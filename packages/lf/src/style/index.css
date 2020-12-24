@@ -1,0 +1,44 @@
+@import 'background.css';
+@import 'html-overlay.css';
+@import 'tool.css';
+
+.lf-graph {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: #FFFFFF;
+  user-select: none;
+}
+.lf-element-text {
+  cursor: text;
+}
+.lf-node-anchor {
+  cursor: crosshair;
+}
+.lf-edge-append {
+  cursor: pointer;
+}
+
+/* node */
+.lf-node-not-allow {
+  cursor: not-allowed;
+}
+.lf-node-not-allow .lf-basic-shape {
+  fill: #f9dee5;
+}
+.lf-polyline-append-ns-resize {
+  cursor: ns-resize;
+}
+.lf-polyline-append-ew-resize {
+  cursor: ew-resize;
+}
+.lf-dragging {
+  cursor: grabbing;
+}
+.lf-drag-able {
+  cursor:default;
+}
+.lf-bezier-adjust-anchor{
+  cursor: pointer;
+}

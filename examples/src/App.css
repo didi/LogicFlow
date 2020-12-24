@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  border: 1px rgb(230, 230, 230) solid;
+  border-radius: 6px;
+  padding: 10px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.viewport {
+  height: 100%;
+}

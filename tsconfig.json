@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": false,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "es5",
+    "maxNodeModuleJsDepth": 5,
+  },
+  "include": [
+    "packages/*",
+    "packages/**/*",
+    "examples"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.d.ts",
+    "packages/lf/types"
+  ]
+}

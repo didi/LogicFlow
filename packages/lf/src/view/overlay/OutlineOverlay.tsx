@@ -1,0 +1,142 @@
+import { observer } from 'mobx-react';
+import { Component, h } from 'preact';
+import { ModelType } from '../../constant/constant';
+import { LineEdgeModel } from '../../LogicFlow';
+import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
+import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
+import GraphModel from '../../model/GraphModel';
+import { poins2PointsList, getBezierPoints, getBBoxOfPoints } from '../../util/edge';
+import Rect from '../basic-shape/Rect';
+
+type IProps = {
+  graphModel: GraphModel;
+};
+
+const STROKE_DASH_ARRAY = '3, 3';
+
+@observer
+export default class OutlineOverlay extends Component<IProps> {
+  // 节点outline
+  getNodeOutline() {
+    const { graphModel } = this.props;
+    const nodeList = graphModel.nodes;
+    const nodeOutline = [];
+    for (let i = 0; i < nodeList.length; i++) {
+      const node = nodeList[i];
+      const {
+        isSelected, x, y, width, height, outlineColor,
+      } = node;
+      if (isSelected) {
+        nodeOutline.push(
+          <Rect
+            className="lf-outline-node"
+            {...{
+              x, y, width: width + 10, height: height + 10,
+            }}
+            radius={0}
+            fill="none"
+            stroke={outlineColor}
+            strokeDasharray={STROKE_DASH_ARRAY}
+          />,
+        );
+      }
+    }
+    return nodeOutline;
+  }
+  // 边的outline
+  getEdgeOutline() {
+    const { graphModel } = this.props;
+    const edgeList = graphModel.edges;
+    const edgeOutline = [];
+    for (let i = 0; i < edgeList.length; i++) {
+      const edge = edgeList[i];
+      if (edge.isSelected) {
+        if (edge.modelType === ModelType.LINE_EDGE) {
+          edgeOutline.push(this.getLineOutline(edge));
+        } else if (edge.modelType === ModelType.POLYLINE_EDGE) {
+          edgeOutline.push(this.getPolylineOutline(edge as PolylineEdgeModel));
+        } else if (edge.modelType === ModelType.BEZIER_EDGE) {
+          edgeOutline.push(this.getBezierOutline(edge as BezierEdgeModel));
+        }
+      }
+    }
+    return edgeOutline;
+  }
+  // 直线outline
+  getLineOutline(line: LineEdgeModel) {
+    const { startPoint, endPoint } = line;
+    const x = (startPoint.x + endPoint.x) / 2;
+    const y = (startPoint.y + endPoint.y) / 2;
+    const width = Math.abs(startPoint.x - endPoint.x) + 10;
+    const height = Math.abs(startPoint.y - endPoint.y) + 10;
+    const { graphModel } = this.props;
+    const { outlineColor } = graphModel.theme.line;
+    return (
+      <Rect
+        className="lf-outline-edge"
+        {...{
+          x, y, width, height,
+        }}
+        radius={0}
+        fill="none"
+        stroke={outlineColor}
+        strokeDasharray={STROKE_DASH_ARRAY}
+      />
+    );
+  }
+  // 折线outline
+  getPolylineOutline(polyline: PolylineEdgeModel) {
+    const { points } = polyline;
+    const pointsList = poins2PointsList(points);
+    const bbox = getBBoxOfPoints(pointsList, 8);
+    const {
+      x, y, width, height,
+    } = bbox;
+    const { graphModel } = this.props;
+    const { outlineColor } = graphModel.theme.polyline;
+    return (
+      <Rect
+        className="lf-outline"
+        {...{
+          x, y, width, height,
+        }}
+        radius={0}
+        fill="none"
+        stroke={outlineColor}
+        strokeDasharray={STROKE_DASH_ARRAY}
+      />
+    );
+  }
+  // 曲线outline
+  getBezierOutline(bezier: BezierEdgeModel) {
+    const { path } = bezier;
+    const pointsList = getBezierPoints(path);
+    const bbox = getBBoxOfPoints(pointsList, 8);
+    const {
+      x, y, width, height,
+    } = bbox;
+    const { graphModel } = this.props;
+    const { outlineColor } = graphModel.theme.bezier;
+    return (
+      <Rect
+        className="lf-outline"
+        {...{
+          x, y, width, height,
+        }}
+        radius={0}
+        fill="none"
+        stroke={outlineColor}
+        strokeDasharray={STROKE_DASH_ARRAY}
+      />
+    );
+  }
+
+  render() {
+    return (
+      <g className="lf-outline">
+        {this.getNodeOutline()}
+        {this.getEdgeOutline()}
+      </g>
+    );
+  }
+}

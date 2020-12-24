@@ -1,0 +1,35 @@
+name: docs
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: load dependences
+        run: |
+          npm run bootstrap
+
+      - name: generate static file
+        run: |
+          npm run build:types
+          npm run build:doc
+          npm run build
+          rm -rf ./deploy
+          mkdir -p deploy/examples
+          cp -rf ./docs/.vuepress/dist/* ./deploy
+          cp -rf ./examples/build/* ./deploy/examples
+
+      - name: deploy to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy

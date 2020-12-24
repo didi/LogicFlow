@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+types/*
+types
+*.DS_Store
+lib
+cjs
+esm
+es
+site-build
+output
+logic-flow-docs.tar.gz
+*.log
+package-lock.json
+*/.eslintcache

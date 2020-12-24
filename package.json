@@ -1,0 +1,50 @@
+{
+  "name": "LogicFlow",
+  "private": true,
+  "description": "一款流程可视化的前端框架",
+  "license": "Apache 2.0",
+  "author": "LogicFlow-Team",
+  "scripts": {
+    "bootstrap": "npm install && lerna bootstrap",
+    "clean": "lerna clean",
+    "build": "lerna run build",
+    "build:types": "lerna run types",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "commit": "git-cz",
+    "build:example": "lerna run build --scope examples",
+    "lerna:publish": "lerna publish from-git",
+    "docs:dev": "./node_modules/.bin/vuepress dev docs",
+    "docs:build": "./node_modules/.bin/vuepress build docs"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc -d --noEmit && npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.2.0",
+    "cz-lerna-changelog": "^2.0.3",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-webpack-plugin": "^2.1.0",
+    "inquirer": "^7.3.3",
+    "lerna": "^3.22.1",
+    "shelljs": "^0.8.4",
+    "typescript": "^3.8.3",
+    "vuepress": "^1.7.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-lerna-changelog"
+    }
+  }
+}

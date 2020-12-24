@@ -1,0 +1,22 @@
+.example-header {
+  padding: 0 10px 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px rgb(230, 230, 230) solid;
+  color: rgb(90, 90, 90);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-header .content {
+  width: 70%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.example-header .tools {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
