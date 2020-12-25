@@ -31,12 +31,13 @@
       }
     },
     mounted() {
+      const { base } = this.$router.options;
       let host = ''
       if (process.env.NODE_ENV === 'development') {
         host = 'http://localhost:3000'
       }
       if (this.href) {
-        this.iframeLink = host + this.href
+        this.iframeLink = host + base.slice(0, -1) + this.href;
       } else {
         this.iframeLink = host + location.pathname.replace('guide', 'examples/#').replace('.html', '')
       }

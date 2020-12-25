@@ -43,4 +43,4 @@ Logic Flow 内部会检测 tool 的配置，默认展示工具。
 
 通过属性 ```nodeMenuConfig、edgeMenuConfig、 graphMenuConfig ``` 可以自定义不同类型的菜单，格式参考前文示例代码中的 text ，className 和 callback 三个属性。如果只想要 node 的 menu 而不需要 edge 和 graph 的 menu，可以为 edge 和 graph 传一个空数组。
  
- <example href="/examples/#/extension/tools/custom-menu" :height="300" ></example> 
+<example href="/examples/#/extension/tools/custom-menu" :height="300" ></example> 
