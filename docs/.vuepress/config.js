@@ -59,53 +59,11 @@ const article = [
   '插件系统',
   'article01',
 ];
-  'start',
-  {
-    title: '基础',
-    collapsable: false,
-    children: [
-      'guide/basic/core',
-      'guide/basic/graph',
-      'guide/basic/node',
-      'guide/basic/connection'
-    ]
-  },
-  {
-    title: '进阶',
-    collapsable: false,
-    children: [
-      'guide/advance/theme',
-      'guide/advance/behavior',
-      'guide/advance/customNode',
-      'guide/advance/anchor',
-      'guide/advance/plugin',
-      'guide/advance/adapter',
-    ]
-  },
-  {
-    title: 'API',
-    collapsable: false,
-    children: [
-      'api/graphApi',
-      'api/nodeApi',
-      'api/connectionApi',
-    ]
-  },
-  {
-    title: '文章',
-    collapsable: false,
-    children: [
-      'article/基于 Logic Flow 开发自定义扩展',
-      'article/插件系统',
-      'article/article01',
-    ]
-  }
-]
 
 module.exports = {
   title: 'Logic Flow',
   description: 'Logic Flow desc',
-  base: "/logicflow/",
+  base: "/LogicFlow/",
   themeConfig: {
     sidebarDepth: 1,
     logo: '/logo.png',

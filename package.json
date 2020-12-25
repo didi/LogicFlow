@@ -5,7 +5,7 @@
   "license": "Apache 2.0",
   "author": "LogicFlow-Team",
   "scripts": {
-    "bootstrap": "npm install && lerna bootstrap",
+    "bootstrap": "npm install && lerna bootstrap --no-ci",
     "clean": "lerna clean",
     "build": "lerna run build",
     "build:types": "lerna run types",

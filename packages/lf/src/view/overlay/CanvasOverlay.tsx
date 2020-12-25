@@ -6,7 +6,7 @@ import GraphModel from '../../model/GraphModel';
 import { ElementState, ModelType, EventType } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import getTransform from './getTransformHoc';
-import EventEmitter from '../../event/EventEmitter';
+import EventEmitter from '../../event/eventEmitter';
 import { GraphTransform } from '../../type';
 
 type IProps = {

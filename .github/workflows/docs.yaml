@@ -20,7 +20,7 @@ jobs:
       - name: generate static file
         run: |
           npm run build:types
-          npm run build:doc
+          npm run docs:build
           npm run build
           rm -rf ./deploy
           mkdir -p deploy/examples
