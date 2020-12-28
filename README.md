@@ -130,7 +130,7 @@ lf.render(data);
 
 
 # 开发团队
-内部成员：<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxus
+内部成员：<a href="https://github.com/GeekJk">GeekJk</a>、<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxus
 ">towersxu</a>、<a href="https://github.com/xinxin93
 ">xinxin93</a>、<a href="https://github.com/ChengranYan
 ">ChengranYan</a>、<a href="https://github.com/lww117
@@ -141,6 +141,9 @@ lf.render(data);
 
 ## 联系我加入微信群
 
+微信号：sunyongjian1993
+
+二维码：
 <image src="https://dpubstatic.udache.com/static/dpubimg/AfkDdZm9W9/weixin.png" width="300"/>
 
 ## 加入 QQ 群

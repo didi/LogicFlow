@@ -63,7 +63,6 @@ const article = [
 module.exports = {
   title: 'Logic Flow',
   description: 'Logic Flow desc',
-  base: "/LogicFlow/",
   themeConfig: {
     sidebarDepth: 1,
     logo: '/logo.png',
