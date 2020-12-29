@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "cjs/index.js",
   "module": "es/index.js",
@@ -24,7 +24,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^0.0.1",
+    "@logicflow/core": "^0.1.0",
     "ids": "^1.0.0"
   },
   "standard-version": {
@@ -61,11 +61,11 @@
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
     "less-loader": "^6.0.0",
+    "standard-version": "^9.0.0",
     "style-loader": "^1.2.0",
     "typescript": "^3.8.3",
     "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
-    "standard-version": "^9.0.0",
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
