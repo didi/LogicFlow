@@ -22,7 +22,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
-        exclude: source ? /node_modules\/(?!(logic-flow)).*\// : /node_modules/,
+        exclude: source ? /node_modules\/(?!(logicflow)).*\// : /node_modules/,
         use: [{
           loader: 'babel-loader',
           options: {

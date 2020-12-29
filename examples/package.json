@@ -5,8 +5,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@babel/core": "7.12.3",
-    "lf-extension": "^0.0.1",
-    "logic-flow": "^0.0.1",
+    "@logicflow/extension": "^0.0.1",
+    "@logicflow/core": "^0.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "^5.11.4",

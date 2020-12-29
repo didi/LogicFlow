@@ -5,8 +5,8 @@
 **第一步**: 注册插件
 
 ```ts
-import LogicFlow from 'logic-flow';
-import { Snapshot } from 'logic-flow/lib/snapshot';
+import LogicFlow from '@logicflow/core';
+import { Snapshot } from '@logicflow/core/lib/snapshot';
 
 LogicFlow.use(Snapshot);
 ```

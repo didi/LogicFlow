@@ -1,5 +1,5 @@
 import React from 'react';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 import { approveNodes } from '../config';
 import { HtmlNodeConfig } from '../type';
 

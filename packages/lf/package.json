@@ -1,8 +1,9 @@
 {
-  "name": "logic-flow",
+  "name": "@logicflow/core",
   "version": "0.0.1",
   "description": "logic flow",
   "main": "dist/logic-flow.js",
+  "license": "Apache 2.0",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",

@@ -1,10 +1,11 @@
 {
-  "name": "lf-extension",
+  "name": "@logicflow/extension",
   "version": "0.0.1",
   "description": "",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "license": "Apache 2.0",
   "scripts": {
     "start": "NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,7 +17,6 @@
     "publish-lib": "npm run build && npm publish"
   },
   "author": "",
-  "license": "ISC",
   "files": [
     "cjs",
     "es",
@@ -24,7 +24,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "logic-flow": "^0.0.1",
+    "@logicflow/core": "^0.0.1",
     "ids": "^1.0.0"
   },
   "standard-version": {

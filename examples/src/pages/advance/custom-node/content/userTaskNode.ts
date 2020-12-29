@@ -1,5 +1,5 @@
-import { BaseNode } from "logic-flow/types/LogicFlow";
-import { ConnectRule } from "logic-flow/types/model/node/BaseNodeModel";
+import { BaseNode } from "@logicflow/core/types/LogicFlow";
+import { ConnectRule } from "@logicflow/core/types/model/node/BaseNodeModel";
 
 const EXCLUSIVE_GATEWAY_NAME = "gateway";
 

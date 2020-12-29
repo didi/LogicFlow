@@ -4,17 +4,17 @@
 
 ```sh
 # npm
-$ npm install logic-flow --save
+$ npm install @logicflow/core --save
 
 
 # yarn
-$ yarn add logic-flow --registry
+$ yarn add @logicflow/core --registry
 
 ```
 安装完成之后，使用 `import` 或 `require` 进行引用。
 ```js
-import LogicFlow from 'logic-flow';
-import 'logic-flow/dist/style/index.css';
+import LogicFlow from '@logicflow/core';
+import '@logicflow/core/dist/style/index.css';
 ```
 
 ## 开始使用

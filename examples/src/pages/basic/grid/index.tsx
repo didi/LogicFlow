@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 import ExampleHeader from '../../../components/example-header';
 import { Button } from 'antd';
 import 'antd/lib/button/style/index.css';

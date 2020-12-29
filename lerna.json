@@ -13,6 +13,9 @@
       "conventionalCommits": true
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "ignoreChanges": ["**/*.md"],
   "bootstrap": {
     "hoist": true

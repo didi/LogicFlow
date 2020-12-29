@@ -12,8 +12,8 @@
     "sites"
   ],
   "dependencies": {
-    "lf-extension": "^0.0.1",
-    "logic-flow": "^0.0.1",
+    "@logicflow/extension": "^0.0.1",
+    "@logicflow/core": "^0.0.1",
     "preact": "^10.4.8"
   },
   "devDependencies": {

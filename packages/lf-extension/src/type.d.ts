@@ -8,7 +8,7 @@ import {
   PolygonNode,
   RectNodeModel,
   RectNode,
-} from 'logic-flow/types/LogicFlow';
+} from '@logicflow/core/types/LogicFlow';
 
 type PointTuple = [number, number];
 

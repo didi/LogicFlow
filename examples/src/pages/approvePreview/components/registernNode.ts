@@ -1,6 +1,6 @@
-import LogicFlow from "logic-flow"
-import GraphModel from "logic-flow/types/model/GraphModel";
-import BaseNodeModel from "logic-flow/types/model/node/BaseNodeModel";
+import LogicFlow from "@logicflow/core"
+import GraphModel from "@logicflow/core/types/model/GraphModel";
+import BaseNodeModel from "@logicflow/core/types/model/node/BaseNodeModel";
 import { nodeProperty } from '../type';
 
 type CircleNode = {

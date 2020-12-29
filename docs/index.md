@@ -20,11 +20,11 @@ features:
 安装一下
 ```sh
 # npm
-$ npm install logic-flow --save
+$ npm install @logicflow/core --save
 
 
 # yarn
-$ yarn add logic-flow --registry
+$ yarn add @logicflow/core --registry
 ```
 
 调用

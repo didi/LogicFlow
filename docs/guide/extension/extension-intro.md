@@ -7,7 +7,7 @@
 ## 使用拓展
 
 ```js
-import { ResizeNode } from 'lf-extension/lib/resizeNode';
+import { ResizeNode } from '@logicflow/extension/lib/resizeNode';
 LogicFlow.use(ResizeNode);
 ```
 

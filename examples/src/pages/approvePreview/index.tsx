@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 import RegisteNode from './components/registernNode';
 import hoverPanel from './components/hoverPanel';
 import { themeApprove, data } from './config';

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LogicFlow from "logic-flow";
+import LogicFlow from "@logicflow/core";
 import Panel from "./components/panel";
 import ExampleHeader from "../../../components/example-header";
 import './index.css';

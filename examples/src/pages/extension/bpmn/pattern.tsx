@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 
 type IProps = {
   lf: LogicFlow

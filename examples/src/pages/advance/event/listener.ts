@@ -1,4 +1,4 @@
-import { LogicFlow } from "logic-flow";
+import { LogicFlow } from "@logicflow/core";
 
 type ContentType = {
   type: string;

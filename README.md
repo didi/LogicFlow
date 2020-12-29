@@ -17,11 +17,11 @@ LogicFlow 是一款解决流程可视化的前端框架，提供了一系列流�
 ## 安装
 ```sh
 # npm
-$ npm install logic-flow --save
+$ npm install @logicflow/core --save
 
 
 # yarn
-$ yarn add logic-flow
+$ yarn add @logicflow/core
 ```
 
 ## 代码示例

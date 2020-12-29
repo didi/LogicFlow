@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
-import { Snapshot } from 'lf-extension';
-import LogicFlow from 'logic-flow';
+import { Snapshot } from '@logicflow/extension';
+import LogicFlow from '@logicflow/core';
 import Panel from './component/Panel';
 import Share from './component/Share';
 import Setting from './component/Setting';

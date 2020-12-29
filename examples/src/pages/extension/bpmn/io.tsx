@@ -1,5 +1,5 @@
 import React from 'react';
-import LogicFlow from 'logic-flow/types/LogicFlow';
+import LogicFlow from '@logicflow/core/types/LogicFlow';
 
 const downloadImg = require('./img/download.png').default;
 const photo = require('./img/img.png').default;

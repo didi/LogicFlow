@@ -1,7 +1,7 @@
-import LogicFlow from "logic-flow"
-import { BaseNode } from "logic-flow/types/LogicFlow";
-import GraphModel from "logic-flow/types/model/GraphModel";
-import { ConnectRule } from "logic-flow/types/model/node/BaseNodeModel";
+import LogicFlow from "@logicflow/core"
+import { BaseNode } from "@logicflow/core/types/LogicFlow";
+import GraphModel from "@logicflow/core/types/model/GraphModel";
+import { ConnectRule } from "@logicflow/core/types/model/node/BaseNodeModel";
 import { nodeProperty } from '../type';
 
 export default function RegisteNode(lf: LogicFlow) {

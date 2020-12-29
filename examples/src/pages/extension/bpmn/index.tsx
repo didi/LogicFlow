@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LogicFlow from 'logic-flow';
-import { BpmnElement, BpmnXmlAdapter } from 'lf-extension';
+import LogicFlow from '@logicflow/core';
+import { BpmnElement, BpmnXmlAdapter } from '@logicflow/extension';
 import BpmnPattern from './pattern';
 import BpmnIo from './io';
 import './index.css';

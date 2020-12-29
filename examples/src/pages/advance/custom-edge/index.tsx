@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 import { registerCustomPolylineEdge } from './customPolylineEdge';
 
 const config = {

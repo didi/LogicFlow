@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
-import LogicFlow from 'logic-flow';
+import LogicFlow from '@logicflow/core';
 import PropertyPanel from './components/property';
 import NodePanel from './components/NodePanel';
 import RegisteNode from './components/registernNode';

@@ -83,7 +83,7 @@ Logic Flow 内置通用的 bpmn-js 兼容的转换工具。可以支持将 Logic
 **bpmnAdapter**
 
 ```ts
-import { bpmnAdapter } from 'lf-extension/bpmnAdapter';
+import { bpmnAdapter } from '@logicflow/extension/bpmnAdapter';
 
 Graph.useAdapter(bpmnAdapter);
 ```
