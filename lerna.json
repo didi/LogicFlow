@@ -3,9 +3,9 @@
   "npmClientArgs": ["--no-package-lock", "--no-ci"],
   "version": "independent",
   "packages": [
-    "packages/lf",
-    "packages/lf-extension",
-    "packages/lf-site",
+    "packages/core",
+    "packages/extension",
+    "packages/site",
     "examples"
   ],
   "command": {

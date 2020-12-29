@@ -1,4 +1,4 @@
-# lf-extension
+# extension
 
 Logic Flow 扩展包
 

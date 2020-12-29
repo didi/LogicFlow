@@ -5,4 +5,4 @@ dist
 # don't lint nyc coverage output
 coverage
 types
-packages/lf/types
+packages/core/types

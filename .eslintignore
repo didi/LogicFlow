@@ -5,9 +5,9 @@ dist
 # don't lint nyc coverage output
 coverage
 types
-packages/lf/types
+packages/core/types
 
-packages/lf-extension/src/adapter/bpmn/xml2json.ts
-packages/lf-extension/src/adapter/bpmn/json2xml.ts
+packages/extension/src/adapter/bpmn/xml2json.ts
+packages/extension/src/adapter/bpmn/json2xml.ts
 
 **/*.d.ts

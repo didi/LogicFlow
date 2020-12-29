@@ -21,6 +21,6 @@
     "node_modules",
     "**/*.spec.ts",
     "**/*.d.ts",
-    "packages/lf/types"
+    "packages/core/types"
   ]
 }

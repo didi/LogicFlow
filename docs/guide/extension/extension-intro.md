@@ -2,7 +2,7 @@
 
 > Logic Flow 最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。
 
-目前所有内置的拓展都在`lf-extension`包中，其中包括组件、`BpmnElement`、`RectLabelNode`、`ResizeNode`、`Snapshot`、`Adapter`。
+目前所有内置的拓展都在`extension`包中，其中包括组件、`BpmnElement`、`RectLabelNode`、`ResizeNode`、`Snapshot`、`Adapter`。
 
 ## 使用拓展
 
