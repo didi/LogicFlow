@@ -77,13 +77,13 @@ lf.render(data);
 ```
 
 # 文档
-[官方文档](http://didi.github.io/LogicFlow)
+[官方文档](http://logic-flow.org)
 
-- [快速上手](http://didi.github.io/LogicFlow/guide/start.html#安装)
-- [基础教程](http://didi.github.io/LogicFlow/guide/basic/logic-flow.html)
-- [进阶指南](http://didi.github.io/LogicFlow/guide/advance/theme.html)
-- [拓展](http://didi.github.io/LogicFlow/guide/extension/extension-intro.html)
-- [示例](http://didi.github.io/LogicFlow/usage/bpmn.html)
+- [快速上手](http://logic-flow.org/guide/start.html#安装)
+- [基础教程](http://logic-flow.org/guide/basic/logic-flow.html)
+- [进阶指南](http://logic-flow.org/guide/advance/theme.html)
+- [拓展](http://logic-flow.org/guide/extension/extension-intro.html)
+- [示例](http://logic-flow.org/usage/bpmn.html)
 
 
 # 核心能力
