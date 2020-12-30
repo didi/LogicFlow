@@ -128,6 +128,7 @@ lf.render(data);
 
 ![jiagou](https://dpubstatic.udache.com/static/dpubimg/ZjXIjXh6qo/LogicFlow2.png)
 
+[详细介绍](https://github.com/didi/LogicFlow/wiki)
 
 # 开发团队
 内部成员：<a href="https://github.com/GeekJk">GeekJk</a>、<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxus
