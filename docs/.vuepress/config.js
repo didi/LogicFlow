@@ -55,8 +55,6 @@ const api = [
 const usage = ["bpmn", "approve"];
 
 const article = [
-  '基于 Logic Flow 开发自定义扩展',
-  '插件系统',
   'article01',
 ];
 
@@ -72,7 +70,7 @@ module.exports = {
       {text: '教程', link: '/guide/start'},
       {text: 'API', link: '/api/logicFlowApi'},
       {text: '示例', link: '/usage/bpmn'},
-      {text: '介绍', link: '/article/article01'},
+      {text: '文章', link: '/article/article01'},
     ],
     sidebar: {
       '/guide/': guide,

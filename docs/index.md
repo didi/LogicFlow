@@ -24,7 +24,7 @@ $ npm install @logicflow/core --save
 
 
 # yarn
-$ yarn add @logicflow/core --registry
+$ yarn add @logicflow/core
 ```
 
 调用

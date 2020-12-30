@@ -8,7 +8,7 @@ $ npm install @logicflow/core --save
 
 
 # yarn
-$ yarn add @logicflow/core --registry
+$ yarn add @logicflow/core
 
 ```
 安装完成之后，使用 `import` 或 `require` 进行引用。
