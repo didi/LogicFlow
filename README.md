@@ -139,12 +139,13 @@ lf.render(data);
 
 # 联系我们
 
-## 联系我加入微信群
+## 加入微信群
 
-微信号：sunyongjian1993
+加我微信号邀请入群：sunyongjian1993
 
-二维码：
-<image src="https://dpubstatic.udache.com/static/dpubimg/AfkDdZm9W9/weixin.png" width="300"/>
+或扫群二维码：
+
+<image src="https://dpubstatic.udache.com/static/dpubimg/C9OknpWCFr/wxq2.jpeg" width="300"/>
 
 ## 加入 QQ 群
 <image src="https://dpubstatic.udache.com/static/dpubimg/VMBzV7jhh8/qq.png" width="300"/>
