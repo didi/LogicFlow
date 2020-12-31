@@ -286,7 +286,7 @@ lf.deleteNode('id');
 创建连接两个节点的连线
 
 ```js
-createEdge(edgeConfig: EdgeConifg): void
+createEdge(edgeConfig: EdgeConfig): void
 ```
 
 **参数**

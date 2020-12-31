@@ -72,17 +72,6 @@ export type MenuConfig = {
 
 export type AdditionData = Record<string, unknown>;
 
-export type EdgeConifg = {
-  id?: string,
-  type?: string,
-  // modelType: string, 待讨论，modelType不是默认了吗？用啥内置
-  sourceNodeId: string,
-  startPoint?: Point,
-  targetNodeId: string,
-  endPoint?: Point,
-  text?: string | TextConfig,
-  properties?: Record<string, unknown>;
-};
 // 边数据
 export type EdgeData = {
   id: string,

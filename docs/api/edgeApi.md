@@ -62,9 +62,9 @@ Logic Flow 的内置连线类型包括
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
-| edgeConifg | EdgeConifg| 创建边的配置数据 |
+| edgeConfig | EdgeConfig| 创建边的配置数据 |
 ``` ts
-export type EdgeConifg = {
+export type EdgeConfig = {
   id?: string,
   type?: string,
   sourceNodeId: string,

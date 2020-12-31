@@ -35,7 +35,7 @@ import EventEmitter, { CallbackType } from './event/eventEmitter';
 import Keyboard from './keyboard';
 
 import {
-  EdgeConifg,
+  EdgeConfig,
   EdgeFilter,
   NodeConfig,
   NodeAttribute,
@@ -56,7 +56,7 @@ if (process.env.NODE_ENV === 'development') {
 
 type GraphConfigData = {
   nodes: NodeConfig[],
-  edges: EdgeConifg[],
+  edges: EdgeConfig[],
 };
 
 export default class LogicFlow {
@@ -348,7 +348,7 @@ export default class LogicFlow {
   // getModel = this.graphModel.getModel;
 
   /* 创建边 */
-  createEdge(edgeConfig: EdgeConifg): void {
+  createEdge(edgeConfig: EdgeConfig): void {
     this.graphModel.createEdge(edgeConfig);
   }
   /* 删除边 */
