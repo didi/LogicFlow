@@ -71,6 +71,7 @@ module.exports = {
       {text: 'API', link: '/api/logicFlowApi'},
       {text: '示例', link: '/usage/bpmn'},
       {text: '文章', link: '/article/article01'},
+      { text: 'Github', link: 'https://github.com/didi/LogicFlow' },
     ],
     sidebar: {
       '/guide/': guide,
