@@ -4,8 +4,9 @@
   "description": "一款流程可视化的前端框架",
   "license": "Apache 2.0",
   "author": "LogicFlow-Team",
+  "workspaces": ["packages/*", "examples"],
   "scripts": {
-    "bootstrap": "npm install && lerna bootstrap --no-ci",
+    "bootstrap": "yarn",
     "clean": "lerna clean",
     "build": "lerna run build",
     "build:types": "lerna run types",
@@ -18,7 +19,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc -d --noEmit && npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

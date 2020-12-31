@@ -1,12 +1,11 @@
 {
-  "npmClient": "npm",
+  "npmClient": "yarn",
   "npmClientArgs": ["--no-package-lock", "--no-ci"],
   "version": "independent",
+  "useWorkspaces": true,
   "packages": [
     "packages/core",
-    "packages/extension",
-    "packages/site",
-    "examples"
+    "packages/extension"
   ],
   "command": {
     "version": {

@@ -32,6 +32,7 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@types/mousetrap": "^1.6.4",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@types/lodash-es": "^4.17.3",
     "@typescript-eslint/parser": "^3.2.0",
     "autoprefixer": "^9.7.6",
     "babel-core": "^7.0.0-bridge.0",
@@ -77,14 +78,7 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "standard-version": {
-    "skip": {
-      "tag": true,
-      "commit": true
-    }
-  },
   "dependencies": {
-    "@types/lodash-es": "^4.17.3",
     "ids": "^1.0.0",
     "lodash-es": "^4.17.15",
     "mobx": "^5.15.7",
