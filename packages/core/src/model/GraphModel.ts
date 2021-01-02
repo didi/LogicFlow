@@ -9,7 +9,7 @@ import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType,
 } from '../constant/constant';
 import {
-  AdditionData, Point, NodeConfig, EdgeConifg, Style, PointTuple,
+  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple,
 } from '../type';
 import MenuModel from './MenuModel';
 import { updateTheme } from '../util/theme';
@@ -309,7 +309,7 @@ class GraphModel {
   }
 
   @action
-  createEdge(edgeConfig: EdgeConifg) {
+  createEdge(edgeConfig: EdgeConfig) {
     // 边的类型优先级：自定义>全局>默认
     let { type } = edgeConfig;
     if (!type) {
