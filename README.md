@@ -1,5 +1,5 @@
 # LogicFlow
-LogicFlow 是一款解决流程可视化的前端框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
+LogicFlow 是一款流程可视化的前端框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
 
 # 特性
 - 🎯专业
@@ -126,7 +126,7 @@ lf.render(data);
 
 # 整体架构
 
-![jiagou](https://dpubstatic.udache.com/static/dpubimg/ZjXIjXh6qo/LogicFlow2.png)
+![jiagou](https://dpubstatic.udache.com/static/dpubimg/fg7q5j_5nG/lfjk.png)
 
 [详细介绍](https://github.com/didi/LogicFlow/wiki)
 
