@@ -131,7 +131,7 @@ lf.render(data);
 [详细介绍](https://github.com/didi/LogicFlow/wiki)
 
 # 开发团队
-内部成员：<a href="https://github.com/GeekJk">GeekJk</a>、<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxus
+内部成员：<a href="https://github.com/GeekJk">GeekJk</a>、<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxu
 ">towersxu</a>、<a href="https://github.com/xinxin93
 ">xinxin93</a>、<a href="https://github.com/ChengranYan
 ">ChengranYan</a>、<a href="https://github.com/lww117
