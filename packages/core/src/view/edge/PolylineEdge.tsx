@@ -151,7 +151,7 @@ export default class PolylineEdge extends BaseEdge {
   }
   getAppendWidth() {
     const { model, graphModel } = this.props;
-    const { pointsList } = model;
+    const { pointsList, draggable } = model;
     const LineAppendList = [];
     for (let i = 0; i < pointsList.length - 1; i++) {
       let className = 'lf-polyline-append';
@@ -176,7 +176,7 @@ export default class PolylineEdge extends BaseEdge {
         </g>
       );
       const { editConfig } = graphModel;
-      if (!editConfig.adjustEdge) {
+      if (!editConfig.adjustEdge || !draggable) {
         this.dragHandler = () => { };
       } else {
         this.dragHandler = this.drag;

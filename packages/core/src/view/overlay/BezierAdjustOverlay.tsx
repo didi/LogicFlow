@@ -58,10 +58,8 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     bezierModel.updateAdjustAnchor({ x: endX, y: endY }, type);
   });
   render() {
-    const {
-      endX,
-      endY,
-    } = this.state;
+    const { position } = this.props;
+    const { x, y } = position;
     const {
       adjustAnchorStroke,
       adjustAnchorFill,
@@ -70,8 +68,8 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     return (
       <Circle
         className="lf-bezier-adjust-anchor"
-        x={endX}
-        y={endY}
+        x={x}
+        y={y}
         r={4}
         stroke={adjustAnchorStroke}
         fill={adjustAnchorFill}
@@ -125,7 +123,7 @@ export default class BezierAdjustOverlay extends Component<IProps> {
     const edgeAdjust = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (edge.isSelected && edge.modelType === ModelType.BEZIER_EDGE) {
+      if (edge.isSelected && edge.modelType === ModelType.BEZIER_EDGE && edge.draggable) {
         edgeAdjust.push(this.getBezierAdjust(edge as BezierEdgeModel, graphModel));
       }
     }

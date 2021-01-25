@@ -39,7 +39,8 @@ import {
   EdgeFilter,
   NodeConfig,
   NodeAttribute,
-  ExtensionLike,
+  Extension,
+  ComponentRender,
   FocusOnArgs,
   RegisterElementFn,
   RegisterParam,
@@ -64,7 +65,7 @@ export default class LogicFlow {
   width: number;
   height: number;
   graphModel: GraphModel;
-  history: History = new History();
+  history: History;
   viewMap = new Map();
   tool: Tool;
   keyboard: Keyboard;
@@ -73,15 +74,16 @@ export default class LogicFlow {
   getSnapshot: () => void;
   eventCenter: EventEmitter;
   snaplineModel: SnaplineModel;
-  static extensions: ExtensionLike[] = [];
+  static extensions: Extension[] = [];
+  components: ComponentRender[] = [];
   adapterIn: (data: unknown) => GraphConfigData;
   adapterOut: (data: GraphConfigData) => unknown;
+  [propName: string]: any;
   constructor(options: Options.Definition) {
     const {
       container,
       width,
       height,
-      tool = {},
       dndOptions,
       keyboard,
       isSilentMode,
@@ -97,8 +99,9 @@ export default class LogicFlow {
     if (!this.height) {
       this.height = container.getBoundingClientRect().height;
     }
-    this.tool = new Tool(tool, this);
+    this.tool = new Tool(this);
     this.eventCenter = new EventEmitter();
+    this.history = new History(this.eventCenter);
     this.dnd = new Dnd({ options: dndOptions, lf: this });
     this.keyboard = new Keyboard({ lf: this, keyboard });
     // model 初始化
@@ -132,12 +135,16 @@ export default class LogicFlow {
    * 添加扩展, 待讨论，这里是不是静态方法好一些？
    * @param plugin 插件
    */
-  static use(extension: ExtensionLike) {
+  static use(extension: Extension) {
     this.extensions.push(extension);
   }
   installPlugins() {
     LogicFlow.extensions.forEach((extension) => {
-      extension.install(this);
+      const { install, render: renderComponent } = extension;
+      install.call(extension, this);
+      if (renderComponent) {
+        this.components.push(renderComponent.bind(extension));
+      }
     });
   }
 
@@ -261,6 +268,14 @@ export default class LogicFlow {
     transformMatrix.translate(x, y);
   }
   /**
+   * 还原图形为初始位置
+   */
+  resetTranslate(): void {
+    const { transformMatrix } = this.graphModel;
+    const { TRANSLATE_X, TRANSLATE_Y } = transformMatrix;
+    this.translate(-TRANSLATE_X, -TRANSLATE_Y);
+  }
+  /**
    * 将图形定位到画布中心
    * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是连线的id，也可以不传（兜底）
    */
@@ -297,8 +312,13 @@ export default class LogicFlow {
    * @param {string} nodeId 节点Id
    */
   deleteNode(nodeId: string): void {
-    // todo: 1) before after钩子； 2) 删除后的回调
-    this.graphModel.deleteNode(nodeId);
+    const Model = this.graphModel.getNodeModel(nodeId);
+    const data = Model.getData();
+    const { guards } = this.options;
+    const enabledDelete = guards && guards.beforeDelete ? guards.beforeDelete(data) : true;
+    if (enabledDelete) {
+      this.graphModel.deleteNode(nodeId);
+    }
   }
   /**
    * 添加节点
@@ -306,6 +326,14 @@ export default class LogicFlow {
    */
   addNode(nodeConfig: NodeConfig): BaseNodeModel {
     return this.graphModel.addNode(nodeConfig);
+  }
+
+  setProperties(id: string, properties: Object): void {
+    this.graphModel.getElement(id)?.setProperties(properties);
+  }
+
+  getProperties(id: string): Object {
+    return this.graphModel.getElement(id)?.getProperties();
   }
   /**
    * 显示节点文本编辑框
@@ -319,7 +347,13 @@ export default class LogicFlow {
    * @param nodeId 节点Id
    */
   cloneNode(nodeId: string): BaseNodeModel {
-    return this.graphModel.cloneNode(nodeId);
+    const Model = this.graphModel.getNodeModel(nodeId);
+    const data = Model.getData();
+    const { guards } = this.options;
+    const enabledClone = guards && guards.beforeClone ? guards.beforeClone(data) : true;
+    if (enabledClone) {
+      return this.graphModel.cloneNode(nodeId);
+    }
   }
   /**
    * 获取节点对象
@@ -351,14 +385,25 @@ export default class LogicFlow {
   createEdge(edgeConfig: EdgeConfig): void {
     this.graphModel.createEdge(edgeConfig);
   }
-  /* 删除边 */
-  removeEdge(config: EdgeFilter): void {
-    const {
-      id, sourceNodeId, targetNodeId,
-    } = config;
-    if (id) {
-      this.graphModel.removeEdgeById(id);
+  /**
+   * 删除边
+   * @param {string} edgeId 边Id
+   */
+  deleteEdge(edgeId: string): void {
+    // 待讨论，这种钩子在这里覆盖不到removeEdge, 是否需要在graphModel中实现
+    const { guards } = this.options;
+    const edgeData = this.graphModel.edgesMap[edgeId].model.getData();
+    const enabledDelete = guards && guards.beforeDelete
+      ? guards.beforeDelete(edgeData) : true;
+    if (enabledDelete) {
+      this.graphModel.removeEdgeById(edgeId);
     }
+  }
+  /* 删除指定类型的边 */
+  removeEdge(config: { sourceNodeId: string, targetNodeId: string }): void {
+    const {
+      sourceNodeId, targetNodeId,
+    } = config;
     if (sourceNodeId && targetNodeId) {
       this.graphModel.removeEdge(sourceNodeId, targetNodeId);
     } else if (sourceNodeId) {
@@ -501,6 +546,7 @@ export default class LogicFlow {
           options={this.options}
           dnd={this.dnd}
           snaplineModel={this.snaplineModel}
+          components={this.components}
         />
       </Provider>
     ), this.container);

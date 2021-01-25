@@ -1,9 +1,9 @@
 import { debounce, isEqual, last } from 'lodash-es';
 import { deepObserve } from 'mobx-utils';
 import EventEmitter from '../event/eventEmitter';
-import { InnerEventType } from '../constant/constant';
+import { EventType } from '../constant/constant';
 
-class History extends EventEmitter {
+class History {
   undos = [];
   redos = [];
   callbacks = [];
@@ -13,6 +13,11 @@ class History extends EventEmitter {
   // 发生数据变化后，最多再等500ms，把距离上次的数据变更存储起来。
   // 所以waitTime值越小，History对数据变化越敏感，存的undos就越细。
   waitTime = 100;
+  eventCenter: EventEmitter;
+
+  constructor(eventCenter) {
+    this.eventCenter = eventCenter;
+  }
 
   add(data) {
     if (isEqual(last(this.undos), data)) return;
@@ -23,7 +28,15 @@ class History extends EventEmitter {
     if (!isEqual(this.curData, data)) {
       this.redos = [];
     }
-    this.emit(InnerEventType.HISTORY_CHANGE, data);
+    this.eventCenter.emit(EventType.HISTORY_CHANGE,
+      {
+        data: {
+          undos: this.undos,
+          redos: this.redos,
+          undoAble: this.undos.length > 1,
+          redoAble: this.redos.length > 0,
+        },
+      });
     if (this.undos.length > this.maxSize) {
       this.undos.shift();
     }

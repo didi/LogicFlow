@@ -17,6 +17,7 @@
   pointer-events: all;
 }
 .lf-text-input {
+  text-align: center;
   outline: none;
   position: absolute;
   border: 1px solid #edefed;

@@ -5,9 +5,9 @@ import { observer } from 'mobx-react';
 import LogicFlow from '../LogicFlow';
 // import BaseNodeModel from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
-import { isEdgeModel } from '../util/edge';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
+import { ElementType } from '../constant/constant';
 // import { ElementState } from '../constant/constant';
 
 type IProps = {
@@ -80,15 +80,13 @@ export default class TextEdit extends Component<IProps> {
       // 所以不能在连线创建的时候就初始化文本位置。
       // 而是在连线上新建文本的时候创建。
       if (!textEditElement.text?.value) {
-        if (isEdgeModel(textEditElement)) {
+        if (textEditElement.BaseType === ElementType.EDGE) {
           textEditElement = textEditElement as BaseEdgeModel;
+          const textConfig = textEditElement.text;
           const { x, y } = textEditElement.textPosition;
-          textEditElement.setText({
-            x,
-            y,
-            draggable: false,
-            value: '',
-          });
+          textConfig.x = x;
+          textConfig.y = y;
+          textEditElement.setText(textConfig);
         } else {
           textEditElement = textEditElement as BaseNodeModel;
         }

@@ -1,5 +1,6 @@
 import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
+import { ElementType } from '../constant/constant';
 
 let selected = null;
 
@@ -11,8 +12,10 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['cmd + c', 'ctrl + c'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    const node = graph.getSelected();
-    selected = node;
+    const element = graph.selectElement;
+    if (element.BaseType === ElementType.NODE) {
+      selected = element;
+    }
     return false;
   });
   // 粘贴
@@ -20,7 +23,8 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
     if (selected) {
-      selected = graph.cloneNode(selected.id);
+      const cloned = lf.cloneNode(selected.id);
+      selected = cloned || selected;
     }
     return false;
   });
@@ -42,13 +46,12 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['backspace'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    const node = graph.getSelected();
-    if (node) {
-      lf.deleteNode(node.id);
+    const element = graph.selectElement;
+    if (element.BaseType === ElementType.NODE) {
+      lf.deleteNode(element.id);
     }
-    const edge = graph.getSelectedEdge();
-    if (edge) {
-      lf.removeEdge({ id: edge.id });
+    if (element.BaseType === ElementType.EDGE) {
+      lf.deleteEdge(element.id);
     }
     return false;
   });

@@ -16,12 +16,16 @@ interface IBaseModel {
   moveText(deltaX: number, deltaY: number): void;
   updateText(value: string): void;
   setSelected(flag: boolean): void;
+  setZIndex(zindex?: number): void;
   /**
    * 设置Node|Edge等model的状态
    * @param state 状态
    */
   setElementState(state: ElementState, additionStateData?: AdditionData): void;
-  // TODO: 补充model的通用函数
+
+  getProperties(): Object;
+
+  setProperties(properties: Object): void;
 }
 
 export {

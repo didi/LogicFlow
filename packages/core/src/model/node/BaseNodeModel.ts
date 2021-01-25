@@ -5,7 +5,7 @@ import { assign, pick } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import {
-  ElementState, ModelType, ElementMaxzIndex, ElementType,
+  ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
   AdditionData, NodeData, MenuConfig, NodeAttribute,
@@ -16,11 +16,13 @@ const defaultConfig = assign(
   {
     x: 0,
     y: 0,
+    zIndex: 1,
     text: {
       value: '',
       x: 0,
       y: 0,
       draggable: false,
+      editable: true,
     },
   },
   defaultTheme.rect,
@@ -43,7 +45,7 @@ export default class BaseNodeModel implements IBaseModel {
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
-  menu?: MenuConfig;
+  menu?: MenuConfig[];
   targetRules: ConnectRule[] = [];
   sourceRules: ConnectRule[] = [];
   @observable properties = {};
@@ -63,11 +65,12 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable isContextMenu = false;
-  @observable zIndex = 1;
+  @observable zIndex = defaultConfig.zIndex;
   @observable anchors = [];
   @observable activeAnchor = -1;
   @observable state = 1;
   @observable text = defaultConfig.text;
+  @observable draggable = true;
 
   constructor(data) {
     this.formatText(data);
@@ -86,6 +89,7 @@ export default class BaseNodeModel implements IBaseModel {
         x: data.x,
         y: data.y,
         draggable: false,
+        editable: true,
       };
     }
     if (data.text && typeof data.text === 'string') {
@@ -94,7 +98,10 @@ export default class BaseNodeModel implements IBaseModel {
         x: data.x,
         y: data.y,
         draggable: false,
+        editable: true,
       };
+    } else if (data.text && data.text.editable === undefined) {
+      data.text.editable = true;
     }
   }
 
@@ -107,18 +114,22 @@ export default class BaseNodeModel implements IBaseModel {
     if (isObservable(properties)) {
       properties = toJS(properties);
     }
-    return {
+    const data: NodeData = {
       id: this.id,
       type: this.type,
       x: this.x,
       y: this.y,
-      text: {
+      properties,
+      baseType: this.BaseType,
+    };
+    if (value) {
+      data.text = {
         x,
         y,
         value,
-      },
-      properties,
-    };
+      };
+    }
+    return data;
   }
 
   getProperties() {
@@ -203,9 +214,11 @@ export default class BaseNodeModel implements IBaseModel {
       y,
       value,
       draggable,
+      editable,
     } = this.text;
     this.text = {
       value,
+      editable,
       draggable,
       x: x + deltaX,
       y: y + deltaY,
@@ -218,11 +231,8 @@ export default class BaseNodeModel implements IBaseModel {
   }
 
   @action
-  setSelected(flag = true, zIndexFlag = true): void {
+  setSelected(flag = true): void {
     this.isSelected = flag;
-    if (zIndexFlag) {
-      this.zIndex = this.isSelected ? ElementMaxzIndex : 1;
-    }
   }
 
   @action
@@ -279,5 +289,10 @@ export default class BaseNodeModel implements IBaseModel {
     if (theme[type]) {
       assign(this, theme[type]);
     }
+  }
+
+  @action
+  setZIndex(zindex: number = defaultConfig.zIndex): void {
+    this.zIndex = zindex;
   }
 }

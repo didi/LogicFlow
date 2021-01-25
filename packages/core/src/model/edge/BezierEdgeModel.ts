@@ -20,6 +20,18 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   }
 
   @computed get textPosition(): Point {
+    if (this.pointsList && this.pointsList.length > 0) {
+      let pointsXSum = 0;
+      let pointsYSum = 0;
+      this.pointsList.forEach(({ x, y }) => {
+        pointsXSum += x;
+        pointsYSum += y;
+      });
+      return {
+        x: pointsXSum / this.pointsList.length,
+        y: pointsYSum / this.pointsList.length,
+      };
+    }
     return {
       x: (this.startPoint.x + this.endPoint.x) / 2,
       y: (this.startPoint.y + this.endPoint.y) / 2,
