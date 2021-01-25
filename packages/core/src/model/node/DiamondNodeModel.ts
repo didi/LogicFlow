@@ -1,6 +1,6 @@
 import { computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
-import { Point, PointTuple } from '../../type';
+import { NodeData, Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
@@ -14,6 +14,12 @@ class DiamondNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('diamond', graphModel);
     assign(this, data);
+  }
+
+  getData(): NodeData {
+    const { rx, ry } = this;
+    const data = super.getData();
+    return { ...data, rx, ry };
   }
 
   @computed get points(): PointTuple[] {

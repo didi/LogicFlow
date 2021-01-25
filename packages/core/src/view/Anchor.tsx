@@ -21,6 +21,7 @@ interface IProps extends CSSStyleDeclaration {
   graphModel: GraphModel,
   nodeModel: BaseNodeModel,
   nodeDraging: boolean,
+  setHoverOFF: Function,
 }
 
 interface IState {
@@ -56,6 +57,7 @@ class Anchor extends Component<IProps, IState> {
       x, y, nodeModel, graphModel,
     } = this.props;
     // nodeModel.setSelected(true);
+    graphModel.selectNodeById(nodeModel.id);
     graphModel.toFront(nodeModel.id);
     this.setState({
       startX: x,
@@ -107,12 +109,16 @@ class Anchor extends Component<IProps, IState> {
     });
   };
 
-  setHover(isHover: boolean): void {
-    const { nodeDraging } = this.props;
+  setHover(isHover: boolean, ev: MouseEvent): void {
+    const { nodeDraging, setHoverOFF } = this.props;
     // 节点拖拽过程中不更新锚点状态
     // 防止拖拽过快导致触发不了节点的onMouseLeave事件，从而导致出现多个锚点被选中的效果
     if (!nodeDraging) {
       this.setState({ hover: isHover });
+    }
+    // 如果锚点hoveroff, 先执行节点的hoveroff，避免造成从锚点mouseleave时节点仍然在hover状态
+    if (!isHover) {
+      setHoverOFF(ev);
     }
   }
 
@@ -196,8 +202,8 @@ class Anchor extends Component<IProps, IState> {
           className="lf-node-anchor"
           {...{ x, y }}
           {...style}
-          onMouseEnter={() => this.setHover(true)}
-          onMouseLeave={() => this.setHover(false)}
+          onMouseEnter={(ev) => this.setHover(true, ev)}
+          onMouseLeave={(ev) => this.setHover(false, ev)}
           onMouseDown={this.dragHandler}
         />
         {this.isShowLine() && (

@@ -51,8 +51,11 @@ export type NodeData = {
   type: string;
   x: number;
   y: number;
-  text: TextConfig;
+  rx?: number;
+  ry?: number;
+  text?: TextConfig;
   properties: Record<string, unknown>;
+  baseType?: 'node' | 'edge' | 'graph'; // todo: 问一下为啥这里要导出baseType
 };
 // 修改节点数据的参数
 export type NodeAttribute = {
@@ -65,13 +68,13 @@ export type NodeAttribute = {
 };
 
 export type MenuConfig = {
-  text: string;
-  className: string;
+  text?: string;
+  className?: string;
+  icon?: boolean;
   callback: (id) => void;
 };
 
 export type AdditionData = Record<string, unknown>;
-
 // 边数据
 export type EdgeData = {
   id: string,
@@ -80,7 +83,7 @@ export type EdgeData = {
   startPoint: Point,
   targetNodeId: string,
   endPoint: Point,
-  text: TextConfig,
+  text?: TextConfig,
   properties: Record<string, unknown>;
   pointsList?: Point[], // 折线、曲线会输出pointsList
 };
@@ -228,9 +231,12 @@ export type FocusOnArgs = {
   };
 };
 
-export interface ExtensionLike {
+export type ComponentRender = (lf: LogicFlow, container: HTMLElement) => void;
+export interface Extension {
   install: (lf: LogicFlow) => void;
+  render?: ComponentRender;
 }
+
 export type Direction = 'vertical' | 'horizontal';
 
 export type AppendInfo = {

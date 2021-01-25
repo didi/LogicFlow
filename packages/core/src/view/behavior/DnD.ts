@@ -26,11 +26,11 @@ export default class Dnd {
   clientToLocalPoint({ x, y }) {
     const gridSize = get(this.lf.options, ['grid', 'size']);
     // 处理 container 的 offset 等
-    const point = this.lf.graphModel.getPointByClient({ x, y });
+    const position = this.lf.graphModel.getPointByClient({ x, y });
     // 处理缩放和偏移
-    const [tX, tY] = this.lf.graphModel.transformMatrix.HtmlPointToCanvasPoint([point.x, point.y]);
+    const { x: x1, y: y1 } = position.canvasOverlayPostion;
     // x, y 对齐到网格的 size
-    return { x: snapToGrid(tX, gridSize), y: snapToGrid(tY, gridSize) };
+    return { x: snapToGrid(x1, gridSize), y: snapToGrid(y1, gridSize) };
   }
 
   startDrag(nodeConfig: NewNodeConfig) {

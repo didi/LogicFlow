@@ -3,7 +3,7 @@ import PolylineEdgeModel from '../model/edge/PolylineEdgeModel';
 import BaseNode from '../model/node/BaseNodeModel';
 import { Point, Direction } from '../type/index';
 import { getCorssPointOfLine, isInSegment } from '../algorithm/edge';
-import { SegmentDirection, ModelType } from '../constant/constant';
+import { SegmentDirection } from '../constant/constant';
 import {
   getNodeBBox, isInNode, distance,
 } from './node';
@@ -609,18 +609,6 @@ export const segmentDirection = (start: Point, end: Point): Direction => {
     direction = SegmentDirection.HORIZONTAL;
   }
   return direction;
-};
-
-export const isEdgeModel = (model) => {
-  // todo: model中新增一个属性来区分是边还是节点
-  if (
-    model.modelType === ModelType.EDGE
-    || model.modelType === ModelType.LINE_EDGE
-    || model.modelType === ModelType.POLYLINE_EDGE
-  ) {
-    return true;
-  }
-  return false;
 };
 
 export const poins2PointsList = (points: string): PolyPoint[] => {

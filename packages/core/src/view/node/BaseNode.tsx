@@ -26,12 +26,14 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   stepDrag: StepDrag;
   startTime: number;
   preStartTime: number;
+  contextMenuTime: number;
+  clickTimer: number;
   constructor(props) {
     super();
     const {
       graphModel: { gridSize, editConfig }, eventCenter, model,
     } = props;
-    if (editConfig.adjustNodePosition) {
+    if (editConfig.adjustNodePosition && model.draggable) {
       this.stepDrag = new StepDrag({
         onDragStart: this.onDragStart,
         onDraging: this.onDraging,
@@ -149,6 +151,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             nodeModel={model}
             eventCenter={eventCenter}
             graphModel={graphModel}
+            setHoverOFF={this.setHoverOFF}
           />
         ));
     }
@@ -175,7 +178,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       }
       return (
         <BaseText
-          editable={editConfig.nodeTextEdit}
+          editable={editConfig.nodeTextEdit && model.text.editable}
           style={style}
           model={model}
           graphModel={graphModel}
@@ -225,50 +228,73 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
   };
   handleClick = (e: MouseEvent) => {
+    // 节点拖拽进画布之后，不触发click事件相关emit
+    // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
+    if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
     if (time > 200) return; // 事件大于200ms，认为是拖拽。
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
+    const position = graphModel.getPointByClient({
+      x: e.clientX,
+      y: e.clientY,
+    });
     // 两次点击间隔小于200ms， 认为是双击
+    // 节点点击事件推迟200ms触发，如果有双击则取消第一次点击事件触发
     if (this.preStartTime && this.startTime - this.preStartTime < 200) {
+      if (this.clickTimer) { window.clearTimeout(this.clickTimer); }
       const { editConfig } = graphModel;
-      if (editConfig.nodeTextEdit) {
+      if (editConfig.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
         eventCenter.emit(EventType.NODE_DBCLICK, {
           data: nodeData,
           e,
+          position,
         });
       }
     } else {
-      eventCenter.emit(EventType.ELEMENT_CLICK, {
-        data: nodeData,
-        e,
-      });
-      eventCenter.emit(EventType.NODE_CLICK, {
-        data: nodeData,
-        e,
-      });
+      this.clickTimer = window.setTimeout(() => {
+        // 节点右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
+        if (!this.contextMenuTime || this.startTime > this.contextMenuTime) {
+          eventCenter.emit(EventType.ELEMENT_CLICK, {
+            data: nodeData,
+            e,
+            position,
+          });
+          eventCenter.emit(EventType.NODE_CLICK, {
+            data: nodeData,
+            e,
+            position,
+          });
+        }
+      }, 200);
     }
     graphModel.toFront(model.id);
+    graphModel.selectNodeById(model.id);
     this.preStartTime = this.startTime;
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
+    // 节点右击也会触发时间，区分右击和点击(mouseup)
+    this.contextMenuTime = new Date().getTime();
+    if (this.clickTimer) { clearTimeout(this.clickTimer); }
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
-    // fixme: 这里的x, y不准确，当graph较大，页面有滚动条的时候，位置是不正确的。
-    const offsetPosition = graphModel.getPointByClient({
+
+    const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
     });
-    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, offsetPosition);
+    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPostion);
     graphModel.toFront(model.id);
+    graphModel.selectNodeById(model.id);
     eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,
+      position,
     });
   };
   handleMouseDown = (ev) => {
@@ -279,8 +305,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   // 不清楚以前为啥要把hover状态放到model中，先改回来。
   setHoverON = (ev) => {
-    // const { model } = this.props;
-    // model.setHovered(true);
     this.setState({
       isHovered: true,
     });
@@ -292,8 +316,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
   };
   setHoverOFF = (ev) => {
-    // const { model } = this.props;
-    // model.setHovered(false);
     this.setState({
       isHovered: false,
     });
@@ -313,6 +335,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     } = graphModel;
     const {
       isHitable,
+      draggable,
     } = model;
     const nodeShapeInner = (
       <g className="lf-node-content">
@@ -331,7 +354,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         </g>
       );
     } else {
-      if (adjustNodePosition) {
+      if (adjustNodePosition && draggable) {
         this.stepDrag.setStep(gridSize * SCALE_X);
       }
       nodeShape = (

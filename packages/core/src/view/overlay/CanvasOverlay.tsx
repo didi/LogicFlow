@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import GraphModel from '../../model/GraphModel';
 
-import { ElementState, ModelType, EventType } from '../../constant/constant';
+import { ElementState, EventType, ElementType } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import getTransform from './getTransformHoc';
 import EventEmitter from '../../event/eventEmitter';
@@ -89,11 +89,11 @@ class CanvasOverlay extends Component<IProps, Istate> {
     // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住ctrl键也不能缩放了。
     if (!editConfig.stopZoomGraph) {
       ev.preventDefault();
-      let { x, y } = graphModel.getPointByClient({
+      const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
       });
-      [x, y] = transformMatrix.HtmlPointToCanvasPoint([x, y]);
+      const { x, y } = position.canvasOverlayPostion;
       transformMatrix.zoom(ev.deltaY < 0, [x, y]);
     }
   };
@@ -102,15 +102,15 @@ class CanvasOverlay extends Component<IProps, Istate> {
     const target = ev.target as HTMLElement;
     if (target.getAttribute('name') === 'canvas-overlay') {
       const { graphModel, eventCenter } = this.props;
-      const { selectedNode, textEditElement, showMenuElement } = graphModel;
-      if (selectedNode) {
-        selectedNode.setSelected(false, false);
+      const { selectElement, textEditElement, showMenuElement } = graphModel;
+      if (selectElement) {
+        selectElement.setSelected(false);
       }
       if (textEditElement) {
         textEditElement.setElementState(ElementState.DEFAULT);
       }
       if (showMenuElement) {
-        if (showMenuElement.modelType === ModelType.GRAPH) {
+        if (showMenuElement.BaseType === ElementType.GRAPH) {
           graphModel.setElementState(ElementState.DEFAULT);
         } else {
           showMenuElement.setElementState(ElementState.DEFAULT);
@@ -124,12 +124,12 @@ class CanvasOverlay extends Component<IProps, Istate> {
     if (target.getAttribute('name') === 'canvas-overlay') {
       ev.preventDefault();
       const { graphModel, eventCenter } = this.props;
-      const offsetPosition = graphModel.getPointByClient({
+      const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
       });
-      graphModel.setElementState(ElementState.SHOW_MENU, offsetPosition);
-      eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev });
+      graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPostion);
+      eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
     }
   };
   mouseDownHandler = (ev: MouseEvent) => {

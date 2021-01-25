@@ -30,6 +30,7 @@ export enum ModelType {
 export enum ElementType {
   NODE = 'node',
   EDGE = 'edge',
+  GRAPH = 'graph',
 }
 
 export enum EventType {
@@ -57,6 +58,7 @@ export enum EventType {
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
+  HISTORY_CHANGE = 'history:change',
 }
 
 export enum InnerEventType {

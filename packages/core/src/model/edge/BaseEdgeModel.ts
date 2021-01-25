@@ -7,10 +7,10 @@ import { getAnchors } from '../../util/node';
 import { IBaseModel } from '../BaseModel';
 import GraphModel from '../GraphModel';
 import {
-  Point, AdditionData, EdgeAttribute, EdgeData,
+  Point, AdditionData, EdgeAttribute, EdgeData, MenuConfig,
 } from '../../type/index';
 import {
-  ElementState, ModelType, ElementMaxzIndex, ElementType,
+  ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 
@@ -27,6 +27,7 @@ const defaultData = {
     x: 0,
     y: 0,
     draggable: false,
+    editable: true,
   },
   points: '',
   pointsList: [],
@@ -40,6 +41,7 @@ class BaseEdgeModel implements IBaseModel {
   modelType = ModelType.EDGE;
   additionStateData: AdditionData;
   graphModel: GraphModel;
+  menu?: MenuConfig[];
   @observable text = defaultData.text;
   @observable type = '';
   @observable properties = {};
@@ -59,6 +61,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable selectedStroke = defaultData.selectedStroke;
   @observable points = defaultData.points;
   @observable pointsList = defaultData.pointsList;
+  @observable draggable = true;
   constructor(data, graphModel: GraphModel) {
     // todo: 规范所有的初始化参数
     assign(this, pick(data, [
@@ -136,20 +139,23 @@ class BaseEdgeModel implements IBaseModel {
 
   getData(): EdgeData {
     const { x, y, value } = this.text;
-    return {
+    const data: EdgeData = {
       id: this.id,
       type: this.type,
       sourceNodeId: this.sourceNode.id,
       targetNodeId: this.targetNode.id,
       startPoint: { ...this.startPoint },
       endPoint: { ...this.endPoint },
-      text: {
+      properties: toJS(this.properties),
+    };
+    if (value) {
+      data.text = {
         x,
         y,
         value,
-      },
-      properties: toJS(this.properties),
-    };
+      };
+    }
+    return data;
   }
 
   @action
@@ -179,14 +185,26 @@ class BaseEdgeModel implements IBaseModel {
   @action
   formatText(data) {
     // 暂时处理，只传入text的情况
+    const { x, y } = this.textPosition;
+    if (!data.text) {
+      data.text = {
+        value: '',
+        x,
+        y,
+        draggable: false,
+        editable: true,
+      };
+    }
     if (data.text && typeof data.text === 'string') {
-      const { x, y } = this.textPosition;
       this.text = {
         value: data.text || '',
         x,
         y,
         draggable: false,
+        editable: true,
       };
+    } else if (data.text && data.text.editable === undefined) {
+      data.text.editable = true;
     }
   }
 
@@ -198,19 +216,23 @@ class BaseEdgeModel implements IBaseModel {
         y,
         value,
         draggable,
+        editable,
       } = this.text;
       this.text = {
         value,
         draggable,
         x: x + deltaX,
         y: y + deltaY,
+        editable,
       };
     }
   }
 
   @action
   setText(textConfig): void {
-    this.text = textConfig;
+    if (textConfig) {
+      this.text = assign(this.text, textConfig);
+    }
   }
 
   @action
@@ -219,11 +241,13 @@ class BaseEdgeModel implements IBaseModel {
       x,
       y,
       draggable,
+      editable,
     } = this.text;
     this.text = {
       x,
       y,
       draggable,
+      editable,
       value,
     };
   }
@@ -243,7 +267,6 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setSelected(flag = true): void {
     this.isSelected = flag;
-    this.zIndex = this.isSelected ? ElementMaxzIndex : 0;
   }
 
   @action
@@ -288,6 +311,11 @@ class BaseEdgeModel implements IBaseModel {
     if (theme[type]) {
       assign(this, theme[type]);
     }
+  }
+
+  @action
+  setZIndex(zindex: number = defaultData.zIndex): void {
+    this.zIndex = zindex;
   }
 }
 

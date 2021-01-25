@@ -24,6 +24,7 @@ type ElementModeId = string;
 const VisibleMoreSpace = 200;
 
 class GraphModel {
+  readonly BaseType = ElementType.GRAPH;
   modelType = ModelType.GRAPH;
   rootEl: HTMLElement;
   theme;
@@ -31,6 +32,8 @@ class GraphModel {
   modelMap = new Map();
   width: number;
   height: number;
+  topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
+  selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -41,7 +44,6 @@ class GraphModel {
   @observable isSlient = false;
   @observable plugins = [];
   @observable tools = [];
-  @observable topElement = '';
   @observable background;
   @observable transformMatrix = new TransfromModel();
   @observable editConfig: EditConfigModel;
@@ -49,6 +51,7 @@ class GraphModel {
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
   @observable fakerNode: BaseNodeModel;
+  // @observable selectElements = new Map<string, IBaseModel>(); // 多选还没有做，先不加
   constructor(config) {
     const {
       container, background = {}, grid: { size = 1 } = {}, isSilentMode = false,
@@ -79,32 +82,29 @@ class GraphModel {
       return eMap;
     }, {});
   }
-
+  // fixme: 用户点击触发两次sortElements
   @computed get sortElements() {
     const elements = [...this.edges, ...this.nodes];
     // 只显示可见区域的节点和连线以及和这个可以区域节点的节点
     const showElements = [];
-    let selectElementIdx = -1;
+    let topElementIdx = -1;
     // todo: 缓存, 优化计算效率
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
       if (!this.partial || this.isElementVisible(currentItem)) {
         if (currentItem.zIndex === ElementMaxzIndex) {
-          selectElementIdx = i;
+          topElementIdx = showElements.length;
         }
         showElements.push(currentItem);
       }
     }
-    if (selectElementIdx !== -1) {
-      const lastElement = elements[elements.length - 1];
-      elements[elements.length - 1] = elements[selectElementIdx];
-      elements[selectElementIdx] = lastElement;
+    if (topElementIdx !== -1) {
+      const lastElement = showElements[elements.length - 1];
+      showElements[elements.length - 1] = showElements[topElementIdx];
+      showElements[topElementIdx] = lastElement;
     }
     return showElements;
-  }
-  @computed get selectedNode() {
-    return this.nodes.find(node => node.isSelected) || this.edges.find(edge => edge.isSelected);
   }
   /**
    * 当前编辑的元素，低频操作，先循环找吧。
@@ -126,7 +126,7 @@ class GraphModel {
       return this;
     }
     return {
-      modelType: '',
+      BaseType: '',
       additionStateData: '',
       setElementState() {},
     };
@@ -134,14 +134,6 @@ class GraphModel {
 
   getModel(type: string) {
     return this.modelMap.get(type);
-  }
-
-  getSelected() {
-    return this.nodes.find((node) => node.isSelected);
-  }
-
-  getSelectedEdge() {
-    return this.edges.find((edge) => edge.isSelected);
   }
 
   getNodeModel(nodeId: BaseNodeModelId): BaseNodeModel {
@@ -152,11 +144,20 @@ class GraphModel {
    * 当内部事件需要获取触发事件时，其相对于画布左上角的位置
    * 需要事件触发位置减去画布相对于client的位置
    */
-  getPointByClient({ x, y }: Point) {
+  getPointByClient({ x: x1, y: y1 }: Point) {
     const bbox = this.rootEl.getBoundingClientRect();
+    const domOverlayPostion = {
+      x: x1 - bbox.left,
+      y: y1 - bbox.top,
+    };
+    const [x, y] = this.transformMatrix
+      .HtmlPointToCanvasPoint([domOverlayPostion.x, domOverlayPostion.y]);
     return {
-      x: x - bbox.left,
-      y: y - bbox.top,
+      domOverlayPostion,
+      canvasOverlayPostion: {
+        x,
+        y,
+      },
     };
   }
   isElementVisible(element) {
@@ -198,6 +199,10 @@ class GraphModel {
         node.x = snapToGrid(nodeX, this.gridSize);
         node.y = snapToGrid(nodeY, this.gridSize);
       }
+      if (Object.prototype.toString.call(node.text) === '[object Object]') {
+        node.text.x = snapToGrid(node.text.x, this.gridSize);
+        node.text.y = snapToGrid(node.text.y, this.gridSize);
+      }
       return new Model(node, this);
     });
     this.edges = map(graphData.edges, edge => {
@@ -216,6 +221,22 @@ class GraphModel {
       nodes,
       edges,
     };
+  }
+
+  getEdgeModel(edgeId: string) {
+    const edge = this.edgesMap[edgeId];
+    if (edge) {
+      return edge.model;
+    }
+  }
+
+  getElement(id: string): IBaseModel | undefined {
+    const nodeModel = this.getNodeModel(id);
+    if (nodeModel) {
+      return nodeModel;
+    }
+    const edgeModel = this.getEdgeModel(id);
+    return edgeModel;
   }
 
   @action
@@ -239,8 +260,12 @@ class GraphModel {
 
   @action
   toFront(id) {
-    this.nodes.forEach((node) => node.setSelected(node.id === id));
-    this.edges.forEach((edge) => edge.setSelected(edge.id === id));
+    const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model;
+    if (element) {
+      this.topElement?.setZIndex();
+      this.topElement = element;
+      element.setZIndex(ElementMaxzIndex);
+    }
   }
 
   @action
@@ -286,6 +311,7 @@ class GraphModel {
     }
     const nodeModel = this.addNode(data);
     nodeModel.setSelected(true);
+    Model.setSelected(false);
     return nodeModel.getData();
   }
   /**
@@ -436,9 +462,23 @@ class GraphModel {
 
   @action
   resetElementState() {
-    if (this.showMenuElement && this.showMenuElement.modelType) {
+    if (this.showMenuElement && this.showMenuElement.BaseType) {
       this.showMenuElement.setElementState(ElementState.DEFAULT);
     }
+  }
+
+  @action
+  selectNodeById(id) {
+    this.selectElement?.setSelected(false);
+    this.selectElement = this.nodesMap[id]?.model;
+    this.selectElement?.setSelected(true);
+  }
+
+  @action
+  selectEdgeById(id) {
+    this.selectElement?.setSelected(false);
+    this.selectElement = this.edgesMap[id]?.model;
+    this.selectElement?.setSelected(true);
   }
 
   /* 修改连线类型 */

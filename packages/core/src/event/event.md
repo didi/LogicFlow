@@ -37,4 +37,8 @@ emit 的第二个参数。
 emit('namespace:eventName', {
   id, // 节点或连线的id 必传，blank非必需
   e, //  非必需，事件对象 e
+  position: { // 非必须，表示触发事件时，鼠标所处画布层的位置和dom层的位置
+    domOverlayPostion,
+    canvasOverlayPostion,
+  }
 })

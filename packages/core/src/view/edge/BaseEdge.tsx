@@ -70,7 +70,7 @@ export default class BaseEdge extends Component<IProps> {
     }
     return (
       <LineText
-        editable={editConfig.edgeTextEdit}
+        editable={editConfig.edgeTextEdit && model.text.editable}
         model={model}
         graphModel={graphModel}
         style={style}
@@ -152,10 +152,11 @@ export default class BaseEdge extends Component<IProps> {
     const { model, graphModel, eventCenter } = this.props;
     const { editConfig } = graphModel;
     // 边文案可编辑状态，才可以进行文案编辑
-    if (editConfig.edgeTextEdit) {
+    if (editConfig.edgeTextEdit && model.text.editable) {
       graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
     }
     graphModel.toFront(model.id);
+    graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
     eventCenter.emit(EventType.EDGE_DBCLICK, {
@@ -166,32 +167,41 @@ export default class BaseEdge extends Component<IProps> {
   handleClick = (e) => {
     const { model, graphModel, eventCenter } = this.props;
     graphModel.toFront(model.id);
+    graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
+    const position = graphModel.getPointByClient({
+      x: e.clientX,
+      y: e.clientY,
+    });
     eventCenter.emit(EventType.ELEMENT_CLICK, {
       data: edgeData,
       e,
+      position,
     });
     eventCenter.emit(EventType.EDGE_CLICK, {
       data: edgeData,
       e,
+      position,
     });
   };
   // 右键点击节点，设置节点未现在菜单状态
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
     const { model, graphModel, eventCenter } = this.props;
-    const offsetPosition = graphModel.getPointByClient({
+    const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
     });
-    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, offsetPosition);
+    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPostion);
     graphModel.toFront(model.id);
+    graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
     eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
       data: edgeData,
       e: ev,
+      position,
     });
   };
   render() {
@@ -200,9 +210,9 @@ export default class BaseEdge extends Component<IProps> {
         className="lf-edge"
       >
         {this.getShape()}
+        {this.getAppend()}
         {this.getText()}
         {this.getArrow()}
-        {this.getAppend()}
       </g>
     );
   }

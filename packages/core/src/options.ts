@@ -2,8 +2,7 @@ import { assign } from 'lodash-es';
 import { DndOptions } from './view/behavior/DnD';
 import { GridOptions } from './view/overlay/Grid';
 import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
-import { ToolConfig } from './tool';
-import { MenuConfig, Style } from './type';
+import { Style, NodeData, EdgeData } from './type';
 import { KeyboardDef } from './keyboard';
 
 // edgeMenuConfig: any;
@@ -18,17 +17,9 @@ export type Definition = {
 
   grid?: boolean | GridOptions
 
-  tool?: ToolConfig
-
   textEdit?: boolean
 
   keyboard?: KeyboardDef
-
-  edgeMenuConfig?: false | MenuConfig[]
-
-  nodeMenuConfig?: false | MenuConfig[]
-
-  graphMenuConfig?: false | MenuConfig[]
 
   style?: Style
 
@@ -47,7 +38,14 @@ export type Definition = {
   stopScrollGraph?: boolean;
 
   stopZoomGraph?: boolean;
+
+  guards?: GuardsTypes
 };
+
+export interface GuardsTypes {
+  beforeClone?: (data: NodeData) => boolean;
+  beforeDelete?: (data: NodeData | EdgeData) => boolean;
+}
 
 // 用来获取用户传入的 options，并做一些容错和异常抛出
 export function get(options: Definition) {
@@ -66,7 +64,7 @@ export function get(options: Definition) {
       },
     }, grid);
   }
-  return options;
+  return assign({}, defaults, options);
 }
 
 // 默认 options
