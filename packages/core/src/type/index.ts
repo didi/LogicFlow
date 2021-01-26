@@ -106,7 +106,7 @@ export type EdgeFilter = {
 };
 
 export type EdgeConfig = {
-  id: string;
+  id?: string;
   type: string;
   sourceNodeId: string;
   targetNodeId: string;

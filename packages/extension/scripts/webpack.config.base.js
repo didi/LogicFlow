@@ -3,12 +3,15 @@ const path = require('path')
 const { version } = require('../package.json')
 
 const packagesEntry = {
-  BpmnAdapter: path.resolve(__dirname, "../src/adapter/bpmn/index.ts"),
-  Snapshot: path.resolve(__dirname, "../src/extension/snapshot/index.ts"),
-  RectLabelNode: path.resolve(__dirname, "../src/extension/rect-label-node/index.ts"),
-  BpmnElement: path.resolve(__dirname, "../src/extension/bpmn/index.ts"),
-  ResizeNode: path.resolve(__dirname, "../src/extension/resize-node/index.ts"),
-}
+  BpmnAdapter: path.resolve(__dirname, "../src/adapter/index.ts"),
+  Snapshot: path.resolve(__dirname, "../src/snapshot/index.ts"),
+  RectLabelNode: path.resolve(__dirname, "../src/rect-label-node/index.ts"),
+  BpmnElement: path.resolve(__dirname, "../src/bpmn/index.ts"),
+  ResizeNode: path.resolve(__dirname, "../src/resize-node/index.ts"),
+  Control: path.resolve(__dirname, "../src/components/control/index.ts"),
+  Menu: path.resolve(__dirname, "../src/components/menu/index.ts"),
+  Dnd: path.resolve(__dirname, "../src/components/dnd/index.ts"),
+};
 
 module.exports = {
   entry: packagesEntry,

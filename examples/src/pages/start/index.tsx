@@ -3,9 +3,6 @@ import LogicFlow from '@logicflow/core';
 import './index.css';
 
 const config = {
-  tool: {
-    control: false,
-  },
   stopScrollGraph: true,
   stopZoomGraph: true,
   grid: {

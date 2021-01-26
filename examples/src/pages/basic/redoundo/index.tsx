@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
+import { Control } from '@logicflow/extension';
 import ExampleHeader from '../../../components/example-header';
+import '@logicflow/extension/lib/style/index.css';
 
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
-  tool: {
-    control: true
-  },
 }
 
 const data = {
@@ -33,6 +32,7 @@ const data = {
 export default function RedoUndoExample() {
 
   useEffect(() => {
+    LogicFlow.use(Control);
     const lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph') as HTMLElement

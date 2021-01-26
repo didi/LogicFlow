@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "0.1.0",
+  "version": "0.1.10",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
@@ -9,11 +9,12 @@
   "scripts": {
     "start": "NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "style": "echo ./cjs ./es ./lib | xargs -n 1 cp -v -r ./src/style",
     "types": "tsc -d --declarationDir ./types --outDir temp; rm -rf -R temp",
     "build:esm": "tsc --module esnext --target es5 --outDir ./es -d",
     "build:cjs": "tsc --module commonjs --target es5 --outDir ./cjs",
     "build:umd": "NODE_ENV=production webpack --config scripts/webpack.config.build.js",
-    "build": "rm -rf ./es ./cjs ./lib & npm run build:esm & npm run build:cjs & npm run build:umd",
+    "build": "rm -rf ./es ./cjs ./lib & npm run build:esm & npm run build:cjs & npm run build:umd && npm run style",
     "publish-lib": "npm run build && npm publish"
   },
   "author": "",

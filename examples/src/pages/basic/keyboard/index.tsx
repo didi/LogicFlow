@@ -5,10 +5,6 @@ import './index.css';
 
 const config = {
   textEdit: false,
-  tool: {
-    menu: false,
-    control: false,
-  },
   keyboard: {
     enabled: true,
   },

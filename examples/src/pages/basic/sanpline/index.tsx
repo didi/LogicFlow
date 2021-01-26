@@ -8,11 +8,7 @@ const config = {
   grid: {
     size: 10,
     type: 'dot'
-  },
-  tool: {
-    menu: false,
-    control: false
-  },
+  }
 }
 
 const data = {

@@ -1,5 +1,6 @@
-export * from './extension/bpmn';
-// export * from './extension/rect-label-node';
-// export * from './extension/resize-node';
-export * from './extension/snapshot';
-export * from './adapter/bpmn';
+export * from './bpmn';
+export * from './snapshot';
+export * from './adapter';
+export * from './components/control';
+export * from './components/menu';
+export * from './components/dnd';

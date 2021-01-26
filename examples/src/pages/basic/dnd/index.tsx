@@ -15,9 +15,6 @@ export default class DndExample extends Component<IProps, IState> {
       container: document.querySelector('#graph') as HTMLElement,
       stopScrollGraph: true,
       stopZoomGraph: true,
-      tool: {
-        control: false,
-      },
     });
     this.lf.render();
   }
