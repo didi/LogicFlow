@@ -7,9 +7,6 @@ const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
   textEdit: false,
-  tool: {
-    control: false,
-  }
 };
 
 const data = {

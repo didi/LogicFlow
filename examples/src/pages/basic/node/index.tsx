@@ -5,10 +5,6 @@ const config = {
   isSilentMode: true,
   stopScrollGraph: true,
   stopZoomGraph: true,
-  tool: {
-    menu: false,
-    control: false
-  },
   style: {
     rect: {
       width: 100,

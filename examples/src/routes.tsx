@@ -5,25 +5,29 @@ import Dnd from './pages/basic/dnd';
 import Grid from './pages/basic/grid';
 import Node from './pages/basic/node';
 import Edge from './pages/basic/edge';
-import Bpmn from './pages/extension/bpmn';
+import Bpmn from './pages/usage/bpmn';
 import Keyboard from './pages/basic/keyboard';
 import RedoUndo from './pages/basic/redoundo';
 import Snapline from './pages/basic/sanpline';
 import Silent from './pages/basic/silent-mode';
 import Theme from './pages/advance/theme';
 import Snapshot from './pages/extension/snapshot';
-import Control from './pages/extension/tools/control';
-import Menu from './pages/extension/tools/menu';
-import TextEdit from './pages/extension/tools/text-edit';
-import CustomMenu from './pages/extension/tools/custom-menu';
-import CustomNodeContent from './pages/advance/custom-node/content';
-import CustomNodeShape from './pages/advance/custom-node/shape';
-import CustomNodeProperties from './pages/advance/custom-node/properties';
-import CustomNodeEdge from './pages/advance/custom-node/edge';
-import CustomEdge from './pages/advance/custom-edge';
+import Control from './pages/extension/components/control';
+import Menu from './pages/extension/components/menu';
+import DndPandel from './pages/extension/components/dnd/index';
+import CustomMenu from './pages/extension/components/custom-menu';
+import CustomDnd from './pages/extension/components/custom-dnd';
+import UserTaskNode from './pages/advance/custom-node/userTask';
+import Triangle from './pages/advance/custom-node/triangle';
+import Rule from './pages/advance/custom-node/rule';
+import Process from './pages/advance/custom-edge/process';
+import Arrow from './pages/advance/custom-edge/arrow';
 import Event from './pages/advance/event';
 import Approve from './pages/approve';
 import ApprovePreview from './pages/approvePreview';
+import BpmnElements from './pages/extension/bpmn/Elements';
+import AdapterExample from './pages/extension/adapter';
+
 
 export default (
   <Switch>
@@ -37,19 +41,22 @@ export default (
     <Route path="/basic/silent-mode" exact component={Silent} />
     <Route path="/advance/theme" exact component={Theme} />
     <Route path="/advance/event" exact component={Event} />
-    <Route path="/advance/custom-node/content" exact component={CustomNodeContent} />
-    <Route path="/advance/custom-node/shape" exact component={CustomNodeShape} />
-    <Route path="/advance/custom-node/properties" exact component={CustomNodeProperties} />
-    <Route path="/advance/custom-node/edge" exact component={CustomNodeEdge} />
-    <Route path="/advance/customEdge" exact component={CustomEdge} />
-    <Route path="/extension/bpmn" exact component={Bpmn}/>
+    <Route path="/advance/custom-node/usertask" exact component={UserTaskNode} />
+    <Route path="/advance/custom-node/triangle" exact component={Triangle} />
+    <Route path="/advance/custom-node/rule" exact component={Rule} />
+    <Route path="/advance/custom-edge/process" exact component={Process} />
+    <Route path="/advance/custom-edge/arrow" exact component={Arrow} />
     <Route path="/extension/snapshot" exact component={Snapshot} />
-    <Route path="/extension/tools/control" exact component={Control} />
-    <Route path="/extension/tools/menu" exact component={Menu} />
-    <Route path="/extension/tools/text-edit" exact component={TextEdit} />
-    <Route path="/extension/tools/custom-menu" exact component={CustomMenu} />
+    <Route path="/extension/components/control" exact component={Control} />
+    <Route path="/extension/components/menu" exact component={Menu} />
+    <Route path="/extension/components/dnd" exact component={DndPandel} />
+    <Route path="/extension/components/custom-menu" exact component={CustomMenu} />
+    <Route path="/extension/components/custom-dnd" exact component={CustomDnd} />
     <Route path="/extension/approve" exact component={Approve} />
     <Route path="/extension/approve/preview" exact component={ApprovePreview} />
+    <Route path="/extension/bpmn-elements" exact component={BpmnElements} />
+    <Route path="/extension/adapter" exact component={AdapterExample} />
+    <Route path="/usage/bpmn" exact component={Bpmn} />
     <Route path="/" component={Start} />
   </Switch>
 );

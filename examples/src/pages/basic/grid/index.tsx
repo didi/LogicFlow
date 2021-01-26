@@ -17,10 +17,6 @@ const config = {
   isSilentMode: true,
   stopScrollGraph: true,
   stopZoomGraph: true,
-  tool: {
-    menu: false,
-    control: false
-  }
 };
 
 const data = {
@@ -103,7 +99,7 @@ export default class GridExample extends Component<IProps, IState> {
     const { currentGrid } = this.state;
 
     return (
-      <div>
+      <>
         <ExampleHeader>
           网格类型：
           <Button onClick={() => { this.handleClick('dot') }}>Dot</Button>
@@ -117,7 +113,7 @@ export default class GridExample extends Component<IProps, IState> {
           id="graphMesh"
           className={`viewport example-grid-${currentGrid === 'mesh' ? 'visible' : 'hidden'}`}
         />
-      </div>
+      </>
     );
   }
 }

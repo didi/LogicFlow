@@ -43,7 +43,7 @@ export default function PropertyPanel(nodeData, updateproperty, hidePropertyPane
         onValuesChange={onFormLayoutChange}
       >
         <span className="form-property">类型：<span>{nodeData.type}</span></span>
-        <span className="form-property">文案：<span>{nodeData.text.value}</span></span>
+        <span className="form-property">文案：<span>{nodeData.text?.value}</span></span>
         {nodeData.type==="approver" ? getApproveList() : ''}
         {nodeData.type === "jugement" ? getApiUrl() : ''}
       </Form>

@@ -6,15 +6,9 @@ import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import 'antd/lib/button/style/index.css';
 
-LogicFlow.use(Snapshot);
-
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
-  tool: {
-    menu: false,
-    control: false
-  }
 }
 
 const data = {
@@ -59,6 +53,7 @@ let lf: LogicFlow;
 export default function SnapshotExample() {
 
   useEffect(() => {
+    LogicFlow.use(Snapshot);
     lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph') as HTMLElement
