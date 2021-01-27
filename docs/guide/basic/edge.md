@@ -3,8 +3,8 @@
 
 Logic Flow 的内置节点包括
 - 直线(line)
-- 曲线(bezier)
 - 直角折线(polyline)
+- 贝塞尔曲线(bezier)
   
 ## 创建边
 Logic Flow 支持两种创建边的方式
@@ -28,7 +28,7 @@ lf.render({
 });
 ```
 
-<example :height="300"></example>
+<example :height="500" ></example>
 
 ### 通过函数创建连接
 
@@ -55,7 +55,7 @@ lf.createEdge({
 });
 
 // 获取边数据
-lf.getEdgeData(nodeId);
+lf.getEdgeData(edgeId);
 
 // 修改边数据
 lf.setEdgeData({
@@ -99,9 +99,6 @@ lf.setEdgeData({
   property: {}
 });
 
-// 根据id删除边
-lf.removeEdge({id: edgeId});
-
 // 删除节点A到节点B所有的边
 lf.removeEdge({sourceNodeId: nodeAId, targetNodeId: nodeBId,});
 
@@ -114,4 +111,4 @@ lf.removeEdge({targetNodeId: nodeBId});
 
 ```
 
-Edge 的完整函数参见 [Connection API](/api/EdgeApi.html)。
+Edge 的完整函数参见 [Edge API](/api/EdgeApi.html)。

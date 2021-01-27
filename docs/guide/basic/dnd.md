@@ -70,7 +70,6 @@ export default class Panel extends Component<IProps, IState> {
           return (
             <div className="panel-item">
               <div
-                draggable={true}
                 className={`panel-${type}`}
                 onMouseDown={() => { this.mouseDown(shape); }}
               />
@@ -87,7 +86,7 @@ export default class Panel extends Component<IProps, IState> {
 
 <example :height="350" ></example>
 
-通过上面的代码可以看出，将图形面板中的图形`div`设置属性`draggable = true`，当拖拽图形时，会触发`lf.dnd.startDrag`函数，表示开始拖拽，并传入选中图形的配置，`startDrag`入参格式：
+通过上面的代码可以看出，将节点通过`div`标签+`css`样式的方式绘制到面板中，并为其绑定`onMouseDown`事件，当拖拽图形时，会触发`lf.dnd.startDrag`函数，表示开始拖拽，并传入选中图形的配置，`startDrag`入参格式：
 
 ```js
 startDrag(nodeConfig: NodeConfig):void

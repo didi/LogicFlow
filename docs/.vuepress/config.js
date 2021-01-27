@@ -31,7 +31,6 @@ const guide = [
     title: '拓展',
     collapsable: false,
     children: [
-      'extension/extension-intro',
       'extension/extension-components',
       'extension/bpmn-element',
       'extension/snapshot',

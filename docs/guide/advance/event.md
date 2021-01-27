@@ -1,68 +1,89 @@
 # 事件 Event
 
-通过鼠标或者各种可交互的组件与应用产生交互时触发的事件，如节点的点击事件 `node:click`。
-另外所有的事件都通过 lf 来监听，比如：
+当我们使用鼠标或其它方式与画布交互时，会触发的对应的事件。通过监听这些事件，可以获取其在触发时所产生的数据，根据这些数据来实现需要的功能。
+
+所有的事件都可以通过`lf.on()`进行监听。
+
 ```js
-lf.on('node:click', ({ data, e }) => {})
+lf.on('element:type', (eventObject) => {});
 ```
 
 ## 节点事件
 
 | 事件名   | 说明   | 事件对象 |
-| :----- | :----- | :-----  |   
-| 'element:click' | 元素单击 | data, e |
-| 'node:click' | 节点单击 |  data, e |
-| 'node:dblclick' | 节点双击 | data, e |
+| :----- | :----- | :-----  |
+| 'element:click' | 元素单击 | data, e, position |
+| 'node:click' | 节点单击 |  data, e, position |
+| 'node:dblclick' | 节点双击 | data, e, position |
 | 'node:mousedown' | 鼠标按下节点 | data, e |
 | 'node:mouseup' | 鼠标抬起节点 | data, e |
 | 'node:mousemove' | 鼠标移动节点 | data, e |
 | 'node:delete' | 节点的删除 | data |
 | 'node:add' | 节点的添加 | data |
-| 'node:contextmenu' | 右键点击节点 | data, e |
+| 'node:contextmenu' | 右键点击节点 | data, e, position |
+
+事件对象包含如下内容。
+
+| 属性   | 类型   | 值 |
+| :----- | :----- | :----- |
+| data | Object | 节点的[数据属性](/api/nodeApi.md#数据属性) |
+| e | MouseEvent | 原生的鼠标事件对象 |
+| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
 
 ## 边事件
 
 | 事件名   | 说明   | 事件对象 |
-| :----- | :----- | :-----  |   
-| 'element:click' | 元素单击 | data, e |
-| 'edge:click' | 边单击 | data, e |
+| :----- | :----- | :----- |
+| 'element:click' | 元素单击 | data, e, position |
+| 'edge:click' | 边单击 | data, e, position |
 | 'edge:dbclick' | 边双击 | data, e |
 | 'edge:add' | 边增加 | data |
 | 'edge:delete'| 边删除 |data |
-| 'edge:contextmenu'| 边右键 | data, e |
+| 'edge:contextmenu'| 边右键 | data, e, position |
 | 'connection:not-allowed' | 不允许建立连接 | data, msg |
 
+事件对象包含如下内容。
 
-## 画布的事件
-目前支持以下画布事件，可通过 `lf.on('blank:click', ({ e }) => {})` 捕获。
+| 属性   | 类型   | 值 |
+| :----- | :----- | :----- |
+| data | Object | 连线的[数据属性](/api/edgeApi.md#数据属性) |
+| e | MouseEvent | 原生的鼠标事件对象 |
+| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
+| msg | String | 连线校验信息 |
 
-| 事件名   | 说明   |事件对象 |
-| :----- | :----- |:-----  |  
+## 画布事件
+
+| 事件名   | 说明   | 事件对象 |
+| :----- | :----- | :----- |  
 | 'blank:mousedown' | 画布鼠标按下 | e |
 | 'blank:mousemove' | 画布鼠标移动 | e |
 | 'blank:mouseup' | 画布鼠标抬起 | e |
 | 'blank:click' | 画布单击 | e |
-| 'blank:contextmenu'| 画布右键 | e |
+| 'blank:contextmenu'| 画布右键 | e, position |
 
+事件对象包含如下内容。
 
-## 事件对象
-| 属性   | 说明   |
-| :----- | :----- |
-| data   | 触发事件的实例数据, 节点事件和边事件存在实例数据，画布事件暂无数据抛出 |
-| e  | 监听到的事件对象; 类原生事件存在此属性，例如：xxx:click; 其他事件不存在此属性，例如：xxx:add; |
-| msg  | 连线校验信息 |
+| 属性   | 类型   | 值 |
+| :----- | :----- | :----- |
+| e | MouseEvent | 原生的鼠标事件对象 |
+| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
 
+## History 事件
 
-```js
-lf.on('node:click', (
-  {
-  data,
-  e,
-  msg,
-}
-) => { })
+History 用来记录画布上的每一次改动，当画布上的元素发生变化时会触发`history:change`事件。
 
-```
+| 事件名   | 说明   | 事件对象 |
+| :----- | :----- | :-----  |  
+| 'history:change' | 画布变化 | data |
+
+事件对象中的 data 属性包含以下内容。
+
+| 属性   | 类型   | 说明 |
+| :----- | :----- | :-----  |  
+| undos | Array | 可撤销的 graph 快照 |
+| redos | Array | 可重做的 graph 快照 |
+| undoAble | Boolean | 是否可以撤销 |
+| redoAble | Boolean | 是否可以重做 |
 
 ## 示例
 
