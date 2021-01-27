@@ -1,243 +1,311 @@
 # 自定义节点
 
-> 在实际使用中，我们往往需要基于各自的业务自定义节点。比如需要实现一个满足bpmn规范的流程图，我们则需要一个圆形表示`startEvent`，一个矩形表示`userTask`，一个圆柱体表示`dataStoreReference`。这个时候我们就可以使用自定义的方式来实现。
+> Logic Flow 的元素是基于 SVG 实现的，如果你对 SVG 的相关知识还不太熟悉，那么推荐你先了解一下 [SVG](https://developer.mozilla.org/zh-CN/docs/Web/SVG) 的基础内容。
 
 ## 原理
 
-**基于继承的自定义节点**
+### 基于继承的自定义节点
 
-Logic Flow 对外暴露了基础节点`BaseNode`和3个代表简单类型的节点`RectNode`、`CircleNode`、`PolygonNode`。
+Logic Flow 对外暴露了基础节点`BaseNode`和5个代表简单类型的节点`RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`。
 
 ![节点继承原理](../../assets/images/custom-node.png)
 
-由上图可以看到，Logic Flow 内置了基础的`BaseNode`, `RectNode`、`CircleNode`、`PolygonNode`都是继承了`BaseNode`。然后是`CustomNode`, 他们可以继承`RectNode`、`CircleNode`、`PolygonNode`,也可以直接继承`BaseNode`。
+由上图可以看到，Logic Flow 提供的`RectNode`、`CircleNode`、`PolygonNode`都是继承自内部的`BaseNode`。因此，用户的`CustomNode`可以通过继承简单类型节点来实现，也可以直接继承`BaseNode`。
 
-**MVVM**
+### MVVM
 
-Logic Flow 内部是基于`MVVM`模式进行开发的，使用了`preact`来处理 view 的渲染和`mobx`来管理model。所以当我们需要高度自定义节点的时候，需要同时定义这个节点的`view`和`model`。当然，大多数情况下，我们只需要自定义`view`即可。
+Logic Flow 内部是基于`MVVM`模式进行开发的，分别使用`preact`和`mobx`来处理 view 和 model，所以当我们自定义节点的时候，需要为这个节点定义`view`和`model`。
 
 ## 注册自定义节点
 
-在创建了`LogicFlow`实例后，render 之前，我们可以使用`register`方法来注册自定义节点。
+我们可以在创建`LogicFlow`实例之后，`render`之前，使用[`register`方法](/api/logicFlowApi.md#register)来注册自定义节点。
 
-**自定义节点名称**
+`register`的第一个参数告诉 Logic Flow 自定义节点的类型，第二个参数可以为自定义节点定义`view`和`model`。`register`的第二个参数是一个回调函数，它的参数包含了 Logic Flow 内部所有节点的`view`和`model`，因此，我们可以通过**继承**这些内部的`view`和`model`来实现自定义节点的`view`和`model`，下文详细介绍了注册自定义节点的细节。
 
-例如我们注册一个开始节点，这个节点长得和内置的`circle`节点一样，只是最后生成的 type 变成了`startEvent`, 那么我们可以如下实现：
+## 自定义节点的类型
+
+如果我们要注册一个`type`为`startEvent`的自定义节点，这个节点形状是一个圆形，那么可以通过继承内置的`Circle`节点（实际是继承`Circle`的`view`和`model`）来快速实现，例如：
+
 ```ts
-const lf = new LogicFlow({
-  container: document.querySelector('#container'),
+// 注册自定义节点
+lf.register('startEvent', (RegisterParam) => {
+  const { CircleNode, CircleNodeModel } = RegisterParam;
+  // 自定义节点的 view，CircleNode 是 Circle 的 view
+  class StartEventView extends CircleNode {}
+  // 自定义节点的 model，CircleNodeModel 是 Circle 的 model
+  class StartEventModel extends CircleNodeModel {}
+  return {
+    view: StartEventView,
+    model: StartEventModel,
+  }
 });
 
-lf.register('startEvent', ({ CircleNode, CircleNodeModel }) => {
-  return {
-    view: CircleNode,
-    model: CircleNodeModel,
-  }
-})
+// 使用自定义节点
 lf.render({
   nodes: [
     {
+      id: 10,
       type: 'startEvent',
       x: 300,
       y: 200,
       text: '开始'
     },
   ]
-})
+});
 ```
 
-**给节点内部增加其它元素**
+访问 [API](/api/logicFlowApi.md#register) 来查看`register`提供的`view`和`model`全集。
 
-我们可以通过在节点内部任意位置增加文本和图片，例如`userTask`节点需要在左上角增加一个图标。我们则可以通过重写`view`中的`getShape`方法来实现。
+## 自定义节点的 View
+
+节点在`view`中维护了自身的`VNode`，Logic Flow 渲染节点时会实例化`view`，并主动调用`view`中的以下两个方法来确定`VNode`该如何渲染，通过**复写**这两个方法就可以实现自定义节点的`view`.
+
+- [getShape](/guide/advance/customNode.html#getshape)
+- [getAttributes](/guide/advance/customNode.html#getattributes)
+
+### getShape
+
+`getShape`方法可以返回任意 SVG 能识别的标签，这个返回的元素就是自定义节点的`VNode`，目前需要使用 Logic Flow 提供的 `h` 方法来创建 SVG 元素。
+
+以自定义一个正方形（square）节点为例，我们直接通过继承`RectNode`来实现，只需要在继承`view`时复写`getShape`方法。
 
 ```js
-class UserTaskNode extends RectNode {
-  getLabelShape() {
-    const attributes = this.getAttributes();
-    const {
-      x,
-      y,
-      width,
-      height,
-      stroke,
-    } = attributes;
-    return h(
-      'svg',
-      {
-        x: x - width / 2 + 5,
-        y: y - height / 2 + 5,
-        width: 25,
-        height: 25,
-        viewBox: '0 0 1274 1024',
-      },
-      h(
-        'path',
-        {
-          fill: stroke,
-          d: 'M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z',
-        },
-      ),
-    );
-  }
-  getShape() {
-    const attributes = this.getAttributes();
-    const {
-      x,
-      y,
-      width,
-      height,
-      fill,
-      stroke,
-      strokeWidth,
-      radius,
-    } = attributes;
-
-    return h(
-      'g',
-      {
-      },
-      [
-        h(
-          'rect',
-          {
-            x: x - width / 2,
-            y: y - height / 2,
-            rx: radius,
-            ry: radius,
-            fill,
-            stroke,
-            strokeWidth,
-            width,
-            height,
-          },
-        ),
-        this.getLabelShape(),
-      ],
-    );
-  }
-}
-```
-
-<example href="/examples/#/advance/custom-node/content" :height="200" ></example>
-
-从上面的代码中，`getShape`方法会返回表示节点形状的`VNode`。这个`VNode`可以是任意 svg 能识别的标签。这里我们返回的就是一个矩形和一个图标。这个图标的位置可以通过直接调用`this.getAttributes()`拿到，除了位置，还有很多这个节点相关的属性都能拿到。
-
-> 图标这里有个小技巧，如果使用的是一个 svg 图标，那么可以直接用 IDE 打开，将里面的 path 和 viewBox 替换到上面就好了。
-
-**自定义形状**
-
-Logic Flow 内置了`RectNode`、`CircleNode`、`PolygonNode`分别对应着矩形、圆形和多边形三种基础形状，我们可以里面上面说的重写机制，修改这些节点的大小，颜色等。当我们需要其他形状的时候，可以直接通过继承`BaseNode`来实现更多的形状。例如我们需要实现一个三角形的节点。
-
-```ts
-this.lf.register('triangle', ({ PolygonNode, PolygonNodeModel }) => {
-  class TriangleNode extends PolygonNode {
-  }
-  class TriangleModel extends PolygonNodeModel {
-    constructor(data, graphModel) {
-      super(data, graphModel);
-      this.points = [
-        [50, 0],
-        [100, 80],
-        [0, 80],
-      ];
+lf.register('square', (RegisterParam) => {
+  // h 方法由 Logic Flow 提供
+  const { RectNode, RectNodeModel, h } = RegisterParam;
+  class SquareView extends RectNode {
+    // getShape 的返回值是一个通过 h 方法创建的 svg 元素
+    getShape() {
+      // 使用 h 方法创建一个矩形
+      return h("rect", {
+        x: 100,
+        y: 100,
+        width: 80,
+        height: 80
+      });
     }
   }
   return {
-    view: TriangleNode,
+    view: SquareView,
+    model: RectNodeModel,
+  }
+});
+```
+
+在上面的代码中，`getShape`方法返回了一个中心坐标为(100, 100)，宽度为80的正方形，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。
+
+> 图标这里有个小技巧，如果使用的是一个 svg 图标，那么可以直接用 IDE 打开，将里面的 path 和 viewBox 替换到上面就好了。
+
+### getAttributes
+
+目前`getShape`方法只能返回静态的`VNode`，在开发好自定义节点后，我们希望它的使用体验与内置节点一致，即通过`render`或`addNode`等 API 就可以直接使用，因此，Logic Flow 提供了`getAttributes`方法作为`VNode`和配置数据之间的桥梁。
+
+`getAttributes`方法的返回值是一个对象，它包含了**所继承节点**的[数据属性](/api/nodeApi.md#通用属性)和[样式属性](/api/nodeApi.html#样式属性)，复写时，需要基于父类的`getAttributes`方法进行变动。
+
+```ts
+// 为自定义节点复写 getAttributes
+getAttributes() {
+  const attributes = super.getAttributes();
+  return Object.assign(attributes, {});
+}
+```
+
+仍然以正方形为例，现在我们直接使用配置数据来确定如何渲染。
+
+```ts
+lf.register('square', (RegisterParam) => {
+  const { RectNode, RectNodeModel, h } = RegisterParam;
+  class SquareView extends RectNode {
+    getAttributes() {
+      const attributes = super.getAttributes();
+      // 覆盖 rect 节点的 width 和 height
+      return Object.assign(attributes, { width: 80, height: 80 });
+    }
+    getShape() {
+      const { x, y, width, height } = this.getAttributes();
+      return h("rect", { x, y, width, height });
+    }
+  }
+  return {
+    view: SquareView,
+    model: RectNodeModel,
+  }
+});
+
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形'
+    },
+  ]
+});
+```
+
+在业务中，自定义节点常常会有许多附加的特性，例如根据不同的业务属性展现出不同的样式，对于这种需求，我们可以在配置节点的[数据属性](/api/nodeApi.md#通用属性)时通过`properties`进行设置。
+
+```ts
+lf.register('square', (RegisterParam) => {
+  const { RectNode, RectNodeModel, h } = RegisterParam;
+  class SquareView extends RectNode {
+    getAttributes() {
+      const attributes = super.getAttributes();
+      // 读取 properties 中的附加属性
+      const { properties } = attributes;
+      const { width, height } = properties;
+      return Object.assign(attributes, { width, height });
+    }
+    getShape() {
+      const { x, y, width, height } = this.getAttributes();
+      return h("rect", { x, y, width, height });
+    }
+  }
+  return {
+    view: SquareView,
+    model: RectNodeModel,
+  }
+});
+
+// 配置节点时，在 properties 中设置需要的附加属性
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形',
+      properties: {
+        width: 100,
+        height: 100
+      }
+    },
+  ]
+});
+```
+
+`properties`可以放任何值，Logic Flow 内部不会使用它，当接入方需要存放一些和节点相绑定的数据时，可以将其加入到`properties`中。
+
+> Logic Flow 自定义节点的灵活性就在于`getAttributes`方法和`properties`属性的使用，这两者的结合可以实现大部分业务对于节点的需求。
+
+## 自定义节点的 Model
+
+节点在`model`中维护了以下内容：
+
+- 节点的**数据属性**和**样式属性**
+- 多边形节点的**顶点坐标**
+- 在连线时，节点作为`source`或`target`的**连线规则**
+
+### 数据属性和样式属性
+
+在前文中我们已经知道，为自定义节点的`view`定义`VNode`时，可以通过`getAttributes`方法来获取节点渲染时所需要的数据，实际上，这些数据全部源自于节点的`model`，因此在`model`中可以直接通过`this`进行访问。
+
+### 顶点坐标
+
+多边形节点（PolygonNode）在`model`中，额外维护了一个`points`属性，这个属性是一个数组，它包含了节点所有的顶点坐标，当继承多边形节点的`model`来实现自定义节点时，可以通过设置`points`来快速实现**任何形状的多边形**。
+
+例如我们需要实现一个三角形的节点。
+
+```ts
+lf.register('triangle', (RegisterParam) => {
+  const { PolygonNode, PolygonNodeModel } = RegisterParam;
+  class TriangleModel extends PolygonNodeModel {
+    // 覆盖 PolygonNodeModel 的 points 属性
+    points = [
+      [50, 0],
+      [100, 80],
+      [0, 80],
+    ];
+  }
+  return {
+    view: PolygonNode,
     model: TriangleModel,
   };
 });
 ```
 
-<example href="/examples/#/advance/custom-node/shape" :height="200" ></example>
+<example href="/examples/#/advance/custom-node/triangle" :height="200" ></example>
 
-从上面代码可以看到，自定义多边形，需要重新自定义 model 中的 points, 这个 points 表示着多边形中这个形状对应的点。默认情况下，我们会在每个点上生成一个可以连接的锚点。
+> 默认情况下，Logic Flow 会在每个顶点上生成一个可以连接的锚点。
 
+### 连线规则
 
-## 自定义属性
+在某些时候，我们可能需要控制连线的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等。Logic Flow 在`model`中提供了以下两个方法来实现节点的连线规则。
 
-通过`graph`渲染节点的时候，我们需要传入表示节点的数据。其格式如下:
+- [getConnectedSourceRules](/guide/advance/customNode.md#getconnectedsourcerules)
+- [getConnectedTargetRules](/guide/advance/customNode.md#getconnectedtargetrules)
 
-```ts
-type NodeConfig = {
-  id?: string;
-  type?: string;
-  x: number;
-  y: number;
-  text?: {
-    x: number;
-    y: number;
-    value: number;
-  }
-  properties?: Record<string, any>;
-}
-```
+#### getConnectedSourceRules
 
-一般来说，对于一个节点，我们只需要`type`、`x`、`y`、`text`就可以完整的图中的一个节点的所有可见信息了。`type`控制这个节点的类型，`x`、`y`控制着节点所处的位置，`text`控制着节点上的文本。
-
-虽然每种类型的节点在画布上，都对应着渲染其自己的形状。 但是在实际业务中，可能存在虽然节点的类型是相同的，但是因为不同的业务属性，可能会表现为不同的颜色、大小之类的。这种业务属性，我们可以通过 properties 传递到节点中。然后我们在创建节点的时候，依据不同业务属性，创建 UI 不同的节点。
-
-例如我们通过 properties 传入一个表示大小的属性，然后在创建的时候，依据这个大小的属性来控制节点显示为不同大小的节点。
+通过该方法能够获取当前节点作为连线开始点（source）的校验规则。它的的返回值是一个包含了多项校验规则的数组，每项规则都是一个对象，我们需要为其设置`messgage`和`validate`属性。
 
 ```ts
-class BeginNode extends RectNode {
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const { properties } = attributes;
-    if (properties.size === 'big') {
-        attributes.width = attributes.width * 1.3;
-        attributes.height = attributes.height * 1.3;
+getConnectedSourceRules() {
+  // 在所继承节点的连线规则的基础上添加新的规则
+  const rules = super.getConnectedSourceRules();
+  const rule = {
+    message: '不满足连线的校验规则',
+    validate: (source, target) => {
+      // 校验规则
+      return false;
     }
-    return attributes;
   }
+  rules.push(rule);
+  return rules;
 }
 ```
 
-<example href="/examples/#/advance/custom-node/properties" :height="200" ></example>
+在上面的代码中，`getConnectedSourceRules`方法在所继承节点的校验规则的基础上新增了一项 rule，rule 的`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。
 
-`properties`可以放任何值，Logic Flow内部不会使用它。当接入方需要存放一些和节点相绑定的数据时，可以将其加入到`properties`中。
+`validate`方法有两个参数，分别为包含了自身数据属性的连线起始节点（source）和连线目标节点（target）。我们可以根据节点的情况，来返回`true or false`. `true`表示通过校验。
 
-## 自定义连线规则
-
-在某些时候，我们可能需要控制连线的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等等。Logic Flow提供了自定义节点规则功能来实现这个需求。
-
-同上面的自定义外观，Logic Flow内部有`getConnectedSourceRules`和`getConnectedTargetRules`两个公共方法，分别返回当前节点作为连线开始点和作为连接目标点时的校验规则。当在面板上进行连线操作的时候，会判断所有的规则是否通过，只有通过了才能连接。
-
-这里我们先看看示例，比如我们想实现用户节点的下一个节点只能是网关节点。那么我们这个应该给用户节点配置作为连线`source`的规则。
+例如我们想实现一个用户节点（UserTask），在连线时它的下一节点只能是网关节点，那么我们应该给`UserTask`添加作为`source`节点的校验规则。
 
 ```ts
-class UserTaskNode extends RectNode {
-  /* ignore other code*/
-
-  getConnectedSourceRules(): ConnectRule[] {
-    const rules = super.getConnectedSourceRules();
-    const gateWayOnlyAsTarget = {
-      message: '流程节点下一个节点只能是网关节点',
-      validate: (source: BaseNode, target: BaseNode) => {
-        let isValid = true;
-        if (target.type !== EXCLUSIVE_GATEWAY_NAME) {
-          isValid = false;
-        }
-        return isValid;
-      },
-    };
-    rules.push(gateWayOnlyAsTarget);
-    return rules;
+lf.register('userTask', (RegisterParam) => {
+  const { RectNode, RectNodeModel } = RegisterParam;
+  class UserTaskView extends RectNode {
+    // 自定义形状
   }
-}
+  class UserTaskModel extends RectNodeModel {
+    // 设置校验规则
+    getConnectedSourceRules() {
+      const rules = super.getConnectedSourceRules();
+      const gateWayOnlyAsTarget = {
+        message: '流程节点下一个节点只能是网关节点',
+        validate: (source, target) => {
+          let isValid = true;
+          if (target.type !== 'gateway') isValid = false;
+          return isValid;
+        },
+      };
+      rules.push(gateWayOnlyAsTarget);
+      return rules;
+    }
+  }
+  return {
+    view: UserTaskView,
+    model: UserTaskModel,
+  };
+});
 ```
 
-<example href="/examples/#/advance/custom-node/edge" :height="400" ></example>
+<example href="/examples/#/advance/custom-node/rule" :height="400" ></example>
 
-从上面的代码可以看到，我们在原有的校验规则基础上，给新增了一个`gateWayOnlyAsTarget`规则，这个规则传入的是一个对象，对象拥有 message 和 validate 两个属性。message 是当规则不满足的时候，会抛出错误提示。`validate`则是传入规则检验的回调函数。
+当在面板上进行连线操作的时候，Logic Flow 会判断所有的规则是否通过，只有**全部**通过才能连接。
 
-`validate`传入的参数有两个，分别为连线的起始节点和连线的目标节点。你则可以自己根据节点的情况，来返回`true or false`. `true`表示通过校验。
+访问 [API](/api/modelApi.md#getconnectedsourcerules) 以查看`getConnectedSourceRules`方法的详细信息。
 
-同样，我们也可以通过重写`getConnectedTargetRules`方法，来实现当节点作为目标节点的统一判断。比如开始节点不能作为任何节点的目标节点。虽然我们也可以通过重写每个节点的`getConnectedSourceRules`来使其不能连接开始节点，但是这样太过于麻烦。
+#### getConnectedTargetRules
 
-**接收错误消息**
+同样，我们可以通过重写`getConnectedTargetRules`方法，来实现当节点作为目标节点（target）时的校验规则。访问 [API](/api/modelApi.md#getconnectedtargetrules) 以查看`getConnectedTargetRules`方法的详细信息。
 
-当连线的时候，在鼠标松开的时候如果没有通过自定义规则，会对外抛出事件`connection:not-allowed`。
+#### 接收错误消息
+
+在连线时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
 
 ```js
 lf.on('connection:not-allowed', (msg) => {

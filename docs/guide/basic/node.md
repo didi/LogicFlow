@@ -4,7 +4,6 @@ Logic Flow 的内置节点包括：
 - 矩形(rect)
 - 圆形(circle)
 - 椭圆（ellipse)
-- 菱形 (diamond)
 - 多边形(polygon)
 - 文本(text)
 
@@ -44,7 +43,7 @@ Logic Flow 的内置节点包括：
 | :---- | :----- | :------- | :------------- |
 | points | Point[] | ✅ | 多边形端点坐标 |
 
-【注意】`points`为多边形各个端点的坐标，这些坐标都参照于画布的坐标轴起点，如果要修改多边形的大小，需要计算多边形各个端点的坐标并通过修改`points`来实现，通过公共属性`x`和`y`来确定多边形的位置。
+【注意】`points`为多边形相对于画布坐标轴起点的各个端点的坐标，如果要修改多边形的大小，可以通过计算目标大小的多边形的坐标并修改`points`来实现，通过公共属性`x`和`y`来确定多边形的位置。
 ```ts
 type Point = [number, number]
 ```
@@ -72,8 +71,7 @@ lf.render({
       type: 'rect',
       x: 150,
       y: 70,
-      text: '矩形',
-      properties: {}
+      text: '矩形'
     }
   ],
   edges: [...],
@@ -84,7 +82,7 @@ lf.render({
 
 ### 函数创建节点
 
-在实例化 `LogicFlow` 后，通过调用 `lf.addNode` 创建节点。创建节点的参数包括节点类型、位置信息、文案信息、自定义属性。节点的完整配置参见 [Node API](/api/nodeApi.html)。
+在实例化 `LogicFlow` 后，通过调用 `lf.addNode` 创建节点。创建节点的参数包括节点类型、位置信息、文案信息、自定义属性等。节点的完整配置参见 [Node API](/api/nodeApi.html)。
 
 ```ts
 lf.addNode({

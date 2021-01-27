@@ -1,9 +1,12 @@
-# 主题 Theme
+# 主题 Theme 样式
 
 Logic Flow 提供了设置主题的方法，便于用户统一设置其内部所有元素的样式。  
 设置方式有两种：
 - 初始化`LogicFlow`时作为配置传入
 - 初始化后，调用`LogicFlow`的 setTheme 方法  
+  
+## 配置
+new LogicFlow时作为将主题配置作为参数进行初始化。
   
 ```ts
 // 方法1：new LogicFlow时作为配置传入
@@ -41,7 +44,10 @@ const config = {
   }
 }
 const lf = new LogicFlow(config);
-
+```
+## setTheme
+调用LogicFlow的setTheme方法，`lf.setTheme`进行主题配置
+```ts
 // 方法2： 调用LogicFlow的setTheme方法 
 lf.setTheme({
    rect: {
@@ -75,9 +81,11 @@ lf.setTheme({
 
 <example :height="400" ></example>
 
-style 中填写需要覆盖的值，未填写的将会使用默认值，各个图形支持的属性和默认值在下方样式介绍中有详细讲解。
+> style 中填写需要覆盖的值，未填写的将会使用默认值，主题配置需要在数据render之前进行。  
+> 
+> 各个图形支持的属性和默认值在下方样式介绍中有详细讲解。
 
-## 矩形样式
+## 矩形
 
 |key|type|description|default|
 |-|-|-|-|
@@ -92,7 +100,7 @@ style 中填写需要覆盖的值，未填写的将会使用默认值，各个�
 |opacity|number|整体透明度|1|
 |outlineColor|color|hover外边框颜色|1|
 <details>
-<summary>设置矩形样式</summary>
+<summary>点击展开查看矩形样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -112,7 +120,7 @@ lf.setTheme({
 ```
 </details>
 
-## 圆形样式
+## 圆形
 
 |key|type|description|default|
 |-|-|-|-|
@@ -125,7 +133,7 @@ lf.setTheme({
 |opacity|number|整体透明度|1|
 |outlineColor|color|hover外边框颜色|1|
 <details>
-<summary>设置圆形样式</summary>
+<summary>点击展开查看圆形样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -143,7 +151,7 @@ lf.setTheme({
 ```
 </details>
 
-## 椭圆样式
+## 椭圆
 
 |key|type|description|default|
 |-|-|-|-|
@@ -157,7 +165,7 @@ lf.setTheme({
 |opacity|number|整体透明度|1|
 |outlineColor|color|hover外边框颜色|1|
 <details>
-<summary>设置椭圆样式</summary>
+<summary>点击展开查看椭圆样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -176,7 +184,7 @@ lf.setTheme({
 ```
 </details>
 
-## 文本样式
+## 文本
 
 |key|type|description|default|
 |-|-|-|-|
@@ -185,7 +193,7 @@ lf.setTheme({
 |fontWeight|string/number|字体粗细|normal|
 |fontFamily|string|字体名称|''|
 <details>
-<summary>设置文本样式</summary>
+<summary>点击展开查看文本样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -199,7 +207,7 @@ lf.setTheme({
 ```
 </details>
 
-## 节点文本样式
+## 节点文本
 
 |key|type|description|default|
 |-|-|-|-|
@@ -208,7 +216,7 @@ lf.setTheme({
 |fontWeight|string/number|字体粗细|normal|
 |fontFamily|string|字体名称|''|
 <details>
-<summary>设置节点文本样式</summary>
+<summary>点击展开查看节点文本样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -223,7 +231,7 @@ lf.setTheme({
 </details>
 
 
-## 多边形样式
+## 多边形
 
 |key|type|description|default|
 |-|-|-|-|
@@ -235,7 +243,7 @@ lf.setTheme({
 |opacity|number|整体透明度|1|
 |outlineColor|color|hover外边框颜色|1|
 <details>
-<summary>设置多边形样式</summary>
+<summary>点击展开查看多边形样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -252,7 +260,7 @@ lf.setTheme({
 ```
 </details>
 
-## 锚点样式
+## 锚点
 
 |key|type|description|default|
 |-|-|-|-|
@@ -265,7 +273,7 @@ lf.setTheme({
 |opacity|number|整体透明度|1|
 |outlineColor|color|外边框颜色|#000000|
 <details>
-<summary>设置锚点样式</summary>
+<summary>点击展开查看锚点样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -283,7 +291,7 @@ lf.setTheme({
 </details>
 
 
-## 锚点hover样式
+## 锚点hover
 
 |key|type|description|default|
 |-|-|-|-|
@@ -295,7 +303,7 @@ lf.setTheme({
 |strokeOpacity|number|边框透明度|1|
 |opacity|number|整体透明度|1|
 <details>
-<summary>设置锚点样式</summary>
+<summary>点击展开查看锚点hover样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -312,7 +320,7 @@ lf.setTheme({
 ```
 </details>
 
-## 锚点连线样式
+## 锚点连线
 
 |key|type|description|default|
 |-|-|-|-|
@@ -320,7 +328,7 @@ lf.setTheme({
 |strokeWidth|number|连线宽度|2|
 |strokeDasharray|string|图案范式|'3,2'|
 <details>
-<summary>设置锚点样式</summary>
+<summary>点击展开查看锚点连线样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -333,7 +341,7 @@ lf.setTheme({
 ```
 </details>
 
-## 直线样式
+## 直线
 
 |key|type|description|default|
 |-|-|-|-|
@@ -343,7 +351,7 @@ lf.setTheme({
 |selectedStroke|color|连线选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
 <details>
-<summary>设置锚点样式</summary>
+<summary>点击展开查看直线样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -358,7 +366,7 @@ lf.setTheme({
 ```
 </details>
 
-## 折线样式
+## 折线
 
 |key|type|description|default|
 |-|-|-|-|
@@ -369,7 +377,7 @@ lf.setTheme({
 |outlineColor|color|外边框颜色|#000000|
 |offset|number|折线起终点距离节点的偏移|30|
 <details>
-<summary>设置锚点样式</summary>
+<summary>点击展开查看折线样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -385,7 +393,7 @@ lf.setTheme({
 ```
 </details>
 
-## 连线文本样式
+## 连线文本
 
 |key|type|description|default|
 |-|-|-|-|
@@ -402,7 +410,7 @@ lf.setTheme({
 |stroke|number|边框颜色|transparent|
 |radius|number|圆角弧度|0|
 <details>
-<summary>设置连线文本样式</summary>
+<summary>点击展开查看连线文本样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -423,14 +431,14 @@ lf.setTheme({
 </details>
 
 
-## 箭头样式
+## 箭头
 
 |key|type|description|default|
 |-|-|-|-|
 |offset|number|箭头长度|10|
 |verticalLength|number|箭头垂直于连线的距离|5|
 <details>
-<summary>设置箭头样式</summary>
+<summary>点击展开查看箭头样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -446,14 +454,14 @@ lf.setTheme({
 </details>
 
 
-## 对齐线样式
+## 对齐线
 
 |key|type|description|default|
 |-|-|-|-|
 |stroke|color|对齐线颜色|#1E90FF|
 |strokeWidth|number|对齐线宽度|1|
 <details>
-<summary>设置对齐线样式</summary>
+<summary>点击展开查看对齐线样式设置</summary>
 
 ```ts
 lf.setTheme({
