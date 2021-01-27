@@ -1,12 +1,15 @@
 # 边 Edge
 
 Logic Flow 的内置连线类型包括
+
 - 直线(line)
 - 直角折线(polyline)
+- 贝塞尔曲线(bezier)
 
 ## 通用属性
 
 ### 数据属性
+
 > 作为data进行保存，可以通过lf.setEdgeData进行修改  
 
 | 名称  | 类型   | 是否必须 | 描述           |
@@ -21,6 +24,7 @@ Logic Flow 的内置连线类型包括
 | properties | Object |    | 边的自定义属性 |
 
 ### 样式属性
+
 > 属性取值内部已定义，不作为data进行保存，可通过修改主题、自定义边方式进行属性值的修改  
 
 | 名称  | 类型   | 是否必须 | 描述           |
@@ -35,8 +39,9 @@ Logic Flow 的内置连线类型包括
 | selectedShadow | boolean  | ✅ | 边选中时的是否展示阴影 |
 
 ### 附加属性
+
 > 不对外输出  
-> 
+
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------- | :------------- |
 | modelType | String | ✅  | 边图形类型，已内部定义 |
@@ -44,6 +49,7 @@ Logic Flow 的内置连线类型包括
 | additionStateData | object |    | 设置节点状态的附加数据，例如显示菜单，菜单的位置信息|
 
 ### 状态属性
+
 > 编辑过程中使用不对外输出
 
 | 名称  | 类型   | 是否必须 | 描述           |
@@ -58,13 +64,14 @@ Logic Flow 的内置连线类型包括
 
 创建边
 
-**参数**
+参数：
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
-| edgeConfig | EdgeConfig| 创建边的配置数据 |
-``` ts
-export type EdgeConfig = {
+| edgeConifg | EdgeConifg | 创建边的配置数据 |
+
+```ts
+export type EdgeConifg = {
   id?: string,
   type?: string,
   sourceNodeId: string,
@@ -76,26 +83,21 @@ export type EdgeConfig = {
 };
 ```
 
-**返回值**  
+返回值：
 
 无
-
-**用法**
-```ts 
-lf.createEdge(edgeConfig);
-```
 
 ### lf.getEdgeData
 
 获取边数据
 
-**参数**
+参数：
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
 | edgeId | string | 边Id |
 
-**返回值**  
+返回值：
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
@@ -114,15 +116,16 @@ type EdgeData = {
   pointsList?: Point[], // 折线会输出pointsList
 };
 ```
+
 ### lf.setEdgeData
 
 修改边数据
 
-**参数**
+参数：
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
-| edgeData | EdgeAttribute | 修改边数据需要的参数 |
+| edgeAttribute | EdgeAttribute | 修改边数据需要的参数 |
 
 ```ts
 // 边属性
@@ -137,19 +140,35 @@ type EdgeAttribute = {
   properties?: Record<string, unknown>;
 };
 ```
-**返回值** 
+
+返回值：
+
+无
+
+### lf.deleteEdge
+
+删除边
+
+参数：
+
+| 名称   | 类型   | 描述            |
+| :----- | :----- | :------- | :-------------- |
+| edgeId | string | 删除边Id |
+
+返回值：
 
 无
 
 ### lf.removeEdge
 
-删除边
+基于连线的起终点删除连线
 
-**参数**
+参数：
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
-| edgeFilter | EdgeFilter | 删除边参数 |
+| sourceNodeId | string | 连线起点Id |
+| targetNodeId | string | 连线终点Id |
 
 ```ts
 type EdgeFilter = {
@@ -158,51 +177,102 @@ type EdgeFilter = {
   targetNodeId?: string,
 };
 ```
-> 参数规则 
-> - 存在id，删除指定id的边
-> - 仅存在sourceNodeId，删除以sourceNodeId为开始节点的边
-> - 仅存在targetNodeId，删除以targetNodeId为结束节点的边
-> - 存在targetNodeId和targetNodeId，删除以sourceNodeId为开始节点，并且以targetNodeId为结束节点的边
 
-**返回值** 
+参数规则：
+
+- 仅存在sourceNodeId，删除以sourceNodeId为开始节点的边
+- 仅存在targetNodeId，删除以targetNodeId为结束节点的边
+- 存在targetNodeId和targetNodeId，删除以sourceNodeId为开始节点，并且以targetNodeId为结束节点的边
+
+返回值：
 
 无
 
+### lf.setDefaultEdgeType
+
+设置默认的边类型
+
+```js
+setDefaultEdgeType(type: string): void
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- |:- | :- |
+| type | String | ✅ | 'polyline' | 设置边的类型，内置支持的边类型有line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线，用户可以自定义type名切换到用户自定义的边 |
+
+示例：
+
+```js
+// 设置边默认类型为贝塞尔曲线
+lf.setDefaultEdgeType('beizer')
+```
+
+返回值：
+
+无
 
 ## 边属性
+
 > 不同类型边自定义的属性
 
 ### 折线
+
 #### 数据属性
   
-  | 名称  | 类型   | 是否必须 | 描述           |
-  | :---- | :----- | :------- | :------------- |
-  | PointsList | PolyPoint[] | ✅ | 折线路线上的点坐标集合 |
-  ```ts
-   type PolyPoint = {
-    x: number;
-    y: number;
-    id?: string;
-  };
-  ```
-- 样式属性
-  
-  | 名称  | 类型   | 是否必须 | 描述           |
-  | :---- | :----- | :------- | :------------- |
-  | offset | number | ✅ | 起终点的相邻点距离起终点的距离 |
+| 名称 | 类型 | 是否必须 | 描述 |
+| :- | :- | :- | :- |
+| pointsList | PolyPoint[] | ✅ | 折线路线上的点坐标集合 |
 
-- 附加属性
-  
-  | 名称  | 类型   | 是否必须 | 描述           |
-  | :---- | :----- | :------- | :------------- |
-  | draginngPointList | PolyPoint[] | ✅ | 调整边的过程中，中间计算附加数据 |
-  | points | string | ✅ | 边渲染依赖字段，初始化是与PointsList对应，调整时与draginngPointList对应 |
+```ts
+type PolyPoint = {
+  x: number;
+  y: number;
+  id?: string;
+};
+```
 
+#### 样式属性
+  
+| 名称 | 类型 | 是否必须 | 描述 |
+| :- | :- | :- | :- |
+| offset | number | ✅ | 起终点的相邻点距离起终点的距离 |
+
+#### 附加属性
+  
+| 名称 | 类型 | 是否必须 | 描述 |
+| :- | :- | :- | :- |
+| draginngPointList | PolyPoint[] | ✅ | 调整边的过程中，中间计算附加数据 |
+| points | string | ✅ | 边渲染依赖字段，初始化是与PointsList对应，调整时与draginngPointList对应 |
+
+### 贝塞尔曲线
+
+#### 数据属性
+  
+| 名称 | 类型 | 是否必须 | 描述 |
+| :- | :- | :- | :- |
+| pointsList | PolyPoint[] | ✅ | 起点、终点、两个中间控制点，四个点坐标集合 |
+
+```ts
+type PolyPoint = {
+  x: number;
+  y: number;
+  id?: string;
+};
+```
+
+#### 样式属性
+  
+| 名称  | 类型 | 是否必须 | 描述 |
+| :-| :-| :-| :- |
+| offset | number | ✅ | 起终点距离控制点的距离 |
 
 ### 箭头
+
 > 边在渲染不仅包含路径，还包含箭头部分，目前仅支持边的末尾渲染箭头。箭头的样式属性依赖边的样式属性，保持一致。箭头形状可以通过修改主题、自定义节点方式进行修改。
 
-####  箭头属性
+#### 箭头属性
 
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------- | :------------- |
@@ -211,4 +281,3 @@ type EdgeFilter = {
 | strokeWidth | number | ✅ | 取值为1 |
 | offset | number | ✅ | 箭头长度 |
 | verticalLength | number | ✅ | 箭头垂直于连线的距离 |
-

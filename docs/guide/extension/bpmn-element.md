@@ -16,9 +16,11 @@ Logic Flow 提供了[自定义节点](../advance/customNode)和[自定义连线]
 </script>
 ```
 
-## 转换为xml
+<example href="/examples/#/extension/bpmn-elements" height=360></example>
 
-BpmnAdapter 支持的 bpmnjson 和 Logic Flow data的相互转换，如果希望是转换为xml。可以使用`BpmnXmlAdapter`。
+## 转换为 XML
+
+`BpmnAdapter` 支持 bpmnjson 和 Logic Flow data 之间的相互转换，如果希望 Logic Flow data 与 XML 互相转换，可以使用`BpmnXmlAdapter`。
 
 ```html
 <script src="/logic-flow.js"></script>
@@ -31,8 +33,82 @@ BpmnAdapter 支持的 bpmnjson 和 Logic Flow data的相互转换，如果希望
 ```
 
 ## StartEvent
+
+```js
+const data = {
+  nodes: [
+    {
+      id: 10,
+      type: 'bpmn:startEvent',
+      x: 200,
+      y: 80,
+      text: '开始'
+    }
+  ]
+}
+```
+
 ## EndEvent
+
+```js
+const data = {
+  nodes: [
+    {
+      id: 10,
+      type: 'bpmn:endEvent',
+      x: 200,
+      y: 80,
+      text: '结束'
+    }
+  ]
+}
+```
+
 ## UserTask
+
+```js
+const data = {
+  nodes: [
+    {
+      id: 10,
+      type: 'bpmn:userTask',
+      x: 200,
+      y: 80,
+      text: '用户任务'
+    }
+  ]
+}
+```
+
 ## ServiceTask
-## SequenceFlow
+
+```js
+const data = {
+  nodes: [
+    {
+      id: 10,
+      type: 'bpmn:serviceTask',
+      x: 200,
+      y: 80,
+      text: '系统任务'
+    }
+  ]
+}
+```
+
 ## ExclusiveGateway
+
+```js
+const data = {
+  nodes: [
+    {
+      id: 10,
+      type: 'bpmn:exclusiveGateway',
+      x: 200,
+      y: 80,
+    }
+  ]
+}
+```
+
+完整的 BPMN 案例工具请到[示例](/usage/bpmn.html)中体验。
