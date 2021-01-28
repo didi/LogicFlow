@@ -139,10 +139,6 @@ const lf = new LogicFlow({ // 实例化 lf 对象
   container: document.querySelector('#graph'), // 获取渲染容器
   width: 700,
   height: 600,
-  tool: {
-    menu: true,
-    control: true,
-  },
   background: {
     color: '#F0F0F0'
   },

@@ -15,10 +15,6 @@ export default class App extends Component<IProps, IState> {
       container: document.querySelector('#graph'),
       width: 700,
       height: 600,
-      tool: {
-        menu: true,
-        control: false,
-      },
     });
     this.lf.render();
   }

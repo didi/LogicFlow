@@ -65,9 +65,6 @@ const data = {
 ```js
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
-  tool: {
-    control: false,
-  },
   stopScrollGraph: true,
   stopZoomGraph: true,
   grid: {
@@ -78,6 +75,7 @@ const lf = new LogicFlow({
 ```
 
 通过刚才创建的实例，来渲染画布。
+
 ```js
 lf.render(data);
 ```

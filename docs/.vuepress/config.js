@@ -31,6 +31,7 @@ const guide = [
     title: '拓展',
     collapsable: false,
     children: [
+      'extension/extension-intro',
       'extension/extension-components',
       'extension/bpmn-element',
       'extension/snapshot',
@@ -48,7 +49,15 @@ const api = [
       'nodeApi',
       'edgeApi',
     ]
-  }
+  },
+  {
+    title: '自定义元素',
+    collapsable: false,
+    children: [
+      'customNodeApi',
+      'customEdgeApi',
+    ]
+  },
 ];
 
 const usage = ["bpmn", "approve"];
