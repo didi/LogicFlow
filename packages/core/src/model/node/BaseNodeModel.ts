@@ -48,6 +48,8 @@ export default class BaseNodeModel implements IBaseModel {
   menu?: MenuConfig[];
   targetRules: ConnectRule[] = [];
   sourceRules: ConnectRule[] = [];
+  hasSetTargetRules = false; // 用来限制rules的重复值
+  hasSetSourceRules = false; // 用来限制rules的重复值
   @observable properties = {};
   @observable type = '';
   @observable x = defaultConfig.x;
@@ -140,7 +142,10 @@ export default class BaseNodeModel implements IBaseModel {
    * 在连线的时候，是否允许这个节点为source节点，连线到target节点。
    */
   isAllowConnectedAsSource(target: BaseNodeModel): ConnectRuleResult {
-    const rules = this.getConnectedSourceRules();
+    const rules = !this.hasSetSourceRules
+      ? this.getConnectedSourceRules()
+      : this.sourceRules;
+    this.hasSetSourceRules = true;
     let isAllPass = true;
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
@@ -168,7 +173,10 @@ export default class BaseNodeModel implements IBaseModel {
    */
 
   isAllowConnectedAsTarget(source: BaseNodeModel): ConnectRuleResult {
-    const rules = this.getConnectedTargetRules();
+    const rules = !this.hasSetTargetRules
+      ? this.getConnectedTargetRules()
+      : this.targetRules;
+    this.hasSetTargetRules = true;
     let isAllPass = true;
     let msg: string;
     for (let i = 0; i < rules.length; i++) {

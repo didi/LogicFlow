@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import './share.less';
+import './index.less';
 
 type IProps = {
   exportIMG: () => void,

@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import './links.less';
+import './index.less';
 
 type IProps = {
 };

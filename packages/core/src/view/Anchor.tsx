@@ -4,9 +4,11 @@ import { targetNodeInfo, distance } from '../util/node';
 import Circle from './basic-shape/Circle';
 import Line from './basic-shape/Line';
 import { ElementState, EventType } from '../constant/constant';
-import BaseNodeModel from '../model/node/BaseNodeModel';
+import BaseNodeModel, { ConnectRuleResult } from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
 import EventEmitter from '../event/eventEmitter';
+
+type TargetNodeId = string;
 
 interface IProps extends CSSStyleDeclaration {
   x: number,
@@ -35,8 +37,12 @@ interface IState {
 class Anchor extends Component<IProps, IState> {
   preTargetNode: BaseNodeModel;
   dragHandler: Function;
+  sourceRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，source的校验规则产生的结果不同
+  targetRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，target的校验规则不同
   constructor() {
     super();
+    this.sourceRuleResults = new Map();
+    this.targetRuleResults = new Map();
 
     this.state = {
       startX: 0,
@@ -53,6 +59,8 @@ class Anchor extends Component<IProps, IState> {
     });
   }
   onDragStart = () => {
+    console.log('onDragStart');
+
     const {
       x, y, nodeModel, graphModel,
     } = this.props;
@@ -67,6 +75,8 @@ class Anchor extends Component<IProps, IState> {
     });
   };
   onDraging = ({ deltaX, deltaY }) => {
+    console.log('onDraging');
+
     const { endX, endY } = this.state;
     const { graphModel, nodeModel } = this.props;
     const { transformMatrix, nodes } = graphModel;
@@ -83,8 +93,15 @@ class Anchor extends Component<IProps, IState> {
     if (info) {
       const targetNode = info.node;
       this.preTargetNode = targetNode;
-      const { isAllPass: isSourcePass } = nodeModel.isAllowConnectedAsSource(targetNode);
-      const { isAllPass: isTargetPass } = targetNode.isAllowConnectedAsTarget(nodeModel);
+      // 查看鼠标是否进入过target，若有检验结果，表示进入过
+      if (!this.targetRuleResults.has(targetNode.id)) {
+        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
+        const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
+        this.sourceRuleResults.set(targetNode.id, sourceRuleResult);
+        this.targetRuleResults.set(targetNode.id, targetRuleResult);
+      }
+      const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
+      const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetNode.id);
       // 实时提示出即将链接的锚点
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
@@ -100,6 +117,7 @@ class Anchor extends Component<IProps, IState> {
     }
   };
   onDragEnd = () => {
+    console.log('onDragEnd');
     this.checkEnd();
     this.setState({
       startX: 0,
@@ -141,11 +159,11 @@ class Anchor extends Component<IProps, IState> {
       const {
         isAllPass: isSourcePass,
         msg: sourceMsg,
-      } = nodeModel.isAllowConnectedAsSource(targetNode);
+      } = this.sourceRuleResults.get(targetNode.id);
       const {
         isAllPass: isTargetPass,
         msg: targetMsg,
-      } = targetNode.isAllowConnectedAsTarget(nodeModel);
+      } = this.targetRuleResults.get(targetNode.id);
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
