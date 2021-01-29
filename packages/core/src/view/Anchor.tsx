@@ -32,6 +32,7 @@ interface IState {
   endX: number,
   endY: number,
   hover: boolean,
+  draging: boolean,
 }
 
 class Anchor extends Component<IProps, IState> {
@@ -50,6 +51,7 @@ class Anchor extends Component<IProps, IState> {
       endX: 0,
       endY: 0,
       hover: false,
+      draging: false,
     };
 
     this.dragHandler = createDrag({
@@ -84,6 +86,7 @@ class Anchor extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
+      draging: true,
     });
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
     if (info) {
@@ -119,6 +122,7 @@ class Anchor extends Component<IProps, IState> {
       startY: 0,
       endX: 0,
       endY: 0,
+      draging: false,
     });
   };
   onDblClick = () => {
@@ -146,13 +150,15 @@ class Anchor extends Component<IProps, IState> {
     // nodeModel.setSelected(false);
     /* 创建连线 */
     const { nodes, edgeType } = graphModel;
-    const { endX, endY } = this.state;
+    const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
       this.preTargetNode.setAnchorActive(-1);
     }
+    // 没有draging就结束连线
+    if (!draging) return;
     if (info) {
       const targetNode = info.node;
       const {
