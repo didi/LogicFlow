@@ -4,6 +4,8 @@ import ExampleHeader from '../../../components/example-header';
 import './index.css';
 
 const config = {
+  stopScrollGraph: true,
+  stopZoomGraph: true,
   textEdit: false,
   keyboard: {
     enabled: true,

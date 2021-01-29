@@ -3,7 +3,7 @@
 
 import { Component, h } from 'preact';
 // import { NodeConfig } from '../../src/type';
-import './properties.less';
+import './index.less';
 
 type IProps = {
   // gridChange: () => void,

@@ -3,7 +3,7 @@ import { message } from 'antd';
 import LogicFlow from '@logicflow/core';
 import PropertyPanel from './components/property';
 import NodePanel from './components/NodePanel';
-import RegisteNode from './components/registernNode';
+import RegisteNode from './components/registerNode';
 import { themeApprove, data } from './config';
 import './index.css';
 

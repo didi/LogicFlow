@@ -23,8 +23,8 @@ import Rule from './pages/advance/custom-node/rule';
 import Process from './pages/advance/custom-edge/process';
 import Arrow from './pages/advance/custom-edge/arrow';
 import Event from './pages/advance/event';
-import Approve from './pages/approve';
-import ApprovePreview from './pages/approvePreview';
+import Approve from './pages/usage/approve';
+import ApprovePreview from './pages/usage/approvePreview';
 import BpmnElements from './pages/extension/bpmn/Elements';
 import AdapterExample from './pages/extension/adapter';
 
@@ -52,11 +52,11 @@ export default (
     <Route path="/extension/components/dnd" exact component={DndPandel} />
     <Route path="/extension/components/custom-menu" exact component={CustomMenu} />
     <Route path="/extension/components/custom-dnd" exact component={CustomDnd} />
-    <Route path="/extension/approve" exact component={Approve} />
-    <Route path="/extension/approve/preview" exact component={ApprovePreview} />
     <Route path="/extension/bpmn-elements" exact component={BpmnElements} />
     <Route path="/extension/adapter" exact component={AdapterExample} />
     <Route path="/usage/bpmn" exact component={Bpmn} />
+    <Route path="/usage/approve" exact component={Approve} />
+    <Route path="/usage/approve/preview" exact component={ApprovePreview} />
     <Route path="/" component={Start} />
   </Switch>
 );

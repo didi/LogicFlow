@@ -19,7 +19,7 @@
 - 连线规则  
   在审批流配置过程中，需要有一些控制连接的规则保证流程的正确性，比如申请节点不能被其它节点连接、结束节点不能连接其他节点等，Logic Flow提供了自定义节点`连线规则`功能来实现这个需求。  
 
-<example href="/examples/#/extension/approve" :height="650"></example>
+<example href="/examples/#/usage/approve" :height="650"></example>
 
 ## 审批流配置
 ### 创建节点
@@ -31,7 +31,7 @@
 ### 事件
 LogicFlow提供了节点和边的交互事件，可以通过监听这些事件，拿到对应的节点和边的`数据`以及`原生事件`信息。事件的详细内容见[事件API](/guide/advance/event.html)  
 审批中的流程进度预览，设置[静默模式](/guide/basic/silent-mode.html)，监听节点hover，使用React组件展示审批详情。
-<example :height="350" href="/examples/#/extension/approve/preview"></example>
+<example :height="350" href="/examples/#/usage/approve/preview"></example>
 
 
 ## 审批流程主题设置
