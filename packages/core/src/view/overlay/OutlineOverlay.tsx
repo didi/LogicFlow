@@ -12,8 +12,6 @@ type IProps = {
   graphModel: GraphModel;
 };
 
-const STROKE_DASH_ARRAY = '3, 3';
-
 @observer
 export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
@@ -24,7 +22,7 @@ export default class OutlineOverlay extends Component<IProps> {
     for (let i = 0; i < nodeList.length; i++) {
       const node = nodeList[i];
       const {
-        isSelected, x, y, width, height, outlineColor,
+        isSelected, x, y, width, height, outlineColor, outlineStrokeDashArray,
       } = node;
       if (isSelected) {
         nodeOutline.push(
@@ -36,7 +34,7 @@ export default class OutlineOverlay extends Component<IProps> {
             radius={0}
             fill="none"
             stroke={outlineColor}
-            strokeDasharray={STROKE_DASH_ARRAY}
+            strokeDasharray={outlineStrokeDashArray}
           />,
         );
       }
@@ -70,7 +68,7 @@ export default class OutlineOverlay extends Component<IProps> {
     const width = Math.abs(startPoint.x - endPoint.x) + 10;
     const height = Math.abs(startPoint.y - endPoint.y) + 10;
     const { graphModel } = this.props;
-    const { outlineColor } = graphModel.theme.line;
+    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.line;
     return (
       <Rect
         className="lf-outline-edge"
@@ -80,7 +78,7 @@ export default class OutlineOverlay extends Component<IProps> {
         radius={0}
         fill="none"
         stroke={outlineColor}
-        strokeDasharray={STROKE_DASH_ARRAY}
+        strokeDasharray={outlineStrokeDashArray}
       />
     );
   }
@@ -93,7 +91,7 @@ export default class OutlineOverlay extends Component<IProps> {
       x, y, width, height,
     } = bbox;
     const { graphModel } = this.props;
-    const { outlineColor } = graphModel.theme.polyline;
+    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.polyline;
     return (
       <Rect
         className="lf-outline"
@@ -103,7 +101,7 @@ export default class OutlineOverlay extends Component<IProps> {
         radius={0}
         fill="none"
         stroke={outlineColor}
-        strokeDasharray={STROKE_DASH_ARRAY}
+        strokeDasharray={outlineStrokeDashArray}
       />
     );
   }
@@ -116,7 +114,7 @@ export default class OutlineOverlay extends Component<IProps> {
       x, y, width, height,
     } = bbox;
     const { graphModel } = this.props;
-    const { outlineColor } = graphModel.theme.bezier;
+    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.bezier;
     return (
       <Rect
         className="lf-outline"
@@ -126,7 +124,7 @@ export default class OutlineOverlay extends Component<IProps> {
         radius={0}
         fill="none"
         stroke={outlineColor}
-        strokeDasharray={STROKE_DASH_ARRAY}
+        strokeDasharray={outlineStrokeDashArray}
       />
     );
   }
