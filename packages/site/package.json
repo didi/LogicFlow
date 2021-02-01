@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "site",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "LogicFlow site",
   "scripts": {
     "dev": "NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.site.js",
@@ -12,8 +12,8 @@
     "sites"
   ],
   "dependencies": {
-    "@logicflow/core": "^0.1.0",
-    "@logicflow/extension": "^0.1.0",
+    "@logicflow/core": "^0.2.0",
+    "@logicflow/extension": "^0.2.0",
     "preact": "^10.4.8"
   },
   "devDependencies": {
@@ -45,12 +45,12 @@
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
     "less-loader": "^6.0.0",
+    "prettier": "^2.2.1",
     "style-loader": "^1.2.0",
     "typescript": "^3.8.3",
     "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "prettier": "^2.2.1"
+    "webpack-dev-server": "^3.10.3"
   }
 }
