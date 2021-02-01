@@ -14,7 +14,7 @@ import Theme from './pages/advance/theme';
 import Snapshot from './pages/extension/snapshot';
 import Control from './pages/extension/components/control';
 import Menu from './pages/extension/components/menu';
-import DndPandel from './pages/extension/components/dnd/index';
+import DndPanel from './pages/extension/components/dnd-panel';
 import CustomMenu from './pages/extension/components/custom-menu';
 import CustomDnd from './pages/extension/components/custom-dnd';
 import UserTaskNode from './pages/advance/custom-node/userTask';
@@ -49,7 +49,7 @@ export default (
     <Route path="/extension/snapshot" exact component={Snapshot} />
     <Route path="/extension/components/control" exact component={Control} />
     <Route path="/extension/components/menu" exact component={Menu} />
-    <Route path="/extension/components/dnd" exact component={DndPandel} />
+    <Route path="/extension/components/dnd-panel" exact component={DndPanel} />
     <Route path="/extension/components/custom-menu" exact component={CustomMenu} />
     <Route path="/extension/components/custom-dnd" exact component={CustomDnd} />
     <Route path="/extension/bpmn-elements" exact component={BpmnElements} />

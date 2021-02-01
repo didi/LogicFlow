@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import { Dnd } from '@logicflow/extension'
+import { DndPanel } from '@logicflow/extension'
 
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
 };
 
-export default function DndPanleExample() {
+export default function DndPanelExample() {
   useEffect(() => {
-    LogicFlow.use(Dnd);
+    LogicFlow.use(DndPanel);
     const lf = new LogicFlow({
       ...config,
       grid: {
