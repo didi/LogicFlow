@@ -5,8 +5,8 @@ import Share from './component/Share';
 import Setting from './component/Setting';
 import Links from './component/Links';
 import './index.less';
-import CustomNode from './lib/utils/registerNode';
-import CustomListener from './lib/utils/addListener';
+import CustomNode from './utils/registerNode';
+import CustomListener from './utils/addListener';
 
 LogicFlow.use(Snapshot);
 LogicFlow.use(Dnd);
