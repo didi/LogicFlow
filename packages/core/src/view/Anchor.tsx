@@ -32,6 +32,7 @@ interface IState {
   endX: number,
   endY: number,
   hover: boolean,
+  draging: boolean,
 }
 
 class Anchor extends Component<IProps, IState> {
@@ -50,6 +51,7 @@ class Anchor extends Component<IProps, IState> {
       endX: 0,
       endY: 0,
       hover: false,
+      draging: false,
     };
 
     this.dragHandler = createDrag({
@@ -59,8 +61,6 @@ class Anchor extends Component<IProps, IState> {
     });
   }
   onDragStart = () => {
-    console.log('onDragStart');
-
     const {
       x, y, nodeModel, graphModel,
     } = this.props;
@@ -75,8 +75,6 @@ class Anchor extends Component<IProps, IState> {
     });
   };
   onDraging = ({ deltaX, deltaY }) => {
-    console.log('onDraging');
-
     const { endX, endY } = this.state;
     const { graphModel, nodeModel } = this.props;
     const { transformMatrix, nodes } = graphModel;
@@ -88,6 +86,7 @@ class Anchor extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
+      draging: true,
     });
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
     if (info) {
@@ -117,14 +116,18 @@ class Anchor extends Component<IProps, IState> {
     }
   };
   onDragEnd = () => {
-    console.log('onDragEnd');
     this.checkEnd();
     this.setState({
       startX: 0,
       startY: 0,
       endX: 0,
       endY: 0,
+      draging: false,
     });
+  };
+  onDblClick = () => {
+    const { graphModel, nodeModel } = this.props;
+    graphModel.setElementStateById(nodeModel.id, ElementState.TEXT_EDIT);
   };
 
   setHover(isHover: boolean, ev: MouseEvent): void {
@@ -147,13 +150,15 @@ class Anchor extends Component<IProps, IState> {
     // nodeModel.setSelected(false);
     /* 创建连线 */
     const { nodes, edgeType } = graphModel;
-    const { endX, endY } = this.state;
+    const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
       this.preTargetNode.setAnchorActive(-1);
     }
+    // 没有draging就结束连线
+    if (!draging) return;
     if (info) {
       const targetNode = info.node;
       const {
@@ -208,7 +213,7 @@ class Anchor extends Component<IProps, IState> {
     } = this.props;
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
-      <g className="lf-anchor">
+      <g className="lf-anchor" onDblClick={this.onDblClick}>
         {hover || activeAnchor === anchorIndex ? (
           <Circle
             className="lf-node-anchor-hover"

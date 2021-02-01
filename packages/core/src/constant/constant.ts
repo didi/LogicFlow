@@ -61,10 +61,6 @@ export enum EventType {
   HISTORY_CHANGE = 'history:change',
 }
 
-export enum InnerEventType {
-  HISTORY_CHANGE = 'inner:history:change'
-}
-
 export enum SegmentDirection {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical',

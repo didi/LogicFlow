@@ -6,6 +6,7 @@ import Setting from './component/Setting';
 import Links from './component/Links';
 import './index.less';
 import CustomNode from './lib/utils/registerNode';
+import CustomListener from './lib/utils/addListener';
 
 LogicFlow.use(Snapshot);
 LogicFlow.use(Dnd);
@@ -36,7 +37,9 @@ export default class App extends Component<IProps, IState> {
     });
 
     const customNode = new CustomNode(this.lf);
+    const customListener = new CustomListener(this.lf);
     customNode.registerAll();
+    customListener.addAll();
     this.lf.render({});
   }
 
