@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import { BpmnAdapter, Control, Dnd } from '@logicflow/extension';
+import { BpmnAdapter, Control, DndPanel } from '@logicflow/extension';
 import ExampleHeader from '../../../components/example-header';
 import { Button } from 'antd';
 import { ExportOutlined } from '@ant-design/icons';
@@ -23,7 +23,7 @@ export default function AdapterExample() {
     // 注册插件
     LogicFlow.use(BpmnAdapter);
     LogicFlow.use(Control);
-    LogicFlow.use(Dnd);
+    LogicFlow.use(DndPanel);
 
     lf = new LogicFlow({
       container: document.querySelector('#graph') as HTMLElement,

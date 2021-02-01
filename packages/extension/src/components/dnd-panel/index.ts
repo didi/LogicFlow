@@ -5,7 +5,7 @@ type Shape = {
   type: string;
 };
 
-interface Dnd extends Extension {
+interface DndPanel extends Extension {
   lf: LogicFlow;
   shapeList: Shape[];
   getDnd: () => HTMLElement;
@@ -13,7 +13,7 @@ interface Dnd extends Extension {
   handleMouseDown: (config: Shape) => void;
 }
 
-const Dnd: Dnd = {
+const DndPanel: DndPanel = {
   lf: null,
   shapeList: [
     {
@@ -42,24 +42,24 @@ const Dnd: Dnd = {
     },
   ],
   install(lf) {
-    Dnd.lf = lf;
-    Dnd.registerNode();
+    DndPanel.lf = lf;
+    DndPanel.registerNode();
     lf.setShapeList = (config) => {
       if (!Array.isArray(config)) {
-        throw new TypeError('Dnd 的 ShapeList 必须是数组');
+        throw new TypeError('DndPanel 的 ShapeList 必须是数组');
       } else if (config.length > 0) {
-        Dnd.shapeList = config;
+        DndPanel.shapeList = config;
       }
     };
   },
   render(lf, container) {
-    container.appendChild(Dnd.getDnd());
+    container.appendChild(DndPanel.getDnd());
   },
   getDnd() {
-    const { handleMouseDown } = Dnd;
+    const { handleMouseDown } = DndPanel;
     const dndContainer = document.createElement('div');
     dndContainer.className = 'lf-dnd';
-    Dnd.shapeList.forEach((shape) => {
+    DndPanel.shapeList.forEach((shape) => {
       const { type, text } = shape;
       const dndItem = document.createElement('div');
       const dndIcon = document.createElement('div');
@@ -74,7 +74,7 @@ const Dnd: Dnd = {
     return dndContainer;
   },
   registerNode() {
-    const { lf } = Dnd;
+    const { lf } = DndPanel;
     lf.register('star', ({ PolygonNode, PolygonNodeModel }) => {
       class StarNode extends PolygonNode {
       }
@@ -158,12 +158,12 @@ const Dnd: Dnd = {
     });
   },
   handleMouseDown(config) {
-    const { lf } = Dnd;
+    const { lf } = DndPanel;
     lf.dnd.startDrag(config);
   },
 };
 
-export default Dnd;
+export default DndPanel;
 export {
-  Dnd,
+  DndPanel,
 };

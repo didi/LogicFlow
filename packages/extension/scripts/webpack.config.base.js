@@ -10,7 +10,7 @@ const packagesEntry = {
   ResizeNode: path.resolve(__dirname, "../src/resize-node/index.ts"),
   Control: path.resolve(__dirname, "../src/components/control/index.ts"),
   Menu: path.resolve(__dirname, "../src/components/menu/index.ts"),
-  Dnd: path.resolve(__dirname, "../src/components/dnd/index.ts"),
+  DndPanel: path.resolve(__dirname, "../src/components/dnd-panel/index.ts"),
 };
 
 module.exports = {

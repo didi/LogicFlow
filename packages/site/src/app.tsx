@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 import LogicFlow from '@logicflow/core';
-import { Snapshot, Dnd, Menu } from '@logicflow/extension';
+import { Snapshot, DndPanel, Menu } from '@logicflow/extension';
 import Share from './component/Share';
 import Setting from './component/Setting';
 import Links from './component/Links';
@@ -9,7 +9,7 @@ import CustomNode from './utils/registerNode';
 import CustomListener from './utils/addListener';
 
 LogicFlow.use(Snapshot);
-LogicFlow.use(Dnd);
+LogicFlow.use(DndPanel);
 LogicFlow.use(Menu);
 
 type IProps = {

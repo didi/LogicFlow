@@ -6,12 +6,12 @@
 
 ```ts
 import LogicFlow from '@logicflow/core';
-import { Control, Menu, Dnd } from '@logicflow/extension';
+import { Control, Menu, DndPanel } from '@logicflow/extension';
 import '@logicflow/extension/lib/style.css';
 
 LogicFlow.use(Control);
 LogicFlow.use(Menu);
-LogicFlow.use(Dnd);
+LogicFlow.use(DndPanel);
 ```
 
 ## 控制面板
@@ -249,15 +249,15 @@ lf.setDefaultEdgeType('custome_edge');
 
 ## 拖拽面板
 
-注册`Dnd`组件后，Logic Flow 会在画布左上方创建一个拖拽面板，如下所示
+注册`DndPanel`组件后，Logic Flow 会在画布左上方创建一个拖拽面板，如下所示
 
-<example href="/examples/#/extension/components/dnd"></example>
+<example href="/examples/#/extension/components/dnd-panel"></example>
 
-`Dnd`组件在 Logic Flow 内置节点的基础上新增了三种类型，分别是`star`（五角星）、`triangle`（三角形）和`hexagon`（六边形），如果只想使用其中的某几个图形，可以通过`setShapeList`方法来实现。
+`DndPanel`组件在 Logic Flow 内置节点的基础上新增了三种类型，分别是`star`（五角星）、`triangle`（三角形）和`hexagon`（六边形），如果只想使用其中的某几个图形，可以通过`setShapeList`方法来实现。
 
 ```ts
 // 注册插件
-LogicFlow.use(Dnd);
+LogicFlow.use(DndPanel);
 
 // 示例化 LogicFlow
 const lf = new LogicFlow();
@@ -325,4 +325,4 @@ const Dnd = {
 }
 ```
 
-自定义组件的详细案例请参考拖拽面板的实现[源码]()
+自定义组件的详细案例请参考拖拽面板的实现[源码](https://github.com/didi/LogicFlow/blob/master/packages/extension/src/components/dnd-panel/index.ts)
