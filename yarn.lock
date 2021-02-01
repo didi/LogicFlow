@@ -11454,7 +11454,7 @@ prettier@^1.18.2:
 
 prettier@^2.2.1:
   version "2.2.1"
-  resolved "http://registry.npm.xiaojukeji.com/prettier/download/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
 
 pretty-bytes@^5.3.0:
   version "5.5.0"
