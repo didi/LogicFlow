@@ -8,6 +8,7 @@ const commonStyle = {
   strokeOpacity: 1,
   opacity: 1,
   outlineColor: '#000000',
+  outlineStrokeDashArray: '3,3',
 };
 const rect = {
   ...commonStyle,
@@ -51,6 +52,7 @@ const edge = {
   hoverStroke: '#000000',
   selectedStroke: '#000000',
   outlineColor: '#000000',
+  outlineStrokeDashArray: '3,3',
 };
 const line = {
   ...edge,

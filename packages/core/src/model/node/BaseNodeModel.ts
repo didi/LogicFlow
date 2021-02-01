@@ -63,6 +63,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable strokeOpacity = defaultConfig.strokeOpacity;
   @observable opacity = defaultConfig.opacity;
   @observable outlineColor = defaultConfig.outlineColor;
+  @observable outlineStrokeDashArray = defaultConfig.outlineStrokeDashArray;
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
