@@ -1,4 +1,4 @@
-import { Component, h } from 'preact';
+import { Component, Fragment, h } from 'preact';
 import { observer, inject } from 'mobx-react';
 import { map } from 'lodash-es';
 import GraphModel from '../model/GraphModel';
@@ -69,33 +69,35 @@ class Graph extends Component<IProps> {
     const { adjustEdge } = editConfig;
 
     return (
-      <div
-        className="lf-graph"
-        {...dnd.eventMap()}
-        style={style}
-      >
-        <CanvasOverlay
-          graphModel={graphModel}
-          eventCenter={eventCenter}
+      <Fragment>
+        <div
+          className="lf-graph"
+          {...dnd.eventMap()}
+          style={style}
         >
-          <g className="lf-base">
+          <CanvasOverlay
+            graphModel={graphModel}
+            eventCenter={eventCenter}
+          >
+            <g className="lf-base">
+              {
+                map(graphModel.sortElements, (nodeModel) => (
+                  this.getComponent(nodeModel, graphModel, eventCenter)
+                ))
+              }
+            </g>
             {
-              map(graphModel.sortElements, (nodeModel) => (
-                this.getComponent(nodeModel, graphModel, eventCenter)
-              ))
+              fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
             }
-          </g>
-          {
-            fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
-          }
-          {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
-          <OutlineOverlay graphModel={graphModel} />
-          {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
-        </CanvasOverlay>
+            {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
+            <OutlineOverlay graphModel={graphModel} />
+            {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
+          </CanvasOverlay>
+          {options.background && <BackgroundOverlay background={options.background} />}
+          {options.grid && <Grid {...options.grid} graphModel={graphModel} />}
+        </div>
         <ToolOverlay graphModel={graphModel} tool={tool} />
-        {options.background && <BackgroundOverlay background={options.background} />}
-        {options.grid && <Grid {...options.grid} graphModel={graphModel} />}
-      </div>
+      </Fragment>
     );
   }
 }
