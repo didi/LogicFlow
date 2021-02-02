@@ -18,6 +18,8 @@ lf.on('element:type', (eventObject) => {});
 | 'node:mousedown' | 鼠标按下节点 | data, e |
 | 'node:mouseup' | 鼠标抬起节点 | data, e |
 | 'node:mousemove' | 鼠标移动节点 | data, e |
+| 'node:mouseenter' | 鼠标进入节点 | data, e |
+| 'node:mouseleave' | 鼠标离开节点 | data, e |
 | 'node:delete' | 节点的删除 | data |
 | 'node:add' | 节点的添加 | data |
 | 'node:contextmenu' | 右键点击节点 | data, e, position |
@@ -37,6 +39,8 @@ lf.on('element:type', (eventObject) => {});
 | 'element:click' | 元素单击 | data, e, position |
 | 'edge:click' | 边单击 | data, e, position |
 | 'edge:dbclick' | 边双击 | data, e |
+| 'edge:mouseenter' | 鼠标进入边 | data, e |
+| 'edge:mouseleave' | 鼠标离开边 | data, e |
 | 'edge:add' | 边增加 | data |
 | 'edge:delete'| 边删除 |data |
 | 'edge:contextmenu'| 边右键 | data, e, position |
