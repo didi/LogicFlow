@@ -20,6 +20,18 @@ class CustomListener {
     lf.on('node:dbclick', ({ data }) => {
       console.log('双击', data);
     });
+    lf.on('node:mouseenter', (param) => {
+      console.log(param);
+    });
+    lf.on('node:mouseleave', (param) => {
+      console.log(param);
+    });
+    lf.on('edge:mouseenter', (param) => {
+      console.log(param);
+    });
+    lf.on('edge:mouseleave', (param) => {
+      console.log(param);
+    });
   }
 }
 
