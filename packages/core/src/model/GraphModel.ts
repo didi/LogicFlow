@@ -481,6 +481,13 @@ class GraphModel {
     this.selectElement?.setSelected(true);
   }
 
+  @action
+  selectElementById(id: string) {
+    this.selectElement?.setSelected(false);
+    this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
+    this.selectElement?.setSelected(true);
+  }
+
   /* 修改连线类型 */
   @action
   changeEdgeType(type: string): void {

@@ -276,6 +276,12 @@ export default class LogicFlow {
     this.translate(-TRANSLATE_X, -TRANSLATE_Y);
   }
   /**
+   * 将图形选中
+   */
+  select(id: string) {
+    this.graphModel.selectElementById(id);
+  }
+  /**
    * 将图形定位到画布中心
    * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是连线的id，也可以不传（兜底）
    */
