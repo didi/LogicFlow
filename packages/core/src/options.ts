@@ -7,27 +7,27 @@ import { KeyboardDef } from './keyboard';
 
 // edgeMenuConfig: any;
 export type Definition = {
-  container: HTMLElement
+  container: HTMLElement;
 
-  width?: number
+  width?: number;
 
-  height?: number
+  height?: number;
 
-  background?: false | BackgroundConfig
+  background?: false | BackgroundConfig;
 
-  grid?: boolean | GridOptions
+  grid?: boolean | GridOptions;
 
-  textEdit?: boolean
+  textEdit?: boolean;
 
-  keyboard?: KeyboardDef
+  keyboard?: KeyboardDef;
 
-  style?: Style
+  style?: Style;
 
-  dndOptions?: DndOptions
+  dndOptions?: DndOptions;
 
-  isSilentMode?: boolean
+  isSilentMode?: boolean;
 
-  edgeType?: string,
+  edgeType?: string;
 
   snapline?: boolean;
 
@@ -39,7 +39,11 @@ export type Definition = {
 
   stopZoomGraph?: boolean;
 
-  guards?: GuardsTypes
+  guards?: GuardsTypes;
+
+  hideAnchors?: boolean; // 是否隐藏anchor
+
+  hoverOutline?: boolean; // 是否显示节点hover时的outline
 };
 
 export interface GuardsTypes {

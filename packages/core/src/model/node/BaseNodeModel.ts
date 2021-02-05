@@ -63,6 +63,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable strokeOpacity = defaultConfig.strokeOpacity;
   @observable opacity = defaultConfig.opacity;
   @observable outlineColor = defaultConfig.outlineColor;
+  @observable hoverOutlineColor = defaultConfig.hoverOutlineColor;
   @observable outlineStrokeDashArray = defaultConfig.outlineStrokeDashArray;
   @observable isSelected = false;
   @observable isHovered = false;

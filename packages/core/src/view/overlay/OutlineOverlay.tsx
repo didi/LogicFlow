@@ -17,14 +17,22 @@ export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
   getNodeOutline() {
     const { graphModel } = this.props;
-    const nodeList = graphModel.nodes;
+    const { nodes: nodeList, editConfig: { hoverOutline } } = graphModel;
     const nodeOutline = [];
     for (let i = 0; i < nodeList.length; i++) {
-      const node = nodeList[i];
       const {
-        isSelected, x, y, width, height, outlineColor, outlineStrokeDashArray,
-      } = node;
-      if (isSelected) {
+        isHovered,
+        isSelected,
+        x,
+        y,
+        width,
+        height,
+        outlineColor,
+        hoverOutlineColor,
+        outlineStrokeDashArray,
+      } = nodeList[i];
+      if (isSelected || (hoverOutline && isHovered)) {
+        const color = isSelected ? outlineColor : hoverOutlineColor;
         nodeOutline.push(
           <Rect
             className="lf-outline-node"
@@ -33,7 +41,7 @@ export default class OutlineOverlay extends Component<IProps> {
             }}
             radius={0}
             fill="none"
-            stroke={outlineColor}
+            stroke={color}
             strokeDasharray={outlineStrokeDashArray}
           />,
         );

@@ -310,6 +310,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
     const { model, eventCenter } = this.props;
     const nodeData = model.getData();
+    model.setHovered(true);
     eventCenter.emit(EventType.NODE_MOUSEENTER, {
       data: nodeData,
       e: ev,
@@ -321,6 +322,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
     const { model, eventCenter } = this.props;
     const nodeData = model.getData();
+    model.setHovered(false);
     eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
       e: ev,
