@@ -9,6 +9,8 @@ const commonStyle = {
   opacity: 1,
   outlineColor: '#000000',
   outlineStrokeDashArray: '3,3',
+  hoverOutlineColor: '#000000',
+  hoverOutlineStrokeDashArray: '3,3',
 };
 const rect = {
   ...commonStyle,

@@ -98,8 +98,10 @@ lf.setTheme({
 |strokeWidth|number|边框宽度|2|
 |strokeOpacity|number|边框透明度|1|
 |opacity|number|整体透明度|1|
-|outlineColor|color|hover外边框颜色|1|
+|outlineColor|color|外边框颜色|#000000|
+|hoverOutlineColor|color|hover外边框颜色|#000000|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+|hoverOutlineStrokeDashArray|string|控制用来描hover外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
 <details>
 <summary>点击展开查看矩形样式设置</summary>
 
@@ -116,7 +118,9 @@ lf.setTheme({
     strokeOpacity: 1,
     opacity: 1,
     outlineColor: '#000000',
+    hoverOutlineColor: '#000000',
     outlineStrokeDashArray: '3,3',
+    hoverOutlineStrokeDashArray: '3,3'
   },
 })
 ```
@@ -133,8 +137,10 @@ lf.setTheme({
 |strokeWidth|number|边框宽度|2|
 |strokeOpacity|number|边框透明度|1|
 |opacity|number|整体透明度|1|
-|outlineColor|color|hover外边框颜色|1|
+|outlineColor|color|外边框颜色|#000000|
+|hoverOutlineColor|color|hover外边框颜色|#000000|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+|hoverOutlineStrokeDashArray|string|控制用来描hover外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
 <details>
 <summary>点击展开查看圆形样式设置</summary>
 
@@ -149,7 +155,9 @@ lf.setTheme({
     strokeOpacity: 1,
     opacity: 1,
     outlineColor: '#000000',
+    hoverOutlineColor: '#000000',
     outlineStrokeDashArray: '3,3',
+    hoverOutlineStrokeDashArray: '3,3'
   },
 })
 ```
@@ -167,8 +175,10 @@ lf.setTheme({
 |strokeWidth|number|边框宽度|2|
 |strokeOpacity|number|边框透明度|1|
 |opacity|number|整体透明度|1|
-|outlineColor|color|hover外边框颜色|1|
+|outlineColor|color|外边框颜色|#000000|
+|hoverOutlineColor|color|hover外边框颜色|#000000|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+|hoverOutlineStrokeDashArray|string|控制用来描hover外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
 <details>
 <summary>点击展开查看椭圆样式设置</summary>
 
@@ -184,7 +194,9 @@ lf.setTheme({
     strokeOpacity: 1,
     opacity: 1,
     outlineColor: '#000000',
+    hoverOutlineColor: '#000000',
     outlineStrokeDashArray: '3,3',
+    hoverOutlineStrokeDashArray: '3,3'
   },
 })
 ```
@@ -247,8 +259,10 @@ lf.setTheme({
 |strokeWidth|number|边框宽度|2|
 |strokeOpacity|number|边框透明度|1|
 |opacity|number|整体透明度|1|
-|outlineColor|color|hover外边框颜色|1|
+|outlineColor|color|外边框颜色|#000000|
+|hoverOutlineColor|color|hover外边框颜色|#000000|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+|hoverOutlineStrokeDashArray|string|控制用来描hover外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
 <details>
 <summary>点击展开查看多边形样式设置</summary>
 
@@ -262,7 +276,9 @@ lf.setTheme({
     strokeOpacity: 1,
     opacity: 1,
     outlineColor: '#000000',
+    hoverOutlineColor: '#000000',
     outlineStrokeDashArray: '3,3',
+    hoverOutlineStrokeDashArray: '3,3'
   },
 })
 ```

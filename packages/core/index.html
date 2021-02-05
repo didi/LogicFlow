@@ -50,35 +50,17 @@
     window.onload = function () {
       const lf = new LogicFlow({
         container: document.querySelector('#app'),
-        keyboard: {
-          enabled: true,
-        },
         // width: 700,
         // height: 500,
         // isSilentMode: true,
-        partial: true,
-        tool: {
-          menu: true,
-          control: true,
+        keyboard: {
+          enabled: true,
         },
+        partial: true,
         background: {
           color: '#F0F0F0'
         },
         grid: true,
-        graphMenuConfig: [
-          {
-            text: '分享',
-            className: 'lf-menu-item',
-            callback(graphModel) {
-              alert('分享')
-            },
-          }
-        ], 
-        // style: {
-        //   rect: {
-        //     fill: '#000000'
-        //   }
-        // },
         edgeTextDraggable: true,
         edgeType: 'line',
       });
