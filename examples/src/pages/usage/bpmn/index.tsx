@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LogicFlow from '@logicflow/core';
-import { BpmnElement, BpmnXmlAdapter, Control, Menu } from '@logicflow/extension';
+import { BpmnElement, BpmnXmlAdapter, Snapshot, Control, Menu } from '@logicflow/extension';
 import BpmnPattern from './pattern';
 import BpmnIo from './io';
 import './index.css';
@@ -34,6 +34,7 @@ export default class BpmnExample extends Component<IProps, IState>{
   componentDidMount() {
     LogicFlow.use(BpmnElement);
     LogicFlow.use(BpmnXmlAdapter);
+    LogicFlow.use(Snapshot);
     LogicFlow.use(Control);
     LogicFlow.use(Menu);
     const lf = new LogicFlow({

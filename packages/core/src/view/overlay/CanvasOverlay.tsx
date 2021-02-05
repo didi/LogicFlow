@@ -8,10 +8,12 @@ import { StepDrag } from '../../util/drag';
 import getTransform from './getTransformHoc';
 import EventEmitter from '../../event/eventEmitter';
 import { GraphTransform } from '../../type';
+import Dnd from '../behavior/DnD';
 
 type IProps = {
   graphModel: GraphModel;
   eventCenter: EventEmitter;
+  dnd: Dnd
 };
 type Istate = {
   isDraging: boolean,
@@ -151,7 +153,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
   };
   render() {
     const { transformStyle: { transform } } = this.InjectedProps;
-    const { children } = this.props;
+    const { children, dnd } = this.props;
     const { isDraging } = this.state;
 
     return (
@@ -164,6 +166,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         onMouseDown={this.mouseDownHandler}
         onContextMenu={this.handleContextMenu}
         className={isDraging ? 'lf-dragging' : 'lf-drag-able'}
+        {...dnd.eventMap()}
       >
         <g style={{ transform }}>
           {children}
