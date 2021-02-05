@@ -30,9 +30,11 @@ export default class OutlineOverlay extends Component<IProps> {
         outlineColor,
         hoverOutlineColor,
         outlineStrokeDashArray,
+        hoverOutlineStrokeDashArray,
       } = nodeList[i];
       if (isSelected || (hoverOutline && isHovered)) {
         const color = isSelected ? outlineColor : hoverOutlineColor;
+        const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
         nodeOutline.push(
           <Rect
             className="lf-outline-node"
@@ -42,7 +44,7 @@ export default class OutlineOverlay extends Component<IProps> {
             radius={0}
             fill="none"
             stroke={color}
-            strokeDasharray={outlineStrokeDashArray}
+            strokeDasharray={strokeDashArray}
           />,
         );
       }
