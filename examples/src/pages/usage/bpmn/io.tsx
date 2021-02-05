@@ -43,6 +43,12 @@ export default function BpmnIo(props: IProps) {
     }
     reader.readAsText(file); // you could also read images and other binaries
   }
+
+  function downloadImage() {
+    const { lf } = props;
+    lf.getSnapshot();
+  }
+
   return (
     <div className="graph-io">
       <span
@@ -54,6 +60,7 @@ export default function BpmnIo(props: IProps) {
       <span
         id="download-img"
         title="下载图片"
+        onMouseDown={() => downloadImage()}
       >
         <img src={photo} alt="下载图片" />
       </span>
