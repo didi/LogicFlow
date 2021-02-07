@@ -771,3 +771,48 @@ export const getEndTangent = (path: string): Point[] => {
   const bezierPoints = getBezierPoints(path);
   return [bezierPoints[2], bezierPoints[3]];
 };
+
+export const getClosestPointOfPolyline = (point: Point, points: string): Point => {
+  const { x, y } = point;
+  const pointsPosition = poins2PointsList(points);
+  let minDistance = Number.MAX_SAFE_INTEGER;
+  let crossPoint;
+  const segments = [];
+  for (let i = 0; i < pointsPosition.length; i++) {
+    segments.push({
+      start: pointsPosition[i],
+      end: pointsPosition[(i + 1) % pointsPosition.length],
+    });
+  }
+  segments.forEach(item => {
+    const { start, end } = item;
+    if (start.x === end.x) {
+      const pointXY = {
+        x: start.x,
+        y,
+      };
+      const inSegment = isInSegment(pointXY, start, end);
+      if (inSegment) {
+        const currentDistance = Math.abs(start.x - x);
+        if (currentDistance < minDistance) {
+          minDistance = currentDistance;
+          crossPoint = pointXY;
+        }
+      }
+    } else if (start.y === end.y) {
+      const pointXY = {
+        x,
+        y: start.y,
+      };
+      const inSegment = isInSegment(pointXY, start, end);
+      if (inSegment) {
+        const currentDistance = Math.abs(start.y - y);
+        if (currentDistance < minDistance) {
+          minDistance = currentDistance;
+          crossPoint = pointXY;
+        }
+      }
+    }
+  });
+  return crossPoint;
+};

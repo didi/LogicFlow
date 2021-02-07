@@ -32,6 +32,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   draginngPointList;
   @observable points = '';
   @observable pointsList: Point[] = [];
+  @observable dbClickPosition: Point;
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel);
     this.setStyleFromTheme('polyline', graphModel);
@@ -40,6 +41,14 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     this.formatText(data);
   }
   @computed get textPosition(): Point {
+    // 在文案为空的情况下，文案位置为双击位置
+    const textValue = this.text?.value;
+    if (this.dbClickPosition && !textValue) {
+      const { x, y } = this.dbClickPosition;
+      return {
+        x, y,
+      };
+    }
     const currentPositionList = poins2PointsList(this.points);
     const [p1, p2] = getLongestEdge(currentPositionList);
     return {
