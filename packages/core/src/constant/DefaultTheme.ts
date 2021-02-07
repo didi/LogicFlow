@@ -24,8 +24,8 @@ const circle = {
 };
 const ellipse = {
   ...commonStyle,
-  rx: 50,
-  ry: 50,
+  rx: 55,
+  ry: 45,
 };
 const diamond = {
   ...commonStyle,

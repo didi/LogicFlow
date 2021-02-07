@@ -24,10 +24,10 @@ class CircleNodeModel extends BaseNodeModel {
   }
   @computed get anchors(): Point[] {
     return [
+      { x: this.x, y: this.y - this.r },
       { x: this.x + this.r, y: this.y },
       { x: this.x, y: this.y + this.r },
       { x: this.x - this.r, y: this.y },
-      { x: this.x, y: this.y - this.r },
     ];
   }
 }

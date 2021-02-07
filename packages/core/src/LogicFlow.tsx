@@ -46,6 +46,7 @@ import {
   RegisterParam,
   EdgeAttribute,
   EdgeData,
+  Point,
 } from './type';
 import { initShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -530,6 +531,18 @@ export default class LogicFlow {
     if (this.snaplineModel) {
       this.snaplineModel.clearSnapline();
     }
+  }
+
+  /**
+   * 获取事件位置相对于画布左上角的坐标
+   * @param {number} x 事件x坐标
+   * @param {number} y 事件y坐标
+   * @returns {object} Point 事件位置的坐标
+   * @returns {object} Point.domOverlayPostion HTML层上的坐标
+   * @returns {object} Point.canvasOverlayPostion SVG层上的坐标
+   */
+  getPointByClient({ x, y }: Point) {
+    return this.graphModel.getPointByClient({ x, y });
   }
 
   // TODO 定义 graphData

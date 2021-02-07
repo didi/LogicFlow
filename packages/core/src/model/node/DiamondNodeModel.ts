@@ -27,10 +27,10 @@ class DiamondNodeModel extends BaseNodeModel {
       x, y, rx, ry,
     } = this;
     return [
+      [x, y - ry],
       [x + rx, y],
       [x, y + ry],
       [x - rx, y],
-      [x, y - ry],
     ];
   }
 
