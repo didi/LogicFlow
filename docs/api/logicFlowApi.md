@@ -465,6 +465,36 @@ lf.focusOn({
 })
 ```
 
+## getPointByClient
+
+获取事件位置相对于画布左上角的坐标
+
+画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+
+```js
+getPointByClient(x: number, y: number)
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| x | Number | ✅ | - | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
+| y | Number | ✅ | - | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
+
+返回值：
+
+| 名称 | 类型 | 描述 |
+| :- | :- | :- |
+| domOverlayPosition | Object | HTML 层上相对于画布左上角的坐标`{x, y}` |
+| canvasOverlayPosition | Object | SVG 层上相对于画布左上角的坐标`{x, y}` |
+
+示例：
+
+```js
+lf.getPointByClient(event.x, event.y)
+```
+
 ## cloneNode
 
 克隆节点

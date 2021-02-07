@@ -30,7 +30,7 @@ lf.on('element:type', (eventObject) => {});
 | :----- | :----- | :----- |
 | data | Object | 节点的[数据属性](/api/nodeApi.md#数据属性) |
 | e | MouseEvent | 原生的鼠标事件对象 |
-| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
+| position | Object | 鼠标触发点在画布中的坐标（参照[getPointByClient](/api/logicFlowApi.html#getpointbyclient)的返回值） |
 
 ## 边事件
 
@@ -52,7 +52,7 @@ lf.on('element:type', (eventObject) => {});
 | :----- | :----- | :----- |
 | data | Object | 连线的[数据属性](/api/edgeApi.md#数据属性) |
 | e | MouseEvent | 原生的鼠标事件对象 |
-| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
+| position | Object | 鼠标触发点在画布中的坐标（参照[getPointByClient](/api/logicFlowApi.html#getpointbyclient)的返回值） |
 | msg | String | 连线校验信息 |
 
 ## 画布事件
@@ -70,7 +70,7 @@ lf.on('element:type', (eventObject) => {});
 | 属性   | 类型   | 值 |
 | :----- | :----- | :----- |
 | e | MouseEvent | 原生的鼠标事件对象 |
-| position | Object | 鼠标触发点在画布中的坐标 `{ x, y }` |
+| position | Object | 鼠标触发点在画布中的坐标（参照[getPointByClient](/api/logicFlowApi.html#getpointbyclient)的返回值） |
 
 ## History 事件
 
