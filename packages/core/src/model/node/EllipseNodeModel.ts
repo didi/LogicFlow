@@ -25,10 +25,10 @@ class EllipseNodeModel extends BaseNodeModel {
   }
   @computed get anchors(): Point[] {
     return [
+      { x: this.x, y: this.y - this.ry },
       { x: this.x + this.rx, y: this.y },
       { x: this.x, y: this.y + this.ry },
       { x: this.x - this.rx, y: this.y },
-      { x: this.x, y: this.y - this.ry },
     ];
   }
 }
