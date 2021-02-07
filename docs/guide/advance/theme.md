@@ -167,8 +167,8 @@ lf.setTheme({
 
 |key|type|description|default|
 |-|-|-|-|
-|rx|number|x轴尺寸|50|
-|ry|number|y轴尺寸|50|
+|rx|number|x轴尺寸|55|
+|ry|number|y轴尺寸|45|
 |fill|color|填充颜色|#FFFFFF|
 |fillOpacity|number|填充透明度|1|
 |stroke|color|边框颜色|#000000|
