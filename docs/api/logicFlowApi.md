@@ -486,8 +486,18 @@ getPointByClient(x: number, y: number)
 
 | 名称 | 类型 | 描述 |
 | :- | :- | :- |
-| domOverlayPosition | Object | HTML 层上相对于画布左上角的坐标`{x, y}` |
-| canvasOverlayPosition | Object | SVG 层上相对于画布左上角的坐标`{x, y}` |
+| point | Point | 相对于画布左上角的两种坐标 |
+
+```ts
+type Position = {
+  x: number;
+  y: number;
+}
+type Point = {
+  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
+  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
+}
+```
 
 示例：
 
