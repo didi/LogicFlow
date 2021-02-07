@@ -16,6 +16,7 @@ import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
 import { snapToGrid } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
+import { getClosestPointOfPolyline } from '../util/edge';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -103,8 +104,8 @@ class GraphModel {
       }
     }
     if (topElementIdx !== -1) {
-      const lastElement = showElements[elements.length - 1];
-      showElements[elements.length - 1] = showElements[topElementIdx];
+      const lastElement = showElements[showElements.length - 1];
+      showElements[showElements.length - 1] = showElements[topElementIdx];
       showElements[topElementIdx] = lastElement;
     }
     return showElements;
@@ -355,29 +356,36 @@ class GraphModel {
   moveEdge(nodeId: BaseNodeModelId, deltaX: number, deltaY: number) {
     /* 更新相关连线位置 */
     for (let i = 0; i < this.edges.length; i++) {
-      if (this.edges[i].sourceNodeId === nodeId) {
-        const edgeModel = this.edges[i];
-        const { x, y } = edgeModel.textPosition;
+      const edgeModel = this.edges[i];
+      const { x, y } = edgeModel.textPosition;
+      const nodeAsSource = this.edges[i].sourceNodeId === nodeId;
+      const nodeAsTarget = this.edges[i].targetNodeId === nodeId;
+      if (nodeAsSource) {
         edgeModel.updateStartPoint({
           x: edgeModel.startPoint.x + deltaX,
           y: edgeModel.startPoint.y + deltaY,
         });
-        const { x: x1, y: y1 } = edgeModel.textPosition;
-        edgeModel.moveText(x1 - x, y1 - y);
       }
-      if (this.edges[i].targetNodeId === nodeId) {
-        const edgeModel = this.edges[i];
-        const { x, y } = edgeModel.textPosition;
+      if (nodeAsTarget) {
         edgeModel.updateEndPoint({
           x: edgeModel.endPoint.x + deltaX,
           y: edgeModel.endPoint.y + deltaY,
         });
-        const { x: x1, y: y1 } = edgeModel.textPosition;
-        edgeModel.moveText(x1 - x, y1 - y);
+      }
+      // 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新连线距离最短距离的点
+      // 最大程度保持节点位置不变且在连线上
+      if (nodeAsSource || nodeAsTarget) {
+        if (edgeModel.modelType === ModelType.POLYLINE_EDGE && edgeModel.text?.value) {
+          const textPosition = edgeModel.text;
+          const newPoint = getClosestPointOfPolyline(textPosition, edgeModel.points);
+          edgeModel.moveText(newPoint.x - textPosition.x, newPoint.y - textPosition.y);
+        } else {
+          const { x: x1, y: y1 } = edgeModel.textPosition;
+          edgeModel.moveText(x1 - x, y1 - y);
+        }
       }
     }
   }
-
   @action
   removeEdge(sourceNodeId, targetNodeId) {
     for (let i = 0; i < this.edges.length; i++) {

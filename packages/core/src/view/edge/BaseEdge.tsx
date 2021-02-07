@@ -4,9 +4,11 @@ import Arrow from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
-import { ElementState, EventType } from '../../constant/constant';
+import { ElementState, EventType, ModelType } from '../../constant/constant';
 import EventEmitter from '../../event/eventEmitter';
 import { ArrowInfo, IEdgeState } from '../../type/index';
+import { PolylineEdgeModel } from '../..';
+import { getClosestPointOfPolyline } from '../../util/edge';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -154,6 +156,12 @@ export default class BaseEdge extends Component<IProps> {
     // 边文案可编辑状态，才可以进行文案编辑
     if (editConfig.edgeTextEdit && model.text.editable) {
       graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
+    }
+    if (model.modelType === ModelType.POLYLINE_EDGE) {
+      const polylineEdgeModel = model as PolylineEdgeModel;
+      const { canvasOverlayPostion: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
+      const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
+      polylineEdgeModel.dbClickPosition = crossPoint;
     }
     graphModel.toFront(model.id);
     graphModel.selectEdgeById(model.id);
