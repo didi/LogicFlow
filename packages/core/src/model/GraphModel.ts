@@ -55,7 +55,10 @@ class GraphModel {
   // @observable selectElements = new Map<string, IBaseModel>(); // 多选还没有做，先不加
   constructor(config) {
     const {
-      container, background = {}, grid: { size = 1 } = {}, isSilentMode = false,
+      container,
+      background = {},
+      grid: { size = 1 } = {},
+      isSilentMode = false,
       eventCenter,
     } = config;
     this.background = background;

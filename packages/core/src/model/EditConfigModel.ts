@@ -37,6 +37,7 @@ export default class EditConfigModel {
   @observable adjustEdge = true; // 允许调整连线
   @observable adjustNodePosition = true; // 允许拖动节点
   @observable hideAnchors = false; // 隐藏节点所有锚点
+  @observable hoverOutline = false; // 显示节点悬浮时的外框
   @observable nodeTextEdit = true; // 允许节点文本可以编辑
   @observable edgeTextEdit = true; // 允许连线文本可以编辑
   @observable nodeTextDraggable = false; // 允许节点文本可以拖拽
@@ -49,6 +50,7 @@ export default class EditConfigModel {
       'adjustEdge',
       'adjustNodePosition',
       'hideAnchors',
+      'hoverOutline',
       'nodeTextEdit',
       'edgeTextEdit',
       'nodeTextDraggable',
@@ -56,7 +58,17 @@ export default class EditConfigModel {
     ];
     const { isSilentMode, textEdit } = data;
     if (isSilentMode) {
-      assign(this, pick(SilentConfig, keys), pick(data, ['stopZoomGraph', 'stopScrollGraph', 'stopMoveGraph', 'hideAnchors']));
+      assign(
+        this,
+        pick(SilentConfig, keys),
+        pick(data, [
+          'stopZoomGraph',
+          'stopScrollGraph',
+          'stopMoveGraph',
+          'hideAnchors',
+          'hoverOutline',
+        ]),
+      );
     } else if (!textEdit) {
       // 通过 textEdit API 禁用文本编辑
       assign(this, pick(data, keys), {
