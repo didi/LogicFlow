@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.1...@logicflow/extension@0.2.2) (2021-02-08)
+
+
+### Bug Fixes
+
+* **core:** change the priority of events ([5373797](https://github.com/didi/LogicFlow/commit/53737978d109088a2aeac1b4492fcbd69d16ec35))
+
+
+
+
+
 ## [0.2.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.1.0...@logicflow/extension@0.2.1) (2021-02-08)
 
 
