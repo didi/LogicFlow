@@ -95,7 +95,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         x: ev.clientX,
         y: ev.clientY,
       });
-      const { x, y } = position.canvasOverlayPostion;
+      const { x, y } = position.canvasOverlayPosition;
       transformMatrix.zoom(ev.deltaY < 0, [x, y]);
     }
   };
@@ -130,7 +130,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         x: ev.clientX,
         y: ev.clientY,
       });
-      graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPostion);
+      graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
       eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
     }
   };

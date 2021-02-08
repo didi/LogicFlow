@@ -150,15 +150,15 @@ class GraphModel {
    */
   getPointByClient({ x: x1, y: y1 }: Point) {
     const bbox = this.rootEl.getBoundingClientRect();
-    const domOverlayPostion = {
+    const domOverlayPosition = {
       x: x1 - bbox.left,
       y: y1 - bbox.top,
     };
     const [x, y] = this.transformMatrix
-      .HtmlPointToCanvasPoint([domOverlayPostion.x, domOverlayPostion.y]);
+      .HtmlPointToCanvasPoint([domOverlayPosition.x, domOverlayPosition.y]);
     return {
-      domOverlayPostion,
-      canvasOverlayPostion: {
+      domOverlayPosition,
+      canvasOverlayPosition: {
         x,
         y,
       },

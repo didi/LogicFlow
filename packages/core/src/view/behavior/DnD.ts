@@ -28,7 +28,7 @@ export default class Dnd {
     // 处理 container 的 offset 等
     const position = this.lf.graphModel.getPointByClient({ x, y });
     // 处理缩放和偏移
-    const { x: x1, y: y1 } = position.canvasOverlayPostion;
+    const { x: x1, y: y1 } = position.canvasOverlayPosition;
     // x, y 对齐到网格的 size
     return { x: snapToGrid(x1, gridSize), y: snapToGrid(y1, gridSize) };
   }
