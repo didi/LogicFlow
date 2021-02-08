@@ -269,7 +269,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             position,
           });
         }
-      }, 200);
+      }, 400);
     }
     graphModel.toFront(model.id);
     graphModel.selectNodeById(model.id);
@@ -288,7 +288,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       x: ev.clientX,
       y: ev.clientY,
     });
-    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPostion);
+    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     graphModel.toFront(model.id);
     graphModel.selectNodeById(model.id);
     eventCenter.emit(EventType.NODE_CONTEXTMENU, {
@@ -297,7 +297,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       position,
     });
   };
-  handleMouseDown = (ev) => {
+  handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
     graphModel.toFront(model.id);
     this.startTime = new Date().getTime();
