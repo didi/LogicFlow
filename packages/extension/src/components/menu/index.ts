@@ -128,7 +128,7 @@ const Menu: Menu = {
     }, true);
     // 通过事件控制菜单的显示和隐藏
     lf.on('node:contextmenu', ({ data, position }) => {
-      const { domOverlayPostion: { x, y } } = position;
+      const { domOverlayPosition: { x, y } } = position;
       const { _menuDOM: menu, _menuItemDOM: menuItem } = Menu;
       menu.innerHTML = '';
       const { id } = data;
@@ -146,7 +146,7 @@ const Menu: Menu = {
     });
     lf.on('edge:contextmenu', ({ data, position }) => {
       const { _menuDOM: menu, _menuItemDOM: menuItem } = Menu;
-      const { domOverlayPostion: { x, y } } = position;
+      const { domOverlayPosition: { x, y } } = position;
       menu.innerHTML = '';
       const { id } = data;
       const model = lf.graphModel.getEdgeModel(id);
@@ -163,7 +163,7 @@ const Menu: Menu = {
     });
     lf.on('blank:contextmenu', ({ e, position }) => {
       const { _menuDOM: menu, _menuItemDOM: menuItem } = Menu;
-      const { domOverlayPostion: { x, y } } = position;
+      const { domOverlayPosition: { x, y } } = position;
       if (menuItem.has('graphMenu')) {
         menu.innerHTML = '';
         menu.append(...menuItem.get('graphMenu'));

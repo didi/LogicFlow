@@ -14,7 +14,7 @@ lf.on('element:type', (eventObject) => {});
 | :----- | :----- | :-----  |
 | 'element:click' | 元素单击 | data, e, position |
 | 'node:click' | 节点单击 |  data, e, position |
-| 'node:dblclick' | 节点双击 | data, e, position |
+| 'node:dbclick' | 节点双击 | data, e, position |
 | 'node:mousedown' | 鼠标按下节点 | data, e |
 | 'node:mouseup' | 鼠标抬起节点 | data, e |
 | 'node:mousemove' | 鼠标移动节点 | data, e |

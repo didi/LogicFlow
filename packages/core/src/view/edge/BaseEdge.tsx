@@ -158,7 +158,7 @@ export default class BaseEdge extends Component<IProps> {
     }
     if (model.modelType === ModelType.POLYLINE_EDGE) {
       const polylineEdgeModel = model as PolylineEdgeModel;
-      const { canvasOverlayPostion: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
+      const { canvasOverlayPosition: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
       const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
       polylineEdgeModel.dbClickPosition = crossPoint;
     }
@@ -200,7 +200,7 @@ export default class BaseEdge extends Component<IProps> {
       x: ev.clientX,
       y: ev.clientY,
     });
-    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPostion);
+    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     graphModel.toFront(model.id);
     graphModel.selectEdgeById(model.id);
     // 边数据

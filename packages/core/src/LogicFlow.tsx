@@ -46,7 +46,6 @@ import {
   RegisterParam,
   EdgeAttribute,
   EdgeData,
-  Point,
 } from './type';
 import { initShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -538,10 +537,10 @@ export default class LogicFlow {
    * @param {number} x 事件x坐标
    * @param {number} y 事件y坐标
    * @returns {object} Point 事件位置的坐标
-   * @returns {object} Point.domOverlayPostion HTML层上的坐标
-   * @returns {object} Point.canvasOverlayPostion SVG层上的坐标
+   * @returns {object} Point.domOverlayPosition HTML层上的坐标
+   * @returns {object} Point.canvasOverlayPosition SVG层上的坐标
    */
-  getPointByClient({ x, y }: Point) {
+  getPointByClient(x: number, y: number) {
     return this.graphModel.getPointByClient({ x, y });
   }
 
