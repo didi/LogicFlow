@@ -205,7 +205,7 @@ class BaseEdgeModel implements IBaseModel {
         editable: true,
       };
     } else if (data.text && data.text.editable === undefined) {
-      data.text.editable = true;
+      this.text.editable = true;
     }
   }
 

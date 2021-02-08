@@ -124,7 +124,6 @@ export default class BaseEdge extends Component<IProps> {
     return (
       <g
         className="lf-edge-append"
-        onClick={this.handleClick}
         onDblClick={this.handleDbClick}
         onContextMenu={this.handleContextMenu}
         onMouseEnter={this.setHoverON}
@@ -216,6 +215,7 @@ export default class BaseEdge extends Component<IProps> {
     return (
       <g
         className="lf-edge"
+        onClick={this.handleClick}
       >
         {this.getShape()}
         {this.getAppend()}
