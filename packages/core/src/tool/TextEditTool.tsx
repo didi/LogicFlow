@@ -10,24 +10,76 @@ import BaseNodeModel from '../model/node/BaseNodeModel';
 import { ElementType } from '../constant/constant';
 // import { ElementState } from '../constant/constant';
 
+type Style = {
+  left: number;
+  top: number;
+};
+
 type IProps = {
   graphModel: GraphModel;
   logicFlow: LogicFlow;
 };
 
+type IState = {
+  style: Style;
+};
+
 @observer
-export default class TextEdit extends Component<IProps> {
+export default class TextEdit extends Component<IProps, IState> {
   ref = createRef();
   __prevText = {
     text: '',
     id: '',
   };
+
+  constructor() {
+    super();
+    this.state = {
+      style: {
+        left: 0,
+        top: 0,
+      },
+    };
+  }
+
   componentDidMount() {
     if (this.ref.current) {
       this.ref.current.focus();
       this.placeCaretAtEnd(this.ref.current);
     }
   }
+
+  static getDerivedStateFromProps(props) {
+    const { graphModel } = props;
+    const { transformMatrix } = graphModel;
+    let { textEditElement } = graphModel;
+    if (textEditElement) {
+      // 由于连线上的文本是依据显示的时候动态计算出来的
+      // 所以不能在连线创建的时候就初始化文本位置。
+      // 而是在连线上新建文本的时候创建。
+      if (!textEditElement.text?.value) {
+        if (textEditElement.BaseType === ElementType.EDGE) {
+          textEditElement = textEditElement as BaseEdgeModel;
+          const textConfig = textEditElement.text;
+          const { x, y } = textEditElement.textPosition;
+          textConfig.x = x;
+          textConfig.y = y;
+          textEditElement.setText(textConfig);
+        } else {
+          textEditElement = textEditElement as BaseNodeModel;
+        }
+      }
+      const { x, y } = textEditElement.text;
+      const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
+      return {
+        style: {
+          left,
+          top,
+        },
+      };
+    }
+  }
+
   componentDidUpdate() {
     const {
       graphModel,
@@ -70,45 +122,22 @@ export default class TextEdit extends Component<IProps> {
     }
   }
   render() {
-    const {
-      graphModel,
-    } = this.props;
-    const { transformMatrix } = graphModel;
-    let { textEditElement } = graphModel;
-    if (textEditElement) {
-      // 由于连线上的文本是依据显示的时候动态计算出来的
-      // 所以不能在连线创建的时候就初始化文本位置。
-      // 而是在连线上新建文本的时候创建。
-      if (!textEditElement.text?.value) {
-        if (textEditElement.BaseType === ElementType.EDGE) {
-          textEditElement = textEditElement as BaseEdgeModel;
-          const textConfig = textEditElement.text;
-          const { x, y } = textEditElement.textPosition;
-          textConfig.x = x;
-          textConfig.y = y;
-          textEditElement.setText(textConfig);
-        } else {
-          textEditElement = textEditElement as BaseNodeModel;
-        }
-      }
-      const { x, y } = textEditElement.text;
-      const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
-      const style = {
-        left,
-        top,
-      };
-      return (
-        <div
-          contentEditable
-          className="lf-text-input"
-          style={style}
-          ref={this.ref}
-          onKeyUp={this.keyupHandler}
-        >
-          {textEditElement.text?.value}
-        </div>
-      );
-    }
-    return '';
+    const { graphModel: { textEditElement } } = this.props;
+    const { style } = this.state;
+    return (
+      textEditElement
+        ? (
+          <div
+            contentEditable
+            className="lf-text-input"
+            style={style}
+            ref={this.ref}
+            onKeyUp={this.keyupHandler}
+          >
+            {textEditElement.text?.value}
+          </div>
+        )
+        : null
+    );
   }
 }
