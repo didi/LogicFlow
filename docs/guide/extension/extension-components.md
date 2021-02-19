@@ -130,7 +130,7 @@ lf.render();
 
 ### 重置菜单
 
-如果默认菜单中存在不需要的选项，或者无法满足需求，可以重置菜单，更换为自定义菜单。
+如果默认菜单中存在不需要的选项，或者无法满足需求，可以通过`lf.setMenuConfig`重置菜单，更换为自定义菜单。
 
 ```ts
 lf.setMenuConfig({
@@ -146,6 +146,37 @@ lf.setMenuConfig({
     graphMenu: [],  // 覆盖默认的边右键菜单，与false表现一样
   });
 ```
+
+### 更改菜单选项
+
+> 0.2.3+ 新增
+
+支持通过参数来确定复写还是追加，推荐使用`Menu.changeMenuItem`方法代替以下两种设置方式：
+
+- `lf.addMenuConfig`
+- `lf.setMenuConfig`
+
+```ts
+const lf = new LogicFlow();
+
+Menu.changeMenuItem(setType, {
+  nodeMenu: [
+    {
+      text: '删除',
+        callback(node) {
+          lf.deleteNode(node.id);
+      },
+    },
+  ],
+})
+
+lf.render();
+```
+
+setType 取值如下：
+
+- `add` 追加
+- `reset` 复写
 
 ### 菜单自由配置
 

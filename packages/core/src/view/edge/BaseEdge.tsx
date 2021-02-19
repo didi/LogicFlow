@@ -151,7 +151,11 @@ export default class BaseEdge extends Component<IProps> {
   };
   handleDbClick = (e: MouseEvent) => {
     const { model, graphModel, eventCenter } = this.props;
-    const { editConfig } = graphModel;
+    const { editConfig, textEditElement } = graphModel;
+    // 当前连线正在编辑，需要先重置状态才能变更文本框位置
+    if (textEditElement && textEditElement.id === model.id) {
+      graphModel.setElementStateById(model.id, ElementState.DEFAULT);
+    }
     // 边文案可编辑状态，才可以进行文案编辑
     if (editConfig.edgeTextEdit && model.text.editable) {
       graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
