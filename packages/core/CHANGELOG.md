@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.2...@logicflow/core@0.2.3) (2021-02-19)
+
+
+### Bug Fixes
+
+* **core:** print error when double click edge ([a890ef7](https://github.com/didi/LogicFlow/commit/a890ef7f81e559ef16da505568b1ddb94c7eb365))
+
+
+
+
+
 ## [0.2.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.1...@logicflow/core@0.2.2) (2021-02-08)
 
 
