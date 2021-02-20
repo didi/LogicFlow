@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.3...@logicflow/core@0.2.4) (2021-02-20)
+
+
+### Bug Fixes
+
+* 🐛 fix error when moving edge ([9ac20c1](https://github.com/didi/LogicFlow/commit/9ac20c1c89a6909860e2de99eea2c333f2f4aa6c))
+
+
+
+
+
 ## [0.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.2...@logicflow/core@0.2.3) (2021-02-19)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/didi/LogicFlow/compare/examples@0.3.3...examples@0.3.4) (2021-02-20)
+
+
+### Features
+
+* 🎸 add the type hinting of the edgeType option ([ebaa73b](https://github.com/didi/LogicFlow/commit/ebaa73bb676733c1eeabf877199755390c323d14))
+
+
+
+
+
 ## [0.3.3](https://github.com/didi/LogicFlow/compare/examples@0.3.2...examples@0.3.3) (2021-02-19)
 
 **Note:** Version bump only for package examples
