@@ -5,7 +5,8 @@ import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
 import { Style, NodeData, EdgeData } from './type';
 import { KeyboardDef } from './keyboard';
 
-// edgeMenuConfig: any;
+export type EdgeType = 'line' | 'polyline' | 'bezier';
+
 export type Definition = {
   container: HTMLElement;
 
@@ -27,7 +28,7 @@ export type Definition = {
 
   isSilentMode?: boolean;
 
-  edgeType?: string;
+  edgeType?: EdgeType;
 
   snapline?: boolean;
 
