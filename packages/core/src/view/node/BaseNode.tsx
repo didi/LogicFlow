@@ -212,9 +212,12 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
 
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
-    this.setState({
-      isDraging: true,
-    });
+    const { isDraging } = this.state;
+    if (!isDraging) {
+      this.setState({
+        isDraging: true,
+      });
+    }
     const { transformMatrix } = graphModel;
 
     const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);

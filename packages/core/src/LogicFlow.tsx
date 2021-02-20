@@ -197,7 +197,7 @@ export default class LogicFlow {
       model: ModelClass,
     } = fn(registerParam);
 
-    this.setView(type, observer(ViewClass));
+    this.setView(type, observer(ViewClass as IReactComponent));
     this.graphModel.setModel(type, ModelClass);
   }
 
@@ -479,7 +479,7 @@ export default class LogicFlow {
     const { id } = edgeAttribute;
     return this.getEdgeModelById(id).updateData(edgeAttribute);
   }
-  setDefaultEdgeType(type: string): void {
+  setDefaultEdgeType(type: Options.EdgeType): void {
     this.options.edgeType = type;
     this.graphModel.changeEdgeType(type);
   }

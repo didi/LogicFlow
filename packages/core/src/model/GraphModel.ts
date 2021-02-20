@@ -11,7 +11,6 @@ import {
 import {
   AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple,
 } from '../type';
-import MenuModel from './MenuModel';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
 import { snapToGrid } from '../util/geometry';
@@ -48,7 +47,6 @@ class GraphModel {
   @observable background;
   @observable transformMatrix = new TransfromModel();
   @observable editConfig: EditConfigModel;
-  @observable menuConfig;
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
   @observable fakerNode: BaseNodeModel;
@@ -66,7 +64,6 @@ class GraphModel {
     this.gridSize = size;
     this.rootEl = container;
     this.editConfig = new EditConfigModel(config);
-    this.menuConfig = new MenuModel(config, this);
     this.eventCenter = eventCenter;
     this.theme = updateTheme(config.style);
     this.edgeType = config.edgeType || 'polyline';
@@ -117,23 +114,6 @@ class GraphModel {
     const textEditNode = this.nodes.find(node => node.state === ElementState.TEXT_EDIT);
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
-  }
-  /**
-   * 当前展示菜单的元素
-   */
-  @computed get showMenuElement() {
-    const showMenuNode = this.nodes.find(node => node.state === ElementState.SHOW_MENU);
-    if (showMenuNode) return showMenuNode;
-    const showMenuEdge = this.edges.find(edge => edge.state === ElementState.SHOW_MENU);
-    if (showMenuEdge) return showMenuEdge;
-    if (this.state === ElementState.SHOW_MENU) {
-      return this;
-    }
-    return {
-      BaseType: '',
-      additionStateData: '',
-      setElementState() {},
-    };
   }
 
   getModel(type: string) {
@@ -473,9 +453,6 @@ class GraphModel {
 
   @action
   resetElementState() {
-    if (this.showMenuElement && this.showMenuElement.BaseType) {
-      this.showMenuElement.setElementState(ElementState.DEFAULT);
-    }
   }
 
   @action

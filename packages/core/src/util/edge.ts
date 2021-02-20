@@ -772,6 +772,11 @@ export const getEndTangent = (path: string): Point[] => {
   return [bezierPoints[2], bezierPoints[3]];
 };
 
+/**
+ * 获取移动连线后，文本位置距离连线上的最近的一点
+ * @param point 连线上文本的位置
+ * @param points 连线的各个拐点
+ */
 export const getClosestPointOfPolyline = (point: Point, points: string): Point => {
   const { x, y } = point;
   const pointsPosition = poins2PointsList(points);
@@ -786,6 +791,7 @@ export const getClosestPointOfPolyline = (point: Point, points: string): Point =
   }
   segments.forEach(item => {
     const { start, end } = item;
+    // 若线段垂直，则crossPoint的横坐标与线段一致
     if (start.x === end.x) {
       const pointXY = {
         x: start.x,
@@ -814,5 +820,13 @@ export const getClosestPointOfPolyline = (point: Point, points: string): Point =
       }
     }
   });
+  // 边界：只有一条线段时，沿线段移动节点，当文本超出连线后，文本没有可供参考的线段
+  if (!crossPoint) {
+    const { start, end } = segments[0];
+    crossPoint = {
+      x: start.x + (end.x - start.x) / 2,
+      y: start.y + (end.y - start.y) / 2,
+    };
+  }
   return crossPoint;
 };
