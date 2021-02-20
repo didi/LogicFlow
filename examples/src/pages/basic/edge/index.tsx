@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import LogicFlow from '@logicflow/core';
+import LogicFlow, { EdgeType } from '@logicflow/core';
 import ExampleHeader from '../../../components/example-header';
 
 const config = {
@@ -80,7 +80,7 @@ export default function EdgeExample() {
     logicflow.render(data);
     setLf(logicflow);
   }, []);
-  const setEdgeType = (type: string, typeName: string): void => {
+  const setEdgeType = (type: EdgeType, typeName: string): void => {
     const logicflow = lf as LogicFlow;
     logicflow.setDefaultEdgeType(type);
     setType(typeName);

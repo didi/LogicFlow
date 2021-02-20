@@ -626,7 +626,7 @@ lf.getEdgeDataById('id')
 设置边的类型
 
 ```js
-setDefaultEdgeType(type: string): void
+setDefaultEdgeType(type: EdgeType): void
 ```
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
