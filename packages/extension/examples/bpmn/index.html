@@ -5,7 +5,7 @@
   <meta name="format-detection" content="telephone=no, email=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
-  <link rel="stylesheet" href="/lf/dist/style/index.css">
+  <link rel="stylesheet" href="/core/dist/style/index.css">
   <style>
     html,body {
       padding: 0;
@@ -109,15 +109,15 @@
   <div class="rules-graph">
     <div id="app"></div>
     <div class="pattern">
-      <div class="pattern-start" draggable="true" id="start-node-pattern"></div>
+      <div class="pattern-start" id="start-node-pattern"></div>
       <div>开始</div>
-      <div class="pattern-user" draggable="true" id="user-node-pattern"></div>
+      <div class="pattern-user" id="user-node-pattern"></div>
       <div>用户任务</div>
-      <div class="pattern-user" draggable="true" id="system-node-pattern"></div>
+      <div class="pattern-user" id="system-node-pattern"></div>
       <div>系统任务</div>
-      <div class="pattern-condition" draggable="true" id="condition-node-pattern"></div>
+      <div class="pattern-condition" id="condition-node-pattern"></div>
       <div>条件判断</div>
-      <div class="pattern-end" draggable="true" id="end-node-pattern"></div>
+      <div class="pattern-end" id="end-node-pattern"></div>
       <div>结束</div>
     </div>
     <div class="graph-io">
@@ -128,7 +128,7 @@
       </a>
     </div>
   </div>
-  <script src="/lf/dist/logic-flow.js"></script>
+  <script src="/core/dist/logic-flow.js"></script>
   <script src="/BpmnElement.js"></script>
   <script src="/BpmnAdapter.js"></script>
   <script src="/Snapshot.js"></script>

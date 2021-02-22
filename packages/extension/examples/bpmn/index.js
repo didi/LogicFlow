@@ -56,7 +56,6 @@ window.onload = function () {
   document.querySelector('#download').addEventListener('click', () => {
     const data = lf.getGraphData();
     const xml = json2xml(data, '\n');
-    // console.log(xml);
     this.download('logic-flow.xml', xml);
     window.sessionStorage.setItem('lf-data', xml);
   });
