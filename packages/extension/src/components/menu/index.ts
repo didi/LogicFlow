@@ -100,7 +100,9 @@ const Menu: Menu = {
     Menu.__menuDOM.addEventListener('click', (event) => {
       event.stopPropagation();
       let target = event.target as HTMLElement;
-      // 菜单项内有多层dom,查找菜单项element
+      // 菜单有多层dom，需要精确获取菜单项所对应的dom
+      // 除菜单项dom外，应考虑两种情况
+      // 1. 菜单项的子元素 2. 菜单外层容器
       while (Array.from(target.classList).indexOf('lf-menu-item') === -1 && Array.from(target.classList).indexOf('lf-menu') === -1) {
         target = target.parentElement;
       }
@@ -123,7 +125,7 @@ const Menu: Menu = {
       menu.innerHTML = '';
       const { id } = data;
       const model = lf.graphModel.getNodeModel(id);
-      if (model && model.menu && model.menu.length > 0) {
+      if (model && model.menu && Array.isArray(model.menu)) {
         // 支持直接从model中读取菜单配置
         const menuList = Menu.__getMenuDom(model.menu);
         menu.append(...menuList);
@@ -143,7 +145,7 @@ const Menu: Menu = {
       menu.innerHTML = '';
       const { id } = data;
       const model = lf.graphModel.getEdgeModel(id);
-      if (model && model.menu && model.menu.length > 0) {
+      if (model && model.menu && Array.isArray(model.menu)) {
         const menuList = Menu.__getMenuDom(model.menu);
         menu.append(...menuList);
       } else {
