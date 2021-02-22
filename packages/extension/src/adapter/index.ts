@@ -116,8 +116,10 @@ function convertLf2ProcessData(bpmnProcessData, data) {
   data.nodes.forEach((node: NodeConfig) => {
     const processNode = {
       '-id': node.id, // 如果是xml的属性，json中属性用'-'开头
-      '-name': node.text?.value,
     };
+    if (node.text?.value) {
+      processNode['-name'] = node.text.value
+    }
     if (node.properties) {
       const properties = toXmlJson(node.properties);
       Object.assign(processNode, properties);
@@ -160,10 +162,12 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     }
     const edgeConfig = {
       '-id': edge.id,
-      '-name': edge.text?.value,
       '-sourceRef': edge.sourceNodeId,
       '-targetRef': edge.targetNodeId,
     };
+    if (edge.text?.value) {
+      edgeConfig['-name'] = edge.text?.value
+    }
     if (edge.properties) {
       const properties = toXmlJson(edge.properties);
       Object.assign(edgeConfig, properties);
