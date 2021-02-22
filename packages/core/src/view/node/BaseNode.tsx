@@ -275,7 +275,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       }, 400);
     }
     graphModel.toFront(model.id);
-    graphModel.selectNodeById(model.id);
+    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
     this.preStartTime = this.startTime;
   };
   handleContextMenu = (ev: MouseEvent) => {

@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
   <link rel="stylesheet" href="/core/dist/style/index.css">
+  <link rel="stylesheet" href="/extension/lib/style/index.css">
   <style>
     html,body {
       padding: 0;
@@ -129,11 +130,14 @@
     </div>
   </div>
   <script src="/core/dist/logic-flow.js"></script>
+  <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
   <script src="/BpmnElement.js"></script>
   <script src="/BpmnAdapter.js"></script>
+  <script src="/Control.js"></script>
   <script src="/Snapshot.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
+    LogicFlow.use(Control);
     LogicFlow.use(BpmnAdapter);
     LogicFlow.use(Snapshot);
   </script>
