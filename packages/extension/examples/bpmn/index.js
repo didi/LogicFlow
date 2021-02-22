@@ -3,6 +3,10 @@ window.onload = function () {
     container: document.querySelector('#app'),
     // fixme: grid成为了必传的了
     edgeTextDraggable: true,
+    metaKeyMultipleSelected: true,
+    // stopScrollGraph: true,
+    // stopMoveGraph: true,
+    // stopZoomGraph: true,
     grid: {
       type: 'dot',
       size: 20,

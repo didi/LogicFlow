@@ -277,9 +277,11 @@ export default class LogicFlow {
   }
   /**
    * 将图形选中
+   * @param id 选择元素ID
+   * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
    */
-  select(id: string) {
-    this.graphModel.selectElementById(id);
+  select(id: string, multiple = false) {
+    this.graphModel.selectElementById(id, multiple);
   }
   /**
    * 将图形定位到画布中心

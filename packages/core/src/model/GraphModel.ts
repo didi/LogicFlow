@@ -34,6 +34,7 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
+  selectElements = new Map<string, IBaseModel>(); // 多选
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -50,7 +51,6 @@ class GraphModel {
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
   @observable fakerNode: BaseNodeModel;
-  // @observable selectElements = new Map<string, IBaseModel>(); // 多选还没有做，先不加
   constructor(config) {
     const {
       container,
@@ -456,24 +456,44 @@ class GraphModel {
   }
 
   @action
-  selectNodeById(id) {
-    this.selectElement?.setSelected(false);
+  selectNodeById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
   }
 
   @action
-  selectEdgeById(id) {
-    this.selectElement?.setSelected(false);
+  selectEdgeById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.edgesMap[id]?.model;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
   }
 
   @action
-  selectElementById(id: string) {
-    this.selectElement?.setSelected(false);
+  selectElementById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
+  }
+
+  @action
+  clearSelectElements() {
+    this.selectElements.forEach(element => {
+      element.setSelected(false);
+    });
+    this.selectElements.clear();
   }
 
   /* 修改连线类型 */

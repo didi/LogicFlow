@@ -25,6 +25,7 @@ const SilentConfig = {
   edgeTextEdit: false,
   nodeTextDraggable: false,
   edgeTextDraggable: false,
+  metaKeyMultipleSelected: false,
 };
 
 /**
@@ -42,6 +43,7 @@ export default class EditConfigModel {
   @observable edgeTextEdit = true; // 允许连线文本可以编辑
   @observable nodeTextDraggable = false; // 允许节点文本可以拖拽
   @observable edgeTextDraggable = false; // 允许连线文本可以拖拽
+  @observable metaKeyMultipleSelected = false; // 允许meta多选元素
   constructor(data) {
     const keys = [
       'stopZoomGraph',
@@ -55,6 +57,7 @@ export default class EditConfigModel {
       'edgeTextEdit',
       'nodeTextDraggable',
       'edgeTextDraggable',
+      'metaKeyMultipleSelected',
     ];
     const { isSilentMode, textEdit } = data;
     if (isSilentMode) {
