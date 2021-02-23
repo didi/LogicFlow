@@ -6,7 +6,7 @@
 
 ```ts
 import LogicFlow from '@logicflow/core';
-import { Snapshot } from '@logicflow/core/lib/snapshot';
+import { Snapshot } from '@logicflow/extension';
 
 LogicFlow.use(Snapshot);
 ```
