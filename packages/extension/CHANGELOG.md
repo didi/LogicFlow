@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.4...@logicflow/extension@0.2.5) (2021-02-23)
+
+
+### Bug Fixes
+
+* 🐛 fix the result of setting menu in model ([74494a5](https://github.com/didi/LogicFlow/commit/74494a5060620b7b2193ae73c1b41697dc36fd9e))
+* **extension:** 🐛 fix bpmn demo download not work ([6cec577](https://github.com/didi/LogicFlow/commit/6cec57778ee833675176fe957a5a442ec21c1727))
+
+
+
+
+
 ## [0.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.3...@logicflow/extension@0.2.4) (2021-02-20)
 
 **Note:** Version bump only for package @logicflow/extension
