@@ -42,7 +42,7 @@ shortcuts 则可以定义用户自定义的一组快捷键
 | cmd + c 或 ctrl + c | 复制节点 |
 | cmd + v 或 ctrl + v | 粘贴节点 |
 | cmd + z 或 ctrl + z | 撤销操作 |
-| cmd + c 或 ctrl + c | 回退操作 |
+| cmd + y 或 ctrl + y | 回退操作 |
 
 ## 如何阻止删除或者拷贝行为
 通过创建 `LogicFlow` 实例时传入 options 的 guards 属性可以配置守卫, 目前支持两种 beforeClone 和 beforeDelete，回调函数的参数data是LogicFlow倒出的 NodeData｜EdgeData 类型， 从data可以拿到节点或者边的信息，继续进行业务逻辑判断。
