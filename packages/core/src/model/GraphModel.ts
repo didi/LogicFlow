@@ -13,7 +13,7 @@ import {
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
-import { snapToGrid } from '../util/geometry';
+import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
 
@@ -182,10 +182,10 @@ class GraphModel {
       if (nodeX && nodeY) {
         node.x = snapToGrid(nodeX, this.gridSize);
         node.y = snapToGrid(nodeY, this.gridSize);
-      }
-      if (Object.prototype.toString.call(node.text) === '[object Object]') {
-        node.text.x = snapToGrid(node.text.x, this.gridSize);
-        node.text.y = snapToGrid(node.text.y, this.gridSize);
+        if (Object.prototype.toString.call(node.text) === '[object Object]') {
+          node.text.x -= getGridOffset(nodeX, this.gridSize);
+          node.text.y -= getGridOffset(nodeY, this.gridSize);
+        }
       }
       return new Model(node, this);
     });

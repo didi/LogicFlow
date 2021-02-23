@@ -1,4 +1,6 @@
-import { debounce, isEqual, last } from 'lodash-es';
+import {
+  debounce, isEqual, last, cloneDeep,
+} from 'lodash-es';
 import { deepObserve } from 'mobx-utils';
 import EventEmitter from '../event/eventEmitter';
 import { EventType } from '../constant/constant';
@@ -55,8 +57,9 @@ class History {
 
     const preData = this.undos.pop();
     this.redos.push(preData);
-    this.curData = this.undos.pop();
-    return this.curData;
+    const curData = this.undos.pop();
+    this.curData = cloneDeep(curData);
+    return curData;
   }
 
   redoAble() {
