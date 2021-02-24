@@ -60,6 +60,11 @@ type GraphConfigData = {
   edges: EdgeConfig[],
 };
 
+type GraphConfigModel = {
+  nodes: BaseNodeModel[];
+  edges: BaseEdgeModel[];
+};
+
 export default class LogicFlow {
   container: HTMLElement;
   width: number;
@@ -334,6 +339,35 @@ export default class LogicFlow {
    */
   addNode(nodeConfig: NodeConfig): BaseNodeModel {
     return this.graphModel.addNode(nodeConfig);
+  }
+  /**
+   * 添加多个元素, 包括连线和节点。
+   */
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+    const nodeIdMap = {};
+    const elements = {
+      nodes: [],
+      edges: [],
+    };
+    nodes.forEach(node => {
+      const preId = node.id;
+      const nodeModel = this.addNode(node);
+      if (preId) nodeIdMap[preId] = nodeModel.id;
+      elements.nodes.push(nodeModel);
+    });
+    edges.forEach(edge => {
+      const sourceId = edge.sourceNodeId;
+      const targetId = edge.targetNodeId;
+      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
+      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
+      const edgeModel = this.graphModel.createEdge(edge);
+      elements.edges.push(edgeModel);
+    });
+    return elements;
+  }
+
+  clearSelectElements() {
+    this.graphModel.clearSelectElements();
   }
 
   setProperties(id: string, properties: Object): void {

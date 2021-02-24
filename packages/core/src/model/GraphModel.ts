@@ -20,7 +20,7 @@ import { getClosestPointOfPolyline } from '../util/edge';
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
 type ElementModeId = string;
-
+type BaseElementModel = BaseNodeModel | BaseEdgeModel;
 const VisibleMoreSpace = 200;
 
 class GraphModel {
@@ -34,7 +34,7 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
-  selectElements = new Map<string, IBaseModel>(); // 多选
+  selectElements = new Map<string, BaseElementModel>(); // 多选
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -269,6 +269,10 @@ class GraphModel {
 
   @action
   addNode(nodeConfig: NodeConfig) {
+    // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
+    if (nodeConfig.id && this.nodesMap[nodeConfig.id]) {
+      delete nodeConfig.id;
+    }
     const Model = this.getModel(nodeConfig.type);
     // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
     const nodeModel = new Model(nodeConfig, this);
@@ -319,17 +323,21 @@ class GraphModel {
   }
 
   @action
-  createEdge(edgeConfig: EdgeConfig) {
+  createEdge(edgeConfig: EdgeConfig): EdgeConfig {
     // 边的类型优先级：自定义>全局>默认
     let { type } = edgeConfig;
     if (!type) {
       type = this.edgeType;
+    }
+    if (edgeConfig.id && this.edgesMap[edgeConfig.id]) {
+      delete edgeConfig.id;
     }
     const Model = this.getModel(type);
     const edgeModel = new Model({ ...edgeConfig, type }, this);
     const edgeData = edgeModel.getData();
     this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     this.edges.push(edgeModel);
+    return edgeModel;
   }
 
   @action
@@ -494,6 +502,7 @@ class GraphModel {
       element.setSelected(false);
     });
     this.selectElements.clear();
+    this.topElement?.setZIndex();
   }
 
   /* 修改连线类型 */

@@ -11,6 +11,9 @@ window.onload = function () {
       type: 'dot',
       size: 20,
     },
+    keyboard: {
+      enabled: true,
+    },
     snapline: true,
   });
 
