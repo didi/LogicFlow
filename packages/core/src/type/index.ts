@@ -9,6 +9,8 @@ import RectNodeModel from '../model/node/RectNodeModel';
 import RectNode from '../view/node/RectNode';
 import CircleNode from '../view/node/CircleNode';
 import CircleNodeModel from '../model/node/CircleNodeModel';
+import DiamondNode from '../view/node/DiamondNode';
+import DiamondNodeModel from '../model/node/DiamondNodeModel';
 import PolygonNode from '../view/node/PolygonNode';
 import PolygonNodeModel from '../model/node/PolygonNodeModel';
 import TextNodeModel from '../model/node/TextNodeModel';
@@ -278,6 +280,8 @@ export interface RegisterParam {
   RectNodeModel: typeof RectNodeModel;
   CircleNode: typeof CircleNode;
   CircleNodeModel: typeof CircleNodeModel;
+  DiamondNode: typeof DiamondNode;
+  DiamondNodeModel: typeof DiamondNodeModel;
   PolygonNode: typeof PolygonNode;
   PolygonNodeModel: typeof PolygonNodeModel;
   TextNode: typeof TextNode;
