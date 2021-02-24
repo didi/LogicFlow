@@ -54,7 +54,6 @@ class History {
   // 4) watch触发add
   undo() {
     if (!this.undoAble()) return;
-
     const preData = this.undos.pop();
     this.redos.push(preData);
     const curData = this.undos.pop();
@@ -68,8 +67,9 @@ class History {
 
   redo() {
     if (!this.redoAble()) return;
-    this.curData = this.redos.pop();
-    return this.curData;
+    const curData = this.redos.pop();
+    this.curData = cloneDeep(curData);
+    return curData;
   }
 
   watch(model) {
