@@ -50,6 +50,7 @@ import {
 import { initShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
+import { EditConfigInterface } from './model/EditConfigModel';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
@@ -560,6 +561,12 @@ export default class LogicFlow {
     if (this.snaplineModel) {
       this.snaplineModel.setNodeSnapLine(data);
     }
+  }
+  /**
+   * 更新流程图编辑相关设置
+   */
+  updateEditConfig(config: EditConfigInterface) {
+    this.graphModel.editConfig.updateEditConfig(config);
   }
 
   removeNodeSnapLine() {

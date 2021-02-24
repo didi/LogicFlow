@@ -1,17 +1,17 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import { assign, pick } from 'lodash-es';
 
 export interface EditConfigInterface {
-  stopZoomGraph: boolean;
-  stopScrollGraph: boolean;
-  stopMoveGraph: boolean;
-  adjustEdge: boolean;
-  adjustNodePosition: boolean;
-  hideAnchors: boolean;
-  nodeTextEdit: boolean;
-  edgeTextEdit: boolean;
-  nodeTextDraggable: boolean,
-  edgeTextDraggable: boolean,
+  stopZoomGraph?: boolean;
+  stopScrollGraph?: boolean;
+  stopMoveGraph?: boolean;
+  adjustEdge?: boolean;
+  adjustNodePosition?: boolean;
+  hideAnchors?: boolean;
+  nodeTextEdit?: boolean;
+  edgeTextEdit?: boolean;
+  nodeTextDraggable?: boolean,
+  edgeTextDraggable?: boolean,
 }
 
 const SilentConfig = {
@@ -44,8 +44,9 @@ export default class EditConfigModel {
   @observable nodeTextDraggable = false; // 允许节点文本可以拖拽
   @observable edgeTextDraggable = false; // 允许连线文本可以拖拽
   @observable metaKeyMultipleSelected = false; // 允许meta多选元素
+  keys: string[];
   constructor(data) {
-    const keys = [
+    this.keys = [
       'stopZoomGraph',
       'stopScrollGraph',
       'stopMoveGraph',
@@ -63,7 +64,7 @@ export default class EditConfigModel {
     if (isSilentMode) {
       assign(
         this,
-        pick(SilentConfig, keys),
+        pick(SilentConfig, this.keys),
         pick(data, [
           'stopZoomGraph',
           'stopScrollGraph',
@@ -74,13 +75,17 @@ export default class EditConfigModel {
       );
     } else if (!textEdit) {
       // 通过 textEdit API 禁用文本编辑
-      assign(this, pick(data, keys), {
+      assign(this, pick(data, this.keys), {
         nodeTextEdit: false,
         edgeTextEdit: false,
       });
     } else {
-      assign(this, pick(data, keys));
+      assign(this, pick(data, this.keys));
     }
+  }
+  @action
+  updateEditConfig(config) {
+    assign(this, pick(config, this.keys));
   }
 }
 
