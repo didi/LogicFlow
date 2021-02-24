@@ -36,7 +36,6 @@ Logic Flow 的内置连线类型包括
 | strokeWidth | number  | ✅ | 边宽度 |
 | hoverStroke | color  | ✅ | 边hover时的颜色 |
 | selectedStroke | color  | ✅ | 边选中时的颜色 |
-| selectedShadow | boolean  | ✅ | 边选中时的是否展示阴影 |
 
 ### 附加属性
 
