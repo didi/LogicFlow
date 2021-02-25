@@ -137,6 +137,9 @@ export type CommonStyle = {
   strokeOpacity?: number,
   opacity?: number,
   outlineColor?: string,
+  hoverOutlineColor?: string,
+  outlineStrokeDashArray?: string,
+  hoverOutlineStrokeDashArray?: string,
 };
 export type RectStyle = CommonStyle & {
   width?: number,
@@ -146,6 +149,11 @@ export type RectStyle = CommonStyle & {
 export type CircleStyle = CommonStyle & {
   r?: number,
 };
+export type EllipseStyle = CommonStyle & {
+  rx?: number,
+  ry?: number,
+};
+export type DiamondStyle = CommonStyle;
 export type PolygonStyle = CommonStyle;
 export type AnchorStyle = CommonStyle & {
   stroke?: string,
@@ -204,6 +212,8 @@ export type ArrowStyle = {
 export type Style = {
   rect?: RectStyle,
   circle?: CircleStyle,
+  ellipse?: EllipseStyle,
+  diamond?: DiamondStyle,
   polygon?: PolygonStyle,
   anchor?: AnchorStyle,
   text?: TextStyle,
