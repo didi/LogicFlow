@@ -1,6 +1,5 @@
 import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
-import { ElementType } from '../constant/constant';
 
 let selected = null;
 
@@ -36,35 +35,6 @@ function translationEdgeData(edgeData, distance) {
   return edgeData;
 }
 
-/**
- * 获取选中的元素数据
- * @param selectElements 选中的元素实例
- * @param isIgnoreCheck 是否忽略检查连线必须存在对应的节点。
- */
-function getSelectElements(selectElements, isIgnoreCheck = false) {
-  const elements = selectElements;
-  const graphData = {
-    nodes: [],
-    edges: [],
-  };
-  elements.forEach((element) => {
-    if (element.BaseType === ElementType.NODE) {
-      graphData.nodes.push(translationNodeData(element.getData(), TRANSLATION_DISTANCE));
-    }
-    if (element.BaseType === ElementType.EDGE) {
-      const edgeData = element.getData();
-      // 连线复制的时候，必须要求连线的起点和终点都在复制的内容中
-      const isNodeSelected = elements.get(edgeData.sourceNodeId)
-        && elements.get(edgeData.targetNodeId);
-
-      if (isIgnoreCheck || isNodeSelected) {
-        graphData.edges.push(translationEdgeData(edgeData, TRANSLATION_DISTANCE));
-      }
-    }
-  });
-  return graphData;
-}
-
 const TRANSLATION_DISTANCE = 40;
 
 export function initShortcut(lf: LogicFlow, graph: GraphModel) {
@@ -75,7 +45,9 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['cmd + c', 'ctrl + c'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    selected = getSelectElements(graph.selectElements);
+    selected = graph.getSelectElements(false);
+    selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
+    selected.edges.forEach(edge => translationEdgeData(edge, TRANSLATION_DISTANCE));
     return false;
   });
   // 粘贴
@@ -110,7 +82,7 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['backspace'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    const elements = getSelectElements(graph.selectElements, true);
+    const elements = graph.getSelectElements();
     lf.clearSelectElements();
     elements.edges.forEach(edge => lf.deleteEdge(edge.id));
     elements.nodes.forEach(node => lf.deleteNode(node.id));

@@ -35,6 +35,7 @@ class GraphModel {
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElements = new Map<string, BaseElementModel>(); // 多选
+  @observable selectElementSize = 0;
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -221,6 +222,33 @@ class GraphModel {
     }
     const edgeModel = this.getEdgeModel(id);
     return edgeModel;
+  }
+
+  /**
+   * 获取选中的元素数据
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线。默认包括。复制的时候不能包括此类连线
+   */
+  getSelectElements(isIgnoreCheck = true) {
+    const elements = this.selectElements;
+    const graphData = {
+      nodes: [],
+      edges: [],
+    };
+    elements.forEach((element) => {
+      if (element.BaseType === ElementType.NODE) {
+        graphData.nodes.push(element.getData());
+      }
+      if (element.BaseType === ElementType.EDGE) {
+        const edgeData = element.getData();
+        const isNodeSelected = elements.get(edgeData.sourceNodeId)
+          && elements.get(edgeData.targetNodeId);
+
+        if (!isIgnoreCheck || isNodeSelected) {
+          graphData.edges.push(edgeData);
+        }
+      }
+    });
+    return graphData;
   }
 
   @action
@@ -472,6 +500,7 @@ class GraphModel {
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -483,6 +512,7 @@ class GraphModel {
     this.selectElement = this.edgesMap[id]?.model;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -494,6 +524,7 @@ class GraphModel {
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -503,6 +534,19 @@ class GraphModel {
     });
     this.selectElements.clear();
     this.topElement?.setZIndex();
+    this.selectElementSize = this.selectElements.size;
+  }
+  /**
+   * 批量移动元素
+   */
+  @action
+  moveElements(
+    elements: { nodes: NodeConfig[] },
+    deltaX: number,
+    deltaY: number,
+  ) {
+    // 如果移动的
+    elements.nodes.forEach(node => this.moveNode(node.id, deltaX, deltaY));
   }
 
   /* 修改连线类型 */
