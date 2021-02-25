@@ -125,7 +125,7 @@ lf.render(data);
 
 ### vue应用demo
 
-<image src="https://img-hxy021.didistatic.com/static/experience_portal/logicflow-vue-demo.gif" width="1000"/>
+<image src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
 
 [代码地址](https://github.com/xinxin93/logicflow_vue_demo)
 
