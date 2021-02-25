@@ -151,7 +151,7 @@ lf.render(data);
 
 或扫群二维码：
 
-<image src="https://dpubstatic.udache.com/static/dpubimg/C9OknpWCFr/wxq2.jpeg" width="300"/>
+<image src="https://dpubstatic.udache.com/static/dpubimg/3TqcecQuhw/WechatIMG307.jpeg" width="300"/>
 
 ## 加入 QQ 群
 <image src="https://dpubstatic.udache.com/static/dpubimg/VMBzV7jhh8/qq.png" width="300"/>
