@@ -123,6 +123,11 @@ lf.render(data);
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/uBeSlMEytL/lfexample3.gif" width="500"/>
 
+### vue应用demo
+
+<image src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
+
+[代码地址](https://github.com/xinxin93/logicflow_vue_demo)
 
 # 整体架构
 
