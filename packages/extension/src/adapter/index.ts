@@ -155,8 +155,8 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     } else if (Array.isArray(targetNode['bpmn:incoming'])) {
       targetNode['bpmn:incoming'].push(edge.id);
     } else {
-      sourceNode['bpmn:incoming'] = [
-        sourceNode['bpmn:incoming'],
+      targetNode['bpmn:incoming'] = [
+        targetNode['bpmn:incoming'],
         edge.id,
       ];
     }
