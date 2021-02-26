@@ -129,6 +129,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
   };
   mouseDownHandler = (ev: MouseEvent) => {
     const {
+      eventCenter,
       graphModel: {
         editConfig,
         transformMatrix: {
@@ -140,6 +141,8 @@ class CanvasOverlay extends Component<IProps, Istate> {
     if (!editConfig.stopMoveGraph) {
       this.stepDrag.setStep(gridSize * SCALE_X);
       this.stepDrag.handleMouseDown(ev);
+    } else {
+      eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev });
     }
     // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
     this.clickHandler(ev);

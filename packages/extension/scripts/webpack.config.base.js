@@ -11,6 +11,7 @@ const packagesEntry = {
   Control: path.resolve(__dirname, "../src/components/control/index.ts"),
   Menu: path.resolve(__dirname, "../src/components/menu/index.ts"),
   DndPanel: path.resolve(__dirname, "../src/components/dnd-panel/index.ts"),
+  SelectionSelect: path.resolve(__dirname, "../src/components/selection-select/index.ts"),
 };
 
 module.exports = {

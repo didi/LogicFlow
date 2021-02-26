@@ -91,10 +91,12 @@ class GraphModel {
     const showElements = [];
     let topElementIdx = -1;
     // todo: 缓存, 优化计算效率
+    const visibleLt: PointTuple = [-VisibleMoreSpace, -VisibleMoreSpace];
+    const visibleRb: PointTuple = [this.width + VisibleMoreSpace, this.height + VisibleMoreSpace];
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
-      if (!this.partial || this.isElementVisible(currentItem)) {
+      if (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false)) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;
         }
@@ -115,6 +117,21 @@ class GraphModel {
     const textEditNode = this.nodes.find(node => node.state === ElementState.TEXT_EDIT);
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
+  }
+
+  /**
+   * 获取指定区域内的所有元素
+   */
+  getAreaElement(leftTopPoint, rightBottomPoint) {
+    const selectElements = [];
+    const elements = [...this.edges, ...this.nodes];
+    for (let i = 0; i < elements.length; i++) {
+      const currentItem = elements[i];
+      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {
+        selectElements.push(currentItem);
+      }
+    }
+    return selectElements;
   }
 
   getModel(type: string) {
@@ -145,14 +162,19 @@ class GraphModel {
       },
     };
   }
-  isElementVisible(element) {
-    const visibleLt: PointTuple = [-VisibleMoreSpace, -VisibleMoreSpace];
-    const visibleRb: PointTuple = [this.width + VisibleMoreSpace, this.height + VisibleMoreSpace];
+
+  /**
+   * 判断一个元素是否在指定矩形区域内。
+   * @param element 节点或者连线
+   * @param lt 左上角点
+   * @param rb 右下角点
+   */
+  isElementInArea(element, lt, rb, wholeEdge = true) {
     if (element.BaseType === ElementType.NODE) {
       element = element as BaseNodeModel;
       let { x, y } = element;
       [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
-      if (isPointInArea([x, y], visibleLt, visibleRb)) {
+      if (isPointInArea([x, y], lt, rb)) {
         return true;
       }
     }
@@ -163,12 +185,9 @@ class GraphModel {
         [startPoint.x, startPoint.y],
       );
       const endHtmlPoint = this.transformMatrix.CanvasPointToHtmlPoint([endPoint.x, endPoint.y]);
-      if (
-        isPointInArea(startHtmlPoint, visibleLt, visibleRb)
-        || isPointInArea(endHtmlPoint, visibleLt, visibleRb)
-      ) {
-        return true;
-      }
+      const isStartInArea = isPointInArea(startHtmlPoint, lt, rb);
+      const isEndInArea = isPointInArea(endHtmlPoint, lt, rb);
+      return wholeEdge ? (isStartInArea && isEndInArea) : (isStartInArea || isEndInArea);
     }
     return false;
   }

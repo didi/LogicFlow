@@ -134,6 +134,9 @@ export default class LogicFlow {
   off(evt: string, callback: CallbackType) {
     this.eventCenter.off(evt, callback);
   }
+  emit(evt: string, arg: Record<string, string | number | object>) {
+    this.eventCenter.emit(evt, arg);
+  }
   getEvents() {
     this.eventCenter.getEvents();
   }
@@ -223,11 +226,13 @@ export default class LogicFlow {
   undo() {
     if (!this.history.undoAble()) return;
     const graphData = this.history.undo();
+    this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
   redo() {
     if (!this.history.redoAble()) return;
     const graphData = this.history.redo();
+    this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
 
@@ -567,6 +572,23 @@ export default class LogicFlow {
    */
   updateEditConfig(config: EditConfigInterface) {
     this.graphModel.editConfig.updateEditConfig(config);
+  }
+
+  /**
+   * 获取
+   */
+  getEditConfig() {
+    return this.graphModel.editConfig.getConfig();
+  }
+
+  /**
+   * 获取指定区域坐标，此区域必须是DOM层，也就是可视区域。
+   * @param leftTopPoint 区域左上角坐标, dom层坐标
+   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   */
+  getAreaElement(leftTopPoint, rightBottomPoint) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+      .map(element => element.getData());
   }
 
   removeNodeSnapLine() {

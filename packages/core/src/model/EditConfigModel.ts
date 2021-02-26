@@ -10,8 +10,9 @@ export interface EditConfigInterface {
   hideAnchors?: boolean;
   nodeTextEdit?: boolean;
   edgeTextEdit?: boolean;
-  nodeTextDraggable?: boolean,
-  edgeTextDraggable?: boolean,
+  nodeTextDraggable?: boolean;
+  edgeTextDraggable?: boolean;
+  extraConf?: Record<string, string | number | object | boolean>;
 }
 
 const SilentConfig = {
@@ -44,6 +45,7 @@ export default class EditConfigModel {
   @observable nodeTextDraggable = false; // 允许节点文本可以拖拽
   @observable edgeTextDraggable = false; // 允许连线文本可以拖拽
   @observable metaKeyMultipleSelected = false; // 允许meta多选元素
+  extraConf = {}; // 外部传入的额外配置, 待优化，这里不够易用。
   keys: string[];
   constructor(data) {
     this.keys = [
@@ -59,6 +61,7 @@ export default class EditConfigModel {
       'nodeTextDraggable',
       'edgeTextDraggable',
       'metaKeyMultipleSelected',
+      'extraConf',
     ];
     const { isSilentMode, textEdit } = data;
     if (isSilentMode) {
@@ -71,6 +74,7 @@ export default class EditConfigModel {
           'stopMoveGraph',
           'hideAnchors',
           'hoverOutline',
+          'extraConf',
         ]),
       );
     } else if (!textEdit) {
@@ -86,6 +90,9 @@ export default class EditConfigModel {
   @action
   updateEditConfig(config) {
     assign(this, pick(config, this.keys));
+  }
+  getConfig() {
+    return pick(this, this.keys);
   }
 }
 

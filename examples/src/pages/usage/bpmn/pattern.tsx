@@ -34,8 +34,26 @@ export default function BpmnPattern(props: IProps): ReactElement {
       text: '结束'
     });
   }
+  function openSelection() {
+    lf.updateEditConfig({
+      stopMoveGraph: true,
+      extraConf: {
+        openSelectionMode: true,
+      }
+    });
+  }
+  lf && lf.on('selection:selected', () => {
+    lf.updateEditConfig({
+      stopMoveGraph: false,
+      extraConf: {
+        openSelectionMode: false,
+      }
+    });
+  });
   return (
     <div className="pattern">
+      <div className="pattern-selection" onMouseDown={() => openSelection()} />
+      <div>选区</div>
       <div className="pattern-start" onMouseDown={() => addStartNode()} />
       <div>开始</div>
       <div className="pattern-user" onMouseDown={() => addUserTask()}></div>

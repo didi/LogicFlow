@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import LogicFlow from '@logicflow/core';
-import { BpmnElement, BpmnXmlAdapter, Snapshot, Control, Menu } from '@logicflow/extension';
+import {
+  BpmnElement,
+  BpmnXmlAdapter,
+  Snapshot,
+  Control,
+  Menu,
+  SelectionSelect,
+} from '@logicflow/extension';
 import BpmnPattern from './pattern';
 import BpmnIo from './io';
 import './index.css';
@@ -12,10 +19,15 @@ import ExampleHeader from '../../../components/example-header';
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
+  metaKeyMultipleSelected: true,
   grid: {
     size: 10,
     type: 'dot',
-  }
+  },
+  keyboard: {
+    enabled: true,
+  },
+  snapline: true,
 }
 
 type IState = {
@@ -37,6 +49,7 @@ export default class BpmnExample extends Component<IProps, IState>{
     LogicFlow.use(Snapshot);
     LogicFlow.use(Control);
     LogicFlow.use(Menu);
+    LogicFlow.use(SelectionSelect);
     const lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph') as HTMLElement

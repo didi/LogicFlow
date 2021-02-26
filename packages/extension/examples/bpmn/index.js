@@ -1,12 +1,9 @@
 window.onload = function () {
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
-    // fixme: grid成为了必传的了
     edgeTextDraggable: true,
+    nodeTextDraggable: true,
     metaKeyMultipleSelected: true,
-    // stopScrollGraph: true,
-    // stopMoveGraph: true,
-    // stopZoomGraph: true,
     grid: {
       type: 'dot',
       size: 20,
@@ -16,7 +13,6 @@ window.onload = function () {
     },
     snapline: true,
   });
-
   let lfData = window.sessionStorage.getItem('lf-data');
   if (lfData) {
     renderXml(lfData);
@@ -29,6 +25,24 @@ window.onload = function () {
     }
     lf.render(lfData);
   }
+
+  document.querySelector('#selection-node-pattern').addEventListener('mousedown', () => {
+    lf.updateEditConfig({
+      stopMoveGraph: true,
+      extraConf: {
+        openSelectionMode: true,
+      }
+    });
+  });
+
+  lf.on('selection:selected', () => {
+    lf.updateEditConfig({
+      stopMoveGraph: false,
+      extraConf: {
+        openSelectionMode: false,
+      }
+    });
+  });
 
   document.querySelector('#start-node-pattern').addEventListener('mousedown', () => {
     lf.dnd.startDrag({

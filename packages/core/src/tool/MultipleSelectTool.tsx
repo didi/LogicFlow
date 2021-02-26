@@ -15,7 +15,7 @@ type IProps = {
 };
 
 @observer
-export default class Selection extends Component<IProps> {
+export default class MultipleSelect extends Component<IProps> {
   stepDrag;
   constructor(props) {
     super();
@@ -27,7 +27,7 @@ export default class Selection extends Component<IProps> {
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
       step: gridSize,
-      eventType: 'GROUP',
+      eventType: 'multiple:select',
       eventCenter,
     });
   }
@@ -72,7 +72,7 @@ export default class Selection extends Component<IProps> {
     };
     return (
       <div
-        className="lf-selection"
+        className="lf-multiple-select"
         style={style}
         onMouseDown={this.handleMouseDown}
       />
