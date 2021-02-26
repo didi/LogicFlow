@@ -319,6 +319,12 @@ function getNodeConfig(shapeValue, type, processValue) {
       y,
       value: name,
     };
+    // 自定义文本位置
+    if (shapeValue['bpmndi:BPMNLabel'] && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']) {
+      const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds'];
+      text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2;
+      text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2
+    }
   }
   const nodeConfig: NodeConfig = {
     id: shapeValue['-bpmnElement'],

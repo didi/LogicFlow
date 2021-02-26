@@ -5,7 +5,9 @@
   <meta name="format-detection" content="telephone=no, email=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
-  <link rel="stylesheet" href="/core/dist/style/index.css">
+  <!-- <link rel="stylesheet" href="/core/dist/style/index.css"> -->
+  <link rel="stylesheet" href="http://0.0.0.0:9090/src/style/index.css">
+  <link rel="stylesheet" href="/extension/src/style/index.css">
   <style>
     html,body {
       padding: 0;
@@ -34,6 +36,13 @@
       font-size: 12px;
       color: #676768;
       user-select: none;
+    }
+    .pattern-selection {
+      width: 36px;
+      height: 36px;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAAH6ji2bAAAABGdBTUEAALGPC/xhBQAAAOVJREFUOBGtVMENwzAIjKP++2026ETdpv10iy7WFbqFyyW6GBywLCv5gI+Dw2Bluj1znuSjhb99Gkn6QILDY2imo60p8nsnc9bEo3+QJ+AKHfMdZHnl78wyTnyHZD53Zzx73MRSgYvnqgCUHj6gwdck7Zsp1VOrz0Uz8NbKunzAW+Gu4fYW28bUYutYlzSa7B84Fh7d1kjLwhcSdYAYrdkMQVpsBr5XgDGuXwQfQr0y9zwLda+DUYXLaGKdd2ZTtvbolaO87pdo24hP7ov16N0zArH1ur3iwJpXxm+v7oAJNR4JEP8DoAuSFEkYH7cAAAAASUVORK5CYII=) center center no-repeat;
+      cursor: pointer;
+      opacity: 0.99;
     }
     .pattern-start {
       width: 36px;
@@ -109,6 +118,8 @@
   <div class="rules-graph">
     <div id="app"></div>
     <div class="pattern">
+      <div class="pattern-selection" id="selection-node-pattern"></div>
+      <div>选区</div>
       <div class="pattern-start" id="start-node-pattern"></div>
       <div>开始</div>
       <div class="pattern-user" id="user-node-pattern"></div>
@@ -129,13 +140,18 @@
     </div>
   </div>
   <script src="/core/dist/logic-flow.js"></script>
+  <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
   <script src="/BpmnElement.js"></script>
   <script src="/BpmnAdapter.js"></script>
+  <script src="/Control.js"></script>
+  <script src="/SelectionSelect.js"></script>
   <script src="/Snapshot.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
+    LogicFlow.use(Control);
     LogicFlow.use(BpmnAdapter);
     LogicFlow.use(Snapshot);
+    LogicFlow.use(SelectionSelect);
   </script>
   <script src="./xml2json.js"></script>
   <script src="./json2xml.js"></script>

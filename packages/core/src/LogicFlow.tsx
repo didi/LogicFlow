@@ -50,6 +50,7 @@ import {
 import { initShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
+import { EditConfigInterface } from './model/EditConfigModel';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
@@ -58,6 +59,11 @@ if (process.env.NODE_ENV === 'development') {
 type GraphConfigData = {
   nodes: NodeConfig[],
   edges: EdgeConfig[],
+};
+
+type GraphConfigModel = {
+  nodes: BaseNodeModel[];
+  edges: BaseEdgeModel[];
 };
 
 export default class LogicFlow {
@@ -127,6 +133,9 @@ export default class LogicFlow {
   }
   off(evt: string, callback: CallbackType) {
     this.eventCenter.off(evt, callback);
+  }
+  emit(evt: string, arg: Record<string, string | number | object>) {
+    this.eventCenter.emit(evt, arg);
   }
   getEvents() {
     this.eventCenter.getEvents();
@@ -217,11 +226,13 @@ export default class LogicFlow {
   undo() {
     if (!this.history.undoAble()) return;
     const graphData = this.history.undo();
+    this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
   redo() {
     if (!this.history.redoAble()) return;
     const graphData = this.history.redo();
+    this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
 
@@ -277,9 +288,11 @@ export default class LogicFlow {
   }
   /**
    * 将图形选中
+   * @param id 选择元素ID
+   * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
    */
-  select(id: string) {
-    this.graphModel.selectElementById(id);
+  select(id: string, multiple = false) {
+    this.graphModel.selectElementById(id, multiple);
   }
   /**
    * 将图形定位到画布中心
@@ -332,6 +345,35 @@ export default class LogicFlow {
    */
   addNode(nodeConfig: NodeConfig): BaseNodeModel {
     return this.graphModel.addNode(nodeConfig);
+  }
+  /**
+   * 添加多个元素, 包括连线和节点。
+   */
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+    const nodeIdMap = {};
+    const elements = {
+      nodes: [],
+      edges: [],
+    };
+    nodes.forEach(node => {
+      const preId = node.id;
+      const nodeModel = this.addNode(node);
+      if (preId) nodeIdMap[preId] = nodeModel.id;
+      elements.nodes.push(nodeModel);
+    });
+    edges.forEach(edge => {
+      const sourceId = edge.sourceNodeId;
+      const targetId = edge.targetNodeId;
+      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
+      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
+      const edgeModel = this.graphModel.createEdge(edge);
+      elements.edges.push(edgeModel);
+    });
+    return elements;
+  }
+
+  clearSelectElements() {
+    this.graphModel.clearSelectElements();
   }
 
   setProperties(id: string, properties: Object): void {
@@ -524,6 +566,29 @@ export default class LogicFlow {
     if (this.snaplineModel) {
       this.snaplineModel.setNodeSnapLine(data);
     }
+  }
+  /**
+   * 更新流程图编辑相关设置
+   */
+  updateEditConfig(config: EditConfigInterface) {
+    this.graphModel.editConfig.updateEditConfig(config);
+  }
+
+  /**
+   * 获取
+   */
+  getEditConfig() {
+    return this.graphModel.editConfig.getConfig();
+  }
+
+  /**
+   * 获取指定区域坐标，此区域必须是DOM层，也就是可视区域。
+   * @param leftTopPoint 区域左上角坐标, dom层坐标
+   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   */
+  getAreaElement(leftTopPoint, rightBottomPoint) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+      .map(element => element.getData());
   }
 
   removeNodeSnapLine() {

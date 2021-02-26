@@ -178,7 +178,8 @@ export default class BaseEdge extends Component<IProps> {
   handleClick = (e) => {
     const { model, graphModel, eventCenter } = this.props;
     graphModel.toFront(model.id);
-    graphModel.selectEdgeById(model.id);
+    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
     // 边数据
     const edgeData = model?.getData();
     const position = graphModel.getPointByClient({

@@ -13,14 +13,14 @@ import {
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
-import { snapToGrid } from '../util/geometry';
+import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
 type ElementModeId = string;
-
+type BaseElementModel = BaseNodeModel | BaseEdgeModel;
 const VisibleMoreSpace = 200;
 
 class GraphModel {
@@ -34,6 +34,8 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
+  selectElements = new Map<string, BaseElementModel>(); // 多选
+  @observable selectElementSize = 0;
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -50,7 +52,6 @@ class GraphModel {
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
   @observable fakerNode: BaseNodeModel;
-  // @observable selectElements = new Map<string, IBaseModel>(); // 多选还没有做，先不加
   constructor(config) {
     const {
       container,
@@ -90,10 +91,12 @@ class GraphModel {
     const showElements = [];
     let topElementIdx = -1;
     // todo: 缓存, 优化计算效率
+    const visibleLt: PointTuple = [-VisibleMoreSpace, -VisibleMoreSpace];
+    const visibleRb: PointTuple = [this.width + VisibleMoreSpace, this.height + VisibleMoreSpace];
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
-      if (!this.partial || this.isElementVisible(currentItem)) {
+      if (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false)) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;
         }
@@ -114,6 +117,21 @@ class GraphModel {
     const textEditNode = this.nodes.find(node => node.state === ElementState.TEXT_EDIT);
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
+  }
+
+  /**
+   * 获取指定区域内的所有元素
+   */
+  getAreaElement(leftTopPoint, rightBottomPoint) {
+    const selectElements = [];
+    const elements = [...this.edges, ...this.nodes];
+    for (let i = 0; i < elements.length; i++) {
+      const currentItem = elements[i];
+      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {
+        selectElements.push(currentItem);
+      }
+    }
+    return selectElements;
   }
 
   getModel(type: string) {
@@ -144,14 +162,19 @@ class GraphModel {
       },
     };
   }
-  isElementVisible(element) {
-    const visibleLt: PointTuple = [-VisibleMoreSpace, -VisibleMoreSpace];
-    const visibleRb: PointTuple = [this.width + VisibleMoreSpace, this.height + VisibleMoreSpace];
+
+  /**
+   * 判断一个元素是否在指定矩形区域内。
+   * @param element 节点或者连线
+   * @param lt 左上角点
+   * @param rb 右下角点
+   */
+  isElementInArea(element, lt, rb, wholeEdge = true) {
     if (element.BaseType === ElementType.NODE) {
       element = element as BaseNodeModel;
       let { x, y } = element;
       [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
-      if (isPointInArea([x, y], visibleLt, visibleRb)) {
+      if (isPointInArea([x, y], lt, rb)) {
         return true;
       }
     }
@@ -162,12 +185,9 @@ class GraphModel {
         [startPoint.x, startPoint.y],
       );
       const endHtmlPoint = this.transformMatrix.CanvasPointToHtmlPoint([endPoint.x, endPoint.y]);
-      if (
-        isPointInArea(startHtmlPoint, visibleLt, visibleRb)
-        || isPointInArea(endHtmlPoint, visibleLt, visibleRb)
-      ) {
-        return true;
-      }
+      const isStartInArea = isPointInArea(startHtmlPoint, lt, rb);
+      const isEndInArea = isPointInArea(endHtmlPoint, lt, rb);
+      return wholeEdge ? (isStartInArea && isEndInArea) : (isStartInArea || isEndInArea);
     }
     return false;
   }
@@ -182,10 +202,10 @@ class GraphModel {
       if (nodeX && nodeY) {
         node.x = snapToGrid(nodeX, this.gridSize);
         node.y = snapToGrid(nodeY, this.gridSize);
-      }
-      if (Object.prototype.toString.call(node.text) === '[object Object]') {
-        node.text.x = snapToGrid(node.text.x, this.gridSize);
-        node.text.y = snapToGrid(node.text.y, this.gridSize);
+        if (Object.prototype.toString.call(node.text) === '[object Object]') {
+          node.text.x -= getGridOffset(nodeX, this.gridSize);
+          node.text.y -= getGridOffset(nodeY, this.gridSize);
+        }
       }
       return new Model(node, this);
     });
@@ -221,6 +241,33 @@ class GraphModel {
     }
     const edgeModel = this.getEdgeModel(id);
     return edgeModel;
+  }
+
+  /**
+   * 获取选中的元素数据
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线。默认包括。复制的时候不能包括此类连线
+   */
+  getSelectElements(isIgnoreCheck = true) {
+    const elements = this.selectElements;
+    const graphData = {
+      nodes: [],
+      edges: [],
+    };
+    elements.forEach((element) => {
+      if (element.BaseType === ElementType.NODE) {
+        graphData.nodes.push(element.getData());
+      }
+      if (element.BaseType === ElementType.EDGE) {
+        const edgeData = element.getData();
+        const isNodeSelected = elements.get(edgeData.sourceNodeId)
+          && elements.get(edgeData.targetNodeId);
+
+        if (!isIgnoreCheck || isNodeSelected) {
+          graphData.edges.push(edgeData);
+        }
+      }
+    });
+    return graphData;
   }
 
   @action
@@ -269,6 +316,10 @@ class GraphModel {
 
   @action
   addNode(nodeConfig: NodeConfig) {
+    // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
+    if (nodeConfig.id && this.nodesMap[nodeConfig.id]) {
+      delete nodeConfig.id;
+    }
     const Model = this.getModel(nodeConfig.type);
     // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
     const nodeModel = new Model(nodeConfig, this);
@@ -319,17 +370,21 @@ class GraphModel {
   }
 
   @action
-  createEdge(edgeConfig: EdgeConfig) {
+  createEdge(edgeConfig: EdgeConfig): EdgeConfig {
     // 边的类型优先级：自定义>全局>默认
     let { type } = edgeConfig;
     if (!type) {
       type = this.edgeType;
+    }
+    if (edgeConfig.id && this.edgesMap[edgeConfig.id]) {
+      delete edgeConfig.id;
     }
     const Model = this.getModel(type);
     const edgeModel = new Model({ ...edgeConfig, type }, this);
     const edgeData = edgeModel.getData();
     this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     this.edges.push(edgeModel);
+    return edgeModel;
   }
 
   @action
@@ -456,24 +511,61 @@ class GraphModel {
   }
 
   @action
-  selectNodeById(id) {
-    this.selectElement?.setSelected(false);
+  selectNodeById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
   }
 
   @action
-  selectEdgeById(id) {
-    this.selectElement?.setSelected(false);
+  selectEdgeById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.edgesMap[id]?.model;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
   }
 
   @action
-  selectElementById(id: string) {
-    this.selectElement?.setSelected(false);
+  selectElementById(id: string, multiple = false) {
+    if (!multiple) {
+      this.selectElement?.setSelected(false);
+      this.clearSelectElements();
+    }
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
+    this.selectElements.set(id, this.selectElement);
+    this.selectElementSize = this.selectElements.size;
+  }
+
+  @action
+  clearSelectElements() {
+    this.selectElements.forEach(element => {
+      element.setSelected(false);
+    });
+    this.selectElements.clear();
+    this.topElement?.setZIndex();
+    this.selectElementSize = this.selectElements.size;
+  }
+  /**
+   * 批量移动元素
+   */
+  @action
+  moveElements(
+    elements: { nodes: NodeConfig[] },
+    deltaX: number,
+    deltaY: number,
+  ) {
+    // 如果移动的
+    elements.nodes.forEach(node => this.moveNode(node.id, deltaX, deltaY));
   }
 
   /* 修改连线类型 */

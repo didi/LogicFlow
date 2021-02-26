@@ -79,7 +79,7 @@ class StepDrag {
   sumDeltaY = 0;
   eventType: string;
   eventCenter: EventEmitter | null;
-  model: BaseNodeModel | BaseEdgeModel;
+  model?: BaseNodeModel | BaseEdgeModel;
   constructor({
     onDragStart = noop,
     onDraging = noop,
@@ -88,7 +88,7 @@ class StepDrag {
     eventCenter = null,
     step = 1,
     isStopPropagation = true,
-    model,
+    model = null,
   }) {
     this.onDragStart = onDragStart;
     this.onDraging = onDraging;

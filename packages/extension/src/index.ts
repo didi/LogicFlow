@@ -4,3 +4,4 @@ export * from './adapter';
 export * from './components/control';
 export * from './components/menu';
 export * from './components/dnd-panel';
+export * from './components/selection-select';

@@ -1,5 +1,6 @@
 import { Component } from 'preact';
 import TextEdit from './TextEditTool';
+import MultipleSelect from './MultipleSelectTool';
 import LogicFlow from '../LogicFlow';
 
 export default class Tool {
@@ -10,6 +11,7 @@ export default class Tool {
   constructor(instance: LogicFlow) {
     this.instance = instance;
     this.registerTool('textEdit', TextEdit);
+    this.registerTool('multipleSelect', MultipleSelect);
   }
   registerTool(name, component) {
     this.toolMap.set(name, component);

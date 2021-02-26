@@ -1,4 +1,6 @@
-import { debounce, isEqual, last } from 'lodash-es';
+import {
+  debounce, isEqual, last, cloneDeep,
+} from 'lodash-es';
 import { deepObserve } from 'mobx-utils';
 import EventEmitter from '../event/eventEmitter';
 import { EventType } from '../constant/constant';
@@ -52,11 +54,11 @@ class History {
   // 4) watch触发add
   undo() {
     if (!this.undoAble()) return;
-
     const preData = this.undos.pop();
     this.redos.push(preData);
-    this.curData = this.undos.pop();
-    return this.curData;
+    const curData = this.undos.pop();
+    this.curData = cloneDeep(curData);
+    return curData;
   }
 
   redoAble() {
@@ -65,8 +67,9 @@ class History {
 
   redo() {
     if (!this.redoAble()) return;
-    this.curData = this.redos.pop();
-    return this.curData;
+    const curData = this.redos.pop();
+    this.curData = cloneDeep(curData);
+    return curData;
   }
 
   watch(model) {
