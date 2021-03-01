@@ -70,13 +70,24 @@ class BaseEdgeModel implements IBaseModel {
       'type',
       'sourceNodeId',
       'targetNodeId',
-      'startPoint',
-      'endPoint',
       'pointsList',
       'properties',
     ]));
     if (data.text) {
       this.text = data.text;
+    }
+    // 修复vue项目传入的是响应式对象导致最终获取数据是错误的情况。
+    if (data.startPoint) {
+      this.startPoint = {
+        x: data.startPoint.x,
+        y: data.startPoint.y,
+      };
+    }
+    if (data.endPoint) {
+      this.endPoint = {
+        x: data.endPoint.x,
+        y: data.endPoint.y,
+      };
     }
     this.graphModel = graphModel;
   }
