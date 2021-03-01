@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.5...@logicflow/extension@0.2.6) (2021-03-01)
+
+
+### Bug Fixes
+
+* **extension:** 🐛fix undo error when custom text position ([fc6e7d7](https://github.com/didi/LogicFlow/commit/fc6e7d767889e8bbdd542a3c8006e352a86121c4))
+* **extension:** fix adapter out data ([3941c4b](https://github.com/didi/LogicFlow/commit/3941c4ba2939ec1bcf452543e1da486fe2f64f9f))
+
+
+### Features
+
+* new plugin Selection & example ([2e4b489](https://github.com/didi/LogicFlow/commit/2e4b48958dff21617b6f7b08c9840deac0a178f0))
+* **core:** copy paste and delete multiple selected elements ([4a5be86](https://github.com/didi/LogicFlow/commit/4a5be86c63c90b7c1c88e08e9d084e708307a80d))
+* **core:** support use meta key select multiple element ([e137f9f](https://github.com/didi/LogicFlow/commit/e137f9fdbdb6bf3f85c3f7ac9323785e445844c8))
+
+
+
+
+
 ## [0.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.4...@logicflow/extension@0.2.5) (2021-02-23)
 
 

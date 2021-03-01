@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.4...@logicflow/core@0.2.6) (2021-03-01)
+
+
+### Bug Fixes
+
+* **core:** immutable redo data ([7a5dac6](https://github.com/didi/LogicFlow/commit/7a5dac6d89b0b248a9055cacaa22dc423dc6c299))
+* **extension:** 🐛fix undo error when custom text position ([fc6e7d7](https://github.com/didi/LogicFlow/commit/fc6e7d767889e8bbdd542a3c8006e352a86121c4))
+* 🐛 add the type of diamond class ([90f70b5](https://github.com/didi/LogicFlow/commit/90f70b5dd378af9f7c6ee3abca0c2ebf5cb8e4b3))
+
+
+### Features
+
+* new plugin Selection & example ([2e4b489](https://github.com/didi/LogicFlow/commit/2e4b48958dff21617b6f7b08c9840deac0a178f0))
+* **core:** add edit config update function ([695894c](https://github.com/didi/LogicFlow/commit/695894c4db9fa328d358be1d3917166b33aae990))
+* **core:** copy paste and delete multiple selected elements ([4a5be86](https://github.com/didi/LogicFlow/commit/4a5be86c63c90b7c1c88e08e9d084e708307a80d))
+* **core:** multiple elements drag moving ([a59065f](https://github.com/didi/LogicFlow/commit/a59065f7cebd745e2ba0e147c8356849384be9f9))
+* **core:** support use meta key select multiple element ([e137f9f](https://github.com/didi/LogicFlow/commit/e137f9fdbdb6bf3f85c3f7ac9323785e445844c8))
+
+
+
+
+
 ## [0.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.3...@logicflow/core@0.2.4) (2021-02-20)
 
 
