@@ -7,7 +7,7 @@
 ```ts
 import LogicFlow from '@logicflow/core';
 import { Control, Menu, DndPanel } from '@logicflow/extension';
-import '@logicflow/extension/lib/style.css';
+import '@logicflow/extension/lib/style/index.css';
 
 LogicFlow.use(Control);
 LogicFlow.use(Menu);
@@ -41,7 +41,7 @@ LogicFlow.use(DndPanel);
 ```ts
 import LogicFlow from '@logicflow/core';
 import { Menu } from '@logicflow/extension';
-import '@logicflow/extension/lib/style.css';
+import '@logicflow/extension/lib/style/index.css'
 
 LogicFlow.use(Menu);
 ```
