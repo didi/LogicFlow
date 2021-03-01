@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
@@ -25,7 +25,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^0.2.6",
+    "@logicflow/core": "^0.2.7",
     "ids": "^1.0.0"
   },
   "standard-version": {

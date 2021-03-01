@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.6...@logicflow/core@0.2.7) (2021-03-01)
+
+
+### Bug Fixes
+
+* 🐛 complete the type of nodes' common style ([971f63e](https://github.com/didi/LogicFlow/commit/971f63ec1b320f034263ab34e456eee970a3e06b))
+* **core:** get vue project  responsive data error ([e03d277](https://github.com/didi/LogicFlow/commit/e03d277b6cca2836f53f104f5e999208439a5fe0))
+
+
+
+
+
 ## [0.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.4...@logicflow/core@0.2.6) (2021-03-01)
 
 
