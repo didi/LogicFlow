@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/didi/LogicFlow/compare/examples@0.3.5...examples@0.3.6) (2021-03-01)
+
+
+### Features
+
+* new plugin Selection & example ([2e4b489](https://github.com/didi/LogicFlow/commit/2e4b48958dff21617b6f7b08c9840deac0a178f0))
+
+
+
+
+
 ## [0.3.5](https://github.com/didi/LogicFlow/compare/examples@0.3.4...examples@0.3.5) (2021-02-23)
 
 **Note:** Version bump only for package examples
