@@ -65,7 +65,15 @@
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "ids": "^1.0.0",
+    "lodash-es": "^4.17.15",
+    "mobx": "^5.15.7",
+    "mobx-react": "^6.3.0",
+    "mobx-utils": "^5.6.1",
+    "mousetrap": "^1.6.5",
+    "preact": "^10.4.8",
+    "uuid": "^8.2.0"
   },
   "browserslist": [
     "> 3%",
@@ -78,16 +86,7 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "dependencies": {
-    "ids": "^1.0.0",
-    "lodash-es": "^4.17.15",
-    "mobx": "^5.15.7",
-    "mobx-react": "^6.3.0",
-    "mobx-utils": "^5.6.1",
-    "mousetrap": "^1.6.5",
-    "preact": "^10.4.8",
-    "uuid": "^8.2.0"
-  },
+  "dependencies": {},
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
