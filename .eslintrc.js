@@ -75,6 +75,7 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 0,
         'react/no-danger': 0,
         'no-console': 0,
+        'import/no-extraneous-dependencies': 0,
         "@typescript-eslint/no-explicit-any": 0
     }
 }
