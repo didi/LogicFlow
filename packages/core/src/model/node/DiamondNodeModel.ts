@@ -34,6 +34,14 @@ class DiamondNodeModel extends BaseNodeModel {
     ];
   }
 
+  @computed get pointsPosition(): Point[] {
+    const pointsPosition = this.points.map(item => ({
+      x: item[0],
+      y: item[1],
+    }));
+    return pointsPosition;
+  }
+
   @computed get width(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
