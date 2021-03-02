@@ -6,7 +6,7 @@ import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 
 class DiamondNodeModel extends BaseNodeModel {
-  modelType = ModelType.DIAMOND;
+  modelType = ModelType.DIAMOND_NODE;
   @observable rx: number;
   @observable ry: number;
 

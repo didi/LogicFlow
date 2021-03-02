@@ -14,7 +14,6 @@ export enum ClipBoardInfo {
 
 export enum ModelType {
   NODE = 'node',
-  DIAMOND = 'diamond-node',
   CIRCLE_NODE = 'circle-node',
   POLYGON_NODE = 'polygon-node',
   RECT_NODE = 'rect-node',
