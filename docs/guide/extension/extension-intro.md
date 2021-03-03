@@ -7,7 +7,7 @@
 ## 使用拓展
 
 ```js
-import { BpmnElement } from '@didi/lf-extension';
+import { BpmnElement } from '@logicflow/extension';
 LogicFlow.use(BpmnElement);
 ```
 
