@@ -14,12 +14,12 @@ export enum ClipBoardInfo {
 
 export enum ModelType {
   NODE = 'node',
-  DIAMOND = 'diamond-node',
   CIRCLE_NODE = 'circle-node',
   POLYGON_NODE = 'polygon-node',
   RECT_NODE = 'rect-node',
   TEXT_NODE = 'text-node',
   ELLIPSE_NODE = 'ellipse-node',
+  DIAMOND_NODE = 'diamond-node',
   EDGE = 'edge',
   LINE_EDGE = 'line-edge',
   POLYLINE_EDGE = 'polyline-edge',

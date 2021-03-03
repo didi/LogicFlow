@@ -198,6 +198,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       case ModelType.ELLIPSE_NODE:
         startCrossPoint = getCrossPointWithEllipse(start, startPointDirection, sourceNode);
         break;
+      case ModelType.DIAMOND_NODE:
+        startCrossPoint = getCrossPointWithPolyone(start, startPointDirection, sourceNode);
+        break;
       case ModelType.POLYGON_NODE:
         startCrossPoint = getCrossPointWithPolyone(start, startPointDirection, sourceNode);
         break;
@@ -221,6 +224,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         break;
       case ModelType.ELLIPSE_NODE:
         endCrossPoint = getCrossPointWithEllipse(end, endPointDirection, targetNode);
+        break;
+      case ModelType.DIAMOND_NODE:
+        endCrossPoint = getCrossPointWithPolyone(end, endPointDirection, targetNode);
         break;
       case ModelType.POLYGON_NODE:
         endCrossPoint = getCrossPointWithPolyone(end, endPointDirection, targetNode);

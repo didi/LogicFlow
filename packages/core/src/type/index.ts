@@ -177,6 +177,8 @@ export type EdgeStyle = {
   strokeWidth?: number,
   hoverStroke?: string,
   selectedStroke?: string,
+  outlineColor?: string,
+  outlineStrokeDashArray?: string,
 };
 
 export type LineStyle = EdgeStyle;
