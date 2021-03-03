@@ -43,6 +43,8 @@
     <div class="rect" onmousedown="mouseDownRect()"></div>
     <div class="circle" onmousedown="mouseDownCircle()"></div>
     <button onClick="focusOn()">定位到五角星</button>
+    <button id="undo" onClick="undo()" disabled>上一步</button>
+    <button id="redo" onClick="redo()" disabled>下一步</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -90,6 +92,16 @@
           id: '2222'
         })
       }
+      window.undo = function undo() {
+        lf.undo()
+      }
+      window.redo = function redo() {
+        lf.redo()
+      }
+      lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
+        document.getElementById('undo').disabled = !undoAble
+        document.getElementById('redo').disabled = !redoAble
+      });
       lf.register('user', ({ RectNode, RectNodeModel, h }) => {
         class UserNode extends RectNode {
           getShapeStyle(){
