@@ -12,6 +12,7 @@ import {
 } from '../../type';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
+import { pickNodeConfig } from '../../util/node';
 
 const defaultConfig = assign(
   {
@@ -83,8 +84,7 @@ export default class BaseNodeModel implements IBaseModel {
     if (!data.properties) {
       data.properties = {};
     }
-    // todo: 规范所有的初始化参数，pick需要的参数
-    assign(this, data);
+    assign(this, pickNodeConfig(data));
   }
 
   // 格式化text参数，未修改observable不作为action
@@ -126,7 +126,6 @@ export default class BaseNodeModel implements IBaseModel {
       x: this.x,
       y: this.y,
       properties,
-      baseType: this.BaseType,
     };
     if (value) {
       data.text = {
