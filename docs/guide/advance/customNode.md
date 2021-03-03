@@ -549,3 +549,22 @@ lf.on('connection:not-allowed', (msg) => {
   console.log(msg)
 });
 ```
+
+## extendKey
+
+当我们注册的自定义节点希望可以被其他自定义节点继承时，就需要为`view`和`model`都设置一个静态属性`extendKey`，以便在`lf.register`的第二个回调函数的参数中被访问到。
+
+```ts
+lf.register('CustomNode', ({ BaseNode, BaseNodeModel }) => {
+  class View extends BaseNode {
+    static extendKey = 'CustomNodeView';
+  }
+  class Model extends BaseNodeModel {
+    static extendKey = 'CustomNodeModel';
+  }
+  return {
+    view: View,
+    model: Model,
+  }
+});
+```
