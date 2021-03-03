@@ -41,12 +41,6 @@ lf.register('process', (RegisterParam) => {
 
 连线的`getAttributes`方法返回值所包含的属性与节点的不同，访问 [API](/api/customEdgeApi.md#getattributes) 以查看更多细节。
 
-<!-- ### extendKey
-
-在注册的时候，我们自定义的 class 会有一个静态属性`extendKey`, 当你注册的元素希望能继续被其它元素继承的时候，则必须使用这个属性标识你注册的元素的`class.name`。
-
-详细原因请参考：[自定义节点原理](./) -->
-
 ### getArrowStyle
 
 我们除了可以通过重写`getAttributes`来实现修改连线的样式，也可以通过重写`getArrowStyle`来实现对箭头样式的细粒度控制。
@@ -84,9 +78,24 @@ lf.register('process', (RegisterParam) => {
 
 连线在`model`中维护了以下内容。
 
-- 连线自身的`attributes`
-- 连线的起点坐标和终点坐标
+- 连线的[数据属性](/api/edgeApi.html#数据属性)和[样式属性](/api/edgeApi.html#样式属性)
+- 连线的[边属性](/api/edgeApi.html#边属性)
 
-### attributes
+## extendKey
 
-与自定义节点一致，我们可以直接在`model`中通过`this`来获取连线的`attributes`。
+当我们注册的自定义连线希望可以被其他自定义连线继承时，就需要为`view`和`model`都设置一个静态属性`extendKey`，以便在`lf.register`的第二个回调函数的参数中被访问到。
+
+```ts
+lf.register('CustomEdge', ({ BaseEdge, BaseEdgeModel }) => {
+  class View extends BaseEdge {
+    static extendKey = 'CustomEdgeView';
+  }
+  class Model extends BaseEdgeModel {
+    static extendKey = 'CustomEdgeModel';
+  }
+  return {
+    view: View,
+    model: Model,
+  }
+});
+```
