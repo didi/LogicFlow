@@ -6,7 +6,7 @@ import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 
 class DiamondNodeModel extends BaseNodeModel {
-  modelType = ModelType.DIAMOND;
+  modelType = ModelType.DIAMOND_NODE;
   @observable rx: number;
   @observable ry: number;
 
@@ -32,6 +32,14 @@ class DiamondNodeModel extends BaseNodeModel {
       [x, y + ry],
       [x - rx, y],
     ];
+  }
+
+  @computed get pointsPosition(): Point[] {
+    const pointsPosition = this.points.map(item => ({
+      x: item[0],
+      y: item[1],
+    }));
+    return pointsPosition;
   }
 
   @computed get width(): number {
