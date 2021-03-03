@@ -4,6 +4,7 @@ import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
+import { pickNodeConfig } from '../../util/node';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -17,7 +18,7 @@ class PolygonNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('polygon', graphModel);
-    assign(this, data);
+    assign(this, pickNodeConfig(data));
   }
 
   @computed get pointsPosition(): Point[] {

@@ -5,6 +5,7 @@ import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import GraphModel from '../GraphModel';
+import { pickNodeConfig } from '../../util/node';
 
 class EllipseNodeModel extends BaseNodeModel {
   modelType = ModelType.ELLIPSE_NODE;
@@ -14,7 +15,7 @@ class EllipseNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('ellipse', graphModel);
-    assign(this, data);
+    assign(this, pickNodeConfig(data));
   }
 
   @computed get width(): number {

@@ -1,9 +1,14 @@
+import { pick } from 'lodash-es';
 import BaseNode from '../model/node/BaseNodeModel';
 import CircleNode from '../model/node/CircleNodeModel';
 import RectNode from '../model/node/RectNodeModel';
 import EllipseNode from '../model/node/EllipseNodeModel';
 import PolygonNode from '../model/node/PolygonNodeModel';
-import { Point, Direction } from '../type';
+import {
+  Point,
+  Direction,
+  NodeConfig,
+} from '../type';
 import { isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
 
@@ -334,4 +339,17 @@ export const getCrossPointWithPolyone = (
     }
   });
   return crossPoint;
+};
+
+// 规范节点初始化数据
+export const pickNodeConfig = (data): NodeConfig => {
+  const nodeData = pick(data, [
+    'id',
+    'type',
+    'x',
+    'y',
+    'text',
+    'properties',
+  ]);
+  return nodeData;
 };

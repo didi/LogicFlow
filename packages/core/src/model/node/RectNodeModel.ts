@@ -5,6 +5,7 @@ import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
+import { pickNodeConfig } from '../../util/node';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
@@ -15,7 +16,7 @@ class RectNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('rect', graphModel);
-    assign(this, data);
+    assign(this, pickNodeConfig(data));
   }
 
   @computed get anchors(): Point[] {

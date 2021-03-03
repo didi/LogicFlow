@@ -4,6 +4,7 @@ import { NodeData, Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
+import { pickNodeConfig } from '../../util/node';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
@@ -13,7 +14,7 @@ class DiamondNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('diamond', graphModel);
-    assign(this, data);
+    assign(this, pickNodeConfig(data));
   }
 
   getData(): NodeData {
