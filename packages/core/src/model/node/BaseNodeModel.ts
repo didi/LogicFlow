@@ -11,6 +11,7 @@ import {
   AdditionData, NodeData, MenuConfig, NodeAttribute,
 } from '../../type';
 import { IBaseModel } from '../BaseModel';
+import { formatData } from '../../util/compatible';
 
 const defaultConfig = assign(
   {
@@ -280,7 +281,8 @@ export default class BaseNodeModel implements IBaseModel {
   /* 更新数据 */
   @action
   updateData(nodeAttribute: NodeAttribute): void {
-    const nodeData = pick(nodeAttribute, 'type', 'x', 'y', 'text', 'properties');
+    // formatData兼容vue数据
+    const nodeData = formatData(pick(nodeAttribute, 'type', 'x', 'y', 'text', 'properties'));
     assign(this, nodeData);
   }
 

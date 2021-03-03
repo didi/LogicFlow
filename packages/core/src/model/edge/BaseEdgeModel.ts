@@ -13,6 +13,7 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
+import { formatData } from '../../util/compatible';
 
 const defaultData = {
   sourceNodeId: '',
@@ -71,23 +72,12 @@ class BaseEdgeModel implements IBaseModel {
       'sourceNodeId',
       'targetNodeId',
       'pointsList',
+      'startPoint',
+      'endPoint',
       'properties',
     ]));
     if (data.text) {
       this.text = data.text;
-    }
-    // 修复vue项目传入的是响应式对象导致最终获取数据是错误的情况。
-    if (data.startPoint) {
-      this.startPoint = {
-        x: data.startPoint.x,
-        y: data.startPoint.y,
-      };
-    }
-    if (data.endPoint) {
-      this.endPoint = {
-        x: data.endPoint.x,
-        y: data.endPoint.y,
-      };
     }
     this.graphModel = graphModel;
   }
@@ -183,14 +173,15 @@ class BaseEdgeModel implements IBaseModel {
   /* 更新数据 */
   @action
   updateData(edgeAttribute: EdgeAttribute): void {
-    const nodeData = pick(edgeAttribute,
+    // formatData兼容vue数据
+    const nodeData = formatData(pick(edgeAttribute,
       'type',
       'sourceNodeId',
       'targetNodeId',
       'startPoint',
       'endPoint',
       'text',
-      'properties');
+      'properties'));
     assign(this, nodeData);
   }
 

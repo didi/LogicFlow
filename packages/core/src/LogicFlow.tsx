@@ -33,6 +33,7 @@ import History from './history/History';
 import Tool from './tool';
 import EventEmitter, { CallbackType } from './event/eventEmitter';
 import Keyboard from './keyboard';
+import { formatData } from './util/compatible';
 
 import {
   EdgeConfig,
@@ -225,17 +226,18 @@ export default class LogicFlow {
 
   undo() {
     if (!this.history.undoAble()) return;
-    const graphData = this.history.undo();
+    // formatData兼容vue数据
+    const graphData = formatData(this.history.undo());
     this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
   redo() {
     if (!this.history.redoAble()) return;
-    const graphData = this.history.redo();
+    // formatData兼容vue数据
+    const graphData = formatData(this.history.redo());
     this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
-
   /**
    * 放大缩小图形
    * isZoomIn 是否放大，默认false, 表示缩小。
