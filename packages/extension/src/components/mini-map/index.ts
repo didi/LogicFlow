@@ -7,8 +7,7 @@ const MiniMap = {
     MiniMap.__lf = lf;
     MiniMap.__container = container;
   },
-  __createMiniMap(left = 100, top = 100) {
-    console.log(1);
+  __createMiniMap(left, top) {
     const miniMapWrap = document.createElement('div');
     miniMapWrap.className = 'lf-mini-map';
     miniMapWrap.style.left = `${left}px`;
