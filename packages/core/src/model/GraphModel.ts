@@ -16,6 +16,7 @@ import EventEmitter from '../event/eventEmitter';
 import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
+import { formatData } from '../util/compatible';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -316,13 +317,14 @@ class GraphModel {
 
   @action
   addNode(nodeConfig: NodeConfig) {
+    const nodeOriginData = formatData(nodeConfig);
     // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
-    if (nodeConfig.id && this.nodesMap[nodeConfig.id]) {
-      delete nodeConfig.id;
+    if (nodeOriginData.id && this.nodesMap[nodeConfig.id]) {
+      delete nodeOriginData.id;
     }
-    const Model = this.getModel(nodeConfig.type);
+    const Model = this.getModel(nodeOriginData.type);
     // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
-    const nodeModel = new Model(nodeConfig, this);
+    const nodeModel = new Model(nodeOriginData, this);
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();
     this.eventCenter.emit(EventType.NODE_ADD, { data: nodeData });
@@ -371,16 +373,17 @@ class GraphModel {
 
   @action
   createEdge(edgeConfig: EdgeConfig): EdgeConfig {
+    const edgeOriginData = formatData(edgeConfig);
     // 边的类型优先级：自定义>全局>默认
-    let { type } = edgeConfig;
+    let { type } = edgeOriginData;
     if (!type) {
       type = this.edgeType;
     }
-    if (edgeConfig.id && this.edgesMap[edgeConfig.id]) {
-      delete edgeConfig.id;
+    if (edgeOriginData.id && this.edgesMap[edgeOriginData.id]) {
+      delete edgeOriginData.id;
     }
     const Model = this.getModel(type);
-    const edgeModel = new Model({ ...edgeConfig, type }, this);
+    const edgeModel = new Model({ ...edgeOriginData, type }, this);
     const edgeData = edgeModel.getData();
     this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     this.edges.push(edgeModel);
