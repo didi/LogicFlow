@@ -1,5 +1,6 @@
 window.onload = function () {
   LogicFlow.use(RectLabelNode);
+  LogicFlow.use(ResizeNode);
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
     width: 700,
