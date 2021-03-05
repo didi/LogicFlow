@@ -8,6 +8,7 @@
   margin: 5px;
   position: absolute;
   right: 10px;
+  top: 0;
 }
 .lf-control-item {
   display: flex;
@@ -139,4 +140,15 @@
 .lf-selection-select {
   border: 2px dashed darkorange;
   position: absolute;
+}
+.lf-mini-map {
+  width: 150px;
+  height: 200px;
+  border: 1px solid #93a3b4;
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  border: 1px solid #999;
+  -webkit-box-shadow: 0 4px 8px 0 rgb(0 0 0 / 33%);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.33);
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 33%);
 }
