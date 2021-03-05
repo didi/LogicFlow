@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.7...@logicflow/core@0.2.8) (2021-03-05)
+
+
+### Bug Fixes
+
+* **core:** Compatible with the data of the vue project ([4d94215](https://github.com/didi/LogicFlow/commit/4d9421522444915ddb5534836c93ccf0b199481d))
+* **core:** Fix the problem of invalid property settings in addNode and createEdge function ([54eb760](https://github.com/didi/LogicFlow/commit/54eb760b8e2d56fcc10ae1171427b275441e31c3))
+* **core:** Pick standardized data in the constructor function of nodeModel ([fc6f6d7](https://github.com/didi/LogicFlow/commit/fc6f6d74968425e272b805c76692469dad449f53))
+* 🐛 lack the outline style of edge ([babeaac](https://github.com/didi/LogicFlow/commit/babeaac2b6a4e9b864df0e740deddc9a6a21dfb9))
+* 🐛 the render err of diamond ([01c85bb](https://github.com/didi/LogicFlow/commit/01c85bbee091222c3772dbf6cc3de282d2f7d097))
+
+
+
+
+
 ## [0.2.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.6...@logicflow/core@0.2.7) (2021-03-01)
 
 

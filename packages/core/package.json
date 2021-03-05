@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "license": "Apache 2.0",
@@ -54,7 +54,14 @@
     "eslint-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
+    "ids": "^1.0.0",
     "less-loader": "^6.0.0",
+    "lodash-es": "^4.17.15",
+    "mobx": "^5.15.7",
+    "mobx-react": "^6.3.0",
+    "mobx-utils": "^5.6.1",
+    "mousetrap": "^1.6.5",
+    "preact": "^10.4.8",
     "prettier": "^2.2.1",
     "standard-version": "^9.0.0",
     "style-loader": "^1.2.0",
@@ -62,18 +69,11 @@
     "terser-webpack-plugin": "^4.2.3",
     "typescript": "^3.8.3",
     "url-loader": "^4.1.0",
+    "uuid": "^8.2.0",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "ids": "^1.0.0",
-    "lodash-es": "^4.17.15",
-    "mobx": "^5.15.7",
-    "mobx-react": "^6.3.0",
-    "mobx-utils": "^5.6.1",
-    "mousetrap": "^1.6.5",
-    "preact": "^10.4.8",
-    "uuid": "^8.2.0"
+    "webpack-dev-server": "^3.10.3"
   },
   "browserslist": [
     "> 3%",
@@ -86,7 +86,6 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "dependencies": {},
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
