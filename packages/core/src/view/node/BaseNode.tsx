@@ -251,12 +251,12 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       if (editConfig.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
-        eventCenter.emit(EventType.NODE_DBCLICK, {
-          data: nodeData,
-          e,
-          position,
-        });
       }
+      eventCenter.emit(EventType.NODE_DBCLICK, {
+        data: nodeData,
+        e,
+        position,
+      });
     } else {
       this.clickTimer = window.setTimeout(() => {
         // 节点右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
