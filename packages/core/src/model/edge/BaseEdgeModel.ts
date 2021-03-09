@@ -162,7 +162,7 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   setProperty(key, val): void {
-    this.properties[key] = val;
+    this.properties[key] = formatData(val);
   }
 
   @action
@@ -174,7 +174,7 @@ class BaseEdgeModel implements IBaseModel {
   @action
   updateData(edgeAttribute: EdgeAttribute): void {
     // formatData兼容vue数据
-    const nodeData = formatData(pick(edgeAttribute,
+    const edgeData = formatData(pick(edgeAttribute,
       'type',
       'sourceNodeId',
       'targetNodeId',
@@ -182,7 +182,30 @@ class BaseEdgeModel implements IBaseModel {
       'endPoint',
       'text',
       'properties'));
-    assign(this, nodeData);
+    // 兼容text, object/string类型
+    const {
+      x,
+      y,
+      draggable,
+      editable,
+    } = this.text;
+    if (edgeData.text && typeof edgeData.text === 'string') {
+      const text = {
+        value: edgeData.text,
+        draggable,
+        editable,
+      };
+      const textPostion = this.textPosition;
+      if (!x && !y) {
+        edgeData.text = { ...text, ...textPostion };
+      } else {
+        edgeData.text = { ...text, x, y };
+      }
+    } else if (typeof edgeData.text === 'object') {
+      const text = { ...this.text, ...edgeData.text };
+      edgeData.text = pick(text, 'x', 'y', 'value', 'draggable', 'editable');
+    }
+    assign(this, edgeData);
   }
 
   @action

@@ -379,7 +379,7 @@ export default class LogicFlow {
   }
 
   setProperties(id: string, properties: Object): void {
-    this.graphModel.getElement(id)?.setProperties(properties);
+    this.graphModel.getElement(id)?.setProperties(formatData(properties));
   }
 
   getProperties(id: string): Object {
