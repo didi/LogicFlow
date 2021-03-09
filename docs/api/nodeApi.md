@@ -38,6 +38,9 @@ Logic Flow 的内置节点包括
 | strokeWidth | number  | ✅ | 节点边框宽度 |
 | opacity | number  | ✅ | 节点整体透明度 |
 | outlineColor | color  | ✅ | 外框颜色 |
+| hoverOutlineColor | color  | ✅ | hover外边框颜色 |
+| outlineStrokeDashArray | string  | ✅ | 控制用来描外边框的点划线的图案范式, 设置为空是为实线 |
+| hoverOutlineStrokeDashArray | string  | ✅ | 控制用来描hover外边框的点划线的图案范式, 设置为空是为实线 |
   
 ### 附加属性
 
