@@ -39,6 +39,7 @@ export type TextConfig = {
   value: string;
 } & Point;
 
+// 节点数据属性
 export type NodeConfig = {
   id?: string;
   type: string;
@@ -57,7 +58,6 @@ export type NodeData = {
   ry?: number;
   text?: TextConfig;
   properties: Record<string, unknown>;
-  baseType?: 'node' | 'edge' | 'graph'; // todo: 问一下为啥这里要导出baseType
 };
 // 修改节点数据的参数
 export type NodeAttribute = {
@@ -129,6 +129,7 @@ export type EdgeConfig = {
   properties?: Record<string, unknown>;
 };
 
+// 节点样式属性
 export type CommonStyle = {
   fill?: string,
   stroke?: string,

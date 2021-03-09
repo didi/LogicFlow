@@ -4,7 +4,7 @@ import { NodeData, Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig } from '../../util/node';
+import { pickNodeConfig, pickAttributes } from '../../util/node';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
@@ -14,7 +14,13 @@ class DiamondNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('diamond', graphModel);
-    assign(this, pickNodeConfig(data));
+    const attrs = this.setAttributes(data);
+    assign(this, pickNodeConfig(data), pickAttributes(attrs));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setAttributes(data: NodeData) {
+    return {};
   }
 
   getData(): NodeData {

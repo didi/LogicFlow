@@ -353,3 +353,33 @@ export const pickNodeConfig = (data): NodeConfig => {
   ]);
   return nodeData;
 };
+
+// 规范自定义样式属性
+export const pickAttributes = (data) => pick(data, [
+  // 数据属性
+  'id',
+  'type',
+  'x',
+  'y',
+  'text',
+  'properties',
+  // 样式属性
+  'width',
+  'height',
+  'fill',
+  'fillOpacity',
+  'stroke',
+  'strokeWidth',
+  'strokeOpactiy',
+  'opacity',
+  'outlineColor',
+  'hoverOutlineColor',
+  'outlineStrokeDashArray',
+  'hoverOutlineStrokeDashArray',
+  // 节点属性
+  'radius',
+  'r',
+  'rx',
+  'ry',
+  'points',
+]);

@@ -127,43 +127,14 @@
           }
         }
         class UserModel extends RectNodeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
+          setAttributes(data) {
             const { size } = data.properties;
-            this.width = size * 40;
-            this.height = size * 40;
-            this.fill = 'green';
-            this.radius = 0;
-            this.menu = [
-              {
-                text: 'delete',
-                className: 'lf-menu-item',
-                callback(node) {
-                  const comfirm = window.confirm('你确定要删除吗？')
-                  comfirm && lf.deleteNode(node.id)
-                },
-              },
-              {
-                text: 'edit',
-                className: 'lf-menu-item',
-                callback(node) {
-                  lf.editNodeText(node.id)
-                },
-              },
-              {
-                text: 'copy',
-                className: 'lf-menu-item',
-                callback: function (node) {
-                  // 自定义User节点带有复制功能
-                  // 复制的时候，将背复制节点状态设置未选中和不显示菜单模式
-                  node.setSelected(false);
-                  const ElementStateDefault = 1;
-                  node.setElementState(ElementStateDefault);
-                  const newNode = lf.cloneNode(node.id);
-                  newNode.setSelected(true);
-                },
-              },
-            ]
+            return {
+              width: size * 40,
+              height: size * 40,
+              fill: 'green',
+              radius: 0
+            };
           }
         }
         return {
@@ -194,11 +165,12 @@
         }
 
         class CombineModel extends BaseNodeModel {
-          constructor(data) {
-            super(data);
-            this.width = 50;
-            this.height = 60;
-            this.fill = 'orange';
+          setAttributes(data) {
+            return {
+              width: 50,
+              height: 60,
+              fill: 'orange'
+            }
           }
 
           get anchors() {
@@ -221,20 +193,21 @@
         };
       });
       lf.register('star', ({ PolygonNode, PolygonNodeModel, h, }) => {
-        class StarNode extends PolygonNode {
-        }
+        class StarNode extends PolygonNode { }
         class StarModel extends PolygonNodeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
-            this.points = [
-              [45, 0],
-              [20, 90],
-              [90, 30],
-              [0, 30],
-              [80, 90]
-            ];
-            this.fill = '#456789';
-            this.stroke = this.fill;
+          setAttributes(data) {
+            return {
+              points: [
+                [45, 0],
+                [20, 90],
+                [90, 30],
+                [0, 30],
+                [80, 90]
+              ],
+              fill: '#456789',
+              stroke: '#456789',
+              fontSize: 40
+            }
           }
         }
         return {
@@ -255,11 +228,7 @@
             };
           }
         }
-        class ConnnectionModel extends LineEdgeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
-          }
-        }
+        class ConnnectionModel extends LineEdgeModel { }
         return {
           view: Connection,
           model: ConnnectionModel,

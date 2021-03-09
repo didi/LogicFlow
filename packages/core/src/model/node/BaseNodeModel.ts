@@ -12,7 +12,7 @@ import {
 } from '../../type';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
-import { pickNodeConfig } from '../../util/node';
+import { pickNodeConfig, pickAttributes } from '../../util/node';
 
 const defaultConfig = assign(
   {
@@ -84,7 +84,8 @@ export default class BaseNodeModel implements IBaseModel {
     if (!data.properties) {
       data.properties = {};
     }
-    assign(this, pickNodeConfig(data));
+    const attrs = this.setAttributes(data);
+    assign(this, pickNodeConfig(data), pickAttributes(attrs));
   }
 
   // 格式化text参数，未修改observable不作为action
@@ -109,6 +110,11 @@ export default class BaseNodeModel implements IBaseModel {
     } else if (data.text && data.text.editable === undefined) {
       data.text.editable = true;
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setAttributes(data: NodeData) {
+    return {};
   }
 
   /**

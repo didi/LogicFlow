@@ -1,11 +1,11 @@
 import { computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
-import { Point } from '../../type';
+import { Point, NodeData } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig } from '../../util/node';
+import { pickNodeConfig, pickAttributes } from '../../util/node';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
@@ -16,7 +16,13 @@ class RectNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data);
     this.setStyleFromTheme('rect', graphModel);
-    assign(this, pickNodeConfig(data));
+    const attrs = this.setAttributes(data);
+    assign(this, pickNodeConfig(data), pickAttributes(attrs));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setAttributes(data: NodeData) {
+    return {};
   }
 
   @computed get anchors(): Point[] {
