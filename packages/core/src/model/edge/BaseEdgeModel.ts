@@ -14,6 +14,7 @@ import {
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
+import { pickEdgeConfig, pickEdgeAttributes } from '../../util/edge';
 
 const defaultData = {
   sourceNodeId: '',
@@ -64,23 +65,21 @@ class BaseEdgeModel implements IBaseModel {
   @observable points = defaultData.points;
   @observable pointsList = defaultData.pointsList;
   @observable draggable = true;
+
   constructor(data, graphModel: GraphModel) {
-    // todo: 规范所有的初始化参数
-    assign(this, pick(data, [
-      'id',
-      'type',
-      'sourceNodeId',
-      'targetNodeId',
-      'pointsList',
-      'startPoint',
-      'endPoint',
-      'properties',
-    ]));
-    if (data.text) {
-      this.text = data.text;
-    }
     this.graphModel = graphModel;
+    if (!data.properties) {
+      data.properties = {};
+    }
+    const attrs = this.setAttributes(data);
+    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setAttributes(data) {
+    return {};
+  }
+
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
   }

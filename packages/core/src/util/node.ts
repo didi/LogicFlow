@@ -354,8 +354,8 @@ export const pickNodeConfig = (data): NodeConfig => {
   return nodeData;
 };
 
-// 规范自定义样式属性
-export const pickAttributes = (data) => pick(data, [
+// 规范自定义节点的 model 属性
+export const pickNodeAttributes = (data) => pick(data, [
   // 数据属性
   'id',
   'type',

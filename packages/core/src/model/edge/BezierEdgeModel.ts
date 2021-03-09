@@ -1,8 +1,11 @@
 import { action, computed, observable } from 'mobx';
+import { assign } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
-import { getBezierControlPoints, IBezierControls } from '../../util/edge';
+import {
+  getBezierControlPoints, IBezierControls, pickEdgeConfig, pickEdgeAttributes,
+} from '../../util/edge';
 import { defaultTheme } from '../../constant/DefaultTheme';
 
 export { BezierEdgeModel };
@@ -14,6 +17,8 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel) {
     super(data, graphModel);
     this.setStyleFromTheme('bezier', graphModel);
+    const attrs = this.setAttributes(data);
+    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
     this.setAnchors();
     this.formatText(data);
     this.initPoints();

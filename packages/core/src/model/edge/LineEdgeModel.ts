@@ -1,7 +1,9 @@
 import { computed } from 'mobx';
+import { assign } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
+import { pickEdgeConfig, pickEdgeAttributes } from '../../util/edge';
 
 export { LineEdgeModel };
 export default class LineEdgeModel extends BaseEdgeModel {
@@ -9,6 +11,8 @@ export default class LineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel) {
     super(data, graphModel);
     this.setStyleFromTheme('line', graphModel);
+    const attrs = this.setAttributes(data);
+    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
     this.setAnchors();
     this.formatText(data);
   }

@@ -165,7 +165,7 @@
         }
 
         class CombineModel extends BaseNodeModel {
-          setAttributes(data) {
+          setAttributes() {
             return {
               width: 50,
               height: 60,
@@ -195,7 +195,7 @@
       lf.register('star', ({ PolygonNode, PolygonNodeModel, h, }) => {
         class StarNode extends PolygonNode { }
         class StarModel extends PolygonNodeModel {
-          setAttributes(data) {
+          setAttributes() {
             return {
               points: [
                 [45, 0],
@@ -206,7 +206,6 @@
               ],
               fill: '#456789',
               stroke: '#456789',
-              fontSize: 40
             }
           }
         }

@@ -12,7 +12,7 @@ import {
 } from '../../type';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
-import { pickNodeConfig, pickAttributes } from '../../util/node';
+import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
 
 const defaultConfig = assign(
   {
@@ -85,7 +85,7 @@ export default class BaseNodeModel implements IBaseModel {
       data.properties = {};
     }
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickAttributes(attrs));
+    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
   }
 
   // 格式化text参数，未修改observable不作为action

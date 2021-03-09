@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import { assign } from 'lodash-es';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -20,6 +21,8 @@ import {
   segmentDirection,
   poins2PointsList,
   pointFilter,
+  pickEdgeConfig,
+  pickEdgeAttributes,
 } from '../../util/edge';
 import RectNodeModel from '../node/RectNodeModel';
 import BaseEdgeModel from './BaseEdgeModel';
@@ -36,6 +39,8 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel);
     this.setStyleFromTheme('polyline', graphModel);
+    const attrs = this.setAttributes(data);
+    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
     this.setAnchors();
     this.initPoints();
     this.formatText(data);

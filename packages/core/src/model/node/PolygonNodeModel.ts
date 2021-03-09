@@ -1,10 +1,10 @@
 import { computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
-import { Point, PointTuple, NodeData } from '../../type';
+import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig, pickAttributes } from '../../util/node';
+import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -19,12 +19,7 @@ class PolygonNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('polygon', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickAttributes(attrs));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAttributes(data: NodeData) {
-    return {};
+    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
   }
 
   @computed get pointsPosition(): Point[] {

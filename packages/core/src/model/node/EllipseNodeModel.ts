@@ -1,11 +1,11 @@
 import { computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
-import { Point, NodeData } from '../../type';
+import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig, pickAttributes } from '../../util/node';
+import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
 
 class EllipseNodeModel extends BaseNodeModel {
   modelType = ModelType.ELLIPSE_NODE;
@@ -16,12 +16,7 @@ class EllipseNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('ellipse', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickAttributes(attrs));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAttributes(data: NodeData) {
-    return {};
+    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
   }
 
   @computed get width(): number {
