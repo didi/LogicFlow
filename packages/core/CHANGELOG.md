@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.8...@logicflow/core@0.2.9) (2021-03-10)
+
+
+### Bug Fixes
+
+* 🐛 no dbclick event was triggered when textEdit is false ([f295def](https://github.com/didi/LogicFlow/commit/f295def99aae5f92394056066884faf8d2967495))
+* **core:** Fix the problem of invalid property settings in setProperties function ([3e28d4e](https://github.com/didi/LogicFlow/commit/3e28d4e8b0153830c8277bd81f0259374fa23b71))
+
+
+
+
+
 ## [0.2.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.7...@logicflow/core@0.2.8) (2021-03-05)
 
 
