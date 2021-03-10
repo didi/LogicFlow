@@ -28,6 +28,7 @@ export default class PolylineEdge extends BaseEdge {
       onDragStart: this.onDragStart,
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
+      isStopPropagation: false,
     });
   }
   onDragStart = () => {
@@ -51,11 +52,11 @@ export default class PolylineEdge extends BaseEdge {
     // 情况当前拖拽的线段信息
     this.appendInfo = undefined;
   };
-  beforeDragStart(e, appendInfo) {
+  beforeDragStart = (e, appendInfo) => {
     this.dragHandler(e);
     // 记录当前拖拽的线段信息
     this.appendInfo = appendInfo;
-  }
+  };
   getAttributes() {
     const attr = super.getAttributes();
     const {

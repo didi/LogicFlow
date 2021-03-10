@@ -98,6 +98,9 @@
       window.redo = function redo() {
         lf.redo()
       }
+      window.consolelog = function consolelog(msg) {
+        console.log(msg)
+      }
       lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
         document.getElementById('undo').disabled = !undoAble
         document.getElementById('redo').disabled = !redoAble
@@ -379,6 +382,12 @@
         targetNodeId: 21,
         text: '222',
       });
+      lf.createEdge({
+        sourceNodeId: 10,
+        targetNodeId: 50,
+        text: '222',
+        type: 'bezier'
+      });
       console.log(lf.graphModel);
       // lf.on('node:mouseup',()=> {
       //   console.log('nodeup')
@@ -404,9 +413,15 @@
       // lf.on('node:click', () => {
       //   console.log('node:click')
       // })
-      // lf.on('edge:click', () => {
-      //   console.log('edge:click')
-      // })
+      lf.on('edge:click', () => {
+        console.log('edge:click')
+      })
+      lf.on('edge:dbclick', () => {
+        console.log('edge:dbclick')
+      })
+      lf.on('edge:contextmenu', () => {
+        console.log('edge:contextmenu')
+      })
       // lf.on('element:click', () => {
       //   console.log('element:click')
       // })

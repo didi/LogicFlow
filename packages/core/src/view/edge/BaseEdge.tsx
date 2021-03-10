@@ -17,6 +17,10 @@ type IProps = {
 };
 
 export default class BaseEdge extends Component<IProps> {
+  startTime: number;
+  preStartTime: number;
+  contextMenuTime: number;
+  clickTimer: number;
   getAttributes() {
     const {
       model: {
@@ -124,10 +128,6 @@ export default class BaseEdge extends Component<IProps> {
     return (
       <g
         className="lf-edge-append"
-        onDblClick={this.handleDbClick}
-        onContextMenu={this.handleContextMenu}
-        onMouseEnter={this.setHoverON}
-        onMouseLeave={this.setHoverOFF}
       >
         {this.getAppendWidth()}
       </g>
@@ -149,57 +149,12 @@ export default class BaseEdge extends Component<IProps> {
   setHoverOFF = (ev) => {
     this.handleHover(false, ev);
   };
-  handleDbClick = (e: MouseEvent) => {
-    const { model, graphModel, eventCenter } = this.props;
-    const { editConfig, textEditElement } = graphModel;
-    // 当前连线正在编辑，需要先重置状态才能变更文本框位置
-    if (textEditElement && textEditElement.id === model.id) {
-      graphModel.setElementStateById(model.id, ElementState.DEFAULT);
-    }
-    // 边文案可编辑状态，才可以进行文案编辑
-    if (editConfig.edgeTextEdit && model.text.editable) {
-      graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
-    }
-    if (model.modelType === ModelType.POLYLINE_EDGE) {
-      const polylineEdgeModel = model as PolylineEdgeModel;
-      const { canvasOverlayPosition: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
-      const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
-      polylineEdgeModel.dbClickPosition = crossPoint;
-    }
-    graphModel.toFront(model.id);
-    graphModel.selectEdgeById(model.id);
-    // 边数据
-    const edgeData = model?.getData();
-    eventCenter.emit(EventType.EDGE_DBCLICK, {
-      data: edgeData,
-      e,
-    });
-  };
-  handleClick = (e) => {
-    const { model, graphModel, eventCenter } = this.props;
-    graphModel.toFront(model.id);
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    // 边数据
-    const edgeData = model?.getData();
-    const position = graphModel.getPointByClient({
-      x: e.clientX,
-      y: e.clientY,
-    });
-    eventCenter.emit(EventType.ELEMENT_CLICK, {
-      data: edgeData,
-      e,
-      position,
-    });
-    eventCenter.emit(EventType.EDGE_CLICK, {
-      data: edgeData,
-      e,
-      position,
-    });
-  };
   // 右键点击节点，设置节点未现在菜单状态
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
+    // 节点右击也会触发时间，区分右击和点击(mouseup)
+    this.contextMenuTime = new Date().getTime();
+    if (this.clickTimer) { clearTimeout(this.clickTimer); }
     const { model, graphModel, eventCenter } = this.props;
     const position = graphModel.getPointByClient({
       x: ev.clientX,
@@ -216,11 +171,77 @@ export default class BaseEdge extends Component<IProps> {
       position,
     });
   };
+  handleMouseDown = () => {
+    this.startTime = new Date().getTime();
+  };
+  handleMouseUp = (e: MouseEvent) => {
+    if (!this.startTime) return;
+    const time = new Date().getTime() - this.startTime;
+    if (time > 200) return; // 事件大于200ms，认为是拖拽。
+    const { model, graphModel, eventCenter } = this.props;
+    const edgeData = model?.getData();
+    const position = graphModel.getPointByClient({
+      x: e.clientX,
+      y: e.clientY,
+    });
+    if (this.preStartTime && this.startTime - this.preStartTime < 200) {
+      if (this.clickTimer) { window.clearTimeout(this.clickTimer); }
+      const { editConfig, textEditElement } = graphModel;
+      // 当前连线正在编辑，需要先重置状态才能变更文本框位置
+      if (textEditElement && textEditElement.id === model.id) {
+        graphModel.setElementStateById(model.id, ElementState.DEFAULT);
+      }
+      // 边文案可编辑状态，才可以进行文案编辑
+      if (editConfig.edgeTextEdit && model.text.editable) {
+        graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
+      }
+      if (model.modelType === ModelType.POLYLINE_EDGE) {
+        const polylineEdgeModel = model as PolylineEdgeModel;
+        const { canvasOverlayPosition: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
+        const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
+        polylineEdgeModel.dbClickPosition = crossPoint;
+      }
+      graphModel.selectEdgeById(model.id);
+      eventCenter.emit(EventType.EDGE_DBCLICK, {
+        data: edgeData,
+        e,
+        position,
+      });
+    } else {
+      this.clickTimer = window.setTimeout(() => {
+        // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
+        if (!this.contextMenuTime || this.startTime > this.contextMenuTime) {
+          const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+          graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
+          // 边数据
+          eventCenter.emit(EventType.ELEMENT_CLICK, {
+            data: edgeData,
+            e,
+            position,
+          });
+          eventCenter.emit(EventType.EDGE_CLICK, {
+            data: edgeData,
+            e,
+            position,
+          });
+        }
+      }, 400);
+    }
+    graphModel.toFront(model.id);
+    this.preStartTime = this.startTime;
+  };
+
   render() {
+    const { model } = this.props;
     return (
       <g
         className="lf-edge"
-        onClick={this.handleClick}
+        id={model.id}
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
+        onContextMenu={this.handleContextMenu}
+        onMouseEnter={this.setHoverON}
+        onMouseLeave={this.setHoverOFF}
       >
         {this.getShape()}
         {this.getAppend()}

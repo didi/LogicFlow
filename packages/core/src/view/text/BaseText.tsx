@@ -26,6 +26,7 @@ export default class BaseText extends Component<IProps> {
       onDraging: this.onDraging,
       step: 1,
       model,
+      isStopPropagation: false,
     });
   }
   getShape() {
