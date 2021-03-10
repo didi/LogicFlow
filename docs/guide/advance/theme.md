@@ -446,7 +446,7 @@ lf.setTheme({
 
 ```ts
 lf.setTheme({
-  nodeText: {
+  edgeText: {
     color: '#000000',
     fontSize: 12,
     fontWeight: 'normal',
