@@ -844,27 +844,3 @@ export const pickEdgeConfig = (data): EdgeConfig => pick(data, [
   'text',
   'properties',
 ]);
-
-export const pickEdgeAttributes = (data) => pick(data, [
-  // 数据属性
-  'id',
-  'type',
-  'sourceNodeId',
-  'targetNodeId',
-  'startPoint',
-  'endPoint',
-  'text',
-  'properties',
-  // 样式属性
-  'fill',
-  'fillOpacity',
-  'stroke',
-  'strokeWidth',
-  'strokeOpactiy',
-  'hoverStroke',
-  'selectedStroke',
-  // 边属性
-  'pointsList',
-  'offset',
-  'draginngPointList',
-]);

@@ -3,7 +3,7 @@ import { assign } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
-import { pickEdgeConfig, pickEdgeAttributes } from '../../util/edge';
+import { pickEdgeConfig } from '../../util/edge';
 
 export { LineEdgeModel };
 export default class LineEdgeModel extends BaseEdgeModel {
@@ -12,7 +12,7 @@ export default class LineEdgeModel extends BaseEdgeModel {
     super(data, graphModel);
     this.setStyleFromTheme('line', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
+    assign(this, pickEdgeConfig(data), attrs);
     this.setAnchors();
     this.formatText(data);
   }

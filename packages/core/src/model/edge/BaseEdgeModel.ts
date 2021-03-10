@@ -14,7 +14,7 @@ import {
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
-import { pickEdgeConfig, pickEdgeAttributes } from '../../util/edge';
+import { pickEdgeConfig } from '../../util/edge';
 
 const defaultData = {
   sourceNodeId: '',
@@ -72,7 +72,7 @@ class BaseEdgeModel implements IBaseModel {
       data.properties = {};
     }
     const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
+    assign(this, pickEdgeConfig(data), attrs);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

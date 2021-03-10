@@ -22,7 +22,6 @@ import {
   poins2PointsList,
   pointFilter,
   pickEdgeConfig,
-  pickEdgeAttributes,
 } from '../../util/edge';
 import RectNodeModel from '../node/RectNodeModel';
 import BaseEdgeModel from './BaseEdgeModel';
@@ -40,7 +39,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     super(data, graphModel);
     this.setStyleFromTheme('polyline', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
+    assign(this, pickEdgeConfig(data), attrs);
     this.setAnchors();
     this.initPoints();
     this.formatText(data);

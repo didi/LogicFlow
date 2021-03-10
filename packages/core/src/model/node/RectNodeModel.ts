@@ -5,7 +5,7 @@ import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
@@ -17,15 +17,24 @@ class RectNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('rect', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   @computed get anchors(): Point[] {
+    const {
+      anchorsOffset, x, y, width, height,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
     return [
-      { x: this.x, y: this.y - this.height / 2 },
-      { x: this.x + this.width / 2, y: this.y },
-      { x: this.x, y: this.y + this.height / 2 },
-      { x: this.x - this.width / 2, y: this.y },
+      { x, y: y - height / 2 },
+      { x: x + width / 2, y },
+      { x, y: y + height / 2 },
+      { x: x - width / 2, y },
     ];
   }
 }

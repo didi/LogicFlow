@@ -12,7 +12,7 @@ import {
 } from '../../type';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 const defaultConfig = assign(
   {
@@ -73,8 +73,8 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable isContextMenu = false;
   @observable zIndex = defaultConfig.zIndex;
-  @observable anchors = [];
   @observable activeAnchor = -1;
+  @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
   @observable state = 1;
   @observable text = defaultConfig.text;
   @observable draggable = true;
@@ -85,7 +85,7 @@ export default class BaseNodeModel implements IBaseModel {
       data.properties = {};
     }
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   // 格式化text参数，未修改observable不作为action

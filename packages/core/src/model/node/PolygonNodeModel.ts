@@ -4,7 +4,7 @@ import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -19,7 +19,7 @@ class PolygonNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('polygon', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   @computed get pointsPosition(): Point[] {
@@ -59,9 +59,18 @@ class PolygonNodeModel extends BaseNodeModel {
     return max - min;
   }
   @computed get anchors(): Point[] {
-    return this.points.map(([x1, y1]) => ({
-      x: this.x + x1 - this.width / 2,
-      y: this.y + y1 - this.height / 2,
+    const {
+      anchorsOffset, x, y, width, height, points,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
+    return points.map(([x1, y1]) => ({
+      x: x + x1 - width / 2,
+      y: y + y1 - height / 2,
     }));
   }
 }

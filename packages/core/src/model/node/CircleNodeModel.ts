@@ -5,7 +5,7 @@ import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 class CircleNodeModel extends BaseNodeModel {
   modelType = ModelType.CIRCLE_NODE;
@@ -15,7 +15,7 @@ class CircleNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('circle', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   @computed get width(): number {
@@ -25,11 +25,20 @@ class CircleNodeModel extends BaseNodeModel {
     return this.r * 2;
   }
   @computed get anchors(): Point[] {
+    const {
+      anchorsOffset, x, y, r,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
     return [
-      { x: this.x, y: this.y - this.r },
-      { x: this.x + this.r, y: this.y },
-      { x: this.x, y: this.y + this.r },
-      { x: this.x - this.r, y: this.y },
+      { x, y: y - r },
+      { x: x + r, y },
+      { x, y: y + r },
+      { x: x - r, y },
     ];
   }
 }

@@ -4,7 +4,7 @@ import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
 import {
-  getBezierControlPoints, IBezierControls, pickEdgeConfig, pickEdgeAttributes,
+  getBezierControlPoints, IBezierControls, pickEdgeConfig,
 } from '../../util/edge';
 import { defaultTheme } from '../../constant/DefaultTheme';
 
@@ -18,7 +18,7 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     super(data, graphModel);
     this.setStyleFromTheme('bezier', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), pickEdgeAttributes(attrs));
+    assign(this, pickEdgeConfig(data), attrs);
     this.setAnchors();
     this.formatText(data);
     this.initPoints();

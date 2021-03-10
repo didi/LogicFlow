@@ -4,7 +4,7 @@ import { NodeData, Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
@@ -15,7 +15,7 @@ class DiamondNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('diamond', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   getData(): NodeData {
@@ -73,7 +73,16 @@ class DiamondNodeModel extends BaseNodeModel {
   }
 
   @computed get anchors(): Point[] {
-    return this.points.map(([x, y]) => ({ x, y }));
+    const {
+      anchorsOffset, x, y, points,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
+    return points.map(([x1, y1]) => ({ x: x1, y: y1 }));
   }
 }
 

@@ -5,7 +5,7 @@ import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig, pickNodeAttributes } from '../../util/node';
+import { pickNodeConfig } from '../../util/node';
 
 class EllipseNodeModel extends BaseNodeModel {
   modelType = ModelType.ELLIPSE_NODE;
@@ -16,7 +16,7 @@ class EllipseNodeModel extends BaseNodeModel {
     super(data);
     this.setStyleFromTheme('ellipse', graphModel);
     const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), pickNodeAttributes(attrs));
+    assign(this, pickNodeConfig(data), attrs);
   }
 
   @computed get width(): number {
@@ -26,11 +26,20 @@ class EllipseNodeModel extends BaseNodeModel {
     return this.ry * 2;
   }
   @computed get anchors(): Point[] {
+    const {
+      anchorsOffset, x, y, rx, ry,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
     return [
-      { x: this.x, y: this.y - this.ry },
-      { x: this.x + this.rx, y: this.y },
-      { x: this.x, y: this.y + this.ry },
-      { x: this.x - this.rx, y: this.y },
+      { x, y: y - ry },
+      { x: x + rx, y },
+      { x, y: y + ry },
+      { x: x - rx, y },
     ];
   }
 }
