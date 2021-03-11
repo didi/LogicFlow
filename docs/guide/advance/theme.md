@@ -499,7 +499,7 @@ lf.setTheme({
 lf.setTheme({
   snapline: {
     stroke: '#1E90FF', // 对齐线颜色
-    verticalLength: 1, // 对齐线宽度
+    strokeWidth: 1, // 对齐线宽度
   },
 })
 ```
