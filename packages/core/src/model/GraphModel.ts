@@ -301,12 +301,6 @@ class GraphModel {
   }
 
   @action
-  showMenu(id) {
-    this.nodes.forEach((node) => node.showMenu(node.id === id));
-    // this.edges.forEach((edge) => edge.showMenu(edge.id === id));
-  }
-
-  @action
   deleteNode(id) {
     const nodeData = this.nodesMap[id].model.getData();
     this.removeEdgeBySource(id);

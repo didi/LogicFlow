@@ -71,7 +71,6 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable isContextMenu = false;
   @observable zIndex = defaultConfig.zIndex;
   @observable activeAnchor = -1;
   @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
@@ -275,11 +274,6 @@ export default class BaseNodeModel implements IBaseModel {
   setElementState(state: ElementState, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
-  }
-
-  @action
-  showMenu(flag = true): void {
-    this.isContextMenu = flag;
   }
 
   @action
