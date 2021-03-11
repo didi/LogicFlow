@@ -422,9 +422,15 @@
       lf.on('edge:contextmenu', () => {
         console.log('edge:contextmenu')
       })
-      // lf.on('element:click', () => {
-      //   console.log('element:click')
-      // })
+      lf.on('element:click', () => {
+        console.log('element:click')
+      })
+      lf.on('blank:mousedown', () => {
+        console.log('blank:mousedown')
+      })
+      lf.on('blank:mouseup', () => {
+        console.log('blank:mouseup')
+      })
     }
 
   </script>

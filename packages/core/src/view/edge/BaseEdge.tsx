@@ -171,7 +171,8 @@ export default class BaseEdge extends Component<IProps> {
       position,
     });
   };
-  handleMouseDown = () => {
+  handleMouseDown = (e) => {
+    e.stopPropagation();
     this.startTime = new Date().getTime();
   };
   handleMouseUp = (e: MouseEvent) => {
@@ -201,7 +202,6 @@ export default class BaseEdge extends Component<IProps> {
         const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
         polylineEdgeModel.dbClickPosition = crossPoint;
       }
-      graphModel.selectEdgeById(model.id);
       eventCenter.emit(EventType.EDGE_DBCLICK, {
         data: edgeData,
         e,
@@ -211,8 +211,6 @@ export default class BaseEdge extends Component<IProps> {
       this.clickTimer = window.setTimeout(() => {
         // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
         if (!this.contextMenuTime || this.startTime > this.contextMenuTime) {
-          const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-          graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
           // 边数据
           eventCenter.emit(EventType.ELEMENT_CLICK, {
             data: edgeData,
@@ -228,6 +226,8 @@ export default class BaseEdge extends Component<IProps> {
       }, 400);
     }
     graphModel.toFront(model.id);
+    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
     this.preStartTime = this.startTime;
   };
 
