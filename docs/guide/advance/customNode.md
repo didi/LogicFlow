@@ -329,15 +329,44 @@ lf.render({
 
 节点在`model`中维护了以下内容：
 
-- 节点的[数据属性](/api/nodeApi.md#通用属性)和[样式属性](/api/nodeApi.html#样式属性)
-- 在连线时，节点作为`source`或`target`的**连线规则**
+- 节点的[通用属性](/api/nodeApi.md#通用属性)
 - 简单节点的[节点属性](/api/nodeApi.md#节点属性)
+- 在连线时，节点作为`source`或`target`的**连线规则**
 
-### 数据属性和样式属性
+### 通用属性
 
-在前文中我们已经知道，为自定义节点的`view`定义`VNode`时，可以通过`getShapeStyle`和`getAttributes`方法来获取节点渲染时所需要的数据，这些数据全部源自于节点的`model`，我们可以在`model`中修改这些属性来实现自定义节点的部分效果。
+一个节点的通用属性包含了以下内容：
 
-#### 自定义节点的样式属性
+- 数据属性
+- 样式属性
+- 附加属性
+- 状态属性
+
+我们已经知道，在 view 中我们可以通过`getShapeStyle`和`getAttributes`方法，从 model 里获取节点渲染时所需要的数据，现在我们可以在 model 中使用`setAttributes`方法来设置这些数据。
+
+`setAttributes`方法接收数据属性作为参数，其返回值可以包含任何你想自定义的通用属性。
+
+```ts
+setAttributes(data: NodeConfig) {
+  return {}
+}
+```
+
+#### 数据属性
+
+一般而言，数据属性自身不需要再做改动，它主要用来作为设置其他通用属性的依据。
+
+```ts
+setAttributes(data: NodeConfig) {
+  // 读取数据属性的 properties.color，并根据其值设置样式属性 stroke
+  const { properties: { color } } = data;
+  return {
+    stroke: color
+  };
+}
+```
+
+#### 样式属性
 
 以正方形的`width`和`height`为例，在之前的示例中，我们通过`lf.setTheme`方法设置矩形的全局样式，现在我们只对`square`节点的样式进行设置。
 
@@ -345,27 +374,16 @@ lf.render({
 lf.register('square', (RegisterParam) => {
   const { RectNode, RectNodeModel, h } = RegisterParam;
   class SquareView extends RectNode {
-    getShape() {
-      const style = super.getShapeStyle();
-      const { width, height } = style; 
-      const { x, y } = super.getAttributes();
-      const position = {
-        x: x - width / 2,
-        y: y - height /2
-      }
-      return h("rect", {
-        ...style,
-        ...position
-      });
-    }
+    // ...
   }
   // 自定义节点的 model
   class SquareModel extends RectNodeModel {
-    constructor(data, graphModel) {
-      super(data, graphModel);
-      //  在 Model 中配置属性
-      this.width = 100;
-      this.height = 100;
+    // 为 model 设置自定义 width 和 height
+    setAttributes() {
+      return {
+        width: 100,
+        height: 100
+      }
     }
   }
   return {
@@ -388,45 +406,32 @@ lf.render({
 });
 ```
 
-在上面的代码中，我们直接在`model`的构造函数里面设置了`width`和`height`，现在节点`view`通过`getShapeStyle`获取的样式也就随之发生了变更。同时可以看到，在自定义`model`时，我们需要提供一个构造函数，并在内部调用`super`方法进行初始化，Logic Flow 会为构造函数提供两个参数。
+在上面的代码中，我们直接让`setAttributes`返回了`width`和`height`，现在节点`view`通过`getShapeStyle`获取的样式也就随之发生了变更。
 
-- `data` - 配置节点时的[数据属性](/api/nodeApi.md#通用属性)
-- `graphModel` - LF 内部数据（继承自`BaseNodeModel`时不存在该参数；不建议做任何改动，后续版本会删掉。）
+#### 附加属性
 
-#### 自定义节点的数据属性
+我们可以通过附加属性为节点设置锚点的数量和位置、连线时的校验规则、特有的菜单选项（需要与[@logicflow/extension](/guide/extension/extension-components.html#菜单)配合使用）。
 
-在[数据属性](/api/nodeApi.md#通用属性)中，我们可以设置节点的起始位置、文本内容及其位置、自定义属性等，这些数据最终都会被传入`model`进行初始化，所以我们同样可以在`model`中对这些值进行重新定义。
-
-以正方形节点为例，现在我们想要自定义节点的文本位置。
+以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
 
 ```ts
 lf.register('square', (RegisterParam) => {
   const { RectNode, RectNodeModel, h } = RegisterParam;
   class SquareView extends RectNode {
-    getShape() {
-      const style = super.getShapeStyle();
-      const { width, height } = style; 
-      const { x, y } = this.getAttributes();
-      const position = {
-        x: x - width / 2,
-        y: y - height /2
-      }
-      return h("rect", {
-        ...style,
-        ...position
-      });
-    }
+    // ...
   }
   // 自定义节点的 model
   class SquareModel extends RectNodeModel {
-    constructor(data, graphModel) {
-      super(data, graphModel);
-      this.width = 100;
-      this.height = 100;
-      // 设置节点的文本位置
-      this.text = {
-        ...this.text, // 必需。super() 已经为 text 设置了部分内部数据
-        y: this.text.y + 70
+    // 为 model 设置自定义锚点
+    setAttributes() {
+      const size = 100;
+      return {
+        width: size,
+        height: size,
+        anchorsOffset: [
+          [size / 2, 0], // x 轴上偏移 size / 2
+          [-size / 2, 0], // x 轴上偏移 -size / 2
+        ]
       }
     }
   }
@@ -436,7 +441,6 @@ lf.register('square', (RegisterParam) => {
   }
 });
 
-// 配置节点时，在 properties 中设置需要的附加属性
 lf.render({
   nodes: [
     {
@@ -450,6 +454,8 @@ lf.render({
   ]
 });
 ```
+
+在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一个元素都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`就表示在 x 轴方向上，从节点中心向右偏移宽度的一半。
 
 ### 简单节点的节点属性
 

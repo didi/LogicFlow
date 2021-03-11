@@ -206,6 +206,10 @@ export default class BaseNodeModel implements IBaseModel {
     return this.targetRules;
   }
 
+  get anchors() {
+    return [];
+  }
+
   @action
   move(deltaX, deltaY): void {
     this.x += deltaX;
