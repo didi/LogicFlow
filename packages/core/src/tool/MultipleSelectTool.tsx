@@ -37,7 +37,7 @@ export default class MultipleSelect extends Component<IProps> {
   onDragStart = () => {};
   onDraging = ({ deltaX, deltaY }) => {
     const { graphModel } = this.props;
-    graphModel.moveElements(graphModel.getSelectElements(), deltaX, deltaY);
+    graphModel.moveElements(graphModel.getSelectElements(true), deltaX, deltaY);
   };
   onDragEnd = () => {};
   render() {

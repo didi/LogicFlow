@@ -73,6 +73,8 @@ class Keyboard {
       this.options.keyboard.enabled = true;
       if (this.target instanceof HTMLElement) {
         this.target.setAttribute('tabindex', '-1');
+        // 去掉节点被选中时container出现的边框
+        this.target.style.outline = 'none';
       }
     }
   }

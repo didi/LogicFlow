@@ -82,7 +82,7 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['backspace'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    const elements = graph.getSelectElements();
+    const elements = graph.getSelectElements(true);
     lf.clearSelectElements();
     elements.edges.forEach(edge => lf.deleteEdge(edge.id));
     elements.nodes.forEach(node => lf.deleteNode(node.id));

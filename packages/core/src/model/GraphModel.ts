@@ -246,7 +246,8 @@ class GraphModel {
 
   /**
    * 获取选中的元素数据
-   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线。默认包括。复制的时候不能包括此类连线
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
+   * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线
    */
   getSelectElements(isIgnoreCheck = true) {
     const elements = this.selectElements;
@@ -263,7 +264,7 @@ class GraphModel {
         const isNodeSelected = elements.get(edgeData.sourceNodeId)
           && elements.get(edgeData.targetNodeId);
 
-        if (!isIgnoreCheck || isNodeSelected) {
+        if (isIgnoreCheck || isNodeSelected) {
           graphData.edges.push(edgeData);
         }
       }
