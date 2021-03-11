@@ -68,7 +68,12 @@
       });
       // 方便调试
       window.lf = lf;
-      
+      lf.setTheme({
+        // snapline: {
+        //   stroke: '#999999', // 对齐线颜色
+        //   strokeWidth	: 2, // 对齐线宽度
+        // },
+      })
       window.mouseDownRect = function mouseDownCircle() {
         lf.dnd.startDrag({
           type: 'rect',

@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
 import GraphModel from './GraphModel';
 import { NodeData } from '../type/index';
@@ -26,18 +26,16 @@ export default class SnaplineModel {
   @observable isShowVertical: boolean;
   // 对齐线的中心位置，目前仅展示中心对齐的情况，后面可以考虑多种对齐策略
   @observable position: SnaplinePosition;
-  @observable stroke: string = defaultStyle.stroke;
-  @observable strokeWidth: number = defaultStyle.strokeWidth;
+  @computed get stroke(): string {
+    return this.graphModel.theme.snapline.stroke || defaultStyle.stroke;
+  }
+  @computed get strokeWidth(): number {
+    return this.graphModel.theme.snapline.strokeWidth || defaultStyle.strokeWidth;
+  }
   constructor(graphModel) {
     this.isShowHorizontal = false;
     this.isShowVertical = false;
     this.position = { x: 0, y: 0 };
-    const { theme } = graphModel;
-    if (theme.snapline) {
-      const { snapline } = theme;
-      this.stroke = snapline.stroke;
-      this.strokeWidth = snapline.strokeWidth;
-    }
     this.graphModel = graphModel;
   }
   // 计算节点中心线与其他节点的对齐信息
