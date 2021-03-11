@@ -192,30 +192,45 @@ class GraphModel {
     }
     return false;
   }
-  graphDataToModel(graphData) {
-    this.nodes = map(graphData.nodes, node => {
-      const Model = this.getModel(node.type);
-      if (!Model) {
-        throw new Error(`找不到${node.type}对应的节点。`);
+  clearData(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        this.nodes = [];
+        this.edges = [];
+        resolve('clear data success');
+      } catch (error) {
+        reject(error);
       }
-      const { x: nodeX, y: nodeY } = node;
-      // 根据 grid 修正节点的 x, y
-      if (nodeX && nodeY) {
-        node.x = snapToGrid(nodeX, this.gridSize);
-        node.y = snapToGrid(nodeY, this.gridSize);
-        if (Object.prototype.toString.call(node.text) === '[object Object]') {
-          node.text.x -= getGridOffset(nodeX, this.gridSize);
-          node.text.y -= getGridOffset(nodeY, this.gridSize);
-        }
-      }
-      return new Model(node, this);
     });
-    this.edges = map(graphData.edges, edge => {
-      const Model = this.getModel(edge.type);
-      if (!Model) {
-        throw new Error(`找不到${edge.type}对应的边。`);
-      }
-      return new Model(edge, this);
+  }
+  graphDataToModel(graphData) {
+    this.clearData().then(() => {
+      this.nodes = map(graphData.nodes, node => {
+        const Model = this.getModel(node.type);
+        if (!Model) {
+          throw new Error(`找不到${node.type}对应的节点。`);
+        }
+        const { x: nodeX, y: nodeY } = node;
+        // 根据 grid 修正节点的 x, y
+        if (nodeX && nodeY) {
+          node.x = snapToGrid(nodeX, this.gridSize);
+          node.y = snapToGrid(nodeY, this.gridSize);
+          if (Object.prototype.toString.call(node.text) === '[object Object]') {
+            node.text.x -= getGridOffset(nodeX, this.gridSize);
+            node.text.y -= getGridOffset(nodeY, this.gridSize);
+          }
+        }
+        return new Model(node, this);
+      });
+      this.edges = map(graphData.edges, edge => {
+        const Model = this.getModel(edge.type);
+        if (!Model) {
+          throw new Error(`找不到${edge.type}对应的边。`);
+        }
+        return new Model(edge, this);
+      });
+    }).catch(() => {
+      throw new Error('graphDataToModel fail');
     });
   }
 
