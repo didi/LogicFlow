@@ -76,10 +76,16 @@ lf.register('process', (RegisterParam) => {
 
 ## 自定义连线的 Model
 
-连线在`model`中维护了以下内容。
+连线的`model`中维护了以下内容。
 
-- 连线的[数据属性](/api/edgeApi.html#数据属性)和[样式属性](/api/edgeApi.html#样式属性)
+- 连线的[通用属性](/api/edgeApi.html#通用属性)
 - 连线的[边属性](/api/edgeApi.html#边属性)
+
+为了保证连线的每一类属性都可以被正常设置，LF 在`model`的构造函数中按下图顺序对属性进行初始化。
+
+<img src="../../assets/images/custom-edge-model.png" alt="连线属性初始化顺序" style="display: block; margin: 0 auto; zoom: 50%;"  />
+
+与节点一致，当我们需要为连线的自定义各类属性时，也应通过`setAttributes`方法来进行设置，其使用方式参考自定义节点`model`的[章节](/guide/advance/customNode.html#自定义节点的-model)
 
 ## extendKey
 
