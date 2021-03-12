@@ -1,23 +1,21 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig } from '../../util/node';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
-  @observable width = defaultTheme.rect.width;
-  @observable height = defaultTheme.rect.height;
   @observable radius = defaultTheme.rect.radius;
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('rect', graphModel);
-    const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), attrs);
+    super(data, graphModel, 'rect');
+  }
+
+  setAttributes() {
+    this.width = defaultTheme.rect.width;
+    this.height = defaultTheme.rect.height;
   }
 
   @computed get anchors(): Point[] {

@@ -118,7 +118,6 @@
               strokeWidth: 2,
             };
           }
-
           getTextStyle() {
             return {
                 fontSize: 12,
@@ -127,14 +126,12 @@
           }
         }
         class UserModel extends RectNodeModel {
-          setAttributes(data) {
-            const { size } = data.properties;
-            return {
-              width: size * 40,
-              height: size * 40,
-              fill: 'green',
-              radius: 0
-            };
+          setAttributes() {
+            const { size } = this.properties;
+            this.width = size * 40;
+            this.height = size * 40;
+            this.fill = 'green';
+            this.radius = 0;
           }
         }
         return {
@@ -142,7 +139,7 @@
           model: UserModel,
         };
       });
-      lf.register('combine', ({ BaseNode, BaseNodeModel, h, mobx }) => {
+      lf.register('combine', ({ BaseNode, BaseNodeModel, h }) => {
         class CombineNode extends BaseNode {
           getShape() {
             const attributes = this.getAttributes();
@@ -166,26 +163,17 @@
 
         class CombineModel extends BaseNodeModel {
           setAttributes() {
-            return {
-              width: 50,
-              height: 60,
-              fill: 'orange'
-            }
-          }
-
-          get anchors() {
-            return [
-              { x: this.x, y: this.y - this.height / 2 },
-              { x: this.x + this.width / 2, y: this.y },
-              { x: this.x, y: this.y + this.height / 2 },
-              { x: this.x - this.width / 2, y: this.y },
+            this.width = 50;
+            this.height = 60;
+            this.fill = 'orange';
+            this.anchorsOffset = [
+              [0, -this.height / 2],
+              [this.width / 2, 0],
+              [0, this.height / 2],
+              [-this.width / 2, 0]
             ];
           }
         }
-
-        mobx.decorate(CombineModel, {
-          anchors: mobx.computed,
-        });
 
         return {
           view: CombineNode,
@@ -196,17 +184,15 @@
         class StarNode extends PolygonNode { }
         class StarModel extends PolygonNodeModel {
           setAttributes() {
-            return {
-              points: [
-                [45, 0],
-                [20, 90],
-                [90, 30],
-                [0, 30],
-                [80, 90]
-              ],
-              fill: '#456789',
-              stroke: '#456789',
-            }
+            this.points = [
+              [45, 0],
+              [20, 90],
+              [90, 30],
+              [0, 30],
+              [80, 90]
+            ];
+            this.fill =  '#456789';
+            this.stroke =  '#456789';
           }
         }
         return {

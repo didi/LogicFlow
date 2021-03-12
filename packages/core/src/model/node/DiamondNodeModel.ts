@@ -1,10 +1,8 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { NodeData, Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig } from '../../util/node';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
@@ -12,10 +10,7 @@ class DiamondNodeModel extends BaseNodeModel {
   @observable ry: number;
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('diamond', graphModel);
-    const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), attrs);
+    super(data, graphModel, 'diamond');
   }
 
   getData(): NodeData {

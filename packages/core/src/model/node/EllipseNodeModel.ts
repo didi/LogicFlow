@@ -1,11 +1,9 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig } from '../../util/node';
 
 class EllipseNodeModel extends BaseNodeModel {
   modelType = ModelType.ELLIPSE_NODE;
@@ -13,10 +11,7 @@ class EllipseNodeModel extends BaseNodeModel {
   @observable ry = defaultTheme.ellipse.ry;
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('ellipse', graphModel);
-    const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), attrs);
+    super(data, graphModel, 'ellipse');
   }
 
   @computed get width(): number {

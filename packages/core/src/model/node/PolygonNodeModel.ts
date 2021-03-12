@@ -1,10 +1,8 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { pickNodeConfig } from '../../util/node';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -16,10 +14,7 @@ class PolygonNodeModel extends BaseNodeModel {
   ];
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('polygon', graphModel);
-    const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), attrs);
+    super(data, graphModel, 'polygon');
   }
 
   @computed get pointsPosition(): Point[] {

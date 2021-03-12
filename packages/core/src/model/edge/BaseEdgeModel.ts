@@ -7,7 +7,12 @@ import { getAnchors } from '../../util/node';
 import { IBaseModel } from '../BaseModel';
 import GraphModel from '../GraphModel';
 import {
-  Point, AdditionData, EdgeAttribute, EdgeData, MenuConfig,
+  Point,
+  AdditionData,
+  EdgeAttribute,
+  EdgeData,
+  MenuConfig,
+  EdgeConfig,
 } from '../../type/index';
 import {
   ElementState, ModelType, ElementType,
@@ -66,19 +71,28 @@ class BaseEdgeModel implements IBaseModel {
   @observable pointsList = defaultData.pointsList;
   @observable draggable = true;
 
-  constructor(data, graphModel: GraphModel) {
+  constructor(data: EdgeConfig, graphModel: GraphModel, type) {
     this.graphModel = graphModel;
+    this.setStyleFromTheme(type, graphModel);
+    this.initEdgeData(data);
+    this.setAttributes();
+    // 设置连线的 anchors，也就是连线的两个端点
+    // 端点依赖于 edgeData 的 sourceNode 和 targetNode
+    this.setAnchors();
+    // 连线的拐点依赖于两个端点
+    this.initPoints();
+    // 文本位置依赖于连线上的所有拐点
+    this.formatText(data);
+  }
+
+  initEdgeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
-    const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), attrs);
+    assign(this, pickEdgeConfig(data));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAttributes(data) {
-    return {};
-  }
+  setAttributes() { }
 
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
@@ -92,6 +106,7 @@ class BaseEdgeModel implements IBaseModel {
       y: 0,
     };
   }
+
   move() { }
 
   /* 获取起点 */
@@ -319,6 +334,9 @@ class BaseEdgeModel implements IBaseModel {
   setZIndex(zindex: number = defaultData.zIndex): void {
     this.zIndex = zindex;
   }
+
+  @action
+  initPoints() {}
 }
 
 export { BaseEdgeModel };

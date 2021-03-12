@@ -8,9 +8,9 @@
 
 Logic Flow 对外暴露了基础节点`BaseNode`和5个代表简单类型的节点`RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`。
 
-![节点继承原理](../../assets/images/custom-node.png)
+<img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
 
-由上图可以看到，Logic Flow 提供的`RectNode`、`CircleNode`、`PolygonNode`都是继承自内部的`BaseNode`。因此，用户的`CustomNode`可以通过继承简单类型节点来实现，也可以直接继承`BaseNode`。
+由上图可以看到，Logic Flow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以通过继承简单类型节点实现，也可以直接继承`BaseNode`来实现。
 
 ### MVVM
 
@@ -327,48 +327,34 @@ lf.render({
 
 ## 自定义节点的 Model
 
-节点在`model`中维护了以下内容：
+节点的`model`中维护了以下内容：
 
-- 节点的[通用属性](/api/nodeApi.md#通用属性)
+- 节点的[通用属性](/api/nodeApi.md#通用属性)（包含数据属性、样式属性、附加属性、状态属性）
 - 简单节点的[节点属性](/api/nodeApi.md#节点属性)
-- 在连线时，节点作为`source`或`target`的**连线规则**
 
-### 通用属性
+为了保证每一类属性都可以被正常设置，LF 在`model`的构造函数中按下图顺序对属性进行初始化。
 
-一个节点的通用属性包含了以下内容：
+<img src="../../assets/images/custom-node-model.png" alt="节点属性初始化顺序" style="display: block; margin: 0 auto; zoom: 50%;"  />
 
-- 数据属性
-- 样式属性
-- 附加属性
-- 状态属性
+在 view 中我们可以通过`getShapeStyle`和`getAttributes`方法，从 model 里获取节点渲染时所需要的数据，接下来我们将学习如何在 model 中使用`setAttributes`方法来自定义这些数据。
 
-我们已经知道，在 view 中我们可以通过`getShapeStyle`和`getAttributes`方法，从 model 里获取节点渲染时所需要的数据，现在我们可以在 model 中使用`setAttributes`方法来设置这些数据。
+### 数据属性
 
-`setAttributes`方法接收数据属性作为参数，其返回值可以包含任何你想自定义的通用属性。
+从上图可以看出，节点的数据属性在调用`setAttributes`之前已经被初始化，因此我们不需要对其再做任何改动，数据属性可以用来作为自定义其他属性的依据。
 
 ```ts
-setAttributes(data: NodeConfig) {
-  return {}
+class Model extends BaseNodeModel {
+  setAttributes() {
+    // 读取数据属性的 properties.color，并根据其值设置样式属性 stroke
+    const { properties: { color } } = this;
+    this.stroke = color;
+  }
 }
 ```
 
-#### 数据属性
+### 样式属性
 
-一般而言，数据属性自身不需要再做改动，它主要用来作为设置其他通用属性的依据。
-
-```ts
-setAttributes(data: NodeConfig) {
-  // 读取数据属性的 properties.color，并根据其值设置样式属性 stroke
-  const { properties: { color } } = data;
-  return {
-    stroke: color
-  };
-}
-```
-
-#### 样式属性
-
-以正方形的`width`和`height`为例，在之前的示例中，我们通过`lf.setTheme`方法设置矩形的全局样式，现在我们只对`square`节点的样式进行设置。
+以正方形为例，在之前的示例中，我们通过`lf.setTheme`方法设置了矩形的全局样式，现在我们只设置`square`节点的样式。
 
 ```ts
 lf.register('square', (RegisterParam) => {
@@ -378,12 +364,10 @@ lf.register('square', (RegisterParam) => {
   }
   // 自定义节点的 model
   class SquareModel extends RectNodeModel {
-    // 为 model 设置自定义 width 和 height
+    // 设置自定义 width 和 height
     setAttributes() {
-      return {
-        width: 100,
-        height: 100
-      }
+      this.width = 100;
+      this.height = 100;
     }
   }
   return {
@@ -406,11 +390,13 @@ lf.render({
 });
 ```
 
-在上面的代码中，我们直接让`setAttributes`返回了`width`和`height`，现在节点`view`通过`getShapeStyle`获取的样式也就随之发生了变更。
+在上面的代码中，我们直接在`setAttributes`中设置了`width`和`height`，现在节点`view`通过`getShapeStyle`获取的样式也就随之发生了变更。
 
-#### 附加属性
+### 附加属性
 
-我们可以通过附加属性为节点设置锚点的数量和位置、连线时的校验规则、特有的菜单选项（需要与[@logicflow/extension](/guide/extension/extension-components.html#菜单)配合使用）。
+我们可以通过附加属性为节点设置锚点的数量和位置、连线时的校验规则、特有的菜单选项。
+
+#### 设置锚点的数量和位置
 
 以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
 
@@ -420,19 +406,18 @@ lf.register('square', (RegisterParam) => {
   class SquareView extends RectNode {
     // ...
   }
-  // 自定义节点的 model
+
   class SquareModel extends RectNodeModel {
-    // 为 model 设置自定义锚点
     setAttributes() {
       const size = 100;
-      return {
-        width: size,
-        height: size,
-        anchorsOffset: [
-          [size / 2, 0], // x 轴上偏移 size / 2
-          [-size / 2, 0], // x 轴上偏移 -size / 2
-        ]
-      }
+      this.width = size;
+      this.height = size;
+      // 设置自定义锚点
+      // 只需要为每个锚点设置相对于节点中心的偏移量
+      this.anchorsOffset = [
+        [size / 2, 0], // x 轴上偏移 size / 2
+        [-size / 2, 0], // x 轴上偏移 -size / 2
+      ];
     }
   }
   return {
@@ -455,21 +440,107 @@ lf.render({
 });
 ```
 
-在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一个元素都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`就表示在 x 轴方向上，从节点中心向右偏移宽度的一半。
+在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项元素都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
+
+#### 设置连线时的校验规则
+
+在某些时候，我们可能需要控制连线的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等，要想达到这种效果，我们需要为节点设置以下两个属性。
+
+- `sourceRules` - 当节点作为连线的起始节点（source）时的校验规则
+- `targetRules` - 当节点作为连线的目标节点（target）时的校验规则
+
+以正方形（square）为例，在连线时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`添加作为`source`节点的校验规则。
+
+```ts
+lf.register('square', (RegisterParam) => {
+  const { RectNode, RectNodeModel, h } = RegisterParam;
+  class SquareView extends RectNode {
+    // ...
+  }
+
+  class SquareModel extends RectNodeModel {
+    setAttributes() {
+      // ...
+      const circleOnlyAsTarget = {
+        message: '正方形节点下一个节点只能是圆形节点',
+        validate: (source, target) => {
+          return target.type === 'circle';
+        },
+      };
+      this.sourceRules.push(circleOnlyAsTarget);
+    }
+  }
+  return {
+    view: SquareView,
+    model: SquareModel,
+  }
+});
+
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形',
+      properties: {}
+    },
+  ]
+});
+```
+
+<example href="/examples/#/advance/custom-node/rule" :height="400" ></example>
+
+在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
+
+`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`方法有两个参数，分别为连线的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
+
+> 当我们在面板上进行连线操作的时候，Logic Flow 会校验每一条规则，只有**全部**通过后才能连接。
+
+在连线时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
+
+```js
+lf.on('connection:not-allowed', (msg) => {
+  console.log(msg)
+});
+```
+
+#### 特有的菜单选项
+
+自定义节点的菜单功能依赖于 [@logicflow/extension](/guide/extension/extension-components.html#组件) 拓展包的[菜单](/guide/extension/extension-components.html#菜单)组件。
+
+```ts
+class Model extends BaseNodeModel {
+  setAttributes() {
+    this.menu = [
+      {
+        text: '删除',
+        callback(node) {
+          // node为该节点数据
+          lf.deleteNode(node.id);
+        },
+      },
+    ]
+  }
+}
+```
+
+在`model`中，我们可以直接设置`menu`属性以达到只为某一类节点设置菜单的效果，`menu`的类型是一个数组，数组的元素表示菜单项，菜单项的具体配置请查看拓展包中的[菜单配置项](/guide/extension/extension-components.html#菜单配置项)。
+
+> 为某一种类型的节点设置菜单，并不是只有设置`model`的`menu`这一种方式，更便于自定义的方式是直接通过[事件系统](/guide/advance/event.html#节点事件)来监听右键事件，然后根据事件所返回的数据去渲染自己的组件，实际上，`@logicflow/extension`中的菜单组件就是基于这个机制开发的。
 
 ### 简单节点的节点属性
 
-不同形状的简单节点所对应的 SVG 标签不同，其所需要的标签属性也略有不同，查看[节点API](/api/nodeApi.html#节点属性)以获取更过信息。
+不同形状的简单节点所对应的 SVG 标签不同，其所需要的标签属性也略有不同，查看[节点 API](/api/nodeApi.html#节点属性) 以获取更过信息。
 
-例如我们需要实现一个三角形的节点。
+例如我们需要通过继承多边形（Polygon）来实现一个三角形的节点，直接修改多边形的节点属性`points`就可以快速得到这个效果。
 
 ```ts
 lf.register('triangle', (RegisterParam) => {
   const { PolygonNode, PolygonNodeModel } = RegisterParam;
   class TriangleModel extends PolygonNodeModel {
-    constructor(data, graphModel) {
-      super(data, graphModel);
-      // 多边形的节点属性 points
+    setAttributes() {
       this.points = [
         [50, 0],
         [100, 80],
@@ -485,90 +556,6 @@ lf.register('triangle', (RegisterParam) => {
 ```
 
 <example href="/examples/#/advance/custom-node/triangle" :height="200" ></example>
-
-> 默认情况下，Logic Flow 会在每个顶点上生成一个可以连接的锚点。
-
-### 连线规则
-
-在某些时候，我们可能需要控制连线的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等。Logic Flow 在`model`中提供了以下两个方法来实现节点的连线规则。
-
-- [getConnectedSourceRules](/guide/advance/customNode.md#getconnectedsourcerules)
-- [getConnectedTargetRules](/guide/advance/customNode.md#getconnectedtargetrules)
-
-#### getConnectedSourceRules
-
-通过该方法能够获取当前节点作为连线开始点（source）的校验规则。它的的返回值是一个包含了多项校验规则的数组，每项规则都是一个对象，我们需要为其设置`messgage`和`validate`属性。
-
-```ts
-getConnectedSourceRules() {
-  // 在所继承节点的连线规则的基础上添加新的规则
-  const rules = super.getConnectedSourceRules();
-  const rule = {
-    message: '不满足连线的校验规则',
-    validate: (source, target) => {
-      // 校验规则
-      return false;
-    }
-  }
-  rules.push(rule);
-  return rules;
-}
-```
-
-在上面的代码中，`getConnectedSourceRules`方法在所继承节点的校验规则的基础上新增了一项 rule，rule 的`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。
-
-`validate`方法有两个参数，分别为包含了自身数据属性的连线起始节点（source）和连线目标节点（target）。我们可以根据节点的情况，来返回`true or false`. `true`表示通过校验。
-
-例如我们想实现一个用户节点（UserTask），在连线时它的下一节点只能是网关节点，那么我们应该给`UserTask`添加作为`source`节点的校验规则。
-
-```ts
-lf.register('userTask', (RegisterParam) => {
-  const { RectNode, RectNodeModel } = RegisterParam;
-  class UserTaskView extends RectNode {
-    // 自定义形状
-  }
-  class UserTaskModel extends RectNodeModel {
-    // 设置校验规则
-    getConnectedSourceRules() {
-      const rules = super.getConnectedSourceRules();
-      const gateWayOnlyAsTarget = {
-        message: '流程节点下一个节点只能是网关节点',
-        validate: (source, target) => {
-          let isValid = true;
-          if (target.type !== 'gateway') isValid = false;
-          return isValid;
-        },
-      };
-      rules.push(gateWayOnlyAsTarget);
-      return rules;
-    }
-  }
-  return {
-    view: UserTaskView,
-    model: UserTaskModel,
-  };
-});
-```
-
-<example href="/examples/#/advance/custom-node/rule" :height="400" ></example>
-
-当在面板上进行连线操作的时候，Logic Flow 会判断所有的规则是否通过，只有**全部**通过才能连接。
-
-访问 [API](/api/modelApi.md#getconnectedsourcerules) 以查看`getConnectedSourceRules`方法的详细信息。
-
-#### getConnectedTargetRules
-
-同样，我们可以通过重写`getConnectedTargetRules`方法，来实现当节点作为目标节点（target）时的校验规则。访问 [API](/api/modelApi.md#getconnectedtargetrules) 以查看`getConnectedTargetRules`方法的详细信息。
-
-#### 接收错误消息
-
-在连线时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
-
-```js
-lf.on('connection:not-allowed', (msg) => {
-  console.log(msg)
-});
-```
 
 ## extendKey
 

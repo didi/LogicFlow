@@ -5,5 +5,6 @@
   },
   "MD024": {
     "allow_different_nesting": true
-  }
+  },
+  "MD033": false
 }

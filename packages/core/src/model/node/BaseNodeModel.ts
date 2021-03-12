@@ -8,8 +8,9 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, MenuConfig, NodeAttribute,
+  AdditionData, NodeData, MenuConfig, NodeAttribute, NodeConfig,
 } from '../../type';
+import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
@@ -78,13 +79,18 @@ export default class BaseNodeModel implements IBaseModel {
   @observable text = defaultConfig.text;
   @observable draggable = true;
 
-  constructor(data) {
-    this.formatText(data);
+  constructor(data: NodeConfig, graphModel: GraphModel, type) {
+    this.setStyleFromTheme(type, graphModel);
+    this.initNodeData(data);
+    this.setAttributes();
+  }
+
+  initNodeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
-    const attrs = this.setAttributes(data);
-    assign(this, pickNodeConfig(data), attrs);
+    this.formatText(data);
+    assign(this, pickNodeConfig(data));
   }
 
   // 格式化text参数，未修改observable不作为action
@@ -111,10 +117,7 @@ export default class BaseNodeModel implements IBaseModel {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAttributes(data: NodeData) {
-    return {};
-  }
+  setAttributes() {}
 
   /**
    * 保存时获取的数据

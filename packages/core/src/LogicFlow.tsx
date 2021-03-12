@@ -351,18 +351,20 @@ export default class LogicFlow {
   /**
    * 添加多个元素, 包括连线和节点。
    */
-  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+  cloneElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
     const nodeIdMap = {};
     const elements = {
       nodes: [],
       edges: [],
     };
-    nodes.forEach(node => {
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
       const preId = node.id;
-      const nodeModel = this.addNode(node);
+      const nodeModel = this.cloneNode(node.id);
+      if (!nodeModel) return;
       if (preId) nodeIdMap[preId] = nodeModel.id;
       elements.nodes.push(nodeModel);
-    });
+    }
     edges.forEach(edge => {
       const sourceId = edge.sourceNodeId;
       const targetId = edge.targetNodeId;

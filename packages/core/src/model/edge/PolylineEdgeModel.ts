@@ -1,5 +1,4 @@
 import { observable, action, computed } from 'mobx';
-import { assign } from 'lodash-es';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -21,7 +20,6 @@ import {
   segmentDirection,
   poins2PointsList,
   pointFilter,
-  pickEdgeConfig,
 } from '../../util/edge';
 import RectNodeModel from '../node/RectNodeModel';
 import BaseEdgeModel from './BaseEdgeModel';
@@ -32,17 +30,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE;
   offset = defaultTheme.polyline.offset;
   draginngPointList;
-  @observable points = '';
-  @observable pointsList: Point[] = [];
   @observable dbClickPosition: Point;
   constructor(data, graphModel: GraphModel) {
-    super(data, graphModel);
-    this.setStyleFromTheme('polyline', graphModel);
-    const attrs = this.setAttributes(data);
-    assign(this, pickEdgeConfig(data), attrs);
-    this.setAnchors();
-    this.initPoints();
-    this.formatText(data);
+    super(data, graphModel, 'polyline');
   }
   @computed get textPosition(): Point {
     // 在文案为空的情况下，文案位置为双击位置
