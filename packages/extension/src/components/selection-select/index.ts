@@ -1,4 +1,5 @@
 const SelectionSelect = {
+  name: 'selection-select',
   domContainer: null,
   wrapper: null,
   lf: null,

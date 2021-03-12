@@ -95,6 +95,7 @@ export default class LogicFlow {
       keyboard,
       isSilentMode,
       snapline,
+      disableExtension,
     } = options;
     this.options = Options.get(options);
     this.container = container;
@@ -126,7 +127,7 @@ export default class LogicFlow {
     }
     // init 放到最后
     this.defaultRegister();
-    this.installPlugins();
+    !disableExtension && this.installPlugins();
     initShortcut(this, this.graphModel);
   }
   on(evt: string, callback: CallbackType) {
@@ -149,12 +150,11 @@ export default class LogicFlow {
     this.extensions.push(extension);
   }
   installPlugins() {
+    // todo: 细粒度控制加载那些插件？
     LogicFlow.extensions.forEach((extension) => {
       const { install, render: renderComponent } = extension;
-      install.call(extension, this, LogicFlow);
-      if (renderComponent) {
-        this.components.push(renderComponent.bind(extension));
-      }
+      install && install.call(extension, this, LogicFlow);
+      renderComponent && this.components.push(renderComponent.bind(extension));
     });
   }
 

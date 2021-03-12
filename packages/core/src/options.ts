@@ -26,7 +26,9 @@ export type Definition = {
 
   dndOptions?: DndOptions;
 
-  isSilentMode?: boolean;
+  isSilentMode?: boolean; // 静默模式
+
+  disableExtension?: boolean; // 是否禁用插件
 
   edgeType?: EdgeType;
 
