@@ -56,9 +56,10 @@ export function initShortcut(lf: LogicFlow, graph: GraphModel) {
     if (graph.textEditElement) return;
     if (selected && (selected.nodes || selected.edges)) {
       lf.clearSelectElements();
-      const addElements = lf.addElements(selected);
-      addElements.nodes.forEach(node => lf.select(node.id, true));
-      addElements.edges.forEach(edge => lf.select(edge.id, true));
+      const cloneElements = lf.cloneElements(selected);
+      if (!cloneElements) return;
+      cloneElements.nodes.forEach(node => lf.select(node.id, true));
+      cloneElements.edges.forEach(edge => lf.select(edge.id, true));
       selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
       selected.edges.forEach(edge => translationEdgeData(edge, TRANSLATION_DISTANCE));
     }
