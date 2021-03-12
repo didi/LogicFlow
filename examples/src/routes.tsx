@@ -17,7 +17,7 @@ import Menu from './pages/extension/components/menu';
 import DndPanel from './pages/extension/components/dnd-panel';
 import CustomMenu from './pages/extension/components/custom-menu';
 import CustomDnd from './pages/extension/components/custom-dnd';
-import UserTaskNode from './pages/advance/custom-node/userTask';
+import Anchor from './pages/advance/custom-node/anchor';
 import Triangle from './pages/advance/custom-node/triangle';
 import Rule from './pages/advance/custom-node/rule';
 import Process from './pages/advance/custom-edge/process';
@@ -41,7 +41,7 @@ export default (
     <Route path="/basic/silent-mode" exact component={Silent} />
     <Route path="/advance/theme" exact component={Theme} />
     <Route path="/advance/event" exact component={Event} />
-    <Route path="/advance/custom-node/usertask" exact component={UserTaskNode} />
+    <Route path="/advance/custom-node/anchor" exact component={Anchor} />
     <Route path="/advance/custom-node/triangle" exact component={Triangle} />
     <Route path="/advance/custom-node/rule" exact component={Rule} />
     <Route path="/advance/custom-edge/process" exact component={Process} />

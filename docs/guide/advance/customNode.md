@@ -366,8 +366,9 @@ lf.register('square', (RegisterParam) => {
   class SquareModel extends RectNodeModel {
     // 设置自定义 width 和 height
     setAttributes() {
-      this.width = 100;
-      this.height = 100;
+      const size = 80;
+      this.width = size;
+      this.height = size;
     }
   }
   return {
@@ -409,7 +410,7 @@ lf.register('square', (RegisterParam) => {
 
   class SquareModel extends RectNodeModel {
     setAttributes() {
-      const size = 100;
+      const size = 80;
       this.width = size;
       this.height = size;
       // 设置自定义锚点
@@ -439,6 +440,8 @@ lf.render({
   ]
 });
 ```
+
+<example href="/examples/#/advance/custom-node/anchor" :height="250" ></example>
 
 在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项元素都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
 

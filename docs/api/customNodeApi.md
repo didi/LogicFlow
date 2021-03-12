@@ -34,28 +34,14 @@ getAttributes() {
 }
 ```
 
-## getConnectedSourceRules
+## setAttributes
 
-获取节点作为开始节点（source）的校验规则。
+设置节点`model`中的属性。
 
-```ts
-getConnectedSourceRules(): ConnectRule[]
-
-export type ConnectRule = {
-  message: string;
-  validate: (source: BaseNodeModel, target: BaseNodeModel) => boolean;
-};
-```
-
-## getConnectedTargetRules
-
-获取节点作为目标节点（target）的校验规则。
+使用示例：
 
 ```ts
-getConnectedTargetRules(): ConnectRule[]
-
-export type ConnectRule = {
-  message: string;
-  validate: (source: BaseNodeModel, target: BaseNodeModel) => boolean;
-};
+setAttributes() {
+  this.width = 80;
+}
 ```

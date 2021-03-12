@@ -19,27 +19,13 @@ const data = {
       id: 10,
       type: 'square',
       x: 150,
-      y: 150,
+      y: 90,
       text: '正方形'
-    },
-    {
-      id: 20,
-      type: 'circle',
-      x: 380,
-      y: 70,
-      text: '圆形'
-    },
-    {
-      id: 30,
-      type: 'diamond',
-      x: 380,
-      y: 230,
-      text: '其他节点'
     },
   ]
 };
 
-export default function CustomNodeEdgeExample() {
+export default function CustomNodeAnchorExample() {
 
   useEffect(() => {
     const lf = new LogicFlow({
@@ -52,7 +38,7 @@ export default function CustomNodeEdgeExample() {
 
   return (
     <>
-      <ExampleHeader content="正方形的下一个节点只能是圆形节点" />
+      <ExampleHeader content="只保留水平方向上的锚点" />
       <div id="graph" className="viewport" />
     </>
   )
