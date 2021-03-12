@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
-import { observer, inject } from 'mobx-react';
 import { map } from 'lodash-es';
+import { inject } from 'mobx-react';
 import GraphModel from '../model/GraphModel';
 import CanvasOverlay from './overlay/CanvasOverlay';
 import ToolOverlay from './overlay/ToolOverlay';
@@ -16,6 +16,7 @@ import SnaplineOverlay from './overlay/SnaplineOverlay';
 import SnaplineModel from '../model/SnaplineModel';
 import OutlineOverlay from './overlay/OutlineOverlay';
 import BezierAdjustOverlay from './overlay/BezierAdjustOverlay';
+import { observer } from '..';
 
 type IProps = {
   getView: (type: string) => typeof Component,
@@ -35,6 +36,8 @@ type ContainerStyle = {
   height?: string;
 };
 
+// todo: fixme type
+// @ts-ignore
 @inject('graphModel')
 @observer
 class Graph extends Component<IProps> {

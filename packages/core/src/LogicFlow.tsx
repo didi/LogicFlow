@@ -151,7 +151,7 @@ export default class LogicFlow {
   installPlugins() {
     LogicFlow.extensions.forEach((extension) => {
       const { install, render: renderComponent } = extension;
-      install.call(extension, this);
+      install.call(extension, this, LogicFlow);
       if (renderComponent) {
         this.components.push(renderComponent.bind(extension));
       }
