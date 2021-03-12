@@ -21,6 +21,7 @@ import PolylineEdge from '../view/edge/PolylineEdge';
 import PolylineEdgeModel from '../model/edge/PolylineEdgeModel';
 import EllipseNode from '../view/node/EllipseNode';
 import EllipseNodeModel from '../model/node/EllipseNodeModel';
+import * as Options from '../options';
 
 export type PointTuple = [number, number];
 
@@ -248,7 +249,7 @@ export type FocusOnArgs = {
 
 export type ComponentRender = (lf: LogicFlow, container: HTMLElement) => void;
 export interface Extension {
-  install: (lf: LogicFlow) => void;
+  install: (lf: LogicFlow, LogicFlow: LogicFlowContractor) => void;
   render?: ComponentRender;
 }
 
@@ -275,6 +276,10 @@ export type IEdgeState = {
 
 export interface ModelContractor {
   new(data, graphModel): unknown; // todo: 这里应该怎么写？
+}
+
+export interface LogicFlowContractor {
+  new(option: Options.Definition): LogicFlow;
 }
 
 export type RegisterBack = {

@@ -1,14 +1,12 @@
 import { h, Component } from 'preact';
-import { observer } from 'mobx-react';
-
 import GraphModel from '../../model/GraphModel';
-
 import { ElementState, EventType } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import getTransform from './getTransformHoc';
 import EventEmitter from '../../event/eventEmitter';
 import { GraphTransform } from '../../type';
 import Dnd from '../behavior/DnD';
+import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;

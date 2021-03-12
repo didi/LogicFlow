@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
-import { observer } from 'mobx-react';
 import GraphModel from '../../model/GraphModel';
 import { createUuid } from '../../util/uuid';
+import { observer } from '../..';
 
 export type GridOptions = {
   size?: number
