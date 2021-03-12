@@ -14,6 +14,7 @@ interface DndPanel extends Extension {
 }
 
 const DndPanel: DndPanel = {
+  name: 'dnd-panel',
   lf: null,
   shapeList: [
     {

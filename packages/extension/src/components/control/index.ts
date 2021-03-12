@@ -1,4 +1,4 @@
-import LogicFlow from "@logicflow/core";
+import LogicFlow, { Extension } from "@logicflow/core";
 
 type ControlItem = {
   key: string;
@@ -10,7 +10,8 @@ type ControlItem = {
   onMouseLeave?: Function;
 }
 
-type ControlPlugin = {
+interface ControlPlugin extends Extension {
+  name: string,
   __lf?: LogicFlow;
   __controlItems: ControlItem[];
   addItem: (item: ControlItem) => void;
@@ -21,6 +22,7 @@ type ControlPlugin = {
 };
 
 const Control: ControlPlugin = {
+  name: 'control',
   __lf: null,
   __controlItems: [
     {

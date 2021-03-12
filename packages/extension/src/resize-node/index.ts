@@ -1,6 +1,7 @@
 import { getCircleModel, getCircleView } from './circle';
 
 const ResizeNode = {
+  name: 'resize-node',
   install(lf) {
     lf.register('circle', this.registerLabelPlusNode);
   },

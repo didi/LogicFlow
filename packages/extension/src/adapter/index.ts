@@ -411,6 +411,7 @@ function getEdgeConfig(edgeValue, processValue) {
 }
 
 const BpmnAdapter = {
+  name: 'bpmn-adapter',
   install(lf) {
     lf.adapterIn = this.adapterIn;
     lf.adapterOut = this.adapterOut;
