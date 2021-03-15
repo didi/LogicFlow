@@ -6,9 +6,11 @@ type Shape = {
 };
 
 interface DndPanel extends Extension {
+  __dndEl: HTMLElement;
   lf: LogicFlow;
   shapeList: Shape[];
   getDnd: () => HTMLElement;
+  __container: HTMLElement;
   registerNode: () => void;
   handleMouseDown: (config: Shape) => void;
 }
@@ -16,6 +18,8 @@ interface DndPanel extends Extension {
 const DndPanel: DndPanel = {
   name: 'dnd-panel',
   lf: null,
+  __container: null,
+  __dndEl: null,
   shapeList: [
     {
       type: 'rect',
@@ -54,7 +58,12 @@ const DndPanel: DndPanel = {
     };
   },
   render(lf, container) {
-    container.appendChild(DndPanel.getDnd());
+    DndPanel.__container = container;
+    DndPanel.__dndEl = DndPanel.getDnd()
+    container.appendChild(DndPanel.__dndEl);
+  },
+  destroy() {
+    DndPanel.__container.removeChild(DndPanel.__dndEl);
   },
   getDnd() {
     const { handleMouseDown } = DndPanel;

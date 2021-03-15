@@ -71,7 +71,12 @@ const Control: ControlPlugin = {
   install() { },
   render(lf, domContainer) {
     Control.__lf = lf;
-    domContainer.appendChild(this.__getControlTool());
+    this.__domContainer = domContainer;
+    this.__tool = this.__getControlTool();
+    domContainer.appendChild(this.__tool);
+  },
+  destroy() {
+    this.__domContainer.removeChild(this.__tool);
   },
   __getControlTool(): HTMLElement {
     const NORMAL = 'lf-control-item';
