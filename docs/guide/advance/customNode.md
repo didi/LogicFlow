@@ -6,11 +6,12 @@
 
 ### 基于继承的自定义节点
 
-Logic Flow 对外暴露了基础节点`BaseNode`和5个代表简单类型的节点`RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`。
+Logic Flow 对外暴露了基础节点`BaseNode`和 5 个简单类型的节点：
+`RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`。
 
 <img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
 
-由上图可以看到，Logic Flow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以通过继承简单类型节点实现，也可以直接继承`BaseNode`来实现。
+由上图可以看到，Logic Flow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以继承简单类型节点实现，也可以直接通过继承`BaseNode`来实现。
 
 ### MVVM
 
@@ -20,327 +21,55 @@ Logic Flow 内部是基于`MVVM`模式进行开发的，分别使用`preact`和`
 
 我们可以在创建`LogicFlow`实例之后，`render`之前，使用[`register`方法](/api/logicFlowApi.md#register)来注册自定义节点。
 
-`register`的第一个参数告诉 Logic Flow 自定义节点的类型，第二个参数可以为自定义节点定义`view`和`model`。`register`的第二个参数是一个回调函数，它的参数包含了 Logic Flow 内部所有节点的`view`和`model`，因此，我们可以通过**继承**这些内部的`view`和`model`来实现自定义节点的`view`和`model`，下文详细介绍了注册自定义节点的细节。
-
-## 自定义节点的类型
-
-如果我们要注册一个`type`为`startEvent`的自定义节点，这个节点形状是一个圆形，那么可以通过继承内置的`Circle`节点（实际是继承`Circle`的`view`和`model`）来快速实现，例如：
-
 ```ts
-// 注册自定义节点
-lf.register('startEvent', (RegisterParam) => {
-  const { CircleNode, CircleNodeModel } = RegisterParam;
-  // 自定义节点的 view，CircleNode 是 Circle 的 view
-  class StartEventView extends CircleNode {}
-  // 自定义节点的 model，CircleNodeModel 是 Circle 的 model
-  class StartEventModel extends CircleNodeModel {}
+lf.register('customNodeType', (RegisterParam) => {
+  const { RectNode, RectNodeModel } = RegisterParam;
+  // 自定义节点的 model
+  class Model extends RectNodeModel {}
+  // 自定义节点的 view
+  class View extends RectNode {}
   return {
-    view: StartEventView,
-    model: StartEventModel,
+    view: View,
+    model: Model,
   }
 });
+```
 
-// 使用自定义节点
+`register`的第一个参数是自定义节点的类型，注册之后我们可以直接在`lf.render()`初始化时直接使用。
+
+```ts
 lf.render({
   nodes: [
     {
       id: 10,
-      type: 'startEvent',
+      type: 'customNodeType',
       x: 300,
       y: 200,
-      text: '开始'
     },
   ]
 });
 ```
+
+`register`的第二个参数可以为自定义节点定义`view`和`model`，`register`的第二个参数是一个回调函数，它的参数包含了 Logic Flow 内部所有节点的`view`和`model`，因此，我们可以通过**继承**这些内部的`view`和`model`来实现自定义节点的`view`和`model`，下文详细介绍了注册自定义节点的细节。
 
 访问 [API](/api/logicFlowApi.md#register) 来查看`register`提供的`view`和`model`全集。
 
-## 自定义节点的 View
-
-节点在`view`中维护了自身的`VNode`，Logic Flow 渲染节点时会实例化`view`，并主动调用`view`中的`getShape`方法来确定`VNode`该如何渲染，通过**复写**该方法就可以实现自定义节点的`view`。
-
-### getShape
-
-`getShape`方法可以返回任意 SVG 能识别的标签，这个返回的元素就是自定义节点的`VNode`，目前需要使用 Logic Flow 提供的 `h` 方法来创建 SVG 元素。
-
-以自定义一个正方形（square）节点为例，直接通过继承`RectNode`来实现，我需要在`getShape`方法中返回一个 SVG 元素。
-
-```js
-lf.register('square', (RegisterParam) => {
-  // h 方法由 Logic Flow 提供
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    // getShape 的返回值是一个通过 h 方法创建的 svg 元素
-    getShape() {
-      // 使用 h 方法创建一个矩形
-      return h("rect", {
-        // some attributies
-      });
-    }
-  }
-  return {
-    view: SquareView,
-    model: RectNodeModel,
-  }
-});
-
-// 配置节点
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
-```
-
-在上面的代码中，`getShape`方法返回了一个没有任何属性的 rect 标签，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。
-
-此时节点还不能正常显示，因为`rect`标签缺少了`model`所提供的**动态**数据，注意，`view`只专注于节点应该如何渲染，而渲染时所需要的数据全部源自`model`，Logic Flow 在`view`中提供了两个方法来获取这些数据。
-
-- [getShapeStyle](/guide/advance/customNode.html#getshapestyle)
-- [getAttributes](/guide/advance/customNode.html#getattributes)
-
-### getShapeStyle
-
-`getShapeStyle`方法返回了节点在渲染时所需要的部分样式属性，这些[样式属性](/api/nodeApi.html#样式属性)源自节点的`model`。
-
-```ts
-// 为自定义节点复写 getShapeStyle
-getShapeStyle() {
-  const style = super.getShapeStyle();
-  return Object.assign(style, {});
-}
-```
-
-继续看前文中的正方形节点示例，现在我们通过`getShapeStyle`获取到`model`中的[样式属性](/api/nodeApi.html#样式属性)，并将其赋值给 rect 标签。
-
-```js
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    // 获取 model 中的样式属性
-    getShapeStyle() {
-      const style = super.getShapeStyle();
-      return Object.assign(style, {});
-    }
-    getShape() {
-      const style = this.getShapeStyle();
-      return h("rect", {
-        ...style
-      });
-    }
-  }
-  return {
-    view: SquareView,
-    model: RectNodeModel,
-  }
-});
-
-// 通过 setTheme 将 model 中的 width 和 height 设为 100
-lf.setTheme({
-  rect: {
-    width: 100,
-    height: 100
-  }
-});
-
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
-```
-
-在上面的代码中，我们使用`lf.setTheme`方法为节点设置了`width`和`height`，这些样式会被传递给`model`，然后我们通过`getShapeStyle`方法去`model`中获取样式属性，并将其赋值给 rect 标签。
-
-虽然节点已经可以显示了，但是它还不能正常使用，在 Logic Flow 中一个节点的基本功能（例：渲染位置）还受其自身的[数据属性](/api/nodeApi.md#通用属性)所影响，所以我们还要根据数据属性为节点标签设置必要的属性。
-
-> 我们不推荐在`view`中直接修改节点的各类属性，因为节点的锚点和外边框的渲染都基于`model`，在`view`中设置的数据并不能影响到锚点和外边框，会导致渲染出现问题，所以直接在`model`中修改属性才是正确的姿势。此外通过`lf.setTheme`方法设置的样式是作用于全局的，对于单一类型的自定义节点，我们可以直接修改`model`中的样式属性。在下文，我们会学习如何在[model](/guide/advance/customNode.html#自定义节点的-model)中设置各种属性。
-
-### getAttributes
-
-除了样式属性以外，Logic Flow 还为我们提供了节点的[数据属性](/api/nodeApi.md#通用属性)，我们可以通过`getAttributes`进行获取。
-
-```ts
-// 为自定义节点复写 getAttributes
-getAttributes() {
-  const attributes = super.getAttributes();
-  return Object.assign(attributes, {});
-}
-```
-
-仍然以自定义的正方形节点为例，现在我们要把 rect 所需要的属性补充完整。
-
-```ts
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    getShapeStyle() {
-      const style = super.getShapeStyle();
-      return Object.assign(style, {});
-    }
-    // 获取 model 中的数据属性
-    getAttributes() {
-      const attributes = super.getAttributes();
-      return Object.assign(attributes, {});
-    }
-    getShape() {
-      const style = this.getShapeStyle();
-      const { width, height } = style; 
-      const { x, y } = this.getAttributes();
-      // rect 标签的 x，y 对应的是图形的左上角
-      // 所以我们要将矩形的中心移动到 x，y
-      const position = {
-        x: x - width / 2,
-        y: y - height /2
-      }
-      return h("rect", {
-        ...style,
-        ...position
-      });
-    }
-  }
-  return {
-    view: SquareView,
-    model: RectNodeModel,
-  }
-});
-
-lf.setTheme({
-  rect: {
-    width: 100,
-    height: 100
-  }
-});
-
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
-```
-
-在上面的代码中，我们通过`getAttributes`方法获取到了节点`model`中的数据属性，并将 rect 元素与数据属性中的`(x, y)`对齐，到此为止，一个自定义正方形节点已经可以正常显示并使用了。🎉
-
-> 为了方便使用，`getAttributes`方法的返回值同样包含了`model`的样式属性。
-
-### 自定义属性 `properties`
-
-在业务中，自定义节点常常会有许多附加的特性，例如根据不同的业务属性展现出不同的样式，对于这种需求，我们可以在配置节点的[数据属性](/api/nodeApi.md#通用属性)时通过`properties`进行设置。
-
-```ts
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    getShapeStyle() {
-      const style = super.getShapeStyle();
-      return Object.assign(style, {});
-    }
-    getAttributes() {
-      const attributes = super.getAttributes();
-      return Object.assign(attributes, {});
-    }
-    getShape() {
-      const style = this.getShapeStyle();
-      const { width, height } = style; 
-      const { x, y, properties } = this.getAttributes();
-      const position = {
-        x: x - width / 2,
-        y: y - height / 2
-      }
-      // 读取 properties 中的附加属性
-      const { executed } = properties;
-      // 如果节点已经执行，则边框显示为绿色
-      if (executed) style.stroke = '#2da54e';
-      return h("rect", {
-        ...style,
-        ...position
-      });
-    }
-  }
-  return {
-    view: SquareView,
-    model: RectNodeModel,
-  }
-});
-
-lf.setTheme({
-  rect: {
-    width: 100,
-    height: 100
-  }
-});
-
-// 配置节点时，在 properties 中设置需要的附加属性
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {
-        executed: true
-      }
-    },
-  ]
-});
-```
-
-`properties`可以放任何值，Logic Flow 内部不会使用它，当接入方需要存放一些和节点相绑定的数据时，可以将其加入到`properties`中。
-
-你可能会疑惑，前文中已经提到了**不能在`view`中修改任何属性**，但在上例中，我们根据`properties.executed`的值修改了样式属性`stroke`，这是为什么？`properties`是一项特例，我们常常会在节点渲染好后对节点做一些操作，并根据`properties`的值去执行特定的逻辑，例如点击节点后，节点的 SVG 结构发生变化，这种运行时的场景就需要在`view`中执行，除此之外，我们仍然推荐不要在`view`中修改任何属性。
-
-在`view`中根据`properties`修改样式属性时，唯一需要注意的点是不能修改**尺寸类**属性，因为节点的锚点和外边框获取不到修改后的值，具体的尺寸类属性如下。
-
-| 属性 | 含义 | 对应节点类型 |
-| :- | :- | :- |
-| width | 宽 | 矩形（rect） |
-| height | 高 | 矩形（rect） |
-| r | 半径 | 圆形（circle） |
-| rx | x 轴半径 | 椭圆（ellipse） |
-| ry | y 轴半径 | 椭圆（ellipse） |
-
-> Logic Flow 自定义节点最大的灵活性就在于`properties`属性，它可以实现大部分业务对于节点的逻辑需求。
-
 ## 自定义节点的 Model
 
-节点的`model`中维护了以下内容：
+一个节点的正常渲染所需要的各类数据都源自于`model`，节点的`model`中包含了以下内容：
 
 - 节点的[通用属性](/api/nodeApi.md#通用属性)（包含数据属性、样式属性、附加属性、状态属性）
 - 简单节点的[节点属性](/api/nodeApi.md#节点属性)
 
-为了保证每一类属性都可以被正常设置，LF 在`model`的构造函数中按下图顺序对属性进行初始化。
+不同类型的属性之间可能存在着依赖关系，为了保证每一种属性都可以正常使用，LF 在`model`的构造函数中按下图顺序进行初始化。
 
 <img src="../../assets/images/custom-node-model.png" alt="节点属性初始化顺序" style="display: block; margin: 0 auto; zoom: 50%;"  />
 
-在 view 中我们可以通过`getShapeStyle`和`getAttributes`方法，从 model 里获取节点渲染时所需要的数据，接下来我们将学习如何在 model 中使用`setAttributes`方法来自定义这些数据。
+当各类属性被初始化完成后，LF 会主动调用`setAttributes`方法，因此我们可以用这个方法来对节点的属性进行自定义。
 
 ### 数据属性
 
-从上图可以看出，节点的数据属性在调用`setAttributes`之前已经被初始化，因此我们不需要对其再做任何改动，数据属性可以用来作为自定义其他属性的依据。
+从上图可以看到，数据属性在调用`setAttributes`之前就已经被初始化，它一般可以用来作为设置其他属性的依据。
 
 ```ts
 class Model extends BaseNodeModel {
@@ -352,19 +81,20 @@ class Model extends BaseNodeModel {
 }
 ```
 
+当接入方需要存放一些和节点相绑定的数据时，可以将其加入到`properties`中，Logic Flow 内部不会使用它，`properties`是自定义能力中最核心的一部分，通过`properties`可以实现业务中大部分逻辑需求。
+
+> 注意：我们不推荐在`setAttributes`中对数据属性再做任何改动。
+
+完整的数据类属性请访问 [API](/api/nodeApi.md#数据属性) 以查看更多细节。
+
 ### 样式属性
 
-以正方形为例，在之前的示例中，我们通过`lf.setTheme`方法设置了矩形的全局样式，现在我们只设置`square`节点的样式。
+以正方形节点（square）为例，我们需要为节点设置`width`和`height`。
 
 ```ts
 lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    // ...
-  }
-  // 自定义节点的 model
+  const { RectNode, RectNodeModel } = RegisterParam;
   class SquareModel extends RectNodeModel {
-    // 设置自定义 width 和 height
     setAttributes() {
       const size = 80;
       this.width = size;
@@ -372,7 +102,7 @@ lf.register('square', (RegisterParam) => {
     }
   }
   return {
-    view: SquareView,
+    view: RectNode,
     model: SquareModel,
   }
 });
@@ -391,7 +121,9 @@ lf.render({
 });
 ```
 
-在上面的代码中，我们直接在`setAttributes`中设置了`width`和`height`，现在节点`view`通过`getShapeStyle`获取的样式也就随之发生了变更。
+<example href="/examples/#/advance/custom-node/style" :height="250" ></example>
+
+完整的的样式类属性请访问 [API](/api/nodeApi.md#样式属性) 以查看更多细节。
 
 ### 附加属性
 
@@ -403,11 +135,7 @@ lf.render({
 
 ```ts
 lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    // ...
-  }
-
+  const { RectNode, RectNodeModel } = RegisterParam;
   class SquareModel extends RectNodeModel {
     setAttributes() {
       const size = 80;
@@ -422,7 +150,7 @@ lf.register('square', (RegisterParam) => {
     }
   }
   return {
-    view: SquareView,
+    view: RectNode,
     model: SquareModel,
   }
 });
@@ -443,7 +171,7 @@ lf.render({
 
 <example href="/examples/#/advance/custom-node/anchor" :height="250" ></example>
 
-在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项元素都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
+在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
 
 #### 设置连线时的校验规则
 
@@ -456,25 +184,28 @@ lf.render({
 
 ```ts
 lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareView extends RectNode {
-    // ...
-  }
-
+  const { RectNode, RectNodeModel } = RegisterParam;
   class SquareModel extends RectNodeModel {
     setAttributes() {
-      // ...
+      const size = 80;
       const circleOnlyAsTarget = {
-        message: '正方形节点下一个节点只能是圆形节点',
-        validate: (source, target) => {
-          return target.type === 'circle';
+        message: "正方形节点下一个节点只能是圆形节点",
+        validate: (source: any, target: any) => {
+          return target.type === "circle";
         },
       };
+
+      this.width = size;
+      this.height = size;
+      this.anchorsOffset = [
+        [size / 2, 0],
+        [-size / 2, 0]
+      ];
       this.sourceRules.push(circleOnlyAsTarget);
     }
   }
   return {
-    view: SquareView,
+    view: RectNode,
     model: SquareModel,
   }
 });
@@ -533,11 +264,13 @@ class Model extends BaseNodeModel {
 
 > 为某一种类型的节点设置菜单，并不是只有设置`model`的`menu`这一种方式，更便于自定义的方式是直接通过[事件系统](/guide/advance/event.html#节点事件)来监听右键事件，然后根据事件所返回的数据去渲染自己的组件，实际上，`@logicflow/extension`中的菜单组件就是基于这个机制开发的。
 
+完整的附加类属性请访问 [API](/api/nodeApi.md#附加属性) 以查看更多细节。
+
 ### 简单节点的节点属性
 
-不同形状的简单节点所对应的 SVG 标签不同，其所需要的标签属性也略有不同，查看[节点 API](/api/nodeApi.html#节点属性) 以获取更过信息。
+不同形状的简单节点所对应的 SVG 标签不同，其所需要的标签属性也略有不同，例如圆形需要设置半径`r`，椭圆需要设置 x 轴半径`rx`和 y 轴半径`ry`等。
 
-例如我们需要通过继承多边形（Polygon）来实现一个三角形的节点，直接修改多边形的节点属性`points`就可以快速得到这个效果。
+如果我们需要通过继承多边形（Polygon）来实现一个三角形的节点，则需要为多边形设置节点属性`points`。
 
 ```ts
 lf.register('triangle', (RegisterParam) => {
@@ -559,6 +292,106 @@ lf.register('triangle', (RegisterParam) => {
 ```
 
 <example href="/examples/#/advance/custom-node/triangle" :height="200" ></example>
+
+完整的节点属性请访问 [API](/api/nodeApi.md#节点属性) 以查看更多细节。
+
+## 自定义节点的 View
+
+节点在`view`中维护了自身的`VNode`，Logic Flow 渲染节点时会调用`view`中的`getShape`方法来确定`VNode`该如何渲染。
+
+### getShape
+
+`getShape`方法可以返回任意 SVG 能识别的标签，目前需要使用 Logic Flow 提供的 `h` 方法来创建 SVG 元素。
+
+仍然以正方形（square）节点为例，现在我们需要在正方形的左上角添加一个图标。
+
+```js
+lf.register('square', (RegisterParam) => {
+  // h 方法由 Logic Flow 提供
+  const { RectNode, RectNodeModel, h } = RegisterParam;
+  class SquareModel extends RectNodeModel {
+    setAttributes() {
+      const size = 80;
+      const circleOnlyAsTarget = {
+        message: "正方形节点下一个节点只能是圆形节点",
+        validate: (source: any, target: any) => {
+          return target.type === "circle";
+        },
+      };
+
+      this.width = size;
+      this.height = size;
+      this.anchorsOffset = [
+        [size / 2, 0],
+        [-size / 2, 0]
+      ];
+      this.sourceRules.push(circleOnlyAsTarget);
+    }
+  }
+  class SquareView extends RectNode {
+    getShape() {
+      // 通过 getAttributes 获取 model 中的属性
+      const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+      const attrs = {
+        // rect 标签的 x，y 对应的是图形的左上角
+        // 所以我们要将矩形的中心移动到 x，y
+        x: x - width / 2,
+        y: y - height / 2,
+        width,
+        height,
+        stroke,
+        fill,
+        strokeWidth
+      }
+      // getShape 的返回值是一个通过 h 方法创建的 svg 元素
+      return h("g", {}, [
+          h("rect", { ...attrs }),
+          h(
+            'svg',
+            {
+              x: x - width / 2 + 5,
+              y: y - height / 2 + 5,
+              width: 25,
+              height: 25,
+              viewBox: "0 0 1274 1024",
+            },
+            h(
+              'path',
+              {
+                fill: stroke,
+                d:
+                  "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
+              }
+            )
+          )
+        ]
+      );
+    }
+  }
+  return {
+    view: SquareView,
+    model: SquareModel,
+  }
+});
+
+// 配置节点
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形',
+      properties: {}
+    },
+  ]
+});
+```
+
+<example href="/examples/#/advance/custom-node/shape" :height="280" ></example>
+
+在上面的代码中，`getShape`方法返回了一个包含图标的标签，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。SVG 元素需要 model 中的实时数据才可以正常显示并使用，现在我们可以通过[getAttributes](/guide/advance/customNode.html#getattributes)方法获取到 model 中的[数据属性](/api/nodeApi.md#数据属性)和[样式属性](/api/nodeApi.html#样式属性)。
 
 ## extendKey
 

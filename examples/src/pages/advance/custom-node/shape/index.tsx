@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import { registerTriangleNode } from './triangleNode';
-import ExampleHeader from '../../../../components/example-header/index';
+import ExampleHeader from '../../../../components/example-header';
+import { Square } from '../square';
 
 const config = {
-  isSilentMode: true,
+  hideAnchors: true,
   stopScrollGraph: true,
   stopZoomGraph: true,
 };
@@ -13,11 +13,14 @@ const data = {
   nodes: [
     {
       id: 10,
-      type: 'triangle',
+      type: 'square',
       x: 150,
-      y: 70,
-      text: 'triangle'
-    }
+      y: 90,
+      text: '正方形',
+      properties: {
+        isUser: true
+      }
+    },
   ]
 };
 
@@ -28,13 +31,13 @@ export default function CustomNodeShapeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register('triangle', registerTriangleNode);
+    lf.register('square', Square);
     lf.render(data);
   }, []);
 
   return (
     <>
-      <ExampleHeader content="设置多边形的顶点来实现三角形" />
+      <ExampleHeader content="设置自定义节点的 SVG 元素" />
       <div id="graph" className="viewport" />
     </>
   )
