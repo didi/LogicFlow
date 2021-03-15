@@ -732,3 +732,23 @@ getProperties(id: string): Object
 ```js
 lf.getProperties('id')
 ```
+
+## updateText
+
+更新节点或者连线的文案
+
+```ts
+updateText(id: string, value: string): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点或者连线id |
+| value | String | ✅ |  | 更新后的文本值 |
+
+
+示例：
+
+```js
+lf.updateText('id', 'value')
+```
