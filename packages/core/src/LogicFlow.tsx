@@ -137,9 +137,12 @@ export default class LogicFlow {
   }
   /**
    * 添加扩展, 待讨论，这里是不是静态方法好一些？
+   * 重复添加插件的时候，把上一次添加的插件的销毁。
    * @param plugin 插件
    */
   static use(extension: Extension) {
+    const preExtension = this.extensions.get(extension.name);
+    preExtension && preExtension.destroy && preExtension.destroy();
     this.extensions.set(extension.name, extension);
   }
   installPlugins(activePlugins) {

@@ -251,6 +251,7 @@ export interface Extension {
   name: string; // 插件名称，之后用于插件覆盖和细粒度控制加载那些插件
   install?: (lf: LogicFlow, LogicFlow: LogicFlowContractor) => void;
   render?: ComponentRender;
+  destroy?: () => void;
 }
 
 export type Direction = 'vertical' | 'horizontal';

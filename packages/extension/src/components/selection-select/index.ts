@@ -1,6 +1,6 @@
 const SelectionSelect = {
   name: 'selection-select',
-  domContainer: null,
+  __domContainer: null,
   wrapper: null,
   lf: null,
   startPoint: {
@@ -13,7 +13,7 @@ const SelectionSelect = {
   },
   install() {},
   render(lf, domContainer) {
-    SelectionSelect.domContainer = domContainer;
+    SelectionSelect.__domContainer = domContainer;
     SelectionSelect.lf = lf;
     lf.on('blank:mousedown', ({ e }) => {
       const config = lf.getEditConfig();
@@ -57,7 +57,7 @@ const SelectionSelect = {
   __drawOff() {
     document.removeEventListener('mousemove', SelectionSelect.__draw);
     document.removeEventListener('mouseup', SelectionSelect.__drawOff);
-    SelectionSelect.domContainer.removeChild(SelectionSelect.wrapper);
+    SelectionSelect.__domContainer.removeChild(SelectionSelect.wrapper);
     const { x, y } = SelectionSelect.startPoint;
     const { x: x1, y: y1 } = SelectionSelect.endPoint;
     const lt = [
