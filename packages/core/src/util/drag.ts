@@ -80,6 +80,7 @@ class StepDrag {
   eventType: string;
   eventCenter: EventEmitter | null;
   model?: BaseNodeModel | BaseEdgeModel;
+  startTime?: number;
   constructor({
     onDragStart = noop,
     onDraging = noop,
@@ -114,6 +115,8 @@ class StepDrag {
     this.onDragStart({ event: e });
     const elementData = this.model?.getData();
     this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEDOWN`], { e, data: elementData });
+    this.eventCenter?.emit(EventType[`${this.eventType}_DRAGSTART`], { e, data: elementData });
+    this.startTime = new Date().getTime();
   };
   handleMouseMove = (e: MouseEvent) => {
     if (this.isStopPropagation) e.stopPropagation();
@@ -133,6 +136,9 @@ class StepDrag {
       this.onDraging({ deltaX, deltaY, event: e });
       const elementData = this.model?.getData();
       this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: elementData });
+      if (new Date().getTime() - this.startTime > 200) {
+        this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
+      }
     }
   };
   handleMouseUp = (e: MouseEvent) => {
@@ -143,6 +149,10 @@ class StepDrag {
     this.onDragEnd({ event: e });
     const elementData = this.model?.getData();
     this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
+    // 区分mouseup和drop, 在触发click事件的时候，会触发mouseup事件，但是不会触发drop事件。
+    if (new Date().getTime() - this.startTime > 200) {
+      this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
+    }
   };
 }
 
