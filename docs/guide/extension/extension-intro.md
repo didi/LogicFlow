@@ -25,8 +25,14 @@ LogicFlow.use(BpmnElement);
 
 ```js
 window.ResizeNode = {
-  install: function(lf) {
+  name: 'resize-node',
+  // lf实例化的时候触发
+  install: function(lf, LogicFlow) {
     // 基于lf进行扩展
-  }
+  },
+  // 流程渲染到界面时触发
+  render: function (lf, container) {}
 }
 ```
+
+
