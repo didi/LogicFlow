@@ -147,7 +147,7 @@ lf.render(data);
 
 ## 加入微信群
 
-加我微信号邀请入群：sunyongjian1993
+添加微信号：sunyongjian1993 或 logic-flow 加入用户群
 
 或扫群二维码：
 
