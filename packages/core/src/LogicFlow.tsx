@@ -279,6 +279,25 @@ export default class LogicFlow {
     transformMatrix.setZoomMaxSize(size);
   }
   /**
+   * 获取缩放的值和平移的值。
+   */
+  getTransform() {
+    const {
+      transformMatrix: {
+        SCALE_X,
+        SCALE_Y,
+        TRANSLATE_X,
+        TRANSLATE_Y,
+      },
+    } = this.graphModel;
+    return {
+      SCALE_X,
+      SCALE_Y,
+      TRANSLATE_X,
+      TRANSLATE_Y,
+    };
+  }
+  /**
    * 平移图形
    * @param x 向x轴移动距离
    * @param y 向y轴移动距离

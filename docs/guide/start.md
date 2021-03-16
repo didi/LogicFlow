@@ -67,6 +67,8 @@ const lf = new LogicFlow({
   container: document.querySelector('#container'),
   stopScrollGraph: true,
   stopZoomGraph: true,
+  width: 500,
+  height: 500,
   grid: {
     type: 'dot',
     size: 20,
