@@ -844,3 +844,21 @@ export const pickEdgeConfig = (data): EdgeConfig => pick(data, [
   'text',
   'properties',
 ]);
+
+type Position = {
+  x: number;
+  y: number;
+};
+
+// eslint-disable-next-line arrow-body-style
+export const twoPointDistance = (p1: Position, p2: Position) => {
+  const source = {
+    x: Math.abs(p1.x),
+    y: Math.abs(p1.y),
+  };
+  const target = {
+    x: Math.abs(p2.x),
+    y: Math.abs(p2.y),
+  };
+  return Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
+};

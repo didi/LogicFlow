@@ -19,7 +19,7 @@ import {
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
-import { pickEdgeConfig } from '../../util/edge';
+import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 
 const defaultData = {
   sourceNodeId: '',
@@ -111,41 +111,37 @@ class BaseEdgeModel implements IBaseModel {
 
   /* 获取起点 */
   getBeginAnchor(sourceNode, targetNode): Point {
-    const sourceAnchors = getAnchors(sourceNode);
     let position;
-    if (sourceNode.y >= targetNode.y + targetNode.height) {
-      // 上方
-      [position] = sourceAnchors;
-    } else if (sourceNode.y + sourceNode.height <= targetNode.y) {
-      // 下方
-      [, , position] = sourceAnchors;
-    } else if (sourceNode.x >= targetNode.x) {
-      // 左边
-      [, , , position] = sourceAnchors;
-    } else {
-      // 右边
-      [, position] = sourceAnchors;
-    }
+    let minDistance;
+    const sourceAnchors = getAnchors(sourceNode);
+    sourceAnchors.forEach((anchor) => {
+      const distance = twoPointDistance(anchor, targetNode);
+      if (!minDistance) {
+        minDistance = distance;
+        position = anchor;
+      } else if (distance < minDistance) {
+        minDistance = distance;
+        position = anchor;
+      }
+    });
     return position;
   }
 
   /* 获取终点 */
-  getEndAnchor(sourceNode, targetNode): Point {
-    const targetAnchors = getAnchors(targetNode);
+  getEndAnchor(targetNode): Point {
     let position;
-    if (targetNode.y >= sourceNode.y + sourceNode.height) {
-      // 上方
-      [position] = targetAnchors;
-    } else if (targetNode.y + targetNode.height <= sourceNode.y) {
-      // 下方
-      [, , position] = targetAnchors;
-    } else if (targetNode.x >= sourceNode.x) {
-      // 左边
-      [, , , position] = targetAnchors;
-    } else {
-      // 右边
-      [, position] = targetAnchors;
-    }
+    let minDistance;
+    const targetAnchors = getAnchors(targetNode);
+    targetAnchors.forEach((anchor) => {
+      const distance = twoPointDistance(anchor, this.startPoint);
+      if (!minDistance) {
+        minDistance = distance;
+        position = anchor;
+      } else if (distance < minDistance) {
+        minDistance = distance;
+        position = anchor;
+      }
+    });
     return position;
   }
 
@@ -276,7 +272,7 @@ class BaseEdgeModel implements IBaseModel {
       this.startPoint = position;
     }
     if (!this.endPoint) {
-      const position = this.getEndAnchor(this.sourceNode, this.targetNode);
+      const position = this.getEndAnchor(this.targetNode);
       this.endPoint = position;
     }
   }
