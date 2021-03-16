@@ -386,8 +386,8 @@ class GraphModel {
     const Model = this.getModel(type);
     const edgeModel = new Model({ ...edgeOriginData, type }, this);
     const edgeData = edgeModel.getData();
-    this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     this.edges.push(edgeModel);
+    this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     return edgeModel;
   }
 
@@ -553,7 +553,7 @@ class GraphModel {
   @action
   clearSelectElements() {
     this.selectElements.forEach(element => {
-      element.setSelected(false);
+      element?.setSelected(false);
     });
     this.selectElements.clear();
     this.topElement?.setZIndex();

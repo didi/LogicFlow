@@ -753,3 +753,23 @@ updateText(id: string, value: string): void
 ```js
 lf.updateText('id', 'value')
 ```
+
+## getEditConfig
+
+获取流程编辑基本配置
+
+
+```js
+lf.getEditConfig()
+```
+
+## updateEditConfig
+
+更新流程编辑基本配置
+
+```js
+lf.updateEditConfig({
+  isSilentMode: true
+})
+```
+

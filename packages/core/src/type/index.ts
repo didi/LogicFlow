@@ -65,7 +65,7 @@ export type NodeAttribute = {
   id: string;
   type?: string;
   x?: number;
-  y: number;
+  y?: number;
   text?: TextConfig;
   properties?: Record<string, unknown>;
 };
