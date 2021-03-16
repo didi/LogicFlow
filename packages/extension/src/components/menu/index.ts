@@ -27,7 +27,7 @@ interface Menu extends Extension {
 }
 
 const Menu: Menu = {
-  name: 'meun',
+  name: 'menu',
   __items: {},
   __menuDOM: null,
   __menuItemDOM: null, // 三种类型菜单选项的 DOM（node | edge | graph）
