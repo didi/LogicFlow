@@ -81,7 +81,7 @@ export default class LogicFlow {
   getSnapshot: () => void;
   eventCenter: EventEmitter;
   snaplineModel: SnaplineModel;
-  static extensions: Extension[] = [];
+  static extensions: Map<string, Extension> = new Map();
   components: ComponentRender[] = [];
   adapterIn: (data: unknown) => GraphConfigData;
   adapterOut: (data: GraphConfigData) => unknown;
@@ -98,14 +98,8 @@ export default class LogicFlow {
     } = options;
     this.options = Options.get(options);
     this.container = container;
-    this.width = width;
-    this.height = height;
-    if (!this.width) {
-      this.width = container.getBoundingClientRect().width;
-    }
-    if (!this.height) {
-      this.height = container.getBoundingClientRect().height;
-    }
+    this.width = width || container.getBoundingClientRect().width;
+    this.height = height || container.getBoundingClientRect().height;
     this.tool = new Tool(this);
     this.eventCenter = new EventEmitter();
     this.history = new History(this.eventCenter);
@@ -126,7 +120,7 @@ export default class LogicFlow {
     }
     // init 放到最后
     this.defaultRegister();
-    this.installPlugins();
+    this.installPlugins(options.activePlugins);
     initShortcut(this, this.graphModel);
   }
   on(evt: string, callback: CallbackType) {
@@ -143,21 +137,34 @@ export default class LogicFlow {
   }
   /**
    * 添加扩展, 待讨论，这里是不是静态方法好一些？
+   * 重复添加插件的时候，把上一次添加的插件的销毁。
    * @param plugin 插件
    */
   static use(extension: Extension) {
-    this.extensions.push(extension);
+    const preExtension = this.extensions.get(extension.name);
+    preExtension && preExtension.destroy && preExtension.destroy();
+    this.extensions.set(extension.name, extension);
   }
-  installPlugins() {
-    LogicFlow.extensions.forEach((extension) => {
-      const { install, render: renderComponent } = extension;
-      install.call(extension, this);
-      if (renderComponent) {
-        this.components.push(renderComponent.bind(extension));
+  installPlugins(activePlugins) {
+    if (activePlugins) {
+      for (let i = 0; i < activePlugins.length; i++) {
+        const name = activePlugins[i];
+        const extension = LogicFlow.extensions.get(name);
+        if (!extension) {
+          console.warn(`cannot find extension ${name}`);
+          break;
+        }
+        this.__installPlugin(extension);
       }
-    });
+      return;
+    }
+    LogicFlow.extensions.forEach((extension) => this.__installPlugin(extension));
   }
-
+  __installPlugin(extension) {
+    const { install, render: renderComponent } = extension;
+    install && install.call(extension, this, LogicFlow);
+    renderComponent && this.components.push(renderComponent.bind(extension));
+  }
   register(type: string, fn: RegisterElementFn) {
     const registerParam: RegisterParam = {
       BaseEdge,
@@ -270,6 +277,25 @@ export default class LogicFlow {
   setZoomMaxSize(size: number): void {
     const { transformMatrix } = this.graphModel;
     transformMatrix.setZoomMaxSize(size);
+  }
+  /**
+   * 获取缩放的值和平移的值。
+   */
+  getTransform() {
+    const {
+      transformMatrix: {
+        SCALE_X,
+        SCALE_Y,
+        TRANSLATE_X,
+        TRANSLATE_Y,
+      },
+    } = this.graphModel;
+    return {
+      SCALE_X,
+      SCALE_Y,
+      TRANSLATE_X,
+      TRANSLATE_Y,
+    };
   }
   /**
    * 平移图形
@@ -464,12 +490,14 @@ export default class LogicFlow {
       this.graphModel.removeEdgeByTarget(targetNodeId);
     }
   }
-  /* 更新文案 */
-  // updateEdgeText(id: string, text: string) {
-  //   const { edgesMap } = this.graphModel;
-  //   const { model } = edgesMap[id];
-  //   model.updateText(text);
-  // }
+  /**
+   * 更新节点或连线文案
+   * @param id 节点或者连线id
+   * @param value 文案内容
+   */
+  updateText(id: string, value: string) {
+    this.graphModel.setElementTextById(id, value);
+  }
   /* 获取边，返回的是model */
   // TODO 移到 model
   getEdge(config: EdgeFilter): BaseEdgeModel[] {

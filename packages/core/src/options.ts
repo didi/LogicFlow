@@ -26,7 +26,9 @@ export type Definition = {
 
   dndOptions?: DndOptions;
 
-  isSilentMode?: boolean;
+  isSilentMode?: boolean; // 静默模式
+
+  activePlugins?: string[]; // 启用插件，如果为空，则启用所有插件
 
   edgeType?: EdgeType;
 
@@ -40,6 +42,8 @@ export type Definition = {
 
   stopZoomGraph?: boolean;
 
+  stopMoveGraph?: boolean;
+  
   guards?: GuardsTypes;
 
   hideAnchors?: boolean; // 是否隐藏anchor

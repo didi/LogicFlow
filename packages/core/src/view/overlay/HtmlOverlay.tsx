@@ -5,10 +5,10 @@
  * 之后可以考虑放图片，范围框等。
  */
 import { h, Component } from 'preact';
-import { observer } from 'mobx-react';
 import GraphModel from '../../model/GraphModel';
 import getTransform from './getTransformHoc';
 import { GraphTransform } from '../../type';
+import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel

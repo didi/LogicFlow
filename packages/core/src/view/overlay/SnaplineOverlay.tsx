@@ -1,7 +1,7 @@
-import { observer } from 'mobx-react';
 import { h, Component } from 'preact';
 import SnaplineModel from '../../model/SnaplineModel';
 import Line from '../basic-shape/Line';
+import { observer } from '../..';
 
 type IProps = {
   snaplineModel: SnaplineModel;

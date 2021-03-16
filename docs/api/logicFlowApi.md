@@ -25,6 +25,7 @@ const lf = new LogicFlow(config: Object)
 | edgeType | String | | 'polyline' | 边的类型，支持自定义，内置直线'line'和折线'polyline'，默认折线 |
 | snapline | Boolean | | true | 是否启用节点辅助对齐线 |
 | guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
+| activePlugins | Array | | - | 控制当前渲染实例激活的插件，不传表示激活所有插件，空数组表示禁用所有插件 |
 
 ### `background`
 
@@ -294,6 +295,9 @@ export enum EventType {
   NODE_DELETE = 'node:delete',
   NODE_ADD = 'node:add',
   NODE_MOUSEDOWN = 'node:mousedown',
+  NODE_DRAGSTART = 'node:dragstart',
+  NODE_DRAG = 'node:drag',
+  NODE_DROP = 'node:drop',
   NODE_MOUSEUP = 'node:mouseup',
   NODE_MOUSEMOVE = 'node:mousemove',
   NODE_CONTEXTMENU = 'node:contextmenu',
@@ -305,6 +309,9 @@ export enum EventType {
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_MOUSEMOVE = 'blank:mousemove',
   BLANK_MOUSEUP = 'blank:mouseup',
+  BLANK_DRAGSTART = 'blank:dragstart',
+  BLANK_DRAG = 'blank:drag',
+  BLANK_DROP = 'blank:drop',
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
@@ -726,3 +733,43 @@ getProperties(id: string): Object
 ```js
 lf.getProperties('id')
 ```
+
+## updateText
+
+更新节点或者连线的文案
+
+```ts
+updateText(id: string, value: string): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点或者连线id |
+| value | String | ✅ |  | 更新后的文本值 |
+
+
+示例：
+
+```js
+lf.updateText('id', 'value')
+```
+
+## getEditConfig
+
+获取流程编辑基本配置
+
+
+```js
+lf.getEditConfig()
+```
+
+## updateEditConfig
+
+更新流程编辑基本配置
+
+```js
+lf.updateEditConfig({
+  isSilentMode: true
+})
+```
+

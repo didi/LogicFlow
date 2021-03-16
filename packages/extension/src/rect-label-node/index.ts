@@ -1,6 +1,7 @@
 import RectLabelNodeView from './RectLabelNodeView';
 
 const RectLabelNode = {
+  name: 'rect-label-node',
   install(lf) {
     lf.register('rect-label', this.registerLabelPlusNode);
   },

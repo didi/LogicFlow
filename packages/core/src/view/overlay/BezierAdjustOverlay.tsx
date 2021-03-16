@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react';
 import { Component, h } from 'preact';
 import { ModelType } from '../../constant/constant';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
@@ -8,6 +7,7 @@ import { createDrag } from '../../util/drag';
 import { getBezierPoints } from '../../util/edge';
 import Circle from '../basic-shape/Circle';
 import Line from '../basic-shape/Line';
+import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;
