@@ -51,19 +51,19 @@ Logic Flow 的内置节点包括
 | modelType | String | ✅  | 节点图形类型，已内部定义 |
 | graphModel | object | ✅  | 图形数据|
 | menu | Object |    | 节点菜单 |
+| anchorsOffset | Array |    | 锚点相对于节点中心坐标的偏移值数组 |
 | targetRules | Array |    | 节点可以连接的规则 |
 | sourceRules | Array |    | 节点可以被连接的规则 |
 | additionStateData | object |    | 设置节点状态的附加数据，例如显示菜单，菜单的位置信息|
 
 ### 状态属性
 
-> 编辑过程中使用不对外输出
+> 编辑过程中使用，不对外输出
 
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------ | :------------- |
 | isSelected | boolean |  ✅ | 节点是否被选中        |
 | isHovered  | boolean |  ✅ | 节点是否在hover状态       |
-| isContextMenu  | boolean |  ✅ | 是否展示节点菜单      |
 | zIndex     | number  |  ✅ | 节点在图中显示优先级，数值大的在上面，类似于css中zIndex的定义     |
 | anchors    | Array  |  ✅ | 锚点数组 |
 | activeAnchor | number  |  ✅ | 当前激活锚点Index值，没有激活的锚点，数值为-1|

@@ -1,30 +1,38 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig } from '../../util/node';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
-  @observable width = defaultTheme.rect.width;
-  @observable height = defaultTheme.rect.height;
   @observable radius = defaultTheme.rect.radius;
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('rect', graphModel);
-    assign(this, pickNodeConfig(data));
+    super(data, graphModel, 'rect');
+  }
+
+  setAttributes() {
+    this.width = defaultTheme.rect.width;
+    this.height = defaultTheme.rect.height;
   }
 
   @computed get anchors(): Point[] {
+    const {
+      anchorsOffset, x, y, width, height,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el) => ({
+        x: x + el[0],
+        y: y + el[1],
+      }));
+    }
     return [
-      { x: this.x, y: this.y - this.height / 2 },
-      { x: this.x + this.width / 2, y: this.y },
-      { x: this.x, y: this.y + this.height / 2 },
-      { x: this.x - this.width / 2, y: this.y },
+      { x, y: y - height / 2 },
+      { x: x + width / 2, y },
+      { x, y: y + height / 2 },
+      { x: x - width / 2, y },
     ];
   }
 }

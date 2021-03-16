@@ -30,15 +30,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE;
   offset = defaultTheme.polyline.offset;
   draginngPointList;
-  @observable points = '';
-  @observable pointsList: Point[] = [];
   @observable dbClickPosition: Point;
   constructor(data, graphModel: GraphModel) {
-    super(data, graphModel);
-    this.setStyleFromTheme('polyline', graphModel);
-    this.setAnchors();
-    this.initPoints();
-    this.formatText(data);
+    super(data, graphModel, 'polyline');
   }
   @computed get textPosition(): Point {
     // 在文案为空的情况下，文案位置为双击位置

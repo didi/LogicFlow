@@ -10,13 +10,8 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE;
   offset = defaultTheme.bezier.offset;
   @observable path = '';
-  @observable pointsList: Point[] = [];
   constructor(data, graphModel) {
-    super(data, graphModel);
-    this.setStyleFromTheme('bezier', graphModel);
-    this.setAnchors();
-    this.formatText(data);
-    this.initPoints();
+    super(data, graphModel, 'bezier');
   }
 
   @computed get textPosition(): Point {
