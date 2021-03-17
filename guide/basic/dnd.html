@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>拖拽 Dnd | Logic Flow</title>
+    <meta name="generator" content="VuePress 1.7.1">
+    
+    <meta name="description" content="Logic Flow desc">
+    
+    <link rel="preload" href="/assets/css/0.styles.fbf5df4c.css" as="style"><link rel="preload" href="/assets/js/app.44a3e942.js" as="script"><link rel="preload" href="/assets/js/2.ce0f30c1.js" as="script"><link rel="preload" href="/assets/js/20.9e9e9803.js" as="script"><link rel="preload" href="/assets/js/3.6f1b5052.js" as="script"><link rel="prefetch" href="/assets/js/10.83fc47b7.js"><link rel="prefetch" href="/assets/js/11.ec59f31e.js"><link rel="prefetch" href="/assets/js/12.afea3051.js"><link rel="prefetch" href="/assets/js/13.b9d81d1b.js"><link rel="prefetch" href="/assets/js/14.daf3a605.js"><link rel="prefetch" href="/assets/js/15.f7fdc0e0.js"><link rel="prefetch" href="/assets/js/16.5aaeab27.js"><link rel="prefetch" href="/assets/js/17.5bb66dc3.js"><link rel="prefetch" href="/assets/js/18.f63fb344.js"><link rel="prefetch" href="/assets/js/19.8f6a9d4f.js"><link rel="prefetch" href="/assets/js/21.a5ebfee0.js"><link rel="prefetch" href="/assets/js/22.16daa81c.js"><link rel="prefetch" href="/assets/js/23.30c3748e.js"><link rel="prefetch" href="/assets/js/24.2fc8642b.js"><link rel="prefetch" href="/assets/js/25.3e360b4b.js"><link rel="prefetch" href="/assets/js/26.3833905b.js"><link rel="prefetch" href="/assets/js/27.fa73c826.js"><link rel="prefetch" href="/assets/js/28.55e9788f.js"><link rel="prefetch" href="/assets/js/29.7dbc6778.js"><link rel="prefetch" href="/assets/js/30.aa415e9f.js"><link rel="prefetch" href="/assets/js/31.d0cb6496.js"><link rel="prefetch" href="/assets/js/32.4566ef10.js"><link rel="prefetch" href="/assets/js/33.386d7640.js"><link rel="prefetch" href="/assets/js/34.b81ae223.js"><link rel="prefetch" href="/assets/js/35.6d51a13e.js"><link rel="prefetch" href="/assets/js/36.16508b1f.js"><link rel="prefetch" href="/assets/js/4.69af47a6.js"><link rel="prefetch" href="/assets/js/5.0b1ff015.js"><link rel="prefetch" href="/assets/js/6.52658573.js"><link rel="prefetch" href="/assets/js/7.637023d3.js"><link rel="prefetch" href="/assets/js/8.dec690d1.js"><link rel="prefetch" href="/assets/js/9.138f1b1a.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.fbf5df4c.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.png" alt="Logic Flow" class="logo"> <span class="site-name can-hide">Logic Flow</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/guide/start.html" class="nav-link">
+  教程
+</a></div><div class="nav-item"><a href="/api/logicFlowApi.html" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/usage/bpmn.html" class="nav-link">
+  示例
+</a></div><div class="nav-item"><a href="/article/article01.html" class="nav-link">
+  文章
+</a></div><div class="nav-item"><a href="https://github.com/didi/LogicFlow" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/guide/start.html" class="nav-link">
+  教程
+</a></div><div class="nav-item"><a href="/api/logicFlowApi.html" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/usage/bpmn.html" class="nav-link">
+  示例
+</a></div><div class="nav-item"><a href="/article/article01.html" class="nav-link">
+  文章
+</a></div><div class="nav-item"><a href="https://github.com/didi/LogicFlow" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/guide/start.html" class="sidebar-link">快速上手</a></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>基础教程</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/basic/logic-flow.html" class="sidebar-link">LogicFlow</a></li><li><a href="/guide/basic/node.html" class="sidebar-link">节点 Node</a></li><li><a href="/guide/basic/edge.html" class="sidebar-link">边 Edge</a></li><li><a href="/guide/basic/grid.html" class="sidebar-link">网格 Grid</a></li><li><a href="/guide/basic/background.html" class="sidebar-link">背景 Background</a></li><li><a href="/guide/basic/dnd.html" aria-current="page" class="active sidebar-link">拖拽 Dnd</a></li><li><a href="/guide/basic/keyboard.html" class="sidebar-link">键盘快捷键 Keyboard</a></li><li><a href="/guide/basic/redoundo.html" class="sidebar-link">撤销/重做 Undo/Redo</a></li><li><a href="/guide/basic/snapline.html" class="sidebar-link">对齐线 Snapline</a></li><li><a href="/guide/basic/silent-mode.html" class="sidebar-link">静默模式</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>进阶指引</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/advance/theme.html" class="sidebar-link">主题 Theme 样式</a></li><li><a href="/guide/advance/event.html" class="sidebar-link">事件 Event</a></li><li><a href="/guide/advance/customNode.html" class="sidebar-link">自定义节点</a></li><li><a href="/guide/advance/customEdge.html" class="sidebar-link">自定义连线</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>拓展</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/guide/extension/extension-intro.html" class="sidebar-link">简介</a></li><li><a href="/guide/extension/extension-components.html" class="sidebar-link">组件</a></li><li><a href="/guide/extension/bpmn-element.html" class="sidebar-link">BPMN 元素</a></li><li><a href="/guide/extension/snapshot.html" class="sidebar-link">导出图片</a></li><li><a href="/guide/extension/adapter.html" class="sidebar-link">数据转换 Adapter</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="拖拽-dnd"><a href="#拖拽-dnd" class="header-anchor">#</a> 拖拽 Dnd</h1> <blockquote><p>在流程图编辑场景中比起通过代码配置注册节点以外，我们可能更需要通过图形用户界面来操作创建流程图，这时候就可以通过拖拽的方式来实现。</p></blockquote> <p>拖拽需要结合图形面板来实现，步骤：创建面板 → 拖拽初始化 → 监听drop事件创建节点</p> <p>示例如下：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 顶层App组件，渲染画布，对图形面板绑定拖拽事件</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">App</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span><span class="token operator">&lt;</span>IProps<span class="token punctuation">,</span> IState<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  lf<span class="token operator">:</span> LogicFlow<span class="token punctuation">;</span>
+  <span class="token function">componentDidMount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>lf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LogicFlow</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      container<span class="token operator">:</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'#graph'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      width<span class="token operator">:</span> <span class="token number">700</span><span class="token punctuation">,</span>
+      height<span class="token operator">:</span> <span class="token number">600</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>lf<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token function-variable function">mouseDownHandle</span> <span class="token operator">=</span> <span class="token parameter">config</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>lf<span class="token punctuation">.</span>dnd<span class="token punctuation">.</span><span class="token function">startDrag</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">&quot;designer&quot;</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>Panel mouseDownHandle<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>mouseDownHandle<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>div
+          className<span class="token operator">=</span><span class="token string">&quot;viewport&quot;</span>
+          id<span class="token operator">=</span><span class="token string">&quot;graph&quot;</span>
+        <span class="token operator">/</span><span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// Panel组件</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Panel</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span><span class="token operator">&lt;</span>IProps<span class="token punctuation">,</span> IState<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>state <span class="token operator">=</span> <span class="token punctuation">{</span>
+      shapeList<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          type<span class="token operator">:</span> <span class="token string">'rect'</span><span class="token punctuation">,</span>
+          text<span class="token operator">:</span> <span class="token string">'矩形'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+          type<span class="token operator">:</span> <span class="token string">'circle'</span><span class="token punctuation">,</span>
+          text<span class="token operator">:</span> <span class="token string">'圆形'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">mouseDown</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> type<span class="token punctuation">,</span> text <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> mouseDownHandle <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">;</span>
+    <span class="token function">mouseDownHandle</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      type<span class="token punctuation">,</span>
+      text<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> shapeList <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+        <span class="token punctuation">{</span>shapeList<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">shape</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+          <span class="token keyword">const</span> <span class="token punctuation">{</span> type<span class="token punctuation">,</span> text <span class="token punctuation">}</span> <span class="token operator">=</span> shape<span class="token punctuation">;</span>
+          <span class="token keyword">return</span> <span class="token punctuation">(</span>
+            <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">&quot;panel-item&quot;</span><span class="token operator">&gt;</span>
+              <span class="token operator">&lt;</span>div
+                className<span class="token operator">=</span><span class="token punctuation">{</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">panel-</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>type<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">}</span>
+                onMouseDown<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">mouseDown</span><span class="token punctuation">(</span>shape<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+              <span class="token operator">/</span><span class="token operator">&gt;</span>
+              <span class="token operator">&lt;</span>span<span class="token operator">&gt;</span><span class="token punctuation">{</span>text<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">&gt;</span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+          <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p><iframe width="100%" height="350" src="" data-v-e8c9530e></iframe></p> <p>通过上面的代码可以看出，将节点通过<code>div</code>标签+<code>css</code>样式的方式绘制到面板中，并为其绑定<code>onMouseDown</code>事件，当拖拽图形时，会触发<code>lf.dnd.startDrag</code>函数，表示开始拖拽，并传入选中图形的配置，<code>startDrag</code>入参格式：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token function">startDrag</span><span class="token punctuation">(</span>nodeConfig<span class="token operator">:</span> NodeConfig<span class="token punctuation">)</span><span class="token operator">:</span><span class="token keyword">void</span>
+
+type NodeConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+  id<span class="token operator">?</span><span class="token operator">:</span> string<span class="token punctuation">;</span>
+  type<span class="token operator">:</span> string<span class="token punctuation">;</span>
+  x<span class="token operator">:</span> number<span class="token punctuation">;</span>
+  y<span class="token operator">:</span> number<span class="token punctuation">;</span>
+  text<span class="token operator">?</span><span class="token operator">:</span> TextConfig<span class="token punctuation">;</span>
+  properties<span class="token operator">?</span><span class="token operator">:</span> Record<span class="token operator">&lt;</span>string<span class="token punctuation">,</span> unknown<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>拖拽结束鼠标松开时，将当前鼠标的位置转换为画布上的坐标，并以此为节点的中心点坐标<code>x</code>、<code>y</code>，合并拖拽节点传入的<code>nodeConfig</code>，监听到drop事件后会调用<code>lf.addNode</code>方法创建节点。</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/guide/basic/background.html" class="prev">
+        背景 Background
+      </a></span> <span class="next"><a href="/guide/basic/keyboard.html">
+        键盘快捷键 Keyboard
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.44a3e942.js" defer></script><script src="/assets/js/2.ce0f30c1.js" defer></script><script src="/assets/js/20.9e9e9803.js" defer></script><script src="/assets/js/3.6f1b5052.js" defer></script>
+  </body>
+</html>
