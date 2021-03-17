@@ -1,5 +1,3 @@
-import LogicFlow from "@logicflow/core";
-
 const MiniMap = {
   __lf: null,
   __container: null,
@@ -20,13 +18,13 @@ const MiniMap = {
   __viewPortHeight: 75,
   __resetDataX: 0,
   __resetDataY: 0,
-  __LogicFlow: LogicFlow,
+  __LogicFlow: null,
   install(lf, LogicFlow) {
     MiniMap.__lf = lf;
     MiniMap.__miniMapWidth = lf.width;
     MiniMap.__miniMapHeight = lf.width * 220 / 150;
     MiniMap.__LogicFlow = LogicFlow;
-    
+    this.__init();
   },
   render(lf, container) {
     MiniMap.__container = container;
