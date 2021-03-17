@@ -43,7 +43,7 @@ export type Definition = {
   stopZoomGraph?: boolean;
 
   stopMoveGraph?: boolean;
-  
+
   guards?: GuardsTypes;
 
   hideAnchors?: boolean; // 是否隐藏anchor
