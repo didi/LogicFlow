@@ -244,6 +244,19 @@ class GraphModel {
     return edgeModel;
   }
 
+  getNodeEdges(nodeId): BaseEdgeModel[] {
+    const edges = [];
+    for (let i = 0; i < this.edges.length; i++) {
+      const edgeModel = this.edges[i];
+      const nodeAsSource = this.edges[i].sourceNodeId === nodeId;
+      const nodeAsTarget = this.edges[i].targetNodeId === nodeId;
+      if (nodeAsSource || nodeAsTarget) {
+        edges.push(edgeModel);
+      }
+    }
+    return edges;
+  }
+
   /**
    * 获取选中的元素数据
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
