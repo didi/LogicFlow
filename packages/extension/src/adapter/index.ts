@@ -480,6 +480,7 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
 });
 
 const BpmnXmlAdapter = {
+  name: 'bpmn-xml-adapter',
   install(lf) {
     lf.adapterIn = this.adapterXmlIn;
     lf.adapterOut = this.adapterXmlOut;

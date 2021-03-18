@@ -7,6 +7,7 @@ import {
   Control,
   Menu,
   SelectionSelect,
+  MiniMap,
 } from '@logicflow/extension';
 import BpmnPattern from './pattern';
 import BpmnIo from './io';
@@ -50,6 +51,7 @@ export default class BpmnExample extends Component<IProps, IState>{
     LogicFlow.use(Control);
     LogicFlow.use(Menu);
     LogicFlow.use(SelectionSelect);
+    LogicFlow.use(MiniMap);
     const lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph') as HTMLElement

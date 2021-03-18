@@ -192,7 +192,7 @@ const Menu: Menu = {
     Menu.__menuDOM = null;
     Menu.__menuItemDOM = null;
   },
-  
+
   /**
    * 获取 Menu DOM
    * @param list 菜单项
