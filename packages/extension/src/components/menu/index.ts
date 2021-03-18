@@ -4,8 +4,8 @@ type SetType = 'add' | 'reset';
 
 export type MenuItem = {
   text?: string;
-  className?: string,
-  icon?: boolean,
+  className?: string;
+  icon?: boolean;
   callback: (element: any) => void;
 };
 
@@ -15,7 +15,7 @@ export type MenuConfig = {
   graphMenu?: MenuItem[] | false;
 };
 
-interface Menu extends Extension {
+interface MenuPlugin extends Extension {
   __container: HTMLElement;
   __items: MenuConfig;
   __menuDOM: HTMLElement;
@@ -26,7 +26,7 @@ interface Menu extends Extension {
   changeMenuItem: (type: SetType, config: MenuConfig) => void;
 }
 
-const Menu: Menu = {
+const Menu: MenuPlugin = {
   name: 'menu',
   __items: {},
   __menuDOM: null,
@@ -192,7 +192,7 @@ const Menu: Menu = {
     Menu.__menuDOM = null;
     Menu.__menuItemDOM = null;
   },
-  
+
   /**
    * 获取 Menu DOM
    * @param list 菜单项
