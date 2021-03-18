@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.0](https://github.com/didi/LogicFlow/compare/site@0.2.9...site@0.3.0-alpha.0) (2021-03-18)
+
+**Note:** Version bump only for package site
+
+
+
+
+
 ## [0.2.9](https://github.com/didi/LogicFlow/compare/site@0.2.8...site@0.2.9) (2021-03-10)
 
 **Note:** Version bump only for package site

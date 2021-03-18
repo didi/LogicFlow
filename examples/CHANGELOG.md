@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0-alpha.0](https://github.com/didi/LogicFlow/compare/examples@0.3.9...examples@0.4.0-alpha.0) (2021-03-18)
+
+
+### Bug Fixes
+
+* 🐛 add the name field for the extension components ([24a2831](https://github.com/didi/LogicFlow/commit/24a28316e90070f48813c29c5d3a95f00b0eb4bc))
+
+
+
+
+
 ## [0.3.9](https://github.com/didi/LogicFlow/compare/examples@0.3.8...examples@0.3.9) (2021-03-10)
 
 **Note:** Version bump only for package examples
