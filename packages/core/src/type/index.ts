@@ -253,6 +253,7 @@ export interface Extension {
   install?: (lf: LogicFlow, LogicFlow: LogicFlowContractor) => void;
   render?: ComponentRender;
   destroy?: () => void;
+  [props: string]: any;
 }
 
 export type Direction = 'vertical' | 'horizontal';

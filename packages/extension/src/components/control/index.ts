@@ -1,4 +1,4 @@
-import LogicFlow, { Extension } from "@logicflow/core";
+import LogicFlow, { Extension } from '@logicflow/core';
 
 type ControlItem = {
   key: string;
@@ -8,10 +8,10 @@ type ControlItem = {
   onClick?: Function;
   onMouseEnter?: Function;
   onMouseLeave?: Function;
-}
+};
 
 interface ControlPlugin extends Extension {
-  name: string,
+  name: string;
   __lf?: LogicFlow;
   __controlItems: ControlItem[];
   addItem: (item: ControlItem) => void;
@@ -19,7 +19,7 @@ interface ControlPlugin extends Extension {
   install: (lf) => void;
   render: (lf, domContainer) => void;
   __getControlTool: () => HTMLElement;
-};
+}
 
 const Control: ControlPlugin = {
   name: 'control',

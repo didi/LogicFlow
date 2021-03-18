@@ -1,4 +1,7 @@
-const MiniMap = {
+import { Extension } from '@logicflow/core';
+
+const MiniMap: Extension = {
+  name: 'minimap',
   __lf: null,
   __container: null,
   __miniMapWrap: null,
