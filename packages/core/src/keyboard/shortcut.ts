@@ -37,7 +37,7 @@ function translationEdgeData(edgeData, distance) {
 
 const TRANSLATION_DISTANCE = 40;
 
-export function initShortcut(lf: LogicFlow, graph: GraphModel) {
+export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
   const { keyboard } = lf;
   const { options: { keyboard: keyboardOptions } } = keyboard;
 

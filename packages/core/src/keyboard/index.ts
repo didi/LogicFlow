@@ -34,7 +34,6 @@ class Keyboard {
     const { lf } = options;
     this.target = lf.container;
     this.mousetrap = new Mousetrap(this.target);
-    this.initShortcuts();
     if (options.keyboard.enabled) {
       this.enable(true);
     }
