@@ -368,7 +368,7 @@ export default class LogicFlow {
   /**
    * 添加多个元素, 包括连线和节点。
    */
-  cloneElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
     const nodeIdMap = {};
     const elements = {
       nodes: [],
