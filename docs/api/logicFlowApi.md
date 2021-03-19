@@ -773,3 +773,28 @@ lf.updateEditConfig({
 })
 ```
 
+## getSelectElements
+
+获取选中的所有元素
+
+```ts
+getSelectElements(isIgnoreCheck: boolean): GraphConfigData
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的连线, 默认包括。 |
+
+
+```js
+lf.getSelectElements(false)
+```
+
+## clearSelectElements
+
+取消所有元素的选中状态
+
+```js
+lf.clearSelectElements()
+```
+
