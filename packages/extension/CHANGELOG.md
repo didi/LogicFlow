@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.3.0-alpha.0...@logicflow/extension@0.3.0-alpha.1) (2021-03-19)
+
+
+### Features
+
+* add getSelectElements function ([d6b5a81](https://github.com/didi/LogicFlow/commit/d6b5a81a76ba59cac319cb01a3187caf0fb216ea))
+
+
+
+
+
 # [0.3.0-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.2.9...@logicflow/extension@0.3.0-alpha.0) (2021-03-18)
 
 

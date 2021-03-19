@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.3.0-alpha.0...@logicflow/core@0.3.0-alpha.1) (2021-03-19)
+
+
+### Bug Fixes
+
+*  custom shortcut replace default shortcut ([791a4e2](https://github.com/didi/LogicFlow/commit/791a4e20134ef251073e528b897a6568a38ae57f))
+* vue reactive object side effect ([a2dc0f8](https://github.com/didi/LogicFlow/commit/a2dc0f86d920679df6a387985b36374c6c2aeb78))
+
+
+### Features
+
+* add getSelectElements function ([d6b5a81](https://github.com/didi/LogicFlow/commit/d6b5a81a76ba59cac319cb01a3187caf0fb216ea))
+
+
+
+
+
 # [0.3.0-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.9...@logicflow/core@0.3.0-alpha.0) (2021-03-18)
 
 
