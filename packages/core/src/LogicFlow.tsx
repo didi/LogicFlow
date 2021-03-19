@@ -48,7 +48,7 @@ import {
   EdgeAttribute,
   EdgeData,
 } from './type';
-import { initShortcut } from './keyboard/shortcut';
+import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
@@ -121,7 +121,10 @@ export default class LogicFlow {
     // init 放到最后
     this.defaultRegister();
     this.installPlugins(options.activePlugins);
-    initShortcut(this, this.graphModel);
+    // 先初始化默认内置快捷键
+    initDefaultShortcut(this, this.graphModel);
+    // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键
+    this.keyboard.initShortcuts();
   }
   on(evt: string, callback: CallbackType) {
     this.eventCenter.on(evt, callback);
