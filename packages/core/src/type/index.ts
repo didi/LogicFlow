@@ -40,6 +40,11 @@ export type TextConfig = {
   value: string;
 } & Point;
 
+export type GraphConfigData = {
+  nodes: NodeConfig[],
+  edges: EdgeConfig[],
+};
+
 // 节点数据属性
 export type NodeConfig = {
   id?: string;

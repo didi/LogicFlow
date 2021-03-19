@@ -1,6 +1,13 @@
 import { Extension } from '@logicflow/core';
 
-const MiniMap: Extension = {
+interface MiniMapPlugin extends Extension {
+  init: (option) => void;
+  show: (leftPosition, topPosition) => void;
+  hide: () => void;
+  [x: string]: any;
+}
+
+const MiniMap: MiniMapPlugin = {
   name: 'minimap',
   __lf: null,
   __container: null,
@@ -22,12 +29,16 @@ const MiniMap: Extension = {
   __resetDataX: 0,
   __resetDataY: 0,
   __LogicFlow: null,
+  __disabledPlugins: ['minimap', 'control'],
   install(lf, LogicFlow) {
     MiniMap.__lf = lf;
     MiniMap.__miniMapWidth = lf.width;
     MiniMap.__miniMapHeight = lf.width * 220 / 150;
     MiniMap.__LogicFlow = LogicFlow;
     this.__init();
+  },
+  init(option) {
+    this.__disabledPlugins = ['minimap'].concat(option.disabledPlugins || [])
   },
   render(lf, container) {
     MiniMap.__container = container;
@@ -73,7 +84,7 @@ const MiniMap: Extension = {
       stopMoveGraph: true,
       hideAnchors: true,
       hoverOutline: false,
-      activePlugins: [ 'bpmn-element' ],
+      disabledPlugins: MiniMap.__disabledPlugins,
     });
     MiniMap.__miniMapWrap = miniMapWrap;
     MiniMap.__createViewPort();
@@ -194,7 +205,7 @@ const MiniMap: Extension = {
    */
   __setView() {
     // 1. 获取到图中所有的节点中的位置，将其偏移到原点开始（避免节点位置为负的时候无法展示问题）。
-    const data = MiniMap.__resetData(MiniMap.__lf.getGraphRawData());
+    const data = MiniMap.__resetData(MiniMap.__lf.getGraphData());
     // 2. 将偏移后的数据渲染到minimap画布上
     MiniMap.__lfMap.render(data);
     // 3. 计算出所有节点在一起的边界。

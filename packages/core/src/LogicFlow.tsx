@@ -47,6 +47,7 @@ import {
   RegisterParam,
   EdgeAttribute,
   EdgeData,
+  GraphConfigData,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -56,11 +57,6 @@ import { EditConfigInterface } from './model/EditConfigModel';
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
 }
-
-type GraphConfigData = {
-  nodes: NodeConfig[],
-  edges: EdgeConfig[],
-};
 
 type GraphConfigModel = {
   nodes: BaseNodeModel[];
@@ -120,7 +116,7 @@ export default class LogicFlow {
     }
     // init 放到最后
     this.defaultRegister();
-    this.installPlugins(options.activePlugins);
+    this.installPlugins(options.disabledPlugins);
     // 先初始化默认内置快捷键
     initDefaultShortcut(this, this.graphModel);
     // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键
@@ -148,20 +144,12 @@ export default class LogicFlow {
     preExtension && preExtension.destroy && preExtension.destroy();
     this.extensions.set(extension.name, extension);
   }
-  installPlugins(activePlugins) {
-    if (activePlugins) {
-      for (let i = 0; i < activePlugins.length; i++) {
-        const name = activePlugins[i];
-        const extension = LogicFlow.extensions.get(name);
-        if (!extension) {
-          console.warn(`cannot find extension ${name}`);
-          break;
-        }
-        this.__installPlugin(extension);
+  installPlugins(disabledPlugins = []) {
+    LogicFlow.extensions.forEach((extension) => {
+      if (disabledPlugins.indexOf(extension.name) === -1) {
+        this.__installPlugin(extension)
       }
-      return;
-    }
-    LogicFlow.extensions.forEach((extension) => this.__installPlugin(extension));
+    });
   }
   __installPlugin(extension) {
     const { install, render: renderComponent } = extension;
@@ -380,7 +368,7 @@ export default class LogicFlow {
   /**
    * 添加多个元素, 包括连线和节点。
    */
-  cloneElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
     const nodeIdMap = {};
     const elements = {
       nodes: [],
@@ -389,7 +377,7 @@ export default class LogicFlow {
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       const preId = node.id;
-      const nodeModel = this.cloneNode(node.id);
+      const nodeModel = this.addNode(node);
       if (!nodeModel) return;
       if (preId) nodeIdMap[preId] = nodeModel.id;
       elements.nodes.push(nodeModel);

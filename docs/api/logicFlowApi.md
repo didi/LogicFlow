@@ -25,7 +25,7 @@ const lf = new LogicFlow(config: Object)
 | edgeType | String | | 'polyline' | 边的类型，支持自定义，内置直线'line'和折线'polyline'，默认折线 |
 | snapline | Boolean | | true | 是否启用节点辅助对齐线 |
 | guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
-| activePlugins | Array | | - | 控制当前渲染实例激活的插件，不传表示激活所有插件，空数组表示禁用所有插件 |
+| disabledPlugins | Array[pluginName] | | - | 控制当前禁用的插件 |
 
 ### `background`
 
