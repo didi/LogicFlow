@@ -649,7 +649,7 @@ export default class LogicFlow {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
     }
-    this.graphModel.graphDataToModel(graphData);
+    this.graphModel.graphDataToModel(formatData(graphData));
     if (!this.options.isSilentMode && this.options.history !== false) {
       this.history.watch(this.graphModel);
     }
