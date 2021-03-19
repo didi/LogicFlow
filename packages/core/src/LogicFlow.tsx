@@ -408,6 +408,14 @@ export default class LogicFlow {
   clearSelectElements() {
     this.graphModel.clearSelectElements();
   }
+  /**
+   * 获取选中的元素数据
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
+   * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
+   */
+  getSelectElements(isIgnoreCheck = true) {
+    this.graphModel.getSelectElements(isIgnoreCheck);
+  }
 
   setProperties(id: string, properties: Object): void {
     this.graphModel.getElement(id)?.setProperties(formatData(properties));
@@ -649,7 +657,7 @@ export default class LogicFlow {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
     }
-    this.graphModel.graphDataToModel(graphData);
+    this.graphModel.graphDataToModel(formatData(graphData));
     if (!this.options.isSilentMode && this.options.history !== false) {
       this.history.watch(this.graphModel);
     }
