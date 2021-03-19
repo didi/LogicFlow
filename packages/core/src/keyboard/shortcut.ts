@@ -45,7 +45,11 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
   keyboard.on(['cmd + c', 'ctrl + c'], () => {
     if (!keyboardOptions.enabled) return;
     if (graph.textEditElement) return;
-    selected = graph.getSelectElements(false);
+    const { guards } = lf.options;
+    const elements = graph.getSelectElements(false);
+    const enabledClone = guards && guards.beforeClone ? guards.beforeClone(elements) : true;
+    if (!enabledClone) return false;
+    selected = elements;
     selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
     selected.edges.forEach(edge => translationEdgeData(edge, TRANSLATION_DISTANCE));
     return false;

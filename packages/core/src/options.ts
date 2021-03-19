@@ -2,7 +2,12 @@ import { assign } from 'lodash-es';
 import { DndOptions } from './view/behavior/DnD';
 import { GridOptions } from './view/overlay/Grid';
 import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
-import { Style, NodeData, EdgeData } from './type';
+import {
+  Style,
+  NodeData,
+  EdgeData,
+  GraphConfigData,
+} from './type';
 import { KeyboardDef } from './keyboard';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier';
@@ -52,7 +57,7 @@ export type Definition = {
 };
 
 export interface GuardsTypes {
-  beforeClone?: (data: NodeData) => boolean;
+  beforeClone?: (data: NodeData | GraphConfigData) => boolean;
   beforeDelete?: (data: NodeData | EdgeData) => boolean;
 }
 

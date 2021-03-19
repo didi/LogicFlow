@@ -47,6 +47,7 @@ import {
   RegisterParam,
   EdgeAttribute,
   EdgeData,
+  GraphConfigData,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -56,11 +57,6 @@ import { EditConfigInterface } from './model/EditConfigModel';
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
 }
-
-type GraphConfigData = {
-  nodes: NodeConfig[],
-  edges: EdgeConfig[],
-};
 
 type GraphConfigModel = {
   nodes: BaseNodeModel[];
@@ -389,7 +385,7 @@ export default class LogicFlow {
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       const preId = node.id;
-      const nodeModel = this.cloneNode(node.id);
+      const nodeModel = this.addNode(node);
       if (!nodeModel) return;
       if (preId) nodeIdMap[preId] = nodeModel.id;
       elements.nodes.push(nodeModel);
