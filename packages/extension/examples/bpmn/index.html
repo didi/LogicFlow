@@ -153,6 +153,9 @@
   <script>
     LogicFlow.use(BpmnElement);
     LogicFlow.use(MiniMap);
+    MiniMap.init({
+      disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
+    })
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',

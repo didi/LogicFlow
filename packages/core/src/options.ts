@@ -33,7 +33,7 @@ export type Definition = {
 
   isSilentMode?: boolean; // 静默模式
 
-  activePlugins?: string[]; // 启用插件，如果为空，则启用所有插件
+  disabledPlugins?: string[]; // 禁用的插件
 
   edgeType?: EdgeType;
 

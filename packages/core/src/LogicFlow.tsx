@@ -116,7 +116,7 @@ export default class LogicFlow {
     }
     // init 放到最后
     this.defaultRegister();
-    this.installPlugins(options.activePlugins);
+    this.installPlugins(options.disabledPlugins);
     // 先初始化默认内置快捷键
     initDefaultShortcut(this, this.graphModel);
     // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键
@@ -144,20 +144,12 @@ export default class LogicFlow {
     preExtension && preExtension.destroy && preExtension.destroy();
     this.extensions.set(extension.name, extension);
   }
-  installPlugins(activePlugins) {
-    if (activePlugins) {
-      for (let i = 0; i < activePlugins.length; i++) {
-        const name = activePlugins[i];
-        const extension = LogicFlow.extensions.get(name);
-        if (!extension) {
-          console.warn(`cannot find extension ${name}`);
-          break;
-        }
-        this.__installPlugin(extension);
+  installPlugins(disabledPlugins = []) {
+    LogicFlow.extensions.forEach((extension) => {
+      if (disabledPlugins.indexOf(extension.name) === -1) {
+        this.__installPlugin(extension)
       }
-      return;
-    }
-    LogicFlow.extensions.forEach((extension) => this.__installPlugin(extension));
+    });
   }
   __installPlugin(extension) {
     const { install, render: renderComponent } = extension;
