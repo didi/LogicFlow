@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.1...@logicflow/core@0.3.0-alpha.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* minimap extension custom disabled plugin ([3768d14](https://github.com/towersxu/logicflow/commit/3768d149b6a72e4c251e287432b6070dcbfabce6))
+* move clone guard to shortcut ([c5643da](https://github.com/towersxu/logicflow/commit/c5643daa8ca7b2f905db81357444e5bba64a5ee7))
+
+
+### Features
+
+* change cloneElements to addElements ([6c59d74](https://github.com/towersxu/logicflow/commit/6c59d749a53e5263f5cf630702453054347215f6))
+
+
+
+
+
 # [0.3.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.3.0-alpha.0...@logicflow/core@0.3.0-alpha.1) (2021-03-19)
 
 
