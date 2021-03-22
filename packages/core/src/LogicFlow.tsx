@@ -147,7 +147,7 @@ export default class LogicFlow {
   installPlugins(disabledPlugins = []) {
     LogicFlow.extensions.forEach((extension) => {
       if (disabledPlugins.indexOf(extension.name) === -1) {
-        this.__installPlugin(extension)
+        this.__installPlugin(extension);
       }
     });
   }
