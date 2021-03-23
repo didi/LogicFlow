@@ -319,31 +319,20 @@ export default class LogicFlow {
    */
   focusOn(focusOnArgs: FocusOnArgs): void {
     const { transformMatrix } = this.graphModel;
-    const { coordinate, id, type } = focusOnArgs;
-    if (coordinate) {
-      const { x, y } = coordinate;
-      transformMatrix.focusOn(x, y, this.width, this.height);
-    } else if (id) {
-      if (type === 'node') {
-        const model = this.getNodeModel(id);
-        const { x, y } = model.getData();
-        transformMatrix.focusOn(x, y, this.width, this.height);
-      } else if (type === 'edge') {
-        const model = this.getEdgeModelById(id);
-        const { x, y } = model.textPosition;
-        transformMatrix.focusOn(x, y, this.width, this.height);
-      } else {
-        const nodeModel = this.getNodeModel(id);
-        if (!nodeModel) {
-          const edgeModel = this.getEdgeModelById(id);
-          const { x, y } = edgeModel.textPosition;
-          transformMatrix.focusOn(x, y, this.width, this.height);
-          return;
-        }
-        const { x, y } = nodeModel.getData();
-        transformMatrix.focusOn(x, y, this.width, this.height);
+    let { coordinate } = focusOnArgs;
+    const { id } = focusOnArgs;
+    if (!coordinate) {
+      const model = this.getNodeModel(id);
+      if (model) {
+        coordinate = model.getData();
+      }
+      const edgeModel = this.getEdgeModelById(id);
+      if (edgeModel) {
+        coordinate = edgeModel.textPosition;
       }
     }
+    const { x, y } = coordinate;
+    transformMatrix.focusOn(x, y, this.width, this.height);
   }
   /**
    * 删除节点
@@ -543,14 +532,14 @@ export default class LogicFlow {
   // todo: 不做外api输出，有例子在使用，后续删除
   getEdgeModelById(edgeId: string): BaseEdgeModel {
     const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId].model;
+    return edgesMap[edgeId]?.model;
   }
   getEdgeData(edgeId: string): EdgeData {
-    return this.getEdgeModelById(edgeId).getData();
+    return this.getEdgeModelById(edgeId)?.getData();
   }
   setEdgeData(edgeAttribute: EdgeAttribute): void {
     const { id } = edgeAttribute;
-    return this.getEdgeModelById(id).updateData(edgeAttribute);
+    return this.getEdgeModelById(id)?.updateData(edgeAttribute);
   }
   setDefaultEdgeType(type: Options.EdgeType): void {
     this.options.edgeType = type;
