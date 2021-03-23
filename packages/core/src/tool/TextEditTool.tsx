@@ -132,6 +132,7 @@ export default class TextEdit extends Component<IProps, IState> {
             className="lf-text-input"
             style={style}
             ref={this.ref}
+            key={textEditElement.id}
             onKeyUp={this.keyupHandler}
           >
             {textEditElement.text?.value}
