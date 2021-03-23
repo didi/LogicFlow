@@ -244,7 +244,6 @@ export type GraphTransform = {
 export type EventArgs = Record<string, number | object | string>;
 
 export type FocusOnArgs = {
-  type?: string;
   id?: string;
   coordinate?: {
     x: number,
