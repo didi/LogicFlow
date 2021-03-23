@@ -29,7 +29,7 @@ const MiniMap: MiniMapPlugin = {
   __resetDataX: 0,
   __resetDataY: 0,
   __LogicFlow: null,
-  __disabledPlugins: ['minimap', 'control'],
+  __disabledPlugins: ['minimap', 'control', 'selection-select'],
   install(lf, LogicFlow) {
     MiniMap.__lf = lf;
     MiniMap.__miniMapWidth = lf.width;
@@ -38,7 +38,7 @@ const MiniMap: MiniMapPlugin = {
     this.__init();
   },
   init(option) {
-    this.__disabledPlugins = ['minimap'].concat(option.disabledPlugins || [])
+    this.__disabledPlugins = this.__disabledPlugins.concat(option.disabledPlugins || [])
   },
   render(lf, container) {
     MiniMap.__container = container;

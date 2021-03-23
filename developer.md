@@ -26,6 +26,24 @@ npm run bulid:types
 npm run build
 ```
 
+### 启动本地开发
+
+开发core包
+
+```shell
+cd packages/core
+
+npm run dev
+```
+
+开发extension
+
+```shell
+cd packages/extension
+
+npm run dev
+```
+
 ## Publish
 
 ### clone 源码仓库
