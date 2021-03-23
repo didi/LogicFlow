@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.3](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.2...@logicflow/extension@0.3.0-alpha.3) (2021-03-23)
+
+
+### Bug Fixes
+
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/towersxu/logicflow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+
+
+
 # [0.3.0-alpha.2](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.1...@logicflow/extension@0.3.0-alpha.2) (2021-03-22)
 
 
