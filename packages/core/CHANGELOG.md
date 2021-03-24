@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.2...@logicflow/core@0.3.0-alpha.4) (2021-03-24)
+
+
+### Bug Fixes
+
+* the text content misalignment caused by switching nodes ([38193f7](https://github.com/towersxu/logicflow/commit/38193f7a28cb004c18dc7717f854d83269bf4194))
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/towersxu/logicflow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+
+
+
 # [0.3.0-alpha.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.2...@logicflow/core@0.3.0-alpha.3) (2021-03-23)
 
 
