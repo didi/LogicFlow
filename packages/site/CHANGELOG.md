@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.4](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.2...site@0.3.0-alpha.4) (2021-03-24)
+
+**Note:** Version bump only for package site
+
+
+
+
+
 # [0.3.0-alpha.3](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.2...site@0.3.0-alpha.3) (2021-03-23)
 
 **Note:** Version bump only for package site
