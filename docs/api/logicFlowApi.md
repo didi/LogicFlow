@@ -454,13 +454,11 @@ focusOn(focusOnArgs: FocusOnArgs): void
 | :- | :- | :- | :- | :- |
 | id | String | | - | 图形的id |
 | coordinate | Object | | - | 图形当前的位置坐标 |
-| type | String | | - | 图形类型，目前仅支持传节点'node'或连线'edge' |
 
 示例：
 
 ```js
 lf.focusOn({
-  type: 'node',
   id: '22'
 })
 
@@ -692,7 +690,7 @@ lf.getGraphData()
 
 ## getGraphRawData
 
-获取流程绘图原始数据
+获取流程绘图原始数据， 与getGraphData区别是该方法获取的数据不会受到adapter影响。
 
 ```ts
 getGraphRawData(): GraphConfigData
