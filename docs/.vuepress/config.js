@@ -64,6 +64,8 @@ const usage = ["bpmn", "approve"];
 
 const article = [
   'article01',
+  'article02',
+  'article03',
 ];
 
 module.exports = {
