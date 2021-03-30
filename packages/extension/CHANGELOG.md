@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.4...@logicflow/extension@0.3.0-alpha.5) (2021-03-30)
+
+
+### Features
+
+* edge text support hover style ([ffc75d4](https://github.com/towersxu/logicflow/commit/ffc75d45e0ef42b9dbca1be489fa749186aa81b0))
+
+
+
+
+
 # [0.3.0-alpha.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.2...@logicflow/extension@0.3.0-alpha.4) (2021-03-24)
 
 
