@@ -13,8 +13,11 @@ type IProps = {
   draggable: boolean;
   editable: boolean;
 };
+type IState = {
+  isHoverd: boolean;
+};
 
-export default class BaseText extends Component<IProps> {
+export default class BaseText extends Component<IProps, IState> {
   dragHandler: (ev: MouseEvent) => void;
   sumDeltaX = 0;
   sumDeltaY = 0;

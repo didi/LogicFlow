@@ -86,6 +86,9 @@ const MiniMap: MiniMapPlugin = {
       hoverOutline: false,
       disabledPlugins: MiniMap.__disabledPlugins,
     });
+    // minimap中禁用adapter。
+    MiniMap.__lfMap.adapterIn = (a) => a;
+    MiniMap.__lfMap.adapterOut = (a) => a;
     MiniMap.__miniMapWrap = miniMapWrap;
     MiniMap.__createViewPort();
   },
@@ -205,7 +208,7 @@ const MiniMap: MiniMapPlugin = {
    */
   __setView() {
     // 1. 获取到图中所有的节点中的位置，将其偏移到原点开始（避免节点位置为负的时候无法展示问题）。
-    const data = MiniMap.__resetData(MiniMap.__lf.getGraphData());
+    const data = MiniMap.__resetData(MiniMap.__lf.getGraphRawData());
     // 2. 将偏移后的数据渲染到minimap画布上
     MiniMap.__lfMap.render(data);
     // 3. 计算出所有节点在一起的边界。
