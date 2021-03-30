@@ -204,6 +204,11 @@ export type TextStyle = {
   fontSize?: number,
   fontWeight?: string,
   fontFamily?: string,
+  textHoverStyle?: {
+    fill?: string,
+    stroke?: string,
+    radius?: number,
+  }
 };
 export type NodeTextStyle = TextStyle;
 export type EdgeTextStyle = TextStyle & {
