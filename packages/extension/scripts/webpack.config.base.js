@@ -3,7 +3,8 @@ const path = require('path')
 const { version } = require('../package.json')
 
 const packagesEntry = {
-  BpmnAdapter: path.resolve(__dirname, "../src/adapter/index.ts"),
+  BpmnAdapter: path.resolve(__dirname, "../src/bpmn-adapter/index.ts"),
+  TurboAdapter: path.resolve(__dirname, "../src/turbo-adapter/index.ts"),
   Snapshot: path.resolve(__dirname, "../src/snapshot/index.ts"),
   RectLabelNode: path.resolve(__dirname, "../src/rect-label-node/index.ts"),
   BpmnElement: path.resolve(__dirname, "../src/bpmn/index.ts"),
