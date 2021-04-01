@@ -14,7 +14,8 @@ export default function ExampleHeader(props: IProps): ReactElement {
         className="content"
         style={props.contentStyle}
       >
-        {props.content}{props.children}
+        <span className="content-text">{props.content}</span>
+        {props.children}
       </div>
       {/* <div className="tools">some tools 🥳 🤯 🤩</div> */}
     </div>

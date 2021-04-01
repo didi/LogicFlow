@@ -37,17 +37,11 @@ export default function BpmnPattern(props: IProps): ReactElement {
   function openSelection() {
     lf.updateEditConfig({
       stopMoveGraph: true,
-      extraConf: {
-        openSelectionMode: true,
-      }
     });
   }
   lf && lf.on('selection:selected', () => {
     lf.updateEditConfig({
       stopMoveGraph: false,
-      extraConf: {
-        openSelectionMode: false,
-      }
     });
   });
   return (

@@ -66,6 +66,10 @@ const article = [
   'article01',
 ];
 
+const verisonInfo = [
+  '0.3.0'
+];
+
 module.exports = {
   title: 'Logic Flow',
   description: 'Logic Flow desc',
@@ -75,7 +79,13 @@ module.exports = {
     displayAllHeaders: false,
     sidebar: [],
     nav: [
-      {text: '教程', link: '/guide/start'},
+      {
+        text: '文档',
+        items: [
+          { text: '教程', link: '/guide/start' },
+          { text: '版本信息', link: '/version-info/0.3.0' }
+        ]
+      },
       {text: 'API', link: '/api/logicFlowApi'},
       {text: '示例', link: '/usage/bpmn'},
       {text: '文章', link: '/article/article01'},
@@ -83,6 +93,7 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': guide,
+      '/version-info/': verisonInfo,
       '/api/': api,
       '/usage/': usage,
       '/article/': article,
