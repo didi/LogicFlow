@@ -1,6 +1,6 @@
 # 节点 Node
 
-Logic Flow 的内置节点包括
+LogicFlow 的内置节点包括
 
 - 矩形(rect)
 - 圆形(circle)

@@ -33,7 +33,7 @@ const data = {
       type: 'circle',
       x: 380,
       y: 180,
-      text: 'Logic Flow'
+      text: 'LogicFlow'
     }
   ],
   edges: [

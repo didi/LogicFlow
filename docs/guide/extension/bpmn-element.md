@@ -1,8 +1,8 @@
 # BPMN 元素
 
-> BPMN 是目前较为著名的 workflow 的建模语言标准之一。Logic Flow 实现了 BPMN 扩展，可以直接使用 Logic Flow 来绘制兼容 BPMN2.0 规范的流程，并且其导出的数据可以在 Activiti 流程引擎上运行。
+> BPMN 是目前较为著名的 workflow 的建模语言标准之一。LogicFlow 实现了 BPMN 扩展，可以直接使用 LogicFlow 来绘制兼容 BPMN2.0 规范的流程，并且其导出的数据可以在 Activiti 流程引擎上运行。
 
-Logic Flow 提供了[自定义节点](../advance/customNode)和[自定义连线](../advance/customEdge), 可以实现满足 BPMN2.0 规范的节点和连线。然后在使用[数据转换](../extension/adapter)将生成的数据转换为 Activiti 需要的格式。
+LogicFlow 提供了[自定义节点](../advance/customNode)和[自定义连线](../advance/customEdge), 可以实现满足 BPMN2.0 规范的节点和连线。然后在使用[数据转换](../extension/adapter)将生成的数据转换为 Activiti 需要的格式。
 
 ## 使用方式
 
@@ -20,7 +20,7 @@ Logic Flow 提供了[自定义节点](../advance/customNode)和[自定义连线]
 
 ## 转换为 XML
 
-`BpmnAdapter` 支持 bpmnjson 和 Logic Flow data 之间的相互转换，如果希望 Logic Flow data 与 XML 互相转换，可以使用`BpmnXmlAdapter`。
+`BpmnAdapter` 支持 bpmnjson 和 LogicFlow data 之间的相互转换，如果希望 LogicFlow data 与 XML 互相转换，可以使用`BpmnXmlAdapter`。
 
 ```html
 <script src="/logic-flow.js"></script>

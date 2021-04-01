@@ -1,6 +1,6 @@
 # 主题 Theme 样式
 
-Logic Flow 提供了设置主题的方法，便于用户统一设置其内部所有元素的样式。  
+LogicFlow 提供了设置主题的方法，便于用户统一设置其内部所有元素的样式。  
 设置方式有两种：
 - 初始化`LogicFlow`时作为配置传入
 - 初始化后，调用`LogicFlow`的 setTheme 方法  

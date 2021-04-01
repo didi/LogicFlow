@@ -206,7 +206,7 @@ function convertLf2DiagramData(bpmnDiagramData, data) {
     let width = 100;
     let height = 80;
     let { x, y } = node;
-    // bpmn坐标是基于左上角，logic flow基于中心点，此处处理一下。
+    // bpmn坐标是基于左上角，LogicFlow基于中心点，此处处理一下。
     const shapeConfig = BpmnAdapter.shapeConfigMap.get(node.type);
     if (shapeConfig) {
       width = shapeConfig.width;
@@ -239,7 +239,7 @@ function convertLf2DiagramData(bpmnDiagramData, data) {
 }
 
 /**
- * 将bpmn数据转换为logic flow内部能识别数据
+ * 将bpmn数据转换为LogicFlow内部能识别数据
  */
 function convertBpmn2LfData(bpmnData) {
   let nodes = [];

@@ -1,6 +1,6 @@
 # 边 Edge
 
-Logic Flow 的内置连线类型包括
+LogicFlow 的内置连线类型包括
 
 - 直线(line)
 - 直角折线(polyline)

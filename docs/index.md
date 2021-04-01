@@ -1,8 +1,8 @@
 ---
 home: true
-heroImage: /logo.png
-heroText: Logic Flow
-tagline:  专注流程图前端可视化解决方案
+heroImage: /Logo_Dark_2.png
+heroText:  
+tagline:  专注流程可视化的前端解决方案
 actionText: 开始使用 →
 actionLink: /guide/start
 features:

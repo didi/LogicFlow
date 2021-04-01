@@ -1,21 +1,21 @@
 # 自定义节点
 
-> Logic Flow 的元素是基于 SVG 实现的，如果你对 SVG 的相关知识还不太熟悉，那么推荐你先了解一下 [SVG](https://developer.mozilla.org/zh-CN/docs/Web/SVG) 的基础内容。
+> LogicFlow 的元素是基于 SVG 实现的，如果你对 SVG 的相关知识还不太熟悉，那么推荐你先了解一下 [SVG](https://developer.mozilla.org/zh-CN/docs/Web/SVG) 的基础内容。
 
 ## 原理
 
 ### 基于继承的自定义节点
 
-Logic Flow 对外暴露了基础节点`BaseNode`和 5 个简单类型的节点：
+LogicFlow 对外暴露了基础节点`BaseNode`和 5 个简单类型的节点：
 `RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`。
 
 <img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
 
-由上图可以看到，Logic Flow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以继承简单类型节点实现，也可以直接通过继承`BaseNode`来实现。
+由上图可以看到，LogicFlow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以继承简单类型节点实现，也可以直接通过继承`BaseNode`来实现。
 
 ### MVVM
 
-Logic Flow 内部是基于`MVVM`模式进行开发的，分别使用`preact`和`mobx`来处理 view 和 model，所以当我们自定义节点的时候，需要为这个节点定义`view`和`model`。
+LogicFlow 内部是基于`MVVM`模式进行开发的，分别使用`preact`和`mobx`来处理 view 和 model，所以当我们自定义节点的时候，需要为这个节点定义`view`和`model`。
 
 ## 注册自定义节点
 

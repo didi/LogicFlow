@@ -85,11 +85,10 @@ const verisonInfo = [
 ];
 
 module.exports = {
-  title: 'Logic Flow',
-  description: 'Logic Flow desc',
+  description: 'LogicFlow desc',
   themeConfig: {
     sidebarDepth: 1,
-    logo: '/logo.png',
+    logo: '/Logo_Dark_1.png',
     displayAllHeaders: false,
     sidebar: [],
     nav: [

@@ -1,6 +1,6 @@
 # extension
 
-Logic Flow 扩展包
+LogicFlow 扩展包
 
 ## 使用方式
 

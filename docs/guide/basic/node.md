@@ -1,6 +1,6 @@
 # 节点 Node
 
-Logic Flow 的内置节点包括：
+LogicFlow 的内置节点包括：
 - 矩形(rect)
 - 圆形(circle)
 - 椭圆（ellipse)
@@ -54,7 +54,7 @@ type Point = [number, number]
 | fontFamily | string | ✅ | 字体类型 |
 | fontWeight | number / string | ✅ | 字体粗细 |
 ## 创建节点
-Logic Flow 支持三种创建节点的方式：
+LogicFlow 支持三种创建节点的方式：
 - 数据配置
 - 函数调用
 - 拖拽创建节点
@@ -278,7 +278,7 @@ lf.focusOn({
 Node 的完整函数参见 [Node API](/api/nodeApi.html)。
 
 ## 节点扩展
-Logic Flow 内部为各个图形设置了默认的样式属性，例如：宽、高、填充颜色、边框颜色、透明度等。默认配置参见[Theme API](/guide/advance/theme.html)。
+LogicFlow 内部为各个图形设置了默认的样式属性，例如：宽、高、填充颜色、边框颜色、透明度等。默认配置参见[Theme API](/guide/advance/theme.html)。
 
 ### 节点样式属性
 

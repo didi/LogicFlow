@@ -1,5 +1,5 @@
 # EventCenter
-eventCenter 是 Logic Flow 内部的通讯中心，通过 eventCenter 来发布事件或者监听事件，以低耦合的方式使两个实例产生交互。
+eventCenter 是 LogicFlow 内部的通讯中心，通过 eventCenter 来发布事件或者监听事件，以低耦合的方式使两个实例产生交互。
 
 在开发过程中，使用 eventCenter 也需要遵循一些规范。
 
