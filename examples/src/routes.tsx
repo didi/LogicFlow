@@ -15,6 +15,7 @@ import Snapshot from './pages/extension/snapshot';
 import Control from './pages/extension/components/control';
 import Menu from './pages/extension/components/menu';
 import DndPanel from './pages/extension/components/dnd-panel';
+import Selection from './pages/extension/components/selection';
 import CustomMenu from './pages/extension/components/custom-menu';
 import CustomDnd from './pages/extension/components/custom-dnd';
 import CustomNodeStyle from './pages/advance/custom-node/style';
@@ -54,6 +55,7 @@ export default (
     <Route path="/extension/components/control" exact component={Control} />
     <Route path="/extension/components/menu" exact component={Menu} />
     <Route path="/extension/components/dnd-panel" exact component={DndPanel} />
+    <Route path="/extension/components/selection" exact component={Selection} />
     <Route path="/extension/components/custom-menu" exact component={CustomMenu} />
     <Route path="/extension/components/custom-dnd" exact component={CustomDnd} />
     <Route path="/extension/bpmn-elements" exact component={BpmnElements} />
