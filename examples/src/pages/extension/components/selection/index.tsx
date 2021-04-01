@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LogicFlow from '@logicflow/core';
-import { SelectionSelect } from '@logicflow/extension'
+import { SelectionSelect } from '@logicflow/extension';
 import ExampleHeader from '../../../../components/example-header/index';
 import { Switch } from 'antd';
 
