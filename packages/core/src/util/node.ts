@@ -237,7 +237,7 @@ export const inStraightLineOfRect = (point: Point, node: BaseNode): boolean => {
     minX: rect.x - rect.width / 2 + rect.radius,
     maxX: rect.x + rect.width / 2 - rect.radius,
     minY: rect.y - rect.height / 2 + rect.radius,
-    maxY: rect.x + rect.height / 2 - rect.radius,
+    maxY: rect.y + rect.height / 2 - rect.radius,
   };
   const {
     x, y, width, height,
