@@ -244,6 +244,19 @@ class GraphModel {
     return edgeModel;
   }
 
+  getNodeEdges(nodeId): BaseEdgeModel[] {
+    const edges = [];
+    for (let i = 0; i < this.edges.length; i++) {
+      const edgeModel = this.edges[i];
+      const nodeAsSource = this.edges[i].sourceNodeId === nodeId;
+      const nodeAsTarget = this.edges[i].targetNodeId === nodeId;
+      if (nodeAsSource || nodeAsTarget) {
+        edges.push(edgeModel);
+      }
+    }
+    return edges;
+  }
+
   /**
    * 获取选中的元素数据
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
@@ -299,12 +312,6 @@ class GraphModel {
       this.topElement = element;
       element.setZIndex(ElementMaxzIndex);
     }
-  }
-
-  @action
-  showMenu(id) {
-    this.nodes.forEach((node) => node.showMenu(node.id === id));
-    // this.edges.forEach((edge) => edge.showMenu(edge.id === id));
   }
 
   @action
@@ -386,8 +393,8 @@ class GraphModel {
     const Model = this.getModel(type);
     const edgeModel = new Model({ ...edgeOriginData, type }, this);
     const edgeData = edgeModel.getData();
-    this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     this.edges.push(edgeModel);
+    this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
     return edgeModel;
   }
 
@@ -553,7 +560,7 @@ class GraphModel {
   @action
   clearSelectElements() {
     this.selectElements.forEach(element => {
-      element.setSelected(false);
+      element?.setSelected(false);
     });
     this.selectElements.clear();
     this.topElement?.setZIndex();

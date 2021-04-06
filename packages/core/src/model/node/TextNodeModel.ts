@@ -1,11 +1,9 @@
 import { computed, observable } from 'mobx';
-import { assign } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
 import { defaultTheme } from '../../constant/DefaultTheme';
-import { pickNodeConfig } from '../../util/node';
 
 class TextNodeModel extends BaseNodeModel {
   modelType = ModelType.TEXT_NODE;
@@ -14,9 +12,7 @@ class TextNodeModel extends BaseNodeModel {
   @observable fontWeight = defaultTheme.text.fontWeight;
 
   constructor(data, graphModel: GraphModel) {
-    super(data);
-    this.setStyleFromTheme('text', graphModel);
-    assign(this, pickNodeConfig(data));
+    super(data, graphModel, 'text');
   }
 
   @computed get width(): number {
@@ -26,8 +22,7 @@ class TextNodeModel extends BaseNodeModel {
     return this.fontSize * 1.5;
   }
   @computed get anchors(): Point[] {
-    return [
-    ];
+    return [];
   }
 }
 

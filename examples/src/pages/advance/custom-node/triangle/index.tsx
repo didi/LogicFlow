@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import { registerTriangleNode } from './triangleNode';
+import ExampleHeader from '../../../../components/example-header/index';
 
 const config = {
   isSilentMode: true,
@@ -31,5 +32,10 @@ export default function CustomNodeShapeExample() {
     lf.render(data);
   }, []);
 
-  return <div id="graph" className="viewport" />;
+  return (
+    <>
+      <ExampleHeader content="设置多边形的顶点来实现三角形" />
+      <div id="graph" className="viewport" />
+    </>
+  )
 }

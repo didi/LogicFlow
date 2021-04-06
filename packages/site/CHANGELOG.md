@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.4...site@0.3.0-alpha.5) (2021-03-30)
+
+**Note:** Version bump only for package site
+
+
+
+
+
+# [0.3.0-alpha.4](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.2...site@0.3.0-alpha.4) (2021-03-24)
+
+**Note:** Version bump only for package site
+
+
+
+
+
+# [0.3.0-alpha.3](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.2...site@0.3.0-alpha.3) (2021-03-23)
+
+**Note:** Version bump only for package site
+
+
+
+
+
+# [0.3.0-alpha.2](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.1...site@0.3.0-alpha.2) (2021-03-22)
+
+**Note:** Version bump only for package site
+
+
+
+
+
+# [0.3.0-alpha.1](https://github.com/didi/LogicFlow/compare/site@0.3.0-alpha.0...site@0.3.0-alpha.1) (2021-03-19)
+
+**Note:** Version bump only for package site
+
+
+
+
+
+# [0.3.0-alpha.0](https://github.com/didi/LogicFlow/compare/site@0.2.9...site@0.3.0-alpha.0) (2021-03-18)
+
+**Note:** Version bump only for package site
+
+
+
+
+
 ## [0.2.9](https://github.com/didi/LogicFlow/compare/site@0.2.8...site@0.2.9) (2021-03-10)
 
 **Note:** Version bump only for package site

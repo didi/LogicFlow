@@ -1,5 +1,6 @@
 const SelectionSelect = {
-  domContainer: null,
+  name: 'selection-select',
+  __domContainer: null,
   wrapper: null,
   lf: null,
   startPoint: {
@@ -10,21 +11,24 @@ const SelectionSelect = {
     x: 0,
     y: 0,
   },
+  __disabled: false,
   install() {},
   render(lf, domContainer) {
-    SelectionSelect.domContainer = domContainer;
+    SelectionSelect.__domContainer = domContainer;
     SelectionSelect.lf = lf;
     lf.on('blank:mousedown', ({ e }) => {
       const config = lf.getEditConfig();
       // 鼠标控制滚动移动画布的时候，不能选区。
-      if (!config.stopMoveGraph) {
-        return
+      if (!config.stopMoveGraph || SelectionSelect.__disabled) {
+        return;
       }
       const { domOverlayPosition: { x, y } } = lf.getPointByClient(e.x, e.y);
       SelectionSelect.startPoint = { x, y };
-      SelectionSelect.endPoint = {x, y};
+      SelectionSelect.endPoint = { x, y };
       const wrapper = document.createElement('div');
       wrapper.className = 'lf-selection-select';
+      wrapper.style.top = `${SelectionSelect.startPoint.y}px`;
+      wrapper.style.left = `${SelectionSelect.startPoint.x}px`;
       domContainer.appendChild(wrapper);
       SelectionSelect.wrapper = wrapper;
       document.addEventListener('mousemove', SelectionSelect.__draw);
@@ -56,7 +60,7 @@ const SelectionSelect = {
   __drawOff() {
     document.removeEventListener('mousemove', SelectionSelect.__draw);
     document.removeEventListener('mouseup', SelectionSelect.__drawOff);
-    SelectionSelect.domContainer.removeChild(SelectionSelect.wrapper);
+    SelectionSelect.__domContainer.removeChild(SelectionSelect.wrapper);
     const { x, y } = SelectionSelect.startPoint;
     const { x: x1, y: y1 } = SelectionSelect.endPoint;
     const lt = [
@@ -72,7 +76,13 @@ const SelectionSelect = {
       SelectionSelect.lf.select(element.id, true);
     });
     SelectionSelect.lf.emit('selection:selected', elements);
-  }
+  },
+  open() {
+    SelectionSelect.__disabled = false;
+  },
+  close() {
+    SelectionSelect.__disabled = true;
+  },
 };
 
 export {

@@ -68,8 +68,19 @@ export const getCircleView = (
       const { r } = super.getAttributes();
       const { model } = this.props;
       model.updateRadius(r + moveX);
+      this.r = r + moveX;
       model.setHitable(true);
+      this.resetEdge();
     };
+
+    resetEdge() {
+      const { graphModel, model } = this.props;
+      graphModel.getNodeEdges(model.id).map((edgeModel) => {
+        console.log(edgeModel);
+        // todo: @xinxin93统一节点更新方法。
+      });
+    }
+
     getResizeShape() {
       const {
         x,
@@ -78,9 +89,9 @@ export const getCircleView = (
         height,
         isHovered,
       } = this.getAttributes();
-      if (!isHovered) {
-        return '';
-      }
+      // if (!isHovered) {
+      //   return '';
+      // }
       return [
         h(
           'rect',

@@ -25,6 +25,7 @@ const lf = new LogicFlow(config: Object)
 | edgeType | String | | 'polyline' | 边的类型，支持自定义，内置直线'line'和折线'polyline'，默认折线 |
 | snapline | Boolean | | true | 是否启用节点辅助对齐线 |
 | guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
+| disabledPlugins | Array[pluginName] | | - | 控制当前禁用的插件 |
 
 ### `background`
 
@@ -294,6 +295,9 @@ export enum EventType {
   NODE_DELETE = 'node:delete',
   NODE_ADD = 'node:add',
   NODE_MOUSEDOWN = 'node:mousedown',
+  NODE_DRAGSTART = 'node:dragstart',
+  NODE_DRAG = 'node:drag',
+  NODE_DROP = 'node:drop',
   NODE_MOUSEUP = 'node:mouseup',
   NODE_MOUSEMOVE = 'node:mousemove',
   NODE_CONTEXTMENU = 'node:contextmenu',
@@ -305,6 +309,9 @@ export enum EventType {
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_MOUSEMOVE = 'blank:mousemove',
   BLANK_MOUSEUP = 'blank:mouseup',
+  BLANK_DRAGSTART = 'blank:dragstart',
+  BLANK_DRAG = 'blank:drag',
+  BLANK_DROP = 'blank:drop',
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
@@ -447,13 +454,11 @@ focusOn(focusOnArgs: FocusOnArgs): void
 | :- | :- | :- | :- | :- |
 | id | String | | - | 图形的id |
 | coordinate | Object | | - | 图形当前的位置坐标 |
-| type | String | | - | 图形类型，目前仅支持传节点'node'或连线'edge' |
 
 示例：
 
 ```js
 lf.focusOn({
-  type: 'node',
   id: '22'
 })
 
@@ -685,7 +690,7 @@ lf.getGraphData()
 
 ## getGraphRawData
 
-获取流程绘图原始数据
+获取流程绘图原始数据， 与getGraphData区别是该方法获取的数据不会受到adapter影响。
 
 ```ts
 getGraphRawData(): GraphConfigData
@@ -726,3 +731,68 @@ getProperties(id: string): Object
 ```js
 lf.getProperties('id')
 ```
+
+## updateText
+
+更新节点或者连线的文案
+
+```ts
+updateText(id: string, value: string): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点或者连线id |
+| value | String | ✅ |  | 更新后的文本值 |
+
+
+示例：
+
+```js
+lf.updateText('id', 'value')
+```
+
+## getEditConfig
+
+获取流程编辑基本配置
+
+
+```js
+lf.getEditConfig()
+```
+
+## updateEditConfig
+
+更新流程编辑基本配置
+
+```js
+lf.updateEditConfig({
+  isSilentMode: true
+})
+```
+
+## getSelectElements
+
+获取选中的所有元素
+
+```ts
+getSelectElements(isIgnoreCheck: boolean): GraphConfigData
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的连线, 默认包括。 |
+
+
+```js
+lf.getSelectElements(false)
+```
+
+## clearSelectElements
+
+取消所有元素的选中状态
+
+```js
+lf.clearSelectElements()
+```
+

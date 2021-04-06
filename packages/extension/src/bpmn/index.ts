@@ -7,6 +7,7 @@ import { getSequenceFlowView, getSequenceFlowModel } from './flow/SequenceFlow';
 import { theme } from './constant';
 
 const BpmnElement = {
+  name: 'bpmn-element',
   install(lf) {
     lf.setTheme(theme);
     lf.register('bpmn:startEvent', this.registerStartEvent);

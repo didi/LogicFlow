@@ -411,6 +411,7 @@ function getEdgeConfig(edgeValue, processValue) {
 }
 
 const BpmnAdapter = {
+  name: 'bpmn-adapter',
   install(lf) {
     lf.adapterIn = this.adapterIn;
     lf.adapterOut = this.adapterOut;
@@ -479,6 +480,7 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
 });
 
 const BpmnXmlAdapter = {
+  name: 'bpmn-xml-adapter',
   install(lf) {
     lf.adapterIn = this.adapterXmlIn;
     lf.adapterOut = this.adapterXmlOut;

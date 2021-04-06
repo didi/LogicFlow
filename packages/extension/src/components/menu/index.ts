@@ -4,8 +4,8 @@ type SetType = 'add' | 'reset';
 
 export type MenuItem = {
   text?: string;
-  className?: string,
-  icon?: boolean,
+  className?: string;
+  icon?: boolean;
   callback: (element: any) => void;
 };
 
@@ -15,7 +15,8 @@ export type MenuConfig = {
   graphMenu?: MenuItem[] | false;
 };
 
-interface Menu extends Extension {
+interface MenuPlugin extends Extension {
+  __container: HTMLElement;
   __items: MenuConfig;
   __menuDOM: HTMLElement;
   __menuItemDOM: Map<string, HTMLElement[]>;
@@ -25,16 +26,19 @@ interface Menu extends Extension {
   changeMenuItem: (type: SetType, config: MenuConfig) => void;
 }
 
-const Menu: Menu = {
+const Menu: MenuPlugin = {
+  name: 'menu',
   __items: {},
-  __menuDOM: document.createElement('ul'),
-  __menuItemDOM: new Map(), // 三种类型菜单选项的 DOM（node | edge | graph）
-
+  __menuDOM: null,
+  __menuItemDOM: null, // 三种类型菜单选项的 DOM（node | edge | graph）
+  __container: null,
   /**
    * 注册 Menu 插件
    * @param lf LogicFlow 实例
    */
   install(lf: LogicFlow) {
+    Menu.__menuDOM = document.createElement('ul');
+    Menu.__menuItemDOM = new Map();
     Menu.__items = {
       nodeMenu: [
         {
@@ -83,6 +87,7 @@ const Menu: Menu = {
    * @param container 组件层 DOM
    */
   render(lf, container) {
+    Menu.__container = container;
     let currentData = null; // 当前展示的菜单所属元素的model数据
     const menuConfig: MenuConfig = Menu.__items;
     Menu.__menuDOM.className = 'lf-menu';
@@ -180,6 +185,12 @@ const Menu: Menu = {
       Menu.__menuDOM.style.display = 'none';
     });
     // todo: 鼠标滚动导致缩放和平移变化，会是菜单显示不准确。需要抛出缩放和平移事件，这里再做处理。
+  },
+
+  destroy() {
+    Menu.__container.removeChild(Menu.__menuDOM);
+    Menu.__menuDOM = null;
+    Menu.__menuItemDOM = null;
   },
 
   /**

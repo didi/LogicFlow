@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0-alpha.5](https://github.com/towersxu/logicflow/compare/examples@0.4.0-alpha.4...examples@0.4.0-alpha.5) (2021-03-30)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [0.4.0-alpha.4](https://github.com/towersxu/logicflow/compare/examples@0.4.0-alpha.2...examples@0.4.0-alpha.4) (2021-03-24)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [0.4.0-alpha.3](https://github.com/towersxu/logicflow/compare/examples@0.4.0-alpha.2...examples@0.4.0-alpha.3) (2021-03-23)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [0.4.0-alpha.2](https://github.com/towersxu/logicflow/compare/examples@0.4.0-alpha.1...examples@0.4.0-alpha.2) (2021-03-22)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [0.4.0-alpha.1](https://github.com/didi/LogicFlow/compare/examples@0.4.0-alpha.0...examples@0.4.0-alpha.1) (2021-03-19)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [0.4.0-alpha.0](https://github.com/didi/LogicFlow/compare/examples@0.3.9...examples@0.4.0-alpha.0) (2021-03-18)
+
+
+### Bug Fixes
+
+* 🐛 add the name field for the extension components ([24a2831](https://github.com/didi/LogicFlow/commit/24a28316e90070f48813c29c5d3a95f00b0eb4bc))
+
+
+
+
+
 ## [0.3.9](https://github.com/didi/LogicFlow/compare/examples@0.3.8...examples@0.3.9) (2021-03-10)
 
 **Note:** Version bump only for package examples

@@ -8,8 +8,9 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, MenuConfig, NodeAttribute,
+  AdditionData, NodeData, MenuConfig, NodeAttribute, NodeConfig,
 } from '../../type';
+import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
@@ -71,19 +72,24 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable isContextMenu = false;
   @observable zIndex = defaultConfig.zIndex;
-  @observable anchors = [];
   @observable activeAnchor = -1;
+  @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
   @observable state = 1;
   @observable text = defaultConfig.text;
   @observable draggable = true;
 
-  constructor(data) {
-    this.formatText(data);
+  constructor(data: NodeConfig, graphModel: GraphModel, type) {
+    this.setStyleFromTheme(type, graphModel);
+    this.initNodeData(data);
+    this.setAttributes();
+  }
+
+  initNodeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
+    this.formatText(data);
     assign(this, pickNodeConfig(data));
   }
 
@@ -110,6 +116,8 @@ export default class BaseNodeModel implements IBaseModel {
       data.text.editable = true;
     }
   }
+
+  setAttributes() {}
 
   /**
    * 保存时获取的数据
@@ -200,6 +208,10 @@ export default class BaseNodeModel implements IBaseModel {
     return this.targetRules;
   }
 
+  get anchors() {
+    return [];
+  }
+
   @action
   move(deltaX, deltaY): void {
     this.x += deltaX;
@@ -265,11 +277,6 @@ export default class BaseNodeModel implements IBaseModel {
   setElementState(state: ElementState, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
-  }
-
-  @action
-  showMenu(flag = true): void {
-    this.isContextMenu = flag;
   }
 
   @action

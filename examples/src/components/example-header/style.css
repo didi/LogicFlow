@@ -16,6 +16,10 @@
   overflow: hidden;
 }
 
+.content-text {
+  padding-right: 6px;
+}
+
 .example-header .tools {
   white-space: nowrap;
   text-overflow: ellipsis;

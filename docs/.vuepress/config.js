@@ -32,10 +32,22 @@ const guide = [
     collapsable: false,
     children: [
       'extension/extension-intro',
-      'extension/extension-components',
-      'extension/bpmn-element',
       'extension/snapshot',
       'extension/adapter',
+      'extension/bpmn-element',
+      {
+        title: '组件',
+        collapsable: true,
+        children: [
+          'extension/extension-components',
+          'extension/component-control',
+          'extension/component-menu',
+          'extension/component-dnd-panel',
+          'extension/component-selection',
+          'extension/component-minimap',
+          'extension/component-custom'
+        ]
+      },
     ]
   }
 ];
@@ -68,6 +80,10 @@ const article = [
   'article03',
 ];
 
+const verisonInfo = [
+  '0.3.0'
+];
+
 module.exports = {
   title: 'Logic Flow',
   description: 'Logic Flow desc',
@@ -77,7 +93,13 @@ module.exports = {
     displayAllHeaders: false,
     sidebar: [],
     nav: [
-      {text: '教程', link: '/guide/start'},
+      {
+        text: '文档',
+        items: [
+          { text: '教程', link: '/guide/start' },
+          { text: '版本信息', link: '/version-info/0.3.0' }
+        ]
+      },
       {text: 'API', link: '/api/logicFlowApi'},
       {text: '示例', link: '/usage/bpmn'},
       {text: '文章', link: '/article/article01'},
@@ -85,6 +107,7 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': guide,
+      '/version-info/': verisonInfo,
       '/api/': api,
       '/usage/': usage,
       '/article/': article,

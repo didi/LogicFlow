@@ -126,7 +126,6 @@
               strokeWidth: 2,
             };
           }
-
           getTextStyle() {
             return {
                 fontSize: 12,
@@ -135,43 +134,12 @@
           }
         }
         class UserModel extends RectNodeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
-            const { size } = data.properties;
+          setAttributes() {
+            const { size } = this.properties;
             this.width = size * 40;
             this.height = size * 40;
             this.fill = 'green';
             this.radius = 0;
-            this.menu = [
-              {
-                text: 'delete',
-                className: 'lf-menu-item',
-                callback(node) {
-                  const comfirm = window.confirm('你确定要删除吗？')
-                  comfirm && lf.deleteNode(node.id)
-                },
-              },
-              {
-                text: 'edit',
-                className: 'lf-menu-item',
-                callback(node) {
-                  lf.editNodeText(node.id)
-                },
-              },
-              {
-                text: 'copy',
-                className: 'lf-menu-item',
-                callback: function (node) {
-                  // 自定义User节点带有复制功能
-                  // 复制的时候，将背复制节点状态设置未选中和不显示菜单模式
-                  node.setSelected(false);
-                  const ElementStateDefault = 1;
-                  node.setElementState(ElementStateDefault);
-                  const newNode = lf.cloneNode(node.id);
-                  newNode.setSelected(true);
-                },
-              },
-            ]
           }
         }
         return {
@@ -179,7 +147,7 @@
           model: UserModel,
         };
       });
-      lf.register('combine', ({ BaseNode, BaseNodeModel, h, mobx }) => {
+      lf.register('combine', ({ BaseNode, BaseNodeModel, h }) => {
         class CombineNode extends BaseNode {
           getShape() {
             const attributes = this.getAttributes();
@@ -202,26 +170,18 @@
         }
 
         class CombineModel extends BaseNodeModel {
-          constructor(data) {
-            super(data);
+          setAttributes() {
             this.width = 50;
             this.height = 60;
             this.fill = 'orange';
-          }
-
-          get anchors() {
-            return [
-              { x: this.x, y: this.y - this.height / 2 },
-              { x: this.x + this.width / 2, y: this.y },
-              { x: this.x, y: this.y + this.height / 2 },
-              { x: this.x - this.width / 2, y: this.y },
+            this.anchorsOffset = [
+              [0, -this.height / 2],
+              [this.width / 2, 0],
+              [0, this.height / 2],
+              [-this.width / 2, 0]
             ];
           }
         }
-
-        mobx.decorate(CombineModel, {
-          anchors: mobx.computed,
-        });
 
         return {
           view: CombineNode,
@@ -229,11 +189,9 @@
         };
       });
       lf.register('star', ({ PolygonNode, PolygonNodeModel, h, }) => {
-        class StarNode extends PolygonNode {
-        }
+        class StarNode extends PolygonNode { }
         class StarModel extends PolygonNodeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
+          setAttributes() {
             this.points = [
               [45, 0],
               [20, 90],
@@ -241,8 +199,8 @@
               [0, 30],
               [80, 90]
             ];
-            this.fill = '#456789';
-            this.stroke = this.fill;
+            this.fill =  '#456789';
+            this.stroke =  '#456789';
           }
         }
         return {
@@ -263,21 +221,85 @@
             };
           }
         }
-        class ConnnectionModel extends LineEdgeModel {
-          constructor(data, graphModel) {
-            super(data, graphModel);
-          }
-        }
+        class ConnnectionModel extends LineEdgeModel { }
         return {
           view: Connection,
           model: ConnnectionModel,
+        }
+      });
+      lf.register('square', (RegisterParam) => {
+        // h 方法由 Logic Flow 提供
+        const { RectNode, RectNodeModel, h } = RegisterParam;
+        class SquareModel extends RectNodeModel {
+          setAttributes() {
+            const size = 80;
+            const circleOnlyAsTarget = {
+              message: "正方形节点下一个节点只能是圆形节点",
+              validate: (source, target) => {
+                return target.type === "circle";
+              },
+            };
+
+            this.width = size;
+            this.height = size;
+            this.anchorsOffset = [
+              [size / 2, 0],
+              [-size / 2, 0]
+            ];
+            this.sourceRules.push(circleOnlyAsTarget);
+          }
+        }
+        class SquareView extends RectNode {
+          // getShape 的返回值是一个通过 h 方法创建的 svg 元素
+          getShape() {
+            const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+            const attrs = {
+              x: x - width / 2,
+              y: y - height / 2,
+              width,
+              height,
+              stroke,
+              fill,
+              strokeWidth
+            }
+            // 使用 h 方法创建一个矩形
+            return h(
+              "g", {}, [
+                h(
+                  "rect", { ...attrs }
+                ),
+                h(
+                  'svg',
+                  {
+                    x: x - width / 2 + 5,
+                    y: y - height / 2 + 5,
+                    width: 25,
+                    height: 25,
+                    viewBox: "0 0 1274 1024",
+                  },
+                  h(
+                    'path',
+                    {
+                      fill: stroke,
+                      d:
+                        "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
+                    }
+                  )
+                )
+              ]
+            );
+          }
+        }
+        return {
+          view: SquareView,
+          model: SquareModel,
         }
       });
       lf.setDefaultEdgeType('polyline');
       lf.render({
         nodes: [
           {
-            type: 'rect',
+            type: 'square',
             x: 300,
             y: 200,
             text: {

@@ -47,8 +47,9 @@ import {
   RegisterParam,
   EdgeAttribute,
   EdgeData,
+  GraphConfigData,
 } from './type';
-import { initShortcut } from './keyboard/shortcut';
+import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
@@ -56,11 +57,6 @@ import { EditConfigInterface } from './model/EditConfigModel';
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
 }
-
-type GraphConfigData = {
-  nodes: NodeConfig[],
-  edges: EdgeConfig[],
-};
 
 type GraphConfigModel = {
   nodes: BaseNodeModel[];
@@ -81,7 +77,7 @@ export default class LogicFlow {
   getSnapshot: () => void;
   eventCenter: EventEmitter;
   snaplineModel: SnaplineModel;
-  static extensions: Extension[] = [];
+  static extensions: Map<string, Extension> = new Map();
   components: ComponentRender[] = [];
   adapterIn: (data: unknown) => GraphConfigData;
   adapterOut: (data: GraphConfigData) => unknown;
@@ -98,14 +94,8 @@ export default class LogicFlow {
     } = options;
     this.options = Options.get(options);
     this.container = container;
-    this.width = width;
-    this.height = height;
-    if (!this.width) {
-      this.width = container.getBoundingClientRect().width;
-    }
-    if (!this.height) {
-      this.height = container.getBoundingClientRect().height;
-    }
+    this.width = width || container.getBoundingClientRect().width;
+    this.height = height || container.getBoundingClientRect().height;
     this.tool = new Tool(this);
     this.eventCenter = new EventEmitter();
     this.history = new History(this.eventCenter);
@@ -126,9 +116,15 @@ export default class LogicFlow {
     }
     // init 放到最后
     this.defaultRegister();
-    this.installPlugins();
-    initShortcut(this, this.graphModel);
+    this.installPlugins(options.disabledPlugins);
+    // 先初始化默认内置快捷键
+    initDefaultShortcut(this, this.graphModel);
+    // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键
+    this.keyboard.initShortcuts();
   }
+
+  // 事件系统----------------------------------------------
+
   on(evt: string, callback: CallbackType) {
     this.eventCenter.on(evt, callback);
   }
@@ -138,26 +134,31 @@ export default class LogicFlow {
   emit(evt: string, arg: Record<string, string | number | object>) {
     this.eventCenter.emit(evt, arg);
   }
-  getEvents() {
-    this.eventCenter.getEvents();
-  }
+
+  // 插件系统----------------------------------------------
+
   /**
    * 添加扩展, 待讨论，这里是不是静态方法好一些？
+   * 重复添加插件的时候，把上一次添加的插件的销毁。
    * @param plugin 插件
    */
   static use(extension: Extension) {
-    this.extensions.push(extension);
+    const preExtension = this.extensions.get(extension.name);
+    preExtension && preExtension.destroy && preExtension.destroy();
+    this.extensions.set(extension.name, extension);
   }
-  installPlugins() {
+  installPlugins(disabledPlugins = []) {
     LogicFlow.extensions.forEach((extension) => {
-      const { install, render: renderComponent } = extension;
-      install.call(extension, this);
-      if (renderComponent) {
-        this.components.push(renderComponent.bind(extension));
+      if (disabledPlugins.indexOf(extension.name) === -1) {
+        this.__installPlugin(extension);
       }
     });
   }
-
+  __installPlugin(extension) {
+    const { install, render: renderComponent } = extension;
+    install && install.call(extension, this, LogicFlow);
+    renderComponent && this.components.push(renderComponent.bind(extension));
+  }
   register(type: string, fn: RegisterElementFn) {
     const registerParam: RegisterParam = {
       BaseEdge,
@@ -210,7 +211,6 @@ export default class LogicFlow {
     this.setView(type, observer(ViewClass as IReactComponent));
     this.graphModel.setModel(type, ModelClass);
   }
-
   defaultRegister() {
     // register default shape
     this.register('rect', () => ({ view: RectNode, model: RectNodeModel }));
@@ -223,6 +223,8 @@ export default class LogicFlow {
     this.register('ellipse', () => ({ view: EllipseNode, model: EllipseNodeModel }));
     this.register('diamond', () => ({ view: DiamondNode, model: DiamondNodeModel }));
   }
+
+  // 全局操作----------------------------------------------
 
   undo() {
     if (!this.history.undoAble()) return;
@@ -272,6 +274,25 @@ export default class LogicFlow {
     transformMatrix.setZoomMaxSize(size);
   }
   /**
+   * 获取缩放的值和平移的值。
+   */
+  getTransform() {
+    const {
+      transformMatrix: {
+        SCALE_X,
+        SCALE_Y,
+        TRANSLATE_X,
+        TRANSLATE_Y,
+      },
+    } = this.graphModel;
+    return {
+      SCALE_X,
+      SCALE_Y,
+      TRANSLATE_X,
+      TRANSLATE_Y,
+    };
+  }
+  /**
    * 平移图形
    * @param x 向x轴移动距离
    * @param y 向y轴移动距离
@@ -302,31 +323,52 @@ export default class LogicFlow {
    */
   focusOn(focusOnArgs: FocusOnArgs): void {
     const { transformMatrix } = this.graphModel;
-    const { coordinate, id, type } = focusOnArgs;
-    if (coordinate) {
-      const { x, y } = coordinate;
-      transformMatrix.focusOn(x, y, this.width, this.height);
-    } else if (id) {
-      if (type === 'node') {
-        const model = this.getNodeModel(id);
-        const { x, y } = model.getData();
-        transformMatrix.focusOn(x, y, this.width, this.height);
-      } else if (type === 'edge') {
-        const model = this.getEdgeModelById(id);
-        const { x, y } = model.textPosition;
-        transformMatrix.focusOn(x, y, this.width, this.height);
-      } else {
-        const nodeModel = this.getNodeModel(id);
-        if (!nodeModel) {
-          const edgeModel = this.getEdgeModelById(id);
-          const { x, y } = edgeModel.textPosition;
-          transformMatrix.focusOn(x, y, this.width, this.height);
-          return;
-        }
-        const { x, y } = nodeModel.getData();
-        transformMatrix.focusOn(x, y, this.width, this.height);
+    let { coordinate } = focusOnArgs;
+    const { id } = focusOnArgs;
+    if (!coordinate) {
+      const model = this.getNodeModel(id);
+      if (model) {
+        coordinate = model.getData();
+      }
+      const edgeModel = this.getEdgeModelById(id);
+      if (edgeModel) {
+        coordinate = edgeModel.textPosition;
       }
     }
+    const { x, y } = coordinate;
+    transformMatrix.focusOn(x, y, this.width, this.height);
+  }
+  /*
+  * 设置主题样式
+  */
+  setTheme(style): void {
+    this.graphModel.setTheme(style);
+  }
+  /**
+   * 设置默认的连线类型
+   * @param type Options.EdgeType
+   */
+  setDefaultEdgeType(type: Options.EdgeType): void {
+    this.options.edgeType = type;
+    this.graphModel.changeEdgeType(type);
+  }
+  /**
+   * 更新节点或连线文案
+   * @param id 节点或者连线id
+   * @param value 文案内容
+   */
+  updateText(id: string, value: string) {
+    this.graphModel.setElementTextById(id, value);
+  }
+
+  // 节点操作----------------------------------------------
+
+  /**
+   * 添加节点
+   * @param nodeConfig 节点配置
+   */
+  addNode(nodeConfig: NodeConfig): BaseNodeModel {
+    return this.graphModel.addNode(nodeConfig);
   }
   /**
    * 删除节点
@@ -340,52 +382,6 @@ export default class LogicFlow {
     if (enabledDelete) {
       this.graphModel.deleteNode(nodeId);
     }
-  }
-  /**
-   * 添加节点
-   * @param nodeConfig 节点配置
-   */
-  addNode(nodeConfig: NodeConfig): BaseNodeModel {
-    return this.graphModel.addNode(nodeConfig);
-  }
-  /**
-   * 添加多个元素, 包括连线和节点。
-   */
-  cloneElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
-    const nodeIdMap = {};
-    const elements = {
-      nodes: [],
-      edges: [],
-    };
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
-      const preId = node.id;
-      const nodeModel = this.cloneNode(node.id);
-      if (!nodeModel) return;
-      if (preId) nodeIdMap[preId] = nodeModel.id;
-      elements.nodes.push(nodeModel);
-    }
-    edges.forEach(edge => {
-      const sourceId = edge.sourceNodeId;
-      const targetId = edge.targetNodeId;
-      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
-      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
-      const edgeModel = this.graphModel.createEdge(edge);
-      elements.edges.push(edgeModel);
-    });
-    return elements;
-  }
-
-  clearSelectElements() {
-    this.graphModel.clearSelectElements();
-  }
-
-  setProperties(id: string, properties: Object): void {
-    this.graphModel.getElement(id)?.setProperties(formatData(properties));
-  }
-
-  getProperties(id: string): Object {
-    return this.graphModel.getElement(id)?.getProperties();
   }
   /**
    * 显示节点文本编辑框
@@ -407,31 +403,8 @@ export default class LogicFlow {
       return this.graphModel.cloneNode(nodeId);
     }
   }
-  /**
-   * 获取节点对象
-   * @param nodeId 节点Id
-   */
-  // todo: 不做外api输出，有例子在使用，后续删除
-  getNodeModel(nodeId: string): BaseNodeModel {
-    return this.graphModel.getNodeModel(nodeId);
-  }
-  /**
-   * 获取节点数据
-   * @param nodeId 节点Id
-   */
-  getNodeData(nodeId: string): NodeAttribute {
-    return this.graphModel.getNodeModel(nodeId).getData();
-  }
-  setNodeData(nodeAttribute: NodeAttribute): void {
-    const { id } = nodeAttribute;
-    this.graphModel.getNodeModel(id).updateData(nodeAttribute);
-  }
-  setView(type: string, component: IReactComponent) {
-    this.viewMap.set(type, component);
-  }
-  getView = (type: string) => this.viewMap.get(type);
 
-  // getModel = this.graphModel.getModel;
+  // 连线操作----------------------------------------------
 
   /* 创建边 */
   createEdge(edgeConfig: EdgeConfig): void {
@@ -464,12 +437,9 @@ export default class LogicFlow {
       this.graphModel.removeEdgeByTarget(targetNodeId);
     }
   }
-  /* 更新文案 */
-  // updateEdgeText(id: string, text: string) {
-  //   const { edgesMap } = this.graphModel;
-  //   const { model } = edgesMap[id];
-  //   model.updateText(text);
-  // }
+
+  // 数据操作----------------------------------------------
+
   /* 获取边，返回的是model */
   // TODO 移到 model
   getEdge(config: EdgeFilter): BaseEdgeModel[] {
@@ -510,24 +480,26 @@ export default class LogicFlow {
     return [];
   }
   /**
-   * 获取边的model
-   * @param edgeId 边的Id
+   * 获取节点对象
+   * @param nodeId 节点Id
    */
   // todo: 不做外api输出，有例子在使用，后续删除
-  getEdgeModelById(edgeId: string): BaseEdgeModel {
-    const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId].model;
+  getNodeModel(nodeId: string): BaseNodeModel {
+    return this.graphModel.getNodeModel(nodeId);
+  }
+  getNodeData(nodeId: string): NodeAttribute {
+    return this.graphModel.getNodeModel(nodeId).getData();
+  }
+  setNodeData(nodeAttribute: NodeAttribute): void {
+    const { id } = nodeAttribute;
+    this.graphModel.getNodeModel(id).updateData(nodeAttribute);
   }
   getEdgeData(edgeId: string): EdgeData {
-    return this.getEdgeModelById(edgeId).getData();
+    return this.getEdgeModelById(edgeId)?.getData();
   }
   setEdgeData(edgeAttribute: EdgeAttribute): void {
     const { id } = edgeAttribute;
-    return this.getEdgeModelById(id).updateData(edgeAttribute);
-  }
-  setDefaultEdgeType(type: Options.EdgeType): void {
-    this.options.edgeType = type;
-    this.graphModel.changeEdgeType(type);
+    return this.getEdgeModelById(id)?.updateData(edgeAttribute);
   }
   /**
    * 获取流程绘图数据
@@ -547,29 +519,21 @@ export default class LogicFlow {
     const data = this.graphModel.modelToGraphData();
     return data;
   }
-
-  /*
-  * 设置主题样式
-  */
-  setTheme(style): void {
-    this.graphModel.setTheme(style);
+  /**
+   * 设置元素的自定义属性
+   * @param id 元素的id
+   * @param properties 自定义属性
+   */
+  setProperties(id: string, properties: Object): void {
+    this.graphModel.getElement(id)?.setProperties(formatData(properties));
   }
-
-  createFakerNode(nodeConfig) {
-    const Model = this.graphModel.modelMap.get(nodeConfig.type);
-    const fakerNodeModel = new Model(nodeConfig, this.graphModel);
-    this.graphModel.setFakerNode(fakerNodeModel);
-    return fakerNodeModel;
-  }
-
-  removeFakerNode() {
-    this.graphModel.removeFakerNode();
-  }
-
-  setNodeSnapLine(data) {
-    if (this.snaplineModel) {
-      this.snaplineModel.setNodeSnapLine(data);
-    }
+  /**
+   * 获取元素的自定义属性
+   * @param id 元素的id
+   * @returns 自定义属性
+   */
+  getProperties(id: string): Object {
+    return this.graphModel.getElement(id)?.getProperties();
   }
   /**
    * 更新流程图编辑相关设置
@@ -577,30 +541,12 @@ export default class LogicFlow {
   updateEditConfig(config: EditConfigInterface) {
     this.graphModel.editConfig.updateEditConfig(config);
   }
-
   /**
-   * 获取
+   * 获取流程图编辑相关设置
    */
   getEditConfig() {
     return this.graphModel.editConfig.getConfig();
   }
-
-  /**
-   * 获取指定区域坐标，此区域必须是DOM层，也就是可视区域。
-   * @param leftTopPoint 区域左上角坐标, dom层坐标
-   * @param rightBottomPoint 区域右下角坐标，dom层坐标
-   */
-  getAreaElement(leftTopPoint, rightBottomPoint) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
-      .map(element => element.getData());
-  }
-
-  removeNodeSnapLine() {
-    if (this.snaplineModel) {
-      this.snaplineModel.clearSnapline();
-    }
-  }
-
   /**
    * 获取事件位置相对于画布左上角的坐标
    * @param {number} x 事件x坐标
@@ -612,13 +558,94 @@ export default class LogicFlow {
   getPointByClient(x: number, y: number) {
     return this.graphModel.getPointByClient({ x, y });
   }
+  /**
+   * 获取选中的元素数据
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
+   * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
+   */
+  getSelectElements(isIgnoreCheck = true) {
+    this.graphModel.getSelectElements(isIgnoreCheck);
+  }
 
+  // 内部方法----------------------------------------------
+
+  /**
+   * 添加多个元素, 包括连线和节点。
+   */
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+    const nodeIdMap = {};
+    const elements = {
+      nodes: [],
+      edges: [],
+    };
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const preId = node.id;
+      const nodeModel = this.addNode(node);
+      if (!nodeModel) return;
+      if (preId) nodeIdMap[preId] = nodeModel.id;
+      elements.nodes.push(nodeModel);
+    }
+    edges.forEach(edge => {
+      const sourceId = edge.sourceNodeId;
+      const targetId = edge.targetNodeId;
+      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
+      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
+      const edgeModel = this.graphModel.createEdge(edge);
+      elements.edges.push(edgeModel);
+    });
+    return elements;
+  }
+  clearSelectElements() {
+    this.graphModel.clearSelectElements();
+  }
+  createFakerNode(nodeConfig) {
+    const Model = this.graphModel.modelMap.get(nodeConfig.type);
+    const fakerNodeModel = new Model(nodeConfig, this.graphModel);
+    this.graphModel.setFakerNode(fakerNodeModel);
+    return fakerNodeModel;
+  }
+  removeFakerNode() {
+    this.graphModel.removeFakerNode();
+  }
+  setNodeSnapLine(data) {
+    if (this.snaplineModel) {
+      this.snaplineModel.setNodeSnapLine(data);
+    }
+  }
+  /**
+   * 获取指定区域坐标，此区域必须是DOM层，也就是可视区域。
+   * @param leftTopPoint 区域左上角坐标, dom层坐标
+   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   */
+  getAreaElement(leftTopPoint, rightBottomPoint) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+      .map(element => element.getData());
+  }
+  removeNodeSnapLine() {
+    if (this.snaplineModel) {
+      this.snaplineModel.clearSnapline();
+    }
+  }
+  /**
+   * 获取边的model
+   * @param edgeId 边的Id
+   */
+  // todo: 不做外api输出，有例子在使用，后续删除
+  getEdgeModelById(edgeId: string): BaseEdgeModel {
+    const { edgesMap } = this.graphModel;
+    return edgesMap[edgeId].model;
+  }
+  setView(type: string, component: IReactComponent) {
+    this.viewMap.set(type, component);
+  }
+  getView = (type: string) => this.viewMap.get(type);
   // TODO 定义 graphData
   render(graphData = {}) {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
     }
-    this.graphModel.graphDataToModel(graphData);
+    this.graphModel.graphDataToModel(formatData(graphData));
     if (!this.options.isSilentMode && this.options.history !== false) {
       this.history.watch(this.graphModel);
     }

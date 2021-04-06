@@ -7,10 +7,7 @@ export { LineEdgeModel };
 export default class LineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.LINE_EDGE;
   constructor(data, graphModel) {
-    super(data, graphModel);
-    this.setStyleFromTheme('line', graphModel);
-    this.setAnchors();
-    this.formatText(data);
+    super(data, graphModel, 'line');
   }
   @computed get textPosition(): Point {
     return {

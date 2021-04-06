@@ -3,6 +3,101 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.4...@logicflow/core@0.3.0-alpha.5) (2021-03-30)
+
+
+### Features
+
+* edge text support hover style ([ffc75d4](https://github.com/towersxu/logicflow/commit/ffc75d45e0ef42b9dbca1be489fa749186aa81b0))
+
+
+
+
+
+# [0.3.0-alpha.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.2...@logicflow/core@0.3.0-alpha.4) (2021-03-24)
+
+
+### Bug Fixes
+
+* the text content misalignment caused by switching nodes ([38193f7](https://github.com/towersxu/logicflow/commit/38193f7a28cb004c18dc7717f854d83269bf4194))
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/towersxu/logicflow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+
+
+
+# [0.3.0-alpha.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.2...@logicflow/core@0.3.0-alpha.3) (2021-03-23)
+
+
+### Bug Fixes
+
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/towersxu/logicflow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+
+
+
+# [0.3.0-alpha.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.1...@logicflow/core@0.3.0-alpha.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* minimap extension custom disabled plugin ([3768d14](https://github.com/towersxu/logicflow/commit/3768d149b6a72e4c251e287432b6070dcbfabce6))
+* move clone guard to shortcut ([c5643da](https://github.com/towersxu/logicflow/commit/c5643daa8ca7b2f905db81357444e5bba64a5ee7))
+
+
+### Features
+
+* change cloneElements to addElements ([6c59d74](https://github.com/towersxu/logicflow/commit/6c59d749a53e5263f5cf630702453054347215f6))
+
+
+
+
+
+# [0.3.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.3.0-alpha.0...@logicflow/core@0.3.0-alpha.1) (2021-03-19)
+
+
+### Bug Fixes
+
+*  custom shortcut replace default shortcut ([791a4e2](https://github.com/didi/LogicFlow/commit/791a4e20134ef251073e528b897a6568a38ae57f))
+* vue reactive object side effect ([a2dc0f8](https://github.com/didi/LogicFlow/commit/a2dc0f86d920679df6a387985b36374c6c2aeb78))
+
+
+### Features
+
+* add getSelectElements function ([d6b5a81](https://github.com/didi/LogicFlow/commit/d6b5a81a76ba59cac319cb01a3187caf0fb216ea))
+
+
+
+
+
+# [0.3.0-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.9...@logicflow/core@0.3.0-alpha.0) (2021-03-18)
+
+
+### Bug Fixes
+
+* 🐛 beforeClone is not be triggered by ctrl+v ([969ab8d](https://github.com/didi/LogicFlow/commit/969ab8d3e1f00bfaba2124389d5d48ce21c6f58f)), closes [#66](https://github.com/didi/LogicFlow/issues/66)
+* 🐛 the incorrect way of anchor choice ([4811f65](https://github.com/didi/LogicFlow/commit/4811f6522ee7a817220ed472b1eb972dad562630))
+* **core:** invalid style setting of snapline in setTheme function ([dc963d5](https://github.com/didi/LogicFlow/commit/dc963d5cb3480e2e469ce5cb46cc4fbf8975f73b))
+* **core:** remove outline in container & copy incomplete elements ([370bbf5](https://github.com/didi/LogicFlow/commit/370bbf578416be6199fa4d4d424cb55fdb5c844c))
+* **core:** select edge after mouseup event ([f24aafd](https://github.com/didi/LogicFlow/commit/f24aafdafbdb5ee3d9617df4600e71b70dda876e))
+* **core:** trigger the edge:click and edge:dbclick with mousedown and mouseup ([b267188](https://github.com/didi/LogicFlow/commit/b267188c712e4ab363c958c4327d219634582641))
+
+
+### Features
+
+* 🎸 add anchorsOffset API ([f23317b](https://github.com/didi/LogicFlow/commit/f23317bf535222d3770ae39892071ca7d154df41))
+* add mini-map extension ([fa621da](https://github.com/didi/LogicFlow/commit/fa621daf2cc6a05cd5265bfe5245f5424f97ae7e))
+* custom active plugin & add updateText function ([c974e75](https://github.com/didi/LogicFlow/commit/c974e7521d8eb1395c9df63c5c5da8933e8a849a))
+* extension add destroy property ([23e59e5](https://github.com/didi/LogicFlow/commit/23e59e5902976fced92ad67ddd72f74938113c96))
+* resize node ([2bc595e](https://github.com/didi/LogicFlow/commit/2bc595eadea58e1597f730520b830efc41a0dac5))
+* **core:** add disable extension config & extension need name ([8bd9355](https://github.com/didi/LogicFlow/commit/8bd93555b7f82eb30a4813c986e3e642c86578fb))
+* **core:** add drap event ([746f5db](https://github.com/didi/LogicFlow/commit/746f5db4e5dcfd362f57524f2bfb40db2279030f))
+
+
+
+
+
 ## [0.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.2.8...@logicflow/core@0.2.9) (2021-03-10)
 
 

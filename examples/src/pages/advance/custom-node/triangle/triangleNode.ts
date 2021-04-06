@@ -1,18 +1,6 @@
-import { NodeData, GraphModel } from "@logicflow/core";
-
-type RegisterTriangleNodeType = {
-  PolygonNode: any;
-  PolygonNodeModel: any;
-};
-
-export const registerTriangleNode: any = ({
-  PolygonNode,
-  PolygonNodeModel,
-}: RegisterTriangleNodeType) => {
-  class TriangleNode extends PolygonNode {}
+export const registerTriangleNode: any = ({ PolygonNode, PolygonNodeModel }: any) => {
   class TriangleNodeModel extends PolygonNodeModel {
-    constructor(data: NodeData, graphModel: GraphModel) {
-      super(data, graphModel);
+    setAttributes() {
       // 多边形的节点属性 points
       this.points = [
         [50, 0],
@@ -22,7 +10,7 @@ export const registerTriangleNode: any = ({
     }
   }
   return {
-    view: TriangleNode,
+    view: PolygonNode,
     model: TriangleNodeModel,
   };
 };

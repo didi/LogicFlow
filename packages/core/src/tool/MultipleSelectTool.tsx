@@ -1,7 +1,7 @@
 import {
   h, Component,
 } from 'preact';
-import { observer } from 'mobx-react';
+import { observer } from '..';
 import LogicFlow from '../LogicFlow';
 // import BaseNodeModel from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
@@ -13,7 +13,6 @@ type IProps = {
   graphModel: GraphModel;
   logicFlow: LogicFlow;
 };
-
 @observer
 export default class MultipleSelect extends Component<IProps> {
   stepDrag;

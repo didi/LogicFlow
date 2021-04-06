@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import { registerGatewayNode } from './gatewayNode';
-import { registerUserTaskNode } from '../userTask/userTask';
 import ExampleHeader from '../../../../components/example-header';
+import { Square } from '../square';
 
 const config = {
   stopScrollGraph: true,
@@ -18,24 +17,24 @@ const data = {
   nodes: [
     {
       id: 10,
-      type: 'userTask',
+      type: 'square',
       x: 150,
       y: 150,
-      text: 'userTask'
+      text: '正方形'
     },
     {
       id: 20,
-      type: 'gateway',
+      type: 'circle',
       x: 380,
       y: 70,
-      text: 'gateway'
+      text: '圆形'
     },
     {
       id: 30,
-      type: 'circle',
+      type: 'diamond',
       x: 380,
       y: 230,
-      text: 'other'
+      text: '其他节点'
     },
   ]
 };
@@ -47,14 +46,13 @@ export default function CustomNodeEdgeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register('userTask', registerUserTaskNode);
-    lf.register('gateway', registerGatewayNode);
+    lf.register('square', Square);
     lf.render(data);
   }, []);
 
   return (
     <>
-      <ExampleHeader content="userTask 的下一个节点只能是网关节点" />
+      <ExampleHeader content="正方形的下一个节点只能是圆形节点" />
       <div id="graph" className="viewport" />
     </>
   )
