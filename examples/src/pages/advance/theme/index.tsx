@@ -49,15 +49,15 @@ const data = {
     {
       id: 20,
       type: 'rect',
-      x: 150,
-      y: 250,
+      x: 180,
+      y: 260,
       text: 'rect'
     },
     {
       id: 30,
       type: 'rect',
-      x: 350,
-      y: 250,
+      x: 320,
+      y: 260,
       text: 'rect'
     }
   ],
