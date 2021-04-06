@@ -8,7 +8,6 @@ import './index.css';
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
-  stopMoveGraph: true,
 };
 
 const data = {
