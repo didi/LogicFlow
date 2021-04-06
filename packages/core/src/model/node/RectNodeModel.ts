@@ -13,11 +13,6 @@ class RectNodeModel extends BaseNodeModel {
     super(data, graphModel, 'rect');
   }
 
-  setAttributes() {
-    this.width = defaultTheme.rect.width;
-    this.height = defaultTheme.rect.height;
-  }
-
   @computed get anchors(): Point[] {
     const {
       anchorsOffset, x, y, width, height,

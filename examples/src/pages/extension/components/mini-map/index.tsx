@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import LogicFlow from '@logicflow/core';
-import { SelectionSelect } from '@logicflow/extension';
+import { MiniMap } from '@logicflow/extension';
 import ExampleHeader from '../../../../components/example-header/index';
 import { Switch } from 'antd';
+import './index.css';
 
 const config = {
   stopScrollGraph: true,
@@ -44,10 +45,10 @@ const data = {
 let lf: LogicFlow;
 
 export default function DndPanelExample() {
-  const [ isOpened, setIsOpened ] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    LogicFlow.use(SelectionSelect);
+    LogicFlow.use(MiniMap);
     lf = new LogicFlow({
       ...config,
       grid: {
@@ -60,18 +61,19 @@ export default function DndPanelExample() {
   }, []);
 
   function handleSwitch() {
-    if (isOpened) {
-      SelectionSelect.close();
+    if (show) {
+      MiniMap.hide();
+      setShow(false);
     } else {
-      SelectionSelect.open();
+      MiniMap.show();
+      setShow(true);
     }
-    setIsOpened(!isOpened);
   }
 
   return (
     <>
-      <ExampleHeader content="开启多选功能" >
-        <Switch defaultChecked onChange={handleSwitch} />
+      <ExampleHeader content="显示 mini-map" >
+        <Switch onChange={handleSwitch} />
       </ExampleHeader>
       <div id="graph" className="viewport" />
     </>

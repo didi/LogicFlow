@@ -2,7 +2,7 @@ import { Extension } from '@logicflow/core';
 
 interface MiniMapPlugin extends Extension {
   init: (option) => void;
-  show: (leftPosition, topPosition) => void;
+  show: (leftPosition?: number, topPosition?: number) => void;
   hide: () => void;
   [x: string]: any;
 }
@@ -96,12 +96,13 @@ const MiniMap: MiniMapPlugin = {
     const miniMapContainer = document.createElement('div');
     const miniMapWrap = MiniMap.__miniMapWrap;
     miniMapContainer.appendChild(miniMapWrap);
-    miniMapContainer.style.left = `${left}px`;
-    miniMapContainer.style.top = `${top}px`;
+    if (typeof left !== 'undefined' && typeof top !== 'undefined') {
+      miniMapContainer.style.left = `${left}px`;
+      miniMapContainer.style.top = `${top}px`;
+    }
     miniMapContainer.style.position = 'absolute';
     miniMapContainer.className = 'lf-mini-map';
     MiniMap.__container.appendChild(miniMapContainer);
-    
     MiniMap.__miniMapWrap.appendChild(MiniMap.__viewport);
 
     const header = document.createElement('div');

@@ -27,6 +27,8 @@ const SelectionSelect = {
       SelectionSelect.endPoint = { x, y };
       const wrapper = document.createElement('div');
       wrapper.className = 'lf-selection-select';
+      wrapper.style.top = `${SelectionSelect.startPoint.y}px`;
+      wrapper.style.left = `${SelectionSelect.startPoint.x}px`;
       domContainer.appendChild(wrapper);
       SelectionSelect.wrapper = wrapper;
       document.addEventListener('mousemove', SelectionSelect.__draw);
