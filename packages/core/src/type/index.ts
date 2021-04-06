@@ -182,6 +182,7 @@ export type AnchorHoverStyle = {
 export type EdgeStyle = {
   stroke?: string,
   strokeWidth?: number,
+  strokeDashArray?: string,
   hoverStroke?: string,
   selectedStroke?: string,
   outlineColor?: string,

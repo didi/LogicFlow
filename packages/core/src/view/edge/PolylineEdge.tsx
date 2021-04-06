@@ -74,12 +74,14 @@ export default class PolylineEdge extends BaseEdge {
       points,
       strokeWidth,
       stroke,
+      strokeDashArray,
     } = this.getAttributes();
     return (
       <Polyline
         points={points}
         strokeWidth={strokeWidth}
         stroke={stroke}
+        strokeDasharray={strokeDashArray}
       />
     );
   }

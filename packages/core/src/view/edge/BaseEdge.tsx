@@ -26,6 +26,7 @@ export default class BaseEdge extends Component<IProps> {
       model: {
         strokeWidth,
         strokeOpacity,
+        strokeDashArray,
         isSelected,
         isHovered,
         hoverStroke,
@@ -48,6 +49,7 @@ export default class BaseEdge extends Component<IProps> {
       stroke,
       strokeWidth,
       strokeOpacity,
+      strokeDashArray,
       isSelected,
       isHovered,
       hoverStroke,

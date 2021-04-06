@@ -53,6 +53,7 @@ const edge = {
   strokeWidth: 2,
   hoverStroke: '#000000',
   selectedStroke: '#000000',
+  strokeDashArray: '1,0',
   outlineColor: '#000000',
   outlineStrokeDashArray: '3,3',
 };

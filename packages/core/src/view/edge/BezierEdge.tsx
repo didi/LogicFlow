@@ -19,6 +19,7 @@ export default class BezierEdge extends BaseEdge {
       path,
       strokeWidth,
       stroke,
+      strokeDashArray,
     } = this.getAttributes();
     return (
       <Path
@@ -26,6 +27,7 @@ export default class BezierEdge extends BaseEdge {
         strokeWidth={strokeWidth}
         stroke={stroke}
         fill="none"
+        strokeDasharray={strokeDashArray}
       />
     );
   }
