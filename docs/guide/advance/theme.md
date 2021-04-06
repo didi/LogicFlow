@@ -373,6 +373,7 @@ lf.setTheme({
 |-|-|-|-|
 |stroke|color|连线颜色|#000000|
 |strokeWidth|number|连线宽度|2|
+|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
 |hoverStroke|color|连线hover颜色|#000000|
 |selectedStroke|color|连线选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
@@ -385,6 +386,7 @@ lf.setTheme({
   line: {
     stroke: '#000000',
     strokeWidth: 2,
+    strokeDashArray: '1,0',
     hoverStroke: '#000000',
     selectedStroke: '#000000',
     selectedShadow: true,
@@ -401,6 +403,7 @@ lf.setTheme({
 |-|-|-|-|
 |stroke|color|连线颜色|#000000|
 |strokeWidth|number|连线宽度|2|
+|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
 |hoverStroke|color|连线hover颜色|#000000|
 |selectedStroke|color|连线选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
@@ -414,6 +417,7 @@ lf.setTheme({
   polyline: {
     stroke: '#000000',
     strokeWidth: 2,
+    strokeDashArray: '1,0',
     hoverStroke: '#000000',
     selectedStroke: '#000000',
     selectedShadow: true,
