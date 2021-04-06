@@ -32,10 +32,22 @@ const guide = [
     collapsable: false,
     children: [
       'extension/extension-intro',
-      'extension/extension-components',
-      'extension/bpmn-element',
       'extension/snapshot',
       'extension/adapter',
+      'extension/bpmn-element',
+      {
+        title: '组件',
+        collapsable: true,
+        children: [
+          'extension/extension-components',
+          'extension/component-control',
+          'extension/component-menu',
+          'extension/component-dnd-panel',
+          'extension/component-selection',
+          'extension/component-minimap',
+          'extension/component-custom'
+        ]
+      },
     ]
   }
 ];
