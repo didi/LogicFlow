@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-beta.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.3.0-alpha.1...@logicflow/extension@0.3.0-beta.1) (2021-04-06)
+
+
+### Bug Fixes
+
+* minimap extension custom disabled plugin ([3768d14](https://github.com/didi/LogicFlow/commit/3768d149b6a72e4c251e287432b6070dcbfabce6))
+* set the start position of selection when mouse is down ([c7d3715](https://github.com/didi/LogicFlow/commit/c7d3715b956ed99e80bcb19a51d2e21432cd1037))
+* support custom style by class for mini-map ([4c97625](https://github.com/didi/LogicFlow/commit/4c97625774f65ed3d59caefc5c691fabf0adc499))
+* **all:** add rimraf ([c526ad8](https://github.com/didi/LogicFlow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/didi/LogicFlow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+### Features
+
+* add the switch of SelectionSelect in Extension ([35baa89](https://github.com/didi/LogicFlow/commit/35baa89a9ded2be1ce1fe7392fc9e75121f8e0d7))
+* add the UMD dist of BpmnAdapter and TurboAdapter in extension ([2edac3b](https://github.com/didi/LogicFlow/commit/2edac3b7b7fb6deb873f7268a5fdb9cc116ed8b3))
+* **extension:** turbo-adapter ([1b4c99e](https://github.com/didi/LogicFlow/commit/1b4c99e1a2d1f996e4e3b65d39d6b586f0f69937))
+* edge text support hover style ([ffc75d4](https://github.com/didi/LogicFlow/commit/ffc75d45e0ef42b9dbca1be489fa749186aa81b0))
+
+
+
+
+
 # [0.3.0-beta.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.3.0-alpha.1...@logicflow/extension@0.3.0-beta.0) (2021-04-06)
 
 
