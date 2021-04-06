@@ -388,11 +388,10 @@
         })),
         edges: [
           {
-            id: '2222',
-            type: 'line',
+            id: 'edge_2222',
+            type: 'polyline',
             sourceNodeId: 50,
             targetNodeId: 21,
-            text: '5555',
           }
         ]
         // .concat(Array.of(...Array(300)).map((item, i) => {
@@ -409,6 +408,7 @@
         targetNodeId: 21,
         text: '222',
       });
+      lf.updateText('edge_2222', '你是打算啊')
       lf.createEdge({
         sourceNodeId: 10,
         targetNodeId: 50,

@@ -223,7 +223,7 @@ class BaseEdgeModel implements IBaseModel {
     // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition;
     if (!data.text) {
-      data.text = {
+      this.text = {
         value: '',
         x,
         y,
