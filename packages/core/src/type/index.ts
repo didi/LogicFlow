@@ -182,6 +182,7 @@ export type AnchorHoverStyle = {
 export type EdgeStyle = {
   stroke?: string,
   strokeWidth?: number,
+  strokeDashArray?: string,
   hoverStroke?: string,
   selectedStroke?: string,
   outlineColor?: string,
@@ -204,15 +205,15 @@ export type TextStyle = {
   fontSize?: number,
   fontWeight?: string,
   fontFamily?: string,
-  textHoverStyle?: {
-    fill?: string,
-    stroke?: string,
-    radius?: number,
-  }
 };
 export type NodeTextStyle = TextStyle;
 export type EdgeTextStyle = TextStyle & {
   background?: {
+    fill?: string,
+    stroke?: string,
+    radius?: number,
+  },
+  hoverBackground?: {
     fill?: string,
     stroke?: string,
     radius?: number,

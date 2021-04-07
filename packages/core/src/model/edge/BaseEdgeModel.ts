@@ -58,6 +58,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable endPoint = defaultData.endPoint;
   @observable strokeWidth = defaultData.strokeWidth;
   @observable stroke = defaultData.stroke;
+  @observable strokeDashArray = defaultData.strokeDashArray;
   @observable outlineColor = defaultData.outlineColor;
   @observable outlineStrokeDashArray = defaultData.outlineStrokeDashArray;
   @observable strokeOpacity = defaultData.strokeOpacity;

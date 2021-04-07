@@ -373,6 +373,7 @@ lf.setTheme({
 |-|-|-|-|
 |stroke|color|连线颜色|#000000|
 |strokeWidth|number|连线宽度|2|
+|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
 |hoverStroke|color|连线hover颜色|#000000|
 |selectedStroke|color|连线选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
@@ -385,6 +386,7 @@ lf.setTheme({
   line: {
     stroke: '#000000',
     strokeWidth: 2,
+    strokeDashArray: '1,0',
     hoverStroke: '#000000',
     selectedStroke: '#000000',
     selectedShadow: true,
@@ -401,6 +403,7 @@ lf.setTheme({
 |-|-|-|-|
 |stroke|color|连线颜色|#000000|
 |strokeWidth|number|连线宽度|2|
+|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
 |hoverStroke|color|连线hover颜色|#000000|
 |selectedStroke|color|连线选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
@@ -414,6 +417,7 @@ lf.setTheme({
   polyline: {
     stroke: '#000000',
     strokeWidth: 2,
+    strokeDashArray: '1,0',
     hoverStroke: '#000000',
     selectedStroke: '#000000',
     selectedShadow: true,
@@ -433,14 +437,18 @@ lf.setTheme({
 |fontSize|number|字体大小|1|
 |fontWeight|string/number|字体粗细|normal|
 |fontFamily|string|字体名称|''|
-|background|object|文本背景(矩形)|{}|
-背景
+|background|BackgroundObject|文本背景(矩形)|[BackgroundObject](/guide/advance/theme.html#backgroundobject)|
+|hoverBackground|BackgroundObject|文本背景(矩形)|null|
+
+### `BackgroundObject`
+
 |key|type|description|default|
 |-|-|-|-|
 |fill|color|填充颜色|transparent|
 |height|number|高度|20|
 |stroke|number|边框颜色|transparent|
 |radius|number|圆角弧度|0|
+
 <details>
 <summary>点击展开查看连线文本样式设置</summary>
 
@@ -457,9 +465,16 @@ lf.setTheme({
       stroke: 'transparent',
       radius: 0,
     },
+    hoverBackground: {
+      fill: 'transparent',
+      height: 20,
+      stroke: 'transparent',
+      radius: 0,
+    },
   },
 })
 ```
+
 </details>
 
 

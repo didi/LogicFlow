@@ -26,6 +26,7 @@ export default class LineEdge extends BaseEdge {
       endPoint,
       strokeWidth,
       strokeOpacity,
+      strokeDashArray,
     } = this.getAttributes();
     return (
       <Line
@@ -36,6 +37,7 @@ export default class LineEdge extends BaseEdge {
         strokeOpacity={strokeOpacity}
         strokeWidth={strokeWidth}
         stroke={stroke}
+        strokeDasharray={strokeDashArray}
       />
     );
   }
