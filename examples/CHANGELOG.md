@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0-beta.0](https://github.com/didi/LogicFlow/compare/examples@0.4.0-alpha.1...examples@0.4.0-beta.0) (2021-04-07)
+
+
+### Bug Fixes
+
+* invalid setTheme for rect size ([4ed7e1a](https://github.com/didi/LogicFlow/commit/4ed7e1af69ddf31956e454748da4ea5adcb03be6))
+* set the start position of selection when mouse is down ([c7d3715](https://github.com/didi/LogicFlow/commit/c7d3715b956ed99e80bcb19a51d2e21432cd1037))
+* **all:** add rimraf ([c526ad8](https://github.com/didi/LogicFlow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+
+
+### Features
+
+* add mini-map example ([b0f1a3e](https://github.com/didi/LogicFlow/commit/b0f1a3e13ffeede2aac5be5d0c38f9d982d97f21))
+* add Selection example ([8847392](https://github.com/didi/LogicFlow/commit/8847392da2ea73dfaf6444e79841a233bb3c6b1f))
+
+
+
+
+
 # [0.4.0-alpha.5](https://github.com/towersxu/logicflow/compare/examples@0.4.0-alpha.4...examples@0.4.0-alpha.5) (2021-03-30)
 
 **Note:** Version bump only for package examples
