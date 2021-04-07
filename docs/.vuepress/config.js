@@ -97,6 +97,7 @@ module.exports = {
         text: '文档',
         items: [
           { text: '教程', link: '/guide/start' },
+          { text: 'FAQ', link: '/FAQ' },
           { text: '版本信息', link: '/version-info/0.3.0' }
         ]
       },
