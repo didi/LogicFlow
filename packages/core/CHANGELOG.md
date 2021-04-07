@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-beta.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.3.0-alpha.1...@logicflow/core@0.3.0-beta.2) (2021-04-07)
+
+
+### Bug Fixes
+
+* add hoverBackground ([aca87e6](https://github.com/didi/LogicFlow/commit/aca87e6feafb7c0745a192b110533fe96e27edc2))
+* anchor hover style not hide ([2ea9e54](https://github.com/didi/LogicFlow/commit/2ea9e54b5df5030388e2cfbaca39680a88a7387a))
+* edge updateText position ([e333787](https://github.com/didi/LogicFlow/commit/e3337878bed766eaab9345c9110e202cc477a56c))
+* invalid setTheme for rect size ([4ed7e1a](https://github.com/didi/LogicFlow/commit/4ed7e1af69ddf31956e454748da4ea5adcb03be6))
+* **all:** add rimraf ([c526ad8](https://github.com/didi/LogicFlow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+* **core:** fix the bug when drag edges ([36aed3a](https://github.com/didi/LogicFlow/commit/36aed3a455e9bfd04ad5a0b4aae294863184069c))
+* minimap extension custom disabled plugin ([3768d14](https://github.com/didi/LogicFlow/commit/3768d149b6a72e4c251e287432b6070dcbfabce6))
+* move clone guard to shortcut ([c5643da](https://github.com/didi/LogicFlow/commit/c5643daa8ca7b2f905db81357444e5bba64a5ee7))
+* the text content misalignment caused by switching nodes ([38193f7](https://github.com/didi/LogicFlow/commit/38193f7a28cb004c18dc7717f854d83269bf4194))
+* **extension:** mini-map default disable control & selection-select ([297cecf](https://github.com/didi/LogicFlow/commit/297cecf4637ca7a045619a10cd9298feacc631ea))
+
+
+### Features
+
+* add the height field for hoverBackground and background ([4d38c8a](https://github.com/didi/LogicFlow/commit/4d38c8aadcd21e02f21f1b822c6a7832445b24bd))
+* change cloneElements to addElements ([6c59d74](https://github.com/didi/LogicFlow/commit/6c59d749a53e5263f5cf630702453054347215f6))
+* edge text support hover style ([ffc75d4](https://github.com/didi/LogicFlow/commit/ffc75d45e0ef42b9dbca1be489fa749186aa81b0))
+* support setting line of dashes for edges ([4f39909](https://github.com/didi/LogicFlow/commit/4f39909af2260ff0ea696dd2db04ee4e5713b4bc))
+
+
+
+
+
 # [0.3.0-beta.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.3.0-alpha.1...@logicflow/core@0.3.0-beta.1) (2021-04-06)
 
 

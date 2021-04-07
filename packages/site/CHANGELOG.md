@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-beta.2](https://github.com/didi/LogicFlow/compare/site@0.3.0-alpha.1...site@0.3.0-beta.2) (2021-04-07)
+
+
+### Bug Fixes
+
+* **all:** add rimraf ([c526ad8](https://github.com/didi/LogicFlow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+
+
+
+
+
 # [0.3.0-beta.1](https://github.com/didi/LogicFlow/compare/site@0.3.0-alpha.1...site@0.3.0-beta.1) (2021-04-06)
 
 
