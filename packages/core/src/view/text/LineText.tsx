@@ -16,8 +16,8 @@ export default class LineText extends BaseText {
     const { model: { text }, style } = this.props;
     let backgroundStyle = pick(style.background, 'fill', 'stroke', 'radius');
     const { isHoverd } = this.state;
-    if (isHoverd && style.textHoverStyle) {
-      backgroundStyle = style.textHoverStyle;
+    if (isHoverd && style.hoverBackground) {
+      backgroundStyle = style.hoverBackground;
     }
     // 存在文本并且文本背景不为透明时计算背景框
     if (text && text.value && backgroundStyle.fill !== 'transparnet') {

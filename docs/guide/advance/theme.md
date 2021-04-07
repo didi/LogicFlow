@@ -437,14 +437,17 @@ lf.setTheme({
 |fontSize|number|字体大小|1|
 |fontWeight|string/number|字体粗细|normal|
 |fontFamily|string|字体名称|''|
-|background|object|文本背景(矩形)|{}|
-背景
+|background|BackgroundObject|文本背景(矩形)|[BackgroundObject](/guide/advance/theme.html#backgroundobject)|
+|hoverBackground|BackgroundObject|文本背景(矩形)|null|
+
+### `BackgroundObject`
+
 |key|type|description|default|
 |-|-|-|-|
 |fill|color|填充颜色|transparent|
-|height|number|高度|20|
 |stroke|number|边框颜色|transparent|
 |radius|number|圆角弧度|0|
+
 <details>
 <summary>点击展开查看连线文本样式设置</summary>
 
@@ -457,13 +460,18 @@ lf.setTheme({
     fontFamily: '',
     background: {
       fill: 'transparent',
-      height: 20,
+      stroke: 'transparent',
+      radius: 0,
+    },
+    hoverBackground: {
+      fill: 'transparent',
       stroke: 'transparent',
       radius: 0,
     },
   },
 })
 ```
+
 </details>
 
 

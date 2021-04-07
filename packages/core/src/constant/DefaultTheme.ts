@@ -94,6 +94,7 @@ const edgeText = {
     stroke: 'transparent',
     radius: 0,
   },
+  hoverBackground: null,
 };
 const snapline = {
   stroke: '#1E90FF',
