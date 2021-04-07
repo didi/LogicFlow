@@ -73,7 +73,6 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable zIndex = defaultConfig.zIndex;
-  @observable activeAnchor = -1;
   @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
   @observable state = 1;
   @observable text = defaultConfig.text;
@@ -266,11 +265,6 @@ export default class BaseNodeModel implements IBaseModel {
   @action
   setHitable(flag = true): void {
     this.isHitable = flag;
-  }
-
-  @action
-  setAnchorActive(index: number): void {
-    this.activeAnchor = index;
   }
 
   @action

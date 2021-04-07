@@ -66,7 +66,6 @@ Logic Flow 的内置节点包括
 | isHovered  | boolean |  ✅ | 节点是否在hover状态       |
 | zIndex     | number  |  ✅ | 节点在图中显示优先级，数值大的在上面，类似于css中zIndex的定义     |
 | anchors    | Array  |  ✅ | 锚点数组 |
-| activeAnchor | number  |  ✅ | 当前激活锚点Index值，没有激活的锚点，数值为-1|
 | state | number  |  ✅ | 节点状态|
 
 节点状态

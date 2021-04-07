@@ -16,6 +16,12 @@
 .lf-node-anchor {
   cursor: crosshair;
 }
+.lf-node-anchor-hover {
+  visibility: hidden;
+}
+.lf-anchor:hover > .lf-node-anchor-hover {
+  visibility: visible;
+}
 .lf-edge-append {
   cursor: pointer;
 }

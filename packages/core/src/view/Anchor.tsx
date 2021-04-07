@@ -18,7 +18,6 @@ interface IProps extends CSSStyleDeclaration {
   hoverStyle: CSSStyleDeclaration,
   edgeStyle: CSSStyleDeclaration,
   anchorIndex: number,
-  activeAnchor: number,
   eventCenter: EventEmitter,
   graphModel: GraphModel,
   nodeModel: BaseNodeModel,
@@ -31,7 +30,6 @@ interface IState {
   startY: number,
   endX: number,
   endY: number,
-  hover: boolean,
   draging: boolean,
 }
 
@@ -50,7 +48,6 @@ class Anchor extends Component<IProps, IState> {
       startY: 0,
       endX: 0,
       endY: 0,
-      hover: false,
       draging: false,
     };
 
@@ -104,15 +101,12 @@ class Anchor extends Component<IProps, IState> {
       // 实时提示出即将链接的锚点
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
-        targetNode.setAnchorActive(info.anchorIndex);
       } else {
         targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT);
-        this.preTargetNode.setAnchorActive(-1);
       }
     } else if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
       this.preTargetNode.setElementState(ElementState.DEFAULT);
-      this.preTargetNode.setAnchorActive(-1);
     }
   };
   onDragEnd = () => {
@@ -130,19 +124,6 @@ class Anchor extends Component<IProps, IState> {
     graphModel.setElementStateById(nodeModel.id, ElementState.TEXT_EDIT);
   };
 
-  setHover(isHover: boolean, ev: MouseEvent): void {
-    const { nodeDraging, setHoverOFF } = this.props;
-    // 节点拖拽过程中不更新锚点状态
-    // 防止拖拽过快导致触发不了节点的onMouseLeave事件，从而导致出现多个锚点被选中的效果
-    if (!nodeDraging) {
-      this.setState({ hover: isHover });
-    }
-    // 如果锚点hoveroff, 先执行节点的hoveroff，避免造成从锚点mouseleave时节点仍然在hover状态
-    if (!isHover) {
-      setHoverOFF(ev);
-    }
-  }
-
   checkEnd = () => {
     const {
       graphModel, nodeModel, x, y, eventCenter,
@@ -155,7 +136,6 @@ class Anchor extends Component<IProps, IState> {
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
-      this.preTargetNode.setAnchorActive(-1);
     }
     // 没有draging就结束连线
     if (!draging) return;
@@ -206,27 +186,23 @@ class Anchor extends Component<IProps, IState> {
       startY,
       endX,
       endY,
-      hover,
     } = this.state;
     const {
-      x, y, anchorIndex, activeAnchor, style, edgeStyle, hoverStyle,
+      x, y, style, edgeStyle, hoverStyle,
     } = this.props;
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
       <g className="lf-anchor" onDblClick={this.onDblClick}>
-        {hover || activeAnchor === anchorIndex ? (
-          <Circle
-            className="lf-node-anchor-hover"
-            {...{ x, y }}
-            {...hoverStyle}
-          />
-        ) : ''}
+        <Circle
+          className="lf-node-anchor-hover"
+          {...{ x, y }}
+          {...hoverStyle}
+          onMouseDown={this.dragHandler}
+        />
         <Circle
           className="lf-node-anchor"
           {...{ x, y }}
           {...style}
-          onMouseEnter={(ev) => this.setHover(true, ev)}
-          onMouseLeave={(ev) => this.setHover(false, ev)}
           onMouseDown={this.dragHandler}
         />
         {this.isShowLine() && (
