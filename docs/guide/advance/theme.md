@@ -460,11 +460,13 @@ lf.setTheme({
     fontFamily: '',
     background: {
       fill: 'transparent',
+      height: 20,
       stroke: 'transparent',
       radius: 0,
     },
     hoverBackground: {
       fill: 'transparent',
+      height: 20,
       stroke: 'transparent',
       radius: 0,
     },

@@ -91,6 +91,7 @@ const edgeText = {
   fontFamily: '',
   background: {
     fill: 'transparent',
+    height: 20,
     stroke: 'transparent',
     radius: 0,
   },
