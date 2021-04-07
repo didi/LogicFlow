@@ -131,7 +131,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   getAnchors() {
     const { model, graphModel, eventCenter } = this.props;
     const {
-      isSelected, activeAnchor, isHitable,
+      isSelected, isHitable,
     } = model;
     const { isHovered, isDraging } = this.state;
     if (isHitable && (isSelected || isHovered)) {
@@ -147,7 +147,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             hoverStyle={hoverStyle}
             edgeStyle={edgeStyle}
             anchorIndex={index}
-            activeAnchor={activeAnchor}
             nodeModel={model}
             eventCenter={eventCenter}
             graphModel={graphModel}
