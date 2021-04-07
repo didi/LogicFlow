@@ -26,6 +26,8 @@ interface IBaseModel {
   getProperties(): Object;
 
   setProperties(properties: Object): void;
+
+  updateAttributes(attributes: Object): void;
 }
 
 export {

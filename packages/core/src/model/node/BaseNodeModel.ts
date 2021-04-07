@@ -327,4 +327,10 @@ export default class BaseNodeModel implements IBaseModel {
   setZIndex(zindex: number = defaultConfig.zIndex): void {
     this.zIndex = zindex;
   }
+
+  @action
+  updateAttributes(attributes) {
+    assign(this, attributes);
+    console.log(this);
+  }
 }

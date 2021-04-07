@@ -357,6 +357,11 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   initPoints() {}
+
+  @action
+  updateAttributes(attributes) {
+    assign(this, attributes);
+  }
 }
 
 export { BaseEdgeModel };

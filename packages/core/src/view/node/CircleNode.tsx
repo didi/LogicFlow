@@ -12,21 +12,12 @@ type IProps = {
 };
 
 export default class CircleNode extends BaseNode {
-  r: number;
-  constructor(props: IProps) {
-    super(props);
-    const {
-      model: {
-        r,
-      },
-    } = props as IProps;
-    this.r = r;
-  }
   getShapeStyle() {
     const style = super.getShapeStyle();
+    const { model: { r } } = this.props as IProps;
     return {
       ...style,
-      r: this.r,
+      r,
     };
   }
   getAttributes() {

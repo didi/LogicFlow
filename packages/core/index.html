@@ -112,14 +112,6 @@
       });
       lf.register('user', ({ RectNode, RectNodeModel, h }) => {
         class UserNode extends RectNode {
-          getShapeStyle(){
-            const style = super.getShapeStyle();
-            return {
-              ...style,
-              stroke: '#18905F',
-              fill: 'red',
-            }
-          }
           getAnchorStyle() {
             return {
               stroke: '#18905F',
@@ -138,7 +130,8 @@
             const { size } = this.properties;
             this.width = size * 40;
             this.height = size * 40;
-            this.fill = 'green';
+            this.stroke = '#18905F';
+            this.fill = 'red';
             this.radius = 0;
           }
         }
@@ -437,7 +430,8 @@
       // lf.on('edge:mouseleave', () => {
       //   console.log('edge:mouseleave')
       // })
-      // lf.on('node:click', () => {
+      // lf.on('node:click', (eventData) => {
+      //   console.log(eventData);
       //   console.log('node:click')
       // })
       lf.on('edge:click', () => {

@@ -285,6 +285,11 @@ class GraphModel {
     return graphData;
   }
 
+  updateAttributes(id: string, attributes: object) {
+    const element = this.getElement(id);
+    element.updateAttributes(attributes);
+  }
+
   @action
   setFakerNode(nodeModel: BaseNodeModel) {
     this.fakerNode = nodeModel;
