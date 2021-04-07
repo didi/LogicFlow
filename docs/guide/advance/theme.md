@@ -445,6 +445,7 @@ lf.setTheme({
 |key|type|description|default|
 |-|-|-|-|
 |fill|color|填充颜色|transparent|
+|height|number|高度|20|
 |stroke|number|边框颜色|transparent|
 |radius|number|圆角弧度|0|
 
