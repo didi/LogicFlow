@@ -300,84 +300,85 @@
         nodes: [
           {
             type: 'square',
-            x: 300,
-            y: 200,
-            text: {
-              x: 300,
-              y: 200,
-              value: '444'
-            },
+            x: 100,
+            y: 100,
             id: 10,
           },
           {
-            type: 'text',
-            x: 200,
-            y: 400,
-            text: {
-              x: 200,
-              y: 400,
-              value: '我是单独的文本节点',
-            }
-          },
-          {
-            type: 'polygon',
-            x: 200,
-            y: 200,
-            id: 50,
-            text: 'hhhh',
-          },
-          {
-            type: 'diamond',
-            x: 220,
-            y: 220,
-            rx: 30,
-            ry: 50,
-            id: 524,
-            text: 'diamond',
-          },
-          {
-            type: 'user',
-            x: 500,
-            y: 600,
-            id: 20,
-            fillOpacity: 1,
-            text:{
-              value: '111',
-              x: 500,
-              y: 600,
-            },
-            properties: {
-              size: 1
-            }
-          },
-          {
-            type: 'user',
-            x: 500 * Math.random(),
-            y: 600 * Math.random(),
-            id: 21,
-            properties: {
-              size: 2
-            }
-          },
-          {
-            type: 'star',
-            x: 400,
+            type: 'square',
+            x: 300,
             y: 300,
-            id: 99
+            id: 11,
           },
-          {
-            type: 'combine',
-            x: 222,
-            y: 40,
-            id: 30,
-          },
-          {
-            type: 'circle',
-            x: 500 * Math.random(),
-            y: 600 * Math.random(),
-            fill: 'blue',
-            id: 40,
-          },
+          // {
+          //   type: 'text',
+          //   x: 200,
+          //   y: 400,
+          //   text: {
+          //     x: 200,
+          //     y: 400,
+          //     value: '我是单独的文本节点',
+          //   }
+          // },
+          // {
+          //   type: 'polygon',
+          //   x: 200,
+          //   y: 200,
+          //   id: 50,
+          //   text: 'hhhh',
+          // },
+          // {
+          //   type: 'diamond',
+          //   x: 220,
+          //   y: 220,
+          //   rx: 30,
+          //   ry: 50,
+          //   id: 524,
+          //   text: 'diamond',
+          // },
+          // {
+          //   type: 'user',
+          //   x: 500,
+          //   y: 600,
+          //   id: 20,
+          //   fillOpacity: 1,
+          //   text:{
+          //     value: '111',
+          //     x: 500,
+          //     y: 600,
+          //   },
+          //   properties: {
+          //     size: 1
+          //   }
+          // },
+          // {
+          //   type: 'user',
+          //   x: 500 * Math.random(),
+          //   y: 600 * Math.random(),
+          //   id: 21,
+          //   properties: {
+          //     size: 2
+          //   }
+          // },
+          // {
+          //   type: 'star',
+          //   x: 400,
+          //   y: 300,
+          //   id: 99
+          // },
+          // {
+          //   type: 'combine',
+          //   x: 222,
+          //   y: 40,
+          //   id: 30,
+          // },
+          // {
+          //   type: 'circle',
+          //   x: 500 * Math.random(),
+          //   y: 600 * Math.random(),
+          //   fill: 'blue',
+          //   id: 40,
+          // },
         ].concat(Array.of(...Array(0)).map((item, i) => {
           return {
             id: 'node_' + i,
@@ -386,14 +387,14 @@
             y: (i / 4) * 150,
           }
         })),
-        edges: [
-          {
-            id: 'edge_2222',
-            type: 'polyline',
-            sourceNodeId: 50,
-            targetNodeId: 21,
-          }
-        ]
+        // edges: [
+        //   {
+        //     id: 'edge_2222',
+        //     type: 'polyline',
+        //     sourceNodeId: 50,
+        //     targetNodeId: 21,
+        //   }
+        // ]
         // .concat(Array.of(...Array(300)).map((item, i) => {
         //   return {
         //     type: 'polyline',
@@ -405,17 +406,17 @@
       console.log(lf.graphModel);
       lf.createEdge({
         sourceNodeId: 10,
-        targetNodeId: 21,
-        text: '222',
+        targetNodeId: 11,
+        // text: '222',
       });
-      lf.updateText('edge_2222', '你是打算啊')
-      lf.createEdge({
-        sourceNodeId: 10,
-        targetNodeId: 50,
-        text: '222',
-        type: 'bezier'
-      });
-      console.log(lf.graphModel);
+      // lf.updateText('edge_2222', '你是打算啊')
+      // lf.createEdge({
+      //   sourceNodeId: 10,
+      //   targetNodeId: 50,
+      //   text: '222',
+      //   type: 'bezier'
+      // });
+      // console.log(lf.graphModel);
       // lf.on('node:mouseup',()=> {
       //   console.log('nodeup')
       // })

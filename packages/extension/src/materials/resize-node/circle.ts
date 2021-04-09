@@ -87,11 +87,7 @@ export const getCircleView = (
         y,
         width,
         height,
-        isHovered,
       } = this.getAttributes();
-      // if (!isHovered) {
-      //   return '';
-      // }
       return [
         h(
           'rect',
