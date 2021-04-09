@@ -15,6 +15,4 @@ const RectLabelNode = {
 
 export default RectLabelNode;
 
-export {
-  RectLabelNode,
-};
+export { RectLabelNode };

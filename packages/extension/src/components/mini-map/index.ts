@@ -33,12 +33,14 @@ const MiniMap: MiniMapPlugin = {
   install(lf, LogicFlow) {
     MiniMap.__lf = lf;
     MiniMap.__miniMapWidth = lf.width;
-    MiniMap.__miniMapHeight = lf.width * 220 / 150;
+    MiniMap.__miniMapHeight = (lf.width * 220) / 150;
     MiniMap.__LogicFlow = LogicFlow;
     this.__init();
   },
   init(option) {
-    this.__disabledPlugins = this.__disabledPlugins.concat(option.disabledPlugins || [])
+    this.__disabledPlugins = this.__disabledPlugins.concat(
+      option.disabledPlugins || [],
+    );
   },
   render(lf, container) {
     MiniMap.__container = container;
@@ -50,7 +52,7 @@ const MiniMap: MiniMapPlugin = {
       'node:drop',
       'blank:drop',
     ];
-    events.forEach(eventName => {
+    events.forEach((eventName) => {
       MiniMap.__lf.on(eventName, () => {
         MiniMap.__setView();
       });
@@ -71,12 +73,12 @@ const MiniMap: MiniMapPlugin = {
   },
   __init() {
     const miniMapWrap = document.createElement('div');
-    miniMapWrap.className = 'lf-mini-map-graph'
+    miniMapWrap.className = 'lf-mini-map-graph';
     miniMapWrap.style.width = `${MiniMap.__width}px`;
     miniMapWrap.style.height = `${MiniMap.__height}px`;
     MiniMap.__lfMap = new MiniMap.__LogicFlow({
       width: MiniMap.__lf.width,
-      height: MiniMap.__lf.width * 220 / 150,
+      height: (MiniMap.__lf.width * 220) / 150,
       container: miniMapWrap,
       isSilentMode: true,
       stopZoomGraph: true,
@@ -121,14 +123,14 @@ const MiniMap: MiniMapPlugin = {
   },
   /**
    * 计算所有图形一起，占领的区域范围。
-   * @param data 
+   * @param data
    */
   __getBounds(data) {
     let left = 0;
     let right = MiniMap.__miniMapWidth;
     let top = 0;
     let bottom = MiniMap.__miniMapHeight;
-    let nodes = data.nodes;
+    const { nodes } = data;
     if (nodes && nodes.length > 0) {
       // 因为获取的节点不知道真实的宽高，这里需要补充一点数值
       nodes.forEach(({ x, y, width = 200, height = 200 }) => {
@@ -147,7 +149,7 @@ const MiniMap: MiniMapPlugin = {
       top,
       bottom,
       right,
-    }
+    };
   },
   /**
    * 将负值的平移转换为正值。
@@ -155,8 +157,7 @@ const MiniMap: MiniMapPlugin = {
    * 获取将画布所有元素平移到0，0开始时，所有节点数据
    */
   __resetData(data) {
-    const nodes = data.nodes;
-    const edges = data.edges;
+    const { nodes, edges } = data;
     let left = 0;
     let top = 0;
     if (nodes && nodes.length > 0) {
@@ -170,7 +171,7 @@ const MiniMap: MiniMapPlugin = {
       if (left < 0 || top < 0) {
         MiniMap.__resetDataX = left;
         MiniMap.__resetDataY = top;
-        nodes.forEach(node => {
+        nodes.forEach((node) => {
           node.x = node.x - left;
           node.y = node.y - top;
           if (node.text) {
@@ -178,7 +179,7 @@ const MiniMap: MiniMapPlugin = {
             node.text.y = node.text.y - top;
           }
         });
-        edges.forEach(edge => {
+        edges.forEach((edge) => {
           if (edge.startPoint) {
             edge.startPoint.x = edge.startPoint.x - left;
             edge.startPoint.y = edge.startPoint.y - top;
@@ -192,7 +193,7 @@ const MiniMap: MiniMapPlugin = {
             edge.text.y = edge.text.y - top;
           }
           if (edge.pointsList) {
-            edge.pointsList.forEach(point => {
+            edge.pointsList.forEach((point) => {
               point.x = point.x - left;
               point.y = point.y - top;
             });
@@ -232,35 +233,34 @@ const MiniMap: MiniMapPlugin = {
     const scale = Math.min(realWidthScale, realHeightScale);
     innerStyle.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`;
     innerStyle.transformOrigin = 'left top';
-    innerStyle.height = bottom - Math.min(top, 0) + 'px';
-    innerStyle.width = right - Math.min(left, 0) + 'px';
+    innerStyle.height = `${bottom - Math.min(top, 0)}px`;
+    innerStyle.width = `${right - Math.min(left, 0)}px`;
     MiniMap.__viewPortScale = scale;
     MiniMap.__setViewPort(scale, {
-      left, top, right, bottom
+      left,
+      top,
+      right,
+      bottom,
     });
   },
   // 设置视口
-  __setViewPort(scale, {
-    left, top, right, bottom
-  }) {
+  __setViewPort(scale, { left, right }) {
     const viewStyle = MiniMap.__viewport.style;
     viewStyle.width = `${MiniMap.__width - 4}px`;
-    viewStyle.height = `${(MiniMap.__width - 4) / (MiniMap.__lf.width / MiniMap.__lf.height)}px`;
+    viewStyle.height = `${
+      (MiniMap.__width - 4) / (MiniMap.__lf.width / MiniMap.__lf.height)
+    }px`;
     // top
-    const {
-      SCALE_X,
-      TRANSLATE_X,
-      TRANSLATE_Y,
-    } = MiniMap.__lf.getTransform();
+    const { TRANSLATE_X, TRANSLATE_Y } = MiniMap.__lf.getTransform();
 
     const realWidth = right - left;
     // 视口实际宽 = 视口默认宽 / (所有元素一起占据的真实宽 / 绘布宽)
     const realViewPortWidth = (MiniMap.__width - 4) / (realWidth / MiniMap.__lf.width);
     // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
     const realViewPortHeight = realViewPortWidth / (MiniMap.__lf.width / MiniMap.__lf.height);
-    
-    MiniMap.__viewPortTop = TRANSLATE_Y > 0 ? 0: (-TRANSLATE_Y) * scale;
-    MiniMap.__viewPortLeft = (-TRANSLATE_X) * scale;
+
+    MiniMap.__viewPortTop = TRANSLATE_Y > 0 ? 0 : -TRANSLATE_Y * scale;
+    MiniMap.__viewPortLeft = -TRANSLATE_X * scale;
 
     MiniMap.__viewPortWidth = realViewPortWidth;
     MiniMap.__viewPortHeight = realViewPortHeight;
@@ -286,21 +286,23 @@ const MiniMap: MiniMapPlugin = {
   },
   __drag(e) {
     const viewStyle = MiniMap.__viewport.style;
-    MiniMap.__viewPortTop += (e.y - MiniMap.__startPosition.y);
-    MiniMap.__viewPortLeft += (e.x - MiniMap.__startPosition.x);
-    viewStyle.top = MiniMap.__viewPortTop + 'px';
-    viewStyle.left = MiniMap.__viewPortLeft + 'px';
+    MiniMap.__viewPortTop += e.y - MiniMap.__startPosition.y;
+    MiniMap.__viewPortLeft += e.x - MiniMap.__startPosition.x;
+    viewStyle.top = `${MiniMap.__viewPortTop}px`;
+    viewStyle.left = `${MiniMap.__viewPortLeft}px`;
     MiniMap.__startPosition = {
       x: e.x,
       y: e.y,
     };
-    const centerX = (MiniMap.__viewPortLeft + MiniMap.__viewPortWidth / 2) / MiniMap.__viewPortScale;
-    const centerY = (MiniMap.__viewPortTop + MiniMap.__viewPortHeight / 2) / MiniMap.__viewPortScale;
+    const centerX = (MiniMap.__viewPortLeft + MiniMap.__viewPortWidth / 2)
+      / MiniMap.__viewPortScale;
+    const centerY = (MiniMap.__viewPortTop + MiniMap.__viewPortHeight / 2)
+      / MiniMap.__viewPortScale;
     MiniMap.__lf.focusOn({
       coordinate: {
         x: centerX + MiniMap.__resetDataX,
         y: centerY + MiniMap.__resetDataY,
-      }
+      },
     });
   },
   __drop() {
@@ -311,6 +313,4 @@ const MiniMap: MiniMapPlugin = {
 
 export default MiniMap;
 
-export {
-  MiniMap,
-};
+export { MiniMap };

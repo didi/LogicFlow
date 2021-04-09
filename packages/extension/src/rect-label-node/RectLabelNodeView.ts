@@ -2,12 +2,7 @@ const getRectLabelNodeView = (RectNode, h) => class extends RectNode {
   getLabelShape() {
     const attributes = this.getAttributes();
     const properties = this.getProperties();
-    const {
-      x,
-      y,
-      width,
-      height,
-    } = attributes;
+    const { x, y, width, height } = attributes;
     return h(
       'text',
       {
@@ -21,29 +16,16 @@ const getRectLabelNodeView = (RectNode, h) => class extends RectNode {
   }
   getShape() {
     const attributes = this.getAttributes();
-    const {
-      x,
-      y,
-      width,
-      height,
-    } = attributes;
+    const { x, y, width, height } = attributes;
     // todo: 将basic-shape对外暴露，在这里可以直接用。现在纯手写有点麻烦。
-    return h(
-      'g',
-      {
-      },
-      [
-        h(
-          'rect',
-          {
-            ...attributes,
-            x: x - width / 2,
-            y: y - height / 2,
-          },
-        ),
-        this.getLabelShape(),
-      ],
-    );
+    return h('g', {}, [
+      h('rect', {
+        ...attributes,
+        x: x - width / 2,
+        y: y - height / 2,
+      }),
+      this.getLabelShape(),
+    ]);
   }
 };
 

@@ -75,6 +75,7 @@ export const getCircleView = (
 
     resetEdge() {
       const { graphModel, model } = this.props;
+      // eslint-disable-next-line
       graphModel.getNodeEdges(model.id).map((edgeModel) => {
         console.log(edgeModel);
         // todo: @xinxin93统一节点更新方法。
