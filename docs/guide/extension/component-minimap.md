@@ -35,4 +35,14 @@ MiniMap.show(leftPosition?: number, topPosition?: number);
 MiniMap.hide();
 ```
 
+## 禁用插件
+
+MiniMap和正常的画布共享LogicFlow，可以在MiniMap中不显示某些插件，例如不显示工具栏。
+
+```ts
+MiniMap.init({
+  disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
+})
+```
+
 <example href="/examples/#/extension/components/mini-map" :height="350" ></example>
