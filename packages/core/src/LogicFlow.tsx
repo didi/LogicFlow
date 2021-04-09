@@ -566,6 +566,14 @@ export default class LogicFlow {
   getSelectElements(isIgnoreCheck = true) {
     this.graphModel.getSelectElements(isIgnoreCheck);
   }
+  /**
+   * 动态修改 id 对应元素 model 中的属性
+   * @param {string} id 元素id
+   * @param {object} attributes 需要更新的属性
+   */
+  updateAttributes(id: string, attributes: object) {
+    this.graphModel.updateAttributes(id, attributes);
+  }
 
   // 内部方法----------------------------------------------
 

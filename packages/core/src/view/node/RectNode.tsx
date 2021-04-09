@@ -12,21 +12,12 @@ type IProps = {
 };
 
 export default class RectNode extends BaseNode {
-  radius: number;
-  constructor(props: IProps) {
-    super(props);
-    const {
-      model: {
-        radius,
-      },
-    } = props as IProps;
-    this.radius = radius;
-  }
   getShapeStyle() {
     const attributes = super.getShapeStyle();
+    const { model: { radius } } = this.props as IProps;
     return {
       ...attributes,
-      radius: this.radius,
+      radius,
     };
   }
   getAttributes() {
