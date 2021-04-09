@@ -9,12 +9,13 @@
     "examples"
   ],
   "scripts": {
-    "bootstrap": "yarn",
+    "bootstrap": "yarn && npm run prepare",
     "clean": "lerna clean",
     "build": "lerna run build",
     "build:types": "lerna run types",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "commit": "git-cz",
+    "prepare": "husky install",
     "build:example": "lerna run build --scope examples",
     "lerna:publish": "lerna publish from-git",
     "docs:dev": "./node_modules/.bin/vuepress dev docs",
@@ -45,12 +46,6 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-lerna-changelog"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
