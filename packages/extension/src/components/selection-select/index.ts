@@ -1,4 +1,12 @@
-const SelectionSelect = {
+import { Extension } from '@logicflow/core';
+
+interface SelectionSelectPlugin extends Extension {
+  open: () => void;
+  close: () => void;
+  [x: string]: any;
+}
+
+const SelectionSelect: SelectionSelectPlugin = {
   name: 'selection-select',
   __domContainer: null,
   wrapper: null,

@@ -95,9 +95,9 @@ module.exports = {
     nav: [
       { text: '教程', link: '/guide/start' },
       { text: 'API', link: '/api/logicFlowApi' },
+      { text: '示例', link: '/usage/bpmn' },
       { text: '常见问题', link: '/FAQ' },
       { text: '版本公告', link: '/version-info/0.3.0' },
-      { text: '示例', link: '/usage/bpmn' },
       { text: '文章', link: '/article/article01' },
       { text: 'Github', link: 'https://github.com/didi/LogicFlow' },
     ],

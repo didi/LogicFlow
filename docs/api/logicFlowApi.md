@@ -26,6 +26,7 @@ const lf = new LogicFlow(config: Object)
 | snapline | Boolean | | true | 是否启用节点辅助对齐线 |
 | guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
 | disabledPlugins | Array[pluginName] | | - | 控制当前禁用的插件 |
+| metaKeyMultipleSelected | Boolean | false | - | 是否开启功能键按住多选 |
 
 ### `background`
 
