@@ -7,7 +7,7 @@ coverage
 types
 packages/core/types
 
-packages/extension/src/adapter/bpmn/xml2json.ts
-packages/extension/src/adapter/bpmn/json2xml.ts
+packages/extension/src/bpmn-adapter/xml2json.ts
+packages/extension/src/bpmn-adapter/json2xml.ts
 
 **/*.d.ts

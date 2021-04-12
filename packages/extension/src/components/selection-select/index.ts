@@ -30,7 +30,9 @@ const SelectionSelect: SelectionSelectPlugin = {
       if (!config.stopMoveGraph || SelectionSelect.__disabled) {
         return;
       }
-      const { domOverlayPosition: { x, y } } = lf.getPointByClient(e.x, e.y);
+      const {
+        domOverlayPosition: { x, y },
+      } = lf.getPointByClient(e.x, e.y);
       SelectionSelect.startPoint = { x, y };
       SelectionSelect.endPoint = { x, y };
       const wrapper = document.createElement('div');
@@ -44,10 +46,12 @@ const SelectionSelect: SelectionSelectPlugin = {
     });
   },
   __draw(ev) {
-    const { domOverlayPosition: { x: x1, y: y1 } } = SelectionSelect.lf.getPointByClient(ev.x, ev.y);
+    const {
+      domOverlayPosition: { x: x1, y: y1 },
+    } = SelectionSelect.lf.getPointByClient(ev.x, ev.y);
     SelectionSelect.endPoint = { x: x1, y: y1 };
     const { x, y } = SelectionSelect.startPoint;
-    const style = SelectionSelect.wrapper.style;
+    const { style } = SelectionSelect.wrapper;
     let left = x;
     let top = y;
     let width = x1 - x;
@@ -71,16 +75,10 @@ const SelectionSelect: SelectionSelectPlugin = {
     SelectionSelect.__domContainer.removeChild(SelectionSelect.wrapper);
     const { x, y } = SelectionSelect.startPoint;
     const { x: x1, y: y1 } = SelectionSelect.endPoint;
-    const lt = [
-      Math.min(x, x1),
-      Math.min(y, y1)
-    ];
-    const rt = [
-      Math.max(x, x1),
-      Math.max(y, y1),
-    ]
+    const lt = [Math.min(x, x1), Math.min(y, y1)];
+    const rt = [Math.max(x, x1), Math.max(y, y1)];
     const elements = SelectionSelect.lf.getAreaElement(lt, rt);
-    elements.forEach(element => {
+    elements.forEach((element) => {
       SelectionSelect.lf.select(element.id, true);
     });
     SelectionSelect.lf.emit('selection:selected', elements);
@@ -93,6 +91,4 @@ const SelectionSelect: SelectionSelectPlugin = {
   },
 };
 
-export {
-  SelectionSelect,
-};
+export { SelectionSelect };

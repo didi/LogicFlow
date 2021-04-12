@@ -1,19 +1,20 @@
-const path = require('path')
-const webpack = require('webpack')
-const baseWebpackConfig = require('./webpack.config.base.js')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const path = require('path');
+const webpack = require('webpack');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const baseWebpackConfig = require('./webpack.config.base.js');
 
 module.exports = [
-  Object.assign({}, baseWebpackConfig, {
+  {
+    ...baseWebpackConfig,
     mode: 'production',
     output: {
-      path: path.resolve(__dirname, "../lib"),
-      filename: `[name].js`,
+      path: path.resolve(__dirname, '../lib'),
+      filename: '[name].js',
       libraryTarget: 'umd',
     },
     plugins: [
       new CaseSensitivePathsPlugin(),
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'MOCK_TYPE'])
-    ]
-  })
-]
+      new webpack.EnvironmentPlugin(['NODE_ENV', 'MOCK_TYPE']),
+    ],
+  },
+];
