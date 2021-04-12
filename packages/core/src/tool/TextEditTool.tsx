@@ -84,16 +84,15 @@ export default class TextEdit extends Component<IProps, IState> {
     const {
       graphModel,
     } = this.props;
-    const {
-      textEditElement,
-    } = graphModel;
     if (this.ref.current) {
       this.ref.current.focus();
       this.placeCaretAtEnd(this.ref.current);
     }
-    if (this.__prevText.id !== '' && !textEditElement) {
+    if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText;
       graphModel.setElementTextById(id, text);
+      this.__prevText.id = '';
+      this.__prevText.text = '';
     }
   }
   keyupHandler = (ev: KeyboardEvent) => {
