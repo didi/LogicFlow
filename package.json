@@ -25,6 +25,8 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.2.0",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "cz-lerna-changelog": "^2.0.3",
     "eslint": "^7.0.0",
     "eslint-config-airbnb-typescript": "^9.0.0",
