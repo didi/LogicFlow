@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.5...site@0.3.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* **all:** add rimraf ([c526ad8](https://github.com/towersxu/logicflow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+
+
+
+
+
 # [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/site@0.3.0-alpha.4...site@0.3.0-alpha.5) (2021-03-30)
 
 **Note:** Version bump only for package site

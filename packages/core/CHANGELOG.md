@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.5...@logicflow/core@0.3.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* add hoverBackground ([aca87e6](https://github.com/towersxu/logicflow/commit/aca87e6feafb7c0745a192b110533fe96e27edc2))
+* anchor hover style not hide ([2ea9e54](https://github.com/towersxu/logicflow/commit/2ea9e54b5df5030388e2cfbaca39680a88a7387a))
+* edge updateText position ([e333787](https://github.com/towersxu/logicflow/commit/e3337878bed766eaab9345c9110e202cc477a56c))
+* invalid setTheme for rect size ([4ed7e1a](https://github.com/towersxu/logicflow/commit/4ed7e1af69ddf31956e454748da4ea5adcb03be6))
+* save input value when swich edit element ([972e4cd](https://github.com/towersxu/logicflow/commit/972e4cdaba7f7388fe59cb572ff598b976275c0b))
+* **all:** add rimraf ([c526ad8](https://github.com/towersxu/logicflow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+* **core:** fix the bug when drag edges ([36aed3a](https://github.com/towersxu/logicflow/commit/36aed3a455e9bfd04ad5a0b4aae294863184069c))
+
+
+### Features
+
+* **extension:** curved-edge ([1731b10](https://github.com/towersxu/logicflow/commit/1731b10e3e65ccf226b48d4fb572d90d2ad10dec))
+* add the height field for hoverBackground and background ([4d38c8a](https://github.com/towersxu/logicflow/commit/4d38c8aadcd21e02f21f1b822c6a7832445b24bd))
+* add updateAttributes API ([3112b69](https://github.com/towersxu/logicflow/commit/3112b6917998f6cbb2e306b1862eb3e2c4bd8e8f))
+* added missing element tips ([71674cd](https://github.com/towersxu/logicflow/commit/71674cddc6096170fdc88d88b02a4d482f3c2f43))
+* support setting line of dashes for edges ([4f39909](https://github.com/towersxu/logicflow/commit/4f39909af2260ff0ea696dd2db04ee4e5713b4bc))
+
+
+
+
+
 # [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.4...@logicflow/core@0.3.0-alpha.5) (2021-03-30)
 
 

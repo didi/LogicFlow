@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.5...@logicflow/extension@0.3.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* minimap support register node ([3a692e6](https://github.com/towersxu/logicflow/commit/3a692e6448d775ebdbd9c6f26fce79102c77fb3e))
+* set the start position of selection when mouse is down ([c7d3715](https://github.com/towersxu/logicflow/commit/c7d3715b956ed99e80bcb19a51d2e21432cd1037))
+* support custom style by class for mini-map ([4c97625](https://github.com/towersxu/logicflow/commit/4c97625774f65ed3d59caefc5c691fabf0adc499))
+* **all:** add rimraf ([c526ad8](https://github.com/towersxu/logicflow/commit/c526ad840b1e2620a3221d416f7a03e9c6d3583c))
+
+
+### Features
+
+* **extension:** curved-edge ([1731b10](https://github.com/towersxu/logicflow/commit/1731b10e3e65ccf226b48d4fb572d90d2ad10dec))
+* add the switch of SelectionSelect in Extension ([35baa89](https://github.com/towersxu/logicflow/commit/35baa89a9ded2be1ce1fe7392fc9e75121f8e0d7))
+* add the UMD dist of BpmnAdapter and TurboAdapter in extension ([2edac3b](https://github.com/towersxu/logicflow/commit/2edac3b7b7fb6deb873f7268a5fdb9cc116ed8b3))
+* **extension:** turbo-adapter ([1b4c99e](https://github.com/towersxu/logicflow/commit/1b4c99e1a2d1f996e4e3b65d39d6b586f0f69937))
+
+
+
+
+
 # [0.3.0-alpha.5](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.4...@logicflow/extension@0.3.0-alpha.5) (2021-03-30)
 
 
