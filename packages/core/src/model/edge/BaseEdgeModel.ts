@@ -231,8 +231,9 @@ class BaseEdgeModel implements IBaseModel {
         draggable: false,
         editable: true,
       };
+      return;
     }
-    if (data.text && typeof data.text === 'string') {
+    if (typeof data.text === 'string') {
       this.text = {
         value: data.text || '',
         x,
@@ -240,8 +241,15 @@ class BaseEdgeModel implements IBaseModel {
         draggable: false,
         editable: true,
       };
-    } else if (data.text && data.text.editable === undefined) {
-      this.text.editable = true;
+      return;
+    }
+    if (Object.prototype.toString.call(data.text) === '[object Object]') {
+      Object.assign(this.text, {
+        x,
+        y,
+        draggable: false,
+        editable: true,
+      }, data.text);
     }
   }
 
@@ -274,6 +282,7 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   updateText(value: string): void {
+    console.log(value, JSON.stringify(this.text));
     const {
       x,
       y,
