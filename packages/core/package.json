@@ -28,8 +28,6 @@
     "@babel/plugin-transform-react-jsx": "^7.10.4",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
     "@types/lodash-es": "^4.17.3",
     "@types/mousetrap": "^1.6.4",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
@@ -80,10 +78,5 @@
     "> 3%",
     "last 2 versions",
     "not ie <= 11"
-  ],
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+  ]
 }
