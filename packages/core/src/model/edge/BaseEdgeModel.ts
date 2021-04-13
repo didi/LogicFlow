@@ -282,7 +282,6 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   updateText(value: string): void {
-    console.log(value, JSON.stringify(this.text));
     const {
       x,
       y,
