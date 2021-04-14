@@ -9,7 +9,7 @@
     "examples"
   ],
   "scripts": {
-    "bootstrap": "yarn && npm run prepare",
+    "bootstrap": "yarn",
     "clean": "lerna clean",
     "build": "lerna run build",
     "build:types": "lerna run types",
