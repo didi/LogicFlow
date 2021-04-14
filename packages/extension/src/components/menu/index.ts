@@ -113,7 +113,7 @@ const Menu: MenuPlugin = {
       }
       if (Array.from(target.classList).indexOf('lf-menu-item') > -1) {
         // 如果点击区域在菜单项内
-        (target as HTMLElement).onclick(currentData);
+        (target as any).onclickCallback(currentData);
         // 点击后隐藏menu
         Menu.__menuDOM.style.display = 'none';
         currentData = null;
@@ -218,7 +218,7 @@ const Menu: MenuPlugin = {
         text.innerText = item.text;
       }
       element.appendChild(text);
-      element.onclick = item.callback;
+      (element as any).onclickCallback = item.callback;
       menuList.push(element);
     });
     return menuList;
