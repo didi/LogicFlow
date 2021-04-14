@@ -13,7 +13,7 @@
     "clean": "lerna clean",
     "build": "lerna run build",
     "build:types": "lerna run types",
-    "lint": "eslint",
+    "lint": "eslint --cache",
     "commit": "git-cz",
     "prepare": "husky install",
     "build:example": "lerna run build --scope examples",
