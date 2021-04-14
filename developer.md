@@ -21,7 +21,7 @@ npm run bootstrap
 LF 使用 monorepo 的形式进行管理，各个 package 之间存在依赖关系，所以需要先构建一次类型和源码才能进行开发。
 
 ```shell
-npm run bulid:types
+npm run build:types
 
 npm run build
 ```
