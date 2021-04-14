@@ -18,8 +18,8 @@
     "prepare": "husky install",
     "build:example": "lerna run build --scope examples",
     "lerna:publish": "lerna publish from-git",
-    "docs:dev": "./node_modules/.bin/vuepress dev docs",
-    "docs:build": "./node_modules/.bin/vuepress build docs"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "dependencies": {},
   "devDependencies": {
