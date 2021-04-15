@@ -7,11 +7,11 @@
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
-    "clean": "rm -rf dist lib esm cjs",
+    "clean": "rimraf dist lib esm cjs",
     "build": "npm run build:umd",
     "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style",
     "build-analyse": "cross-env analyse=true npm run build",
-    "types": "tsc -d --declarationDir ./types --outDir temp; rimraf temp",
+    "types": "tsc -d --declarationDir ./types --outDir temp && rimraf temp",
     "lint": "eslint . --ext .ts,.tsx",
     "publish-lib": "npm run types & npm run clean && npm run build && npm publish",
     "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next"

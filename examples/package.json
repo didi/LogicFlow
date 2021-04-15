@@ -82,7 +82,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "PUBLIC_URL='./' node scripts/build.js",
+    "build": "cross-env PUBLIC_URL='./' node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
