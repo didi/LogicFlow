@@ -155,7 +155,7 @@ lf.setMenuConfig({
   });
 ```
 
-## 菜单自由配置
+## 为自定义元素单独配置菜单
 
 > 从单个节点/边维度，设置其右键菜单，前提条件是需要实现自定义节点/自定义边
 
@@ -164,12 +164,11 @@ lf.setMenuConfig({
   ```ts
   lf.register('custome_node', ({ RectNode, RectNodeModel }) => {
     class CustomeModel extends RectNodeModel {
-      constructor(data, graphModel) {
-        super(data, graphModel);
+      setAttributes() {
         this.stroke = '#1E90FF';
         this.fill = '#F0F8FF';
         this.radius = 10;
-        // 右键菜单自由配置，也可以通过节点的properties或者其他属性条件更换不同菜单
+        // 右键菜单
         this.menu = [
           {
             className: 'lf-menu-delete',
@@ -208,9 +207,8 @@ lf.setMenuConfig({
 ```ts
 lf.register('custome_edge', ({ PolylineEdge, PolylineEdgeModel }) => {
   class CustomeModel extends PolylineEdgeModel {
-    constructor(data, graphModel) {
-      super(data, graphModel);
-        // 右键菜单自由配置，也可以通过边的properties或者其他属性条件更换不同菜单
+    setAttributes() {
+      // 右键菜单
       this.menu = [
         {
           className: 'lf-menu-delete',
