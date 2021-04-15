@@ -12,6 +12,8 @@ git clone <your forked repository>
 
 ### 安装项目依赖
 
+> 需要提前安装 yarn
+
 ```shell
 npm run bootstrap
 ```
@@ -42,6 +44,25 @@ npm run dev
 cd packages/extension
 
 npm run dev
+```
+
+windows 和 mac 平台的换行不一致，windows 下是 CRLF，mac 下是 LF，因此 windows 系统下需要修改 eslint 规则：
+
+```js
+{
+  rules: {
+    'linebreak-style': ['error', 'unix'],
+    // ...
+  }
+}
+
+// 改为
+{
+  rules: {
+    'linebreak-style': ['error', node.env.NODE_ENV === 'production' ? 'unix' : 'windows'],
+    // ...
+  }
+}
 ```
 
 ## Publish
