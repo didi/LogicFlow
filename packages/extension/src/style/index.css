@@ -166,7 +166,7 @@
   border-bottom: #666666 solid 1px;
   text-shadow: 0 1px 0 rgb(255 255 255 / 33%);
   background-color: #a6a6a6;
-  background-image: linear-gradient(top,#b2b2b2,#9b9b9b);
+  background-image: linear-gradient(to bottom,#b2b2b2,#9b9b9b);
   padding: 0px 10px;
   position: absolute;
   top: 0;
