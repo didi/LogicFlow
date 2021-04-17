@@ -16,7 +16,7 @@ Logic Flow 提供了[自定义节点](../advance/customNode)和[自定义连线]
 </script>
 ```
 
-<example href="/examples/#/extension/bpmn-elements" height=360></example>
+<example href="/examples/#/extension/bpmn-elements" :height="360"></example>
 
 ## 转换为 XML
 
