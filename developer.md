@@ -104,7 +104,7 @@ npm whoami
 ### 为项目添加 tags
 
 ```shell
-lerna verion patch
+lerna version patch
 ```
 
 lerna version 的详细使用方式见[这里](https://github.com/lerna/lerna/tree/main/commands/version#readme)
@@ -113,4 +113,10 @@ lerna version 的详细使用方式见[这里](https://github.com/lerna/lerna/tr
 
 ```shell
 npm run lerna:publish
+```
+
+### 推tag到远端
+
+```shell
+git push origin --tags
 ```
