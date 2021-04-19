@@ -88,7 +88,7 @@ module.exports = {
   description: 'LogicFlow desc',
   themeConfig: {
     sidebarDepth: 1,
-    logo: '/Logo_Dark_1.png',
+    logo: '/horizontal-logo.png',
     displayAllHeaders: false,
     sidebar: [],
     nav: [
@@ -106,6 +106,6 @@ module.exports = {
       '/api/': api,
       '/usage/': usage,
       '/article/': article,
-    }
-  }
-}
+    },
+  },
+};
