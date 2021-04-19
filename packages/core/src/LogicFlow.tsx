@@ -635,6 +635,10 @@ export default class LogicFlow {
       this.snaplineModel.clearSnapline();
     }
   }
+  // 清空数据
+  clearData() {
+    this.graphModel.clearData();
+  }
   /**
    * 获取边的model
    * @param edgeId 边的Id

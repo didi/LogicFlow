@@ -45,6 +45,7 @@
     <button onClick="focusOn()">定位到五角星</button>
     <button id="undo" onClick="undo()" disabled>上一步</button>
     <button id="redo" onClick="redo()" disabled>下一步</button>
+    <button id="clearData" onClick="clearData()">清空数据</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -102,6 +103,9 @@
       }
       window.redo = function redo() {
         lf.redo()
+      }
+      window.clearData = function clearData() {
+        lf.clearData()
       }
       window.consolelog = function consolelog(msg) {
         console.log(msg)
