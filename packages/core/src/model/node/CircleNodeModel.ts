@@ -12,11 +12,9 @@ class CircleNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'circle');
   }
-  // @ts-ignore
   @computed get width(): number {
     return this.r * 2;
   }
-  // @ts-ignore
   @computed get height(): number {
     return this.r * 2;
   }

@@ -20,6 +20,10 @@
     "dist",
     "types"
   ],
+  "dependencies": {
+    "mousetrap": "^1.6.5",
+    "preact": "^10.4.8"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -58,8 +62,6 @@
     "mobx": "^5.15.7",
     "mobx-react": "^6.3.0",
     "mobx-utils": "^5.6.1",
-    "mousetrap": "^1.6.5",
-    "preact": "^10.4.8",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "standard-version": "^9.0.0",

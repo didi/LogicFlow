@@ -143,7 +143,7 @@
           view: UserNode,
           model: UserModel,
         };
-      });
+      }, false);
       lf.register('combine', ({ BaseNode, BaseNodeModel, h }) => {
         class CombineNode extends BaseNode {
           getShape() {
@@ -184,7 +184,7 @@
           view: CombineNode,
           model: CombineModel,
         };
-      });
+      }, false);
       lf.register('star', ({ PolygonNode, PolygonNodeModel, h, }) => {
         class StarNode extends PolygonNode { }
         class StarModel extends PolygonNodeModel {
@@ -204,7 +204,7 @@
           view: StarNode,
           model: StarModel,
         };
-      });
+      }, false);
       lf.register('connection', ({LineEdge, LineEdgeModel})=>{
         class Connection extends LineEdge {
           getTextStyle() {
@@ -223,7 +223,7 @@
           view: Connection,
           model: ConnnectionModel,
         }
-      });
+      }, false);
       lf.register('square', (RegisterParam) => {
         // h 方法由 Logic Flow 提供
         const { RectNode, RectNodeModel, h } = RegisterParam;
@@ -291,7 +291,7 @@
           view: SquareView,
           model: SquareModel,
         }
-      });
+      }, false);
       lf.setDefaultEdgeType('polyline');
       lf.render({
         nodes: [
@@ -307,74 +307,74 @@
             y: 300,
             id: 11,
           },
-          // {
-          //   type: 'text',
-          //   x: 200,
-          //   y: 400,
-          //   text: {
-          //     x: 200,
-          //     y: 400,
-          //     value: '我是单独的文本节点',
-          //   }
-          // },
-          // {
-          //   type: 'polygon',
-          //   x: 200,
-          //   y: 200,
-          //   id: 50,
-          //   text: 'hhhh',
-          // },
-          // {
-          //   type: 'diamond',
-          //   x: 220,
-          //   y: 220,
-          //   rx: 30,
-          //   ry: 50,
-          //   id: 524,
-          //   text: 'diamond',
-          // },
-          // {
-          //   type: 'user',
-          //   x: 600,
-          //   y: 200,
-          //   id: 20,
-          //   text:{
-          //     value: 'user',
-          //     x: 600,
-          //     y: 200,
-          //   },
-          //   properties: {
-          //     size: 1
-          //   }
-          // },
-          // {
-          //   type: 'user',
-          //   x: 500 * Math.random(),
-          //   y: 600 * Math.random(),
-          //   id: 21,
-          //   properties: {
-          //     size: 2
-          //   }
-          // },
-          // {
-          //   type: 'star',
-          //   x: 400,
-          //   y: 300,
-          //   id: 99
-          // },
-          // {
-          //   type: 'combine',
-          //   x: 222,
-          //   y: 40,
-          //   id: 30,
-          // },
-          // {
-          //   type: 'circle',
-          //   x: 500 * Math.random(),
-          //   y: 600 * Math.random(),
-          //   fill: 'blue',
-          //   id: 40,
-          // },
+          {
+            type: 'text',
+            x: 200,
+            y: 400,
+            text: {
+              x: 200,
+              y: 400,
+              value: '我是单独的文本节点',
+            }
+          },
+          {
+            type: 'polygon',
+            x: 200,
+            y: 200,
+            id: 50,
+            text: 'hhhh',
+          },
+          {
+            type: 'diamond',
+            x: 220,
+            y: 220,
+            rx: 30,
+            ry: 50,
+            id: 524,
+            text: 'diamond',
+          },
+          {
+            type: 'user',
+            x: 600,
+            y: 200,
+            id: 20,
+            text:{
+              value: 'user',
+              x: 600,
+              y: 200,
+            },
+            properties: {
+              size: 1
+            }
+          },
+          {
+            type: 'user',
+            x: 500 * Math.random(),
+            y: 600 * Math.random(),
+            id: 21,
+            properties: {
+              size: 2
+            }
+          },
+          {
+            type: 'star',
+            x: 400,
+            y: 300,
+            id: 99
+          },
+          {
+            type: 'combine',
+            x: 222,
+            y: 40,
+            id: 30,
+          },
+          {
+            type: 'circle',
+            x: 500 * Math.random(),
+            y: 600 * Math.random(),
+            fill: 'blue',
+            id: 40,
+          },
         ].concat(Array.of(...Array(0)).map((item, i) => {
           return {
             id: 'node_' + i,

@@ -244,12 +244,13 @@ class BaseEdgeModel implements IBaseModel {
       return;
     }
     if (Object.prototype.toString.call(data.text) === '[object Object]') {
-      Object.assign(this.text, {
-        x,
-        y,
-        draggable: false,
-        editable: true,
-      }, data.text);
+      this.text = {
+        x: data.text.x || x,
+        y: data.text.y || y,
+        value: data.text.value,
+        draggable: this.text.draggable,
+        editable: this.text.editable,
+      };
     }
   }
 

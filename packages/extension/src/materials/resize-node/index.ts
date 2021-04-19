@@ -3,7 +3,7 @@ import { getCircleModel, getCircleView } from './circle';
 const ResizeNode = {
   name: 'resize-node',
   install(lf) {
-    lf.register('circle', this.registerLabelPlusNode);
+    lf.register('circle', this.registerLabelPlusNode, true);
   },
   registerLabelPlusNode({ CircleNode, CircleNodeModel, h }) {
     return {

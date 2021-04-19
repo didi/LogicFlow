@@ -13,11 +13,10 @@ class EllipseNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'ellipse');
   }
-  // @ts-ignore
+
   @computed get width(): number {
     return this.rx * 2;
   }
-  // @ts-ignore
   @computed get height(): number {
     return this.ry * 2;
   }

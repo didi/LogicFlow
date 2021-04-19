@@ -119,7 +119,7 @@ const Menu: MenuPlugin = {
         currentData = null;
       } else {
         // 如果点击区域不在菜单项内
-        throw new Error('点击区域不在菜单项内，请检查代码！');
+        console.warn('点击区域不在菜单项内，请检查代码！');
       }
     }, true);
     // 通过事件控制菜单的显示和隐藏

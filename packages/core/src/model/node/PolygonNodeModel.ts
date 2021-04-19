@@ -27,7 +27,6 @@ class PolygonNodeModel extends BaseNodeModel {
     }));
     return pointsPosition;
   }
-  // @ts-ignore
   @computed get width(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
@@ -41,7 +40,6 @@ class PolygonNodeModel extends BaseNodeModel {
     });
     return max - min;
   }
-  // @ts-ignore
   @computed get height(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;

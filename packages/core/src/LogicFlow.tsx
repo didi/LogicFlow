@@ -1,7 +1,7 @@
 import { render, h } from 'preact';
 import { observer, Provider } from 'mobx-react';
-import * as mobx from 'mobx';
-import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
+// import * as mobx from 'mobx';
+// import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
 import GraphModel from './model/GraphModel';
 import Graph from './view/Graph';
 import BaseNodeModel from './model/node/BaseNodeModel';
@@ -159,7 +159,7 @@ export default class LogicFlow {
     install && install.call(extension, this, LogicFlow);
     renderComponent && this.components.push(renderComponent.bind(extension));
   }
-  register(type: string, fn: RegisterElementFn) {
+  register(type: string, fn: RegisterElementFn, isObserverView = true) {
     const registerParam: RegisterParam = {
       BaseEdge,
       BaseEdgeModel,
@@ -183,7 +183,7 @@ export default class LogicFlow {
       BezierEdgeModel,
       EllipseNode,
       EllipseNodeModel,
-      mobx,
+      // mobx,
       h,
       type,
     };
@@ -207,8 +207,12 @@ export default class LogicFlow {
       view: ViewClass,
       model: ModelClass,
     } = fn(registerParam);
-
-    this.setView(type, observer(ViewClass as IReactComponent));
+    let vClass = ViewClass;
+    if (isObserverView) {
+      // @ts-ignore
+      vClass = observer(vClass);
+    }
+    this.setView(type, vClass);
     this.graphModel.setModel(type, ModelClass);
   }
   defaultRegister() {
@@ -648,7 +652,7 @@ export default class LogicFlow {
     const { edgesMap } = this.graphModel;
     return edgesMap[edgeId].model;
   }
-  setView(type: string, component: IReactComponent) {
+  setView(type: string, component) {
     this.viewMap.set(type, component);
   }
   getView = (type: string) => this.viewMap.get(type);
@@ -698,6 +702,6 @@ export {
   PolylineEdgeModel,
   EllipseNode,
   EllipseNodeModel,
-  mobx,
+  // mobx,
   h,
 };
