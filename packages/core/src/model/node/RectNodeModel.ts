@@ -18,10 +18,7 @@ class RectNodeModel extends BaseNodeModel {
       anchorsOffset, x, y, width, height,
     } = this;
     if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
-      return anchorsOffset.map((el) => ({
-        x: x + el[0],
-        y: y + el[1],
-      }));
+      return this.getAnchorsByOffset();
     }
     return [
       { x, y: y - height / 2 },

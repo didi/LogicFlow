@@ -38,7 +38,7 @@ class DiamondNodeModel extends BaseNodeModel {
     }));
     return pointsPosition;
   }
-
+  // @ts-ignore
   @computed get width(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
@@ -52,7 +52,7 @@ class DiamondNodeModel extends BaseNodeModel {
     });
     return max - min;
   }
-
+  // @ts-ignore
   @computed get height(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
@@ -69,13 +69,10 @@ class DiamondNodeModel extends BaseNodeModel {
 
   @computed get anchors(): Point[] {
     const {
-      anchorsOffset, x, y, points,
+      anchorsOffset, points,
     } = this;
     if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
-      return anchorsOffset.map((el) => ({
-        x: x + el[0],
-        y: y + el[1],
-      }));
+      return this.getAnchorsByOffset();
     }
     return points.map(([x1, y1]) => ({ x: x1, y: y1 }));
   }
