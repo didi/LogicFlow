@@ -599,6 +599,12 @@ class GraphModel {
   @action setTheme(style: Style) {
     this.theme = updateTheme({ ...this.theme, ...style });
   }
+  // 清空数据
+  @action
+  clearData(): void {
+    this.nodes = [];
+    this.edges = [];
+  }
 }
 
 export { GraphModel };
