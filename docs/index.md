@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /Logo_Dark_2.png
+heroImage: /new-logo.png
 heroText:  
 tagline:  专注流程可视化的前端解决方案
 actionText: 开始使用 →
