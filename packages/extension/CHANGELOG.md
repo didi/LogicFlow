@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0...@logicflow/extension@0.3.1) (2021-04-19)
+
+
+### Bug Fixes
+
+* Gradient has outdated direction syntax ([48fdc1f](https://github.com/towersxu/logicflow/commit/48fdc1f3663d7f3a2c51563cbe7979332c9def18))
+* menu error in vue ([4f123a9](https://github.com/towersxu/logicflow/commit/4f123a9e32ab17e3ecf30d5bbfaa773734e28437))
+
+
+
+
+
 # [0.3.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.0-alpha.5...@logicflow/extension@0.3.0) (2021-04-13)
 
 

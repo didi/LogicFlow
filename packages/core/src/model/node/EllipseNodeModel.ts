@@ -13,10 +13,11 @@ class EllipseNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'ellipse');
   }
-
+  // @ts-ignore
   @computed get width(): number {
     return this.rx * 2;
   }
+  // @ts-ignore
   @computed get height(): number {
     return this.ry * 2;
   }
@@ -25,10 +26,7 @@ class EllipseNodeModel extends BaseNodeModel {
       anchorsOffset, x, y, rx, ry,
     } = this;
     if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
-      return anchorsOffset.map((el) => ({
-        x: x + el[0],
-        y: y + el[1],
-      }));
+      return this.getAnchorsByOffset();
     }
     return [
       { x, y: y - ry },

@@ -207,7 +207,23 @@ export default class BaseNodeModel implements IBaseModel {
     return this.targetRules;
   }
 
+  getAnchorsByOffset() {
+    const {
+      anchorsOffset, x, y,
+    } = this;
+    return anchorsOffset.map((el) => ({
+      x: x + el[0],
+      y: y + el[1],
+    }));
+  }
+
   get anchors() {
+    const {
+      anchorsOffset,
+    } = this;
+    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+      return this.getAnchorsByOffset();
+    }
     return [];
   }
 

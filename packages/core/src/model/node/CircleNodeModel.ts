@@ -12,10 +12,11 @@ class CircleNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'circle');
   }
-
+  // @ts-ignore
   @computed get width(): number {
     return this.r * 2;
   }
+  // @ts-ignore
   @computed get height(): number {
     return this.r * 2;
   }
@@ -24,10 +25,7 @@ class CircleNodeModel extends BaseNodeModel {
       anchorsOffset, x, y, r,
     } = this;
     if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
-      return anchorsOffset.map((el) => ({
-        x: x + el[0],
-        y: y + el[1],
-      }));
+      return this.getAnchorsByOffset();
     }
     return [
       { x, y: y - r },
