@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0...@logicflow/core@0.3.1) (2021-04-19)
+
+
+### Bug Fixes
+
+* delete useless code ([8680810](https://github.com/towersxu/logicflow/commit/8680810fdb6600994bcf3b94e11061dad176bc51))
+* format edge text value ([cc8aa22](https://github.com/towersxu/logicflow/commit/cc8aa224d158f547589a2e1f9e079d064df0b9e8))
+
+
+
+
+
 # [0.3.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0-alpha.5...@logicflow/core@0.3.0) (2021-04-13)
 
 
