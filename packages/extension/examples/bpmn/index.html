@@ -149,13 +149,13 @@
   <script src="/Control.js"></script>
   <script src="/SelectionSelect.js"></script>
   <script src="/Snapshot.js"></script>
-  <script src="/MiniMap.js"></script>
+  <!-- <script src="/MiniMap.js"></script> -->
   <script>
     LogicFlow.use(BpmnElement);
-    LogicFlow.use(MiniMap);
-    MiniMap.init({
-      disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
-    })
+    // LogicFlow.use(MiniMap);
+    // MiniMap.init({
+    //   disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
+    // })
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',

@@ -63,6 +63,10 @@ type GraphConfigModel = {
   edges: BaseEdgeModel[];
 };
 
+type InnerView = ClassDecorator & {
+  isObervered: boolean;
+};
+
 export default class LogicFlow {
   container: HTMLElement;
   width: number;
@@ -207,8 +211,9 @@ export default class LogicFlow {
       view: ViewClass,
       model: ModelClass,
     } = fn(registerParam);
-    let vClass = ViewClass;
-    if (isObserverView) {
+    let vClass = ViewClass as InnerView;
+    if (isObserverView && !vClass.isObervered) {
+      vClass.isObervered = true;
       // @ts-ignore
       vClass = observer(vClass);
     }

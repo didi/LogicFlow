@@ -24,12 +24,12 @@ export default class BaseText extends Component<IProps, IState> {
   stepDrag: StepDrag;
   constructor(config) {
     super();
-    const { model } = config;
+    const { model, draggable } = config;
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,
       step: 1,
       model,
-      isStopPropagation: false,
+      isStopPropagation: draggable,
     });
   }
   getShape() {

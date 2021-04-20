@@ -15,13 +15,21 @@ export const getEndEventModel = (
       if (!data.id) {
         data.id = `Event_${getBpmnId()}`;
       }
+      if (!data.text) {
+        data.text = {
+          value: '',
+          x: data.x,
+          y: data.y,
+        };
+      }
       if (data.text && typeof data.text === 'string') {
         data.text = {
           value: data.text,
           x: data.x,
-          y: data.y + 35,
+          y: data.y,
         };
       }
+      data.text.y += 40;
       super(data, graphModel);
     }
     getConnectedSourceRules() {
