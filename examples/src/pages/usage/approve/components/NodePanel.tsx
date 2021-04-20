@@ -14,10 +14,11 @@ export default function NodePanel(lf: LogicFlow) {
   // 节点菜单
   const getNodePanel = (): JSX.Element[]  => { 
     const nodeList: JSX.Element[] = [];
-    approveNodes.forEach(item => { 
+    approveNodes.forEach((item, key) => { 
       nodeList.push(
         <div
           className={`approve-node node-${item.type}`}
+          key={key}
         >
           <div
             className="node-shape"
