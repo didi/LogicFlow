@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.1...@logicflow/core@0.3.2) (2021-04-20)
+
+
+### Bug Fixes
+
+* show anchors when extend baseNode ([12bd0db](https://github.com/towersxu/logicflow/commit/12bd0db574b18b19aed8134b9e508f3c0a9ef6f4))
+* show anchors when extend baseNode ([d78d7df](https://github.com/towersxu/logicflow/commit/d78d7dfabbdea171a104a22b48ad6e8662230c21))
+
+
+### Features
+
+* **core:** add clearData funcion in Logicflow ([2a5b345](https://github.com/towersxu/logicflow/commit/2a5b3450b88fd7d831bc25810726fa4de4255033))
+
+
+
+
+
 ## [0.3.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.0...@logicflow/core@0.3.1) (2021-04-19)
 
 
