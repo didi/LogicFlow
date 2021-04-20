@@ -19,6 +19,7 @@ const BpmnElement = {
     lf.setDefaultEdgeType('bpmn:sequenceFlow');
   },
   registerStartEvent({ CircleNode, CircleNodeModel }) {
+    console.log(1111);
     return {
       model: getStartEventModel(CircleNodeModel),
       view: getStartEventView(CircleNode),
