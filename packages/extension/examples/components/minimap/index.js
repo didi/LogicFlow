@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-  console.log(document.querySelector('#app'))
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
     edgeTextDraggable: true,
@@ -14,7 +13,6 @@ window.addEventListener('DOMContentLoaded', () => {
     },
     snapline: true,
   });
-  console.log(5);
   lf.register('x-node', ({ RectNode, RectNodeModel }) => {
     return {
       view: RectNode,
@@ -71,7 +69,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelector('#mini-map').addEventListener('click', () => {
-    console.log(444)
     MiniMap.show();
   })
 })

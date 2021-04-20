@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-  console.log(document.querySelector('#app'))
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
     edgeTextDraggable: true,

@@ -57,8 +57,22 @@ export default class BaseNodeModel implements IBaseModel {
   @observable type = '';
   @observable x = defaultConfig.x;
   @observable y = defaultConfig.y;
-  @observable width = defaultConfig.width;
-  @observable height = defaultConfig.height;
+  @observable
+  private _width = defaultConfig.width;
+  public get width() {
+    return this._width;
+  }
+  public set width(value) {
+    this._width = value;
+  }
+  @observable
+  private _height = defaultConfig.height;
+  public get height() {
+    return this._height;
+  }
+  public set height(value) {
+    this._height = value;
+  }
   @observable fill = defaultConfig.fill;
   @observable fillOpacity = defaultConfig.fillOpacity;
   @observable strokeWidth = defaultConfig.strokeWidth;
@@ -347,6 +361,5 @@ export default class BaseNodeModel implements IBaseModel {
   @action
   updateAttributes(attributes) {
     assign(this, attributes);
-    console.log(this);
   }
 }

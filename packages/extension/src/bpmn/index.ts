@@ -10,12 +10,12 @@ const BpmnElement = {
   name: 'bpmn-element',
   install(lf) {
     lf.setTheme(theme);
-    lf.register('bpmn:startEvent', this.registerStartEvent);
-    lf.register('bpmn:endEvent', this.registerEndEvent);
-    lf.register('bpmn:exclusiveGateway', this.registerExclusiveGateway);
-    lf.register('bpmn:userTask', this.registerUserTask);
-    lf.register('bpmn:serviceTask', this.registerServiceTask);
-    lf.register('bpmn:sequenceFlow', this.registerSequenceFlow);
+    lf.register('bpmn:startEvent', this.registerStartEvent, false);
+    lf.register('bpmn:endEvent', this.registerEndEvent, false);
+    lf.register('bpmn:exclusiveGateway', this.registerExclusiveGateway, false);
+    lf.register('bpmn:userTask', this.registerUserTask, false);
+    lf.register('bpmn:serviceTask', this.registerServiceTask, false);
+    lf.register('bpmn:sequenceFlow', this.registerSequenceFlow, false);
     lf.setDefaultEdgeType('bpmn:sequenceFlow');
   },
   registerStartEvent({ CircleNode, CircleNodeModel }) {

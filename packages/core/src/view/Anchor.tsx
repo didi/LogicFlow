@@ -10,13 +10,12 @@ import EventEmitter from '../event/eventEmitter';
 
 type TargetNodeId = string;
 
-interface IProps extends CSSStyleDeclaration {
+interface IProps {
   x: number,
   y: number,
-  active: boolean,
-  style: CSSStyleDeclaration,
-  hoverStyle: CSSStyleDeclaration,
-  edgeStyle: CSSStyleDeclaration,
+  style?: CSSStyleDeclaration,
+  hoverStyle?: CSSStyleDeclaration,
+  edgeStyle?: CSSStyleDeclaration,
   anchorIndex: number,
   eventCenter: EventEmitter,
   graphModel: GraphModel,

@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+// import mobx from 'mobx';
 import { h } from 'preact';
 import LogicFlow from '../LogicFlow';
 import BaseEdge from '../view/edge/BaseEdge';
@@ -301,7 +301,7 @@ export type RegisterBack = {
 };
 
 export interface RegisterParam {
-  mobx: typeof mobx;
+  // mobx: typeof mobx;
   h: typeof h;
   BaseEdge: typeof BaseEdge;
   BaseEdgeModel: typeof BaseEdgeModel;

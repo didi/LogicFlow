@@ -21,8 +21,8 @@ class CustomNode {
           const rule = {
             message: '不满足连线的校验规则',
             validate: (source, target) => {
-              console.log(target);
               // 校验规则
+              console.log(target);
               return true;
             },
           };

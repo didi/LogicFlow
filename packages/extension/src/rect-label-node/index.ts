@@ -3,7 +3,7 @@ import RectLabelNodeView from './RectLabelNodeView';
 const RectLabelNode = {
   name: 'rect-label-node',
   install(lf) {
-    lf.register('rect-label', this.registerLabelPlusNode);
+    lf.register('rect-label', this.registerLabelPlusNode, false);
   },
   registerLabelPlusNode({ RectNode, RectNodeModel, h }) {
     return {
