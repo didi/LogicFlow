@@ -43,6 +43,9 @@ export default function ApproveExample() {
       setNodeData(undefined);
       setIsShowHoverPanel(true);
     });
+    lf.on('blank:mousemove', ({ e }) => {
+      setHoverStyle({ top: e.clientY, left: e.clientX })
+    });
   }
   return (
     <div className="approve-example-container">

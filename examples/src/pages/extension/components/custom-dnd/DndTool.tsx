@@ -28,10 +28,10 @@ export default function DndTool(props: IProps): ReactElement {
   }
   return (
     <div className="panel">
-      {dndItem.map(shape => {
+      {dndItem.map((shape,key) => {
         const { type, text } = shape;
         return (
-          <div className="panel-item">
+          <div className="panel-item" key={key}>
             <div
               className={`panel-${type}`}
               onMouseDown={() => { mouseDown(shape); }}
