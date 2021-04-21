@@ -38,7 +38,10 @@ export default function CustomNodeAnchorExample() {
 
   return (
     <>
-      <ExampleHeader content="只保留水平方向上的锚点" />
+      <ExampleHeader
+        content="只保留水平方向上的锚点"
+        githubPath="/advance/custom-node/anchor/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

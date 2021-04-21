@@ -71,7 +71,10 @@ export default function DndPanelExample() {
 
   return (
     <>
-      <ExampleHeader content="显示 mini-map" >
+      <ExampleHeader
+        content="显示 mini-map"
+        githubPath="/extension/components/mini-map/index.tsx"
+      >
         <Switch onChange={handleSwitch} />
       </ExampleHeader>
       <div id="graph" className="viewport" />

@@ -67,7 +67,10 @@ export default function SnapshotExample() {
 
   return (
     <>
-      <ExampleHeader contentStyle={contentStyle}>
+      <ExampleHeader
+        contentStyle={contentStyle}
+        githubPath="/extension/snapshot/index.tsx"
+      >
         导出图片：
         <Button
           shape="round"

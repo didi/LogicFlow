@@ -42,7 +42,10 @@ export default function RedoUndoExample() {
 
   return (
     <>
-      <ExampleHeader content={"尝试连线后点击“上一步”撤销"} />
+      <ExampleHeader
+        content={"尝试连线后点击“上一步”撤销"}
+        githubPath="/basic/redoundo/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

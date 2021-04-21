@@ -52,7 +52,10 @@ export default function CustomNodeEdgeExample() {
 
   return (
     <>
-      <ExampleHeader content="正方形的下一个节点只能是圆形节点" />
+      <ExampleHeader
+        content="正方形的下一个节点只能是圆形节点"
+        githubPath="/advance/custom-node/rule/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import { DndPanel } from '@logicflow/extension'
+import ExampleHeader from '../../../../components/example-header';
 
 const config = {
   stopScrollGraph: true,
@@ -21,5 +22,10 @@ export default function DndPanelExample() {
     lf.render();
   }, []);
 
-  return <div id="graph" className="viewport" />;
+  return (
+    <>
+      <ExampleHeader githubPath="/extension/components/dnd-panel/index.tsx" />
+      <div id="graph" className="viewport" />
+    </>
+  )
 }

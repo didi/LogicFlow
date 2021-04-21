@@ -1,7 +1,7 @@
 <template>
   <div class="example" :style="{ width, height: height + 'px' }">
     <div class="mask" v-show="!showIframe"></div>
-    <iframe id="example-iframe" :src="iframeLink" />
+    <iframe :id="iframeId" class="iframe" :src="iframeLink" />
   </div>
 </template>
 
@@ -19,6 +19,11 @@ export default {
       type: Number,
       default: 600,
     },
+    // 一个md中有多个iframe时，需要进行区分
+    iframeId: {
+      type: String,
+      default: 'example-iframe'
+    }
   },
   data() {
     return {
@@ -47,7 +52,7 @@ export default {
         host +
         location.pathname.replace('guide', 'examples/#').replace('.html', '');
     }
-    document.getElementById('example-iframe').onload = () => {
+    document.getElementById(this.iframeId).onload = () => {
       this.showIframe = true;
     };
   },
@@ -58,7 +63,7 @@ export default {
   position: relative;
 }
 .mask,
-iframe {
+.iframe {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -70,7 +75,7 @@ iframe {
   animation: example-mask-animation 2s linear 0s infinite alternate;
   z-index: 1;
 }
-iframe {
+.iframe {
   border: none;
   outline: none;
   z-index: 0;

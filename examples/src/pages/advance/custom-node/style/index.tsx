@@ -39,7 +39,10 @@ export default function CustomNodeStyleExample() {
 
   return (
     <>
-      <ExampleHeader content="设置自定义节点的 width 和 height" />
+      <ExampleHeader
+        content="设置自定义节点的 width 和 height"
+        githubPath="/advance/custom-node/style/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

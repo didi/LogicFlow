@@ -51,7 +51,7 @@ export default function AdapterExample() {
 
   return (
     <>
-      <ExampleHeader>
+      <ExampleHeader githubPath="/extension/adapter/index.tsx">
         导出 bpmnAdapter 转换后的数据格式：
         <Button
           shape="round"

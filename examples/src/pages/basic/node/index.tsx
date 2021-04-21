@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
+import ExampleHeader from '../../../components/example-header';
 
 const config = {
   isSilentMode: true,
@@ -35,5 +36,10 @@ export default function NodeExample() {
     lf.render(data)
   }, []);
 
-  return <div id="graph" className="viewport"></div>;
+  return (
+    <>
+      <ExampleHeader githubPath="/basic/node/index.tsx" />
+      <div id="graph" className="viewport"></div>
+    </>
+  )
 }

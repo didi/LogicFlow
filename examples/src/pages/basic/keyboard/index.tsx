@@ -42,7 +42,9 @@ export default function KeyboardExample() {
 
   return (
     <>
-      <ExampleHeader>
+      <ExampleHeader
+        githubPath="/basic/keyboard/index.tsx"
+      >
         <div className="keyboard-example-code">Ctrl + C</div>
         <div className="keyboard-example-code">Ctrl + V</div>
       </ExampleHeader>

@@ -105,7 +105,10 @@ export default function EdgeExample() {
 
   return (
     <>
-      <ExampleHeader content="尝试为矩形和圆形手动添加连线" />
+      <ExampleHeader
+        content="尝试为矩形和圆形手动添加连线"
+        githubPath="/basic/dege/index.tsx"
+      />
       <div>当前：{type}</div>
       <div>
         <button onClick={() => setEdgeType('line', '直线')}>直线</button>

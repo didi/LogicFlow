@@ -37,7 +37,10 @@ export default function CustomNodeShapeExample() {
 
   return (
     <>
-      <ExampleHeader content="设置自定义节点的 SVG 元素" />
+      <ExampleHeader
+        content="设置自定义节点的 SVG 元素"
+        githubPath="/advance/custom-node/shape/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )
