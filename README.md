@@ -1,6 +1,10 @@
-<p align="center">
+<p align="center" style="padding">
   <a href="http://logic-flow.org" target="_blank">
-    <img src="http://logic-flow.org/new-logo.png" alt="LogicFlow logo" style="zoom: 33%;" />
+    <img
+      src="http://logic-flow.org/new-logo.png"
+      alt="LogicFlow logo"
+      style="width: 30%; margin-top: 20px;"
+    />
   </a>
 </p>
 
