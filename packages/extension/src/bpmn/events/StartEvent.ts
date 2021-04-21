@@ -2,7 +2,7 @@ import { getBpmnId } from '../getBpmnId';
 import {
   CircleNodeModelContractor,
   CircleNodeViewContractor,
-} from '../../type.d';
+} from '../../type/index';
 
 export const getStartEventModel = (
   CircleNodeModel: CircleNodeModelContractor,

@@ -1,5 +1,5 @@
 import { getBpmnId } from '../getBpmnId';
-import { PolylineEdgeModelContractor, PolylineEdgeViewContractor } from '../../type.d';
+import { PolylineEdgeModelContractor, PolylineEdgeViewContractor } from '../../type/index';
 
 export const getSequenceFlowModel = (
   LineEdgeModel: PolylineEdgeModelContractor,

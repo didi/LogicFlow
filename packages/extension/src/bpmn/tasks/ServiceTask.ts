@@ -2,7 +2,7 @@ import { getBpmnId } from '../getBpmnId';
 import {
   ServiceTaskModelContractor,
   ServiceTaskViewContractor,
-} from '../../type.d';
+} from '../../type/index';
 
 export const getServiceTaskModel = (
   PolygonNodeModel: ServiceTaskModelContractor,

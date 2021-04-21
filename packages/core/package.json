@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "license": "Apache 2.0",
@@ -21,6 +21,7 @@
     "types"
   ],
   "dependencies": {
+    "@types/mousetrap": "^1.6.4",
     "mousetrap": "^1.6.5",
     "preact": "^10.4.8"
   },
@@ -33,7 +34,6 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@types/lodash-es": "^4.17.3",
-    "@types/mousetrap": "^1.6.4",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.2.0",
     "autoprefixer": "^9.7.6",

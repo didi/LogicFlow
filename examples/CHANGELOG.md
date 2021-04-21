@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.3](https://github.com/towersxu/logicflow/compare/examples@0.4.2...examples@0.4.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* **example:** should have a unique "key" prop ([b8903c9](https://github.com/towersxu/logicflow/commit/b8903c9f6f37b3e52123e7f603fdccf1be78c8a5))
+* **example:** should have a unique "key" prop ([9c48953](https://github.com/towersxu/logicflow/commit/9c48953dada7eff04c95189e251b0dda38275085))
+
+
+### Performance Improvements
+
+* add mousemove in examples ([af8085b](https://github.com/towersxu/logicflow/commit/af8085b501dffa524500a72dd549fcbfdde586e5))
+
+
+
+
+
 ## [0.4.2](https://github.com/towersxu/logicflow/compare/examples@0.4.1...examples@0.4.2) (2021-04-20)
 
 **Note:** Version bump only for package examples

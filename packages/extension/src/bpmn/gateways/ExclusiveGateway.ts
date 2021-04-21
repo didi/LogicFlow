@@ -3,7 +3,7 @@ import {
   PolygonNodeModelContractor,
   PolygonNodeViewContractor,
   ExclusiveGatewayAttribute,
-} from '../../type.d';
+} from '../../type/index';
 
 export const getExclusiveGateway = (
   PolygonNodeModel: PolygonNodeModelContractor,
