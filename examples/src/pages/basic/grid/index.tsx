@@ -100,7 +100,9 @@ export default class GridExample extends Component<IProps, IState> {
 
     return (
       <>
-        <ExampleHeader>
+        <ExampleHeader
+          githubPath="/basic/grid/index.tsx"
+        >
           网格类型：
           <Button onClick={() => { this.handleClick('dot') }}>Dot</Button>
           <Button onClick={() => { this.handleClick('mesh') }}>Mesh</Button>

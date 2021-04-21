@@ -26,7 +26,10 @@ export default class DndExample extends Component<IProps, IState> {
   render() {
     return (
       <>
-        <ExampleHeader content="拖拽面板上的图形生成节点" />
+        <ExampleHeader
+          content="拖拽面板上的图形生成节点"
+          githubPath="/basic/dnd/index.tsx"
+        />
         <div className="dnd-example-container">
           <Panel mouseDownHandle={this.mouseDownHandle} />
           <div id="graph" className="viewport" />

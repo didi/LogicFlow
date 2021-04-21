@@ -5,7 +5,7 @@
 .App {
   border: 1px rgb(230, 230, 230) solid;
   border-radius: 6px;
-  padding: 10px;
+  padding: 0 10px 10px;
   height: 100vh;
   display: flex;
   flex-direction: column;

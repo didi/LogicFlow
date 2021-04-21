@@ -62,7 +62,9 @@ export default function EventExample() {
 
   return (
     <>
-      <ExampleHeader>
+      <ExampleHeader
+        githubPath="/advance/event/index.tsx"
+      >
         拖拽或点击元素查看触发事件：{event ? `${event}-${element}` : ''}
       </ExampleHeader>
       <div id="graph" className="viewport" />

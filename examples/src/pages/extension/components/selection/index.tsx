@@ -44,7 +44,7 @@ const data = {
 let lf: LogicFlow;
 
 export default function DndPanelExample() {
-  const [ isOpened, setIsOpened ] = useState(true);
+  const [isOpened, setIsOpened] = useState(true);
 
   useEffect(() => {
     LogicFlow.use(SelectionSelect);
@@ -70,7 +70,10 @@ export default function DndPanelExample() {
 
   return (
     <>
-      <ExampleHeader content="开启多选功能" >
+      <ExampleHeader
+        content="开启多选功能"
+        githubPath="/extension/components/selection/index.tsx"
+      >
         <Switch defaultChecked onChange={handleSwitch} />
       </ExampleHeader>
       <div id="graph" className="viewport" />

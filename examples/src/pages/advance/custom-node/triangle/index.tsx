@@ -34,7 +34,10 @@ export default function CustomNodeShapeExample() {
 
   return (
     <>
-      <ExampleHeader content="设置多边形的顶点来实现三角形" />
+      <ExampleHeader
+        content="设置多边形的顶点来实现三角形"
+        githubPath="/advance/custom-node/triangle/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

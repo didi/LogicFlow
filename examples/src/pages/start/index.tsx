@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import './index.css';
+import ExampleHeader from '../../components/example-header';
 
 const config = {
   stopScrollGraph: true,
@@ -48,5 +49,10 @@ export default function StartExample() {
     lf.render(data)
   }, []);
 
-  return <div id="container" className="viewport" />;
+  return (
+    <>
+      <ExampleHeader githubPath="/start/index.tsx" />
+      <div id="container" className="viewport" />
+    </>
+  )
 }

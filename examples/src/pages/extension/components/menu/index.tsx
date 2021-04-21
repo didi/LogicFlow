@@ -36,7 +36,10 @@ export default function MenuExample() {
 
   return (
     <>
-      <ExampleHeader content="右键节点展示菜单" />
+      <ExampleHeader
+        content="右键节点展示菜单"
+        githubPath="/extension/components/menu/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )

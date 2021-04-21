@@ -121,7 +121,11 @@ lf.render({
 });
 ```
 
-<example href="/examples/#/advance/custom-node/style" :height="250" ></example>
+<example
+  :height="250"
+  iframeId="iframe-1"
+  href="/examples/#/advance/custom-node/style"
+/>
 
 完整的的样式类属性请访问 [API](/api/nodeApi.md#样式属性) 以查看更多细节。
 
@@ -169,7 +173,11 @@ lf.render({
 });
 ```
 
-<example href="/examples/#/advance/custom-node/anchor" :height="250" ></example>
+<example
+  :height="250"
+  iframeId="iframe-2"
+  href="/examples/#/advance/custom-node/anchor"
+/>
 
 在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
 
@@ -224,7 +232,11 @@ lf.render({
 });
 ```
 
-<example href="/examples/#/advance/custom-node/rule" :height="400" ></example>
+<example
+  :height="400"
+  iframeId="iframe-3"
+  href="/examples/#/advance/custom-node/rule"
+/>
 
 在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
 
@@ -291,7 +303,11 @@ lf.register('triangle', (RegisterParam) => {
 });
 ```
 
-<example href="/examples/#/advance/custom-node/triangle" :height="200" ></example>
+<example
+  :height="200"
+  iframeId="iframe-4"
+  href="/examples/#/advance/custom-node/triangle"
+/>
 
 完整的节点属性请访问 [API](/api/nodeApi.md#节点属性) 以查看更多细节。
 
@@ -389,7 +405,11 @@ lf.render({
 });
 ```
 
-<example href="/examples/#/advance/custom-node/shape" :height="280" ></example>
+<example
+  :height="280"
+  iframeId="iframe-5"
+  href="/examples/#/advance/custom-node/shape"
+/>
 
 在上面的代码中，`getShape`方法返回了一个包含图标的标签，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。SVG 元素需要 model 中的实时数据才可以正常显示并使用，现在我们可以通过[getAttributes](/guide/advance/customNode.html#getattributes)方法获取到 model 中的[数据属性](/api/nodeApi.md#数据属性)和[样式属性](/api/nodeApi.html#样式属性)。
 

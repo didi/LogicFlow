@@ -36,7 +36,11 @@ lf.register('process', (RegisterParam) => {
 });
 ```
 
-<example href="/examples/#/advance/custom-edge/process" :height="250" ></example>
+<example
+  :height="250"
+  iframeId="iframe-1"
+  href="/examples/#/advance/custom-edge/process"
+/>
 
 ## 自定义连线的 View
 

@@ -1,20 +1,45 @@
-# LogicFlow
+<p align="center">
+  <a href="http://logic-flow.org" target="_blank">
+    <img
+      src="http://logic-flow.org/new-logo.png"
+      alt="LogicFlow logo"
+      width="250"
+    />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@logicflow/core">
+    <img src="https://img.shields.io/npm/v/@logicflow/core" alt="Version">
+  </a>
+  <a href="https://www.npmjs.com/package/@logicflow/core">
+    <img src="https://img.shields.io/npm/dm/@logicflow/core" alt="Download">
+  </a>
+  <a href="https://github.com/didi/LogicFlow/blob/master/LICENSE">
+    <img src="https://img.shields.io/npm/l/@logicflow/core" alt="LICENSE">
+  </a>
+</p>
+
 LogicFlow 是一款流程可视化的前端框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
 
-# 特性
-- 🎯专业
+## 特性
+
+- 🎯 专业
 
   专注于业务流程可视化的解决方案
-- 🚀快速搭建
+
+- 🚀 快速搭建
 
   提供配套能力（undo/对齐线/键盘）快速搭建流程图编辑器，提升研发效率
-- 🛠高拓展性
+
+- 🛠 高拓展性
 
   提供自定义能力和插件能力，助力定制化的业务场景
 
+## 使用
 
-# 使用
-## 安装
+### 安装
+
 ```sh
 # npm
 $ npm install @logicflow/core --save
@@ -24,10 +49,11 @@ $ npm install @logicflow/core --save
 $ yarn add @logicflow/core
 ```
 
-## 代码示例
+### 代码示例
+
 ```js
 // 创建容器
-<div id="container"></div>
+<div id="container"></div>;
 
 // 准备数据
 const data = {
@@ -57,14 +83,14 @@ const data = {
     },
   ],
   // 边
-  edges:[
+  edges: [
     {
       type: 'polyline',
       sourceNodeId: 50,
       targetNodeId: 21,
-    }
-  ]
-}
+    },
+  ],
+};
 // 渲染画布
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
@@ -73,10 +99,10 @@ const lf = new LogicFlow({
 });
 
 lf.render(data);
-
 ```
 
-# 文档
+## 文档
+
 [官方文档](http://logic-flow.org)
 
 - [快速上手](http://logic-flow.org/guide/start.html#安装)
@@ -85,9 +111,10 @@ lf.render(data);
 - [拓展](http://logic-flow.org/guide/extension/extension-components.html)
 - [示例](http://logic-flow.org/usage/bpmn.html)
 
+## 核心能力
 
-# 核心能力
-## 流程图编辑器快速搭建
+### 流程图编辑器快速搭建
+
 提供了一个流程图编辑所必需的各项能力，这也是 LogicFlow 的基础能力：
 
 - 图的绘制能力。基于 SVG 来绘制形状各异的节点和线，并提供了基础的节点（矩形、圆形、多边形等）和线（直线、折线、曲线）
@@ -96,12 +123,11 @@ lf.render(data);
 - 提供了丰富的 API ，宿主研发通过 API 传参调用和监听事件的方式，与 LogicFlow 完成交互
 
   下面是通过 LogicFlow 内置的节点和配套能力，做的流程图示例
-：
+  ：
 
-  <image src="https://dpubstatic.udache.com/static/dpubimg/eEMT14E7BR/lfexample1.gif" width="500"/>
+    <image src="https://dpubstatic.udache.com/static/dpubimg/eEMT14E7BR/lfexample1.gif" width="500"/>
 
-
-## 基于业务场景拓展
+### 基于业务场景拓展
 
 当基础能力无法满足业务需求的时候，便需要基于业务场景拓展。
 
@@ -114,28 +140,28 @@ lf.render(data);
 
 基于上述拓展的能力，前端研发能够根据实际业务场景的需求，灵活的开发出所需的节点、组件等。下面有两个基于 LogicFlow 拓展能力做出的流程图
 
-### BPMN 规范
+#### BPMN 规范
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/CS6S6q9Yxf/lfexample2.gif" width="500"/>
 
-
-### 审批流
+#### 审批流
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/uBeSlMEytL/lfexample3.gif" width="500"/>
 
-### vue应用demo
+#### vue 应用 demo
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
 
 [代码地址](https://github.com/xinxin93/logicflow_vue_demo)
 
-# 整体架构
+## 整体架构
 
 ![jiagou](https://dpubstatic.udache.com/static/dpubimg/fg7q5j_5nG/lfjk.png)
 
 [详细介绍](https://github.com/didi/LogicFlow/wiki)
 
-# 开发团队
+## 开发团队
+
 内部成员：<a href="https://github.com/GeekJk">GeekJk</a>、<a href="https://github.com/sunyongjian">sunyongjian</a>、<a href="https://github.com/towersxu
 ">towersxu</a>、<a href="https://github.com/xinxin93
 ">xinxin93</a>、<a href="https://github.com/ChengranYan
@@ -143,9 +169,9 @@ lf.render(data);
 ">lww117</a>、<a href="https://github.com/yhlchao
 ">yhlchao</a>
 
-# 联系我们
+## 联系我们
 
-## 加入微信群
+### 加入微信群
 
 添加微信号：sunyongjian1993 或 logic-flow 加入用户群
 
@@ -153,5 +179,6 @@ lf.render(data);
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/3TqcecQuhw/WechatIMG307.jpeg" width="300"/>
 
-## 加入 QQ 群
+### 加入 QQ 群
+
 <image src="https://dpubstatic.udache.com/static/dpubimg/VMBzV7jhh8/qq.png" width="300"/>

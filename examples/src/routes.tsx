@@ -8,7 +8,7 @@ import Edge from './pages/basic/edge';
 import Bpmn from './pages/usage/bpmn';
 import Keyboard from './pages/basic/keyboard';
 import RedoUndo from './pages/basic/redoundo';
-import Snapline from './pages/basic/sanpline';
+import Snapline from './pages/basic/snapline';
 import Silent from './pages/basic/silent-mode';
 import Theme from './pages/advance/theme';
 import Snapshot from './pages/extension/snapshot';
@@ -24,8 +24,7 @@ import Anchor from './pages/advance/custom-node/anchor';
 import Triangle from './pages/advance/custom-node/triangle';
 import Rule from './pages/advance/custom-node/rule';
 import Shape from './pages/advance/custom-node/shape';
-import Process from './pages/advance/custom-edge/process';
-import Arrow from './pages/advance/custom-edge/arrow';
+import Process from './pages/advance/custom-edge';
 import Event from './pages/advance/event';
 import Approve from './pages/usage/approve';
 import ApprovePreview from './pages/usage/approvePreview';
@@ -51,7 +50,6 @@ export default (
     <Route path="/advance/custom-node/rule" exact component={Rule} />
     <Route path="/advance/custom-node/shape" exact component={Shape} />
     <Route path="/advance/custom-edge/process" exact component={Process} />
-    <Route path="/advance/custom-edge/arrow" exact component={Arrow} />
     <Route path="/extension/snapshot" exact component={Snapshot} />
     <Route path="/extension/components/control" exact component={Control} />
     <Route path="/extension/components/menu" exact component={Menu} />

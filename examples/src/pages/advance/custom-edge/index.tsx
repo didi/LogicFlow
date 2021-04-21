@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import { registerProcess } from './process';
+import ExampleHeader from '../../../components/example-header';
 
 const config = {
   stopScrollGraph: true,
@@ -82,5 +83,10 @@ export default function CustomEdgeExample() {
     lf.render(data);
   }, []);
 
-  return <div id="graph" className="viewport" />;
+  return (
+    <>
+      <ExampleHeader githubPath="/advance/custom-edge/index.tsx" />
+      <div id="graph" className="viewport" />
+    </>
+  )
 }

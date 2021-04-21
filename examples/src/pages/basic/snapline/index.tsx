@@ -43,7 +43,10 @@ export default function SnaplineExample() {
 
   return (
     <>
-      <ExampleHeader content="尝试拖拽圆形使两个节点对齐" />
+      <ExampleHeader
+        content="尝试拖拽圆形使两个节点对齐"
+        githubPath="/basic/snapline/index.tsx"
+      />
       <div id="graph" className="viewport" />
     </>
   )
