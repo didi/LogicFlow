@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "license": "Apache 2.0",
@@ -21,8 +21,8 @@
     "types"
   ],
   "dependencies": {
-    "mousetrap": "^1.6.5",
     "@types/mousetrap": "^1.6.4",
+    "mousetrap": "^1.6.5",
     "preact": "^10.4.8"
   },
   "devDependencies": {

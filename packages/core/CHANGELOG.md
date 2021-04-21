@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.2...@logicflow/core@0.3.3) (2021-04-21)
+
+
+### Bug Fixes
+
+* avoid reObserver view ([996fd65](https://github.com/towersxu/logicflow/commit/996fd6515d78b5331b08fd84025a148b45026cd9))
+* drag text not allowed propagation ([9d6cc0c](https://github.com/towersxu/logicflow/commit/9d6cc0cc1c64fdc134e83f37794ca568ffbfca25))
+* types ([37491ca](https://github.com/towersxu/logicflow/commit/37491cab07d7712aa4b94326424af3ded5031f75))
+
+
+
+
+
 ## [0.3.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.1...@logicflow/core@0.3.2) (2021-04-20)
 
 
