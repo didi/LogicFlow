@@ -85,12 +85,21 @@ const verisonInfo = [
 ];
 
 module.exports = {
+  title: 'LogicFlow',
   description: 'LogicFlow desc',
+  head: [['link', { rel: 'icon', href: '/new-logo.svg' }]],
+  plugins: ['@vuepress-reco/vuepress-plugin-back-to-top'],
   themeConfig: {
     sidebarDepth: 1,
     logo: '/horizontal-logo.png',
     displayAllHeaders: false,
-    sidebar: [],
+    smoothScroll: true,
+    search: true,
+    lastUpdated: '最后更新时间',
+    repo: 'https://github.com/didi/LogicFlow',
+    docsDir: 'docs',
+    editLinks: true,
+    editLinkText: '在 Github 上改善此页',
     nav: [
       { text: '教程', link: '/guide/start' },
       { text: 'API', link: '/api/logicFlowApi' },
@@ -98,7 +107,6 @@ module.exports = {
       { text: '常见问题', link: '/FAQ' },
       { text: '版本公告', link: '/version-info/0.3.0' },
       { text: '文章', link: '/article/article01' },
-      { text: 'Github', link: 'https://github.com/didi/LogicFlow' },
     ],
     sidebar: {
       '/guide/': guide,
