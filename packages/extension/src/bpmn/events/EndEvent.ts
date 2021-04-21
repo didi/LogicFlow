@@ -4,7 +4,7 @@ import {
   CircleNodeModelContractor,
   CircleNodeViewContractor,
   // EventEventModel,
-} from '../../type.d';
+} from '../../type/index';
 
 export const getEndEventModel = (
   CircleNodeModel: CircleNodeModelContractor,

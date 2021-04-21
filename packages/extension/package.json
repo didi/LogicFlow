@@ -22,6 +22,7 @@
     "cjs",
     "es",
     "lib",
+    "types",
     "readme.md"
   ],
   "dependencies": {
