@@ -1,3 +1,7 @@
+---
+sidebarDepth: 2
+---
+
 # 自定义节点
 
 > LogicFlow 的元素是基于 SVG 实现的，如果你对 SVG 的相关知识还不太熟悉，那么推荐你先了解一下 [SVG](https://developer.mozilla.org/zh-CN/docs/Web/SVG) 的基础内容。
