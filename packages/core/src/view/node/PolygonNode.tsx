@@ -2,7 +2,7 @@ import { h } from 'preact';
 import BaseNode from './BaseNode';
 import EventEmitter from '../../event/eventEmitter';
 import GraphModel from '../../model/GraphModel';
-import { PolygonNodeModel } from '../../LogicFlow';
+import { PolygonNodeModel } from '../../model';
 import Polygon from '../basic-shape/Polygon';
 
 type IProps = {
