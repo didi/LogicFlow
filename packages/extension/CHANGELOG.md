@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.3...@logicflow/extension@0.3.4) (2021-04-22)
+
+
+### Bug Fixes
+
+* unexpect text position ([7559183](https://github.com/towersxu/logicflow/commit/7559183b1d218317cfe83396dc065b803362a948))
+
+
+
+
+
 ## [0.3.3](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.2...@logicflow/extension@0.3.3) (2021-04-21)
 
 
