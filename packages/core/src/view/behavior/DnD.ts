@@ -1,6 +1,8 @@
 import { get } from 'lodash-es';
 import { EventType } from '../../constant/constant';
-import LogicFlow, { BaseNodeModel } from '../../LogicFlow';
+// import LogicFlow, { BaseNodeModel } from '../../LogicFlow';
+import LogicFlow from '../../LogicFlow';
+import { BaseNodeModel } from '../../model';
 import { TextConfig } from '../../type';
 import { snapToGrid } from '../../util/geometry';
 

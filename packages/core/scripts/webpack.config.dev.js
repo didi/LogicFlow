@@ -27,6 +27,7 @@ module.exports = [
       new HtmlWebpackPlugin({
         filename: 'index.html',
         template: path.resolve(__dirname, '../index.html'),
+        inject: false,
       }),
       new CaseSensitivePathsPlugin(),
       new ESLintPlugin({

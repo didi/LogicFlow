@@ -4,30 +4,10 @@ import { observer, Provider } from 'mobx-react';
 // import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
 import GraphModel from './model/GraphModel';
 import Graph from './view/Graph';
-import BaseNodeModel from './model/node/BaseNodeModel';
-import BaseNode from './view/node/BaseNode';
-import RectNodeModel from './model/node/RectNodeModel';
-import RectNode from './view/node/RectNode';
-import CircleNodeModel from './model/node/CircleNodeModel';
-import CircleNode from './view/node/CircleNode';
-import PolygonNodeModel from './model/node/PolygonNodeModel';
-import PolygonNode from './view/node/PolygonNode';
-import TextNodeModel from './model/node/TextNodeModel';
-import TextNode from './view/node/TextNode';
-import BaseEdgeModel from './model/edge/BaseEdgeModel';
-import BaseEdge from './view/edge/BaseEdge';
-import LineEdgeModel from './model/edge/LineEdgeModel';
-import LineEdge from './view/edge/LineEdge';
-import DiamondNode from './view/node/DiamondNode';
-import DiamondNodeModel from './model/node/DiamondNodeModel';
-import PolylineEdgeModel from './model/edge/PolylineEdgeModel';
-import PolylineEdge from './view/edge/PolylineEdge';
-import BezierEdgeModel from './model/edge/BezierEdgeModel';
-import BezierEdge from './view/edge/BezierEdge';
 import Dnd from './view/behavior/DnD';
-import EllipseNode from './view/node/EllipseNode';
-import EllipseNodeModel from './model/node/EllipseNodeModel';
 import * as Options from './options';
+import * as _Model from './model';
+import * as _View from './view';
 
 import History from './history/History';
 import Tool from './tool';
@@ -43,8 +23,6 @@ import {
   Extension,
   ComponentRender,
   FocusOnArgs,
-  RegisterElementFn,
-  RegisterParam,
   EdgeAttribute,
   EdgeData,
   GraphConfigData,
@@ -59,8 +37,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 type GraphConfigModel = {
-  nodes: BaseNodeModel[];
-  edges: BaseEdgeModel[];
+  nodes: _Model.BaseNodeModel[];
+  edges: _Model.BaseEdgeModel[];
 };
 
 type InnerView = ClassDecorator & {
@@ -163,54 +141,7 @@ export default class LogicFlow {
     install && install.call(extension, this, LogicFlow);
     renderComponent && this.components.push(renderComponent.bind(extension));
   }
-  register(type: string, fn: RegisterElementFn, isObserverView = true) {
-    const registerParam: RegisterParam = {
-      BaseEdge,
-      BaseEdgeModel,
-      BaseNode,
-      BaseNodeModel,
-      RectNode,
-      RectNodeModel,
-      CircleNode,
-      CircleNodeModel,
-      PolygonNode,
-      PolygonNodeModel,
-      TextNode,
-      TextNodeModel,
-      LineEdge,
-      LineEdgeModel,
-      DiamondNode,
-      DiamondNodeModel,
-      PolylineEdge,
-      PolylineEdgeModel,
-      BezierEdge,
-      BezierEdgeModel,
-      EllipseNode,
-      EllipseNodeModel,
-      // mobx,
-      h,
-      type,
-    };
-    // 为了能让后来注册的可以继承前面注册的
-    // 例如我注册一个”开始节点“
-    // 然后我再想注册一个”立即开始节点“
-    // 注册传递参数改为动态。
-    this.viewMap.forEach(component => {
-      const key = component.extendKey;
-      if (key) {
-        registerParam[key] = component;
-      }
-    });
-    this.graphModel.modelMap.forEach(component => {
-      const key = component.extendKey;
-      if (key) {
-        registerParam[key] = component;
-      }
-    });
-    const {
-      view: ViewClass,
-      model: ModelClass,
-    } = fn(registerParam);
+  register(type: string, { view: ViewClass, model: ModelClass }, isObserverView = true) {
     let vClass = ViewClass as InnerView;
     if (isObserverView && !vClass.isObervered) {
       vClass.isObervered = true;
@@ -222,15 +153,15 @@ export default class LogicFlow {
   }
   defaultRegister() {
     // register default shape
-    this.register('rect', () => ({ view: RectNode, model: RectNodeModel }));
-    this.register('circle', () => ({ view: CircleNode, model: CircleNodeModel }));
-    this.register('polygon', () => ({ view: PolygonNode, model: PolygonNodeModel }));
-    this.register('line', () => ({ view: LineEdge, model: LineEdgeModel }));
-    this.register('polyline', () => ({ view: PolylineEdge, model: PolylineEdgeModel }));
-    this.register('bezier', () => ({ view: BezierEdge, model: BezierEdgeModel }));
-    this.register('text', () => ({ view: TextNode, model: TextNodeModel }));
-    this.register('ellipse', () => ({ view: EllipseNode, model: EllipseNodeModel }));
-    this.register('diamond', () => ({ view: DiamondNode, model: DiamondNodeModel }));
+    this.register('rect', { view: _View.RectNode, model: _Model.RectNodeModel });
+    this.register('circle', { view: _View.CircleNode, model: _Model.CircleNodeModel });
+    this.register('polygon', { view: _View.PolygonNode, model: _Model.PolygonNodeModel });
+    this.register('line', { view: _View.LineEdge, model: _Model.LineEdgeModel });
+    this.register('polyline', { view: _View.PolylineEdge, model: _Model.PolylineEdgeModel });
+    this.register('bezier', { view: _View.BezierEdge, model: _Model.BezierEdgeModel });
+    this.register('text', { view: _View.TextNode, model: _Model.TextNodeModel });
+    this.register('ellipse', { view: _View.EllipseNode, model: _Model.EllipseNodeModel });
+    this.register('diamond', { view: _View.DiamondNode, model: _Model.DiamondNodeModel });
   }
 
   // 全局操作----------------------------------------------
@@ -391,7 +322,7 @@ export default class LogicFlow {
    * 添加节点
    * @param nodeConfig 节点配置
    */
-  addNode(nodeConfig: NodeConfig): BaseNodeModel {
+  addNode(nodeConfig: NodeConfig): _Model.BaseNodeModel {
     return this.graphModel.addNode(nodeConfig);
   }
   /**
@@ -418,7 +349,7 @@ export default class LogicFlow {
    * 克隆节点
    * @param nodeId 节点Id
    */
-  cloneNode(nodeId: string): BaseNodeModel {
+  cloneNode(nodeId: string): _Model.BaseNodeModel {
     const Model = this.graphModel.getNodeModel(nodeId);
     const data = Model.getData();
     const { guards } = this.options;
@@ -471,7 +402,7 @@ export default class LogicFlow {
 
   /* 获取边，返回的是model */
   // TODO 移到 model
-  getEdge(config: EdgeFilter): BaseEdgeModel[] {
+  getEdge(config: EdgeFilter): _Model.BaseEdgeModel[] {
     const { edges, edgesMap } = this.graphModel;
     const {
       id, sourceNodeId, targetNodeId,
@@ -518,7 +449,7 @@ export default class LogicFlow {
    * @param nodeId 节点Id
    */
   // todo: 不做外api输出，有例子在使用，后续删除
-  getNodeModel(nodeId: string): BaseNodeModel {
+  getNodeModel(nodeId: string): _Model.BaseNodeModel {
     return this.graphModel.getNodeModel(nodeId);
   }
   getNodeData(nodeId: string): NodeAttribute {
@@ -682,7 +613,7 @@ export default class LogicFlow {
    * @param edgeId 边的Id
    */
   // todo: 不做外api输出，有例子在使用，后续删除
-  getEdgeModelById(edgeId: string): BaseEdgeModel {
+  getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
     const { edgesMap } = this.graphModel;
     return edgesMap[edgeId]?.model;
   }
@@ -716,26 +647,3 @@ export default class LogicFlow {
     ), this.container);
   }
 }
-
-export {
-  BaseEdge,
-  BaseEdgeModel,
-  BaseNode,
-  BaseNodeModel,
-  RectNode,
-  RectNodeModel,
-  CircleNode,
-  CircleNodeModel,
-  PolygonNode,
-  PolygonNodeModel,
-  TextNode,
-  TextNodeModel,
-  LineEdge,
-  LineEdgeModel,
-  PolylineEdge,
-  PolylineEdgeModel,
-  EllipseNode,
-  EllipseNodeModel,
-  // mobx,
-  h,
-};
