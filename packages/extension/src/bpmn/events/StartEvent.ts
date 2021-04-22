@@ -1,59 +1,53 @@
+import { CircleNode, CircleNodeModel } from '@logicflow/core';
 import { getBpmnId } from '../getBpmnId';
-import {
-  CircleNodeModelContractor,
-  CircleNodeViewContractor,
-} from '../../type/index';
 
-export const getStartEventModel = (
-  CircleNodeModel: CircleNodeModelContractor,
-): CircleNodeModelContractor => {
-  class StartEventModel extends CircleNodeModel {
-    static extendKey = 'StartEventModel';
-    constructor(data, graphModel) {
-      if (!data.id) {
-        data.id = `Event_${getBpmnId()}`;
-      }
-      if (!data.text) {
-        data.text = {
-          value: '',
-          x: data.x,
-          y: data.y,
-        };
-      }
-      if (data.text && typeof data.text === 'string') {
-        data.text = {
-          value: data.text,
-          x: data.x,
-          y: data.y,
-        };
-      }
-      data.text.y += 40;
-      super(data, graphModel);
+class StartEventModel extends CircleNodeModel {
+  constructor(data, graphModel) {
+    if (!data.id) {
+      data.id = `Event_${getBpmnId()}`;
     }
-    getConnectedTargetRules() {
-      const rules = super.getConnectedTargetRules();
-      const notAsTarget = {
-        message: '起始节点不能作为连线的终点',
-        validate: () => false,
-      };
-      rules.push(notAsTarget);
-      return rules;
-    }
-  }
-  return StartEventModel;
-};
-
-export const getStartEventView = (
-  CircleNode: CircleNodeViewContractor,
-): CircleNodeViewContractor => {
-  class StartEventNode extends CircleNode {
-    static extendKey = 'StartEventNode';
-    getAttributes() {
-      const attr = super.getAttributes();
-      return {
-        ...attr,
+    if (!data.text) {
+      data.text = {
+        value: '',
+        x: data.x,
+        y: data.y,
       };
     }
+    if (data.text && typeof data.text === 'string') {
+      data.text = {
+        value: data.text,
+        x: data.x,
+        y: data.y,
+      };
+    }
+    data.text.y += 40;
+    super(data, graphModel);
   }
-  return StartEventNode;
+  getConnectedTargetRules() {
+    const rules = super.getConnectedTargetRules();
+    const notAsTarget = {
+      message: '起始节点不能作为连线的终点',
+      validate: () => false,
+    };
+    rules.push(notAsTarget);
+    return rules;
+  }
+}
+
+class StartEventView extends CircleNode {
+  static extendKey = 'StartEventNode';
+  getAttributes() {
+    const attr = super.getAttributes();
+    return {
+      ...attr,
+    };
+  }
+}
+
+const StartEvent = {
+  view: StartEventView,
+  model: StartEventModel,
 };
+
+export { StartEventModel, StartEventView };
+export default StartEvent;
