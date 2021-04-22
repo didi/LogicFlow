@@ -26,6 +26,8 @@ import {
   EdgeAttribute,
   EdgeData,
   GraphConfigData,
+  RegisterElementFn,
+  RegisterParam,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -141,7 +143,67 @@ export default class LogicFlow {
     install && install.call(extension, this, LogicFlow);
     renderComponent && this.components.push(renderComponent.bind(extension));
   }
-  register(type: string, { view: ViewClass, model: ModelClass }, isObserverView = true) {
+  /**
+   * @deprecated 推荐使用 registerElment 来替代 regiser 方法。
+   */
+  register(type: string, fn: RegisterElementFn, isObserverView = true) {
+    const registerParam: RegisterParam = {
+      BaseEdge: _View.BaseEdge,
+      BaseEdgeModel: _Model.BaseEdgeModel,
+      BaseNode: _View.BaseNode,
+      BaseNodeModel: _Model.BaseNodeModel,
+      RectNode: _View.RectNode,
+      RectNodeModel: _Model.RectNodeModel,
+      CircleNode: _View.CircleNode,
+      CircleNodeModel: _Model.CircleNodeModel,
+      PolygonNode: _View.PolygonNode,
+      PolygonNodeModel: _Model.PolygonNodeModel,
+      TextNode: _View.TextNode,
+      TextNodeModel: _Model.TextNodeModel,
+      LineEdge: _View.LineEdge,
+      LineEdgeModel: _Model.LineEdgeModel,
+      DiamondNode: _View.DiamondNode,
+      DiamondNodeModel: _Model.DiamondNodeModel,
+      PolylineEdge: _View.PolylineEdge,
+      PolylineEdgeModel: _Model.PolylineEdgeModel,
+      BezierEdge: _View.BezierEdge,
+      BezierEdgeModel: _Model.BezierEdgeModel,
+      EllipseNode: _View.EllipseNode,
+      EllipseNodeModel: _Model.EllipseNodeModel,
+      // mobx,
+      h,
+      type,
+    };
+    // 为了能让后来注册的可以继承前面注册的
+    // 例如我注册一个”开始节点“
+    // 然后我再想注册一个”立即开始节点“
+    // 注册传递参数改为动态。
+    this.viewMap.forEach(component => {
+      const key = component.extendKey;
+      if (key) {
+        registerParam[key] = component;
+      }
+    });
+    this.graphModel.modelMap.forEach(component => {
+      const key = component.extendKey;
+      if (key) {
+        registerParam[key] = component;
+      }
+    });
+    const {
+      view: ViewClass,
+      model: ModelClass,
+    } = fn(registerParam);
+    let vClass = ViewClass as InnerView;
+    if (isObserverView && !vClass.isObervered) {
+      vClass.isObervered = true;
+      // @ts-ignore
+      vClass = observer(vClass);
+    }
+    this.setView(type, vClass);
+    this.graphModel.setModel(type, ModelClass);
+  }
+  registerElement(type: string, { view: ViewClass, model: ModelClass }, isObserverView = true) {
     let vClass = ViewClass as InnerView;
     if (isObserverView && !vClass.isObervered) {
       vClass.isObervered = true;
@@ -153,15 +215,15 @@ export default class LogicFlow {
   }
   defaultRegister() {
     // register default shape
-    this.register('rect', { view: _View.RectNode, model: _Model.RectNodeModel });
-    this.register('circle', { view: _View.CircleNode, model: _Model.CircleNodeModel });
-    this.register('polygon', { view: _View.PolygonNode, model: _Model.PolygonNodeModel });
-    this.register('line', { view: _View.LineEdge, model: _Model.LineEdgeModel });
-    this.register('polyline', { view: _View.PolylineEdge, model: _Model.PolylineEdgeModel });
-    this.register('bezier', { view: _View.BezierEdge, model: _Model.BezierEdgeModel });
-    this.register('text', { view: _View.TextNode, model: _Model.TextNodeModel });
-    this.register('ellipse', { view: _View.EllipseNode, model: _Model.EllipseNodeModel });
-    this.register('diamond', { view: _View.DiamondNode, model: _Model.DiamondNodeModel });
+    this.registerElement('rect', { view: _View.RectNode, model: _Model.RectNodeModel });
+    this.registerElement('circle', { view: _View.CircleNode, model: _Model.CircleNodeModel });
+    this.registerElement('polygon', { view: _View.PolygonNode, model: _Model.PolygonNodeModel });
+    this.registerElement('line', { view: _View.LineEdge, model: _Model.LineEdgeModel });
+    this.registerElement('polyline', { view: _View.PolylineEdge, model: _Model.PolylineEdgeModel });
+    this.registerElement('bezier', { view: _View.BezierEdge, model: _Model.BezierEdgeModel });
+    this.registerElement('text', { view: _View.TextNode, model: _Model.TextNodeModel });
+    this.registerElement('ellipse', { view: _View.EllipseNode, model: _Model.EllipseNodeModel });
+    this.registerElement('diamond', { view: _View.DiamondNode, model: _Model.DiamondNodeModel });
   }
 
   // 全局操作----------------------------------------------
