@@ -3,7 +3,7 @@ import Circle from '../basic-shape/Circle';
 import BaseNode from './BaseNode';
 import GraphModel from '../../model/GraphModel';
 import EventEmitter from '../../event/eventEmitter';
-import { CircleNodeModel } from '../../LogicFlow';
+import { CircleNodeModel } from '../../model';
 
 type IProps = {
   model: CircleNodeModel;

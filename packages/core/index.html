@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="format-detection" content="telephone=no, email=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
-  <link rel="stylesheet" href="./src/style/index.css">  
+  <link rel="stylesheet" href="./src/style/index.css">
   <style>
-    html,body {
+    html,
+    body {
       padding: 0;
       margin: 0;
     }
+
     body {
       background-color: #FFF;
     }
+
     #app {
       margin-top: 30px;
       margin-left: 30px;
       width: 800px;
       height: 500px;
     }
+
     *:focus {
-        outline: none;
+      outline: none;
     }
+
     .rect {
       width: 50px;
       height: 50px;
       border: 2px solid #000;
       background: #fff;
     }
+
     .circle {
       width: 50px;
       height: 50px;
@@ -38,6 +45,7 @@
     }
   </style>
 </head>
+
 <body>
   <div>
     <div class="rect" onmousedown="mouseDownRect()"></div>
@@ -49,415 +57,431 @@
   </div>
   <div id="app"></div>
   <div id="debug"></div>
-  <script>
-    window.onload = function () {
-      const lf = new LogicFlow({
-        container: document.querySelector('#app'),
-        // width: 700,
-        // height: 500,
-        // isSilentMode: true,
-        keyboard: {
-          enabled: true,
-        },
-        partial: true,
-        background: {
-          color: '#F0F0F0'
-        },
-        grid: true,
-        edgeTextDraggable: true,
-        edgeType: 'line',
-      });
-      // 方便调试
-      window.lf = lf;
-      lf.setTheme({
-        // snapline: {
-        //   stroke: '#999999', // 对齐线颜色
-        //   strokeWidth	: 2, // 对齐线宽度
-        // },
-      })
-      window.mouseDownRect = function mouseDownCircle() {
-        lf.dnd.startDrag({
-          type: 'rect',
-          width: 50,
-          height: 50,
-          x: 100,
-          y: 100,
-          fill: '#fff',
-        })
+  <%= htmlWebpackPlugin.tags.bodyTags %>
+
+    <script>
+      window.onload = function () {
+        InitLogicFlow();
+        InitElementFunction();
+        InitLogicFlowEvent();
       }
-      window.mouseDownCircle = function mouseDownRect() {
-        lf.dnd.startDrag({
-          type: 'circle',
-          r: 25,
-          x: 100,
-          y: 100,
-        })
+    </script>
+
+    <!-- 自定义节点 -->
+    <script>
+      // square
+      class SquareModel extends RectNodeModel {
+        setAttributes() {
+          const size = 80;
+          const circleOnlyAsTarget = {
+            message: "正方形节点下一个节点只能是圆形节点",
+            validate: (source, target) => {
+              return target.type === "circle";
+            },
+          };
+
+          this.width = size;
+          this.height = size;
+          this.anchorsOffset = [
+            [size / 2, 0],
+            [-size / 2, 0]
+          ];
+          this.sourceRules.push(circleOnlyAsTarget);
+        }
       }
-      window.focusOn = function focusOnStar() {
-        lf.focusOn({
-          id: '2222'
-        })
+      class SquareView extends RectNode {
+        // getShape 的返回值是一个通过 h 方法创建的 svg 元素
+        getShape() {
+          const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+          const attrs = {
+            x: x - width / 2,
+            y: y - height / 2,
+            width,
+            height,
+            stroke,
+            fill,
+            strokeWidth
+          }
+          // 使用 h 方法创建一个矩形
+          return h(
+            "g", {}, [
+            h(
+              "rect", { ...attrs }
+            ),
+            h(
+              'svg',
+              {
+                x: x - width / 2 + 5,
+                y: y - height / 2 + 5,
+                width: 25,
+                height: 25,
+                viewBox: "0 0 1274 1024",
+              },
+              h(
+                'path',
+                {
+                  fill: stroke,
+                  d:
+                    "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
+                }
+              )
+            )
+          ]
+          );
+        }
       }
-      window.undo = function undo() {
-        lf.undo()
+
+      // star
+      class StarModel extends PolygonNodeModel {
+        setAttributes() {
+          this.points = [
+            [45, 0],
+            [20, 90],
+            [90, 30],
+            [0, 30],
+            [80, 90]
+          ];
+          this.fill = '#456789';
+          this.stroke = '#456789';
+        }
       }
-      window.redo = function redo() {
-        lf.redo()
+
+      // user
+      class UserNode extends RectNode {
+        getAnchorStyle() {
+          return {
+            stroke: '#18905F',
+            strokeWidth: 2,
+          };
+        }
+        getTextStyle() {
+          return {
+            fontSize: 12,
+            fill: '#FFFFFF',
+          };
+        }
       }
-      window.clearData = function clearData() {
-        lf.clearData()
+      class UserModel extends RectNodeModel {
+        setAttributes() {
+          const { size } = this.properties;
+          this.width = size * 40;
+          this.height = size * 40;
+          this.stroke = '#18905F';
+          this.fill = 'red';
+          this.radius = 0;
+        }
       }
-      window.consolelog = function consolelog(msg) {
-        console.log(msg)
-      }
-      lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
-        document.getElementById('undo').disabled = !undoAble
-        document.getElementById('redo').disabled = !redoAble
-      });
-      lf.register('user', ({ RectNode, RectNodeModel, h }) => {
-        class UserNode extends RectNode {
-          getAnchorStyle() {
-            return {
-              stroke: '#18905F',
+
+      // combine
+      class CombineNode extends BaseNode {
+        getShape() {
+          const attributes = this.getAttributes();
+          const { x, y } = attributes;
+          const { model } = this.props;
+          return h(
+            'g',
+            {
+              transform: `matrix(1 0 0 1 ${x - 25} ${y - 25})`,
+            },
+            h('path', {
+              d: 'm  0,6.65 l  0,36.885245901639344 c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 l  0,-36.885245901639344 c -1.639344262295082,-8.196721311475411 -47.540983606557376,-8.196721311475411 -49.18032786885246,0c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411 49.18032786885246,0m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0',
+              fill: 'orange',
               strokeWidth: 2,
-            };
-          }
-          getTextStyle() {
-            return {
-                fontSize: 12,
-                fill: '#FFFFFF',
-              };
-          }
+              stroke: 'red',
+              fillOpacity: 0.95,
+            })
+          )
         }
-        class UserModel extends RectNodeModel {
-          setAttributes() {
-            const { size } = this.properties;
-            this.width = size * 40;
-            this.height = size * 40;
-            this.stroke = '#18905F';
-            this.fill = 'red';
-            this.radius = 0;
-          }
+      }
+      class CombineModel extends BaseNodeModel {
+        setAttributes() {
+          this.width = 50;
+          this.height = 60;
+          this.fill = 'orange';
+          this.anchorsOffset = [
+            [0, -this.height / 2],
+            [this.width / 2, 0],
+            [0, this.height / 2],
+            [-this.width / 2, 0]
+          ];
         }
-        return {
+      }
+
+      // connection
+      class Connection extends LineEdge {
+        getTextStyle() {
+          return {
+            background: {
+              fill: 'white',
+              height: 20,
+              stroke: 'transparent',
+              radius: 0,
+            }
+          };
+        }
+      }
+    </script>
+
+    <!-- 实例化 LogicFlow -->
+    <script>
+      function InitLogicFlow() {
+        const lf = new LogicFlow({
+          container: document.querySelector('#app'),
+          // width: 700,
+          // height: 500,
+          // isSilentMode: true,
+          keyboard: {
+            enabled: true,
+          },
+          partial: true,
+          background: {
+            color: '#F0F0F0'
+          },
+          grid: true,
+          edgeTextDraggable: true,
+          edgeType: 'line',
+        });
+
+        // 方便调试
+        window.lf = lf;
+
+        // 注册自定义节点
+        lf.register('square', {
+          view: RectNode,
+          model: SquareModel,
+        });
+        lf.register('star', {
+          view: PolygonNode,
+          model: StarModel,
+        });
+        lf.register('user', {
           view: UserNode,
           model: UserModel,
-        };
-      }, false);
-      lf.register('combine', ({ BaseNode, BaseNodeModel, h }) => {
-        class CombineNode extends BaseNode {
-          getShape() {
-            const attributes = this.getAttributes();
-            const { x, y } = attributes;
-            const { model } = this.props;
-            return h(
-              'g',
-              {
-                transform: `matrix(1 0 0 1 ${x - 25} ${y - 25})`,
-              },
-              h('path', {
-                d: 'm  0,6.65 l  0,36.885245901639344 c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 l  0,-36.885245901639344 c -1.639344262295082,-8.196721311475411 -47.540983606557376,-8.196721311475411 -49.18032786885246,0c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411 49.18032786885246,0m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0',
-                fill: 'orange',
-                strokeWidth: 2,
-                stroke: 'red',
-                fillOpacity: 0.95,
-              })
-            )
-          }
-        }
-
-        class CombineModel extends BaseNodeModel {
-          setAttributes() {
-            this.width = 50;
-            this.height = 60;
-            this.fill = 'orange';
-            this.anchorsOffset = [
-              [0, -this.height / 2],
-              [this.width / 2, 0],
-              [0, this.height / 2],
-              [-this.width / 2, 0]
-            ];
-          }
-        }
-
-        return {
+        });
+        lf.register('combine', {
           view: CombineNode,
           model: CombineModel,
-        };
-      }, false);
-      lf.register('star', ({ PolygonNode, PolygonNodeModel, h, }) => {
-        class StarNode extends PolygonNode { }
-        class StarModel extends PolygonNodeModel {
-          setAttributes() {
-            this.points = [
-              [45, 0],
-              [20, 90],
-              [90, 30],
-              [0, 30],
-              [80, 90]
-            ];
-            this.fill =  '#456789';
-            this.stroke =  '#456789';
-          }
-        }
-        return {
-          view: StarNode,
-          model: StarModel,
-        };
-      }, false);
-      lf.register('connection', ({LineEdge, LineEdgeModel})=>{
-        class Connection extends LineEdge {
-          getTextStyle() {
-            return {
-              background: {
-                fill: 'white',
-                height: 20,
-                stroke: 'transparent',
-                radius: 0,
-              }
-            };
-          }
-        }
-        class ConnnectionModel extends LineEdgeModel { }
-        return {
-          view: Connection,
-          model: ConnnectionModel,
-        }
-      }, false);
-      lf.register('square', (RegisterParam) => {
-        // h 方法由 Logic Flow 提供
-        const { RectNode, RectNodeModel, h } = RegisterParam;
-        class SquareModel extends RectNodeModel {
-          setAttributes() {
-            const size = 80;
-            const circleOnlyAsTarget = {
-              message: "正方形节点下一个节点只能是圆形节点",
-              validate: (source, target) => {
-                return target.type === "circle";
-              },
-            };
+        });
 
-            this.width = size;
-            this.height = size;
-            this.anchorsOffset = [
-              [size / 2, 0],
-              [-size / 2, 0]
-            ];
-            this.sourceRules.push(circleOnlyAsTarget);
-          }
-        }
-        class SquareView extends RectNode {
-          // getShape 的返回值是一个通过 h 方法创建的 svg 元素
-          getShape() {
-            const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
-            const attrs = {
-              x: x - width / 2,
-              y: y - height / 2,
-              width,
-              height,
-              stroke,
-              fill,
-              strokeWidth
-            }
-            // 使用 h 方法创建一个矩形
-            return h(
-              "g", {}, [
-                h(
-                  "rect", { ...attrs }
-                ),
-                h(
-                  'svg',
-                  {
-                    x: x - width / 2 + 5,
-                    y: y - height / 2 + 5,
-                    width: 25,
-                    height: 25,
-                    viewBox: "0 0 1274 1024",
-                  },
-                  h(
-                    'path',
-                    {
-                      fill: stroke,
-                      d:
-                        "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
-                    }
-                  )
-                )
-              ]
-            );
-          }
-        }
-        return {
-          view: SquareView,
-          model: SquareModel,
-        }
-      }, false);
-      lf.setDefaultEdgeType('polyline');
-      lf.render({
-        nodes: [
-          {
-            type: 'square',
-            x: 100,
-            y: 100,
-            id: 10,
-          },
-          {
-            type: 'square',
-            x: 300,
-            y: 300,
-            id: 11,
-          },
-          {
-            type: 'text',
-            x: 200,
-            y: 400,
-            text: {
+        // 注册自定义连线
+        lf.register('connection', {
+          view: Connection,
+          model: LineEdgeModel,
+        })
+
+        lf.setTheme({});
+        lf.setDefaultEdgeType('polyline');
+
+        lf.render({
+          nodes: [
+            {
+              type: 'rect',
+              x: 100,
+              y: 100,
+              id: 10,
+            },
+            {
+              type: 'square',
+              x: 300,
+              y: 300,
+              id: 11,
+            },
+            {
+              type: 'text',
               x: 200,
               y: 400,
-              value: '我是单独的文本节点',
-            }
-          },
-          {
-            type: 'polygon',
-            x: 200,
-            y: 200,
-            id: 50,
-            text: 'hhhh',
-          },
-          {
-            type: 'diamond',
-            x: 220,
-            y: 220,
-            rx: 30,
-            ry: 50,
-            id: 524,
-            text: 'diamond',
-          },
-          {
-            type: 'user',
-            x: 600,
-            y: 200,
-            id: 20,
-            text:{
-              value: 'user',
+              text: {
+                x: 200,
+                y: 400,
+                value: '我是单独的文本节点',
+              }
+            },
+            {
+              type: 'polygon',
+              x: 200,
+              y: 200,
+              id: 50,
+              text: 'hhhh',
+            },
+            {
+              type: 'diamond',
+              x: 220,
+              y: 220,
+              rx: 30,
+              ry: 50,
+              id: 524,
+              text: 'diamond',
+            },
+            {
+              type: 'user',
               x: 600,
               y: 200,
+              id: 20,
+              text: {
+                value: 'user',
+                x: 600,
+                y: 200,
+              },
+              properties: {
+                size: 1
+              }
             },
-            properties: {
-              size: 1
+            {
+              type: 'user',
+              x: 500 * Math.random(),
+              y: 600 * Math.random(),
+              id: 21,
+              properties: {
+                size: 2
+              }
+            },
+            {
+              type: 'star',
+              x: 400,
+              y: 300,
+              id: 99
+            },
+            {
+              type: 'combine',
+              x: 222,
+              y: 40,
+              id: 30,
+            },
+            {
+              type: 'circle',
+              x: 500 * Math.random(),
+              y: 600 * Math.random(),
+              fill: 'blue',
+              id: 40,
+            },
+          ].concat(Array.of(...Array(0)).map((item, i) => {
+            return {
+              id: 'node_' + i,
+              type: 'circle',
+              x: (i % 4) * 150,
+              y: (i / 4) * 150,
             }
-          },
-          {
-            type: 'user',
-            x: 500 * Math.random(),
-            y: 600 * Math.random(),
-            id: 21,
-            properties: {
-              size: 2
+          })),
+          edges: [
+            {
+              id: 'edge_2222',
+              type: 'polyline',
+              sourceNodeId: 50,
+              targetNodeId: 21,
             }
-          },
-          {
-            type: 'star',
-            x: 400,
-            y: 300,
-            id: 99
-          },
-          {
-            type: 'combine',
-            x: 222,
-            y: 40,
-            id: 30,
-          },
-          {
-            type: 'circle',
-            x: 500 * Math.random(),
-            y: 600 * Math.random(),
-            fill: 'blue',
-            id: 40,
-          },
-        ].concat(Array.of(...Array(0)).map((item, i) => {
-          return {
-            id: 'node_' + i,
-            type: 'circle',
-            x: (i % 4) * 150,
-            y: (i / 4) * 150,
-          }
-        })),
-        // edges: [
-        //   {
-        //     id: 'edge_2222',
-        //     type: 'polyline',
-        //     sourceNodeId: 50,
-        //     targetNodeId: 21,
-        //   }
-        // ]
-        // .concat(Array.of(...Array(300)).map((item, i) => {
-        //   return {
-        //     type: 'polyline',
-        //     sourceNodeId: 'node_' + i,
-        //     targetNodeId: 'node_' + (i + 1),
-        //   }
-        // })),
-      });
-      console.log(lf.graphModel);
-      lf.createEdge({
-        sourceNodeId: 10,
-        targetNodeId: 11,
-        // text: '222',
-      });
-      // lf.updateText('edge_2222', '你是打算啊')
-      // lf.createEdge({
-      //   sourceNodeId: 10,
-      //   targetNodeId: 50,
-      //   text: '222',
-      //   type: 'bezier'
-      // });
-      // console.log(lf.graphModel);
-      // lf.on('node:mouseup',()=> {
-      //   console.log('nodeup')
-      // })
-      // lf.on('node:mousemove',()=> {
-      //   // console.log('nodemove')
-      // })
-      // lf.on('node:mousedown', () => {
-      //   console.log('nodemousedown')
-      // })
-      // lf.on('node:mouseenter', () => {
-      //   console.log('node:mouseenter')
-      // })
-      // lf.on('node:mouseleave', () => {
-      //   console.log('node:mouseleave')
-      // })
-      // lf.on('edge:mouseenter', () => {
-      //   console.log('edge:mouseenter')
-      // })
-      // lf.on('edge:mouseleave', () => {
-      //   console.log('edge:mouseleave')
-      // })
-      // lf.on('node:click', (eventData) => {
-      //   console.log(eventData);
-      //   console.log('node:click')
-      // })
-      lf.on('edge:click', () => {
-        console.log('edge:click')
-      })
-      lf.on('edge:dbclick', () => {
-        console.log('edge:dbclick')
-      })
-      lf.on('edge:contextmenu', () => {
-        console.log('edge:contextmenu')
-      })
-      lf.on('element:click', () => {
-        console.log('element:click')
-      })
-      lf.on('blank:mousedown', () => {
-        console.log('blank:mousedown')
-      })
-      lf.on('blank:mouseup', () => {
-        console.log('blank:mouseup')
-      })
-    }
+          ]
+        });
 
-  </script>
+        // console.log(lf.graphModel);
+        // lf.createEdge({
+        //   sourceNodeId: 10,
+        //   targetNodeId: 11,
+        //   // text: '222',
+        // });
+        // lf.updateText('edge_2222', '你是打算啊')
+        // lf.createEdge({
+        //   sourceNodeId: 10,
+        //   targetNodeId: 50,
+        //   text: '222',
+        //   type: 'bezier'
+        // });
+        // console.log(lf.graphModel);
+      }
+    </script>
+
+    <!-- 元素相关方法 -->
+    <script>
+      function InitElementFunction() {
+        window.mouseDownRect = function mouseDownCircle() {
+          lf.dnd.startDrag({
+            type: 'rect',
+            width: 50,
+            height: 50,
+            x: 100,
+            y: 100,
+            fill: '#fff',
+          })
+        }
+        window.mouseDownCircle = function mouseDownRect() {
+          lf.dnd.startDrag({
+            type: 'circle',
+            r: 25,
+            x: 100,
+            y: 100,
+          })
+        }
+        window.focusOn = function focusOnStar() {
+          lf.focusOn({
+            id: '2222'
+          })
+        }
+        window.undo = function undo() {
+          lf.undo()
+        }
+        window.redo = function redo() {
+          lf.redo()
+        }
+        window.clearData = function clearData() {
+          lf.clearData()
+        }
+        window.consolelog = function consolelog(msg) {
+          console.log(msg)
+        }
+      }
+    </script>
+
+    <!-- LogicFlow 相关事件 -->
+    <script>
+      function InitLogicFlowEvent() {
+        lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
+          document.getElementById('undo').disabled = !undoAble
+          document.getElementById('redo').disabled = !redoAble
+        });
+        // lf.on('node:mouseup',()=> {
+        //   console.log('nodeup')
+        // })
+        // lf.on('node:mousemove',()=> {
+        //   // console.log('nodemove')
+        // })
+        // lf.on('node:mousedown', () => {
+        //   console.log('nodemousedown')
+        // })
+        // lf.on('node:mouseenter', () => {
+        //   console.log('node:mouseenter')
+        // })
+        // lf.on('node:mouseleave', () => {
+        //   console.log('node:mouseleave')
+        // })
+        // lf.on('edge:mouseenter', () => {
+        //   console.log('edge:mouseenter')
+        // })
+        // lf.on('edge:mouseleave', () => {
+        //   console.log('edge:mouseleave')
+        // })
+        // lf.on('node:click', (eventData) => {
+        //   console.log(eventData);
+        //   console.log('node:click')
+        // })
+        // lf.on('edge:click', () => {
+        //   console.log('edge:click')
+        // })
+        // lf.on('edge:dbclick', () => {
+        //   console.log('edge:dbclick')
+        // })
+        // lf.on('edge:contextmenu', () => {
+        //   console.log('edge:contextmenu')
+        // })
+        // lf.on('element:click', () => {
+        //   console.log('element:click')
+        // })
+        // lf.on('blank:mousedown', () => {
+        //   console.log('blank:mousedown')
+        // })
+        // lf.on('blank:mouseup', () => {
+        //   console.log('blank:mouseup')
+        // })
+      }
+    </script>
 </body>
+
 </html>

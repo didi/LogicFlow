@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 import { ModelType } from '../../constant/constant';
-import { LineEdgeModel } from '../../LogicFlow';
+import { LineEdgeModel } from '../../model';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 import GraphModel from '../../model/GraphModel';

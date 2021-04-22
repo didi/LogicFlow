@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import Rect from '../basic-shape/Rect';
 import BaseNode from './BaseNode';
-import { RectNodeModel } from '../../LogicFlow';
+import { RectNodeModel } from '../../model';
 import GraphModel from '../../model/GraphModel';
 import EventEmitter from '../../event/eventEmitter';
 
