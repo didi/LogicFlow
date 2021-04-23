@@ -10,7 +10,7 @@ import {
 } from './type';
 import { KeyboardDef } from './keyboard';
 
-export type EdgeType = 'line' | 'polyline' | 'bezier';
+export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 
 export type Definition = {
   container: HTMLElement;

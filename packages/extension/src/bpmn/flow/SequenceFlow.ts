@@ -1,26 +1,24 @@
+import { LineEdge, LineEdgeModel } from '@logicflow/core';
 import { getBpmnId } from '../getBpmnId';
-import { PolylineEdgeModelContractor, PolylineEdgeViewContractor } from '../../type/index';
 
-export const getSequenceFlowModel = (
-  LineEdgeModel: PolylineEdgeModelContractor,
-): PolylineEdgeModelContractor => {
-  class SequenceFlowModel extends LineEdgeModel {
-    static extendKey = 'SequenceFlowModel';
-    constructor(data, graphModel) {
-      if (!data.id) {
-        data.id = `Flow_${getBpmnId()}`;
-      }
-      super(data, graphModel);
+class SequenceFlowModel extends LineEdgeModel {
+  static extendKey = 'SequenceFlowModel';
+  constructor(data, graphModel) {
+    if (!data.id) {
+      data.id = `Flow_${getBpmnId()}`;
     }
+    super(data, graphModel);
   }
-  return SequenceFlowModel;
+}
+
+class SequenceFlowView extends LineEdge {
+  static extendKey = 'SequenceFlowEdge';
+}
+
+const SequenceFlow = {
+  view: SequenceFlowView,
+  model: SequenceFlowModel,
 };
 
-export const getSequenceFlowView = (
-  LineEdge: PolylineEdgeViewContractor,
-): PolylineEdgeViewContractor => {
-  class SequenceFlowEdge extends LineEdge {
-    static extendKey = 'SequenceFlowEdge';
-  }
-  return SequenceFlowEdge;
-};
+export { SequenceFlowView, SequenceFlowModel };
+export default SequenceFlow;
