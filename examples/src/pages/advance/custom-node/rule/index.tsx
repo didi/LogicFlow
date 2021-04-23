@@ -46,7 +46,7 @@ export default function CustomNodeEdgeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register('square', Square);
+    lf.registerElement('square', Square);
     lf.render(data);
   }, []);
 
