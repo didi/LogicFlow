@@ -33,6 +33,7 @@ module.exports = {
       'react-dom': 'preact/compat',
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.less', '.css'],
+    symlinks: false,
   },
   module: {
     rules: [
