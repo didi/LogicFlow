@@ -426,7 +426,12 @@ export default class LogicFlow {
   deleteEdge(edgeId: string): void {
     // 待讨论，这种钩子在这里覆盖不到removeEdge, 是否需要在graphModel中实现
     const { guards } = this.options;
-    const edgeData = this.graphModel.edgesMap[edgeId].model.getData();
+    const edge = this.graphModel.edgesMap[edgeId];
+    if (!edge) {
+      console.warn(`不存在id为${edgeId}的边`);
+      return;
+    }
+    const edgeData = edge.model.getData();
     const enabledDelete = guards && guards.beforeDelete
       ? guards.beforeDelete(edgeData) : true;
     if (enabledDelete) {
@@ -457,6 +462,11 @@ export default class LogicFlow {
       id, sourceNodeId, targetNodeId,
     } = config;
     if (id) {
+      const edge = edgesMap[id];
+      if (!edge) {
+        console.warn(`不存在id为${id}的边`);
+        return;
+      }
       return [edgesMap[id].model];
     }
     if (sourceNodeId && targetNodeId) {
@@ -618,6 +628,10 @@ export default class LogicFlow {
   }
   createFakerNode(nodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type);
+    if (!Model) {
+      console.warn(`不存在为${nodeConfig.type}类型的节点`);
+      return;
+    }
     const fakerNodeModel = new Model(nodeConfig, this.graphModel);
     this.graphModel.setFakerNode(fakerNodeModel);
     return fakerNodeModel;
@@ -655,7 +669,7 @@ export default class LogicFlow {
   // todo: 不做外api输出，有例子在使用，后续删除
   getEdgeModelById(edgeId: string): BaseEdgeModel {
     const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId].model;
+    return edgesMap[edgeId]?.model;
   }
   setView(type: string, component) {
     this.viewMap.set(type, component);

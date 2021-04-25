@@ -229,10 +229,7 @@ class GraphModel {
   }
 
   getEdgeModel(edgeId: string) {
-    const edge = this.edgesMap[edgeId];
-    if (edge) {
-      return edge.model;
-    }
+    return this.edgesMap[edgeId]?.model;
   }
 
   getElement(id: string): IBaseModel | undefined {
@@ -376,7 +373,12 @@ class GraphModel {
   @action
   moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number) {
     // 1) 移动节点
-    const nodeModel = this.nodesMap[nodeId].model;
+    const node = this.nodesMap[nodeId];
+    if (!node) {
+      console.warn(`不存在id为${nodeId}的节点`);
+      return;
+    }
+    const nodeModel = node.model;
     nodeModel.move(deltaX, deltaY);
     // 2) 移动连线
     this.moveEdge(nodeId, deltaX, deltaY);
@@ -460,6 +462,11 @@ class GraphModel {
   @action
   removeEdgeById(id) {
     const idx = this.edgesMap[id].index;
+    const edge = this.edgesMap[id];
+    if (!edge) {
+      console.warn(`不存在id为${id}的边`);
+      return;
+    }
     const edgeData = this.edgesMap[id].model.getData();
     this.edges.splice(idx, 1);
     this.eventCenter.emit(EventType.EDGE_DELETE, { data: edgeData });
