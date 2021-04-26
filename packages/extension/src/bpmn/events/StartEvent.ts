@@ -45,6 +45,7 @@ class StartEventView extends CircleNode {
 }
 
 const StartEvent = {
+  type: 'bpmn:startEvent',
   view: StartEventView,
   model: StartEventModel,
 };

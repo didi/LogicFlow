@@ -327,3 +327,10 @@ export interface RegisterParam {
 }
 
 export type RegisterElementFn = (params: RegisterParam) => RegisterBack;
+
+export type RegisterConfig = {
+  type: string;
+  view: any;
+  model: any;
+  isObserverView?: boolean;
+};

@@ -56,6 +56,7 @@ class EndEventView extends CircleNode {
 }
 
 const EndEvent = {
+  type: 'bpmn:endEvent',
   view: EndEventView,
   model: EndEventModel,
 };
