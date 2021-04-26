@@ -1,4 +1,5 @@
 import { get } from 'lodash-es';
+import { EventType } from '../../constant/constant';
 import LogicFlow, { BaseNodeModel } from '../../LogicFlow';
 import { TextConfig } from '../../type';
 import { snapToGrid } from '../../util/geometry';
@@ -69,7 +70,7 @@ export default class Dnd {
     if (!this.lf.graphModel || !e || !this.nodeConfig) {
       return;
     }
-    this.lf.addNode({
+    const currentNode = this.lf.addNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({ x: e.clientX, y: e.clientY }),
     });
@@ -79,6 +80,8 @@ export default class Dnd {
     this.lf.removeNodeSnapLine();
     this.lf.graphModel.removeFakerNode();
     this.fakerNode = null;
+    const nodeData = currentNode.getData();
+    this.lf.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
   };
 
   eventMap() {
