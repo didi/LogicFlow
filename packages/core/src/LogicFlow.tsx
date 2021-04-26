@@ -28,6 +28,7 @@ import {
   GraphConfigData,
   RegisterElementFn,
   RegisterParam,
+  RegisterConfig,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -143,10 +144,11 @@ export default class LogicFlow {
     install && install.call(extension, this, LogicFlow);
     renderComponent && this.components.push(renderComponent.bind(extension));
   }
-  /**
-   * @deprecated 推荐使用 registerElment 来替代 regiser 方法。
-   */
-  register(type: string, fn: RegisterElementFn, isObserverView = true) {
+  register(type: string | RegisterConfig, fn?: RegisterElementFn, isObserverView = true) {
+    if (typeof type !== 'string') {
+      this._registerElement(type);
+      return;
+    }
     const registerParam: RegisterParam = {
       BaseEdge: _View.BaseEdge,
       BaseEdgeModel: _Model.BaseEdgeModel,
@@ -203,27 +205,63 @@ export default class LogicFlow {
     this.setView(type, vClass);
     this.graphModel.setModel(type, ModelClass);
   }
-  registerElement(type: string, { view: ViewClass, model: ModelClass }, isObserverView = true) {
-    let vClass = ViewClass as InnerView;
-    if (isObserverView && !vClass.isObervered) {
+  _registerElement(config) {
+    let vClass = config.view;
+    if (config.isObserverView !== false && !vClass.isObervered) {
       vClass.isObervered = true;
       // @ts-ignore
       vClass = observer(vClass);
     }
-    this.setView(type, vClass);
-    this.graphModel.setModel(type, ModelClass);
+    this.setView(config.type, vClass);
+    this.graphModel.setModel(config.type, config.model);
   }
   defaultRegister() {
     // register default shape
-    this.registerElement('rect', { view: _View.RectNode, model: _Model.RectNodeModel });
-    this.registerElement('circle', { view: _View.CircleNode, model: _Model.CircleNodeModel });
-    this.registerElement('polygon', { view: _View.PolygonNode, model: _Model.PolygonNodeModel });
-    this.registerElement('line', { view: _View.LineEdge, model: _Model.LineEdgeModel });
-    this.registerElement('polyline', { view: _View.PolylineEdge, model: _Model.PolylineEdgeModel });
-    this.registerElement('bezier', { view: _View.BezierEdge, model: _Model.BezierEdgeModel });
-    this.registerElement('text', { view: _View.TextNode, model: _Model.TextNodeModel });
-    this.registerElement('ellipse', { view: _View.EllipseNode, model: _Model.EllipseNodeModel });
-    this.registerElement('diamond', { view: _View.DiamondNode, model: _Model.DiamondNodeModel });
+    this._registerElement({
+      view: _View.RectNode,
+      model: _Model.RectNodeModel,
+      type: 'rect',
+    });
+    this._registerElement({
+      type: 'circle',
+      view: _View.CircleNode,
+      model: _Model.CircleNodeModel,
+    });
+    this._registerElement({
+      type: 'polygon',
+      view: _View.PolygonNode,
+      model: _Model.PolygonNodeModel,
+    });
+    this._registerElement({
+      type: 'line',
+      view: _View.LineEdge,
+      model: _Model.LineEdgeModel,
+    });
+    this._registerElement({
+      type: 'polyline',
+      view: _View.PolylineEdge,
+      model: _Model.PolylineEdgeModel,
+    });
+    this._registerElement({
+      type: 'bezier',
+      view: _View.BezierEdge,
+      model: _Model.BezierEdgeModel,
+    });
+    this._registerElement({
+      type: 'text',
+      view: _View.TextNode,
+      model: _Model.TextNodeModel,
+    });
+    this._registerElement({
+      type: 'ellipse',
+      view: _View.EllipseNode,
+      model: _Model.EllipseNodeModel,
+    });
+    this._registerElement({
+      type: 'diamond',
+      view: _View.DiamondNode,
+      model: _Model.DiamondNodeModel,
+    });
   }
 
   // 全局操作----------------------------------------------

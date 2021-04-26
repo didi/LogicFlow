@@ -11,12 +11,12 @@ const BpmnElement = {
   name: 'bpmn-element',
   install(lf: LogicFlow) {
     lf.setTheme(theme);
-    lf.registerElement('bpmn:startEvent', StartEvent, false);
-    lf.registerElement('bpmn:endEvent', EndEvent, false);
-    lf.registerElement('bpmn:exclusiveGateway', ExclusiveGateway, false);
-    lf.registerElement('bpmn:userTask', UserTask, false);
-    lf.registerElement('bpmn:serviceTask', ServiceTask, false);
-    lf.registerElement('bpmn:sequenceFlow', SequenceFlow, false);
+    lf.register(StartEvent);
+    lf.register(EndEvent);
+    lf.register(ExclusiveGateway);
+    lf.register(UserTask);
+    lf.register(ServiceTask);
+    lf.register(SequenceFlow);
     lf.setDefaultEdgeType('bpmn:sequenceFlow');
   },
 };

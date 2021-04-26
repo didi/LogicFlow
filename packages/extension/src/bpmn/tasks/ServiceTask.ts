@@ -1,7 +1,7 @@
-import { h, PolygonNodeModel, RectNode } from '@logicflow/core';
+import { h, RectNodeModel, RectNode } from '@logicflow/core';
 import { getBpmnId } from '../getBpmnId';
 
-class ServiceTaskModel extends PolygonNodeModel {
+class ServiceTaskModel extends RectNodeModel {
   static extendKey = 'ServiceTaskModel';
   constructor(data, graphModel) {
     if (!data.id) {
@@ -63,6 +63,7 @@ class ServiceTaskView extends RectNode {
 }
 
 const ServiceTask = {
+  type: 'bpmn:serviceTask',
   view: ServiceTaskView,
   model: ServiceTaskModel,
 };

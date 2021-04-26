@@ -16,6 +16,7 @@ class SequenceFlowView extends LineEdge {
 }
 
 const SequenceFlow = {
+  type: 'bpmn:sequenceFlow',
   view: SequenceFlowView,
   model: SequenceFlowModel,
 };

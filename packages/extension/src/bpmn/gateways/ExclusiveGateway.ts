@@ -72,6 +72,7 @@ class ExclusiveGatewayView extends PolygonNode {
 }
 
 const ExclusiveGateway = {
+  type: 'bpmn:exclusiveGateway',
   view: ExclusiveGatewayView,
   model: ExclusiveGatewayModel,
 };
