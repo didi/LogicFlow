@@ -18,8 +18,7 @@
   审批流程配置中除了节点信息之外，还需要配置各个审批节点和边上的一些属性，自定义实现属性配置。通过LogicFlow`自定义属性`，扩展审批流程需要的业务属性。
 - 连线规则  
   在审批流配置过程中，需要有一些控制连接的规则保证流程的正确性，比如申请节点不能被其它节点连接、结束节点不能连接其他节点等，LogicFlow提供了自定义节点`连线规则`功能来实现这个需求。  
-
-<example href="/examples/#/usage/approve" :height="650"></example>
+<example href="/examples/#/usage/approve" :height="450"></example>
 
 ## 审批流配置
 ### 创建节点

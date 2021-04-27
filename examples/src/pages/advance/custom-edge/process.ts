@@ -11,6 +11,7 @@ export const registerProcess: any = ({ LineEdge, LineEdgeModel }: any) => {
     }
   }
   return {
+    type: 'process',
     view: LineEdge,
     model: ProcessModel,
   };

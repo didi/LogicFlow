@@ -66,6 +66,7 @@ class View extends RectNode {
 }
 
 export const Square = {
+  type: 'square',
   view: View,
   model: Model,
 };

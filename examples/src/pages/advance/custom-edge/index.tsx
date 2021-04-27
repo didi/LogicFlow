@@ -79,7 +79,7 @@ export default function CustomEdgeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register('process', registerProcess);
+    lf.register(registerProcess);
     lf.render(data);
   }, []);
 

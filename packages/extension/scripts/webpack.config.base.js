@@ -99,4 +99,7 @@ module.exports = {
       },
     ],
   },
+  externals: {
+    '@logicflow/core': 'window'
+  }
 };

@@ -1,7 +1,7 @@
-import { LineEdge, LineEdgeModel } from '@logicflow/core';
+import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
 import { getBpmnId } from '../getBpmnId';
 
-class SequenceFlowModel extends LineEdgeModel {
+class SequenceFlowModel extends PolylineEdgeModel {
   static extendKey = 'SequenceFlowModel';
   constructor(data, graphModel) {
     if (!data.id) {
@@ -11,7 +11,7 @@ class SequenceFlowModel extends LineEdgeModel {
   }
 }
 
-class SequenceFlowView extends LineEdge {
+class SequenceFlowView extends PolylineEdge {
   static extendKey = 'SequenceFlowEdge';
 }
 

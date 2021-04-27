@@ -28,7 +28,7 @@ export default function CustomNodeShapeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register('triangle', registerTriangleNode);
+    lf.register(registerTriangleNode);
     lf.render(data);
   }, []);
 

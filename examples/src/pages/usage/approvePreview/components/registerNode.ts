@@ -1,28 +1,17 @@
-import LogicFlow from "@logicflow/core"
+import LogicFlow, {
+  CircleNodeModel,
+  CircleNode,
+  RectNode,
+  RectNodeModel,
+  PolygonNode,
+  PolygonNodeModel,
+  PolylineEdge,
+  PolylineEdgeModel,
+  h,
+} from "@logicflow/core"
 import GraphModel from "@logicflow/core/types/model/GraphModel";
 import BaseNodeModel from "@logicflow/core/types/model/node/BaseNodeModel";
 import { nodeProperty } from '../type';
-
-type CircleNode = {
-  CircleNode: any;
-  CircleNodeModel: any;
-}
-
-type RectNode = {
-  RectNode: any;
-  RectNodeModel: any;
-  h: any;
-}
-
-type PolygonNode = {
-  PolygonNode: any;
-  PolygonNodeModel: any;
-}
-
-type PolylineEdge = {
-  PolylineEdge: any;
-  PolylineEdgeModel: any;
-}
 
 const statusColor = {
   0: 'grey',
@@ -32,24 +21,23 @@ const statusColor = {
 
 export default function RegisteNode(lf: LogicFlow) {
   
-  lf.register('apply', ({ CircleNode, CircleNodeModel }: CircleNode) => {
-    class ApplyModel extends CircleNodeModel { 
-      constructor(data: BaseNodeModel, graphModel: GraphModel) {
-        super(data, graphModel);
-        const property = data.properties;
-        // @ts-ignore
-        this.stroke = statusColor[property.status];
-      }
+  class ApplyModel extends CircleNodeModel { 
+    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+      super(data, graphModel);
+      const property = data.properties;
+      // @ts-ignore
+      this.stroke = statusColor[property.status];
     }
-    return {
-      view: CircleNode,
-      model: ApplyModel,
-    }
+  }
+
+  lf.register({
+    type: 'apply',
+    model: ApplyModel,
+    view: CircleNode, 
   })
 
-  lf.register('approver', ({ RectNode, RectNodeModel, h }: RectNode): any => {
-    class ApproverNode extends RectNode {
-      static extendKey = 'UserTaskNode';
+  class ApproverNode extends RectNode {
+    static extendKey = 'UserTaskNode';
     getLabelShape() {
       const attributes = super.getAttributes();
       const {
@@ -108,78 +96,78 @@ export default function RegisteNode(lf: LogicFlow) {
         ],
       );
     }
+  }
+  class ApproverModel extends RectNodeModel { 
+    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+      super(data, graphModel);
+      const property = data.properties;
+      // @ts-ignore
+      this.stroke = statusColor[property.status];
     }
-    class ApproverModel extends RectNodeModel { 
-      constructor(data: BaseNodeModel, graphModel: GraphModel) {
-        super(data, graphModel);
-        const property = data.properties;
-        // @ts-ignore
-        this.stroke = statusColor[property.status];
-      }
-    }
-    return {
-      view: ApproverNode,
-      model: ApproverModel,
-    }
+  }
+
+  lf.register({
+    type: 'approver',
+    view: ApproverNode,
+    model: ApproverModel,
   })
 
-  lf.register('jugement', ({ PolygonNode, PolygonNodeModel }: PolygonNode) => {
-    class JugementModel extends PolygonNodeModel { 
-      constructor(data: any, graphModel: GraphModel) {
-        super(data, graphModel);
-        this.points= [
-          [35, 0],
-          [70, 35],
-          [35, 70],
-          [0, 35],
-        ];
-        const property = data.properties;
-        // @ts-ignore
-        this.stroke = statusColor[property.status];
-        this.properties = {
-          api: '',
-        }
+  class JugementModel extends PolygonNodeModel { 
+    constructor(data: any, graphModel: GraphModel) {
+      super(data, graphModel);
+      this.points= [
+        [35, 0],
+        [70, 35],
+        [35, 70],
+        [0, 35],
+      ];
+      const property = data.properties;
+      // @ts-ignore
+      this.stroke = statusColor[property.status];
+      this.properties = {
+        api: '',
       }
     }
-    return {
-      view: PolygonNode,
-      model: JugementModel,
-    }
+  }
+
+  lf.register({
+    type: 'jugement',
+    view: PolygonNode,
+    model: JugementModel,
   })
 
-  lf.register('finsh', ({ CircleNode, CircleNodeModel }: CircleNode) => {
-    class FinshModel extends CircleNodeModel { 
-      constructor(data: BaseNodeModel, graphModel: GraphModel) {
-        super(data, graphModel);
-        const property = data.properties;
-        // @ts-ignore
-        this.stroke = statusColor[property.status];
-      }
+  class FinshModel extends CircleNodeModel { 
+    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+      super(data, graphModel);
+      const property = data.properties;
+      // @ts-ignore
+      this.stroke = statusColor[property.status];
     }
-    return {
-      view: CircleNode,
-      model: FinshModel,
-    }
+  }
+
+  lf.register({
+    type: 'finsh',
+    view: CircleNode,
+    model: FinshModel,
   })
 
-  lf.register('action', ({ PolylineEdge, PolylineEdgeModel }: PolylineEdge) => {
-    console.log(PolylineEdge, PolylineEdgeModel);
-    // @ts-ignore
-    class ActionModel extends PolylineEdgeModel { 
-      constructor(data: BaseNodeModel, graphModel: GraphModel) {
-        super(data, graphModel);
-        const property = data.properties as any;
-        // @ts-ignore
-        this.stroke = statusColor[property.status];
-        // @ts-ignore
-        this.hoverStroke = statusColor[property.status];
-        // @ts-ignore
-        this.selectedStroke = statusColor[property.status];
-      }
+
+  class ActionModel extends PolylineEdgeModel { 
+    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+      super(data, graphModel);
+      const property = data.properties as any;
+      // @ts-ignore
+      this.stroke = statusColor[property.status];
+      // @ts-ignore
+      this.hoverStroke = statusColor[property.status];
+      // @ts-ignore
+      this.selectedStroke = statusColor[property.status];
     }
-    return {
-      view: PolylineEdge,
-      model: ActionModel,
-    }
+  }
+
+  lf.register({
+    type: 'action',
+    view: PolylineEdge,
+    model: ActionModel,
   })
 }
