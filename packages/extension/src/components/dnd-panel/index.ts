@@ -1,4 +1,10 @@
-import LogicFlow, { Extension } from '@logicflow/core';
+import LogicFlow, {
+  Extension,
+  PolygonNode,
+  PolygonNodeModel,
+  EllipseNode,
+  EllipseNodeModel,
+} from '@logicflow/core';
 
 type Shape = {
   text: string;
@@ -59,7 +65,7 @@ const DndPanel: DndPanel = {
   },
   render(lf, container) {
     DndPanel.__container = container;
-    DndPanel.__dndEl = DndPanel.getDnd()
+    DndPanel.__dndEl = DndPanel.getDnd();
     container.appendChild(DndPanel.__dndEl);
   },
   destroy() {
@@ -85,86 +91,87 @@ const DndPanel: DndPanel = {
   },
   registerNode() {
     const { lf } = DndPanel;
-    lf.register('star', ({ PolygonNode, PolygonNodeModel }) => {
-      class StarNode extends PolygonNode {
+    class StarNode extends PolygonNode {
+    }
+    class StarModel extends PolygonNodeModel {
+      constructor(data, graphModel) {
+        super(data, graphModel);
+        this.points = [
+          [45, 0],
+          [20, 90],
+          [90, 30],
+          [0, 30],
+          [80, 90],
+        ];
       }
-      class StarModel extends PolygonNodeModel {
-        constructor(data, graphModel) {
-          super(data, graphModel);
-          this.points = [
-            [45, 0],
-            [20, 90],
-            [90, 30],
-            [0, 30],
-            [80, 90],
-          ];
-        }
-      }
-      return {
-        view: StarNode,
-        model: StarModel,
-      };
+    }
+    lf.register({
+      type: 'star',
+      view: StarNode,
+      model: StarModel,
     });
-    lf.register('triangle', ({ PolygonNode, PolygonNodeModel }) => {
-      class TriangleNode extends PolygonNode {
-      }
-      class TriangleModel extends PolygonNodeModel {
-        constructor(data, graphModel) {
-          if (data.text && typeof data.text === 'string') {
-            data.text = {
-              value: data.text,
-              x: data.x,
-              y: data.y + 20,
-            };
-          }
-          super(data, graphModel);
-          this.points = [
-            [50, 0],
-            [100, 100],
-            [0, 100],
-          ];
+
+    class TriangleNode extends PolygonNode {
+    }
+    class TriangleModel extends PolygonNodeModel {
+      constructor(data, graphModel) {
+        if (data.text && typeof data.text === 'string') {
+          data.text = {
+            value: data.text,
+            x: data.x,
+            y: data.y + 20,
+          };
         }
+        super(data, graphModel);
+        this.points = [
+          [50, 0],
+          [100, 100],
+          [0, 100],
+        ];
       }
-      return {
-        view: TriangleNode,
-        model: TriangleModel,
-      };
+    }
+    lf.register({
+      type: 'triangle',
+      view: TriangleNode,
+      model: TriangleModel,
     });
-    lf.register('ellipse', ({ EllipseNode, EllipseNodeModel }) => {
-      class MyEllipseNode extends EllipseNode {
+
+    class MyEllipseNode extends EllipseNode {
+    }
+    class MyEllipseModel extends EllipseNodeModel {
+      constructor(data, graphModel) {
+        super(data, graphModel);
+        this.rx = 60;
+        this.ry = 40;
       }
-      class MyEllipseModel extends EllipseNodeModel {
-        constructor(data, graphModel) {
-          super(data, graphModel);
-          this.rx = 60;
-          this.ry = 40;
-        }
-      }
-      return {
-        view: MyEllipseNode,
-        model: MyEllipseModel,
-      };
+    }
+
+    lf.register({
+      type: 'ellipse',
+      view: MyEllipseNode,
+      model: MyEllipseModel,
     });
-    lf.register('hexagon', ({ PolygonNode, PolygonNodeModel }) => {
-      class HexagonNode extends PolygonNode {
+
+    class HexagonNode extends PolygonNode {
+    }
+    class HexagonModel extends PolygonNodeModel {
+      constructor(data, graphModel) {
+        super(data, graphModel);
+        this.points = [
+          [40, 0],
+          [80, 20],
+          [80, 60],
+          [40, 80],
+          [0, 60],
+          [0, 20],
+        ];
       }
-      class HexagonModel extends PolygonNodeModel {
-        constructor(data, graphModel) {
-          super(data, graphModel);
-          this.points = [
-            [40, 0],
-            [80, 20],
-            [80, 60],
-            [40, 80],
-            [0, 60],
-            [0, 20],
-          ];
-        }
-      }
-      return {
-        view: HexagonNode,
-        model: HexagonModel,
-      };
+    }
+
+    lf.register({
+      type: 'hexagon',
+      view: HexagonNode,
+      model: HexagonModel,
     });
   },
   handleMouseDown(config) {

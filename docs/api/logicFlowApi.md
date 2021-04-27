@@ -75,15 +75,16 @@ export type GridOptions = {
 注册节点
 
 ```js
-register(type: string, fn: RegisterElementFn):void
+register(config):void
 ```
 
 参数：
 
 | 参数名 | 类型 | 必传 |默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| type | String | ✅ | - | 自定义节点的名称 |
-| fn | Function | ✅ | - | 回调函数，参数包含内部的节点 model 等 |
+| config.type | String | ✅ | - | 自定义节点的名称 |
+| config.model | Model | ✅ | - | 节点的model |
+| config.view | View | ✅ | - | 节点的view |
 
 示例：
 
