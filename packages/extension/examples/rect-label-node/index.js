@@ -20,12 +20,7 @@ window.onload = function () {
           alert('分享')
         },
       }
-    ], 
-    style: {
-      rect: {
-        fill: '#000000'
-      }
-    },
+    ],
     // nodeTextDraggable: true,
     edgeTextDraggable: true
   });
@@ -41,10 +36,24 @@ window.onload = function () {
         id: 40,
       },
       {
-        type: 'circle',
+        type: 'rect-label',
         x: 500 * Math.random(),
         y: 600 * Math.random(),
         id: 50,
+        text: '开始',
+        properties: {
+          moreText: '用户节点'
+        }
+      },
+      {
+        type: 'rect-label',
+        x: 500 * Math.random(),
+        y: 600 * Math.random(),
+        id: 51,
+        text: '开始2',
+        properties: {
+          moreText: '系统节点'
+        }
       },
     ],
     edges: [
