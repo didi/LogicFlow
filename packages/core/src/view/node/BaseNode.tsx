@@ -106,7 +106,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       ...style,
     };
   }
-  getProperties() {
+  getProperties(): Record<string, any> {
     const { model } = this.props;
     return model.getProperties();
   }
