@@ -88,49 +88,25 @@ register(type: string, fn: RegisterElementFn):void
 示例：
 
 ```js
-lf.register('user', ({ RectNode, RectNodeModel, h }) => {
-  // 提供节点
-  class UserNode extends RectNode {
+import { RectNode, RectNodeModel, h } from '@logicflow/core'
+// 提供节点
+class UserNode extends RectNode {
+}
+// 提供节点的属性
+class UserModel extends RectNodeModel {
+  constructor(data) {
+    super(data);
+    const { size } = data.properties;
+    this.width = size * 40;
+    this.height = size * 40;
+    this.fill = 'green';
   }
-  // 提供节点的属性
-  class UserModel extends RectNodeModel {
-    constructor(data) {
-      super(data);
-      const { size } = data.properties;
-      this.width = size * 40;
-      this.height = size * 40;
-      this.fill = 'green';
-    }
-  }
-  // 返回 view 和 model
-  return {
-    view: UserNode,
-    model: UserModel,
-  };
+}
+lf.register({
+  type: 'user',
+  view: UserNode,
+  model: UserModel,
 });
-// 回调函数的参数全集
-// {
-//   BaseEdge,
-//   BaseEdgeModel,
-//   BaseNode,
-//   BaseNodeModel,
-//   RectNode,
-//   RectNodeModel,
-//   CircleNode,
-//   CircleNodeModel,
-//   PolygonNode,
-//   PolygonNodeModel,
-//   TextNode,
-//   TextNodeModel,
-//   LineEdge,
-//   LineEdgeModel,
-//   PolylineEdge,
-//   PolylineEdgeModel,
-//   EllipseNode,
-//   EllipseNodeModel,
-//   mobx,
-//   h,
-// }
 ```
 
 ## addNode

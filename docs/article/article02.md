@@ -124,24 +124,26 @@ class CnodeModel extends RectModel {
 LogicFlow 中提供了一个`properties`字段用于开发者存放自己业务相关的属性，然后可以在自定义节点的时候，基于这些`properties`自己进行处理。
 
 ```javascript
-lf.register('custom-process', ({TriangleNode,TriangleModel }) => {
-  class CustomProcessNode extends TriangleNode {
-    static extendKey = 'CustomProcessNode';
-    getShapeStyle() {
-      const attributes = super.getShapeStyle();
-      const properties = super.getProperties();
-      // 判断自定义属性customStatus是否为error,
-      // 如果是，则将这个节点的填充颜色设置为红色。
-      if (properties.customStatus === 'error') {
-        attributes.fill = 'red'
-      }
-      return attributes;
+import { TriangleNode, PolygonNodeModel } from '@logicflow/core';
+
+class CustomProcessNode extends TriangleNode {
+  static extendKey = 'CustomProcessNode';
+  getShapeStyle() {
+    const attributes = super.getShapeStyle();
+    const properties = super.getProperties();
+    // 判断自定义属性customStatus是否为error,
+    // 如果是，则将这个节点的填充颜色设置为红色。
+    if (properties.customStatus === 'error') {
+      attributes.fill = 'red'
     }
+    return attributes;
   }
-  return {
-    view: CustomProcessNode,
-    model: PolygonNodeModel,
-  };
+}
+
+lf.register({
+  type: 'custom-process',
+  view: CustomProcessNode,
+  model: PolygonNodeModel,
 });
 ```
 

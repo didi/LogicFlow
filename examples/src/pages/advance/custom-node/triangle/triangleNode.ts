@@ -10,6 +10,7 @@ export const registerTriangleNode: any = ({ PolygonNode, PolygonNodeModel }: any
     }
   }
   return {
+    type: 'triangle',
     view: PolygonNode,
     model: TriangleNodeModel,
   };
