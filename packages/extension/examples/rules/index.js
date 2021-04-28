@@ -29,65 +29,63 @@ window.onload = function () {
 }
 
 function registerStart(lf) {
-  lf.register('start', ({ CircleNode, CircleNodeModel, h }) => {
-    class StartNode extends CircleNode {
-    }
-    class StartModel extends CircleNodeModel {
-      constructor(data, graphModel) {
-        if (data.text && typeof data.text === 'string') {
-          data.text = {
-            value: data.text,
-            x: data.x,
-            y: data.y + 35
-          }
+  class StartNode extends CircleNode {
+  }
+  class StartModel extends CircleNodeModel {
+    constructor(data, graphModel) {
+      if (data.text && typeof data.text === 'string') {
+        data.text = {
+          value: data.text,
+          x: data.x,
+          y: data.y + 35
         }
-        super(data, graphModel);
-        this.r = 18;
-        this.strokeWidth = 2;
-        this.stroke = 'rgb(24, 125, 255)';
       }
-      getConnectedTargetRules() {
-        const rules = super.getConnectedTargetRules();
-        const notAsTarget = {
-          message: '起始节点不能作为连线的终点',
-          validate: () => false,
-        };
-        rules.push(notAsTarget);
-        return rules;
-      }
+      super(data, graphModel);
+      this.r = 18;
+      this.strokeWidth = 2;
+      this.stroke = 'rgb(24, 125, 255)';
     }
-    return {
-      view: StartNode,
-      model: StartModel,
+    getConnectedTargetRules() {
+      const rules = super.getConnectedTargetRules();
+      const notAsTarget = {
+        message: '起始节点不能作为连线的终点',
+        validate: () => false,
+      };
+      rules.push(notAsTarget);
+      return rules;
     }
+  }
+  lf.register({
+    type: 'start',
+    view: StartNode,
+    model: StartModel,
   });
 }
 
 function registerUser(lf) {
-  lf.register('user-task', ({ RectNode, RectNodeModel }) => {
-    class UserTaskNode extends RectNode {
-    }
-    class UsetTaskModel extends RectNodeModel {
-      constructor(data, graphModel) {
-        if (data.text && typeof data.text === 'string') {
-          data.text = {
-            value: data.text,
-            x: data.x,
-            y: data.y
-          }
+  class UserTaskNode extends RectNode {
+  }
+  class UsetTaskModel extends RectNodeModel {
+    constructor(data, graphModel) {
+      if (data.text && typeof data.text === 'string') {
+        data.text = {
+          value: data.text,
+          x: data.x,
+          y: data.y
         }
-        super(data, graphModel);
-        this.width = 100;
-        this.height = 80;
-        this.strokeWidth = 2;
-        this.stroke = 'rgb(24, 125, 255)';
-        this.radius = 10;
-        this.fillOpacity = 0.95;
       }
+      super(data, graphModel);
+      this.width = 100;
+      this.height = 80;
+      this.strokeWidth = 2;
+      this.stroke = 'rgb(24, 125, 255)';
+      this.radius = 10;
+      this.fillOpacity = 0.95;
     }
-    return {
-      view: UserTaskNode,
-      model: UsetTaskModel,
-    }
+  }
+  lf.register({
+    view: UserTaskNode,
+    model: UsetTaskModel,
+    type: 'user-task',
   });
 }

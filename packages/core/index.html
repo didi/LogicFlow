@@ -246,25 +246,30 @@
         window.lf = lf;
 
         // 注册自定义节点
-        lf.register('square', {
+        lf.register({
+          type: 'square',
           view: RectNode,
           model: SquareModel,
         });
-        lf.register('star', {
+        lf.register({
+          type: 'star',
           view: PolygonNode,
           model: StarModel,
         });
-        lf.register('user', {
+        lf.register({
+          type: 'user',
           view: UserNode,
           model: UserModel,
         });
-        lf.register('combine', {
+        lf.register({
+          type: 'combine',
           view: CombineNode,
           model: CombineModel,
         });
 
         // 注册自定义连线
-        lf.register('connection', {
+        lf.register({
+          type: 'connection',
           view: Connection,
           model: LineEdgeModel,
         })

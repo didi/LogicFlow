@@ -1,4 +1,6 @@
-const getRectLabelNodeView = (RectNode, h) => class extends RectNode {
+import { RectNode, h } from '@logicflow/core';
+
+export class RectLabelNodeView extends RectNode {
   getLabelShape() {
     const attributes = this.getAttributes();
     const properties = this.getProperties();
@@ -9,7 +11,7 @@ const getRectLabelNodeView = (RectNode, h) => class extends RectNode {
         x: x - width / 2 + 5,
         y: y - height / 2 + 16,
         fontSize: 12,
-        fill: '#FFF',
+        fill: 'blue',
       },
       properties.moreText,
     );
@@ -21,12 +23,11 @@ const getRectLabelNodeView = (RectNode, h) => class extends RectNode {
     return h('g', {}, [
       h('rect', {
         ...attributes,
+        fill: '#FFFFFF',
         x: x - width / 2,
         y: y - height / 2,
       }),
       this.getLabelShape(),
     ]);
   }
-};
-
-export default getRectLabelNodeView;
+}

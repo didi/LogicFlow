@@ -13,11 +13,10 @@ window.addEventListener('DOMContentLoaded', () => {
     },
     snapline: true,
   });
-  lf.register('x-node', ({ RectNode, RectNodeModel }) => {
-    return {
-      view: RectNode,
-      model: RectNodeModel,
-    }
+  lf.register({
+    type: 'x-node',
+    view: RectNode,
+    model: RectNodeModel,
   })
   lf.render({
     nodes: [

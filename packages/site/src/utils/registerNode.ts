@@ -15,7 +15,7 @@ class CustomNode {
   }
 
   registerRect() {
-    this.lf.registerElement('rect', Rect);
+    this.lf.register(Rect);
   }
 }
 

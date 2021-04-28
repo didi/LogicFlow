@@ -26,16 +26,18 @@ LogicFlow 内部是基于`MVVM`模式进行开发的，分别使用`preact`和`m
 我们可以在创建`LogicFlow`实例之后，`render`之前，使用[`register`方法](/api/logicFlowApi.md#register)来注册自定义节点。
 
 ```ts
-lf.register('customNodeType', (RegisterParam) => {
-  const { RectNode, RectNodeModel } = RegisterParam;
-  // 自定义节点的 model
-  class Model extends RectNodeModel {}
-  // 自定义节点的 view
-  class View extends RectNode {}
-  return {
-    view: View,
-    model: Model,
-  }
+import { RectNode, RectNodeModel } from '@logicflow/core'
+
+// 自定义节点的 model
+class Model extends RectNodeModel {}
+// 自定义节点的 view
+class View extends RectNode {}
+
+
+lf.register({
+  type: 'customNodeType'
+  view: View,
+  model: Model,
 });
 ```
 
@@ -96,19 +98,18 @@ class Model extends BaseNodeModel {
 以正方形节点（square）为例，我们需要为节点设置`width`和`height`。
 
 ```ts
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel } = RegisterParam;
-  class SquareModel extends RectNodeModel {
-    setAttributes() {
-      const size = 80;
-      this.width = size;
-      this.height = size;
-    }
+const { RectNode, RectNodeModel } from '@logicflow/core';
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+    const size = 80;
+    this.width = size;
+    this.height = size;
   }
-  return {
-    view: RectNode,
-    model: SquareModel,
-  }
+}
+lf.register({
+  type: 'square',
+  view: RectNode,
+  model: SquareModel,
 });
 
 lf.render({
@@ -142,25 +143,25 @@ lf.render({
 以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
 
 ```ts
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel } = RegisterParam;
-  class SquareModel extends RectNodeModel {
-    setAttributes() {
-      const size = 80;
-      this.width = size;
-      this.height = size;
-      // 设置自定义锚点
-      // 只需要为每个锚点设置相对于节点中心的偏移量
-      this.anchorsOffset = [
-        [size / 2, 0], // x 轴上偏移 size / 2
-        [-size / 2, 0], // x 轴上偏移 -size / 2
-      ];
-    }
+import { RectNode, RectNodeModel } from '@logicflow/core';
+
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+    const size = 80;
+    this.width = size;
+    this.height = size;
+    // 设置自定义锚点
+    // 只需要为每个锚点设置相对于节点中心的偏移量
+    this.anchorsOffset = [
+      [size / 2, 0], // x 轴上偏移 size / 2
+      [-size / 2, 0], // x 轴上偏移 -size / 2
+    ];
   }
-  return {
-    view: RectNode,
-    model: SquareModel,
-  }
+}
+lf.register({
+  type: 'square'
+  view: RectNode,
+  model: SquareModel,
 });
 
 lf.render({
@@ -195,31 +196,29 @@ lf.render({
 以正方形（square）为例，在连线时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`添加作为`source`节点的校验规则。
 
 ```ts
-lf.register('square', (RegisterParam) => {
-  const { RectNode, RectNodeModel } = RegisterParam;
-  class SquareModel extends RectNodeModel {
-    setAttributes() {
-      const size = 80;
-      const circleOnlyAsTarget = {
-        message: "正方形节点下一个节点只能是圆形节点",
-        validate: (source: any, target: any) => {
-          return target.type === "circle";
-        },
-      };
+import { RectNode, RectNodeModel } from '@logicflow/core';
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+  const size = 80;
+  const circleOnlyAsTarget = {
+    message: "正方形节点下一个节点只能是圆形节点",
+    validate: (source: any, target: any) => {
+      return target.type === "circle";
+    },
+  };
 
-      this.width = size;
-      this.height = size;
-      this.anchorsOffset = [
-        [size / 2, 0],
-        [-size / 2, 0]
-      ];
-      this.sourceRules.push(circleOnlyAsTarget);
-    }
-  }
-  return {
-    view: RectNode,
-    model: SquareModel,
-  }
+  this.width = size;
+  this.height = size;
+  this.anchorsOffset = [
+    [size / 2, 0],
+    [-size / 2, 0]
+  ];
+  this.sourceRules.push(circleOnlyAsTarget);
+}
+lf.register({
+  type: 'square'
+  view: RectNode,
+  model: SquareModel,
 });
 
 lf.render({
@@ -289,21 +288,20 @@ class Model extends BaseNodeModel {
 如果我们需要通过继承多边形（Polygon）来实现一个三角形的节点，则需要为多边形设置节点属性`points`。
 
 ```ts
-lf.register('triangle', (RegisterParam) => {
-  const { PolygonNode, PolygonNodeModel } = RegisterParam;
-  class TriangleModel extends PolygonNodeModel {
-    setAttributes() {
-      this.points = [
-        [50, 0],
-        [100, 80],
-        [0, 80],
-      ];
-    }
+import { PolygonNode, PolygonNodeModel } from '@logicflow/core';
+class TriangleModel extends PolygonNodeModel {
+  setAttributes() {
+    this.points = [
+      [50, 0],
+      [100, 80],
+      [0, 80],
+    ];
   }
-  return {
-    view: PolygonNode,
-    model: TriangleModel,
-  };
+}
+lf.register({
+  type: 'triangle',
+  view: PolygonNode,
+  model: TriangleModel,
 });
 ```
 
@@ -326,72 +324,71 @@ lf.register('triangle', (RegisterParam) => {
 仍然以正方形（square）节点为例，现在我们需要在正方形的左上角添加一个图标。
 
 ```js
-lf.register('square', (RegisterParam) => {
-  // h 方法由 Logic Flow 提供
-  const { RectNode, RectNodeModel, h } = RegisterParam;
-  class SquareModel extends RectNodeModel {
-    setAttributes() {
-      const size = 80;
-      const circleOnlyAsTarget = {
-        message: "正方形节点下一个节点只能是圆形节点",
-        validate: (source: any, target: any) => {
-          return target.type === "circle";
-        },
-      };
 
-      this.width = size;
-      this.height = size;
-      this.anchorsOffset = [
-        [size / 2, 0],
-        [-size / 2, 0]
-      ];
-      this.sourceRules.push(circleOnlyAsTarget);
-    }
+const { RectNode, RectNodeModel, h } = '@logicflow/core';
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+    const size = 80;
+    const circleOnlyAsTarget = {
+      message: "正方形节点下一个节点只能是圆形节点",
+      validate: (source: any, target: any) => {
+        return target.type === "circle";
+      },
+    };
+
+    this.width = size;
+    this.height = size;
+    this.anchorsOffset = [
+      [size / 2, 0],
+      [-size / 2, 0]
+    ];
+    this.sourceRules.push(circleOnlyAsTarget);
   }
-  class SquareView extends RectNode {
-    getShape() {
-      // 通过 getAttributes 获取 model 中的属性
-      const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
-      const attrs = {
-        // rect 标签的 x，y 对应的是图形的左上角
-        // 所以我们要将矩形的中心移动到 x，y
-        x: x - width / 2,
-        y: y - height / 2,
-        width,
-        height,
-        stroke,
-        fill,
-        strokeWidth
-      }
-      // getShape 的返回值是一个通过 h 方法创建的 svg 元素
-      return h("g", {}, [
-          h("rect", { ...attrs }),
+}
+class SquareView extends RectNode {
+  getShape() {
+    // 通过 getAttributes 获取 model 中的属性
+    const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+    const attrs = {
+      // rect 标签的 x，y 对应的是图形的左上角
+      // 所以我们要将矩形的中心移动到 x，y
+      x: x - width / 2,
+      y: y - height / 2,
+      width,
+      height,
+      stroke,
+      fill,
+      strokeWidth
+    }
+    // getShape 的返回值是一个通过 h 方法创建的 svg 元素
+    return h("g", {}, [
+        h("rect", { ...attrs }),
+        h(
+          'svg',
+          {
+            x: x - width / 2 + 5,
+            y: y - height / 2 + 5,
+            width: 25,
+            height: 25,
+            viewBox: "0 0 1274 1024",
+          },
           h(
-            'svg',
+            'path',
             {
-              x: x - width / 2 + 5,
-              y: y - height / 2 + 5,
-              width: 25,
-              height: 25,
-              viewBox: "0 0 1274 1024",
-            },
-            h(
-              'path',
-              {
-                fill: stroke,
-                d:
-                  "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
-              }
-            )
+              fill: stroke,
+              d:
+                "M655.807326 287.35973m-223.989415 0a218.879 218.879 0 1 0 447.978829 0 218.879 218.879 0 1 0-447.978829 0ZM1039.955839 895.482975c-0.490184-212.177424-172.287821-384.030443-384.148513-384.030443-211.862739 0-383.660376 171.85302-384.15056 384.030443L1039.955839 895.482975z",
+            }
           )
-        ]
-      );
-    }
+        )
+      ]
+    );
   }
-  return {
-    view: SquareView,
-    model: SquareModel,
-  }
+}
+lf.register({
+  type: 'square',
+  view: SquareView,
+  model: SquareModel,
 });
 
 // 配置节点
@@ -417,21 +414,3 @@ lf.render({
 
 在上面的代码中，`getShape`方法返回了一个包含图标的标签，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。SVG 元素需要 model 中的实时数据才可以正常显示并使用，现在我们可以通过[getAttributes](/guide/advance/customNode.html#getattributes)方法获取到 model 中的[数据属性](/api/nodeApi.md#数据属性)和[样式属性](/api/nodeApi.html#样式属性)。
 
-## extendKey
-
-当我们注册的自定义节点希望可以被其他自定义节点继承时，就需要为`view`和`model`都设置一个静态属性`extendKey`，以便在`lf.register`的第二个回调函数的参数中被访问到。
-
-```ts
-lf.register('CustomNode', ({ BaseNode, BaseNodeModel }) => {
-  class View extends BaseNode {
-    static extendKey = 'CustomNodeView';
-  }
-  class Model extends BaseNodeModel {
-    static extendKey = 'CustomNodeModel';
-  }
-  return {
-    view: View,
-    model: Model,
-  }
-});
-```

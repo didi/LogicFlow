@@ -22,21 +22,20 @@ sidebarDepth: 2
 例如我们想要实现一条进度连线，若当前进度连线已执行，则显示为绿色。
 
 ```ts
-lf.register('process', (RegisterParam) => {
-  const { LineEdge, LineEdgeModel } = RegisterParam;
-  class ProcessModel extends LineEdgeModel {
-    setAttributes() {
-      const { propteries: { isExecuted } } = this;
+import { LineEdge, LineEdgeModel } from '@logicflow/core';
+class ProcessModel extends LineEdgeModel {
+  setAttributes() {
+    const { propteries: { isExecuted } } = this;
 
-      if (isExecuted) {
-        this.stroke = 'green';
-      }
+    if (isExecuted) {
+      this.stroke = 'green';
     }
   }
-  return {
-    view: LineEdge,
-    model: ProcessModel,
-  }
+}
+lf.register({
+  type: 'process',
+  view: LineEdge,
+  model: ProcessModel,
 });
 ```
 
@@ -54,21 +53,3 @@ lf.register('process', (RegisterParam) => {
 
 我们可以通过`getShape`方法返回 SVG 元素来实现连线的形状，但是内置的直线、折线和曲线已经能满足绝大部分需求，且连线的开发成本较高，这里不详细说明如何自定义连线的形状，如果有需要，建议直接阅读内部连线的[源码实现](https://github.com/didi/LogicFlow/blob/cdc19ddfb6774005b3f57cb4e27d54e8e25572b4/packages/core/src/view/edge/LineEdge.tsx)。也欢迎将你实现的自定义连线通过`extension`的方式提交 PR 给我们。
 
-## extendKey
-
-当我们注册的自定义连线希望可以被其他自定义连线继承时，就需要为`view`和`model`都设置一个静态属性`extendKey`，以便在`lf.register`的第二个回调函数的参数中被访问到。
-
-```ts
-lf.register('CustomEdge', ({ BaseEdge, BaseEdgeModel }) => {
-  class View extends BaseEdge {
-    static extendKey = 'CustomEdgeView';
-  }
-  class Model extends BaseEdgeModel {
-    static extendKey = 'CustomEdgeModel';
-  }
-  return {
-    view: View,
-    model: Model,
-  }
-});
-```

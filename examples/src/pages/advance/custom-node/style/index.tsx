@@ -33,7 +33,7 @@ export default function CustomNodeStyleExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.registerElement('square', Square);
+    lf.register(Square);
     lf.render(data);
   }, []);
 

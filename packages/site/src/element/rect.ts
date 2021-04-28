@@ -17,6 +17,7 @@ class CustomRectModel extends RectNodeModel {
 }
 
 export const Rect = {
+  type: 'rect',
   view: RectNode,
   model: CustomRectModel,
 };
