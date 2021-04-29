@@ -774,3 +774,10 @@ lf.getSelectElements(false)
 lf.clearSelectElements()
 ```
 
+## changeNodeType
+
+修改节点类型
+
+```ts
+lf.changeNodeType(id: string, type: string)
+```

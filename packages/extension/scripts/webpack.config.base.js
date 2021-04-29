@@ -12,6 +12,7 @@ const packagesEntry = {
   MiniMap: path.resolve(__dirname, '../src/components/mini-map/index.ts'),
   ResizeNode: path.resolve(__dirname, '../src/materials/resize-node/index.ts'),
   CurvedEdge: path.resolve(__dirname, '../src/materials/curved-edge/index.ts'),
+  InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
   SelectionSelect: path.resolve(
     __dirname,
     '../src/components/selection-select/index.ts',

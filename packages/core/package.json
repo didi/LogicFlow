@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "license": "Apache 2.0",

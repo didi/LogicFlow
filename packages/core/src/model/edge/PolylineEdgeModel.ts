@@ -289,7 +289,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       endIndex,
       direction,
     } = appendInfo;
-    console.log(start, end, startIndex, endIndex, direction, dragInfo);
     const { pointsList } = this;
     if (direction === SegmentDirection.HORIZONTAL) {
       // 水平，仅调整y坐标
