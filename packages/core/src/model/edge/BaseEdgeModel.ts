@@ -157,8 +157,8 @@ class BaseEdgeModel implements IBaseModel {
       type: this.type,
       sourceNodeId: this.sourceNode.id,
       targetNodeId: this.targetNode.id,
-      startPoint: { ...this.startPoint },
-      endPoint: { ...this.endPoint },
+      startPoint: Object.assign({}, this.startPoint),
+      endPoint: Object.assign({}, this.endPoint),
       properties: toJS(this.properties),
     };
     if (value) {
@@ -208,12 +208,12 @@ class BaseEdgeModel implements IBaseModel {
       };
       const textPostion = this.textPosition;
       if (!x && !y) {
-        edgeData.text = { ...text, ...textPostion };
+        edgeData.text = Object.assign({}, text, textPostion);
       } else {
-        edgeData.text = { ...text, x, y };
+        edgeData.text = Object.assign({}, text, { x, y });
       }
     } else if (typeof edgeData.text === 'object') {
-      const text = { ...this.text, ...edgeData.text };
+      const text = Object.assign({}, this.text, edgeData.text);
       edgeData.text = pick(text, 'x', 'y', 'value', 'draggable', 'editable');
     }
     assign(this, edgeData);

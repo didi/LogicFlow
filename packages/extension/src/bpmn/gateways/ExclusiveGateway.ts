@@ -12,17 +12,16 @@ class ExclusiveGatewayModel extends PolygonNodeModel {
       data.text = {
         value: '',
         x: data.x,
-        y: data.y,
+        y: data.y + 40,
       };
     }
     if (data.text && typeof data.text === 'string') {
       data.text = {
         value: data.text,
         x: data.x,
-        y: data.y,
+        y: data.y + 40,
       };
     }
-    data.text.y += 40;
     super(data, graphModel);
     this.points = [
       [25, 0],

@@ -88,7 +88,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   // 删除在图形内的过个交点
   removeCrossPoints(startIndex, endIndex, pointList) {
-    const list = [...pointList];
+    const list = pointList.map(i => i);
     if (startIndex === 1) {
       const start = list[startIndex];
       const end = list[endIndex];
@@ -152,7 +152,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   // 获取在拖拽过程中可能产生的点
   getDragingPoints(direction, positioType, position, anchorList, draginngPointList) {
-    const pointList = [...draginngPointList];
+    const pointList = draginngPointList.map(i => i);
     const anchor = this.getAfterAnchor(direction, position, anchorList);
     const crossPoint = this.getCorssPoint(direction, position, anchor);
     if (positioType === 'start') {
@@ -167,7 +167,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   // 更新相交点[起点，终点]，更加贴近图形, 未修改observable不作为action
   updateCrossPoints(pointList) {
-    const list = [...pointList];
+    const list = pointList.map(i => i);
     const start = pointList[0];
     const next = pointList[1];
     const pre = pointList[list.length - 2];
@@ -235,10 +235,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   getData() {
     const data = super.getData();
     const pointsList = this.pointsList.map(({ x, y }) => ({ x, y }));
-    return {
-      ...data,
+    return Object.assign({}, data, {
       pointsList,
-    };
+    });
   }
 
   @action
@@ -277,7 +276,8 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   @action
   dragAppendStart() {
-    this.draginngPointList = [...this.pointsList];
+    // mobx observer 对象被iterator处理会有问题
+    this.draginngPointList = this.pointsList.map(i => i);
   }
 
   @action
@@ -297,7 +297,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       pointsList[endIndex] = { x: end.x, y: end.y + dragInfo.y };
       // step2: 计算拖拽后,两个端点与节点外框的交点
       // 定义一个拖住中节点list
-      let draginngPointList = [...this.pointsList];
+      let draginngPointList = this.pointsList.map(i => i);
       if (startIndex !== 0 && endIndex !== this.pointsList.length - 1) {
         // 2.1)如果线段没有连接起终点，过滤会穿插在图形内部的线段，取整个图形离线段最近的点
         draginngPointList = this.removeCrossPoints(startIndex, endIndex, draginngPointList);
@@ -334,7 +334,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       // 垂直，仅调整x坐标， 与水平调整同理
       pointsList[startIndex] = { x: start.x + dragInfo.x, y: start.y };
       pointsList[endIndex] = { x: end.x + dragInfo.x, y: end.y };
-      let draginngPointList = [...this.pointsList];
+      let draginngPointList = this.pointsList.map(i => i);
       if (startIndex !== 0 && endIndex !== this.pointsList.length - 1) {
         draginngPointList = this.removeCrossPoints(startIndex, endIndex, draginngPointList);
       }
@@ -362,10 +362,10 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       this.updatePointsAfterDrage(draginngPointList);
       this.draginngPointList = draginngPointList;
     }
-    this.setText({ ...this.text, ...this.textPosition });
+    this.setText(Object.assign({}, this.text, this.textPosition));
     return {
-      start: pointsList[startIndex],
-      end: pointsList[endIndex],
+      start: Object.assign({}, pointsList[startIndex]),
+      end: Object.assign({}, pointsList[endIndex]),
       startIndex,
       endIndex,
       direction,
@@ -377,14 +377,14 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     if (this.draginngPointList) {
       const pointsList = poins2PointsList(this.points);
       // 更新pointsList，重新渲染appendWidth
-      this.pointsList = [...pointsList];
+      this.pointsList = pointsList.map(i => i);
       // draginngPointList清空
       this.draginngPointList = [];
       // 更新起终点
       const startPoint = pointsList[0];
-      this.startPoint = { ...startPoint };
+      this.startPoint = Object.assign({}, startPoint);
       const endPoint = pointsList[pointsList.length - 1];
-      this.endPoint = { ...endPoint };
+      this.endPoint = Object.assign({}, endPoint);
     }
   }
 

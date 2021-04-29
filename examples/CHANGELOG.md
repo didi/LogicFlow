@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.5](https://github.com/towersxu/logicflow/compare/examples@0.4.4...examples@0.4.5) (2021-04-29)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [0.4.4](https://github.com/towersxu/logicflow/compare/examples@0.4.3...examples@0.4.4) (2021-04-22)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
 ## [0.4.3](https://github.com/towersxu/logicflow/compare/examples@0.4.2...examples@0.4.3) (2021-04-21)
 
 
