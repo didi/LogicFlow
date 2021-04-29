@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.4...@logicflow/core@0.3.6) (2021-04-29)
+
+
+### Bug Fixes
+
+* add more warning ([12f4bb3](https://github.com/towersxu/logicflow/commit/12f4bb36e34733855aeb760a5874fedd09b411de))
+* change node type line ([31602bb](https://github.com/towersxu/logicflow/commit/31602bbbfb5282ef9b2d80d18c0a7492ed19f907))
+
+
+### Features
+
+* add change nodetype ([15878a1](https://github.com/towersxu/logicflow/commit/15878a1c8be6f9117c925792c66dcdbfd1b0aa77))
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
 ## [0.3.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.4...@logicflow/core@0.3.5) (2021-04-29)
 
 
