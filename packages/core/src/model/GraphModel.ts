@@ -611,7 +611,6 @@ class GraphModel {
   }
   @action
   changeNodeType(id, type: string): void {
-    console.log(id, type);
     const nodeModel = this.getNodeModel(id);
     if (!nodeModel) {
       console.warn(`找不到id为${id}的节点`);
