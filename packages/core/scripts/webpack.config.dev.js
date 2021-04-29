@@ -1,11 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const baseWebpackConfig = require('./webpack.config.base.js');
-const getProxy = require('./config');
-// const packagesEntry = require('./packages.config');
 
 // 先不用webpack merge
 module.exports = [
@@ -17,11 +14,10 @@ module.exports = [
       contentBase: path.join(__dirname, '../'),
       stats: 'errors-warnings',
       port: 9090,
-      host: 'localhost',
+      host: '0.0.0.0',
       watchOptions: {
         poll: true,
-      },
-      proxy: getProxy(),
+      }
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -33,8 +29,7 @@ module.exports = [
       new ESLintPlugin({
         context: path.resolve(__dirname, '../src'),
         extensions: ['ts', 'tsx'],
-      }),
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'MOCK_TYPE']),
+      })
     ],
   },
 ];

@@ -87,7 +87,10 @@ class GraphModel {
   }
   // fixme: 用户点击触发两次sortElements
   @computed get sortElements() {
-    const elements = [...this.edges, ...this.nodes];
+    const elements = [];
+    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
+    this.nodes.forEach(node => elements.push(node));
+    this.edges.forEach(edge => elements.push(edge));
     // 只显示可见区域的节点和连线以及和这个可以区域节点的节点
     const showElements = [];
     let topElementIdx = -1;
@@ -125,7 +128,10 @@ class GraphModel {
    */
   getAreaElement(leftTopPoint, rightBottomPoint) {
     const selectElements = [];
-    const elements = [...this.edges, ...this.nodes];
+    const elements = [];
+    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
+    this.nodes.forEach(node => elements.push(node));
+    this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {

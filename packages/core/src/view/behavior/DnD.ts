@@ -43,7 +43,8 @@ export default class Dnd {
     window.document.removeEventListener('mouseup', this.stopDrag);
   };
   dragEnter = (e) => {
-    if (!this.nodeConfig) return;
+    if (!this.nodeConfig || this.fakerNode) return;
+    console.log('enter');
     this.fakerNode = this.lf.createFakerNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({ x: e.clientX, y: e.clientY }),
@@ -61,6 +62,7 @@ export default class Dnd {
   };
   onDragLeave = () => {
     if (this.fakerNode) {
+      console.log('leave');
       this.lf.removeNodeSnapLine();
       this.lf.graphModel.removeFakerNode();
       this.fakerNode = null;
@@ -85,8 +87,10 @@ export default class Dnd {
   eventMap() {
     return {
       onMouseEnter: this.dragEnter,
+      onMouseOver: this.dragEnter, // IE11
       onMouseMove: this.onDragOver,
       onMouseLeave: this.onDragLeave,
+      // onMouseOut: this.onDragLeave, // IE11
       onMouseUp: this.onDrop,
     };
   }
