@@ -46,6 +46,7 @@
     <button id="undo" onClick="undo()" disabled>上一步</button>
     <button id="redo" onClick="redo()" disabled>下一步</button>
     <button id="clearData" onClick="clearData()">清空数据</button>
+    <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -97,6 +98,9 @@
         lf.focusOn({
           id: '2222'
         })
+      }
+      window.changeNodeType = function() {
+        lf.changeNodeType(10, 'combine')
       }
       window.undo = function undo() {
         lf.undo()
@@ -296,14 +300,14 @@
       lf.render({
         nodes: [
           {
-            type: 'square',
+            type: 'rect',
             x: 100,
             y: 100,
             id: 10,
           },
           {
-            type: 'square',
-            x: 300,
+            type: 'rect',
+            x: 140,
             y: 300,
             id: 11,
           },
@@ -401,8 +405,8 @@
       });
       console.log(lf.graphModel);
       lf.createEdge({
-        sourceNodeId: 10,
-        targetNodeId: 11,
+        sourceNodeId: 11,
+        targetNodeId: 10,
         // text: '222',
       });
       // lf.updateText('edge_2222', '你是打算啊')

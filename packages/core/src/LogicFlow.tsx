@@ -371,7 +371,22 @@ export default class LogicFlow {
   }
 
   // 节点操作----------------------------------------------
-
+  /**
+   * 修改指定节点类型
+   * @param id 节点id
+   * @param type 节点类型
+   */
+  changeNodeType(id: string, type: string): void {
+    this.graphModel.changeNodeType(id, type);
+  }
+  /**
+   * 获取节点所有连线的model
+   * @param nodeId 节点ID
+   * @returns model数组
+   */
+  getNodeEdges(nodeId): BaseEdgeModel[] {
+    return this.graphModel.getNodeEdges(nodeId);
+  }
   /**
    * 添加节点
    * @param nodeConfig 节点配置
