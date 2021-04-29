@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "site",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "LogicFlow site",
   "scripts": {
     "dev": "cross-env NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.site.js",
@@ -12,8 +12,8 @@
     "sites"
   ],
   "dependencies": {
-    "@logicflow/core": "^0.3.4",
-    "@logicflow/extension": "^0.3.4",
+    "@logicflow/core": "^0.3.5",
+    "@logicflow/extension": "^0.3.5",
     "preact": "^10.4.8"
   },
   "devDependencies": {
