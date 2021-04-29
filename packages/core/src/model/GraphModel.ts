@@ -17,6 +17,7 @@ import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
 import { formatData } from '../util/compatible';
+import { getNodeAnchorPosition } from '../util/node';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -602,6 +603,46 @@ class GraphModel {
   changeEdgeType(type: string): void {
     this.edgeType = type;
   }
+  @action
+  changeNodeType(id, type: string): void {
+    console.log(id, type);
+    const nodeModel = this.getNodeModel(id);
+    if (!nodeModel) {
+      console.warn(`找不到id为${id}的节点`);
+      return;
+    }
+    const data = nodeModel.getData();
+    data.type = type;
+    const Model = this.getModel(type);
+    if (!Model) {
+      throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`);
+    }
+    const newNodeModel = new Model(data, this);
+    this.nodes.splice(this.nodesMap[id].index, 1, newNodeModel);
+    // 微调连线
+    const edgeModels = this.getNodeEdges(id);
+    edgeModels.forEach(edge => {
+      if (edge.sourceNodeId === id) {
+        const point = getNodeAnchorPosition(
+          newNodeModel,
+          edge.startPoint,
+          newNodeModel.width,
+          newNodeModel.height,
+        );
+        edge.updateStartPoint(point);
+      }
+      if (edge.targetNodeId === id) {
+        const point = getNodeAnchorPosition(
+          newNodeModel,
+          edge.endPoint,
+          newNodeModel.width,
+          newNodeModel.height,
+        );
+        edge.updateEndPoint(point);
+      }
+    });
+  }
+
   /* 设置主题 */
   @action setTheme(style: Style) {
     this.theme = updateTheme({ ...this.theme, ...style });
