@@ -20,9 +20,9 @@ export default function getTransform<P>(WrappedComponent: ComponentType<P>) {
           TRANSLATE_Y,
         },
       } = graphModel;
-      const matrixString = [SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y].join(',');
+      const matrixString = `skew(${SKEW_X}deg,${SKEW_Y}deg) translate(${TRANSLATE_X}px, ${TRANSLATE_Y}px) scale(${SCALE_X}, ${SCALE_Y})`;
       return {
-        transform: `matrix(${matrixString})`,
+        transform: matrixString,
         transformOrigin: 'left top',
       };
     }

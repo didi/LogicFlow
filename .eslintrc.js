@@ -63,6 +63,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'object-curly-newline': 0,
+    'prefer-object-spread': 0,
     'operator-assignment': 0
   },
 };

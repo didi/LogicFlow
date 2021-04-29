@@ -7,6 +7,7 @@ import BaseText from '../text/BaseText';
 import EventEmitter from '../../event/eventEmitter';
 import { ElementState, EventType } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
+import { isIe } from '../../util/browser';
 
 type IProps = {
   model: BaseNodeModel;
@@ -308,6 +309,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   // 不清楚以前为啥要把hover状态放到model中，先改回来。
   setHoverON = (ev) => {
+    const { isHovered } = this.state;
+    if (isHovered) return;
     this.setState({
       isHovered: true,
     });
@@ -330,6 +333,11 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       data: nodeData,
       e: ev,
     });
+  };
+  onMouseOut = (ev) => {
+    if (isIe) {
+      this.setHoverOFF(ev);
+    }
   };
   render() {
     const { model, graphModel } = this.props;
@@ -369,7 +377,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleClick}
           onMouseEnter={this.setHoverON}
+          onMouseOver={this.setHoverON}
           onMouseLeave={this.setHoverOFF}
+          onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
         >
           { nodeShapeInner }

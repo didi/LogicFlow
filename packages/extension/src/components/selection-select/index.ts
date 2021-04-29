@@ -32,7 +32,7 @@ const SelectionSelect: SelectionSelectPlugin = {
       }
       const {
         domOverlayPosition: { x, y },
-      } = lf.getPointByClient(e.x, e.y);
+      } = lf.getPointByClient(e.clientX, e.clientY);
       SelectionSelect.startPoint = { x, y };
       SelectionSelect.endPoint = { x, y };
       const wrapper = document.createElement('div');
@@ -48,7 +48,7 @@ const SelectionSelect: SelectionSelectPlugin = {
   __draw(ev) {
     const {
       domOverlayPosition: { x: x1, y: y1 },
-    } = SelectionSelect.lf.getPointByClient(ev.x, ev.y);
+    } = SelectionSelect.lf.getPointByClient(ev.clientX, ev.clientY);
     SelectionSelect.endPoint = { x: x1, y: y1 };
     const { x, y } = SelectionSelect.startPoint;
     const { style } = SelectionSelect.wrapper;

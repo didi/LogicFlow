@@ -23,10 +23,10 @@ function createDrag({
     if (isStopPropagation) e.stopPropagation();
 
     if (!isDraging) return;
-    sumDeltaX += e.x - startX;
-    sumDeltaY += e.y - startY;
-    startX = e.x;
-    startY = e.y;
+    sumDeltaX += e.clientX - startX;
+    sumDeltaY += e.clientY - startY;
+    startX = e.clientX;
+    startY = e.clientY;
     if (Math.abs(sumDeltaX) > step || Math.abs(sumDeltaY) > step) {
       const remainderX = sumDeltaX % step;
       const remainderY = sumDeltaY % step;
@@ -53,8 +53,8 @@ function createDrag({
     if (isStopPropagation) e.stopPropagation();
 
     isDraging = true;
-    startX = e.x;
-    startY = e.y;
+    startX = e.clientX;
+    startY = e.clientY;
 
     DOC.addEventListener('mousemove', handleMouseMove, false);
     DOC.addEventListener('mouseup', handleMouseUp, false);
@@ -107,8 +107,8 @@ class StepDrag {
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return;
     if (this.isStopPropagation) e.stopPropagation();
     this.isDraging = true;
-    this.startX = e.x;
-    this.startY = e.y;
+    this.startX = e.clientX;
+    this.startY = e.clientY;
 
     DOC.addEventListener('mousemove', this.handleMouseMove, false);
     DOC.addEventListener('mouseup', this.handleMouseUp, false);
@@ -122,10 +122,10 @@ class StepDrag {
     if (this.isStopPropagation) e.stopPropagation();
 
     if (!this.isDraging) return;
-    this.sumDeltaX += e.x - this.startX;
-    this.sumDeltaY += e.y - this.startY;
-    this.startX = e.x;
-    this.startY = e.y;
+    this.sumDeltaX += e.clientX - this.startX;
+    this.sumDeltaY += e.clientY - this.startY;
+    this.startX = e.clientX;
+    this.startY = e.clientY;
     if (Math.abs(this.sumDeltaX) > this.step || Math.abs(this.sumDeltaY) > this.step) {
       const remainderX = this.sumDeltaX % this.step;
       const remainderY = this.sumDeltaY % this.step;
