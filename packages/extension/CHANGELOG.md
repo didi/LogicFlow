@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.4...@logicflow/extension@0.3.5) (2021-04-29)
+
+
+### Features
+
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
 ## [0.3.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.3...@logicflow/extension@0.3.4) (2021-04-22)
 
 
