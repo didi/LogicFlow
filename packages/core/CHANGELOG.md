@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.6...@logicflow/core@0.4.0) (2021-04-30)
+
+
+### Bug Fixes
+
+* save register API & add registerElement API ([53304b3](https://github.com/towersxu/logicflow/commit/53304b3c5ad7ad78cc1ae1a282879614f881cf80))
+* update registerElement API in extension ([7798dbb](https://github.com/towersxu/logicflow/commit/7798dbbeef4b4d021d02b5d21d55f81ef7161d1e))
+
+
+### Features
+
+* register support config ([cae7c98](https://github.com/towersxu/logicflow/commit/cae7c9807eff77fcad9de2907c286c03b01b6aa9))
+* support ie11 ([902e813](https://github.com/towersxu/logicflow/commit/902e81394a2d5945d7ceecfee58875f57f938fc8))
+
+
+
+
+
 ## [0.3.6](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.4...@logicflow/core@0.3.6) (2021-04-29)
 
 
