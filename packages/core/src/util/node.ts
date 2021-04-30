@@ -366,7 +366,7 @@ export const getNodeAnchorPosition = (center, point, width, height) => {
   }
   if (point.y > center.y) {
     y = center.y + height / 2;
-  } else if (point.x < center.x) {
+  } else if (point.y < center.y) {
     y = center.y - height / 2;
   }
   return {
