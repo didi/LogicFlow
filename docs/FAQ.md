@@ -12,6 +12,13 @@
 
 ## LogicFlow 支持 IE 浏览器吗？
 
-暂时不支持。LogicFLow 内部受到 MobX 5.x 版本的限制，不能兼容 IE。
+兼容IE11，需要引入promise polyfill
 
-你可以进入这个 [issue](https://github.com/didi/LogicFlow/issues/138) 查看 LogicFlow 对于兼容 IE 的最新讨论和进展。
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/promise-polyfill/8.2.0/polyfill.min.js"></script>
+```
+
+由于svg的一些功能在IE11上存在限制，目前IE11还存在一些细节上的问题：
+- 无法拖动画布和放大缩小（可以创建足够宽高的画布来解决）
+- 鼠标在锚点上会有持续闪烁
+
