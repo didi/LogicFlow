@@ -118,6 +118,7 @@
   <div>
     点击左下角下载xml，将文件上传到 <a href="https://demo.bpmn.io/" target="_blank">https://demo.bpmn.io/</a>即可使用。
   </div>
+  <button id="js_get_path">获取路径</button>
   <div class="rules-graph">
     <div id="app"></div>
     <div class="pattern">
@@ -142,13 +143,14 @@
       </a>
     </div>
   </div>
-  <script src="/core/dist/logic-flow.js"></script>
-  <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
+  <!-- <script src="/core/dist/logic-flow.js"></script> -->
+  <script src="http://0.0.0.0:9090/logic-flow.js"></script>
   <script src="/BpmnElement.js"></script>
   <script src="/BpmnAdapter.js"></script>
   <script src="/Control.js"></script>
   <script src="/SelectionSelect.js"></script>
   <script src="/Snapshot.js"></script>
+  <script src="/FlowPath.js"></script>
   <!-- <script src="/MiniMap.js"></script> -->
   <script>
     LogicFlow.use(BpmnElement);
@@ -156,6 +158,7 @@
     // MiniMap.init({
     //   disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
     // })
+    LogicFlow.use(FlowPath);
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',

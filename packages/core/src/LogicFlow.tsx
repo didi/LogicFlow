@@ -29,6 +29,7 @@ import {
   RegisterElementFn,
   RegisterParam,
   RegisterConfig,
+  ExtensionContractor,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -140,9 +141,18 @@ export default class LogicFlow {
     });
   }
   __installPlugin(extension) {
-    const { install, render: renderComponent } = extension;
-    install && install.call(extension, this, LogicFlow);
-    renderComponent && this.components.push(renderComponent.bind(extension));
+    if (typeof extension === 'object') {
+      const { install, render: renderComponent } = extension;
+      install && install.call(extension, this, LogicFlow);
+      renderComponent && this.components.push(renderComponent.bind(extension));
+      return;
+    }
+    const ExtensionContructor = extension as ExtensionContractor;
+    const extensionInstance = new ExtensionContructor({
+      lf: this,
+      LogicFlow,
+    });
+    extensionInstance.render && this.components.push(extensionInstance.render);
   }
   register(type: string | RegisterConfig, fn?: RegisterElementFn, isObserverView = true) {
     if (typeof type !== 'string') {
