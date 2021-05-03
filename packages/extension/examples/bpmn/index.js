@@ -83,7 +83,7 @@ window.onload = function () {
   document.querySelector('#download-img').addEventListener('click', () => {
     lf.getSnapshot('logic-flow.png');
   });
-  this.document.querySelector('#upload').addEventListener('change', function (ev) {
+  document.querySelector('#upload').addEventListener('change', function (ev) {
     const file = ev.target.files[0];
     const reader = new FileReader()
     reader.onload = (event) => {
@@ -95,6 +95,10 @@ window.onload = function () {
     reader.readAsText(file) // you could also read images and other binaries
   });
 
+  document.querySelector('#js_get_path').addEventListener('click', () => {
+    const pathes = lf.getPathes();
+    console.log(pathes);
+  });
   function renderXml(xml) {
     const json = new XML.ObjTree().parseXML(xml);
     lf.render(json);
