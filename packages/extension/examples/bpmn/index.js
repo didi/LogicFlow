@@ -96,6 +96,7 @@ window.onload = function () {
   });
 
   document.querySelector('#js_get_path').addEventListener('click', () => {
+    lf.setStartNodeType('bpmn:startEvent');
     const pathes = lf.getPathes();
     console.log(pathes);
   });
