@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1-alpha.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.0...@logicflow/extension@0.4.1-alpha.0) (2021-05-06)
+
+
+### Features
+
+* add get flow path extension ([a56dd9a](https://github.com/towersxu/logicflow/commit/a56dd9a820c06d6c7036f044c643468d3592c336))
+* support class as extension ([e3c40d1](https://github.com/towersxu/logicflow/commit/e3c40d1e3e648b58597f33cb8330b42ce6d76079))
+* support keep path id ([fc7d3a8](https://github.com/towersxu/logicflow/commit/fc7d3a8917c0871d7e5b55f200a67cd41f0537fc))
+
+
+
+
+
 # [0.4.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.6...@logicflow/extension@0.4.0) (2021-04-30)
 
 
