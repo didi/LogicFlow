@@ -17,7 +17,7 @@ const packagesEntry = {
     __dirname,
     '../src/components/selection-select/index.ts',
   ),
-  FlowPath: path.resolve(__dirname, '../src/materials/flow-path/index.ts'),
+  FlowPath: path.resolve(__dirname, '../src/flow-path/index.ts'),
 };
 
 module.exports = {
