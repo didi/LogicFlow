@@ -25,7 +25,10 @@ window.onload = function () {
     }
     lf.render(lfData);
   }
-
+  const pathes = window.sessionStorage.getItem('lf-pathes');
+  if (pathes) {
+    lf.setRawPathes(JSON.parse(pathes));
+  }
   document.querySelector('#selection-node-pattern').addEventListener('mousedown', () => {
     lf.updateEditConfig({
       stopMoveGraph: true,
@@ -98,7 +101,12 @@ window.onload = function () {
   document.querySelector('#js_get_path').addEventListener('click', () => {
     lf.setStartNodeType('bpmn:startEvent');
     const pathes = lf.getPathes();
-    console.log(pathes);
+    console.log(JSON.stringify(pathes));
+    console.log( window.sessionStorage.getItem('lf-pathes'));
+    window.sessionStorage.setItem('lf-pathes', JSON.stringify(pathes));
+  });
+  document.querySelector('#js_show_path').addEventListener('click', () => {
+    console.log(lf.getRawPathes());
   });
   function renderXml(xml) {
     const json = new XML.ObjTree().parseXML(xml);
