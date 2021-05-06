@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core';
+// import LogicFlow from '@logicflow/core';
 import StartEvent from './events/StartEvent';
 import EndEvent from './events/EndEvent';
 import ExclusiveGateway from './gateways/ExclusiveGateway';
@@ -7,9 +7,9 @@ import ServiceTask from './tasks/ServiceTask';
 import SequenceFlow from './flow/SequenceFlow';
 import { theme } from './constant';
 
-const BpmnElement = {
-  name: 'bpmn-element',
-  install(lf: LogicFlow) {
+// todo: name
+class BpmnElement {
+  constructor({ lf }) {
     lf.setTheme(theme);
     lf.register(StartEvent);
     lf.register(EndEvent);
@@ -18,9 +18,9 @@ const BpmnElement = {
     lf.register(ServiceTask);
     lf.register(SequenceFlow);
     lf.setDefaultEdgeType('bpmn:sequenceFlow');
-  },
+  }
+}
+
+export {
+  BpmnElement,
 };
-
-export { BpmnElement };
-
-export default BpmnElement;

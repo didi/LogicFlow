@@ -10,3 +10,4 @@ export * from './components/selection-select';
 export * from './components/mini-map';
 export * from './materials/curved-edge';
 export * from './NodeResize';
+export * from './flow-path';
