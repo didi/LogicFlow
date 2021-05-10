@@ -15,7 +15,7 @@ type Path = {
 
 type RawPath = Path & {
   similarElement: RawPath;
-  similarElementWeight: number;
+  weight: number;
 };
 
 class FlowPath {
@@ -50,7 +50,7 @@ class FlowPath {
       elements,
       type,
       similarElement: null,
-      similarElementWeight: 0,
+      weight: 0,
     }));
   }
   getPathes() {
@@ -110,37 +110,43 @@ class FlowPath {
    */
   private getNewPathes(pathElements) {
     const pathes = [];
+    // 由于循环路径不包括开始，所以存在重复的情况，此处去重。
+    const LoopSet = new Set();
     pathElements.forEach(elements => {
       const routeId = this.getNewId('path');
       const name = this.getNewId('路径');
       const isLoop = this.isLoopPath(elements);
-      pathes.push({
-        routeId,
-        name,
-        elements,
-        type: isLoop,
-        weight: 0,
-        similarElement: '',
-      });
+      const elementStr = elements.join(',');
+      if (!LoopSet.has(elementStr)) {
+        LoopSet.add(elementStr);
+        pathes.push({
+          routeId,
+          name,
+          elements,
+          type: isLoop,
+          weight: 0,
+          similarElement: '',
+        });
+      }
     });
     const oldPathes = JSON.parse(JSON.stringify(this.pathes));
     // 1) 找到所有路径最相似的路径, 给旧路径标记其最接近的路径
     pathes.forEach(newPath => {
-      for (let i = 0; i < this.pathes.length; i++) {
-        const path = oldPathes[i];
-        const weight = this.similar2Path([...newPath.elements], [...path.elements]);
-        if (weight > newPath.weight && path.similarElementWeight <= weight) {
+      for (let i = 0; i < oldPathes.length; i++) {
+        const oldPath = oldPathes[i];
+        const weight = this.similar2Path([...newPath.elements], [...oldPath.elements]);
+        if (weight > newPath.weight && oldPath.weight <= weight) {
           newPath.weight = weight;
-          newPath.similarElement = path;
-          if (weight === path.similarElementWeight && path.similarElement) {
+          newPath.similarElement = oldPath;
+          if (weight === oldPath.weight && oldPath.similarElement) {
             // 特殊处理，如果两个路径都与同一条旧路径有相似的权重，则这两个路径的相似路径都置空
-            path.similarElement.similarElement = null;
-            path.similarElement.similarElementWeight = 0;
-            path.similarElement = null;
-            path.similarElementWeight = 0;
+            oldPath.similarElement.similarElement = null;
+            oldPath.similarElement.weight = 0;
+            oldPath.similarElement = null;
+            oldPath.weight = 0;
           } else {
-            path.similarElement = newPath;
-            path.similarElementWeight = weight;
+            oldPath.similarElement = newPath;
+            oldPath.weight = weight;
           }
         }
       }
@@ -185,7 +191,8 @@ class FlowPath {
   }
   /**
    * 判断是否为循环路径
-   * 循环路径的最后一个节点在路径的前面出现过
+   * 由于前面进行了特殊处理，将循环部分单独提出来作为路径
+   * 所有循环路径必定开始节点等于结束节点。
    */
   private isLoopPath(elements) {
     const { length } = elements;
