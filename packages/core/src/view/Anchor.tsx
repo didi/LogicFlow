@@ -138,16 +138,16 @@ class Anchor extends Component<IProps, IState> {
     }
     // 没有draging就结束连线
     if (!draging) return;
-    if (info) {
+    if (info && info.node) {
       const targetNode = info.node;
       const {
         isAllPass: isSourcePass,
         msg: sourceMsg,
-      } = this.sourceRuleResults.get(targetNode.id);
+      } = this.sourceRuleResults.get(targetNode.id) || {};
       const {
         isAllPass: isTargetPass,
         msg: targetMsg,
-      } = this.targetRuleResults.get(targetNode.id);
+      } = this.targetRuleResults.get(targetNode.id) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
