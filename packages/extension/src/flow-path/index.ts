@@ -88,8 +88,9 @@ class FlowPath {
       const n = nodesMap.get(node.nextNodes[i]);
       let p;
       // 循环路径
-      if (newPathes.indexOf(n.id) !== -1) {
-        p = [[...newPathes, n.id]];
+      const idx = newPathes.indexOf(n.id);
+      if (idx !== -1) {
+        p = [[...newPathes.slice(idx), n.id]];
       } else {
         p = this.findPathElements(n, nodesMap, [...newPathes]);
       }
