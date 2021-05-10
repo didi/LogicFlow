@@ -101,8 +101,8 @@ window.onload = function () {
   document.querySelector('#js_get_path').addEventListener('click', () => {
     lf.setStartNodeType('bpmn:startEvent');
     const pathes = lf.getPathes();
-    console.log(JSON.stringify(pathes));
-    console.log( window.sessionStorage.getItem('lf-pathes'));
+    console.log(pathes);
+    console.log(JSON.parse(window.sessionStorage.getItem('lf-pathes')));
     window.sessionStorage.setItem('lf-pathes', JSON.stringify(pathes));
   });
   document.querySelector('#js_show_path').addEventListener('click', () => {
