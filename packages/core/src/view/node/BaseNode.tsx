@@ -24,8 +24,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     return defaultModel;
   }
   stepDrag: StepDrag;
-  startTime: number;
-  preStartTime: number;
   contextMenuTime: number;
   clickTimer: number;
   constructor(props) {
@@ -230,11 +228,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
   };
   handleClick = (e: MouseEvent) => {
-    // 节点拖拽进画布之后，不触发click事件相关emit
-    // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
-    if (!this.startTime) return;
-    const time = new Date().getTime() - this.startTime;
-    if (time > 200) return; // 事件大于200ms，认为是拖拽。
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
@@ -242,41 +235,35 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       x: e.clientX,
       y: e.clientY,
     });
-    // 两次点击间隔小于200ms， 认为是双击
-    // 节点点击事件推迟200ms触发，如果有双击则取消第一次点击事件触发
-    if (this.preStartTime && this.startTime - this.preStartTime < 200) {
-      if (this.clickTimer) { window.clearTimeout(this.clickTimer); }
+
+    const eventOptions = {
+      data: nodeData,
+      e,
+      position,
+    };
+
+    const isRightClick = e.button === 2;
+    // 这里 IE 11不能正确显示
+    const isDoubleClick = e.detail === 2;
+
+    // 判断是否有右击，如果有右击则取消点击事件触发
+    if (isRightClick) return;
+
+    // 不是双击的，默认都是单击
+    if (isDoubleClick) {
       const { editConfig } = graphModel;
       if (editConfig.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
-      eventCenter.emit(EventType.NODE_DBCLICK, {
-        data: nodeData,
-        e,
-        position,
-      });
+      eventCenter.emit(EventType.NODE_DBCLICK, eventOptions);
     } else {
-      this.clickTimer = window.setTimeout(() => {
-        // 节点右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
-        if (!this.contextMenuTime || this.startTime > this.contextMenuTime) {
-          eventCenter.emit(EventType.ELEMENT_CLICK, {
-            data: nodeData,
-            e,
-            position,
-          });
-          eventCenter.emit(EventType.NODE_CLICK, {
-            data: nodeData,
-            e,
-            position,
-          });
-        }
-      }, 400);
+      eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
+      eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
     graphModel.toFront(model.id);
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    this.preStartTime = this.startTime;
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -303,7 +290,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
     graphModel.toFront(model.id);
-    this.startTime = new Date().getTime();
     this.stepDrag && this.stepDrag.handleMouseDown(ev);
   };
   // 不清楚以前为啥要把hover状态放到model中，先改回来。
