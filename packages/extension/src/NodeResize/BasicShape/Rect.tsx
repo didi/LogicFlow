@@ -1,5 +1,4 @@
-import { h } from 'preact';
-import { Point, Size } from '@logicflow/core';
+import { h, Point, Size } from '@logicflow/core';
 
 // TODO: 常用的属性集合定一个interface
 type IProps = {
@@ -42,7 +41,6 @@ export default function Rect(props: IProps) {
     x: leftTopX,
     y: leftTopY,
   };
-  console.log(attrs);
   return (
     <rect {...attrs} />
   );
