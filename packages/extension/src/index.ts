@@ -1,5 +1,5 @@
 export * from './bpmn';
-export * from './snapshot';
+export * from './tools/snapshot';
 export * from './bpmn-adapter';
 export * from './turbo-adapter';
 export * from './insert-node-in-polyline';
@@ -10,4 +10,5 @@ export * from './components/selection-select';
 export * from './components/mini-map';
 export * from './materials/curved-edge';
 export * from './NodeResize';
-export * from './flow-path';
+export * from './tools/flow-path';
+export * from './tools/auto-layout';

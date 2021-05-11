@@ -3,7 +3,7 @@ const path = require('path');
 const packagesEntry = {
   BpmnAdapter: path.resolve(__dirname, '../src/bpmn-adapter/index.ts'),
   TurboAdapter: path.resolve(__dirname, '../src/turbo-adapter/index.ts'),
-  Snapshot: path.resolve(__dirname, '../src/snapshot/index.ts'),
+  Snapshot: path.resolve(__dirname, '../src/tools/snapshot/index.ts'),
   RectLabelNode: path.resolve(__dirname, '../src/rect-label-node/index.ts'),
   BpmnElement: path.resolve(__dirname, '../src/bpmn/index.ts'),
   Control: path.resolve(__dirname, '../src/components/control/index.ts'),
@@ -19,7 +19,8 @@ const packagesEntry = {
     __dirname,
     '../src/components/selection-select/index.ts',
   ),
-  FlowPath: path.resolve(__dirname, '../src/flow-path/index.ts'),
+  FlowPath: path.resolve(__dirname, '../src/tools/flow-path/index.ts'),
+  AutoLayout: path.resolve(__dirname, '../src/tools/auto-layout/index.ts'),
 };
 
 module.exports = {

@@ -1,3 +1,5 @@
+
+
 window.onload = function () {
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
@@ -32,18 +34,12 @@ window.onload = function () {
   document.querySelector('#selection-node-pattern').addEventListener('mousedown', () => {
     lf.updateEditConfig({
       stopMoveGraph: true,
-      extraConf: {
-        openSelectionMode: true,
-      }
     });
   });
 
   lf.on('selection:selected', () => {
     lf.updateEditConfig({
       stopMoveGraph: false,
-      extraConf: {
-        openSelectionMode: false,
-      }
     });
   });
 
@@ -107,6 +103,10 @@ window.onload = function () {
   });
   document.querySelector('#js_show_path').addEventListener('click', () => {
     console.log(lf.getRawPathes());
+  });
+  document.querySelector('#js_auto_layout').addEventListener('click', () => {
+    const data1 = lf.layout('bpmn:startEvent');
+    console.log(data1);
   });
   function renderXml(xml) {
     const json = new XML.ObjTree().parseXML(xml);

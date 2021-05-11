@@ -1,3 +1,7 @@
+/**
+ * 快照插件，生成视图
+ */
+
 function getOuterHTML(el: Element): string {
   if (el.outerHTML) {
     return el.outerHTML;

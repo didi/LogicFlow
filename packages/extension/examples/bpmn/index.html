@@ -118,8 +118,11 @@
   <div>
     点击左下角下载xml，将文件上传到 <a href="https://demo.bpmn.io/" target="_blank">https://demo.bpmn.io/</a>即可使用。
   </div>
-  <button id="js_get_path">获取路径</button>
-  <button id="js_show_path">原始路径</button>
+  <div>
+    <button id="js_get_path">获取路径</button>
+    <button id="js_show_path">原始路径</button>
+    <button id="js_auto_layout">自动布局</button>
+  </div>
   <div class="rules-graph">
     <div id="app"></div>
     <div class="pattern">
@@ -153,6 +156,7 @@
   <script src="/Snapshot.js"></script>
   <script src="/MiniMap.js"></script>
   <script src="/FlowPath.js"></script>
+  <script src="/AutoLayout.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
     LogicFlow.use(MiniMap);
@@ -160,6 +164,7 @@
     //   disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
     // })
     LogicFlow.use(FlowPath);
+    LogicFlow.use(AutoLayout);
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',
