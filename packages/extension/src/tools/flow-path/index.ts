@@ -4,7 +4,7 @@
  */
 
 import LogicFlow from '@logicflow/core';
-import { getBpmnId } from '../bpmn/getBpmnId';
+import { getBpmnId } from '../../bpmn/getBpmnId';
 
 type Path = {
   routeId: string;
