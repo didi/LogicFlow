@@ -1,7 +1,8 @@
 import { h, Component } from 'preact';
 import { BaseNodeModel, GraphModel } from '@logicflow/core';
 import Control from './Control';
-import Rect from './Rect';
+import Rect from '../BasicShape/Rect';
+import NodeResize from '../index';
 
 interface IProps {
   x: number,
@@ -62,14 +63,9 @@ class ControlGroup extends Component<IProps> {
         y: maxY,
       },
     ];
-    const rectTheme = {
-      width: 5,
-      height: 5,
-    };
     return controlList.map((control, index) => (
       <Control
         index={index}
-        {...rectTheme}
         {...control}
         nodeModel={nodeModel}
         graphModel={graphModel}
@@ -83,6 +79,7 @@ class ControlGroup extends Component<IProps> {
       width,
       height,
     } = this.props;
+    const { stroke, strokeWidth, strokeDasharray } = NodeResize.style.outline;
     return (
       <Rect
         fill="none"
@@ -90,7 +87,9 @@ class ControlGroup extends Component<IProps> {
         y={y}
         width={width}
         height={height}
-        stroke="#6495ED"
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        strokeDasharray={strokeDasharray}
       />
     );
   }

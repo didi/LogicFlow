@@ -1,6 +1,6 @@
 import { BaseNodeModel, GraphModel, h, RectNode, RectNodeModel } from '@logicflow/core';
-import ControlGroup from './ControlGroup';
-import Rect from './Rect';
+import ControlGroup from '../Control/ControlGroup';
+import Rect from '../BasicShape/Rect';
 
 interface IProps {
   x: number,
@@ -13,7 +13,15 @@ interface IProps {
   hoverStyle?: CSSStyleDeclaration,
   edgeStyle?: CSSStyleDeclaration,
 }
-
+class RectResizeModel extends RectNodeModel {
+  setAttributes() {
+    const { nodeSize } = this.properties;
+    if (nodeSize) {
+      this.width = nodeSize.width;
+      this.height = nodeSize.height;
+    }
+  }
+}
 class RectResizeView extends RectNode {
   getControlGroup(attributes) {
     const {
@@ -28,35 +36,17 @@ class RectResizeView extends RectNode {
       />
     );
   }
+  getRect(arrt) {
+    return <g><Rect {...arrt} /></g>;
+  }
   getShape() {
     const attributes = super.getAttributes();
-    const {
-      x,
-      y,
-      width,
-      height,
-      fill,
-      stroke,
-      strokeWidth,
-      radius,
-    } = attributes;
-    const arrt = {
-      x,
-      y,
-      width,
-      height,
-      fill,
-      stroke,
-      strokeWidth,
-      radius,
-    };
-    console.log(arrt);
     const {
       model: { isSelected },
     } = this.props;
     return (
       <g>
-        <Rect {...arrt} />
+        {this.getRect(attributes)}
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );
@@ -66,8 +56,7 @@ class RectResizeView extends RectNode {
 const RectResize = {
   type: 'rect',
   view: RectResizeView,
-  model: RectNodeModel,
+  model: RectResizeModel,
 };
 
-export { RectResizeView, RectNodeModel };
 export default RectResize;

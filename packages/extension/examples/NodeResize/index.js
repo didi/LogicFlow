@@ -4,12 +4,15 @@ window.onload = function () {
     // fixme: grid成为了必传的了
     grid: {
       type: 'dot',
-      size: 20,
+      size: 10,
+    },
+    keyboard: {
+      enabled: true,
     },
   });
   lf.setTheme({
     rect: {
-      radius: 40,
+      radius: 50,
       strokeWidth: 2,
       outlineColor: 'transparent',
     },
@@ -37,7 +40,6 @@ window.onload = function () {
       },
     ],
   });
-  console.log(lf);
   // 初始化拖入功能
   document.querySelector('#rect').addEventListener('mousedown', () => {
     lf.dnd.startDrag({
@@ -46,7 +48,15 @@ window.onload = function () {
   });
   document.querySelector('#circle').addEventListener('mousedown', () => {
     lf.dnd.startDrag({
-      type: 'circle',
+      type: 'ellipse',
     });
+  });
+  document.querySelector('#diamond').addEventListener('mousedown', () => {
+    lf.dnd.startDrag({
+      type: 'diamond',
+    });
+  });
+  document.querySelector('#data').addEventListener('mousedown', () => {
+    console.log(JSON.stringify(lf.getGraphData()));
   });
 };

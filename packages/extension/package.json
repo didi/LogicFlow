@@ -28,7 +28,7 @@
   "dependencies": {
     "@logicflow/core": "^0.3.6",
     "ids": "^1.0.0",
-    "preact": "^10.5.13"
+    "preact": "^10.4.8"
   },
   "standard-version": {
     "skip": {
