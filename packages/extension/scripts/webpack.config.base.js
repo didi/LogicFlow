@@ -14,6 +14,8 @@ const packagesEntry = {
   CurvedEdge: path.resolve(__dirname, '../src/materials/curved-edge/index.ts'),
   SelectionSelect: path.resolve(__dirname, '../src/components/selection-select/index.ts'),
   NodeResize: path.resolve(__dirname, '../src/NodeResize/index.ts'),
+  InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
+  FlowPath: path.resolve(__dirname, '../src/materials/flow-path/index.ts'),
 };
 
 module.exports = {

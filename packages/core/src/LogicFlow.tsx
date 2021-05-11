@@ -29,6 +29,7 @@ import {
   RegisterElementFn,
   RegisterParam,
   RegisterConfig,
+  ExtensionContractor,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -140,9 +141,18 @@ export default class LogicFlow {
     });
   }
   __installPlugin(extension) {
-    const { install, render: renderComponent } = extension;
-    install && install.call(extension, this, LogicFlow);
-    renderComponent && this.components.push(renderComponent.bind(extension));
+    if (typeof extension === 'object') {
+      const { install, render: renderComponent } = extension;
+      install && install.call(extension, this, LogicFlow);
+      renderComponent && this.components.push(renderComponent.bind(extension));
+      return;
+    }
+    const ExtensionContructor = extension as ExtensionContractor;
+    const extensionInstance = new ExtensionContructor({
+      lf: this,
+      LogicFlow,
+    });
+    extensionInstance.render && this.components.push(extensionInstance.render);
   }
   register(type: string | RegisterConfig, fn?: RegisterElementFn, isObserverView = true) {
     if (typeof type !== 'string') {
@@ -402,7 +412,22 @@ export default class LogicFlow {
   }
 
   // 节点操作----------------------------------------------
-
+  /**
+   * 修改指定节点类型
+   * @param id 节点id
+   * @param type 节点类型
+   */
+  changeNodeType(id: string, type: string): void {
+    this.graphModel.changeNodeType(id, type);
+  }
+  /**
+   * 获取节点所有连线的model
+   * @param nodeId 节点ID
+   * @returns model数组
+   */
+  getNodeEdges(nodeId): _Model.BaseEdgeModel[] {
+    return this.graphModel.getNodeEdges(nodeId);
+  }
   /**
    * 添加节点
    * @param nodeConfig 节点配置
@@ -457,7 +482,12 @@ export default class LogicFlow {
   deleteEdge(edgeId: string): void {
     // 待讨论，这种钩子在这里覆盖不到removeEdge, 是否需要在graphModel中实现
     const { guards } = this.options;
-    const edgeData = this.graphModel.edgesMap[edgeId].model.getData();
+    const edge = this.graphModel.edgesMap[edgeId];
+    if (!edge) {
+      console.warn(`不存在id为${edgeId}的边`);
+      return;
+    }
+    const edgeData = edge.model.getData();
     const enabledDelete = guards && guards.beforeDelete
       ? guards.beforeDelete(edgeData) : true;
     if (enabledDelete) {
@@ -488,6 +518,11 @@ export default class LogicFlow {
       id, sourceNodeId, targetNodeId,
     } = config;
     if (id) {
+      const edge = edgesMap[id];
+      if (!edge) {
+        console.warn(`不存在id为${id}的边`);
+        return;
+      }
       return [edgesMap[id].model];
     }
     if (sourceNodeId && targetNodeId) {
@@ -649,6 +684,10 @@ export default class LogicFlow {
   }
   createFakerNode(nodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type);
+    if (!Model) {
+      console.warn(`不存在为${nodeConfig.type}类型的节点`);
+      return;
+    }
     const fakerNodeModel = new Model(nodeConfig, this.graphModel);
     this.graphModel.setFakerNode(fakerNodeModel);
     return fakerNodeModel;
@@ -686,7 +725,7 @@ export default class LogicFlow {
   // todo: 不做外api输出，有例子在使用，后续删除
   getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
     const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId].model;
+    return edgesMap[edgeId]?.model;
   }
   setView(type: string, component) {
     this.viewMap.set(type, component);

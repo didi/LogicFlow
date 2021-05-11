@@ -3,6 +3,67 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.6...@logicflow/core@0.4.0) (2021-04-30)
+
+
+### Bug Fixes
+
+* save register API & add registerElement API ([53304b3](https://github.com/towersxu/logicflow/commit/53304b3c5ad7ad78cc1ae1a282879614f881cf80))
+* update registerElement API in extension ([7798dbb](https://github.com/towersxu/logicflow/commit/7798dbbeef4b4d021d02b5d21d55f81ef7161d1e))
+
+
+### Features
+
+* register support config ([cae7c98](https://github.com/towersxu/logicflow/commit/cae7c9807eff77fcad9de2907c286c03b01b6aa9))
+* support ie11 ([902e813](https://github.com/towersxu/logicflow/commit/902e81394a2d5945d7ceecfee58875f57f938fc8))
+
+
+
+
+
+## [0.3.6](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.4...@logicflow/core@0.3.6) (2021-04-29)
+
+
+### Bug Fixes
+
+* add more warning ([12f4bb3](https://github.com/towersxu/logicflow/commit/12f4bb36e34733855aeb760a5874fedd09b411de))
+* change node type line ([31602bb](https://github.com/towersxu/logicflow/commit/31602bbbfb5282ef9b2d80d18c0a7492ed19f907))
+
+
+### Features
+
+* add change nodetype ([15878a1](https://github.com/towersxu/logicflow/commit/15878a1c8be6f9117c925792c66dcdbfd1b0aa77))
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
+## [0.3.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.4...@logicflow/core@0.3.5) (2021-04-29)
+
+
+### Bug Fixes
+
+* add more warning ([12f4bb3](https://github.com/towersxu/logicflow/commit/12f4bb36e34733855aeb760a5874fedd09b411de))
+
+
+### Features
+
+* add change nodetype ([15878a1](https://github.com/towersxu/logicflow/commit/15878a1c8be6f9117c925792c66dcdbfd1b0aa77))
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
+## [0.3.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.3...@logicflow/core@0.3.4) (2021-04-22)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
 ## [0.3.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.2...@logicflow/core@0.3.3) (2021-04-21)
 
 

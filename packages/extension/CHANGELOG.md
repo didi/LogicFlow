@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.6...@logicflow/extension@0.4.0) (2021-04-30)
+
+
+### Bug Fixes
+
+* change the points type ([a845deb](https://github.com/towersxu/logicflow/commit/a845debe66c734ea248718c79379f45af84f2a4b))
+* update registerElement API in extension ([7798dbb](https://github.com/towersxu/logicflow/commit/7798dbbeef4b4d021d02b5d21d55f81ef7161d1e))
+
+
+### Features
+
+* register support config ([cae7c98](https://github.com/towersxu/logicflow/commit/cae7c9807eff77fcad9de2907c286c03b01b6aa9))
+* support ie11 ([902e813](https://github.com/towersxu/logicflow/commit/902e81394a2d5945d7ceecfee58875f57f938fc8))
+
+
+
+
+
+## [0.3.6](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.4...@logicflow/extension@0.3.6) (2021-04-29)
+
+
+### Features
+
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
+## [0.3.5](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.4...@logicflow/extension@0.3.5) (2021-04-29)
+
+
+### Features
+
+* **extension:** drop node in polyline ([94480ac](https://github.com/towersxu/logicflow/commit/94480ac5b2b8d989a2310a3b4c25e08abe9d10b6))
+
+
+
+
+
+## [0.3.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.3...@logicflow/extension@0.3.4) (2021-04-22)
+
+
+### Bug Fixes
+
+* unexpect text position ([7559183](https://github.com/towersxu/logicflow/commit/7559183b1d218317cfe83396dc065b803362a948))
+
+
+
+
+
 ## [0.3.3](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.2...@logicflow/extension@0.3.3) (2021-04-21)
 
 

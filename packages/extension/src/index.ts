@@ -2,6 +2,7 @@ export * from './bpmn';
 export * from './snapshot';
 export * from './bpmn-adapter';
 export * from './turbo-adapter';
+export * from './insert-node-in-polyline';
 export * from './components/control';
 export * from './components/menu';
 export * from './components/dnd-panel';

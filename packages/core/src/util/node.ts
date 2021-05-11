@@ -353,3 +353,24 @@ export const pickNodeConfig = (data): NodeConfig => {
   ]);
   return nodeData;
 };
+
+/**
+ * 基于节点的边，重新获取新的节点
+ */
+export const getNodeAnchorPosition = (center, point, width, height) => {
+  let { x, y } = center;
+  if (point.x > center.x) {
+    x = center.x + width / 2;
+  } else if (point.x < center.x) {
+    x = center.x - width / 2;
+  }
+  if (point.y > center.y) {
+    y = center.y + height / 2;
+  } else if (point.y < center.y) {
+    y = center.y - height / 2;
+  }
+  return {
+    x,
+    y,
+  };
+};

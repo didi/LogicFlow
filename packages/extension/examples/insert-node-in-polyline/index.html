@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LOGIN FLOW</title>
+  <link rel="stylesheet" href="/core/dist/style/index.css">
+  <!-- <link rel="stylesheet" href="http://0.0.0.0:9090/src/style/index.css"> -->
+  <link rel="stylesheet" href="/extension/src/style/index.css">
+  <style>
+    html,body {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color: #FFF;
+    }
+    #app {
+      margin-top: 30px;
+      margin-left: 30px;
+      width: 700px;
+      height: 500px;
+    }
+    #rect {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #000;
+      background: #fff;
+    }
+    #circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="rect"></div>
+  <div id="circle"></div>
+  <div id="app"></div>
+  <div id="debug"></div>
+  <script src="/core/dist/logic-flow.js"></script>
+  <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
+  <script src="/InsertNodeInPolyline.js"></script>
+  <script>
+    LogicFlow.use(InsertNodeInPolyline);
+  </script>
+  <script src="./index.js"></script>
+</body>
+</html>
