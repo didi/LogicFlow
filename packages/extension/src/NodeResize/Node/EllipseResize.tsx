@@ -15,6 +15,7 @@ interface IProps {
 }
 class EllipseResizeModel extends EllipseNodeModel {
   setAttributes() {
+    // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {
       this.rx = nodeSize.rx;
