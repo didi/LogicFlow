@@ -162,7 +162,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         className={isDraging ? 'lf-dragging' : 'lf-drag-able'}
         {...dnd.eventMap()}
       >
-        <g style={{ transform }}>
+        <g transform={transform}>
           {children}
         </g>
       </svg>
