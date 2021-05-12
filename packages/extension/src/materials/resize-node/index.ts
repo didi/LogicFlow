@@ -1,15 +1,13 @@
-import { getCircleModel, getCircleView } from './circle';
+import { ResizeCircleNode, ResizeCircleNodeModel } from './circle';
 
 const ResizeNode = {
   name: 'resize-node',
   install(lf) {
-    lf.register('circle', this.registerLabelPlusNode, true);
-  },
-  registerLabelPlusNode({ CircleNode, CircleNodeModel, h }) {
-    return {
-      view: getCircleView(CircleNode, h),
-      model: getCircleModel(CircleNodeModel),
-    };
+    lf.register({
+      type: 'circle',
+      view: ResizeCircleNode,
+      model: ResizeCircleNodeModel,
+    });
   },
 };
 

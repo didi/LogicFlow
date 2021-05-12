@@ -22,7 +22,7 @@ export default {
     // 一个md中有多个iframe时，需要进行区分
     iframeId: {
       type: String,
-      default: 'example-iframe'
+      default: 'example-iframe' + Math.random()
     }
   },
   data() {
@@ -55,6 +55,10 @@ export default {
     document.getElementById(this.iframeId).onload = () => {
       this.showIframe = true;
     };
+    // todo: fixme: 审批页面不显示第一个示例
+    setTimeout(() => {
+      this.showIframe = true;
+    }, 1000)
   },
 };
 </script>

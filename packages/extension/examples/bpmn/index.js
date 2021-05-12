@@ -1,3 +1,5 @@
+
+
 window.onload = function () {
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
@@ -25,22 +27,19 @@ window.onload = function () {
     }
     lf.render(lfData);
   }
-
+  const pathes = window.sessionStorage.getItem('lf-pathes');
+  if (pathes) {
+    lf.setRawPathes(JSON.parse(pathes));
+  }
   document.querySelector('#selection-node-pattern').addEventListener('mousedown', () => {
     lf.updateEditConfig({
       stopMoveGraph: true,
-      extraConf: {
-        openSelectionMode: true,
-      }
     });
   });
 
   lf.on('selection:selected', () => {
     lf.updateEditConfig({
       stopMoveGraph: false,
-      extraConf: {
-        openSelectionMode: false,
-      }
     });
   });
 
@@ -83,7 +82,7 @@ window.onload = function () {
   document.querySelector('#download-img').addEventListener('click', () => {
     lf.getSnapshot('logic-flow.png');
   });
-  this.document.querySelector('#upload').addEventListener('change', function (ev) {
+  document.querySelector('#upload').addEventListener('change', function (ev) {
     const file = ev.target.files[0];
     const reader = new FileReader()
     reader.onload = (event) => {
@@ -95,6 +94,20 @@ window.onload = function () {
     reader.readAsText(file) // you could also read images and other binaries
   });
 
+  document.querySelector('#js_get_path').addEventListener('click', () => {
+    lf.setStartNodeType('bpmn:startEvent');
+    const pathes = lf.getPathes();
+    console.log(pathes);
+    console.log(JSON.parse(window.sessionStorage.getItem('lf-pathes')));
+    window.sessionStorage.setItem('lf-pathes', JSON.stringify(pathes));
+  });
+  document.querySelector('#js_show_path').addEventListener('click', () => {
+    console.log(lf.getRawPathes());
+  });
+  document.querySelector('#js_auto_layout').addEventListener('click', () => {
+    const data1 = lf.layout('bpmn:startEvent');
+    console.log(data1);
+  });
   function renderXml(xml) {
     const json = new XML.ObjTree().parseXML(xml);
     lf.render(json);

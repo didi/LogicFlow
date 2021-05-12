@@ -242,6 +242,7 @@ export default class BaseEdge extends Component<IProps> {
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onContextMenu={this.handleContextMenu}
+        onMouseOver={this.setHoverON}
         onMouseEnter={this.setHoverON}
         onMouseLeave={this.setHoverOFF}
       >

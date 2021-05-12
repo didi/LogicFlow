@@ -118,6 +118,11 @@
   <div>
     点击左下角下载xml，将文件上传到 <a href="https://demo.bpmn.io/" target="_blank">https://demo.bpmn.io/</a>即可使用。
   </div>
+  <div>
+    <button id="js_get_path">获取路径</button>
+    <button id="js_show_path">原始路径</button>
+    <button id="js_auto_layout">自动布局</button>
+  </div>
   <div class="rules-graph">
     <div id="app"></div>
     <div class="pattern">
@@ -142,30 +147,34 @@
       </a>
     </div>
   </div>
-  <script src="/core/dist/logic-flow.js"></script>
-  <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
+  <!-- <script src="/core/dist/logic-flow.js"></script> -->
+  <script src="http://0.0.0.0:9090/logic-flow.js"></script>
   <script src="/BpmnElement.js"></script>
   <script src="/BpmnAdapter.js"></script>
   <script src="/Control.js"></script>
   <script src="/SelectionSelect.js"></script>
   <script src="/Snapshot.js"></script>
-  <!-- <script src="/MiniMap.js"></script> -->
+  <script src="/MiniMap.js"></script>
+  <script src="/FlowPath.js"></script>
+  <script src="/AutoLayout.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
-    // LogicFlow.use(MiniMap);
+    LogicFlow.use(MiniMap);
     // MiniMap.init({
     //   disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
     // })
+    LogicFlow.use(FlowPath);
+    LogicFlow.use(AutoLayout);
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',
       text: '导航',
-      // onMouseEnter: (lf, ev) => {
-      //   console.log(MiniMap, ev);
-      //   const position = lf.getPointByClient(ev.x, ev.y);
-      //   console.log(position);
-      //   MiniMap.show(position.domOverlayPosition.x - 120, position.domOverlayPosition.y + 35);
-      // },
+      onMouseEnter: (lf, ev) => {
+        console.log(MiniMap, ev);
+        const position = lf.getPointByClient(ev.x, ev.y);
+        console.log(position);
+        MiniMap.show(position.domOverlayPosition.x - 120, position.domOverlayPosition.y + 35);
+      },
       onClick: (lf, ev) => {
         // console.log(MiniMap, ev);
         const position = lf.getPointByClient(ev.x, ev.y);

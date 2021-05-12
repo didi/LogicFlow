@@ -161,70 +161,71 @@ lf.setMenuConfig({
 
 - 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单
 
-  ```ts
-  lf.register('custome_node', ({ RectNode, RectNodeModel }) => {
-    class CustomeModel extends RectNodeModel {
-      setAttributes() {
-        this.stroke = '#1E90FF';
-        this.fill = '#F0F8FF';
-        this.radius = 10;
-        // 右键菜单
-        this.menu = [
-          {
-            className: 'lf-menu-delete',
-            icon: true,
-            callback(node) {
-              const comfirm = window.confirm('你确定要删除吗？');
-              comfirm && lf.deleteNode(node.id);
-            },
-          },
-          {
-            text: 'edit',
-            className: 'lf-menu-item',
-            callback(node) {
-              lf.editNodeText(node.id);
-            },
-          },
-          {
-            text: 'copy',
-            className: 'lf-menu-item',
-            callback(node) {
-              lf.cloneNode(node.id);
-            },
-          },
-        ];
-      }
-    }
-    return {
-      view: RectNode,
-      model: CustomeModel,
-    };
-  });
+```ts
+import { RectNode, RectNodeModel } from '@logicflow/core';
+
+class CustomeModel extends RectNodeModel {
+  setAttributes() {
+    this.stroke = '#1E90FF';
+    this.fill = '#F0F8FF';
+    this.radius = 10;
+    // 右键菜单
+    this.menu = [
+      {
+        className: 'lf-menu-delete',
+        icon: true,
+        callback(node) {
+          const comfirm = window.confirm('你确定要删除吗？');
+          comfirm && lf.deleteNode(node.id);
+        },
+      },
+      {
+        text: 'edit',
+        className: 'lf-menu-item',
+        callback(node) {
+          lf.editNodeText(node.id);
+        },
+      },
+      {
+        text: 'copy',
+        className: 'lf-menu-item',
+        callback(node) {
+          lf.cloneNode(node.id);
+        },
+      },
+    ];
+  }
+}
+lf.register({
+  type: 'custome_node',
+  view: RectNode,
+  model: CustomeModel,
+})
   ```
 
 - 通过自定义边，设置其menu，从而为边设置定制的自定义菜单
 
 ```ts
-lf.register('custome_edge', ({ PolylineEdge, PolylineEdgeModel }) => {
-  class CustomeModel extends PolylineEdgeModel {
-    setAttributes() {
-      // 右键菜单
-      this.menu = [
-        {
-          className: 'lf-menu-delete',
-          icon: true,
-          callback(edge) {
-            const comfirm = window.confirm('你确定要删除吗？');
-            comfirm && lf.deleteEdge(edge.id);
-          },
+import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
+class CustomeModel extends PolylineEdgeModel {
+  setAttributes() {
+    // 右键菜单
+    this.menu = [
+      {
+        className: 'lf-menu-delete',
+        icon: true,
+        callback(edge) {
+          const comfirm = window.confirm('你确定要删除吗？');
+          comfirm && lf.deleteEdge(edge.id);
         },
-      ];
-    }
+      },
+    ];
   }
-  return {
-    view: PolylineEdge,
-    model: CustomeModel,
-  };
+}
+lf.register({
+  type: 'custome_edge',
+  view: PolylineEdge,
+  model: CustomeModel,
 });
 // 设置默认连线的类型为自定义连线类型
 lf.setDefaultEdgeType('custome_edge');

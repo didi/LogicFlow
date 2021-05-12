@@ -295,6 +295,14 @@ export interface LogicFlowContractor {
   new(option: Options.Definition): LogicFlow;
 }
 
+export interface ExtensionContractor {
+  new({
+    lf: LogicFlow,
+    LogicFlow: LogicFlowContractor,
+  });
+  render?: Function;
+}
+
 export type RegisterBack = {
   view: Function;
   model: Function;
@@ -327,3 +335,10 @@ export interface RegisterParam {
 }
 
 export type RegisterElementFn = (params: RegisterParam) => RegisterBack;
+
+export type RegisterConfig = {
+  type: string;
+  view: any;
+  model: any;
+  isObserverView?: boolean;
+};
