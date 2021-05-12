@@ -15,6 +15,7 @@ interface IProps {
 }
 class RectResizeModel extends RectNodeModel {
   setAttributes() {
+    // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {
       this.width = nodeSize.width;

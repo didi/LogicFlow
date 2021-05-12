@@ -189,7 +189,9 @@ class Control extends Component<IProps> {
     // 更新中心点位置，更新文案位置
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
+    // @ts-ignore
     this.nodeModel.rx = size.width;
+    // @ts-ignore
     this.nodeModel.ry = size.height;
     this.nodeModel.setProperties({
       nodeSize:
@@ -253,7 +255,9 @@ class Control extends Component<IProps> {
     // 更新中心点位置，更新文案位置
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
+    // @ts-ignore
     this.nodeModel.rx = size.width;
+    // @ts-ignore
     this.nodeModel.ry = size.height;
     this.nodeModel.setProperties({
       nodeSize:

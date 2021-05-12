@@ -5,7 +5,7 @@ import DiamondResize from './Node/DiamondResize';
 const NodeResize = {
   name: 'node-resize',
   // 拖动step
-  step: '',
+  step: 1,
   // 边框和contol拖动点样式的设置
   style: {
     outline: {

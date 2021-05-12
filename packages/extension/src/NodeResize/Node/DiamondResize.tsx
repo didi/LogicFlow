@@ -15,6 +15,7 @@ interface IProps {
 }
 class DiamondResizeModel extends DiamondNodeModel {
   setAttributes() {
+    // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {
       this.rx = nodeSize.rx;
@@ -37,7 +38,7 @@ class DiamondResizeView extends DiamondNode {
     );
   }
   getShape() {
-    const attributes = super.getAttributes();
+    const attributes = super.getAttributes() as any;
     const {
       model: { isSelected },
     } = this.props;
