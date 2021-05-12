@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1-alpha.1](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.0...@logicflow/extension@0.4.1-alpha.1) (2021-05-12)
+
+
+### Bug Fixes
+
+* loop path unique ([64d4023](https://github.com/towersxu/logicflow/commit/64d4023ccc822861d5fc4160222d02c0c2e5b814))
+* occasionally read isAllPass of undefined ([e413970](https://github.com/towersxu/logicflow/commit/e41397064f208c8f9daa76399397a69bdf4a133f))
+* types ([601777a](https://github.com/towersxu/logicflow/commit/601777a2717056e9b2aff48e631d4de4d2aa1718))
+* **extension:** merge v0.4 ([3ce2a7c](https://github.com/towersxu/logicflow/commit/3ce2a7c13e02828c701b523135c0275011c592c8))
+
+
+### Features
+
+* add get flow path extension ([251fc88](https://github.com/towersxu/logicflow/commit/251fc88d801000c5854da8cd1b85d55a52f82c96))
+* auto layout tmp ([356214e](https://github.com/towersxu/logicflow/commit/356214e6e202601769b93bb1ead137e3ce674939))
+* support class as extension ([e3c40d1](https://github.com/towersxu/logicflow/commit/e3c40d1e3e648b58597f33cb8330b42ce6d76079))
+* support keep path id ([8713aaf](https://github.com/towersxu/logicflow/commit/8713aafc3968601eb2486ca2df6fd95d7986ea52))
+* **extension:** node resize ([5e2577c](https://github.com/towersxu/logicflow/commit/5e2577cd87d81c036fd5bbff174959b58b6c88ef))
+* **extension:** rect node resize ([9d25526](https://github.com/towersxu/logicflow/commit/9d25526c8bdbf0a64ecf4b66d5b755e498ccc2cd))
+
+
+
+
+
 ## [0.4.1-alpha.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.0...@logicflow/extension@0.4.1-alpha.0) (2021-05-06)
 
 
