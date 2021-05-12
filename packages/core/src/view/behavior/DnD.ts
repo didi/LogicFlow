@@ -46,7 +46,6 @@ export default class Dnd {
   };
   dragEnter = (e) => {
     if (!this.nodeConfig || this.fakerNode) return;
-    console.log('enter');
     this.fakerNode = this.lf.createFakerNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({ x: e.clientX, y: e.clientY }),
