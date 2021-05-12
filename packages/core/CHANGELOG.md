@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1-alpha.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.0...@logicflow/core@0.4.1-alpha.1) (2021-05-12)
+
+
+### Bug Fixes
+
+* ie11 transform no work ([95a069b](https://github.com/towersxu/logicflow/commit/95a069bb18faba2bd3efc849217ee4ce019fed23))
+* occasionally read isAllPass of undefined ([e413970](https://github.com/towersxu/logicflow/commit/e41397064f208c8f9daa76399397a69bdf4a133f))
+* **core:** export function in util ([24655f3](https://github.com/towersxu/logicflow/commit/24655f3f2d4d539925847e3ced47e16c503d6ebb))
+* **extension:** merge v0.4 ([3ce2a7c](https://github.com/towersxu/logicflow/commit/3ce2a7c13e02828c701b523135c0275011c592c8))
+
+
+### Features
+
+* support class as extension ([e3c40d1](https://github.com/towersxu/logicflow/commit/e3c40d1e3e648b58597f33cb8330b42ce6d76079))
+* **extension:** rect node resize ([9d25526](https://github.com/towersxu/logicflow/commit/9d25526c8bdbf0a64ecf4b66d5b755e498ccc2cd))
+
+
+
+
+
 ## [0.4.1-alpha.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.0...@logicflow/core@0.4.1-alpha.0) (2021-05-06)
 
 
