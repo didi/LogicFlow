@@ -425,7 +425,7 @@ export default class LogicFlow {
    * @param nodeId 节点ID
    * @returns model数组
    */
-  getNodeEdges(nodeId): BaseEdgeModel[] {
+  getNodeEdges(nodeId): _Model.BaseEdgeModel[] {
     return this.graphModel.getNodeEdges(nodeId);
   }
   /**
