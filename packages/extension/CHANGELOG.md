@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.3.6...@logicflow/extension@0.4.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* build support ie ([4a90d5e](https://github.com/towersxu/logicflow/commit/4a90d5e0bb20f8dfd2f4ab88db5c691894521298))
+* change the points type ([766c34b](https://github.com/towersxu/logicflow/commit/766c34b1276b3c0221bf0aeb6e7b7716e3b362dc))
+* loop path unique ([dc88286](https://github.com/towersxu/logicflow/commit/dc88286ea09cb00b2b64e5d4ab5a751d2fdae03e))
+* occasionally read isAllPass of undefined ([dac3d41](https://github.com/towersxu/logicflow/commit/dac3d4118aff2699497512ca799912deaa0b4930))
+* types ([a49bf16](https://github.com/towersxu/logicflow/commit/a49bf16e8ee994f1bacc4015deb054a9eeb44895))
+* update registerElement API in extension ([df25d11](https://github.com/towersxu/logicflow/commit/df25d110eee7051ee9357b11f669d80a3de1e0ea))
+
+
+### Features
+
+* add get flow path extension ([6a15d11](https://github.com/towersxu/logicflow/commit/6a15d110b83f92b0c147cb6935735f5345090f7f))
+* auto layout tmp ([ac58232](https://github.com/towersxu/logicflow/commit/ac58232150d58bd655b9e2180df9b545fbf46c0c))
+* register support config ([074c584](https://github.com/towersxu/logicflow/commit/074c58443df30b8d0a0beeee8deb1d0866f90f66))
+* support class as extension ([ac66e9f](https://github.com/towersxu/logicflow/commit/ac66e9ffd6709a605c48b61281be102429524b82))
+* support ie11 ([46df695](https://github.com/towersxu/logicflow/commit/46df6951b1af5b1e46bea4ed084aa6abd5ebddf0))
+* support keep path id ([65c42e6](https://github.com/towersxu/logicflow/commit/65c42e6820ee512d2527e999304d03a8a5c48713))
+* **extension:** node resize ([35e3a0a](https://github.com/towersxu/logicflow/commit/35e3a0a4291fea87fe55238d1ca377664b2676ed))
+* **extension:** rect node resize ([399afb5](https://github.com/towersxu/logicflow/commit/399afb545b421345ca3ea823d60f2d47db1e0d72))
+
+
+
+
+
 ## [0.4.1-alpha.1](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.0...@logicflow/extension@0.4.1-alpha.1) (2021-05-12)
 
 
