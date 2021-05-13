@@ -6,7 +6,7 @@
   <meta name="format-detection" content="telephone=no, email=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
-  <link rel="stylesheet" href="./src/style/index.css">
+  <link rel="stylesheet" href="/core/dist/style/index.css">
   <style>
     html,
     body {
@@ -60,7 +60,8 @@
   <div id="app"></div>
   <div id="debug"></div>
   <%= htmlWebpackPlugin.tags.bodyTags %>
-
+      <script src="/core/dist/logic-flow.js"></script>
+    <!-- <script src="http://0.0.0.0:9090/logic-flow.js"></script> -->
     <script>
       window.onload = function () {
         InitLogicFlow();
