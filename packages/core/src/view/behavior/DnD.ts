@@ -63,7 +63,6 @@ export default class Dnd {
   };
   onDragLeave = () => {
     if (this.fakerNode) {
-      console.log('leave');
       this.lf.removeNodeSnapLine();
       this.lf.graphModel.removeFakerNode();
       this.fakerNode = null;
