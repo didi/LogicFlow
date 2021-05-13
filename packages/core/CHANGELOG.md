@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.6...@logicflow/core@0.4.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* build support ie ([4a90d5e](https://github.com/towersxu/logicflow/commit/4a90d5e0bb20f8dfd2f4ab88db5c691894521298))
+* ie11 transform no work ([f776592](https://github.com/towersxu/logicflow/commit/f776592b2d16675514e4f0e876b888d9ea14ebe9))
+* occasionally read isAllPass of undefined ([dac3d41](https://github.com/towersxu/logicflow/commit/dac3d4118aff2699497512ca799912deaa0b4930))
+* **core:** export function in util ([5ecae8a](https://github.com/towersxu/logicflow/commit/5ecae8a4d226a2a4e196461aef2e848a6ba7bb6c))
+* save register API & add registerElement API ([916f6be](https://github.com/towersxu/logicflow/commit/916f6be2be6f16fde9f385010f3291d82ded4a23))
+* update registerElement API in extension ([df25d11](https://github.com/towersxu/logicflow/commit/df25d110eee7051ee9357b11f669d80a3de1e0ea))
+
+
+### Features
+
+* register support config ([074c584](https://github.com/towersxu/logicflow/commit/074c58443df30b8d0a0beeee8deb1d0866f90f66))
+* support class as extension ([ac66e9f](https://github.com/towersxu/logicflow/commit/ac66e9ffd6709a605c48b61281be102429524b82))
+* support ie11 ([46df695](https://github.com/towersxu/logicflow/commit/46df6951b1af5b1e46bea4ed084aa6abd5ebddf0))
+* type ([a14c1c2](https://github.com/towersxu/logicflow/commit/a14c1c2b540700dc1f7ca93b1b2abbf542b896e4))
+* **extension:** rect node resize ([399afb5](https://github.com/towersxu/logicflow/commit/399afb545b421345ca3ea823d60f2d47db1e0d72))
+
+
+
+
+
 ## [0.4.1-alpha.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.0...@logicflow/core@0.4.1-alpha.1) (2021-05-12)
 
 

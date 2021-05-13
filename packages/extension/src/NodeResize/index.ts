@@ -44,7 +44,6 @@ const NodeResize = {
   install(lf) {
     // 为保证对齐线功能正常使用，step默认是网格grid的两倍，
     // 没有网格设置，默认为2，保证坐标是整数
-    console.log(this.step);
     if (!this.step) {
       const { options } = lf;
       const { grid } = options;

@@ -1,6 +1,6 @@
 import { BaseNodeModel, GraphModel, h, DiamondNode, DiamondNodeModel } from '@logicflow/core';
 import ControlGroup from '../Control/ControlGroup';
-import polygon from '../BasicShape/polygon';
+import Polygon from '../BasicShape/polygon';
 
 interface IProps {
   x: number,
@@ -44,7 +44,7 @@ class DiamondResizeView extends DiamondNode {
     } = this.props;
     return (
       <g>
-        <polygon {...attributes} />
+        <Polygon {...attributes} />
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );
