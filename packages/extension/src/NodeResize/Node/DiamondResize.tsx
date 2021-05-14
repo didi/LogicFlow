@@ -1,6 +1,6 @@
 import { BaseNodeModel, GraphModel, h, DiamondNode, DiamondNodeModel } from '@logicflow/core';
 import ControlGroup from '../Control/ControlGroup';
-import Polygon from '../BasicShape/polygon';
+import Polygon from '../BasicShape/Polygon';
 
 interface IProps {
   x: number,
