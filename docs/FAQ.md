@@ -18,7 +18,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/promise-polyfill/8.2.0/polyfill.min.js"></script>
 ```
 
-由于svg的一些功能在IE11上存在限制，目前IE11还存在一些细节上的问题：
-- 无法拖动画布和放大缩小（可以创建足够宽高的画布来解决）
+由于svg的一些功能在IE11上存在限制，目前IE11还存在细节上的问题：
 - 鼠标在锚点上会有持续闪烁
 
