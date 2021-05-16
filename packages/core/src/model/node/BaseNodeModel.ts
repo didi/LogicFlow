@@ -235,7 +235,7 @@ export default class BaseNodeModel implements IBaseModel {
     const {
       anchorsOffset,
     } = this;
-    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+    if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
     return [];

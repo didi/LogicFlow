@@ -22,7 +22,7 @@ class CircleNodeModel extends BaseNodeModel {
     const {
       anchorsOffset, x, y, r,
     } = this;
-    if (Array.isArray(anchorsOffset) && anchorsOffset.length > 0) {
+    if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
     return [
