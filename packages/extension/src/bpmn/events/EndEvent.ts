@@ -8,20 +8,15 @@ class EndEventModel extends CircleNodeModel {
       data.id = `Event_${getBpmnId()}`;
     }
     if (!data.text) {
-      data.text = {
-        value: '',
-        x: data.x,
-        y: data.y,
-      };
+      data.text = '';
     }
     if (data.text && typeof data.text === 'string') {
       data.text = {
         value: data.text,
         x: data.x,
-        y: data.y,
+        y: data.y + 40,
       };
     }
-    data.text.y += 40;
     super(data, graphModel);
   }
   getConnectedSourceRules() {
