@@ -36,6 +36,11 @@ class EndEventModel extends CircleNodeModel {
 }
 
 class EndEventView extends CircleNode {
+  getAnchorStyle() {
+    return {
+      visibility: 'hidden',
+    };
+  }
   getShape() {
     const { x, y, fill, stroke, strokeWidth, r } = this.getAttributes();
     const outCircle = super.getShape();

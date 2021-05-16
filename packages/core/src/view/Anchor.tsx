@@ -13,9 +13,9 @@ type TargetNodeId = string;
 interface IProps {
   x: number,
   y: number,
-  style?: CSSStyleDeclaration,
-  hoverStyle?: CSSStyleDeclaration,
-  edgeStyle?: CSSStyleDeclaration,
+  style?: Record<string, any>,
+  hoverStyle?: Record<string, any>,
+  edgeStyle?: Record<string, any>,
   anchorIndex: number,
   eventCenter: EventEmitter,
   graphModel: GraphModel,
