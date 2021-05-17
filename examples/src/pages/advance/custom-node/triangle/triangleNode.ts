@@ -9,7 +9,7 @@ class TriangleNodeModel extends PolygonNodeModel {
     ];
   }
 }
-export default {
+export const TriangleNode = {
   type: 'triangle',
   view: PolygonNode,
   model: TriangleNodeModel,
