@@ -851,14 +851,15 @@ type Position = {
 };
 
 // eslint-disable-next-line arrow-body-style
-export const twoPointDistance = (p1: Position, p2: Position) => {
-  const source = {
-    x: Math.abs(p1.x),
-    y: Math.abs(p1.y),
-  };
-  const target = {
-    x: Math.abs(p2.x),
-    y: Math.abs(p2.y),
-  };
+export const twoPointDistance = (source: Position, target: Position) => {
+  // fix: 修复坐标存在负值时计算错误的问题。
+  // const source = {
+  //   x: p1.x,
+  //   y: Math.abs(p1.y),
+  // };
+  // const target = {
+  //   x: Math.abs(p2.x),
+  //   y: Math.abs(p2.y),
+  // };
   return Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
 };

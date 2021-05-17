@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.2...@logicflow/core@0.4.3) (2021-05-16)
+
+
+### Bug Fixes
+
+* mobx4 anchorsOffset it`s not an array ([4e05895](https://github.com/towersxu/logicflow/commit/4e05895fec0a00313f851cb5afa350b5c849d408))
+* remove unnecessary console ([102bd81](https://github.com/towersxu/logicflow/commit/102bd8179d5dd5f84e677ad39b209f49d2ee3a1b))
+* twoPointDistance methods support negative number ([3f9b719](https://github.com/towersxu/logicflow/commit/3f9b719bbc836c6d6d050d12d7c7c908c19b0bc6))
+
+
+### Features
+
+* **extension:** endEvent node hide anchor ([6e2333f](https://github.com/towersxu/logicflow/commit/6e2333f2af8a214530a2c2ed3c1dc5597fcd68f1))
+
+
+
+
+
 ## [0.4.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.3.6...@logicflow/core@0.4.2) (2021-05-13)
 
 

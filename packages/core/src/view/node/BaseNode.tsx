@@ -110,22 +110,23 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     return model.getProperties();
   }
   /* 支持节点自定义锚点样式 */
-  getAnchorStyle(): CSSStyleDeclaration {
+  getAnchorStyle(): Record<string, any> {
     const { graphModel } = this.props;
     const { anchor } = graphModel.theme;
-    return anchor;
+    // 防止被重写覆盖主题。
+    return { ...anchor };
   }
   /* 支持节点自定义锚点hover样式 */
-  getAnchorHoverStyle(): CSSStyleDeclaration {
+  getAnchorHoverStyle(): Record<string, any> {
     const { graphModel } = this.props;
     const { anchorHover } = graphModel.theme;
-    return anchorHover;
+    return { ...anchorHover };
   }
   /* 锚点创建连线样式 */
-  getNewEdgeStyle(): CSSStyleDeclaration {
+  getNewEdgeStyle(): Record<string, any> {
     const { graphModel } = this.props;
     const { anchorLine } = graphModel.theme;
-    return anchorLine;
+    return { ...anchorLine };
   }
   getAnchors() {
     const { model, graphModel, eventCenter } = this.props;

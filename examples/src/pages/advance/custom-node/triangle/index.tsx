@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import { registerTriangleNode } from './triangleNode';
+import registerTriangleNode from './triangleNode';
 import ExampleHeader from '../../../../components/example-header/index';
 
 const config = {
