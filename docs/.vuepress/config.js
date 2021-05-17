@@ -35,6 +35,7 @@ const guide = [
       'extension/snapshot',
       'extension/adapter',
       'extension/bpmn-element',
+      'extension/extension-node-resize',
       {
         title: '组件',
         collapsable: true,
@@ -78,6 +79,7 @@ const article = [
   'article01',
   'article02',
   'article03',
+  'NodeResize'
 ];
 
 const verisonInfo = [

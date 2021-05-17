@@ -19,6 +19,7 @@ import Selection from './pages/extension/components/selection';
 import MiniMap from './pages/extension/components/mini-map';
 import CustomMenu from './pages/extension/components/custom-menu';
 import CustomDnd from './pages/extension/components/custom-dnd';
+import NodeResizeExample from './pages/extension/NodeResize';
 import CustomNodeStyle from './pages/advance/custom-node/style';
 import Anchor from './pages/advance/custom-node/anchor';
 import Triangle from './pages/advance/custom-node/triangle';
@@ -60,6 +61,7 @@ export default (
     <Route path="/extension/components/custom-dnd" exact component={CustomDnd} />
     <Route path="/extension/bpmn-elements" exact component={BpmnElements} />
     <Route path="/extension/adapter" exact component={AdapterExample} />
+    <Route path="/extension/node-resize" exact component={NodeResizeExample} />
     <Route path="/usage/bpmn" exact component={Bpmn} />
     <Route path="/usage/approve" exact component={Approve} />
     <Route path="/usage/approve/preview" exact component={ApprovePreview} />
