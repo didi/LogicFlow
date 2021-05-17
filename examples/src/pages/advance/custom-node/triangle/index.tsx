@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
-import registerTriangleNode from './triangleNode';
+import { TriangleNode } from './triangleNode';
 import ExampleHeader from '../../../../components/example-header/index';
 
 const config = {
@@ -28,7 +28,7 @@ export default function CustomNodeShapeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.register(registerTriangleNode);
+    lf.register(TriangleNode);
     lf.render(data);
   }, []);
 
