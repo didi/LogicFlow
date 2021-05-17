@@ -152,7 +152,9 @@ export default class LogicFlow {
       lf: this,
       LogicFlow,
     });
-    extensionInstance.render && this.components.push(extensionInstance.render);
+    extensionInstance.render && this.components.push(
+      extensionInstance.render.bind(extensionInstance),
+    );
   }
   register(type: string | RegisterConfig, fn?: RegisterElementFn, isObserverView = true) {
     if (typeof type !== 'string') {
