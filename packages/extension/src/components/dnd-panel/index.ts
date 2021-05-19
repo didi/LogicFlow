@@ -4,7 +4,8 @@ type ShapeItem = {
   type?: string;
   text?: string;
   icon?: string;
-  cls?: string;
+  className?: string;
+  properties?: Record<string, any>;
   callback?: string;
 };
 
@@ -32,7 +33,7 @@ class DndPanel {
   }
   private createDndItem(shapeItem): HTMLElement {
     const el = document.createElement('div');
-    el.className = shapeItem.cls ? `lf-dnd-item ${shapeItem.cls}` : 'lf-dnd-item';
+    el.className = shapeItem.className ? `lf-dnd-item ${shapeItem.className}` : 'lf-dnd-item';
     const shape = document.createElement('div');
     shape.className = 'lf-dnd-shape';
     if (shapeItem.icon) {
@@ -49,6 +50,7 @@ class DndPanel {
       if (shapeItem.type) {
         this.lf.dnd.startDrag({
           type: shapeItem.type,
+          properties: shapeItem.properties,
         });
       }
       if (shapeItem.callback) {

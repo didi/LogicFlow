@@ -25,7 +25,8 @@ type PatternItem = {
   type?: string;
   text?: string;
   icon?: string;
-  cls?: string;
+  className?: string;
+  properties?: object;
   callback?: string;
 };
 lf.setPatternItems(patternItems: PatternItem[])
@@ -40,10 +41,10 @@ PatternItem：
 | :- | :- | :- | :- | :- |
 |type|string|非必须|无|指定用户鼠标可以拖入的节点类型，包括自定义节点类型|
 |text|string|非必须|无|节点的文本描述|
-|icon|string|非必须|无|拖拽面试上显示的图标，可以传入图标地址或base64编码|
-|cls|string|非必须|无|额外传入可以拖拽项的class, 用于自定义拖拽项的样式|
+|icon|string|非必须|无|拖拽面试上显示的图标，可以传入图标url地址或base64编码|
+|className|string|非必须|无|额外传入可以拖拽项的class, 用于自定义拖拽项的样式|
 |callback|fn|非必须|无|用户鼠标按下拖拽项后触发的回调|
-
+|properties|object|非必须|无|创建节点时附带的properties|
 
 ```js
 LogicFlow.use(DndPanel);
