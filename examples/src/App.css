@@ -17,3 +17,6 @@
   overflow: hidden;
   position: relative;
 }
+.import_icon {
+  color: red;
+}
