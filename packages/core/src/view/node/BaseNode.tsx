@@ -263,9 +263,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
       eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
-    graphModel.toFront(model.id);
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    graphModel.toFront(model.id);
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -281,8 +281,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       y: ev.clientY,
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
-    graphModel.toFront(model.id);
     graphModel.selectNodeById(model.id);
+    graphModel.toFront(model.id);
     eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,

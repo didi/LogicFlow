@@ -88,10 +88,12 @@ class GraphModel {
   }
   // fixme: 用户点击触发两次sortElements
   @computed get sortElements() {
-    const elements = [];
+    let elements = [];
+    elements = elements.concat(this.nodes.sort((a, b) => a.zIndex - b.zIndex))
+      .concat(this.edges.sort((a, b) => a.zIndex - b.zIndex));
     // IE BUG: mobx observer对象使用解构会导致IE11出现问题
-    this.nodes.forEach(node => elements.push(node));
-    this.edges.forEach(edge => elements.push(edge));
+    // this.edges.forEach(edge => elements.push(edge));
+    // this.nodes.forEach(node => elements.push(node));
     // 只显示可见区域的节点和连线以及和这个可以区域节点的节点
     const showElements = [];
     let topElementIdx = -1;

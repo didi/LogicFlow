@@ -228,9 +228,9 @@ export default class BaseEdge extends Component<IProps> {
         }
       }, 400);
     }
-    graphModel.toFront(model.id);
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    graphModel.toFront(model.id);
     this.preStartTime = this.startTime;
   };
 
