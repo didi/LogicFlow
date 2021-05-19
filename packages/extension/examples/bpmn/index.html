@@ -125,7 +125,7 @@
   </div>
   <div class="rules-graph">
     <div id="app"></div>
-    <div class="pattern">
+    <!-- <div class="pattern">
       <div class="pattern-selection" id="selection-node-pattern"></div>
       <div>选区</div>
       <div class="pattern-start" id="start-node-pattern"></div>
@@ -138,7 +138,7 @@
       <div>条件判断</div>
       <div class="pattern-end" id="end-node-pattern"></div>
       <div>结束</div>
-    </div>
+    </div> -->
     <div class="graph-io">
       <a href="javascript:;" id="download"><img src="./img/download.png" /></a>
       <a href="javascript:;" id="download-img"><img src="./img/img.png" /></a>
@@ -157,14 +157,16 @@
   <script src="/MiniMap.js"></script>
   <script src="/FlowPath.js"></script>
   <script src="/AutoLayout.js"></script>
+  <script src="/DndPanel.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
     LogicFlow.use(MiniMap);
     // MiniMap.init({
-    //   disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
+    //   disabledPlugins: [DndPanel.name]
     // })
     LogicFlow.use(FlowPath);
     LogicFlow.use(AutoLayout);
+    LogicFlow.use(DndPanel);
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',

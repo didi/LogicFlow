@@ -177,6 +177,7 @@ export default class BaseEdge extends Component<IProps> {
     e.stopPropagation();
     this.startTime = new Date().getTime();
   };
+  // todo: 去掉setTimeout
   handleMouseUp = (e: MouseEvent) => {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
