@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4](https://github.com/towersxu/logicflow/compare/examples@0.5.3...examples@0.5.4) (2021-05-19)
+
+
+### Bug Fixes
+
+* eslint import/no-anonymous-default-export ([134b170](https://github.com/towersxu/logicflow/commit/134b170bfedf7f5638d37e5b809b2db0f9bd9f52))
+
+
+### Features
+
+* dndpanel support properties, related [#181](https://github.com/towersxu/logicflow/issues/181) ([765416c](https://github.com/towersxu/logicflow/commit/765416c6051559f529cb5af1fe9d5d14304f3cf1))
+* **docs:** add docs for NodeResize ([2a629bc](https://github.com/towersxu/logicflow/commit/2a629bc77641a88d63dbb3263f60b85a26bf227c))
+
+
+
+
+
 ## [0.5.3](https://github.com/towersxu/logicflow/compare/examples@0.5.2...examples@0.5.3) (2021-05-16)
 
 **Note:** Version bump only for package examples

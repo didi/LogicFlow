@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.3...@logicflow/extension@0.4.4) (2021-05-19)
+
+
+### Features
+
+* dndpanel support properties, related [#181](https://github.com/towersxu/logicflow/issues/181) ([765416c](https://github.com/towersxu/logicflow/commit/765416c6051559f529cb5af1fe9d5d14304f3cf1))
+* **docs:** add docs for NodeResize ([2a629bc](https://github.com/towersxu/logicflow/commit/2a629bc77641a88d63dbb3263f60b85a26bf227c))
+
+
+
+
+
 ## [0.4.3](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.2...@logicflow/extension@0.4.3) (2021-05-16)
 
 

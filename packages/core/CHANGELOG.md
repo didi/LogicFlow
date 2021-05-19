@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.3...@logicflow/core@0.4.4) (2021-05-19)
+
+
+### Bug Fixes
+
+* extenion render bind self instence ([afac922](https://github.com/towersxu/logicflow/commit/afac92287bf1c15b10151764c0a3fe0e4251be63))
+
+
+### Features
+
+* dndpanel support properties, related [#181](https://github.com/towersxu/logicflow/issues/181) ([765416c](https://github.com/towersxu/logicflow/commit/765416c6051559f529cb5af1fe9d5d14304f3cf1))
+
+
+
+
+
 ## [0.4.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.2...@logicflow/core@0.4.3) (2021-05-16)
 
 
