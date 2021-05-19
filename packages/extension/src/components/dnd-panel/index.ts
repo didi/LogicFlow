@@ -14,7 +14,7 @@ class DndPanel {
   panelEl: HTMLDivElement;
   constructor({ lf }) {
     this.lf = lf;
-    this.lf.setShapeList = (shapeList) => {
+    this.lf.setPatternItems = (shapeList) => {
       this.shapeList = shapeList;
     };
   }
