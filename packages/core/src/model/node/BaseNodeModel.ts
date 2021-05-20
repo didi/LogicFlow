@@ -59,6 +59,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable y = defaultConfig.y;
   @observable
   private _width = defaultConfig.width;
+  graphModel: GraphModel;
   public get width() {
     return this._width;
   }
@@ -93,6 +94,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable draggable = true;
 
   constructor(data: NodeConfig, graphModel: GraphModel, type) {
+    this.graphModel = graphModel;
     this.setStyleFromTheme(type, graphModel);
     this.initNodeData(data);
     this.setAttributes();
