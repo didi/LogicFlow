@@ -313,6 +313,11 @@ lf.register({
 
 完整的节点属性请访问 [API](/api/nodeApi.md#节点属性) 以查看更多细节。
 
+### graphModel
+
+graphModel表示整个流程图对应的Model, 里面记录图的常用操作方法和数据[API](/api/graphModel.html)。
+在自定义节点Model中，可以使用`this.graphModel`访问。例如在自定义连线的时候
+
 ## 自定义节点的 View
 
 节点在`view`中维护了自身的`VNode`，Logic Flow 渲染节点时会调用`view`中的`getShape`方法来确定`VNode`该如何渲染。

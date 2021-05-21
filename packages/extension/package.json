@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
@@ -26,7 +26,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^0.4.4",
+    "@logicflow/core": "^0.4.6",
     "ids": "^1.0.0",
     "preact": "^10.4.8"
   },
@@ -72,5 +72,6 @@
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
-  }
+  },
+  "gitHead": "ab8cc6126e9dfa5c4fb18037538a374d3a0b0521"
 }

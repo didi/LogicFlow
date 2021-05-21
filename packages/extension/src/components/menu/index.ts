@@ -135,7 +135,9 @@ const Menu: MenuPlugin = {
         const menuList = Menu.__getMenuDom(model.menu);
         menu.append(...menuList);
       } else {
-        menu.append(...menuItem.get('nodeMenu'));
+        // 需要判空，不然setPatternItems设置空数组会报错。
+        const menuList = menuItem.get('nodeMenu');
+        menuList && menu.append(...menuList);
       }
       // 菜单中没有项，不显示
       if (!menu.children.length) return;
@@ -154,7 +156,8 @@ const Menu: MenuPlugin = {
         const menuList = Menu.__getMenuDom(model.menu);
         menu.append(...menuList);
       } else {
-        menu.append(...menuItem.get('edgeMenu'));
+        const menuList = menuItem.get('edgeMenu');
+        menuList && menu.append(...menuList);
       }
       if (!menu.children.length) return;
       menu.style.display = 'block';
@@ -165,9 +168,10 @@ const Menu: MenuPlugin = {
     lf.on('blank:contextmenu', ({ e, position }) => {
       const { __menuDOM: menu, __menuItemDOM: menuItem } = Menu;
       const { domOverlayPosition: { x, y } } = position;
-      if (menuItem.has('graphMenu')) {
+      const menuList = menuItem.get('graphMenu');
+      if (menuList) {
         menu.innerHTML = '';
-        menu.append(...menuItem.get('graphMenu'));
+        menu.append(...menuList);
         if (!menu.children.length) return;
         menu.style.display = 'block';
         menu.style.top = `${y}px`;

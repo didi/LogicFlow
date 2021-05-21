@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.6](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.5...@logicflow/extension@0.4.6) (2021-05-21)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [0.4.5](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.4...@logicflow/extension@0.4.5) (2021-05-21)
+
+
+### Features
+
+* 自定义节点model支持获取graphModel ([71927f6](https://github.com/towersxu/logicflow/commit/71927f6947d27422bb0157898271d18d9ed2c84b))
+
+
+
+
+
 ## [0.4.4](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.3...@logicflow/extension@0.4.4) (2021-05-19)
 
 

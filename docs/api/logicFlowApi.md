@@ -743,9 +743,11 @@ lf.getEditConfig()
 
 更新流程编辑基本配置
 
+详细参数见： 
+
 ```js
 lf.updateEditConfig({
-  isSilentMode: true
+  stopZoomGraph: true
 })
 ```
 
