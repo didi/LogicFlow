@@ -56,6 +56,17 @@ const guide = [
 const api = [
   'logicFlowApi',
   {
+    title: 'Model',
+    collapsable: false,
+    children: [
+      'graphModelApi',
+      'baseNodeModelApi',
+      'baseEdgeModelApi',
+      'transformModelApi',
+      'editConfigModelApi',
+    ]
+  },
+  {
     title: '元素',
     collapsable: false,
     children: [
