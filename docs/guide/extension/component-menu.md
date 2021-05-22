@@ -45,37 +45,6 @@ LogicFlow.use(Menu);
 },
 ```
 
-## 更改菜单选项
-
-> 0.2.3+ 新增
-
-支持通过参数来确定覆写还是追加，推荐使用`Menu.changeMenuItem`方法代替以下两种设置方式：
-
-- `lf.addMenuConfig`
-- `lf.setMenuConfig`
-
-```ts
-const lf = new LogicFlow();
-
-Menu.changeMenuItem(setType, {
-  nodeMenu: [
-    {
-      text: '删除',
-        callback(node) {
-          lf.deleteNode(node.id);
-      },
-    },
-  ],
-})
-
-lf.render();
-```
-
-setType 取值如下：
-
-- `add` 追加
-- `reset` 复写
-
 ## 追加菜单选项
 
 通过`lf.addMenuConfig`方法可以在原有菜单的基础上追加新的选项，具体配置示例如下
@@ -155,13 +124,35 @@ lf.setMenuConfig({
   });
 ```
 
-## 为自定义元素单独配置菜单
+## 指定类型元素配置菜单
 
-> 从单个节点/边维度，设置其右键菜单，前提条件是需要实现自定义节点/自定义边
-
-- 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单
+除了上面的为所有的节点、元素、画布自定义通用菜单外，还可以使用`lf.setMenuByType`为指定类型的节点或连线定义菜单。
 
 ```ts
+lf.setMenuByType({
+  type: 'bpmn:startEvent',
+  menu: [
+    {
+      text: '分享111',
+      callback() {
+        console.log('分享成功222！');
+      }
+    },
+  ]
+})
+```
+
+## 指定业务状态设置菜单
+
+除了上面的为某种类型元素设置菜单外，还可以在自定义元素的时候，为节点处于不同业务状态下设置菜单。
+
+- 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单
+- 由于自定义的model中可能无法直接拿到lf实例对象，此时可以通过`this.graphModel`拿到graphModel对象。graphModel对象详细说明请参考API/graphModel
+- 如果还希望在点击菜单后进行业务处理，可以通过`graphModel`的`eventCenter`发送自定义事件，然后自己在`lf`实例上监听此事件。
+- 优先级：指定业务状态设置菜单 > 指定类型元素配置菜单 > 通用菜单配置 > 默认菜单
+
+```ts
+// customNode.ts
 import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class CustomeModel extends RectNodeModel {
@@ -169,45 +160,56 @@ class CustomeModel extends RectNodeModel {
     this.stroke = '#1E90FF';
     this.fill = '#F0F8FF';
     this.radius = 10;
-    // 右键菜单
-    this.menu = [
-      {
-        className: 'lf-menu-delete',
-        icon: true,
-        callback(node) {
-          const comfirm = window.confirm('你确定要删除吗？');
-          comfirm && lf.deleteNode(node.id);
+    const { properties: { isDisabledNode } } = this;
+    if (!isDisabledNode) {
+      // 单独为非禁用的元素设置菜单。
+      this.menu = [
+        {
+          className: 'lf-menu-delete',
+          icon: true,
+          callback: (node) => {
+            this.graphModel.deleteNode(node.id);
+            this.graphModel.eventCenter.emit('custom:event', node);
+          },
         },
-      },
-      {
-        text: 'edit',
-        className: 'lf-menu-item',
-        callback(node) {
-          lf.editNodeText(node.id);
+        {
+          text: 'edit',
+          className: 'lf-menu-item',
+          callback: (node) => {
+            this.graphModel.setElementStateById(node.id, 2);
+          },
         },
-      },
-      {
-        text: 'copy',
-        className: 'lf-menu-item',
-        callback(node) {
-          lf.cloneNode(node.id);
+        {
+          text: 'copy',
+          className: 'lf-menu-item',
+          callback: (node) => {
+            this.graphModel.cloneNode(node.id);
+          },
         },
-      },
-    ];
+      ];
+    }
   }
 }
+// index.js
+import { RectNode, CustomeModel } from './custom.ts';
+
 lf.register({
   type: 'custome_node',
   view: RectNode,
   model: CustomeModel,
 })
+
+lf.on('custom:event', (r) => {
+  console.log(r)
+});
   ```
 
 - 通过自定义边，设置其menu，从而为边设置定制的自定义菜单
 
 ```ts
+// custom.ts
 import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
-class CustomeModel extends PolylineEdgeModel {
+class CustomModel extends PolylineEdgeModel {
   setAttributes() {
     // 右键菜单
     this.menu = [
@@ -216,12 +218,13 @@ class CustomeModel extends PolylineEdgeModel {
         icon: true,
         callback(edge) {
           const comfirm = window.confirm('你确定要删除吗？');
-          comfirm && lf.deleteEdge(edge.id);
+          comfirm && this.graphModel.deleteEdge(edge.id);
         },
       },
     ];
   }
 }
+// index.ts
 lf.register({
   type: 'custome_edge',
   view: PolylineEdge,

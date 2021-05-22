@@ -15,6 +15,35 @@ window.onload = function () {
     },
     snapline: true,
   });
+  lf.setMenuConfig({
+    nodeMenu: [
+      {
+        text: '分享',
+        callback() {
+          console.log('分享成功！');
+        }
+      },
+    ],
+    graphMenu: [
+      {
+        text: '分111享',
+        callback() {
+          console.log('分享成功22！');
+        }
+      },
+    ]
+  });
+  // lf.setMenuByType({
+  //   type: 'bpmn:startEvent',
+  //   menu: [
+  //     {
+  //       text: '分享111',
+  //       callback() {
+  //         console.log('分享成功222！');
+  //       }
+  //     },
+  //   ]
+  // })
   lf.setPatternItems([
     {
       text: '选区',

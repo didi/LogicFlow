@@ -1,4 +1,4 @@
-import LogicFlow, { Extension } from '@logicflow/core';
+import LogicFlow from '@logicflow/core';
 
 type SetType = 'add' | 'reset';
 
@@ -15,94 +15,83 @@ export type MenuConfig = {
   graphMenu?: MenuItem[] | false;
 };
 
-interface MenuPlugin extends Extension {
-  __container: HTMLElement;
-  __items: MenuConfig;
-  __menuDOM: HTMLElement;
-  __menuItemDOM: Map<string, HTMLElement[]>;
-  __getMenuDom: (list: MenuItem[]) => HTMLElement[];
-  resetMenuItem: (config: MenuConfig) => void;
-  addMenuItem: (config: MenuConfig) => void;
-  changeMenuItem: (type: SetType, config: MenuConfig) => void;
-}
+const DefalutNodeMenuKey = 'lf:defaultNodeMenu';
+const DefalutEdgeMenuKey = 'lf:defaultEdgeMenu';
+const DefalutGraphMenuKey = 'lf:defaultGraphMenu';
 
-const Menu: MenuPlugin = {
-  name: 'menu',
-  __items: {},
-  __menuDOM: null,
-  __menuItemDOM: null, // 三种类型菜单选项的 DOM（node | edge | graph）
-  __container: null,
-  /**
-   * 注册 Menu 插件
-   * @param lf LogicFlow 实例
-   */
-  install(lf: LogicFlow) {
-    Menu.__menuDOM = document.createElement('ul');
-    Menu.__menuItemDOM = new Map();
-    Menu.__items = {
-      nodeMenu: [
-        {
-          text: '删除',
-          callback(node) {
-            lf.deleteNode(node.id);
-          },
-        },
-        {
-          text: '编辑文本',
-          callback(node) {
-            lf.graphModel.setTextEditable(node.id);
-          },
-        },
-        {
-          text: '复制',
-          callback(node) {
-            lf.cloneNode(node.id);
-          },
-        },
-      ],
-      edgeMenu: [
-        {
-          text: '删除',
-          callback(edge) {
-            lf.deleteEdge(edge.id);
-          },
-        },
-        {
-          text: '编辑文本',
-          callback(edge) {
-            lf.graphModel.setTextEditable(edge.id);
-          },
-        },
-      ],
-      graphMenu: [],
+class Menu {
+  lf: LogicFlow;
+  private __container: HTMLElement;
+  private __menuDOM: HTMLElement;
+  private menuTypeMap: Map<string, MenuItem[]>;
+  private __currentData: any;
+  constructor({ lf }) {
+    this.__menuDOM = document.createElement('ul');
+    this.lf = lf;
+    this.menuTypeMap = new Map();
+    this.init();
+    this.lf.setMenuConfig = (config) => {
+      this.resetMenuItem(config);
     };
-    // TODO: 将方法添加到lf上后没有类型提示，推荐直接使用Menu上的方法
-    lf.setMenuConfig = Menu.resetMenuItem;
-    lf.addMenuConfig = Menu.addMenuItem;
-  },
-
+    this.lf.addMenuConfig = (config) => {
+      this.addMenuItem(config);
+    };
+    this.lf.setMenuByType = (config) => {
+      this.setMenuByType(config);
+    };
+  }
   /**
-   * 将 Menu 组件渲染进 LF 的组件层
-   * @param lf LogicFlow 实例
-   * @param container 组件层 DOM
+   * 初始化设置默认内置菜单栏
    */
+  private init() {
+    const defalutNodeMenu = [
+      {
+        text: '删除',
+        callback: (node) => {
+          this.lf.deleteNode(node.id);
+        },
+      },
+      {
+        text: '编辑文本',
+        callback: (node) => {
+          this.lf.graphModel.setTextEditable(node.id);
+        },
+      },
+      {
+        text: '复制',
+        callback: (node) => {
+          this.lf.cloneNode(node.id);
+        },
+      },
+    ];
+    this.menuTypeMap.set(DefalutNodeMenuKey, defalutNodeMenu);
+
+    const defaultEdgeMenu = [
+      {
+        text: '删除',
+        callback: (edge) => {
+          this.lf.deleteEdge(edge.id);
+        },
+      },
+      {
+        text: '编辑文本',
+        callback: (edge) => {
+          this.lf.graphModel.setTextEditable(edge.id);
+        },
+      },
+    ];
+    this.menuTypeMap.set(DefalutEdgeMenuKey, defaultEdgeMenu);
+
+    this.menuTypeMap.set(DefalutGraphMenuKey, []);
+  }
   render(lf, container) {
-    Menu.__container = container;
-    let currentData = null; // 当前展示的菜单所属元素的model数据
-    const menuConfig: MenuConfig = Menu.__items;
-    Menu.__menuDOM.className = 'lf-menu';
-    // 三种类型的菜单
-    Object.keys(menuConfig).forEach((menuType) => {
-      // 菜单没有配置时不进行渲染
-      if (menuConfig[menuType].length) {
-        const menuItems = Menu.__getMenuDom(menuConfig[menuType]); // 菜单的选项
-        Menu.__menuItemDOM.set(menuType, menuItems);
-        container.appendChild(Menu.__menuDOM);
-      }
-    });
+    this.__container = container;
+    this.__currentData = null; // 当前展示的菜单所属元素的model数据
+    this.__menuDOM.className = 'lf-menu';
+    container.appendChild(this.__menuDOM);
     // 将选项的click事件委托至menu容器
     // 在捕获阶段拦截并执行
-    Menu.__menuDOM.addEventListener('click', (event) => {
+    this.__menuDOM.addEventListener('click', (event) => {
       event.stopPropagation();
       let target = event.target as HTMLElement;
       // 菜单有多层dom，需要精确获取菜单项所对应的dom
@@ -113,96 +102,96 @@ const Menu: MenuPlugin = {
       }
       if (Array.from(target.classList).indexOf('lf-menu-item') > -1) {
         // 如果点击区域在菜单项内
-        (target as any).onclickCallback(currentData);
+        (target as any).onclickCallback(this.__currentData);
         // 点击后隐藏menu
-        Menu.__menuDOM.style.display = 'none';
-        currentData = null;
+        this.__menuDOM.style.display = 'none';
+        this.__currentData = null;
       } else {
         // 如果点击区域不在菜单项内
         console.warn('点击区域不在菜单项内，请检查代码！');
       }
     }, true);
     // 通过事件控制菜单的显示和隐藏
-    lf.on('node:contextmenu', ({ data, position }) => {
+    this.lf.on('node:contextmenu', ({ data, position }) => {
       const { domOverlayPosition: { x, y } } = position;
-      const { __menuDOM: menu, __menuItemDOM: menuItem } = Menu;
-      // 菜单容器不变，需要先清空内部的菜单项
-      menu.innerHTML = '';
       const { id } = data;
-      const model = lf.graphModel.getNodeModel(id);
+      const model = this.lf.graphModel.getNodeModel(id);
+      let menuList = [];
+      const typeMenus = this.menuTypeMap.get(model.type);
+      // 如果单个节点自定义了节点，以单个节点自定义为准
       if (model && model.menu && Array.isArray(model.menu)) {
-        // 支持直接从model中读取菜单配置
-        const menuList = Menu.__getMenuDom(model.menu);
-        menu.append(...menuList);
-      } else {
-        // 需要判空，不然setPatternItems设置空数组会报错。
-        const menuList = menuItem.get('nodeMenu');
-        menuList && menu.append(...menuList);
+        menuList = model.menu;
+      } else if (typeMenus) { // 如果定义当前节点类型的元素
+        menuList = typeMenus;
+      } else { // 最后取全局默认
+        menuList = this.menuTypeMap.get(DefalutNodeMenuKey);
       }
-      // 菜单中没有项，不显示
-      if (!menu.children.length) return;
-      menu.style.display = 'block';
-      menu.style.top = `${y}px`;
-      menu.style.left = `${x}px`;
-      currentData = data;
+      this.__currentData = data;
+      this.showMenu(x, y, menuList);
     });
-    lf.on('edge:contextmenu', ({ data, position }) => {
-      const { __menuDOM: menu, __menuItemDOM: menuItem } = Menu;
+    this.lf.on('edge:contextmenu', ({ data, position }) => {
       const { domOverlayPosition: { x, y } } = position;
-      menu.innerHTML = '';
       const { id } = data;
-      const model = lf.graphModel.getEdgeModel(id);
+      const model = this.lf.graphModel.getEdgeModel(id);
+      let menuList = [];
+      const typeMenus = this.menuTypeMap.get(model.type);
+      // 如果单个节点自定义了连线
       if (model && model.menu && Array.isArray(model.menu)) {
-        const menuList = Menu.__getMenuDom(model.menu);
-        menu.append(...menuList);
-      } else {
-        const menuList = menuItem.get('edgeMenu');
-        menuList && menu.append(...menuList);
+        menuList = model.menu;
+      } else if (typeMenus) { // 如果定义当前连线类型的元素
+        menuList = typeMenus;
+      } else { // 最后取全局默认
+        menuList = this.menuTypeMap.get(DefalutEdgeMenuKey);
       }
-      if (!menu.children.length) return;
-      menu.style.display = 'block';
-      menu.style.top = `${y}px`;
-      menu.style.left = `${x}px`;
-      currentData = data;
+      this.__currentData = data;
+      this.showMenu(x, y, menuList);
     });
-    lf.on('blank:contextmenu', ({ e, position }) => {
-      const { __menuDOM: menu, __menuItemDOM: menuItem } = Menu;
+    this.lf.on('blank:contextmenu', ({ position }) => {
+      const menuList = this.menuTypeMap.get(DefalutGraphMenuKey);
       const { domOverlayPosition: { x, y } } = position;
-      const menuList = menuItem.get('graphMenu');
-      if (menuList) {
-        menu.innerHTML = '';
-        menu.append(...menuList);
-        if (!menu.children.length) return;
-        menu.style.display = 'block';
-        menu.style.top = `${y}px`;
-        menu.style.left = `${x}px`;
-        currentData = e;
-      }
+      this.showMenu(x, y, menuList);
     });
-    lf.on('node:mousedown', () => {
-      Menu.__menuDOM.style.display = 'none';
+    this.lf.on('node:mousedown', () => {
+      this.__menuDOM.style.display = 'none';
     });
-    lf.on('edge:click', () => {
-      Menu.__menuDOM.style.display = 'none';
+    this.lf.on('edge:click', () => {
+      this.__menuDOM.style.display = 'none';
     });
-    lf.on('blank:click', () => {
-      Menu.__menuDOM.style.display = 'none';
+    this.lf.on('blank:click', () => {
+      this.__menuDOM.style.display = 'none';
     });
-    // todo: 鼠标滚动导致缩放和平移变化，会是菜单显示不准确。需要抛出缩放和平移事件，这里再做处理。
-  },
-
+  }
   destroy() {
-    Menu.__container.removeChild(Menu.__menuDOM);
-    Menu.__menuDOM = null;
-    Menu.__menuItemDOM = null;
-  },
-
+    this.__container.removeChild(this.__menuDOM);
+    this.__menuDOM = null;
+  }
+  private showMenu(x, y, menuList) {
+    if (!menuList || !menuList.length) return;
+    const { __menuDOM: menu } = this;
+    // 菜单容器不变，需要先清空内部的菜单项
+    menu.innerHTML = '';
+    menu.append(...this.__getMenuDom(menuList));
+    // 菜单中没有项，不显示
+    if (!menu.children.length) return;
+    menu.style.display = 'block';
+    menu.style.top = `${y}px`;
+    menu.style.left = `${x}px`;
+  }
+  /**
+   * 设置指定类型元素的菜单
+   */
+  private setMenuByType(config) {
+    if (!config.type || !config.menu) {
+      return;
+    }
+    this.menuTypeMap.set(config.type, config.menu);
+  }
   /**
    * 获取 Menu DOM
    * @param list 菜单项
    * @return 菜单项 DOM
    */
-  __getMenuDom(list): HTMLElement[] {
+  private __getMenuDom(list): HTMLElement[] {
     const menuList = [];
     list && list.length > 0 && list.forEach((item) => {
       const element = document.createElement('li');
@@ -226,54 +215,55 @@ const Menu: MenuPlugin = {
       menuList.push(element);
     });
     return menuList;
-  },
+  }
   // 复写菜单
-  resetMenuItem(config: MenuConfig) {
-    if (config) {
-      // 自定义全局菜单
-      if (config.nodeMenu === false) {
-        Menu.__items.nodeMenu = [];
-      } else if (config.nodeMenu) {
-        Menu.__items.nodeMenu = config.nodeMenu;
-      }
-      if (config.edgeMenu === false) {
-        Menu.__items.edgeMenu = [];
-      } else if (config.edgeMenu) {
-        Menu.__items.edgeMenu = config.edgeMenu;
-      }
-      if (config.graphMenu === false) {
-        Menu.__items.graphMenu = [];
-      } else if (config.graphMenu) {
-        Menu.__items.graphMenu = config.graphMenu;
-      }
+  private resetMenuItem(config: MenuConfig) {
+    if (!config) {
+      return;
     }
-  },
+    // node
+    config.nodeMenu !== undefined
+      && this.menuTypeMap.set(DefalutNodeMenuKey, config.nodeMenu ? config.nodeMenu : []);
+    // edge
+    config.edgeMenu !== undefined
+      && this.menuTypeMap.set(DefalutEdgeMenuKey, config.edgeMenu ? config.edgeMenu : []);
+    // graph
+    config.graphMenu !== undefined
+      && this.menuTypeMap.set(DefalutGraphMenuKey, config.graphMenu ? config.graphMenu : []);
+  }
   // 在默认菜单后面追加菜单项
-  addMenuItem(config: MenuConfig) {
-    if (config) {
-      // 追加项时，只支持数组类型，对false不做操作
-      if (Array.isArray(config.nodeMenu)) {
-        (Menu.__items.nodeMenu as MenuItem[]).push(...config.nodeMenu);
-      }
-      if (Array.isArray(config.edgeMenu)) {
-        (Menu.__items.edgeMenu as MenuItem[]).push(...config.edgeMenu);
-      }
-      if (Array.isArray(config.graphMenu)) {
-        (Menu.__items.edgeMenu as MenuItem[]).push(...config.graphMenu);
-      }
+  private addMenuItem(config: MenuConfig) {
+    if (!config) {
+      return;
     }
-  },
-  // 支持复写或追加
+    // 追加项时，只支持数组类型，对false不做操作
+    if (Array.isArray(config.nodeMenu)) {
+      const menuList = this.menuTypeMap.get(DefalutNodeMenuKey);
+      this.menuTypeMap.set(DefalutNodeMenuKey, menuList.concat(config.nodeMenu));
+    }
+    if (Array.isArray(config.edgeMenu)) {
+      const menuList = this.menuTypeMap.get(DefalutEdgeMenuKey);
+      this.menuTypeMap.set(DefalutEdgeMenuKey, menuList.concat(config.edgeMenu));
+    }
+    if (Array.isArray(config.graphMenu)) {
+      const menuList = this.menuTypeMap.get(DefalutGraphMenuKey);
+      this.menuTypeMap.set(DefalutGraphMenuKey, menuList.concat(config.graphMenu));
+    }
+  }
+  /**
+   * @deprecated
+   * 复写添加
+   */
   changeMenuItem(type: SetType, config: MenuConfig) {
-    if (type === 'add') Menu.addMenuItem(config);
-    else if (type === 'reset') Menu.resetMenuItem(config);
+    if (type === 'add') this.addMenuItem(config);
+    else if (type === 'reset') this.resetMenuItem(config);
     else {
       throw new Error(
         'The first parameter of changeMenuConfig should be \'add\' or \'reset\'',
       );
     }
-  },
-};
+  }
+}
 
 export default Menu;
 
