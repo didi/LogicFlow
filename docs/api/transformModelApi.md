@@ -2,6 +2,9 @@
 
 控制画布的放大、缩小、平移
 
+```ts
+type PointTuple = [number, number]
+```
 
 ## zoom(isZoomIn, point)
 
@@ -49,4 +52,34 @@
 |-|-|-|-|
 |size|number|无|放大的倍数，大于1|
 
+## HtmlPointToCanvasPoint
 
+`方法`
+
+将toolOverlay点基于缩放转换为canvasOverlay层上的点
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| point | PointTuple | true | 无 | 坐标 |
+
+返回值
+
+PointTuple
+
+## CanvasPointToHtmlPoint
+
+`方法`
+
+将canvasOverlay层上的点基于缩放转换为toolOverlay上的点。
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| point | PointTuple | true | 无 | 坐标 |
+
+返回值
+
+PointTuple

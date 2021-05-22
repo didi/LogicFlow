@@ -59,6 +59,15 @@
     .upload::-webkit-file-upload-button{
       cursor: pointer;
     }
+    .custom-tips {
+      display: none;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAgCAYAAACcuBHKAAACXUlEQVRYR+1XO2wTQRB9a1suKAAJGqhSQUGB+Ei0pEKyb062gdR0qfiK1MQtEiSCKhWpCdjSzdqiI5RIgIgEBTRUQAMSpKCwfB401tkcju+yjm2l8XWnezPzbufN7luDER8iWhORi8aYE4OhIvLZGLPJzIujpDWjgIloBcAth5hVZr7tgOtCnEn4vn9VRJ5GibcBvBtS5CyAg93ExiwEQbDhQsSZhOd5y8aYe5pUROattZuDBTzP0za9jDBVa+2yMwkt4AT+R6KahI8RTcTEY5WoIaIPAE65kJgS5qOSeALg2pQKuKRd72pCe9lDx3sKYEffXbImYFQvfU31MKqt/4S5V2G5EEsT9tgklPiwSRkyOYnTNRYJInoE4DqAx8x8I21Fxl4Jz/MKxpglZp6PFyIi3RNUT7pVd7+VSqW5MAy196+Yeb2HH5sEEX0BMCciG9bahV7iYSSSik2ChESF+3+s7zMSs3bEp2CmifheMZuO/ZqOrwCO77cwSwBuioj6xr7H2OXs2GLm1YmdHUmnIxE9BKDWfoWZ70z1FN0l+WT9RLFYPJfJZN5Elv2Btfaui2tywfi+f19ElhTb6XTONxqNt31LOZiAiH7rBcYY8z4IgjMuBVwwvu+/EJFLALaZ+VA8Zsflh4ieAbgcrUY1n8+v1Wq17y6FhmEqlcqxVqu12DO5AJ4z85VUEuVy+Ui73f4RA/0B8AmArtCoj/7xSQAHeoG5XO5ovV7/mUpCPxYKhQvZbLYW7Q2jFk7CfwvDsNJsNl8PAlLvopElOx35yMN7YPNLNzgR2Uq7l/4FHSW5gJV0bmAAAAAASUVORK5CYII=') center center no-repeat;
+      background-size: cover;
+    }
   </style>
 </head>
 <body>
@@ -108,6 +117,7 @@
   <script src="/FlowPath.js"></script>
   <script src="/AutoLayout.js"></script>
   <script src="/DndPanel.js"></script>
+  <script src="./tips.js"></script>
   <script>
     LogicFlow.use(BpmnElement);
     LogicFlow.use(MiniMap);

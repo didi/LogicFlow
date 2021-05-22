@@ -111,7 +111,6 @@ window.onload = function () {
       stopMoveGraph: false,
     });
   });
-
   // document.querySelector('#start-node-pattern').addEventListener('mousedown', () => {
   //   lf.dnd.startDrag({
   //     type: 'bpmn:startEvent',
