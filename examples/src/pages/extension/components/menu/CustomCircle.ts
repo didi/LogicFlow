@@ -1,4 +1,4 @@
-import { CircleNode, CircleNodeModel } from '@logicflow/core';
+import { CircleNode, CircleNodeModel, EventArgs } from '@logicflow/core';
 
 class CustomCircleModel extends CircleNodeModel {
   setAttributes() {
@@ -7,7 +7,7 @@ class CustomCircleModel extends CircleNodeModel {
       text: '自定义元素菜单',
       icon: true,
       className: 'custom-menu',
-      callback: (res) => {
+      callback: (res: EventArgs) => {
         this.graphModel.eventCenter.emit('custom:node:event', res);
       }
     }]
