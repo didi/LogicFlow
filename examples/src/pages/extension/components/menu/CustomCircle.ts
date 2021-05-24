@@ -14,8 +14,10 @@ class CustomCircleModel extends CircleNodeModel {
   }
 }
 
-export default {
+const CustomCircle = {
   type: 'custom:circle',
   model: CustomCircleModel,
   view: CircleNode,
 }
+
+export default CustomCircle;
