@@ -8,7 +8,7 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, MenuConfig, NodeAttribute, NodeConfig,
+  AdditionData, NodeData, NodeAttribute, NodeConfig,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -48,7 +48,7 @@ export default class BaseNodeModel implements IBaseModel {
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
-  menu?: MenuConfig[];
+  [propName: string]: any; // 支持自定义
   targetRules: ConnectRule[] = [];
   sourceRules: ConnectRule[] = [];
   hasSetTargetRules = false; // 用来限制rules的重复值
