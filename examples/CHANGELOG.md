@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.7](https://github.com/towersxu/logicflow/compare/examples@0.5.4...examples@0.5.7) (2021-05-24)
+
+
+### Bug Fixes
+
+* eslint import/no-anonymous-default-export ([a495c21](https://github.com/towersxu/logicflow/commit/a495c21e9eaa2191aeb1827887ff33614eb08764))
+* menu callback types ([2313a0a](https://github.com/towersxu/logicflow/commit/2313a0af692fb84ae012426e212301cf88629366))
+
+
+
+
+
 ## [0.5.6](https://github.com/towersxu/logicflow/compare/examples@0.5.5...examples@0.5.6) (2021-05-21)
 
 **Note:** Version bump only for package examples
