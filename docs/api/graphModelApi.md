@@ -40,6 +40,31 @@ LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是
 
 页面编辑基本配置对象, 详情见[](/api/editConfigModel.html)
 
+## eventCenter
+
+`属性`, `只读`
+
+logicflow内部的事件中心，可以通过这个对象向外部抛出事件。
+
+示例
+
+```ts
+class UserTaskModel extends RectNodeModel {
+  setAttributes() {
+    this.menu = [
+      {
+        text: '详情',
+        callback: (res) => {
+          this.graphModel.eventCenter.emit('user:detail', res);
+        }
+      },
+    ]
+  }
+}
+// 监听
+lf.on('user:detail', (res) => {})
+```
+
 ## partial
 
 `属性`
@@ -508,3 +533,26 @@ type graphDataConfig = {
 `方法`
 
 清空画布所有元素
+
+## setElementStateById
+
+`方法`
+
+设置指定元素状态
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | string | true | 无 | 元素Id |
+| state | ElementState | true | 无 | 元素状态 |
+
+```ts
+export enum ElementState {
+  DEFAULT = 1, // 原始状态
+  TEXT_EDIT = 2, // 编辑框显示
+  SHOW_MENU = 3, // 菜单显示
+  ALLOW_CONNECT = 4, // 允许连线连接
+  NOT_ALLOW_CONNECT = 5, // 不允许连线连接
+}
+```
