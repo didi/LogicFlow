@@ -38,7 +38,7 @@ LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是
 
 `属性`
 
-页面编辑基本配置对象, 详情见[](/api/editConfigModel.html)
+页面编辑基本配置对象, 详情见[editConfigApi](/api/editConfigModel.html)
 
 ## eventCenter
 
