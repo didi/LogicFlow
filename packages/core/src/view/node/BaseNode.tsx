@@ -26,6 +26,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   }
   stepDrag: StepDrag;
   contextMenuTime: number;
+  startTime: number;
   clickTimer: number;
   constructor(props) {
     super();
@@ -230,6 +231,11 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
   };
   handleClick = (e: MouseEvent) => {
+    // 节点拖拽进画布之后，不触发click事件相关emit
+    // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
+    if (!this.startTime) return;
+    const time = new Date().getTime() - this.startTime;
+    if (time > 200) return; // 事件大于200ms，认为是拖拽。
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
@@ -292,6 +298,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
     graphModel.toFront(model.id);
+    this.startTime = new Date().getTime();
     this.stepDrag && this.stepDrag.handleMouseDown(ev);
   };
   // 不清楚以前为啥要把hover状态放到model中，先改回来。
