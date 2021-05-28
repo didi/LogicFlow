@@ -73,7 +73,7 @@ const Control: ControlPlugin = {
     Control.__lf = lf;
     Control.__domContainer = domContainer;
     Control.__tool = this.__getControlTool();
-    domContainer.appendChild(this.__tool);
+    domContainer.appendChild(Control.__tool);
   },
   destroy() {
     Control.__domContainer?.removeChild(Control.__tool);
