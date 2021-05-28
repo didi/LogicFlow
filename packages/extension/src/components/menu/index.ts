@@ -162,7 +162,7 @@ class Menu {
     });
   }
   destroy() {
-    this.__container.removeChild(this.__menuDOM);
+    this?.__container?.removeChild(this.__menuDOM);
     this.__menuDOM = null;
   }
   private showMenu(x, y, menuList) {

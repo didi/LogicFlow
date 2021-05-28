@@ -71,12 +71,12 @@ const Control: ControlPlugin = {
   install() { },
   render(lf, domContainer) {
     Control.__lf = lf;
-    this.__domContainer = domContainer;
-    this.__tool = this.__getControlTool();
-    domContainer.appendChild(this.__tool);
+    Control.__domContainer = domContainer;
+    Control.__tool = this.__getControlTool();
+    domContainer.appendChild(Control.__tool);
   },
   destroy() {
-    this.__domContainer.removeChild(this.__tool);
+    Control.__domContainer?.removeChild(Control.__tool);
   },
   __getControlTool(): HTMLElement {
     const NORMAL = 'lf-control-item';
@@ -90,8 +90,12 @@ const Control: ControlPlugin = {
       const text = document.createElement('span');
       itemContainer.className = DISABLED;
       item.onClick && (itemContainer.onclick = item.onClick.bind(null, Control.__lf));
-      item.onMouseEnter && (itemContainer.onmouseenter = item.onMouseEnter.bind(null, Control.__lf));
-      item.onMouseLeave && (itemContainer.onmouseleave = item.onMouseLeave.bind(null, Control.__lf));
+      item.onMouseEnter && (
+        itemContainer.onmouseenter = item.onMouseEnter.bind(null, Control.__lf)
+      );
+      item.onMouseLeave && (
+        itemContainer.onmouseleave = item.onMouseLeave.bind(null, Control.__lf)
+      );
       icon.className = item.iconClass;
       text.className = 'lf-control-text';
       text.title = item.title;

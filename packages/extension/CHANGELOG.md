@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.10](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.9...@logicflow/extension@0.4.10) (2021-05-28)
+
+
+### Bug Fixes
+
+* use Control. __tool ([c739586](https://github.com/towersxu/logicflow/commit/c739586dd261ead077b2c86fefb7c6cc726b6f33))
+
+
+
+
+
+## [0.4.9](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.7...@logicflow/extension@0.4.9) (2021-05-28)
+
+
+### Bug Fixes
+
+* extension destroy domContainer is undefined ([6f8fe13](https://github.com/towersxu/logicflow/commit/6f8fe1379aa5307ef2ba48bfb6d5072dfa132f33))
+
+
+
+
+
+## [0.4.8](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.7...@logicflow/extension@0.4.8) (2021-05-25)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
 ## [0.4.7](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.4...@logicflow/extension@0.4.7) (2021-05-24)
 
 
