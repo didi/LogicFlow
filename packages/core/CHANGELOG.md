@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.9](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.7...@logicflow/core@0.4.9) (2021-05-28)
+
+
+### Bug Fixes
+
+* 修复拖动触发点击事件的问题 ([19fd122](https://github.com/towersxu/logicflow/commit/19fd1226f0d26ccfddbe0df405907412e95b4535))
+
+
+
+
+
 ## [0.4.8](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.7...@logicflow/core@0.4.8) (2021-05-25)
 
 
