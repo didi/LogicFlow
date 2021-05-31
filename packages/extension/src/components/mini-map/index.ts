@@ -213,7 +213,7 @@ const MiniMap: MiniMapPlugin = {
     const data = MiniMap.__resetData(MiniMap.__lf.getGraphRawData());
     // 由于随时都会有新节点注册进来，需要同步将注册的
     const { viewMap } : { viewMap: Map<string, any> } = MiniMap.__lf;
-    const { modelMap } : { modelMap: Map<string, any> } = MiniMap.__lf.graphModel.modelMap;
+    const { modelMap } : { modelMap: Map<string, any> } = MiniMap.__lf.graphModel;
     const { viewMap: minimapViewMap } : { viewMap: Map<string, any> } = MiniMap.__lfMap;
     // todo: no-restricted-syntax
     for (const key of viewMap.keys()) {
