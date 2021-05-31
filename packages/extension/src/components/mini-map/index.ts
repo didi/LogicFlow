@@ -212,10 +212,11 @@ const MiniMap: MiniMapPlugin = {
     // 1. 获取到图中所有的节点中的位置，将其偏移到原点开始（避免节点位置为负的时候无法展示问题）。
     const data = MiniMap.__resetData(MiniMap.__lf.getGraphRawData());
     // 由于随时都会有新节点注册进来，需要同步将注册的
-    const viewMap = MiniMap.__lf.viewMap;
-    const modelMap = MiniMap.__lf.graphModel.modelMap;
-    const minimapViewMap = MiniMap.__lfMap.viewMap;
-    for (let key of viewMap.keys()) {
+    const { viewMap } : { viewMap: Map<string, any> } = MiniMap.__lf;
+    const { modelMap } : { modelMap: Map<string, any> } = MiniMap.__lf.graphModel.modelMap;
+    const { viewMap: minimapViewMap } : { viewMap: Map<string, any> } = MiniMap.__lfMap;
+    // todo: no-restricted-syntax
+    for (const key of viewMap.keys()) {
       if (!minimapViewMap.has(key)) {
         MiniMap.__lfMap.setView(key, viewMap.get(key));
         MiniMap.__lfMap.graphModel.modelMap.set(key, modelMap.get(key));
