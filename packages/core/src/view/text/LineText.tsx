@@ -57,13 +57,12 @@ export default class LineText extends BaseText {
   getShape() {
     const { model: { text }, style } = this.props;
     const { value, x, y } = text;
-    const textStyle = pick(style, 'color', 'fontSize', 'fontWeight', 'fontFamily');
     const attr = {
       x,
       y,
       className: 'lf-element-text',
       value,
-      ...textStyle,
+      ...style, // 透传 edageText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
     };
     return (
       <g
