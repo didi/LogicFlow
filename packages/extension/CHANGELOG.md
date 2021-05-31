@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.11](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.10...@logicflow/extension@0.4.11) (2021-05-31)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
 ## [0.4.10](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.9...@logicflow/extension@0.4.10) (2021-05-28)
 
 
