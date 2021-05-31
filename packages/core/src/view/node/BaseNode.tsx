@@ -160,6 +160,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   /* 支持节点自定义文案样式 */
   getTextStyle() {
     const { graphModel } = this.props;
+    // 透传 nodeText
     const { nodeText } = graphModel.theme;
     return nodeText;
   }

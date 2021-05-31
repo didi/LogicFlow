@@ -233,6 +233,12 @@ lf.setTheme({
 |fontSize|number|字体大小|1|
 |fontWeight|string/number|字体粗细|normal|
 |fontFamily|string|字体名称|''|
+|dx|number|水平偏移量|None|
+|dy|number|垂直偏移量|None|
+|textAnchor|string|对齐方式|inherit|
+|rotate|number|文字旋转角度|0|
+|textLength|number|文本长度|None|
+|lengthAdjust|string|文本伸缩方式|'spacing'|
 <details>
 <summary>点击展开查看节点文本样式设置</summary>
 
@@ -439,6 +445,12 @@ lf.setTheme({
 |fontFamily|string|字体名称|''|
 |background|BackgroundObject|文本背景(矩形)|[BackgroundObject](/guide/advance/theme.html#backgroundobject)|
 |hoverBackground|BackgroundObject|文本背景(矩形)|null|
+|dx|number|水平偏移量|None|
+|dy|number|垂直偏移量|None|
+|textAnchor|string|对齐方式|inherit|
+|rotate|number|文字旋转角度|0|
+|textLength|number|文本长度|None|
+|lengthAdjust|string|文本拉伸或压缩方式|'spacing'|
 
 ### `BackgroundObject`
 
