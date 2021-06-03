@@ -36,6 +36,7 @@ const guide = [
       'extension/adapter',
       'extension/bpmn-element',
       'extension/extension-node-resize',
+      'extension/extension-insert-node-in-polyline.md',
       {
         title: '组件',
         collapsable: true,

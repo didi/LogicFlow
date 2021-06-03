@@ -31,6 +31,7 @@ import Approve from './pages/usage/approve';
 import ApprovePreview from './pages/usage/approvePreview';
 import BpmnElements from './pages/extension/bpmn/Elements';
 import AdapterExample from './pages/extension/adapter';
+import InserNodeInPolyline from './pages/extension/InserNodeInPolyline';
 
 
 export default (
@@ -62,6 +63,7 @@ export default (
     <Route path="/extension/bpmn-elements" exact component={BpmnElements} />
     <Route path="/extension/adapter" exact component={AdapterExample} />
     <Route path="/extension/node-resize" exact component={NodeResizeExample} />
+    <Route path="/extension/InserNodeInPolyline" exact component={InserNodeInPolyline} />
     <Route path="/usage/bpmn" exact component={Bpmn} />
     <Route path="/usage/approve" exact component={Approve} />
     <Route path="/usage/approve/preview" exact component={ApprovePreview} />
