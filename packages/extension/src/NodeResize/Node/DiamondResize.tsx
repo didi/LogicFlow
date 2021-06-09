@@ -37,6 +37,10 @@ class DiamondResizeView extends DiamondNode {
       />
     );
   }
+  // getShapeResize绘制图形，功能等同于基础菱形的getShape功能，可以通过复写此方法，进行节点自定义
+  getShapeResize(arrt) {
+    return <g><Polygon {...arrt} /></g>;
+  }
   getShape() {
     const attributes = super.getAttributes() as any;
     const {
@@ -44,7 +48,7 @@ class DiamondResizeView extends DiamondNode {
     } = this.props;
     return (
       <g>
-        <Polygon {...attributes} />
+        {this.getShapeResize(attributes)}
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );

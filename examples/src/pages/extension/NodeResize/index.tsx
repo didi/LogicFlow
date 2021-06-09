@@ -3,6 +3,9 @@ import LogicFlow from '@logicflow/core';
 import { NodeResize } from '@logicflow/extension';
 import ExampleHeader from '../../../components/example-header';
 import 'antd/lib/button/style/index.css';
+import StartEvent from './CustomeNode/StartEvent';
+import ExclusiveGateway from './CustomeNode/ExclusiveGateway'; 
+import UserTask from './CustomeNode/UserTask';
 import './index.css';
 
 const config = {
@@ -63,7 +66,38 @@ export default function NodeResizeExample() {
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
-    lf.render(data)
+    // 设置默认样式，主要将outlineColor设置为透明，不再core包中默认的节点外框
+    lf.setTheme({
+      rect: {
+        strokeWidth: 2,
+        outlineColor: 'transparent',
+        stroke: 'blue',
+      },
+      ellipse: {
+        strokeWidth: 2,
+        outlineColor: 'transparent',
+      },
+      diamond: {
+        strokeWidth: 2,
+        outlineColor: 'transparent',
+      },
+    });
+    lf.register(StartEvent);
+    lf.register(ExclusiveGateway);
+    lf.register(UserTask);
+    lf.render(data);
+    // 节点缩放后更新文案位置
+    lf.on('node:resize', (data) => {
+      console.log(data);
+      const { newNodeSize } = data;
+      const { id, type } = newNodeSize;
+      if (type === 'bpmn:exclusiveGateway' || type === 'bpmn:startEvent') {
+        const { x, y, ry } = newNodeSize;
+        const text = { x, y: y + ry + 10}
+        //@ts-ignore
+        lf.setNodeData({id, text});
+      }
+    })
   }, []);
   const addNode = (type: string) => {
     lf.dnd.startDrag({
@@ -81,6 +115,9 @@ export default function NodeResizeExample() {
       </ExampleHeader>
       <div className="node-resize-list">
         <div>拖拽添加节点</div>
+        <div className="node-resize-custome" onMouseDown={() => addNode('bpmn:userTask')}>用户</div>
+        <div className="node-resize-custome" onMouseDown={() => addNode('bpmn:startEvent')}>开始</div>
+        <div className="node-resize-custome" onMouseDown={() => addNode('bpmn:exclusiveGateway')}>判断</div>
         <div className="node-resize-rect" onMouseDown={() => addNode('rect')}></div>
         <div className="node-resize-ellipse" onMouseDown={() => addNode('ellipse')}></div>
         <div className="node-resize-diamond" onMouseDown={() => addNode('diamond')}></div>

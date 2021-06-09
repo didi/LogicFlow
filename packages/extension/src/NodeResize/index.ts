@@ -90,4 +90,7 @@ export default NodeResize;
 
 export {
   NodeResize,
+  RectResize,
+  EllipseResize,
+  DiamondResize,
 };
