@@ -22,6 +22,10 @@ lf.on('element:type', (eventObject) => {});
 | 'node:mouseleave' | 鼠标离开节点 | data, e |
 | 'node:delete' | 节点的删除 | data |
 | 'node:add' | 节点的添加 | data |
+| 'node:dnd-add' | 节点拖拽添加 | data |
+| 'node:dragstart' | 节点开始拖拽 | data, e |
+| 'node:drag' | 节点拖拽 | data, e |
+| 'node:drop' | 节点拖拽放开 | data, e |
 | 'node:contextmenu' | 右键点击节点 | data, e, position |
 
 事件对象包含如下内容。
@@ -64,6 +68,9 @@ lf.on('element:type', (eventObject) => {});
 | 'blank:mouseup' | 画布鼠标抬起 | e |
 | 'blank:click' | 画布单击 | e |
 | 'blank:contextmenu'| 画布右键 | e, position |
+| 'blank:dragstart' | 画布开始拖拽 | e |
+| 'blank:drag' | 画布拖拽 | e |
+| 'blank:drop' | 画布拖拽放开 | e |
 
 事件对象包含如下内容。
 
