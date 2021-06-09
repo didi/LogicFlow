@@ -254,6 +254,44 @@ lf.setTheme({
 ```
 </details>
 
+## 菱形
+
+|key|type|description|default|
+|-|-|-|-|
+|rx|number|x轴尺寸|50|
+|ry|number|y轴尺寸|40|
+|fill|color|填充颜色|#FFFFFF|
+|fillOpacity|number|填充透明度|1|
+|stroke|color|边框颜色|#000000|
+|strokeWidth|number|边框宽度|2|
+|strokeOpacity|number|边框透明度|1|
+|opacity|number|整体透明度|1|
+|outlineColor|color|外边框颜色|#000000|
+|hoverOutlineColor|color|hover外边框颜色|#000000|
+|outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+|hoverOutlineStrokeDashArray|string|控制用来描hover外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
+<details>
+<summary>点击展开查看多边形样式设置</summary>
+
+```ts
+lf.setTheme({
+  diamond: {
+    rx: 50,
+    ry: 50,
+    fill: '#FFFFFF',
+    stroke: '#000000',
+    strokeWidth: 2,
+    fillOpacity: 1,
+    strokeOpacity: 1,
+    opacity: 1,
+    outlineColor: '#000000',
+    hoverOutlineColor: '#000000',
+    outlineStrokeDashArray: '3,3',
+    hoverOutlineStrokeDashArray: '3,3'
+  },
+})
+```
+</details>
 
 ## 多边形
 
