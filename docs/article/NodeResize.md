@@ -149,7 +149,7 @@ edges.targetEdges.forEach(item => {
 ### 样式
 增加节点调整后，为了使整体样式个更加舒适，在插件内部设置了节点的主题样式，宿主可以对其进行覆盖设置。
 ```js
-// 设置默认样式，主要将outlineColor设置为透明，不再core包中默认的节点外框
+// 设置默认样式，主要将outlineColor设置为透明，不再展示core包中默认的节点外框
     lf.setTheme({
       rect: {
         strokeWidth: 2,
@@ -182,5 +182,10 @@ edges.targetEdges.forEach(item => {
     },
   },
 ```
+## 事件
+节点缩放后，定义了 `node:resize` 事件，并抛出节点缩放前和缩放后的基础信息、大小、位置信息，方便宿主可以进行其他操作。
+
+## 自定义节点使用
+ 为了能够使自定义节点使用缩放功能，内部将 `RectResize`,   `EllipseResize` ,  `DiamondResize` 导出，通过继承 `RectResize.model` , `RectResize.view` 等实现缩放。
 ## 最后
 以上介绍了节点缩放功能的实现方案，如果对此插件实现有想法的同学，欢迎在用户群交流~。

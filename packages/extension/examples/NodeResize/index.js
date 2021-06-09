@@ -40,6 +40,9 @@ window.onload = function () {
       },
     ],
   });
+  lf.on('node:resize', (data) => {
+    console.log(data);
+  })
   // 初始化拖入功能
   document.querySelector('#rect').addEventListener('mousedown', () => {
     lf.dnd.startDrag({

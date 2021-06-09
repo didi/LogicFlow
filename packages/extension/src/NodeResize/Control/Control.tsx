@@ -128,22 +128,24 @@ class Control extends Component<IProps> {
       },
     });
     const edges = this.getNodeEdges(id);
+    const beforeNode = {
+      x,
+      y,
+      width,
+      height,
+      radius,
+    };
+    const afterNode = {
+      x: this.nodeModel.x,
+      y: this.nodeModel.y,
+      width: this.nodeModel.width,
+      height: this.nodeModel.height,
+      radius,
+    };
     const params = {
       point: '',
-      beforeNode: {
-        x,
-        y,
-        width,
-        height,
-        radius,
-      },
-      afterNode: {
-        x: this.nodeModel.x,
-        y: this.nodeModel.y,
-        width: this.nodeModel.width,
-        height: this.nodeModel.height,
-        radius,
-      },
+      beforeNode,
+      afterNode,
     };
     // 更新连线
     let afterPoint;
@@ -157,6 +159,7 @@ class Control extends Component<IProps> {
       afterPoint = getRectReizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
+    this.eventEmit({ beforeNode, afterNode });
   };
   // 椭圆更新
   updateEllipse = ({ deltaX, deltaY }) => {
@@ -201,15 +204,17 @@ class Control extends Component<IProps> {
       },
     });
     const edges = this.getNodeEdges(id);
+    const beforeNode = { x, y };
+    const afterNode = {
+      rx: size.width,
+      ry: size.height,
+      x: this.nodeModel.x,
+      y: this.nodeModel.y,
+    };
     const params = {
       point: {},
-      beforeNode: { x, y },
-      afterNode: {
-        rx: size.width,
-        ry: size.height,
-        x: this.nodeModel.x,
-        y: this.nodeModel.y,
-      },
+      beforeNode,
+      afterNode,
     };
     // 更新连线
     let afterPoint;
@@ -223,6 +228,7 @@ class Control extends Component<IProps> {
       afterPoint = getEllipseReizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
+    this.eventEmit({ beforeNode: { ...beforeNode, rx, ry }, afterNode });
   };
   // 菱形更新
   updateDiamond = ({ deltaX, deltaY }) => {
@@ -266,17 +272,17 @@ class Control extends Component<IProps> {
         ry: size.height,
       },
     });
+    const beforeNode = { x, y, rx, ry };
+    const afterNode = {
+      rx: size.width,
+      ry: size.height,
+      x: this.nodeModel.x,
+      y: this.nodeModel.y,
+    };
     const params = {
       point: {},
-      beforeNode: {
-        x, y, rx, ry,
-      },
-      afterNode: {
-        rx: size.width,
-        ry: size.height,
-        x: this.nodeModel.x,
-        y: this.nodeModel.y,
-      },
+      beforeNode,
+      afterNode,
     };
     // 更新连线
     let afterPoint;
@@ -291,6 +297,13 @@ class Control extends Component<IProps> {
       afterPoint = getDiamondReizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
+    this.eventEmit({ beforeNode, afterNode });
+  };
+  eventEmit = ({ beforeNode, afterNode }) => {
+    const { id, modelType, type } = this.nodeModel;
+    const oldNodeSize = { id, modelType, type, ...beforeNode };
+    const newNodeSize = { id, modelType, type, ...afterNode };
+    this.graphModel.eventCenter.emit('node:resize', { oldNodeSize, newNodeSize });
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { modelType } = this.nodeModel;

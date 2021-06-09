@@ -37,6 +37,10 @@ class EllipseResizeView extends EllipseNode {
       />
     );
   }
+  // getResizeShape绘制图形，功能等同于基础椭圆的getShape功能，可以通过复写此方法，进行节点自定义
+  getResizeShape(arrt) {
+    return <g><Ellipse {...arrt} /></g>;
+  }
   getShape() {
     const attributes = super.getAttributes();
     const {
@@ -44,7 +48,7 @@ class EllipseResizeView extends EllipseNode {
     } = this.props;
     return (
       <g>
-        <Ellipse {...attributes} />
+        {this.getResizeShape(attributes)}
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );
