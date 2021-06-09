@@ -26,7 +26,7 @@ class ExclusiveGatewayModel extends DiamondResize.model {
 }
 
 class ExclusiveGatewayView extends DiamondResize.view {
-  getShapeResize() {
+  getResizeShape() {
     const attributes = super.getAttributes();
     const {
       x,

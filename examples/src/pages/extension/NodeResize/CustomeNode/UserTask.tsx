@@ -11,7 +11,7 @@ class UserTaskModel extends RectResize.model {
 }
 // 自定义节点的 view
 class UserTaskView extends RectResize.view {
-  getShapeResize() {
+  getResizeShape() {
     // 通过 getAttributes 获取 model 中的属性
     const { x, y, width, height, fill, stroke, strokeWidth, radius } = this.getAttributes();
     const attrs = {
