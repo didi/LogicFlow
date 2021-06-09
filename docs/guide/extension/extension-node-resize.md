@@ -114,7 +114,7 @@ lf.on('node:resize', ({oldNodeSize, newNodeSize}) => {
 - EllipseResize: 椭圆
 - DiamondResize: 菱形  
 
-**getShapeResize**方法功能等同于普通自定义节点的**getShape**方法，进行个性化图形绘制，使用方式如下：
+**getResizeShape**方法功能等同于普通自定义节点的**getShape**方法，进行个性化图形绘制，使用方式如下：
 
 ```js
 import { RectResize,  EllipseResize, DiamondResize,} from '@logicflow/extension';
@@ -123,7 +123,7 @@ class UserModel extends RectResize.model {}
 
 // 自定义节点的 view ，方法功能等同于普通自定义节点的getShape方法
 class UserView extends RectResize.view {
-  getShapeResize() {
+  getResizeShape() {
     // 通过 getAttributes 获取 model 中的属性
     const { x, y, width, height, fill, stroke, strokeWidth, radius } = this.getAttributes();
     const attrs = {
