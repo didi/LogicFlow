@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.13](https://github.com/towersxu/logicflow/compare/examples@0.5.11...examples@0.5.13) (2021-06-09)
+
+
+### Bug Fixes
+
+* **textension:** rename function getShapeReise to getResizeShape ([88d6d53](https://github.com/towersxu/logicflow/commit/88d6d531dd6232a2abb952468fae0086813bce78))
+
+
+### Features
+
+* **docs:** add docs and example for InserNodeInPolyline ([e83b998](https://github.com/towersxu/logicflow/commit/e83b998c33b6354463f08d4cd45eac4103138e66))
+* **extension:** node resize update ([5434840](https://github.com/towersxu/logicflow/commit/5434840692f741dfb71e385e07f1fe539f3355b1))
+
+
+
+
+
 ## [0.5.12](https://github.com/towersxu/logicflow/compare/examples@0.5.11...examples@0.5.12) (2021-05-31)
 
 **Note:** Version bump only for package examples
