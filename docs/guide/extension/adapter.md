@@ -99,4 +99,4 @@ lf.getGraphData();
 
 ### 转换结果示例
 
-<example :height="400"></example>
+<example :height="400" href="/examples#/extension/adapter"></example>

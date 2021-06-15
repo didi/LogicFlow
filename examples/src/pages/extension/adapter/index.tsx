@@ -4,15 +4,18 @@ import { BpmnAdapter, Control, DndPanel } from '@logicflow/extension';
 import ExampleHeader from '../../../components/example-header';
 import { Button } from 'antd';
 import { ExportOutlined } from '@ant-design/icons';
+import './index.css';
 
 const dndItem = [
   {
     type: 'rect',
     text: '矩形',
+    className: 'adpter-shape adpter-rect',
   },
   {
     type: 'circle',
-    text: '圆形'
+    text: '圆形',
+    className: 'adpter-shape adpter-circle',
   }
 ]
 
@@ -30,7 +33,7 @@ export default function AdapterExample() {
       stopScrollGraph: true,
       stopZoomGraph: true,
     });
-    lf.setShapeList(dndItem);
+    lf.setPatternItems(dndItem);
     lf.render();
   }, []);
 

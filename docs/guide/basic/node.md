@@ -328,7 +328,7 @@ LogicFlow 内部为各个图形设置了默认的样式属性，例如：宽、�
   <img src="../../assets/images/nodeApi/node-rect.png" width="200" alt="矩形主题图片">
 
 
-  主题的完整设置，参见 [Theme API](/guide/advance/theme.html)
+  主题的完整设置，参见 [主题 Theme 样式 API](/guide/advance/theme.html)
 
   ### 自定义节点
-  > 如果想要更高维度的个性化设置，例如不同样式的矩形、业务属性，可以通过自定义节点的方式实现，具体参见[customNode API](/guide/advance/customNode.html)。
+  > 如果想要更高维度的个性化设置，例如不同样式的矩形、业务属性，可以通过自定义节点的方式实现，具体参见 [自定义节点 API](/guide/advance/customNode.html)。
