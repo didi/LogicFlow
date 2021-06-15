@@ -1,7 +1,9 @@
-export const registerProcess: any = ({ LineEdge, LineEdgeModel }: any) => {
-  class ProcessModel extends LineEdgeModel {
+import { LineEdge, LineEdgeModel } from '@logicflow/core'
+export const registerProcess: any = () => {
+    class ProcessModel extends LineEdgeModel {
     setAttributes() {
       const {
+         // @ts-ignore
         properties: { isExecuted },
       } = this;
 

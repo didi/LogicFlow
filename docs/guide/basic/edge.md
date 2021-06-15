@@ -6,7 +6,7 @@ LogicFlow 的内置连线包括
 - 直角折线(polyline)
 - 贝塞尔曲线(bezier)
 
-LogicFlow在扩展中还提供了跟多类型的连线
+LogicFlow在扩展中还提供了更多类型的连线
 - 圆角折线(curved-edge)
 
 ## 创建边

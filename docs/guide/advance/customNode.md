@@ -35,7 +35,7 @@ class View extends RectNode {}
 
 
 lf.register({
-  type: 'customNodeType'
+  type: 'customNodeType',
   view: View,
   model: Model,
 });
