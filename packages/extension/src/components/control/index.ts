@@ -76,7 +76,11 @@ const Control: ControlPlugin = {
     domContainer.appendChild(Control.__tool);
   },
   destroy() {
-    Control.__domContainer?.removeChild(Control.__tool);
+    try {
+      Control.__domContainer?.removeChild(Control.__tool);
+    } catch (e) {
+      console.warn('unexpect destory error', e);
+    } // todo: 目前某些情况存在此处报错情况，暂时这样处理。后续改成class写法就没有问题了。
   },
   __getControlTool(): HTMLElement {
     const NORMAL = 'lf-control-item';
