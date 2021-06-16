@@ -444,6 +444,9 @@
           document.getElementById('undo').disabled = !undoAble
           document.getElementById('redo').disabled = !redoAble
         });
+        lf.on('text:update', (data) => {
+          console.log('test:update', data)
+        });
         // lf.on('node:mouseup',()=> {
         //   console.log('nodeup')
         // })
