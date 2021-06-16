@@ -66,6 +66,7 @@ export enum EventType {
   BLANK_CONTEXTMENU = 'blank:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
   HISTORY_CHANGE = 'history:change',
+  TEXT_UPDATE = 'text:update',
 }
 
 export enum SegmentDirection {

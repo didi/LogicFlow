@@ -6,7 +6,7 @@ import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
-import { ElementType } from '../constant/constant';
+import { ElementType, EventType } from '../constant/constant';
 import { observer } from '..';
 // import { ElementState } from '../constant/constant';
 
@@ -93,6 +93,7 @@ export default class TextEdit extends Component<IProps, IState> {
       graphModel.setElementTextById(id, text);
       this.__prevText.id = '';
       this.__prevText.text = '';
+      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { data: { text } });
     }
   }
   keyupHandler = (ev: KeyboardEvent) => {
