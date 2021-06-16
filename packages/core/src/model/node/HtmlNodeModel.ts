@@ -10,7 +10,7 @@ class HtmlNodeModel extends BaseNodeModel {
   @observable radius = defaultTheme.rect.radius;
 
   constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'rect');
+    super(data, graphModel, 'html');
   }
 
   @computed get anchors(): Point[] {

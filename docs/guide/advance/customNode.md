@@ -419,3 +419,53 @@ lf.render({
 
 在上面的代码中，`getShape`方法返回了一个包含图标的标签，Logic Flow 拿到这个返回值后会直接在`graph`中进行渲染。SVG 元素需要 model 中的实时数据才可以正常显示并使用，现在我们可以通过[getAttributes](/guide/advance/customNode.html#getattributes)方法获取到 model 中的[数据属性](/api/nodeApi.md#数据属性)和[样式属性](/api/nodeApi.html#样式属性)。
 
+## 自定义HTML节点
+
+LogicFlow内置了基础的HTML节点，我们可以利用LogicFlow的自定义机制，实现各种形态的HTML节点，而且HTML节点内部可以使用任意框架进行渲染。
+
+<example
+  :height="280"
+  iframeId="iframe-6"
+  href="/examples/#/advance/custom-node/html"
+/>
+
+```ts
+class UmlModel extends HtmlNodeModel {
+  setAttributes() {
+    this.text.editable = false; // 禁止节点文本编辑
+    // 设置节点宽高和锚点
+    const width = 200;
+    const height = 130;
+    this.width = width;
+    this.height = height;
+    this.anchorsOffset = [
+      [width / 2, 0],
+      [0, height / 2],
+      [-width / 2, 0],
+      [0, -height/2],
+    ]
+  }
+}
+class UmlNode extends HtmlNode {
+  // 重新setHtml方法，想html节点插入任何你想要插入的节点
+  setHtml(rootEl: HTMLElement) {
+    const el = document.createElement('div');
+    el.className = 'uml-wrapper';
+    const html = `
+      <div>
+        <div class="uml-head">Head</div>
+        <div class="uml-body">
+          <div>+ $Name</div>
+          <div>+ $Body</div>
+        </div>
+        <div class="uml-footer">
+          <div>+ setHead(Head $head)</div>
+          <div>+ setBody(Body $body)</div>
+        </div>
+      </div>
+    `
+    el.innerHTML = html;
+    rootEl.appendChild(el);
+  }
+}
+```
