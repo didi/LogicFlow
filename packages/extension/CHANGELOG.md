@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.15](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.11...@logicflow/extension@0.4.15) (2021-06-17)
+
+
+### Bug Fixes
+
+* 修复control组件某些情况下无法销毁的问题 ([47fc75d](https://github.com/towersxu/logicflow/commit/47fc75dd942cba1c5cd441110b4d4e2e07ffc7a3))
+* **textension:** rename function getShapeReise to getResizeShape ([88d6d53](https://github.com/towersxu/logicflow/commit/88d6d531dd6232a2abb952468fae0086813bce78))
+
+
+### Features
+
+* **extension:** node resize update ([5434840](https://github.com/towersxu/logicflow/commit/5434840692f741dfb71e385e07f1fe539f3355b1))
+
+
+
+
+
 ## [0.4.14](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.11...@logicflow/extension@0.4.14) (2021-06-16)
 
 
