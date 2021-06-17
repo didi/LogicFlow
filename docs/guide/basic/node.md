@@ -7,6 +7,7 @@ LogicFlow 的内置节点包括：
 - 菱形(diamond)
 - 多边形(polygon)
 - 文本(text)
+- html节点(html)
 
 ## 节点属性
 
@@ -59,6 +60,11 @@ type Point = [number, number]
 | fontSize | number | ✅ | 字体大小 |
 | fontFamily | string | ✅ | 字体类型 |
 | fontWeight | number / string | ✅ | 字体粗细 |
+
+### html节点
+
+html节点无特殊属性，定制效果需要去view中自己控制。详情请参考自定义节点。
+
 ## 创建节点
 LogicFlow 支持三种创建节点的方式：
 - 数据配置

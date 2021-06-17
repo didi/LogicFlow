@@ -274,6 +274,11 @@ export default class LogicFlow {
       view: _View.DiamondNode,
       model: _Model.DiamondNodeModel,
     });
+    this._registerElement({
+      type: 'html',
+      view: _View.HtmlNode,
+      model: _Model.HtmlNodeModel,
+    });
   }
 
   // 全局操作----------------------------------------------

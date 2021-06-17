@@ -25,6 +25,7 @@ import Anchor from './pages/advance/custom-node/anchor';
 import Triangle from './pages/advance/custom-node/triangle';
 import Rule from './pages/advance/custom-node/rule';
 import Shape from './pages/advance/custom-node/shape';
+import Html from './pages/advance/custom-node/html';
 import Process from './pages/advance/custom-edge';
 import Event from './pages/advance/event';
 import Approve from './pages/usage/approve';
@@ -52,6 +53,7 @@ export default (
     <Route path="/advance/custom-node/rule" exact component={Rule} />
     <Route path="/advance/custom-node/shape" exact component={Shape} />
     <Route path="/advance/custom-edge/process" exact component={Process} />
+    <Route path="/advance/custom-node/html" exact component={Html} />
     <Route path="/extension/snapshot" exact component={Snapshot} />
     <Route path="/extension/components/control" exact component={Control} />
     <Route path="/extension/components/menu" exact component={Menu} />

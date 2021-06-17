@@ -5,6 +5,7 @@ import PolygonNode from './PolygonNode';
 import DiamondNode from './DiamondNode';
 import EllipseNode from './EllipseNode';
 import TextNode from './TextNode';
+import HtmlNode from './HtmlNode';
 
 export {
   BaseNode,
@@ -14,4 +15,5 @@ export {
   DiamondNode,
   EllipseNode,
   TextNode,
+  HtmlNode,
 };

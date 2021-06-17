@@ -43,6 +43,30 @@
       border: 2px solid #000;
       background: #fff;
     }
+    .uml-wrapper {
+      background: #68FCE2;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      border: 2px solid #838382;
+      box-sizing: border-box;
+    }
+    .uml-head {
+      text-align: center;
+      line-height: 30px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .uml-body {
+      border-top: 1px solid #838382;
+      border-bottom: 1px solid #838382;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .uml-footer {
+      padding: 5px 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 
@@ -70,6 +94,41 @@
 
     <!-- 自定义节点 -->
     <script>
+      class UmlModel extends HtmlNodeModel {
+        setAttributes() {
+          const width = 200;
+          const height = 130;
+          this.width = width;
+          this.height = height;
+          this.anchorsOffset = [
+            [width / 2, 0],
+            [0, height / 2],
+            [-width / 2, 0],
+            [0, -height/2],
+          ]
+        }
+      }
+      class UmlNode extends HtmlNode {
+        setHtml(rootEl) {
+          const el = document.createElement('div');
+          el.className = 'uml-wrapper';
+          const html = `
+            <div>
+              <div class="uml-head">Head</div>
+              <div class="uml-body">
+                <div>+ $Name</div>
+                <div>+ $Body</div>
+              </div>
+              <div class="uml-footer">
+                <div>+ setHead(Head $head)</div>
+                <div>+ setBody(Body $body)</div>
+              </div>
+            </div>
+          `
+          el.innerHTML = html;
+          rootEl.appendChild(el);
+        }
+      }
       // square
       class SquareModel extends RectNodeModel {
         setAttributes() {
@@ -275,14 +334,18 @@
           view: Connection,
           model: LineEdgeModel,
         })
-
+        lf.register({
+          type: 'uml',
+          view: UmlNode,
+          model: UmlModel,
+        })
         lf.setTheme({});
         lf.setDefaultEdgeType('polyline');
 
         lf.render({
           nodes: [
             {
-              type: 'rect',
+              type: 'uml',
               x: 100,
               y: 100,
               id: 10,
@@ -378,21 +441,6 @@
             }
           ]
         });
-
-        // console.log(lf.graphModel);
-        // lf.createEdge({
-        //   sourceNodeId: 10,
-        //   targetNodeId: 11,
-        //   // text: '222',
-        // });
-        // lf.updateText('edge_2222', '你是打算啊')
-        // lf.createEdge({
-        //   sourceNodeId: 10,
-        //   targetNodeId: 50,
-        //   text: '222',
-        //   type: 'bezier'
-        // });
-        // console.log(lf.graphModel);
       }
     </script>
 
