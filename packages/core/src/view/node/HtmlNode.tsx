@@ -19,22 +19,6 @@ export default class HtmlNode extends BaseNode {
   get rootEl() {
     return document.querySelector(`#${this.rootElId}`) as HTMLElement;
   }
-  getShapeStyle() {
-    const attributes = super.getShapeStyle();
-    const { model: { radius } } = this.props as IProps;
-    return {
-      ...attributes,
-      radius,
-    };
-  }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const style = this.getShapeStyle();
-    return {
-      ...attributes,
-      ...style,
-    };
-  }
   setHtml(rootEl: HTMLElement) {
     rootEl.appendChild(document.createElement('div'));
   }

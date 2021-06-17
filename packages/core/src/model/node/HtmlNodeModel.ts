@@ -1,13 +1,11 @@
-import { computed, observable } from 'mobx';
+import { computed } from 'mobx';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import GraphModel from '../GraphModel';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 class HtmlNodeModel extends BaseNodeModel {
-  modelType = ModelType.RECT_NODE;
-  @observable radius = defaultTheme.rect.radius;
+  modelType = ModelType.HTML_NODE;
 
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'html');

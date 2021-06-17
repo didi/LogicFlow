@@ -20,6 +20,7 @@ export enum ModelType {
   TEXT_NODE = 'text-node',
   ELLIPSE_NODE = 'ellipse-node',
   DIAMOND_NODE = 'diamond-node',
+  HTML_NODE ='html-node',
   EDGE = 'edge',
   LINE_EDGE = 'line-edge',
   POLYLINE_EDGE = 'polyline-edge',
