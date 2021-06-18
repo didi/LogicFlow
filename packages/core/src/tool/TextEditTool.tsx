@@ -28,6 +28,7 @@ type IState = {
 export default class TextEdit extends Component<IProps, IState> {
   ref = createRef();
   __prevText = {
+    type: '',
     text: '',
     id: '',
   };
@@ -91,9 +92,10 @@ export default class TextEdit extends Component<IProps, IState> {
     if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText;
       graphModel.setElementTextById(id, text);
+      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { ...this.__prevText });
       this.__prevText.id = '';
       this.__prevText.text = '';
-      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { data: { text } });
+      this.__prevText.type = '';
     }
   }
   keyupHandler = (ev: KeyboardEvent) => {
@@ -107,6 +109,7 @@ export default class TextEdit extends Component<IProps, IState> {
       textEditElement.setElementState(0);
     }
     this.__prevText = {
+      type: textEditElement.type,
       text: value,
       id: textEditElement.id,
     };
