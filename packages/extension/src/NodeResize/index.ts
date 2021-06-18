@@ -3,7 +3,7 @@ import EllipseResize from './Node/EllipseResize';
 import DiamondResize from './Node/DiamondResize';
 
 const NodeResize = {
-  name: 'node-resize',
+  pluginName: 'node-resize',
   // 拖动step
   step: 0,
   // 边框和contol拖动点样式的设置

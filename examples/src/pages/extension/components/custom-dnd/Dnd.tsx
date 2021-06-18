@@ -4,7 +4,7 @@ import DndTool from './DndTool';
 import LogicFlow, { Extension } from '@logicflow/core';
 
 const Dnd: Extension = {
-  name: 'dnd',
+  pluginName: 'dnd',
   install() { },
   render(lf: LogicFlow, domContainer: HTMLElement) {
     ReactDOM.render(<DndTool lf={lf} />, domContainer);

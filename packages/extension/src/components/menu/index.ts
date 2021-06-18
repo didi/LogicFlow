@@ -25,6 +25,7 @@ class Menu {
   private __menuDOM: HTMLElement;
   private menuTypeMap: Map<string, MenuItem[]>;
   private __currentData: any;
+  static pluginName = 'Menu';
   constructor({ lf }) {
     this.__menuDOM = document.createElement('ul');
     this.lf = lf;

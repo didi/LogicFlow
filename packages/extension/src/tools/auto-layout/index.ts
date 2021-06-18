@@ -16,6 +16,7 @@ class AutoLayout {
   lf: LogicFlow;
   levelHeight: any[];
   newNodeMap: Map<string, any>;
+  static pluginName = 'AutoLayout';
   constructor({ lf }) {
     this.lf = lf;
     // 给lf添加方法

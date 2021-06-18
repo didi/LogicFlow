@@ -118,7 +118,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       '-id': node.id, // 如果是xml的属性，json中属性用'-'开头
     };
     if (node.text?.value) {
-      processNode['-name'] = node.text.value
+      processNode['-name'] = node.text.value;
     }
     if (node.properties) {
       const properties = toXmlJson(node.properties);
@@ -166,7 +166,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       '-targetRef': edge.targetNodeId,
     };
     if (edge.text?.value) {
-      edgeConfig['-name'] = edge.text?.value
+      edgeConfig['-name'] = edge.text?.value;
     }
     if (edge.properties) {
       const properties = toXmlJson(edge.properties);
@@ -323,7 +323,7 @@ function getNodeConfig(shapeValue, type, processValue) {
     if (shapeValue['bpmndi:BPMNLabel'] && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']) {
       const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds'];
       text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2;
-      text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2
+      text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2;
     }
   }
   const nodeConfig: NodeConfig = {
@@ -411,7 +411,7 @@ function getEdgeConfig(edgeValue, processValue) {
 }
 
 const BpmnAdapter = {
-  name: 'bpmn-adapter',
+  pluginName: 'bpmn-adapter',
   install(lf) {
     lf.adapterIn = this.adapterIn;
     lf.adapterOut = this.adapterOut;
@@ -480,7 +480,7 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
 });
 
 const BpmnXmlAdapter = {
-  name: 'bpmn-xml-adapter',
+  pluginName: 'bpmn-xml-adapter',
   install(lf) {
     lf.adapterIn = this.adapterXmlIn;
     lf.adapterOut = this.adapterXmlOut;
