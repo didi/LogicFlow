@@ -63,7 +63,7 @@ class CurvedEdgeModel extends PolylineEdgeModel {
 }
 
 const CurvedEdge: CurvedEdgePlugin = {
-  name: 'curved-edge',
+  pluginName: 'curved-edge',
   curvedSpace: 5,
   init({ curvedSpace }) {
     CurvedEdge.curvedSpace = curvedSpace;

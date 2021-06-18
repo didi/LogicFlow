@@ -12,7 +12,7 @@ function getOuterHTML(el: Element): string {
 }
 
 const Snapshot = {
-  name: 'snapshot',
+  pluginName: 'snapshot',
   install(lf) {
     this.offsetX = Number.MAX_SAFE_INTEGER;
     this.offsetY = Number.MAX_SAFE_INTEGER;

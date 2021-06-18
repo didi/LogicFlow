@@ -13,6 +13,7 @@ class DndPanel {
   lf: LogicFlow;
   shapeList: ShapeItem[];
   panelEl: HTMLDivElement;
+  static pluginName = 'DndPanel';
   constructor({ lf }) {
     this.lf = lf;
     this.lf.setPatternItems = (shapeList) => {
