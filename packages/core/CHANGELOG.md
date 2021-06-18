@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.11...@logicflow/core@0.5.0) (2021-06-18)
+
+
+### Bug Fixes
+
+* [#211](https://github.com/towersxu/logicflow/issues/211) ([3347137](https://github.com/towersxu/logicflow/commit/33471376ec4994eece9acf5266fe50d411aa99cd))
+* use html-node as model type ([944b895](https://github.com/towersxu/logicflow/commit/944b895e640a699d6ce0bdedd2d2ac04779489d1))
+* use pluginName replace name ([8bf1a08](https://github.com/towersxu/logicflow/commit/8bf1a0892e61f619204b7b621902f36f9ad3e204))
+
+
+### Features
+
+* add html node ([373db63](https://github.com/towersxu/logicflow/commit/373db637fb8cca0416ff944dc5beda23f3082bf3))
+* text:update event emit element data ([36f1f2a](https://github.com/towersxu/logicflow/commit/36f1f2a5d57c70dada007a7ec92782d994528e5e))
+
+
+
+
+
 ## [0.4.15](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.11...@logicflow/core@0.4.15) (2021-06-17)
 
 
