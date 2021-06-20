@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import ExampleHeader from '../../../../components/example-header';
 import Uml from './uml';
+// @ts-ignore
+import box from './box.tsx';
 
 const config = {
   stopScrollGraph: true,
@@ -21,17 +23,25 @@ const data = {
       x: 150,
       y: 90,
     },
+    {
+      id: 11,
+      type: 'boxx',
+      x: 350,
+      y: 100,
+    },
   ]
 };
 
 export default function CustomNodeAnchorExample() {
 
   useEffect(() => {
+    console.log(LogicFlow)
     const lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph_html') as HTMLElement
     });
     lf.register(Uml);
+    lf.register(box);
     lf.render(data);
   }, []);
 
