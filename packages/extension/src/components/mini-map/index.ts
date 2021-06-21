@@ -8,7 +8,7 @@ interface MiniMapPlugin extends Extension {
 }
 
 const MiniMap: MiniMapPlugin = {
-  name: 'minimap',
+  pluginName: 'minimap',
   __lf: null,
   __container: null,
   __miniMapWrap: null,

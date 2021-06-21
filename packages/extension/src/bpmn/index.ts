@@ -9,6 +9,7 @@ import { theme } from './constant';
 
 // todo: name
 class BpmnElement {
+  static pluginName = 'BpmnElement';
   constructor({ lf }) {
     lf.setTheme(theme);
     lf.register(StartEvent);

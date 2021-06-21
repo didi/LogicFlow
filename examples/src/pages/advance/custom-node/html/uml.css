@@ -22,3 +22,19 @@
   padding: 5px 10px;
   font-size: 14px;
 }
+foreignObject:focus {
+  outline: none;
+}
+.box-title {
+  border: 1px solid #909192;
+  margin: 0;
+  padding: 0 10px;
+}
+.box-content {
+  border: 1px solid #909192;
+  border-top: none;
+}
+.box-content p {
+  margin: 0;
+  padding: 0 10px;
+}

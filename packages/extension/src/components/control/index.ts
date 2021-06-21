@@ -11,7 +11,7 @@ type ControlItem = {
 };
 
 interface ControlPlugin extends Extension {
-  name: string;
+  pluginName: string;
   __lf?: LogicFlow;
   __controlItems: ControlItem[];
   addItem: (item: ControlItem) => void;
@@ -22,7 +22,7 @@ interface ControlPlugin extends Extension {
 }
 
 const Control: ControlPlugin = {
-  name: 'control',
+  pluginName: 'control',
   __lf: null,
   __controlItems: [
     {

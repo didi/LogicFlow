@@ -129,13 +129,19 @@ export default class LogicFlow {
    * @param plugin 插件
    */
   static use(extension: Extension) {
-    const preExtension = this.extensions.get(extension.name);
+    let { pluginName } = extension;
+    if (!pluginName) {
+      console.warn('请给插件指定pluginName!');
+      pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
+    }
+    const preExtension = this.extensions.get(pluginName);
     preExtension && preExtension.destroy && preExtension.destroy();
-    this.extensions.set(extension.name, extension);
+    this.extensions.set(pluginName, extension);
   }
   installPlugins(disabledPlugins = []) {
     LogicFlow.extensions.forEach((extension) => {
-      if (disabledPlugins.indexOf(extension.name) === -1) {
+      const pluginName = extension.pluginName || extension.name;
+      if (disabledPlugins.indexOf(pluginName) === -1) {
         this.__installPlugin(extension);
       }
     });

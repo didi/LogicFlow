@@ -1,7 +1,7 @@
 import { ResizeCircleNode, ResizeCircleNodeModel } from './circle';
 
 const ResizeNode = {
-  name: 'resize-node',
+  pluginName: 'resize-node',
   install(lf) {
     lf.register({
       type: 'circle',

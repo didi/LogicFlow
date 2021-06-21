@@ -184,6 +184,7 @@ export function toLogicflowData(data) {
 }
 
 const TurboAdapter = {
+  pluginName: 'TurboAdapter',
   install(lf) {
     lf.adapterIn = this.adapterIn;
     lf.adapterOut = this.adapterOut;

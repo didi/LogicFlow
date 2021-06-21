@@ -22,6 +22,7 @@ class FlowPath {
   lf: LogicFlow;
   pathes: RawPath[];
   startNodeType: string;
+  static pluginName = 'FlowPath';
   constructor({ lf }) {
     this.lf = lf;
     this.pathes = [];

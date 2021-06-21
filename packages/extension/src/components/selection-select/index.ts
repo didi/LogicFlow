@@ -7,7 +7,7 @@ interface SelectionSelectPlugin extends Extension {
 }
 
 const SelectionSelect: SelectionSelectPlugin = {
-  name: 'selection-select',
+  pluginName: 'selection-select',
   __domContainer: null,
   wrapper: null,
   lf: null,

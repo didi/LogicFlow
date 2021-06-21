@@ -469,3 +469,81 @@ class UmlNode extends HtmlNode {
   }
 }
 ```
+
+### 使用react编写html节点
+
+以为自定义html节点对外暴露的是一个DOM节点，所以你可以使用框架现有的能力来渲染节点。在react中，我们利用`reactDom`的`render`方法，将react组件渲染到dom节点上。
+
+```jsx
+// box.jsx
+
+import { HtmlNodeModel, HtmlNode } from '@logicflow/core';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './uml.css';
+
+function Hello() {
+  return (
+    <>
+      <h1 className="box-title">title</h1>
+      <div className="box-content">
+        <p>content</p>
+        <p>content2</p>
+        <p>content3</p>
+      </div>
+    </>
+  )
+}
+
+class BoxxModel extends HtmlNodeModel {
+  setAttributes() {
+    this.text.editable = false;
+    const width = 200;
+    const height = 116;
+    this.width = width;
+    this.height = height;
+    this.anchorsOffset = [
+      [width / 2, 0],
+      [0, height / 2],
+      [-width / 2, 0],
+      [0, -height/2],
+    ]
+  }
+}
+class BoxxNode extends HtmlNode {
+  setHtml(rootEl: HTMLElement) {
+    ReactDOM.render(<Hello />, rootEl);
+  }
+}
+
+const boxx = {
+  type: 'boxx',
+  view: BoxxNode,
+  model: BoxxModel
+}
+
+export default boxx;
+
+```
+
+```jsx
+// page.jsx
+
+import box from './box.tsx';
+export default function PageIndex() {
+  useEffect(() => {
+    const lf = new LogicFlow({
+      ...config,
+      container: document.querySelector('#graph_html') as HTMLElement
+    });
+    lf.register(box);
+    lf.render();
+  }, []);
+
+  return (
+    <>
+      <div id="graph_html" className="viewport" />
+    </>
+  )
+}
+```

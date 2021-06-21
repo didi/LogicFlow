@@ -14,7 +14,7 @@ module.exports = [
       contentBase: path.join(__dirname, '../'),
       stats: 'errors-warnings',
       port: 9090,
-      host: 'localhost',
+      host: '0.0.0.0',
       watchOptions: {
         poll: true,
       }
