@@ -107,7 +107,7 @@ export default function EdgeExample() {
     <>
       <ExampleHeader
         content="尝试为矩形和圆形手动添加连线"
-        githubPath="/basic/dege/index.tsx"
+        githubPath="/basic/edge/index.tsx"
       />
       <div>当前：{type}</div>
       <div>
