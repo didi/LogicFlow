@@ -31,6 +31,7 @@ class EndEventModel extends CircleNodeModel {
 }
 
 class EndEventView extends CircleNode {
+  static extendKey = 'EndEventView';
   getAnchorStyle() {
     return {
       visibility: 'hidden',

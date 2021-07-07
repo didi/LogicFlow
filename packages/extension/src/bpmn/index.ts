@@ -1,10 +1,10 @@
 // import LogicFlow from '@logicflow/core';
-import StartEvent from './events/StartEvent';
-import EndEvent from './events/EndEvent';
-import ExclusiveGateway from './gateways/ExclusiveGateway';
-import UserTask from './tasks/UserTask';
-import ServiceTask from './tasks/ServiceTask';
-import SequenceFlow from './flow/SequenceFlow';
+import StartEvent, { StartEventModel, StartEventView } from './events/StartEvent';
+import EndEvent, { EndEventView, EndEventModel } from './events/EndEvent';
+import ExclusiveGateway, { ExclusiveGatewayView, ExclusiveGatewayModel } from './gateways/ExclusiveGateway';
+import UserTask, { UserTaskView, UserTaskModel } from './tasks/UserTask';
+import ServiceTask, { ServiceTaskView, ServiceTaskModel } from './tasks/ServiceTask';
+import SequenceFlow, { SequenceFlowView, SequenceFlowModel } from './flow/SequenceFlow';
 import { theme } from './constant';
 
 // todo: name
@@ -24,4 +24,16 @@ class BpmnElement {
 
 export {
   BpmnElement,
+  StartEventModel,
+  StartEventView,
+  EndEventView,
+  EndEventModel,
+  ExclusiveGatewayView,
+  ExclusiveGatewayModel,
+  UserTaskView,
+  UserTaskModel,
+  ServiceTaskView,
+  ServiceTaskModel,
+  SequenceFlowView,
+  SequenceFlowModel,
 };

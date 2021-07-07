@@ -2,6 +2,7 @@ import { CircleNode, CircleNodeModel } from '@logicflow/core';
 import { getBpmnId } from '../getBpmnId';
 
 class StartEventModel extends CircleNodeModel {
+  static extendKey = 'StartEventModel';
   constructor(data, graphModel) {
     if (!data.id) {
       data.id = `Event_${getBpmnId()}`;
