@@ -104,6 +104,10 @@ export default class BaseNodeModel implements IBaseModel {
     if (!data.properties) {
       data.properties = {};
     }
+    const id = this.createUniqueId();
+    if (!data.id && id) {
+      data.id = id;
+    }
     this.formatText(data);
     assign(this, pickNodeConfig(data));
   }
@@ -241,6 +245,10 @@ export default class BaseNodeModel implements IBaseModel {
       return this.getAnchorsByOffset();
     }
     return [];
+  }
+
+  createUniqueId() {
+    return null;
   }
 
   @action
