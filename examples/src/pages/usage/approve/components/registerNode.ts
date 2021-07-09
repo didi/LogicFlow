@@ -1,5 +1,5 @@
 import LogicFlow, {
-  BaseNode,
+  BaseNodeModel,
   ConnectRule,
   CircleNodeModel,
   CircleNode,
@@ -18,7 +18,7 @@ export default function RegisteNode(lf: LogicFlow) {
       const rules = super.getConnectedTargetRules();
       const geteWayOnlyAsTarget = {
         message: '开始节点只能连出，不能连入！',
-        validate: (source:BaseNode, target:BaseNode) => {
+        validate: (source:BaseNodeModel, target:BaseNodeModel) => {
           let isValid = true;
           if (target) {
             isValid = false;
@@ -140,7 +140,7 @@ export default function RegisteNode(lf: LogicFlow) {
       const rules = super.getConnectedSourceRules();
       const geteWayOnlyAsTarget = {
         message: '结束节点只能连入，不能连出！',
-        validate: (source:BaseNode) => {
+        validate: (source:BaseNodeModel) => {
           let isValid = true;
           if (source) {
             isValid = false;

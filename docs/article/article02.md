@@ -95,7 +95,7 @@ class CnodeModel extends RectModel {
     const rules = super.getConnectedSourceRules();
     const gateWayOnlyAsTarget = {
       message: 'C节点下一个节点只能是A节点',
-      validate: (source: BaseNode, target: BaseNode) => {
+      validate: (source: BaseNodeModel, target: BaseNodeModel) => {
         let isValid = true;
         if (target.type !== 'a-node ') {
           isValid = false;
