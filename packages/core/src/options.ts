@@ -54,6 +54,8 @@ export type Definition = {
   hideAnchors?: boolean; // 是否隐藏anchor
 
   hoverOutline?: boolean; // 是否显示节点hover时的outline
+
+  idGenerator?: () => number | string; // 元素id生成器
 };
 
 export interface GuardsTypes {

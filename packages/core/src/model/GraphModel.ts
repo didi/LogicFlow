@@ -37,6 +37,7 @@ class GraphModel {
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElements = new Map<string, BaseElementModel>(); // 多选
+  idGenerator: () => number | string;
   @observable selectElementSize = 0;
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
@@ -61,6 +62,7 @@ class GraphModel {
       grid: { size = 1 } = {},
       isSilentMode = false,
       eventCenter,
+      idGenerator,
     } = config;
     this.background = background;
     this.isSlient = isSilentMode;
@@ -73,6 +75,7 @@ class GraphModel {
     this.width = config.width;
     this.height = config.height;
     this.partial = config.partial;
+    this.idGenerator = idGenerator;
   }
   @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
     return this.nodes.reduce((nMap, model, index) => {
