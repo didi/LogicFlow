@@ -90,7 +90,20 @@ class BaseEdgeModel implements IBaseModel {
     if (!data.properties) {
       data.properties = {};
     }
+
+    if (!data.id) {
+      const { idGenerator } = this.graphModel;
+      const globalId = idGenerator && idGenerator();
+      if (globalId) data.id = globalId;
+      const nodeId = this.createId();
+      if (nodeId) data.id = nodeId;
+    }
+
     assign(this, pickEdgeConfig(data));
+  }
+
+  createId() {
+    return null;
   }
 
   setAttributes() { }

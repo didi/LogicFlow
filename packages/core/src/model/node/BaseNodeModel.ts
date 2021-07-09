@@ -104,12 +104,21 @@ export default class BaseNodeModel implements IBaseModel {
     if (!data.properties) {
       data.properties = {};
     }
-    const id = this.createUniqueId();
-    if (!data.id && id) {
-      data.id = id;
+
+    if (!data.id) {
+      const { idGenerator } = this.graphModel;
+      const globalId = idGenerator && idGenerator();
+      if (globalId) data.id = globalId;
+      const nodeId = this.createId();
+      if (nodeId) data.id = nodeId;
     }
+
     this.formatText(data);
     assign(this, pickNodeConfig(data));
+  }
+
+  createId() {
+    return null;
   }
 
   // 格式化text参数，未修改observable不作为action
@@ -245,10 +254,6 @@ export default class BaseNodeModel implements IBaseModel {
       return this.getAnchorsByOffset();
     }
     return [];
-  }
-
-  createUniqueId() {
-    return null;
   }
 
   @action
