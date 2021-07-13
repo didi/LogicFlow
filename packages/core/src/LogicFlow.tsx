@@ -190,6 +190,8 @@ export default class LogicFlow {
       BezierEdgeModel: _Model.BezierEdgeModel,
       EllipseNode: _View.EllipseNode,
       EllipseNodeModel: _Model.EllipseNodeModel,
+      HtmlNode: _View.HtmlNode,
+      HtmlNodeModel: _Model.HtmlNodeModel,
       // mobx,
       h,
       type,
