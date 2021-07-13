@@ -41,9 +41,9 @@ class DndPanel {
       shape.style.backgroundImage = `url(${shapeItem.icon})`;
     }
     el.appendChild(shape);
-    if (shapeItem.text) {
+    if (shapeItem.label) {
       const text = document.createElement('div');
-      text.innerText = shapeItem.text;
+      text.innerText = shapeItem.label;
       text.className = 'lf-dnd-text';
       el.appendChild(text);
     }
@@ -52,6 +52,7 @@ class DndPanel {
         this.lf.dnd.startDrag({
           type: shapeItem.type,
           properties: shapeItem.properties,
+          text: shapeItem.text,
         });
       }
       if (shapeItem.callback) {

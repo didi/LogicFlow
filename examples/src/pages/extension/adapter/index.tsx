@@ -9,12 +9,12 @@ import './index.css';
 const dndItem = [
   {
     type: 'rect',
-    text: '矩形',
+    label: '矩形',
     className: 'adpter-shape adpter-rect',
   },
   {
     type: 'circle',
-    text: '圆形',
+    label: '圆形',
     className: 'adpter-shape adpter-circle',
   }
 ]
