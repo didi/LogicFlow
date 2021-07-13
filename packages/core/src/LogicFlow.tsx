@@ -131,7 +131,7 @@ export default class LogicFlow {
   static use(extension: Extension) {
     let { pluginName } = extension;
     if (!pluginName) {
-      console.warn('请给插件指定pluginName!');
+      console.warn(`请给插件${extension.name || extension.constructor.name}指定pluginName!`);
       pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
     }
     const preExtension = this.extensions.get(pluginName);
