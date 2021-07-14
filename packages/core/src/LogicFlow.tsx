@@ -117,7 +117,10 @@ export default class LogicFlow {
   off(evt: string, callback: CallbackType) {
     this.eventCenter.off(evt, callback);
   }
-  emit(evt: string, arg: Record<string, string | number | object>) {
+  once(evt: string, callback: CallbackType) {
+    this.eventCenter.once(evt, callback);
+  }
+  emit(evt: string, arg: any) {
     this.eventCenter.emit(evt, arg);
   }
 
@@ -131,7 +134,7 @@ export default class LogicFlow {
   static use(extension: Extension) {
     let { pluginName } = extension;
     if (!pluginName) {
-      console.warn('请给插件指定pluginName!');
+      console.warn(`请给插件${extension.name || extension.constructor.name}指定pluginName!`);
       pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
     }
     const preExtension = this.extensions.get(pluginName);
@@ -190,6 +193,8 @@ export default class LogicFlow {
       BezierEdgeModel: _Model.BezierEdgeModel,
       EllipseNode: _View.EllipseNode,
       EllipseNodeModel: _Model.EllipseNodeModel,
+      HtmlNode: _View.HtmlNode,
+      HtmlNodeModel: _Model.HtmlNodeModel,
       // mobx,
       h,
       type,

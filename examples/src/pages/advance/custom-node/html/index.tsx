@@ -22,27 +22,40 @@ const data = {
       type: 'uml',
       x: 150,
       y: 90,
+      properties: {
+        name: 'logicflow',
+        body: 'hello'
+      }
     },
     {
       id: 11,
       type: 'boxx',
       x: 350,
       y: 100,
+      properties: {
+        name: 'turbo',
+        body: 'hello'
+      }
     },
   ]
 };
-
+let lf: LogicFlow;
 export default function CustomNodeAnchorExample() {
 
   useEffect(() => {
-    console.log(LogicFlow)
-    const lf = new LogicFlow({
+    lf = new LogicFlow({
       ...config,
       container: document.querySelector('#graph_html') as HTMLElement
     });
     lf.register(Uml);
     lf.register(box);
     lf.render(data);
+    lf.on('node:click', ({ data}) => {
+      lf.setProperties(data.id, {
+        name: 'turbo',
+        body: Math.random()
+      })
+    })
   }, []);
 
   return (

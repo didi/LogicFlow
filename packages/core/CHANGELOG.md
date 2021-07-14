@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.11...@logicflow/core@0.6.0) (2021-07-14)
+
+
+### Bug Fixes
+
+* [#211](https://github.com/towersxu/logicflow/issues/211) ([3347137](https://github.com/towersxu/logicflow/commit/33471376ec4994eece9acf5266fe50d411aa99cd))
+* new selection select ([4fc34d4](https://github.com/towersxu/logicflow/commit/4fc34d41e1000629362c141a8c6a2eb033ecf17d))
+* reactive html node ([0909bd3](https://github.com/towersxu/logicflow/commit/0909bd3d423d0bb9ed72a8eb36dd69054810ba84))
+* use html-node as model type ([944b895](https://github.com/towersxu/logicflow/commit/944b895e640a699d6ce0bdedd2d2ac04779489d1))
+* use pluginName replace name ([2b2706a](https://github.com/towersxu/logicflow/commit/2b2706a4596eaee5fb6e88328a219ebc9366505c))
+
+
+### Features
+
+* add createUniqueId API ([edaf244](https://github.com/towersxu/logicflow/commit/edaf244cd3e2ae38ad58a61c83046edb1d7e5952))
+* add html node ([373db63](https://github.com/towersxu/logicflow/commit/373db637fb8cca0416ff944dc5beda23f3082bf3))
+* add idGenerator global option ([b6fd441](https://github.com/towersxu/logicflow/commit/b6fd4417e9d99dfd319889fdce1c6da7a1abcfb9))
+* html node support old register method ([d83821b](https://github.com/towersxu/logicflow/commit/d83821b694d45a9ad968e9d51adb7e79e402c610))
+* text:update event emit element data ([44a0d5d](https://github.com/towersxu/logicflow/commit/44a0d5d9a7ae77e28021208d7ecf2d7ef5a0707c))
+
+
+
+
+
 # [0.5.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.11...@logicflow/core@0.5.0) (2021-06-18)
 
 

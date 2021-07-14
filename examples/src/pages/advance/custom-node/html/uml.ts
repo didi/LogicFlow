@@ -19,15 +19,15 @@ class UmlModel extends HtmlNodeModel {
 }
 class UmlNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
-    console.log(111)
+    const { properties } = this.getAttributes();
     const el = document.createElement('div');
     el.className = 'uml-wrapper';
     const html = `
       <div>
         <div class="uml-head">Head</div>
         <div class="uml-body">
-          <div>+ $Name</div>
-          <div>+ $Body</div>
+          <div>+ ${properties.name}</div>
+          <div>+ ${properties.body}</div>
         </div>
         <div class="uml-footer">
           <div>+ setHead(Head $head)</div>
@@ -36,6 +36,8 @@ class UmlNode extends HtmlNode {
       </div>
     `
     el.innerHTML = html;
+    // 需要先把之前渲染的子节点清除掉。
+    rootEl.innerHTML = '';
     rootEl.appendChild(el);
   }
 }

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.11...@logicflow/extension@0.6.0) (2021-07-14)
+
+
+### Bug Fixes
+
+* new selection select ([4fc34d4](https://github.com/towersxu/logicflow/commit/4fc34d41e1000629362c141a8c6a2eb033ecf17d))
+* use pluginName replace name ([2b2706a](https://github.com/towersxu/logicflow/commit/2b2706a4596eaee5fb6e88328a219ebc9366505c))
+* 修复control组件某些情况下无法销毁的问题 ([47fc75d](https://github.com/towersxu/logicflow/commit/47fc75dd942cba1c5cd441110b4d4e2e07ffc7a3))
+* **textension:** rename function getShapeReise to getResizeShape ([88d6d53](https://github.com/towersxu/logicflow/commit/88d6d531dd6232a2abb952468fae0086813bce78))
+
+
+### Features
+
+* 解决bpmn element 导出model和view存在的问题 ([c6a259a](https://github.com/towersxu/logicflow/commit/c6a259af7af307795ab6b07d1a23c5208b6a89e4))
+* **extension:** node resize update ([5434840](https://github.com/towersxu/logicflow/commit/5434840692f741dfb71e385e07f1fe539f3355b1))
+
+
+
+
+
 # [0.5.0](https://github.com/towersxu/logicflow/compare/@logicflow/extension@0.4.11...@logicflow/extension@0.5.0) (2021-06-18)
 
 

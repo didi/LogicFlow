@@ -96,7 +96,8 @@ const article = [
 
 const verisonInfo = [
   '0.3.0',
-  '0.4.0'
+  '0.4.0',
+  '0.6.0'
 ];
 
 module.exports = {

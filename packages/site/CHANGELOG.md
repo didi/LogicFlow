@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/towersxu/logicflow/compare/site@0.4.11...site@0.6.0) (2021-07-14)
+
+**Note:** Version bump only for package site
+
+
+
+
+
 # [0.5.0](https://github.com/towersxu/logicflow/compare/site@0.4.11...site@0.5.0) (2021-06-18)
 
 **Note:** Version bump only for package site

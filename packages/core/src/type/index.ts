@@ -21,6 +21,8 @@ import PolylineEdge from '../view/edge/PolylineEdge';
 import PolylineEdgeModel from '../model/edge/PolylineEdgeModel';
 import EllipseNode from '../view/node/EllipseNode';
 import EllipseNodeModel from '../model/node/EllipseNodeModel';
+import HtmlNode from '../view/node/HtmlNode';
+import HtmlNodeModel from '../model/node/HtmlNodeModel';
 import * as Options from '../options';
 
 export type PointTuple = [number, number];
@@ -331,6 +333,8 @@ export interface RegisterParam {
   PolylineEdgeModel: typeof PolylineEdgeModel;
   EllipseNode: typeof EllipseNode;
   EllipseNodeModel: typeof EllipseNodeModel;
+  HtmlNode: typeof HtmlNode;
+  HtmlNodeModel: typeof HtmlNodeModel;
   [key: string]: unknown;
 }
 
