@@ -1,10 +1,4 @@
-import LogicFlow, { Extension } from '@logicflow/core';
-
-interface SelectionSelectPlugin extends Extension {
-  open: () => void;
-  close: () => void;
-  [x: string]: any;
-}
+import LogicFlow from '@logicflow/core';
 
 class SelectionSelect {
   __domContainer: HTMLElement;
