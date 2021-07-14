@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/towersxu/logicflow/compare/examples@0.5.11...examples@0.7.0) (2021-07-14)
+
+
+### Bug Fixes
+
+* new selection select ([4fc34d4](https://github.com/towersxu/logicflow/commit/4fc34d41e1000629362c141a8c6a2eb033ecf17d))
+* reactive html node ([0909bd3](https://github.com/towersxu/logicflow/commit/0909bd3d423d0bb9ed72a8eb36dd69054810ba84))
+* typo ([1cf4d91](https://github.com/towersxu/logicflow/commit/1cf4d91c690a1b0e4d7f568879863b898ad7404f))
+* use pluginName replace name ([2b2706a](https://github.com/towersxu/logicflow/commit/2b2706a4596eaee5fb6e88328a219ebc9366505c))
+* **docs:** docs fix ([13d29e4](https://github.com/towersxu/logicflow/commit/13d29e49fa47189e3e0953a5cdd1ea26c4647ced))
+* **textension:** rename function getShapeReise to getResizeShape ([88d6d53](https://github.com/towersxu/logicflow/commit/88d6d531dd6232a2abb952468fae0086813bce78))
+
+
+### Features
+
+* **docs:** add docs and example for InserNodeInPolyline ([e83b998](https://github.com/towersxu/logicflow/commit/e83b998c33b6354463f08d4cd45eac4103138e66))
+* **extension:** node resize update ([5434840](https://github.com/towersxu/logicflow/commit/5434840692f741dfb71e385e07f1fe539f3355b1))
+
+
+
+
+
 # [0.6.0](https://github.com/towersxu/logicflow/compare/examples@0.5.11...examples@0.6.0) (2021-06-18)
 
 
