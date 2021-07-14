@@ -1,4 +1,4 @@
-import { Extension } from '@logicflow/core';
+import LogicFlow, { Extension } from '@logicflow/core';
 
 interface SelectionSelectPlugin extends Extension {
   open: () => void;
@@ -6,52 +6,72 @@ interface SelectionSelectPlugin extends Extension {
   [x: string]: any;
 }
 
-const SelectionSelect: SelectionSelectPlugin = {
-  pluginName: 'selection-select',
-  __domContainer: null,
-  wrapper: null,
-  lf: null,
+class SelectionSelect {
+  __domContainer: HTMLElement;
+  wrapper: HTMLElement;
+  lf: LogicFlow;
   startPoint: {
-    x: 0,
-    y: 0,
-  },
+    x: number,
+    y: number,
+  };
   endPoint: {
-    x: 0,
-    y: 0,
-  },
-  __disabled: false,
-  install() {},
+    x: number,
+    y: number,
+  };
+  __disabled = false;
+  isDefalutStopMoveGraph = false;
+  static pluginName = 'selection-select';
+  constructor({ lf }) {
+    this.lf = lf;
+    lf.openSelectionSelect = () => {
+      const { stopMoveGraph } = lf.getEditConfig();
+      if (!stopMoveGraph) {
+        this.isDefalutStopMoveGraph = false;
+        lf.updateEditConfig({
+          stopMoveGraph: true,
+        });
+      }
+      this.open();
+    };
+    lf.closeSelectionSelect = () => {
+      if (!this.isDefalutStopMoveGraph) {
+        lf.updateEditConfig({
+          stopMoveGraph: false,
+        });
+      }
+      this.close();
+    };
+  }
   render(lf, domContainer) {
-    SelectionSelect.__domContainer = domContainer;
-    SelectionSelect.lf = lf;
+    this.__domContainer = domContainer;
     lf.on('blank:mousedown', ({ e }) => {
       const config = lf.getEditConfig();
       // 鼠标控制滚动移动画布的时候，不能选区。
-      if (!config.stopMoveGraph || SelectionSelect.__disabled) {
+      if (!config.stopMoveGraph || this.__disabled) {
         return;
       }
       const {
         domOverlayPosition: { x, y },
       } = lf.getPointByClient(e.clientX, e.clientY);
-      SelectionSelect.startPoint = { x, y };
-      SelectionSelect.endPoint = { x, y };
+      this.startPoint = { x, y };
+      this.endPoint = { x, y };
       const wrapper = document.createElement('div');
       wrapper.className = 'lf-selection-select';
-      wrapper.style.top = `${SelectionSelect.startPoint.y}px`;
-      wrapper.style.left = `${SelectionSelect.startPoint.x}px`;
+      wrapper.style.top = `${this.startPoint.y}px`;
+      wrapper.style.left = `${this.startPoint.x}px`;
       domContainer.appendChild(wrapper);
-      SelectionSelect.wrapper = wrapper;
-      document.addEventListener('mousemove', SelectionSelect.__draw);
-      document.addEventListener('mouseup', SelectionSelect.__drawOff);
+      this.wrapper = wrapper;
+      document.addEventListener('mousemove', this.__draw);
+      document.addEventListener('mouseup', this.__drawOff);
     });
-  },
-  __draw(ev) {
+  }
+  __draw = (ev) => {
     const {
       domOverlayPosition: { x: x1, y: y1 },
-    } = SelectionSelect.lf.getPointByClient(ev.clientX, ev.clientY);
-    SelectionSelect.endPoint = { x: x1, y: y1 };
-    const { x, y } = SelectionSelect.startPoint;
-    const { style } = SelectionSelect.wrapper;
+    } = this.lf.getPointByClient(ev.clientX, ev.clientY);
+    this.endPoint = { x: x1, y: y1 };
+    const { x, y } = this.startPoint;
+    const { style } = this.wrapper;
     let left = x;
     let top = y;
     let width = x1 - x;
@@ -68,27 +88,27 @@ const SelectionSelect: SelectionSelectPlugin = {
     style.top = `${top}px`;
     style.width = `${width}px`;
     style.height = `${height}px`;
-  },
-  __drawOff() {
-    document.removeEventListener('mousemove', SelectionSelect.__draw);
-    document.removeEventListener('mouseup', SelectionSelect.__drawOff);
-    SelectionSelect.__domContainer.removeChild(SelectionSelect.wrapper);
-    const { x, y } = SelectionSelect.startPoint;
-    const { x: x1, y: y1 } = SelectionSelect.endPoint;
+  };
+  __drawOff = () => {
+    document.removeEventListener('mousemove', this.__draw);
+    document.removeEventListener('mouseup', this.__drawOff);
+    this.__domContainer.removeChild(this.wrapper);
+    const { x, y } = this.startPoint;
+    const { x: x1, y: y1 } = this.endPoint;
     const lt = [Math.min(x, x1), Math.min(y, y1)];
     const rt = [Math.max(x, x1), Math.max(y, y1)];
-    const elements = SelectionSelect.lf.getAreaElement(lt, rt);
+    const elements = this.lf.getAreaElement(lt, rt);
     elements.forEach((element) => {
-      SelectionSelect.lf.select(element.id, true);
+      this.lf.select(element.id, true);
     });
-    SelectionSelect.lf.emit('selection:selected', elements);
-  },
+    this.lf.emit('selection:selected', elements);
+  };
   open() {
-    SelectionSelect.__disabled = false;
-  },
+    this.__disabled = false;
+  }
   close() {
-    SelectionSelect.__disabled = true;
-  },
-};
+    this.__disabled = true;
+  }
+}
 
 export { SelectionSelect };

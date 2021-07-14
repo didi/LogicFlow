@@ -117,7 +117,10 @@ export default class LogicFlow {
   off(evt: string, callback: CallbackType) {
     this.eventCenter.off(evt, callback);
   }
-  emit(evt: string, arg: Record<string, string | number | object>) {
+  once(evt: string, callback: CallbackType) {
+    this.eventCenter.once(evt, callback);
+  }
+  emit(evt: string, arg: any) {
     this.eventCenter.emit(evt, arg);
   }
 

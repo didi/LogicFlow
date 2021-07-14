@@ -61,9 +61,9 @@ export default function DndPanelExample() {
 
   function handleSwitch() {
     if (isOpened) {
-      SelectionSelect.close();
+      lf.closeSelectionSelect();
     } else {
-      SelectionSelect.open();
+      lf.openSelectionSelect();
     }
     setIsOpened(!isOpened);
   }
