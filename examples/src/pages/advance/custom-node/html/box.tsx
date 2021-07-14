@@ -3,13 +3,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './uml.css';
 
-function Hello() {
+function Hello(props: any) {
   return (
     <>
       <h1 className="box-title">title</h1>
       <div className="box-content">
-        <p>content</p>
-        <p>content2</p>
+        <p>{props.name}</p>
+        <p>{props.body}</p>
         <p>content3</p>
       </div>
     </>
@@ -33,7 +33,8 @@ class BoxxModel extends HtmlNodeModel {
 }
 class BoxxNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
-    ReactDOM.render(<Hello />, rootEl);
+    const { properties } = this.getAttributes();
+    ReactDOM.render(<Hello name={properties.name} body={properties.body}/>, rootEl);
   }
 }
 

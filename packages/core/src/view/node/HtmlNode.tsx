@@ -25,6 +25,9 @@ export default class HtmlNode extends BaseNode {
   componentDidMount() {
     this.setHtml(this.rootEl);
   }
+  componentDidUpdate() {
+    this.setHtml(this.rootEl);
+  }
   getShape() {
     const attributes = this.getAttributes();
     const { x, y, width, height } = attributes;

@@ -110,14 +110,16 @@
       }
       class UmlNode extends HtmlNode {
         setHtml(rootEl) {
+          const { properties } = this.getAttributes();
+          console.log(7777, properties)
           const el = document.createElement('div');
           el.className = 'uml-wrapper';
           const html = `
             <div>
               <div class="uml-head">Head</div>
               <div class="uml-body">
-                <div>+ $Name</div>
-                <div>+ $Body</div>
+                <div>+ ${properties.name}</div>
+                <div>+ ${properties.body}</div>
               </div>
               <div class="uml-footer">
                 <div>+ setHead(Head $head)</div>
@@ -126,6 +128,7 @@
             </div>
           `
           el.innerHTML = html;
+          rootEl.innerHTML = '';
           rootEl.appendChild(el);
         }
       }
@@ -349,6 +352,10 @@
               x: 100,
               y: 100,
               id: 10,
+              properties: {
+                name: 'haod',
+                body: '哈哈哈哈'
+              }
             },
             {
               type: 'square',
@@ -495,6 +502,13 @@
         lf.on('text:update', (data) => {
           console.log('test:update', data)
         });
+        lf.on('node:click', ({ data }) => {
+          console.log(6666)
+          lf.setProperties(data.id, {
+            name: 'xt'
+          })
+          console.log(lf.getProperties(data.id));
+        })
         // lf.on('node:mouseup',()=> {
         //   console.log('nodeup')
         // })

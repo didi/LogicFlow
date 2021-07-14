@@ -449,14 +449,15 @@ class UmlModel extends HtmlNodeModel {
 class UmlNode extends HtmlNode {
   // 重新setHtml方法，想html节点插入任何你想要插入的节点
   setHtml(rootEl: HTMLElement) {
+    const { properties } = this.getAttributes();
     const el = document.createElement('div');
     el.className = 'uml-wrapper';
     const html = `
       <div>
         <div class="uml-head">Head</div>
         <div class="uml-body">
-          <div>+ $Name</div>
-          <div>+ $Body</div>
+          <div>+ ${properties.name}</div>
+          <div>+ ${properties.body}</div>
         </div>
         <div class="uml-footer">
           <div>+ setHead(Head $head)</div>
@@ -465,6 +466,8 @@ class UmlNode extends HtmlNode {
       </div>
     `
     el.innerHTML = html;
+    // 需要先把之前渲染的子节点清除掉。
+    rootEl.innerHTML = '';
     rootEl.appendChild(el);
   }
 }
@@ -475,20 +478,18 @@ class UmlNode extends HtmlNode {
 以为自定义html节点对外暴露的是一个DOM节点，所以你可以使用框架现有的能力来渲染节点。在react中，我们利用`reactDom`的`render`方法，将react组件渲染到dom节点上。
 
 ```jsx
-// box.jsx
-
 import { HtmlNodeModel, HtmlNode } from '@logicflow/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './uml.css';
 
-function Hello() {
+function Hello(props) {
   return (
     <>
       <h1 className="box-title">title</h1>
       <div className="box-content">
-        <p>content</p>
-        <p>content2</p>
+        <p>{props.name}</p>
+        <p>{props.body}</p>
         <p>content3</p>
       </div>
     </>
@@ -512,7 +513,8 @@ class BoxxModel extends HtmlNodeModel {
 }
 class BoxxNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
-    ReactDOM.render(<Hello />, rootEl);
+    const { properties } = this.getAttributes();
+    ReactDOM.render(<Hello name={properties.name} body={properties.body}/>, rootEl);
   }
 }
 
@@ -523,6 +525,7 @@ const boxx = {
 }
 
 export default boxx;
+
 
 ```
 
@@ -537,7 +540,26 @@ export default function PageIndex() {
       container: document.querySelector('#graph_html') as HTMLElement
     });
     lf.register(box);
-    lf.render();
+    lf.render({
+      nodes: [
+        {
+          id: 11,
+          type: 'boxx',
+          x: 350,
+          y: 100,
+          properties: {
+            name: 'turbo',
+            body: 'hello'
+          }
+        },
+      ]
+    });
+    lf.on('node:click', ({ data}) => {
+      lf.setProperties(data.id, {
+        name: 'turbo',
+        body: Math.random()
+      })
+    });
   }, []);
 
   return (
