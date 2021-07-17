@@ -124,6 +124,12 @@ module.exports = {
       { text: '版本公告', link: '/version-info/0.3.0' },
       { text: '文章', link: '/article/article01' },
     ],
+    thirdLinks: [
+      {
+        text: 'playground',
+        link: 'http://localhost:8001/'
+      }
+    ],
     sidebar: {
       '/guide/': guide,
       '/version-info/': verisonInfo,
