@@ -1,8 +1,8 @@
 {
   "examples": [
     {
-      "name": "渲染节点",
-      "key": "start"
+      "name": "自定义节点",
+      "key": "custom-node"
     },
     {
       "name": "基础节点",

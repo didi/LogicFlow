@@ -26,7 +26,7 @@ function loadDefault(examples) {
   if (window.location.hash) {
     loadPlayground(window.location.hash.slice(1));
   } else {
-    window.locaiton.hash = examples[0].key;
+    window.location.hash = examples[0].key;
   }
 }
 
