@@ -1,0 +1,6 @@
+.lf-playground {
+  display: flex;
+}
+.lf-playground-ide {
+  flex-grow: 1;
+}
