@@ -13,7 +13,6 @@ class UserNode extends HtmlNode {
     return true;
   }
   setHtml(rootEl) {
-    console.log(7777)
     // todo: 和react不一样，还没有找到合适的利用vue内置的diff算法来计算节点是否需要更新。
     if (!this.shouldUpdate()) return;
     const { properties } = this.getAttributes();
@@ -21,7 +20,6 @@ class UserNode extends HtmlNode {
     const el = document.createElement('div');
     rootEl.innerHTML = '';
     rootEl.appendChild(el);
-    console.log(5555)
     const Profile = Vue.extend({
       render: (h) => {
         return h(Call, {
@@ -29,11 +27,10 @@ class UserNode extends HtmlNode {
             name: properties.name
           },
           on: {
-            'change-name': (properties) => {
-              console.log(properties);
-              model.setProperties(properties)
-              // model.setProperty('name', name);
-              console.log(model)
+            'change-name': (pname) => {
+              model.setProperties({
+                name: pname
+              })
             }
           }
         })

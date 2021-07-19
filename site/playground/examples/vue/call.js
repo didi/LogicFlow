@@ -2,26 +2,26 @@ const template = `<div class="call-wrapper">
   <ul>
     <li>{{name}}</li>
     <li>hello</li>
-    <input type="text" @blur="change" v-model="p.name"/>
+    <input type="text" @blur="change" v-model="pname"/>
   </ul>
 </div>`
 
 export default Vue.component('call', {
   template,
   props: {
-    name: String,
+    name: {
+      type: String,
+      default: 'logicflow'
+    },
   },
   data() {
     return {
-      p: {
-        name: '',
-      }
+      pname: ''
     }
   },
   methods: {
     change() {
-      console.log(555, this.p)
-      this.$emit('change-name', this.p)
+      this.$emit('change-name', this.pname)
     }
   },
 });
