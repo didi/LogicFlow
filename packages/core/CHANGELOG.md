@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.0...@logicflow/core@0.6.1) (2021-07-19)
+
+
+### Bug Fixes
+
+* setProperties not observable in htmlNode ([9b47918](https://github.com/towersxu/logicflow/commit/9b47918a97b9d7b8df53c876dcea51d88d82ac4f))
+
+
+
+
+
 # [0.6.0](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.4.11...@logicflow/core@0.6.0) (2021-07-14)
 
 
