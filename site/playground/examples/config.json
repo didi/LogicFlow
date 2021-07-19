@@ -1,16 +1,12 @@
 {
   "examples": [
     {
-      "name": "自定义节点",
+      "name": "自定义带有图标的节点",
       "key": "custom-node"
     },
     {
-      "name": "基础节点",
-      "key": "basic"
-    },
-    {
-      "name": "节点",
-      "key": "node"
+      "name": "使用vue自定义html节点",
+      "key": "vue"
     }
   ]
 }
