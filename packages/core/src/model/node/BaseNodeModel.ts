@@ -352,12 +352,19 @@ export default class BaseNodeModel implements IBaseModel {
 
   @action
   setProperty(key, val): void {
-    this.properties[key] = formatData(val);
+    this.properties = {
+      ...this.properties,
+      [key]: formatData(val),
+    };
   }
 
   @action
   setProperties(properties): void {
-    this.properties = Object.assign(this.properties, properties);
+    // fix: vue setProperties not observable
+    this.properties = {
+      ...this.properties,
+      ...formatData(properties),
+    };
   }
 
   @action
