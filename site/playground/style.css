@@ -77,13 +77,17 @@ body {
   display: flex;
   padding-top: 3.6rem;
   padding: 4rem 1rem 0 0;
+  height: calc(100vh - 4.6rem);
 }
 
 .lf-playground-ide {
   flex-grow: 1;
+  height: 100%;
+  --playground-preview-width: 60%;
 }
 
 .sidebar {
-  width: 20rem;
+  width: 20%;
+  max-width: 20rem;
   flex-shrink: 0;
 }
