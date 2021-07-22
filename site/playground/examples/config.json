@@ -7,6 +7,10 @@
     {
       "name": "使用vue自定义html节点",
       "key": "vue"
+    },
+    {
+      "name": "html卡片",
+      "key": "html-card"
     }
   ]
 }
