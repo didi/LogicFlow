@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 import { map } from 'lodash-es';
-import { inject } from 'mobx-react';
+// import { inject } from 'mobx-react';
 import GraphModel from '../model/GraphModel';
 import CanvasOverlay from './overlay/CanvasOverlay';
 import ToolOverlay from './overlay/ToolOverlay';
@@ -26,6 +26,7 @@ type IProps = {
   dnd: DnD,
   snaplineModel: SnaplineModel;
   components: any;
+  graphModel: GraphModel,
 };
 type InjectedProps = IProps & {
   graphModel: GraphModel,
@@ -38,12 +39,11 @@ type ContainerStyle = {
 
 // todo: fixme type
 // @ts-ignore
-@inject('graphModel')
 @observer
 class Graph extends Component<IProps> {
-  get InjectedProps() {
-    return this.props as InjectedProps;
-  }
+  // get InjectedProps() {
+  //   return this.props as InjectedProps;
+  // }
   getComponent(model: BaseEdgeModel | BaseNodeModel, graphModel: GraphModel, eventCenter: EventEmitter, overlay = 'canvas-overlay') {
     const { getView } = this.props;
     const View = getView(model.type);
@@ -60,7 +60,7 @@ class Graph extends Component<IProps> {
   render() {
     const {
       graphModel, tool, options, eventCenter, dnd, snaplineModel,
-    } = this.InjectedProps;
+    } = this.props;
     const style: ContainerStyle = {};
     if (options.width) {
       style.width = `${options.width}px`;
@@ -81,6 +81,7 @@ class Graph extends Component<IProps> {
           eventCenter={eventCenter}
           dnd={dnd}
         >
+          <OutlineOverlay graphModel={graphModel} />
           <g className="lf-base">
             {
               map(graphModel.sortElements, (nodeModel) => (
@@ -92,7 +93,6 @@ class Graph extends Component<IProps> {
             fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
           }
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
-          <OutlineOverlay graphModel={graphModel} />
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </CanvasOverlay>
         <ToolOverlay graphModel={graphModel} tool={tool} />

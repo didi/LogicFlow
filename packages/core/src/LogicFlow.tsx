@@ -1,5 +1,5 @@
 import { render, h } from 'preact';
-import { observer, Provider } from 'mobx-react';
+import { observer } from 'mobx-react';
 // import * as mobx from 'mobx';
 // import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
 import GraphModel from './model/GraphModel';
@@ -759,19 +759,16 @@ export default class LogicFlow {
       this.history.watch(this.graphModel);
     }
     render((
-      <Provider
+      <Graph
+        eventCenter={this.eventCenter}
+        getView={this.getView}
+        tool={this.tool}
+        options={this.options}
+        dnd={this.dnd}
+        snaplineModel={this.snaplineModel}
+        components={this.components}
         graphModel={this.graphModel}
-      >
-        <Graph
-          eventCenter={this.eventCenter}
-          getView={this.getView}
-          tool={this.tool}
-          options={this.options}
-          dnd={this.dnd}
-          snaplineModel={this.snaplineModel}
-          components={this.components}
-        />
-      </Provider>
+      />
     ), this.container);
   }
 }

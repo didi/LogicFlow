@@ -17,7 +17,7 @@ export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
   getNodeOutline() {
     const { graphModel } = this.props;
-    const { nodes: nodeList, editConfig: { hoverOutline } } = graphModel;
+    const { nodes: nodeList, editConfig: { hoverOutline, nodeSelectedOutline } } = graphModel;
     const nodeOutline = [];
     for (let i = 0; i < nodeList.length; i++) {
       const {
@@ -32,7 +32,7 @@ export default class OutlineOverlay extends Component<IProps> {
         outlineStrokeDashArray,
         hoverOutlineStrokeDashArray,
       } = nodeList[i];
-      if (isSelected || (hoverOutline && isHovered)) {
+      if ((isSelected && nodeSelectedOutline) || (hoverOutline && isHovered)) {
         const color = isSelected ? outlineColor : hoverOutlineColor;
         const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
         nodeOutline.push(
@@ -53,12 +53,11 @@ export default class OutlineOverlay extends Component<IProps> {
   }
   // 边的outline
   getEdgeOutline() {
-    const { graphModel } = this.props;
-    const edgeList = graphModel.edges;
+    const { graphModel: { edges: edgeList, editConfig: { edgeSelectedOutline } } } = this.props;
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (edge.isSelected) {
+      if (edge.isSelected && edgeSelectedOutline) {
         if (edge.modelType === ModelType.LINE_EDGE) {
           edgeOutline.push(this.getLineOutline(edge));
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {
