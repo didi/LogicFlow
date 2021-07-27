@@ -236,31 +236,22 @@ class BaseEdgeModel implements IBaseModel {
   formatText(data) {
     // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition;
-    if (!data.text) {
-      this.text = {
-        value: '',
-        x,
-        y,
-        draggable: false,
-        editable: true,
-      };
-      return;
-    }
-    if (typeof data.text === 'string') {
+    if (!data.text || typeof data.text === 'string') {
       this.text = {
         value: data.text || '',
         x,
         y,
-        draggable: false,
-        editable: true,
+        draggable: this.text.draggable,
+        editable: this.text.editable,
       };
       return;
     }
+
     if (Object.prototype.toString.call(data.text) === '[object Object]') {
       this.text = {
         x: data.text.x || x,
         y: data.text.y || y,
-        value: data.text.value,
+        value: data.text.value || '',
         draggable: this.text.draggable,
         editable: this.text.editable,
       };

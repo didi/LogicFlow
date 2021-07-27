@@ -841,7 +841,6 @@ export const pickEdgeConfig = (data): EdgeConfig => pick(data, [
   'pointsList',
   'startPoint',
   'endPoint',
-  'text',
   'properties',
 ]);
 
