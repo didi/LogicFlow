@@ -81,7 +81,6 @@ class Graph extends Component<IProps> {
           eventCenter={eventCenter}
           dnd={dnd}
         >
-          <OutlineOverlay graphModel={graphModel} />
           <g className="lf-base">
             {
               map(graphModel.sortElements, (nodeModel) => (
@@ -92,6 +91,7 @@ class Graph extends Component<IProps> {
           {
             fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
           }
+          <OutlineOverlay graphModel={graphModel} />
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </CanvasOverlay>

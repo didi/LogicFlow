@@ -3,7 +3,7 @@ import { pick } from 'lodash-es';
 import Text from '../basic-shape/Text';
 import Rect from '../basic-shape/Rect';
 import BaseText from './BaseText';
-import { getBytesLength } from '../../util/edge';
+import { getTextWidth } from '../../util/edge';
 
 export default class LineText extends BaseText {
   constructor(config) {
@@ -29,17 +29,17 @@ export default class LineText extends BaseText {
       // 计算文本中最长的一行的字节数
       let longestBytes = 0;
       rows && rows.forEach(item => {
-        const rowByteLength = getBytesLength(item);
+        const rowByteLength = getTextWidth(item, fontSize);
         longestBytes = rowByteLength > longestBytes ? rowByteLength : longestBytes;
       });
       // 背景框宽度，最长一行字节数/2 * fontsize + 2
       // 背景框宽度， 行数 * fontsize + 2
       const rectAttr = {
+        ...backgroundStyle,
         x: x - 1,
         y: y - 1,
         width: Math.ceil(longestBytes / 2) * fontSize + fontSize / 4,
         height: rowsLength * (fontSize + 2) + fontSize / 4,
-        ...backgroundStyle,
       };
       return <Rect {...rectAttr} />;
     }

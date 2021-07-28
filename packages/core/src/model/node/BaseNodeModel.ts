@@ -8,7 +8,7 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig,
+  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -51,6 +51,7 @@ export default class BaseNodeModel implements IBaseModel {
   [propName: string]: any; // 支持自定义
   targetRules: ConnectRule[] = [];
   sourceRules: ConnectRule[] = [];
+  moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
   hasSetTargetRules = false; // 用来限制rules的重复值
   hasSetSourceRules = false; // 用来限制rules的重复值
   @observable properties: Record<string, any> = {};
@@ -231,6 +232,18 @@ export default class BaseNodeModel implements IBaseModel {
       msg,
     };
   }
+  /**
+   * 是否允许移动节点到新的位置
+   */
+  isAllowMoveNode(deltaX, deltaY) {
+    for (const rule of this.moveRules) {
+      if (!rule(this, deltaX, deltaY)) return false;
+    }
+    for (const rule of this.graphModel.nodeMoveRules) {
+      if (!rule(this, deltaX, deltaY)) return false;
+    }
+    return true;
+  }
 
   getConnectedTargetRules(): ConnectRule[] {
     return this.targetRules;
@@ -245,6 +258,17 @@ export default class BaseNodeModel implements IBaseModel {
       y: y + el[1],
     }));
   }
+  /**
+   * 获取节点区域
+   */
+  getBounds(): Bounds {
+    return {
+      x1: this.x - this.width / 2,
+      y1: this.y - this.height / 2,
+      x2: this.x + this.width / 2,
+      y2: this.y + this.height / 2,
+    };
+  }
 
   get anchors() {
     const {
@@ -257,9 +281,18 @@ export default class BaseNodeModel implements IBaseModel {
   }
 
   @action
+  addNodeMoveRules(fn: NodeMoveRule) {
+    if (!this.moveRules.includes(fn)) {
+      this.moveRules.push(fn);
+    }
+  }
+  @action
   move(deltaX, deltaY): void {
-    this.x += deltaX;
-    this.y += deltaY;
+    const targetX = this.x + deltaX;
+    const targetY = this.y + deltaY;
+    if (!this.isAllowMoveNode(deltaX, deltaY)) return;
+    this.x = targetX;
+    this.y = targetY;
     this.text && this.moveText(deltaX, deltaY);
   }
 

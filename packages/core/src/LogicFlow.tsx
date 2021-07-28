@@ -527,9 +527,39 @@ export default class LogicFlow {
   }
 
   // 数据操作----------------------------------------------
-
-  /* 获取边，返回的是model */
-  // TODO 移到 model
+  /**
+   * 获取节点对象
+   * @param nodeId 节点Id
+   */
+  getNodeModel(nodeId: string): _Model.BaseNodeModel {
+    return this.graphModel.getNodeModel(nodeId);
+  }
+  getNodeData(nodeId: string): NodeAttribute {
+    return this.graphModel.getNodeModel(nodeId).getData();
+  }
+  /**
+   * 设置节点数据
+   * @deprecated 不建议直接设置节点数据，更新文本请用updateText, 修改数据请用setProperties
+   */
+  setNodeData(nodeAttribute: NodeAttribute): void {
+    const { id } = nodeAttribute;
+    this.graphModel.getNodeModel(id).updateData(nodeAttribute);
+  }
+  getEdgeModel(config: EdgeFilter) {
+    return this.getEdge(config);
+  }
+  /**
+   * 获取边的model
+   * @param edgeId 边的Id
+   */
+  getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
+    const { edgesMap } = this.graphModel;
+    return edgesMap[edgeId]?.model;
+  }
+  /**
+   * 获取边Model
+   * @deprecated 不建议使用getEdge, 建议使用getEdgeModel
+   */
   getEdge(config: EdgeFilter): _Model.BaseEdgeModel[] {
     const { edges, edgesMap } = this.graphModel;
     const {
@@ -572,24 +602,13 @@ export default class LogicFlow {
     }
     return [];
   }
-  /**
-   * 获取节点对象
-   * @param nodeId 节点Id
-   */
-  // todo: 不做外api输出，有例子在使用，后续删除
-  getNodeModel(nodeId: string): _Model.BaseNodeModel {
-    return this.graphModel.getNodeModel(nodeId);
-  }
-  getNodeData(nodeId: string): NodeAttribute {
-    return this.graphModel.getNodeModel(nodeId).getData();
-  }
-  setNodeData(nodeAttribute: NodeAttribute): void {
-    const { id } = nodeAttribute;
-    this.graphModel.getNodeModel(id).updateData(nodeAttribute);
-  }
   getEdgeData(edgeId: string): EdgeData {
     return this.getEdgeModelById(edgeId)?.getData();
   }
+  /**
+   * 设置边数据
+   * @deprecated 不建议直接设置边数据，更新文本请用updateText, 修改数据请用setProperties
+   */
   setEdgeData(edgeAttribute: EdgeAttribute): void {
     const { id } = edgeAttribute;
     return this.getEdgeModelById(id)?.updateData(edgeAttribute);
@@ -667,7 +686,12 @@ export default class LogicFlow {
   updateAttributes(id: string, attributes: object) {
     this.graphModel.updateAttributes(id, attributes);
   }
-
+  /**
+   * 清空画布
+   */
+  clearData() {
+    this.graphModel.clearData();
+  }
   // 内部方法----------------------------------------------
 
   /**
@@ -731,19 +755,6 @@ export default class LogicFlow {
     if (this.snaplineModel) {
       this.snaplineModel.clearSnapline();
     }
-  }
-  // 清空数据
-  clearData() {
-    this.graphModel.clearData();
-  }
-  /**
-   * 获取边的model
-   * @param edgeId 边的Id
-   */
-  // todo: 不做外api输出，有例子在使用，后续删除
-  getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
-    const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId]?.model;
   }
   setView(type: string, component) {
     this.viewMap.set(type, component);

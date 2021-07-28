@@ -9,7 +9,7 @@ import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType,
 } from '../constant/constant';
 import {
-  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple,
+  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple, NodeMoveRule,
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
@@ -38,6 +38,7 @@ class GraphModel {
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElements = new Map<string, BaseElementModel>(); // 多选
   idGenerator: () => number | string;
+  nodeMoveRules: NodeMoveRule[] = [];
   @observable selectElementSize = 0;
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
@@ -151,6 +152,9 @@ class GraphModel {
   }
 
   getNodeModel(nodeId: BaseNodeModelId): BaseNodeModel {
+    if (this.fakerNode && nodeId === this.fakerNode.id) {
+      return this.fakerNode;
+    }
     return this.nodesMap[nodeId]?.model;
   }
   /**
@@ -607,7 +611,24 @@ class GraphModel {
     // 如果移动的
     elements.nodes.forEach(node => this.moveNode(node.id, deltaX, deltaY));
   }
-
+  /**
+   * 批量移动节点，节点移动的时候，会动态计算所有节点与未移动节点的连线位置
+   * 移动的节点直接的连线会保持相对位置
+   */
+  @action
+  moveNodes(nodeIds, deltaX, deltaY) {
+    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY));
+  }
+  /**
+   * 添加节点移动限制规则，在节点移动的时候触发。
+   * 如果方法返回false, 则会阻止节点移动。
+   * @param fn function
+   */
+  addNodeMoveRules(fn: NodeMoveRule) {
+    if (!this.nodeMoveRules.includes(fn)) {
+      this.nodeMoveRules.push(fn);
+    }
+  }
   /* 修改连线类型 */
   @action
   changeEdgeType(type: string): void {
