@@ -657,7 +657,7 @@ export default class LogicFlow {
    * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
    */
   getSelectElements(isIgnoreCheck = true) {
-    this.graphModel.getSelectElements(isIgnoreCheck);
+    return this.graphModel.getSelectElements(isIgnoreCheck);
   }
   /**
    * 动态修改 id 对应元素 model 中的属性
