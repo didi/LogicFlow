@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.1...@logicflow/core@0.6.2) (2021-07-28)
+
+
+### Bug Fixes
+
+* text undefined cause undraggble ([ae4f1db](https://github.com/towersxu/logicflow/commit/ae4f1db28efa5d7a5194be92df3922d7f6fdd7c5))
+* 修复getSelectElements方法,即使选中元素,但是依然返回为undefined的bug ([12df9f2](https://github.com/towersxu/logicflow/commit/12df9f26020c3eeda0fa18c4f23d09ab1566c1cc))
+
+
+
+
+
 ## [0.6.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.0...@logicflow/core@0.6.1) (2021-07-19)
 
 
