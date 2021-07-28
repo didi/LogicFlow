@@ -1,6 +1,6 @@
-@import 'background.css';
-@import 'html-overlay.css';
-@import 'tool.css';
+@import './background.css';
+@import './html-overlay.css';
+@import './tool.css';
 
 .lf-graph {
   position: relative;
