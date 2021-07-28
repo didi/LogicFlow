@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.2...@logicflow/core@0.6.4) (2021-07-28)
+
+
+### Bug Fixes
+
+* codesandbox import css ([a0eb60a](https://github.com/towersxu/logicflow/commit/a0eb60a3c61b152b9e06ba043d1e6eb5f2b00e95))
+
+
+### Features
+
+* all core style use one css ([3528505](https://github.com/towersxu/logicflow/commit/3528505c4be7305c10cf5dd4ab4df8dab599f6ae))
+
+
+
+
+
 ## [0.6.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.2...@logicflow/core@0.6.3) (2021-07-28)
 
 
