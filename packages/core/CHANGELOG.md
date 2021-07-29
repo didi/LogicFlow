@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.4...@logicflow/core@0.6.5) (2021-07-29)
+
+
+### Bug Fixes
+
+* remove unnessage import ([cd02497](https://github.com/towersxu/logicflow/commit/cd024976b657c0b964e55cdcce1f086f395e2c8c))
+
+
+### Features
+
+* add node:dnd-drag event ([bf8a351](https://github.com/towersxu/logicflow/commit/bf8a3515c458014c33cc7fdc8f366c4d16b226b8))
+
+
+
+
+
 ## [0.6.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.2...@logicflow/core@0.6.4) (2021-07-28)
 
 
