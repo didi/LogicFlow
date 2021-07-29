@@ -22,7 +22,8 @@ lf.on('element:type', (eventObject) => {});
 | 'node:mouseleave' | 鼠标离开节点 | data, e |
 | 'node:delete' | 节点的删除 | data |
 | 'node:add' | 节点的添加 | data |
-| 'node:dnd-add' | 节点拖拽添加 | data |
+| 'node:dnd-add' | 外部拖入节点添加时触发 | data |
+| 'node:dnd-drag' | 外部拖入节点拖拽中触发 | data |
 | 'node:dragstart' | 节点开始拖拽 | data, e |
 | 'node:drag' | 节点拖拽 | data, e |
 | 'node:drop' | 节点拖拽放开 | data, e |
