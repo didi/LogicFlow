@@ -58,6 +58,7 @@ export default class Dnd {
       this.fakerNode.moveTo(x, y);
       const nodeData = this.fakerNode.getData();
       this.lf.setNodeSnapLine(nodeData);
+      this.lf.eventCenter.emit(EventType.NODE_DND_DRAG, { data: nodeData });
     }
     return false;
   };

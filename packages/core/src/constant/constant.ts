@@ -41,6 +41,7 @@ export enum EventType {
   NODE_DELETE = 'node:delete',
   NODE_ADD = 'node:add',
   NODE_DND_ADD = 'node:dnd-add',
+  NODE_DND_DRAG = 'node:dnd-drag',
   NODE_MOUSEDOWN = 'node:mousedown',
   NODE_DRAGSTART = 'node:dragstart',
   NODE_DRAG = 'node:drag',
