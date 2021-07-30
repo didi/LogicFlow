@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.4...@logicflow/core@0.6.5) (2021-07-29)
+
+
+### Bug Fixes
+
+* remove unnessage import ([cd02497](https://github.com/towersxu/logicflow/commit/cd024976b657c0b964e55cdcce1f086f395e2c8c))
+
+
+### Features
+
+* add node:dnd-drag event ([bf8a351](https://github.com/towersxu/logicflow/commit/bf8a3515c458014c33cc7fdc8f366c4d16b226b8))
+
+
+
+
+
+## [0.6.4](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.2...@logicflow/core@0.6.4) (2021-07-28)
+
+
+### Bug Fixes
+
+* codesandbox import css ([a0eb60a](https://github.com/towersxu/logicflow/commit/a0eb60a3c61b152b9e06ba043d1e6eb5f2b00e95))
+
+
+### Features
+
+* all core style use one css ([3528505](https://github.com/towersxu/logicflow/commit/3528505c4be7305c10cf5dd4ab4df8dab599f6ae))
+
+
+
+
+
+## [0.6.3](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.2...@logicflow/core@0.6.3) (2021-07-28)
+
+
+### Bug Fixes
+
+* codesandbox import css ([e3f71cc](https://github.com/towersxu/logicflow/commit/e3f71cc1bf62f6bbc23dc3cac2deccfde83d83a1))
+
+
+
+
+
+## [0.6.2](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.1...@logicflow/core@0.6.2) (2021-07-28)
+
+
+### Bug Fixes
+
+* text undefined cause undraggble ([ae4f1db](https://github.com/towersxu/logicflow/commit/ae4f1db28efa5d7a5194be92df3922d7f6fdd7c5))
+* 修复getSelectElements方法,即使选中元素,但是依然返回为undefined的bug ([12df9f2](https://github.com/towersxu/logicflow/commit/12df9f26020c3eeda0fa18c4f23d09ab1566c1cc))
+
+
+
+
+
 ## [0.6.1](https://github.com/towersxu/logicflow/compare/@logicflow/core@0.6.0...@logicflow/core@0.6.1) (2021-07-19)
 
 

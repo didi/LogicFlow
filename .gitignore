@@ -12,7 +12,6 @@ site-build
 output
 logic-flow-docs.tar.gz
 *.log
-package-lock.json
 */.eslintcache
 .eslintcache
 ~*
