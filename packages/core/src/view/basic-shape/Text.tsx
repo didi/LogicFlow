@@ -78,7 +78,6 @@ export default function Text(props) {
                 width: model.width,
                 background: 'transparent',
               }}
-              xmlns="http://www.w3.org/1999/xhtml"
             >
               <div
                 className="lf-node-text-auto-wrap"
