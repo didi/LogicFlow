@@ -376,7 +376,7 @@ class GraphModel {
     return nodeModel.getData();
   }
   /**
-   * 移动节点
+   * 移动节点-相对位置
    * @param nodeModel 节点Id
    * @param deltaX X轴移动距离
    * @param deltaY Y轴移动距离
@@ -393,6 +393,30 @@ class GraphModel {
     nodeModel.move(deltaX, deltaY);
     // 2) 移动连线
     this.moveEdge(nodeId, deltaX, deltaY);
+  }
+
+  /**
+   * 移动节点-绝对位置
+   * @param nodeModel 节点Id
+   * @param x X轴目标位置
+   * @param y Y轴目标位置
+   */
+  @action
+  moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number) {
+    // 1) 移动节点
+    const node = this.nodesMap[nodeId];
+    if (!node) {
+      console.warn(`不存在id为${nodeId}的节点`);
+      return;
+    }
+    const nodeModel = node.model;
+    const {
+      x: originX,
+      y: originY,
+    } = nodeModel;
+    const deltaX = x - originX;
+    const deltaY = y - originY;
+    this.moveNode(nodeId, deltaX, deltaY);
   }
 
   @action
