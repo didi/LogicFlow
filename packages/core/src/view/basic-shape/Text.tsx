@@ -9,6 +9,7 @@ export default function Text(props) {
     fill = 'currentColor',
     model,
     fontFamily = '',
+    lineHeight,
     autoWrap = false,
   } = props;
   const attrs = {
@@ -25,6 +26,7 @@ export default function Text(props) {
     dom.style.display = 'inline-block';
     dom.style.fontSize = style.fontSize;
     dom.style.width = style.width;
+    dom.style.lineHeight = style.lineHeight;
     if (style.fontFamily) {
       dom.style.fontFamily = style.fontFamily;
     }
@@ -54,6 +56,7 @@ export default function Text(props) {
           fontSize: `${fontSize}px`,
           width: `${model.width}px`,
           fontFamily,
+          lineHeight,
         },
         rowsLength,
       });
@@ -84,6 +87,8 @@ export default function Text(props) {
                   background: 'transparent',
                   textAlign: 'center',
                   wordBreak: 'break-all',
+                  fontFamily,
+                  lineHeight,
                 }}
               >
                 {rows.map(item => <div>{item}</div>)}
@@ -96,8 +101,8 @@ export default function Text(props) {
     if (rowsLength > 1) {
       const tspans = rows.map(((row, i) => {
         // 保证文字居中，文字Y轴偏移为当前行数对应中心行数的偏移行 * 行高
-        const lineHeight = fontSize + 2;
-        const offsetY = (i - (rowsLength - 1) / 2) * lineHeight;
+        const tspanLineHeight = fontSize + 2;
+        const offsetY = (i - (rowsLength - 1) / 2) * tspanLineHeight;
         return (
           <tspan className="lf-text-tspan" x={x} y={y + offsetY}>{row}</tspan>
         );

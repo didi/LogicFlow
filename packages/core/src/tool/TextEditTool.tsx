@@ -73,12 +73,15 @@ export default class TextEdit extends Component<IProps, IState> {
       }
       if (textEditElement.BaseType === ElementType.NODE) {
         // 如果节点文案自动换行, 设置编辑框宽度
-        const { nodeText: { autoWrap } } = theme;
+        const { nodeText: { autoWrap, lineHeight } } = theme;
         if (autoWrap) {
           autoStyle = {
             width: textEditElement.width,
+            minWidth: textEditElement.width,
             resize: 'auto',
             whiteSpace: 'normal',
+            wordBreak: 'break-all',
+            lineHeight,
           };
         }
       }

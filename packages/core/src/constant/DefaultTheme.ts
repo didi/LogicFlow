@@ -86,6 +86,7 @@ const text = {
 const nodeText = {
   ...text,
   autoWrap: false,
+  lineHeight: 1.2,
 };
 const edgeText = {
   color: '#000000',

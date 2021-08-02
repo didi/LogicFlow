@@ -87,6 +87,9 @@
   background: #FFF;
   transform: translate(-50%, -50%);
 }
+.lf-node-text-auto-wrap {
+  line-height: 1.2;
+}
 /* tool-overlay */
 .lf-tool-overlay {
   position: absolute;
