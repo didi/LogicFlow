@@ -52,8 +52,9 @@ export default class TextEdit extends Component<IProps, IState> {
 
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
-    const { transformMatrix } = graphModel;
+    const { transformMatrix, theme } = graphModel;
     let { textEditElement } = graphModel;
+    let autoStyle;
     if (textEditElement) {
       // 由于连线上的文本是依据显示的时候动态计算出来的
       // 所以不能在连线创建的时候就初始化文本位置。
@@ -70,12 +71,27 @@ export default class TextEdit extends Component<IProps, IState> {
           textEditElement = textEditElement as BaseNodeModel;
         }
       }
+      if (textEditElement.BaseType === ElementType.NODE) {
+        // 如果节点文案自动换行, 设置编辑框宽度
+        const { nodeText: { autoWrap, lineHeight } } = theme;
+        if (autoWrap) {
+          autoStyle = {
+            width: textEditElement.width,
+            minWidth: textEditElement.width,
+            resize: 'auto',
+            whiteSpace: 'normal',
+            wordBreak: 'break-all',
+            lineHeight,
+          };
+        }
+      }
       const { x, y } = textEditElement.text;
       const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
       return {
         style: {
           left,
           top,
+          ...autoStyle,
         },
       };
     }

@@ -83,7 +83,11 @@ const text = {
   fontWeight: 'normal',
   fontFamily: '',
 };
-const nodeText = { ...text };
+const nodeText = {
+  ...text,
+  autoWrap: false,
+  lineHeight: 1.2,
+};
 const edgeText = {
   color: '#000000',
   fontSize: 12,

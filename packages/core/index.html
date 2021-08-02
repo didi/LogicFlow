@@ -67,6 +67,10 @@
       padding: 5px 10px;
       font-size: 14px;
     }
+    /* 输入框字体大小和设置的大小保持一致，自动换行输入和展示保持一致 */
+    .lf-text-input {
+      font-size: 12px;
+    }
   </style>
 </head>
 
@@ -342,7 +346,7 @@
           view: UmlNode,
           model: UmlModel,
         })
-        lf.setTheme({});
+        lf.setTheme({nodeText: {autoWrap: true, lineHeight: 1.5}});
         lf.setDefaultEdgeType('polyline');
 
         lf.render({
