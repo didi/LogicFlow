@@ -6,7 +6,7 @@ import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
-import { ElementType, EventType } from '../constant/constant';
+import { ElementType, EventType, ModelType } from '../constant/constant';
 import { observer } from '..';
 // import { ElementState } from '../constant/constant';
 
@@ -52,8 +52,9 @@ export default class TextEdit extends Component<IProps, IState> {
 
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
-    const { transformMatrix } = graphModel;
+    const { transformMatrix, theme } = graphModel;
     let { textEditElement } = graphModel;
+    let autoStyle;
     if (textEditElement) {
       // 由于连线上的文本是依据显示的时候动态计算出来的
       // 所以不能在连线创建的时候就初始化文本位置。
@@ -70,12 +71,48 @@ export default class TextEdit extends Component<IProps, IState> {
           textEditElement = textEditElement as BaseNodeModel;
         }
       }
+      // 自动换行节点连线通用样式
+      const commonAutoStyle = {
+        resize: 'auto',
+        whiteSpace: 'normal',
+        wordBreak: 'break-all',
+      };
+      if (textEditElement.BaseType === ElementType.EDGE) {
+        // 如果连线文案自动换行, 设置编辑框宽度
+        const { edgeText: { autoWrap, lineHeight, wrapPadding } } = theme;
+        const { textWidth } = textEditElement;
+        if (autoWrap && textWidth) {
+          autoStyle = {
+            ...commonAutoStyle,
+            width: textWidth,
+            minWidth: textWidth,
+            lineHeight,
+            padding: wrapPadding,
+          };
+        }
+      } else if (textEditElement.BaseType === ElementType.NODE) {
+        // 如果节点文案自动换行, 设置编辑框宽度
+        const { nodeText: { autoWrap, lineHeight, wrapPadding } } = theme;
+        const { width, textWidth, modelType } = textEditElement;
+        // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
+        if ((modelType !== ModelType.TEXT_NODE && autoWrap)
+        || (modelType === ModelType.TEXT_NODE && autoWrap && textWidth)) {
+          autoStyle = {
+            ...commonAutoStyle,
+            width: textWidth || width,
+            minWidth: textWidth || width,
+            lineHeight,
+            padding: wrapPadding,
+          };
+        }
+      }
       const { x, y } = textEditElement.text;
       const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
       return {
         style: {
           left,
           top,
+          ...autoStyle,
         },
       };
     }

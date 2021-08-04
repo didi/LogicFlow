@@ -83,7 +83,12 @@ const text = {
   fontWeight: 'normal',
   fontFamily: '',
 };
-const nodeText = { ...text };
+const nodeText = {
+  ...text,
+  autoWrap: false,
+  lineHeight: 1.2,
+  wrapPadding: '2px 3px',
+};
 const edgeText = {
   color: '#000000',
   fontSize: 12,
@@ -96,6 +101,9 @@ const edgeText = {
     radius: 0,
   },
   hoverBackground: null,
+  autoWrap: false,
+  lineHeight: 1.2,
+  wrapPadding: '2px 3px',
 };
 const snapline = {
   stroke: '#1E90FF',

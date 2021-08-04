@@ -33,7 +33,8 @@ export default class BaseText extends Component<IProps, IState> {
     });
   }
   getShape() {
-    const { model: { text }, style } = this.props;
+    const { model, style } = this.props;
+    const { text } = model;
     const { value, x, y } = text;
     const attr = {
       x,
@@ -42,7 +43,7 @@ export default class BaseText extends Component<IProps, IState> {
       value,
     };
     return (
-      <Text {...attr} {...style} />
+      <Text {...attr} {...style} model={model} />
     );
   }
   onDraging = ({ deltaX, deltaY }) => {

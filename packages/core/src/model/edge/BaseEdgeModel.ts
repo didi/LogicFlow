@@ -47,6 +47,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable state = 1;
   modelType = ModelType.EDGE;
   additionStateData: AdditionData;
+  [propName: string]: any; // 支持自定义
   graphModel: GraphModel;
   menu?: MenuConfig[];
   @observable text = defaultData.text;
