@@ -16,37 +16,53 @@ const Snapshot = {
   install(lf) {
     this.offsetX = Number.MAX_SAFE_INTEGER;
     this.offsetY = Number.MAX_SAFE_INTEGER;
-    lf.getSnapshot = (fileName: string) => {
+    /* 下载快照 */
+    lf.getSnapshot = (fileName: string, backgroundColor: string) => {
       this.fileName = fileName || `logic-flow.${Date.now()}.png`;
-      lf.graphModel.nodes.forEach(item => {
-        const {
-          x, width, y, height,
-        } = item;
-        const offsetX = x - width / 2;
-        const offsetY = y - height / 2;
-        if (offsetX < this.offsetX) {
-          this.offsetX = offsetX - 5;
-        }
-        if (offsetY < this.offsetY) {
-          this.offsetY = offsetY - 5;
-        }
-      });
-      lf.graphModel.edges.forEach(edge => {
-        if (edge.pointsList) {
-          edge.pointsList.forEach(point => {
-            const { x, y } = point;
-            if (x < this.offsetX) {
-              this.offsetX = x - 5;
-            }
-            if (y < this.offsetY) {
-              this.offsetY = y - 5;
-            }
-          });
-        }
-      });
-      const svgRootElement = lf.container.querySelector('svg');
-      this.downloadSvg(svgRootElement, this.fileName);
+      const svgRootElement = this.getSvgRootElement(lf);
+      this.downloadSvg(svgRootElement, this.fileName, backgroundColor);
     };
+    /* 获取Blob对象，用户图片上传 */
+    lf.getSnapshotBlob = (backgroundColor: string) => {
+      const svgRootElement = this.getSvgRootElement(lf);
+      return this.getBlob(svgRootElement, backgroundColor);
+    };
+    /* 获取Base64对象，用户图片上传 */
+    lf.getSnapshotBase64 = (backgroundColor: string) => {
+      const svgRootElement = this.getSvgRootElement(lf);
+      return this.getBase64(svgRootElement, backgroundColor);
+    };
+  },
+  /* 获取svgRoot对象 */
+  getSvgRootElement(lf) {
+    lf.graphModel.nodes.forEach(item => {
+      const {
+        x, width, y, height,
+      } = item;
+      const offsetX = x - width / 2;
+      const offsetY = y - height / 2;
+      if (offsetX < this.offsetX) {
+        this.offsetX = offsetX - 5;
+      }
+      if (offsetY < this.offsetY) {
+        this.offsetY = offsetY - 5;
+      }
+    });
+    lf.graphModel.edges.forEach(edge => {
+      if (edge.pointsList) {
+        edge.pointsList.forEach(point => {
+          const { x, y } = point;
+          if (x < this.offsetX) {
+            this.offsetX = x - 5;
+          }
+          if (y < this.offsetY) {
+            this.offsetY = y - 5;
+          }
+        });
+      }
+    });
+    const svgRootElement = lf.container.querySelector('svg');
+    return svgRootElement;
   },
   triggerDownload(imgURI: string) {
     const evt = new MouseEvent('click', {
@@ -73,9 +89,37 @@ const Snapshot = {
       }
     }
   },
-  downloadSvg(svg: SVGGraphicsElement) {
+  /* 下载图片 */
+  downloadSvg(svg: SVGGraphicsElement, fileName: string, backgroundColor: string) {
+    this.getCanvasData(svg, backgroundColor).then(canvas => {
+      const imgURI = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
+      this.triggerDownload(imgURI, fileName);
+    });
+  },
+  /* 获取base64对象 */
+  getBase64(svg: SVGGraphicsElement, backgroundColor: string) {
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, backgroundColor).then(canvas => {
+        const base64 = canvas.toDataURL('image/png');
+        resolve(base64);
+      });
+    });
+  },
+  /* 获取Blob对象 */
+  getBlob(svg: SVGGraphicsElement, backgroundColor: string) {
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, backgroundColor).then(canvas => {
+        canvas.toBlob(blob => {
+          resolve(blob);
+        }, 'image/png');
+      });
+    });
+  },
+  // 获取图片生成中中间产物canvas对象，用户转换为其他需要的格式
+  getCanvasData(svg: SVGGraphicsElement, backgroundColor: string) {
     const copy = svg.cloneNode(true);
-    const dpr = window.devicePixelRatio || 1;
     const graph = copy.lastChild;
     let childLength = graph.childNodes && graph.childNodes.length;
     if (childLength) {
@@ -99,6 +143,9 @@ const Snapshot = {
     }
     // offset值加10，保证图形不会紧贴着下载图片的左边和上边
     (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${-this.offsetX + 10}, ${-this.offsetY + 10})`;
+    const data = getOuterHTML(copy as Element);
+    const svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    const dpr = window.devicePixelRatio || 1;
     const canvas = document.createElement('canvas');
     const base = document.getElementsByClassName('lf-base')[0];
     const bbox = (base as Element).getBoundingClientRect();
@@ -109,20 +156,23 @@ const Snapshot = {
     canvas.height = bbox.height * dpr + 80;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, bbox.width, bbox.height);
-    const data = getOuterHTML(copy as Element);
+    // 如果有背景色，设置流程图导出的背景色
+    if (backgroundColor) {
+      ctx.fillStyle = backgroundColor;
+      ctx.fillRect(0, 0, bbox.width * dpr + 80, bbox.height * dpr + 80);
+    } else {
+      ctx.clearRect(0, 0, bbox.width, bbox.height);
+    }
     const img = new Image();
-    const svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     const url = window.URL.createObjectURL(svgBlob);
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0);
-      window.URL.revokeObjectURL(url);
-      const imgURI = canvas
-        .toDataURL('image/png')
-        .replace('image/png', 'image/octet-stream');
-      this.triggerDownload(imgURI, this.fileName);
-    };
-    img.src = url;
+    return new Promise((resolve) => {
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+        window.URL.revokeObjectURL(url);
+        resolve(canvas);
+      };
+      img.src = url;
+    });
   },
 };
 
