@@ -71,17 +71,21 @@ export default class TextEdit extends Component<IProps, IState> {
           textEditElement = textEditElement as BaseNodeModel;
         }
       }
+      // 自动换行节点连线通用样式
+      const commonAutoStyle = {
+        resize: 'auto',
+        whiteSpace: 'normal',
+        wordBreak: 'break-all',
+      };
       if (textEditElement.BaseType === ElementType.EDGE) {
         // 如果连线文案自动换行, 设置编辑框宽度
         const { edgeText: { autoWrap, lineHeight, wrapPadding } } = theme;
         const { textWidth } = textEditElement;
         if (autoWrap && textWidth) {
           autoStyle = {
+            ...commonAutoStyle,
             width: textWidth,
             minWidth: textWidth,
-            resize: 'auto',
-            whiteSpace: 'normal',
-            wordBreak: 'break-all',
             lineHeight,
             padding: wrapPadding,
           };
@@ -94,11 +98,9 @@ export default class TextEdit extends Component<IProps, IState> {
         if ((modelType !== ModelType.TEXT_NODE && autoWrap)
         || (modelType === ModelType.TEXT_NODE && autoWrap && textWidth)) {
           autoStyle = {
+            ...commonAutoStyle,
             width: textWidth || width,
             minWidth: textWidth || width,
-            resize: 'auto',
-            whiteSpace: 'normal',
-            wordBreak: 'break-all',
             lineHeight,
             padding: wrapPadding,
           };
