@@ -384,9 +384,10 @@ class GraphModel {
    * @param nodeModel 节点Id
    * @param deltaX X轴移动距离
    * @param deltaY Y轴移动距离
+   * @param isignoreRule 是否忽略移动规则限制
    */
   @action
-  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number) {
+  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number, isignoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -394,7 +395,7 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    nodeModel.move(deltaX, deltaY);
+    nodeModel.move(deltaX, deltaY, isignoreRule);
     // 2) 移动连线
     this.moveEdge(nodeId, deltaX, deltaY);
   }
@@ -640,8 +641,8 @@ class GraphModel {
    * 移动的节点直接的连线会保持相对位置
    */
   @action
-  moveNodes(nodeIds, deltaX, deltaY) {
-    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY));
+  moveNodes(nodeIds, deltaX, deltaY, isignoreRule = false) {
+    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isignoreRule));
   }
   /**
    * 添加节点移动限制规则，在节点移动的时候触发。

@@ -287,20 +287,21 @@ export default class BaseNodeModel implements IBaseModel {
     }
   }
   @action
-  move(deltaX, deltaY): void {
+  move(deltaX, deltaY, isignoreRule = false): void {
+    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return;
     const targetX = this.x + deltaX;
     const targetY = this.y + deltaY;
-    if (!this.isAllowMoveNode(deltaX, deltaY)) return;
     this.x = targetX;
     this.y = targetY;
     this.text && this.moveText(deltaX, deltaY);
   }
 
   @action
-  moveTo(x, y): void {
+  moveTo(x, y, isignoreRule = false): void {
+    const deltaX = x - this.x;
+    const deltaY = y - this.y;
+    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return;
     if (this.text) {
-      const deltaX = x - this.x;
-      const deltaY = y - this.y;
       this.text && this.moveText(deltaX, deltaY);
     }
     this.x = x;

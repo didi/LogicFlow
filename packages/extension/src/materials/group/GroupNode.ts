@@ -7,6 +7,7 @@ class GroupNodeModel extends RectNodeModel {
   setAttributes() {
     this.width = 500;
     this.height = 200;
+    this.strokeWidth = 1;
     this.zIndex = 0;
   }
   /**
@@ -46,7 +47,11 @@ class GroupNode extends RectNode {
    * 重新toFront，阻止其置顶
    */
   toFront() {}
-
+  getShapeStyle() {
+    const shape = super.getShapeStyle();
+    shape.radius = 0;
+    return shape;
+  }
 }
 
 export default {
