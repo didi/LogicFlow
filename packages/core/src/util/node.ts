@@ -11,6 +11,7 @@ import {
 } from '../type';
 import { isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
+import { getBytesLength } from './edge';
 
 /* 获取所有锚点 */
 export const getAnchors = (data): Point[] => {
@@ -372,5 +373,45 @@ export const getNodeAnchorPosition = (center, point, width, height) => {
   return {
     x,
     y,
+  };
+};
+
+// 获取文案高度，自动换行，利用dom计算高度
+export const getHtmlTextHeight = ({ rows, style, rowsLength, className }) => {
+  const dom = document.createElement('div');
+  dom.style.fontSize = style.fontSize;
+  dom.style.width = style.width;
+  dom.className = className;
+  dom.style.lineHeight = style.lineHeight;
+  dom.style.padding = style.padding;
+  if (style.fontFamily) {
+    dom.style.fontFamily = style.fontFamily;
+  }
+  if (rowsLength > 1) {
+    rows.forEach(row => {
+      const rowDom = document.createElement('div');
+      rowDom.textContent = row;
+      dom.appendChild(rowDom);
+    });
+  } else {
+    dom.textContent = rows;
+  }
+  document.body.appendChild(dom);
+  const height = dom.clientHeight;
+  document.body.removeChild(dom);
+  return height;
+};
+// 获取文案高度，自动换行，利用dom计算高度
+export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
+  let longestBytes = 0;
+  rows && rows.forEach(item => {
+    const rowByteLength = getBytesLength(item);
+    longestBytes = rowByteLength > longestBytes ? rowByteLength : longestBytes;
+  });
+  // 背景框宽度，最长一行字节数/2 * fontsize + 2
+  // 背景框宽度， 行数 * fontsize + 2
+  return {
+    width: Math.ceil(longestBytes / 2) * fontSize + fontSize / 4,
+    height: rowsLength * (fontSize + 2) + fontSize / 4,
   };
 };

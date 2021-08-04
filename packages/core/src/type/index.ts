@@ -208,7 +208,12 @@ export type TextStyle = {
   fontWeight?: string,
   fontFamily?: string,
 };
-export type NodeTextStyle = TextStyle;
+export type NodeTextStyle = TextStyle & {
+  autoWrap?: boolean,
+  lineHeight?: number,
+  wrapPadding?: string,
+
+};
 export type EdgeTextStyle = TextStyle & {
   background?: {
     fill?: string,
@@ -219,7 +224,10 @@ export type EdgeTextStyle = TextStyle & {
     fill?: string,
     stroke?: string,
     radius?: number,
-  }
+  },
+  autoWrap?: boolean,
+  lineHeight?: number,
+  wrapPadding?: string,
 };
 export type ArrowStyle = {
   offset?: number, // 箭头长度
