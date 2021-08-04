@@ -78,6 +78,7 @@
   <div>
     <div class="rect" onmousedown="mouseDownRect()"></div>
     <div class="circle" onmousedown="mouseDownCircle()"></div>
+    <div class="text" onmousedown="mouseDownText()">文本</div>
     <button onClick="focusOn()">定位到五角星</button>
     <button id="undo" onClick="undo()" disabled>上一步</button>
     <button id="redo" onClick="redo()" disabled>下一步</button>
@@ -225,6 +226,9 @@
           return {
             fontSize: 12,
             fill: '#FFFFFF',
+            autoWrap: true,
+            lineHeight: 1.5,
+            wrapPadding: '2px 3px',
           };
         }
       }
@@ -233,6 +237,7 @@
           const { size } = this.properties;
           this.width = size * 40;
           this.height = size * 40;
+          this.textWidth = 150;
           this.stroke = '#18905F';
           this.fill = 'red';
           this.radius = 10;
@@ -276,7 +281,7 @@
       }
 
       // connection
-      class Connection extends LineEdge {
+      class Connection extends PolylineEdge {
         getTextStyle() {
           return {
             background: {
@@ -286,6 +291,11 @@
               radius: 0,
             }
           };
+        }
+      }
+      class ConnectionModel extends PolylineEdgeModel {
+        setAttributes() {
+          this.textWidth = 200;
         }
       }
     </script>
@@ -339,15 +349,20 @@
         lf.register({
           type: 'connection',
           view: Connection,
-          model: LineEdgeModel,
+          model: ConnectionModel,
         })
         lf.register({
           type: 'uml',
           view: UmlNode,
           model: UmlModel,
         })
-        lf.setTheme({nodeText: {autoWrap: true, lineHeight: 1.5}});
-        lf.setDefaultEdgeType('polyline');
+        lf.setTheme(
+          {
+            nodeText: {autoWrap: true, lineHeight: 1.5},
+            edgeText: {autoWrap: true, lineHeight: 1.5}
+          }
+        );
+        lf.setDefaultEdgeType('connection');
 
         lf.render({
           nodes: [
@@ -474,6 +489,12 @@
             r: 25,
             x: 100,
             y: 100,
+          })
+        }
+        window.mouseDownText = function mouseDownText() {
+          lf.dnd.startDrag({
+            type: 'text',
+            text: '文本'
           })
         }
         window.focusOn = function focusOnStar() {

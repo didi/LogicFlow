@@ -162,7 +162,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { graphModel } = this.props;
     // 透传 nodeText
     const { nodeText } = graphModel.theme;
-    return nodeText;
+    return { ...nodeText };
   }
   getText() {
     const { model, graphModel } = this.props;
