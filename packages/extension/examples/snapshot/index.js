@@ -50,12 +50,51 @@ window.onload = function () {
           y: 200,
         },
         id: 10,
+      },
+      {
+        type: 'rect',
+        x: 500,
+        y: 300,
+        text: {
+          value: '你好2',
+          x: 500,
+          y: 300,
+        },
+        id: 11,
+      },
+      {
+        type: 'rect',
+        x: 700,
+        y: 300,
+        text: {
+          value: '你好3',
+          x: 700,
+          y: 300,
+        },
+        id: 12,
       }
     ],
     edges: [
+      {
+        type: 'polyline',
+        sourceNodeId: 10,
+        targetNodeId: 11
+      }
     ],
   });
 }
 document.getElementById('download').addEventListener('click', () => {
   lf.getSnapshot()
+})
+document.getElementById('preview').addEventListener('click', () => {
+  lf.getSnapshotBlob().then(res=> {
+    console.log(res);
+    document.getElementById('img').src = img.src = window.URL.createObjectURL(res);
+  })
+})
+document.getElementById('base64').addEventListener('click', () => {
+  lf.getSnapshotBase64().then(res => {
+    console.log(res)
+    document.getElementById('img').src = res;
+  })
 })
