@@ -74,7 +74,7 @@ class DiamondNodeModel extends BaseNodeModel {
     if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
-    return points.map(([x1, y1]) => ({ x: x1, y: y1 }));
+    return points.map(([x1, y1], idx) => ({ x: x1, y: y1, id: `${this.id}_${idx}` }));
   }
 }
 

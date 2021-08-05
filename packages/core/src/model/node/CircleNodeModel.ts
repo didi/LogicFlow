@@ -26,10 +26,10 @@ class CircleNodeModel extends BaseNodeModel {
       return this.getAnchorsByOffset();
     }
     return [
-      { x, y: y - r },
-      { x: x + r, y },
-      { x, y: y + r },
-      { x: x - r, y },
+      { x, y: y - r, id: `${this.id}_0` },
+      { x: x + r, y, id: `${this.id}_1` },
+      { x, y: y + r, id: `${this.id}_2` },
+      { x: x - r, y, id: `${this.id}_3` },
     ];
   }
 }

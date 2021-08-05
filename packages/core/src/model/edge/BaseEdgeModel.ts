@@ -23,7 +23,9 @@ import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 
 const defaultData = {
   sourceNodeId: '',
+  sourceAnchorId: '',
   targetNodeId: '',
+  targetAnchorId: '',
   startPoint: null,
   endPoint: null,
   zIndex: 0,
@@ -50,6 +52,8 @@ class BaseEdgeModel implements IBaseModel {
   [propName: string]: any; // 支持自定义
   graphModel: GraphModel;
   menu?: MenuConfig[];
+  sourceAnchorId = defaultData.sourceAnchorId;
+  targetAnchorId = defaultData.targetAnchorId;
   @observable text = defaultData.text;
   @observable type = '';
   @observable properties = {};

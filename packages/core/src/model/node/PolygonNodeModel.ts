@@ -60,9 +60,10 @@ class PolygonNodeModel extends BaseNodeModel {
     if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
-    return points.map(([x1, y1]) => ({
+    return points.map(([x1, y1], idx) => ({
       x: x + x1 - width / 2,
       y: y + y1 - height / 2,
+      id: `${this.id}_${idx}`,
     }));
   }
 }

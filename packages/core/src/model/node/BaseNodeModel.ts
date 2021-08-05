@@ -8,7 +8,7 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig,
+  AdditionData, NodeData, NodeAttribute, NodeConfig, AnchorConfig,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -238,15 +238,28 @@ export default class BaseNodeModel implements IBaseModel {
 
   getAnchorsByOffset() {
     const {
-      anchorsOffset, x, y,
+      anchorsOffset, x, y, id,
     } = this;
-    return anchorsOffset.map((el) => ({
-      x: x + el[0],
-      y: y + el[1],
-    }));
+    return anchorsOffset.map((el, idx) => {
+      if (Array.isArray(el)) {
+        return {
+          id: `${id}_${idx}`,
+          x: x + el[0],
+          y: y + el[1],
+        };
+      }
+      return {
+        x: x + el.x,
+        y: y + el.y,
+        id: el.id || `${id}_${idx}`,
+      };
+    });
   }
-
-  get anchors() {
+  /**
+   * 为了保证锚点更正节点移动，不能直接定义锚点的位置，
+   * 而是要定义锚点相对于节点中心点的偏移位置。
+   */
+  get anchors(): AnchorConfig[] {
     const {
       anchorsOffset,
     } = this;
