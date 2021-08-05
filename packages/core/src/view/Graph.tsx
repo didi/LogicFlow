@@ -25,7 +25,6 @@ type IProps = {
   eventCenter: EventEmitter
   dnd: DnD,
   snaplineModel: SnaplineModel;
-  components: any;
   graphModel: GraphModel,
 };
 type InjectedProps = IProps & {

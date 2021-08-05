@@ -777,7 +777,6 @@ export default class LogicFlow {
         options={this.options}
         dnd={this.dnd}
         snaplineModel={this.snaplineModel}
-        components={this.components}
         graphModel={this.graphModel}
       />
     ), this.container);
