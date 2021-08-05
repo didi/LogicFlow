@@ -58,6 +58,11 @@ export default function Text(props) {
             <div
               className="lf-node-text-auto-wrap"
               style={{
+                boxSizing: 'border-box',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                border: '1px solid transparent',
                 minHeight: model.height,
                 width: textRealWidth,
                 color,
@@ -70,6 +75,9 @@ export default function Text(props) {
                   fontSize,
                   fontFamily,
                   lineHeight,
+                  background: 'transparent',
+                  textAlign: 'center',
+                  wordBreak: 'break-all',
                 }}
               >
                 {rows.map(item => <div>{item}</div>)}
