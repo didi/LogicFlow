@@ -40,9 +40,8 @@ export default class MultipleSelect extends Component<IProps> {
   };
   onDragEnd = () => {};
   render() {
-    const { graphModel: { selectElements, selectElementSize, transformMatrix } } = this.props;
-    const isShowSelection = selectElementSize > 1;
-    if (!isShowSelection) return;
+    const { graphModel: { selectElements, transformMatrix } } = this.props;
+    if (selectElements.size <= 1) return;
     let x = Number.MAX_SAFE_INTEGER;
     let y = Number.MAX_SAFE_INTEGER;
     let x1 = Number.MIN_SAFE_INTEGER;

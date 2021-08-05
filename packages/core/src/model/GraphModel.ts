@@ -36,10 +36,8 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
-  selectElements = new Map<string, BaseElementModel>(); // 多选
   idGenerator: () => number | string;
   nodeMoveRules: NodeMoveRule[] = [];
-  @observable selectElementSize = 0;
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -128,12 +126,25 @@ class GraphModel {
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
   }
-
+  @computed get selectElements() {
+    const elements = new Map();
+    this.nodes.forEach(node => {
+      if (node.isSelected) {
+        elements.set(node.id, node);
+      }
+    });
+    this.edges.forEach(edge => {
+      if (edge.isSelected) {
+        elements.set(edge.id, edge);
+      }
+    });
+    return elements;
+  }
   /**
    * 获取指定区域内的所有元素
    */
   getAreaElement(leftTopPoint, rightBottomPoint) {
-    const selectElements = [];
+    const areaElements = [];
     const elements = [];
     // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
@@ -141,10 +152,10 @@ class GraphModel {
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {
-        selectElements.push(currentItem);
+        areaElements.push(currentItem);
       }
     }
-    return selectElements;
+    return areaElements;
   }
 
   getModel(type: string) {
@@ -588,7 +599,6 @@ class GraphModel {
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -599,8 +609,6 @@ class GraphModel {
     }
     this.selectElement = this.edgesMap[id]?.model;
     this.selectElement?.setSelected(true);
-    this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -612,7 +620,6 @@ class GraphModel {
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -622,7 +629,6 @@ class GraphModel {
     });
     this.selectElements.clear();
     this.topElement?.setZIndex();
-    this.selectElementSize = this.selectElements.size;
   }
   /**
    * 批量移动元素
