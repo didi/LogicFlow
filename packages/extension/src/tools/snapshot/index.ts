@@ -2,15 +2,6 @@
  * 快照插件，生成视图
  */
 
-function getOuterHTML(el: Element): string {
-  if (el.outerHTML) {
-    return el.outerHTML;
-  }
-  const container = document.createElement('div');
-  container.appendChild(el.cloneNode(true));
-  return container.innerHTML;
-}
-
 const Snapshot = {
   pluginName: 'snapshot',
   install(lf) {
@@ -143,8 +134,6 @@ const Snapshot = {
     }
     // offset值加10，保证图形不会紧贴着下载图片的左边和上边
     (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${-this.offsetX + 10}, ${-this.offsetY + 10})`;
-    const data = getOuterHTML(copy as Element);
-    const svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
     const dpr = window.devicePixelRatio || 1;
     const canvas = document.createElement('canvas');
     const base = document.getElementsByClassName('lf-base')[0];
@@ -164,14 +153,19 @@ const Snapshot = {
       ctx.clearRect(0, 0, bbox.width, bbox.height);
     }
     const img = new Image();
-    const url = window.URL.createObjectURL(svgBlob);
     return new Promise((resolve) => {
       img.onload = () => {
         ctx.drawImage(img, 0, 0);
-        window.URL.revokeObjectURL(url);
         resolve(canvas);
       };
-      img.src = url;
+      /*
+      因为svg中存在dom存放在foreignObject元素中
+      SVG图形转成img对象
+      todo: 会导致一些清晰度问题这个需要再解决
+      */
+      const svg2Img = `data:image/svg+xml;charset=utf-8,${new XMLSerializer().serializeToString(copy)}`;
+      const imgSrc = svg2Img.replace(/\n/g, '').replace(/\t/g, '').replace(/#/g, '%23');
+      img.src = imgSrc;
     });
   },
 };
