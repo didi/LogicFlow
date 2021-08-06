@@ -120,12 +120,18 @@ class BaseEdgeModel implements IBaseModel {
     return this.graphModel?.nodesMap[this.targetNodeId]?.model;
   }
   @computed get textPosition(): Point {
+    return this.getTextPosition();
+  }
+  /**
+   * @override 重新自定义文本位置
+   * @returns 文本位置
+   */
+  getTextPosition(): Point {
     return {
       x: 0,
       y: 0,
     };
   }
-
   move() { }
 
   /* 获取起点 */

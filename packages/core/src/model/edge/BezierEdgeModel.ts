@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
@@ -14,7 +14,7 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     super(data, graphModel, 'bezier');
   }
 
-  @computed get textPosition(): Point {
+  getTextPosition(): Point {
     if (this.pointsList && this.pointsList.length > 0) {
       let pointsXSum = 0;
       let pointsYSum = 0;
