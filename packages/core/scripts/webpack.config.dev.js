@@ -13,7 +13,7 @@ module.exports = [
     devServer: {
       contentBase: path.join(__dirname, '../'),
       stats: 'errors-warnings',
-      port: 9090,
+      port: 9093,
       host: '0.0.0.0',
       watchOptions: {
         poll: true,

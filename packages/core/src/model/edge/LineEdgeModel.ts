@@ -1,4 +1,3 @@
-import { computed } from 'mobx';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
@@ -9,7 +8,7 @@ export default class LineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel) {
     super(data, graphModel, 'line');
   }
-  @computed get textPosition(): Point {
+  getTextPosition(): Point {
     return {
       x: (this.startPoint.x + this.endPoint.x) / 2,
       y: (this.startPoint.y + this.endPoint.y) / 2,

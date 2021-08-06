@@ -8,6 +8,7 @@ import {
   Point,
   Direction,
   NodeConfig,
+  AnchorConfig,
 } from '../type';
 import { isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
@@ -24,7 +25,7 @@ export const getAnchors = (data): Point[] => {
 type NodeContaint = {
   node: BaseNode;
   anchorIndex: number;
-  anchorPosition: Point;
+  anchor: AnchorConfig;
 };
 
 /* 手动连线时获取目标节点的信息：目标节点，目标节点的锚点index以及坐标 */
@@ -38,7 +39,7 @@ export const targetNodeInfo = (position: Point, nodes:BaseNode[]): NodeContaint 
         const currentNodeInfo = {
           node: nodes[i],
           anchorIndex: anchorInfo.index,
-          anchorPosition: anchorInfo.anchor,
+          anchor: anchorInfo.anchor,
         };
         nodeInfo = currentNodeInfo;
         break;
@@ -66,6 +67,7 @@ const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
         anchor: {
           x: anchors[i].x,
           y: anchors[i].y,
+          id: anchors[i].id,
         },
       };
     }

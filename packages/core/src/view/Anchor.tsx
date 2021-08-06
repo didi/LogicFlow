@@ -11,25 +11,26 @@ import EventEmitter from '../event/eventEmitter';
 type TargetNodeId = string;
 
 interface IProps {
-  x: number,
-  y: number,
-  style?: Record<string, any>,
-  hoverStyle?: Record<string, any>,
-  edgeStyle?: Record<string, any>,
-  anchorIndex: number,
-  eventCenter: EventEmitter,
-  graphModel: GraphModel,
-  nodeModel: BaseNodeModel,
-  nodeDraging: boolean,
-  setHoverOFF: Function,
+  x: number;
+  y: number;
+  id?: string;
+  style?: Record<string, any>;
+  hoverStyle?: Record<string, any>;
+  edgeStyle?: Record<string, any>;
+  anchorIndex: number;
+  eventCenter: EventEmitter;
+  graphModel: GraphModel;
+  nodeModel: BaseNodeModel;
+  nodeDraging: boolean;
+  setHoverOFF: Function;
 }
 
 interface IState {
-  startX: number,
-  startY: number,
-  endX: number,
-  endY: number,
-  draging: boolean,
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  draging: boolean;
 }
 
 class Anchor extends Component<IProps, IState> {
@@ -125,7 +126,7 @@ class Anchor extends Component<IProps, IState> {
 
   checkEnd = () => {
     const {
-      graphModel, nodeModel, x, y, eventCenter,
+      graphModel, nodeModel, x, y, eventCenter, id,
     } = this.props;
     // nodeModel.setSelected(false);
     /* 创建连线 */
@@ -151,13 +152,15 @@ class Anchor extends Component<IProps, IState> {
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
-        if (!(x === info.anchorPosition.x && y === info.anchorPosition.y)) {
+        if (!(x === info.anchor.x && y === info.anchor.y)) {
           graphModel.createEdge({
             type: edgeType,
             sourceNodeId: nodeModel.id,
+            sourceAnchorId: id,
             startPoint: { x, y },
             targetNodeId: info.node.id,
-            endPoint: { x: info.anchorPosition.x, y: info.anchorPosition.y },
+            targetAnchorId: info.anchor.id,
+            endPoint: { x: info.anchor.x, y: info.anchor.y },
           });
         }
       } else {

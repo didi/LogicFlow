@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -34,7 +34,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'polyline');
   }
-  @computed get textPosition(): Point {
+  getTextPosition() {
     // 在文案为空的情况下，文案位置为双击位置
     const textValue = this.text?.value;
     if (this.dbClickPosition && !textValue) {

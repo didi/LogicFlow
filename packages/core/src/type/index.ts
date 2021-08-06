@@ -119,7 +119,9 @@ export type EdgeConfig = {
   id?: string;
   type: string;
   sourceNodeId: string;
+  sourceAnchorId?: string;
   targetNodeId: string;
+  targetAnchorId?: string;
   startPoint?: {
     x: number;
     y: number;
@@ -353,4 +355,11 @@ export type RegisterConfig = {
   view: any;
   model: any;
   isObserverView?: boolean;
+};
+
+export type AnchorConfig = {
+  id?: string;
+  x: number;
+  y: number;
+  [key: string]: any;
 };
