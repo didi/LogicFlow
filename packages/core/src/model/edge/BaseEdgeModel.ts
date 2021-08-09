@@ -54,6 +54,7 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   sourceAnchorId = defaultData.sourceAnchorId;
   targetAnchorId = defaultData.targetAnchorId;
+  customTextPosition = false; // 是否自定义连线文本位置
   @observable text = defaultData.text;
   @observable type = '';
   @observable properties = {};
@@ -267,6 +268,13 @@ class BaseEdgeModel implements IBaseModel {
         editable: this.text.editable,
       };
     }
+  }
+
+  @action
+  resetTextPosition() {
+    const { x, y } = this.textPosition;
+    this.text.x = x;
+    this.text.y = y;
   }
 
   @action
