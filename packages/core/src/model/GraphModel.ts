@@ -469,7 +469,11 @@ class GraphModel {
       // 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新连线距离最短距离的点
       // 最大程度保持节点位置不变且在连线上
       if (nodeAsSource || nodeAsTarget) {
-        if (edgeModel.modelType === ModelType.POLYLINE_EDGE && edgeModel.text?.value) {
+        // todo: 找到更好的连线位置移动处理方式
+        // 如果是自定义连线文本位置，则移动节点的时候重新计算其位置
+        if (edgeModel.customTextPosition === true) {
+          edgeModel.resetTextPosition();
+        } else if (edgeModel.modelType === ModelType.POLYLINE_EDGE && edgeModel.text?.value) {
           const textPosition = edgeModel.text;
           const newPoint = getClosestPointOfPolyline(textPosition, edgeModel.points);
           edgeModel.moveText(newPoint.x - textPosition.x, newPoint.y - textPosition.y);

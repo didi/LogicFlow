@@ -241,7 +241,7 @@ export default class BaseNodeModel implements IBaseModel {
       anchorsOffset, x, y, id,
     } = this;
     return anchorsOffset.map((el, idx) => {
-      if (Array.isArray(el)) {
+      if (el.length) {
         return {
           id: `${id}_${idx}`,
           x: x + el[0],
