@@ -84,6 +84,7 @@
     <button id="redo" onClick="redo()" disabled>下一步</button>
     <button id="clearData" onClick="clearData()">清空数据</button>
     <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
+    <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -307,6 +308,7 @@
           container: document.querySelector('#app'),
           // width: 700,
           // height: 500,
+          // adjustNodePosition: false,
           // isSilentMode: true,
           keyboard: {
             enabled: true,
@@ -513,6 +515,11 @@
         }
         window.consolelog = function consolelog(msg) {
           console.log(msg)
+        }
+        window.changeEditConfig = function () {
+          lf.updateEditConfig({
+            isSilentMode: true
+          })
         }
       }
     </script>

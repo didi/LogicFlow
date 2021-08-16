@@ -29,6 +29,21 @@ const SilentConfig = {
   metaKeyMultipleSelected: false,
 };
 
+const keys = [
+  'stopZoomGraph',
+  'stopScrollGraph',
+  'stopMoveGraph',
+  'adjustEdge',
+  'adjustNodePosition',
+  'hideAnchors',
+  'hoverOutline',
+  'nodeTextEdit',
+  'edgeTextEdit',
+  'nodeTextDraggable',
+  'edgeTextDraggable',
+  'metaKeyMultipleSelected',
+  'extraConf',
+];
 /**
  * 页面编辑配置
  */
@@ -46,53 +61,30 @@ export default class EditConfigModel {
   @observable edgeTextDraggable = false; // 允许连线文本可以拖拽
   @observable metaKeyMultipleSelected = false; // 允许meta多选元素
   extraConf = {}; // 外部传入的额外配置, 待优化，这里不够易用。
-  keys: string[];
-  constructor(data) {
-    this.keys = [
-      'stopZoomGraph',
-      'stopScrollGraph',
-      'stopMoveGraph',
-      'adjustEdge',
-      'adjustNodePosition',
-      'hideAnchors',
-      'hoverOutline',
-      'nodeTextEdit',
-      'edgeTextEdit',
-      'nodeTextDraggable',
-      'edgeTextDraggable',
-      'metaKeyMultipleSelected',
-      'extraConf',
-    ];
-    const { isSilentMode, textEdit } = data;
-    if (isSilentMode) {
-      assign(
-        this,
-        pick(SilentConfig, this.keys),
-        pick(data, [
-          'stopZoomGraph',
-          'stopScrollGraph',
-          'stopMoveGraph',
-          'hideAnchors',
-          'hoverOutline',
-          'extraConf',
-        ]),
-      );
-    } else if (!textEdit) {
-      // 通过 textEdit API 禁用文本编辑
-      assign(this, pick(data, this.keys), {
-        nodeTextEdit: false,
-        edgeTextEdit: false,
-      });
-    } else {
-      assign(this, pick(data, this.keys));
-    }
+  constructor(config) {
+    assign(this, this.getConfigDetail(config));
   }
   @action
   updateEditConfig(config) {
-    assign(this, pick(config, this.keys));
+    assign(this, this.getConfigDetail(config));
+  }
+  getConfigDetail(config) {
+    const { isSilentMode, textEdit } = config;
+    const userConfig = pick(config, keys);
+    if (isSilentMode) {
+      const slientConfig = pick(SilentConfig, keys);
+      assign(userConfig, slientConfig);
+    }
+    if (!textEdit) {
+      assign(userConfig, {
+        nodeTextEdit: false,
+        edgeTextEdit: false,
+      });
+    }
+    return userConfig;
   }
   getConfig() {
-    return pick(this, this.keys);
+    return pick(this, keys);
   }
 }
 
