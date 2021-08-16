@@ -4,6 +4,7 @@ const lf = new LogicFlow({
   grid: true,
 });
 lf.register(customEdge);
+lf.setDefaultEdgeType('custom-edge');
 lf.render({
   nodes: [
     {

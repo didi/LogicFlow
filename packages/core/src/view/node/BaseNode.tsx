@@ -31,19 +31,17 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   constructor(props) {
     super();
     const {
-      graphModel: { gridSize, editConfig }, eventCenter, model,
+      graphModel: { gridSize }, eventCenter, model,
     } = props;
-    if (editConfig.adjustNodePosition && model.draggable) {
-      this.stepDrag = new StepDrag({
-        onDragStart: this.onDragStart,
-        onDraging: this.onDraging,
-        onDragEnd: this.onDragEnd,
-        step: gridSize,
-        eventType: 'NODE',
-        eventCenter,
-        model,
-      });
-    }
+    // 不在构造函数中判断，因为editConfig可能会被动态改变
+    this.stepDrag = new StepDrag({
+      onDraging: this.onDraging,
+      onDragEnd: this.onDragEnd,
+      step: gridSize,
+      eventType: 'NODE',
+      eventCenter,
+      model,
+    });
     this.state = {
       isDraging: false,
       isHovered: false,
@@ -208,8 +206,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     return className;
   }
-  // 拖拽相关API-为了减少高阶组件导致调用栈爆掉，将其迁移进来
-  onDragStart = () => {};
 
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
@@ -300,7 +296,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { model, graphModel } = this.props;
     graphModel.toFront(model.id);
     this.startTime = new Date().getTime();
-    this.stepDrag && this.stepDrag.handleMouseDown(ev);
+    const { editConfig } = graphModel;
+    if (editConfig.adjustNodePosition && model.draggable) {
+      this.stepDrag && this.stepDrag.handleMouseDown(ev);
+    }
   };
   // 不清楚以前为啥要把hover状态放到model中，先改回来。
   setHoverON = (ev) => {
