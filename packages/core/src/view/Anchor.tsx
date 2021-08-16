@@ -119,10 +119,6 @@ class Anchor extends Component<IProps, IState> {
       draging: false,
     });
   };
-  onDblClick = () => {
-    const { graphModel, nodeModel } = this.props;
-    graphModel.setElementStateById(nodeModel.id, ElementState.TEXT_EDIT);
-  };
 
   checkEnd = () => {
     const {
@@ -194,7 +190,7 @@ class Anchor extends Component<IProps, IState> {
     } = this.props;
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
-      <g className="lf-anchor" onDblClick={this.onDblClick}>
+      <g className="lf-anchor">
         <Circle
           className="lf-node-anchor-hover"
           {...{ x, y }}
