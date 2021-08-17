@@ -172,12 +172,14 @@ document.getElementById('download').addEventListener('click', () => {
   lf.getSnapshot()
 })
 document.getElementById('preview').addEventListener('click', () => {
-  lf.getSnapshotBlob('#FFFFFF').then(res=> {
-    document.getElementById('img').src = img.src = window.URL.createObjectURL(res);
+  lf.getSnapshotBlob('#FFFFFF').then(({data, width, height})=> {
+    document.getElementById('img').src = img.src = window.URL.createObjectURL(data);
+    console.log(width, height)
   })
 })
 document.getElementById('base64').addEventListener('click', () => {
-  lf.getSnapshotBase64().then(res => {
-    document.getElementById('img').src = res;
+  lf.getSnapshotBase64().then(({data, width, height}) => {
+    document.getElementById('img').src = data;
+    console.log(width, height)
   })
 })

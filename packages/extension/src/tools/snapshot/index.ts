@@ -94,7 +94,8 @@ const Snapshot = {
     return new Promise((resolve) => {
       this.getCanvasData(svg, backgroundColor).then(canvas => {
         const base64 = canvas.toDataURL('image/png');
-        resolve(base64);
+        // 输出图片数据以及图片宽高
+        resolve({ data: base64, width: canvas.width, height: canvas.height });
       });
     });
   },
@@ -103,7 +104,8 @@ const Snapshot = {
     return new Promise((resolve) => {
       this.getCanvasData(svg, backgroundColor).then(canvas => {
         canvas.toBlob(blob => {
-          resolve(blob);
+          // 输出图片数据以及图片宽高
+          resolve({ data: blob, width: canvas.width, height: canvas.height });
         }, 'image/png');
       });
     });
