@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.5...@logicflow/extension@0.6.12) (2021-08-17)
+
+
+### Bug Fixes
+
+* **extension:** snapshot forginObject in svg fix ([ef937a0](https://github.com/didi/LogicFlow/commit/ef937a08f2f4898b99376d06c25ee57c3f81fda2))
+
+
+### Features
+
+* add custom TextPosition ([352047d](https://github.com/didi/LogicFlow/commit/352047d942cc505f36272ba1a64bae33c13b5897))
+* edgemodel support override getTextPosition ([5ede6f2](https://github.com/didi/LogicFlow/commit/5ede6f295c128c5f8c87af789105576f1f04ba57))
+* increase width and height of snapshot data ([e223510](https://github.com/didi/LogicFlow/commit/e2235105899982a2a63c83d613c0268d111deecd))
+* set anchors id ([17c4105](https://github.com/didi/LogicFlow/commit/17c4105474084b01c656298b30c28d0cd2908a36))
+* **extension:** support for obtaining snapshot data ([aac9fe0](https://github.com/didi/LogicFlow/commit/aac9fe0fa62573ae43faa5f7473df3761f10d2cc))
+
+
+
+
+
 ## [0.6.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.5...@logicflow/extension@0.6.8) (2021-08-06)
 
 
