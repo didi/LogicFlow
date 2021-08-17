@@ -2,6 +2,7 @@ const nodeWidth = 100;
 const nodeHeight = 80;
 
 class Tips {
+  static pluginName = 'tips';
   constructor ({ lf }) {
     this.lf = lf;
     const tipsWrap = document.createElement('div');

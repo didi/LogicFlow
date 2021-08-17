@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import { ModelType } from '../../constant/constant';
+import { ElementType, ModelType } from '../../constant/constant';
 import { LineEdgeModel } from '../../model';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
@@ -17,48 +17,49 @@ export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
   getNodeOutline() {
     const { graphModel } = this.props;
-    const { nodes: nodeList, editConfig: { hoverOutline } } = graphModel;
+    const { selectElements, editConfig: { hoverOutline, nodeSelectedOutline } } = graphModel;
     const nodeOutline = [];
-    for (let i = 0; i < nodeList.length; i++) {
-      const {
-        isHovered,
-        isSelected,
-        x,
-        y,
-        width,
-        height,
-        outlineColor,
-        hoverOutlineColor,
-        outlineStrokeDashArray,
-        hoverOutlineStrokeDashArray,
-      } = nodeList[i];
-      if (isSelected || (hoverOutline && isHovered)) {
-        const color = isSelected ? outlineColor : hoverOutlineColor;
-        const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
-        nodeOutline.push(
-          <Rect
-            className="lf-outline-node"
-            {...{
-              x, y, width: width + 10, height: height + 10,
-            }}
-            radius={0}
-            fill="none"
-            stroke={color}
-            strokeDasharray={strokeDashArray}
-          />,
-        );
+    selectElements.forEach(element => {
+      if (element.BaseType === ElementType.NODE) {
+        const {
+          isHovered,
+          isSelected,
+          x,
+          y,
+          width,
+          height,
+          outlineColor,
+          hoverOutlineColor,
+          outlineStrokeDashArray,
+          hoverOutlineStrokeDashArray,
+        } = element;
+        if (nodeSelectedOutline || (hoverOutline && isHovered)) {
+          const color = isSelected ? outlineColor : hoverOutlineColor;
+          const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
+          nodeOutline.push(
+            <Rect
+              className="lf-outline-node"
+              {...{
+                x, y, width: width + 10, height: height + 10,
+              }}
+              radius={0}
+              fill="none"
+              stroke={color}
+              strokeDasharray={strokeDashArray}
+            />,
+          );
+        }
       }
-    }
+    });
     return nodeOutline;
   }
   // 边的outline
   getEdgeOutline() {
-    const { graphModel } = this.props;
-    const edgeList = graphModel.edges;
+    const { graphModel: { edges: edgeList, editConfig: { edgeSelectedOutline } } } = this.props;
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (edge.isSelected) {
+      if (edge.isSelected && edgeSelectedOutline) {
         if (edge.modelType === ModelType.LINE_EDGE) {
           edgeOutline.push(this.getLineOutline(edge));
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {

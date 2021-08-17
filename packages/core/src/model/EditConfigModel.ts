@@ -55,6 +55,8 @@ export default class EditConfigModel {
   @observable adjustNodePosition = true; // 允许拖动节点
   @observable hideAnchors = false; // 隐藏节点所有锚点
   @observable hoverOutline = false; // 显示节点悬浮时的外框
+  @observable nodeSelectedOutline = true; // 节点被选中时是否显示outline
+  @observable edgeSelectedOutline = true; // 连线被选中时是否显示outline
   @observable nodeTextEdit = true; // 允许节点文本可以编辑
   @observable edgeTextEdit = true; // 允许连线文本可以编辑
   @observable nodeTextDraggable = false; // 允许节点文本可以拖拽

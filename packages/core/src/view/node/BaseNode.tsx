@@ -216,11 +216,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       });
     }
     const { transformMatrix } = graphModel;
-
     const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
-    if (model.modelType.indexOf('node') > -1) {
-      graphModel.moveNode(model.id, curDeltaX, curDeltaY);
-    }
+    graphModel.moveNode(model.id, curDeltaX, curDeltaY);
   };
   onDragEnd = () => {
     this.setState({
@@ -268,7 +265,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    graphModel.toFront(model.id);
+    this.toFront();
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -285,16 +282,16 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     graphModel.selectNodeById(model.id);
-    graphModel.toFront(model.id);
     eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,
       position,
     });
+    this.toFront();
   };
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
-    graphModel.toFront(model.id);
+    this.toFront();
     this.startTime = new Date().getTime();
     const { editConfig } = graphModel;
     if (editConfig.adjustNodePosition && model.draggable) {
@@ -333,6 +330,13 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       this.setHoverOFF(ev);
     }
   };
+  /**
+   * 节点置顶，可以被某些不需要置顶的节点重写，如group节点。
+   */
+  toFront() {
+    const { model, graphModel } = this.props;
+    graphModel.toFront(model.id);
+  }
   render() {
     const { model, graphModel } = this.props;
     const {

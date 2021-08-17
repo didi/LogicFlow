@@ -677,13 +677,34 @@ export const getBytesLength = (word: string): number => {
   let totalLength = 0;
   for (let i = 0; i < word.length; i++) {
     const c = word.charCodeAt(i);
-    if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
+    if ((word.match(/[A-Z]/))) {
+      totalLength += 1.5;
+    } else if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
       totalLength += 1;
     } else {
       totalLength += 2;
     }
   }
   return totalLength;
+};
+
+/**
+ * Uses canvas.measureText to compute
+ * and return the width of the given text of given font in pixels.
+ * @param {String} text The text to be rendered.
+ * @param {String} font The css font descriptor
+ * that text is to be rendered with (e.g. "bold 14px verdana").
+ * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+ */
+let canvas = null;
+export const getTextWidth = (text, font) => {
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+  }
+  const context = canvas.getContext('2d');
+  context.font = font;
+  const metrics = context.measureText(text);
+  return metrics.width;
 };
 
 type AppendAttributesType = {

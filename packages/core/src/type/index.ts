@@ -62,10 +62,9 @@ export type NodeData = {
   type: string;
   x: number;
   y: number;
-  rx?: number;
-  ry?: number;
   text?: TextConfig;
   properties: Record<string, unknown>;
+  [key: string]: any;
 };
 // 修改节点数据的参数
 export type NodeAttribute = {
@@ -137,6 +136,18 @@ export type EdgeConfig = {
   },
   pointsList?: Point[];
   properties?: Record<string, unknown>;
+};
+
+type LeftTopX = number;
+type LeftTopY = number;
+type RightBottomX = number;
+type RightBottomY = number;
+
+export type Bounds = {
+  x1: LeftTopX,
+  y1: LeftTopY,
+  x2: RightBottomX,
+  y2: RightBottomY,
 };
 
 // 节点样式属性
@@ -363,3 +374,14 @@ export type AnchorConfig = {
   y: number;
   [key: string]: any;
 };
+/**
+ * 限制节点移动规则
+ * model: 移动节点的model
+ * deltaX: 移动的x轴距离
+ * deltaY: 移动的y轴距离
+ */
+export type NodeMoveRule = (
+  model: BaseNodeModel,
+  deltaX: number,
+  deltaY: number,
+) => Boolean;
