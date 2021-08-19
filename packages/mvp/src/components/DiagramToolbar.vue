@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="toolbar-item">
+      <area-select size="18" />
+    </div>
     <div class="toolbar-item toolbar-item-bigger">
       <color-fill />
     </div>
@@ -40,9 +43,10 @@ import ZoomIn from './icon/ZoomIn.vue'
 import ZoomOut from './icon/ZoomOut.vue'
 import StepBack from './icon/StepBack.vue'
 import StepFoward from './icon/StepFoward.vue'
+import AreaSelect from './icon/AreaSelect.vue'
 
 export default {
-  components: { ColorFill, ColorText, IconFont, IconBlod, IconLine, ZoomIn, ZoomOut, StepBack, StepFoward }
+  components: { ColorFill, ColorText, IconFont, IconBlod, IconLine, ZoomIn, ZoomOut, StepBack, StepFoward, AreaSelect }
 }
 </script>
 
