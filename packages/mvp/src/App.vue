@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <Diagram />
-    <DiagramList />
+    <!-- <DiagramList /> -->
   </div>
 </template>
 
 <script>
-import DiagramList from './components/DiagramList.vue'
+// import DiagramList from './components/DiagramList.vue'
 import Diagram from './components/Diagram.vue'
 
 export default {
   name: 'App',
   components: {
-    DiagramList,
+    // DiagramList,
     Diagram
   }
 }

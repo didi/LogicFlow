@@ -1,6 +1,9 @@
 <template>
   <div class="diagram">
-    <diagram-toolbar class="diagram-toolbar" />
+    <diagram-toolbar
+      class="diagram-toolbar"
+      @changeNodeFillColor="$_changeNodeFill"
+    />
     <diagram-sidebar class="diagram-sidebar" @dragInNode="$_dragInNode" :style="{ width: sidebarWidth + 'px'}"/>
     <div class="diagram-container" ref="container" :style="{ left: sidebarWidth + 'px'}">
       <div class="diagram-wrapper" :style="{ width: this.diagramWidth + 'px' }">
@@ -14,6 +17,8 @@
 // import LogicFlow from '@logicflow/core'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
+import BaseNode from './node/BaseNode'
+import CircleNode from './node/CircleNode'
 const LogicFlow = window.LogicFlow
 
 export default {
@@ -41,12 +46,22 @@ export default {
           repeat: 'repeat'
         }
       })
+      lf.register(BaseNode)
+      lf.register(CircleNode)
       lf.render()
       this.lf = lf
     },
     $_dragInNode (type) {
       this.lf.dnd.startDrag({
         type
+      })
+    },
+    $_changeNodeFill (color) {
+      const { nodes } = this.lf.graphModel.getSelectElements()
+      nodes.forEach(({ id }) => {
+        this.lf.setProperties(id, {
+          fill: color
+        })
       })
     }
   },
