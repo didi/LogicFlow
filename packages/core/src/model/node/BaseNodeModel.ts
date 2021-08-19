@@ -8,7 +8,7 @@ import {
   ElementState, ModelType, ElementType,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds,
+  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -249,7 +249,7 @@ export default class BaseNodeModel implements IBaseModel {
     return this.targetRules;
   }
 
-  getAnchorsByOffset() {
+  getAnchorsByOffset(): Point[] {
     const {
       anchorsOffset, x, y, id,
     } = this;
