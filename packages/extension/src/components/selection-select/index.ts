@@ -17,8 +17,10 @@ class SelectionSelect {
   static pluginName = 'selection-select';
   constructor({ lf }) {
     this.lf = lf;
+    // 初始化isDefalutStopMoveGraph取值
+    const { stopMoveGraph } = lf.getEditConfig();
+    this.isDefalutStopMoveGraph = stopMoveGraph;
     lf.openSelectionSelect = () => {
-      const { stopMoveGraph } = lf.getEditConfig();
       if (!stopMoveGraph) {
         this.isDefalutStopMoveGraph = false;
         lf.updateEditConfig({
