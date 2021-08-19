@@ -81,6 +81,7 @@ class StepDrag {
   eventCenter: EventEmitter | null;
   model?: BaseNodeModel | BaseEdgeModel;
   startTime?: number;
+  isGrag: boolean;
   constructor({
     onDragStart = noop,
     onDraging = noop,
@@ -136,9 +137,8 @@ class StepDrag {
       this.onDraging({ deltaX, deltaY, event: e });
       const elementData = this.model?.getData();
       this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: elementData });
-      if (new Date().getTime() - this.startTime > 200) {
-        this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
-      }
+      this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
+      this.isGrag = true;
     }
   };
   handleMouseUp = (e: MouseEvent) => {
@@ -150,8 +150,10 @@ class StepDrag {
     const elementData = this.model?.getData();
     this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
     // 区分mouseup和drop, 在触发click事件的时候，会触发mouseup事件，但是不会触发drop事件。
-    if (new Date().getTime() - this.startTime > 200) {
+    // 以200ms判断不太合理，改成只要触发了drag, 那必定会触发drop
+    if (this.isGrag) {
       this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
+      this.isGrag = false;
     }
   };
 }

@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.5...@logicflow/core@0.6.12) (2021-08-17)
+
+
+### Bug Fixes
+
+* editconfig default type ([575e566](https://github.com/didi/LogicFlow/commit/575e566d528015ecdb5769700fb06194a34a4ad1))
+* isArray not fit mobx array ([8392165](https://github.com/didi/LogicFlow/commit/839216534a7c80551a417617330d30e79121aa0c))
+* **core:** code optimization ([b96dfb4](https://github.com/didi/LogicFlow/commit/b96dfb47b9ca0fa4f7182334c77db341b0515711))
+* **core:** nodeText auto wrap build:type bugfix ([fb43025](https://github.com/didi/LogicFlow/commit/fb43025ed921f2f208950e476aebe640f9fda187))
+* **extension:** snapshot forginObject in svg fix ([ef937a0](https://github.com/didi/LogicFlow/commit/ef937a08f2f4898b99376d06c25ee57c3f81fda2))
+
+
+### Features
+
+* add custom TextPosition ([352047d](https://github.com/didi/LogicFlow/commit/352047d942cc505f36272ba1a64bae33c13b5897))
+* edgemodel support override getTextPosition ([5ede6f2](https://github.com/didi/LogicFlow/commit/5ede6f295c128c5f8c87af789105576f1f04ba57))
+* set anchors id ([17c4105](https://github.com/didi/LogicFlow/commit/17c4105474084b01c656298b30c28d0cd2908a36))
+* **core:** nodeText auto wrap ([f260d47](https://github.com/didi/LogicFlow/commit/f260d4700cdc86194a3a738fec3df27b9871cc10))
+* **core:** nodeText auto wrap lineHeight ([fcc64c3](https://github.com/didi/LogicFlow/commit/fcc64c32a5ebccd74f64f51042d7bb0dfdf680ad))
+* **core:** text auto wrap for customize element ([ddf51c5](https://github.com/didi/LogicFlow/commit/ddf51c561a28a9555a64cc146abca7e58ee46d12))
+* 新增move节点采用绝对位置 ([c36d604](https://github.com/didi/LogicFlow/commit/c36d604f52ad3bfed0316d99b3dc0538f61ab339))
+
+
+
+
+
 ## [0.6.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.5...@logicflow/core@0.6.8) (2021-08-06)
 
 

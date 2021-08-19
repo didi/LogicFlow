@@ -9,7 +9,7 @@ import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType,
 } from '../constant/constant';
 import {
-  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple,
+  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple, NodeMoveRule,
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
@@ -36,9 +36,8 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
-  selectElements = new Map<string, BaseElementModel>(); // 多选
   idGenerator: () => number | string;
-  @observable selectElementSize = 0;
+  nodeMoveRules: NodeMoveRule[] = [];
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
   @observable activeElement: IBaseModel;
@@ -127,12 +126,25 @@ class GraphModel {
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
   }
-
+  @computed get selectElements() {
+    const elements = new Map();
+    this.nodes.forEach(node => {
+      if (node.isSelected) {
+        elements.set(node.id, node);
+      }
+    });
+    this.edges.forEach(edge => {
+      if (edge.isSelected) {
+        elements.set(edge.id, edge);
+      }
+    });
+    return elements;
+  }
   /**
    * 获取指定区域内的所有元素
    */
   getAreaElement(leftTopPoint, rightBottomPoint) {
-    const selectElements = [];
+    const areaElements = [];
     const elements = [];
     // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
@@ -140,10 +152,10 @@ class GraphModel {
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {
-        selectElements.push(currentItem);
+        areaElements.push(currentItem);
       }
     }
-    return selectElements;
+    return areaElements;
   }
 
   getModel(type: string) {
@@ -151,6 +163,9 @@ class GraphModel {
   }
 
   getNodeModel(nodeId: BaseNodeModelId): BaseNodeModel {
+    if (this.fakerNode && nodeId === this.fakerNode.id) {
+      return this.fakerNode;
+    }
     return this.nodesMap[nodeId]?.model;
   }
   /**
@@ -380,9 +395,10 @@ class GraphModel {
    * @param nodeModel 节点Id
    * @param deltaX X轴移动距离
    * @param deltaY Y轴移动距离
+   * @param isignoreRule 是否忽略移动规则限制
    */
   @action
-  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number) {
+  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number, isignoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -390,7 +406,7 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    nodeModel.move(deltaX, deltaY);
+    nodeModel.move(deltaX, deltaY, isignoreRule);
     // 2) 移动连线
     this.moveEdge(nodeId, deltaX, deltaY);
   }
@@ -587,7 +603,6 @@ class GraphModel {
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -598,8 +613,6 @@ class GraphModel {
     }
     this.selectElement = this.edgesMap[id]?.model;
     this.selectElement?.setSelected(true);
-    this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -611,7 +624,6 @@ class GraphModel {
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
     this.selectElements.set(id, this.selectElement);
-    this.selectElementSize = this.selectElements.size;
   }
 
   @action
@@ -621,7 +633,6 @@ class GraphModel {
     });
     this.selectElements.clear();
     this.topElement?.setZIndex();
-    this.selectElementSize = this.selectElements.size;
   }
   /**
    * 批量移动元素
@@ -635,7 +646,24 @@ class GraphModel {
     // 如果移动的
     elements.nodes.forEach(node => this.moveNode(node.id, deltaX, deltaY));
   }
-
+  /**
+   * 批量移动节点，节点移动的时候，会动态计算所有节点与未移动节点的连线位置
+   * 移动的节点直接的连线会保持相对位置
+   */
+  @action
+  moveNodes(nodeIds, deltaX, deltaY, isignoreRule = false) {
+    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isignoreRule));
+  }
+  /**
+   * 添加节点移动限制规则，在节点移动的时候触发。
+   * 如果方法返回false, 则会阻止节点移动。
+   * @param fn function
+   */
+  addNodeMoveRules(fn: NodeMoveRule) {
+    if (!this.nodeMoveRules.includes(fn)) {
+      this.nodeMoveRules.push(fn);
+    }
+  }
   /* 修改连线类型 */
   @action
   changeEdgeType(type: string): void {

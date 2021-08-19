@@ -1,12 +1,12 @@
 {
   "name": "examples",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@babel/core": "7.12.3",
-    "@logicflow/core": "^0.6.8",
-    "@logicflow/extension": "^0.6.8",
+    "@logicflow/core": "^0.6.12",
+    "@logicflow/extension": "^0.6.12",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "^5.11.4",

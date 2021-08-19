@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIN FLOW</title>
   <link rel="stylesheet" href="/core/dist/style/index.css">
-  <!-- <link rel="stylesheet" href="http://0.0.0.0:9090/src/style/index.css"> -->
+  <!-- <link rel="stylesheet" href="http://0.0.0.0:9099/src/style/index.css"> -->
   <link rel="stylesheet" href="/extension/src/style/index.css">
   <style>
     html,body {
@@ -80,6 +80,7 @@
     <button id="js_get_path">获取路径</button>
     <button id="js_show_path">原始路径</button>
     <button id="js_auto_layout">自动布局</button>
+    <button id="js_get_data">获取数据</button>
   </div>
   <div class="rules-graph">
     <div id="app"></div>
@@ -116,8 +117,9 @@
   <script src="/Menu.js"></script>
   <script src="/FlowPath.js"></script>
   <script src="/AutoLayout.js"></script>
+  <script src="/Group.js"></script>
   <script src="/DndPanel.js"></script>
-  <script src="./tips.js"></script>
+  <!-- <script src="./tips.js"></script> -->
   <script>
     LogicFlow.use(BpmnElement);
     LogicFlow.use(MiniMap);
@@ -128,6 +130,8 @@
     LogicFlow.use(AutoLayout);
     LogicFlow.use(DndPanel);
     LogicFlow.use(Menu);
+    // console.log(Group);
+    LogicFlow.use(Group);
     Control.addItem({
       iconClass: 'custom-minimap',
       title: '',

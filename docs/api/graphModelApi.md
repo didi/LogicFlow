@@ -485,9 +485,9 @@ type EdgeConfig = {
 
 ## moveElements
 
-`方法`
+`方法` `废弃`
 
-批量移动元素
+批量移动元素（将要废弃，请使用批量移动节点）
 
 参数
 
@@ -501,6 +501,24 @@ type EdgeConfig = {
 type graphDataConfig = {
   nodes: NodeConfig[],
 }
+```
+
+## moveNodes
+
+`方法`
+
+批量移动节点
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeIds | nodeId[] | true | 无 | 图元素配置|
+|deltaX| number | true | 无 | 移动的x轴距离|
+|deltaY| number | true | 无 | 移动的y轴距离|
+
+```ts
+type nodeId = string;
 ```
 
 ## changeEdgeType
