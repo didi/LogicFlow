@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.8](https://github.com/didi/LogicFlow/compare/examples@0.7.7...examples@0.7.8) (2021-08-19)
+
+
+### Features
+
+* merge master ([cead588](https://github.com/didi/LogicFlow/commit/cead5887df27bd7624c46000966257a73b5a95e0))
+
+
+
+
+
 ## [0.7.7](https://github.com/didi/LogicFlow/compare/examples@0.7.5...examples@0.7.7) (2021-08-17)
 
 **Note:** Version bump only for package examples

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.12...@logicflow/core@0.6.13) (2021-08-19)
+
+
+### Bug Fixes
+
+* silent mode support recovery ([7c17585](https://github.com/didi/LogicFlow/commit/7c17585767426aad508ff3b14434ec5b05850ec5))
+* text undefined cause undraggble ([640ec9e](https://github.com/didi/LogicFlow/commit/640ec9ef98a3fc73206b607e21a7294314d826f3))
+
+
+### Features
+
+* add config nodeSelectedOutline ([9b91cd0](https://github.com/didi/LogicFlow/commit/9b91cd0b5ab3a30bfe0575b6f297d59719f3a2d1))
+* group ([2c75b81](https://github.com/didi/LogicFlow/commit/2c75b810d2bda185e37e029a5fe28503f299e412))
+* merge master ([cead588](https://github.com/didi/LogicFlow/commit/cead5887df27bd7624c46000966257a73b5a95e0))
+* mvp demo ([12d5e96](https://github.com/didi/LogicFlow/commit/12d5e9684bad4a465e1b57a1217aceed73453d59))
+* 增加移动节点跳过校验规则功能 ([659b83e](https://github.com/didi/LogicFlow/commit/659b83eb8ab6c8f3a1f60333e11e24777795a14b))
+
+
+
+
+
 ## [0.6.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.5...@logicflow/core@0.6.12) (2021-08-17)
 
 
