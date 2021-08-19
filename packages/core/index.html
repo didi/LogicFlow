@@ -85,6 +85,7 @@
     <button id="clearData" onClick="clearData()">清空数据</button>
     <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
     <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
+    <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -517,9 +518,13 @@
           console.log(msg)
         }
         window.changeEditConfig = function () {
+          window.isSilentMode = !window.isSilentMode
           lf.updateEditConfig({
-            isSilentMode: true
+            isSilentMode: window.isSilentMode
           })
+        }
+        window.focusOut = function () {
+          lf.graphModel.textEditElement.setElementState(1)
         }
       }
     </script>
