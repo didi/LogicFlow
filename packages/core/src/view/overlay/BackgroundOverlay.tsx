@@ -55,7 +55,9 @@ export default class BackgroundOverlay extends Component<IProps> {
       opacity,
     };
     return (
-      <div style={backgroundStyle} className="lf-background" />
+      <div className="lf-background">
+        <div style={backgroundStyle} className="lf-background-area" />
+      </div>
     );
   }
   render() {

@@ -5,6 +5,7 @@ types/*
 types
 *.DS_Store
 lib
+!packages/mvp/lib
 cjs
 esm
 es

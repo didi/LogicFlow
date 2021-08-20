@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.12...@logicflow/extension@0.6.13) (2021-08-19)
+
+
+### Bug Fixes
+
+* **extension:** init isDefalutStopMoveGraph of SelectionSelect ([88ec07b](https://github.com/didi/LogicFlow/commit/88ec07bb5d4d7ae6e242e68e46e4bc4278f5a17e))
+
+
+### Features
+
+* group ([2c75b81](https://github.com/didi/LogicFlow/commit/2c75b810d2bda185e37e029a5fe28503f299e412))
+* merge master ([cead588](https://github.com/didi/LogicFlow/commit/cead5887df27bd7624c46000966257a73b5a95e0))
+* mvp demo ([12d5e96](https://github.com/didi/LogicFlow/commit/12d5e9684bad4a465e1b57a1217aceed73453d59))
+* 增加移动节点跳过校验规则功能 ([659b83e](https://github.com/didi/LogicFlow/commit/659b83eb8ab6c8f3a1f60333e11e24777795a14b))
+
+
+
+
+
 ## [0.6.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.5...@logicflow/extension@0.6.12) (2021-08-17)
 
 
