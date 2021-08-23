@@ -5,6 +5,7 @@
 const Snapshot = {
   pluginName: 'snapshot',
   install(lf) {
+    this.lf = lf;
     this.offsetX = Number.MAX_SAFE_INTEGER;
     this.offsetY = Number.MAX_SAFE_INTEGER;
     /* 下载快照 */
@@ -138,21 +139,31 @@ const Snapshot = {
     (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${-this.offsetX + 10}, ${-this.offsetY + 10})`;
     const dpr = window.devicePixelRatio || 1;
     const canvas = document.createElement('canvas');
+    /*
+    为了计算真实宽高需要取图的真实dom
+    真实dom存在缩放影响其宽高数值
+    在得到真实宽高后除以缩放比例即可得到正常宽高
+    */
     const base = document.getElementsByClassName('lf-base')[0];
     const bbox = (base as Element).getBoundingClientRect();
+    const { graphModel } = this.lf;
+    const { transformMatrix } = graphModel;
+    const { SCALE_X, SCALE_Y } = transformMatrix;
+    const bboxWidth = Math.ceil(bbox.width / SCALE_X);
+    const bboxHeight = Math.ceil(bbox.height / SCALE_Y);
     // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边
-    canvas.style.width = `${bbox.width}px`;
-    canvas.style.height = `${bbox.height}px`;
-    canvas.width = bbox.width * dpr + 80;
-    canvas.height = bbox.height * dpr + 80;
+    canvas.style.width = `${bboxWidth}px`;
+    canvas.style.height = `${bboxHeight}px`;
+    canvas.width = bboxWidth * dpr + 80;
+    canvas.height = bboxHeight * dpr + 80;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
     // 如果有背景色，设置流程图导出的背景色
     if (backgroundColor) {
       ctx.fillStyle = backgroundColor;
-      ctx.fillRect(0, 0, bbox.width * dpr + 80, bbox.height * dpr + 80);
+      ctx.fillRect(0, 0, bboxWidth * dpr + 80, bboxHeight * dpr + 80);
     } else {
-      ctx.clearRect(0, 0, bbox.width, bbox.height);
+      ctx.clearRect(0, 0, bboxWidth, bboxHeight);
     }
     const img = new Image();
     return new Promise((resolve) => {
