@@ -213,6 +213,7 @@ class GraphModel {
         [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
         if (!isPointInArea([x, y], lt, rb)) {
           inArea = false;
+          break;
         }
       }
       return inArea;
