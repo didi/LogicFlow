@@ -181,7 +181,7 @@ export default class BaseNodeModel implements IBaseModel {
   /**
    * 在连线的时候，是否允许这个节点为source节点，连线到target节点。
    */
-  isAllowConnectedAsSource(target: BaseNodeModel): ConnectRuleResult {
+  isAllowConnectedAsSource(target: BaseNodeModel): ConnectRuleResult | Boolean{
     const rules = !this.hasSetSourceRules
       ? this.getConnectedSourceRules()
       : this.sourceRules;
@@ -212,7 +212,7 @@ export default class BaseNodeModel implements IBaseModel {
    * 在连线的时候，是否允许这个节点未target节点
    */
 
-  isAllowConnectedAsTarget(source: BaseNodeModel): ConnectRuleResult {
+  isAllowConnectedAsTarget(source: BaseNodeModel): ConnectRuleResult | Boolean {
     const rules = !this.hasSetTargetRules
       ? this.getConnectedTargetRules()
       : this.targetRules;
