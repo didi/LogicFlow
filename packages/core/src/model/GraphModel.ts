@@ -17,7 +17,7 @@ import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
 import { formatData } from '../util/compatible';
-import { getNodeAnchorPosition } from '../util/node';
+import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -199,11 +199,24 @@ class GraphModel {
   isElementInArea(element, lt, rb, wholeEdge = true) {
     if (element.BaseType === ElementType.NODE) {
       element = element as BaseNodeModel;
-      let { x, y } = element;
-      [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
-      if (isPointInArea([x, y], lt, rb)) {
-        return true;
+      // 节点是否在选区内，判断逻辑为如果节点的bbox的四个角上的点都在选区内，则判断节点在选区内
+      const { minX, minY, maxX, maxY } = getNodeBBox(element);
+      const bboxPointsList = [
+        { x: minX, y: minY },
+        { x: maxX, y: minY },
+        { x: maxX, y: maxY },
+        { x: minX, y: maxY },
+      ];
+      let inArea = true;
+      for (let i = 0; i < bboxPointsList.length; i++) {
+        let { x, y } = bboxPointsList[i];
+        [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
+        if (!isPointInArea([x, y], lt, rb)) {
+          inArea = false;
+          break;
+        }
       }
+      return inArea;
     }
     if (element.BaseType === ElementType.EDGE) {
       element = element as BaseEdgeModel;
