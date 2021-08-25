@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 import { createDrag } from '../util/drag';
-import { targetNodeInfo, distance } from '../util/node';
+import { formateAnchorConnectValidateData, targetNodeInfo, distance } from '../util/node';
 import Circle from './basic-shape/Circle';
 import Line from './basic-shape/Line';
 import { ElementState, EventType } from '../constant/constant';
@@ -93,8 +93,8 @@ class Anchor extends Component<IProps, IState> {
       if (!this.targetRuleResults.has(targetNode.id)) {
         const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
         const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
-        this.sourceRuleResults.set(targetNode.id, sourceRuleResult);
-        this.targetRuleResults.set(targetNode.id, targetRuleResult);
+        this.sourceRuleResults.set(targetNode.id, formateAnchorConnectValidateData(sourceRuleResult));
+        this.targetRuleResults.set(targetNode.id, formateAnchorConnectValidateData(targetRuleResult));
       }
       const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
       const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetNode.id);

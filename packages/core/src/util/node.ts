@@ -417,3 +417,17 @@ export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
     height: rowsLength * (fontSize + 2) + fontSize / 4,
   };
 };
+
+
+/**
+ * @description 格式化连线校验信息
+ */
+ export const formateAnchorConnectValidateData= (data) =>{
+  if(typeof data !== 'object'){
+    return {
+      isAllPass:!!data,
+      msg:!!data?'':'不允许连接'
+    }
+  }
+  return data
+}
