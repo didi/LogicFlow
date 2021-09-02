@@ -6,7 +6,7 @@ type ShapeItem = {
   icon?: string;
   className?: string;
   properties?: Record<string, any>;
-  callback?: string;
+  callback?: () => void;
 };
 
 class DndPanel {
