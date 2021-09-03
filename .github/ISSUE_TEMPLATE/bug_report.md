@@ -13,13 +13,8 @@ assignees: ''
 2. 期望的表现
 3. 实际的表现
 
-**环境信息描述**  
-至少包含以下部分：
-1. 系统类型(Mac或者Windows)
-2. 浏览器类型 （chrome80 或者 IE11）
-
 **最简复现demo**  
 一般来说通过文字和截图的描述我们很难定位到问题，为了帮助我们快速定位问题并修复，请按照以下指南编写并上传最简复现demo：
-1. 根据现有项目遇到的问题，尝试精简代码，确定问题的最小复现条件
-2. 使用脚手架创建新项目，基于最小复现条件编写稳定的最简复现demo
+1. 在任意在线编码平台，编写示例如[codesanbox](https://codesandbox.io/s/musing-colden-ffswi?file=/index.html)、[codePen](https://codepen.io/towersxu/pen/ExXyeYY?editors=0010)。将其保存到自己空间，然后贴上链接。
+2. 在自己github中创建一个最简单的示例，然后贴上github链接。
 3. 删除项目中的node_modules部分，打包项目，并拖拽到issue输入框中上传（或提供远程可下载地址）
