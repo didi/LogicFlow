@@ -4,10 +4,21 @@ import { createUuid } from '../../util/uuid';
 import { observer } from '../..';
 
 export type GridOptions = {
+  /**
+   * 网格格子间距
+   */
   size?: number
+  /**
+   * 网格是否可见
+   */
   visible?: boolean,
+
   graphModel?: GraphModel,
-  type?: string, // 'dot' || 'mesh'
+  /**
+   * 网格类型
+   * 'dot' || 'mesh'
+   */
+  type?: string,
   config?: {
     color: string,
     thickness?: number,

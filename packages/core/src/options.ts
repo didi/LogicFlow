@@ -9,29 +9,37 @@ import {
   GraphConfigData,
 } from './type';
 import { KeyboardDef } from './keyboard';
+import { EditConfigInterface } from './model/EditConfigModel';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 
 export type Definition = {
+  /**
+   * 画布初始化容器
+   */
   container: HTMLElement;
-
+  /**
+   * 画布宽度，不传则默认100%
+   */
   width?: number;
-
+  /**
+   * 画布高度，不传则默认100%
+   */
   height?: number;
-
+  /**
+   * 背景图
+   */
   background?: false | BackgroundConfig;
-
+  /**
+   * 网格
+   */
   grid?: boolean | GridOptions;
-
-  textEdit?: boolean;
 
   keyboard?: KeyboardDef;
 
   style?: Style;
 
   dndOptions?: DndOptions;
-
-  isSilentMode?: boolean; // 静默模式
 
   disabledPlugins?: string[]; // 禁用的插件
 
@@ -43,20 +51,10 @@ export type Definition = {
 
   partial?: boolean; // 是否开启局部渲染
 
-  stopScrollGraph?: boolean;
-
-  stopZoomGraph?: boolean;
-
-  stopMoveGraph?: boolean;
-
   guards?: GuardsTypes;
 
-  hideAnchors?: boolean; // 是否隐藏anchor
-
-  hoverOutline?: boolean; // 是否显示节点hover时的outline
-
   idGenerator?: () => number | string; // 元素id生成器
-};
+} & EditConfigInterface;
 
 export interface GuardsTypes {
   beforeClone?: (data: NodeData | GraphConfigData) => boolean;

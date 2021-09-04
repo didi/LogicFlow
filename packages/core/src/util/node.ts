@@ -418,16 +418,15 @@ export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
   };
 };
 
-
 /**
  * @description 格式化连线校验信息
  */
- export const formateAnchorConnectValidateData= (data) =>{
-  if(typeof data !== 'object'){
+export const formateAnchorConnectValidateData = (data) => {
+  if (typeof data !== 'object') {
     return {
-      isAllPass:!!data,
-      msg:!!data?'':'不允许连接'
-    }
+      isAllPass: !!data,
+      msg: data ? '' : '不允许连接',
+    };
   }
-  return data
-}
+  return data;
+};
