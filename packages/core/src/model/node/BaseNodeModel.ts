@@ -400,6 +400,7 @@ export default class BaseNodeModel implements IBaseModel {
       ...this.properties,
       [key]: formatData(val),
     };
+    this.setAttributes();
   }
 
   @action
@@ -409,6 +410,7 @@ export default class BaseNodeModel implements IBaseModel {
       ...this.properties,
       ...formatData(properties),
     };
+    this.setAttributes();
   }
 
   @action

@@ -46,7 +46,6 @@ class HtmlCard extends HtmlNode {
     return el;
   }
 }
-
 class HtmlCardModel extends HtmlNodeModel {
   setAttributes() {
     this.width = 240;
@@ -54,14 +53,32 @@ class HtmlCardModel extends HtmlNodeModel {
     const { properties } = this;
     if (properties.answers) {
       let preOffset = 5;
-      const sourceAnchor = properties.answers.map((answer) => {
+      const sourceAnchor = properties.answers.map((answer,) => {
         const text = answer.text;
-        const x = -120 + preOffset + (12 * text.length / 2) + 2;
-        preOffset += 12 * text.length + 10 + 4; 
+        const x = preOffset + (this.getBytesLength(text) * 6 + 4) / 2 - this.width / 2;
+        preOffset += this.getBytesLength(text) * 6 + 4 + 10;
         return { x: x, y: 45, id: answer.id };
       });
       this.anchorsOffset = [{ x: 0, y: -50}].concat(sourceAnchor);
     }
+  }
+
+  getBytesLength (word) {
+    if (!word) {
+      return 0;
+    }
+    let totalLength = 0;
+    for (let i = 0; i < word.length; i++) {
+      const c = word.charCodeAt(i);
+      if ((word.match(/[A-Z]/))) {
+        totalLength += 1.5;
+      } else if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
+        totalLength += 1.2;
+      } else {
+        totalLength += 2;
+      }
+    }
+    return totalLength;
   }
 }
 
