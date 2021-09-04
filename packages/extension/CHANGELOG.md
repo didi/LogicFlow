@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.13...@logicflow/extension@0.6.16) (2021-09-04)
+
+
+### Bug Fixes
+
+* **examples:** modified examples page title ([3a9ae5e](https://github.com/didi/LogicFlow/commit/3a9ae5ed100405378ed468574ca61445bef44035))
+* **extension:** snapshot bugfix after zooming ([c23c0fa](https://github.com/didi/LogicFlow/commit/c23c0fa2d8ec0825f4319def7b98388cc3a09997))
+
+
+
+
+
 ## [0.6.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.12...@logicflow/extension@0.6.13) (2021-08-19)
 
 

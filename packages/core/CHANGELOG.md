@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.13...@logicflow/core@0.6.16) (2021-09-04)
+
+
+### Bug Fixes
+
+* **core:** isElementInArea fix ([9e8bd62](https://github.com/didi/LogicFlow/commit/9e8bd621e28ff9563f1a02e10708a6e421a01870))
+* **examples:** modified examples page title ([3a9ae5e](https://github.com/didi/LogicFlow/commit/3a9ae5ed100405378ed468574ca61445bef44035))
+* isElementInArea bugfix ([2050510](https://github.com/didi/LogicFlow/commit/2050510c98684266e152d7d733694c543bbb9c28))
+
+
+
+
+
 ## [0.6.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.12...@logicflow/core@0.6.13) (2021-08-19)
 
 
