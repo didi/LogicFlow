@@ -93,8 +93,14 @@ class Anchor extends Component<IProps, IState> {
       if (!this.targetRuleResults.has(targetNode.id)) {
         const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
         const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
-        this.sourceRuleResults.set(targetNode.id, formateAnchorConnectValidateData(sourceRuleResult));
-        this.targetRuleResults.set(targetNode.id, formateAnchorConnectValidateData(targetRuleResult));
+        this.sourceRuleResults.set(
+          targetNode.id,
+          formateAnchorConnectValidateData(sourceRuleResult),
+        );
+        this.targetRuleResults.set(
+          targetNode.id,
+          formateAnchorConnectValidateData(targetRuleResult),
+        );
       }
       const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
       const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetNode.id);

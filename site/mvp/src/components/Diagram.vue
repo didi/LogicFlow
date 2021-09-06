@@ -14,12 +14,13 @@
 </template>
 
 <script>
-// import LogicFlow from '@logicflow/core'
+import LogicFlow from '@logicflow/core'
+import '@logicflow/core/dist/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
 import BaseNode from './node/BaseNode'
 import CircleNode from './node/CircleNode'
-const LogicFlow = window.LogicFlow
+// const LogicFlow = window.LogicFlow
 
 export default {
   name: 'Diagram',
@@ -73,7 +74,6 @@ export default {
 </script>
 
 <style scoped>
-@import '~@logicflow/core/dist/style/index.css';
 
 .diagram {
   width: 100%;

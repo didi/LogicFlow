@@ -121,7 +121,7 @@ module.exports = {
       { text: 'API', link: '/api/logicFlowApi' },
       { text: '示例', link: '/usage/bpmn' },
       { text: '常见问题', link: '/FAQ' },
-      { text: '版本公告', link: '/version-info/0.3.0' },
+      // { text: '版本公告', link: '/version-info/0.3.0' },
       { text: '文章', link: '/article/article01' },
     ],
     // thirdLinks: [
@@ -132,7 +132,7 @@ module.exports = {
     // ],
     sidebar: {
       '/guide/': guide,
-      '/version-info/': verisonInfo,
+      // '/version-info/': verisonInfo,
       '/api/': api,
       '/usage/': usage,
       '/article/': article,

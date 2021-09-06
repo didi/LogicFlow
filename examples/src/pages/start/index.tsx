@@ -44,6 +44,7 @@ export default function StartExample() {
   useEffect(() => {
     const lf = new LogicFlow({
       ...config,
+      metaKeyMultipleSelected: true,
       container: document.querySelector('#container') as HTMLElement,
     });
     lf.render(data)

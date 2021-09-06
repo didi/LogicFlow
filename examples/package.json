@@ -1,12 +1,12 @@
 {
   "name": "examples",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@babel/core": "7.12.3",
-    "@logicflow/core": "^0.6.13",
-    "@logicflow/extension": "^0.6.13",
+    "@logicflow/core": "^0.6.16",
+    "@logicflow/extension": "^0.6.16",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -81,7 +81,7 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "dev": "node scripts/start.js",
     "build": "cross-env PUBLIC_URL='./' node scripts/build.js",
     "test": "node scripts/test.js"
   },
