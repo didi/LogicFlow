@@ -5,7 +5,7 @@
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "cross-env NODE_ENV=development MOCK_TYPE=mock webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1",

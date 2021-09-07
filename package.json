@@ -2,7 +2,7 @@
   "name": "logicflow",
   "private": true,
   "description": "一款流程可视化的前端框架",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "author": "LogicFlow-Team",
   "workspaces": [
     "packages/*",
