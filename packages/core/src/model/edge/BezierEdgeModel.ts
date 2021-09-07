@@ -61,7 +61,7 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     const [
       start, sNext, ePre, end,
     ] = points;
-    return `M ${start.x} ${start.y} 
+    return `M ${start.x} ${start.y}
     C ${sNext.x} ${sNext.y},
     ${ePre.x} ${ePre.y},
     ${end.x} ${end.y}`;
@@ -91,15 +91,30 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   }
 
   @action
+  updatePath() {
+    const start = {
+      x: this.startPoint.x,
+      y: this.startPoint.y,
+    };
+    const end = {
+      x: this.endPoint.x,
+      y: this.endPoint.y,
+    };
+    const [, sNext, ePre] = this.pointsList;
+    this.pointsList = [start, sNext, ePre, end];
+    this.path = this.getPath(this.pointsList);
+  }
+
+  @action
   updateStartPoint(anchor) {
     this.startPoint = anchor;
-    this.updatePoints();
+    this.updatePath();
   }
 
   @action
   updateEndPoint(anchor) {
     this.endPoint = anchor;
-    this.updatePoints();
+    this.updatePath();
   }
 
   @action
