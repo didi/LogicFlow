@@ -25,7 +25,7 @@ sidebarDepth: 2
 import { LineEdge, LineEdgeModel } from '@logicflow/core';
 class ProcessModel extends LineEdgeModel {
   setAttributes() {
-    const { propteries: { isExecuted } } = this;
+    const { properties: { isExecuted } } = this;
 
     if (isExecuted) {
       this.stroke = 'green';
