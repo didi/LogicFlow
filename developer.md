@@ -30,7 +30,7 @@ npm run build
 
 ### 启动本地开发
 
-开发core包
+开发 core 包
 
 ```shell
 cd packages/core
@@ -38,7 +38,7 @@ cd packages/core
 npm run dev
 ```
 
-开发extension
+开发 extension
 
 ```shell
 cd packages/extension
@@ -46,7 +46,11 @@ cd packages/extension
 npm run dev
 ```
 
+
+### 项目配置修改
+
 windows 和 mac 平台的换行不一致，windows 下是 CRLF，mac 下是 LF，因此 windows 系统下需要修改 eslint 规则：
+（如果 widows 配置了转换为 LF，此条不适用）
 
 ```js
 {
@@ -59,7 +63,7 @@ windows 和 mac 平台的换行不一致，windows 下是 CRLF，mac 下是 LF�
 // 改为
 {
   rules: {
-    'linebreak-style': ['error', node.env.NODE_ENV === 'production' ? 'unix' : 'windows'],
+    'linebreak-style': ['error', process.env.NODE_ENV === 'production' ? 'unix' : 'windows'],
     // ...
   }
 }
@@ -115,7 +119,7 @@ lerna version 的详细使用方式见[这里](https://github.com/lerna/lerna/tr
 npm run lerna:publish
 ```
 
-### 推tag到远端
+### 推 tag 到远端
 
 ```shell
 git push origin --tags
