@@ -34,18 +34,21 @@ npm run build
 
 ```shell
 cd packages/core
-
 npm run dev
+
+# 或跳过以上“构建部分”直接运行
+npm run dev:core
 ```
 
 开发 extension
 
 ```shell
 cd packages/extension
-
 npm run dev
-```
 
+# 或跳过以上“构建部分”直接运行
+npm run dev:extension
+```
 
 ### 项目配置修改
 
