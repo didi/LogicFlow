@@ -9,6 +9,8 @@
     "examples"
   ],
   "scripts": {
+    "dev:core": "npm run build:types && npm run build && cd packages/core && npm run dev",
+    "dev:extension": "npm run build:types && npm run build && cd packages/extension && npm run dev",
     "bootstrap": "yarn",
     "clean": "lerna clean",
     "build": "lerna run build",
