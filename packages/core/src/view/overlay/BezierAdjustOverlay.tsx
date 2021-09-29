@@ -83,7 +83,7 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
 @observer
 export default class BezierAdjustOverlay extends Component<IProps> {
   getBezierAdjust(bezier: BezierEdgeModel, graphModel: GraphModel) {
-    const { path } = bezier;
+    const { path, id } = bezier;
     const pointsList = getBezierPoints(path);
     const [start, sNext, ePre, end] = pointsList;
     const { adjustLineColor } = graphModel.theme.bezier;
@@ -99,6 +99,7 @@ export default class BezierAdjustOverlay extends Component<IProps> {
       position={sNext}
       bezierModel={bezier}
       graphModel={graphModel}
+      key={`${id}_ePre`}
       type="sNext"
     />);
     result.push(<Line
@@ -112,6 +113,7 @@ export default class BezierAdjustOverlay extends Component<IProps> {
       position={ePre}
       bezierModel={bezier}
       graphModel={graphModel}
+      key={`${id}_sNext`}
       type="ePre"
     />);
     return result;

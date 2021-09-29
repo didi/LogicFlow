@@ -1,6 +1,6 @@
 import cardLine from "./cardLine.js";
 import htmlCard from "./htmlCard.js";
-
+LogicFlow.use(MiniMap);
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
   grid: true,
@@ -10,7 +10,7 @@ lf.register(cardLine);
 lf.register(htmlCard);
 lf.setDefaultEdgeType('card-line');
 lf.on('node:click', ({ data : { id, properties }}) => {
-  if (properties.answers.length < 5) {
+  if (properties.answers && properties.answers.length < 5) {
     const randomId = Math.ceil(Math.random() * 10000) + ''
     properties.answers.push({
       id: randomId,
@@ -117,7 +117,7 @@ lf.render({
     }
   ]
 });
-
+MiniMap.show(0, 0);
 document.querySelector('#getJson').addEventListener('click', () => {
   const data = lf.getGraphData();
   console.log(data);
