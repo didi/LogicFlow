@@ -18,7 +18,6 @@ type IProps = {
 
 export default class BaseEdge extends Component<IProps> {
   startTime: number;
-  preStartTime: number;
   contextMenuTime: number;
   clickTimer: number;
   getAttributes() {
@@ -182,14 +181,17 @@ export default class BaseEdge extends Component<IProps> {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
     if (time > 200) return; // 事件大于200ms，认为是拖拽。
+    const isRightClick = e.button === 2;
+    if (isRightClick) return;
+    // 这里 IE 11不能正确显示
+    const isDoubleClick = e.detail === 2;
     const { model, graphModel, eventCenter } = this.props;
     const edgeData = model?.getData();
     const position = graphModel.getPointByClient({
       x: e.clientX,
       y: e.clientY,
     });
-    if (this.preStartTime && this.startTime - this.preStartTime < 200) {
-      if (this.clickTimer) { window.clearTimeout(this.clickTimer); }
+    if (isDoubleClick) {
       const { editConfig, textEditElement } = graphModel;
       // 当前连线正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === model.id) {
@@ -210,28 +212,24 @@ export default class BaseEdge extends Component<IProps> {
         e,
         position,
       });
-    } else {
-      this.clickTimer = window.setTimeout(() => {
-        // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
-        if (!this.contextMenuTime || this.startTime > this.contextMenuTime) {
-          // 边数据
-          eventCenter.emit(EventType.ELEMENT_CLICK, {
-            data: edgeData,
-            e,
-            position,
-          });
-          eventCenter.emit(EventType.EDGE_CLICK, {
-            data: edgeData,
-            e,
-            position,
-          });
-        }
-      }, 400);
+    } else { // 单击
+      // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
+      // 边数据
+      eventCenter.emit(EventType.ELEMENT_CLICK, {
+        data: edgeData,
+        e,
+        position,
+      });
+      eventCenter.emit(EventType.EDGE_CLICK, {
+        data: edgeData,
+        e,
+        position,
+      });
     }
+
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
     graphModel.toFront(model.id);
-    this.preStartTime = this.startTime;
   };
 
   render() {

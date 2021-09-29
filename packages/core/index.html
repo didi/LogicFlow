@@ -311,6 +311,7 @@
           // height: 500,
           // adjustNodePosition: false,
           // isSilentMode: true,
+          edgeTextEdit: true,
           keyboard: {
             enabled: true,
           },
@@ -513,9 +514,6 @@
         }
         window.clearData = function clearData() {
           lf.clearData()
-        }
-        window.consolelog = function consolelog(msg) {
-          console.log(msg)
         }
         window.changeEditConfig = function () {
           window.isSilentMode = !window.isSilentMode
