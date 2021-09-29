@@ -492,7 +492,7 @@ const BpmnXmlAdapter = {
   },
   adapterXmlOut(data) {
     const outData = BpmnAdapter.adapterOut(data);
-    return json2xml(outData, '\n');
+    return json2xml(outData);
   },
 };
 
