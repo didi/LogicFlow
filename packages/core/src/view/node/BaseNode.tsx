@@ -360,7 +360,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     let nodeShape;
     if (!isHitable) {
       nodeShape = (
-        <g className={this.getStateClassName()} id={model.id}>
+        <g className={this.getStateClassName()}>
           { nodeShapeInner }
         </g>
       );
@@ -371,7 +371,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       nodeShape = (
         <g
           className={this.getStateClassName()}
-          id={model.id}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleClick}
           onMouseEnter={this.setHoverON}

@@ -11,13 +11,12 @@ type IProps = {
 };
 
 export default class HtmlNode extends BaseNode {
-  rootElId: string;
-  constructor(props) {
-    super(props);
-    this.rootElId = `htmlNode_${props.model.id}`;
-  }
+  ref: HTMLElement;
+  setRef = (dom): void => {
+    this.ref = dom;
+  };
   get rootEl() {
-    return document.querySelector(`#${this.rootElId}`) as HTMLElement;
+    return this.ref;
   }
   setHtml(rootEl: HTMLElement) {
     rootEl.appendChild(document.createElement('div'));
@@ -37,7 +36,7 @@ export default class HtmlNode extends BaseNode {
         y={y - height / 2}
         width={width}
         height={height}
-        id={this.rootElId}
+        ref={this.setRef}
       />
     );
   }

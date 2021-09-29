@@ -235,11 +235,9 @@ export default class BaseEdge extends Component<IProps> {
   };
 
   render() {
-    const { model } = this.props;
     return (
       <g
         className="lf-edge"
-        id={model.id}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
         onContextMenu={this.handleContextMenu}

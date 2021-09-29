@@ -1,6 +1,6 @@
 import cardLine from "./cardLine.js";
 import htmlCard from "./htmlCard.js";
-
+LogicFlow.use(MiniMap);
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
   grid: true,
@@ -117,7 +117,7 @@ lf.render({
     }
   ]
 });
-
+MiniMap.show(0, 0);
 document.querySelector('#getJson').addEventListener('click', () => {
   const data = lf.getGraphData();
   console.log(data);
