@@ -1,4 +1,6 @@
 import { observable, action } from 'mobx';
+import { EventType } from '../constant/constant';
+import EventEmitter from '../event/eventEmitter';
 import { PointTuple } from '../type';
 
 export interface TransfromInterface {
@@ -27,7 +29,10 @@ export default class TransfromModel implements TransfromInterface {
   @observable TRANSLATE_X = 0;
   @observable TRANSLATE_Y = 0;
   @observable ZOOM_SIZE = 0.04;
-
+  eventCenter: EventEmitter;
+  constructor(eventCenter) {
+    this.eventCenter = eventCenter;
+  }
   setZoomMiniSize(size: number): void {
     this.MINI_SCALE_SIZE = size;
   }
@@ -87,19 +92,34 @@ export default class TransfromModel implements TransfromInterface {
       this.TRANSLATE_X -= size * point[0];
       this.TRANSLATE_Y -= size * point[1];
     }
+    this.emitGraphTransform('zoom');
     return true;
   }
-
+  private emitGraphTransform(type) {
+    this.eventCenter.emit(EventType.GRAPH_TRANSFORM, {
+      type,
+      transform: {
+        SCALE_X: this.SCALE_X,
+        SKEW_Y: this.SKEW_Y,
+        SKEW_X: this.SKEW_X,
+        SCALE_Y: this.SCALE_Y,
+        TRANSLATE_X: this.TRANSLATE_X,
+        TRANSLATE_Y: this.TRANSLATE_Y,
+      },
+    });
+  }
   @action
   resetZoom() : void {
     this.SCALE_X = 1;
     this.SCALE_Y = 1;
+    this.emitGraphTransform('resetZoom');
   }
 
   @action
   translate(x: number, y: number) {
     this.TRANSLATE_X += x;
     this.TRANSLATE_Y += y;
+    this.emitGraphTransform('translate');
   }
 
   /**
@@ -115,5 +135,6 @@ export default class TransfromModel implements TransfromInterface {
     const [deltaX, deltaY] = [width / 2 - x, height / 2 - y];
     this.TRANSLATE_X += deltaX;
     this.TRANSLATE_Y += deltaY;
+    this.emitGraphTransform('focusOn');
   }
 }

@@ -49,7 +49,7 @@ class GraphModel {
   @observable plugins = [];
   @observable tools = [];
   @observable background;
-  @observable transformMatrix = new TransfromModel();
+  @observable transformMatrix;
   @observable editConfig: EditConfigModel;
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
@@ -69,6 +69,7 @@ class GraphModel {
     this.rootEl = container;
     this.editConfig = new EditConfigModel(config);
     this.eventCenter = eventCenter;
+    this.transformMatrix = new TransfromModel(eventCenter);
     this.theme = updateTheme(config.style);
     this.edgeType = config.edgeType || 'polyline';
     this.width = config.width;

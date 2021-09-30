@@ -69,6 +69,7 @@ export enum EventType {
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
   HISTORY_CHANGE = 'history:change',
   TEXT_UPDATE = 'text:update',
+  GRAPH_TRANSFORM = 'graph:transform'
 }
 
 export enum SegmentDirection {
