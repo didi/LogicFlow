@@ -48,7 +48,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     const { guards } = lf.options;
     const elements = graph.getSelectElements(false);
     const enabledClone = guards && guards.beforeClone ? guards.beforeClone(elements) : true;
-    if (!enabledClone) return false;
+    if (!enabledClone) {
+      selected = null;
+      return false;
+    }
     selected = elements;
     selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
     selected.edges.forEach(edge => translationEdgeData(edge, TRANSLATION_DISTANCE));

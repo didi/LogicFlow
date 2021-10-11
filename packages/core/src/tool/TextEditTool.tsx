@@ -6,7 +6,7 @@ import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
-import { ElementType, EventType, ModelType } from '../constant/constant';
+import { ElementState, ElementType, EventType, ModelType } from '../constant/constant';
 import { observer } from '..';
 // import { ElementState } from '../constant/constant';
 
@@ -48,8 +48,23 @@ export default class TextEdit extends Component<IProps, IState> {
       this.ref.current.focus();
       this.placeCaretAtEnd(this.ref.current);
     }
+    // @see https://github.com/didi/LogicFlow/issues/152
+    const { graphModel } = this.props;
+    const {
+      eventCenter,
+      editConfig: {
+        edgeTextEdit,
+        nodeTextEdit,
+      },
+    } = graphModel;
+    if (edgeTextEdit || nodeTextEdit) {
+      eventCenter.on(EventType.GRAPH_TRANSFORM, () => {
+        if (graphModel.textEditElement) {
+          graphModel.textEditElement.setElementState(ElementState.DEFAULT);
+        }
+      });
+    }
   }
-
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
     const { transformMatrix, theme } = graphModel;

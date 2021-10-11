@@ -56,8 +56,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
     if (editConfig.stopMoveGraph) {
       return;
     }
-    transformMatrix.TRANSLATE_X += deltaX;
-    transformMatrix.TRANSLATE_Y += deltaY;
+    transformMatrix.translate(deltaX, deltaY);
   };
   onDragEnd = () => {
     this.setState({
@@ -75,13 +74,13 @@ class CanvasOverlay extends Component<IProps, Istate> {
       if (Math.abs(this.stepScrollX) >= gridSize) {
         const remainderX = this.stepScrollX % gridSize;
         const moveDistence = this.stepScrollX - remainderX;
-        transformMatrix.TRANSLATE_X -= moveDistence * transformMatrix.SCALE_X;
+        transformMatrix.translate(-moveDistence * transformMatrix.SCALE_X, 0);
         this.stepScrollX = remainderX;
       }
       if (Math.abs(this.stepScrollY) >= gridSize) {
         const remainderY = this.stepScrollY % gridSize;
         const moveDistenceY = this.stepScrollY - remainderY;
-        transformMatrix.TRANSLATE_Y -= moveDistenceY * transformMatrix.SCALE_Y;
+        transformMatrix.translate(0, -moveDistenceY * transformMatrix.SCALE_Y);
         this.stepScrollY = remainderY;
       }
       return;

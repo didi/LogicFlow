@@ -125,5 +125,6 @@ export default class BezierEdgeModel extends BaseEdgeModel {
       this.pointsList[2] = anchor;
     }
     this.path = this.getPath(this.pointsList);
+    this.setText(Object.assign({}, this.text, this.textPosition));
   }
 }

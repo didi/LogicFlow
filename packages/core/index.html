@@ -160,6 +160,18 @@
         }
       }
       class SquareView extends RectNode {
+        getTextStyle () {
+          const style = super.getTextStyle()
+          const {
+            model: {
+              properties = {},
+            },
+          } = this.props;
+          if (properties.isUsed) {
+            style.color = 'red'
+          }
+          return style
+        }
         // getShape 的返回值是一个通过 h 方法创建的 svg 元素
         getShape() {
           const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
@@ -330,7 +342,7 @@
         // 注册自定义节点
         lf.register({
           type: 'square',
-          view: RectNode,
+          view: SquareView,
           model: SquareModel,
         });
         lf.register({
@@ -385,6 +397,10 @@
               x: 300,
               y: 300,
               id: 11,
+              text: '啊大大',
+              properties: {
+                isUsed: true
+              }
             },
             {
               type: 'text',
@@ -537,6 +553,9 @@
         lf.on('text:update', (data) => {
           console.log('test:update', data)
         });
+        // lf.on('graph:transform', (data) => {
+        //   console.log(data)
+        // })
         // lf.on('node:click', ({ data }) => {
         //   const model = lf.graphModel.getElement(data.id)
         //   model.fill = 'red'
