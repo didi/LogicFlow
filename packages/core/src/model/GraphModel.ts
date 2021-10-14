@@ -18,6 +18,7 @@ import { isPointInArea } from '../util/graph';
 import { getClosestPointOfPolyline } from '../util/edge';
 import { formatData } from '../util/compatible';
 import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
+import { createUuid } from '../util';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -36,7 +37,7 @@ class GraphModel {
   height: number;
   topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
-  idGenerator: () => number | string;
+  idGenerator: (type?: string) => number | string;
   nodeMoveRules: NodeMoveRule[] = [];
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
@@ -326,7 +327,51 @@ class GraphModel {
     const element = this.getElement(id);
     element.updateAttributes(attributes);
   }
-
+  /**
+   * 修改指定节点id
+   */
+  changeNodeId<T extends string>(oldId, newId?: T | string): false | T | string {
+    if (!newId) {
+      newId = createUuid();
+    }
+    if (this.nodesMap[newId]) {
+      console.warn(`当前流程图已存在节点${newId}, 修改失败`);
+      return false;
+    }
+    if (!this.nodesMap[oldId]) {
+      console.warn(`当前流程图找不到节点${newId}, 修改失败`);
+      return false;
+    }
+    this.edges.forEach((edge) => {
+      if (edge.sourceNodeId === oldId) {
+        edge.sourceNodeId = newId;
+      }
+      if (edge.targetNodeId === oldId) {
+        edge.targetNodeId = newId;
+      }
+    });
+    this.nodesMap[oldId].model.id = newId;
+    return newId;
+  }
+  changeEdgeId<T extends string>(oldId: string, newId?: string): false | T | string {
+    if (!newId) {
+      newId = createUuid();
+    }
+    if (this.edgesMap[newId]) {
+      console.warn(`当前流程图已存在连线: ${newId}, 修改失败`);
+      return false;
+    }
+    if (!this.edgesMap[oldId]) {
+      console.warn(`当前流程图找不到连线: ${newId}, 修改失败`);
+      return false;
+    }
+    this.edges.forEach((edge) => {
+      if (edge.id === oldId) {
+        edge.id = newId;
+      }
+    });
+    return newId;
+  }
   @action
   setFakerNode(nodeModel: BaseNodeModel) {
     this.fakerNode = nodeModel;

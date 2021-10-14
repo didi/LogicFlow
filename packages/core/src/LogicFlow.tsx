@@ -627,7 +627,7 @@ export default class LogicFlow {
    * 获取流程绘图原始数据
    * 在存在adapter时，可以使用getGraphRawData获取图原始数据
    */
-  getGraphRawData() {
+  getGraphRawData(): GraphConfigData {
     const data = this.graphModel.modelToGraphData();
     return data;
   }
@@ -647,6 +647,17 @@ export default class LogicFlow {
   getProperties(id: string): Object {
     return this.graphModel.getElement(id)?.getProperties();
   }
+  /**
+   * 修改节点的id， 如果
+   * @returns 是否修改成功
+   */
+  changeNodeId<T extends string>(oldId: string, newId?: T): false | T | string {
+    return this.graphModel.changeNodeId(oldId, newId);
+  }
+  changeEdgeId<T extends string>(oldId: string, newId?: T): false | T | string {
+    return this.graphModel.changeEdgeId(oldId, newId);
+  }
+  updateGraphId() {}
   /**
    * 更新流程图编辑相关设置
    */

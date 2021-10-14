@@ -86,6 +86,8 @@
     <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
     <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
     <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
+    <button onClick="getData()">获取数据</button>
+    <button onClick="getRefreshData()">属性流程图节点id</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -255,6 +257,7 @@
           this.stroke = '#18905F';
           this.fill = 'red';
           this.radius = 10;
+          this.text.value ='id:' + this.id;
         }
       }
 
@@ -540,6 +543,21 @@
         window.focusOut = function () {
           lf.graphModel.textEditElement.setElementState(1)
         }
+        window.getData = function () {
+          console.log(lf.getGraphData())
+        }
+        window.changeNodeType = function () {
+          const { nodes } = lf.getSelectElements()
+          nodes.forEach(({ id }) => {
+            lf.changeNodeType(id, 'star')
+          })
+        }
+        window.getRefreshData = function () {
+          let data = lf.getGraphData();
+          data = LogicFlowUtil.refreshGraphId(data);
+          console.log(data);
+          lf.render(data);
+        }
       }
     </script>
 
@@ -556,10 +574,12 @@
         // lf.on('graph:transform', (data) => {
         //   console.log(data)
         // })
-        // lf.on('node:click', ({ data }) => {
-        //   const model = lf.graphModel.getElement(data.id)
-        //   model.fill = 'red'
-        // })
+        lf.on('node:click', ({ data }) => {
+          // const model = lf.graphModel.getElement(data.id)
+          // model.fill = 'red'
+          console.log(data.id)
+          lf.changeNodeId(data.id)
+        })
         // lf.on('node:mouseup',()=> {
         //   console.log('nodeup')
         // })

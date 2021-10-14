@@ -44,7 +44,7 @@ const defaultData = {
   ...defaultTheme.line,
 };
 class BaseEdgeModel implements IBaseModel {
-  readonly id = createUuid();
+  id = createUuid();
   readonly BaseType = ElementType.EDGE;
   @observable state = 1;
   modelType = ModelType.EDGE;

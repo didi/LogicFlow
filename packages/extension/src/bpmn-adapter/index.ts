@@ -138,6 +138,19 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     }
   });
   const sequenceFlow = data.edges.map((edge: EdgeConfig) => {
+    const targetNode = nodeMap.get(edge.targetNodeId);
+    // @see https://github.com/didi/LogicFlow/issues/325
+    // 需要保证incomming在outgoing之前
+    if (!targetNode['bpmn:incoming']) {
+      targetNode['bpmn:incoming'] = edge.id;
+    } else if (Array.isArray(targetNode['bpmn:incoming'])) {
+      targetNode['bpmn:incoming'].push(edge.id);
+    } else {
+      targetNode['bpmn:incoming'] = [
+        targetNode['bpmn:incoming'],
+        edge.id,
+      ];
+    }
     const sourceNode = nodeMap.get(edge.sourceNodeId);
     if (!sourceNode['bpmn:outgoing']) {
       sourceNode['bpmn:outgoing'] = edge.id;
@@ -146,17 +159,6 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     } else { // 字符串转数组
       sourceNode['bpmn:outgoing'] = [
         sourceNode['bpmn:outgoing'],
-        edge.id,
-      ];
-    }
-    const targetNode = nodeMap.get(edge.targetNodeId);
-    if (!targetNode['bpmn:incoming']) {
-      targetNode['bpmn:incoming'] = edge.id;
-    } else if (Array.isArray(targetNode['bpmn:incoming'])) {
-      targetNode['bpmn:incoming'].push(edge.id);
-    } else {
-      targetNode['bpmn:incoming'] = [
-        targetNode['bpmn:incoming'],
         edge.id,
       ];
     }

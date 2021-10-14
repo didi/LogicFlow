@@ -1,6 +1,6 @@
 module.exports = function getProxy() {
   let proxy = {};
-  const env = process.env.MOCK_TYPE || 'mock';
+  const env = 'mock';
   switch (env) {
     case 'mock':
       proxy = {};
