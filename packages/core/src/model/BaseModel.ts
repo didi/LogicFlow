@@ -3,7 +3,7 @@ import { ElementState } from '../constant/constant';
 import { TextConfig, AdditionData } from '../type';
 
 interface IBaseModel {
-  readonly id: string;
+  id: string;
   modelType: string;
   type: string;
   state: ElementState;
