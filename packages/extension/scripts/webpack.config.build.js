@@ -13,8 +13,7 @@ module.exports = [
       libraryTarget: 'umd',
     },
     plugins: [
-      new CaseSensitivePathsPlugin(),
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'MOCK_TYPE']),
+      new CaseSensitivePathsPlugin()
     ],
   },
 ];
