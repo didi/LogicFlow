@@ -18,17 +18,20 @@ export default class EventEmitter {
 
   /**
      * 监听一个事件
-     * @param evt
+     * @param evt 事件名称
      * @param callback
      * @param once
      */
   on(evt: string, callback: CallbackType, once?: boolean) {
-    if (!this._events[evt]) {
-      this._events[evt] = [];
-    }
-    this._events[evt].push({
-      callback,
-      once: !!once,
+    evt.split(',').forEach((evKey) => {
+      evKey = evKey.trim();
+      if (!this._events[evKey]) {
+        this._events[evKey] = [];
+      }
+      this._events[evKey].push({
+        callback,
+        once: !!once,
+      });
     });
     return this;
   }

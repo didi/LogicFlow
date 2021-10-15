@@ -4,7 +4,7 @@ import Arrow from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
-import { ElementState, EventType, ModelType } from '../../constant/constant';
+import { ElementState, EventType, ModelType, OverlapMode } from '../../constant/constant';
 import EventEmitter from '../../event/eventEmitter';
 import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
@@ -162,7 +162,7 @@ export default class BaseEdge extends Component<IProps> {
       y: ev.clientY,
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
-    graphModel.toFront(model.id);
+    this.toFront();
     graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
@@ -229,9 +229,15 @@ export default class BaseEdge extends Component<IProps> {
 
     const { editConfig: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    graphModel.toFront(model.id);
+    this.toFront();
   };
-
+  toFront() {
+    const { graphModel, model } = this.props;
+    const { overlapMode } = graphModel;
+    if (overlapMode !== OverlapMode.INCREASE) {
+      graphModel.toFront(model.id);
+    }
+  }
   render() {
     return (
       <g

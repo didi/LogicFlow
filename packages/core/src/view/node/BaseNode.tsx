@@ -5,7 +5,7 @@ import Anchor from '../Anchor';
 import BaseNodeModel from '../../model/node/BaseNodeModel';
 import BaseText from '../text/BaseText';
 import EventEmitter from '../../event/eventEmitter';
-import { ElementState, EventType } from '../../constant/constant';
+import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 
@@ -251,6 +251,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return;
 
+    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    this.toFront();
+
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       const { editConfig } = graphModel;
@@ -263,9 +267,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
       eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    this.toFront();
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -335,7 +336,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
    */
   toFront() {
     const { model, graphModel } = this.props;
-    graphModel.toFront(model.id);
+    const { overlapMode } = graphModel;
+    if (overlapMode !== OverlapMode.INCREASE) {
+      graphModel.toFront(model.id);
+    }
   }
   render() {
     const { model, graphModel } = this.props;

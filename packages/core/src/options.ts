@@ -13,6 +13,15 @@ import { EditConfigInterface } from './model/EditConfigModel';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 
+type DefaultOverlapMode = 0;
+type IncreaseOverlapMode = 1;
+/**
+ * 元素重叠处理方式
+ * 0：表示节点在上，连线在下，点击元素时选择元素显示在最顶部。
+ * 1：表示安装元素创建顺序排序，点击元素也不会将其置顶。要置顶需要调用置顶API。
+ */
+export type OverlapMode = DefaultOverlapMode | IncreaseOverlapMode;
+
 export type Definition = {
   /**
    * 画布初始化容器
@@ -53,7 +62,12 @@ export type Definition = {
 
   guards?: GuardsTypes;
 
+  hideOutline?: boolean; // 是否隐藏选中元素边框
+
+  overlapMode?: OverlapMode; // 节点和连线重叠显示模式
+
   idGenerator?: () => number | string; // 元素id生成器
+
 } & EditConfigInterface;
 
 export interface GuardsTypes {

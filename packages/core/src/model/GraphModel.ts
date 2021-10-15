@@ -6,7 +6,7 @@ import EditConfigModel from './EditConfigModel';
 import TransfromModel from './TransformModel';
 import { IBaseModel } from './BaseModel';
 import {
-  ElementState, ModelType, EventType, ElementMaxzIndex, ElementType,
+  ElementState, ModelType, EventType, ElementMaxzIndex, ElementType, OverlapMode,
 } from '../constant/constant';
 import {
   AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple, NodeMoveRule,
@@ -47,6 +47,7 @@ class GraphModel {
   @observable additionStateData: AdditionData;
   @observable edges: BaseEdgeModel[] = [];
   @observable isSlient = false;
+  @observable overlapMode = 0;
   @observable plugins = [];
   @observable tools = [];
   @observable background;
@@ -76,6 +77,7 @@ class GraphModel {
     this.width = config.width;
     this.height = config.height;
     this.partial = config.partial;
+    this.overlapMode = config.overlapMode || 0;
     this.idGenerator = idGenerator;
   }
   @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
@@ -661,7 +663,6 @@ class GraphModel {
     }
     this.selectElement = this.nodesMap[id]?.model;
     this.selectElement?.setSelected(true);
-    this.selectElements.set(id, this.selectElement);
   }
 
   @action
@@ -682,7 +683,7 @@ class GraphModel {
     }
     this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     this.selectElement?.setSelected(true);
-    this.selectElements.set(id, this.selectElement);
+    // this.selectElements.set(id, this.selectElement);
   }
 
   @action
@@ -691,7 +692,10 @@ class GraphModel {
       element?.setSelected(false);
     });
     this.selectElements.clear();
-    this.topElement?.setZIndex();
+    const { overlapMode } = this;
+    if (overlapMode !== OverlapMode.DEFAULT) {
+      this.topElement?.setZIndex();
+    }
   }
   /**
    * 批量移动元素

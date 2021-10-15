@@ -90,7 +90,7 @@ class Graph extends Component<IProps> {
           {
             fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
           }
-          <OutlineOverlay graphModel={graphModel} />
+          {!options.hideOutline ? <OutlineOverlay graphModel={graphModel} /> : ''}
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </CanvasOverlay>

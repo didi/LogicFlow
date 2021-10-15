@@ -14,6 +14,10 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class RectResizeModel extends RectNodeModel {
+  minWidth = 30;
+  minHeight = 30;
+  maxWidth = 2000;
+  maxHeight = 2000;
   setAttributes() {
     // @ts-ignore
     const { nodeSize } = this.properties;

@@ -14,6 +14,10 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class EllipseResizeModel extends EllipseNodeModel {
+  minWidth = 30;
+  minHeight = 30;
+  maxWidth = 300;
+  maxHeight = 300;
   setAttributes() {
     // @ts-ignore
     const { nodeSize } = this.properties;

@@ -6,7 +6,7 @@
         <div class="node-item" @mousedown="dragInNode('circle')">
           <icon-circle class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('rect')">
+        <div class="node-item" @mousedown="dragInNode('lf-rect')">
           <icon-rect class="svg-node"/>
         </div>
         <div class="node-item" @mousedown="dragInNode('rect-radius')">

@@ -22,12 +22,12 @@ const NodeResize = {
   },
   // 缩放范围
   sizeRange: {
-    rect: {
-      minWidth: 30,
-      minHeight: 30,
-      maxWidth: 300,
-      maxHeight: 300,
-    },
+    // rect: {
+    //   minWidth: 30,
+    //   minHeight: 30,
+    //   maxWidth: 300,
+    //   maxHeight: 300,
+    // },
     ellipse: {
       minRx: 15,
       minRy: 15,
@@ -42,17 +42,6 @@ const NodeResize = {
     },
   },
   install(lf) {
-    // 为保证对齐线功能正常使用，step默认是网格grid的两倍，
-    // 没有网格设置，默认为2，保证坐标是整数
-    if (this.step === 0) {
-      const { options } = lf;
-      const { grid } = options;
-      if (grid.size && grid.size > 1) {
-        this.step = 2 * grid.size;
-      } else {
-        this.step = 2;
-      }
-    }
     // 设置默认样式，主要将outlineColor设置为透明，不再core包中默认的节点外框
     lf.setTheme({
       rect: {

@@ -78,3 +78,8 @@ export enum SegmentDirection {
 }
 
 export const ElementMaxzIndex = 999;
+
+export enum OverlapMode {
+  DEFAULT = 0,
+  INCREASE = 1,
+}

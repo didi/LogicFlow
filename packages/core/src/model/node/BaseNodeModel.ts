@@ -5,7 +5,7 @@ import { assign, pick } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import {
-  ElementState, ModelType, ElementType,
+  ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
   AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point,
@@ -14,6 +14,7 @@ import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
+import { getZIndex } from '../../util/zIndex';
 
 const defaultConfig = assign(
   {
@@ -115,6 +116,10 @@ export default class BaseNodeModel implements IBaseModel {
 
     this.formatText(data);
     assign(this, pickNodeConfig(data));
+    const { overlapMode } = this.graphModel;
+    if (overlapMode === OverlapMode.INCREASE) {
+      this.zIndex = getZIndex();
+    }
   }
 
   createId() {

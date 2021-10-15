@@ -15,11 +15,12 @@ import {
   EdgeConfig,
 } from '../../type/index';
 import {
-  ElementState, ModelType, ElementType,
+  ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
 import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
+import { getZIndex } from '../../util/zIndex';
 
 const defaultData = {
   sourceNodeId: '',
@@ -106,6 +107,11 @@ class BaseEdgeModel implements IBaseModel {
     }
 
     assign(this, pickEdgeConfig(data));
+    const { overlapMode } = this.graphModel;
+    if (overlapMode === OverlapMode.INCREASE) {
+      this.zIndex = getZIndex();
+    }
+    console.log(this.zIndex, overlapMode);
   }
 
   createId() {
