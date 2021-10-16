@@ -21,7 +21,7 @@
           width="220"
           trigger="click"
         >
-          <sketch-picker :value="backgroundColor"  @input="$_changeBackgroundColor"/>
+          <sketch-picker :value="backgroundColor" @input="(c) => $_changeColorProperty(c, 'backgroundColor')"/>
           <div class="border-color" :style='{"backgroundColor": backgroundColor}' slot="reference"></div>
         </el-popover>
         <span>背景渐变色</span>
@@ -31,7 +31,7 @@
           width="220"
           trigger="click"
         >
-          <sketch-picker :value="gradientColor"  @input="$_changeGradientColor"/>
+          <sketch-picker :value="gradientColor" @input="(c) => $_changeColorProperty(c, 'gradientColor')"/>
           <div class="border-color" :style='{"backgroundColor": gradientColor}' slot="reference"></div>
         </el-popover>
       </div>
@@ -55,9 +55,25 @@
           width="220"
           trigger="click"
         >
-          <sketch-picker :value="borderColor"  @input="$_changeBorderColor"/>
+          <sketch-picker :value="borderColor"  @input="(c) => $_changeColorProperty(c, 'borderColor')"/>
           <div class="border-color" :style='{"backgroundColor": borderColor}' slot="reference"></div>
         </el-popover>
+      </div>
+      <div class="setting-item">
+        <span>文本颜色</span>
+        <el-popover
+          placement="top-start"
+          title="填充样式"
+          width="220"
+          trigger="click"
+        >
+          <sketch-picker :value="fontColor" @input="(c) => $_changeColorProperty(c, 'fontColor')"/>
+          <div class="border-color" :style='{"backgroundColor": fontColor}' slot="reference"></div>
+        </el-popover>
+      </div>
+      <div class="setting-item">
+        <span>文本大小</span>
+        <el-input v-model="fontSize" @change="$_changeFontSize" />
       </div>
     </div>
   </div>
@@ -98,22 +114,16 @@ export default {
         borderStyle: this.borderStyle
       })
     },
-    $_changeBorderColor ({ rgba: { r, g, b, a } }) {
-      this.borderColor = `rgba(${r},${g},${b},${a})`
+    $_changeColorProperty ({ rgba: { r, g, b, a } }, type) {
+      const color = `rgba(${r},${g},${b},${a})`
+      this[type] = color
       this.$emit('setStyle', {
-        borderColor: this.borderColor
+        [type]: color
       })
     },
-    $_changeBackgroundColor ({ rgba: { r, g, b, a } }) {
-      this.backgroundColor = `rgba(${r},${g},${b},${a})`
+    $_changeFontSize () {
       this.$emit('setStyle', {
-        backgroundColor: this.backgroundColor
-      })
-    },
-    $_changeGradientColor ({ rgba: { r, g, b, a } }) {
-      this.gradientColor = `rgba(${r},${g},${b},${a})`
-      this.$emit('setStyle', {
-        gradientColor: this.gradientColor
+        fontSize: this.fontSize
       })
     }
   },

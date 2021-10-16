@@ -24,3 +24,13 @@ export const getShapeStyleFuction = (style, properties) => {
   }
   return style
 }
+
+export const getTextStyleFunction = (style, properties) => {
+  if (properties.fontColor) {
+    style.fill = properties.fontColor
+  }
+  if (properties.fontSize) {
+    style.fontSize = properties.fontSize
+  }
+  return style
+}

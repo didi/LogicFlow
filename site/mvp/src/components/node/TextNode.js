@@ -1,5 +1,5 @@
 // import { CircleNode, CircleNodeModel } from '@logicflow/core'
-import { getShapeStyleFuction } from './getShapeStyleUtil'
+import { getShapeStyleFuction, getTextStyleFunction } from './getShapeStyleUtil'
 // const EllipseResize = window.EllipseResize
 const { TextNodeModel, TextNode } = window
 
@@ -11,6 +11,12 @@ class TextNewNode extends TextNode {
     const style = super.getShapeStyle()
     const properties = this.getProperties()
     return getShapeStyleFuction(style, properties)
+  }
+
+  getTextStyle () {
+    const style = super.getTextStyle()
+    const properties = this.getProperties()
+    return getTextStyleFunction(style, properties)
   }
 }
 /**
