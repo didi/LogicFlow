@@ -19,6 +19,7 @@ import { getClosestPointOfPolyline } from '../util/edge';
 import { formatData } from '../util/compatible';
 import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 import { createUuid } from '../util';
+import { getMinIndex, getZIndex } from '../util/zIndex';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -402,7 +403,23 @@ class GraphModel {
       element.setZIndex(ElementMaxzIndex);
     }
   }
-
+  @action
+  setElementZIndex(id, zIndex) {
+    const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model;
+    if (element) {
+      let index;
+      if (typeof zIndex === 'number') {
+        index = zIndex;
+      }
+      if (zIndex === 'top') {
+        index = getZIndex();
+      }
+      if (zIndex === 'bottom') {
+        index = getMinIndex();
+      }
+      element.setZIndex(index);
+    }
+  }
   @action
   deleteNode(id) {
     const nodeData = this.nodesMap[id].model.getData();

@@ -118,7 +118,7 @@ export default class BaseNodeModel implements IBaseModel {
     assign(this, pickNodeConfig(data));
     const { overlapMode } = this.graphModel;
     if (overlapMode === OverlapMode.INCREASE) {
-      this.zIndex = getZIndex();
+      this.zIndex = data.zIndex || getZIndex();
     }
   }
 
@@ -167,6 +167,9 @@ export default class BaseNodeModel implements IBaseModel {
       y: this.y,
       properties,
     };
+    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+      data.zIndex = this.zIndex;
+    }
     if (value) {
       data.text = {
         x,

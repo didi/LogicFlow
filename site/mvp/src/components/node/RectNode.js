@@ -30,8 +30,8 @@ class RectNewNode extends RectResize.view {
  */
 class RectNewModel extends RectResize.model {
   setAttributes () {
+    super.setAttributes()
     this.strokeWidth = 1
-    // this.maxWidth = 500
   }
 
   setToBottom () {

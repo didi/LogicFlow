@@ -109,9 +109,8 @@ class BaseEdgeModel implements IBaseModel {
     assign(this, pickEdgeConfig(data));
     const { overlapMode } = this.graphModel;
     if (overlapMode === OverlapMode.INCREASE) {
-      this.zIndex = getZIndex();
+      this.zIndex = data.zIndex || getZIndex();
     }
-    console.log(this.zIndex, overlapMode);
   }
 
   createId() {
@@ -198,6 +197,9 @@ class BaseEdgeModel implements IBaseModel {
         y,
         value,
       };
+    }
+    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+      data.zIndex = this.zIndex;
     }
     return data;
   }

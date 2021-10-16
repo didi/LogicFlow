@@ -22,10 +22,6 @@ class CircleNewNode extends EllipseResize.view {
  * model控制初始化的值
  */
 class CircleNewModel extends EllipseResize.model {
-  setAttributes () {
-    // this.rx = 50
-    // this.ry = 50
-  }
 }
 
 export default {

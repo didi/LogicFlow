@@ -15,6 +15,7 @@
       class="diagram-panel"
       v-if="activeNodes.length > 0"
       @setStyle="$_setStyle"
+      @setZIndex="$_setZIndex"
     />
   </div>
 </template>
@@ -41,16 +42,30 @@ export default {
       sidebarWidth: 200,
       diagramWidth: 0,
       diagramHeight: 0,
+      filename: '',
       activeNodes: []
     }
   },
   mounted () {
     this.diagramWidth = this.$refs.container.clientWidth
     this.diagramHeight = this.$refs.container.clientHeight
-    this.initLogicFlow()
+    let data = ''
+    if (window.location.search) {
+      const query = window.location.search.substring(1).split('&').reduce((map, kv) => {
+        const [key, value] = kv.split('=')
+        map[key] = value
+        return map
+      }, {})
+      this.filename = query.filename
+      const d = window.sessionStorage.getItem(this.filename)
+      if (d) {
+        data = JSON.parse(d)
+      }
+    }
+    this.initLogicFlow(data)
   },
   methods: {
-    initLogicFlow () {
+    initLogicFlow (data) {
       const lf = new LogicFlow({
         container: this.$refs.diagram,
         width: this.diagramWidth,
@@ -70,7 +85,7 @@ export default {
       lf.register(CircleNode)
       lf.register(RectNode)
       lf.register(TextNode)
-      lf.render()
+      lf.render(data)
       this.lf = lf
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
         const { nodes } = this.lf.getSelectElements()
@@ -95,12 +110,17 @@ export default {
         this.lf.setProperties(id, item)
       })
     },
+    $_setZIndex (type) {
+      this.activeNodes.forEach(({ id }) => {
+        this.lf.setElementZIndex(id, type)
+      })
+    },
     $_saveGraph () {
       const data = this.lf.getGraphData()
-      console.log(data)
-      this.download('mvp.json', JSON.stringify(data))
+      this.download(this.filename, JSON.stringify(data))
     },
     download (filename, text) {
+      window.sessionStorage.setItem(filename, text)
       const element = document.createElement('a')
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
       element.setAttribute('download', filename)

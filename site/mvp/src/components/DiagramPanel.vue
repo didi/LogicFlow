@@ -76,6 +76,10 @@
         <span>文本大小</span>
         <el-input v-model="fontSize" @change="$_changeFontSize" />
       </div>
+      <div>
+        <el-button @click="$emit('setZIndex', 'top')">置为顶部</el-button>
+        <el-button @click="$emit('setZIndex', 'bottom')">置为底部</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -102,9 +106,6 @@ export default {
       SketchPicker: Sketch,
       fontWeight: '' // 文本加粗
     }
-  },
-  mounted () {
-    console.log(22)
   },
   methods: {
     setStyle (item) {

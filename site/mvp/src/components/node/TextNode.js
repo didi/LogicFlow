@@ -29,11 +29,10 @@ class TextNewNode extends TextNode {
  */
 class TextNewModel extends TextNodeModel {
   setAttributes () {
+    super.setAttributes()
     if (!this.text.value) {
       this.text.value = 'text'
     }
-    // this.rx = 50
-    // this.ry = 50
   }
 }
 
