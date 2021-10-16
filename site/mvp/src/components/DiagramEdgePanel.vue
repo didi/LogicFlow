@@ -61,6 +61,10 @@
         </el-popover>
       </div>
       <div class="setting-item">
+        <span>边框宽度</span>
+        <el-input v-model="borderWidth" @change="$_changeBorderWidth" />
+      </div>
+      <div class="setting-item">
         <span>文本颜色</span>
         <el-popover
           placement="top-start"
@@ -126,6 +130,11 @@ export default {
     $_changeFontSize () {
       this.$emit('setStyle', {
         fontSize: this.fontSize
+      })
+    },
+    $_changeBorderWidth () {
+      this.$emit('setStyle', {
+        borderWidth: this.borderWidth
       })
     }
   },

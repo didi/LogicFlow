@@ -11,7 +11,7 @@
         <div class="lf-diagram" ref="diagram" :style="{ width: this.diagramWidth + 'px', height: this.diagramHeight + 'px' }"></div>
       </div>
     </div>
-    <diagram-panel
+    <diagram-node-panel
       class="diagram-panel"
       v-if="activeNodes.length > 0"
       @setStyle="$_setStyle"
@@ -27,7 +27,7 @@ import '@logicflow/core/dist/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
-import DiagramPanel from './DiagramPanel.vue'
+import DiagramNodePanel from './DiagramNodePanel.vue'
 // import BaseNode from './node/BaseNode'
 import CircleNode from './node/CircleNode'
 import RectNode from './node/RectNode'
@@ -43,7 +43,8 @@ export default {
       diagramWidth: 0,
       diagramHeight: 0,
       filename: '',
-      activeNodes: []
+      activeNodes: [],
+      activeEdges: []
     }
   },
   mounted () {
@@ -75,6 +76,10 @@ export default {
         keyboard: {
           enabled: true
         },
+        grid: {
+          visible: false,
+          size: 10
+        },
         history: false,
         background: {
           image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=',
@@ -88,8 +93,9 @@ export default {
       lf.render(data)
       this.lf = lf
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
-        const { nodes } = this.lf.getSelectElements()
+        const { nodes, edges } = this.lf.getSelectElements()
         this.activeNodes = nodes
+        this.activeEdges = edges
       })
     },
     $_dragInNode (type) {
@@ -133,7 +139,7 @@ export default {
   components: {
     DiagramToolbar,
     DiagramSidebar,
-    DiagramPanel
+    DiagramNodePanel
   }
 }
 </script>
@@ -171,7 +177,10 @@ export default {
   bottom: 0;
   overflow: scroll;
 }
-
+/* 由于背景图和gird不对齐，需要css处理一下 */
+.diagram /deep/ .lf-background {
+  left: -9px;
+}
 /* .diagram-wrapper {
   padding: 100px 200px;
   box-sizing: border-box;
