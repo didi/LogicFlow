@@ -3,6 +3,7 @@
     <diagram-toolbar
       class="diagram-toolbar"
       @changeNodeFillColor="$_changeNodeFill"
+      @saveGraph="$_saveGraph"
     />
     <diagram-sidebar class="diagram-sidebar" @dragInNode="$_dragInNode" :style="{ width: sidebarWidth + 'px'}"/>
     <div class="diagram-container" ref="container" :style="{ left: sidebarWidth + 'px'}">
@@ -56,6 +57,9 @@ export default {
         height: this.diagramHeight,
         hideOutline: true,
         overlapMode: 1,
+        keyboard: {
+          enabled: true
+        },
         history: false,
         background: {
           image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=',
@@ -90,6 +94,20 @@ export default {
       this.activeNodes.forEach(({ id }) => {
         this.lf.setProperties(id, item)
       })
+    },
+    $_saveGraph () {
+      const data = this.lf.getGraphData()
+      console.log(data)
+      this.download('mvp.json', JSON.stringify(data))
+    },
+    download (filename, text) {
+      const element = document.createElement('a')
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+      element.setAttribute('download', filename)
+      element.style.display = 'none'
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
     }
   },
   components: {

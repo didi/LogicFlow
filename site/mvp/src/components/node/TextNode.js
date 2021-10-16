@@ -16,6 +16,11 @@ class TextNewNode extends TextNode {
   getTextStyle () {
     const style = super.getTextStyle()
     const properties = this.getProperties()
+    if (properties.backgroundColor) {
+      style.backgroundStyle = {
+        fill: properties.backgroundColor
+      }
+    }
     return getTextStyleFunction(style, properties)
   }
 }

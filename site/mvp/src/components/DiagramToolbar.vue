@@ -8,7 +8,7 @@
         placement="top-start"
         title="填充样式"
         width="220"
-        trigger="hover"
+        trigger="click"
       >
         <sketch-picker :value="fillColor"  @input="$_changeFillColor"/>
         <color-fill size="24" slot="reference" />
@@ -37,6 +37,9 @@
     </div>
     <div class="toolbar-item">
       <step-foward size="18" />
+    </div>
+    <div>
+      <button @click="$_saveGraph">保存</button>
     </div>
   </div>
 </template>
@@ -70,6 +73,9 @@ export default {
     $_changeFillColor (val) {
       // console.log(33, val.hex)
       this.$emit('changeNodeFillColor', val.hex)
+    },
+    $_saveGraph () {
+      this.$emit('saveGraph')
     }
   },
   components: {
