@@ -21,6 +21,9 @@ export const getShapeStyleFuction = (style, properties) => {
     if (properties.borderStyle === 'dotted') {
       style.strokeDasharray = '1 1'
     }
+    if (properties.borderStyle === 'hidden') {
+      style.stroke = style.fill
+    }
   }
   return style
 }

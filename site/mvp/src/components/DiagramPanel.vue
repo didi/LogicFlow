@@ -38,6 +38,7 @@
       <div class="setting-item">
         <span>边框样式</span>
         <el-select v-model="borderStyle" size="small" @change="$_selectBorder">
+          <el-option value="hidden" label="不显示"></el-option>
           <el-option
             v-for="(border, index) in borderStyles"
             :value="border.value"
