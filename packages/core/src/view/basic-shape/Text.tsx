@@ -22,9 +22,14 @@ export default function Text(props) {
     x,
     y,
     fill,
-    ...props,
+    // ...props,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   if (value) {
     // String(value),兼容纯数字的文案
     const rows = String(value).split(/[\r\n]/g);

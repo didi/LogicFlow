@@ -3,10 +3,10 @@
     <div>
       <h1 class="node-category-title">General</h1>
       <div class="node-category">
-        <div class="node-item" @mousedown="dragInNode('circle')">
+        <div class="node-item" @mousedown="dragInNode('pro-circle')">
           <icon-circle class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('lf-rect')">
+        <div class="node-item" @mousedown="dragInNode('pro-rect')">
           <icon-rect class="svg-node"/>
         </div>
         <div class="node-item" @mousedown="dragInNode('rect-radius')">
@@ -30,7 +30,7 @@
         <div class="node-item" @mousedown="dragInNode('parallelogram')">
           <icon-parallelogram class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('text')">
+        <div class="node-item" @mousedown="dragInNode('pro-text')">
           <icon-text class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('table')">

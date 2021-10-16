@@ -8,9 +8,14 @@ function Line(props) {
     x2: 20,
     y2: 20,
     stroke: 'black',
-    ...props,
+    // ...props,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   return (
     <line {...attrs} />
   );

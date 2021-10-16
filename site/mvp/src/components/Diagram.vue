@@ -26,9 +26,10 @@ import '@logicflow/extension/lib/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
 import DiagramPanel from './DiagramPanel.vue'
-import BaseNode from './node/BaseNode'
+// import BaseNode from './node/BaseNode'
 import CircleNode from './node/CircleNode'
 import RectNode from './node/RectNode'
+import TextNode from './node/TextNode'
 const LogicFlow = window.LogicFlow
 // LogicFlow.use(NodeResize)
 
@@ -54,14 +55,17 @@ export default {
         width: this.diagramWidth,
         height: this.diagramHeight,
         hideOutline: true,
+        overlapMode: 1,
+        history: false,
         background: {
           image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=',
           repeat: 'repeat'
         }
       })
-      lf.register(BaseNode)
+      // lf.register(BaseNode)
       lf.register(CircleNode)
       lf.register(RectNode)
+      lf.register(TextNode)
       lf.render()
       this.lf = lf
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
@@ -84,7 +88,6 @@ export default {
     },
     $_setStyle (item) {
       this.activeNodes.forEach(({ id }) => {
-        console.log(id, item)
         this.lf.setProperties(id, item)
       })
     }

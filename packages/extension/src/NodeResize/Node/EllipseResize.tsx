@@ -16,8 +16,8 @@ interface IProps {
 class EllipseResizeModel extends EllipseNodeModel {
   minWidth = 30;
   minHeight = 30;
-  maxWidth = 300;
-  maxHeight = 300;
+  maxWidth = 2000;
+  maxHeight = 2000;
   setAttributes() {
     // @ts-ignore
     const { nodeSize } = this.properties;

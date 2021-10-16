@@ -1,5 +1,7 @@
 // import { RectResize } from '@logicflow/extension'
+import { getShapeStyleFuction } from './getShapeStyleUtil'
 const RectResize = window.RectResize
+
 /**
  * view控制渲染的值
  */
@@ -7,16 +9,7 @@ class RectNewNode extends RectResize.view {
   getShapeStyle () {
     const style = super.getShapeStyle()
     const properties = this.getProperties()
-    if (properties.background) {
-      style.fill = properties.background
-    }
-    if (properties.borderColor) {
-      style.stroke = properties.borderColor
-    }
-    if (properties.borderWidth) {
-      style.strokeWidth = properties.borderWidth
-    }
-    return style
+    return getShapeStyleFuction(style, properties)
   }
 
   toFront () {
@@ -41,7 +34,7 @@ class RectNewModel extends RectResize.model {
 }
 
 export default {
-  type: 'lf-rect',
+  type: 'pro-rect',
   view: RectNewNode,
   model: RectNewModel
 }

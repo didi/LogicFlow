@@ -1,23 +1,22 @@
 import { h } from 'preact';
 
-export default function Polygon({
-  fillOpacity = 1,
-  strokeWidth = 1,
-  strokeOpacity = 1,
-  fill = 'transparent',
-  stroke = '#000',
-  points,
-  className = 'lf-basic-shape',
-}) {
+export default function Polygon(props) {
+  const { points, className } = props;
   const attrs = {
-    fill,
-    fillOpacity,
-    strokeWidth,
-    stroke,
-    strokeOpacity,
+    fill: 'transparent',
+    fillOpacity: 1,
+    strokeWidth: 1,
+    stroke: '#000',
+    strokeOpacity: 1,
     points: '',
-    className,
+    className: `lf-basic-shape ${className}`,
   };
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   attrs.points = points.map(point => point.join(',')).join(' ');
 
   return (

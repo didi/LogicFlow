@@ -38,11 +38,17 @@ export default function Rect(props: IProps) {
     stroke: '#000',
     strokeOpacity: 1,
     className: `lf-basic-shape ${className}`,
-    ...props,
-    x: leftTopX,
-    y: leftTopY,
+    x: 0,
+    y: 0,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
+  attrs.x = leftTopX;
+  attrs.y = leftTopY;
   return (
     <rect {...attrs} />
   );
