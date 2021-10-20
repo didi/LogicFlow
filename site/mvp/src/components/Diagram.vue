@@ -73,12 +73,13 @@ export default {
         height: this.diagramHeight,
         hideOutline: true,
         overlapMode: 1,
+        metaKeyMultipleSelected: true,
         keyboard: {
           enabled: true
         },
         grid: {
           visible: false,
-          size: 10
+          size: 5
         },
         history: false,
         background: {
@@ -96,6 +97,7 @@ export default {
         const { nodes, edges } = this.lf.getSelectElements()
         this.activeNodes = nodes
         this.activeEdges = edges
+        console.log(333, nodes, edges)
       })
     },
     $_dragInNode (type) {

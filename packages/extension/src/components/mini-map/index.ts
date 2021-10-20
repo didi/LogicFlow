@@ -1,13 +1,13 @@
 import { Extension } from '@logicflow/core';
 
-interface MiniMapPlugin extends Extension {
-  init: (option) => void;
-  show: (leftPosition?: number, topPosition?: number) => void;
-  hide: () => void;
-  [x: string]: any;
-}
+// interface MiniMapPlugin extends Extension {
+//   init: (option) => void;
+//   show: (leftPosition?: number, topPosition?: number) => void;
+//   hide: () => void;
+//   [x: string]: any;
+// }
 
-const MiniMap: MiniMapPlugin = {
+const MiniMap: Extension = {
   pluginName: 'minimap',
   __lf: null,
   __container: null,

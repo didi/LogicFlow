@@ -24,6 +24,18 @@ window.onload = function () {
           console.log('分享成功！');
         }
       },
+      {
+        text: '复制',
+        callback() {
+          console.log('分享成功！');
+        }
+      },
+      {
+        text: '修改',
+        callback() {
+          console.log('分享成功！');
+        }
+      }
     ],
     graphMenu: [
       {

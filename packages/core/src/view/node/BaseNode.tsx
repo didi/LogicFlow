@@ -270,9 +270,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
-    // 节点右击也会触发时间，区分右击和点击(mouseup)
-    this.contextMenuTime = new Date().getTime();
-    if (this.clickTimer) { clearTimeout(this.clickTimer); }
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();

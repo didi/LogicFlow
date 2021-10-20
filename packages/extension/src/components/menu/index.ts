@@ -18,6 +18,7 @@ export type MenuConfig = {
 const DefalutNodeMenuKey = 'lf:defaultNodeMenu';
 const DefalutEdgeMenuKey = 'lf:defaultEdgeMenu';
 const DefalutGraphMenuKey = 'lf:defaultGraphMenu';
+const DefalutSelectionMenuKey = 'lf:defaultSelectionMenu';
 
 class Menu {
   lf: LogicFlow;
@@ -84,6 +85,18 @@ class Menu {
     this.menuTypeMap.set(DefalutEdgeMenuKey, defaultEdgeMenu);
 
     this.menuTypeMap.set(DefalutGraphMenuKey, []);
+
+    const DefalutSelectionMenu = [
+      {
+        text: '删除',
+        callback: (elements) => {
+          this.lf.clearSelectElements();
+          elements.edges.forEach(edge => this.lf.deleteEdge(edge.id));
+          elements.nodes.forEach(node => this.lf.deleteNode(node.id));
+        },
+      },
+    ];
+    this.menuTypeMap.set(DefalutSelectionMenuKey, DefalutSelectionMenu);
   }
   render(lf, container) {
     this.__container = container;
@@ -150,6 +163,12 @@ class Menu {
     this.lf.on('blank:contextmenu', ({ position }) => {
       const menuList = this.menuTypeMap.get(DefalutGraphMenuKey);
       const { domOverlayPosition: { x, y } } = position;
+      this.showMenu(x, y, menuList);
+    });
+    this.lf.on('selection:contextmenu', ({ data, position }) => {
+      const menuList = this.menuTypeMap.get(DefalutSelectionMenuKey);
+      const { domOverlayPosition: { x, y } } = position;
+      this.__currentData = data;
       this.showMenu(x, y, menuList);
     });
     this.lf.on('node:mousedown', () => {

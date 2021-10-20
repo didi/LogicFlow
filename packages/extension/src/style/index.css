@@ -68,6 +68,7 @@
   border-radius: 3px;
   border: 1px solid #efefee;
   width: 200px;
+  z-index: 999;
 }
 .lf-menu > li {
   cursor: pointer;
