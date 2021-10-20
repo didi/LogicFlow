@@ -47,6 +47,7 @@ export default function DndPanelExample() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    // @ts-ignore
     LogicFlow.use(MiniMap);
     lf = new LogicFlow({
       ...config,

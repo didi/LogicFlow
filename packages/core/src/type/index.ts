@@ -54,6 +54,7 @@ export type NodeConfig = {
   x: number;
   y: number;
   text?: TextConfig | string;
+  zIndex?: number;
   properties?: Record<string, unknown>;
 };
 // 节点数据
@@ -64,6 +65,7 @@ export type NodeData = {
   y: number;
   text?: TextConfig;
   properties: Record<string, unknown>;
+  zIndex?: number;
   [key: string]: any;
 };
 // 修改节点数据的参数
@@ -94,6 +96,7 @@ export type EdgeData = {
   endPoint: Point,
   text?: TextConfig,
   properties: Record<string, unknown>;
+  zIndex?: number;
   pointsList?: Point[], // 折线、曲线会输出pointsList
 };
 // 边属性
@@ -135,6 +138,7 @@ export type EdgeConfig = {
     value: string;
   },
   pointsList?: Point[];
+  zIndex?: number;
   properties?: Record<string, unknown>;
 };
 

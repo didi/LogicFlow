@@ -16,9 +16,13 @@ export default function Circle(props) {
     stroke: '#000',
     strokeOpacity: 1,
     className: 'lf-basic-shape',
-    ...props,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   return (
     <circle {...attrs} />
   );

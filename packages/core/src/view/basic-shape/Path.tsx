@@ -15,9 +15,14 @@ Path.defaultProps = {
 function Path(props: IProps) {
   const attrs = {
     d: '',
-    ...props,
+    // ...props,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   return (
     <path {...attrs} />
   );

@@ -58,6 +58,7 @@ export enum EventType {
   EDGE_MOUSEENTER = 'edge:mouseenter',
   EDGE_MOUSELEAVE = 'edge:mouseleave',
   EDGE_CONTEXTMENU = 'edge:contextmenu',
+  SELECTION_CONTEXTMENU = 'selection:contextmenu',
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',
   BLANK_DRAG = 'blank:drag',
@@ -77,4 +78,9 @@ export enum SegmentDirection {
   VERTICAL = 'vertical',
 }
 
-export const ElementMaxzIndex = 999;
+export const ElementMaxzIndex = 9999;
+
+export enum OverlapMode {
+  DEFAULT = 0,
+  INCREASE = 1,
+}

@@ -72,6 +72,7 @@ class ControlGroup extends Component<IProps> {
       />
     ));
   }
+  // 一般节点被选中了会有outline, 先不用这个
   getGroupSolid() {
     const {
       x,
@@ -96,7 +97,7 @@ class ControlGroup extends Component<IProps> {
   render() {
     return (
       <g className="lf-resize-control">
-        {this.getGroupSolid()}
+        {/* {this.getGroupSolid()} */}
         {this.getResizeControl()}
       </g>
     );

@@ -89,6 +89,7 @@ export default function EdgeExample() {
   const [lf, setLf] = useState<LogicFlow>();
 
   useEffect(() => {
+    // @ts-ignore
     LogicFlow.use(CurvedEdge);
     const logicflow = new LogicFlow({
       ...config,

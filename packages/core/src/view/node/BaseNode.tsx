@@ -5,7 +5,7 @@ import Anchor from '../Anchor';
 import BaseNodeModel from '../../model/node/BaseNodeModel';
 import BaseText from '../text/BaseText';
 import EventEmitter from '../../event/eventEmitter';
-import { ElementState, EventType } from '../../constant/constant';
+import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 
@@ -251,6 +251,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return;
 
+    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    this.toFront();
+
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       const { editConfig } = graphModel;
@@ -263,15 +267,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
       eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
-    this.toFront();
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
-    // 节点右击也会触发时间，区分右击和点击(mouseup)
-    this.contextMenuTime = new Date().getTime();
-    if (this.clickTimer) { clearTimeout(this.clickTimer); }
     const { model, eventCenter, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
@@ -335,7 +333,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
    */
   toFront() {
     const { model, graphModel } = this.props;
-    graphModel.toFront(model.id);
+    const { overlapMode } = graphModel;
+    if (overlapMode !== OverlapMode.INCREASE) {
+      graphModel.toFront(model.id);
+    }
   }
   render() {
     const { model, graphModel } = this.props;

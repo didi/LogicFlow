@@ -703,6 +703,12 @@ export default class LogicFlow {
   clearData() {
     this.graphModel.clearData();
   }
+  /**
+   * 设置元素的层级高度，在元素重叠的时候大的在前面
+   */
+  setElementZIndex(id, zIndex: number | 'top' | 'bottom') {
+    return this.graphModel.setElementZIndex(id, zIndex);
+  }
   // 内部方法----------------------------------------------
 
   /**

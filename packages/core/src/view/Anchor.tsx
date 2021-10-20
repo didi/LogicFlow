@@ -3,7 +3,7 @@ import { createDrag } from '../util/drag';
 import { formateAnchorConnectValidateData, targetNodeInfo, distance } from '../util/node';
 import Circle from './basic-shape/Circle';
 import Line from './basic-shape/Line';
-import { ElementState, EventType } from '../constant/constant';
+import { ElementState, EventType, OverlapMode } from '../constant/constant';
 import BaseNodeModel, { ConnectRuleResult } from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
 import EventEmitter from '../event/eventEmitter';
@@ -61,9 +61,12 @@ class Anchor extends Component<IProps, IState> {
     const {
       x, y, nodeModel, graphModel,
     } = this.props;
+    const { overlapMode } = graphModel;
     // nodeModel.setSelected(true);
     graphModel.selectNodeById(nodeModel.id);
-    graphModel.toFront(nodeModel.id);
+    if (overlapMode !== OverlapMode.INCREASE) {
+      graphModel.toFront(nodeModel.id);
+    }
     this.setState({
       startX: x,
       startY: y,

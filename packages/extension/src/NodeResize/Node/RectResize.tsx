@@ -1,6 +1,6 @@
 import { BaseNodeModel, GraphModel, h, RectNode, RectNodeModel } from '@logicflow/core';
 import ControlGroup from '../Control/ControlGroup';
-import Rect from '../BasicShape/Rect';
+// import Rect from '../BasicShape/Rect';
 
 interface IProps {
   x: number,
@@ -14,6 +14,10 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class RectResizeModel extends RectNodeModel {
+  minWidth = 30;
+  minHeight = 30;
+  maxWidth = 2000;
+  maxHeight = 2000;
   setAttributes() {
     // @ts-ignore
     const { nodeSize } = this.properties;
@@ -37,10 +41,10 @@ class RectResizeView extends RectNode {
       />
     );
   }
-  // getResizeShape绘制图形，功能等同于基础矩形的getShape功能，可以通过复写此方法，进行节点自定义
-  getResizeShape(arrt) {
-    return <g><Rect {...arrt} /></g>;
-  }
+  // // getResizeShape绘制图形，功能等同于基础矩形的getShape功能，可以通过复写此方法，进行节点自定义
+  // getResizeShape() {
+  //   return super.getShape();
+  // }
   getShape() {
     const attributes = super.getAttributes();
     const {
@@ -48,7 +52,7 @@ class RectResizeView extends RectNode {
     } = this.props;
     return (
       <g>
-        {this.getResizeShape(attributes)}
+        {super.getShape()}
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );

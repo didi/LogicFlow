@@ -17,9 +17,14 @@ export default function Ellipse(props) {
     strokeWidth: '1',
     stroke: '#000',
     strokeOpacity: 1,
-    ...props,
+    // ...props,
   };
-
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   return (
     <ellipse {...attrs} />
   );

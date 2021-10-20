@@ -36,10 +36,17 @@ class Control extends Component<IProps> {
     this.index = props.index;
     this.nodeModel = props.nodeModel;
     this.graphModel = props.graphModel;
+    const { gridSize } = this.graphModel;
+    // 为保证对齐线功能正常使用，step默认是网格grid的两倍，
+    // 没有网格设置，默认为2，保证坐标是整数
+    let step = 2;
+    if (gridSize > 1) {
+      step = 2 * gridSize;
+    }
     this.state = {};
     this.dragHandler = createDrag({
       onDraging: this.onDraging,
-      step: NodeResize.step,
+      step,
     });
   }
   getNodeEdges(nodeId) {
@@ -108,7 +115,7 @@ class Control extends Component<IProps> {
       minHeight,
       maxWidth,
       maxHeight,
-    } = NodeResize.sizeRange.rect;
+    } = this.nodeModel;
     if (size.width < minWidth
       || size.width > maxWidth
       || size.height < minHeight
@@ -177,15 +184,15 @@ class Control extends Component<IProps> {
     });
     // 限制放大缩小的最大最小范围
     const {
-      minRx,
-      minRy,
-      maxRx,
-      maxRy,
-    } = NodeResize.sizeRange.ellipse;
-    if (size.width < minRx
-      || size.width > maxRx
-      || size.height < minRy
-      || size.height > maxRy
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.nodeModel;
+    if (size.width < (minWidth / 2)
+      || size.width > (maxWidth / 2)
+      || size.height < (minHeight / 2)
+      || size.height > (maxHeight / 2)
     ) {
       return;
     }

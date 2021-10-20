@@ -5,7 +5,7 @@ import { observer } from '..';
 import LogicFlow from '../LogicFlow';
 // import BaseNodeModel from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
-import { ElementType } from '../constant/constant';
+import { ElementType, EventType } from '../constant/constant';
 import { getNodeOutline, getEdgeOutline } from '../algorithm/outline';
 import { StepDrag } from '../util/drag';
 
@@ -23,7 +23,6 @@ export default class MultipleSelect extends Component<IProps> {
     } = props;
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,
-      onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'multiple:select',
       eventCenter,
@@ -36,7 +35,32 @@ export default class MultipleSelect extends Component<IProps> {
     const { graphModel } = this.props;
     graphModel.moveElements(graphModel.getSelectElements(true), deltaX, deltaY);
   };
-  onDragEnd = () => {};
+  handleContextMenu = (ev: MouseEvent) => {
+    ev.preventDefault();
+    const { graphModel, graphModel: { eventCenter, selectElements } } = this.props;
+    const position = graphModel.getPointByClient({
+      x: ev.clientX,
+      y: ev.clientY,
+    });
+    const selectGraphData = {
+      nodes: [],
+      edges: [],
+    };
+    const models = [...selectElements.values()];
+    models.forEach((model) => {
+      if (model.BaseType === ElementType.NODE) {
+        selectGraphData.nodes.push(model.getData());
+      }
+      if (model.BaseType === ElementType.EDGE) {
+        selectGraphData.edges.push(model.getData());
+      }
+    });
+    eventCenter.emit(EventType.SELECTION_CONTEXTMENU, {
+      data: selectGraphData,
+      e: ev,
+      position,
+    });
+  };
   render() {
     const { graphModel: { selectElements, transformMatrix } } = this.props;
     if (selectElements.size <= 1) return;
@@ -71,6 +95,7 @@ export default class MultipleSelect extends Component<IProps> {
         className="lf-multiple-select"
         style={style}
         onMouseDown={this.handleMouseDown}
+        onContextMenu={this.handleContextMenu}
       />
     );
   }

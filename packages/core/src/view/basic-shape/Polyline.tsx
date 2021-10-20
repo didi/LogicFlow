@@ -5,8 +5,14 @@ function Polyline(props) {
     // default
     points: '',
     fill: 'none',
-    ...props,
+    // ...props,
   };
+  Object.entries(props).forEach(([k, v]) => {
+    const valueType = typeof v;
+    if (valueType !== 'object') {
+      attrs[k] = v;
+    }
+  });
   return (
     <polyline {...attrs} />
   );
