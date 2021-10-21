@@ -26,6 +26,7 @@
     "readme.md"
   ],
   "dependencies": {
+    "@logicflow/core": "^0.7.1",
     "ids": "^1.0.0",
     "preact": "^10.4.8"
   },
