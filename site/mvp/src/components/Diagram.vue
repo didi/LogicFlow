@@ -21,7 +21,7 @@
 </template>
 
 <script>
-// import LogicFlow from '@logicflow/core'
+import LogicFlow from '@logicflow/core'
 // import { NodeResize } from '@logicflow/extension'
 import '@logicflow/core/dist/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
@@ -32,7 +32,7 @@ import DiagramNodePanel from './DiagramNodePanel.vue'
 import CircleNode from './node/CircleNode'
 import RectNode from './node/RectNode'
 import TextNode from './node/TextNode'
-const LogicFlow = window.LogicFlow
+// const LogicFlow = window.LogicFlow
 // LogicFlow.use(NodeResize)
 
 export default {
