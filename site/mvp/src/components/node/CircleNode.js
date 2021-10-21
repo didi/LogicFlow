@@ -1,6 +1,7 @@
 // import { CircleNode, CircleNodeModel } from '@logicflow/core'
+import { EllipseResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from './getShapeStyleUtil'
-const EllipseResize = window.EllipseResize
+// const EllipseResize = window.EllipseResize
 
 /**
  * view控制渲染的值

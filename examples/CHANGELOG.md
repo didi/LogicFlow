@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.10](https://github.com/didi/LogicFlow/compare/examples@0.7.10-alpha.0...examples@0.7.10) (2021-10-21)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [0.7.10-alpha.0](https://github.com/didi/LogicFlow/compare/examples@0.7.9...examples@0.7.10-alpha.0) (2021-10-21)
+
+
+### Features
+
+* add increase overlap mode ([06068e4](https://github.com/didi/LogicFlow/commit/06068e4caa11544b709697d101063838020dc4d1))
+
+
+
+
+
 ## [0.7.9](https://github.com/didi/LogicFlow/compare/examples@0.7.8...examples@0.7.9) (2021-09-04)
 
 **Note:** Version bump only for package examples
