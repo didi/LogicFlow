@@ -721,6 +721,27 @@ getProperties(id: string): Object
 lf.getProperties('id')
 ```
 
+
+## changeNodeId
+
+修改节点的id， 如果不传新的id，会内部自动创建一个。
+
+示例：
+
+```js
+lf.changeNodeId('oldId', 'newId')
+```
+
+## changeEdgeId
+
+修改连线的id， 如果不传新的id，会内部自动创建一个。
+
+示例：
+
+```js
+lf.changeEdgeId('oldId', 'newId')
+```
+
 ## updateText
 
 更新节点或者连线的文案

@@ -146,7 +146,7 @@ lf.getNodeData(nodeId);
 
 ### lf.setNodeData
 
-设置节点数据
+设置节点数据(即将废弃，如果想要修改properties，请使用setProperties。如果想要修改id请使用setNodeId)
 
 #### 参数
 

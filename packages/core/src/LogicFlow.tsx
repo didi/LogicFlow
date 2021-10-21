@@ -648,16 +648,23 @@ export default class LogicFlow {
     return this.graphModel.getElement(id)?.getProperties();
   }
   /**
-   * 修改节点的id， 如果
-   * @returns 是否修改成功
+   * 修改节点的id， 如果不传新的id，会内部自动创建一个。
+   * @param { string } oldId 将要被修改的id
+   * @param { string } newId 可选，修改后的id
+   * @returns 修改后的节点id
    */
   changeNodeId<T extends string>(oldId: string, newId?: T): false | T | string {
     return this.graphModel.changeNodeId(oldId, newId);
   }
+  /**
+   * 修改连线的id， 如果不传新的id，会内部自动创建一个。
+   * @param { string } oldId 将要被修改的id
+   * @param { string } newId 可选，修改后的id
+   * @returns 修改后的节点id
+   */
   changeEdgeId<T extends string>(oldId: string, newId?: T): false | T | string {
     return this.graphModel.changeEdgeId(oldId, newId);
   }
-  updateGraphId() {}
   /**
    * 更新流程图编辑相关设置
    */

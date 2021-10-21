@@ -83,11 +83,6 @@ lf.cloneNode(nodeId)
 // 获取节点的model数据
 lf.getNodeModel(nodeId)
 
-// 获取节点的数据属性
-lf.getNodeData(nodeId)
-
-// 设置节点的数据属性
-lf.setNodeData(nodeAttribute)
 ```
 
 ### 连线方法
