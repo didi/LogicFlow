@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.16...@logicflow/extension@0.7.1-alpha.0) (2021-10-21)
+
+
+
+## 0.7.1-alpha.0 (2021-10-21)
+
+
+### Bug Fixes
+
+* format bpmn xml ([e3c9159](https://github.com/didi/LogicFlow/commit/e3c91599ced342ac64d92f54228bf8145cf52378))
+
+
+### Features
+
+* add increase overlap mode ([06068e4](https://github.com/didi/LogicFlow/commit/06068e4caa11544b709697d101063838020dc4d1))
+* avoid add id in dom ([37cccb6](https://github.com/didi/LogicFlow/commit/37cccb6fc75451b25254c1ccda4c581f2bb5ce51)), closes [#309](https://github.com/didi/LogicFlow/issues/309)
+* remove object attributes ([a242500](https://github.com/didi/LogicFlow/commit/a242500edf2e2e197cd0a015d2e490e474ff585e))
+
+
+
+
+
 ## [0.6.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.6.13...@logicflow/extension@0.6.16) (2021-09-04)
 
 

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.16...@logicflow/core@0.7.1-alpha.0) (2021-10-21)
+
+
+### Bug Fixes
+
+* drag line not toFront ([f1db31d](https://github.com/didi/LogicFlow/commit/f1db31d5c95c339493090907af517481cefba987))
+* this.setState warning ([7f7c498](https://github.com/didi/LogicFlow/commit/7f7c498dd50e25b44a291b3e5d96554144116f40))
+
+
+### Features
+
+* add change graph&node&edge id function ([13d1c0b](https://github.com/didi/LogicFlow/commit/13d1c0b0b6814dc9b65bd74a9bb704b633499554))
+* add increase overlap mode ([06068e4](https://github.com/didi/LogicFlow/commit/06068e4caa11544b709697d101063838020dc4d1))
+* add text background ([dd1a89f](https://github.com/didi/LogicFlow/commit/dd1a89fbb84bfc74e9bf7db251b546a03b783838))
+* avoid add id in dom ([37cccb6](https://github.com/didi/LogicFlow/commit/37cccb6fc75451b25254c1ccda4c581f2bb5ce51)), closes [#309](https://github.com/didi/LogicFlow/issues/309)
+* remove object attributes ([a242500](https://github.com/didi/LogicFlow/commit/a242500edf2e2e197cd0a015d2e490e474ff585e))
+* save data include zIndex in increase mode ([cb79054](https://github.com/didi/LogicFlow/commit/cb7905489ee097bf2b157d3202527f7e5a6f39c9))
+
+
+
+
+
 ## [0.6.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.6.13...@logicflow/core@0.6.16) (2021-09-04)
 
 
