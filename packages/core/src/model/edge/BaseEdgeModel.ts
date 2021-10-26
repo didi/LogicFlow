@@ -211,7 +211,7 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   setProperties(properties): void {
-    this.properties = Object.assign(this.properties, properties);
+    Object.assign(this.properties, properties);
   }
 
   /* 更新数据 */
@@ -308,7 +308,7 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setText(textConfig): void {
     if (textConfig) {
-      this.text = assign(this.text, textConfig);
+      assign(this.text, textConfig);
     }
   }
 
