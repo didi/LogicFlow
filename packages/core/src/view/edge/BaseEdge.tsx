@@ -9,6 +9,7 @@ import EventEmitter from '../../event/eventEmitter';
 import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
+import AdjustPoint from './AdjustPoint';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -122,6 +123,30 @@ export default class BaseEdge extends Component<IProps> {
       <Arrow arrowInfo={arrowInfo} style={style} />
     );
   }
+  // 起点终点，可以修改起点/终点为其他节点
+  getAdjustPoints() {
+    const { model, graphModel, eventCenter } = this.props;
+    const start = model.getAdjustStart();
+    const end = model.getAdjustEnd();
+    return (
+      <g>
+        <AdjustPoint
+          type="SOURCE"
+          {...start}
+          edgeModel={model}
+          graphModel={graphModel}
+          eventCenter={eventCenter}
+        />
+        <AdjustPoint
+          type="TARGET"
+          {...end}
+          edgeModel={model}
+          graphModel={graphModel}
+          eventCenter={eventCenter}
+        />
+      </g>
+    );
+  }
   getAppendWidth() {
     return <g />;
   }
@@ -231,6 +256,8 @@ export default class BaseEdge extends Component<IProps> {
     graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
     this.toFront();
   };
+  // 是否正在拖拽，在折线调整时，不展示起终点的调整点
+  getIsDraging = () => false;
   toFront() {
     const { graphModel, model } = this.props;
     const { overlapMode } = graphModel;
@@ -239,6 +266,9 @@ export default class BaseEdge extends Component<IProps> {
     }
   }
   render() {
+    const { model: { isSelected }, graphModel: { editConfig } } = this.props;
+    const isDraging = this.getIsDraging();
+    const { adjustEdgeStartAndEnd } = editConfig;
     return (
       <g
         className="lf-edge"
@@ -253,6 +283,7 @@ export default class BaseEdge extends Component<IProps> {
         {this.getAppend()}
         {this.getText()}
         {this.getArrow()}
+        {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}
       </g>
     );
   }

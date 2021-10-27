@@ -399,4 +399,28 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     const list = this.updateCrossPoints(pointsList);
     this.points = list.map(point => `${point.x},${point.y}`).join(' ');
   }
+  // 获取连线调整的起点
+  @action
+  getAdjustStart() {
+    return this.pointsList[0] || this.startPoint;
+  }
+  // 获取连线调整的终点
+  @action
+  getAdjustEnd() {
+    const { pointsList } = this;
+    return pointsList[pointsList.length - 1] || this.endPoint;
+  }
+  // 起终点拖拽调整过程中，进行折线路径更新
+  @action
+  updateAfterAdjustStartAndEnd({ startPoint, endPoint, sourceNode, targetNode }) {
+    const pointsList = getPolylinePoints(
+      { x: startPoint.x, y: startPoint.y },
+      { x: endPoint.x, y: endPoint.y },
+      sourceNode,
+      targetNode,
+      this.offset || 0,
+    );
+    this.pointsList = pointsList;
+    this.initPoints();
+  }
 }

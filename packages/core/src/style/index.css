@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: #FFFFFF;
+  background: #ffffff;
   user-select: none;
 }
 .lf-element-text {
@@ -39,13 +39,14 @@
   cursor: grabbing;
 }
 .lf-drag-able {
-  cursor:default;
+  cursor: default;
 }
-.lf-bezier-adjust-anchor{
+.lf-bezier-adjust-anchor {
   cursor: pointer;
 }
 /* background */
-.lf-background, .lf-grid {
+.lf-background,
+.lf-grid {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -89,7 +90,7 @@
   min-height: 20px;
   min-width: 100px;
   white-space: pre;
-  background: #FFF;
+  background: #fff;
   transform: translate(-50%, -50%);
 }
 .lf-get-text-height {
@@ -139,6 +140,9 @@
 .lf-multiple-select {
   position: absolute;
   border: 2px dashed rgba(24, 125, 255, 0.8);
-  box-shadow: 0px 0px 3px 0px rgba(24,125,255, 0.5);
+  box-shadow: 0px 0px 3px 0px rgba(24, 125, 255, 0.5);
+  cursor: move;
+}
+.lf-edge-adjust-point {
   cursor: move;
 }

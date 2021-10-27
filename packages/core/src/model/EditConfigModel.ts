@@ -23,6 +23,10 @@ export interface EditConfigInterface {
    */
   adjustEdge?: boolean;
   /**
+   * 允许调整连线起点和终点
+   */
+  adjustEdgeStartAndEnd?: boolean;
+  /**
    * 允许拖动节点
    */
   adjustNodePosition?: boolean;
@@ -77,6 +81,7 @@ const SilentConfig = {
   stopScrollGraph: false,
   stopMoveGraph: false,
   adjustEdge: false,
+  adjustEdgeStartAndEnd: false,
   adjustNodePosition: false,
   hideAnchors: true,
   nodeTextEdit: false,
@@ -91,6 +96,7 @@ const keys = [
   'stopScrollGraph',
   'stopMoveGraph',
   'adjustEdge',
+  'adjustEdgeStartAndEnd',
   'adjustNodePosition',
   'hideAnchors',
   'hoverOutline',
@@ -109,6 +115,7 @@ export default class EditConfigModel {
   @observable stopScrollGraph = false;
   @observable stopMoveGraph = false;
   @observable adjustEdge = true;
+  @observable adjustEdgeStartAndEnd = false;
   @observable adjustNodePosition = true;
   @observable hideAnchors = false;
   @observable hoverOutline = false;
@@ -145,6 +152,7 @@ export default class EditConfigModel {
         stopScrollGraph: this.stopScrollGraph,
         stopMoveGraph: this.stopMoveGraph,
         adjustEdge: this.adjustEdge,
+        adjustEdgeStartAndEnd: this.adjustEdgeStartAndEnd,
         adjustNodePosition: this.adjustNodePosition,
         hideAnchors: this.hideAnchors,
         hoverOutline: this.hoverOutline,

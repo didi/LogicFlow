@@ -127,4 +127,30 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.path = this.getPath(this.pointsList);
     this.setText(Object.assign({}, this.text, this.textPosition));
   }
+  // 获取连线调整的起点
+  @action
+  getAdjustStart() {
+    return this.pointsList[0] || this.startPoint;
+  }
+  // 获取连线调整的终点
+  @action
+  getAdjustEnd() {
+    const { pointsList } = this;
+    return pointsList[pointsList.length - 1] || this.endPoint;
+  }
+  // 起终点拖拽调整过程中，进行曲线路径更新
+  @action
+  updateAfterAdjustStartAndEnd({ startPoint, endPoint, sourceNode, targetNode }) {
+    const { sNext, ePre } = getBezierControlPoints(
+      {
+        start: startPoint,
+        end: endPoint,
+        sourceNode,
+        targetNode,
+        offset: this.offset,
+      },
+    );
+    this.pointsList = [startPoint, sNext, ePre, endPoint];
+    this.initPoints();
+  }
 }
