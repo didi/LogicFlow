@@ -251,6 +251,12 @@ export type ArrowStyle = {
   verticalLength?: number, // 箭头垂直于连线的距离
 };
 
+export type EdgeAdjustStyle = {
+  r: number;
+  fill?: string,
+  stroke?: string,
+};
+
 export type Style = {
   rect?: RectStyle,
   circle?: CircleStyle,
@@ -267,6 +273,7 @@ export type Style = {
   arrow?: ArrowStyle,
   anchorLine?: AnchorLineStyle,
   anchorHover?: AnchorHoverStyle,
+  EdgeAdjustStyle?: EdgeAdjustStyle,
 };
 
 export type GraphTransform = {

@@ -114,6 +114,12 @@ const arrow = {
   offset: 10, // 箭头长度
   verticalLength: 5, // 箭头垂直于连线的距离
 };
+// 调整连线起终点的圆形样式
+const edgeAdjust = {
+  r: 5,
+  fill: '#32CD32',
+  stroke: '#32CD32',
+};
 
 export const defaultTheme = {
   rect,
@@ -132,4 +138,5 @@ export const defaultTheme = {
   anchorLine,
   anchorHover,
   snapline,
+  edgeAdjust,
 };

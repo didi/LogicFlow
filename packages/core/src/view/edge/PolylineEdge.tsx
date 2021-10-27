@@ -57,6 +57,8 @@ export default class PolylineEdge extends BaseEdge {
     // 记录当前拖拽的线段信息
     this.appendInfo = appendInfo;
   };
+  // 是否正在拖拽，在折线调整时，不展示起终点的调整点
+  getIsDraging = () => this.isDraging;
   getAttributes() {
     const attr = super.getAttributes();
     const {

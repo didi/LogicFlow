@@ -402,6 +402,22 @@ class BaseEdgeModel implements IBaseModel {
   updateAttributes(attributes) {
     assign(this, attributes);
   }
+  // 获取连线调整的起点
+  @action
+  getAdjustStart() {
+    return this.startPoint;
+  }
+  // 获取连线调整的终点
+  @action
+  getAdjustEnd() {
+    return this.endPoint;
+  }
+  // 起终点拖拽调整过程中，进行直线路径更新
+  @action
+  updateAfterAdjustStartAndEnd({ startPoint, endPoint }) {
+    this.updateStartPoint({ x: startPoint.x, y: startPoint.y });
+    this.updateEndPoint({ x: endPoint.x, y: endPoint.y });
+  }
 }
 
 export { BaseEdgeModel };
