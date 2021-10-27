@@ -158,7 +158,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 创建新连线
       const edge = graphModel.createEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件
-      eventCenter.emit('edge:adjust', { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } });
+      eventCenter.emit('edge:exchange-node', { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } });
     } else {
       // 如果没有找到目标节点，还原连线
       this.recoveryEdge();
