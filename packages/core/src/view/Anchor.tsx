@@ -167,6 +167,8 @@ class Anchor extends Component<IProps, IState> {
             targetAnchorId: info.anchor.id,
             endPoint: { x: info.anchor.x, y: info.anchor.y },
           });
+          // 清除掉缓存结果 fix:#320 因为创建连线之后，会影响校验结果变化，所以需要重新校验
+          this.targetRuleResults.clear();
         }
       } else {
         const nodeData = targetNode.getData();
