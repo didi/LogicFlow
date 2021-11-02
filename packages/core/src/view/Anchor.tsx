@@ -92,7 +92,8 @@ class Anchor extends Component<IProps, IState> {
     if (info) {
       const targetNode = info.node;
       this.preTargetNode = targetNode;
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过
+      // 查看鼠标是否进入过target，若有检验结果，表示进入过。
+      // 进入过后避免大量重复运算，换成运算结果。
       if (!this.targetRuleResults.has(targetNode.id)) {
         const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
         const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
@@ -127,6 +128,9 @@ class Anchor extends Component<IProps, IState> {
       endY: 0,
       draging: false,
     });
+    // 清除掉缓存结果 fix:#320 因为创建连线之后，会影响校验结果变化，所以需要重新校验
+    this.sourceRuleResults.clear();
+    this.targetRuleResults.clear();
   };
 
   checkEnd = () => {
@@ -167,8 +171,6 @@ class Anchor extends Component<IProps, IState> {
             targetAnchorId: info.anchor.id,
             endPoint: { x: info.anchor.x, y: info.anchor.y },
           });
-          // 清除掉缓存结果 fix:#320 因为创建连线之后，会影响校验结果变化，所以需要重新校验
-          this.targetRuleResults.clear();
         }
       } else {
         const nodeData = targetNode.getData();
