@@ -129,6 +129,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   }
   getAnchors() {
     const { model, graphModel, eventCenter } = this.props;
+    console.log('----anchors---', model.type);
     const {
       isSelected, isHitable,
     } = model;

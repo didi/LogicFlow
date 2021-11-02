@@ -33,6 +33,7 @@ export const targetNodeInfo = (position: Point, nodes:BaseNode[]): NodeContaint 
   let nodeInfo;
   for (let i = nodes.length - 1; i >= 0; i--) {
     const inNode = isInNodeBbox(position, nodes[i]);
+    console.log('inNode', inNode);
     if (inNode) {
       const anchorInfo = getClosestAnchor(position, nodes[i]);
       if (anchorInfo) { // 不能连接到没有锚点的节点
@@ -59,17 +60,20 @@ const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
   let closest;
   let minDistance = Number.MAX_SAFE_INTEGER;
   for (let i = 0; i < anchors.length; i++) {
-    const len = distance(position.x, position.y, anchors[i].x, anchors[i].y);
-    if (len < minDistance) {
-      minDistance = len;
-      closest = {
-        index: i,
-        anchor: {
-          x: anchors[i].x,
-          y: anchors[i].y,
-          id: anchors[i].id,
-        },
-      };
+    // 如果该锚点允许相连
+    if (anchors[i].isTargetAnchor) {
+      const len = distance(position.x, position.y, anchors[i].x, anchors[i].y);
+      if (len < minDistance) {
+        minDistance = len;
+        closest = {
+          index: i,
+          anchor: {
+            x: anchors[i].x,
+            y: anchors[i].y,
+            id: anchors[i].id,
+          },
+        };
+      }
     }
   }
   return closest;

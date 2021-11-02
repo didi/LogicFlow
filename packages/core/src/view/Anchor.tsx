@@ -14,6 +14,8 @@ interface IProps {
   x: number;
   y: number;
   id?: string;
+  isSourceAnchor?: boolean;
+  isTargetAnchor?: boolean;
   style?: Record<string, any>;
   hoverStyle?: Record<string, any>;
   edgeStyle?: Record<string, any>;
@@ -58,6 +60,7 @@ class Anchor extends Component<IProps, IState> {
     });
   }
   onDragStart = () => {
+    console.log('---onDragStart--');
     const {
       x, y, nodeModel, graphModel,
     } = this.props;
@@ -95,8 +98,19 @@ class Anchor extends Component<IProps, IState> {
       // 查看鼠标是否进入过target，若有检验结果，表示进入过。
       // 进入过后避免大量重复运算，换成运算结果。
       if (!this.targetRuleResults.has(targetNode.id)) {
-        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
-        const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
+        const { id, isSourceAnchor, isTargetAnchor } = this.props;
+        const currentAnchor = { x, y, id, isSourceAnchor, isTargetAnchor };
+        const targetAnchor = info.anchor;
+        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+          targetNode,
+          currentAnchor,
+          targetAnchor,
+        );
+        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+          nodeModel,
+          currentAnchor,
+          targetAnchor,
+        );
         this.sourceRuleResults.set(
           targetNode.id,
           formateAnchorConnectValidateData(sourceRuleResult),
@@ -108,6 +122,7 @@ class Anchor extends Component<IProps, IState> {
       }
       const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
       const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetNode.id);
+      console.log(isSourcePass, isTargetPass);
       // 实时提示出即将链接的锚点
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
@@ -148,6 +163,7 @@ class Anchor extends Component<IProps, IState> {
     }
     // 没有draging就结束连线
     if (!draging) return;
+    console.log(info);
     if (info && info.node) {
       const targetNode = info.node;
       const {
@@ -158,6 +174,7 @@ class Anchor extends Component<IProps, IState> {
         isAllPass: isTargetPass,
         msg: targetMsg,
       } = this.targetRuleResults.get(targetNode.id) || {};
+      console.log(isSourcePass, isTargetPass);
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
@@ -189,9 +206,11 @@ class Anchor extends Component<IProps, IState> {
       endY,
     } = this.state;
     const v = distance(startX, startY, endX, endY);
+    console.log(v);
     return v > 10;
   }
   render() {
+    console.log(this.isShowLine());
     const {
       startX,
       startY,

@@ -25,11 +25,12 @@ class CircleNodeModel extends BaseNodeModel {
     if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
+
     return [
-      { x, y: y - r, id: `${this.id}_0` },
-      { x: x + r, y, id: `${this.id}_1` },
-      { x, y: y + r, id: `${this.id}_2` },
-      { x: x - r, y, id: `${this.id}_3` },
+      { x, y: y - r, id: `${this.id}_0`, isSourceAnchor: true, isTargetAnchor: true },
+      { x: x + r, y, id: `${this.id}_1`, isSourceAnchor: true, isTargetAnchor: true },
+      { x, y: y + r, id: `${this.id}_2`, isSourceAnchor: true, isTargetAnchor: true },
+      { x: x - r, y, id: `${this.id}_3`, isSourceAnchor: true, isTargetAnchor: true },
     ];
   }
 }

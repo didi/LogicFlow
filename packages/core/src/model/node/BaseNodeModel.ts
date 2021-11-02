@@ -8,7 +8,7 @@ import {
   ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point,
+  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point, AnchorConfig,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -35,7 +35,7 @@ const defaultConfig = assign(
 
 export type ConnectRule = {
   message: string;
-  validate: (source: BaseNodeModel, target: BaseNodeModel) => boolean;
+  validate: (source: BaseNodeModel, target: BaseNodeModel, sourceAnchor, targetAnchor) => boolean;
 };
 
 export type ConnectRuleResult = {
@@ -187,7 +187,11 @@ export default class BaseNodeModel implements IBaseModel {
   /**
    * 在连线的时候，是否允许这个节点为source节点，连线到target节点。
    */
-  isAllowConnectedAsSource(target: BaseNodeModel): ConnectRuleResult | Boolean {
+  isAllowConnectedAsSource(
+    target: BaseNodeModel,
+    soureAnchor: AnchorConfig,
+    targetAnchor: AnchorConfig,
+  ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetSourceRules
       ? this.getConnectedSourceRules()
       : this.sourceRules;
@@ -196,7 +200,7 @@ export default class BaseNodeModel implements IBaseModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, this, target)) {
+      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -218,7 +222,11 @@ export default class BaseNodeModel implements IBaseModel {
    * 在连线的时候，是否允许这个节点未target节点
    */
 
-  isAllowConnectedAsTarget(source: BaseNodeModel): ConnectRuleResult | Boolean {
+  isAllowConnectedAsTarget(
+    source: BaseNodeModel,
+    soureAnchor: AnchorConfig,
+    targetAnchor: AnchorConfig,
+  ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetTargetRules
       ? this.getConnectedTargetRules()
       : this.targetRules;
@@ -227,7 +235,7 @@ export default class BaseNodeModel implements IBaseModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, source, this)) {
+      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -265,12 +273,16 @@ export default class BaseNodeModel implements IBaseModel {
           id: `${id}_${idx}`,
           x: x + el[0],
           y: y + el[1],
+          isSourceAnchor: true,
+          isTargetAnchor: true,
         };
       }
       return {
         x: x + el.x,
         y: y + el.y,
         id: el.id || `${id}_${idx}`,
+        isSourceAnchor: el.isSourceAnchor,
+        isTargetAnchor: el.isTargetAnchor,
       };
     });
   }

@@ -14,6 +14,7 @@ function createDrag({
   step = 1,
   isStopPropagation = true,
 }) {
+  console.log('---mouseDown---');
   let isDraging = false;
   let isStartDraging = false;
   let startX = 0;
