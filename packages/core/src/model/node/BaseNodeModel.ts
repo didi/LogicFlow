@@ -35,7 +35,12 @@ const defaultConfig = assign(
 
 export type ConnectRule = {
   message: string;
-  validate: (source: BaseNodeModel, target: BaseNodeModel, sourceAnchor, targetAnchor) => boolean;
+  validate: (
+    source: BaseNodeModel,
+    target: BaseNodeModel,
+    sourceAnchor: AnchorConfig,
+    targetAnchor: AnchorConfig,
+  ) => boolean;
 };
 
 export type ConnectRuleResult = {
