@@ -207,11 +207,13 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setProperty(key, val): void {
     this.properties[key] = formatData(val);
+    this.setAttributes();
   }
 
   @action
   setProperties(properties): void {
-    Object.assign(this.properties, properties);
+    Object.assign(this.properties, formatData(properties));
+    this.setAttributes();
   }
 
   /* 更新数据 */

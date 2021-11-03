@@ -93,6 +93,7 @@
     <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
     <button onClick="getData()">获取数据</button>
     <button onClick="getRefreshData()">属性流程图节点id</button>
+    <button onClick="setProperties()">设置属性</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -298,12 +299,20 @@
             [0, this.height / 2],
             [-this.width / 2, 0]
           ];
-          console.log(JSON.stringify(this.anchorsOffset));
+          // console.log(JSON.stringify(this.anchorsOffset));
         }
       }
 
       // connection
       class Connection extends PolylineEdge {
+        getAttributes() {
+          const attributes = super.getAttributes()
+          const { model: { properties } } = this.props;
+          if (properties.isActived) {
+            attributes.stroke = 'red'
+          }
+          return attributes
+        }
         getTextStyle() {
           return {
             background: {
@@ -318,6 +327,10 @@
       class ConnectionModel extends PolylineEdgeModel {
         setAttributes() {
           this.textWidth = 200;
+          const { properties } = this;
+          if (properties.isActived) {
+            this.stroke = 'red'
+          }
         }
       }
     </script>
@@ -389,7 +402,7 @@
             edgeText: { autoWrap: true, lineHeight: 1.5 },
           }
         );
-        lf.setDefaultEdgeType('polyline');
+        lf.setDefaultEdgeType('connection');
 
         lf.render({
           nodes: [
@@ -597,6 +610,19 @@
           data = LogicFlowUtil.refreshGraphId(data);
           console.log(data);
           lf.render(data);
+        }
+        window.setProperties = function () {
+          const { nodes, edges } = lf.getSelectElements()
+          nodes.forEach(({ id }) => {
+            lf.setProperties(id, {
+              isActived: true
+            })
+          })
+          edges.forEach(({ id }) => {
+            lf.setProperties(id, {
+              isActived: true
+            })
+          })
         }
       }
     </script>

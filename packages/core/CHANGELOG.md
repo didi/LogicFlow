@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.2...@logicflow/core@0.7.3) (2021-11-03)
+
+
+### Bug Fixes
+
+* edge setProperties observable ([9517468](https://github.com/didi/LogicFlow/commit/951746878c2bbd27fc9dae7f13fa0990a2a3ba3d))
+* remove both sourceRuleResults and targetRuleResults ([1ba045a](https://github.com/didi/LogicFlow/commit/1ba045aa7c298989f214eecede053a9d507dd0a8))
+* **core:** update evenetName of edge adjustment, fixes [#330](https://github.com/didi/LogicFlow/issues/330) ([a973de2](https://github.com/didi/LogicFlow/commit/a973de2b70caea9b441039e0659df51401aa321b))
+
+
+### Features
+
+* **core:** adjust edge startPoint or endPoint ([db96695](https://github.com/didi/LogicFlow/commit/db966950e59b5166e704ccd958e837e2fa3e1f6a))
+
+
+
+
+
 ## [0.7.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.1...@logicflow/core@0.7.2) (2021-10-22)
 
 **Note:** Version bump only for package @logicflow/core
