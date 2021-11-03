@@ -116,9 +116,10 @@ const arrow = {
 };
 // 调整连线起终点的圆形样式
 const edgeAdjust = {
-  r: 5,
-  fill: '#32CD32',
-  stroke: '#32CD32',
+  r: 4,
+  fill: '#FFFFFF',
+  stroke: '#373738',
+  strokeWidth: '2px',
 };
 
 export const defaultTheme = {
