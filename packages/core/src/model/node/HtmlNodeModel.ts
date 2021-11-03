@@ -19,10 +19,10 @@ class HtmlNodeModel extends BaseNodeModel {
       return this.getAnchorsByOffset();
     }
     return [
-      { x, y: y - height / 2, id: `${this.id}_0`, isSourceAnchor: true, isTargetAnchor: true },
-      { x: x + width / 2, y, id: `${this.id}_1`, isSourceAnchor: true, isTargetAnchor: true },
-      { x, y: y + height / 2, id: `${this.id}_2`, isSourceAnchor: true, isTargetAnchor: true },
-      { x: x - width / 2, y, id: `${this.id}_3`, isSourceAnchor: true, isTargetAnchor: true },
+      { x, y: y - height / 2, id: `${this.id}_0` },
+      { x: x + width / 2, y, id: `${this.id}_1` },
+      { x, y: y + height / 2, id: `${this.id}_2` },
+      { x: x - width / 2, y, id: `${this.id}_3` },
     ];
   }
 }

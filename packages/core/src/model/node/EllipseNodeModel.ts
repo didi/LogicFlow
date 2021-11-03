@@ -28,10 +28,10 @@ class EllipseNodeModel extends BaseNodeModel {
       return this.getAnchorsByOffset();
     }
     return [
-      { x, y: y - ry, id: `${this.id}_0`, isSourceAnchor: true, isTargetAnchor: true },
-      { x: x + rx, y, id: `${this.id}_1`, isSourceAnchor: true, isTargetAnchor: true },
-      { x, y: y + ry, id: `${this.id}_2`, isSourceAnchor: true, isTargetAnchor: true },
-      { x: x - rx, y, id: `${this.id}_3`, isSourceAnchor: true, isTargetAnchor: true },
+      { x, y: y - ry, id: `${this.id}_0` },
+      { x: x + rx, y, id: `${this.id}_1` },
+      { x, y: y + ry, id: `${this.id}_2` },
+      { x: x - rx, y, id: `${this.id}_3` },
     ];
   }
 }

@@ -64,8 +64,6 @@ class PolygonNodeModel extends BaseNodeModel {
       x: x + x1 - width / 2,
       y: y + y1 - height / 2,
       id: `${this.id}_${idx}`,
-      isSourceAnchor: true,
-      isTargetAnchor: true,
     }));
   }
 }

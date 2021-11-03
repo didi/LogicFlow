@@ -273,16 +273,13 @@ export default class BaseNodeModel implements IBaseModel {
           id: `${id}_${idx}`,
           x: x + el[0],
           y: y + el[1],
-          isSourceAnchor: true,
-          isTargetAnchor: true,
         };
       }
       return {
+        ...el,
         x: x + el.x,
         y: y + el.y,
         id: el.id || `${id}_${idx}`,
-        isSourceAnchor: el.isSourceAnchor,
-        isTargetAnchor: el.isTargetAnchor,
       };
     });
   }

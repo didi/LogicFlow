@@ -383,8 +383,6 @@ export type AnchorConfig = {
   id?: string;
   x: number;
   y: number;
-  isSourceAnchor: Boolean,
-  isTargetAnchor: Boolean,
   [key: string]: any;
 };
 /**
