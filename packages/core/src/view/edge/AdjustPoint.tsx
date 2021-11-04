@@ -6,7 +6,7 @@ import Circle from '../basic-shape/Circle';
 import { createDrag } from '../../util/drag';
 import { targetNodeInfo } from '../../util/node';
 import { Point } from '../../type';
-import { ModelType } from '../../constant/constant';
+import { EventType, ModelType } from '../../constant/constant';
 
 interface IProps {
   x: number;
@@ -158,7 +158,10 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 创建新连线
       const edge = graphModel.createEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件
-      eventCenter.emit('edge:exchange-node', { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } });
+      eventCenter.emit(
+        EventType.EDGE_EXCHANGE_NODE,
+        { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } },
+      );
     } else {
       // 如果没有找到目标节点，还原连线
       this.recoveryEdge();
