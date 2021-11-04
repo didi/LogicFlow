@@ -96,6 +96,7 @@ const keys = [
   'stopScrollGraph',
   'stopMoveGraph',
   'adjustEdge',
+  'adjustEdgeMiddle',
   'adjustEdgeStartAndEnd',
   'adjustNodePosition',
   'hideAnchors',
@@ -115,6 +116,7 @@ export default class EditConfigModel {
   @observable stopScrollGraph = false;
   @observable stopMoveGraph = false;
   @observable adjustEdge = true;
+  @observable adjustEdgeMiddle = false;
   @observable adjustEdgeStartAndEnd = false;
   @observable adjustNodePosition = true;
   @observable hideAnchors = false;
@@ -152,6 +154,7 @@ export default class EditConfigModel {
         stopScrollGraph: this.stopScrollGraph,
         stopMoveGraph: this.stopMoveGraph,
         adjustEdge: this.adjustEdge,
+        adjustEdgeMiddle: this.adjustEdgeMiddle,
         adjustEdgeStartAndEnd: this.adjustEdgeStartAndEnd,
         adjustNodePosition: this.adjustNodePosition,
         hideAnchors: this.hideAnchors,

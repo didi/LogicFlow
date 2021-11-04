@@ -281,6 +281,40 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
+  dragAppendSimple(appendInfo, dragInfo) {
+    const {
+      start,
+      end,
+      startIndex,
+      endIndex,
+      direction,
+    } = appendInfo;
+    const { pointsList } = this;
+    let draginngPointList = pointsList;
+    if (direction === SegmentDirection.HORIZONTAL) {
+      // 水平，仅调整y坐标，拿到当前线段两个端点移动后的坐标
+      pointsList[startIndex] = { x: start.x, y: start.y + dragInfo.y };
+      pointsList[endIndex] = { x: end.x, y: end.y + dragInfo.y };
+      draginngPointList = this.pointsList.map(i => i);
+    } else if (direction === SegmentDirection.VERTICAL) {
+      // 垂直，仅调整x坐标， 与水平调整同理
+      pointsList[startIndex] = { x: start.x + dragInfo.x, y: start.y };
+      pointsList[endIndex] = { x: end.x + dragInfo.x, y: end.y };
+      draginngPointList = this.pointsList.map(i => i);
+    }
+    this.updatePointsAfterDrage(draginngPointList);
+    this.draginngPointList = draginngPointList;
+    this.setText(Object.assign({}, this.text, this.textPosition));
+    return {
+      start: Object.assign({}, pointsList[startIndex]),
+      end: Object.assign({}, pointsList[endIndex]),
+      startIndex,
+      endIndex,
+      direction,
+    };
+  }
+
+  @action
   dragAppend(appendInfo, dragInfo) {
     const {
       start,

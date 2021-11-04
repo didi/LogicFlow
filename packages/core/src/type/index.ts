@@ -308,6 +308,7 @@ export type AppendInfo = {
   startIndex?: number,
   endIndex?: number,
   direction?: string,
+  dragAble?: boolean,
 };
 
 export type ArrowInfo = {

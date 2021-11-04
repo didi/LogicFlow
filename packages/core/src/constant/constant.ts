@@ -58,6 +58,8 @@ export enum EventType {
   EDGE_MOUSEENTER = 'edge:mouseenter',
   EDGE_MOUSELEAVE = 'edge:mouseleave',
   EDGE_CONTEXTMENU = 'edge:contextmenu',
+  EDGE_ADJUST = 'edge:adjust',
+  EDGE_EXCHANGE_NODE = 'edge:exchange-node',
   SELECTION_CONTEXTMENU = 'selection:contextmenu',
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',

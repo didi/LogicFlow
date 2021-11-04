@@ -354,6 +354,7 @@
           // isSilentMode: true,
           // overlapMode: 1,
           metaKeyMultipleSelected: true,
+          adjustEdgeMiddle: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
@@ -659,6 +660,9 @@
         })
         lf.on('edge:adjust',({data})=> {
           console.log('edge:adjust', data)
+        })
+        lf.on('edge:exchange-node',({data})=> {
+          console.log('edge:exchange-node', data)
         })
         // lf.on('node:mousemove',()=> {
         //   // console.log('nodemove')

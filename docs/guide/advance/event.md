@@ -49,6 +49,7 @@ lf.on('element:type', (eventObject) => {});
 | 'edge:add'               | 边增加            | data              |
 | 'edge:delete'            | 边删除            | data              |
 | 'edge:contextmenu'       | 边右键            | data, e, position |
+| 'edge:adjust'            | 边拖拽调整        | data              |
 | 'edge:exchange-node'     | 调整边的起点/终点 | data              |
 | 'connection:not-allowed' | 不允许建立连接    | data, msg         |
 

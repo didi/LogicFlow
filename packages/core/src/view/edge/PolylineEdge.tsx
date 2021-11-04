@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import Polyline from '../basic-shape/Polyline';
 import BaseEdge from './BaseEdge';
-import { SegmentDirection } from '../../constant/constant';
+import { EventType, SegmentDirection } from '../../constant/constant';
 import { AppendInfo, ArrowInfo, IEdgeState } from '../../type/index';
 import { poins2PointsList } from '../../util/edge';
 import { getVerticalPointOfLine } from '../../algorithm';
@@ -39,21 +39,40 @@ export default class PolylineEdge extends BaseEdge {
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
     this.isDraging = true;
-    const { transformMatrix } = graphModel;
+    const { transformMatrix, editConfig } = graphModel;
     const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
     const polylineModel = model as PolylineEdgeModel;
     // 更新当前拖拽的线段信息
-    this.appendInfo = polylineModel.dragAppend(this.appendInfo, { x: curDeltaX, y: curDeltaY });
+    // 1、如果只允许调整中间线段调用dragAppendSimple
+    // 2、如果允许调整所有线段调用dragAppend
+    const { adjustEdgeMiddle } = editConfig;
+    if (adjustEdgeMiddle) {
+      this.appendInfo = polylineModel.dragAppendSimple(
+        this.appendInfo,
+        { x: curDeltaX, y: curDeltaY },
+      );
+    } else {
+      this.appendInfo = polylineModel.dragAppend(this.appendInfo, { x: curDeltaX, y: curDeltaY });
+    }
   };
   onDragEnd = () => {
-    const polylineModel = this.props.model as PolylineEdgeModel;
+    const { model, eventCenter } = this.props;
+    const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
     this.isDraging = false;
     // 情况当前拖拽的线段信息
     this.appendInfo = undefined;
+    // 向外抛出事件
+    eventCenter.emit(
+      EventType.EDGE_ADJUST,
+      { data: polylineModel.getData() },
+    );
   };
   beforeDragStart = (e, appendInfo) => {
-    this.dragHandler(e);
+    // 如果允许拖拽调整触发事件处理
+    if (appendInfo.dragAble) {
+      this.dragHandler(e);
+    }
     // 记录当前拖拽的线段信息
     this.appendInfo = appendInfo;
   };
@@ -158,7 +177,8 @@ export default class PolylineEdge extends BaseEdge {
     const { model, graphModel } = this.props;
     const { pointsList, draggable } = model;
     const LineAppendList = [];
-    for (let i = 0; i < pointsList.length - 1; i++) {
+    const pointsLen = pointsList.length;
+    for (let i = 0; i < pointsLen - 1; i++) {
       let className = 'lf-polyline-append';
       const appendInfo = {
         start: {
@@ -172,6 +192,7 @@ export default class PolylineEdge extends BaseEdge {
         startIndex: i,
         endIndex: i + 1,
         direction: '',
+        dragAble: true,
       };
       let append = (
         <g
@@ -181,17 +202,26 @@ export default class PolylineEdge extends BaseEdge {
         </g>
       );
       const { editConfig } = graphModel;
-      if (!editConfig.adjustEdge || !draggable) {
+      const { adjustEdge, adjustEdgeMiddle } = editConfig;
+      if (!adjustEdge || !draggable) {
         this.dragHandler = () => { };
       } else {
         this.dragHandler = this.drag;
+        const { startIndex, endIndex } = appendInfo;
+        // 如果不允许调整起点和终点相连的线段，设置该线段appendInfo的dragAble为false
+        const dragDisable = adjustEdgeMiddle && (startIndex === 0 || endIndex === pointsLen - 1);
+        appendInfo.dragAble = !dragDisable;
         if (appendInfo.start.x === appendInfo.end.x) {
           // 水平
-          className += '-ew-resize';
+          if (appendInfo.dragAble) {
+            className += '-ew-resize';
+          }
           appendInfo.direction = SegmentDirection.VERTICAL;
         } else if (appendInfo.start.y === appendInfo.end.y) {
           // 垂直
-          className += '-ns-resize';
+          if (appendInfo.dragAble) {
+            className += '-ns-resize';
+          }
           appendInfo.direction = SegmentDirection.HORIZONTAL;
         }
         append = (
