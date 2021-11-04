@@ -25,6 +25,7 @@ class CircleNodeModel extends BaseNodeModel {
     if (anchorsOffset && anchorsOffset.length > 0) {
       return this.getAnchorsByOffset();
     }
+
     return [
       { x, y: y - r, id: `${this.id}_0` },
       { x: x + r, y, id: `${this.id}_1` },

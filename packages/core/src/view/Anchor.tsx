@@ -7,6 +7,7 @@ import { ElementState, EventType, OverlapMode } from '../constant/constant';
 import BaseNodeModel, { ConnectRuleResult } from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
 import EventEmitter from '../event/eventEmitter';
+import { AnchorConfig } from '../type';
 
 type TargetNodeId = string;
 
@@ -14,6 +15,7 @@ interface IProps {
   x: number;
   y: number;
   id?: string;
+  anchorData: AnchorConfig,
   style?: Record<string, any>;
   hoverStyle?: Record<string, any>;
   edgeStyle?: Record<string, any>;
@@ -92,22 +94,34 @@ class Anchor extends Component<IProps, IState> {
     if (info) {
       const targetNode = info.node;
       this.preTargetNode = targetNode;
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过。
-      // 进入过后避免大量重复运算，换成运算结果。
-      if (!this.targetRuleResults.has(targetNode.id)) {
-        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(targetNode);
-        const targetRuleResult = targetNode.isAllowConnectedAsTarget(nodeModel);
+      const anchorId = info.anchor.id;
+      // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
+      const targetInfoId = `${targetNode.id}_${anchorId}`;
+      // 查看鼠标是否进入过target，若有检验结果，表示进入过
+      if (!this.targetRuleResults.has(targetInfoId)) {
+        const { anchorData } = this.props;
+        const targetAnchor = info.anchor;
+        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+          targetNode,
+          anchorData,
+          targetAnchor,
+        );
+        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+          nodeModel,
+          anchorData,
+          targetAnchor,
+        );
         this.sourceRuleResults.set(
           targetNode.id,
           formateAnchorConnectValidateData(sourceRuleResult),
         );
         this.targetRuleResults.set(
-          targetNode.id,
+          targetInfoId,
           formateAnchorConnectValidateData(targetRuleResult),
         );
       }
       const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
-      const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetNode.id);
+      const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
       // 实时提示出即将链接的锚点
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
@@ -154,10 +168,12 @@ class Anchor extends Component<IProps, IState> {
         isAllPass: isSourcePass,
         msg: sourceMsg,
       } = this.sourceRuleResults.get(targetNode.id) || {};
+      const anchorId = info.anchor.id;
+      const targetInfoId = `${targetNode.id}_${anchorId}`;
       const {
         isAllPass: isTargetPass,
         msg: targetMsg,
-      } = this.targetRuleResults.get(targetNode.id) || {};
+      } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己

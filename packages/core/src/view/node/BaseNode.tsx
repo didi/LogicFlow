@@ -141,6 +141,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         (anchor, index) => (
           <Anchor
             {...anchor}
+            anchorData={anchor}
             nodeDraging={isDraging}
             style={style}
             hoverStyle={hoverStyle}

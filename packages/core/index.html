@@ -117,11 +117,19 @@
           this.height = height;
           const properties = this.properties;
           this.anchorsOffset = [
-            [width / 2, 0],
-            [0, height / 2],
-            [-width / 2, 0],
-            [0, -height / 2],
+            {
+              x: width / 2,
+              y: 0,
+              isSourceAnchor: false,
+              isTargetAnchor: true,
+            }
           ]
+          // this.anchorsOffset = [
+          //   [width / 2, 0],
+          //   [0, height / 2],
+          //   [-width / 2, 0],
+          //   [0, -height / 2],
+          // ]
         }
       }
       class UmlNode extends HtmlNode {

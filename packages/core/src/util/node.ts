@@ -65,6 +65,7 @@ const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
       closest = {
         index: i,
         anchor: {
+          ...anchors[i],
           x: anchors[i].x,
           y: anchors[i].y,
           id: anchors[i].id,
