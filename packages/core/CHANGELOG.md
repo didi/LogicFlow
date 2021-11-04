@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.3...@logicflow/core@0.7.4) (2021-11-04)
+
+
+### Bug Fixes
+
+* **core:** ts error ([83db114](https://github.com/didi/LogicFlow/commit/83db114f495307aa039ff45d743336f124a32221))
+
+
+### Features
+
+* **core:** add anchor properties ([21b245e](https://github.com/didi/LogicFlow/commit/21b245ef858761babd42a5de558a77a39ff1e6d6))
+* **core:** adjust edge ([0490ae0](https://github.com/didi/LogicFlow/commit/0490ae08d6d681dfbcf19bf678c46e2179d98cb8))
+* **core:** support anchor setting properties ([ecf7aaa](https://github.com/didi/LogicFlow/commit/ecf7aaa0daa963c08fde6f2c64de0790a4133f8c))
+
+
+
+
+
 ## [0.7.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.2...@logicflow/core@0.7.3) (2021-11-03)
 
 
