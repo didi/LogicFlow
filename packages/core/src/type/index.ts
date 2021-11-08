@@ -136,7 +136,7 @@ export type EdgeConfig = {
     x: number;
     y: number;
     value: string;
-  },
+  } | string,
   pointsList?: Point[];
   zIndex?: number;
   properties?: Record<string, unknown>;

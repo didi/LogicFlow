@@ -127,10 +127,12 @@ export default class AdjustPoint extends Component<IProps, IState> {
     if (!draging) return;
     // 如果找到目标节点，删除老连线，创建新连线
     if (info && info.node) {
+      const edgeData = edgeModel.getData();
       let createEdgeInfo = {
-        ...edgeModel.getData(),
+        ...edgeData,
         sourceAnchorId: '',
         targetAnchorId: '',
+        text: edgeData?.text?.value || '',
       };
       // 根据调整点是连线的起点或重点，计算创建连线需要的参数
       if (type === AdjustType.SOURCE) {
