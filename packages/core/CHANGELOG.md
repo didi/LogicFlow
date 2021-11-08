@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.4...@logicflow/core@0.7.5) (2021-11-08)
+
+
+### Bug Fixes
+
+* **core:** update text position after draging edge ([e430c14](https://github.com/didi/LogicFlow/commit/e430c14c3a0edec26ad0ba24afa7da70aa90421e))
+
+
+
+
+
 ## [0.7.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.3...@logicflow/core@0.7.4) (2021-11-04)
 
 
