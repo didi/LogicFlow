@@ -153,6 +153,13 @@ lf.render(data);
 <image src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
 
 [代码地址](https://github.com/xinxin93/logicflow_vue_demo)
+
+## 整体架构
+
+![jiagou](https://dpubstatic.udache.com/static/dpubimg/fg7q5j_5nG/lfjk.png)
+
+[详细介绍](https://github.com/didi/LogicFlow/wiki)
+
 ## 联系我们
 
 ### 加入微信群

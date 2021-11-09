@@ -4,7 +4,13 @@
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
+  "homepage": "http://logic-flow.org/",
   "types": "es/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/didi/LogicFlow",
+    "directory": "packages/extension"
+  },
   "license": "Apache-2.0",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
@@ -36,6 +42,11 @@
       "commit": true
     }
   },
+  "keywords": [
+    "logicflow",
+    "flowchart",
+    "diagram"
+  ],
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-decorators": "^7.12.1",
