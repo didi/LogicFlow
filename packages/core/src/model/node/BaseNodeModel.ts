@@ -115,7 +115,7 @@ export default class BaseNodeModel implements IBaseModel {
     if (!data.id) {
       // 自定义节点id > 全局定义id > 内置
       const { idGenerator } = this.graphModel;
-      const globalId = idGenerator && idGenerator(this.type);
+      const globalId = idGenerator && idGenerator(data.type);
       if (globalId) data.id = globalId;
       const customNodeId = this.createId();
       if (customNodeId) data.id = customNodeId;
