@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.5...@logicflow/extension@0.7.6) (2021-11-11)
+
+
+### Bug Fixes
+
+* minimap become invisible when repeat init ([ad488fd](https://github.com/didi/LogicFlow/commit/ad488fde9041834e9e809eb38904c013751d9cc8))
+
+
+
+
+
 ## [0.7.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.4...@logicflow/extension@0.7.5) (2021-11-08)
 
 **Note:** Version bump only for package @logicflow/extension

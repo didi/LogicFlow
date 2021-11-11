@@ -1,10 +1,16 @@
 {
   "name": "@logicflow/core",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "license": "Apache-2.0",
+  "homepage": "http://logic-flow.org/",
   "types": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/didi/LogicFlow",
+    "directory": "packages/core"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "clean": "rimraf dist lib esm cjs",
@@ -18,13 +24,18 @@
   },
   "files": [
     "dist",
-    "types"
+    "types",
+    "README.md"
   ],
   "dependencies": {
     "@types/mousetrap": "^1.6.4",
     "mousetrap": "^1.6.5",
     "preact": "^10.4.8"
   },
+  "keywords": [
+    "flowchart",
+    "diagram"
+  ],
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",

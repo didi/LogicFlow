@@ -110,6 +110,9 @@
     <!-- 自定义节点 -->
     <script>
       class UmlModel extends HtmlNodeModel {
+        createId () {
+          return Math.random() + '_uml'
+        }
         setAttributes() {
           const width = 200;
           const height = 130;
@@ -367,8 +370,11 @@
           grid: true,
           edgeTextDraggable: true,
           edgeType: 'line',
+          // 全局自定义id
+          idGenerator(type) {
+            return type + '_' + Math.random()
+          }
         });
-
         // 方便调试
         window.lf = lf;
 
@@ -560,7 +566,7 @@
       function InitElementFunction() {
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
-            type: 'rect',
+            type: 'uml',
             width: 50,
             height: 50,
             x: 100,
@@ -653,7 +659,8 @@
           // const model = lf.graphModel.getElement(data.id)
           // model.fill = 'red'
           console.log(data.id)
-          lf.changeNodeId(data.id)
+          console.log(lf.getGraphData())
+          // lf.changeNodeId(data.id)
         })
         lf.on('node:delete',()=> {
           console.log('nodeup')

@@ -281,6 +281,49 @@ class Model extends BaseNodeModel {
 
 完整的附加类属性请访问 [API](/api/nodeApi.md#附加属性) 以查看更多细节。
 
+#### 定义节点id生成规则
+
+默认情况下，初始化节点(连线)的时候，如果不传入节点(连线)id, logicflow内部会自动使用`uuidv4`生成节点(连线)的id. logicflow提供了自定义id生成规则的方式。
+
+方式1： 重写createId方法
+```ts
+class UmlModel extends HtmlNodeModel {
+  createId () {
+    return Math.random() + '_uml'
+  }
+  setAttributes() {
+    const width = 200;
+    const height = 130;
+    this.width = width;
+    this.height = height;
+    const properties = this.properties;
+    this.anchorsOffset = [
+      {
+        x: width / 2,
+        y: 0,
+        isSourceAnchor: false,
+        isTargetAnchor: true,
+      }
+    ]
+  }
+}
+```
+
+方式2：全局定义
+```ts
+const lf = new LogicFlow({
+  container: document.querySelector('#app'),
+  // 全局自定义id
+  idGenerator(type) {
+    return type + '_' + Math.random()
+  }
+});
+```
+
+在两种方式都存在的同时，优先级 方式1 > 方式2.
+
+> 注意，自定义id只支持同步的方式，详细见issue[#272](https://github.com/didi/LogicFlow/issues/272)
+
 ### 简单节点的节点属性
 
 不同形状的简单节点所对应的 SVG 标签不同，其所需要的标签属性也略有不同，例如圆形需要设置半径`r`，椭圆需要设置 x 轴半径`rx`和 y 轴半径`ry`等。

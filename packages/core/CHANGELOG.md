@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.5...@logicflow/core@0.7.6) (2021-11-11)
+
+
+### Bug Fixes
+
+* custom element id ([cff9c18](https://github.com/didi/LogicFlow/commit/cff9c180e12df91de8921aa083e0bbafe4afc641))
+
+
+
+
+
 ## [0.7.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.4...@logicflow/core@0.7.5) (2021-11-08)
 
 
