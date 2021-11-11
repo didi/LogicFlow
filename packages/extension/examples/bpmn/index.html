@@ -81,6 +81,7 @@
     <button id="js_show_path">原始路径</button>
     <button id="js_auto_layout">自动布局</button>
     <button id="js_get_data">获取数据</button>
+    <button id="js_re_render">重新渲染</button>
   </div>
   <div class="rules-graph">
     <div id="app"></div>
@@ -137,9 +138,7 @@
       title: '',
       text: '导航',
       onMouseEnter: (lf, ev) => {
-        console.log(MiniMap, ev);
         const position = lf.getPointByClient(ev.x, ev.y);
-        console.log(position);
         MiniMap.show(position.domOverlayPosition.x - 120, position.domOverlayPosition.y + 35);
       },
       onClick: (lf, ev) => {

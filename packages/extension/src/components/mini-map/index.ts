@@ -19,7 +19,6 @@ const MiniMap: Extension = {
   __height: 220,
   __miniMapWidth: 450,
   __miniMapHeight: 660,
-  __isShow: false,
   __viewPortTop: 0,
   __viewPortLeft: 0,
   __startPosition: null,
@@ -36,6 +35,8 @@ const MiniMap: Extension = {
     MiniMap.__miniMapHeight = (lf.width * 220) / 150;
     MiniMap.__LogicFlow = LogicFlow;
     this.__init();
+    // 避免多次install的时候, _isShow状态被修改了
+    MiniMap.__isShow = false;
   },
   init(option) {
     this.__disabledPlugins = this.__disabledPlugins.concat(
