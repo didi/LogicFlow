@@ -367,8 +367,11 @@
           grid: true,
           edgeTextDraggable: true,
           edgeType: 'line',
+          idGenerator() {
+            console.log(4444)
+            return Math.random() + ''
+          }
         });
-
         // 方便调试
         window.lf = lf;
 

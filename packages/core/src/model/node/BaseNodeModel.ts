@@ -50,7 +50,7 @@ export type ConnectRuleResult = {
 
 export { BaseNodeModel };
 export default class BaseNodeModel implements IBaseModel {
-  id = '';
+  id = createUuid();
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
@@ -113,10 +113,12 @@ export default class BaseNodeModel implements IBaseModel {
     }
 
     if (!data.id) {
+      // 自定义节点id > 全局定义id > 内置
       const { idGenerator } = this.graphModel;
-      const globalId = idGenerator && idGenerator();
+      const globalId = idGenerator && idGenerator(this.type);
       if (globalId) data.id = globalId;
-      data.id = this.createId();
+      const customNodeId = this.createId();
+      if (customNodeId) data.id = customNodeId;
     }
 
     this.formatText(data);
@@ -128,7 +130,7 @@ export default class BaseNodeModel implements IBaseModel {
   }
 
   createId() {
-    return createUuid();
+    return null;
   }
   // 格式化text参数，未修改observable不作为action
   formatText(data): void {

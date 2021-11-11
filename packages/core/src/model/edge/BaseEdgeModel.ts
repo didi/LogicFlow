@@ -99,8 +99,9 @@ class BaseEdgeModel implements IBaseModel {
     }
 
     if (!data.id) {
+      // 自定义连线id > 全局定义连线id > 内置
       const { idGenerator } = this.graphModel;
-      const globalId = idGenerator && idGenerator();
+      const globalId = idGenerator && idGenerator(this.type);
       if (globalId) data.id = globalId;
       const nodeId = this.createId();
       if (nodeId) data.id = nodeId;
