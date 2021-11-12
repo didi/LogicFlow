@@ -809,6 +809,18 @@ lf.getSelectElements(false)
 lf.clearSelectElements()
 ```
 
+## select
+
+将指定图形选中
+
+```js
+lf.select(id)
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | string | ✅ |  | 需选中(节点或者连线)id |
+
 ## changeNodeType
 
 修改节点类型

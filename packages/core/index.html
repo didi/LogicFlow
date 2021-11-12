@@ -95,6 +95,7 @@
     <button onClick="getRefreshData()">属性流程图节点id</button>
     <button onClick="setProperties()">设置属性</button>
     <button onClick="setZoom()">设置大小</button>
+    <button onClick="selectElement()">选中指定节点</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -527,7 +528,7 @@
               type: 'star',
               x: 400,
               y: 300,
-              id: 99
+              id: '2222'
             },
             {
               type: 'combine',
@@ -644,6 +645,9 @@
           // lf.graphModel.transformMatrix.SCALE_X  = 0.6
           // lf.graphModel.transformMatrix.SCALE_Y = 0.6
           lf.zoom(-0.2, [400, 400])
+        }
+        window.selectElement = function () {
+          lf.select('2222')
         }
       }
     </script>
