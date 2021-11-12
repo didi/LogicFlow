@@ -359,7 +359,7 @@ lf.redo()
 放大缩小
 
 ```js
-zoom(isZoomIn = false): string
+zoom(0.5, [400, 400]): string
 // 返回值为放大缩小的比例
 ```
 
@@ -367,7 +367,8 @@ zoom(isZoomIn = false): string
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| isZoomIn | Boolean | | false | 控制放大或缩小，默认为falses缩小 |
+| isZoomIn | Boolean或Number | | false | 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小 |
+| isZoomIn | [x,y] | | false | 缩放的原点, 不传默认左上角 |
 
 示例：
 

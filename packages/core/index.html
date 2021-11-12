@@ -94,6 +94,7 @@
     <button onClick="getData()">获取数据</button>
     <button onClick="getRefreshData()">属性流程图节点id</button>
     <button onClick="setProperties()">设置属性</button>
+    <button onClick="setZoom()">设置大小</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -638,6 +639,11 @@
               isActived: true
             })
           })
+        }
+        window.setZoom = function () {
+          // lf.graphModel.transformMatrix.SCALE_X  = 0.6
+          // lf.graphModel.transformMatrix.SCALE_Y = 0.6
+          lf.zoom(-0.2, [400, 400])
         }
       }
     </script>
