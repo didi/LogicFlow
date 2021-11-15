@@ -397,3 +397,5 @@ export type NodeMoveRule = (
   deltaX: number,
   deltaY: number,
 ) => Boolean;
+
+export type ZoomParam = boolean | number;

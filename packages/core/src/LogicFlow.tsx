@@ -30,6 +30,8 @@ import {
   RegisterParam,
   RegisterConfig,
   ExtensionContractor,
+  ZoomParam,
+  PointTuple,
 } from './type';
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
@@ -310,12 +312,13 @@ export default class LogicFlow {
   }
   /**
    * 放大缩小图形
-   * isZoomIn 是否放大，默认false, 表示缩小。
+   * @param zoomSize 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小
+   * @param point 缩放的原点
    * @returns {string} -放大缩小的比例
    */
-  zoom(isZoomIn = false): string {
+  zoom(zoomSize?: ZoomParam, point?: PointTuple): string {
     const { transformMatrix } = this.graphModel;
-    transformMatrix.zoom(isZoomIn);
+    transformMatrix.zoom(zoomSize, point);
     return `${transformMatrix.SCALE_X * 100}%`;
   }
   /**
