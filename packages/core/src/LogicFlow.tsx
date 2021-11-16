@@ -719,8 +719,6 @@ export default class LogicFlow {
   setElementZIndex(id, zIndex: number | 'top' | 'bottom') {
     return this.graphModel.setElementZIndex(id, zIndex);
   }
-  // 内部方法----------------------------------------------
-
   /**
    * 添加多个元素, 包括连线和节点。
    */
@@ -751,6 +749,8 @@ export default class LogicFlow {
   clearSelectElements() {
     this.graphModel.clearSelectElements();
   }
+  // 内部方法----------------------------------------------
+
   createFakerNode(nodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type);
     if (!Model) {

@@ -2,11 +2,11 @@ import { h, Component } from 'preact';
 import GraphModel from '../../model/GraphModel';
 import { ElementState, EventType } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
-import getTransform from './getTransformHoc';
+// import getTransform from './getTransformHoc';
 import EventEmitter from '../../event/eventEmitter';
-import { GraphTransform } from '../../type';
+// import { GraphTransform } from '../../type';
 import Dnd from '../behavior/DnD';
-import { observer } from '../..';
+// import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;
@@ -16,9 +16,9 @@ type IProps = {
 type Istate = {
   isDraging: boolean,
 };
-type InjectedProps = IProps & {
-  transformStyle: GraphTransform
-};
+// type InjectedProps = IProps & {
+//   transformStyle: GraphTransform
+// };
 
 class CanvasOverlay extends Component<IProps, Istate> {
   stepDrag: StepDrag;
@@ -40,9 +40,9 @@ class CanvasOverlay extends Component<IProps, Istate> {
       isDraging: false,
     };
   }
-  get InjectedProps() {
-    return this.props as InjectedProps;
-  }
+  // get InjectedProps() {
+  //   return this.props as InjectedProps;
+  // }
   onDraging = ({ deltaX, deltaY }) => {
     this.setState({
       isDraging: true,
@@ -145,7 +145,12 @@ class CanvasOverlay extends Component<IProps, Istate> {
     this.clickHandler(ev);
   };
   render() {
-    const { transformStyle: { transform } } = this.InjectedProps;
+    const {
+      graphModel: {
+        transformMatrix,
+      },
+    } = this.props;
+    const { transform } = transformMatrix.getTransformStyle();
     const { children, dnd } = this.props;
     const { isDraging } = this.state;
 
@@ -169,4 +174,4 @@ class CanvasOverlay extends Component<IProps, Istate> {
   }
 }
 
-export default observer(getTransform(CanvasOverlay));
+export default CanvasOverlay;

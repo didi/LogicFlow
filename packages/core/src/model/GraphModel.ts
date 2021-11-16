@@ -52,7 +52,7 @@ class GraphModel {
   @observable plugins = [];
   @observable tools = [];
   @observable background;
-  @observable transformMatrix;
+  @observable transformMatrix: TransfromModel;
   @observable editConfig: EditConfigModel;
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
