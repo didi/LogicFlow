@@ -120,6 +120,11 @@
           const height = 130;
           this.width = width;
           this.height = height;
+          this.textHeight = 60;
+          this.text = {
+            ...this.text,
+            y: this.y - this.height / 2
+          }
           const properties = this.properties;
           this.anchorsOffset = [
             {

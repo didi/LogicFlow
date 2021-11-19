@@ -35,11 +35,11 @@ export default function Text(props) {
     const rows = String(value).split(/[\r\n]/g);
     const rowsLength = rows.length;
     // 非文本节点设置了自动换行，或连线设置了自动换行并且设置了textWidth
-    const { BaseType, width, textWidth, modelType } = model;
+    const { BaseType, width, textWidth, textHeight, modelType } = model;
     if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE && autoWrap)
     || (BaseType === ElementType.EDGE && autoWrap && textWidth)) {
       const textRealWidth = textWidth || width;
-      const textHeight = getHtmlTextHeight({
+      const textRealHeight = getHtmlTextHeight({
         rows,
         style: {
           fontSize: `${fontSize}px`,
@@ -51,7 +51,12 @@ export default function Text(props) {
         rowsLength,
         className: 'lf-get-text-height',
       });
-      const foreignObjectHeight = model.height > textHeight ? model.height : textHeight;
+      // 当文字超过边框时，取文字高度的实际值，也就是文字可以超过边框
+      let foreignObjectHeight = model.height > textRealHeight ? model.height : textRealHeight;
+      // 如果设置了文字高度，取设置的高度
+      if (textHeight) {
+        foreignObjectHeight = textHeight;
+      }
       return (
         <g>
           <foreignObject
@@ -68,7 +73,7 @@ export default function Text(props) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 border: '1px solid transparent',
-                minHeight: model.height,
+                minHeight: foreignObjectHeight,
                 width: textRealWidth,
                 color,
                 padding: wrapPadding,
