@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.6...@logicflow/extension@0.7.7) (2021-11-19)
+
+
+### Features
+
+* add context menu plugin ([8c5d7a8](https://github.com/didi/LogicFlow/commit/8c5d7a84309ba8d07fbbb99dcebcae81b521bd06))
+
+
+
+
+
 ## [0.7.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.5...@logicflow/extension@0.7.6) (2021-11-11)
 
 
