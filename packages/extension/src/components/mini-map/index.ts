@@ -55,7 +55,9 @@ const MiniMap: Extension = {
     ];
     events.forEach((eventName) => {
       MiniMap.__lf.on(eventName, () => {
-        MiniMap.__setView();
+        if (MiniMap.__isShow) {
+          MiniMap.__setView();
+        }
       });
     });
   },

@@ -17,8 +17,11 @@ class BpmnElement {
     lf.register(ExclusiveGateway);
     lf.register(UserTask);
     lf.register(ServiceTask);
-    lf.register(SequenceFlow);
-    lf.setDefaultEdgeType('bpmn:sequenceFlow');
+    // 支持自定义bpmn元素的连线
+    if (!lf.options.customBpmnEdge) {
+      lf.register(SequenceFlow);
+      lf.setDefaultEdgeType('bpmn:sequenceFlow');
+    }
   }
 }
 

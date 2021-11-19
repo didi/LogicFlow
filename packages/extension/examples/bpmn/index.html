@@ -82,6 +82,7 @@
     <button id="js_auto_layout">自动布局</button>
     <button id="js_get_data">获取数据</button>
     <button id="js_re_render">重新渲染</button>
+    <button id="js_show_menu">显示菜单</button>
   </div>
   <div class="rules-graph">
     <div id="app"></div>
@@ -120,6 +121,7 @@
   <script src="/AutoLayout.js"></script>
   <script src="/Group.js"></script>
   <script src="/DndPanel.js"></script>
+  <script src="/ContextMenu.js"></script>
   <!-- <script src="./tips.js"></script> -->
   <script>
     LogicFlow.use(BpmnElement);
@@ -131,6 +133,7 @@
     LogicFlow.use(AutoLayout);
     LogicFlow.use(DndPanel);
     LogicFlow.use(Menu);
+    LogicFlow.use(ContextMenu);
     // console.log(Group);
     LogicFlow.use(Group);
     Control.addItem({

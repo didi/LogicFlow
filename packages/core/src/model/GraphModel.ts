@@ -52,7 +52,7 @@ class GraphModel {
   @observable plugins = [];
   @observable tools = [];
   @observable background;
-  @observable transformMatrix;
+  @observable transformMatrix: TransfromModel;
   @observable editConfig: EditConfigModel;
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
@@ -597,7 +597,6 @@ class GraphModel {
     const idx = this.edgesMap[id].index;
     const edge = this.edgesMap[id];
     if (!edge) {
-      console.warn(`不存在id为${id}的边`);
       return;
     }
     const edgeData = this.edgesMap[id].model.getData();

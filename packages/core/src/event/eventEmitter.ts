@@ -37,12 +37,15 @@ export default class EventEmitter {
   }
 
   /**
-     * 监听一个事件一次
-     * @param evt
-     * @param callback
-     */
+   * 监听一个事件一次
+   * @param evt
+   * @param callback
+   */
   once(evt: string, callback: CallbackType) {
-    return this.on(evt, callback, true);
+    evt.split(',').forEach((evKey) => {
+      evKey = evKey.trim();
+      return this.on(evKey, callback, true);
+    });
   }
 
   /**
@@ -50,37 +53,33 @@ export default class EventEmitter {
      * @param evt
      * @param args
      */
-  emit(evt: string, eventArgs: EventArgs) {
-    const events = this._events[evt] || [];
-    const wildcardEvents = this._events[WILDCARD] || [];
-
-    // 实际的处理 emit 方法
-    const doEmit = (es: EventType[]) => {
-      let { length } = es;
-      for (let i = 0; i < length; i++) {
-        if (!es[i]) {
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        const { callback, once } = es[i];
-
-        if (once) {
-          es.splice(i, 1);
-
-          if (es.length === 0) {
-            delete this._events[evt];
+  emit(evts: string, eventArgs: EventArgs) {
+    evts.split(',').forEach((evt) => {
+      const events = this._events[evt] || [];
+      const wildcardEvents = this._events[WILDCARD] || [];
+      // 实际的处理 emit 方法
+      const doEmit = (es: EventType[]) => {
+        let { length } = es;
+        for (let i = 0; i < length; i++) {
+          if (!es[i]) {
+            // eslint-disable-next-line no-continue
+            continue;
           }
-
-          length--;
-          i--;
+          const { callback, once } = es[i];
+          if (once) {
+            es.splice(i, 1);
+            if (es.length === 0) {
+              delete this._events[evt];
+            }
+            length--;
+            i--;
+          }
+          callback.apply(this, [eventArgs]);
         }
-
-        callback.apply(this, [eventArgs]);
-      }
-    };
-
-    doEmit(events);
-    doEmit(wildcardEvents);
+      };
+      doEmit(events);
+      doEmit(wildcardEvents);
+    });
   }
 
   /**
@@ -88,31 +87,31 @@ export default class EventEmitter {
      * @param evt
      * @param callback
      */
-  off(evt?: string, callback?: CallbackType) {
-    if (!evt) {
+  off(evts?: string, callback?: CallbackType) {
+    if (!evts) {
       // evt 为空全部清除
       this._events = {};
-    } else if (!callback) {
-      // evt 存在，callback 为空，清除事件所有方法
-      delete this._events[evt];
-    } else {
-      // evt 存在，callback 存在，清除匹配的
-      const events = this._events[evt] || [];
-
-      let { length } = events;
-      for (let i = 0; i < length; i++) {
-        if (events[i].callback === callback) {
-          events.splice(i, 1);
-          length--;
-          i--;
+    }
+    evts.split(',').forEach((evt) => {
+      if (!callback) {
+        // evt 存在，callback 为空，清除事件所有方法
+        delete this._events[evt];
+      } else {
+        // evt 存在，callback 存在，清除匹配的
+        const events = this._events[evt] || [];
+        let { length } = events;
+        for (let i = 0; i < length; i++) {
+          if (events[i].callback === callback) {
+            events.splice(i, 1);
+            length--;
+            i--;
+          }
+        }
+        if (events.length === 0) {
+          delete this._events[evt];
         }
       }
-
-      if (events.length === 0) {
-        delete this._events[evt];
-      }
-    }
-
+    });
     return this;
   }
 

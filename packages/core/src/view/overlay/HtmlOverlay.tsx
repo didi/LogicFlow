@@ -6,29 +6,34 @@
  */
 import { h, Component } from 'preact';
 import GraphModel from '../../model/GraphModel';
-import getTransform from './getTransformHoc';
-import { GraphTransform } from '../../type';
+// import getTransform from './getTransformHoc';
+// import { GraphTransform } from '../../type';
 import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel
 };
-type InjectedProps = IProps & {
-  transformStyle: GraphTransform
-};
+// type InjectedProps = IProps & {
+//   transformStyle: GraphTransform
+// };
 
 @observer
 class HtmlOverlay extends Component<IProps> {
-  get InjectedProps() {
-    return this.props as InjectedProps;
-  }
+  // get InjectedProps() {
+  //   return this.props as InjectedProps;
+  // }
   render() {
-    const { transformStyle } = this.InjectedProps;
+    const {
+      graphModel: {
+        transformMatrix,
+      },
+    } = this.props;
+    const { transform } = transformMatrix.getTransformStyle();
     const { children } = this.props;
 
     return (
       <div className="lf-html-overlay">
-        <div className="lf-html-overlay__transform" style={transformStyle}>
+        <div className="lf-html-overlay__transform" style={transform}>
           {
             children
           }
@@ -38,4 +43,4 @@ class HtmlOverlay extends Component<IProps> {
   }
 }
 
-export default getTransform(HtmlOverlay);
+export default HtmlOverlay;

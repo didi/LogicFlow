@@ -17,6 +17,7 @@ export interface TransfromInterface {
   HtmlPointToCanvasPoint: (point: PointTuple) => PointTuple;
   CanvasPointToHtmlPoint: (point: PointTuple) => PointTuple;
   moveCanvasPointByHtml: (point: PointTuple, x: number, y: number) => PointTuple;
+  getTransformStyle: () => { transform: string };
 }
 
 export default class TransfromModel implements TransfromInterface {
@@ -75,6 +76,15 @@ export default class TransfromModel implements TransfromInterface {
    */
   fixDeltaXY(deltaX: number, deltaY: number): PointTuple {
     return [deltaX / this.SCALE_X, deltaY / this.SCALE_Y];
+  }
+  /**
+   * 基于当前的缩放，获取画布渲染样式transform值
+   */
+  getTransformStyle() {
+    const matrixString = [this.SCALE_X, this.SKEW_Y, this.SKEW_X, this.SCALE_Y, this.TRANSLATE_X, this.TRANSLATE_Y].join(',');
+    return {
+      transform: `matrix(${matrixString})`,
+    };
   }
 
   @action

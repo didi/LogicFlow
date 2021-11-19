@@ -17,6 +17,7 @@ import SnaplineModel from '../model/SnaplineModel';
 import OutlineOverlay from './overlay/OutlineOverlay';
 import BezierAdjustOverlay from './overlay/BezierAdjustOverlay';
 import { observer } from '..';
+import ModificationOverlay from './overlay/ModificationOverlay';
 
 type IProps = {
   getView: (type: string) => typeof Component,
@@ -90,10 +91,12 @@ class Graph extends Component<IProps> {
           {
             fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
           }
+        </CanvasOverlay>
+        <ModificationOverlay graphModel={graphModel}>
           {!options.hideOutline ? <OutlineOverlay graphModel={graphModel} /> : ''}
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
-        </CanvasOverlay>
+        </ModificationOverlay>
         <ToolOverlay graphModel={graphModel} tool={tool} />
         {options.background && <BackgroundOverlay background={options.background} />}
         {options.grid && <Grid {...options.grid} graphModel={graphModel} />}

@@ -431,6 +431,21 @@ export default class LogicFlow {
   updateText(id: string, value: string) {
     this.graphModel.setElementTextById(id, value);
   }
+  /**
+   * 删除元素，在不确定当前id是节点还是连线时使用
+   * @param id 元素id
+   */
+  deleteElement(id): boolean {
+    const NodeModel = this.graphModel.getNodeModel(id);
+    if (NodeModel) {
+      return this.deleteNode(id);
+    }
+    const EdgeModel = this.graphModel.getEdgeModel(id);
+    if (EdgeModel) {
+      return this.deleteEdge(id);
+    }
+    return false;
+  }
 
   // 节点操作----------------------------------------------
   /**
@@ -460,14 +475,18 @@ export default class LogicFlow {
    * 删除节点
    * @param {string} nodeId 节点Id
    */
-  deleteNode(nodeId: string): void {
+  deleteNode(nodeId: string): boolean {
     const Model = this.graphModel.getNodeModel(nodeId);
+    if (!Model) {
+      return false;
+    }
     const data = Model.getData();
     const { guards } = this.options;
     const enabledDelete = guards && guards.beforeDelete ? guards.beforeDelete(data) : true;
     if (enabledDelete) {
       this.graphModel.deleteNode(nodeId);
     }
+    return enabledDelete;
   }
   /**
    * 显示节点文本编辑框
@@ -500,13 +519,11 @@ export default class LogicFlow {
    * 删除边
    * @param {string} edgeId 边Id
    */
-  deleteEdge(edgeId: string): void {
-    // 待讨论，这种钩子在这里覆盖不到removeEdge, 是否需要在graphModel中实现
+  deleteEdge(edgeId: string): boolean {
     const { guards } = this.options;
     const edge = this.graphModel.edgesMap[edgeId];
     if (!edge) {
-      console.warn(`不存在id为${edgeId}的边`);
-      return;
+      return false;
     }
     const edgeData = edge.model.getData();
     const enabledDelete = guards && guards.beforeDelete
@@ -514,8 +531,14 @@ export default class LogicFlow {
     if (enabledDelete) {
       this.graphModel.removeEdgeById(edgeId);
     }
+    return enabledDelete;
   }
-  /* 删除指定类型的边 */
+  /**
+   * 删除指定类型的边
+   * todo: API一致
+   * @param config.sourceNodeId 边的起点节点ID
+   * @param config.targetNodeId 边的终点节点ID
+   */
   removeEdge(config: { sourceNodeId: string, targetNodeId: string }): void {
     const {
       sourceNodeId, targetNodeId,
@@ -696,7 +719,7 @@ export default class LogicFlow {
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
    * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
    */
-  getSelectElements(isIgnoreCheck = true) {
+  getSelectElements(isIgnoreCheck = true): GraphConfigData {
     return this.graphModel.getSelectElements(isIgnoreCheck);
   }
   /**
@@ -719,8 +742,6 @@ export default class LogicFlow {
   setElementZIndex(id, zIndex: number | 'top' | 'bottom') {
     return this.graphModel.setElementZIndex(id, zIndex);
   }
-  // 内部方法----------------------------------------------
-
   /**
    * 添加多个元素, 包括连线和节点。
    */
@@ -751,6 +772,8 @@ export default class LogicFlow {
   clearSelectElements() {
     this.graphModel.clearSelectElements();
   }
+  // 内部方法----------------------------------------------
+
   createFakerNode(nodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type);
     if (!Model) {
@@ -774,7 +797,7 @@ export default class LogicFlow {
    * @param leftTopPoint 区域左上角坐标, dom层坐标
    * @param rightBottomPoint 区域右下角坐标，dom层坐标
    */
-  getAreaElement(leftTopPoint, rightBottomPoint) {
+  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
     return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
       .map(element => element.getData());
   }
