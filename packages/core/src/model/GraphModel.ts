@@ -597,7 +597,6 @@ class GraphModel {
     const idx = this.edgesMap[id].index;
     const edge = this.edgesMap[id];
     if (!edge) {
-      console.warn(`不存在id为${id}的边`);
       return;
     }
     const edgeData = this.edgesMap[id].model.getData();

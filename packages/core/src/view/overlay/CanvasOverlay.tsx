@@ -6,7 +6,7 @@ import { StepDrag } from '../../util/drag';
 import EventEmitter from '../../event/eventEmitter';
 // import { GraphTransform } from '../../type';
 import Dnd from '../behavior/DnD';
-// import { observer } from '../..';
+import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;
@@ -19,7 +19,7 @@ type Istate = {
 // type InjectedProps = IProps & {
 //   transformStyle: GraphTransform
 // };
-
+@observer
 class CanvasOverlay extends Component<IProps, Istate> {
   stepDrag: StepDrag;
   stepScrollX = 0;

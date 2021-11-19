@@ -1,10 +1,12 @@
 import { h, Component } from 'preact';
+import { observer } from '../..';
 import GraphModel from '../../model/GraphModel';
 
 type IProps = {
   graphModel: GraphModel;
 };
 
+@observer
 export default class ModificationOverlay extends Component<IProps> {
   render() {
     const {

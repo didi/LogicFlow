@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core';
+import LogicFlow, { PointTuple } from '@logicflow/core';
 
 class SelectionSelect {
   __domContainer: HTMLElement;
@@ -91,8 +91,8 @@ class SelectionSelect {
     this.__domContainer.removeChild(this.wrapper);
     const { x, y } = this.startPoint;
     const { x: x1, y: y1 } = this.endPoint;
-    const lt = [Math.min(x, x1), Math.min(y, y1)];
-    const rt = [Math.max(x, x1), Math.max(y, y1)];
+    const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)];
+    const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)];
     const elements = this.lf.getAreaElement(lt, rt);
     elements.forEach((element) => {
       this.lf.select(element.id, true);

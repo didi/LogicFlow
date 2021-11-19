@@ -6,6 +6,7 @@ const packagesEntry = {
   Snapshot: path.resolve(__dirname, '../src/tools/snapshot/index.ts'),
   RectLabelNode: path.resolve(__dirname, '../src/rect-label-node/index.ts'),
   BpmnElement: path.resolve(__dirname, '../src/bpmn/index.ts'),
+  ContextMenu: path.resolve(__dirname, '../src/components/context-menu/index.ts'),
   Control: path.resolve(__dirname, '../src/components/control/index.ts'),
   Menu: path.resolve(__dirname, '../src/components/menu/index.ts'),
   DndPanel: path.resolve(__dirname, '../src/components/dnd-panel/index.ts'),

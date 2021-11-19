@@ -177,3 +177,21 @@
 .lf-resize-control-3{
   cursor: sw-resize;
 }
+/* context-menu */
+.lf-inner-context {
+  display: none;
+  position: absolute;
+  /* display: flex; */
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 90px;
+}
+.lf-context-item {
+  padding: 2px 3px;
+  width: 20px;
+  height: 20px;
+  margin: 0 2px 2px 0;
+}
+.lf-context-item:hover {
+  background: rgba(201, 217, 216, 0.5);
+}

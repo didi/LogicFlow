@@ -96,6 +96,7 @@
     <button onClick="setProperties()">设置属性</button>
     <button onClick="setZoom()">设置大小</button>
     <button onClick="selectElement()">选中指定节点</button>
+    <button onClick="triggerLine()">触发连线</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -358,13 +359,14 @@
       function InitLogicFlow() {
         const lf = new LogicFlow({
           container: document.querySelector('#app'),
+          // hideAnchors: true,
           // width: 700,
           // height: 500,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
           metaKeyMultipleSelected: true,
-          adjustEdgeMiddle: true,
+          // adjustEdgeMiddle: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
@@ -424,7 +426,7 @@
             edgeText: { autoWrap: true, lineHeight: 1.5 },
           }
         );
-        lf.setDefaultEdgeType('connection');
+        lf.setDefaultEdgeType('bezier');
 
         lf.render({
           nodes: [
@@ -649,10 +651,13 @@
         window.setZoom = function () {
           // lf.graphModel.transformMatrix.SCALE_X  = 0.6
           // lf.graphModel.transformMatrix.SCALE_Y = 0.6
-          lf.zoom(-0.2, [400, 400])
+          lf.zoom(0.6, [400, 400])
         }
         window.selectElement = function () {
           lf.select('2222')
+        }
+        window.triggerLine = function () {
+          // lf.startConnect()
         }
       }
     </script>
@@ -673,8 +678,8 @@
         lf.on('node:click', ({ data }) => {
           // const model = lf.graphModel.getElement(data.id)
           // model.fill = 'red'
-          console.log(data.id)
-          console.log(lf.getGraphData())
+          // console.log(data.id)
+          // console.log(lf.getGraphData())
           // lf.changeNodeId(data.id)
         })
         lf.on('node:delete',()=> {
