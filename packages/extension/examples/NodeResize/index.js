@@ -14,7 +14,6 @@ window.onload = function () {
     rect: {
       radius: 50,
       strokeWidth: 2,
-      outlineColor: 'transparent',
     },
   });
   lf.render({

@@ -42,6 +42,7 @@ const defaultData = {
   points: '',
   pointsList: [],
   strokeOpacity: 1,
+  hideOutline: false,
   ...defaultTheme.line,
 };
 class BaseEdgeModel implements IBaseModel {
@@ -67,6 +68,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable stroke = defaultData.stroke;
   @observable strokeDashArray = defaultData.strokeDashArray;
   @observable outlineColor = defaultData.outlineColor;
+  @observable hideOutline = defaultData.hideOutline;
   @observable outlineStrokeDashArray = defaultData.outlineStrokeDashArray;
   @observable strokeOpacity = defaultData.strokeOpacity;
   @observable zIndex = defaultData.zIndex;

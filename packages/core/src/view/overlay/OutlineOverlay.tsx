@@ -28,12 +28,13 @@ export default class OutlineOverlay extends Component<IProps> {
           y,
           width,
           height,
+          hideOutline,
           outlineColor,
           hoverOutlineColor,
           outlineStrokeDashArray,
           hoverOutlineStrokeDashArray,
         } = element;
-        if (nodeSelectedOutline || (hoverOutline && isHovered)) {
+        if (!hideOutline && (nodeSelectedOutline || (hoverOutline && isHovered))) {
           const color = isSelected ? outlineColor : hoverOutlineColor;
           const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
           nodeOutline.push(
@@ -59,7 +60,7 @@ export default class OutlineOverlay extends Component<IProps> {
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (edge.isSelected && edgeSelectedOutline) {
+      if (!edge.hideOutline && edge.isSelected && edgeSelectedOutline) {
         if (edge.modelType === ModelType.LINE_EDGE) {
           edgeOutline.push(this.getLineOutline(edge));
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {
