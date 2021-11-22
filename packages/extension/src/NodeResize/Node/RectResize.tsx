@@ -41,10 +41,10 @@ class RectResizeView extends RectNode {
       />
     );
   }
-  // // getResizeShape绘制图形，功能等同于基础矩形的getShape功能，可以通过复写此方法，进行节点自定义
-  // getResizeShape() {
-  //   return super.getShape();
-  // }
+  // getResizeShape绘制图形，功能等同于基础矩形的getShape功能，可以通过复写此方法，进行节点自定义
+  getResizeShape() {
+    return super.getShape();
+  }
   getShape() {
     const attributes = super.getAttributes();
     const {
@@ -52,7 +52,7 @@ class RectResizeView extends RectNode {
     } = this.props;
     return (
       <g>
-        {super.getShape()}
+        {this.getResizeShape()}
         {isSelected ? this.getControlGroup(attributes) : ''}
       </g>
     );
