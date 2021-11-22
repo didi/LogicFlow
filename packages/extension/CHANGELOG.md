@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.7...@logicflow/extension@0.7.8) (2021-11-22)
+
+
+### Bug Fixes
+
+* nodeResize getResizeShape bugfix ([e617013](https://github.com/didi/LogicFlow/commit/e617013f979cd67dbe438dad141f0eef25690aa2))
+
+
+### Features
+
+* export context menu ([f0ff960](https://github.com/didi/LogicFlow/commit/f0ff960a2518cfe0e3f9d2a5abb843b87957def6))
+
+
+
+
+
 ## [0.7.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.6...@logicflow/extension@0.7.7) (2021-11-19)
 
 
