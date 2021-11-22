@@ -85,11 +85,10 @@ class ContextMenu {
       }
     }
     if (Model.BaseType === 'node') {
-      const x1 = data.x + Model.width / 2;
-      const y1 = data.y - Model.height / 2;
-      [x, y] = this.lf.graphModel.transformMatrix.CanvasPointToHtmlPoint([x1, y1]);
+      x = data.x + Model.width / 2;
+      y = data.y - Model.height / 2;
     }
-    return [x, y];
+    return this.lf.graphModel.transformMatrix.CanvasPointToHtmlPoint([x, y]);
   }
   private createContextMenu() {
     const { isSilentMode } = this.lf.options;

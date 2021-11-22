@@ -8,7 +8,7 @@ window.onload = function () {
     // // stopMoveGraph: true,
     // metaKeyMultipleSelected: true,
     hideAnchors: false,
-    isSilentMode: true,
+    // isSilentMode: true,
     grid: {
       type: 'dot',
       size: 20,
