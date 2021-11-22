@@ -26,7 +26,7 @@ const genMenus = () => {
   // eslint-disable-next-line array-callback-return
   menus.map((menu) => {
     const { path } = menu;
-    const { name, group, hidden } = routeMaps[path] ?? {};
+    const { name, group } = routeMaps[path] ?? {};
     const [firstNode] = group.split('.');
     if (firstNode === 'root') {
       tree.push({

@@ -42,7 +42,7 @@ export default function ExampleHeader(props: IProps): ReactElement {
         {props.children}
       </div>
       <div className="tools">
-        <a href="http://logic-flow.org/examples/" target="_blank">查看全部示例</a>
+        <a href="http://logic-flow.org/examples/" rel="noreferrer" target="_blank">查看全部示例</a>
         {props.githubPath ? getGithubTool() : null}
       </div>
     </div>
