@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.17](https://github.com/didi/LogicFlow/compare/examples@0.7.16...examples@0.7.17) (2021-11-22)
+
+
+### Bug Fixes
+
+* build eslint validate ([5668699](https://github.com/didi/LogicFlow/commit/566869945e5571a1a926a0c13e8828ae838a5128))
+
+
+### Features
+
+* :sparkles: example新增导航 ([46239b1](https://github.com/didi/LogicFlow/commit/46239b1a477541476fd157e31727e9e5bc5b6e4e))
+
+
+
+
+
 ## [0.7.16](https://github.com/didi/LogicFlow/compare/examples@0.7.15...examples@0.7.16) (2021-11-19)
 
 **Note:** Version bump only for package examples
