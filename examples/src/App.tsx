@@ -2,7 +2,7 @@ import React from 'react';
 import Routes from './routes';
 import './App.css';
 import { Menu } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { routeGroupNameMaps, routeMaps } from './constants';
 
 type MenusType = { name: string; path: string };
@@ -66,14 +66,14 @@ const genMenus = () => {
       );
     }
   });
-  console.log('tree', tree);
   return tree;
 };
 
 function App() {
   const history = useHistory();
   const m = genMenus();
-
+  let { search } = useLocation();
+  let isInDoc = search.indexOf('from=doc') !== -1
   const renderNav = () => {
     return (
       <Menu
@@ -88,7 +88,7 @@ function App() {
 
   return (
     <div className="App">
-      {renderNav()}
+      { isInDoc ? '' : renderNav()}
       <div className="container">{Routes}</div>
     </div>
   );

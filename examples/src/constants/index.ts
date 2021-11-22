@@ -31,10 +31,10 @@ export const routeMaps: RouteMapsType = {
   '/extension/adapter': { name: '导出 bpmnAdapter 转换后的数据格式', group: 'extension', hidden: false },
   '/extension/node-resize': { name: '节点缩放', group: 'extension', hidden: false },
   '/extension/InserNodeInPolyline': { name: '拖拽节点到线中间进行节点插入', group: 'extension', hidden: false },
-  '/usage/bpmn': { name: '点击左下角下载 XML，将文件上传到', group: 'usage', hidden: false },
+  '/usage/bpmn': { name: 'Bpmn示例', group: 'usage', hidden: false },
   '/usage/approve': { name: '审批流', group: 'usage', hidden: false },
   '/usage/approve/preview': { name: '预览', group: 'usage', hidden: false },
-  '/': { name: '经典', group: 'root', hidden: false },
+  '/': { name: '入门', group: 'root', hidden: false },
 };
 
 type RouteGroupNameMapsType = {[k: string]: string}

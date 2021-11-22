@@ -38,10 +38,11 @@ export default function ExampleHeader(props: IProps): ReactElement {
         className="content"
         style={props.contentStyle}
       >
-        <span className="content-text">{props.content}</span>
+        { props.content ? <span className="content-text">{props.content}</span> : ''} 
         {props.children}
       </div>
       <div className="tools">
+        <a href="http://logic-flow.org/examples/" target="_blank">查看全部示例</a>
         {props.githubPath ? getGithubTool() : null}
       </div>
     </div>
