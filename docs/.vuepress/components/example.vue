@@ -45,13 +45,17 @@ export default {
     if (process.env.NODE_ENV === 'development') {
       host = 'http://localhost:3000';
     }
+    let url = ''
     if (this.href) {
-      this.iframeLink = host + base.slice(0, -1) + this.href;
+      url = host + base.slice(0, -1) + this.href;
     } else {
-      this.iframeLink =
+      url =
         host +
         location.pathname.replace('guide', 'examples/#').replace('.html', '');
     }
+    url += `${url.indexOf('?') === -1 ? '?' : '&'}from=doc`
+    this.iframeLink = url;
+
     document.getElementById(this.iframeId).onload = () => {
       this.showIframe = true;
     };
