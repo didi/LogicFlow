@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.8...@logicflow/extension@0.7.9) (2021-11-23)
+
+
+### Bug Fixes
+
+* context menu edge icon position ([f06ead4](https://github.com/didi/LogicFlow/commit/f06ead4e687498550012e654765430d1fa1f48a2))
+* nodeResize outline bugfix ([8e76f5f](https://github.com/didi/LogicFlow/commit/8e76f5f8e79a18189f48339b85904b06d29cfda2))
+
+
+### Features
+
+* context-menu use className ([e58eaea](https://github.com/didi/LogicFlow/commit/e58eaea67aaf7c8f420aed849a4f77b753a1bc6c))
+
+
+
+
+
 ## [0.7.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.7...@logicflow/extension@0.7.8) (2021-11-22)
 
 

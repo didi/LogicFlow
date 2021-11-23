@@ -191,7 +191,13 @@
   width: 20px;
   height: 20px;
   margin: 0 2px 2px 0;
+  box-sizing: content-box;
 }
 .lf-context-item:hover {
   background: rgba(201, 217, 216, 0.5);
+}
+.lf-context-img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }

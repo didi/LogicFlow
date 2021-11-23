@@ -75,6 +75,7 @@ lf.on('element:type', (eventObject) => {});
 | 'blank:drag'        | 画布拖拽     | e           |
 | 'blank:drop'        | 画布拖拽放开 | e           |
 | 'text:update'       | 文案更新     | data        |
+| 'graph:transform'       | 画布平移或者缩放触发     | data        |
 
 事件对象包含如下内容。
 
