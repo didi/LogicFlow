@@ -104,9 +104,7 @@ class ContextMenu {
       menuItem.className = 'lf-context-item';
       const img = document.createElement('img');
       img.src = item.icon;
-      img.style.width = '20px';
-      img.style.height = '20px';
-      img.style.cursor = 'pointer';
+      img.className = 'lf-context-img';
       img.addEventListener('click', () => {
         this.hideMenu();
         if (item.callback) {
