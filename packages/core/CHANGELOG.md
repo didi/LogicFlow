@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.8...@logicflow/core@0.7.9) (2021-11-23)
+
+
+### Bug Fixes
+
+* nodeResize outline bugfix ([8e76f5f](https://github.com/didi/LogicFlow/commit/8e76f5f8e79a18189f48339b85904b06d29cfda2))
+
+
+
+
+
 ## [0.7.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.7...@logicflow/core@0.7.8) (2021-11-22)
 
 **Note:** Version bump only for package @logicflow/core
