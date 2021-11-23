@@ -42,21 +42,6 @@ const NodeResize = {
     },
   },
   install(lf) {
-    // 设置默认样式，主要将outlineColor设置为透明，不再core包中默认的节点外框
-    lf.setTheme({
-      rect: {
-        strokeWidth: 2,
-        outlineColor: 'transparent',
-      },
-      ellipse: {
-        strokeWidth: 2,
-        outlineColor: 'transparent',
-      },
-      diamond: {
-        strokeWidth: 2,
-        outlineColor: 'transparent',
-      },
-    });
     lf.register({
       type: RectResize.type,
       view: RectResize.view,

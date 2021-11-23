@@ -15,6 +15,7 @@ interface IProps {
 }
 class DiamondResizeModel extends DiamondNodeModel {
   setAttributes() {
+    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {

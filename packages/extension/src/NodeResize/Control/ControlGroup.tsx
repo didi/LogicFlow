@@ -97,7 +97,7 @@ class ControlGroup extends Component<IProps> {
   render() {
     return (
       <g className="lf-resize-control">
-        {/* {this.getGroupSolid()} */}
+        {this.getGroupSolid()}
         {this.getResizeControl()}
       </g>
     );

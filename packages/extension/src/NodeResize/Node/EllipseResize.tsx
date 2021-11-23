@@ -19,6 +19,7 @@ class EllipseResizeModel extends EllipseNodeModel {
   maxWidth = 2000;
   maxHeight = 2000;
   setAttributes() {
+    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {

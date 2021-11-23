@@ -28,6 +28,7 @@ const defaultConfig = assign(
       draggable: false,
       editable: true,
     },
+    hideOutline: false,
   },
   defaultTheme.rect,
   defaultTheme.circle,
@@ -88,6 +89,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable strokeOpacity = defaultConfig.strokeOpacity;
   @observable opacity = defaultConfig.opacity;
   @observable outlineColor = defaultConfig.outlineColor;
+  @observable hideOutline = defaultConfig.hideOutline;
   @observable hoverOutlineColor = defaultConfig.hoverOutlineColor;
   @observable outlineStrokeDashArray = defaultConfig.outlineStrokeDashArray;
   @observable hoverOutlineStrokeDashArray = defaultConfig.hoverOutlineStrokeDashArray;
