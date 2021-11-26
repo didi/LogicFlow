@@ -1,4 +1,5 @@
 export * from './bpmn';
+export * from './mindmap';
 export * from './tools/snapshot';
 export * from './bpmn-adapter';
 export * from './turbo-adapter';

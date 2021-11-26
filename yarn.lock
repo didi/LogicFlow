@@ -36,6 +36,21 @@
     lodash "^4.17.21"
     resize-observer-polyfill "^1.5.0"
 
+"@antv/hierarchy@^0.6.8":
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/@antv/hierarchy/-/hierarchy-0.6.8.tgz#b77c490a9c2dd6da186cbacee0e7887b8c1b3fa4"
+  integrity sha512-wVzUl+pxny5gyGJ2mkWx8IiEypX6bnMHgr/NILgbxY6shoy0Vf4FhZpI3CY8Ez7bQT6js8fMkB2NymPW7d7i8A==
+  dependencies:
+    "@antv/util" "^2.0.7"
+
+"@antv/util@^2.0.7":
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/@antv/util/-/util-2.0.17.tgz#e8ef42aca7892815b229269f3dd10c6b3c7597a9"
+  integrity sha512-o6I9hi5CIUvLGDhth0RxNSFDRwXeywmt6ExR4+RmVAzIi48ps6HUy+svxOCayvrPBN37uE6TAc2KDofRo0nK9Q==
+  dependencies:
+    csstype "^3.0.8"
+    tslib "^2.0.3"
+
 "@babel/code-frame@7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -6477,6 +6492,11 @@ csstype@^3.0.2:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.8.tgz#d2266a792729fb227cd216fb572f43728e1ad340"
   integrity sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==
+
+csstype@^3.0.8:
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
+  integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
