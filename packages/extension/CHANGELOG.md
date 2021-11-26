@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.10](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.9...@logicflow/extension@0.7.10) (2021-11-26)
+
+
+### Features
+
+* add mind map plugin ([11ae7e0](https://github.com/didi/LogicFlow/commit/11ae7e06f878cb6b8c82f2f73f74e8e4620fecb6))
+* hide mind map ([2aa1120](https://github.com/didi/LogicFlow/commit/2aa112002023b87188c9b132dbeb6c77e92e17bf))
+
+
+
+
+
 ## [0.7.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.8...@logicflow/extension@0.7.9) (2021-11-23)
 
 
