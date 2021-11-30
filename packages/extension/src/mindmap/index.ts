@@ -53,6 +53,18 @@ class MindMap {
     lf.renderTree = () => {
       this.renderTree();
     };
+    /**
+     * 监听删除
+     */
+    this.lf.keyboard.on('backspace', () => {
+      const { nodes } = this.lf.getSelectElements(true);
+      if (nodes.length > 0) {
+        this.lf.clearSelectElements();
+        nodes.forEach((node) => {
+          this.lf.removeTreeNode(node.id);
+        });
+      }
+    });
   }
   setContextMenu() {
     const menuItem = [

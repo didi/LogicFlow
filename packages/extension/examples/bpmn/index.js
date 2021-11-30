@@ -7,6 +7,7 @@ window.onload = function () {
     // nodeTextDraggable: true,
     // // stopMoveGraph: true,
     // metaKeyMultipleSelected: true,
+    // multipleSelectedKey: 'meta', // alt, shift
     hideAnchors: false,
     // isSilentMode: true,
     grid: {

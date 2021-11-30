@@ -49,6 +49,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
     'react/prop-types': 0,
     'react/jsx-props-no-spreading': 0,
     'react/prefer-stateless-function': 0,

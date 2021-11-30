@@ -15,6 +15,7 @@ type IProps = {
 };
 @observer
 export default class MultipleSelect extends Component<IProps> {
+  static toolName = 'multipleSelect';
   stepDrag;
   constructor(props) {
     super();

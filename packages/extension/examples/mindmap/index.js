@@ -5,20 +5,20 @@ window.onload = function () {
     container: document.querySelector('#app'),
     keyboard: {
       enabled: true,
-      shortcuts: [
-        {
-          keys: ['backspace'],
-          callback: () => {
-            const { nodes } = lf.getSelectElements(true);
-            if (nodes.length > 0) {
-              lf.clearSelectElements();
-              nodes.forEach((node) => {
-                lf.removeTreeNode(node.id)
-              })
-            }
-          }
-        }
-      ]
+      // shortcuts: [
+      //   {
+      //     keys: ['backspace'],
+      //     callback: () => {
+      //       const { nodes } = lf.getSelectElements(true);
+      //       if (nodes.length > 0) {
+      //         lf.clearSelectElements();
+      //         nodes.forEach((node) => {
+      //           lf.removeTreeNode(node.id)
+      //         })
+      //       }
+      //     }
+      //   }
+      // ]
     }
   });
   lf.setPatternItems([
