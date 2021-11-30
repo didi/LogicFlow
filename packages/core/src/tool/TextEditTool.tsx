@@ -26,6 +26,7 @@ type IState = {
 
 @observer
 export default class TextEdit extends Component<IProps, IState> {
+  static toolName = 'textEdit';
   ref = createRef();
   __prevText = {
     type: '',

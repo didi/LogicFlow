@@ -2,6 +2,7 @@ type MenuItem = {
   icon: string;
   callback?: (data) => void;
   type?: string;
+  className?: string;
   properties: Record<string, any>;
 };
 
@@ -105,6 +106,9 @@ class ContextMenu {
       const img = document.createElement('img');
       img.src = item.icon;
       img.className = 'lf-context-img';
+      if (item.className) {
+        menuItem.className = `${menuItem.className} ${item.className}`;
+      }
       img.addEventListener('click', () => {
         this.hideMenu();
         if (item.callback) {

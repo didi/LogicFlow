@@ -71,6 +71,11 @@ export interface EditConfigInterface {
    */
   metaKeyMultipleSelected?: boolean;
   /**
+   * 多选按键, 支持meta(cmd)、shift、alt
+   * 不支持ctrl，ctrl会出发contextmenu
+   */
+  multipleSelectKey?: string;
+  /**
    * 外部传入的额外配置, 待优化，这里不够易用。
    */
   extraConf?: Record<string, string | number | object | boolean>;
@@ -106,6 +111,7 @@ const keys = [
   'nodeTextDraggable',
   'edgeTextDraggable',
   'metaKeyMultipleSelected',
+  'multipleSelectKey',
   'extraConf',
 ];
 /**
@@ -128,6 +134,7 @@ export default class EditConfigModel {
   @observable nodeTextDraggable = false;
   @observable edgeTextDraggable = false;
   @observable metaKeyMultipleSelected = false;
+  multipleSelectKey = '';
   extraConf = {};
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {

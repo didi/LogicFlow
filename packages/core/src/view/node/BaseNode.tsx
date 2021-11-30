@@ -8,6 +8,7 @@ import EventEmitter from '../../event/eventEmitter';
 import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
+import { isMultipleSelect } from '../../util/graph';
 
 type IProps = {
   model: BaseNodeModel;
@@ -252,13 +253,12 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return;
 
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectNodeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    const { editConfig } = graphModel;
+    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfig));
     this.toFront();
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
-      const { editConfig } = graphModel;
       if (editConfig.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);

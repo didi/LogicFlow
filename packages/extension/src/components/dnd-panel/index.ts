@@ -14,10 +14,15 @@ class DndPanel {
   shapeList: ShapeItem[];
   panelEl: HTMLDivElement;
   static pluginName = 'DndPanel';
+  domContainer: HTMLElement;
   constructor({ lf }) {
     this.lf = lf;
     this.lf.setPatternItems = (shapeList) => {
       this.shapeList = shapeList;
+      // 支持渲染后重新设置拖拽面板
+      if (this.domContainer) {
+        this.render(this.lf, this.domContainer);
+      }
     };
   }
   render(lf, domContainer) {
@@ -31,6 +36,7 @@ class DndPanel {
       this.panelEl.appendChild(this.createDndItem(shapeItem));
     });
     domContainer.appendChild(this.panelEl);
+    this.domContainer = domContainer;
   }
   private createDndItem(shapeItem): HTMLElement {
     const el = document.createElement('div');

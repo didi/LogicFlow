@@ -17,3 +17,28 @@ export const getById = (id, data) => {
 export const isPointInArea = (
   [x, y], [leftTopX, leftTopY], [rightBottomX, rightBottomY],
 ): boolean => (x > leftTopX && x < rightBottomX && y > leftTopY && y < rightBottomY);
+
+/**
+ * 判断鼠标点击选中元素的时候，是否为多选
+ */
+export const isMultipleSelect = (e: MouseEvent, editConfig): boolean => {
+  const { multipleSelectKey, metaKeyMultipleSelected } = editConfig;
+  // todo: 兼容最早的metaKeyMultipleSelected配置方式。1.0版本考虑去掉
+  if (metaKeyMultipleSelected && e.metaKey) return true;
+  let isMultiple = false;
+  switch (multipleSelectKey) {
+    case 'meta':
+      isMultiple = e.metaKey;
+      break;
+    case 'alt':
+      isMultiple = e.altKey;
+      break;
+    case 'shift':
+      isMultiple = e.shiftKey;
+      break;
+    default:
+      isMultiple = false;
+      break;
+  }
+  return isMultiple;
+};

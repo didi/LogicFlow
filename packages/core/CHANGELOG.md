@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.10...@logicflow/core@0.7.11) (2021-11-30)
+
+
+### Features
+
+* support disabled tool in core package ([1c7527f](https://github.com/didi/LogicFlow/commit/1c7527fc75929c444d9e5fb4b0b70b87086694c8))
+
+
+
+
+
+## [0.7.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.9...@logicflow/core@0.7.10) (2021-11-26)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
 ## [0.7.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.8...@logicflow/core@0.7.9) (2021-11-23)
 
 
