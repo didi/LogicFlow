@@ -7,14 +7,13 @@ export default function Text(props) {
     x = 0,
     y = 0,
     value,
-    color = '#000000',
     fontSize,
     fill = 'currentColor',
     model,
-    fontFamily = '',
-    lineHeight,
     autoWrap = false,
-    wrapPadding = '0, 0',
+  } = props;
+  let {
+    overflowMode = 'default', // 文本超出范围处理方式. default表示不特殊处理。autoWrap表示自定换行，ellipsis表示省略
   } = props;
   const attrs = {
     textAnchor: 'middle',
@@ -30,72 +29,20 @@ export default function Text(props) {
       attrs[k] = v;
     }
   });
+  if (autoWrap) { // 兼容历史情况，使用autoWrap来表示自动换行
+    overflowMode = 'autoWrap';
+  }
   if (value) {
     // String(value),兼容纯数字的文案
     const rows = String(value).split(/[\r\n]/g);
     const rowsLength = rows.length;
-    // 非文本节点设置了自动换行，或连线设置了自动换行并且设置了textWidth
-    const { BaseType, width, textWidth, textHeight, modelType } = model;
-    if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE && autoWrap)
-    || (BaseType === ElementType.EDGE && autoWrap && textWidth)) {
-      const textRealWidth = textWidth || width;
-      const textRealHeight = getHtmlTextHeight({
-        rows,
-        style: {
-          fontSize: `${fontSize}px`,
-          width: `${textRealWidth}px`,
-          fontFamily,
-          lineHeight,
-          padding: wrapPadding,
-        },
-        rowsLength,
-        className: 'lf-get-text-height',
-      });
-      // 当文字超过边框时，取文字高度的实际值，也就是文字可以超过边框
-      let foreignObjectHeight = model.height > textRealHeight ? model.height : textRealHeight;
-      // 如果设置了文字高度，取设置的高度
-      if (textHeight) {
-        foreignObjectHeight = textHeight;
+    if (overflowMode !== 'default') {
+      // 非文本节点设置了自动换行，或连线设置了自动换行并且设置了textWidth
+      const { BaseType, textWidth, modelType } = model;
+      if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE)
+      || (BaseType === ElementType.EDGE && textWidth)) {
+        return renderHtmlText(props, attrs);
       }
-      return (
-        <g>
-          <foreignObject
-            width={textRealWidth}
-            height={foreignObjectHeight}
-            x={attrs.x - textRealWidth / 2}
-            y={attrs.y - foreignObjectHeight / 2}
-          >
-            <div
-              className="lf-node-text-auto-wrap"
-              style={{
-                boxSizing: 'border-box',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                border: '1px solid transparent',
-                minHeight: foreignObjectHeight,
-                width: textRealWidth,
-                color,
-                padding: wrapPadding,
-              }}
-            >
-              <div
-                className="lf-node-text-auto-wrap-content"
-                style={{
-                  fontSize,
-                  fontFamily,
-                  lineHeight,
-                  background: 'transparent',
-                  textAlign: 'center',
-                  wordBreak: 'break-all',
-                }}
-              >
-                {rows.map(item => <div>{item}</div>)}
-              </div>
-            </div>
-          </foreignObject>
-        </g>
-      );
     }
     if (rowsLength > 1) {
       const tspans = rows.map(((row, i) => {
@@ -118,4 +65,74 @@ export default function Text(props) {
       </text>
     );
   }
+}
+
+function renderHtmlText(props, attrs) {
+  const {
+    x = 0,
+    y = 0,
+    value,
+    color = '#000000',
+    fontSize,
+    model,
+    fontFamily = '',
+    lineHeight,
+    wrapPadding = '0, 0',
+    overflowMode,
+  } = props;
+  const { width, textWidth, textHeight } = model;
+  const textRealWidth = textWidth || width;
+  const rows = String(value).split(/[\r\n]/g);
+  const rowsLength = rows.length;
+  const textRealHeight = getHtmlTextHeight({
+    rows,
+    style: {
+      fontSize: `${fontSize}px`,
+      width: `${textRealWidth}px`,
+      fontFamily,
+      lineHeight,
+      padding: wrapPadding,
+    },
+    rowsLength,
+    className: 'lf-get-text-height',
+  });
+  // 当文字超过边框时，取文字高度的实际值，也就是文字可以超过边框
+  let foreignObjectHeight = model.height > textRealHeight ? model.height : textRealHeight;
+  // 如果设置了文字高度，取设置的高度
+  if (textHeight) {
+    foreignObjectHeight = textHeight;
+  }
+  const isEllipsis = overflowMode === 'ellipsis';
+
+  return (
+    <g>
+      <foreignObject
+        width={textRealWidth}
+        height={foreignObjectHeight}
+        x={attrs.x - textRealWidth / 2}
+        y={attrs.y - foreignObjectHeight / 2}
+      >
+        <div
+          className="lf-node-text-auto-wrap"
+          style={{
+            minHeight: foreignObjectHeight,
+            width: textRealWidth,
+            color,
+            padding: wrapPadding,
+          }}
+        >
+          <div
+            className={isEllipsis ? 'lf-node-text-ellipsis-content' : 'lf-node-text-auto-wrap-content'}
+            style={{
+              fontSize,
+              fontFamily,
+              lineHeight,
+            }}
+          >
+            {rows.map(item => <div className="lf-node-text--auto-wrap-inner">{item}</div>)}
+          </div>
+        </div>
+      </foreignObject>
+    </g>
+  );
 }
