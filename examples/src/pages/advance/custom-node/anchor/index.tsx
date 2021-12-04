@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import LogicFlow from '@logicflow/core';
 import ExampleHeader from '../../../../components/example-header';
 import { Square } from '../square';
+import { CircleAnchor } from './circle';
 
 const config = {
   stopScrollGraph: true,
@@ -20,19 +21,26 @@ const data = {
       type: 'square',
       x: 150,
       y: 90,
-      text: '正方形'
+      text: '只有两个锚点'
+    },
+    {
+      type: 'circle:anchor',
+      x: 350,
+      y: 90,
+      text: '圆'
     },
   ]
 };
 
 export default function CustomNodeAnchorExample() {
-
+  const refContainer = useRef() as React.MutableRefObject<HTMLDivElement>;
   useEffect(() => {
     const lf = new LogicFlow({
       ...config,
-      container: document.querySelector('#graph') as HTMLElement
+      container: refContainer.current
     });
     lf.register(Square);
+    lf.register(CircleAnchor);
     lf.render(data);
   }, []);
 
@@ -42,7 +50,7 @@ export default function CustomNodeAnchorExample() {
         content="只保留水平方向上的锚点"
         githubPath="/advance/custom-node/anchor/index.tsx"
       />
-      <div id="graph" className="viewport" />
+      <div ref={refContainer} className="viewport" />
     </>
   )
 }

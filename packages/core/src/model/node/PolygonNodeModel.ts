@@ -16,7 +16,11 @@ class PolygonNodeModel extends BaseNodeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'polygon');
   }
-
+  /**
+   * 由于大多数情况下，我们初始化拿到的多边形坐标都是基于原点的（例如绘图工具到处的svg）。
+   * 在logicflow中对多边形进行移动，我们不需要去更新points，
+   * 而是去更新多边形中心点即可。
+   */
   @computed get pointsPosition(): Point[] {
     const {
       x, y, width, height,

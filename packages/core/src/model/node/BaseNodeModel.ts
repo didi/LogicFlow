@@ -8,7 +8,16 @@ import {
   ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point, AnchorConfig,
+  AdditionData,
+  NodeData,
+  NodeAttribute,
+  NodeConfig,
+  NodeMoveRule,
+  Bounds,
+  AnchorConfig,
+  PointAnchor,
+  AnchorsOffsetItem,
+  PointTuple,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -97,7 +106,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable zIndex = defaultConfig.zIndex;
-  @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
+  @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
   @observable state = 1;
   @observable text = defaultConfig.text;
   @observable draggable = true;
@@ -108,8 +117,13 @@ export default class BaseNodeModel implements IBaseModel {
     this.initNodeData(data);
     this.setAttributes();
   }
-
-  initNodeData(data) {
+  /**
+   * 初始化节点数据，不建议重写
+   * 可以重写setAttributes来实现修改初始化功能
+   * initNodeData和setAttributes的区别在于
+   * initNodeData需要
+   */
+  protected initNodeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
@@ -130,12 +144,17 @@ export default class BaseNodeModel implements IBaseModel {
       this.zIndex = data.zIndex || getZIndex();
     }
   }
-
-  createId() {
+  /**
+   * @overridable 支持重新
+   * @returns string
+   */
+  public createId(): string {
     return null;
   }
-  // 格式化text参数，未修改observable不作为action
-  formatText(data): void {
+  /**
+   * 初始化文本属性，对
+   */
+  private formatText(data): void {
     if (!data.text) {
       data.text = {
         value: '',
@@ -157,13 +176,26 @@ export default class BaseNodeModel implements IBaseModel {
       data.text.editable = true;
     }
   }
-
+  /**
+   * 设置model初始化属性
+   * 例如设置节点的宽度
+   * @example
+   *
+   * setAttributes () {
+   *   this.width = 300
+   *   this.height = 200
+   * }
+   *
+   * @overridable 支持重写
+   */
   setAttributes() {}
 
   /**
-   * 保存时获取的数据
+   * 获取被保存时返回的数据
+   * @overridable 支持重写
+   * @returns NodeData
    */
-  getData(): NodeData {
+  public getData(): NodeData {
     const { x, y, value } = this.text;
     let { properties } = this;
     if (isObservable(properties)) {
@@ -272,30 +304,48 @@ export default class BaseNodeModel implements IBaseModel {
     return this.targetRules;
   }
 
-  getAnchorsByOffset(): Point[] {
+  /**
+   * @overridable 子类重写此方法设置锚点
+   * @returns Point[] 锚点坐标构成的数组
+   */
+  public getAnchorsByOffset(): PointAnchor[] {
     const {
-      anchorsOffset, x, y, id,
+      anchorsOffset,
+      id,
+      x,
+      y,
     } = this;
-    return anchorsOffset.map((el, idx) => {
-      if (el.length) {
+    if (anchorsOffset && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el, idx) => {
+        if (el.length) {
+          el = el as PointTuple; // 历史数据格式
+          return {
+            id: `${id}_${idx}`,
+            x: x + el[0],
+            y: y + el[1],
+          };
+        }
+        el = el as PointAnchor;
         return {
-          id: `${id}_${idx}`,
-          x: x + el[0],
-          y: y + el[1],
+          ...el,
+          x: x + el.x,
+          y: y + el.y,
+          id: el.id || `${id}_${idx}`,
         };
-      }
-      return {
-        ...el,
-        x: x + el.x,
-        y: y + el.y,
-        id: el.id || `${id}_${idx}`,
-      };
-    });
+      });
+    }
+    return this.getDetaultAnchor();
   }
   /**
-   * 获取节点区域
+   * 获取节点默认情况下的锚点
    */
-  getBounds(): Bounds {
+  public getDetaultAnchor(): PointAnchor[] {
+    return [];
+  }
+  /**
+   * 获取节点BBox
+   */
+  public getBounds(): Bounds {
     return {
       x1: this.x - this.width / 2,
       y1: this.y - this.height / 2,
@@ -304,14 +354,8 @@ export default class BaseNodeModel implements IBaseModel {
     };
   }
 
-  get anchors() {
-    const {
-      anchorsOffset,
-    } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
-    return [];
+  get anchors(): PointAnchor[] {
+    return this.getAnchorsByOffset();
   }
 
   @action

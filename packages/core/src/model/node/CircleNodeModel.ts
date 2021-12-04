@@ -18,14 +18,8 @@ class CircleNodeModel extends BaseNodeModel {
   @computed get height(): number {
     return this.r * 2;
   }
-  @computed get anchors(): Point[] {
-    const {
-      anchorsOffset, x, y, r,
-    } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
-
+  getDetaultAnchor() {
+    const { x, y, r } = this;
     return [
       { x, y: y - r, id: `${this.id}_0` },
       { x: x + r, y, id: `${this.id}_1` },

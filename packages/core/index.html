@@ -352,6 +352,7 @@
           }
         }
       }
+      
     </script>
 
     <!-- 实例化 LogicFlow -->
@@ -365,9 +366,9 @@
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
-          // multipleSelectKey: 'shift',
-          // disabledTools: ['multipleSelect'],
-          metaKeyMultipleSelected: true,
+          multipleSelectKey: 'shift',
+          disabledTools: ['multipleSelect'],
+          // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
@@ -686,6 +687,9 @@
         })
         lf.on('node:delete',()=> {
           console.log('nodeup')
+        })
+        lf.on('node:contextmenu', () => {
+          console.log(444)
         })
         lf.on('edge:adjust',({data})=> {
           console.log('edge:adjust', data)

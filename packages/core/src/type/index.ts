@@ -33,6 +33,29 @@ export type Point = {
   [key: string]: unknown;
 };
 
+/**
+ * 锚点坐标
+ * 为了方便计算
+ * 锚点的位置都是相对于节点中心点的偏移量。
+ */
+export type PointAnchor = {
+  /**
+   * 锚点x轴相对于中心点的偏移量
+   */
+  x: number,
+  /**
+   * 锚点y轴相对于中心点的偏移量
+   */
+  y: number,
+  /**
+   * 锚点Id
+   */
+  id?: string,
+  [key: string]: unknown;
+};
+
+export type AnchorsOffsetItem = PointTuple | PointAnchor;
+
 export type Size = {
   width: number,
   height: number,
