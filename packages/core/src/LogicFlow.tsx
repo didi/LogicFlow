@@ -422,7 +422,7 @@ export default class LogicFlow {
    */
   setDefaultEdgeType(type: Options.EdgeType): void {
     this.options.edgeType = type;
-    this.graphModel.changeEdgeType(type);
+    this.graphModel.setDefaultEdgeType(type);
   }
   /**
    * 更新节点或连线文案

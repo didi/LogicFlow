@@ -58,8 +58,15 @@ export type ConnectRuleResult = {
   msg?: string;
 };
 
+interface IBaseNodeModel extends IBaseModel {
+  /**
+   * model基础类型，固定为node
+   */
+  readonly BaseType: ElementType.NODE,
+}
+
 export { BaseNodeModel };
-export default class BaseNodeModel implements IBaseModel {
+export default class BaseNodeModel implements IBaseNodeModel {
   id = createUuid();
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;

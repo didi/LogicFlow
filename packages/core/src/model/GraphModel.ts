@@ -743,9 +743,9 @@ class GraphModel {
       this.nodeMoveRules.push(fn);
     }
   }
-  /* 修改连线类型 */
+  /* 修改连线默认类型 */
   @action
-  changeEdgeType(type: string): void {
+  setDefaultEdgeType(type: string): void {
     this.edgeType = type;
   }
   @action
@@ -786,7 +786,22 @@ class GraphModel {
       }
     });
   }
-
+  @action
+  changeEdgeType(id, type) {
+    const edgeModel = this.getEdgeModel(id);
+    if (!edgeModel) {
+      console.warn(`找不到id为${id}的连线`);
+      return;
+    }
+    const data = edgeModel.getData();
+    data.type = type;
+    const Model = this.getModel(type);
+    if (!Model) {
+      throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`);
+    }
+    const newEdgeModel = new Model(data, this);
+    this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
+  }
   /* 设置主题 */
   @action setTheme(style: Style) {
     this.theme = updateTheme({ ...this.theme, ...style });
