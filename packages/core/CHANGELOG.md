@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.11...@logicflow/core@0.7.12) (2021-12-04)
+
+
+### Features
+
+* 增加文本超出隐藏模式 ([0255275](https://github.com/didi/LogicFlow/commit/0255275ed99242da2167ea0f81f7346dc5ce5365))
+
+
+
+
+
 ## [0.7.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.10...@logicflow/core@0.7.11) (2021-11-30)
 
 

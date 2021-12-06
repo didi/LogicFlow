@@ -112,6 +112,20 @@
   background: transparent;
   text-align: center;
   word-break: break-all;
+  width: 100%;
+}
+.lf-node-text-ellipsis-content {
+  line-height: 1.2;
+  background: transparent;
+  text-align: center;
+  white-space: nowrap;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
+  width: 100%;
+}
+.lf-node-text-ellipsis-content>div{
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 /* tool-overlay */
 .lf-tool-overlay {
