@@ -35,28 +35,14 @@ export default class PolygonNode extends BaseNode {
       height,
       x,
       y,
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-      points,
     } = attributes;
     const attr = {
       transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
     };
-    const polygonAttr = {
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-      points,
-    };
     return (
       <g {...attr}>
         <Polygon
-          {...polygonAttr}
+          {...attributes}
         />
       </g>
     );
