@@ -1,15 +1,20 @@
 import { h } from 'preact';
-import BaseNode from './BaseNode';
+import BaseNode, { NodeAttributes } from './BaseNode';
 import EventEmitter from '../../event/eventEmitter';
 import GraphModel from '../../model/GraphModel';
 import { PolygonNodeModel } from '../../model';
 import Polygon from '../basic-shape/Polygon';
+import { PointTuple } from '../../type';
 
 type IProps = {
   model: PolygonNodeModel;
   graphModel: GraphModel;
   eventCenter: EventEmitter;
 };
+
+type PolygonNodeAttributes = {
+  points: PointTuple[]
+} & NodeAttributes;
 
 export default class PolygonNode extends BaseNode {
   getShapeStyle() {
@@ -20,7 +25,7 @@ export default class PolygonNode extends BaseNode {
       points,
     };
   }
-  getAttributes() {
+  getAttributes(): PolygonNodeAttributes {
     const attributes = super.getAttributes();
     const style = this.getShapeStyle();
     return {

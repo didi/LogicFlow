@@ -21,6 +21,34 @@ type Istate = {
   isHovered: boolean,
 };
 
+type StyleAttribute = {
+  width: number;
+  height: number;
+  fill: string;
+  fillOpacity?: number;
+  strokeWidth?: number;
+  stroke: string;
+  strokeOpacity?: number;
+  opacity?: number;
+  outlineColor?: string;
+  [key: string]: any;
+};
+
+export type NodeAttributes = {
+  id: string,
+  properties: Record<string, any>,
+  type: string,
+  x: number,
+  y: number,
+  isSelected: boolean,
+  isHovered: boolean,
+  text: {
+    x: number,
+    y: number,
+    value: string;
+    [key: string]: any;
+  },
+} & StyleAttribute;
 export default abstract class BaseNode extends Component<IProps, Istate> {
   static getModel(defaultModel) {
     return defaultModel;
@@ -49,7 +77,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     };
   }
   abstract getShape();
-  getShapeStyle() {
+  getShapeStyle(): StyleAttribute {
     const {
       model: {
         width,
@@ -75,7 +103,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       outlineColor,
     };
   }
-  getAttributes() {
+  getAttributes(): NodeAttributes {
     const {
       model: {
         id,
