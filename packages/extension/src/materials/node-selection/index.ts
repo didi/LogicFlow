@@ -196,15 +196,14 @@ class NodeSelection {
    * 新建node-selection节点
    */
   addNodeSelection() {
-    this.lf.addNode({
+    const node = this.lf.addNode({
       type: 'node-selection',
       text: '',
       properties: {
         node_selection_ids: this.selectNodesIds,
       },
     });
-
-    this.lf.getNodeModel(id).updatePointsByNodes(this.selectNodesIds);
+    node.updatePointsByNodes(this.selectNodesIds);
   }
 
   /**
