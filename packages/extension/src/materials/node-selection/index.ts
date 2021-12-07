@@ -260,6 +260,10 @@ class NodeSelection {
 
       // 获取所有被选中的节点，获取到的数组是无序的
       const { nodes } = lf.getSelectElements(true);
+      // 使用插件时判断是否允许使用node-selection
+      if (lf.disableNodeSelection && lf.disableNodeSelection(nodes)) {
+        return;
+      }
       this.selectNodes = nodes;
 
       if (this.selectNodes.length === 1) {
