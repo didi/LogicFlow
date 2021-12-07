@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13-alpha.0) (2021-12-07)
+
+
+### Features
+
+* add node view types ([b065a2d](https://github.com/didi/LogicFlow/commit/b065a2d7efc1d47cf0cf97ae73406640d8a20eb4))
+
+
+
+
+
 ## [0.7.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.11...@logicflow/core@0.7.12) (2021-12-04)
 
 

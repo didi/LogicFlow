@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.12...@logicflow/extension@0.7.13-alpha.0) (2021-12-07)
+
+
+### Bug Fixes
+
+* fix addNodeSelection methods in node-selection plugin ([f75afd4](https://github.com/didi/LogicFlow/commit/f75afd4678de91c11d97aa1c628a0b8417f01ed9))
+
+
+
+
+
 ## [0.7.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.11...@logicflow/extension@0.7.12) (2021-12-04)
 
 **Note:** Version bump only for package @logicflow/extension
