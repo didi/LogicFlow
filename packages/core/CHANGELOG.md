@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.13-alpha.0...@logicflow/core@0.7.13-alpha.1) (2021-12-07)
+
+
+### Features
+
+* babel use loose mode ([a48deef](https://github.com/didi/LogicFlow/commit/a48deef1c58e6e8d3f90463082207797fb9b771c))
+
+
+
+
+
 ## [0.7.13-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13-alpha.0) (2021-12-07)
 
 
