@@ -12,6 +12,7 @@ const packagesEntry = {
   DndPanel: path.resolve(__dirname, '../src/components/dnd-panel/index.ts'),
   MiniMap: path.resolve(__dirname, '../src/components/mini-map/index.ts'),
   CurvedEdge: path.resolve(__dirname, '../src/materials/curved-edge/index.ts'),
+  NodeSelection: path.resolve(__dirname, '../src/materials/node-selection/index.ts'),
   Group: path.resolve(__dirname, '../src/materials/group/index.ts'),
   InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
   SelectionSelect: path.resolve(__dirname, '../src/components/selection-select/index.ts'),

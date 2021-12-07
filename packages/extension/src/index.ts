@@ -15,3 +15,4 @@ export * from './materials/group';
 export * from './NodeResize';
 export * from './tools/flow-path';
 export * from './tools/auto-layout';
+export * from './materials/node-selection';
