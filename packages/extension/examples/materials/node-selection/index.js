@@ -81,6 +81,7 @@ window.addEventListener('DOMContentLoaded', () => {
           node_selection_ids: ['2', '4'],
           label_text: '方案',
           active_color: '#6a35ed',
+          disabled_delete: true,
         }
       }
     ]
