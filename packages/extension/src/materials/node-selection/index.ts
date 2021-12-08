@@ -23,6 +23,7 @@ class NodeSelectionView extends PolygonNode {
       id,
       properties: {
         label_text: labelText,
+        disabled_delete: disabledDelete,
       },
     } = attributes;
 
@@ -41,8 +42,8 @@ class NodeSelectionView extends PolygonNode {
         fontSize: '16px',
         fill: stroke,
       }, '方案') : '',
-      labelText ? h('text', {
-        x: 50,
+      disabledDelete ? '' : h('text', {
+        x: labelText ? 50 : 0,
         y: -5,
         width: 50,
         height: 24,
@@ -50,7 +51,7 @@ class NodeSelectionView extends PolygonNode {
         cursor: 'pointer',
         fill: stroke,
         onclick: this.handleCustomDeleteIconClick.bind(this, id),
-      }, 'x') : '',
+      }, 'x'),
     );
   }
 
@@ -207,15 +208,6 @@ class NodeSelection {
   }
 
   /**
-   * 删除node-selection节点
-   */
-  deleteNodeSelection() {
-    const nodeSelection = this.getNodeSelection();
-    if (!nodeSelection) return;
-    this.lf.deleteNode(nodeSelection.id);
-  }
-
-  /**
    * 更新node-selection节点
    */
   updateNodeSelection() {
@@ -249,9 +241,11 @@ class NodeSelection {
     this.lf = lf;
 
     lf.on('node:click', (val) => {
-      if (!val.e.shiftKey) return;
+      if (!val.e.shiftKey || val.data.type === 'node-selection') return;
+
       this.currentClickNode = val.data;
-      // 如果selectNodesIds中已存在此节点，则取消选中次节点
+
+      // 如果selectNodesIds中已存在此节点，则取消选中此节点
       let isUnSelected = false;
       if (this.selectNodesIds.includes(val.data.id)) {
         this.lf.getNodeModel(val.data.id).setSelected(false);
@@ -267,12 +261,12 @@ class NodeSelection {
       this.selectNodes = nodes;
 
       if (this.selectNodes.length === 1) {
-        if (isUnSelected) this.deleteNodeSelection();
-      } else {
-        if (!isUnSelected && this.selectNodes.length === 2) {
+        if (!isUnSelected) {
           this.addNodeSelection();
-          return;
+        } else {
+          this.updateNodeSelection();
         }
+      } else if (this.selectNodes.length > 1) {
         this.updateNodeSelection();
       }
     });
