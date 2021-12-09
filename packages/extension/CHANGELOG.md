@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.12...@logicflow/extension@0.7.13) (2021-12-09)
+
+
+### Bug Fixes
+
+* add disabled_delete attr in  node-selection ([6b103d5](https://github.com/didi/LogicFlow/commit/6b103d56add41d22e35391627588288cadced47b))
+* add disableNodeSelection callback in node-selection ([de21347](https://github.com/didi/LogicFlow/commit/de21347a9dff06a079ab7fe7ca35dc89f2206538))
+* fix addNodeSelection methods in node-selection plugin ([f75afd4](https://github.com/didi/LogicFlow/commit/f75afd4678de91c11d97aa1c628a0b8417f01ed9))
+
+
+### Features
+
+* babel use loose mode ([7fed1fb](https://github.com/didi/LogicFlow/commit/7fed1fb9557e3ac7f6f7fc11ad3afcc1d3d7bad8))
+
+
+
+
+
+## [0.7.13-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.13-alpha.0...@logicflow/extension@0.7.13-alpha.1) (2021-12-07)
+
+
+### Features
+
+* babel use loose mode ([a48deef](https://github.com/didi/LogicFlow/commit/a48deef1c58e6e8d3f90463082207797fb9b771c))
+
+
+
+
+
+## [0.7.13-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.12...@logicflow/extension@0.7.13-alpha.0) (2021-12-07)
+
+
+### Bug Fixes
+
+* fix addNodeSelection methods in node-selection plugin ([f75afd4](https://github.com/didi/LogicFlow/commit/f75afd4678de91c11d97aa1c628a0b8417f01ed9))
+
+
+
+
+
+## [0.7.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.11...@logicflow/extension@0.7.12) (2021-12-04)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
 ## [0.7.11](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.10...@logicflow/extension@0.7.11) (2021-11-30)
 
 

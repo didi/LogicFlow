@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13) (2021-12-09)
+
+
+### Features
+
+* add node view types ([8b6a5ab](https://github.com/didi/LogicFlow/commit/8b6a5abf41967ff47d65e34a926d6b4ac37a9ad4))
+* babel use loose mode ([7fed1fb](https://github.com/didi/LogicFlow/commit/7fed1fb9557e3ac7f6f7fc11ad3afcc1d3d7bad8))
+
+
+
+
+
+## [0.7.13-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.13-alpha.0...@logicflow/core@0.7.13-alpha.1) (2021-12-07)
+
+
+### Features
+
+* babel use loose mode ([a48deef](https://github.com/didi/LogicFlow/commit/a48deef1c58e6e8d3f90463082207797fb9b771c))
+
+
+
+
+
+## [0.7.13-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13-alpha.0) (2021-12-07)
+
+
+### Features
+
+* add node view types ([b065a2d](https://github.com/didi/LogicFlow/commit/b065a2d7efc1d47cf0cf97ae73406640d8a20eb4))
+
+
+
+
+
+## [0.7.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.11...@logicflow/core@0.7.12) (2021-12-04)
+
+
+### Features
+
+* 增加文本超出隐藏模式 ([0255275](https://github.com/didi/LogicFlow/commit/0255275ed99242da2167ea0f81f7346dc5ce5365))
+
+
+
+
+
 ## [0.7.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.10...@logicflow/core@0.7.11) (2021-11-30)
 
 
