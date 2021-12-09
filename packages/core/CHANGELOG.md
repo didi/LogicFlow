@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.13...@logicflow/core@1.0.0-alpha.1) (2021-12-09)
+
+
+### Features
+
+* 重构自定义锚点写法 ([657f911](https://github.com/didi/LogicFlow/commit/657f9113eff1207c910080507e94a22c69c10cce))
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
 ## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13) (2021-12-09)
 
 
