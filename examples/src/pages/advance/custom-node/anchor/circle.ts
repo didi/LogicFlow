@@ -1,4 +1,4 @@
-import { h, CircleNode, CircleNodeModel } from '@logicflow/core';
+import { CircleNode, CircleNodeModel } from '@logicflow/core';
 
 class Model extends CircleNodeModel {
   getAnchorsByOffset() {
