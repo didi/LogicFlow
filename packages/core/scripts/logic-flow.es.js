@@ -34,7 +34,6 @@ import {
   TextNodeModel,
   HtmlNodeModel,
   GraphModel,
-  Arrow,
   Keyboard,
 } from './logic-flow';
 
@@ -68,7 +67,6 @@ export {
   TextNodeModel,
   HtmlNodeModel,
   GraphModel,
-  Arrow,
   Keyboard,
 }
 export default LogicFlow;
