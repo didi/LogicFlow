@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13) (2021-12-09)
+
+
+### Features
+
+* add node view types ([8b6a5ab](https://github.com/didi/LogicFlow/commit/8b6a5abf41967ff47d65e34a926d6b4ac37a9ad4))
+* babel use loose mode ([7fed1fb](https://github.com/didi/LogicFlow/commit/7fed1fb9557e3ac7f6f7fc11ad3afcc1d3d7bad8))
+
+
+
+
+
 ## [0.7.13-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.13-alpha.0...@logicflow/core@0.7.13-alpha.1) (2021-12-07)
 
 
