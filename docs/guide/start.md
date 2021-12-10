@@ -2,8 +2,9 @@
 
 ## LogicFlow是什么
 
-todo:
+LogicFlow 是一款解决流程可视化的前端框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
 
+更多资料请查看[LogicFlow系列文章](/article/article01.html)
 
 ## 安装
 
@@ -13,8 +14,11 @@ LogicFlow分为`core`包和`extension`包。由于LogicFlow本身会有一些预
 
 
 ```html
+<!--LogicFlow core包css-->
 <link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
+<!--LogicFlow extension包css-->
 <link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<!--LogicFlow core包js-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
 <!--LogicFlow的插件支持单个引入，这里以菜单插件为例-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/Menu.js"></script>
@@ -28,13 +32,14 @@ npm install @logicflow/core
 npm install @logicflow/extension
 ```
 
-## 一个简单的流程图
+## 绘制一个简单的流程图
+
 
 ```js
+import LogicFlow from '@logicflow/core'
+
 const lf = new LogicFlow({
   container: document.querySelector("#app"),
-  width: 1000,
-  height: 500,
   grid: true
 });
 
@@ -42,24 +47,87 @@ lf.render({
   nodes: [
     {
       id: "1",
-      x: 200,
-      y: 200,
-      type: "rect"
+      type: "rect",
+      x: 100,
+      y: 100
     },
     {
       id: "2",
-      x: 440,
-      y: 220,
-      type: "rect"
+      type: "circle",
+      x: 300,
+      y: 200
+    }
+  ],
+  edges: [
+    {
+      sourceNodeId: "1",
+      targetNodeId: "2",
+      type: "polyline"
     }
   ]
 });
-
-lf.createEdge({
-  type: "polyline",
-  sourceNodeId: "1",
-  targetNodeId: "2"
-});
 ```
 
-[![Edit cranky-rubin-700y0](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/cranky-rubin-700y0?fontsize=14&hidenavigation=1&theme=dark)
+<iframe src="https://codesandbox.io/embed/cranky-rubin-700y0?fontsize=14&hidenavigation=1&theme=dark"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  title="cranky-rubin-700y0"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+### 在vue或者react等前端框架中使用logicflow
+
+LogicFlow本身是已umd打包为纯JS格式的包，所以不论是vue还是react中都可以使用。这里需要注意一个点，那就是初始化LogicFlow实例的时候，传入的参数container,必须要dom上存在这个节点，不然会报错`请检查 container 参数是否有效`。
+
+[在Sandbox查看vue示例](https://codesandbox.io/s/github/towersxu/logicflow-vue-base/tree/main/?fontsize=14&hidenavigation=1&theme=dark)
+```vue
+<template>
+  <div class="container" ref="container"></div>
+</template>
+
+<script>
+import LogicFlow from "@logicflow/core";
+import "@logicflow/core/dist/style/index.css";
+
+export default {
+  mounted() {
+    this.lf = new LogicFlow({
+      container: this.$refs.container,
+      grid: true
+    });
+    this.lf.render();
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  width: 1000px;
+  height: 500px;
+}
+</style>
+```
+
+[在Sandbox查看react示例](https://codesandbox.io/s/github/towersxu/logicflow-vue-base/tree/main/?fontsize=14&hidenavigation=1&theme=dark)
+
+```js
+
+import LogicFlow from "@logicflow/core";
+import "@logicflow/core/dist/style/index.css";
+import { useEffect, useRef } from "react";
+
+export default function App() {
+  const refContainer = useRef();
+  useEffect(() => {
+    const logicflow = new LogicFlow({
+      container: refContainer.current,
+      grid: true,
+      width: 1000,
+      height: 500
+    });
+    logicflow.render();
+  }, []);
+  return <div className="App" ref={refContainer}></div>;
+}
+
+```
