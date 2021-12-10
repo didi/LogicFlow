@@ -28,4 +28,3 @@ footer: Apache-2.0 License | Copyright © 2020-Present DiDi
 ### 自定义产品应用场景示例
 
 <img src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
-
