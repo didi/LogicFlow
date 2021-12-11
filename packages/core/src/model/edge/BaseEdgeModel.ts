@@ -66,17 +66,12 @@ class BaseEdgeModel implements IBaseModel {
   @observable endPoint = defaultData.endPoint;
   @observable strokeWidth = defaultData.strokeWidth;
   @observable stroke = defaultData.stroke;
-  @observable strokeDashArray = defaultData.strokeDashArray;
-  @observable outlineColor = defaultData.outlineColor;
   @observable hideOutline = defaultData.hideOutline;
-  @observable outlineStrokeDashArray = defaultData.outlineStrokeDashArray;
   @observable strokeOpacity = defaultData.strokeOpacity;
   @observable zIndex = defaultData.zIndex;
   @observable isSelected = defaultData.isSelected;
   @observable isHovered = defaultData.isHovered;
   @observable isHitable = true; // 细粒度控制连线是否对用户操作进行反应
-  @observable hoverStroke = defaultData.hoverStroke;
-  @observable selectedStroke = defaultData.selectedStroke;
   @observable points = defaultData.points;
   @observable pointsList = defaultData.pointsList;
   @observable draggable = true;

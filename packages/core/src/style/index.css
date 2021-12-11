@@ -105,7 +105,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
 }
 .lf-node-text-auto-wrap-content {
   line-height: 1.2;

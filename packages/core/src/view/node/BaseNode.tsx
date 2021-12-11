@@ -9,6 +9,7 @@ import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
+import { CommonTheme, OutlineTheme } from '../../constant/DefaultTheme';
 
 type IProps = {
   model: BaseNodeModel;
@@ -24,15 +25,7 @@ type Istate = {
 type StyleAttribute = {
   width: number;
   height: number;
-  fill: string;
-  fillOpacity?: number;
-  strokeWidth?: number;
-  stroke: string;
-  strokeOpacity?: number;
-  opacity?: number;
-  outlineColor?: string;
-  [key: string]: any;
-};
+} & CommonTheme;
 
 export type NodeAttributes = {
   id: string,
@@ -48,7 +41,7 @@ export type NodeAttributes = {
     value: string;
     [key: string]: any;
   },
-} & StyleAttribute;
+};
 export default abstract class BaseNode extends Component<IProps, Istate> {
   static getModel(defaultModel) {
     return defaultModel;
@@ -77,32 +70,38 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     };
   }
   abstract getShape();
+  /**
+   * @overridable 支持重写
+   * 获取自定义view组件样式信息
+   * @example 我们定义一个节点，不论主题是怎么配置，这个节点都是被红色填充。
+   * class CustomNode extends BaseNode {
+   *   getShapeStyle () {
+   *     const style = super.getShapeStyle();
+   *     style.fill = 'red';
+   *     return style;
+   *   }
+   * }
+   * @returns 自定义样式
+   */
   getShapeStyle(): StyleAttribute {
     const {
       model: {
         width,
         height,
-        fill,
-        fillOpacity,
-        strokeWidth,
-        stroke,
-        strokeOpacity,
-        opacity,
-        outlineColor,
       },
+      graphModel,
     } = this.props;
     return {
+      ...graphModel.theme.baseNode,
       width,
       height,
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-      opacity,
-      outlineColor,
     };
   }
+  /**
+   * @overridable 支持重写
+   * 获取节点的基本信息，例如节点的属性，位置，状态等信息
+   * @returns 节点基本信息
+   */
   getAttributes(): NodeAttributes {
     const {
       model: {
@@ -116,7 +115,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         text,
       },
     } = this.props;
-    const style = this.getShapeStyle();
     return {
       id,
       properties: {
@@ -130,19 +128,21 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       text: {
         ...text,
       },
-      ...style,
     };
   }
-  getProperties(): Record<string, any> {
-    const { model } = this.props;
-    return model.getProperties();
-  }
-  /* 支持节点自定义锚点样式 */
+  /**
+   * 获取节点锚点样式
+   * @returns 自定义样式
+   */
   getAnchorStyle(): Record<string, any> {
     const { graphModel } = this.props;
     const { anchor } = graphModel.theme;
     // 防止被重写覆盖主题。
     return { ...anchor };
+  }
+  getProperties(): Record<string, any> {
+    const { model } = this.props;
+    return model.getProperties();
   }
   /* 支持节点自定义锚点hover样式 */
   getAnchorHoverStyle(): Record<string, any> {

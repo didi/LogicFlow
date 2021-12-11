@@ -222,14 +222,14 @@ class Anchor extends Component<IProps, IState> {
       <g className="lf-anchor">
         <Circle
           className="lf-node-anchor-hover"
-          {...{ x, y }}
           {...hoverStyle}
+          {...{ x, y }}
           onMouseDown={this.dragHandler}
         />
         <Circle
           className="lf-node-anchor"
-          {...{ x, y }}
           {...style}
+          {...{ x, y }}
           onMouseDown={this.dragHandler}
         />
         {this.isShowLine() && (

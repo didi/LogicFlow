@@ -366,6 +366,7 @@
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
+          hoverOutline: true,
           multipleSelectKey: 'shift',
           disabledTools: ['multipleSelect'],
           // metaKeyMultipleSelected: false,
@@ -433,126 +434,131 @@
 
         lf.render({
           nodes: [
-            {
-              type: 'uml',
-              x: 100,
-              y: 100,
-              id: 10,
-              properties: {
-                name: 'haod',
-                body: '哈哈哈哈'
-              }
-            },
-            {
-              type: 'uml',
-              x: 300,
-              y: 100,
-              id: 110,
-              properties: {
-                name: 'hello',
-                body: 'better world'
-              }
-            },
-            {
-              type: 'uml',
-              x: 300,
-              y: 200,
-              id: 1110,
-              properties: {
-                name: 'hello',
-                body: 'better world'
-              }
-            },
-            {
+            // {
+            //   type: 'uml',
+            //   x: 100,
+            //   y: 100,
+            //   id: 10,
+            //   properties: {
+            //     name: 'haod',
+            //     body: '哈哈哈哈'
+            //   }
+            // },
+            // {
+            //   type: 'uml',
+            //   x: 300,
+            //   y: 100,
+            //   id: 110,
+            //   properties: {
+            //     name: 'hello',
+            //     body: 'better world'
+            //   }
+            // },
+            // {
+            //   type: 'uml',
+            //   x: 300,
+            //   y: 200,
+            //   id: 1110,
+            //   properties: {
+            //     name: 'hello',
+            //     body: 'better world'
+            //   }
+            // },
+            // {
 
-              type: 'square',
-              x: 300,
-              y: 300,
-              id: 11,
-              text: '啊大大',
-              properties: {
-                isUsed: true
-              }
-            },
-            {
+            //   type: 'square',
+            //   x: 300,
+            //   y: 300,
+            //   id: 11,
+            //   text: '啊大大',
+            //   properties: {
+            //     isUsed: true
+            //   }
+            // },
+            // {
 
-              type: 'square',
-              x: 400,
-              y: 300,
-              id: 111,
-              text: '啊大大',
-              properties: {
-                isUsed: false
-              }
-            },
+            //   type: 'square',
+            //   x: 400,
+            //   y: 300,
+            //   id: 111,
+            //   text: '啊大大',
+            //   properties: {
+            //     isUsed: false
+            //   }
+            // },
+            // {
+            //   type: 'text',
+            //   x: 200,
+            //   y: 400,
+            //   text: {
+            //     x: 200,
+            //     y: 400,
+            //     value: '我是单独的文本节点',
+            //   }
+            // },
+            // {
+            //   type: 'polygon',
+            //   x: 200,
+            //   y: 200,
+            //   id: 50,
+            //   text: 'hhhh',
+            // },
+            // {
+            //   type: 'diamond',
+            //   x: 220,
+            //   y: 220,
+            //   rx: 30,
+            //   ry: 50,
+            //   id: 524,
+            //   text: 'diamond',
+            // },
+            // {
+            //   type: 'user',
+            //   x: 600,
+            //   y: 200,
+            //   id: 20,
+            //   text: {
+            //     value: 'user',
+            //     x: 600,
+            //     y: 200,
+            //   },
+            //   properties: {
+            //     size: 1
+            //   }
+            // },
+            // {
+            //   type: 'user',
+            //   x: 500 * Math.random(),
+            //   y: 600 * Math.random(),
+            //   id: 21,
+            //   properties: {
+            //     size: 2
+            //   }
+            // },
+            // {
+            //   type: 'star',
+            //   x: 400,
+            //   y: 300,
+            //   id: '2222'
+            // },
+            // {
+            //   type: 'combine',
+            //   x: 222,
+            //   y: 40,
+            //   id: 30,
+            // },
+            // {
+            //   type: 'circle',
+            //   x: 500 * Math.random(),
+            //   y: 600 * Math.random(),
+            //   fill: 'blue',
+            //   id: 40,
+            // },
             {
-              type: 'text',
-              x: 200,
-              y: 400,
-              text: {
-                x: 200,
-                y: 400,
-                value: '我是单独的文本节点',
-              }
-            },
-            {
-              type: 'polygon',
-              x: 200,
+              type: 'rect',
+              x: 500,
               y: 200,
-              id: 50,
-              text: 'hhhh',
-            },
-            {
-              type: 'diamond',
-              x: 220,
-              y: 220,
-              rx: 30,
-              ry: 50,
-              id: 524,
-              text: 'diamond',
-            },
-            {
-              type: 'user',
-              x: 600,
-              y: 200,
-              id: 20,
-              text: {
-                value: 'user',
-                x: 600,
-                y: 200,
-              },
-              properties: {
-                size: 1
-              }
-            },
-            {
-              type: 'user',
-              x: 500 * Math.random(),
-              y: 600 * Math.random(),
-              id: 21,
-              properties: {
-                size: 2
-              }
-            },
-            {
-              type: 'star',
-              x: 400,
-              y: 300,
-              id: '2222'
-            },
-            {
-              type: 'combine',
-              x: 222,
-              y: 40,
-              id: 30,
-            },
-            {
-              type: 'circle',
-              x: 500 * Math.random(),
-              y: 600 * Math.random(),
-              fill: 'blue',
-              id: 40,
-            },
+            }
           ].concat(Array.of(...Array(0)).map((item, i) => {
             return {
               id: 'node_' + i,
@@ -561,14 +567,14 @@
               y: (i / 4) * 150,
             }
           })),
-          edges: [
-            {
-              id: 'edge_2222',
-              type: 'connection',
-              sourceNodeId: 50,
-              targetNodeId: 21,
-            }
-          ]
+          // edges: [
+          //   {
+          //     id: 'edge_2222',
+          //     type: 'connection',
+          //     sourceNodeId: 50,
+          //     targetNodeId: 21,
+          //   }
+          // ]
         });
       }
     </script>

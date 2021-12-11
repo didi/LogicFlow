@@ -28,8 +28,6 @@ type BaseElementModel = BaseNodeModel | BaseEdgeModel;
 const VisibleMoreSpace = 200;
 
 class GraphModel {
-  readonly BaseType = ElementType.GRAPH;
-  modelType = ModelType.GRAPH;
   rootEl: HTMLElement;
   theme;
   eventCenter: EventEmitter;
@@ -42,11 +40,9 @@ class GraphModel {
   nodeMoveRules: NodeMoveRule[] = [];
   @observable edgeType: string;
   @observable nodes: BaseNodeModel[] = [];
-  @observable activeElement: IBaseModel;
-  @observable activeElementState: ElementState;
+  @observable edges: BaseEdgeModel[] = [];
   @observable state: ElementState;
   @observable additionStateData: AdditionData;
-  @observable edges: BaseEdgeModel[] = [];
   @observable isSlient = false;
   @observable overlapMode = 0;
   @observable plugins = [];

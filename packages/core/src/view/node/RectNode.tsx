@@ -13,26 +13,23 @@ type IProps = {
 
 export default class RectNode extends BaseNode {
   getShapeStyle() {
-    const attributes = super.getShapeStyle();
-    const { model: { radius } } = this.props as IProps;
+    const style = super.getShapeStyle();
+    const {
+      graphModel,
+    } = this.props;
     return {
-      ...attributes,
-      radius,
-    };
-  }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const style = this.getShapeStyle();
-    return {
-      ...attributes,
       ...style,
+      ...graphModel.theme.rect,
     };
   }
   getShape() {
     const attributes = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <Rect
-        {...attributes}
+        {...style}
+        x={attributes.x}
+        y={attributes.y}
       />
     );
   }

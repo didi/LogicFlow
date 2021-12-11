@@ -3,7 +3,7 @@ import {
 } from 'mobx';
 import { assign, pick } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
-import { defaultTheme } from '../../constant/DefaultTheme';
+import { defaultTheme, OutlineTheme } from '../../constant/DefaultTheme';
 import {
   ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
@@ -230,6 +230,17 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   getProperties() {
     return toJS(this.properties);
+  }
+
+  /**
+   * @overridable 支持重写
+   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
+   * @returns 自定义outline样式
+   */
+  getOutlineStyle(): OutlineTheme {
+    const { graphModel } = this;
+    const { outline } = graphModel.theme;
+    return outline;
   }
 
   /**
