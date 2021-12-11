@@ -271,6 +271,43 @@ class GraphModel {
       edges,
     };
   }
+  // 用户history记录的数据，忽略拖拽过程中的数据变更
+  modelToHistoryData() {
+    let nodeDraging = false;
+    const nodes = [];
+    // 如果有节点在拖拽中，不更新history
+    for (let i = 0; i < this.nodes.length; i++) {
+      const nodeMode = this.nodes[i];
+      if (nodeMode.isDragging) {
+        nodeDraging = true;
+        break;
+      } else {
+        nodes.push(nodeMode.getData());
+      }
+    }
+    if (nodeDraging) {
+      return false;
+    }
+    // 如果有边在拖拽中，不更新history
+    let edgeDraging = false;
+    const edges = [];
+    for (let j = 0; j < this.edges.length; j++) {
+      const edgeMode = this.edges[j];
+      if (edgeMode.isDragging) {
+        edgeDraging = true;
+        break;
+      } else {
+        edges.push(edgeMode.getData());
+      }
+    }
+    if (edgeDraging) {
+      return false;
+    }
+    return {
+      nodes,
+      edges,
+    };
+  }
 
   getEdgeModel(edgeId: string) {
     return this.edgesMap[edgeId]?.model;

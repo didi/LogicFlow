@@ -95,6 +95,7 @@ export default class BaseNodeModel implements IBaseModel {
   @observable hoverOutlineStrokeDashArray = defaultConfig.hoverOutlineStrokeDashArray;
   @observable isSelected = false;
   @observable isHovered = false;
+  @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable zIndex = defaultConfig.zIndex;
   @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标

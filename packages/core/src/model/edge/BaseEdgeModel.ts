@@ -74,6 +74,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable zIndex = defaultData.zIndex;
   @observable isSelected = defaultData.isSelected;
   @observable isHovered = defaultData.isHovered;
+  @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制连线是否对用户操作进行反应
   @observable hoverStroke = defaultData.hoverStroke;
   @observable selectedStroke = defaultData.selectedStroke;
