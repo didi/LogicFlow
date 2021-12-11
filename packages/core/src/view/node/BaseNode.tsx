@@ -16,7 +16,6 @@ type IProps = {
 };
 
 type Istate = {
-  isDraging: boolean,
   isHovered: boolean,
 };
 
@@ -43,7 +42,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       model,
     });
     this.state = {
-      isDraging: false,
       isHovered: false,
     };
   }
@@ -130,9 +128,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   getAnchors() {
     const { model, graphModel, eventCenter } = this.props;
     const {
-      isSelected, isHitable,
+      isSelected, isHitable, isDragging,
     } = model;
-    const { isHovered, isDraging } = this.state;
+    const { isHovered } = this.state;
     if (isHitable && (isSelected || isHovered)) {
       const style = this.getAnchorStyle();
       const hoverStyle = this.getAnchorHoverStyle();
@@ -142,7 +140,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
           <Anchor
             {...anchor}
             anchorData={anchor}
-            nodeDraging={isDraging}
+            nodeDraging={isDragging}
             style={style}
             hoverStyle={hoverStyle}
             edgeStyle={edgeStyle}
@@ -188,7 +186,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
   }
   getStateClassName() {
-    const { model: { state } } = this.props;
+    const { model: { state, isDraging } } = this.props;
     let className = 'lf-node';
     switch (state) {
       case ElementState.ALLOW_CONNECT:
@@ -201,29 +199,22 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         className += ' lf-node-default';
         break;
     }
-    const { isDraging } = this.state;
     if (isDraging) {
-      className += ' lf-dragging';
+      className += ' lf-isDragging';
     }
     return className;
   }
 
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
-    const { isDraging } = this.state;
-    if (!isDraging) {
-      this.setState({
-        isDraging: true,
-      });
-    }
+    model.isDragging = true;
     const { transformMatrix } = graphModel;
     const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
     graphModel.moveNode(model.id, curDeltaX, curDeltaY);
   };
   onDragEnd = () => {
-    this.setState({
-      isDraging: false,
-    });
+    const { model } = this.props;
+    model.isDragging = false;
   };
   handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit

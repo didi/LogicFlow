@@ -42,6 +42,7 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   }
   onDraging = ({ deltaX, deltaY }) => {
     const { graphModel, bezierModel, type } = this.props;
+    bezierModel.isDragging = true;
     const { transformMatrix } = graphModel;
     const { endX, endY } = this.state;
     const [x, y] = transformMatrix.moveCanvasPointByHtml(
@@ -56,6 +57,7 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     const { endX, endY } = this.state;
     const { bezierModel, type } = this.props;
     bezierModel.updateAdjustAnchor({ x: endX, y: endY }, type);
+    bezierModel.isDragging = false;
   });
   render() {
     const { position } = this.props;
