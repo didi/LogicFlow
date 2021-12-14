@@ -90,6 +90,9 @@ export type EllipseTheme = {
  */
 export type AnchorTheme = {
   r: number;
+  hover?: {
+    r: number;
+  } & CommonTheme;
 } & CommonTheme;
 
 /**
@@ -228,10 +231,6 @@ export type Theme = {
    */
   anchor?: AnchorTheme,
   /**
-   * 锚点在hover状态下的样式
-   */
-  anchorHover?: AnchorTheme,
-  /**
    * 统一文本样式
    */
   text?: TextTheme,
@@ -295,14 +294,13 @@ const anchor = {
   stroke: '#000000',
   strokeWidth: 1,
   r: 4,
-};
-
-const anchorHover = {
-  fill: '#1E90FF',
-  fillOpacity: 0.5,
-  stroke: '#4169E1',
-  strokeWidth: 1,
-  r: 10,
+  hover: {
+    fill: '#1E90FF',
+    fillOpacity: 0.5,
+    stroke: '#4169E1',
+    strokeWidth: 1,
+    r: 10,
+  },
 };
 
 const baseEdge = {
@@ -392,7 +390,6 @@ export const defaultTheme: Theme = {
   bezier,
   arrow,
   anchorLine,
-  anchorHover,
   snapline,
   edgeAdjust,
   outline,

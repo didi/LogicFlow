@@ -13,24 +13,33 @@ type IProps = {
 
 export default class DiamondNode extends BaseNode {
   getShapeStyle() {
+    const style = super.getShapeStyle();
+    const {
+      graphModel,
+    } = this.props;
+    return {
+      ...style,
+      ...graphModel.theme.diamond,
+    };
+  }
+  getAttributes() {
+    const attributes = super.getAttributes();
     const {
       model: {
         points,
       },
-    } = this.props as IProps;
-    const attributes = super.getShapeStyle();
-    return {
-      ...attributes,
-      points,
-    };
+    } = this.props;
+    attributes.points = points;
+    return attributes;
   }
   getShape() {
-    const { x, y } = this.getAttributes();
+    const { x, y, points } = this.getAttributes();
     const style = this.getShapeStyle();
     return (
       <g>
         <Polygon
           {...style}
+          points={points}
           x={x}
           y={y}
         />

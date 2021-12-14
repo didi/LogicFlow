@@ -14,7 +14,10 @@ export default class EllipseNode extends BaseNode {
   getShapeStyle() {
     const style = super.getShapeStyle();
     const { model: { rx, ry } } = this.props as IProps;
-    return { ...style, rx, ry };
+    const {
+      graphModel,
+    } = this.props;
+    return { ...style, ...graphModel.theme.ellipse, rx, ry };
   }
   getShape() {
     const { x, y } = this.getAttributes();

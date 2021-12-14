@@ -40,6 +40,7 @@ export type NodeAttributes = {
     value: string;
     [key: string]: any;
   },
+  [key: string]: any;
 };
 export default abstract class BaseNode extends Component<IProps, Istate> {
   static getModel(defaultModel) {
@@ -147,8 +148,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   /* 支持节点自定义锚点hover样式 */
   getAnchorHoverStyle(): Record<string, any> {
     const { graphModel } = this.props;
-    const { anchorHover } = graphModel.theme;
-    return { ...anchorHover };
+    const { anchor } = graphModel.theme;
+    const { hover } = anchor;
+    return { ...anchor, ...hover };
   }
   /* 锚点创建连线样式 */
   getNewEdgeStyle(): Record<string, any> {

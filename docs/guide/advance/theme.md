@@ -376,17 +376,17 @@ lf.setTheme({
 <summary>点击展开查看锚点hover样式设置</summary>
 
 ```ts
-lf.setTheme({
-  anchorHover: {
-    r: 10, 
-    fill: '#1E90FF',
-    fillOpacity: 0.5,
-    stroke: '#4169E1',
-    strokeWidth: 1,
-    strokeOpacity: 1,
-    opacity: 1,
-  },
-})
+// lf.setTheme({
+//   anchorHover: {
+//     r: 10, 
+//     fill: '#1E90FF',
+//     fillOpacity: 0.5,
+//     stroke: '#4169E1',
+//     strokeWidth: 1,
+//     strokeOpacity: 1,
+//     opacity: 1,
+//   },
+// })
 ```
 </details>
 

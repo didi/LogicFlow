@@ -295,7 +295,6 @@ export type Style = {
   bezier?: BezierStyle,
   arrow?: ArrowStyle,
   anchorLine?: AnchorLineStyle,
-  anchorHover?: AnchorHoverStyle,
   EdgeAdjustStyle?: EdgeAdjustStyle,
 };
 

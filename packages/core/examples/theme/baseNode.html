@@ -15,12 +15,13 @@
         const lf = new LogicFlow({
           container: document.querySelector('#container'),
           width: 1000,
+          grid: true,
           height: 400
         })
         lf.setTheme(
           {
             baseNode: {
-              fill: 'red',
+              fill: 'rgb(255, 230, 204)',
               stroke: 'green',
               strokeDasharray: '3,3'
             },
@@ -32,7 +33,27 @@
               ry: 10
             },
             circle: {
+              r: 10,
               fill: '#9a9b9c'
+            },
+            diamond: {
+              fill: '#238899'
+            },
+            ellipse: {
+              strokeWidth: 3
+            },
+            polygon: {
+              strokeDasharray: 'none'
+            },
+            anchor: {
+              r: 3,
+              fill: '#9a9312',
+              hover: {
+                fill: 'red'
+              }
+            },
+            text: {
+              color: 'red'
             }
           }
         );

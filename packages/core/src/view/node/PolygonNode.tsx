@@ -13,18 +13,38 @@ type IProps = {
 };
 
 export default class PolygonNode extends BaseNode {
+  // getShapeStyle() {
+  //   const style = super.getShapeStyle();
+  //   const { model: { points } } = this.props as IProps;
+  //   return {
+  //     ...style,
+  //     points,
+  //   };
+  // }
   getShapeStyle() {
     const style = super.getShapeStyle();
-    const { model: { points } } = this.props as IProps;
+    const {
+      graphModel,
+    } = this.props;
     return {
       ...style,
-      points,
+      ...graphModel.theme.polygon,
     };
   }
+  getAttributes() {
+    const attributes = super.getAttributes();
+    const {
+      model: {
+        points,
+      },
+    } = this.props;
+    attributes.points = points;
+    return attributes;
+  }
   getShape() {
-    const { x, y } = this.getAttributes();
+    const { x, y, width, height, points } = this.getAttributes();
     const style = this.getShapeStyle();
-    const { width, height } = style;
+    // const { width, height } = style;
     const attr = {
       transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
     };
@@ -34,6 +54,7 @@ export default class PolygonNode extends BaseNode {
           {
             ...style
           }
+          points={points}
           x={x}
           y={y}
         />
