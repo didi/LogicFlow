@@ -7,9 +7,7 @@ import { getSvgTextWidthHeight } from '../../util/node';
 
 class TextNodeModel extends BaseNodeModel {
   modelType = ModelType.TEXT_NODE;
-  @observable fontSize = defaultTheme.text.fontSize;
-  @observable fontFamily = defaultTheme.text.fontFamily;
-  @observable fontWeight = defaultTheme.text.fontWeight;
+  @observable fontSize = defaultTheme.nodeText.fontSize;
 
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'text');

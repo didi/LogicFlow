@@ -95,9 +95,9 @@ export default class TextEdit extends Component<IProps, IState> {
       };
       if (textEditElement.BaseType === ElementType.EDGE) {
         // 如果连线文案自动换行, 设置编辑框宽度
-        const { edgeText: { autoWrap, lineHeight, wrapPadding } } = theme;
+        const { edgeText: { overflowMode, lineHeight, wrapPadding } } = theme;
         const { textWidth } = textEditElement;
-        if (autoWrap && textWidth) {
+        if (textWidth && overflowMode === 'autoWrap') {
           autoStyle = {
             ...commonAutoStyle,
             width: textWidth,
@@ -108,11 +108,11 @@ export default class TextEdit extends Component<IProps, IState> {
         }
       } else if (textEditElement.BaseType === ElementType.NODE) {
         // 如果节点文案自动换行, 设置编辑框宽度
-        const { nodeText: { autoWrap, lineHeight, wrapPadding } } = theme;
+        const { nodeText: { overflowMode, lineHeight, wrapPadding } } = theme;
         const { width, textWidth, modelType } = textEditElement;
         // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
-        if ((modelType !== ModelType.TEXT_NODE && autoWrap)
-        || (modelType === ModelType.TEXT_NODE && autoWrap && textWidth)) {
+        if ((modelType !== ModelType.TEXT_NODE && overflowMode === 'autoWrap')
+        || (modelType === ModelType.TEXT_NODE && textWidth)) {
           autoStyle = {
             ...commonAutoStyle,
             width: textWidth || width,

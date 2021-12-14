@@ -126,6 +126,7 @@ export type NodeTextTheme = {
    * ellipsis: 超出省略
    */
   overflowMode?: 'ellipsis' | 'autoWrap' | 'default';
+  background?: RectTheme;
 } & TextTheme;
 /**
  * 连线文本样式
@@ -137,7 +138,7 @@ export type EdgeTextTheme = {
    * autoWrap: 超出自动换行
    * ellipsis: 超出省略
    */
-  overflowMode?: 'ellipsis' | 'autoWrap';
+  overflowMode?: 'ellipsis' | 'autoWrap' | 'default';
   /**
    * 文本背景样式
    */
@@ -375,16 +376,15 @@ const outline = {
 
 export const defaultTheme: Theme = {
   baseNode,
+  baseEdge,
   rect,
   circle,
   diamond,
   ellipse,
   polygon,
   anchor,
-  text,
   nodeText,
   edgeText,
-  baseEdge,
   line,
   polyline,
   bezier,

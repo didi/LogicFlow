@@ -73,7 +73,6 @@ export default {
         height: this.diagramHeight,
         hideOutline: true,
         overlapMode: 1,
-        autoWrap: true,
         metaKeyMultipleSelected: true,
         keyboard: {
           enabled: true
@@ -88,12 +87,6 @@ export default {
           repeat: 'repeat'
         }
       })
-      lf.setTheme(
-        {
-          nodeText: { autoWrap: true, lineHeight: 1.5 },
-          edgeText: { autoWrap: true, lineHeight: 1.5 }
-        }
-      )
       // lf.register(BaseNode)
       lf.register(CircleNode)
       lf.register(RectNode)

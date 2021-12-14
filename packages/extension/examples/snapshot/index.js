@@ -107,12 +107,6 @@ window.onload = function () {
     view: UserNode,
     model: UserModel,
   });
-  lf.setTheme(
-    {
-      nodeText: {autoWrap: true, lineHeight: 1.5},
-      edgeText: {autoWrap: true, lineHeight: 1.5}
-    }
-  );
   lf.render({
     nodes: [
       {

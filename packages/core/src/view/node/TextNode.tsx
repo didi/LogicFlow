@@ -6,10 +6,17 @@ import { getBytesLength } from '../../util/edge';
 import { getSvgTextWidthHeight } from '../../util/node';
 
 export default class TextNode extends BaseNode {
+  getShapeStyle() {
+    const style = super.getShapeStyle();
+    const {
+      graphModel,
+    } = this.props;
+    return { ...style, ...graphModel.theme.nodeText };
+  }
   getBackgroud() {
     const { text } = this.getAttributes();
     const style = this.getTextStyle();
-    if (text && text.value && style.backgroundStyle && style.backgroundStyle.fill !== 'transparnet') {
+    if (text && text.value && style.background && style.background.fill !== 'transparnet') {
       const { fontSize } = style;
       const { value, x, y } = text;
       const rows = String(value).split(/[\r\n]/g);
@@ -25,7 +32,7 @@ export default class TextNode extends BaseNode {
       // 背景框宽度， 行数 * fontsize + 2
       const { width, height } = getSvgTextWidthHeight({ rows, fontSize, rowsLength });
       const rectAttr = {
-        ...style.backgroundStyle,
+        ...style.background,
         x: x - 1,
         y: y - 1,
         width,

@@ -25,13 +25,13 @@ export default class LineText extends BaseText {
     }
     // 存在文本并且文本背景不为透明时计算背景框
     if (text && text.value && backgroundStyle.fill !== 'transparnet') {
-      const { fontSize, autoWrap, lineHeight, wrapPadding } = style;
+      const { fontSize, overflowMode, lineHeight, wrapPadding } = style;
       const { value, x, y } = text;
       const rows = String(value).split(/[\r\n]/g);
       // 计算行数
       const rowsLength = rows.length;
       let rectAttr;
-      if (autoWrap && textWidth) {
+      if (overflowMode === 'autoWrap' && textWidth) {
         const textHeight = getHtmlTextHeight({
           rows,
           style: {

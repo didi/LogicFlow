@@ -9,11 +9,8 @@ export default function Text(props) {
     value,
     fontSize,
     fill = 'currentColor',
+    overflowMode = 'default',
     model,
-    autoWrap = false,
-  } = props;
-  let {
-    overflowMode = 'default', // 文本超出范围处理方式. default表示不特殊处理。autoWrap表示自定换行，ellipsis表示省略
   } = props;
   const attrs = {
     textAnchor: 'middle',
@@ -29,9 +26,6 @@ export default function Text(props) {
       attrs[k] = v;
     }
   });
-  if (autoWrap) { // 兼容历史情况，使用autoWrap来表示自动换行
-    overflowMode = 'autoWrap';
-  }
   if (value) {
     // String(value),兼容纯数字的文案
     const rows = String(value).split(/[\r\n]/g);
