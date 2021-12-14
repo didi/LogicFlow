@@ -44,16 +44,17 @@ export type RectTheme = {
   /**
    * 矩形的默认宽度
    */
-  width: number;
+  width?: number;
   /**
    * 矩形的默认高度
    */
-  height: number;
+  height?: number;
   /**
    * 圆角
+   * 注意，矩形圆角请使用radius
+   * 不要使用rx和ry
    */
-  rx: number;
-  ry: number;
+  radius?: number;
 } & CommonTheme;
 
 /**
@@ -80,8 +81,8 @@ export type PolygonTheme = CommonTheme;
  * https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse
  */
 export type EllipseTheme = {
-  rx: number;
-  ry: number;
+  rx?: number;
+  ry?: number;
 } & CommonTheme;
 
 /**
@@ -89,7 +90,7 @@ export type EllipseTheme = {
  * svg基础图形-圆
  */
 export type AnchorTheme = {
-  r: number;
+  r?: number;
   hover?: {
     r: number;
   } & CommonTheme;
@@ -109,10 +110,6 @@ export type TextTheme = {
    * 文本大小
    */
   fontSize?: number;
-  /**
-   * 文本一行最大宽度
-   */
-  textWidth?: number;
 } & CommonTheme;
 
 /**
@@ -125,7 +122,7 @@ export type NodeTextTheme = {
    * autoWrap: 超出自动换行
    * ellipsis: 超出省略
    */
-  overflowMode?: 'ellipsis' | 'autoWrap' | 'default';
+  overflowMode?: string;
   background?: RectTheme;
 } & TextTheme;
 /**
@@ -138,11 +135,21 @@ export type EdgeTextTheme = {
    * autoWrap: 超出自动换行
    * ellipsis: 超出省略
    */
-  overflowMode?: 'ellipsis' | 'autoWrap' | 'default';
+  overflowMode?: string;
+  /**
+   * 文本一行最大宽度
+   */
+  textWidth?: number;
   /**
    * 文本背景样式
    */
-  background?: RectTheme;
+  background?: {
+    wrapPadding?: string;
+  } & RectTheme;
+  /**
+   * hover状态下文本样式
+   */
+  hover?: EdgeTextTheme;
 } & TextTheme;
 
 export type EdgeTheme = CommonTheme;
@@ -274,8 +281,7 @@ const baseNode = {
 const rect = {
   width: 100,
   height: 80,
-  rx: 0,
-  ry: 0,
+  radius: 0,
 };
 const circle = {
   r: 50,
@@ -309,7 +315,6 @@ const baseEdge = {
   strokeWidth: 2,
   hoverStroke: '#000000',
   selectedStroke: '#000000',
-  strokeDashArray: '1,0',
 };
 
 const edge = {};
@@ -337,6 +342,7 @@ const anchorLine = {
 
 const text = {
   color: '#000000',
+  lineHeight: 1.2,
   fontSize: 12,
 };
 
@@ -346,6 +352,12 @@ const nodeText = {
 
 const edgeText = {
   ...text,
+  // overflowMode: 'default',
+  background: {
+    fill: '#FFFFFF',
+    stroke: '',
+    radius: 0,
+  },
 };
 
 const snapline = {

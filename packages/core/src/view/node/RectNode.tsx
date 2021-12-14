@@ -22,6 +22,16 @@ export default class RectNode extends BaseNode {
       ...graphModel.theme.rect,
     };
   }
+  getAttributes() {
+    const attributes = super.getAttributes();
+    const {
+      model: {
+        radius,
+      },
+    } = this.props;
+    attributes.radius = radius;
+    return attributes;
+  }
   getShape() {
     const attributes = this.getAttributes();
     const style = this.getShapeStyle();
@@ -30,6 +40,7 @@ export default class RectNode extends BaseNode {
         {...style}
         x={attributes.x}
         y={attributes.y}
+        radius={attributes.radius}
       />
     );
   }

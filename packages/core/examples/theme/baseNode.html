@@ -29,8 +29,7 @@
               fill: '#FFFFFF',
               strokeDasharray: '10, 1',
               className: 'custom-cls',
-              rx: 10,
-              ry: 10
+              radius: 30,
             },
             circle: {
               r: 10,
@@ -53,10 +52,22 @@
               }
             },
             nodeText: {
+              // textWidth: 60,
               fontSize: 20,
               color: 'red',
               // overflowMode: 'ellipsis'
               overflowMode: 'autoWrap'
+            },
+            baseEdge: {
+              strokeWidth: 1,
+              strokeDasharray: '3,3'
+            },
+            edgeText: {
+              textWidth: 60,
+              overflowMode: 'autoWrap',
+              background: {
+                fill: '#919810'
+              }
             }
           }
         );

@@ -10,6 +10,7 @@ export default function Text(props) {
     fontSize,
     fill = 'currentColor',
     overflowMode = 'default',
+    textWidth = '',
     model,
   } = props;
   const attrs = {
@@ -32,7 +33,7 @@ export default function Text(props) {
     const rowsLength = rows.length;
     if (overflowMode !== 'default') {
       // 非文本节点设置了自动换行，或连线设置了自动换行并且设置了textWidth
-      const { BaseType, textWidth, modelType } = model;
+      const { BaseType, modelType } = model;
       if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE)
       || (BaseType === ElementType.EDGE && textWidth)) {
         return renderHtmlText(props, attrs);
@@ -74,8 +75,8 @@ function renderHtmlText(props, attrs) {
     wrapPadding = '0, 0',
     overflowMode,
   } = props;
-  const { width, textWidth, textHeight } = model;
-  const textRealWidth = textWidth || width;
+  const { width, textHeight } = model;
+  const textRealWidth = attrs.textWidth || width;
   const rows = String(value).split(/[\r\n]/g);
   const rowsLength = rows.length;
   const textRealHeight = getHtmlTextHeight({

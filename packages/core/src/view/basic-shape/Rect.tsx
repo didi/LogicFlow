@@ -4,6 +4,7 @@ import * as type from '../../type';
 // TODO: 常用的属性集合定一个interface
 type IProps = {
   className?: string,
+  radius?: number,
 } & type.Point & type.Size;
 
 // TODO: 默认样式引入
@@ -15,6 +16,7 @@ export default function Rect(props: IProps) {
     width,
     height,
     className,
+    radius,
   } = props;
 
   const leftTopX = x - width / 2;
@@ -30,6 +32,10 @@ export default function Rect(props: IProps) {
   if (className) {
     attrs.className = `lf-basic-shape ${className}`;
   }
+  if (radius) {
+    attrs.rx = radius;
+    attrs.ry = radius;
+  }
   attrs.x = leftTopX;
   attrs.y = leftTopY;
   return (
@@ -39,4 +45,5 @@ export default function Rect(props: IProps) {
 
 Rect.defaultProps = {
   className: '',
+  radius: '',
 };

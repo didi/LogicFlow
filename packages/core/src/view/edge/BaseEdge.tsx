@@ -59,6 +59,14 @@ export default class BaseEdge extends Component<IProps> {
       },
     };
   }
+  getShapeStyle() {
+    const {
+      graphModel,
+    } = this.props;
+    return {
+      ...graphModel.theme.baseEdge,
+    };
+  }
   getShape() { }
   getTextStyle() {
   }
