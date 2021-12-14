@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LOGIC FLOW</title>
+    <link rel="stylesheet" href="/src/style/index.css" />
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="/logic-flow.js"></script>
+    <script>
+      window.onload = () => {
+        const lf = new LogicFlow({
+          container: document.querySelector('#container'),
+          width: 1000,
+          height: 400
+        })
+        lf.setTheme(
+          {
+            baseNode: {
+              fill: 'red',
+              stroke: 'green',
+              strokeDasharray: '3,3'
+            },
+            rect: {
+              fill: '#FFFFFF',
+              strokeDasharray: '10, 1',
+              className: 'custom-cls',
+              rx: 10,
+              ry: 10
+            },
+            circle: {
+              fill: '#9a9b9c'
+            }
+          }
+        );
+        lf.render({
+          nodes: [
+          {
+              type: 'rect',
+              x: 500,
+              y: 200,
+            },
+            {
+              type: 'circle',
+              x: 100,
+              y: 200,
+            },
+            {
+              type: 'polygon',
+              x: 300,
+              y: 200,
+            },
+            {
+              type: 'ellipse',
+              x: 100,
+              y: 400,
+            },
+            {
+              type: 'diamond',
+              x: 300,
+              y: 400,
+            },
+            {
+              type: 'text',
+              x: 500,
+              y: 400,
+              text: '33333'
+            }
+          ]
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -27,14 +27,6 @@ export type CommonTheme = {
    */
   strokeWidth?: number;
   /**
-   * 填充透明度
-   */
-  fillOpacity?: number,
-  /**
-   * 边框透明度
-   */
-  strokeOpacity?: number,
-  /**
    * 其他属性
    * 我们会把你定义的所有属性最终传递到DOM上
    * 详情请参考svg属性规范
@@ -375,6 +367,7 @@ const edgeAdjust = {
 };
 
 const outline = {
+  fill: 'transparent',
   stroke: '#3f3f3f',
   strokeDasharray: '3,3',
   hover: {

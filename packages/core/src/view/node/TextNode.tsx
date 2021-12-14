@@ -35,12 +35,15 @@ export default class TextNode extends BaseNode {
     }
   }
   getShape() {
-    const attributes = this.getAttributes();
+    const { x, y } = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <g>
         {this.getBackgroud()}
         <Text
-          {...attributes}
+          {...style}
+          x={x}
+          y={y}
         />
       </g>
     );

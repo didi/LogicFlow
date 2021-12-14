@@ -22,10 +22,7 @@ type Istate = {
   isHovered: boolean,
 };
 
-type StyleAttribute = {
-  width: number;
-  height: number;
-} & CommonTheme;
+type StyleAttribute = CommonTheme;
 
 export type NodeAttributes = {
   id: string,
@@ -35,6 +32,8 @@ export type NodeAttributes = {
   y: number,
   isSelected: boolean,
   isHovered: boolean,
+  width: number,
+  height: number,
   text: {
     x: number,
     y: number,
@@ -81,20 +80,17 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
    *     return style;
    *   }
    * }
+   *
+   * 注意：不能直接自定义节点的宽高，因为宽高控制着节点的锚点、外边框以及连线的计算。
+   * 如果想要自定义节点的宽高，请在自定义model中设置
    * @returns 自定义样式
    */
   getShapeStyle(): StyleAttribute {
     const {
-      model: {
-        width,
-        height,
-      },
       graphModel,
     } = this.props;
     return {
       ...graphModel.theme.baseNode,
-      width,
-      height,
     };
   }
   /**
@@ -113,6 +109,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         isSelected,
         isHovered,
         text,
+        width,
+        height,
       },
     } = this.props;
     return {
@@ -125,6 +123,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       y,
       isSelected,
       isHovered,
+      width,
+      height,
       text: {
         ...text,
       },

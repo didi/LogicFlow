@@ -24,41 +24,15 @@ export default class DiamondNode extends BaseNode {
       points,
     };
   }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const style = this.getShapeStyle();
-    return {
-      ...attributes,
-      ...style,
-    };
-  }
   getShape() {
-    const {
-      model: {
-        points,
-      },
-    } = this.props as IProps;
-    const attributes = this.getAttributes();
-    const {
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-    } = attributes;
-
-    const polygonAttr = {
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-      points,
-    };
+    const { x, y } = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <g>
         <Polygon
-          {...polygonAttr}
+          {...style}
+          x={x}
+          y={y}
         />
       </g>
     );

@@ -12,42 +12,30 @@ type IProps = {
   eventCenter: EventEmitter;
 };
 
-type PolygonNodeAttributes = {
-  points: PointTuple[]
-} & NodeAttributes;
-
 export default class PolygonNode extends BaseNode {
   getShapeStyle() {
-    const attributes = super.getShapeStyle();
+    const style = super.getShapeStyle();
     const { model: { points } } = this.props as IProps;
     return {
-      ...attributes,
+      ...style,
       points,
     };
   }
-  getAttributes(): PolygonNodeAttributes {
-    const attributes = super.getAttributes();
-    const style = this.getShapeStyle();
-    return {
-      ...attributes,
-      ...style,
-    };
-  }
   getShape() {
-    const attributes = this.getAttributes();
-    const {
-      width,
-      height,
-      x,
-      y,
-    } = attributes;
+    const { x, y } = this.getAttributes();
+    const style = this.getShapeStyle();
+    const { width, height } = style;
     const attr = {
       transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
     };
     return (
       <g {...attr}>
         <Polygon
-          {...attributes}
+          {
+            ...style
+          }
+          x={x}
+          y={y}
         />
       </g>
     );

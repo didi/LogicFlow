@@ -426,6 +426,10 @@
         })
         lf.setTheme(
           {
+            baseNode: {
+              fill: 'red',
+              stroke: 'green'
+            },
             nodeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
           }
@@ -558,6 +562,32 @@
               type: 'rect',
               x: 500,
               y: 200,
+            },
+            {
+              type: 'circle',
+              x: 100,
+              y: 200,
+            },
+            {
+              type: 'polygon',
+              x: 300,
+              y: 200,
+            },
+            {
+              type: 'ellipse',
+              x: 100,
+              y: 400,
+            },
+            {
+              type: 'diamond',
+              x: 300,
+              y: 400,
+            },
+            {
+              type: 'text',
+              x: 500,
+              y: 400,
+              text: '33333'
             }
           ].concat(Array.of(...Array(0)).map((item, i) => {
             return {

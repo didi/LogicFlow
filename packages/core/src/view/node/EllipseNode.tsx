@@ -11,16 +11,19 @@ type IProps = {
   eventCenter: EventEmitter;
 };
 export default class EllipseNode extends BaseNode {
-  getAttributes() {
-    const attributes = super.getAttributes();
+  getShapeStyle() {
+    const style = super.getShapeStyle();
     const { model: { rx, ry } } = this.props as IProps;
-    return { ...attributes, rx, ry };
+    return { ...style, rx, ry };
   }
   getShape() {
-    const attributes = this.getAttributes();
+    const { x, y } = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <Ellipse
-        {...attributes}
+        {...style}
+        x={x}
+        y={y}
       />
     );
   }

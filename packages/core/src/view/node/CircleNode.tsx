@@ -14,25 +14,23 @@ type IProps = {
 export default class CircleNode extends BaseNode {
   getShapeStyle() {
     const style = super.getShapeStyle();
-    const { model: { r } } = this.props as IProps;
+    const {
+      graphModel,
+    } = this.props;
     return {
       ...style,
-      r,
-    };
-  }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const style = this.getShapeStyle();
-    return {
-      ...attributes,
-      ...style,
+      ...graphModel.theme.circle,
     };
   }
   getShape() {
-    const attributes = this.getAttributes();
+    const { x, y, width } = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <Circle
-        {...attributes}
+        {...style}
+        x={x}
+        y={y}
+        r={width / 2}
       />
     );
   }
