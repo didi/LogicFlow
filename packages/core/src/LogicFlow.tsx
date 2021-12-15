@@ -52,23 +52,44 @@ type InnerView = ClassDecorator & {
 };
 
 export default class LogicFlow {
-  container: HTMLElement;
-  width: number;
-  height: number;
-  graphModel: GraphModel;
-  history: History;
-  viewMap = new Map();
-  tool: Tool;
-  keyboard: Keyboard;
-  dnd: Dnd;
-  options: Options.Definition;
-  getSnapshot: () => void;
-  eventCenter: EventEmitter;
-  snaplineModel: SnaplineModel;
+  /**
+   * logicflow实例挂载的容器。
+   */
+  private container: HTMLElement;
+  private width: number;
+  private height: number;
+  /**
+   * 控制整个logicflow画布的model
+   */
+  private graphModel: GraphModel;
+  private history: History;
+  private viewMap = new Map();
+  private tool: Tool;
+  private keyboard: Keyboard;
+  private dnd: Dnd;
+  private options: Options.Definition;
+  private eventCenter: EventEmitter;
+  private snaplineModel: SnaplineModel;
+  private components: ComponentRender[] = [];
+
   static extensions: Map<string, Extension> = new Map();
-  components: ComponentRender[] = [];
+  /**
+   * 自定义数据格式转换方法
+   * 当接入系统格式和logicflow格式不一直的时候，可以自定义此方法来转换数据格式
+   * 详情请参考adapter
+   * @see todo
+   */
   adapterIn: (data: unknown) => GraphConfigData;
+  /**
+   * 自定义数据格式转换方法
+   * 把logicflow输入的格式转换也接入系统需要的格式
+   * 详情请参考adapter
+   * @see todo
+   */
   adapterOut: (data: GraphConfigData) => unknown;
+  /**
+   * 支持插件在logicflow实例上增加自定义方法
+   */
   [propName: string]: any;
   constructor(options: Options.Definition) {
     const {
@@ -113,16 +134,32 @@ export default class LogicFlow {
   }
 
   // 事件系统----------------------------------------------
-
+  /**
+   * 监听事件
+   * 事件详情见 @see todo
+   * 支持同时监听多个事件
+   * @example
+   * lf.on('node:click,node:contextmenu', (data) => {
+   * });
+   */
   on(evt: string, callback: CallbackType) {
     this.eventCenter.on(evt, callback);
   }
+  /**
+   * 撤销监听事件
+   */
   off(evt: string, callback: CallbackType) {
     this.eventCenter.off(evt, callback);
   }
+  /**
+   * 监听事件，只监听一次
+   */
   once(evt: string, callback: CallbackType) {
     this.eventCenter.once(evt, callback);
   }
+  /**
+   * 出发监听事件
+   */
   emit(evt: string, arg: any) {
     this.eventCenter.emit(evt, arg);
   }
@@ -296,7 +333,10 @@ export default class LogicFlow {
   }
 
   // 全局操作----------------------------------------------
-
+  /**
+   * 历史记录操作
+   * 返回上一步
+   */
   undo() {
     if (!this.history.undoAble()) return;
     // formatData兼容vue数据
@@ -304,6 +344,10 @@ export default class LogicFlow {
     this.clearSelectElements();
     this.graphModel.graphDataToModel(graphData);
   }
+  /**
+   * 历史记录操作
+   * 恢复下一步
+   */
   redo() {
     if (!this.history.redoAble()) return;
     // formatData兼容vue数据
@@ -323,7 +367,7 @@ export default class LogicFlow {
     return `${transformMatrix.SCALE_X * 100}%`;
   }
   /**
-   * 还原图形
+   * 重置图形的放大缩写比例
    */
   resetZoom(): void {
     const { transformMatrix } = this.graphModel;

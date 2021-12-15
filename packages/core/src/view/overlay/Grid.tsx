@@ -41,6 +41,7 @@ export default class Grid extends Component<IProps> {
     return <rect width={length} height={length} rx={length / 2} ry={length / 2} fill={color} opacity={opacity} />;
   }
   // 网格类型为交叉线
+  // todo: 采用背景缩放的方式，实现更好的体验
   renderMesh() {
     const { config: { color, thickness = 1 }, size, visible } = this.props;
     const strokeWidth = Math.min(Math.max(1, thickness), size / 2); // 1 < strokeWidth < size /2
