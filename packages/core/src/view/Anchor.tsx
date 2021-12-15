@@ -238,8 +238,8 @@ class Anchor extends Component<IProps, IState> {
             y1={startY}
             x2={endX}
             y2={endY}
-            pointer-events="none"
             {...edgeStyle}
+            pointer-events="none"
           />
         )}
       </g>

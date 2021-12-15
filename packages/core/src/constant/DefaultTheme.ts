@@ -271,6 +271,8 @@ export type Theme = {
    */
   snapline?: EdgeTheme,
   /**
+   * 当开启了跳转连线的起点和终点(adjustEdgeStartAndEnd:true)后
+   * 连线的两端会出现调整按钮
    * 连线连段的调整点样式
    */
   edgeAdjust?: CircleTheme,
@@ -280,145 +282,99 @@ export type Theme = {
   outline?: OutlineTheme,
 };
 
-const baseNode = {
-  fill: '#FFFFFF',
-  stroke: '#000000',
-  strokeWidth: 2,
-};
-
-const rect = {
-  width: 100,
-  height: 80,
-  radius: 0,
-};
-const circle = {
-  r: 50,
-};
-const ellipse = {
-  rx: 55,
-  ry: 45,
-};
-const diamond = {
-  rx: 50,
-  ry: 50,
-};
-const polygon = {};
-
-const anchor = {
-  ...baseNode,
-  stroke: '#000000',
-  strokeWidth: 1,
-  r: 4,
-  hover: {
-    fill: '#1E90FF',
-    fillOpacity: 0.5,
-    stroke: '#4169E1',
-    strokeWidth: 1,
-    r: 10,
-  },
-};
-
-const baseEdge = {
-  stroke: '#000000',
-  strokeWidth: 2,
-  hoverStroke: '#000000',
-  selectedStroke: '#000000',
-};
-
-const edge = {};
-
-const line = {};
-
-const polyline = {
-  offset: 30,
-};
-
-const bezier = {
-  ...edge,
-  fill: 'none',
-  offset: 100,
-  adjustLine: {
-    stroke: '#4169E1',
-  },
-  adjustAnchor: {
-    r: 4,
-    fill: '#1E90FF',
-    stroke: '#4169E1',
-    fillOpacity: 1,
-  },
-};
-
-const anchorLine = {
-  stroke: '#000000',
-  strokeWidth: 2,
-  strokeDasharray: '3,2',
-};
-
-const text = {
-  color: '#000000',
-  lineHeight: 1.2,
-  fontSize: 12,
-};
-
-const nodeText = {
-  ...text,
-};
-
-const edgeText = {
-  ...text,
-  // overflowMode: 'default',
-  background: {
+export const defaultTheme: Theme = {
+  baseNode: {
     fill: '#FFFFFF',
-    stroke: '',
+    stroke: '#000000',
+    strokeWidth: 2,
+  },
+  baseEdge: {
+    stroke: '#000000',
+    strokeWidth: 2,
+  },
+  rect: {
+    width: 100,
+    height: 80,
     radius: 0,
   },
-};
-
-const snapline = {
-  stroke: '#1E90FF',
-  strokeWidth: 1,
-};
-
-const arrow = {
-  offset: 10, // 箭头长度
-  verticalLength: 5, // 箭头垂直于连线的距离
-  fill: 'green',
-  stroke: 'green',
-};
-// 调整连线起终点的圆形样式
-const edgeAdjust = {
-  r: 4,
-  fill: '#FFFFFF',
-  stroke: '#373738',
-  strokeWidth: 2,
-};
-
-const outline = {
-  fill: 'transparent',
-  stroke: '#3f3f3f',
-  strokeDasharray: '3,3',
-  hover: {
-    stroke: '#4d90ff',
+  circle: {
+    r: 50,
   },
-};
-
-export const defaultTheme: Theme = {
-  baseNode,
-  baseEdge,
-  rect,
-  circle,
-  diamond,
-  ellipse,
-  polygon,
-  anchor,
-  nodeText,
-  edgeText,
-  line,
-  polyline,
-  bezier,
-  arrow,
-  anchorLine,
-  snapline,
-  edgeAdjust,
-  outline,
+  diamond: {
+    rx: 50,
+    ry: 50,
+  },
+  ellipse: {
+    rx: 55,
+    ry: 45,
+  },
+  polygon: {},
+  anchor: {
+    stroke: '#000000',
+    fill: '#FFFFFF',
+    r: 4,
+    hover: {
+      fill: '#949494',
+      fillOpacity: 0.5,
+      stroke: '#949494',
+      r: 10,
+    },
+  },
+  nodeText: {
+    color: '#000000',
+    overflowMode: 'default',
+    lineHeight: 1.2,
+    fontSize: 12,
+  },
+  edgeText: {
+    textWidth: 100,
+    overflowMode: 'default',
+    background: {
+      fill: '#FFFFFF',
+    },
+  },
+  line: {},
+  polyline: {
+    offset: 30,
+  },
+  bezier: {
+    fill: 'none',
+    offset: 100,
+    adjustLine: {
+      stroke: '#949494',
+    },
+    adjustAnchor: {
+      r: 4,
+      fill: '#949494',
+      stroke: '#949494',
+      fillOpacity: 1,
+    },
+  },
+  arrow: {
+    offset: 10, // 箭头长度
+    verticalLength: 5, // 箭头垂直于连线的距离
+  },
+  anchorLine: {
+    stroke: '#000000',
+    strokeWidth: 2,
+    strokeDasharray: '3,2',
+  },
+  snapline: {
+    stroke: '#949494',
+    strokeWidth: 1,
+  },
+  edgeAdjust: {
+    r: 4,
+    fill: '#FFFFFF',
+    stroke: '#949494',
+    strokeWidth: 2,
+  },
+  outline: {
+    fill: 'transparent',
+    stroke: '#949494',
+    strokeDasharray: '3,3',
+    hover: {
+      stroke: '#949494',
+    },
+  },
 };

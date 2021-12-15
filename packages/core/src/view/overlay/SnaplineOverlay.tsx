@@ -12,8 +12,9 @@ export default class SnaplineOverlay extends Component<IProps> {
   render() {
     const { snaplineModel } = this.props;
     const {
-      position, isShowHorizontal, isShowVertical, stroke, strokeWidth,
+      position, isShowHorizontal, isShowVertical,
     } = snaplineModel;
+    const style = snaplineModel.getStyle();
     const { x = 0, y = 0 } = position;
     // 展示横向，纵向默认-100000,100000 减少计算量
     const horizontalLine = {
@@ -21,16 +22,16 @@ export default class SnaplineOverlay extends Component<IProps> {
       y1: y,
       x2: 100000,
       y2: y,
-      stroke: isShowHorizontal ? stroke : 'none',
-      strokeWidth,
+      ...style,
+      stroke: isShowHorizontal ? style.stroke : 'none',
     };
     const vertailLine = {
       x1: x,
       y1: -100000,
       x2: x,
       y2: 100000,
-      stroke: isShowVertical ? stroke : 'none',
-      strokeWidth,
+      ...style,
+      stroke: isShowVertical ? style.stroke : 'none',
     };
     return (
       <g className="lf-snapline">
