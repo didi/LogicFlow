@@ -154,8 +154,14 @@ class Anchor extends Component<IProps, IState> {
     // nodeModel.setSelected(false);
     /* 创建连线 */
     const { nodes, edgeType } = graphModel;
-    const { endX, endY, draging } = this.state;
-    const info = targetNodeInfo({ x: endX, y: endY }, nodes);
+    const { endX, endY, draging, startX, startY } = this.state;
+    const info = targetNodeInfo({
+      x: endX,
+      y: endY,
+      sourceTargetX: startX,
+      sourceTargetY: startY,
+    }, nodes);
+    // feat 小优化 获取离目标节点最近的
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);

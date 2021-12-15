@@ -53,13 +53,31 @@ type AnchorInfo = {
   index: number,
   anchor: Point,
 };
-/* 手动连线时获取目标节点上，距离目标位置最近的锚点 */
+/**
+ * 手动连线时获取目标节点上，距离目标位置最近的锚点
+ *  @param  {Object} position 坐标信息
+ *  @param  {number} position.x 鼠标的横向坐标
+ *  @param  {number} position.y 鼠标的纵向坐标
+ *  @param  {number|null} position.sourceTargetX 连线源节点的锚点横坐标
+ *  @param  {number|null} position.sourceTargetY 连线源节点的锚点纵坐标
+ *  @param node
+ *  @returns
+ * */
+
 const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
   const anchors = getAnchors(node);
+  const { sourceTargetX, sourceTargetY } = position;
+  let { x, y } = position;
+  if (!Number.isNaN(+sourceTargetX) && !Number.isNaN(+sourceTargetY)) {
+    // 如果传入了 源节点的锚点信息 则取源节点锚点的位置作为最近的判断标准
+    x = +sourceTargetX;
+    y = +sourceTargetY;
+  }
+
   let closest;
   let minDistance = Number.MAX_SAFE_INTEGER;
   for (let i = 0; i < anchors.length; i++) {
-    const len = distance(position.x, position.y, anchors[i].x, anchors[i].y);
+    const len = distance(x, y, anchors[i].x, anchors[i].y);
     if (len < minDistance) {
       minDistance = len;
       closest = {
