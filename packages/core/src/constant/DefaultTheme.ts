@@ -66,7 +66,7 @@ export type CircleTheme = {
   /**
    * 默认半径
    */
-  r: number;
+  r?: number;
 } & CommonTheme;
 /**
  * polygon主题样式
@@ -168,6 +168,14 @@ export type EdgeBezierTheme = {
    * 贝塞尔曲线控制点与锚点的距离
    */
   offset?: number;
+  /**
+   * 贝塞尔调整线主题
+   */
+  adjustLine?: EdgeTheme;
+  /**
+   * 贝塞尔调整锚点主题
+   */
+  adjustAnchor?: CircleTheme;
 } & EdgeTheme;
 
 /**
@@ -327,11 +335,17 @@ const polyline = {
 
 const bezier = {
   ...edge,
+  fill: 'none',
   offset: 100,
-  adjustLineColor: '#4169E1',
-  adjustAnchorStroke: '#4169E1',
-  adjustAnchorFill: '#1E90FF',
-  adjustAnchorFillOpacity: 0.5,
+  adjustLine: {
+    stroke: '#4169E1',
+  },
+  adjustAnchor: {
+    r: 4,
+    fill: '#1E90FF',
+    stroke: '#4169E1',
+    fillOpacity: 1,
+  },
 };
 
 const anchorLine = {
@@ -368,6 +382,8 @@ const snapline = {
 const arrow = {
   offset: 10, // 箭头长度
   verticalLength: 5, // 箭头垂直于连线的距离
+  fill: 'green',
+  stroke: 'green',
 };
 // 调整连线起终点的圆形样式
 const edgeAdjust = {

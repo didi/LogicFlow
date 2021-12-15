@@ -95,7 +95,6 @@ export default class PolylineEdge extends BaseEdge {
       graphModel,
     } = this.props;
     const style = super.getShapeStyle();
-    console.log(11, graphModel.theme.polyline);
     return {
       ...style,
       ...graphModel.theme.polyline,

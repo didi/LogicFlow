@@ -60,20 +60,18 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   render() {
     const { position } = this.props;
     const { x, y } = position;
+    const { graphModel } = this.props;
     const {
-      adjustAnchorStroke,
-      adjustAnchorFill,
-      adjustAnchorFillOpacity,
-    } = this.props?.graphModel?.theme?.bezier;
+      adjustAnchor,
+    } = graphModel.theme.bezier;
     return (
       <Circle
         className="lf-bezier-adjust-anchor"
         x={x}
         y={y}
-        r={4}
-        stroke={adjustAnchorStroke}
-        fill={adjustAnchorFill}
-        fillOpacity={adjustAnchorFillOpacity}
+        {
+          ...adjustAnchor
+        }
         onMouseDown={this.dragHandler}
       />
     );
@@ -86,14 +84,16 @@ export default class BezierAdjustOverlay extends Component<IProps> {
     const { path, id } = bezier;
     const pointsList = getBezierPoints(path);
     const [start, sNext, ePre, end] = pointsList;
-    const { adjustLineColor } = graphModel.theme.bezier;
+    const { adjustLine } = graphModel.theme.bezier;
     const result = [];
     result.push(<Line
       x1={start.x}
       y1={start.y}
       x2={sNext.x}
       y2={sNext.y}
-      stroke={adjustLineColor}
+      {
+        ...adjustLine
+      }
     />);
     result.push(<BezierAdjustAnchor
       position={sNext}
@@ -107,7 +107,9 @@ export default class BezierAdjustOverlay extends Component<IProps> {
       y1={end.y}
       x2={ePre.x}
       y2={ePre.y}
-      stroke={adjustLineColor}
+      {
+        ...adjustLine
+      }
     />);
     result.push(<BezierAdjustAnchor
       position={ePre}

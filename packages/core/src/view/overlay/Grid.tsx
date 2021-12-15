@@ -64,9 +64,9 @@ export default class Grid extends Component<IProps> {
     } = transformMatrix;
     const matrixString = [SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y].join(',');
     const transform = `matrix(${matrixString})`;
-    const transitionStyle = {
-      transition: 'all 0.1s ease',
-    };
+    // const transitionStyle = {
+    //   transition: 'all 0.1s ease',
+    // };
     return (
       <div className="lf-grid">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
@@ -79,7 +79,6 @@ export default class Grid extends Component<IProps> {
               y="0"
               width={size}
               height={size}
-              style={transitionStyle}
             >
               {type === 'dot' && this.renderDot()}
               {type === 'mesh' && this.renderMesh()}

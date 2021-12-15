@@ -108,15 +108,13 @@ export default class BaseEdge extends Component<IProps> {
     };
   }
   getArrowStyle() {
-    const { stroke } = this.getAttributes();
+    const edgeStyle = this.getShapeStyle();
     const { graphModel } = this.props;
-    const { offset, verticalLength } = graphModel.theme.arrow;
+    const { arrow } = graphModel.theme;
     return {
-      stroke,
-      strokeWidth: 1,
-      fill: stroke,
-      offset,
-      verticalLength,
+      ...edgeStyle,
+      fill: edgeStyle.stroke,
+      ...arrow,
     };
   }
   getArrow() {

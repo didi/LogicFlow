@@ -14,20 +14,27 @@ export default class BezierEdge extends BaseEdge {
       path,
     };
   }
+  getShapeStyle() {
+    const {
+      graphModel,
+    } = this.props;
+    const style = super.getShapeStyle();
+    return {
+      ...style,
+      ...graphModel.theme.bezier,
+    };
+  }
   getEdge() {
     const {
       path,
-      strokeWidth,
-      stroke,
-      strokeDashArray,
     } = this.getAttributes();
+    const style = this.getShapeStyle();
     return (
       <Path
         d={path}
-        strokeWidth={strokeWidth}
-        stroke={stroke}
-        fill="none"
-        strokeDasharray={strokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
