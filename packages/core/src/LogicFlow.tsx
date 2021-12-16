@@ -473,7 +473,7 @@ export default class LogicFlow {
     let { coordinate } = focusOnArgs;
     const { id } = focusOnArgs;
     if (!coordinate) {
-      const model = this.getNodeModel(id);
+      const model = this.getNodeModelById(id);
       if (model) {
         coordinate = model.getData();
       }
@@ -514,7 +514,7 @@ export default class LogicFlow {
    * @param id 元素id
    */
   deleteElement(id): boolean {
-    const NodeModel = this.graphModel.getNodeModel(id);
+    const NodeModel = this.graphModel.getNodeModelById(id);
     if (NodeModel) {
       return this.deleteNode(id);
     }
@@ -554,7 +554,7 @@ export default class LogicFlow {
    * @param {string} nodeId 节点Id
    */
   deleteNode(nodeId: string): boolean {
-    const Model = this.graphModel.getNodeModel(nodeId);
+    const Model = this.graphModel.getNodeModelById(nodeId);
     if (!Model) {
       return false;
     }
@@ -578,7 +578,7 @@ export default class LogicFlow {
    * @param nodeId 节点Id
    */
   cloneNode(nodeId: string): _Model.BaseNodeModel {
-    const Model = this.graphModel.getNodeModel(nodeId);
+    const Model = this.graphModel.getNodeModelById(nodeId);
     const data = Model.getData();
     const { guards } = this.options;
     const enabledClone = guards && guards.beforeClone ? guards.beforeClone(data) : true;
@@ -644,19 +644,15 @@ export default class LogicFlow {
    * 获取节点对象
    * @param nodeId 节点Id
    */
-  getNodeModel(nodeId: string): _Model.BaseNodeModel {
-    return this.graphModel.getNodeModel(nodeId);
-  }
-  getNodeData(nodeId: string): NodeAttribute {
-    return this.graphModel.getNodeModel(nodeId).getData();
+  getNodeModelById(nodeId: string): _Model.BaseNodeModel {
+    return this.graphModel.getNodeModelById(nodeId);
   }
   /**
-   * 设置节点数据
-   * @deprecated 不建议直接设置节点数据，更新文本请用updateText, 修改数据请用setProperties
+   * 获取节点数据
+   * @param nodeId 节点
    */
-  setNodeData(nodeAttribute: NodeAttribute): void {
-    const { id } = nodeAttribute;
-    this.graphModel.getNodeModel(id).updateData(nodeAttribute);
+  getNodeDataById(nodeId: string): NodeAttribute {
+    return this.graphModel.getNodeModelById(nodeId).getData();
   }
   /**
    * 基于边Id获取边的model
@@ -670,21 +666,27 @@ export default class LogicFlow {
   /**
    * 获取满足条件边的model
    * @param edgeFilter 过滤条件
+   * @example
+   * 获取所有起点为节点A的边的model
+   * lf.getEdgeModels({
+   *   sourceNodeId: 'nodeA_id'
+   * })
+   * 获取所有终点为节点B的边的model
+   * lf.getEdgeModels({
+   *   targetNodeId: 'nodeB_id'
+   * })
+   * 获取起点为节点A，终点为节点B的边
+   * lf.getEdgeModels({
+   *   sourceNodeId: 'nodeA_id',
+   *   targetNodeId: 'nodeB_id'
+   * })
    * @return model数组
    */
   getEdgeModels(edgeFilter: EdgeFilter): _Model.BaseEdgeModel[] {
     const { edges, edgesMap } = this.graphModel;
     const {
-      id, sourceNodeId, targetNodeId,
+      sourceNodeId, targetNodeId,
     } = edgeFilter;
-    if (id) {
-      const edge = edgesMap[id];
-      if (!edge) {
-        console.warn(`不存在id为${id}的边`);
-        return [];
-      }
-      return [edgesMap[id].model];
-    }
     if (sourceNodeId && targetNodeId) {
       const result = [];
       edges.forEach(edge => {
@@ -723,15 +725,9 @@ export default class LogicFlow {
     return this.getEdgeModelById(edgeId)?.getData();
   }
   /**
-   * 设置边数据
-   * @deprecated 不建议直接设置边数据，更新文本请用updateText, 修改数据请用setProperties
-   */
-  setEdgeData(edgeAttribute: EdgeAttribute): void {
-    const { id } = edgeAttribute;
-    return this.getEdgeModelById(id)?.updateData(edgeAttribute);
-  }
-  /**
    * 获取流程绘图数据
+   * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
+   * 如果实现通用插件，请使用getGraphRawData
    */
   getGraphData(): GraphConfigData | any {
     const data = this.graphModel.modelToGraphData();
@@ -745,11 +741,11 @@ export default class LogicFlow {
    * 在存在adapter时，可以使用getGraphRawData获取图原始数据
    */
   getGraphRawData(): GraphConfigData {
-    const data = this.graphModel.modelToGraphData();
-    return data;
+    return this.graphModel.modelToGraphData();
   }
   /**
    * 设置元素的自定义属性
+   * @see todo docs link
    * @param id 元素的id
    * @param properties 自定义属性
    */
@@ -768,18 +764,18 @@ export default class LogicFlow {
    * 修改节点的id， 如果不传新的id，会内部自动创建一个。
    * @param { string } oldId 将要被修改的id
    * @param { string } newId 可选，修改后的id
-   * @returns 修改后的节点id
+   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
    */
-  changeNodeId<T extends string>(oldId: string, newId?: T): false | T | string {
+  changeNodeId<T extends string>(oldId: string, newId?: T): T | string {
     return this.graphModel.changeNodeId(oldId, newId);
   }
   /**
    * 修改连线的id， 如果不传新的id，会内部自动创建一个。
    * @param { string } oldId 将要被修改的id
    * @param { string } newId 可选，修改后的id
-   * @returns 修改后的节点id
+   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
    */
-  changeEdgeId<T extends string>(oldId: string, newId?: T): false | T | string {
+  changeEdgeId<T extends string>(oldId: string, newId?: T): T | string {
     return this.graphModel.changeEdgeId(oldId, newId);
   }
   /**
@@ -791,13 +787,15 @@ export default class LogicFlow {
     this.graphModel.editConfig.updateEditConfig(config);
   }
   /**
-   * 获取流程图编辑相关设置
+   * 获取流程图当前编辑相关设置
+   * @see todo docs link
    */
   getEditConfig() {
     return this.graphModel.editConfig.getConfig();
   }
   /**
    * 获取事件位置相对于画布左上角的坐标
+   * 画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
    * @param {number} x 事件x坐标
    * @param {number} y 事件y坐标
    * @returns {object} Point 事件位置的坐标

@@ -13,13 +13,13 @@ class Tips {
     this.container = container;
     this.container.appendChild(this.tipsWrap);
     this.lf.on('node:mouseenter', ({ data }) => {
-      const model = this.lf.graphModel.getNodeModel(data.id);
+      const model = this.lf.graphModel.getNodeModelById(data.id);
       // 没有model可以认为是fakernode, 也就是正在外部拖入的节点。
       if (!model) return;
       this.showTip(data);
     });
     this.lf.on('node:mouseleave', ({ data }) => {
-      const model = this.lf.graphModel.getNodeModel(data.id);
+      const model = this.lf.graphModel.getNodeModelById(data.id);
       // 没有model可以认为是fakernode, 也就是正在外部拖入的节点。
       if (!model) return;
       this.isCurrentLeaveId = data.id;

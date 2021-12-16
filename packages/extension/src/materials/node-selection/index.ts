@@ -154,7 +154,7 @@ class NodeSelectionModel extends PolygonNodeModel {
     let maxY = -Infinity;
 
     nodesIds.forEach((id) => {
-      const model = this.graphModel.getNodeModel(id);
+      const model = this.graphModel.getNodeModelById(id);
       if (!model) return;
       const { width, height, x, y } = model;
       minX = Math.min(minX, x - width / 2 - this.d);
@@ -217,7 +217,7 @@ class NodeSelection {
       node_selection_ids: this.selectNodesIds,
     });
 
-    this.lf.getNodeModel(nodeSelection.id).updatePointsByNodes(this.selectNodesIds);
+    this.lf.getNodeModelById(nodeSelection.id).updatePointsByNodes(this.selectNodesIds);
   }
 
   /**
@@ -248,7 +248,7 @@ class NodeSelection {
       // 如果selectNodesIds中已存在此节点，则取消选中此节点
       let isUnSelected = false;
       if (this.selectNodesIds.includes(val.data.id)) {
-        this.lf.getNodeModel(val.data.id).setSelected(false);
+        this.lf.getNodeModelById(val.data.id).setSelected(false);
         isUnSelected = true;
       }
 

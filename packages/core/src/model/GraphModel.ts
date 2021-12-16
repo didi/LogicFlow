@@ -164,7 +164,7 @@ class GraphModel {
     return this.modelMap.get(type);
   }
 
-  getNodeModel(nodeId: BaseNodeModelId): BaseNodeModel {
+  getNodeModelById(nodeId: BaseNodeModelId): BaseNodeModel {
     if (this.fakerNode && nodeId === this.fakerNode.id) {
       return this.fakerNode;
     }
@@ -274,7 +274,7 @@ class GraphModel {
   }
 
   getElement(id: string): IBaseModel | undefined {
-    const nodeModel = this.getNodeModel(id);
+    const nodeModel = this.getNodeModelById(id);
     if (nodeModel) {
       return nodeModel;
     }
@@ -330,17 +330,17 @@ class GraphModel {
   /**
    * 修改指定节点id
    */
-  changeNodeId<T extends string>(oldId, newId?: T | string): false | T | string {
+  changeNodeId<T extends string>(oldId, newId?: T | string): T | string {
     if (!newId) {
       newId = createUuid();
     }
     if (this.nodesMap[newId]) {
       console.warn(`当前流程图已存在节点${newId}, 修改失败`);
-      return false;
+      return '';
     }
     if (!this.nodesMap[oldId]) {
       console.warn(`当前流程图找不到节点${newId}, 修改失败`);
-      return false;
+      return '';
     }
     this.edges.forEach((edge) => {
       if (edge.sourceNodeId === oldId) {
@@ -353,17 +353,17 @@ class GraphModel {
     this.nodesMap[oldId].model.id = newId;
     return newId;
   }
-  changeEdgeId<T extends string>(oldId: string, newId?: string): false | T | string {
+  changeEdgeId<T extends string>(oldId: string, newId?: string): T | string {
     if (!newId) {
       newId = createUuid();
     }
     if (this.edgesMap[newId]) {
       console.warn(`当前流程图已存在连线: ${newId}, 修改失败`);
-      return false;
+      return '';
     }
     if (!this.edgesMap[oldId]) {
       console.warn(`当前流程图找不到连线: ${newId}, 修改失败`);
-      return false;
+      return '';
     }
     this.edges.forEach((edge) => {
       if (edge.id === oldId) {
@@ -451,7 +451,7 @@ class GraphModel {
   */
   @action
   cloneNode(nodeId: string): BaseNodeModel {
-    const Model = this.getNodeModel(nodeId);
+    const Model = this.getNodeModelById(nodeId);
     const data = Model.getData();
     data.x += 30;
     data.y += 30;
@@ -747,7 +747,7 @@ class GraphModel {
   }
   @action
   changeNodeType(id, type: string): void {
-    const nodeModel = this.getNodeModel(id);
+    const nodeModel = this.getNodeModelById(id);
     if (!nodeModel) {
       console.warn(`找不到id为${id}的节点`);
       return;

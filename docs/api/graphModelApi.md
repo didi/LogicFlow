@@ -109,7 +109,7 @@ lf.on('user:detail', (res) => {})
 返回值:
 
 [NodeModel](/api/baseNodeModelApi.html) 或 [EdgeModel](/api/baseEdgeModelApi.html)
-## getNodeModel
+## getNodeModelById
 
 `方法`
 

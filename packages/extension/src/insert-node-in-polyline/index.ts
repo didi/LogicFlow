@@ -36,7 +36,7 @@ const InsertNodeInPolyline = {
   },
   insetNode(nodeData): void {
     const { edges } = this._lf.graphModel;
-    const nodeModel = this._lf.getNodeModel(nodeData.id);
+    const nodeModel = this._lf.getNodeModelById(nodeData.id);
     for (let i = 0; i < edges.length; i++) {
       // eslint-disable-next-line max-len
       const { crossIndex, crossPoints } = isNodeInSegement(nodeModel, edges[i] as PolylineEdgeModel);

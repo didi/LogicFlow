@@ -129,7 +129,7 @@ class Menu {
     this.lf.on('node:contextmenu', ({ data, position }) => {
       const { domOverlayPosition: { x, y } } = position;
       const { id } = data;
-      const model = this.lf.graphModel.getNodeModel(id);
+      const model = this.lf.graphModel.getNodeModelById(id);
       let menuList = [];
       const typeMenus = this.menuTypeMap.get(model.type);
       // 如果单个节点自定义了节点，以单个节点自定义为准

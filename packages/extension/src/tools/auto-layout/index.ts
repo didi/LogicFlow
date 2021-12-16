@@ -173,7 +173,7 @@ class AutoLayout {
    * 获取连线节点图形的宽高。
    */
   private getShape(nodeId) {
-    const nodeModel = this.lf.getNodeModel(nodeId);
+    const nodeModel = this.lf.getNodeModelById(nodeId);
     return {
       height: nodeModel.height,
       width: nodeModel.width,

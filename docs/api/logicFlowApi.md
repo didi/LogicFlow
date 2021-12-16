@@ -520,12 +520,12 @@ cloneNode(nodeId: string): BaseNodeModel
 lf.cloneNode('id')
 ```
 
-## getNodeModel
+## getNodeModelById
 
 获取节点的`model`数据
 
 ```js
-getNodeModel(nodeId: string): BaseNodeModel
+getNodeModelById(nodeId: string): BaseNodeModel
 ```
 
 参数：
@@ -537,7 +537,7 @@ getNodeModel(nodeId: string): BaseNodeModel
 示例：
 
 ```js
-lf.getNodeModel('id')
+lf.getNodeModelById('id')
 ```
 
 ## getEdge
@@ -559,9 +559,6 @@ getEdge(config: EdgeFilter): BaseEdgeModel[]
 示例：
 
 ```js
-lf.getEdgeModels({
-  id: 'id'
-})
 lf.getEdgeModels({
   sourceNodeId: 'id1',
   targetNodeId: 'id2'

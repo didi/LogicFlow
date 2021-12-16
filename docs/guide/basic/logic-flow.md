@@ -81,7 +81,7 @@ lf.deleteNode(nodeId)
 lf.cloneNode(nodeId)
 
 // 获取节点的model数据
-lf.getNodeModel(nodeId)
+lf.getNodeModelById(nodeId)
 
 ```
 

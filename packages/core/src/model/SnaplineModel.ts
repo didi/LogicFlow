@@ -73,7 +73,7 @@ export default class SnaplineModel {
       if (fakerNode && fakerNode.id === id) {
         dragingData = getNodeBBox(fakerNode);
       } else {
-        const nodeModel = this.graphModel.getNodeModel(id);
+        const nodeModel = this.graphModel.getNodeModelById(id);
         dragingData = getNodeBBox(nodeModel);
       }
     }
@@ -113,7 +113,7 @@ export default class SnaplineModel {
       if (fakerNode && fakerNode.id === id) {
         dragingData = getNodeBBox(fakerNode);
       } else {
-        const nodeModel = this.graphModel.getNodeModel(id);
+        const nodeModel = this.graphModel.getNodeModelById(id);
         dragingData = getNodeBBox(nodeModel);
       }
     }

@@ -214,44 +214,6 @@ class BaseEdgeModel implements IBaseModel {
     this.setAttributes();
   }
 
-  /* 更新数据 */
-  @action
-  updateData(edgeAttribute: EdgeAttribute): void {
-    // formatData兼容vue数据
-    const edgeData = formatData(pick(edgeAttribute,
-      'type',
-      'sourceNodeId',
-      'targetNodeId',
-      'startPoint',
-      'endPoint',
-      'text',
-      'properties'));
-    // 兼容text, object/string类型
-    const {
-      x,
-      y,
-      draggable,
-      editable,
-    } = this.text;
-    if (edgeData.text && typeof edgeData.text === 'string') {
-      const text = {
-        value: edgeData.text,
-        draggable,
-        editable,
-      };
-      const textPostion = this.textPosition;
-      if (!x && !y) {
-        edgeData.text = Object.assign({}, text, textPostion);
-      } else {
-        edgeData.text = Object.assign({}, text, { x, y });
-      }
-    } else if (typeof edgeData.text === 'object') {
-      const text = Object.assign({}, this.text, edgeData.text);
-      edgeData.text = pick(text, 'x', 'y', 'value', 'draggable', 'editable');
-    }
-    assign(this, edgeData);
-  }
-
   @action
   formatText(data) {
     // 暂时处理，只传入text的情况

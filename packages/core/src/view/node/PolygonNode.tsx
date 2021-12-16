@@ -13,14 +13,6 @@ type IProps = {
 };
 
 export default class PolygonNode extends BaseNode {
-  // getShapeStyle() {
-  //   const style = super.getShapeStyle();
-  //   const { model: { points } } = this.props as IProps;
-  //   return {
-  //     ...style,
-  //     points,
-  //   };
-  // }
   getShapeStyle() {
     const style = super.getShapeStyle();
     const {

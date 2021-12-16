@@ -453,33 +453,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this.stroke = color;
   }
 
-  /* 更新数据 */
-  @action
-  updateData(nodeAttribute: NodeAttribute): void {
-    // formatData兼容vue数据
-    const nodeData = formatData(pick(nodeAttribute, 'type', 'x', 'y', 'text', 'properties'));
-    // 兼容text, object/string类型
-    const {
-      x,
-      y,
-      draggable,
-      editable,
-    } = this.text;
-    if (nodeData.text && typeof nodeData.text === 'string') {
-      nodeData.text = {
-        x,
-        y,
-        value: nodeData.text,
-        draggable,
-        editable,
-      };
-    } else if (typeof nodeData.text === 'object') {
-      const text = { ...this.text, ...nodeData.text };
-      nodeData.text = pick(text, 'x', 'y', 'value', 'draggable', 'editable');
-    }
-    assign(this, nodeData);
-  }
-
   @action
   setProperty(key, val): void {
     this.properties = {

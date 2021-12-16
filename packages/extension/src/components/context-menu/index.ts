@@ -136,7 +136,7 @@ class ContextMenu {
     if (y === undefined) {
       y = node.y;
     }
-    const nodeModel = this.lf.getNodeModel(node.sourceId);
+    const nodeModel = this.lf.getNodeModelById(node.sourceId);
     const leftTopX = node.x - nodeModel.width + NEXT_X_DISTANCE;
     const leftTopY = y - node.y / 2 - 20;
     const rightBottomX = node.x + nodeModel.width + NEXT_X_DISTANCE;
