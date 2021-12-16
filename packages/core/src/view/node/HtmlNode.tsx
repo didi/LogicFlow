@@ -28,8 +28,7 @@ export default class HtmlNode extends BaseNode {
     this.setHtml(this.rootEl);
   }
   getShape() {
-    const { x, y } = this.getAttributes();
-    const { width, height } = super.getShapeStyle();
+    const { x, y, height, width } = this.getAttributes();
     return (
       <foreignObject
         x={x - width / 2}
