@@ -178,7 +178,7 @@ class Anchor extends Component<IProps, IState> {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
         if (!(x === info.anchor.x && y === info.anchor.y)) {
-          graphModel.createEdge({
+          graphModel.addEdge({
             type: edgeType,
             sourceNodeId: nodeModel.id,
             sourceAnchorId: id,

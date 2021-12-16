@@ -35,10 +35,10 @@ lf.render({
 
 ### 通过函数创建连接
 
-在实例化 `LogicFlow` 后，通过调用 `lf.createEdge` 创建边。创建边的参数包括边类型、位置信息、文案信息、自定义属性等。内置边的完整配置参见 [Edge API](/api/edgeApi.html)。
+在实例化 `LogicFlow` 后，通过调用 `lf.addEdge` 创建边。创建边的参数包括边类型、位置信息、文案信息、自定义属性等。内置边的完整配置参见 [Edge API](/api/edgeApi.html)。
 
 ```ts
-lf.createEdge({
+lf.addEdge({
   type: 'line',
   sourceNodeId: '10',
   targetNodeId: '20',
@@ -50,7 +50,7 @@ lf.createEdge({
 
 ```ts
 // 创建边
-lf.createEdge({
+lf.addEdge({
   type: 'polyline',
   sourceNodeId: '30',
   targetNodeId: '40',

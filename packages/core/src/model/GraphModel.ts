@@ -20,6 +20,7 @@ import { formatData } from '../util/compatible';
 import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 import { createUuid } from '../util';
 import { getMinIndex, getZIndex } from '../util/zIndex';
+import { Theme } from '../constant/DefaultTheme';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -268,7 +269,7 @@ class GraphModel {
     };
   }
 
-  getEdgeModel(edgeId: string) {
+  getEdgeModelById(edgeId: string) {
     return this.edgesMap[edgeId]?.model;
   }
 
@@ -277,7 +278,7 @@ class GraphModel {
     if (nodeModel) {
       return nodeModel;
     }
-    const edgeModel = this.getEdgeModel(id);
+    const edgeModel = this.getEdgeModelById(id);
     return edgeModel;
   }
 
@@ -515,7 +516,7 @@ class GraphModel {
   }
 
   @action
-  createEdge(edgeConfig: EdgeConfig): EdgeConfig {
+  addEdge(edgeConfig: EdgeConfig): EdgeConfig {
     const edgeOriginData = formatData(edgeConfig);
     // 边的类型优先级：自定义>全局>默认
     let { type } = edgeOriginData;
@@ -782,11 +783,18 @@ class GraphModel {
       }
     });
   }
-  @action
-  changeEdgeType(id, type) {
-    const edgeModel = this.getEdgeModel(id);
+  /**
+   * 切换连线的类型
+   * @param id 连线Id
+   * @param type 期望切换的类型
+   */
+  @action changeEdgeType(id, type) {
+    const edgeModel = this.getEdgeModelById(id);
     if (!edgeModel) {
       console.warn(`找不到id为${id}的连线`);
+      return;
+    }
+    if (edgeModel.type === type) {
       return;
     }
     const data = edgeModel.getData();
@@ -798,13 +806,17 @@ class GraphModel {
     const newEdgeModel = new Model(data, this);
     this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
   }
-  /* 设置主题 */
-  @action setTheme(style: Style) {
+  /**
+   * 设置主题
+   * todo docs link
+   */
+  @action setTheme(style: Theme) {
     this.theme = updateTheme({ ...this.theme, ...style });
   }
-  // 清空数据
-  @action
-  clearData(): void {
+  /**
+   * 清空画布
+   */
+  @action clearData(): void {
     this.nodes = [];
     this.edges = [];
   }

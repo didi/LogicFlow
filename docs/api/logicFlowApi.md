@@ -179,12 +179,12 @@ deleteNode(nodeId: string): void
 lf.deleteNode('id');
 ```
 
-## createEdge
+## addEdge
 
 创建连接两个节点的连线
 
 ```js
-createEdge(edgeConfig: EdgeConifg): void
+addEdge(edgeConfig: EdgeConifg): void
 ```
 
 参数：
@@ -202,7 +202,7 @@ createEdge(edgeConfig: EdgeConifg): void
 示例：
 
 ```js
-lf.createEdge({
+lf.addEdge({
   sourceNodeId: '10',
   targetNodeId: '21',
   startPoint: {
@@ -559,17 +559,17 @@ getEdge(config: EdgeFilter): BaseEdgeModel[]
 示例：
 
 ```js
-lf.getEdge({
+lf.getEdgeModels({
   id: 'id'
 })
-lf.getEdge({
+lf.getEdgeModels({
   sourceNodeId: 'id1',
   targetNodeId: 'id2'
 })
-lf.getEdge({
+lf.getEdgeModels({
   sourceNodeId: 'id1'
 })
-lf.getEdge({
+lf.getEdgeModels({
   targetNodeId: 'id2'
 })
 ```

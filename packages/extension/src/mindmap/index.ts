@@ -98,7 +98,7 @@ class MindMap {
       x: data.x,
       y: data.y,
     });
-    this.lf.createEdge({
+    this.lf.addEdge({
       sourceNodeId: data.id,
       targetNodeId: nodeModel.id,
     });

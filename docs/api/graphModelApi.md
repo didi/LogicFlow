@@ -223,7 +223,7 @@ type EdgeConfig = {
 获取graphModel对应的原始数据
 
 返回值： GraphConfigData
-## getEdgeModel
+## getEdgeModels
 
 `方法`
 
@@ -366,7 +366,7 @@ type EdgeConfig = {
 | id | string | 无 | 节点id或者连线id |
 
 
-## createEdge
+## addEdge
 
 `方法`
 

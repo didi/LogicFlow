@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import BaseNode, { NodeAttributes } from './BaseNode';
+import BaseNode from './BaseNode';
 import EventEmitter from '../../event/eventEmitter';
 import GraphModel from '../../model/GraphModel';
 import { PolygonNodeModel } from '../../model';

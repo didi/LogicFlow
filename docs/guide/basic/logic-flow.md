@@ -89,7 +89,7 @@ lf.getNodeModel(nodeId)
 
 ```js
 // 创建边
-lf.createEdge(edgeConfig)
+lf.addEdge(edgeConfig)
 
 // 根据连线Id来删除边
 lf.deleteEdge(edgeId)
@@ -98,7 +98,7 @@ lf.deleteEdge(edgeId)
 lf.removeEdge(sourceNodeId, targetNodeId)
 
 // 获取边的model数据
-lf.getEdge(config)
+lf.getEdgeModels(edgeFilter)
 
 // 获取边的数据属性
 lf.getEdgeData(edgeId)

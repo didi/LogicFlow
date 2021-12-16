@@ -26,13 +26,15 @@ class View extends RectNode {
     const {
       x,
       y,
+      properties,
+    } = this.getAttributes();
+    const {
       width,
       height,
       fill,
       stroke,
       strokeWidth,
-      properties,
-    } = this.getAttributes();
+    } = this.getShapeStyle();
     const attrs = {
       x: x - width / 2,
       y: y - height / 2,

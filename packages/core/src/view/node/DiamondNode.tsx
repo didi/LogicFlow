@@ -1,15 +1,16 @@
 import { h } from 'preact';
 import BaseNode from './BaseNode';
-import EventEmitter from '../../event/eventEmitter';
-import GraphModel from '../../model/GraphModel';
-import DiamondNodeModel from '../../model/node/DiamondNodeModel';
+// import EventEmitter from '../../event/eventEmitter';
+// import GraphModel from '../../model/GraphModel';
+// import DiamondNodeModel from '../../model/node/DiamondNodeModel';
 import Polygon from '../basic-shape/Polygon';
+import { DiamondAttributes } from '../../type';
 
-type IProps = {
-  model: DiamondNodeModel;
-  graphModel: GraphModel;
-  eventCenter: EventEmitter;
-};
+// type IProps = {
+//   model: DiamondNodeModel;
+//   graphModel: GraphModel;
+//   eventCenter: EventEmitter;
+// };
 
 export default class DiamondNode extends BaseNode {
   getShapeStyle() {
@@ -22,7 +23,7 @@ export default class DiamondNode extends BaseNode {
       ...graphModel.theme.diamond,
     };
   }
-  getAttributes() {
+  getAttributes(): DiamondAttributes {
     const attributes = super.getAttributes();
     const {
       model: {
@@ -30,7 +31,7 @@ export default class DiamondNode extends BaseNode {
       },
     } = this.props;
     attributes.points = points;
-    return attributes;
+    return attributes as DiamondAttributes;
   }
   getShape() {
     const { x, y, points } = this.getAttributes();

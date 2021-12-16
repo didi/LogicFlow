@@ -1,8 +1,8 @@
 import { cloneDeep, merge } from 'lodash-es';
-import { defaultTheme } from '../constant/DefaultTheme';
+import { defaultTheme, Theme } from '../constant/DefaultTheme';
 
 /* 主题（全局样式）相关方法 */
-export const updateTheme = (style) => {
+export const updateTheme = (style: Theme) => {
   let defaultStyle = cloneDeep(defaultTheme);
   if (style) {
     /**

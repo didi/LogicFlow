@@ -10,6 +10,7 @@ import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
 import { CommonTheme, OutlineTheme } from '../../constant/DefaultTheme';
+import { NodeAttributes } from '../../type';
 
 type IProps = {
   model: BaseNodeModel;
@@ -24,24 +25,6 @@ type Istate = {
 
 type StyleAttribute = CommonTheme;
 
-export type NodeAttributes = {
-  id: string,
-  properties: Record<string, any>,
-  type: string,
-  x: number,
-  y: number,
-  isSelected: boolean,
-  isHovered: boolean,
-  width: number,
-  height: number,
-  text: {
-    x: number,
-    y: number,
-    value: string;
-    [key: string]: any;
-  },
-  [key: string]: any;
-};
 export default abstract class BaseNode extends Component<IProps, Istate> {
   static getModel(defaultModel) {
     return defaultModel;

@@ -59,7 +59,7 @@ LogicFlow 的内置连线类型包括
 
 ## 通用方法
 
-### lf.createEdge
+### lf.addEdge
 
 创建边
 

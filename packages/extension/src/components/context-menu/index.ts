@@ -168,7 +168,7 @@ class ContextMenu {
         y: newNode.y,
       };
     }
-    this.lf.createEdge({
+    this.lf.addEdge({
       sourceNodeId: node.sourceId,
       targetNodeId: newNode.id,
       startPoint,

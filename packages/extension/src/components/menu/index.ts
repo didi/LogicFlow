@@ -146,7 +146,7 @@ class Menu {
     this.lf.on('edge:contextmenu', ({ data, position }) => {
       const { domOverlayPosition: { x, y } } = position;
       const { id } = data;
-      const model = this.lf.graphModel.getEdgeModel(id);
+      const model = this.lf.graphModel.getEdgeModelById(id);
       let menuList = [];
       const typeMenus = this.menuTypeMap.get(model.type);
       // 如果单个节点自定义了连线

@@ -158,7 +158,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 删除老连线
       graphModel.removeEdgeById(edgeModel.id);
       // 创建新连线
-      const edge = graphModel.createEdge({ ...createEdgeInfo }) as BaseEdgeModel;
+      const edge = graphModel.addEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件
       eventCenter.emit(
         EventType.EDGE_EXCHANGE_NODE,

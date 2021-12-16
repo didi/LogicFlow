@@ -407,3 +407,26 @@ export type NodeMoveRule = (
 ) => Boolean;
 
 export type ZoomParam = boolean | number;
+
+export type NodeAttributes = {
+  id: string,
+  properties: Record<string, any>,
+  type: string,
+  x: number,
+  y: number,
+  isSelected: boolean,
+  isHovered: boolean,
+  width: number,
+  height: number,
+  text: {
+    x: number,
+    y: number,
+    value: string;
+    [key: string]: any;
+  },
+  [key: string]: any;
+};
+
+export type DiamondAttributes = {
+  points: PointTuple[]
+} & NodeAttributes;
