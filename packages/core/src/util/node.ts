@@ -68,7 +68,11 @@ const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
   const anchors = getAnchors(node);
   const { sourceTargetX, sourceTargetY } = position;
   let { x, y } = position;
-  if (!Number.isNaN(+sourceTargetX) && !Number.isNaN(+sourceTargetY)) {
+  // 由于 null 会被转换成 0  所以需要处理
+  if (
+    sourceTargetX !== null && !Number.isNaN(+sourceTargetX)
+    && sourceTargetY !== null && !Number.isNaN(+sourceTargetY)
+  ) {
     // 如果传入了 源节点的锚点信息 则取源节点锚点的位置作为最近的判断标准
     x = +sourceTargetX;
     y = +sourceTargetY;
