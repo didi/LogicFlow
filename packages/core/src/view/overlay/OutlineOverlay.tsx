@@ -88,16 +88,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const height = Math.abs(startPoint.y - endPoint.y) + 10;
     const { graphModel } = this.props;
     const { outlineColor, outlineStrokeDashArray } = graphModel.theme.line;
+    const style = line.getOutlineStyle();
     return (
       <Rect
         className="lf-outline-edge"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
@@ -109,18 +109,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const {
       x, y, width, height,
     } = bbox;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.polyline;
+    const style = polyline.getOutlineStyle();
     return (
       <Rect
         className="lf-outline"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
@@ -132,18 +130,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const {
       x, y, width, height,
     } = bbox;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.bezier;
+    const style = bezier.getOutlineStyle();
     return (
       <Rect
         className="lf-outline"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }

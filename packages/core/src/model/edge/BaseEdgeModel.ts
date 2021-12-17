@@ -17,7 +17,7 @@ import {
 import {
   ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
-import { defaultTheme } from '../../constant/DefaultTheme';
+import { defaultTheme, OutlineTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
 import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 import { getZIndex } from '../../util/zIndex';
@@ -212,6 +212,17 @@ class BaseEdgeModel implements IBaseModel {
   setProperties(properties): void {
     Object.assign(this.properties, formatData(properties));
     this.setAttributes();
+  }
+
+  /**
+   * @overridable 支持重写
+   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
+   * @returns 自定义outline样式
+   */
+  getOutlineStyle(): OutlineTheme {
+    const { graphModel } = this;
+    const { outline } = graphModel.theme;
+    return outline;
   }
 
   @action

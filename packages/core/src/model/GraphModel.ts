@@ -29,13 +29,37 @@ type BaseElementModel = BaseNodeModel | BaseEdgeModel;
 const VisibleMoreSpace = 200;
 
 class GraphModel {
+  /**
+   * LogicFlow画布挂载元素
+   * 也就是初始化LogicFlow实例时传入的container
+   */
   rootEl: HTMLElement;
-  theme;
-  eventCenter: EventEmitter;
-  modelMap = new Map();
+  /**
+   * LogicFlow画布宽度
+   */
   width: number;
+  /**
+   * LogicFlow画布高度
+   */
   height: number;
-  topElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
+  /**
+   * 主题配置
+   * @see todo docs link
+   */
+  theme: Theme;
+  /**
+   * 事件中心
+   * @see todo docs link
+   */
+  eventCenter: EventEmitter;
+  /**
+   * 维护所有
+   */
+  modelMap = new Map();
+  /**
+   * 位于当前画布顶部的元素
+   */
+  topElement: BaseNodeModel | BaseEdgeModel;
   selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
   idGenerator: (type?: string) => number | string;
   nodeMoveRules: NodeMoveRule[] = [];

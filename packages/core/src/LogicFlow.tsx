@@ -796,6 +796,7 @@ export default class LogicFlow {
   /**
    * 获取事件位置相对于画布左上角的坐标
    * 画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+   * @see todo link
    * @param {number} x 事件x坐标
    * @param {number} y 事件y坐标
    * @returns {object} Point 事件位置的坐标
@@ -808,13 +809,16 @@ export default class LogicFlow {
   /**
    * 获取选中的元素数据
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
-   * 复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
+   * 注意：复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
    */
   getSelectElements(isIgnoreCheck = true): GraphConfigData {
     return this.graphModel.getSelectElements(isIgnoreCheck);
   }
   /**
    * 动态修改 id 对应元素 model 中的属性
+   * 注意：此方法慎用，除非您对logicflow内部有足够的了解。
+   * 大多数情况下，请使用setProperties、updateText、changeNodeId等方法。
+   * 例如直接使用此方法修改节点的id,那么就是会导致连接到此节点的连线的sourceNodeId出现找不到的情况。
    * @param {string} id 元素id
    * @param {object} attributes 需要更新的属性
    */
@@ -828,7 +832,8 @@ export default class LogicFlow {
     this.graphModel.clearData();
   }
   /**
-   * 设置元素的层级高度，在元素重叠的时候大的在前面
+   * 设置元素的层级高度，在元素重叠的时候大的在前面。
+   * @see todo link
    */
   setElementZIndex(id, zIndex: number | 'top' | 'bottom') {
     return this.graphModel.setElementZIndex(id, zIndex);
@@ -860,11 +865,27 @@ export default class LogicFlow {
     });
     return elements;
   }
+  /**
+   * 将所有选中的元素设置为非选中
+   */
   clearSelectElements() {
     this.graphModel.clearSelectElements();
   }
-  // 内部方法----------------------------------------------
-
+  /**
+   * 获取指定区域内的所有元素，此区域必须是DOM层。
+   * 例如鼠标绘制选区后，获取选区内的所有元素。
+   * @see todo 分层
+   * @param leftTopPoint 区域左上角坐标, dom层坐标
+   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   */
+  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+      .map(element => element.getData());
+  }
+  /**
+   * 内部保留方法
+   * 创建一个fakerNode，用于dnd插件拖动节点进画布的时候使用。
+   */
   createFakerNode(nodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type);
     if (!Model) {
@@ -875,33 +896,71 @@ export default class LogicFlow {
     this.graphModel.setFakerNode(fakerNodeModel);
     return fakerNodeModel;
   }
+  /**
+   * 内部保留方法
+   * 移除fakerNode
+   */
   removeFakerNode() {
     this.graphModel.removeFakerNode();
   }
+  /**
+   * 内部保留方法
+   * 用于fakerNode显示对齐线
+   */
   setNodeSnapLine(data) {
     if (this.snaplineModel) {
       this.snaplineModel.setNodeSnapLine(data);
     }
   }
   /**
-   * 获取指定区域坐标，此区域必须是DOM层，也就是可视区域。
-   * @param leftTopPoint 区域左上角坐标, dom层坐标
-   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   * 内部保留方法
+   * 用于fakerNode移除对齐线
    */
-  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
-      .map(element => element.getData());
-  }
   removeNodeSnapLine() {
     if (this.snaplineModel) {
       this.snaplineModel.clearSnapline();
     }
   }
+  /**
+   * 内部保留方法
+   * 用于fakerNode移除对齐线
+   */
   setView(type: string, component) {
     this.viewMap.set(type, component);
   }
+  /**
+   * 内部保留方法
+   * 获取指定类型的view
+   */
   getView = (type: string) => this.viewMap.get(type);
-  // TODO 定义 graphData
+  /**
+   * 渲染图
+   * @example
+   * lf.render({
+   *   nodes: [
+   *     {
+   *       id: 'node_1',
+   *       type: 'rect',
+   *       x: 100,
+   *       y: 100
+   *     },
+   *     {
+   *       id: 'node_2',
+   *       type: 'circel',
+   *       x: 300,
+   *       y: 200
+   *     }
+   *   ],
+   *   edges: [
+   *     {
+   *       sourceNodeId: 'node_1',
+   *       targetNodeId: 'node_2',
+   *       type: 'polyline'
+   *     }
+   *   ]
+   * })
+   * @param graphData 图数据
+   */
   render(graphData = {}) {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
