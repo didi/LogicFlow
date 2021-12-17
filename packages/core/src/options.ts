@@ -9,7 +9,7 @@ import {
   GraphConfigData,
 } from './type';
 import { KeyboardDef } from './keyboard';
-import { EditConfigInterface } from './model/EditConfigModel';
+import { EditConfigInterface } from './model/editConfigModel';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 

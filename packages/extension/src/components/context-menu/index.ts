@@ -89,7 +89,7 @@ class ContextMenu {
       x = data.x + Model.width / 2;
       y = data.y - Model.height / 2;
     }
-    return this.lf.graphModel.transformMatrix.CanvasPointToHtmlPoint([x, y]);
+    return this.lf.graphModel.transformModel.CanvasPointToHtmlPoint([x, y]);
   }
   private createContextMenu() {
     const { isSilentMode } = this.lf.options;

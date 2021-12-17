@@ -80,13 +80,13 @@ export default class BaseEdge extends Component<IProps> {
     const custome = this.getTextStyle();
     const style = assign({}, edgeText, custome);
     let draggable = false;
-    const { editConfig } = graphModel;
-    if (model.text.draggable || editConfig.edgeTextDraggable) {
+    const { editConfigModel } = graphModel;
+    if (model.text.draggable || editConfigModel.edgeTextDraggable) {
       draggable = true;
     }
     return (
       <LineText
-        editable={editConfig.edgeTextEdit && model.text.editable}
+        editable={editConfigModel.edgeTextEdit && model.text.editable}
         model={model}
         graphModel={graphModel}
         style={style}
@@ -223,13 +223,13 @@ export default class BaseEdge extends Component<IProps> {
       y: e.clientY,
     });
     if (isDoubleClick) {
-      const { editConfig, textEditElement } = graphModel;
+      const { editConfigModel, textEditElement } = graphModel;
       // 当前连线正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === model.id) {
         graphModel.setElementStateById(model.id, ElementState.DEFAULT);
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (editConfig.edgeTextEdit && model.text.editable) {
+      if (editConfigModel.edgeTextEdit && model.text.editable) {
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
       if (model.modelType === ModelType.POLYLINE_EDGE) {
@@ -258,7 +258,7 @@ export default class BaseEdge extends Component<IProps> {
       });
     }
 
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
+    const { editConfigModel: { metaKeyMultipleSelected } } = graphModel;
     graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
     this.toFront();
   };
@@ -272,9 +272,9 @@ export default class BaseEdge extends Component<IProps> {
     }
   }
   render() {
-    const { model: { isSelected }, graphModel: { editConfig } } = this.props;
+    const { model: { isSelected }, graphModel: { editConfigModel } } = this.props;
     const isDraging = this.getIsDraging();
-    const { adjustEdgeStartAndEnd } = editConfig;
+    const { adjustEdgeStartAndEnd } = editConfigModel;
     return (
       <g
         className="lf-edge"

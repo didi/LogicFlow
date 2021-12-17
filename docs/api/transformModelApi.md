@@ -8,7 +8,7 @@ type PointTuple = [number, number]
 
 ## zoom(isZoomIn, point)
 
-放大缩小画布. 放大缩小的刻度是`transformMatrix.ZOOM_SIZE`
+放大缩小画布. 放大缩小的刻度是`transformModel.ZOOM_SIZE`
 
 |名称|类型|默认值|说明|
 |-|-|-|-|

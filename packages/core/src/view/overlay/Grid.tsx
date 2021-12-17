@@ -54,7 +54,7 @@ export default class Grid extends Component<IProps> {
   }
   render() {
     // TODO 生成网格️️️✔、网格支持 options（size）✔
-    const { type, size, graphModel: { transformMatrix } } = this.props;
+    const { type, size, graphModel: { transformModel } } = this.props;
     const {
       SCALE_X,
       SKEW_Y,
@@ -62,7 +62,7 @@ export default class Grid extends Component<IProps> {
       SCALE_Y,
       TRANSLATE_X,
       TRANSLATE_Y,
-    } = transformMatrix;
+    } = transformModel;
     const matrixString = [SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y].join(',');
     const transform = `matrix(${matrixString})`;
     // const transitionStyle = {

@@ -185,14 +185,14 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     const style = this.getTextStyle();
     if (model.text) {
-      const { editConfig } = graphModel;
+      const { editConfigModel } = graphModel;
       let draggable = false;
-      if (model.text.draggable || editConfig.nodeTextDraggable) {
+      if (model.text.draggable || editConfigModel.nodeTextDraggable) {
         draggable = true;
       }
       return (
         <BaseText
-          editable={editConfig.nodeTextEdit && model.text.editable}
+          editable={editConfigModel.nodeTextEdit && model.text.editable}
           style={style}
           model={model}
           graphModel={graphModel}
@@ -230,8 +230,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         isDraging: true,
       });
     }
-    const { transformMatrix } = graphModel;
-    const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
+    const { transformModel } = graphModel;
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     graphModel.moveNode(model.id, curDeltaX, curDeltaY);
   };
   onDragEnd = () => {
@@ -266,13 +266,13 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return;
 
-    const { editConfig } = graphModel;
-    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfig));
+    const { editConfigModel } = graphModel;
+    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
-      if (editConfig.nodeTextEdit && model.text.editable) {
+      if (editConfigModel.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
@@ -305,8 +305,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { model, graphModel } = this.props;
     this.toFront();
     this.startTime = new Date().getTime();
-    const { editConfig } = graphModel;
-    if (editConfig.adjustNodePosition && model.draggable) {
+    const { editConfigModel } = graphModel;
+    if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev);
     }
   };
@@ -355,9 +355,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   render() {
     const { model, graphModel } = this.props;
     const {
-      editConfig: { hideAnchors, adjustNodePosition },
+      editConfigModel: { hideAnchors, adjustNodePosition },
       gridSize,
-      transformMatrix: { SCALE_X },
+      transformModel: { SCALE_X },
     } = graphModel;
     const {
       isHitable,

@@ -25,10 +25,10 @@ class HtmlOverlay extends Component<IProps> {
   render() {
     const {
       graphModel: {
-        transformMatrix,
+        transformModel,
       },
     } = this.props;
-    const { transform } = transformMatrix.getTransformStyle();
+    const { transform } = transformModel.getTransformStyle();
     const { children } = this.props;
 
     return (

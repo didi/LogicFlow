@@ -17,7 +17,7 @@ export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
   getNodesOutline() {
     const { graphModel } = this.props;
-    const { nodes, editConfig: { hoverOutline, nodeSelectedOutline } } = graphModel;
+    const { nodes, editConfigModel: { hoverOutline, nodeSelectedOutline } } = graphModel;
     const nodeOutline = [];
     nodes.forEach(element => {
       if (element.isHovered || element.isSelected) {
@@ -63,7 +63,9 @@ export default class OutlineOverlay extends Component<IProps> {
   }
   // 边的outline
   getEdgeOutline() {
-    const { graphModel: { edges: edgeList, editConfig: { edgeSelectedOutline } } } = this.props;
+    const {
+      graphModel: { edges: edgeList, editConfigModel: { edgeSelectedOutline } },
+    } = this.props;
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];

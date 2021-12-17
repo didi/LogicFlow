@@ -50,10 +50,10 @@ export default class BaseText extends Component<IProps, IState> {
     const {
       model,
       graphModel: {
-        transformMatrix,
+        transformModel,
       },
     } = this.props;
-    const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     model.moveText(curDeltaX, curDeltaY);
   };
   dblClickHandler = () => {
@@ -68,7 +68,7 @@ export default class BaseText extends Component<IProps, IState> {
     const {
       draggable,
       graphModel: {
-        editConfig: { nodeTextDraggable },
+        editConfigModel: { nodeTextDraggable },
       },
     } = this.props;
     if (draggable || nodeTextDraggable) {

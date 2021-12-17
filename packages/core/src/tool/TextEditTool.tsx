@@ -53,7 +53,7 @@ export default class TextEdit extends Component<IProps, IState> {
     const { graphModel } = this.props;
     const {
       eventCenter,
-      editConfig: {
+      editConfigModel: {
         edgeTextEdit,
         nodeTextEdit,
       },
@@ -68,7 +68,7 @@ export default class TextEdit extends Component<IProps, IState> {
   }
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
-    const { transformMatrix, theme } = graphModel;
+    const { transformModel, theme } = graphModel;
     let { textEditElement } = graphModel;
     let autoStyle;
     if (textEditElement) {
@@ -122,7 +122,7 @@ export default class TextEdit extends Component<IProps, IState> {
         }
       }
       const { x, y } = textEditElement.text;
-      const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
+      const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y]);
       return {
         style: {
           left,
@@ -157,7 +157,7 @@ export default class TextEdit extends Component<IProps, IState> {
         textEditElement,
       },
     } = this.props;
-    if (ev.keyCode === 13 && ev.altKey) {
+    if (ev.key === 'Enter' && ev.altKey) {
       textEditElement.setElementState(0);
     }
     this.__prevText = {

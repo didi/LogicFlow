@@ -79,8 +79,8 @@ class Anchor extends Component<IProps, IState> {
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, nodeModel } = this.props;
-    const { transformMatrix, nodes } = graphModel;
-    const [x, y] = transformMatrix.moveCanvasPointByHtml(
+    const { transformModel, nodes } = graphModel;
+    const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
       deltaX,
       deltaY,

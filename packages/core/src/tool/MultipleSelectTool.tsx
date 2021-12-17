@@ -63,7 +63,7 @@ export default class MultipleSelect extends Component<IProps> {
     });
   };
   render() {
-    const { graphModel: { selectElements, transformMatrix } } = this.props;
+    const { graphModel: { selectElements, transformModel } } = this.props;
     if (selectElements.size <= 1) return;
     let x = Number.MAX_SAFE_INTEGER;
     let y = Number.MAX_SAFE_INTEGER;
@@ -83,8 +83,8 @@ export default class MultipleSelect extends Component<IProps> {
       x1 = Math.max(x1, outline.x1);
       y1 = Math.max(y1, outline.y1);
     });
-    [x, y] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
-    [x1, y1] = transformMatrix.CanvasPointToHtmlPoint([x1, y1]);
+    [x, y] = transformModel.CanvasPointToHtmlPoint([x, y]);
+    [x1, y1] = transformModel.CanvasPointToHtmlPoint([x1, y1]);
     const style = {
       left: `${x - 10}px`,
       top: `${y - 10}px`,

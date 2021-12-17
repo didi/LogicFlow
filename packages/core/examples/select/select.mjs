@@ -10,3 +10,14 @@ const lf = new LogicFlow({
   },
 })
 lf.render(baseData);
+
+document.querySelector('#js_select').addEventListener('click', () => {
+  lf.selectElementById(baseData.nodes[0].id);
+});
+
+document.querySelector('#js_mutil_select').addEventListener('click', () => {
+  lf.updateEditConfig({
+    multipleSelectKey: 'meta'
+  })
+});
+

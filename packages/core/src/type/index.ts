@@ -143,7 +143,11 @@ export type EdgeFilter = {
 
 export type EdgeConfig = {
   id?: string;
-  type: string;
+  /**
+   * 连线的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
+   * LogicFlow内部默认为polyline
+   */
+  type?: string;
   sourceNodeId: string;
   sourceAnchorId?: string;
   targetNodeId: string;

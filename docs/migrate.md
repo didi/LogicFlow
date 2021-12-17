@@ -18,3 +18,9 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 - `getEdge` -> `getEdgeModelById`
 - `changeNodeId`在找不到id的时候，返回的是空字符串而不是`false`
 - `getEdgeModels`参数不支持传入id, 基于Id获取edgeModel请使用`getEdgeModelById`
+- `select` -> `selectElementById`
+
+### graphModel
+
+- `getNodeModel.transformMatrix` -> `getNodeModel.transformModel`
+- `getNodeModel.editConfig` -> `getNodeModel.editConfigModel`

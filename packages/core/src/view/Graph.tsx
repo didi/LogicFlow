@@ -68,8 +68,8 @@ class Graph extends Component<IProps> {
     if (options.height) {
       style.height = `${options.height}px`;
     }
-    const { fakerNode, editConfig } = graphModel;
-    const { adjustEdge } = editConfig;
+    const { fakerNode, editConfigModel } = graphModel;
+    const { adjustEdge } = editConfigModel;
 
     return (
       <div

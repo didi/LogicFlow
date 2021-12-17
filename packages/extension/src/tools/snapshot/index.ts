@@ -147,8 +147,8 @@ const Snapshot = {
     const base = document.getElementsByClassName('lf-base')[0];
     const bbox = (base as Element).getBoundingClientRect();
     const { graphModel } = this.lf;
-    const { transformMatrix } = graphModel;
-    const { SCALE_X, SCALE_Y } = transformMatrix;
+    const { transformModel } = graphModel;
+    const { SCALE_X, SCALE_Y } = transformModel;
     const bboxWidth = Math.ceil(bbox.width / SCALE_X);
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y);
     // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边

@@ -33,7 +33,7 @@
 |config|object|无| 页面编辑状态配置 |
 
 ```ts
-editConfig.updateEditConfig({
+editConfigModel.updateEditConfig({
   stopZoomGraph: true,
 });
 ```
@@ -45,5 +45,5 @@ editConfig.updateEditConfig({
 获得当前页面编辑状态
 
 ```ts
-editConfig.getConfig();
+editConfigModel.getConfig();
 ```

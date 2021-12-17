@@ -53,28 +53,53 @@ class GraphModel {
    */
   eventCenter: EventEmitter;
   /**
-   * 维护所有
+   * 维护所有节点和连线类型对应的model
    */
   modelMap = new Map();
   /**
    * 位于当前画布顶部的元素
    */
   topElement: BaseNodeModel | BaseEdgeModel;
-  selectElement: BaseNodeModel | BaseEdgeModel; // 当前位于顶部的元素
-  idGenerator: (type?: string) => number | string;
+  /**
+   * 自定义全局id生成器
+   * @see todo docs link
+   */
+  idGenerator: (type?: string) => string;
+  /**
+   * 节点移动规则判断
+   * 在节点移动的时候，会出发此数组中的所有规则判断
+   */
   nodeMoveRules: NodeMoveRule[] = [];
+  /**
+   * 在图上操作创建连线时，默认使用的连线类型.
+   */
   @observable edgeType: string;
+  /**
+   * 当前图上所有节点的model
+   */
   @observable nodes: BaseNodeModel[] = [];
+  /**
+   * 当前图上所有连线的model
+   */
   @observable edges: BaseEdgeModel[] = [];
-  @observable state: ElementState;
-  @observable additionStateData: AdditionData;
-  @observable isSlient = false;
-  @observable overlapMode = 0;
-  @observable plugins = [];
-  @observable tools = [];
+  /**
+   * 元素重合时堆叠模式
+   * 默认模式，节点和连线被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
+   * 递增模式，节点和连线被选中，会被显示在最上面。当取消选中后，元素会保持层级。
+   * @see todo link
+   */
+  @observable overlapMode = OverlapMode.DEFAULT;
+  /**
+   * 背景配置
+   * @see todo link
+   */
   @observable background;
-  @observable transformMatrix: TransfromModel;
-  @observable editConfig: EditConfigModel;
+  /**
+   * 控制画布的缩放、平移
+   * @see todo link
+   */
+  @observable transformModel: TransfromModel;
+  @observable editConfigModel: EditConfigModel;
   @observable gridSize = 1;
   @observable partial = false; // 是否开启局部渲染
   @observable fakerNode: BaseNodeModel;
@@ -83,17 +108,15 @@ class GraphModel {
       container,
       background = {},
       grid: { size = 1 } = {},
-      isSilentMode = false,
       eventCenter,
       idGenerator,
     } = config;
     this.background = background;
-    this.isSlient = isSilentMode;
     this.gridSize = size;
     this.rootEl = container;
-    this.editConfig = new EditConfigModel(config);
+    this.editConfigModel = new EditConfigModel(config);
     this.eventCenter = eventCenter;
-    this.transformMatrix = new TransfromModel(eventCenter);
+    this.transformModel = new TransfromModel(eventCenter);
     this.theme = updateTheme(config.style);
     this.edgeType = config.edgeType || 'polyline';
     this.width = config.width;
@@ -205,7 +228,7 @@ class GraphModel {
       x: x1 - bbox.left,
       y: y1 - bbox.top,
     };
-    const [x, y] = this.transformMatrix
+    const [x, y] = this.transformModel
       .HtmlPointToCanvasPoint([domOverlayPosition.x, domOverlayPosition.y]);
     return {
       domOverlayPosition,
@@ -236,7 +259,7 @@ class GraphModel {
       let inArea = true;
       for (let i = 0; i < bboxPointsList.length; i++) {
         let { x, y } = bboxPointsList[i];
-        [x, y] = this.transformMatrix.CanvasPointToHtmlPoint([x, y]);
+        [x, y] = this.transformModel.CanvasPointToHtmlPoint([x, y]);
         if (!isPointInArea([x, y], lt, rb)) {
           inArea = false;
           break;
@@ -247,10 +270,10 @@ class GraphModel {
     if (element.BaseType === ElementType.EDGE) {
       element = element as BaseEdgeModel;
       const { startPoint, endPoint } = element;
-      const startHtmlPoint = this.transformMatrix.CanvasPointToHtmlPoint(
+      const startHtmlPoint = this.transformModel.CanvasPointToHtmlPoint(
         [startPoint.x, startPoint.y],
       );
-      const endHtmlPoint = this.transformMatrix.CanvasPointToHtmlPoint([endPoint.x, endPoint.y]);
+      const endHtmlPoint = this.transformModel.CanvasPointToHtmlPoint([endPoint.x, endPoint.y]);
       const isStartInArea = isPointInArea(startHtmlPoint, lt, rb);
       const isEndInArea = isPointInArea(endHtmlPoint, lt, rb);
       return wholeEdge ? (isStartInArea && isEndInArea) : (isStartInArea || isEndInArea);
@@ -419,7 +442,12 @@ class GraphModel {
   toFront(id) {
     const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model;
     if (element) {
-      this.topElement?.setZIndex();
+      /**
+       * 如果堆叠模式为默认模式，则将置顶元素重新恢复原有层级
+       */
+      if (this.overlapMode === OverlapMode.DEFAULT) {
+        this.topElement?.setZIndex();
+      }
       this.topElement = element;
       element.setZIndex(ElementMaxzIndex);
     }
@@ -650,12 +678,6 @@ class GraphModel {
   }
 
   @action
-  setElementState(state: ElementState, additionStateData?: AdditionData) {
-    this.state = state;
-    this.additionStateData = additionStateData;
-  }
-
-  @action
   setElementStateById(id: ElementModeId, state: ElementState, additionStateData?: AdditionData) {
     this.resetElementState();
     this.nodes.forEach((node) => {
@@ -691,36 +713,38 @@ class GraphModel {
   @action
   resetElementState() {
   }
-
-  @action
-  selectNodeById(id: string, multiple = false) {
+  /**
+   * 选中节点
+   * @param id 节点Id
+   * @param multiple 是否为多选，如果为多选，则不去掉原有已选择节点的选中状态
+   */
+  @action selectNodeById(id: string, multiple = false) {
     if (!multiple) {
-      this.selectElement?.setSelected(false);
       this.clearSelectElements();
     }
-    this.selectElement = this.nodesMap[id]?.model;
-    this.selectElement?.setSelected(true);
+    const selectElement = this.nodesMap[id]?.model;
+    selectElement?.setSelected(true);
   }
-
-  @action
-  selectEdgeById(id: string, multiple = false) {
+  /**
+   * 选中连线
+   * @param id 连线Id
+   * @param multiple 是否为多选，如果为多选，则不去掉原已选中连线的状态
+   */
+  @action selectEdgeById(id: string, multiple = false) {
     if (!multiple) {
-      this.selectElement?.setSelected(false);
       this.clearSelectElements();
     }
-    this.selectElement = this.edgesMap[id]?.model;
-    this.selectElement?.setSelected(true);
+    const selectElement = this.edgesMap[id]?.model;
+    selectElement?.setSelected(true);
   }
 
   @action
   selectElementById(id: string, multiple = false) {
     if (!multiple) {
-      this.selectElement?.setSelected(false);
       this.clearSelectElements();
     }
-    this.selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
-    this.selectElement?.setSelected(true);
-    // this.selectElements.set(id, this.selectElement);
+    const selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
+    selectElement?.setSelected(true);
   }
 
   @action
@@ -729,8 +753,10 @@ class GraphModel {
       element?.setSelected(false);
     });
     this.selectElements.clear();
-    const { overlapMode } = this;
-    if (overlapMode !== OverlapMode.DEFAULT) {
+    /**
+     * 如果堆叠模式为默认模式，则将置顶元素重新恢复原有层级
+     */
+    if (this.overlapMode === OverlapMode.DEFAULT) {
       this.topElement?.setZIndex();
     }
   }

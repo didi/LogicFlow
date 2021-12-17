@@ -14,7 +14,7 @@ LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是
 
 画布所有的连接对象
 
-## transformMatrix
+## transformModel
 
 `属性`
 
@@ -34,7 +34,7 @@ LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是
 
 画布所有连线构成的map
 
-## editConfig
+## editConfigModel
 
 `属性`
 

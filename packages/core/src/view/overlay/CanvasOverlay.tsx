@@ -49,14 +49,14 @@ class CanvasOverlay extends Component<IProps, Istate> {
     });
     const {
       graphModel: {
-        transformMatrix,
-        editConfig,
+        transformModel,
+        editConfigModel,
       },
     } = this.props;
-    if (editConfig.stopMoveGraph) {
+    if (editConfigModel.stopMoveGraph) {
       return;
     }
-    transformMatrix.translate(deltaX, deltaY);
+    transformModel.translate(deltaX, deltaY);
   };
   onDragEnd = () => {
     this.setState({
@@ -64,36 +64,36 @@ class CanvasOverlay extends Component<IProps, Istate> {
     });
   };
   zoomHandler = (ev: WheelEvent) => {
-    const { graphModel: { editConfig, transformMatrix, gridSize }, graphModel } = this.props;
+    const { graphModel: { editConfigModel, transformModel, gridSize }, graphModel } = this.props;
     const { deltaX: eX, deltaY: eY } = ev;
     // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键没有按住, 那么移动画布
-    if (!editConfig.stopScrollGraph && ev.ctrlKey !== true) {
+    if (!editConfigModel.stopScrollGraph && ev.ctrlKey !== true) {
       ev.preventDefault();
       this.stepScrollX += eX;
       this.stepScrollY += eY;
       if (Math.abs(this.stepScrollX) >= gridSize) {
         const remainderX = this.stepScrollX % gridSize;
         const moveDistence = this.stepScrollX - remainderX;
-        transformMatrix.translate(-moveDistence * transformMatrix.SCALE_X, 0);
+        transformModel.translate(-moveDistence * transformModel.SCALE_X, 0);
         this.stepScrollX = remainderX;
       }
       if (Math.abs(this.stepScrollY) >= gridSize) {
         const remainderY = this.stepScrollY % gridSize;
         const moveDistenceY = this.stepScrollY - remainderY;
-        transformMatrix.translate(0, -moveDistenceY * transformMatrix.SCALE_Y);
+        transformModel.translate(0, -moveDistenceY * transformModel.SCALE_Y);
         this.stepScrollY = remainderY;
       }
       return;
     }
     // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住ctrl键也不能缩放了。
-    if (!editConfig.stopZoomGraph) {
+    if (!editConfigModel.stopZoomGraph) {
       ev.preventDefault();
       const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
       });
       const { x, y } = position.canvasOverlayPosition;
-      transformMatrix.zoom(ev.deltaY < 0, [x, y]);
+      transformModel.zoom(ev.deltaY < 0, [x, y]);
     }
   };
   clickHandler = (ev: MouseEvent) => {
@@ -120,7 +120,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         x: ev.clientX,
         y: ev.clientY,
       });
-      graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
+      // graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
       eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
     }
   };
@@ -128,14 +128,14 @@ class CanvasOverlay extends Component<IProps, Istate> {
     const {
       eventCenter,
       graphModel: {
-        editConfig,
-        transformMatrix: {
+        editConfigModel,
+        transformModel: {
           SCALE_X,
         },
         gridSize,
       },
     } = this.props;
-    if (!editConfig.stopMoveGraph) {
+    if (!editConfigModel.stopMoveGraph) {
       this.stepDrag.setStep(gridSize * SCALE_X);
       this.stepDrag.handleMouseDown(ev);
     } else {
@@ -147,10 +147,10 @@ class CanvasOverlay extends Component<IProps, Istate> {
   render() {
     const {
       graphModel: {
-        transformMatrix,
+        transformModel,
       },
     } = this.props;
-    const { transform } = transformMatrix.getTransformStyle();
+    const { transform } = transformModel.getTransformStyle();
     const { children, dnd } = this.props;
     const { isDraging } = this.state;
 

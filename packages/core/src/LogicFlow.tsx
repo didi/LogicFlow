@@ -36,7 +36,7 @@ import {
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
-import { EditConfigInterface } from './model/EditConfigModel';
+import { EditConfigInterface } from './model/editConfigModel';
 import { Theme } from './constant/DefaultTheme';
 
 if (process.env.NODE_ENV === 'development') {
@@ -54,15 +54,24 @@ type InnerView = ClassDecorator & {
 
 export default class LogicFlow {
   /**
-   * logicflow实例挂载的容器。
+   * 只读：logicflow实例挂载的容器。
    */
   container: HTMLElement;
+  /**
+   * 只读：画布宽度
+   */
   width: number;
+  /**
+   * 只读：画布高度
+   */
   height: number;
   /**
-   * 控制整个logicflow画布的model
+   * 只读：控制整个logicflow画布的model
    */
   graphModel: GraphModel;
+  /**
+   * 只读：控制上一步、下一步相关
+   */
   history: History;
   viewMap = new Map();
   tool: Tool;
@@ -394,38 +403,38 @@ export default class LogicFlow {
    * @returns {string} -放大缩小的比例
    */
   zoom(zoomSize?: ZoomParam, point?: PointTuple): string {
-    const { transformMatrix } = this.graphModel;
-    return transformMatrix.zoom(zoomSize, point);
+    const { transformModel } = this.graphModel;
+    return transformModel.zoom(zoomSize, point);
   }
   /**
    * 重置图形的放大缩写比例为默认
    */
   resetZoom(): void {
-    const { transformMatrix } = this.graphModel;
-    transformMatrix.resetZoom();
+    const { transformModel } = this.graphModel;
+    transformModel.resetZoom();
   }
   /**
    * 设置图形缩小时，能缩放到的最小倍数。参数为0-1自己。默认0.2
    * @param size 图形缩小的最小值
    */
   setZoomMiniSize(size: number): void {
-    const { transformMatrix } = this.graphModel;
-    transformMatrix.setZoomMiniSize(size);
+    const { transformModel } = this.graphModel;
+    transformModel.setZoomMiniSize(size);
   }
   /**
    * 设置图形放大时，能放大到的最大倍数，默认16
    * @param size 图形放大的最大值
    */
   setZoomMaxSize(size: number): void {
-    const { transformMatrix } = this.graphModel;
-    transformMatrix.setZoomMaxSize(size);
+    const { transformModel } = this.graphModel;
+    transformModel.setZoomMaxSize(size);
   }
   /**
    * 获取缩放的值和平移的值。
    */
   getTransform() {
     const {
-      transformMatrix: {
+      transformModel: {
         SCALE_X,
         SCALE_Y,
         TRANSLATE_X,
@@ -445,15 +454,15 @@ export default class LogicFlow {
    * @param y 向y轴移动距离
    */
   translate(x: number, y: number): void {
-    const { transformMatrix } = this.graphModel;
-    transformMatrix.translate(x, y);
+    const { transformModel } = this.graphModel;
+    transformModel.translate(x, y);
   }
   /**
    * 还原图形为初始位置
    */
   resetTranslate(): void {
-    const { transformMatrix } = this.graphModel;
-    const { TRANSLATE_X, TRANSLATE_Y } = transformMatrix;
+    const { transformModel } = this.graphModel;
+    const { TRANSLATE_X, TRANSLATE_Y } = transformModel;
     this.translate(-TRANSLATE_X, -TRANSLATE_Y);
   }
   /**
@@ -461,15 +470,18 @@ export default class LogicFlow {
    * @param id 选择元素ID
    * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
    */
-  select(id: string, multiple = false) {
+  selectElementById(id: string, multiple = false) {
     this.graphModel.selectElementById(id, multiple);
+    if (!multiple) {
+      this.graphModel.toFront(id);
+    }
   }
   /**
    * 将图形定位到画布中心
    * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是连线的id，也可以不传（兜底）
    */
   focusOn(focusOnArgs: FocusOnArgs): void {
-    const { transformMatrix } = this.graphModel;
+    const { transformModel } = this.graphModel;
     let { coordinate } = focusOnArgs;
     const { id } = focusOnArgs;
     if (!coordinate) {
@@ -483,7 +495,7 @@ export default class LogicFlow {
       }
     }
     const { x, y } = coordinate;
-    transformMatrix.focusOn(x, y, this.width, this.height);
+    transformModel.focusOn(x, y, this.width, this.height);
   }
   /**
    * 设置主题样式
@@ -784,14 +796,14 @@ export default class LogicFlow {
    * @see todo docs link
    */
   updateEditConfig(config: EditConfigInterface) {
-    this.graphModel.editConfig.updateEditConfig(config);
+    this.graphModel.editConfigModel.updateEditConfig(config);
   }
   /**
    * 获取流程图当前编辑相关设置
    * @see todo docs link
    */
   getEditConfig() {
-    return this.graphModel.editConfig.getConfig();
+    return this.graphModel.editConfigModel.getConfig();
   }
   /**
    * 获取事件位置相对于画布左上角的坐标

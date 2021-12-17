@@ -51,7 +51,7 @@ class Tips {
   showTip(data) {
     if (this.isDragging) return;
     this.currentData = data;
-    const [x, y] = this.lf.graphModel.transformMatrix.CanvasPointToHtmlPoint([data.x + nodeWidth / 2 + 4, data.y - nodeHeight / 2]);
+    const [x, y] = this.lf.graphModel.transformModel.CanvasPointToHtmlPoint([data.x + nodeWidth / 2 + 4, data.y - nodeHeight / 2]);
     this.tipsWrap.style.display = 'block';
     this.tipsWrap.style.top = `${y}px`;
     this.tipsWrap.style.left = `${x}px`;
