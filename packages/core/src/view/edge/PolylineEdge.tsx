@@ -56,7 +56,7 @@ export default class PolylineEdge extends BaseEdge {
     }
   };
   onDragEnd = () => {
-    const { model, eventCenter } = this.props;
+    const { model, graphModel: { eventCenter } } = this.props;
     const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
     this.isDraging = false;

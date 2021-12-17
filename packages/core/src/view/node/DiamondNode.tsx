@@ -6,12 +6,6 @@ import BaseNode from './BaseNode';
 import Polygon from '../basic-shape/Polygon';
 import { DiamondAttributes } from '../../type';
 
-// type IProps = {
-//   model: DiamondNodeModel;
-//   graphModel: GraphModel;
-//   eventCenter: EventEmitter;
-// };
-
 export default class DiamondNode extends BaseNode {
   getShapeStyle() {
     const style = super.getShapeStyle();

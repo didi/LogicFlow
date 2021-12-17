@@ -66,7 +66,7 @@ export type Definition = {
 
   overlapMode?: OverlapMode; // 节点和连线重叠显示模式
 
-  idGenerator?: () => number | string; // 元素id生成器
+  idGenerator?: () => string; // 元素id生成器
   /**
    * 禁止启用的内置工具
    * 有些场景下，需要自定义多选效果或者文本编辑效果，则需要禁用这些内置的工具
@@ -97,6 +97,12 @@ export function get(options: Definition) {
         thickness: 1,
       },
     }, grid);
+  }
+  if (!options.width) {
+    options.width = container.getBoundingClientRect().width;
+  }
+  if (!options.height) {
+    options.height = container.getBoundingClientRect().height;
   }
   return assign({}, defaults, options);
 }

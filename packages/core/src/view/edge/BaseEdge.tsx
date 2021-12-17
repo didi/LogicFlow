@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 import { assign } from 'lodash-es';
-import Arrow from './Arrow';
+import Arrow, { ArrowStyle } from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
@@ -14,7 +14,6 @@ import AdjustPoint from './AdjustPoint';
 type IProps = {
   model: BaseEdgeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 export default class BaseEdge extends Component<IProps> {
@@ -115,7 +114,7 @@ export default class BaseEdge extends Component<IProps> {
       ...edgeStyle,
       fill: edgeStyle.stroke,
       ...arrow,
-    };
+    } as ArrowStyle;
   }
   getArrow() {
     const arrowInfo = this.getArrowInfo();
@@ -131,7 +130,7 @@ export default class BaseEdge extends Component<IProps> {
   }
   // 起点终点，可以修改起点/终点为其他节点
   getAdjustPoints() {
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const start = model.getAdjustStart();
     const end = model.getAdjustEnd();
     return (
@@ -141,14 +140,12 @@ export default class BaseEdge extends Component<IProps> {
           {...start}
           edgeModel={model}
           graphModel={graphModel}
-          eventCenter={eventCenter}
         />
         <AdjustPoint
           type="TARGET"
           {...end}
           edgeModel={model}
           graphModel={graphModel}
-          eventCenter={eventCenter}
         />
       </g>
     );
@@ -166,7 +163,7 @@ export default class BaseEdge extends Component<IProps> {
     );
   }
   handleHover = (hovered, ev) => {
-    const { model, eventCenter } = this.props;
+    const { model, graphModel: { eventCenter } } = this.props;
     model.setHovered(hovered);
     const eventName = hovered ? EventType.EDGE_MOUSEENTER : EventType.EDGE_MOUSELEAVE;
     const nodeData = model.getData();
@@ -187,7 +184,7 @@ export default class BaseEdge extends Component<IProps> {
     // 节点右击也会触发时间，区分右击和点击(mouseup)
     this.contextMenuTime = new Date().getTime();
     if (this.clickTimer) { clearTimeout(this.clickTimer); }
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
@@ -197,7 +194,7 @@ export default class BaseEdge extends Component<IProps> {
     graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
-    eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
+    graphModel.eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
       data: edgeData,
       e: ev,
       position,
@@ -216,7 +213,7 @@ export default class BaseEdge extends Component<IProps> {
     if (isRightClick) return;
     // 这里 IE 11不能正确显示
     const isDoubleClick = e.detail === 2;
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const edgeData = model?.getData();
     const position = graphModel.getPointByClient({
       x: e.clientX,
@@ -238,7 +235,7 @@ export default class BaseEdge extends Component<IProps> {
         const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
         polylineEdgeModel.dbClickPosition = crossPoint;
       }
-      eventCenter.emit(EventType.EDGE_DBCLICK, {
+      graphModel.eventCenter.emit(EventType.EDGE_DBCLICK, {
         data: edgeData,
         e,
         position,
@@ -246,12 +243,12 @@ export default class BaseEdge extends Component<IProps> {
     } else { // 单击
       // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
       // 边数据
-      eventCenter.emit(EventType.ELEMENT_CLICK, {
+      graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, {
         data: edgeData,
         e,
         position,
       });
-      eventCenter.emit(EventType.EDGE_CLICK, {
+      graphModel.eventCenter.emit(EventType.EDGE_CLICK, {
         data: edgeData,
         e,
         position,

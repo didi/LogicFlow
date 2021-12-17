@@ -20,7 +20,6 @@ interface IProps {
   hoverStyle?: Record<string, any>;
   edgeStyle?: Record<string, any>;
   anchorIndex: number;
-  eventCenter: EventEmitter;
   graphModel: GraphModel;
   nodeModel: BaseNodeModel;
   nodeDraging: boolean;
@@ -149,7 +148,7 @@ class Anchor extends Component<IProps, IState> {
 
   checkEnd = () => {
     const {
-      graphModel, nodeModel, x, y, eventCenter, id,
+      graphModel, nodeModel, x, y, id,
     } = this.props;
     // nodeModel.setSelected(false);
     /* 创建连线 */
@@ -190,7 +189,7 @@ class Anchor extends Component<IProps, IState> {
         }
       } else {
         const nodeData = targetNode.getData();
-        eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
+        graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
           data: nodeData,
           msg: targetMsg || sourceMsg,
         });

@@ -23,7 +23,6 @@ type IProps = {
   getView: (type: string) => typeof Component,
   tool: Tool,
   options: Options.Definition,
-  eventCenter: EventEmitter
   dnd: DnD,
   snaplineModel: SnaplineModel;
   graphModel: GraphModel,
@@ -44,7 +43,7 @@ class Graph extends Component<IProps> {
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
-  getComponent(model: BaseEdgeModel | BaseNodeModel, graphModel: GraphModel, eventCenter: EventEmitter, overlay = 'canvas-overlay') {
+  getComponent(model: BaseEdgeModel | BaseNodeModel, graphModel: GraphModel, overlay = 'canvas-overlay') {
     const { getView } = this.props;
     const View = getView(model.type);
     return (
@@ -53,13 +52,12 @@ class Graph extends Component<IProps> {
         model={model}
         graphModel={graphModel}
         overlay={overlay}
-        eventCenter={eventCenter}
       />
     );
   }
   render() {
     const {
-      graphModel, tool, options, eventCenter, dnd, snaplineModel,
+      graphModel, tool, options, dnd, snaplineModel,
     } = this.props;
     const style: ContainerStyle = {};
     if (options.width) {
@@ -78,18 +76,17 @@ class Graph extends Component<IProps> {
       >
         <CanvasOverlay
           graphModel={graphModel}
-          eventCenter={eventCenter}
           dnd={dnd}
         >
           <g className="lf-base">
             {
               map(graphModel.sortElements, (nodeModel) => (
-                this.getComponent(nodeModel, graphModel, eventCenter)
+                this.getComponent(nodeModel, graphModel)
               ))
             }
           </g>
           {
-            fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
+            fakerNode ? this.getComponent(fakerNode, graphModel) : ''
           }
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>

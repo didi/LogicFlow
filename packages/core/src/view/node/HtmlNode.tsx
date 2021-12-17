@@ -7,7 +7,6 @@ import EventEmitter from '../../event/eventEmitter';
 type IProps = {
   model: RectNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 export default class HtmlNode extends BaseNode {

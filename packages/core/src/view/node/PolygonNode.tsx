@@ -9,7 +9,6 @@ import { PointTuple } from '../../type';
 type IProps = {
   model: PolygonNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 export default class PolygonNode extends BaseNode {

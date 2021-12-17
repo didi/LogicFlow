@@ -58,7 +58,7 @@ export default class Dnd {
       this.fakerNode.moveTo(x, y);
       const nodeData = this.fakerNode.getData();
       this.lf.setNodeSnapLine(nodeData);
-      this.lf.eventCenter.emit(EventType.NODE_DND_DRAG, { data: nodeData });
+      this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_DRAG, { data: nodeData });
     }
     return false;
   };
@@ -84,7 +84,7 @@ export default class Dnd {
     this.lf.graphModel.removeFakerNode();
     this.fakerNode = null;
     const nodeData = currentNode.getData();
-    this.lf.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
+    this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
   };
 
   eventMap() {

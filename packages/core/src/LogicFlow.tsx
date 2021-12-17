@@ -11,7 +11,7 @@ import * as _View from './view';
 
 import History from './history/History';
 import Tool from './tool';
-import EventEmitter, { CallbackType } from './event/eventEmitter';
+import { CallbackType } from './event/eventEmitter';
 import Keyboard from './keyboard';
 import { formatData } from './util/compatible';
 
@@ -23,7 +23,6 @@ import {
   Extension,
   ComponentRender,
   FocusOnArgs,
-  EdgeAttribute,
   EdgeData,
   GraphConfigData,
   RegisterElementFn,
@@ -78,7 +77,6 @@ export default class LogicFlow {
   keyboard: Keyboard;
   dnd: Dnd;
   options: Options.Definition;
-  eventCenter: EventEmitter;
   snaplineModel: SnaplineModel;
   components: ComponentRender[] = [];
 
@@ -113,25 +111,20 @@ export default class LogicFlow {
     } = options;
     this.options = Options.get(options);
     this.container = container;
-    this.width = width || container.getBoundingClientRect().width;
-    this.height = height || container.getBoundingClientRect().height;
-    this.tool = new Tool(this);
-    this.eventCenter = new EventEmitter();
-    this.history = new History(this.eventCenter);
-    this.dnd = new Dnd({ options: dndOptions, lf: this });
-    this.keyboard = new Keyboard({ lf: this, keyboard });
+    this.width = this.options.width;
+    this.height = this.options.height;
     // model 初始化
     this.graphModel = new GraphModel({
       ...this.options,
-      eventCenter: this.eventCenter,
-      rootEl: this.container,
-      width: this.width,
-      height: this.height,
     });
+    this.tool = new Tool(this);
+    this.history = new History(this.graphModel.eventCenter);
+    this.dnd = new Dnd({ options: dndOptions, lf: this });
+    this.keyboard = new Keyboard({ lf: this, keyboard });
     // 不可编辑模式没有开启，且没有关闭对齐线
     if (!isSilentMode && snapline !== false) {
       this.snaplineModel = new SnaplineModel(this.graphModel);
-      snaplineTool(this.eventCenter, this.snaplineModel);
+      snaplineTool(this.graphModel.eventCenter, this.snaplineModel);
     }
     // 先初始化默认内置快捷键
     initDefaultShortcut(this, this.graphModel);
@@ -153,25 +146,25 @@ export default class LogicFlow {
    * });
    */
   on(evt: string, callback: CallbackType) {
-    this.eventCenter.on(evt, callback);
+    this.graphModel.eventCenter.on(evt, callback);
   }
   /**
    * 撤销监听事件
    */
   off(evt: string, callback: CallbackType) {
-    this.eventCenter.off(evt, callback);
+    this.graphModel.eventCenter.off(evt, callback);
   }
   /**
    * 监听事件，只监听一次
    */
   once(evt: string, callback: CallbackType) {
-    this.eventCenter.once(evt, callback);
+    this.graphModel.eventCenter.once(evt, callback);
   }
   /**
    * 出发监听事件
    */
   emit(evt: string, arg: any) {
-    this.eventCenter.emit(evt, arg);
+    this.graphModel.eventCenter.emit(evt, arg);
   }
 
   // 插件系统----------------------------------------------
@@ -983,7 +976,6 @@ export default class LogicFlow {
     }
     render((
       <Graph
-        eventCenter={this.eventCenter}
         getView={this.getView}
         tool={this.tool}
         options={this.options}

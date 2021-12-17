@@ -8,7 +8,6 @@ import EventEmitter from '../../event/eventEmitter';
 type IProps = {
   model: EllipseNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 export default class EllipseNode extends BaseNode {
   getShapeStyle() {

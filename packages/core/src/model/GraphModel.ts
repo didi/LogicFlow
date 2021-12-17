@@ -21,6 +21,7 @@ import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 import { createUuid } from '../util';
 import { getMinIndex, getZIndex } from '../util/zIndex';
 import { Theme } from '../constant/DefaultTheme';
+import { Definition } from '../options';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 连线ID
@@ -99,28 +100,46 @@ class GraphModel {
    * @see todo link
    */
   @observable transformModel: TransfromModel;
+  /**
+   * 控制流程图编辑相关配置
+   * @see todo link
+   */
   @observable editConfigModel: EditConfigModel;
+  /**
+   * 网格大小
+   * @see todo link
+   */
   @observable gridSize = 1;
-  @observable partial = false; // 是否开启局部渲染
+  /**
+   * 局部渲染
+   * @see todo logicflow性能
+   */
+  @observable partial = false;
+  /**
+   * 外部拖动节点进入画布的过程中，用fakerNode来和画布上正是的节点区分开
+   */
   @observable fakerNode: BaseNodeModel;
-  constructor(config) {
+  constructor(config: Definition) {
     const {
       container,
       background = {},
-      grid: { size = 1 } = {},
-      eventCenter,
+      grid,
+      width,
+      height,
       idGenerator,
     } = config;
     this.background = background;
-    this.gridSize = size;
+    if (typeof grid === 'object') {
+      this.gridSize = grid.size;
+    }
     this.rootEl = container;
     this.editConfigModel = new EditConfigModel(config);
-    this.eventCenter = eventCenter;
-    this.transformModel = new TransfromModel(eventCenter);
+    this.eventCenter = new EventEmitter();
+    this.transformModel = new TransfromModel(this.eventCenter);
     this.theme = updateTheme(config.style);
     this.edgeType = config.edgeType || 'polyline';
-    this.width = config.width;
-    this.height = config.height;
+    this.width = width;
+    this.height = height;
     this.partial = config.partial;
     this.overlapMode = config.overlapMode || 0;
     this.idGenerator = idGenerator;

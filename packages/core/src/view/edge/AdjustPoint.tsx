@@ -13,7 +13,6 @@ interface IProps {
   y: number;
   type: AdjustType;
   id?: string;
-  eventCenter: EventEmitter;
   graphModel: GraphModel;
   edgeModel: BaseEdgeModel;
 }
@@ -118,7 +117,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       draging: false,
     });
     const {
-      graphModel, edgeModel, type, eventCenter,
+      graphModel, edgeModel, type,
     } = this.props;
     const { nodes } = graphModel;
     const { endX, endY, draging } = this.state;
@@ -160,7 +159,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 创建新连线
       const edge = graphModel.addEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件
-      eventCenter.emit(
+      graphModel.eventCenter.emit(
         EventType.EDGE_EXCHANGE_NODE,
         { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } },
       );

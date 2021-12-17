@@ -20,7 +20,7 @@ export default class MultipleSelect extends Component<IProps> {
   constructor(props) {
     super();
     const {
-      graphModel: { gridSize }, eventCenter,
+      graphModel: { gridSize, eventCenter },
     } = props;
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,

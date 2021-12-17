@@ -8,7 +8,6 @@ import { CircleNodeModel } from '../../model';
 type IProps = {
   model: CircleNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 export default class CircleNode extends BaseNode {

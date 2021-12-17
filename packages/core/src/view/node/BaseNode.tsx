@@ -15,7 +15,6 @@ import { NodeAttributes } from '../../type';
 type IProps = {
   model: BaseNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 type Istate = {
@@ -36,7 +35,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   constructor(props) {
     super();
     const {
-      graphModel: { gridSize }, eventCenter, model,
+      graphModel: { gridSize, eventCenter }, model,
     } = props;
     // 不在构造函数中判断，因为editConfig可能会被动态改变
     this.stepDrag = new StepDrag({
@@ -142,7 +141,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     return { ...anchorLine };
   }
   getAnchors() {
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const {
       isSelected, isHitable,
     } = model;
@@ -162,7 +161,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             edgeStyle={edgeStyle}
             anchorIndex={index}
             nodeModel={model}
-            eventCenter={eventCenter}
             graphModel={graphModel}
             setHoverOFF={this.setHoverOFF}
           />
@@ -245,7 +243,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
     if (time > 200) return; // 事件大于200ms，认为是拖拽。
-    const { model, eventCenter, graphModel } = this.props;
+    const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
     const position = graphModel.getPointByClient({
@@ -276,15 +274,15 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
-      eventCenter.emit(EventType.NODE_DBCLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.NODE_DBCLICK, eventOptions);
     } else {
-      eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
-      eventCenter.emit(EventType.NODE_CLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
-    const { model, eventCenter, graphModel } = this.props;
+    const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
 
@@ -294,7 +292,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     graphModel.selectNodeById(model.id);
-    eventCenter.emit(EventType.NODE_CONTEXTMENU, {
+    graphModel.eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,
       position,
@@ -317,10 +315,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     this.setState({
       isHovered: true,
     });
-    const { model, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const nodeData = model.getData();
     model.setHovered(true);
-    eventCenter.emit(EventType.NODE_MOUSEENTER, {
+    graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
       data: nodeData,
       e: ev,
     });
@@ -329,10 +327,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     this.setState({
       isHovered: false,
     });
-    const { model, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const nodeData = model.getData();
     model.setHovered(false);
-    eventCenter.emit(EventType.NODE_MOUSELEAVE, {
+    graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
       e: ev,
     });

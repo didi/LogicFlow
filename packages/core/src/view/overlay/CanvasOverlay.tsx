@@ -10,7 +10,6 @@ import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
   dnd: Dnd
 };
 type Istate = {
@@ -26,7 +25,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
   stepScrollY = 0;
   constructor(props: IProps) {
     super();
-    const { graphModel: { gridSize }, eventCenter } = props;
+    const { graphModel: { gridSize, eventCenter } } = props;
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
@@ -100,7 +99,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
     // 点击空白处取消节点选中状态, 不包括冒泡过来的事件。
     const target = ev.target as HTMLElement;
     if (target.getAttribute('name') === 'canvas-overlay') {
-      const { graphModel, eventCenter } = this.props;
+      const { graphModel } = this.props;
       const { textEditElement, selectElements } = graphModel;
       if (selectElements.size > 0) {
         graphModel.clearSelectElements();
@@ -108,26 +107,26 @@ class CanvasOverlay extends Component<IProps, Istate> {
       if (textEditElement) {
         textEditElement.setElementState(ElementState.DEFAULT);
       }
-      eventCenter.emit(EventType.BLANK_CLICK, { e: ev });
+      graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev });
     }
   };
   handleContextMenu = (ev: MouseEvent) => {
     const target = ev.target as HTMLElement;
     if (target.getAttribute('name') === 'canvas-overlay') {
       ev.preventDefault();
-      const { graphModel, eventCenter } = this.props;
+      const { graphModel } = this.props;
       const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
       });
       // graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
-      eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
+      graphModel.eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
     }
   };
   mouseDownHandler = (ev: MouseEvent) => {
     const {
-      eventCenter,
       graphModel: {
+        eventCenter,
         editConfigModel,
         transformModel: {
           SCALE_X,
