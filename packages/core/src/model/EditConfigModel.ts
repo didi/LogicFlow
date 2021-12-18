@@ -67,18 +67,10 @@ export interface EditConfigInterface {
    */
   edgeTextDraggable?: boolean;
   /**
-   * 允许meta多选元素
-   */
-  metaKeyMultipleSelected?: boolean;
-  /**
    * 多选按键, 支持meta(cmd)、shift、alt
-   * 不支持ctrl，ctrl会出发contextmenu
+   * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string;
-  /**
-   * 外部传入的额外配置, 待优化，这里不够易用。
-   */
-  extraConf?: Record<string, string | number | object | boolean>;
 }
 
 const SilentConfig = {
@@ -93,7 +85,6 @@ const SilentConfig = {
   edgeTextEdit: false,
   nodeTextDraggable: false,
   edgeTextDraggable: false,
-  metaKeyMultipleSelected: false,
 };
 
 const keys = [
@@ -110,9 +101,7 @@ const keys = [
   'edgeTextEdit',
   'nodeTextDraggable',
   'edgeTextDraggable',
-  'metaKeyMultipleSelected',
   'multipleSelectKey',
-  'extraConf',
 ];
 /**
  * 页面编辑配置
@@ -126,16 +115,14 @@ export default class EditConfigModel {
   @observable adjustEdgeStartAndEnd = false;
   @observable adjustNodePosition = true;
   @observable hideAnchors = false;
-  @observable hoverOutline = false;
+  @observable hoverOutline = true;
   @observable nodeSelectedOutline = true;
   @observable edgeSelectedOutline = true;
   @observable nodeTextEdit = true;
   @observable edgeTextEdit = true;
   @observable nodeTextDraggable = false;
   @observable edgeTextDraggable = false;
-  @observable metaKeyMultipleSelected = false;
   multipleSelectKey = '';
-  extraConf = {};
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
     assign(this, this.getConfigDetail(config));
@@ -172,7 +159,6 @@ export default class EditConfigModel {
         edgeTextEdit: this.edgeTextEdit,
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
-        metaKeyMultipleSelected: this.metaKeyMultipleSelected,
       };
       assign(conf, slientConfig);
     }

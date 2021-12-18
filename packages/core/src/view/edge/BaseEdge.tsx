@@ -10,6 +10,7 @@ import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
+import { isMultipleSelect } from '../../util/graph';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -255,8 +256,8 @@ export default class BaseEdge extends Component<IProps> {
       });
     }
 
-    const { editConfigModel: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    const { editConfigModel } = graphModel;
+    graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点

@@ -14,7 +14,6 @@
 | adjustEdgeStartAndEnd   | boolean | false  | 允许调整边起点/终点                                                  |
 | adjustNodePosition      | boolean | true   | 允许拖动节点                                                           |
 | hideAnchors             | boolean | false  | 隐藏节点所有锚点                                                       |
-| hoverOutline            | boolean | false  | 鼠标 hover 的时候显示节点的外框                                        |
 | nodeTextEdit            | boolean | true   | 允许节点文本可以编辑                                                   |
 | edgeTextEdit            | boolean | true   | 允许边文本可以编辑                                                   |
 | nodeTextDraggable       | boolean | false  | 允许节点文本可以拖拽                                                   |

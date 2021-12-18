@@ -10,11 +10,7 @@ export interface KeyboardDef {
     keys: string | string[],
     callback: Handler,
     action?: Action,
-  }> | {
-    keys: string | string[],
-    callback: Handler,
-    action?: Action,
-  }
+  }>
 }
 
 export interface Options {

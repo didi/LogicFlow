@@ -9,7 +9,7 @@ import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType, OverlapMode,
 } from '../constant/constant';
 import {
-  AdditionData, Point, NodeConfig, EdgeConfig, Style, PointTuple, NodeMoveRule, GraphConfigData,
+  AdditionData, Point, NodeConfig, EdgeConfig, PointTuple, NodeMoveRule, GraphConfigData,
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
@@ -163,7 +163,6 @@ class GraphModel {
    * todo: 性能优化
    */
   @computed get sortElements() {
-    console.log(44);
     let elements: IBaseModel[] = [];
     // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
@@ -647,7 +646,7 @@ class GraphModel {
    * @param nodeId 节点id
    */
   @action
-  editNodeText(id: ElementModeId) {
+  editText(id: ElementModeId) {
     this.setElementStateById(id, ElementState.TEXT_EDIT);
   }
   /**

@@ -6,10 +6,6 @@ import { BaseNodeModel } from '../../model';
 import { TextConfig } from '../../type';
 import { snapToGrid } from '../../util/geometry';
 
-export type DndOptions = {
-  validate: () => boolean
-};
-
 export type NewNodeConfig = {
   type: string;
   text?: TextConfig | string;
@@ -19,12 +15,10 @@ export type NewNodeConfig = {
 export default class Dnd {
   nodeConfig: NewNodeConfig;
   lf: LogicFlow;
-  options: DndOptions;
   fakerNode: BaseNodeModel;
   constructor(params) {
-    const { options, lf } = params;
+    const { lf } = params;
     this.lf = lf;
-    this.options = options;
   }
   clientToLocalPoint({ x, y }) {
     const gridSize = get(this.lf.options, ['grid', 'size']);

@@ -1,7 +1,7 @@
 export const baseData = {
   nodes: [
     {
-      id: '30',
+      id: '1',
       type: 'rect',
       x: 500,
       y: 200,
@@ -12,19 +12,19 @@ export const baseData = {
       y: 200,
     },
     {
-      id: '31',
+      id: '2',
       type: 'polygon',
       x: 300,
       y: 200,
     },
     {
-      id: '32',
+      id: '3',
       type: 'ellipse',
       x: 100,
       y: 400,
     },
     {
-      id: '33',
+      id: '4',
       type: 'diamond',
       x: 300,
       y: 400,
@@ -38,8 +38,9 @@ export const baseData = {
   ],
   edges: [
     {
-      sourceNodeId: '30',
-      targetNodeId: '33',
+      id: '11',
+      sourceNodeId: '1',
+      targetNodeId: '3',
       type: 'bezier'
     }
   ]

@@ -4,12 +4,11 @@ import GraphModel from '../../model/GraphModel';
 import Anchor from '../Anchor';
 import BaseNodeModel from '../../model/node/BaseNodeModel';
 import BaseText from '../text/BaseText';
-import EventEmitter from '../../event/eventEmitter';
 import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
-import { CommonTheme, OutlineTheme } from '../../constant/DefaultTheme';
+import { CommonTheme } from '../../constant/DefaultTheme';
 import { NodeAttributes } from '../../type';
 
 type IProps = {

@@ -191,9 +191,7 @@ export type CommonStyle = {
   strokeOpacity?: number,
   opacity?: number,
   outlineColor?: string,
-  hoverOutlineColor?: string,
   outlineStrokeDashArray?: string,
-  hoverOutlineStrokeDashArray?: string,
 };
 export type RectStyle = CommonStyle & {
   width?: number,
@@ -270,23 +268,23 @@ export type EdgeAdjustStyle = {
   stroke?: string,
 };
 
-export type Style = {
-  rect?: RectStyle,
-  circle?: CircleStyle,
-  ellipse?: EllipseStyle,
-  diamond?: DiamondStyle,
-  polygon?: PolygonStyle,
-  anchor?: AnchorStyle,
-  text?: TextStyle,
-  nodeText?: NodeTextStyle,
-  edgeText?: EdgeTextStyle,
-  line?: LineStyle,
-  polyline?: PolylineStyle,
-  bezier?: BezierStyle,
-  arrow?: ArrowStyle,
-  anchorLine?: AnchorLineStyle,
-  EdgeAdjustStyle?: EdgeAdjustStyle,
-};
+// export type Style = {
+//   rect?: RectStyle,
+//   circle?: CircleStyle,
+//   ellipse?: EllipseStyle,
+//   diamond?: DiamondStyle,
+//   polygon?: PolygonStyle,
+//   anchor?: AnchorStyle,
+//   text?: TextStyle,
+//   nodeText?: NodeTextStyle,
+//   edgeText?: EdgeTextStyle,
+//   line?: LineStyle,
+//   polyline?: PolylineStyle,
+//   bezier?: BezierStyle,
+//   arrow?: ArrowStyle,
+//   anchorLine?: AnchorLineStyle,
+//   EdgeAdjustStyle?: EdgeAdjustStyle,
+// };
 
 export type GraphTransform = {
   transform: string;

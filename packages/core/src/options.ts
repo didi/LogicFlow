@@ -1,15 +1,14 @@
 import { assign } from 'lodash-es';
-import { DndOptions } from './view/behavior/DnD';
 import { GridOptions } from './view/overlay/Grid';
 import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
 import {
-  Style,
   NodeData,
   EdgeData,
   GraphConfigData,
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/editConfigModel';
+import { Theme } from './constant/DefaultTheme';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 
@@ -44,30 +43,53 @@ export type Definition = {
    * 网格
    */
   grid?: boolean | GridOptions;
-
+  /**
+   * 键盘快捷操作
+   */
   keyboard?: KeyboardDef;
-
-  style?: Style;
-
-  dndOptions?: DndOptions;
-
-  disabledPlugins?: string[]; // 禁用的插件
-
+  /**
+   * 主题配置
+   */
+  style?: Theme;
+  /**
+   * 禁止初始化的插件名称
+   */
+  disabledPlugins?: string[];
+  /**
+   * 默认边类型
+   */
   edgeType?: EdgeType;
-
+  /**
+   * 是否开启对齐线，默认开启
+   */
   snapline?: boolean;
-
-  history?: boolean; // 是否开启redo/undo
-
-  partial?: boolean; // 是否开启局部渲染
-
+  /**
+   * 是否开启历史记录功能，默认开启
+   */
+  history?: boolean;
+  /**
+   * 是否开启局部渲染，默认不开启
+   */
+  partial?: boolean;
+  /**
+   * 删除和克隆之前的判断函数
+   * todo: 目前不完善，仅支持同步
+   */
   guards?: GuardsTypes;
-
-  hideOutline?: boolean; // 是否隐藏选中元素边框
-
-  overlapMode?: OverlapMode; // 节点和边重叠显示模式
-
-  idGenerator?: () => string; // 元素id生成器
+  /**
+   * 是否不启用outline显示选中和hover效果
+   */
+  hideOutline?: boolean;
+  /**
+   * 表示节点在上，边在下，点击元素时选择元素显示在最顶部。
+   * 表示安装元素创建顺序排序，点击元素也不会将其置顶。要置顶需要调用置顶API。
+   */
+  overlapMode?: OverlapMode;
+  /**
+   * 自定义创建节点、连线时生成id规则。
+   * @param type 节点、连线类型
+   */
+  idGenerator?: (type?: string) => string;
   /**
    * 禁止启用的内置工具
    * 有些场景下，需要自定义多选效果或者文本编辑效果，则需要禁用这些内置的工具
@@ -75,6 +97,7 @@ export type Definition = {
    * todo: 将multipleSelect放到插件中
    */
   disabledTools?: string[];
+  [key: string]: any;
 } & EditConfigInterface;
 
 export interface GuardsTypes {

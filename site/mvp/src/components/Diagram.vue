@@ -73,7 +73,6 @@ export default {
         height: this.diagramHeight,
         hideOutline: true,
         overlapMode: 1,
-        metaKeyMultipleSelected: true,
         keyboard: {
           enabled: true
         },

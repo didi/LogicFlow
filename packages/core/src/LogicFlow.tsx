@@ -110,7 +110,7 @@ export default class LogicFlow {
     // 附加功能初始化
     this.tool = new Tool(this);
     this.history = new History(this.graphModel.eventCenter);
-    this.dnd = new Dnd({ options: options.dndOptions, lf: this });
+    this.dnd = new Dnd({ lf: this });
     this.keyboard = new Keyboard({ lf: this, keyboard: options.keyboard });
     // 不可编辑模式没有开启，且没有关闭对齐线
     if (!options.isSilentMode && options.snapline !== false) {
@@ -125,79 +125,6 @@ export default class LogicFlow {
     // init 放到最后
     this.defaultRegister();
     this.installPlugins(options.disabledPlugins);
-  }
-
-  // 事件系统----------------------------------------------
-  /**
-   * 监听事件
-   * 事件详情见 @see todo
-   * 支持同时监听多个事件
-   * @example
-   * lf.on('node:click,node:contextmenu', (data) => {
-   * });
-   */
-  on(evt: string, callback: CallbackType) {
-    this.graphModel.eventCenter.on(evt, callback);
-  }
-  /**
-   * 撤销监听事件
-   */
-  off(evt: string, callback: CallbackType) {
-    this.graphModel.eventCenter.off(evt, callback);
-  }
-  /**
-   * 监听事件，只监听一次
-   */
-  once(evt: string, callback: CallbackType) {
-    this.graphModel.eventCenter.once(evt, callback);
-  }
-  /**
-   * 出发监听事件
-   */
-  emit(evt: string, arg: any) {
-    this.graphModel.eventCenter.emit(evt, arg);
-  }
-
-  // 插件系统----------------------------------------------
-
-  /**
-   * 添加扩展, 待讨论，这里是不是静态方法好一些？
-   * 重复添加插件的时候，把上一次添加的插件的销毁。
-   * @param plugin 插件
-   */
-  static use(extension: Extension) {
-    let { pluginName } = extension;
-    if (!pluginName) {
-      console.warn(`请给插件${extension.name || extension.constructor.name}指定pluginName!`);
-      pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
-    }
-    const preExtension = this.extensions.get(pluginName);
-    preExtension && preExtension.destroy && preExtension.destroy();
-    this.extensions.set(pluginName, extension);
-  }
-  installPlugins(disabledPlugins = []) {
-    LogicFlow.extensions.forEach((extension) => {
-      const pluginName = extension.pluginName || extension.name;
-      if (disabledPlugins.indexOf(pluginName) === -1) {
-        this.installPlugin(extension);
-      }
-    });
-  }
-  private installPlugin(extension) {
-    if (typeof extension === 'object') {
-      const { install, render: renderComponent } = extension;
-      install && install.call(extension, this, LogicFlow);
-      renderComponent && this.components.push(renderComponent.bind(extension));
-      return;
-    }
-    const ExtensionContructor = extension as ExtensionContractor;
-    const extensionInstance = new ExtensionContructor({
-      lf: this,
-      LogicFlow,
-    });
-    extensionInstance.render && this.components.push(
-      extensionInstance.render.bind(extensionInstance),
-    );
   }
   /**
    * 注册自定义节点和边
@@ -356,8 +283,437 @@ export default class LogicFlow {
       model: _Model.HtmlNodeModel,
     });
   }
-
-  // 全局操作----------------------------------------------
+  /**
+   * 将图形选中
+   * @param id 选择元素ID
+   * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
+   */
+  selectElementById(id: string, multiple = false) {
+    this.graphModel.selectElementById(id, multiple);
+    if (!multiple) {
+      this.graphModel.toFront(id);
+    }
+  }
+  /**
+   * 定位到画布视口中心
+   * 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是边的id，也可以不传（兜底）
+   * @param focusOnArgs.id 如果传入的是id, 则画布视口中心移动到此id的元素中心点。
+   * @param focusOnArgs.coordinate 如果传入的是坐标，则画布视口中心移动到此坐标。
+   */
+  focusOn(focusOnArgs: FocusOnArgs): void {
+    const { transformModel } = this.graphModel;
+    let { coordinate } = focusOnArgs;
+    const { id } = focusOnArgs;
+    if (!coordinate) {
+      const model = this.getNodeModelById(id);
+      if (model) {
+        coordinate = model.getData();
+      }
+      const edgeModel = this.getEdgeModelById(id);
+      if (edgeModel) {
+        coordinate = edgeModel.textPosition;
+      }
+    }
+    const { x, y } = coordinate;
+    transformModel.focusOn(x, y, this.width, this.height);
+  }
+  /**
+   * 设置主题样式
+   * @param { object } style 自定义主题样式
+   * todo docs link
+   */
+  setTheme(style: Theme): void {
+    this.graphModel.setTheme(style);
+  }
+  /**
+   * 重新设置画布的宽高
+   */
+  resize(width: number, height: number): void {
+    this.graphModel.resize(width, height);
+  }
+  /**
+   * 设置默认的边类型。
+   * 也就是设置在节点直接有用户手动绘制的连线类型。
+   * @param type Options.EdgeType
+   */
+  setDefaultEdgeType(type: Options.EdgeType): void {
+    this.graphModel.setDefaultEdgeType(type);
+  }
+  /**
+   * 更新节点或边的文案
+   * @param id 节点或者边id
+   * @param value 文案内容
+   */
+  updateText(id: string, value: string) {
+    this.graphModel.updateText(id, value);
+  }
+  /**
+   * 删除元素，在不确定当前id是节点还是边时使用
+   * @param id 元素id
+   */
+  deleteElement(id): boolean {
+    const NodeModel = this.graphModel.getNodeModelById(id);
+    if (NodeModel) {
+      return this.deleteNode(id);
+    }
+    const EdgeModel = this.graphModel.getEdgeModelById(id);
+    if (EdgeModel) {
+      return this.deleteEdge(id);
+    }
+    return false;
+  }
+  /**
+   * 修改指定节点类型
+   * @param id 节点id
+   * @param type 节点类型
+   */
+  changeNodeType(id: string, type: string): void {
+    this.graphModel.changeNodeType(id, type);
+  }
+  /**
+   * 获取节点连接的所有边的model
+   * @param nodeId 节点ID
+   * @returns model数组
+   */
+  getNodeEdges(nodeId): _Model.BaseEdgeModel[] {
+    return this.graphModel.getNodeEdges(nodeId);
+  }
+  /**
+   * 添加节点
+   * @param nodeConfig 节点配置
+   */
+  addNode(nodeConfig: NodeConfig): _Model.BaseNodeModel {
+    return this.graphModel.addNode(nodeConfig);
+  }
+  /**
+   * 删除节点
+   * @param {string} nodeId 节点Id
+   */
+  deleteNode(nodeId: string): boolean {
+    const Model = this.graphModel.getNodeModelById(nodeId);
+    if (!Model) {
+      return false;
+    }
+    const data = Model.getData();
+    const { guards } = this.options;
+    const enabledDelete = guards && guards.beforeDelete ? guards.beforeDelete(data) : true;
+    if (enabledDelete) {
+      this.graphModel.deleteNode(nodeId);
+    }
+    return enabledDelete;
+  }
+  /**
+   * 克隆节点
+   * @param nodeId 节点Id
+   */
+  cloneNode(nodeId: string): _Model.BaseNodeModel {
+    const Model = this.graphModel.getNodeModelById(nodeId);
+    const data = Model.getData();
+    const { guards } = this.options;
+    const enabledClone = guards && guards.beforeClone ? guards.beforeClone(data) : true;
+    if (enabledClone) {
+      return this.graphModel.cloneNode(nodeId);
+    }
+  }
+  /**
+   * 修改节点的id， 如果不传新的id，会内部自动创建一个。
+   * @param { string } oldId 将要被修改的id
+   * @param { string } newId 可选，修改后的id
+   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
+   */
+  changeNodeId<T extends string>(oldId: string, newId?: T): T | string {
+    return this.graphModel.changeNodeId(oldId, newId);
+  }
+  /**
+   * 获取节点对象
+   * @param nodeId 节点Id
+   */
+  getNodeModelById(nodeId: string): _Model.BaseNodeModel {
+    return this.graphModel.getNodeModelById(nodeId);
+  }
+  /**
+   * 获取节点数据
+   * @param nodeId 节点
+   */
+  getNodeDataById(nodeId: string): NodeConfig {
+    return this.graphModel.getNodeModelById(nodeId).getData();
+  }
+  /**
+   * 给两个节点之间添加一条边
+   * @example
+   * lf.addEdge({
+   *   type: 'polygon'
+   *   sourceNodeId: 'node_id_1',
+   *   targetNodeId: 'node_id_2',
+   * })
+   * @param {object} edgeConfig
+   */
+  addEdge(edgeConfig: EdgeConfig): void {
+    this.graphModel.addEdge(edgeConfig);
+  }
+  /**
+   * 删除边
+   * @param {string} edgeId 边Id
+   */
+  deleteEdge(edgeId: string): boolean {
+    const { guards } = this.options;
+    const edge = this.graphModel.edgesMap[edgeId];
+    if (!edge) {
+      return false;
+    }
+    const edgeData = edge.model.getData();
+    const enabledDelete = guards && guards.beforeDelete
+      ? guards.beforeDelete(edgeData) : true;
+    if (enabledDelete) {
+      this.graphModel.deleteEdgeById(edgeId);
+    }
+    return enabledDelete;
+  }
+  /**
+   * 删除指定类型的边, 基于边起点和终点，可以只传其一。
+   * @param config.sourceNodeId 边的起点节点ID
+   * @param config.targetNodeId 边的终点节点ID
+   */
+  deleteEdgeByNodeId(config: { sourceNodeId?: string, targetNodeId?: string }): void {
+    const {
+      sourceNodeId, targetNodeId,
+    } = config;
+    if (sourceNodeId && targetNodeId) {
+      this.graphModel.deleteEdgeBySourceAndTarget(sourceNodeId, targetNodeId);
+    } else if (sourceNodeId) {
+      this.graphModel.deleteEdgeBySource(sourceNodeId);
+    } else if (targetNodeId) {
+      this.graphModel.deleteEdgeByTarget(targetNodeId);
+    }
+  }
+  /**
+   * 修改边的id， 如果不传新的id，会内部自动创建一个。
+   * @param { string } oldId 将要被修改的id
+   * @param { string } newId 可选，修改后的id
+   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
+   */
+  changeEdgeId<T extends string>(oldId: string, newId?: T): T | string {
+    return this.graphModel.changeEdgeId(oldId, newId);
+  }
+  /**
+   * 基于边Id获取边的model
+   * @param edgeId 边的Id
+   * @return model
+   */
+  getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
+    const { edgesMap } = this.graphModel;
+    return edgesMap[edgeId]?.model;
+  }
+  /**
+   * 获取满足条件边的model
+   * @param edgeFilter 过滤条件
+   * @example
+   * 获取所有起点为节点A的边的model
+   * lf.getEdgeModels({
+   *   sourceNodeId: 'nodeA_id'
+   * })
+   * 获取所有终点为节点B的边的model
+   * lf.getEdgeModels({
+   *   targetNodeId: 'nodeB_id'
+   * })
+   * 获取起点为节点A，终点为节点B的边
+   * lf.getEdgeModels({
+   *   sourceNodeId: 'nodeA_id',
+   *   targetNodeId: 'nodeB_id'
+   * })
+   * @return model数组
+   */
+  getEdgeModels(edgeFilter: EdgeFilter): _Model.BaseEdgeModel[] {
+    const { edges } = this.graphModel;
+    const {
+      sourceNodeId, targetNodeId,
+    } = edgeFilter;
+    if (sourceNodeId && targetNodeId) {
+      const result = [];
+      edges.forEach(edge => {
+        if (edge.sourceNodeId === sourceNodeId && edge.targetNodeId === targetNodeId) {
+          result.push(edge);
+        }
+      });
+      return result;
+    }
+    if (sourceNodeId) {
+      const result = [];
+      edges.forEach(edge => {
+        if (edge.sourceNodeId === sourceNodeId) {
+          result.push(edge);
+        }
+      });
+      return result;
+    }
+    if (targetNodeId) {
+      const result = [];
+      edges.forEach(edge => {
+        if (edge.targetNodeId === targetNodeId) {
+          result.push(edge);
+        }
+      });
+      return result;
+    }
+    return [];
+  }
+  /**
+   * 基于id获取边数据
+   * @param edgeId 边Id
+   * @returns EdgeData
+   */
+  getEdgeDataById(edgeId: string): EdgeData {
+    return this.getEdgeModelById(edgeId)?.getData();
+  }
+  /**
+   * 显示节点、连线文本编辑框
+   * @param id 元素id
+   */
+  editText(id: string): void {
+    this.graphModel.editText(id);
+  }
+  /**
+   * 设置元素的自定义属性
+   * @see todo docs link
+   * @param id 元素的id
+   * @param properties 自定义属性
+   */
+  setProperties(id: string, properties: Object): void {
+    this.graphModel.getElement(id)?.setProperties(formatData(properties));
+  }
+  /**
+   * 获取元素的自定义属性
+   * @param id 元素的id
+   * @returns 自定义属性
+   */
+  getProperties(id: string): Object {
+    return this.graphModel.getElement(id)?.getProperties();
+  }
+  /**
+   * 将某个元素放置到顶部。
+   * 如果堆叠模式为默认模式，则将原置顶元素重新恢复原有层级。
+   * 如果堆叠模式为递增模式，则将需指定元素zIndex设置为当前最大zIndex + 1。
+   * @see todo link 堆叠模式
+   * @param id 元素Id
+   */
+  toFront(id) {
+    this.graphModel.toFront(id);
+  }
+  /**
+   * 设置元素的zIndex.
+   * 注意：默认堆叠模式下，不建议使用此方法。
+   * @see todo link 堆叠模式
+   * @param id 元素id
+   * @param zIndex zIndex的值，可以传数字，也支持传入'top' 和 'bottom'
+   */
+  setElementZIndex(id: string, zIndex: number | 'top' | 'bottom') {
+    return this.graphModel.setElementZIndex(id, zIndex);
+  }
+  /**
+   * 添加多个元素, 包括边和节点。
+   */
+  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+    const nodeIdMap = {};
+    const elements = {
+      nodes: [],
+      edges: [],
+    };
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const preId = node.id;
+      const nodeModel = this.addNode(node);
+      if (!nodeModel) return;
+      if (preId) nodeIdMap[preId] = nodeModel.id;
+      elements.nodes.push(nodeModel);
+    }
+    edges.forEach(edge => {
+      const sourceId = edge.sourceNodeId;
+      const targetId = edge.targetNodeId;
+      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
+      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
+      const edgeModel = this.graphModel.addEdge(edge);
+      elements.edges.push(edgeModel);
+    });
+    return elements;
+  }
+  /**
+   * 获取指定区域内的所有元素，此区域必须是DOM层。
+   * 例如鼠标绘制选区后，获取选区内的所有元素。
+   * @see todo 分层
+   * @param leftTopPoint 区域左上角坐标, dom层坐标
+   * @param rightBottomPoint 区域右下角坐标，dom层坐标
+   */
+  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+      .map(element => element.getData());
+  }
+  /**
+   * 获取选中的元素数据
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
+   * 注意：复制的时候不能包括此类边, 因为复制的时候不允许悬空的边。
+   */
+  getSelectElements(isIgnoreCheck = true): GraphConfigData {
+    return this.graphModel.getSelectElements(isIgnoreCheck);
+  }
+  /**
+   * 将所有选中的元素设置为非选中
+   */
+  clearSelectElements() {
+    this.graphModel.clearSelectElements();
+  }
+  /**
+   * 获取流程绘图数据
+   * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
+   * 如果实现通用插件，请使用getGraphRawData
+   */
+  getGraphData(): GraphConfigData | any {
+    const data = this.graphModel.modelToGraphData();
+    if (this.adapterOut) {
+      return this.adapterOut(data as GraphConfigData);
+    }
+    return data;
+  }
+  /**
+   * 获取流程绘图原始数据
+   * 在存在adapter时，可以使用getGraphRawData获取图原始数据
+   */
+  getGraphRawData(): GraphConfigData {
+    return this.graphModel.modelToGraphData();
+  }
+  /**
+   * 清空画布
+   */
+  clearData() {
+    this.graphModel.clearData();
+  }
+  /**
+   * 更新流程图编辑相关设置
+   * @param {object} config 编辑配置
+   * @see todo docs link
+   */
+  updateEditConfig(config: EditConfigInterface) {
+    this.graphModel.editConfigModel.updateEditConfig(config);
+  }
+  /**
+   * 获取流程图当前编辑相关设置
+   * @see todo docs link
+   */
+  getEditConfig() {
+    return this.graphModel.editConfigModel.getConfig();
+  }
+  /**
+   * 获取事件位置相对于画布左上角的坐标
+   * 画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+   * @see todo link
+   * @param {number} x 事件x坐标
+   * @param {number} y 事件y坐标
+   * @returns {object} Point 事件位置的坐标
+   * @returns {object} Point.domOverlayPosition HTML层上的坐标
+   * @returns {object} Point.canvasOverlayPosition SVG层上的坐标
+   */
+  getPointByClient(x: number, y: number) {
+    return this.graphModel.getPointByClient({ x, y });
+  }
   /**
    * 历史记录操作
    * 返回上一步
@@ -433,7 +789,7 @@ export default class LogicFlow {
     };
   }
   /**
-   * 平移图形
+   * 平移图
    * @param x 向x轴移动距离
    * @param y 向y轴移动距离
    */
@@ -449,371 +805,83 @@ export default class LogicFlow {
     const { TRANSLATE_X, TRANSLATE_Y } = transformModel;
     this.translate(-TRANSLATE_X, -TRANSLATE_Y);
   }
-  /**
-   * 将图形选中
-   * @param id 选择元素ID
-   * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
-   */
-  selectElementById(id: string, multiple = false) {
-    this.graphModel.selectElementById(id, multiple);
-    if (!multiple) {
-      this.graphModel.toFront(id);
-    }
-  }
-  /**
-   * 将图形定位到画布中心
-   * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是边的id，也可以不传（兜底）
-   */
-  focusOn(focusOnArgs: FocusOnArgs): void {
-    const { transformModel } = this.graphModel;
-    let { coordinate } = focusOnArgs;
-    const { id } = focusOnArgs;
-    if (!coordinate) {
-      const model = this.getNodeModelById(id);
-      if (model) {
-        coordinate = model.getData();
-      }
-      const edgeModel = this.getEdgeModelById(id);
-      if (edgeModel) {
-        coordinate = edgeModel.textPosition;
-      }
-    }
-    const { x, y } = coordinate;
-    transformModel.focusOn(x, y, this.width, this.height);
-  }
-  /**
-   * 设置主题样式
-   * @param { object } style 自定义主题样式
-   * todo docs link
-   */
-  setTheme(style: Theme): void {
-    this.graphModel.setTheme(style);
-  }
-  /**
-   * 重新设置画布的宽高
-   */
-  resize(width: number, height: number): void {
-    this.graphModel.resize(width, height);
-  }
-  /**
-   * 设置默认的边类型。
-   * 也就是设置在节点直接有用户手动绘制的连线类型。
-   * @param type Options.EdgeType
-   */
-  setDefaultEdgeType(type: Options.EdgeType): void {
-    this.graphModel.setDefaultEdgeType(type);
-  }
-  /**
-   * 更新节点或边的文案
-   * @param id 节点或者边id
-   * @param value 文案内容
-   */
-  updateText(id: string, value: string) {
-    this.graphModel.updateText(id, value);
-  }
-  /**
-   * 删除元素，在不确定当前id是节点还是边时使用
-   * @param id 元素id
-   */
-  deleteElement(id): boolean {
-    const NodeModel = this.graphModel.getNodeModelById(id);
-    if (NodeModel) {
-      return this.deleteNode(id);
-    }
-    const EdgeModel = this.graphModel.getEdgeModelById(id);
-    if (EdgeModel) {
-      return this.deleteEdge(id);
-    }
-    return false;
-  }
 
-  // 节点操作----------------------------------------------
+  // 事件系统----------------------------------------------
   /**
-   * 修改指定节点类型
-   * @param id 节点id
-   * @param type 节点类型
-   */
-  changeNodeType(id: string, type: string): void {
-    this.graphModel.changeNodeType(id, type);
-  }
-  /**
-   * 获取节点所有边的model
-   * @param nodeId 节点ID
-   * @returns model数组
-   */
-  getNodeEdges(nodeId): _Model.BaseEdgeModel[] {
-    return this.graphModel.getNodeEdges(nodeId);
-  }
-  /**
-   * 添加节点
-   * @param nodeConfig 节点配置
-   */
-  addNode(nodeConfig: NodeConfig): _Model.BaseNodeModel {
-    return this.graphModel.addNode(nodeConfig);
-  }
-  /**
-   * 删除节点
-   * @param {string} nodeId 节点Id
-   */
-  deleteNode(nodeId: string): boolean {
-    const Model = this.graphModel.getNodeModelById(nodeId);
-    if (!Model) {
-      return false;
-    }
-    const data = Model.getData();
-    const { guards } = this.options;
-    const enabledDelete = guards && guards.beforeDelete ? guards.beforeDelete(data) : true;
-    if (enabledDelete) {
-      this.graphModel.deleteNode(nodeId);
-    }
-    return enabledDelete;
-  }
-  /**
-   * 显示节点文本编辑框
-   * @param nodeId 节点id
-   */
-  editNodeText(nodeId: string): void {
-    this.graphModel.editNodeText(nodeId);
-  }
-  /**
-   * 克隆节点
-   * @param nodeId 节点Id
-   */
-  cloneNode(nodeId: string): _Model.BaseNodeModel {
-    const Model = this.graphModel.getNodeModelById(nodeId);
-    const data = Model.getData();
-    const { guards } = this.options;
-    const enabledClone = guards && guards.beforeClone ? guards.beforeClone(data) : true;
-    if (enabledClone) {
-      return this.graphModel.cloneNode(nodeId);
-    }
-  }
-
-  // 边操作----------------------------------------------
-
-  /**
-   * 给两个节点之间添加一条边
+   * 监听事件
+   * 事件详情见 @see todo
+   * 支持同时监听多个事件
    * @example
-   * lf.addEdge({
-   *   type: 'polygon'
-   *   sourceNodeId: 'node_id_1',
-   *   targetNodeId: 'node_id_2',
-   * })
-   * @param {object} edgeConfig
+   * lf.on('node:click,node:contextmenu', (data) => {
+   * });
    */
-  addEdge(edgeConfig: EdgeConfig): void {
-    this.graphModel.addEdge(edgeConfig);
+  on(evt: string, callback: CallbackType) {
+    this.graphModel.eventCenter.on(evt, callback);
   }
   /**
-   * 删除边
-   * @param {string} edgeId 边Id
+   * 撤销监听事件
    */
-  deleteEdge(edgeId: string): boolean {
-    const { guards } = this.options;
-    const edge = this.graphModel.edgesMap[edgeId];
-    if (!edge) {
-      return false;
-    }
-    const edgeData = edge.model.getData();
-    const enabledDelete = guards && guards.beforeDelete
-      ? guards.beforeDelete(edgeData) : true;
-    if (enabledDelete) {
-      this.graphModel.deleteEdgeById(edgeId);
-    }
-    return enabledDelete;
+  off(evt: string, callback: CallbackType) {
+    this.graphModel.eventCenter.off(evt, callback);
   }
   /**
-   * 删除指定类型的边, 基于边起点和终点，可以只传其一。
-   * @param config.sourceNodeId 边的起点节点ID
-   * @param config.targetNodeId 边的终点节点ID
+   * 监听事件，只监听一次
    */
-  deleteEdgeByNodeId(config: { sourceNodeId?: string, targetNodeId?: string }): void {
-    const {
-      sourceNodeId, targetNodeId,
-    } = config;
-    if (sourceNodeId && targetNodeId) {
-      this.graphModel.deleteEdgeBySourceAndTarget(sourceNodeId, targetNodeId);
-    } else if (sourceNodeId) {
-      this.graphModel.deleteEdgeBySource(sourceNodeId);
-    } else if (targetNodeId) {
-      this.graphModel.deleteEdgeByTarget(targetNodeId);
-    }
+  once(evt: string, callback: CallbackType) {
+    this.graphModel.eventCenter.once(evt, callback);
+  }
+  /**
+   * 触发监听事件
+   */
+  emit(evt: string, arg: any) {
+    this.graphModel.eventCenter.emit(evt, arg);
   }
 
-  // 数据操作----------------------------------------------
+  // 插件系统----------------------------------------------
+
   /**
-   * 获取节点对象
-   * @param nodeId 节点Id
+   * 添加扩展, 待讨论，这里是不是静态方法好一些？
+   * 重复添加插件的时候，把上一次添加的插件的销毁。
+   * @param plugin 插件
    */
-  getNodeModelById(nodeId: string): _Model.BaseNodeModel {
-    return this.graphModel.getNodeModelById(nodeId);
-  }
-  /**
-   * 获取节点数据
-   * @param nodeId 节点
-   */
-  getNodeDataById(nodeId: string): NodeAttribute {
-    return this.graphModel.getNodeModelById(nodeId).getData();
-  }
-  /**
-   * 基于边Id获取边的model
-   * @param edgeId 边的Id
-   * @return model
-   */
-  getEdgeModelById(edgeId: string): _Model.BaseEdgeModel {
-    const { edgesMap } = this.graphModel;
-    return edgesMap[edgeId]?.model;
-  }
-  /**
-   * 获取满足条件边的model
-   * @param edgeFilter 过滤条件
-   * @example
-   * 获取所有起点为节点A的边的model
-   * lf.getEdgeModels({
-   *   sourceNodeId: 'nodeA_id'
-   * })
-   * 获取所有终点为节点B的边的model
-   * lf.getEdgeModels({
-   *   targetNodeId: 'nodeB_id'
-   * })
-   * 获取起点为节点A，终点为节点B的边
-   * lf.getEdgeModels({
-   *   sourceNodeId: 'nodeA_id',
-   *   targetNodeId: 'nodeB_id'
-   * })
-   * @return model数组
-   */
-  getEdgeModels(edgeFilter: EdgeFilter): _Model.BaseEdgeModel[] {
-    const { edges, edgesMap } = this.graphModel;
-    const {
-      sourceNodeId, targetNodeId,
-    } = edgeFilter;
-    if (sourceNodeId && targetNodeId) {
-      const result = [];
-      edges.forEach(edge => {
-        if (edge.sourceNodeId === sourceNodeId && edge.targetNodeId === targetNodeId) {
-          result.push(edge);
-        }
-      });
-      return result;
+  static use(extension: Extension) {
+    let { pluginName } = extension;
+    if (!pluginName) {
+      console.warn(`请给插件${extension.name || extension.constructor.name}指定pluginName!`);
+      pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
     }
-    if (sourceNodeId) {
-      const result = [];
-      edges.forEach(edge => {
-        if (edge.sourceNodeId === sourceNodeId) {
-          result.push(edge);
-        }
-      });
-      return result;
+    const preExtension = this.extensions.get(pluginName);
+    preExtension && preExtension.destroy && preExtension.destroy();
+    this.extensions.set(pluginName, extension);
+  }
+  private installPlugins(disabledPlugins = []) {
+    LogicFlow.extensions.forEach((extension) => {
+      const pluginName = extension.pluginName || extension.name;
+      if (disabledPlugins.indexOf(pluginName) === -1) {
+        this.installPlugin(extension);
+      }
+    });
+  }
+  /**
+   * 加载插件
+   * 注意，不建议插件用这种方式加载，此方式只会出发render方法，
+   * 可能不会实时出发cont
+   */
+  private installPlugin(extension) {
+    if (typeof extension === 'object') {
+      const { install, render: renderComponent } = extension;
+      install && install.call(extension, this, LogicFlow);
+      renderComponent && this.components.push(renderComponent.bind(extension));
+      return;
     }
-    if (targetNodeId) {
-      const result = [];
-      edges.forEach(edge => {
-        if (edge.targetNodeId === targetNodeId) {
-          result.push(edge);
-        }
-      });
-      return result;
-    }
-    return [];
-  }
-  /**
-   * 基于id获取边数据
-   * @param edgeId 边Id
-   * @returns EdgeData
-   */
-  getEdgeDataById(edgeId: string): EdgeData {
-    return this.getEdgeModelById(edgeId)?.getData();
-  }
-  /**
-   * 获取流程绘图数据
-   * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
-   * 如果实现通用插件，请使用getGraphRawData
-   */
-  getGraphData(): GraphConfigData | any {
-    const data = this.graphModel.modelToGraphData();
-    if (this.adapterOut) {
-      return this.adapterOut(data as GraphConfigData);
-    }
-    return data;
-  }
-  /**
-   * 获取流程绘图原始数据
-   * 在存在adapter时，可以使用getGraphRawData获取图原始数据
-   */
-  getGraphRawData(): GraphConfigData {
-    return this.graphModel.modelToGraphData();
-  }
-  /**
-   * 设置元素的自定义属性
-   * @see todo docs link
-   * @param id 元素的id
-   * @param properties 自定义属性
-   */
-  setProperties(id: string, properties: Object): void {
-    this.graphModel.getElement(id)?.setProperties(formatData(properties));
-  }
-  /**
-   * 获取元素的自定义属性
-   * @param id 元素的id
-   * @returns 自定义属性
-   */
-  getProperties(id: string): Object {
-    return this.graphModel.getElement(id)?.getProperties();
-  }
-  /**
-   * 修改节点的id， 如果不传新的id，会内部自动创建一个。
-   * @param { string } oldId 将要被修改的id
-   * @param { string } newId 可选，修改后的id
-   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
-   */
-  changeNodeId<T extends string>(oldId: string, newId?: T): T | string {
-    return this.graphModel.changeNodeId(oldId, newId);
-  }
-  /**
-   * 修改边的id， 如果不传新的id，会内部自动创建一个。
-   * @param { string } oldId 将要被修改的id
-   * @param { string } newId 可选，修改后的id
-   * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
-   */
-  changeEdgeId<T extends string>(oldId: string, newId?: T): T | string {
-    return this.graphModel.changeEdgeId(oldId, newId);
-  }
-  /**
-   * 更新流程图编辑相关设置
-   * @param {object} config 编辑配置
-   * @see todo docs link
-   */
-  updateEditConfig(config: EditConfigInterface) {
-    this.graphModel.editConfigModel.updateEditConfig(config);
-  }
-  /**
-   * 获取流程图当前编辑相关设置
-   * @see todo docs link
-   */
-  getEditConfig() {
-    return this.graphModel.editConfigModel.getConfig();
-  }
-  /**
-   * 获取事件位置相对于画布左上角的坐标
-   * 画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
-   * @see todo link
-   * @param {number} x 事件x坐标
-   * @param {number} y 事件y坐标
-   * @returns {object} Point 事件位置的坐标
-   * @returns {object} Point.domOverlayPosition HTML层上的坐标
-   * @returns {object} Point.canvasOverlayPosition SVG层上的坐标
-   */
-  getPointByClient(x: number, y: number) {
-    return this.graphModel.getPointByClient({ x, y });
-  }
-  /**
-   * 获取选中的元素数据
-   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
-   * 注意：复制的时候不能包括此类边, 因为复制的时候不允许悬空的边。
-   */
-  getSelectElements(isIgnoreCheck = true): GraphConfigData {
-    return this.graphModel.getSelectElements(isIgnoreCheck);
+    const ExtensionContructor = extension as ExtensionContractor;
+    const extensionInstance = new ExtensionContructor({
+      lf: this,
+      LogicFlow,
+    });
+    extensionInstance.render && this.components.push(
+      extensionInstance.render.bind(extensionInstance),
+    );
   }
   /**
    * 修改对应元素 model 中的属性
@@ -825,76 +893,6 @@ export default class LogicFlow {
    */
   updateAttributes(id: string, attributes: object) {
     this.graphModel.updateAttributes(id, attributes);
-  }
-  /**
-   * 清空画布
-   */
-  clearData() {
-    this.graphModel.clearData();
-  }
-  /**
-   * 将某个元素放置到顶部。
-   * 如果堆叠模式为默认模式，则将原置顶元素重新恢复原有层级。
-   * 如果堆叠模式为递增模式，则将需指定元素zIndex设置为当前最大zIndex + 1。
-   * @see todo link 堆叠模式
-   * @param id 元素Id
-   */
-  toFront(id) {
-    this.graphModel.toFront(id);
-  }
-  /**
-   * 设置元素的zIndex.
-   * 注意：默认堆叠模式下，不建议使用此方法。
-   * @see todo link 堆叠模式
-   * @param id 元素id
-   * @param zIndex zIndex的值，可以传数字，也支持传入'top' 和 'bottom'
-   */
-  setElementZIndex(id: string, zIndex: number | 'top' | 'bottom') {
-    return this.graphModel.setElementZIndex(id, zIndex);
-  }
-  /**
-   * 添加多个元素, 包括边和节点。
-   */
-  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
-    const nodeIdMap = {};
-    const elements = {
-      nodes: [],
-      edges: [],
-    };
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
-      const preId = node.id;
-      const nodeModel = this.addNode(node);
-      if (!nodeModel) return;
-      if (preId) nodeIdMap[preId] = nodeModel.id;
-      elements.nodes.push(nodeModel);
-    }
-    edges.forEach(edge => {
-      const sourceId = edge.sourceNodeId;
-      const targetId = edge.targetNodeId;
-      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
-      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
-      const edgeModel = this.graphModel.addEdge(edge);
-      elements.edges.push(edgeModel);
-    });
-    return elements;
-  }
-  /**
-   * 将所有选中的元素设置为非选中
-   */
-  clearSelectElements() {
-    this.graphModel.clearSelectElements();
-  }
-  /**
-   * 获取指定区域内的所有元素，此区域必须是DOM层。
-   * 例如鼠标绘制选区后，获取选区内的所有元素。
-   * @see todo 分层
-   * @param leftTopPoint 区域左上角坐标, dom层坐标
-   * @param rightBottomPoint 区域右下角坐标，dom层坐标
-   */
-  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
-      .map(element => element.getData());
   }
   /**
    * 内部保留方法

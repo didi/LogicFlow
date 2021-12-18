@@ -23,14 +23,13 @@ export default class OutlineOverlay extends Component<IProps> {
       if (element.isHovered || element.isSelected) {
         const {
           isHovered,
-          // isSelected,
+          isSelected,
           x,
           y,
           width,
           height,
-          hideOutline,
         } = element;
-        if (!hideOutline && (nodeSelectedOutline || (hoverOutline && isHovered))) {
+        if ((nodeSelectedOutline && isSelected) || (hoverOutline && isHovered)) {
           const style = (element as BaseNodeModel).getOutlineStyle();
           let attributes = {};
           Object.keys(style).forEach((key) => {
@@ -64,12 +63,12 @@ export default class OutlineOverlay extends Component<IProps> {
   // 边的outline
   getEdgeOutline() {
     const {
-      graphModel: { edges: edgeList, editConfigModel: { edgeSelectedOutline } },
+      graphModel: { edges: edgeList, editConfigModel: { edgeSelectedOutline, hoverOutline } },
     } = this.props;
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (!edge.hideOutline && edge.isSelected && edgeSelectedOutline) {
+      if ((edgeSelectedOutline && edge.isSelected) || (hoverOutline && edge.isHovered)) {
         if (edge.modelType === ModelType.LINE_EDGE) {
           edgeOutline.push(this.getLineOutline(edge));
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {

@@ -98,17 +98,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
   public set height(value) {
     this._height = value;
   }
-  @observable fill = defaultConfig.fill;
-  @observable fillOpacity = defaultConfig.fillOpacity;
-  @observable strokeWidth = defaultConfig.strokeWidth;
-  @observable stroke = defaultConfig.stroke;
-  @observable strokeOpacity = defaultConfig.strokeOpacity;
-  @observable opacity = defaultConfig.opacity;
-  @observable outlineColor = defaultConfig.outlineColor;
-  @observable hideOutline = defaultConfig.hideOutline;
-  @observable hoverOutlineColor = defaultConfig.hoverOutlineColor;
-  @observable outlineStrokeDashArray = defaultConfig.outlineStrokeDashArray;
-  @observable hoverOutlineStrokeDashArray = defaultConfig.hoverOutlineStrokeDashArray;
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
