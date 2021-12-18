@@ -29,7 +29,7 @@ class AutoLayout {
       return this.layout(data, path);
     };
   }
-  // 1) 将所有节点和连线的坐标删除。节点上的文本改成偏移量。
+  // 1) 将所有节点和边的坐标删除。节点上的文本改成偏移量。
   // 2) 找到长度最长的路径，作为基准路径。
   // 3) 依次计算
   // 拿到最长的路径。
@@ -91,9 +91,9 @@ class AutoLayout {
           this.addLevelHeight(xLevel, 1);
           this.setNodePosition(nextInfo.nodeId, nodeMap, newGraphData, xLevel + 1, nextYLevel + 1);
         } else {
-          // todo: 如果下一个节点是已经定位的，则需要考虑连线的规避
+          // todo: 如果下一个节点是已经定位的，则需要考虑边的规避
         }
-        // 设置连接到下一个节点的连线
+        // 设置连接到下一个节点的边
         // 1) 起始位置为source节点的下方，结束位置为target节点左边。
         // 2) 计算折线
         newGraphData.edges.push({
@@ -110,8 +110,8 @@ class AutoLayout {
     return nodeData;
   }
   /**
-   * 1. 处理连线上的文本
-   * 2. 主干节点之间直接的连线
+   * 1. 处理边上的文本
+   * 2. 主干节点之间直接的边
    * 3. 一个节点被多个连接作为目标节点，合理分配锚点位置。
    */
   private getEdgeDataPoints(sourceNodeId, targetNodeId) {
@@ -150,7 +150,7 @@ class AutoLayout {
     };
   }
   /**
-   * 获取连线的连接节点相对位置。
+   * 获取边的连接节点相对位置。
    * source一定在target左边。
    * 1. 如果source和target在同一x, y坐标内容。
    * 2. 如果source在target左上方。
@@ -170,7 +170,7 @@ class AutoLayout {
     return postionType;
   }
   /**
-   * 获取连线节点图形的宽高。
+   * 获取边节点图形的宽高。
    */
   private getShape(nodeId) {
     const nodeModel = this.lf.getNodeModelById(nodeId);

@@ -136,7 +136,7 @@ lf.render({
 
 ### 附加属性
 
-我们可以通过附加属性为节点设置锚点的数量和位置、连线时的校验规则、特有的菜单选项。
+我们可以通过附加属性为节点设置锚点的数量和位置、边时的校验规则、特有的菜单选项。
 
 #### 设置锚点的数量和位置
 
@@ -186,14 +186,14 @@ lf.render({
 
 在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
 
-#### 设置连线时的校验规则
+#### 设置边时的校验规则
 
-在某些时候，我们可能需要控制连线的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等，要想达到这种效果，我们需要为节点设置以下两个属性。
+在某些时候，我们可能需要控制边的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等，要想达到这种效果，我们需要为节点设置以下两个属性。
 
-- `sourceRules` - 当节点作为连线的起始节点（source）时的校验规则
-- `targetRules` - 当节点作为连线的目标节点（target）时的校验规则
+- `sourceRules` - 当节点作为边的起始节点（source）时的校验规则
+- `targetRules` - 当节点作为边的目标节点（target）时的校验规则
 
-以正方形（square）为例，在连线时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`添加作为`source`节点的校验规则。
+以正方形（square）为例，在边时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`添加作为`source`节点的校验规则。
 
 ```ts
 import { RectNode, RectNodeModel } from '@logicflow/core';
@@ -243,11 +243,11 @@ lf.render({
 
 在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
 
-`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`方法有两个参数，分别为连线的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
+`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`方法有两个参数，分别为边的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
 
-> 当我们在面板上进行连线操作的时候，Logic Flow 会校验每一条规则，只有**全部**通过后才能连接。
+> 当我们在面板上进行边操作的时候，Logic Flow 会校验每一条规则，只有**全部**通过后才能连接。
 
-在连线时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
+在边时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
 
 ```js
 lf.on('connection:not-allowed', (msg) => {
@@ -283,7 +283,7 @@ class Model extends BaseNodeModel {
 
 #### 定义节点id生成规则
 
-默认情况下，初始化节点(连线)的时候，如果不传入节点(连线)id, logicflow内部会自动使用`uuidv4`生成节点(连线)的id. logicflow提供了自定义id生成规则的方式。
+默认情况下，初始化节点(边)的时候，如果不传入节点(边)id, logicflow内部会自动使用`uuidv4`生成节点(边)的id. logicflow提供了自定义id生成规则的方式。
 
 方式1： 重写createId方法
 ```ts
@@ -359,7 +359,7 @@ lf.register({
 ### graphModel
 
 graphModel表示整个流程图对应的Model, 里面记录图的常用操作方法和数据[API](/api/graphModel.html)。
-在自定义节点Model中，可以使用`this.graphModel`访问。例如在自定义连线的时候
+在自定义节点Model中，可以使用`this.graphModel`访问。例如在自定义边的时候
 
 ## 自定义节点的 View
 

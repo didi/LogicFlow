@@ -119,7 +119,7 @@ const Snapshot = {
     if (childLength) {
       for (let i = 0; i < childLength; i++) {
         const lfLayer = graph.childNodes[i] as SVGGraphicsElement;
-        // 只保留包含节点和连线的基础图层进行下载，其他图层删除
+        // 只保留包含节点和边的基础图层进行下载，其他图层删除
         const layerClassList = lfLayer.classList && Array.from(lfLayer.classList);
         if (layerClassList && layerClassList.indexOf('lf-base') < 0) {
           graph.removeChild(graph.childNodes[i]);

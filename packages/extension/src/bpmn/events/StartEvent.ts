@@ -24,7 +24,7 @@ class StartEventModel extends CircleNodeModel {
   getConnectedTargetRules() {
     const rules = super.getConnectedTargetRules();
     const notAsTarget = {
-      message: '起始节点不能作为连线的终点',
+      message: '起始节点不能作为边的终点',
       validate: () => false,
     };
     rules.push(notAsTarget);

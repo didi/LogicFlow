@@ -221,7 +221,7 @@ export default class BaseEdge extends Component<IProps> {
     });
     if (isDoubleClick) {
       const { editConfigModel, textEditElement } = graphModel;
-      // 当前连线正在编辑，需要先重置状态才能变更文本框位置
+      // 当前边正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === model.id) {
         graphModel.setElementStateById(model.id, ElementState.DEFAULT);
       }

@@ -19,11 +19,11 @@ export interface EditConfigInterface {
    */
   stopMoveGraph?: boolean;
   /**
-   * 允许调整连线
+   * 允许调整边
    */
   adjustEdge?: boolean;
   /**
-   * 允许调整连线起点和终点
+   * 允许调整边起点和终点
    */
   adjustEdgeStartAndEnd?: boolean;
   /**
@@ -43,7 +43,7 @@ export interface EditConfigInterface {
    */
   nodeSelectedOutline?: boolean;
   /**
-   * 连线被选中时是否显示outline
+   * 边被选中时是否显示outline
    */
   edgeSelectedOutline?: boolean;
   /**
@@ -51,7 +51,7 @@ export interface EditConfigInterface {
    */
   nodeTextEdit?: boolean;
   /**
-   * 允许连线文本可以编辑
+   * 允许边文本可以编辑
    */
   edgeTextEdit?: boolean;
   /**
@@ -63,7 +63,7 @@ export interface EditConfigInterface {
    */
   nodeTextDraggable?: boolean;
   /**
-   * 允许连线文本可以拖拽
+   * 允许边文本可以拖拽
    */
   edgeTextDraggable?: boolean;
   /**

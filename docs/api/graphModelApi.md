@@ -32,7 +32,7 @@ LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是
 
 `属性`, `只读`
 
-画布所有连线构成的map
+画布所有边构成的map
 
 ## editConfigModel
 
@@ -140,11 +140,11 @@ lf.on('user:detail', (res) => {})
 |名称|类型|默认值|说明|
 |-|-|-|-|
 |domOverlayPosition|Position|无| HTML层坐标，一般控制组件的位置时使用此坐标 |
-|canvasOverlayPosition|Position|无| Canvas层坐标，一般节点、连线的坐标是这一层的坐标 |
+|canvasOverlayPosition|Position|无| Canvas层坐标，一般节点、边的坐标是这一层的坐标 |
 
 为什么要这个方法，为什么鼠标点击的同一个位置会产生两个不同的坐标？
 
-因为画布存在缩放和平移。当移动了画布，在视觉上看起来，画布上的元素位置变了，但是在数据层面，画布上的节点和连线位置是没有变化的。反过来举个例子：在一个宽高为1000px * 1000px的画布中间有一个节点，这个节点的位置很可能是`{x: -999,y: -999}`, 因为平移过来的。但是当双击这个节点，我们需要在节点位置显示一个文本输入框的时候，因为输入框是在`domOverlay`层，这一层不像`CanvasOverlay`一样有缩放和平移，其宽高和画布宽高一致。所以这个文本输入框坐标应该是`{x: 500, y: 500}`。
+因为画布存在缩放和平移。当移动了画布，在视觉上看起来，画布上的元素位置变了，但是在数据层面，画布上的节点和边位置是没有变化的。反过来举个例子：在一个宽高为1000px * 1000px的画布中间有一个节点，这个节点的位置很可能是`{x: -999,y: -999}`, 因为平移过来的。但是当双击这个节点，我们需要在节点位置显示一个文本输入框的时候，因为输入框是在`domOverlay`层，这一层不像`CanvasOverlay`一样有缩放和平移，其宽高和画布宽高一致。所以这个文本输入框坐标应该是`{x: 500, y: 500}`。
 
 我们再来看为什么要这个方法？
 
@@ -162,7 +162,7 @@ lf.on('user:detail', (res) => {})
 |element|NodeModel或EdgeModel|无| 元素的model |
 |lt|PointTuple|无| 左上角点 |
 |rb|PointTuple|无| 右下角点 |
-|wholeEdge|boolean|true| 连线是否要所有的节点都在区域内 |
+|wholeEdge|boolean|true| 边是否要所有的节点都在区域内 |
 
 返回值
 
@@ -227,12 +227,12 @@ type EdgeConfig = {
 
 `方法`
 
-获取连线的Model
+获取边的Model
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|edgeId|string|无| 连线Id |
+|edgeId|string|无| 边Id |
 
 返回值
 
@@ -242,12 +242,12 @@ type EdgeConfig = {
 
 `方法`
 
-获取节点或者连线的Model
+获取节点或者边的Model
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|id|string|无| 连线Id或者节点Id |
+|id|string|无| 边Id或者节点Id |
 
 返回值
 
@@ -257,7 +257,7 @@ type EdgeConfig = {
 
 `方法`
 
-获取指定节点上所有的连线
+获取指定节点上所有的边
 
 入参:
 |名称|类型|默认值|说明|
@@ -302,12 +302,12 @@ type EdgeConfig = {
 
 `方法`
 
-将指定节点或者连线放置在前面
+将指定节点或者边放置在前面
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点id或连线id |
+| id | string | 无 | 节点id或边id |
 
 ## deleteNode
 
@@ -363,30 +363,30 @@ type EdgeConfig = {
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点id或者连线id |
+| id | string | 无 | 节点id或者边id |
 
 
 ## addEdge
 
 `方法`
 
-添加连线
+添加边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| edgeConfig | EdgeConfig | 无 | 连线配置 |
+| edgeConfig | EdgeConfig | 无 | 边配置 |
 ## moveEdge
 
 `方法`
 
-移动连线
+移动边
 
 入参:
 
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| edgeId | string | 无 | 连线id |
+| edgeId | string | 无 | 边id |
 | deltaX | number | 无 | 移动x轴距离 |
 | deltaY | number | 无 | 移动y轴距离 |
 
@@ -394,7 +394,7 @@ type EdgeConfig = {
 
 `方法`
 
-删除连线
+删除边
 
 入参:
 
@@ -407,34 +407,34 @@ type EdgeConfig = {
 
 `方法`
 
-基于Id删除连线
+基于Id删除边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线id |
+| id | string | 无 | 边id |
 
 ## removeEdgeBySource
 
 `方法`
 
-删除指定节点为起点的所有连线
+删除指定节点为起点的所有边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线起点id |
+| id | string | 无 | 边起点id |
 
 ## removeEdgeByTarget
 
 `方法`
 
-删除指定节点为目标点的所有连线
+删除指定节点为目标点的所有边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线目的点id |
+| id | string | 无 | 边目的点id |
 
 ## setElementTextById(id: ElementModeId, value: string)
 
@@ -458,7 +458,7 @@ type EdgeConfig = {
 
 `方法`
 
-选中连线
+选中边
 
 入参:
 |名称|类型|默认值|说明|
@@ -469,12 +469,12 @@ type EdgeConfig = {
 
 `方法`
 
-选中节点和连线
+选中节点和边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点或连线id |
+| id | string | 无 | 节点或边id |
 | multiple | boolean | 无 | 是否多选 |
 
 ## clearSelectElements
@@ -525,13 +525,13 @@ type nodeId = string;
 
 `方法`
 
-修改默认连线的类型
+修改默认边的类型
 
 参数
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| type | string | true | 无 | 连线类型 |
+| type | string | true | 无 | 边类型 |
 
 ## changeNodeType
 
@@ -570,7 +570,7 @@ export enum ElementState {
   DEFAULT = 1, // 原始状态
   TEXT_EDIT = 2, // 编辑框显示
   SHOW_MENU = 3, // 菜单显示
-  ALLOW_CONNECT = 4, // 允许连线连接
-  NOT_ALLOW_CONNECT = 5, // 不允许连线连接
+  ALLOW_CONNECT = 4, // 允许边连接
+  NOT_ALLOW_CONNECT = 5, // 不允许边连接
 }
 ```

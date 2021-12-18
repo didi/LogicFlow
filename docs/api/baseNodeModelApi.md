@@ -16,13 +16,13 @@ LogicFlow的自定义节点是基于继承`model`和`view`来实现的，理论�
 
 `属性`
 
-作为连线目标节点时的校验规则
+作为边目标节点时的校验规则
 
 ## sourceRules
 
 `属性`
 
-作为连线起始节点时的校验规则
+作为边起始节点时的校验规则
 
 ## properties
 
@@ -158,7 +158,7 @@ class cNode extend BaseNodeModel {
 
 `方法`
 
-在连线的时候，是否允许这个节点为source节点，连线到target节点。
+在边的时候，是否允许这个节点为source节点，边到target节点。
 
 ```ts
 class cNode extend BaseNodeModel {
@@ -187,7 +187,7 @@ class cNode extend BaseNodeModel {
 
 `方法`
 
-在连线的时候，是否允许这个节点未target节点
+在边的时候，是否允许这个节点未target节点
 
 ## getConnectedTargetRules
 

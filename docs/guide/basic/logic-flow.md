@@ -47,7 +47,7 @@ LogicFlow 所提供的方法一般可以分为三类。
 
 - 图方法
 - 节点方法
-- 连线方法
+- 边方法
 
 ### 图方法
 
@@ -85,16 +85,16 @@ lf.getNodeModelById(nodeId)
 
 ```
 
-### 连线方法
+### 边方法
 
 ```js
 // 创建边
 lf.addEdge(edgeConfig)
 
-// 根据连线Id来删除边
+// 根据边Id来删除边
 lf.deleteEdge(edgeId)
 
-// 根据连线两端节点的Id来删除边
+// 根据边两端节点的Id来删除边
 lf.removeEdge(sourceNodeId, targetNodeId)
 
 // 获取边的model数据

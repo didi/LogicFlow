@@ -96,7 +96,7 @@
     <button onClick="setProperties()">设置属性</button>
     <button onClick="setZoom()">设置大小</button>
     <button onClick="selectElement()">选中指定节点</button>
-    <button onClick="triggerLine()">触发连线</button>
+    <button onClick="triggerLine()">触发边</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -413,7 +413,7 @@
           model: CombineModel,
         });
 
-        // 注册自定义连线
+        // 注册自定义边
         lf.register({
           type: 'connection',
           view: Connection,

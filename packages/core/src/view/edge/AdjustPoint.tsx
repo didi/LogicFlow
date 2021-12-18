@@ -122,9 +122,9 @@ export default class AdjustPoint extends Component<IProps, IState> {
     const { nodes } = graphModel;
     const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
-    // 没有draging就结束连线
+    // 没有draging就结束边
     if (!draging) return;
-    // 如果找到目标节点，删除老连线，创建新连线
+    // 如果找到目标节点，删除老边，创建新边
     if (info && info.node) {
       const edgeData = edgeModel.getData();
       let createEdgeInfo = {
@@ -133,7 +133,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
         targetAnchorId: '',
         text: edgeData?.text?.value || '',
       };
-      // 根据调整点是连线的起点或重点，计算创建连线需要的参数
+      // 根据调整点是边的起点或重点，计算创建边需要的参数
       if (type === AdjustType.SOURCE) {
         createEdgeInfo = {
           ...createEdgeInfo,
@@ -153,10 +153,10 @@ export default class AdjustPoint extends Component<IProps, IState> {
           endPoint: { x: info.anchor.x, y: info.anchor.y },
         };
       }
-      // 为了保证id不变必须要先删除老连线，再创建新连线，创建新连线是会判断是否有重复的id
-      // 删除老连线
+      // 为了保证id不变必须要先删除老边，再创建新边，创建新边是会判断是否有重复的id
+      // 删除老边
       graphModel.removeEdgeById(edgeModel.id);
-      // 创建新连线
+      // 创建新边
       const edge = graphModel.addEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件
       graphModel.eventCenter.emit(
@@ -164,11 +164,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
         { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } },
       );
     } else {
-      // 如果没有找到目标节点，还原连线
+      // 如果没有找到目标节点，还原边
       this.recoveryEdge();
     }
   };
-  // 还原连线
+  // 还原边
   recoveryEdge = () => {
     const { edgeModel } = this.props;
     const { startPoint, endPoint, pointsList } = this.oldEdge;

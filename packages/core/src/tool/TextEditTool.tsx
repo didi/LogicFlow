@@ -72,9 +72,9 @@ export default class TextEdit extends Component<IProps, IState> {
     let { textEditElement } = graphModel;
     let autoStyle;
     if (textEditElement) {
-      // 由于连线上的文本是依据显示的时候动态计算出来的
-      // 所以不能在连线创建的时候就初始化文本位置。
-      // 而是在连线上新建文本的时候创建。
+      // 由于边上的文本是依据显示的时候动态计算出来的
+      // 所以不能在边创建的时候就初始化文本位置。
+      // 而是在边上新建文本的时候创建。
       if (!textEditElement.text?.value) {
         if (textEditElement.BaseType === ElementType.EDGE) {
           textEditElement = textEditElement as BaseEdgeModel;
@@ -87,14 +87,14 @@ export default class TextEdit extends Component<IProps, IState> {
           textEditElement = textEditElement as BaseNodeModel;
         }
       }
-      // 自动换行节点连线通用样式
+      // 自动换行节点边通用样式
       const commonAutoStyle = {
         resize: 'auto',
         whiteSpace: 'normal',
         wordBreak: 'break-all',
       };
       if (textEditElement.BaseType === ElementType.EDGE) {
-        // 如果连线文案自动换行, 设置编辑框宽度
+        // 如果边文案自动换行, 设置编辑框宽度
         const { edgeText: { overflowMode, lineHeight, wrapPadding, textWidth } } = theme;
         if (textWidth && overflowMode === 'autoWrap') {
           autoStyle = {

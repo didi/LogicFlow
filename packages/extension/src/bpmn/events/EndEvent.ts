@@ -22,7 +22,7 @@ class EndEventModel extends CircleNodeModel {
   getConnectedSourceRules() {
     const rules = super.getConnectedSourceRules();
     const notAsSource = {
-      message: '结束节点不能作为连线的起点',
+      message: '结束节点不能作为边的起点',
       validate: () => false,
     };
     rules.push(notAsSource);

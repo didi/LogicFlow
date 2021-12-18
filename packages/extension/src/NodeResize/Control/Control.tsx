@@ -154,7 +154,7 @@ class Control extends Component<IProps> {
       beforeNode,
       afterNode,
     };
-    // 更新连线
+    // 更新边
     let afterPoint;
     edges.sourceEdges.forEach(item => {
       params.point = item.startPoint;
@@ -223,7 +223,7 @@ class Control extends Component<IProps> {
       beforeNode,
       afterNode,
     };
-    // 更新连线
+    // 更新边
     let afterPoint;
     edges.sourceEdges.forEach(item => {
       params.point = item.startPoint;
@@ -291,7 +291,7 @@ class Control extends Component<IProps> {
       beforeNode,
       afterNode,
     };
-    // 更新连线
+    // 更新边
     let afterPoint;
     const edges = this.getNodeEdges(id);
     edges.sourceEdges.forEach(item => {

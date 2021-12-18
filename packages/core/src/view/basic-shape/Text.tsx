@@ -32,7 +32,7 @@ export default function Text(props) {
     const rows = String(value).split(/[\r\n]/g);
     const rowsLength = rows.length;
     if (overflowMode !== 'default') {
-      // 非文本节点设置了自动换行，或连线设置了自动换行并且设置了textWidth
+      // 非文本节点设置了自动换行，或边设置了自动换行并且设置了textWidth
       const { BaseType, modelType } = model;
       if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE)
       || (BaseType === ElementType.EDGE && textWidth)) {

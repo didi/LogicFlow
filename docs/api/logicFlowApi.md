@@ -29,14 +29,14 @@ const lf = new LogicFlow(config: Object)
 |stopZoomGraph|boolean|- |false|禁止缩放画布|
 |stopScrollGraph|boolean|- |false|禁止鼠标滚动移动画布|
 |stopMoveGraph|boolean|- |false|禁止拖动画布|
-|adjustEdge|boolean|- |true|允许调整连线|
+|adjustEdge|boolean|- |true|允许调整边|
 |adjustNodePosition|boolean|- |true|允许拖动节点|
 |hideAnchors|boolean|- |false|隐藏节点所有锚点|
 |hoverOutline|boolean|- |false|鼠标hover的时候显示节点的外框|
 |nodeTextEdit|boolean|- |true|允许节点文本可以编辑|
-|edgeTextEdit|boolean|- |true|允许连线文本可以编辑|
+|edgeTextEdit|boolean|- |true|允许边文本可以编辑|
 |nodeTextDraggable|boolean| - |false|允许节点文本可以拖拽|
-|edgeTextDraggable|boolean| - |false|允许连线文本可以拖拽|
+|edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
 |metaKeyMultipleSelected|boolean| - |false|允许按照meta键多选元素|
 
 ### `background`
@@ -181,7 +181,7 @@ lf.deleteNode('id');
 
 ## addEdge
 
-创建连接两个节点的连线
+创建连接两个节点的边
 
 ```js
 addEdge(edgeConfig: EdgeConifg): void
@@ -191,13 +191,13 @@ addEdge(edgeConfig: EdgeConifg): void
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- |:- | :- |
-| id | String | | - | 连线的id |
-| type | String | | - | 连线的类型 |
-| sourceNodeId | String | ✅ | - | 连线起始节点的id |
-| targetNodeId | String | ✅ | - | 连线终止节点的id |
-| startPoint | Object | | - | 连线起点坐标 |
-| endPoint | Object | | - | 连线终端坐标 |
-| text | String | | - | 连线文案 |
+| id | String | | - | 边的id |
+| type | String | | - | 边的类型 |
+| sourceNodeId | String | ✅ | - | 边起始节点的id |
+| targetNodeId | String | ✅ | - | 边终止节点的id |
+| startPoint | Object | | - | 边起点坐标 |
+| endPoint | Object | | - | 边终端坐标 |
+| text | String | | - | 边文案 |
 
 示例：
 
@@ -213,13 +213,13 @@ lf.addEdge({
     x: 33,
     y: 44,
   }
-  text: '连线文案',
+  text: '边文案',
 });
 ```
 
 ## removeEdge
 
-基于连线的起终点删除连线
+基于边的起终点删除边
 
 ```js
 removeEdge(config: EdgeFilter): void
@@ -229,8 +229,8 @@ removeEdge(config: EdgeFilter): void
 
 | 名称 | 类型 | 必传 |默认值 | 描述 |
 | :- | :- | :- |:- | :- |
-| sourceNodeId | String | | - | 连线起始节点的id |
-| targetNodeId | String | | - | 连线终止节点的id |
+| sourceNodeId | String | | - | 边起始节点的id |
+| targetNodeId | String | | - | 边终止节点的id |
 
 示例：
 
@@ -252,7 +252,7 @@ on(evt: string, callback: Function): this
   e, // 鼠标的原生事件对象 <MouseEvent>
   data?, // 元素的通用属性
   position?, // 鼠标在画布中的触发点坐标 { x, y }
-  msg?, // 连线的校验信息
+  msg?, // 边的校验信息
 }
 ```
 
@@ -691,7 +691,7 @@ lf.getGraphRawData()
 
 ## setProperties
 
-设置节点或者连线的自定义属性
+设置节点或者边的自定义属性
 
 ```ts
 setProperties(id: string, properties: Object): void
@@ -707,7 +707,7 @@ lf.setProperties('aF2Md2P23moN2gasd', {
 
 ## getProperties
 
-获取节点或者连线的自定义属性
+获取节点或者边的自定义属性
 
 ```ts
 getProperties(id: string): Object
@@ -732,7 +732,7 @@ lf.changeNodeId('oldId', 'newId')
 
 ## changeEdgeId
 
-修改连线的id， 如果不传新的id，会内部自动创建一个。
+修改边的id， 如果不传新的id，会内部自动创建一个。
 
 示例：
 
@@ -742,7 +742,7 @@ lf.changeEdgeId('oldId', 'newId')
 
 ## updateText
 
-更新节点或者连线的文案
+更新节点或者边的文案
 
 ```ts
 updateText(id: string, value: string): void
@@ -750,7 +750,7 @@ updateText(id: string, value: string): void
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| id | String | ✅ |  | 节点或者连线id |
+| id | String | ✅ |  | 节点或者边id |
 | value | String | ✅ |  | 更新后的文本值 |
 
 
@@ -791,7 +791,7 @@ getSelectElements(isIgnoreCheck: boolean): GraphConfigData
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的连线, 默认包括。 |
+| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的边, 默认包括。 |
 
 
 ```js
@@ -816,7 +816,7 @@ lf.select(id)
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| id | string | ✅ |  | 需选中(节点或者连线)id |
+| id | string | ✅ |  | 需选中(节点或者边)id |
 
 ## changeNodeType
 

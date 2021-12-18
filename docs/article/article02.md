@@ -48,7 +48,7 @@
 
 如果我们只提供表示这图编辑部分的`@logicflow/core`，那么意味 LogicFlow 就是一个半成品，既不利于推广，也不利于上手使用。所以我们将 LogicFlow 将非核心功能例如菜单、工具栏等组件; 各类特色形态节点; 一些常见的流程实际应用场景等都采用插件的方式实现放到了`@logicflow/extension`包中。其中就有 bpmn-js 插件，这里我大致介绍一下 LogicFlow 是如何如何利用插件机制，去实现兼容 bpmn-js 的插件。
 
-1. 首先是 bpmn-js 中的各种节点和连线，比如用户节点(userTask)、判断节点(gateWay)、顺序流(sequenceFlow)等，我们利用 LogicFlow 自定义节点和自定义连线机制, 将所有的 bpmn-js 需要的基础图形封装成 BpmnElement 插件。
+1. 首先是 bpmn-js 中的各种节点和边，比如用户节点(userTask)、判断节点(gateWay)、顺序流(sequenceFlow)等，我们利用 LogicFlow 自定义节点和自定义边机制, 将所有的 bpmn-js 需要的基础图形封装成 BpmnElement 插件。
 2. LogicFlow 默认生成的数据格式是节点和边组成的 json, 而 bpmn-js 需要生成的数据格式是满足 bpmn 2.0 标准的xml。所以我们提供了一个 BpmnAdapter，在数据输入到 LogicFlow 的时候将 bpmn xml 转换为 LogicFlow Data, 在输出的时候又将 LogicFlow Data 转换为 bpmn xml.
 3. 最后我们再把流程图绘制过程中需要用到的菜单、画板、快捷工具等利用 LogicFlow 的自定义组件功能，封装成 Bpmn Component 组件。
 4. 将上面的三个插件，一起封装为 Bpmn 插件。
@@ -74,7 +74,7 @@ LogicFlow.use(Bpmn);
 
 为了提高易用性，在节点方面，LogicFlow 内置了基础节点，然后在`@logicflow/extension`中也实现了一些特殊节点。开发者在实际使用中，可以基于这些基础节点和特殊节点进行自定义满足其业务需求的节点。
 
-1. 基础节点: 在`@logicflow/core`内部有一个 BaseNode 抽象类，这个类中实现了流程图中节点所需的绝大部分逻辑，例如节点拖动、点击等事件处理和连线处理等。同时也有获取节点外观属性、获取节点基础属性、获取节点配置自定义属性等可以被子类重写的方法。
+1. 基础节点: 在`@logicflow/core`内部有一个 BaseNode 抽象类，这个类中实现了流程图中节点所需的绝大部分逻辑，例如节点拖动、点击等事件处理和边处理等。同时也有获取节点外观属性、获取节点基础属性、获取节点配置自定义属性等可以被子类重写的方法。
 2. 内置节点：BaseNode 是抽象类，为了易用性，我们在 LogicFlow 中还内置了一些基础图形的节点。比如矩形（RectNode）、圆形(CircleNode)、菱形(DiamondNode)和多边形(PolygonNode)。
 3. 扩展节点：为了让开发者在使用的减少接入成本，LogicFlow 除了在核心包中提供了内置节点给与开发继承自定义外，还在扩展包`@logicflow/extension`中提供了更多的节点。例如圆柱体(CylinderNode)、带有图标的矩形(RectIconNode)等。
 4. 自定义节点：开发者可以在自己的项目中基于 LogicFlow 中的任何一种节点(包括`@logicflow/extension`中的节点)，采用继承重写对应的方法，实现自己业务需求的节点。同样，开发者自己自定义的节点也可以成为插件，开源到社区中。后续我们会增加 LogicFlow 的插件市场，到时大家可以自由选择自己项目所需的节点。
@@ -83,9 +83,9 @@ LogicFlow.use(Bpmn);
 
 ### 自定义节点规则
 
-在某些时候，我们可能需要控制连线的连接方式，比如 A 节点不能作为连线的起点、B 节点不能作为连线的终点、C 节点后面必须是 A 节点等等。LogicFlow 提供了自定义节点规则功能来实现这个需求。
+在某些时候，我们可能需要控制边的连接方式，比如 A 节点不能作为边的起点、B 节点不能作为边的终点、C 节点后面必须是 A 节点等等。LogicFlow 提供了自定义节点规则功能来实现这个需求。
 
-LogicFlow 内部有`getConnectedSourceRules`和`getConnectedTargetRules`两个公共方法，分别返回当前节点作为连线开始点和作为连接目标点时的校验规则。当在面板上进行连线操作的时候，会判断所有的规则是否通过，只有通过了才能连接。
+LogicFlow 内部有`getConnectedSourceRules`和`getConnectedTargetRules`两个公共方法，分别返回当前节点作为边开始点和作为连接目标点时的校验规则。当在面板上进行边操作的时候，会判断所有的规则是否通过，只有通过了才能连接。
 
 ```javascript
 class CnodeModel extends RectModel {
@@ -111,9 +111,9 @@ class CnodeModel extends RectModel {
 }
 ```
 
-### 自定义连线
+### 自定义边
 
-自定义连线方案和自定义节点基本一致，由基础连线实现线的绝大部分逻辑，然后在内置连线中实现连线的特殊交互处理，最后再由开发者基于内置连线进行自定义开发。当然，由于绝大多数图编辑上线的表现形式都只有直线、折线和曲线三种形式，所以一般开发者自定义连线都是改变一下样式（颜色、虚线）和名字（如Bpmn中连线叫做`bpmn:sequenceFlow`）。
+自定义边方案和自定义节点基本一致，由基础边实现线的绝大部分逻辑，然后在内置边中实现边的特殊交互处理，最后再由开发者基于内置边进行自定义开发。当然，由于绝大多数图编辑上线的表现形式都只有直线、折线和曲线三种形式，所以一般开发者自定义边都是改变一下样式（颜色、虚线）和名字（如Bpmn中边叫做`bpmn:sequenceFlow`）。
 
 ![LogicFlow4](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b5372a58e5ca4a8fb966736d43882f9a~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -151,7 +151,7 @@ lf.register({
 
 ### 自定义组件
 
-在 LogicFlow 中，除了节点和连线这种由 svg 渲染的图形外，还存在着一些用于图编辑过程中进行控制的组件，这些组件 LogicFlow 是通过 html 来实现的（比如菜单、控制面板等）。LogicFlow 开放了在图上插入 DOM 的能力，开发者就可以基于这个能力来实现自定义组件。
+在 LogicFlow 中，除了节点和边这种由 svg 渲染的图形外，还存在着一些用于图编辑过程中进行控制的组件，这些组件 LogicFlow 是通过 html 来实现的（比如菜单、控制面板等）。LogicFlow 开放了在图上插入 DOM 的能力，开发者就可以基于这个能力来实现自定义组件。
 
 有了在图上自由插件 DOM 的能力，我们就可以做很多事情了，比如可以实现一个自由调整节点颜色、字体大小的工具。这个工具的开发就只需要按照我们正常前端开发即可。然后在监听到用户选中节点后，将这个 DOM 插入到节点对应的位置旁边。
 
@@ -167,7 +167,7 @@ lf.setTheme({
 })
 ```
 
-主题除了可以设置节点和连线的外观以外，还可以设置内部功能的样式，比如文本、对齐线等。
+主题除了可以设置节点和边的外观以外，还可以设置内部功能的样式，比如文本、对齐线等。
 
 ## 最后
 

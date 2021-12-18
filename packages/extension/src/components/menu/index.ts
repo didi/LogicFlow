@@ -149,10 +149,10 @@ class Menu {
       const model = this.lf.graphModel.getEdgeModelById(id);
       let menuList = [];
       const typeMenus = this.menuTypeMap.get(model.type);
-      // 如果单个节点自定义了连线
+      // 如果单个节点自定义了边
       if (model && model.menu && Array.isArray(model.menu)) {
         menuList = model.menu;
-      } else if (typeMenus) { // 如果定义当前连线类型的元素
+      } else if (typeMenus) { // 如果定义当前边类型的元素
         menuList = typeMenus;
       } else { // 最后取全局默认
         menuList = this.menuTypeMap.get(DefalutEdgeMenuKey);

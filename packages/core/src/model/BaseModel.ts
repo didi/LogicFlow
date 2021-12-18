@@ -4,7 +4,7 @@ import { TextConfig, AdditionData, Point } from '../type';
 
 interface IBaseModel {
   /**
-   * 节点或者连线的id.
+   * 节点或者边的id.
    * 默认情况下，使用uuidv4生成。
    * 如果想要自定义，可以重写createId生成。
    */
@@ -37,8 +37,8 @@ interface IBaseModel {
    * DEFAULT = 1 默认显示
    * TEXT_EDIT = 2 此元素正在进行文本编辑
    * SHOW_MENU = 3, 显示菜单，废弃请使用菜单插件
-   * ALLOW_CONNECT = 4, 此元素允许作为当前连线的目标节点
-   * NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前连线的目标节点
+   * ALLOW_CONNECT = 4, 此元素允许作为当前边的目标节点
+   * NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前边的目标节点
    */
   state: ElementState;
   /*
@@ -49,10 +49,10 @@ interface IBaseModel {
   /**
    * 元素上的文本
    * logicflow中存在两种文本
-   * 一种是脱离连线和节点单独存在的文本
-   * 一种是必须和连线、节点关联的文本。
+   * 一种是脱离边和节点单独存在的文本
+   * 一种是必须和边、节点关联的文本。
    * 此属性控制的是第二种。
-   * 节点和连线删除、调整的时候，其关联的文本也会对应删除、调整。
+   * 节点和边删除、调整的时候，其关联的文本也会对应删除、调整。
    */
   text: TextConfig;
   /**
@@ -60,7 +60,7 @@ interface IBaseModel {
    */
   isSelected: boolean;
   /**
-   * 元素堆叠是层级，默认情况下节点zIndex值为1，连线zIndex为0。
+   * 元素堆叠是层级，默认情况下节点zIndex值为1，边zIndex为0。
    * todo：写完善
    */
   zIndex: number;

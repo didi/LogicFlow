@@ -141,7 +141,7 @@ class Anchor extends Component<IProps, IState> {
       endY: 0,
       draging: false,
     });
-    // 清除掉缓存结果 fix:#320 因为创建连线之后，会影响校验结果变化，所以需要重新校验
+    // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
   };
@@ -151,7 +151,7 @@ class Anchor extends Component<IProps, IState> {
       graphModel, nodeModel, x, y, id,
     } = this.props;
     // nodeModel.setSelected(false);
-    /* 创建连线 */
+    /* 创建边 */
     const { nodes, edgeType } = graphModel;
     const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
@@ -159,7 +159,7 @@ class Anchor extends Component<IProps, IState> {
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
     }
-    // 没有draging就结束连线
+    // 没有draging就结束边
     if (!draging) return;
     if (info && info.node) {
       const targetNode = info.node;

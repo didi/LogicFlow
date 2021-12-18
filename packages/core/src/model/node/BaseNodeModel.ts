@@ -244,7 +244,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   /**
-   * 在连线的时候，是否允许这个节点为source节点，连线到target节点。
+   * 在边的时候，是否允许这个节点为source节点，边到target节点。
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
@@ -278,7 +278,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return this.sourceRules;
   }
   /**
-   * 在连线的时候，是否允许这个节点未target节点
+   * 在边的时候，是否允许这个节点未target节点
    */
 
   isAllowConnectedAsTarget(

@@ -144,7 +144,7 @@ export type EdgeFilter = {
 export type EdgeConfig = {
   id?: string;
   /**
-   * 连线的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
+   * 边的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
    * LogicFlow内部默认为polyline
    */
   type?: string;
@@ -261,7 +261,7 @@ export type NodeTextStyle = TextStyle & {
 export type EdgeTextStyle = TextStyle & EdgeTextTheme;
 export type ArrowStyle = {
   offset?: number, // 箭头长度
-  verticalLength?: number, // 箭头垂直于连线的距离
+  verticalLength?: number, // 箭头垂直于边的距离
 };
 
 export type EdgeAdjustStyle = {

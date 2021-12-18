@@ -64,7 +64,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
    *   }
    * }
    *
-   * 注意：不能直接自定义节点的宽高，因为宽高控制着节点的锚点、外边框以及连线的计算。
+   * 注意：不能直接自定义节点的宽高，因为宽高控制着节点的锚点、外边框以及边的计算。
    * 如果想要自定义节点的宽高，请在自定义model中设置
    * @returns 自定义样式
    */
@@ -134,7 +134,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { hover } = anchor;
     return { ...anchor, ...hover };
   }
-  /* 锚点创建连线样式 */
+  /* 锚点创建边样式 */
   getNewEdgeStyle(): Record<string, any> {
     const { graphModel } = this.props;
     const { anchorLine } = graphModel.theme;

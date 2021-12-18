@@ -76,7 +76,7 @@ lf.setTheme(
     },
     arrow: {
       offset: 10, // 箭头长度
-      verticalLength: 3, // 箭头垂直于连线的距离
+      verticalLength: 3, // 箭头垂直于边的距离
       fill: 'none',
       stroke: 'green',
     },

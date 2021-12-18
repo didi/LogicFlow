@@ -209,7 +209,7 @@ export default class LogicFlow {
     );
   }
   /**
-   * 注册自定义节点和连线
+   * 注册自定义节点和边
    * 支持两种方式
    * 方式一（推荐）
    * 详情见 todo: docs link
@@ -471,7 +471,7 @@ export default class LogicFlow {
   }
   /**
    * 将图形定位到画布中心
-   * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是连线的id，也可以不传（兜底）
+   * @param focusOnArgs 支持用户传入图形当前的坐标或id，可以通过type来区分是节点还是边的id，也可以不传（兜底）
    */
   focusOn(focusOnArgs: FocusOnArgs): void {
     const { transformModel } = this.graphModel;
@@ -499,7 +499,7 @@ export default class LogicFlow {
     this.graphModel.setTheme(style);
   }
   /**
-   * 设置默认的连线类型
+   * 设置默认的边类型
    * @param type Options.EdgeType
    */
   setDefaultEdgeType(type: Options.EdgeType): void {
@@ -507,15 +507,15 @@ export default class LogicFlow {
     this.graphModel.setDefaultEdgeType(type);
   }
   /**
-   * 更新节点或连线文案
-   * @param id 节点或者连线id
+   * 更新节点或边文案
+   * @param id 节点或者边id
    * @param value 文案内容
    */
   updateText(id: string, value: string) {
     this.graphModel.setElementTextById(id, value);
   }
   /**
-   * 删除元素，在不确定当前id是节点还是连线时使用
+   * 删除元素，在不确定当前id是节点还是边时使用
    * @param id 元素id
    */
   deleteElement(id): boolean {
@@ -540,7 +540,7 @@ export default class LogicFlow {
     this.graphModel.changeNodeType(id, type);
   }
   /**
-   * 获取节点所有连线的model
+   * 获取节点所有边的model
    * @param nodeId 节点ID
    * @returns model数组
    */
@@ -576,7 +576,7 @@ export default class LogicFlow {
    * @param nodeId 节点id
    */
   editNodeText(nodeId: string): void {
-    this.graphModel.setTextEditable(nodeId);
+    this.graphModel.editNodeText(nodeId);
   }
   /**
    * 克隆节点
@@ -592,10 +592,10 @@ export default class LogicFlow {
     }
   }
 
-  // 连线操作----------------------------------------------
+  // 边操作----------------------------------------------
 
   /**
-   * 给两个节点之间添加一条连线
+   * 给两个节点之间添加一条边
    * @example
    * lf.addEdge({
    *   type: 'polygon'
@@ -626,8 +626,7 @@ export default class LogicFlow {
     return enabledDelete;
   }
   /**
-   * 删除指定类型的边
-   * todo: API一致
+   * 删除指定类型的边, 基于边起点和终点
    * @param config.sourceNodeId 边的起点节点ID
    * @param config.targetNodeId 边的终点节点ID
    */
@@ -722,7 +721,7 @@ export default class LogicFlow {
     return [];
   }
   /**
-   * 基于id获取连线数据
+   * 基于id获取边数据
    * @param edgeId 边Id
    * @returns EdgeData
    */
@@ -775,7 +774,7 @@ export default class LogicFlow {
     return this.graphModel.changeNodeId(oldId, newId);
   }
   /**
-   * 修改连线的id， 如果不传新的id，会内部自动创建一个。
+   * 修改边的id， 如果不传新的id，会内部自动创建一个。
    * @param { string } oldId 将要被修改的id
    * @param { string } newId 可选，修改后的id
    * @returns 修改后的节点id, 如果传入的oldId不存在，返回空字符串
@@ -813,17 +812,17 @@ export default class LogicFlow {
   }
   /**
    * 获取选中的元素数据
-   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的连线,默认包括。
-   * 注意：复制的时候不能包括此类连线, 因为复制的时候不允许悬空的连线。
+   * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
+   * 注意：复制的时候不能包括此类边, 因为复制的时候不允许悬空的边。
    */
   getSelectElements(isIgnoreCheck = true): GraphConfigData {
     return this.graphModel.getSelectElements(isIgnoreCheck);
   }
   /**
-   * 动态修改 id 对应元素 model 中的属性
+   * 修改对应元素 model 中的属性
    * 注意：此方法慎用，除非您对logicflow内部有足够的了解。
    * 大多数情况下，请使用setProperties、updateText、changeNodeId等方法。
-   * 例如直接使用此方法修改节点的id,那么就是会导致连接到此节点的连线的sourceNodeId出现找不到的情况。
+   * 例如直接使用此方法修改节点的id,那么就是会导致连接到此节点的边的sourceNodeId出现找不到的情况。
    * @param {string} id 元素id
    * @param {object} attributes 需要更新的属性
    */
@@ -837,14 +836,27 @@ export default class LogicFlow {
     this.graphModel.clearData();
   }
   /**
-   * 设置元素的层级高度，在元素重叠的时候大的在前面。
-   * @see todo link
+   * 将某个元素放置到顶部。
+   * 如果堆叠模式为默认模式，则将原置顶元素重新恢复原有层级。
+   * 如果堆叠模式为递增模式，则将需指定元素zIndex设置为当前最大zIndex + 1。
+   * @see todo link 堆叠模式
+   * @param id 元素Id
    */
-  setElementZIndex(id, zIndex: number | 'top' | 'bottom') {
+  toFront(id) {
+    this.graphModel.toFront(id);
+  }
+  /**
+   * 设置元素的zIndex.
+   * 注意：默认堆叠模式下，不建议使用此方法。
+   * @see todo link 堆叠模式
+   * @param id 元素id
+   * @param zIndex zIndex的值，可以传数字，也支持传入'top' 和 'bottom'
+   */
+  setElementZIndex(id: string, zIndex: number | 'top' | 'bottom') {
     return this.graphModel.setElementZIndex(id, zIndex);
   }
   /**
-   * 添加多个元素, 包括连线和节点。
+   * 添加多个元素, 包括边和节点。
    */
   addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
     const nodeIdMap = {};

@@ -27,7 +27,7 @@ export enum ModelType {
   BEZIER_EDGE = 'bezier-edge',
   GRAPH = 'graph',
 }
-// 区分节点还是连线
+// 区分节点还是边
 export enum ElementType {
   NODE = 'node',
   EDGE = 'edge',

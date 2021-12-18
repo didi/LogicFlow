@@ -126,7 +126,7 @@ export type NodeTextTheme = {
   background?: RectTheme;
 } & TextTheme;
 /**
- * 连线文本样式
+ * 边文本样式
  */
 export type EdgeTextTheme = {
   /**
@@ -188,7 +188,7 @@ export type ArrowTheme = {
    */
   offset?: number,
   /**
-   * 箭头垂直于连线的距离
+   * 箭头垂直于边的距离
    * 以符号"->"为例, verticalLength表示箭头大于号的高度
    */
   verticalLength?: number,
@@ -227,7 +227,7 @@ export type Theme = {
    */
   polygon?: PolygonTheme,
   /**
-   * 所有连线的通用主题设置
+   * 所有边的通用主题设置
    */
   baseEdge?: EdgeTheme,
   /**
@@ -255,15 +255,15 @@ export type Theme = {
    */
   nodeText?: NodeTextTheme,
   /**
-   * 连线文本样式
+   * 边文本样式
    */
   edgeText?: EdgeTextTheme,
   /**
-   * 连线上箭头的样式
+   * 边上箭头的样式
    */
   arrow?: ArrowTheme,
   /**
-   * 从锚点拉出的连线的样式
+   * 从锚点拉出的边的样式
    */
   anchorLine?: EdgeTheme,
   /**
@@ -271,9 +271,9 @@ export type Theme = {
    */
   snapline?: EdgeTheme,
   /**
-   * 当开启了跳转连线的起点和终点(adjustEdgeStartAndEnd:true)后
-   * 连线的两端会出现调整按钮
-   * 连线连段的调整点样式
+   * 当开启了跳转边的起点和终点(adjustEdgeStartAndEnd:true)后
+   * 边的两端会出现调整按钮
+   * 边连段的调整点样式
    */
   edgeAdjust?: CircleTheme,
   /**
@@ -352,7 +352,7 @@ export const defaultTheme: Theme = {
   },
   arrow: {
     offset: 10, // 箭头长度
-    verticalLength: 5, // 箭头垂直于连线的距离
+    verticalLength: 5, // 箭头垂直于边的距离
   },
   anchorLine: {
     stroke: '#000000',

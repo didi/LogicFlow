@@ -28,7 +28,7 @@ type NodeContaint = {
   anchor: AnchorConfig;
 };
 
-/* 手动连线时获取目标节点的信息：目标节点，目标节点的锚点index以及坐标 */
+/* 手动边时获取目标节点的信息：目标节点，目标节点的锚点index以及坐标 */
 export const targetNodeInfo = (position: Point, nodes:BaseNode[]): NodeContaint => {
   let nodeInfo;
   for (let i = nodes.length - 1; i >= 0; i--) {
@@ -53,7 +53,7 @@ type AnchorInfo = {
   index: number,
   anchor: Point,
 };
-/* 手动连线时获取目标节点上，距离目标位置最近的锚点 */
+/* 手动边时获取目标节点上，距离目标位置最近的锚点 */
 const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
   const anchors = getAnchors(node);
   let closest;
@@ -420,7 +420,7 @@ export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
 };
 
 /**
- * @description 格式化连线校验信息
+ * @description 格式化边校验信息
  */
 export const formateAnchorConnectValidateData = (data) => {
   if (typeof data !== 'object') {

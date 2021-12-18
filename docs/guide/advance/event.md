@@ -57,10 +57,10 @@ lf.on('element:type', (eventObject) => {});
 
 | 属性     | 类型       | 值                                                                                                  |
 | :------- | :--------- | :-------------------------------------------------------------------------------------------------- |
-| data     | Object     | 连线的[数据属性](/api/edgeApi.md#数据属性)                                                          |
+| data     | Object     | 边的[数据属性](/api/edgeApi.md#数据属性)                                                          |
 | e        | MouseEvent | 原生的鼠标事件对象                                                                                  |
 | position | Object     | 鼠标触发点在画布中的坐标（参照[getPointByClient](/api/logicFlowApi.html#getpointbyclient)的返回值） |
-| msg      | String     | 连线校验信息                                                                                        |
+| msg      | String     | 边校验信息                                                                                        |
 
 ## 画布事件
 

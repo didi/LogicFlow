@@ -56,7 +56,7 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   sourceAnchorId = defaultData.sourceAnchorId;
   targetAnchorId = defaultData.targetAnchorId;
-  customTextPosition = false; // 是否自定义连线文本位置
+  customTextPosition = false; // 是否自定义边文本位置
   @observable text = defaultData.text;
   @observable type = '';
   @observable properties = {};
@@ -71,7 +71,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable zIndex = defaultData.zIndex;
   @observable isSelected = defaultData.isSelected;
   @observable isHovered = defaultData.isHovered;
-  @observable isHitable = true; // 细粒度控制连线是否对用户操作进行反应
+  @observable isHitable = true; // 细粒度控制边是否对用户操作进行反应
   @observable points = defaultData.points;
   @observable pointsList = defaultData.pointsList;
   @observable draggable = true;
@@ -81,12 +81,12 @@ class BaseEdgeModel implements IBaseModel {
     this.setStyleFromTheme(type, graphModel);
     this.initEdgeData(data);
     this.setAttributes();
-    // 设置连线的 anchors，也就是连线的两个端点
+    // 设置边的 anchors，也就是边的两个端点
     // 端点依赖于 edgeData 的 sourceNode 和 targetNode
     this.setAnchors();
-    // 连线的拐点依赖于两个端点
+    // 边的拐点依赖于两个端点
     this.initPoints();
-    // 文本位置依赖于连线上的所有拐点
+    // 文本位置依赖于边上的所有拐点
     this.formatText(data);
   }
 
@@ -96,7 +96,7 @@ class BaseEdgeModel implements IBaseModel {
     }
 
     if (!data.id) {
-      // 自定义连线id > 全局定义连线id > 内置
+      // 自定义边id > 全局定义边id > 内置
       const { idGenerator } = this.graphModel;
       const globalId = idGenerator && idGenerator(data.type);
       if (globalId) data.id = globalId;
@@ -375,12 +375,12 @@ class BaseEdgeModel implements IBaseModel {
   updateAttributes(attributes) {
     assign(this, attributes);
   }
-  // 获取连线调整的起点
+  // 获取边调整的起点
   @action
   getAdjustStart() {
     return this.startPoint;
   }
-  // 获取连线调整的终点
+  // 获取边调整的终点
   @action
   getAdjustEnd() {
     return this.endPoint;
