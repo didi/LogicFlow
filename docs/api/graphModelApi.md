@@ -436,7 +436,7 @@ type EdgeConfig = {
 |-|-|-|-|
 | id | string | 无 | 边目的点id |
 
-## setElementTextById(id: ElementModeId, value: string)
+## updateText(id: ElementModeId, value: string)
 
 `方法`
 

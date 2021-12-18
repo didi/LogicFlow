@@ -155,7 +155,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       }
       // 为了保证id不变必须要先删除老边，再创建新边，创建新边是会判断是否有重复的id
       // 删除老边
-      graphModel.removeEdgeById(edgeModel.id);
+      graphModel.deleteEdgeById(edgeModel.id);
       // 创建新边
       const edge = graphModel.addEdge({ ...createEdgeInfo }) as BaseEdgeModel;
       // 向外抛出事件

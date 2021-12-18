@@ -499,7 +499,8 @@ export default class LogicFlow {
     this.graphModel.setTheme(style);
   }
   /**
-   * 设置默认的边类型
+   * 设置默认的边类型。
+   * 也就是设置在节点直接有用户手动绘制的连线类型。
    * @param type Options.EdgeType
    */
   setDefaultEdgeType(type: Options.EdgeType): void {
@@ -507,12 +508,12 @@ export default class LogicFlow {
     this.graphModel.setDefaultEdgeType(type);
   }
   /**
-   * 更新节点或边文案
+   * 更新节点或边的文案
    * @param id 节点或者边id
    * @param value 文案内容
    */
   updateText(id: string, value: string) {
-    this.graphModel.setElementTextById(id, value);
+    this.graphModel.updateText(id, value);
   }
   /**
    * 删除元素，在不确定当前id是节点还是边时使用
@@ -621,25 +622,25 @@ export default class LogicFlow {
     const enabledDelete = guards && guards.beforeDelete
       ? guards.beforeDelete(edgeData) : true;
     if (enabledDelete) {
-      this.graphModel.removeEdgeById(edgeId);
+      this.graphModel.deleteEdgeById(edgeId);
     }
     return enabledDelete;
   }
   /**
-   * 删除指定类型的边, 基于边起点和终点
+   * 删除指定类型的边, 基于边起点和终点，可以只传其一。
    * @param config.sourceNodeId 边的起点节点ID
    * @param config.targetNodeId 边的终点节点ID
    */
-  removeEdge(config: { sourceNodeId: string, targetNodeId: string }): void {
+  deleteEdgeByNodeId(config: { sourceNodeId?: string, targetNodeId?: string }): void {
     const {
       sourceNodeId, targetNodeId,
     } = config;
     if (sourceNodeId && targetNodeId) {
-      this.graphModel.removeEdge(sourceNodeId, targetNodeId);
+      this.graphModel.deleteEdgeBySourceAndTarget(sourceNodeId, targetNodeId);
     } else if (sourceNodeId) {
-      this.graphModel.removeEdgeBySource(sourceNodeId);
+      this.graphModel.deleteEdgeBySource(sourceNodeId);
     } else if (targetNodeId) {
-      this.graphModel.removeEdgeByTarget(targetNodeId);
+      this.graphModel.deleteEdgeByTarget(targetNodeId);
     }
   }
 

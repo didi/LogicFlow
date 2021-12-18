@@ -7,16 +7,17 @@
 `LogicFlow` 配置项
 
 ```js
-const lf = new LogicFlow(config: Object)
+const lf = new LogicFlow(options: Options)
 ```
 
-| 名称 | 类型 | 必选 | 默认值 | 描述 |
+| 选项 | 类型 | 必选 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 | container | HTMLElement | ✅ | - | 图的 DOM 容器。 |
-| width | Number | | 100% | 指定画布宽度，单位为 'px'。 |
-| height | Number | | 100% | 指定画布高度，单位为 'px'。 |
+| width | Number | | - | 指定画布宽度，单位为 'px'，默认使用容器宽度。 |
+| height | Number | | - | 指定画布高度，单位为 'px'，默认使用容器高度。 |
 | [background](#background) | false \| Object | |false | 背景，默认无背景 |
 | [grid](#grid) | false \| Object | | false |网格，若设为`false`不开启网格，则为 1px 移动单位，不绘制网格背景，若设置为`true`开启则默认为 20px 点状网格 |
+| [keyboard](#keyboard) |  Object | | | 自定义键盘相关配置 |
 | textEdit | Boolean | | true | 是否开启文本编辑 |
 | [style](#style) | Object | | - | 样式 |
 | isSilentMode | Boolean | | false | 仅浏览不可编辑模式，默认不开启 |
@@ -69,6 +70,10 @@ export type GridOptions = {
   }
 };
 ```
+
+### `keyboard`
+
+默认不可耐
 
 ### `style`
 

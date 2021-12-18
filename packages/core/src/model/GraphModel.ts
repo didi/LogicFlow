@@ -550,8 +550,8 @@ class GraphModel {
   @action
   deleteNode(id) {
     const nodeData = this.nodesMap[id].model.getData();
-    this.removeEdgeBySource(id);
-    this.removeEdgeByTarget(id);
+    this.deleteEdgeBySource(id);
+    this.deleteEdgeByTarget(id);
     this.nodes.splice(this.nodesMap[id].index, 1);
     this.eventCenter.emit(EventType.NODE_DELETE, { data: nodeData });
   }
@@ -722,7 +722,7 @@ class GraphModel {
    * @param targetNodeId 边的目的节点
    */
   @action
-  removeEdge(sourceNodeId, targetNodeId) {
+  deleteEdgeBySourceAndTarget(sourceNodeId, targetNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].sourceNodeId === sourceNodeId
           && this.edges[i].targetNodeId === targetNodeId
@@ -734,9 +734,11 @@ class GraphModel {
       }
     }
   }
-
+  /**
+   * 基于边Id删除边
+   */
   @action
-  removeEdgeById(id) {
+  deleteEdgeById(id) {
     const idx = this.edgesMap[id].index;
     const edge = this.edgesMap[id];
     if (!edge) {
@@ -746,9 +748,11 @@ class GraphModel {
     this.edges.splice(idx, 1);
     this.eventCenter.emit(EventType.EDGE_DELETE, { data: edgeData });
   }
-
+  /**
+   * 删除以节点Id为起点的所有边
+   */
   @action
-  removeEdgeBySource(sourceNodeId) {
+  deleteEdgeBySource(sourceNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].sourceNodeId === sourceNodeId) {
         const edgeData = this.edges[i].getData();
@@ -758,9 +762,11 @@ class GraphModel {
       }
     }
   }
-
+  /**
+   * 删除以节点Id为终点的所有边
+   */
   @action
-  removeEdgeByTarget(targetNodeId) {
+  deleteEdgeByTarget(targetNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].targetNodeId === targetNodeId) {
         const edgeData = this.edges[i].getData();
@@ -770,10 +776,13 @@ class GraphModel {
       }
     }
   }
-
+  /**
+   * 设置元素的状态，在需要保证整个画布上所有的元素只有一个元素拥有此状态时可以调用此方法。
+   * 例如文本编辑、菜单显示等。
+   * additionStateData: 传递的额外值，如菜单显示的时候，需要传递期望菜单显示的位置。
+   */
   @action
-  setElementStateById(id: ElementModeId, state: ElementState, additionStateData?: AdditionData) {
-    this.resetElementState();
+  setElementStateById(id: ElementModeId, state: number, additionStateData?: AdditionData) {
     this.nodes.forEach((node) => {
       if (node.id === id) {
         node.setElementState(state, additionStateData);
@@ -789,9 +798,13 @@ class GraphModel {
       }
     });
   }
-
+  /**
+   * 更新节点或边的文案
+   * @param id 节点或者边id
+   * @param value 文案内容
+   */
   @action
-  setElementTextById(id: ElementModeId, value: string) {
+  updateText(id: ElementModeId, value: string) {
     this.nodes.forEach((node) => {
       if (node.id === id) {
         node.updateText(value);
@@ -804,9 +817,6 @@ class GraphModel {
     });
   }
 
-  @action
-  resetElementState() {
-  }
   /**
    * 选中节点
    * @param id 节点Id
@@ -831,7 +841,11 @@ class GraphModel {
     const selectElement = this.edgesMap[id]?.model;
     selectElement?.setSelected(true);
   }
-
+  /**
+   * 将图形选中
+   * @param id 选择元素ID
+   * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
+   */
   @action
   selectElementById(id: string, multiple = false) {
     if (!multiple) {
@@ -840,7 +854,9 @@ class GraphModel {
     const selectElement = this.getElement(id) as BaseNodeModel | BaseEdgeModel;
     selectElement?.setSelected(true);
   }
-
+  /**
+   * 将所有选中的元素设置为非选中
+   */
   @action
   clearSelectElements() {
     this.selectElements.forEach(element => {
@@ -884,11 +900,20 @@ class GraphModel {
       this.nodeMoveRules.push(fn);
     }
   }
-  /* 修改边默认类型 */
+  /**
+   * 设置默认的边类型
+   * 也就是设置在节点直接有用户手动绘制的连线类型。
+   * @param type Options.EdgeType
+   */
   @action
   setDefaultEdgeType(type: string): void {
     this.edgeType = type;
   }
+  /**
+  * 修改指定节点类型
+  * @param id 节点id
+  * @param type 节点类型
+  */
   @action
   changeNodeType(id, type: string): void {
     const nodeModel = this.getNodeModelById(id);

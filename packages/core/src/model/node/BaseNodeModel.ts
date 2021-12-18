@@ -443,7 +443,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setElementState(state: ElementState, additionStateData?: AdditionData): void {
+  setElementState(state: number, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
   }

@@ -20,8 +20,13 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 - `getEdgeModels`参数不支持传入id, 基于Id获取edgeModel请使用`getEdgeModelById`
 - `select` -> `selectElementById`
 - `eventCenter` -> `graphModel.eventCenter`
+- `removeEdge` -> `deleteEdgeByNodeId`
 
 ### graphModel
 
 - `getNodeModel.transformMatrix` -> `getNodeModel.transformModel`
 - `getNodeModel.editConfig` -> `getNodeModel.editConfigModel`
+- `graphModel.setElementTextById` -> `graphModel.updateText`
+- `graphModel.removeEdgeById` -> `graphModel.deleteEdgeById`
+- `graphModel.removeEdgeBySource` -> `graphModel.deleteEdgeBySource`
+- `graphModel.removeEdgeByTarget` -> `graphModel.deleteEdgeByTarget`

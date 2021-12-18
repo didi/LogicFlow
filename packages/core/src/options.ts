@@ -25,6 +25,7 @@ export type OverlapMode = DefaultOverlapMode | IncreaseOverlapMode;
 export type Definition = {
   /**
    * 画布初始化容器
+   * 注意，在不传入width和height的情况下，container元素本身应该存在高度和高度。
    */
   container: HTMLElement;
   /**

@@ -143,7 +143,7 @@ export default class TextEdit extends Component<IProps, IState> {
     }
     if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText;
-      graphModel.setElementTextById(id, text);
+      graphModel.updateText(id, text);
       graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { ...this.__prevText });
       this.__prevText.id = '';
       this.__prevText.text = '';
