@@ -38,11 +38,11 @@ class GraphModel {
   /**
    * LogicFlow画布宽度
    */
-  width: number;
+  @observable width: number;
   /**
    * LogicFlow画布高度
    */
-  height: number;
+  @observable height: number;
   /**
    * 主题配置
    * @see todo docs link
@@ -121,7 +121,7 @@ class GraphModel {
    * 外部拖动节点进入画布的过程中，用fakerNode来和画布上正是的节点区分开
    */
   @observable fakerNode: BaseNodeModel;
-  constructor(config: Definition) {
+  constructor(options: Definition) {
     const {
       container,
       background = {},
@@ -129,21 +129,21 @@ class GraphModel {
       width,
       height,
       idGenerator,
-    } = config;
+    } = options;
     this.background = background;
     if (typeof grid === 'object') {
       this.gridSize = grid.size;
     }
     this.rootEl = container;
-    this.editConfigModel = new EditConfigModel(config);
+    this.editConfigModel = new EditConfigModel(options);
     this.eventCenter = new EventEmitter();
     this.transformModel = new TransfromModel(this.eventCenter);
-    this.theme = updateTheme(config.style);
-    this.edgeType = config.edgeType || 'polyline';
+    this.theme = updateTheme(options.style);
+    this.edgeType = options.edgeType || 'polyline';
     this.width = width;
     this.height = height;
-    this.partial = config.partial;
-    this.overlapMode = config.overlapMode || 0;
+    this.partial = options.partial;
+    this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
   }
   @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
@@ -981,6 +981,13 @@ class GraphModel {
    */
   @action setTheme(style: Theme) {
     this.theme = updateTheme({ ...this.theme, ...style });
+  }
+  /**
+   * 重新设置画布的宽高
+   */
+  @action resize(width: number, height: number): void {
+    this.width = width ?? width;
+    this.height = height ?? height;
   }
   /**
    * 清空画布

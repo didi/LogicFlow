@@ -100,29 +100,20 @@ export default class LogicFlow {
    */
   [propName: string]: any;
   constructor(options: Options.Definition) {
-    const {
-      container,
-      width,
-      height,
-      dndOptions,
-      keyboard,
-      isSilentMode,
-      snapline,
-    } = options;
-    this.options = Options.get(options);
-    this.container = container;
-    this.width = this.options.width;
-    this.height = this.options.height;
+    options = Options.get(options);
+    this.options = options;
+    this.container = options.container;
     // model 初始化
     this.graphModel = new GraphModel({
-      ...this.options,
+      ...options,
     });
+    // 附加功能初始化
     this.tool = new Tool(this);
     this.history = new History(this.graphModel.eventCenter);
-    this.dnd = new Dnd({ options: dndOptions, lf: this });
-    this.keyboard = new Keyboard({ lf: this, keyboard });
+    this.dnd = new Dnd({ options: options.dndOptions, lf: this });
+    this.keyboard = new Keyboard({ lf: this, keyboard: options.keyboard });
     // 不可编辑模式没有开启，且没有关闭对齐线
-    if (!isSilentMode && snapline !== false) {
+    if (!options.isSilentMode && options.snapline !== false) {
       this.snaplineModel = new SnaplineModel(this.graphModel);
       snaplineTool(this.graphModel.eventCenter, this.snaplineModel);
     }
@@ -499,12 +490,17 @@ export default class LogicFlow {
     this.graphModel.setTheme(style);
   }
   /**
+   * 重新设置画布的宽高
+   */
+  resize(width: number, height: number): void {
+    this.graphModel.resize(width, height);
+  }
+  /**
    * 设置默认的边类型。
    * 也就是设置在节点直接有用户手动绘制的连线类型。
    * @param type Options.EdgeType
    */
   setDefaultEdgeType(type: Options.EdgeType): void {
-    this.options.edgeType = type;
     this.graphModel.setDefaultEdgeType(type);
   }
   /**

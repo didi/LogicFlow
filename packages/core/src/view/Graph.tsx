@@ -60,11 +60,11 @@ class Graph extends Component<IProps> {
       graphModel, tool, options, dnd, snaplineModel,
     } = this.props;
     const style: ContainerStyle = {};
-    if (options.width) {
-      style.width = `${options.width}px`;
+    if (graphModel.width) {
+      style.width = `${graphModel.width}px`;
     }
-    if (options.height) {
-      style.height = `${options.height}px`;
+    if (graphModel.height) {
+      style.height = `${graphModel.height}px`;
     }
     const { fakerNode, editConfigModel } = graphModel;
     const { adjustEdge } = editConfigModel;
