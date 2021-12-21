@@ -2,14 +2,7 @@ import { h } from 'preact';
 
 type IProps = {
   d: string,
-  strokeWidth: number,
-  stroke: string,
-  fill: string,
-  strokeDasharray?: string,
-};
-
-Path.defaultProps = {
-  strokeDasharray: '',
+  [key: string]: any;
 };
 
 function Path(props: IProps) {

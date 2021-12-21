@@ -22,19 +22,18 @@ class Model extends RectNodeModel {
 
 class View extends RectNode {
   getShape() {
-    // 通过 getAttributes 获取 model 中的属性
     const {
       x,
       y,
       properties,
-    } = this.getAttributes();
-    const {
       width,
       height,
+    } = this.props.model;
+    const {
       fill,
       stroke,
       strokeWidth,
-    } = this.getShapeStyle();
+    } = this.props.model.getNodeStyle();
     const attrs = {
       x: x - width / 2,
       y: y - height / 2,

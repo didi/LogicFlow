@@ -56,7 +56,7 @@ class Menu {
       {
         text: '编辑文本',
         callback: (node) => {
-          this.lf.graphModel.setTextEditable(node.id);
+          this.lf.graphModel.editText(node.id);
         },
       },
       {
@@ -78,7 +78,7 @@ class Menu {
       {
         text: '编辑文本',
         callback: (edge) => {
-          this.lf.graphModel.setTextEditable(edge.id);
+          this.lf.graphModel.editText(edge.id);
         },
       },
     ];

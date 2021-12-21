@@ -12,11 +12,9 @@ interface IProps {
   index: number,
   x: number,
   y: number,
-  nodeModel: BaseNodeModel,
+  model: BaseNodeModel,
   graphModel: GraphModel,
   style?: CSSStyleDeclaration,
-  hoverStyle?: CSSStyleDeclaration,
-  edgeStyle?: CSSStyleDeclaration,
 }
 
 interface IState {
@@ -34,7 +32,7 @@ class Control extends Component<IProps> {
   constructor(props) {
     super();
     this.index = props.index;
-    this.nodeModel = props.nodeModel;
+    this.nodeModel = props.model;
     this.graphModel = props.graphModel;
     const { gridSize } = this.graphModel;
     // 为保证对齐线功能正常使用，step默认是网格grid的两倍，

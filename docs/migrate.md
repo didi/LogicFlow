@@ -25,6 +25,7 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 ### graphModel
 
 - `getNodeModel.transformMatrix` -> `getNodeModel.transformModel`
+- `getNodeModel.setTextEditable` -> `getNodeModel.transformModel`
 - `getNodeModel.editConfig` -> `getNodeModel.editConfigModel`
 - `graphModel.setElementTextById` -> `graphModel.updateText`
 - `graphModel.removeEdgeById` -> `graphModel.deleteEdgeById`

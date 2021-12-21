@@ -24,13 +24,13 @@ class UmlNode extends HtmlNode {
   // setHtml除了properties发生变化会触发外，节点移动了，
   // 节点被选中了等model上所有的属性发生变化都会触发。
   shouldUpdate() {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
     this.currrentProperties = JSON.stringify(properties)
     return true;
   }
   setHtml(rootEl: HTMLElement) {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     if (!this.shouldUpdate()) return;
   
     const el = document.createElement('div');

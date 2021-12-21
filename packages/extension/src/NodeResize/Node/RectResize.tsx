@@ -29,15 +29,14 @@ class RectResizeModel extends RectNodeModel {
   }
 }
 class RectResizeView extends RectNode {
-  getControlGroup(attributes) {
+  getControlGroup() {
     const {
       model,
       graphModel,
     } = this.props;
     return (
       <ControlGroup
-        {...attributes}
-        nodeModel={model}
+        model={model}
         graphModel={graphModel}
       />
     );
@@ -47,14 +46,13 @@ class RectResizeView extends RectNode {
     return super.getShape();
   }
   getShape() {
-    const attributes = super.getAttributes();
     const {
       model: { isSelected },
     } = this.props;
     return (
       <g>
         {this.getResizeShape()}
-        {isSelected ? this.getControlGroup(attributes) : ''}
+        {isSelected ? this.getControlGroup() : ''}
       </g>
     );
   }

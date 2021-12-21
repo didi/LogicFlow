@@ -27,30 +27,19 @@ class ExclusiveGatewayModel extends DiamondResize.model {
 
 class ExclusiveGatewayView extends DiamondResize.view {
   getResizeShape() {
-    const attributes = super.getAttributes();
-    const {
-      x,
-      y,
-      fill,
-      stroke,
-      strokeWidth,
-      points,
-    } = attributes;
-    const pointsPath = points.map(point => point.join(',')).join(' ');
+    const { x, y, points } = this.props.model;
+    const style = this.props.model.getNodeStyle();
+    const pointsPath = points.map((point: PointTuple) => point.join(',')).join(' ');
     return h(
       'g',
       {},
       h('polygon', {
-        fill,
-        stroke,
-        strokeWidth,
+        ...style,
         points: pointsPath,
       }),
       h('path', {
+        ...style,
         transform: `matrix(1 0 0 1 ${x - ICONSIZE} ${y - ICONSIZE})`,
-        fill,
-        stroke,
-        strokeWidth,
         d:
           'm 16,15 7.42857142857143,9.714285714285715 -7.42857142857143,9.714285714285715 3.428571428571429,0 5.714285714285715,-7.464228571428572 5.714285714285715,7.464228571428572 3.428571428571429,0 -7.42857142857143,-9.714285714285715 7.42857142857143,-9.714285714285715 -3.428571428571429,0 -5.714285714285715,7.464228571428572 -5.714285714285715,-7.464228571428572 -3.428571428571429,0 z',
       }),

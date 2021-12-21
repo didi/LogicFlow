@@ -50,7 +50,7 @@ window.onload = function () {
   }
   class UmlNode extends HtmlNode {
     setHtml(rootEl) {
-      const { properties } = this.getAttributes();
+      const { properties } = this.props.model;
       const el = document.createElement('div');
       el.className = 'uml-wrapper';
       const html = `

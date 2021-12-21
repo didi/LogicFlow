@@ -124,18 +124,16 @@ class UserModel extends RectResize.model {}
 // 自定义节点的 view ，方法功能等同于普通自定义节点的getShape方法
 class UserView extends RectResize.view {
   getResizeShape() {
-    // 通过 getAttributes 获取 model 中的属性
-    const { x, y, width, height, fill, stroke, strokeWidth, radius } = this.getAttributes();
+    const { x, y, width, height, radius } = this.props.model;
+    const style = this.props.model.getNodeStyle();
     const attrs = {
       // rect 标签的 x，y 对应的是图形的左上角
       // 所以我们要将矩形的中心移动到 x，y
+      ...style,
       x: x - width / 2,
       y: y - height / 2,
       width,
       height,
-      stroke,
-      fill,
-      strokeWidth,
       rx: radius,
       ry: radius,
     }

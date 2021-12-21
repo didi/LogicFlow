@@ -395,8 +395,7 @@ class SquareModel extends RectNodeModel {
 }
 class SquareView extends RectNode {
   getShape() {
-    // 通过 getAttributes 获取 model 中的属性
-    const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+    const { x, y, width, height, fill, stroke, strokeWidth } = this.props.model;
     const attrs = {
       // rect 标签的 x，y 对应的是图形的左上角
       // 所以我们要将矩形的中心移动到 x，y

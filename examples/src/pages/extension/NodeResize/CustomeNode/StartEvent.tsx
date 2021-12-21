@@ -25,12 +25,6 @@ class StartEventModel extends EllipseResize.model {
 }
 
 class StartEventView extends EllipseResize.view {
-  getAttributes() {
-    const attr = super.getAttributes();
-    return {
-      ...attr,
-    };
-  }
 }
 
 const StartEvent = {
