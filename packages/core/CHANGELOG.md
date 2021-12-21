@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.14...@logicflow/core@1.0.0-alpha.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* html node ([a356297](https://github.com/didi/LogicFlow/commit/a3562974d2dac63f08e531784945bbeb9e25e81d))
+* use model instead of getAttribute ([0e51cb0](https://github.com/didi/LogicFlow/commit/0e51cb0681c458bf68a69b8459ce0a4b91951ea4))
+
+
+### Features
+
+* 重构自定义锚点写法 ([657f911](https://github.com/didi/LogicFlow/commit/657f9113eff1207c910080507e94a22c69c10cce))
+* custom edge ([81cd3be](https://github.com/didi/LogicFlow/commit/81cd3be6a9940553d2eec75b77a3472fdf75eb88))
+* resize width and height ([8275dfb](https://github.com/didi/LogicFlow/commit/8275dfb539449c641c8f61c3f84ebad8a2046f8b))
+* theme and outline ([1b7960d](https://github.com/didi/LogicFlow/commit/1b7960db3bab047e49d187bbb43578a0700d7eef))
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
 # [1.0.0-alpha.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.1...@logicflow/core@1.0.0-alpha.3) (2021-12-09)
 
 **Note:** Version bump only for package @logicflow/core

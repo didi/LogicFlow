@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.3...examples@1.0.0-alpha.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* use model instead of getAttribute ([0e51cb0](https://github.com/didi/LogicFlow/commit/0e51cb0681c458bf68a69b8459ce0a4b91951ea4))
+
+
+
+
+
 # [1.0.0-alpha.3](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.1...examples@1.0.0-alpha.3) (2021-12-09)
 
 **Note:** Version bump only for package examples
