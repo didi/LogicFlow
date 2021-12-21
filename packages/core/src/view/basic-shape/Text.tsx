@@ -67,7 +67,7 @@ function renderHtmlText(props, attrs) {
     x = 0,
     y = 0,
     value,
-    color = '#000000',
+    color = '',
     fontSize,
     model,
     fontFamily = '',

@@ -214,8 +214,12 @@ class Anchor extends Component<IProps, IState> {
       endY,
     } = this.state;
     const {
-      x, y, style, edgeStyle, hoverStyle,
+      x, y, style, edgeStyle,
     } = this.props;
+    const hoverStyle = {
+      ...style,
+      ...style.hover,
+    };
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
       <g className="lf-anchor">

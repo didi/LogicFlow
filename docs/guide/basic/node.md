@@ -1,15 +1,28 @@
 # 节点 Node
 
-LogicFlow 的内置节点包括：
-- 矩形(rect)
-- 圆形(circle)
-- 椭圆（ellipse)
-- 菱形(diamond)
-- 多边形(polygon)
-- 文本(text)
-- html节点(html)
+LogicFlow 的内置了一些基础节点，然后在实际应用场景中，我们可以基于这些基础节点，定义符合自己业务逻辑的节点。
 
-## 节点属性
+::: warning 注意
+LogicFlow推荐在实际应用场景中，所有的节点都使用自定义节点，将节点的type定义为符合项目业务意义的名称。而不是使用基础节点`rect`、`circle`这种仅表示外观的节点。
+:::
+
+## 基于继承的自定义节点
+todo: 补一张图 mvp codesandbox
+
+LogicFlow 对外暴露了基础节点`BaseNode`和 7 个基础类型的节点：
+`RectNode`、`CircleNode`、`PolygonNode`、`EllipseNode`、`DiamondNode`、`TextNode`、`HtmlNode`。
+
+<img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
+
+由上图可以看到，LogicFlow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以继承简单类型节点实现，也可以直接通过继承`BaseNode`来实现。
+
+## 基础节点-RectNode
+
+首先
+
+```js
+import { RectNode, RectNodeModel } from '@logicflow'
+```
 
 ### 公共属性
 

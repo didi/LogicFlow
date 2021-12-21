@@ -3,7 +3,6 @@ import Rect from '../basic-shape/Rect';
 import BaseNode from './BaseNode';
 import { RectNodeModel } from '../../model';
 import GraphModel from '../../model/GraphModel';
-import EventEmitter from '../../event/eventEmitter';
 
 type IProps = {
   model: RectNodeModel;
@@ -11,35 +10,17 @@ type IProps = {
 };
 
 export default class RectNode extends BaseNode {
-  getShapeStyle() {
-    const style = super.getShapeStyle();
-    const {
-      graphModel,
-    } = this.props;
-    return {
-      ...style,
-      ...graphModel.theme.rect,
-    };
-  }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const {
-      model: {
-        radius,
-      },
-    } = this.props;
-    attributes.radius = radius;
-    return attributes;
-  }
   getShape() {
-    const attributes = this.getAttributes();
-    const style = this.getShapeStyle();
+    const { model } = this.props;
+    const style = model.getNodeStyle();
     return (
       <Rect
         {...style}
-        x={attributes.x}
-        y={attributes.y}
-        radius={attributes.radius}
+        x={model.x}
+        y={model.y}
+        width={model.width}
+        height={model.height}
+        radius={model.radius}
       />
     );
   }

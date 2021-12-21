@@ -51,94 +51,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     };
   }
   abstract getShape();
-  /**
-   * @overridable 支持重写
-   * 获取自定义view组件样式信息
-   * @example 我们定义一个节点，不论主题是怎么配置，这个节点都是被红色填充。
-   * class CustomNode extends BaseNode {
-   *   getShapeStyle () {
-   *     const style = super.getShapeStyle();
-   *     style.fill = 'red';
-   *     return style;
-   *   }
-   * }
-   *
-   * 注意：不能直接自定义节点的宽高，因为宽高控制着节点的锚点、外边框以及边的计算。
-   * 如果想要自定义节点的宽高，请在自定义model中设置
-   * @returns 自定义样式
-   */
-  getShapeStyle(): StyleAttribute {
-    const {
-      graphModel,
-    } = this.props;
-    return {
-      ...graphModel.theme.baseNode,
-    };
-  }
-  /**
-   * @overridable 支持重写
-   * 获取节点的基本信息，例如节点的属性，位置，状态等信息
-   * @returns 节点基本信息
-   */
-  getAttributes(): NodeAttributes {
-    const {
-      model: {
-        id,
-        properties = {},
-        type,
-        x,
-        y,
-        isSelected,
-        isHovered,
-        text,
-        width,
-        height,
-      },
-    } = this.props;
-    return {
-      id,
-      properties: {
-        ...properties,
-      },
-      type,
-      x,
-      y,
-      isSelected,
-      isHovered,
-      width,
-      height,
-      text: {
-        ...text,
-      },
-    };
-  }
-  /**
-   * 获取节点锚点样式
-   * @returns 自定义样式
-   */
-  getAnchorStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchor } = graphModel.theme;
-    // 防止被重写覆盖主题。
-    return { ...anchor };
-  }
-  getProperties(): Record<string, any> {
-    const { model } = this.props;
-    return model.getProperties();
-  }
-  /* 支持节点自定义锚点hover样式 */
-  getAnchorHoverStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchor } = graphModel.theme;
-    const { hover } = anchor;
-    return { ...anchor, ...hover };
-  }
-  /* 锚点创建边样式 */
-  getNewEdgeStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchorLine } = graphModel.theme;
-    return { ...anchorLine };
-  }
   getAnchors() {
     const { model, graphModel } = this.props;
     const {
@@ -146,9 +58,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     } = model;
     const { isHovered, isDraging } = this.state;
     if (isHitable && (isSelected || isHovered)) {
-      const style = this.getAnchorStyle();
-      const hoverStyle = this.getAnchorHoverStyle();
-      const edgeStyle = this.getNewEdgeStyle();
+      const style = model.getAnchorStyle();
+      const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
         (anchor, index) => (
           <Anchor
@@ -156,7 +67,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             anchorData={anchor}
             nodeDraging={isDraging}
             style={style}
-            hoverStyle={hoverStyle}
             edgeStyle={edgeStyle}
             anchorIndex={index}
             nodeModel={model}
@@ -167,20 +77,13 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     return [];
   }
-  /* 支持节点自定义文案样式 */
-  getTextStyle() {
-    const { graphModel } = this.props;
-    // 透传 nodeText
-    const { nodeText } = graphModel.theme;
-    return { ...nodeText };
-  }
   getText() {
     const { model, graphModel } = this.props;
     // 文本被编辑的时候，显示编辑框，不显示文本。
     if (model.state === ElementState.TEXT_EDIT) {
       return '';
     }
-    const style = this.getTextStyle();
+    const style = model.getTextStyle();
     if (model.text) {
       const { editConfigModel } = graphModel;
       let draggable = false;

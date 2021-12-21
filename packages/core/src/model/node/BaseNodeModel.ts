@@ -3,7 +3,7 @@ import {
 } from 'mobx';
 import { assign, pick } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
-import { defaultTheme, OutlineTheme } from '../../constant/DefaultTheme';
+import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
   ElementState, ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
@@ -18,6 +18,7 @@ import {
   PointAnchor,
   AnchorsOffsetItem,
   PointTuple,
+  ShapeStyleAttribute,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -39,8 +40,6 @@ const defaultConfig = assign(
     },
     hideOutline: false,
   },
-  defaultTheme.rect,
-  defaultTheme.circle,
 );
 
 export type ConnectRule = {
@@ -82,7 +81,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable x = defaultConfig.x;
   @observable y = defaultConfig.y;
   @observable
-  private _width = defaultConfig.width;
+  private _width = 100;
   graphModel: GraphModel;
   public get width() {
     return this._width;
@@ -91,7 +90,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this._width = value;
   }
   @observable
-  private _height = defaultConfig.height;
+  private _height = 80;
   public get height() {
     return this._height;
   }
@@ -107,9 +106,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable text = defaultConfig.text;
   @observable draggable = true;
 
-  constructor(data: NodeConfig, graphModel: GraphModel, type) {
+  constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel;
-    this.setStyleFromTheme(type, graphModel);
     this.initNodeData(data);
     this.setAttributes();
   }
@@ -220,7 +218,35 @@ export default class BaseNodeModel implements IBaseNodeModel {
   getProperties() {
     return toJS(this.properties);
   }
-
+  /**
+   * @overridable 支持重写
+   * 获取当前节点样式
+   * @returns 自定义节点样式
+   */
+  getNodeStyle(): ShapeStyleAttribute {
+    return {
+      ...this.graphModel.theme.baseNode,
+    };
+  }
+  /* 支持节点自定义文案样式 */
+  getTextStyle() {
+    // 透传 nodeText
+    const { nodeText } = this.graphModel.theme;
+    return { ...nodeText };
+  }
+  /**
+   * 获取节点锚点样式
+   * @returns 自定义样式
+   */
+  getAnchorStyle(): Record<string, any> {
+    const { anchor } = this.graphModel.theme;
+    // 防止被重写覆盖主题。
+    return { ...anchor };
+  }
+  getAnchorLineStyle() {
+    const { anchorLine } = this.graphModel.theme;
+    return { ...anchorLine };
+  }
   /**
    * @overridable 支持重写
    * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
@@ -231,7 +257,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
     const { outline } = graphModel.theme;
     return outline;
   }
-
   /**
    * 在边的时候，是否允许这个节点为source节点，边到target节点。
    */
@@ -459,14 +484,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
       ...formatData(properties),
     };
     this.setAttributes();
-  }
-
-  @action
-  setStyleFromTheme(type, graphModel): void {
-    const { theme } = graphModel;
-    if (theme[type]) {
-      assign(this, theme[type]);
-    }
   }
 
   @action

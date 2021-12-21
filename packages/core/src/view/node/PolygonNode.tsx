@@ -1,10 +1,8 @@
 import { h } from 'preact';
 import BaseNode from './BaseNode';
-import EventEmitter from '../../event/eventEmitter';
 import GraphModel from '../../model/GraphModel';
 import { PolygonNodeModel } from '../../model';
 import Polygon from '../basic-shape/Polygon';
-import { PointTuple } from '../../type';
 
 type IProps = {
   model: PolygonNodeModel;
@@ -12,30 +10,10 @@ type IProps = {
 };
 
 export default class PolygonNode extends BaseNode {
-  getShapeStyle() {
-    const style = super.getShapeStyle();
-    const {
-      graphModel,
-    } = this.props;
-    return {
-      ...style,
-      ...graphModel.theme.polygon,
-    };
-  }
-  getAttributes() {
-    const attributes = super.getAttributes();
-    const {
-      model: {
-        points,
-      },
-    } = this.props;
-    attributes.points = points;
-    return attributes;
-  }
   getShape() {
-    const { x, y, width, height, points } = this.getAttributes();
-    const style = this.getShapeStyle();
-    // const { width, height } = style;
+    const { model } = this.props;
+    const { x, y, width, height, points } = model;
+    const style = model.getNodeStyle();
     const attr = {
       transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
     };

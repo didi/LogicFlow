@@ -1,22 +1,30 @@
 import { computed, observable } from 'mobx';
-import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 class CircleNodeModel extends BaseNodeModel {
   modelType = ModelType.CIRCLE_NODE;
-  @observable r = defaultTheme.circle.r;
+  @observable r = 50;
 
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'circle');
-  }
   @computed get width(): number {
     return this.r * 2;
   }
   @computed get height(): number {
     return this.r * 2;
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    const {
+      graphModel: {
+        theme: {
+          circle,
+        },
+      },
+    } = this;
+    return {
+      ...style,
+      ...circle,
+    };
   }
   getDetaultAnchor() {
     const { x, y, r } = this;

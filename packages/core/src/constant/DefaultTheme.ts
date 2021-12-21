@@ -80,10 +80,7 @@ export type PolygonTheme = CommonTheme;
  * svg基础图形-椭圆
  * https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse
  */
-export type EllipseTheme = {
-  rx?: number;
-  ry?: number;
-} & CommonTheme;
+export type EllipseTheme = CommonTheme;
 
 /**
  * 锚点样式
@@ -113,7 +110,14 @@ export type TextTheme = {
 } & CommonTheme;
 
 /**
- * 节点文本样式
+ * 文本节点样式
+ */
+export type TextNodeTheme = {
+  background?: RectTheme;
+} & TextTheme;
+
+/**
+ * 节点上文本样式
  */
 export type NodeTextTheme = {
   /**
@@ -125,8 +129,9 @@ export type NodeTextTheme = {
   overflowMode?: string;
   background?: RectTheme;
 } & TextTheme;
+
 /**
- * 边文本样式
+ * 边上文本样式
  */
 export type EdgeTextTheme = {
   /**
@@ -247,7 +252,7 @@ export type Theme = {
    */
   anchor?: AnchorTheme,
   /**
-   * 统一文本样式
+   * 文本节点样式
    */
   text?: TextTheme,
   /**
@@ -292,23 +297,17 @@ export const defaultTheme: Theme = {
     stroke: '#000000',
     strokeWidth: 2,
   },
-  rect: {
-    width: 100,
-    height: 80,
-    radius: 0,
-  },
-  circle: {
-    r: 50,
-  },
-  diamond: {
-    rx: 50,
-    ry: 50,
-  },
-  ellipse: {
-    rx: 55,
-    ry: 45,
-  },
+  rect: {},
+  circle: {},
+  diamond: {},
+  ellipse: {},
   polygon: {},
+  text: {
+    strokeWidth: 1,
+    fill: 'currentColor',
+    stroke: 'none',
+    fontSize: 12,
+  },
   anchor: {
     stroke: '#000000',
     fill: '#FFFFFF',

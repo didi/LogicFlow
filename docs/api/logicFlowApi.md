@@ -181,7 +181,7 @@ lf.register({
 
 ## setTheme
 
-设置主题, 详情见(主题)[/guide/advance/theme.html]
+设置主题, 详情见[主题](/guide/advance/theme.html)
 
 示例
 

@@ -1,24 +1,26 @@
 import { computed, observable } from 'mobx';
-import { NodeData, Point, PointTuple } from '../../type';
+import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
-  @observable rx: number;
-  @observable ry: number;
-
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'diamond');
+  @observable rx = 30;
+  @observable ry = 50;
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    const {
+      graphModel: {
+        theme: {
+          diamond,
+        },
+      },
+    } = this;
+    return {
+      ...style,
+      ...diamond,
+    };
   }
-
-  getData(): NodeData {
-    const { rx, ry } = this;
-    const data = super.getData();
-    return { ...data, rx, ry };
-  }
-
   @computed get points(): PointTuple[] {
     const {
       x, y, rx, ry,

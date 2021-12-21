@@ -24,7 +24,7 @@ import EllipseNodeModel from '../model/node/EllipseNodeModel';
 import HtmlNode from '../view/node/HtmlNode';
 import HtmlNodeModel from '../model/node/HtmlNodeModel';
 import * as Options from '../options';
-import { EdgeTextTheme } from '../constant/DefaultTheme';
+import { CommonTheme, EdgeTextTheme } from '../constant/DefaultTheme';
 
 export type PointTuple = [number, number];
 
@@ -432,3 +432,5 @@ export type NodeAttributes = {
 export type DiamondAttributes = {
   points: PointTuple[]
 } & NodeAttributes;
+
+export type ShapeStyleAttribute = CommonTheme;

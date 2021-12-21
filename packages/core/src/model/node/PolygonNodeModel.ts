@@ -2,7 +2,6 @@ import { computed, observable } from 'mobx';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -12,9 +11,19 @@ class PolygonNodeModel extends BaseNodeModel {
     [50, 100],
     [0, 50],
   ];
-
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'polygon');
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    const {
+      graphModel: {
+        theme: {
+          polygon,
+        },
+      },
+    } = this;
+    return {
+      ...style,
+      ...polygon,
+    };
   }
   /**
    * 由于大多数情况下，我们初始化拿到的多边形坐标都是基于原点的（例如绘图工具到处的svg）。
