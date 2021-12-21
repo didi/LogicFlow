@@ -95,7 +95,7 @@ class SelectionSelect {
     const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)];
     const elements = this.lf.getAreaElement(lt, rt);
     elements.forEach((element) => {
-      this.lf.select(element.id, true);
+      this.lf.selectElementById(element.id, true);
     });
     this.lf.emit('selection:selected', elements);
   };

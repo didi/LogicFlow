@@ -9,6 +9,9 @@ const lf = new LogicFlow({
   width: 1000,
   grid: true,
   edgeType: 'custom-polyline',
+  keyboard: {
+    enabled: true,
+  },
   height: 400
 })
 lf.register(customPolyline);
