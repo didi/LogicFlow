@@ -25,7 +25,7 @@ export default class MultipleSelect extends Component<IProps> {
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,
       step: gridSize,
-      eventType: 'multiple:select',
+      eventType: 'SELECTION',
       eventCenter,
     });
   }

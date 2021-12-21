@@ -29,8 +29,8 @@ const data = {
   edges: [
     {
       type: 'line',
-      sourceNodeId: 10,
-      targetNodeId: 20,
+      sourceNodeId: '10',
+      targetNodeId: '20',
       text: '连线',
       endPoint: {
         id: '150-60',

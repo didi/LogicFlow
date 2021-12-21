@@ -17,11 +17,11 @@ const config = {
 const data = {
   nodes: [
     {
-      id: 10,
+      id: '10',
       type: 'square',
       x: 150,
       y: 90,
-      text: '正方形'
+      text: '正方形1'
     },
   ]
 };

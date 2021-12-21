@@ -23,7 +23,7 @@ export default class EventEmitter {
      * @param once
      */
   on(evt: string, callback: CallbackType, once?: boolean) {
-    evt.split(',').forEach((evKey) => {
+    evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim();
       if (!this._events[evKey]) {
         this._events[evKey] = [];
@@ -42,7 +42,7 @@ export default class EventEmitter {
    * @param callback
    */
   once(evt: string, callback: CallbackType) {
-    evt.split(',').forEach((evKey) => {
+    evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim();
       return this.on(evKey, callback, true);
     });
@@ -54,7 +54,7 @@ export default class EventEmitter {
      * @param args
      */
   emit(evts: string, eventArgs: EventArgs) {
-    evts.split(',').forEach((evt) => {
+    evts?.split(',').forEach((evt) => {
       const events = this._events[evt] || [];
       const wildcardEvents = this._events[WILDCARD] || [];
       // 实际的处理 emit 方法
