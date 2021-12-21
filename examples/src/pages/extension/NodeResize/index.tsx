@@ -93,9 +93,7 @@ export default function NodeResizeExample() {
       const { id, type } = newNodeSize;
       if (type === 'bpmn:exclusiveGateway' || type === 'bpmn:startEvent') {
         const { x, y, ry } = newNodeSize;
-        const text = { x, y: y + ry + 10}
-        //@ts-ignore
-        lf.setNodeData({id, text});
+        lf.getNodeModelById(id).moveText(0, ry + 10);
       }
     })
   }, []);

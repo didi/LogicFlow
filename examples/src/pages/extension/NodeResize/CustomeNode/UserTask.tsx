@@ -12,8 +12,8 @@ class UserTaskModel extends RectResize.model {
 // 自定义节点的 view
 class UserTaskView extends RectResize.view {
   getResizeShape() {
-    const { x, y, width, height, radius, getNodeStyle } = this.props.model;
-    const style = getNodeStyle()
+    const { x, y, width, height, radius } = this.props.model;
+    const style = this.props.model.getNodeStyle()
     const attrs = {
       // rect 标签的 x，y 对应的是图形的左上角
       // 所以我们要将矩形的中心移动到 x，y

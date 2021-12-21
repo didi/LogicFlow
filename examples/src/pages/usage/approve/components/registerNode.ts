@@ -68,9 +68,8 @@ export default function RegisteNode(lf: LogicFlow) {
         width,
         height,
         radius,
-        getNodeStyle,
       } = this.props.model;
-      const style = getNodeStyle();
+      const style = this.props.model.getNodeStyle();
       return h(
         'g',
         {
