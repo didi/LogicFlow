@@ -124,6 +124,12 @@ class BaseEdgeModel implements IBaseModel {
       ...graphModel.theme.baseEdge,
     };
   }
+  /* 支持连线自定义文案样式 */
+  getTextStyle() {
+    // 透传 nodeText
+    const { edgeText } = this.graphModel.theme;
+    return { ...edgeText };
+  }
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
   }

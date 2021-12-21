@@ -16,9 +16,9 @@ export default class LineText extends BaseText {
   }
   getBackgroud() {
     const model = this.props.model as BaseEdgeModel;
-    const { style } = this.props;
+    const style = model.getTextStyle();
     const { text } = model;
-    let backgroundStyle = style.background;
+    let backgroundStyle = style.background || {};
     const { isHoverd } = this.state;
     if (isHoverd && style.hover && style.hover.background) {
       backgroundStyle = { ...backgroundStyle, ...style.hover.background };

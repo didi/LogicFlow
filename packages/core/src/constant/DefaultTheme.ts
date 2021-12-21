@@ -328,6 +328,7 @@ export const defaultTheme: Theme = {
   edgeText: {
     textWidth: 100,
     overflowMode: 'default',
+    fontSize: 12,
     background: {
       fill: '#FFFFFF',
     },
