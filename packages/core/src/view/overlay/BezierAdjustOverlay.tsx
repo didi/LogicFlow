@@ -60,10 +60,10 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   render() {
     const { position } = this.props;
     const { x, y } = position;
-    const { graphModel } = this.props;
+    const { bezierModel } = this.props;
     const {
       adjustAnchor,
-    } = graphModel.theme.bezier;
+    } = bezierModel.getEdgeStyle();
     return (
       <Circle
         className="lf-bezier-adjust-anchor"
@@ -84,7 +84,7 @@ export default class BezierAdjustOverlay extends Component<IProps> {
     const { path, id } = bezier;
     const pointsList = getBezierPoints(path);
     const [start, sNext, ePre, end] = pointsList;
-    const { adjustLine } = graphModel.theme.bezier;
+    const { adjustLine } = bezier.getEdgeStyle();
     const result = [];
     result.push(<Line
       x1={start.x}

@@ -78,36 +78,12 @@ export default class PolylineEdge extends BaseEdge {
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
   getIsDraging = () => this.isDraging;
-  getAttributes() {
-    const attr = super.getAttributes();
-    const {
-      model: {
-        points,
-      },
-    } = this.props;
-    return {
-      ...attr,
-      points,
-    };
-  }
-  getShapeStyle() {
-    const {
-      graphModel,
-    } = this.props;
-    const style = super.getShapeStyle();
-    return {
-      ...style,
-      ...graphModel.theme.polyline,
-    };
-  }
   getEdge() {
-    const {
-      points,
-    } = this.getAttributes();
-    const style = this.getShapeStyle();
+    const { model } = this.props;
+    const style = model.getEdgeStyle();
     return (
       <Polyline
-        points={points}
+        points={model.points}
         {
           ...style
         }

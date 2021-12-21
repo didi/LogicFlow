@@ -31,3 +31,7 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 - `graphModel.removeEdgeById` -> `graphModel.deleteEdgeById`
 - `graphModel.removeEdgeBySource` -> `graphModel.deleteEdgeBySource`
 - `graphModel.removeEdgeByTarget` -> `graphModel.deleteEdgeByTarget`
+
+### 自定义节点、连线
+
+LogicFlow 1.0对自定义API进行了统一，也更加容易理解。原来在view上的重写`getAttributes`、`getShapeStyle`方式将会废弃，而是在model中重写`getNodeStyle`、`getEdgeStyle`进行自定义。

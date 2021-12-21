@@ -116,7 +116,14 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   setAttributes() { }
-
+  getEdgeStyle() {
+    const {
+      graphModel,
+    } = this;
+    return {
+      ...graphModel.theme.baseEdge,
+    };
+  }
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
   }

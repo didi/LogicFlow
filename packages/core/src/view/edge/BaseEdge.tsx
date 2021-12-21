@@ -21,52 +21,6 @@ export default class BaseEdge extends Component<IProps> {
   startTime: number;
   contextMenuTime: number;
   clickTimer: number;
-  getAttributes() {
-    const {
-      model: {
-        strokeWidth,
-        strokeOpacity,
-        strokeDashArray,
-        isSelected,
-        isHovered,
-        hoverStroke,
-        selectedStroke,
-        properties,
-      },
-    } = this.props;
-    let {
-      model: {
-        stroke,
-      },
-    } = this.props;
-
-    if (isHovered) {
-      stroke = hoverStroke;
-    } else if (isSelected) {
-      stroke = selectedStroke;
-    }
-    return {
-      stroke,
-      strokeWidth,
-      strokeOpacity,
-      strokeDashArray,
-      isSelected,
-      isHovered,
-      hoverStroke,
-      selectedStroke,
-      properties: {
-        ...properties,
-      },
-    };
-  }
-  getShapeStyle() {
-    const {
-      graphModel,
-    } = this.props;
-    return {
-      ...graphModel.theme.baseEdge,
-    };
-  }
   getShape() { }
   getTextStyle() {
   }
@@ -108,8 +62,8 @@ export default class BaseEdge extends Component<IProps> {
     };
   }
   getArrowStyle() {
-    const edgeStyle = this.getShapeStyle();
-    const { graphModel } = this.props;
+    const { model, graphModel } = this.props;
+    const edgeStyle = model.getEdgeStyle();
     const { arrow } = graphModel.theme;
     return {
       ...edgeStyle,

@@ -87,8 +87,6 @@ export default class OutlineOverlay extends Component<IProps> {
     const y = (startPoint.y + endPoint.y) / 2;
     const width = Math.abs(startPoint.x - endPoint.x) + 10;
     const height = Math.abs(startPoint.y - endPoint.y) + 10;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.line;
     const style = line.getOutlineStyle();
     return (
       <Rect

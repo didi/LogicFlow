@@ -13,7 +13,16 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel) {
     super(data, graphModel, 'bezier');
   }
-
+  getEdgeStyle() {
+    const {
+      graphModel,
+    } = this;
+    const style = super.getEdgeStyle();
+    return {
+      ...style,
+      ...graphModel.theme.bezier,
+    };
+  }
   getTextPosition(): Point {
     if (this.pointsList && this.pointsList.length > 0) {
       let pointsXSum = 0;

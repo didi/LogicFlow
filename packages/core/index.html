@@ -145,7 +145,7 @@
       }
       class UmlNode extends HtmlNode {
         setHtml(rootEl) {
-          const { properties } = this.getAttributes();
+          const { properties } = this.props.model;
           const el = document.createElement('div');
           el.className = 'uml-wrapper';
           const html = `
@@ -201,7 +201,8 @@
         }
         // getShape 的返回值是一个通过 h 方法创建的 svg 元素
         getShape() {
-          const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+          const { x, y, width, height } = this.props.model;
+          const { fill, stroke, strokeWidth } = this.props.model.getNodeStyle();
           const attrs = {
             x: x - width / 2,
             y: y - height / 2,
@@ -289,9 +290,8 @@
       // combine
       class CombineNode extends BaseNode {
         getShape() {
-          const attributes = this.getAttributes();
-          const { x, y } = attributes;
-          const { model } = this.props;
+          const { x, y } = this.props.model;
+          const { fill } = this.props.model.getNodeStyle();
           return h(
             'g',
             {
@@ -299,7 +299,7 @@
             },
             h('path', {
               d: 'm  0,6.65 l  0,36.885245901639344 c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 l  0,-36.885245901639344 c -1.639344262295082,-8.196721311475411 -47.540983606557376,-8.196721311475411 -49.18032786885246,0c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411 49.18032786885246,0m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0',
-              fill: attributes.fill,
+              fill: fill,
               strokeWidth: 2,
               stroke: 'red',
               fillOpacity: 0.95,
@@ -324,14 +324,6 @@
 
       // connection
       class Connection extends PolylineEdge {
-        getAttributes() {
-          const attributes = super.getAttributes()
-          const { model: { properties } } = this.props;
-          if (properties.isActived) {
-            attributes.stroke = 'red'
-          }
-          return attributes
-        }
         getTextStyle() {
           return {
             background: {

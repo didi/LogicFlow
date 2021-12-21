@@ -34,6 +34,16 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'polyline');
   }
+  getEdgeStyle() {
+    const {
+      graphModel,
+    } = this;
+    const style = super.getEdgeStyle();
+    return {
+      ...style,
+      ...graphModel.theme.polyline,
+    };
+  }
   getTextPosition() {
     // 在文案为空的情况下，文案位置为双击位置
     const textValue = this.text?.value;

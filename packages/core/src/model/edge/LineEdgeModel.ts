@@ -8,6 +8,16 @@ export default class LineEdgeModel extends BaseEdgeModel {
   constructor(data, graphModel) {
     super(data, graphModel, 'line');
   }
+  getEdgeStyle() {
+    const {
+      graphModel,
+    } = this;
+    const style = super.getEdgeStyle();
+    return {
+      ...style,
+      ...graphModel.theme.line,
+    };
+  }
   getTextPosition(): Point {
     return {
       x: (this.startPoint.x + this.endPoint.x) / 2,

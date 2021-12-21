@@ -7,11 +7,11 @@ class CurvedEdgeView extends PolylineEdge {
   static extendKey = 'CurvedEdge';
   getEdge() {
     const {
-      points,
       strokeWidth,
       stroke,
       strokeDashArray,
-    } = this.getAttributes();
+    } = this.props.model.getEdgeStyle();
+    const { points } = this.props.model;
     const points2 = points.split(' ').map((p) => p.split(',').map(a => Number(a)));
     const [startX, startY] = points2[0];
     let d = `M${startX} ${startY}`;
