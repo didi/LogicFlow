@@ -18,6 +18,14 @@ class RectResizeModel extends RectNodeModel {
   minHeight = 30;
   maxWidth = 2000;
   maxHeight = 2000;
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'none';
+    if (style.hover) {
+      style.hover.stroke = 'none';
+    }
+    return style;
+  }
   setAttributes() {
     this.hideOutline = true;
     // @ts-ignore

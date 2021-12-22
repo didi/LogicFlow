@@ -36,7 +36,7 @@ export default function Text(props) {
       const { BaseType, modelType } = model;
       if ((BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE)
       || (BaseType === ElementType.EDGE && textWidth)) {
-        return renderHtmlText(props, attrs);
+        return renderHtmlText(props);
       }
     }
     if (rowsLength > 1) {
@@ -62,21 +62,20 @@ export default function Text(props) {
   }
 }
 
-function renderHtmlText(props, attrs) {
+function renderHtmlText(props) {
   const {
-    x = 0,
-    y = 0,
     value,
-    color = '',
     fontSize,
     model,
     fontFamily = '',
     lineHeight,
     wrapPadding = '0, 0',
     overflowMode,
+    x,
+    y,
   } = props;
   const { width, textHeight } = model;
-  const textRealWidth = attrs.textWidth || width;
+  const textRealWidth = props.textWidth || width;
   const rows = String(value).split(/[\r\n]/g);
   const rowsLength = rows.length;
   const textRealHeight = getHtmlTextHeight({
@@ -104,24 +103,21 @@ function renderHtmlText(props, attrs) {
       <foreignObject
         width={textRealWidth}
         height={foreignObjectHeight}
-        x={attrs.x - textRealWidth / 2}
-        y={attrs.y - foreignObjectHeight / 2}
+        x={x - textRealWidth / 2}
+        y={y - foreignObjectHeight / 2}
       >
         <div
           className="lf-node-text-auto-wrap"
           style={{
             minHeight: foreignObjectHeight,
             width: textRealWidth,
-            color,
             padding: wrapPadding,
           }}
         >
           <div
             className={isEllipsis ? 'lf-node-text-ellipsis-content' : 'lf-node-text-auto-wrap-content'}
             style={{
-              fontSize,
-              fontFamily,
-              lineHeight,
+              ...props,
             }}
           >
             {rows.map(item => <div className="lf-node-text--auto-wrap-inner">{item}</div>)}

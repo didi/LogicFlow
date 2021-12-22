@@ -14,6 +14,14 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class DiamondResizeModel extends DiamondNodeModel {
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'none';
+    if (style.hover) {
+      style.hover.stroke = 'none';
+    }
+    return style;
+  }
   setAttributes() {
     this.hideOutline = true;
     // @ts-ignore

@@ -18,6 +18,19 @@ class EllipseResizeModel extends EllipseNodeModel {
   minHeight = 30;
   maxWidth = 2000;
   maxHeight = 2000;
+  constructor(data, graphModel) {
+    super(data, graphModel);
+    this.rx = 50;
+    this.ry = 50;
+  }
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'none';
+    if (style.hover) {
+      style.hover.stroke = 'none';
+    }
+    return style;
+  }
   setAttributes() {
     this.hideOutline = true;
     // @ts-ignore
