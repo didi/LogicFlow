@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 
@@ -23,7 +24,7 @@ class CircleNodeModel extends BaseNodeModel {
     } = this;
     return {
       ...style,
-      ...circle,
+      ...cloneDeep(circle),
     };
   }
   getDetaultAnchor() {

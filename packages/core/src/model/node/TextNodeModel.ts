@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -9,9 +10,10 @@ class TextNodeModel extends BaseNodeModel {
   @observable fontSize = defaultTheme.text.fontSize;
   getNodeStyle() {
     const style = super.getNodeStyle();
+    const { text } = this.graphModel.theme;
     return {
       ...style,
-      ...this.graphModel.theme.text,
+      ...cloneDeep(text),
     };
   }
   @computed get width(): number {

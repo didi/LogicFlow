@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
@@ -22,9 +23,10 @@ class RectNodeModel extends BaseNodeModel {
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
+    const { rect } = this.graphModel.theme;
     return {
       ...style,
-      ...this.graphModel.theme.rect,
+      ...cloneDeep(rect),
     };
   }
 }

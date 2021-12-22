@@ -1,7 +1,7 @@
 import {
   action, observable, computed, toJS,
 } from 'mobx';
-import { assign, pick } from 'lodash-es';
+import { assign, cloneDeep } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { getAnchors } from '../../util/node';
 import { IBaseModel } from '../BaseModel';
@@ -116,28 +116,25 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   setAttributes() { }
-  getEdgeStyle() {
-    const {
-      graphModel,
-    } = this;
-    return {
-      ...graphModel.theme.baseEdge,
-    };
-  }
   /* 支持连线自定义文案样式 */
   getTextStyle() {
     // 透传 nodeText
     const { edgeText } = this.graphModel.theme;
-    return { ...edgeText };
+    return cloneDeep(edgeText);
   }
-  @computed get sourceNode() {
-    return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
+  getEdgeStyle() {
+    const { baseEdge } = this.graphModel.theme;
+    return cloneDeep(baseEdge);
   }
-  @computed get targetNode() {
-    return this.graphModel?.nodesMap[this.targetNodeId]?.model;
-  }
-  @computed get textPosition(): Point {
-    return this.getTextPosition();
+  /**
+   * @overridable 支持重写
+   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
+   * @returns 自定义outline样式
+   */
+  getOutlineStyle(): OutlineTheme {
+    const { graphModel } = this;
+    const { outline } = graphModel.theme;
+    return cloneDeep(outline);
   }
   /**
    * @override 重新自定义文本位置
@@ -148,6 +145,15 @@ class BaseEdgeModel implements IBaseModel {
       x: 0,
       y: 0,
     };
+  }
+  @computed get sourceNode() {
+    return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
+  }
+  @computed get targetNode() {
+    return this.graphModel?.nodesMap[this.targetNodeId]?.model;
+  }
+  @computed get textPosition(): Point {
+    return this.getTextPosition();
   }
   move() { }
 
@@ -228,17 +234,6 @@ class BaseEdgeModel implements IBaseModel {
       ...formatData(properties),
     };
     this.setAttributes();
-  }
-
-  /**
-   * @overridable 支持重写
-   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
-   * @returns 自定义outline样式
-   */
-  getOutlineStyle(): OutlineTheme {
-    const { graphModel } = this;
-    const { outline } = graphModel.theme;
-    return outline;
   }
 
   @action

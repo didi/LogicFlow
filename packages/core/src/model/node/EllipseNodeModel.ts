@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
@@ -18,7 +19,7 @@ class EllipseNodeModel extends BaseNodeModel {
     } = this;
     return {
       ...style,
-      ...ellipse,
+      ...cloneDeep(ellipse),
     };
   }
   @computed get width(): number {

@@ -1,4 +1,5 @@
 import { action, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
@@ -14,13 +15,11 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     super(data, graphModel, 'bezier');
   }
   getEdgeStyle() {
-    const {
-      graphModel,
-    } = this;
+    const { bezier } = this.graphModel.theme;
     const style = super.getEdgeStyle();
     return {
       ...style,
-      ...graphModel.theme.bezier,
+      ...cloneDeep(bezier),
     };
   }
   getTextPosition(): Point {

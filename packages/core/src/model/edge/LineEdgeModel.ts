@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
@@ -9,13 +10,11 @@ export default class LineEdgeModel extends BaseEdgeModel {
     super(data, graphModel, 'line');
   }
   getEdgeStyle() {
-    const {
-      graphModel,
-    } = this;
+    const { line } = this.graphModel.theme;
     const style = super.getEdgeStyle();
     return {
       ...style,
-      ...graphModel.theme.line,
+      ...cloneDeep(line),
     };
   }
   getTextPosition(): Point {

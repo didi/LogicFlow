@@ -1,7 +1,7 @@
 import {
   observable, action, toJS, isObservable,
 } from 'mobx';
-import { assign, pick } from 'lodash-es';
+import { assign, cloneDeep } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
@@ -232,7 +232,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   getTextStyle() {
     // 透传 nodeText
     const { nodeText } = this.graphModel.theme;
-    return { ...nodeText };
+    return cloneDeep(nodeText);
   }
   /**
    * 获取节点锚点样式
@@ -241,11 +241,15 @@ export default class BaseNodeModel implements IBaseNodeModel {
   getAnchorStyle(): Record<string, any> {
     const { anchor } = this.graphModel.theme;
     // 防止被重写覆盖主题。
-    return { ...anchor };
+    return cloneDeep(anchor);
   }
+  /**
+   * 获取自定义锚点拖出样式
+   * @returns 自定义锚点拖出样式
+   */
   getAnchorLineStyle() {
     const { anchorLine } = this.graphModel.theme;
-    return { ...anchorLine };
+    return cloneDeep(anchorLine);
   }
   /**
    * @overridable 支持重写
@@ -253,9 +257,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * @returns 自定义outline样式
    */
   getOutlineStyle(): OutlineTheme {
-    const { graphModel } = this;
-    const { outline } = graphModel.theme;
-    return outline;
+    const { outline } = this.graphModel.theme;
+    return cloneDeep(outline);
   }
   /**
    * 在边的时候，是否允许这个节点为source节点，边到target节点。

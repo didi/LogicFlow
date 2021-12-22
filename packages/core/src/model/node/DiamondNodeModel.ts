@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
@@ -18,7 +19,7 @@ class DiamondNodeModel extends BaseNodeModel {
     } = this;
     return {
       ...style,
-      ...diamond,
+      ...cloneDeep(diamond),
     };
   }
   @computed get points(): PointTuple[] {

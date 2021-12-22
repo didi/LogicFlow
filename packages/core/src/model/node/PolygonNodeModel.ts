@@ -1,4 +1,5 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
@@ -22,7 +23,7 @@ class PolygonNodeModel extends BaseNodeModel {
     } = this;
     return {
       ...style,
-      ...polygon,
+      ...cloneDeep(polygon),
     };
   }
   /**

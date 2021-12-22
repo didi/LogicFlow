@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -35,13 +36,11 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     super(data, graphModel, 'polyline');
   }
   getEdgeStyle() {
-    const {
-      graphModel,
-    } = this;
+    const { polyline } = this.graphModel.theme;
     const style = super.getEdgeStyle();
     return {
       ...style,
-      ...graphModel.theme.polyline,
+      ...cloneDeep(polyline),
     };
   }
   getTextPosition() {
