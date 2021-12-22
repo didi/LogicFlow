@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.7...@logicflow/core@1.0.0-alpha.8) (2021-12-22)
+
+
+### Bug Fixes
+
+* recovery getAppend ([2518892](https://github.com/didi/LogicFlow/commit/2518892c656dc07008676206ca4da920e869ed99))
+
+
+### Features
+
+* use deepclone return style ([e2c2af3](https://github.com/didi/LogicFlow/commit/e2c2af3673ff64de71a2e2c3d3f3db8fa84737cf))
+
+
+
+
+
 # [1.0.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.6...@logicflow/core@1.0.0-alpha.7) (2021-12-22)
 
 
