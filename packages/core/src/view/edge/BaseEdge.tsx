@@ -238,7 +238,7 @@ export default class BaseEdge extends Component<IProps> {
         onMouseLeave={this.setHoverOFF}
       >
         {this.getShape()}
-        {/* {this.getAppend()} */}
+        {this.getAppend()}
         {this.getText()}
         {this.getArrow()}
         {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}
