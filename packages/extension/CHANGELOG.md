@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.6...@logicflow/extension@1.0.0-alpha.7) (2021-12-22)
+
+
+### Bug Fixes
+
+* node resize set default style ([b9def97](https://github.com/didi/LogicFlow/commit/b9def9763f1fa0464c42adeffebf37fe20543151))
+
+
+
+
+
 # [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.4...@logicflow/extension@1.0.0-alpha.6) (2021-12-22)
 
 
