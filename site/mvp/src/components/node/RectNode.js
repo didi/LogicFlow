@@ -1,23 +1,11 @@
-import { RectResize } from '@logicflow/extension'
+// import { RectResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from './getShapeStyleUtil'
-// const RectResize = window.RectResize
+const RectResize = window.RectResize
 
 /**
  * view控制渲染的值
  */
 class RectNewNode extends RectResize.view {
-  getShapeStyle () {
-    const style = super.getShapeStyle()
-    const properties = this.getProperties()
-    return getShapeStyleFuction(style, properties)
-  }
-
-  getTextStyle () {
-    const style = super.getTextStyle()
-    const properties = this.getProperties()
-    return getTextStyleFunction(style, properties)
-  }
-
   toFront () {
     // const { isAlwaysBottom } = this.getProperties()
     // if (!isAlwaysBottom) {
@@ -36,6 +24,19 @@ class RectNewModel extends RectResize.model {
 
   setToBottom () {
     this.zIndex = 0
+  }
+
+  getNodeStyle () {
+    const style = super.getNodeStyle()
+    const properties = this.getProperties()
+    return getShapeStyleFuction(style, properties)
+  }
+
+  getTextStyle () {
+    const style = super.getTextStyle()
+    const properties = this.getProperties()
+    // console.log('getTextStyle', getTextStyleFunction(style, properties))
+    return getTextStyleFunction(style, properties)
   }
 }
 

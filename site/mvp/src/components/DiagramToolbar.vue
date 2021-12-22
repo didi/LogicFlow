@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="toolbar-item">
+    <div class="toolbar-item" :class="{'selection-active': selectionOpened}" @click="$_selectionSelect()">
       <area-select size="18" />
     </div>
     <div class="toolbar-item toolbar-color-picker">
@@ -59,6 +59,7 @@ import AreaSelect from './icon/AreaSelect.vue'
 
 export default {
   props: {
+    lf: Object,
     fillColor: {
       type: String,
       default: ''
@@ -66,6 +67,7 @@ export default {
   },
   data () {
     return {
+      selectionOpened: false,
       colors: '#345678'
     }
   },
@@ -76,6 +78,14 @@ export default {
     },
     $_saveGraph () {
       this.$emit('saveGraph')
+    },
+    $_selectionSelect () {
+      this.selectionOpened = !this.selectionOpened
+      if (this.selectionOpened) {
+        this.lf.openSelectionSelect()
+      } else {
+        this.lf.closeSelectionSelect()
+      }
     }
   },
   components: {
@@ -106,5 +116,8 @@ export default {
   width: 24px;
   height: 24px;
   margin: 8px 4px;
+}
+.selection-active {
+  background: #33a3dc;
 }
 </style>

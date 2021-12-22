@@ -59,7 +59,7 @@ class BaseEdgeModel implements IBaseModel {
   customTextPosition = false; // 是否自定义边文本位置
   @observable text = defaultData.text;
   @observable type = '';
-  @observable properties = {};
+  @observable properties: Record<string, any> = {};
   @observable sourceNodeId = defaultData.sourceNodeId;
   @observable targetNodeId = defaultData.targetNodeId;
   @observable startPoint = defaultData.startPoint;
@@ -223,7 +223,10 @@ class BaseEdgeModel implements IBaseModel {
 
   @action
   setProperties(properties): void {
-    Object.assign(this.properties, formatData(properties));
+    this.properties = {
+      ...this.properties,
+      ...formatData(properties),
+    };
     this.setAttributes();
   }
 

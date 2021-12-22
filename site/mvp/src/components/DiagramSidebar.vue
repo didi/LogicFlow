@@ -15,10 +15,10 @@
         <div class="node-item" @mousedown="dragInNode('triangle')">
           <icon-triangle class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('ellipse')">
+        <div class="node-item" @mousedown="dragInNode('pro-ellipse')">
           <icon-ellipse class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('diamond')">
+        <div class="node-item" @mousedown="dragInNode('pro-diamond')">
           <icon-diamond class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('cylinde')">

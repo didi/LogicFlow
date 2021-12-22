@@ -94,6 +94,7 @@ import { shortStyles, borderStyles } from '../constant'
 
 export default {
   props: {
+    elementsStyle: Object
   },
   data () {
     return {
@@ -109,6 +110,11 @@ export default {
       fontColor: '', // 文本颜色
       SketchPicker: Sketch,
       fontWeight: '' // 文本加粗
+    }
+  },
+  watch: {
+    elementsStyle () {
+
     }
   },
   methods: {
