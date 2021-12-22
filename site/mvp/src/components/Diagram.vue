@@ -29,7 +29,7 @@
 </template>
 
 <script>
-// import LogicFlow from '@logicflow/core'
+import LogicFlow from '@logicflow/core'
 import { SelectionSelect } from '@logicflow/extension'
 import '@logicflow/core/dist/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
@@ -44,7 +44,7 @@ import DiamondNode from './node/DiamondNode'
 import TextNode from './node/TextNode'
 import Ployline from './node/Polyline'
 
-const LogicFlow = window.LogicFlow
+// const LogicFlow = window.LogicFlow
 
 export default {
   name: 'Diagram',

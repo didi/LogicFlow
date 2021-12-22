@@ -1,6 +1,6 @@
-// import { RectResize } from '@logicflow/extension'
+import { RectResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from './getShapeStyleUtil'
-const RectResize = window.RectResize
+// const RectResize = window.RectResize
 
 /**
  * view控制渲染的值

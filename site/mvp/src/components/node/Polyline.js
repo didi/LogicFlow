@@ -1,7 +1,7 @@
-// import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
+import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
 import { getShapeStyleFuction, getTextStyleFunction } from './getShapeStyleUtil'
-const PolylineEdge = window.PolylineEdge
-const PolylineEdgeModel = window.PolylineEdgeModel
+// const PolylineEdge = window.PolylineEdge
+// const PolylineEdgeModel = window.PolylineEdgeModel
 class View extends PolylineEdge {
 
 }

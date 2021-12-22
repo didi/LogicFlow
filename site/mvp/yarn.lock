@@ -952,21 +952,21 @@
     "cssnano-preset-default" "^4.0.0"
     "postcss" "^7.0.0"
 
-"@logicflow/core@^0.7.13-alpha.1":
-  "integrity" "sha512-jVPZVhp2bnJjkg07kXCCYgumuVTuZeQN+iRL/owxbL9NQMTiJGD87c3wZtYka5aKk1eB/XOrJjmSvSpdwvBuYg=="
-  "resolved" "https://registry.npmmirror.com/@logicflow/core/download/@logicflow/core-0.7.13-alpha.1.tgz"
-  "version" "0.7.13-alpha.1"
+"@logicflow/core@^1.0.0-alpha.6":
+  "integrity" "sha512-bbW5sNZvIBXkm5hJMeiJ6ACLjHRHqvU2qpRRCK+SFbuL97NFQArM2mHbg/YeDKXwTPOUo9BiV8E4cUKI19WlbA=="
+  "resolved" "https://registry.npmmirror.com/@logicflow/core/download/@logicflow/core-1.0.0-alpha.6.tgz"
+  "version" "1.0.0-alpha.6"
   dependencies:
     "@types/mousetrap" "^1.6.4"
     "mousetrap" "^1.6.5"
     "preact" "^10.4.8"
 
-"@logicflow/extension@^0.7.13-alpha.1":
-  "integrity" "sha512-MWHSsA8aqCSQuJU8pDepuydpRamNKgcSQ5lZ1Grb2d/z1jIxfVqk7B+pO/OhJCFgxDRtJLTiXjUgClrwg+NwXA=="
-  "resolved" "https://registry.npmmirror.com/@logicflow/extension/download/@logicflow/extension-0.7.13-alpha.1.tgz"
-  "version" "0.7.13-alpha.1"
+"@logicflow/extension@^1.0.0-alpha.6":
+  "integrity" "sha512-xsO7pch0XqI4WMTaxjRsIXk1Nr5J0i4qsfmmZyZ9+/LFo/G2bba9ql/oHnsljMvfS+E4DfkCu/RG5rQnK0uqPw=="
+  "resolved" "https://registry.npmmirror.com/@logicflow/extension/download/@logicflow/extension-1.0.0-alpha.6.tgz"
+  "version" "1.0.0-alpha.6"
   dependencies:
-    "@logicflow/core" "^0.7.13-alpha.1"
+    "@logicflow/core" "^1.0.0-alpha.6"
     "ids" "^1.0.0"
     "preact" "^10.4.8"
 
