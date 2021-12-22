@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.4...@logicflow/core@1.0.0-alpha.6) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge setProperties in vue ([ecdaf34](https://github.com/didi/LogicFlow/commit/ecdaf34ad170e410ad979af8413e87bf86e8345b))
+* edge text use model getTextStyle ([85b36ef](https://github.com/didi/LogicFlow/commit/85b36efa14ed9e7a0a5d95e800489d4dfa65b6d6))
+* lf.select -> lf.selectElementById ([f4eea2c](https://github.com/didi/LogicFlow/commit/f4eea2c23ec6ac44acbd404b35d94b74fbb69d00))
+* selection events ([682ba34](https://github.com/didi/LogicFlow/commit/682ba345451a5c5b522ebcd510f9c9e29be5758e))
+
+
+
+
+
 # [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.14...@logicflow/core@1.0.0-alpha.4) (2021-12-21)
 
 

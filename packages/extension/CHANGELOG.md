@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.4...@logicflow/extension@1.0.0-alpha.6) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge setProperties in vue ([ecdaf34](https://github.com/didi/LogicFlow/commit/ecdaf34ad170e410ad979af8413e87bf86e8345b))
+* lf.select -> lf.selectElementById ([f4eea2c](https://github.com/didi/LogicFlow/commit/f4eea2c23ec6ac44acbd404b35d94b74fbb69d00))
+* mini map ([822adf9](https://github.com/didi/LogicFlow/commit/822adf9bddc53f9c82cd26790e8f83b9eb67f093))
+
+
+
+
+
 # [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.14...@logicflow/extension@1.0.0-alpha.4) (2021-12-21)
 
 

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.5](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.4...examples@1.0.0-alpha.5) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge text use model getTextStyle ([85b36ef](https://github.com/didi/LogicFlow/commit/85b36efa14ed9e7a0a5d95e800489d4dfa65b6d6))
+* examples ([5abdd08](https://github.com/didi/LogicFlow/commit/5abdd08f2b8243b27a40b5b489f39cdda559a79f))
+* selection events ([682ba34](https://github.com/didi/LogicFlow/commit/682ba345451a5c5b522ebcd510f9c9e29be5758e))
+
+
+
+
+
 # [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.3...examples@1.0.0-alpha.4) (2021-12-21)
 
 
