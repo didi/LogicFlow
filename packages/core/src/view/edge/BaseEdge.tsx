@@ -209,7 +209,6 @@ export default class BaseEdge extends Component<IProps> {
         position,
       });
     }
-    console.log(54555);
     const { editConfigModel } = graphModel;
     graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
