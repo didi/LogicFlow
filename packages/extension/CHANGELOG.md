@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.8...@logicflow/extension@1.0.0-alpha.9) (2021-12-24)
+
+
+### Features
+
+* remove hideOutline ([be86fb1](https://github.com/didi/LogicFlow/commit/be86fb118bd8bb1bd67a999802544eb2d10df0da))
+
+
+
+
+
 # [1.0.0-alpha.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.7...@logicflow/extension@1.0.0-alpha.8) (2021-12-22)
 
 **Note:** Version bump only for package @logicflow/extension
