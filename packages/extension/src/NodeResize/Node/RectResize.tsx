@@ -27,7 +27,6 @@ class RectResizeModel extends RectNodeModel {
     return style;
   }
   setAttributes() {
-    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {

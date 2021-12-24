@@ -92,7 +92,7 @@ export default function NodeResizeExample() {
       const { newNodeSize } = data;
       const { id, type } = newNodeSize;
       if (type === 'bpmn:exclusiveGateway' || type === 'bpmn:startEvent') {
-        const { x, y, ry } = newNodeSize;
+        const { ry } = newNodeSize;
         lf.getNodeModelById(id).moveText(0, ry + 10);
       }
     })

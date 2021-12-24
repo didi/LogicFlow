@@ -32,7 +32,6 @@ class EllipseResizeModel extends EllipseNodeModel {
     return style;
   }
   setAttributes() {
-    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {

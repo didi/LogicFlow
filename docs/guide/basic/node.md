@@ -16,12 +16,42 @@ LogicFlow 对外暴露了基础节点`BaseNode`和 7 个基础类型的节点：
 
 由上图可以看到，LogicFlow 提供的简单节点都继承自内部的`BaseNode`，因此，用户的`CustomNode`既可以继承简单类型节点实现，也可以直接通过继承`BaseNode`来实现。
 
-## 基础节点-RectNode
+## 自定义一个矩形节点
 
 首先
 
 ```js
-import { RectNode, RectNodeModel } from '@logicflow'
+// UserNode.js
+import { RectNode, RectNodeModel } from '@logicflow/core'
+
+class UserNodeView extends RectNode {}
+
+class UserNodeModel extends RectNodeModel {}
+
+export default {
+  type: 'UserNode',
+  view: UserNodeView,
+  model: UserNodeModel
+}
+```
+
+```js
+import UserNode from './UserNode.js'
+// main.js
+const lf = new LogicFlow({
+  container: document.querySelector('#container')
+});
+lf.register(UserNode);
+
+lf.render({
+  nodes: [
+    {
+      type: 'UserNode',
+      x: 100,
+      y: 100
+    }
+  ]
+})
 ```
 
 ### 公共属性

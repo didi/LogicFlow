@@ -20,15 +20,15 @@ import { observer } from '..';
 import ModificationOverlay from './overlay/ModificationOverlay';
 
 type IProps = {
-  getView: (type: string) => typeof Component,
-  tool: Tool,
-  options: Options.Definition,
-  dnd: DnD,
+  getView: (type: string) => typeof Component;
+  tool: Tool;
+  options: Options.Definition;
+  dnd: DnD;
   snaplineModel: SnaplineModel;
-  graphModel: GraphModel,
+  graphModel: GraphModel;
 };
 type InjectedProps = IProps & {
-  graphModel: GraphModel,
+  graphModel: GraphModel;
 };
 
 type ContainerStyle = {
@@ -90,7 +90,7 @@ class Graph extends Component<IProps> {
           }
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>
-          {!options.hideOutline ? <OutlineOverlay graphModel={graphModel} /> : ''}
+          <OutlineOverlay graphModel={graphModel} />
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </ModificationOverlay>

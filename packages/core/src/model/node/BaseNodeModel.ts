@@ -5,12 +5,11 @@ import { assign, cloneDeep } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ElementState, ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
   AdditionData,
   NodeData,
-  NodeAttribute,
   NodeConfig,
   NodeMoveRule,
   Bounds,
@@ -25,22 +24,6 @@ import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
-
-const defaultConfig = assign(
-  {
-    x: 0,
-    y: 0,
-    zIndex: 1,
-    text: {
-      value: '',
-      x: 0,
-      y: 0,
-      draggable: false,
-      editable: true,
-    },
-    hideOutline: false,
-  },
-);
 
 export type ConnectRule = {
   message: string;
@@ -78,8 +61,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
   hasSetSourceRules = false; // 用来限制rules的重复值
   @observable properties: Record<string, any> = {};
   @observable type = '';
-  @observable x = defaultConfig.x;
-  @observable y = defaultConfig.y;
+  @observable x = 0;
+  @observable y = 0;
   @observable
   private _width = 100;
   graphModel: GraphModel;
@@ -100,10 +83,16 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable zIndex = defaultConfig.zIndex;
+  @observable zIndex = 1;
   @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
   @observable state = 1;
-  @observable text = defaultConfig.text;
+  @observable text = {
+    value: '',
+    x: 0,
+    y: 0,
+    draggable: false,
+    editable: true,
+  };
   @observable draggable = true;
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
@@ -490,7 +479,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setZIndex(zindex: number = defaultConfig.zIndex): void {
+  setZIndex(zindex = 1): void {
     this.zIndex = zindex;
   }
 

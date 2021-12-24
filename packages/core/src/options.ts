@@ -77,10 +77,6 @@ export type Definition = {
    */
   guards?: GuardsTypes;
   /**
-   * 是否不启用outline显示选中和hover效果
-   */
-  hideOutline?: boolean;
-  /**
    * 表示节点在上，边在下，点击元素时选择元素显示在最顶部。
    * 表示安装元素创建顺序排序，点击元素也不会将其置顶。要置顶需要调用置顶API。
    */

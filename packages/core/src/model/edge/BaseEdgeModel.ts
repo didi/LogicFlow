@@ -9,42 +9,18 @@ import GraphModel from '../GraphModel';
 import {
   Point,
   AdditionData,
-  EdgeAttribute,
   EdgeData,
   MenuConfig,
   EdgeConfig,
 } from '../../type/index';
 import {
-  ElementState, ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
-import { defaultTheme, OutlineTheme } from '../../constant/DefaultTheme';
+import { OutlineTheme } from '../../constant/DefaultTheme';
 import { formatData } from '../../util/compatible';
 import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 import { getZIndex } from '../../util/zIndex';
 
-const defaultData = {
-  sourceNodeId: '',
-  sourceAnchorId: '',
-  targetNodeId: '',
-  targetAnchorId: '',
-  startPoint: null,
-  endPoint: null,
-  zIndex: 0,
-  isSelected: false,
-  isHovered: false,
-  text: {
-    value: '',
-    x: 0,
-    y: 0,
-    draggable: false,
-    editable: true,
-  },
-  points: '',
-  pointsList: [],
-  strokeOpacity: 1,
-  hideOutline: false,
-  ...defaultTheme.line,
-};
 class BaseEdgeModel implements IBaseModel {
   id = createUuid();
   readonly BaseType = ElementType.EDGE;
@@ -54,26 +30,28 @@ class BaseEdgeModel implements IBaseModel {
   [propName: string]: any; // 支持自定义
   graphModel: GraphModel;
   menu?: MenuConfig[];
-  sourceAnchorId = defaultData.sourceAnchorId;
-  targetAnchorId = defaultData.targetAnchorId;
+  sourceAnchorId = '';
+  targetAnchorId = '';
   customTextPosition = false; // 是否自定义边文本位置
-  @observable text = defaultData.text;
+  @observable text = {
+    value: '',
+    x: 0,
+    y: 0,
+    draggable: false,
+    editable: true,
+  };
   @observable type = '';
   @observable properties: Record<string, any> = {};
-  @observable sourceNodeId = defaultData.sourceNodeId;
-  @observable targetNodeId = defaultData.targetNodeId;
-  @observable startPoint = defaultData.startPoint;
-  @observable endPoint = defaultData.endPoint;
-  @observable strokeWidth = defaultData.strokeWidth;
-  @observable stroke = defaultData.stroke;
-  @observable hideOutline = defaultData.hideOutline;
-  @observable strokeOpacity = defaultData.strokeOpacity;
-  @observable zIndex = defaultData.zIndex;
-  @observable isSelected = defaultData.isSelected;
-  @observable isHovered = defaultData.isHovered;
+  @observable sourceNodeId = '';
+  @observable targetNodeId = '';
+  @observable startPoint = null;
+  @observable endPoint = null;
+  @observable zIndex = 0;
+  @observable isSelected = false;
+  @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制边是否对用户操作进行反应
-  @observable points = defaultData.points;
-  @observable pointsList = defaultData.pointsList;
+  @observable points = '';
+  @observable pointsList = [];
   @observable draggable = true;
 
   constructor(data: EdgeConfig, graphModel: GraphModel, type) {
@@ -375,7 +353,7 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
-  setZIndex(zindex: number = defaultData.zIndex): void {
+  setZIndex(zindex = 0): void {
     this.zIndex = zindex;
   }
 
