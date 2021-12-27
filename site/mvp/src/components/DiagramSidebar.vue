@@ -33,9 +33,6 @@
         <div class="node-item" @mousedown="dragInNode('pro-text')">
           <icon-text class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('table')">
-          <icon-table class="svg-table" />
-        </div>
         <div class="node-item" @mousedown="dragInNode('left-arrow')">
           左
         </div>
@@ -53,9 +50,6 @@
         </div>
         <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
           竖
-        </div>
-        <div class="node-item" @mousedown="dragInNode('image')">
-          图片
         </div>
       </div>
     </div>
@@ -85,7 +79,6 @@ import IconCylinde from './icon/Cylinde.vue'
 import IconDiamond from './icon/Diamond.vue'
 import IconEllipse from './icon/Ellipse.vue'
 import IconParallelogram from './icon/Parallelogram.vue'
-import IconTable from './icon/Table.vue'
 import IconText from './icon/Text.vue'
 import IconTriangle from './icon/Triangle.vue'
 
@@ -105,7 +98,6 @@ export default {
     IconDiamond,
     IconEllipse,
     IconParallelogram,
-    IconTable,
     IconText,
     IconTriangle
   }

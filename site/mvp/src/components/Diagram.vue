@@ -37,30 +37,7 @@ import '@logicflow/extension/lib/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
 import PropertyPanel from './PropertyPanel.vue'
-import ActorNode from './node/ActorNode'
-import CircleNode from './node/CircleNode'
-import CylindeNode from './node/CylindeNode'
-import EllipseNode from './node/EllipseNode'
-import RectNode from './node/RectNode'
-import RectRadiusNode from './node/RectRadiusNode'
-import DiamondNode from './node/DiamondNode'
-import TextNode from './node/TextNode'
-import TriangleNode from './node/TriangleNode'
-import Ployline from './node/Polyline'
-import Line from './node/Line'
-import Bezier from './node/Bezier'
-import ParallelogramNode from './node/ParallelogramNode'
-import LeftArrow from './node/LeftArrow'
-import RightArrow from './node/RightArrow'
-import HorizontalArrow from './node/HorizontalArrowNode'
-import UpArrow from './node/UpArrowNode'
-import DownArrow from './node/DownArrowNode'
-import VerticalArrow from './node/VerticalArrowNode'
-import ImageSetting from './node/imageNode/Setting'
-import ImageUser from './node/imageNode/User'
-import ImageCloud from './node/imageNode/Cloud'
-import IconMessage from './node/iconNode/Message'
-
+import { registerCustomElement } from './node'
 // const LogicFlow = window.LogicFlow
 
 export default {
@@ -124,34 +101,11 @@ export default {
           edgeText: { overflowMode: 'autoWrap', lineHeight: 1.5 }
         }
       )
-      lf.register(ActorNode)
-      lf.register(CircleNode)
-      lf.register(CylindeNode)
-      lf.register(EllipseNode)
-      lf.register(RectNode)
-      lf.register(RectRadiusNode)
-      lf.register(DiamondNode)
-      lf.register(TextNode)
-      lf.register(TriangleNode)
-      lf.register(ParallelogramNode)
-      lf.register(LeftArrow)
-      lf.register(RightArrow)
-      lf.register(HorizontalArrow)
-      lf.register(UpArrow)
-      lf.register(DownArrow)
-      lf.register(VerticalArrow)
-      lf.register(ImageSetting)
-      lf.register(ImageUser)
-      lf.register(ImageCloud)
-      lf.register(IconMessage)
-      lf.register(Ployline)
-      lf.register(Line)
-      lf.register(Bezier)
+      // 注册自定义元素
+      registerCustomElement(lf)
       lf.setDefaultEdgeType('pro-polyline')
       lf.render(data)
       this.lf = lf
-      console.log(LogicFlow, lf)
-      // this.$_initEvent()
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
         this.$nextTick(() => {
           const { nodes, edges } = this.lf.getSelectElements()
@@ -167,14 +121,11 @@ export default {
       let properties = {}
       const { nodes, edges } = this.lf.getSelectElements()
       nodes.forEach(node => {
-        // console.log(JSON.stringify(node.properties))
         properties = { ...properties, ...node.properties }
       })
       edges.forEach(edge => {
-        // console.log(JSON.stringify(edge.properties))
         properties = { ...properties, ...edge.properties }
       })
-      console.log(properties)
       this.properties = properties
       return properties
     },
@@ -192,7 +143,6 @@ export default {
       })
     },
     $_setStyle (item) {
-      console.log('11', item)
       this.activeNodes.forEach(({ id }) => {
         this.lf.setProperties(id, item)
       })
