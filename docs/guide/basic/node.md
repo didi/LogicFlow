@@ -132,7 +132,14 @@ class UserTaskModel extends RectNodeModel {
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
-    style.stroke = 'blue'
+    const properties = this.properties;
+    if (properties.statu === 'pass') {
+      style.stroke = "green";
+    } else if (properties.statu === 'reject') {
+      style.stroke = "red";
+    } else {
+      style.stroke = "rgb(24, 125, 255)";
+    }
     return style;
   }
 }
@@ -151,6 +158,12 @@ LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自�
 在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`radius`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要使用`setAttributes`。
 
 LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/nodeModelApi.html#形状属性)
+
+#### 基于properties属性自定义节点样式
+
+在实际业务中，存在这样的情况，例如在审批场景中，自定义的审批节点存在3种状态：
+
+一种是流程还没有走到这个节点的默认状态，一种是流程审批通过状态，一种是审批不通过的驳回状态。在外观上我们需要对不同的状态显示不同的颜色。LogicFlow的图数据中提到，不论是节点还是边，LogicFlow都保留了properties字段，用于给开发者存放自己的业务属性。在上面示例中，`properties`的`statu`属性就是一个自定义的业务属性，开发者在自定义节点样式的时候，可以基于`properties`中的属性来控制节点显示不同的样式。
 
 
 ### 步骤3: 自定义节点view
@@ -240,7 +253,7 @@ LogicFlow定义一个节点的外观有三种方式，分别为**主题**、**�
 2. `自定义节点view`最终生成的图形整体轮廓必须和继承的基础图形一致，不能继承的`rect`而在getShape的时候返回的最终图形轮廓变成了圆形。因为LogicFlow对于节点上的连线调整、锚点生成等会基于基础图形进行计算。
 :::
 
-#### tip 为什么`rect`的`x`,`y`不是直接从`model`中获取的`x`, `y`?
+#### 为什么`rect`的`x`,`y`不是直接从`model`中获取的`x`, `y`?
 
 在LogicFlow所有的基础节点中，`model`里面的`x`,`y`都是统一表示中心点。但是`getShape`方法给我们提供直接生成svg dom的方式，在svg中, 对图形位置的控制则存在差异：
 
