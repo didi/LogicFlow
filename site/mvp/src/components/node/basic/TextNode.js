@@ -3,8 +3,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
 
 // 文本节点
 class TextNewNode extends TextNode {
-  getShapeStyle () {
-    const style = super.getShapeStyle()
+  getNodeStyle () {
+    const style = super.getNodeStyle()
     const properties = this.getProperties()
     return getShapeStyleFuction(style, properties)
   }

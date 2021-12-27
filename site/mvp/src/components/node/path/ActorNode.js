@@ -9,8 +9,8 @@ class ActorModel extends RectResize.model {
     this.height = 80;
   }
 
-  getShapeStyle () {
-    const style = super.getShapeStyle()
+  getNodeStyle () {
+    const style = super.getNodeStyle()
     const properties = this.getProperties()
     return getShapeStyleFuction(style, properties)
   }

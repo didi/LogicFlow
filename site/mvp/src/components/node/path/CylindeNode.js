@@ -9,8 +9,8 @@ class CylindeModel extends RectResize.model {
     this.width = 60
     this.height = 80
   }
-  getShapeStyle () {
-    const style = super.getShapeStyle()
+  getNodeStyle () {
+    const style = super.getNodeStyle()
     const properties = this.getProperties()
     return getShapeStyleFuction(style, properties)
   }
@@ -63,7 +63,6 @@ class CylindeView extends RectResize.view {
       y: y - 1/3 * height,
       width,
       height: 2/3 * height,
-      fill: '#fff',
       stroke: 'transparent'
     }
     return h('g', {}, [

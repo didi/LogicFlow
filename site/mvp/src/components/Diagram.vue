@@ -94,6 +94,9 @@ export default {
       })
       lf.setTheme(
         {
+          rect: { strokeWidth: 1 },
+          diamond: { strokeWidth: 1 },
+          ellipse: { strokeWidth: 1 },
           nodeText: { overflowMode: 'autoWrap', lineHeight: 1.5 },
           edgeText: { overflowMode: 'autoWrap', lineHeight: 1.5 }
         }
