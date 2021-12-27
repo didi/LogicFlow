@@ -34,7 +34,8 @@ export default class MultipleSelect extends Component<IProps> {
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { graphModel } = this.props;
-    graphModel.moveElements(graphModel.getSelectElements(true), deltaX, deltaY);
+    const selectElements = graphModel.getSelectElements(true);
+    graphModel.moveNodes(selectElements.nodes.map(node => node.id), deltaX, deltaY);
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();

@@ -49,20 +49,23 @@ lf.render({
       id: "1",
       type: "rect",
       x: 100,
-      y: 100
+      y: 100,
+      text: "节点1"
     },
     {
       id: "2",
       type: "circle",
       x: 300,
-      y: 200
+      y: 200,
+      text: "节点2"
     }
   ],
   edges: [
     {
       sourceNodeId: "1",
       targetNodeId: "2",
-      type: "polyline"
+      type: "polyline",
+      text: "连线"
     }
   ]
 });

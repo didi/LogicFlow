@@ -199,6 +199,9 @@ class GraphModel {
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
   }
+  /**
+   * 当前画布所有被选中的元素
+   */
   @computed get selectElements() {
     const elements = new Map();
     this.nodes.forEach(node => {
@@ -216,7 +219,7 @@ class GraphModel {
   /**
    * 获取指定区域内的所有元素
    */
-  getAreaElement(leftTopPoint, rightBottomPoint) {
+  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
     const areaElements = [];
     const elements = [];
     // IE BUG: mobx observer对象使用解构会导致IE11出现问题
@@ -273,7 +276,7 @@ class GraphModel {
    * @param lt 左上角点
    * @param rb 右下角点
    */
-  isElementInArea(element, lt, rb, wholeEdge = true) {
+  isElementInArea(element, lt: PointTuple, rb: PointTuple, wholeEdge = true) {
     if (element.BaseType === ElementType.NODE) {
       element = element as BaseNodeModel;
       // 节点是否在选区内，判断逻辑为如果节点的bbox的四个角上的点都在选区内，则判断节点在选区内
@@ -625,7 +628,7 @@ class GraphModel {
    * @param y Y轴目标位置
    */
   @action
-  moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number) {
+  moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number, isignoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -639,11 +642,11 @@ class GraphModel {
     } = nodeModel;
     const deltaX = x - originX;
     const deltaY = y - originY;
-    this.moveNode(nodeId, deltaX, deltaY);
+    this.moveNode(nodeId, deltaX, deltaY, isignoreRule);
   }
   /**
-   * 显示节点文本编辑框
-   * @param nodeId 节点id
+   * 显示节点、连线文本编辑框
+   * @param elementId 节点id
    */
   @action
   editText(id: ElementModeId) {
@@ -716,7 +719,7 @@ class GraphModel {
     }
   }
   /**
-   * 删除两节点直接的边
+   * 删除两节点之间的边
    * @param sourceNodeId 边的起始节点
    * @param targetNodeId 边的目的节点
    */
@@ -870,29 +873,26 @@ class GraphModel {
     }
   }
   /**
-   * 批量移动元素
-   */
-  @action
-  moveElements(
-    elements: { nodes: NodeConfig[] },
-    deltaX: number,
-    deltaY: number,
-  ) {
-    // 如果移动的
-    elements.nodes.forEach(node => this.moveNode(node.id, deltaX, deltaY));
-  }
-  /**
    * 批量移动节点，节点移动的时候，会动态计算所有节点与未移动节点的边位置
-   * 移动的节点直接的边会保持相对位置
+   * 移动的节点之间的边会保持相对位置
    */
   @action
-  moveNodes(nodeIds, deltaX, deltaY, isignoreRule = false) {
+  moveNodes(nodeIds: string[], deltaX: number, deltaY: number, isignoreRule = false) {
     nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isignoreRule));
   }
   /**
    * 添加节点移动限制规则，在节点移动的时候触发。
    * 如果方法返回false, 则会阻止节点移动。
    * @param fn function
+   * @example
+   *
+   * graphModel.addNodeMoveRules((nodeModel, x, y) => {
+   *   if (nodeModel.properties.disabled) {
+   *     return false
+   *   }
+   *   return true
+   * })
+   *
    */
   addNodeMoveRules(fn: NodeMoveRule) {
     if (!this.nodeMoveRules.includes(fn)) {
@@ -954,7 +954,7 @@ class GraphModel {
   /**
    * 切换边的类型
    * @param id 边Id
-   * @param type 期望切换的类型
+   * @param type 边类型
    */
   @action changeEdgeType(id, type) {
     const edgeModel = this.getEdgeModelById(id);
