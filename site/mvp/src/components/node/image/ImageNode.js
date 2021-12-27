@@ -1,7 +1,7 @@
 import { h } from '@logicflow/core'
 import RectNode from '../basic/RectNode'
 
-// 图片-设置
+// 图片-基础节点
 class ImageModel extends RectNode.model {
   constructor(data, graphData) {
     super(data, graphData)

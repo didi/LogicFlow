@@ -1,10 +1,7 @@
 import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
-// const PolylineEdge = window.PolylineEdge
-// const PolylineEdgeModel = window.PolylineEdgeModel
-class View extends PolylineEdge {
 
-}
+ // 折线
 class Model extends PolylineEdgeModel {
   constructor (data, graphModel) {
     super(data, graphModel)
@@ -13,7 +10,6 @@ class Model extends PolylineEdgeModel {
   getTextStyle () {
     const style = super.getTextStyle()
     const attributes = super.getAttributes()
-    // console.log(style, attributes.properties)
     return getTextStyleFunction(style, attributes.properties)
   }
 
@@ -25,6 +21,6 @@ class Model extends PolylineEdgeModel {
 }
 export default {
   type: 'pro-polyline',
-  view: View,
+  view: PolylineEdge,
   model: Model
 }

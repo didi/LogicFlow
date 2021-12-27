@@ -1,5 +1,6 @@
 import ImageNode from './ImageNode'
 
+// 图片-设置节点
 class SettingModel extends ImageNode.model {
   constructor(data, graphData) {
     super(data, graphData)

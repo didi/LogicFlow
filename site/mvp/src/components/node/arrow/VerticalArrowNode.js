@@ -3,6 +3,14 @@ import RectNode from '../basic/RectNode'
 
 // 竖直箭头
 
+class VerticalArrowModel extends RectNode.model {
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.width = 40
+    this.height = 80
+  }
+}
+
 class VerticalArrowView extends RectNode.view {
   getResizeShape() {
     const { x, y, width, height } = this.props.model
@@ -44,5 +52,5 @@ class VerticalArrowView extends RectNode.view {
 export default {
   type: 'vertical-arrow',
   view: VerticalArrowView,
-  model: RectNode.model
+  model: VerticalArrowModel
 }

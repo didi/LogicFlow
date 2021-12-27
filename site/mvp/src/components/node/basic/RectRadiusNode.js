@@ -1,8 +1,6 @@
 import RectNode from './RectNode'
 
-/**
- * model控制初始化的值
- */
+// 带圆角的矩形
 class RectRadiusModel extends RectNode.model {
   setAttributes () {
     super.setAttributes()

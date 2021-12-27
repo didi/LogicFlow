@@ -11,8 +11,8 @@ class IconNode extends RectNode.view {
     const style = this.props.model.getNodeStyle()
     const href = this.getImageHref()
     const iconAttrs = {
-      x: x-  width + 55,
-      y: y - height + 45, // icon在左上角
+      x: x -  1/2 * width + 5,
+      y: y - 1/2 * height + 5, // icon在左上角
       width: 25,
       height: 18,
       href,

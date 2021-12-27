@@ -3,7 +3,14 @@ import RectNode from '../basic/RectNode'
 
 // 下箭头
 
-class UpArrowView extends RectNode.view {
+class DownArrowModel extends RectNode.model {
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.width = 50
+    this.height = 80
+  }
+}
+class DownArrowView extends RectNode.view {
   getResizeShape() {
     const { x, y, width, height } = this.props.model
     const style = this.props.model.getNodeStyle()
@@ -37,6 +44,6 @@ class UpArrowView extends RectNode.view {
 
 export default {
   type: 'down-arrow',
-  view: UpArrowView,
-  model: RectNode.model
+  view: DownArrowView,
+  model: DownArrowModel
 }

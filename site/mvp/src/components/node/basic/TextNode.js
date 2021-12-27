@@ -1,11 +1,7 @@
 import { TextNodeModel, TextNode } from '@logicflow/core'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
-// const EllipseResize = window.EllipseResize
-// const { TextNodeModel, TextNode } = window
 
-/**
- * view控制渲染的值
- */
+// 文本节点
 class TextNewNode extends TextNode {
   getShapeStyle () {
     const style = super.getShapeStyle()
@@ -24,9 +20,6 @@ class TextNewNode extends TextNode {
     return getTextStyleFunction(style, properties)
   }
 }
-/**
- * model控制初始化的值
- */
 class TextNewModel extends TextNodeModel {
   setAttributes () {
     super.setAttributes()

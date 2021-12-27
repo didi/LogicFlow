@@ -1,6 +1,7 @@
 import { LineEdge, LineEdgeModel } from '@logicflow/core'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
 
+// 直线
 class Model extends LineEdgeModel {
   constructor (data, graphModel) {
     super(data, graphModel)

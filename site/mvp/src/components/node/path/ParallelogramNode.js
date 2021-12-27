@@ -2,7 +2,13 @@ import { h } from '@logicflow/core'
 import { RectResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
 
+// 平行四边形
 class ParallelogramModel extends RectResize.model {
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.width = 100
+    this.height = 60
+  }
   getNodeStyle() {
     const style = super.getNodeStyle()
     const properties = this.getProperties()
@@ -22,9 +28,9 @@ class ParallelogramView extends RectResize.view {
     const style = this.props.model.getNodeStyle();
     const pointList = [
       [x - width / 2, y + height/2],
-      [x - width / 3, y - height/2],
+      [x - width / 5, y - height/2],
       [x + width / 2, y - height/2],
-      [x + width / 3, y + height/2]
+      [x + width / 5, y + height/2]
     ];
     const points = pointList.map(item => {
       return `${item[0]},${item[1]}`

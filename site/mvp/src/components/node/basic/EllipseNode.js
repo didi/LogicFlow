@@ -1,5 +1,6 @@
 import CircleNode from './CircleNode'
 
+// 椭圆
 class EllipseNewModel extends CircleNode.model {
   constructor(data, graphData) {
     super(data, graphData)

@@ -1,9 +1,7 @@
 import { DiamondResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
 
-/**
- * view控制渲染的值
- */
+// 菱形
 class DiamondNode extends DiamondResize.view {
   getShapeStyle () {
     const style = super.getShapeStyle()
@@ -21,11 +19,11 @@ class DiamondNode extends DiamondResize.view {
  * model控制初始化的值
  */
 class DiamondModel extends DiamondResize.model {
-  setAttributes () {
-    super.setAttributes()
-    this.strokeWidth = 1
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.rx = 35
+    this.ry = 35
   }
-
   setToBottom () {
     this.zIndex = 0
   }

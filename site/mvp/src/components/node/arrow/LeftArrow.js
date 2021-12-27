@@ -2,7 +2,13 @@ import { h } from '@logicflow/core'
 import RectNode from '../basic/RectNode'
 
 // 左箭头
-
+class LeftArrowModel extends RectNode.model {
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.width = 80
+    this.height = 50
+  }
+}
 class LeftArrowView extends RectNode.view {
   getResizeShape() {
     const { x, y, width, height } = this.props.model
@@ -38,5 +44,5 @@ class LeftArrowView extends RectNode.view {
 export default {
   type: 'left-arrow',
   view: LeftArrowView,
-  model: RectNode.model
+  model: LeftArrowModel
 }

@@ -1,8 +1,14 @@
 import { h } from '@logicflow/core'
 import { RectResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
-
+// 人物
 class ActorModel extends RectResize.model {
+  constructor(data, graphData) {
+    super(data, graphData);
+    this.width = 40;
+    this.height = 80;
+  }
+
   getShapeStyle () {
     const style = super.getShapeStyle()
     const properties = this.getProperties()
@@ -24,30 +30,30 @@ class ActorView extends RectResize.view {
     const circleAttrs = {
       ...style,
       cx: x,
-      cy: y - 1/3 * height,
-      r: 1/8 * width,
+      cy: y - 3/8 * height,
+      r: 1/8 * height,
       width,
       height
     }
     // 人物肩膀横线
     const pathAAttrs = {
       ...style,
-      d: `M ${x - 1/5 * width} ${y - 1/8 * height} L ${x + 1/5 * width} ${y - 1/8 * height}`
+      d: `M ${x - 1/2 * width} ${y - 1/8 * height} L ${x + 1/2 * width} ${y - 1/8 * height}`
     }
     // 人物身体躯干竖线
     const pathBAttrs = {
       ...style,
-      d: `M ${x} ${y - 1/3 * height + 1/8 * width} L ${x} ${y + 1/5 * height}`
+      d: `M ${x} ${y - 1/4 * height} L ${x} ${y + 1/5 * height}`
     }
     // 人物左腿斜线
     const pathCAttrs = {
       ...style,
-      d: `M ${x} ${y + 1/5 * height} L ${x - 1/5 * width} ${y + 1/2 * height}`
+      d: `M ${x} ${y + 1/5 * height} L ${x - 1/2 * width} ${y + 1/2 * height}`
     }
     // 人物右腿斜线
     const pathDAttrs = {
       ...style,
-      d: `M ${x} ${y + 1/5 * height} L ${x + 1/5 * width} ${y + 1/2 * height}`
+      d: `M ${x} ${y + 1/5 * height} L ${x + 1/2 * width} ${y + 1/2 * height}`
     }
     // 人物透明背景板
     const bgAttrs = {

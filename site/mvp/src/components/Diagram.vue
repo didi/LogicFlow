@@ -38,7 +38,6 @@ import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
 import PropertyPanel from './PropertyPanel.vue'
 import { registerCustomElement } from './node'
-// const LogicFlow = window.LogicFlow
 
 export default {
   name: 'Diagram',
@@ -55,8 +54,6 @@ export default {
     }
   },
   mounted () {
-    this.diagramWidth = this.$refs.container.clientWidth
-    this.diagramHeight = this.$refs.container.clientHeight
     let data = ''
     if (window.location.search) {
       const query = window.location.search.substring(1).split('&').reduce((map, kv) => {
@@ -192,8 +189,16 @@ export default {
   box-sizing: border-box;
 }
 .diagram-toolbar {
+  position: absolute;
+  top: 0;
+  left: 200px;
   height: 40px;
-  border-bottom: 1px solid #dadce0;
+  width: 310px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 10;
+  background: #e5e5e5;
 }
 .diagram-main {
   display: flex;
@@ -204,6 +209,7 @@ export default {
   width: 200px;
   height: calc(100% - 40px);
   border-right: 1px solid #dadce0;
+  padding: 10px;
 }
 .diagram-panel {
   width: 300px;

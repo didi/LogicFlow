@@ -34,22 +34,22 @@
           <icon-text class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('left-arrow')">
-          左
+          <icon-left-arrow class="svg-node"/>
         </div>
         <div class="node-item" @mousedown="dragInNode('right-arrow')">
-          右
+          <icon-right-arrow class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('horizontal-arrow')">
-          横
+          <icon-horizontal-arrow class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('up-arrow')">
-          上
+          <icon-up-arrow class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('down-arrow')">
-          下
+          <icon-down-arrow class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
-          竖
+          <icon-vertical-arrow class="svg-node" />
         </div>
       </div>
     </div>
@@ -81,6 +81,12 @@ import IconEllipse from './icon/Ellipse.vue'
 import IconParallelogram from './icon/Parallelogram.vue'
 import IconText from './icon/Text.vue'
 import IconTriangle from './icon/Triangle.vue'
+import IconLeftArrow from './icon/LeftArrow.vue'
+import IconRightArrow from './icon/RightArrow.vue'
+import IconHorizontalArrow from './icon/HorizontalArrow.vue'
+import IconUpArrow from './icon/UpArrow.vue'
+import IconDownArrow from './icon/DownArrow.vue'
+import IconVerticalArrow from './icon/VerticalArrow.vue'
 
 export default {
   name: 'DiagramSidebar',
@@ -99,7 +105,13 @@ export default {
     IconEllipse,
     IconParallelogram,
     IconText,
-    IconTriangle
+    IconTriangle,
+    IconRightArrow,
+    IconLeftArrow,
+    IconHorizontalArrow,
+    IconUpArrow,
+    IconDownArrow,
+    IconVerticalArrow
   }
 }
 </script>
@@ -113,7 +125,8 @@ export default {
   font-size: 14px;
   display: block;
   border-bottom: 1px solid #e5e5e5;
-  line-height: 40px;
+  line-height: 30px;
+  margin-bottom: 10px;
 }
 .node-item {
   width: 30px;

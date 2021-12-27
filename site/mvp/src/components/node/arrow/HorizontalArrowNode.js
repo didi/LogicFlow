@@ -3,6 +3,14 @@ import RectNode from '../basic/RectNode'
 
 // 水平双箭头
 
+class HorizontalArrowModel extends RectNode.model {
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.width = 80
+    this.height = 40
+  }
+}
+
 class HorizontalArrowView extends RectNode.view {
   getResizeShape() {
     const { x, y, width, height } = this.props.model
@@ -44,5 +52,5 @@ class HorizontalArrowView extends RectNode.view {
 export default {
   type: 'horizontal-arrow',
   view: HorizontalArrowView,
-  model: RectNode.model
+  model: HorizontalArrowModel
 }
