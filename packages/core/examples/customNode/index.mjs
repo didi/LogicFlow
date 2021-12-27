@@ -5,6 +5,7 @@ import customEllipse from './customEllipse.mjs';
 import customPolygon from './customPolygon.mjs';
 import customText from './customText.mjs';
 import customHtml from './customHtml.mjs';
+import userTask from './userTask.mjs';
 
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
@@ -22,14 +23,18 @@ lf.register(customEllipse);
 lf.register(customPolygon);
 lf.register(customText);
 lf.register(customHtml);
+lf.register(userTask);
 
 lf.render({
   nodes: [
     {
       id: 'custom-111',
-      type: 'customNode',
+      type: 'UserTask',
       x: 700,
-      y: 100
+      y: 100,
+      properties: {
+        disabled: true
+      }
     },
     {
       id: 'custom-112',

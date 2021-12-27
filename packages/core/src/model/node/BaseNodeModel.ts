@@ -28,10 +28,10 @@ import { getZIndex } from '../../util/zIndex';
 export type ConnectRule = {
   message: string;
   validate: (
-    source: BaseNodeModel,
-    target: BaseNodeModel,
-    sourceAnchor: AnchorConfig,
-    targetAnchor: AnchorConfig,
+    source?: BaseNodeModel,
+    target?: BaseNodeModel,
+    sourceAnchor?: AnchorConfig,
+    targetAnchor?: AnchorConfig,
   ) => boolean;
 };
 
@@ -49,43 +49,11 @@ interface IBaseNodeModel extends IBaseModel {
 
 export { BaseNodeModel };
 export default class BaseNodeModel implements IBaseNodeModel {
+  // 数据属性
   id = createUuid();
-  readonly BaseType = ElementType.NODE;
-  modelType = ModelType.NODE;
-  additionStateData: AdditionData;
-  [propName: string]: any; // 支持自定义
-  targetRules: ConnectRule[] = [];
-  sourceRules: ConnectRule[] = [];
-  moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
-  hasSetTargetRules = false; // 用来限制rules的重复值
-  hasSetSourceRules = false; // 用来限制rules的重复值
-  @observable properties: Record<string, any> = {};
   @observable type = '';
   @observable x = 0;
   @observable y = 0;
-  @observable
-  private _width = 100;
-  graphModel: GraphModel;
-  public get width() {
-    return this._width;
-  }
-  public set width(value) {
-    this._width = value;
-  }
-  @observable
-  private _height = 80;
-  public get height() {
-    return this._height;
-  }
-  public set height(value) {
-    this._height = value;
-  }
-  @observable isSelected = false;
-  @observable isHovered = false;
-  @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable zIndex = 1;
-  @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
-  @observable state = 1;
   @observable text = {
     value: '',
     x: 0,
@@ -93,20 +61,54 @@ export default class BaseNodeModel implements IBaseNodeModel {
     draggable: false,
     editable: true,
   };
+  @observable properties: Record<string, any> = {};
+  // 形状属性
+  @observable private _width = 100;
+  public get width() {
+    return this._width;
+  }
+  public set width(value) {
+    this._width = value;
+  }
+  @observable private _height = 80;
+  public get height() {
+    return this._height;
+  }
+  public set height(value) {
+    this._height = value;
+  }
+  @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
+  // 状态属性
+  @observable isSelected = false;
+  @observable isHovered = false;
+  @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
-
+  // 保留属性
+  @observable zIndex = 1;
+  @observable state = 1;
+  readonly BaseType = ElementType.NODE;
+  modelType = ModelType.NODE;
+  additionStateData: AdditionData;
+  graphModel: GraphModel;
+  targetRules: ConnectRule[] = [];
+  sourceRules: ConnectRule[] = [];
+  moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
+  hasSetTargetRules = false; // 用来限制rules的重复值
+  hasSetSourceRules = false; // 用来限制rules的重复值
+  [propName: string]: any; // 支持自定义
   constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel;
     this.initNodeData(data);
     this.setAttributes();
   }
   /**
-   * 初始化节点数据，不建议重写
-   * 可以重写setAttributes来实现修改初始化功能
+   * @overridable 可以重写
+   * 初始化节点数据
    * initNodeData和setAttributes的区别在于
-   * initNodeData需要
+   * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
+   * setAttributes除了初始化调用外，还会在properties发生变化了调用。
    */
-  protected initNodeData(data) {
+  public initNodeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
@@ -128,7 +130,20 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
   }
   /**
-   * @overridable 支持重新
+   * 设置model属性，每次properties发生变化会触发
+   * 例如设置节点的宽度
+   * @example
+   *
+   * setAttributes () {
+   *   this.width = 300
+   *   this.height = 200
+   * }
+   *
+   * @overridable 支持重写
+   */
+  public setAttributes() {}
+  /**
+   * @overridable 支持重写，自定义此类型节点默认生成方式
    * @returns string
    */
   public createId(): string {
@@ -159,26 +174,13 @@ export default class BaseNodeModel implements IBaseNodeModel {
       data.text.editable = true;
     }
   }
-  /**
-   * 设置model初始化属性
-   * 例如设置节点的宽度
-   * @example
-   *
-   * setAttributes () {
-   *   this.width = 300
-   *   this.height = 200
-   * }
-   *
-   * @overridable 支持重写
-   */
-  setAttributes() {}
 
   /**
    * 获取被保存时返回的数据
    * @overridable 支持重写
    * @returns NodeData
    */
-  public getData(): NodeData {
+  getData(): NodeData {
     const { x, y, value } = this.text;
     let { properties } = this;
     if (isObservable(properties)) {
@@ -217,14 +219,18 @@ export default class BaseNodeModel implements IBaseNodeModel {
       ...this.graphModel.theme.baseNode,
     };
   }
-  /* 支持节点自定义文案样式 */
+  /**
+   * @overridable 支持重写
+   * 获取当前节点文本样式
+   */
   getTextStyle() {
     // 透传 nodeText
     const { nodeText } = this.graphModel.theme;
     return cloneDeep(nodeText);
   }
   /**
-   * 获取节点锚点样式
+   * @overridable 支持重写
+   * 获取当前节点锚点样式
    * @returns 自定义样式
    */
   getAnchorStyle(): Record<string, any> {
@@ -233,7 +239,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return cloneDeep(anchor);
   }
   /**
-   * 获取自定义锚点拖出样式
+   * @overridable 支持重写
+   * 获取当前节点锚点拖出连线样式
    * @returns 自定义锚点拖出样式
    */
   getAnchorLineStyle() {
@@ -250,6 +257,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return cloneDeep(outline);
   }
   /**
+   * @over
    * 在边的时候，是否允许这个节点为source节点，边到target节点。
    */
   isAllowConnectedAsSource(
@@ -284,9 +292,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return this.sourceRules;
   }
   /**
-   * 在边的时候，是否允许这个节点未target节点
+   * 在连线的时候，是否允许这个节点为target节点
    */
-
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
     soureAnchor: AnchorConfig,
@@ -312,6 +319,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     };
   }
   /**
+   * 内部方法
    * 是否允许移动节点到新的位置
    */
   isAllowMoveNode(deltaX, deltaY) {
@@ -323,7 +331,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
     return true;
   }
-
+  /**
+   * 获取作为连线终点时的所有规则。
+   */
   getConnectedTargetRules(): ConnectRule[] {
     return this.targetRules;
   }
@@ -470,7 +480,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   @action
   setProperties(properties): void {
-    // fix: vue setProperties not observable
     this.properties = {
       ...this.properties,
       ...formatData(properties),

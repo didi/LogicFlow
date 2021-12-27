@@ -303,8 +303,7 @@ export const defaultTheme: Theme = {
   ellipse: {},
   polygon: {},
   text: {
-    strokeWidth: 1,
-    fill: 'currentColor',
+    fill: '#000000',
     stroke: 'none',
     fontSize: 12,
   },
