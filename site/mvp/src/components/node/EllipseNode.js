@@ -1,10 +1,14 @@
 import CircleNode from './CircleNode'
 
 class EllipseNewModel extends CircleNode.model {
-  setAttributes () {
-    super.setAttributes()
-    this.rx = 80
-    this.ry = 50
+  constructor(data, graphData) {
+    super(data, graphData)
+    this.rx = 60
+    this.ry = 30
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle()
+    return {...style}
   }
 }
 export default {

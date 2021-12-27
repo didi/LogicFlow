@@ -36,6 +36,27 @@
         <div class="node-item" @mousedown="dragInNode('table')">
           <icon-table class="svg-table" />
         </div>
+        <div class="node-item" @mousedown="dragInNode('left-arrow')">
+          左
+        </div>
+        <div class="node-item" @mousedown="dragInNode('right-arrow')">
+          右
+        </div>
+        <div class="node-item" @mousedown="dragInNode('horizontal-arrow')">
+          横
+        </div>
+        <div class="node-item" @mousedown="dragInNode('up-arrow')">
+          上
+        </div>
+        <div class="node-item" @mousedown="dragInNode('down-arrow')">
+          下
+        </div>
+        <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
+          竖
+        </div>
+        <div class="node-item" @mousedown="dragInNode('image')">
+          图片
+        </div>
       </div>
     </div>
     <div>

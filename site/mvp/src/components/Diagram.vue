@@ -4,6 +4,7 @@
       class="diagram-toolbar"
       v-if="lf"
       :lf="lf"
+      :activeEdges="activeEdges"
       @changeNodeFillColor="$_changeNodeFill"
       @saveGraph="$_saveGraph"
     />
@@ -36,13 +37,26 @@ import '@logicflow/extension/lib/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
 import PropertyPanel from './PropertyPanel.vue'
+import ActorNode from './node/ActorNode'
 import CircleNode from './node/CircleNode'
+import CylindeNode from './node/CylindeNode'
 import EllipseNode from './node/EllipseNode'
 import RectNode from './node/RectNode'
 import RectRadiusNode from './node/RectRadiusNode'
 import DiamondNode from './node/DiamondNode'
 import TextNode from './node/TextNode'
+import TriangleNode from './node/TriangleNode'
 import Ployline from './node/Polyline'
+import Line from './node/Line'
+import Bezier from './node/Bezier'
+import ParallelogramNode from './node/ParallelogramNode'
+import LeftArrow from './node/LeftArrow'
+import RightArrow from './node/RightArrow'
+import HorizontalArrow from './node/HorizontalArrowNode'
+import UpArrow from './node/UpArrowNode'
+import DownArrow from './node/DownArrowNode'
+import VerticalArrow from './node/VerticalArrowNode'
+import Image from './node/ImageNode'
 
 // const LogicFlow = window.LogicFlow
 
@@ -96,7 +110,6 @@ export default {
           visible: false,
           size: 5
         },
-        history: false,
         background: {
           backgroundImage: 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=")',
           backgroundRepeat: 'repeat'
@@ -104,17 +117,30 @@ export default {
       })
       lf.setTheme(
         {
-          nodeText: { autoWrap: true, lineHeight: 1.5 },
-          edgeText: { autoWrap: true, lineHeight: 1.5 }
+          nodeText: { overflowMode: 'autoWrap', lineHeight: 1.5 },
+          edgeText: { overflowMode: 'autoWrap', lineHeight: 1.5 }
         }
       )
+      lf.register(ActorNode)
       lf.register(CircleNode)
+      lf.register(CylindeNode)
       lf.register(EllipseNode)
       lf.register(RectNode)
       lf.register(RectRadiusNode)
       lf.register(DiamondNode)
       lf.register(TextNode)
+      lf.register(TriangleNode)
+      lf.register(ParallelogramNode)
+      lf.register(LeftArrow)
+      lf.register(RightArrow)
+      lf.register(HorizontalArrow)
+      lf.register(UpArrow)
+      lf.register(DownArrow)
+      lf.register(VerticalArrow)
+      lf.register(Image)
       lf.register(Ployline)
+      lf.register(Line)
+      lf.register(Bezier)
       lf.setDefaultEdgeType('pro-polyline')
       lf.render(data)
       this.lf = lf

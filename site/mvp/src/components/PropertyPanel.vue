@@ -118,16 +118,17 @@
       </div>
       <div class="setting-item">
         <span>对齐</span>
-        <el-radio-group v-model="style.textAlign"></el-radio-group>
-        <button @click="$emit('setStyle', { textAlign: 'left'})">左对齐</button>
-        <button @click="$emit('setStyle', { textAlign: 'center'})">居中</button>
-        <button @click="$emit('setStyle', { textAlign: 'right'})">右对齐</button>
+        <el-radio-group v-model="style.textAlign" size="small" @change="$_changeTextAlign">
+          <el-radio-button label="left">左对齐</el-radio-button>
+          <el-radio-button label="center">居中</el-radio-button>
+          <el-radio-button label="right">右对齐</el-radio-button>
+        </el-radio-group>
       </div>
       <div class="setting-item">
         <span>文本样式</span>
-        <button @click="$_changeFontWeight">加粗</button>
-        <button @click="$_changeTextDecoration">下划线</button>
-        <button @click="$_changeFontStyle">斜体</button>
+        <el-button size="small" @click="$_changeFontWeight">B</el-button>
+        <el-button size="small" @click="$_changeTextDecoration">U</el-button>
+        <el-button size="small" @click="$_changeFontStyle">I</el-button>
       </div>
       <div>
         <el-button @click="$emit('setZIndex', 'top')">置为顶部</el-button>
@@ -201,7 +202,6 @@ export default {
       })
     },
     $_changeBorderWidth (val) {
-      // console.log(val)
       this.$emit('setStyle', {
         borderWidth: val
       })
@@ -229,7 +229,6 @@ export default {
       }
     },
     $_changeTextDecoration () {
-      console.log('$_changeTextDecoration', this.style.textDecoration)
       if (this.style.textDecoration === 'underline') {
         this.$emit('setStyle', {
           textDecoration: 'none'
@@ -251,6 +250,11 @@ export default {
           fontStyle: 'italic'
         })
       }
+    },
+    $_changeTextAlign (val) {
+      this.$emit('setStyle', {
+        textAlign: val
+      })
     }
   },
   components: {

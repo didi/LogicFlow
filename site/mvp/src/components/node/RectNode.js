@@ -17,10 +17,6 @@ class RectNewNode extends RectResize.view {
  * model控制初始化的值
  */
 class RectNewModel extends RectResize.model {
-  setAttributes () {
-    super.setAttributes()
-    this.strokeWidth = 1
-  }
 
   setToBottom () {
     this.zIndex = 0
