@@ -240,6 +240,65 @@ LogicFlow定义一个节点的外观有三种方式，分别为**主题**、**�
 2. `自定义节点view`最终生成的图形整体轮廓必须和继承的基础图形一致，不能继承的`rect`而在getShape的时候返回的最终图形轮廓变成了圆形。因为LogicFlow对于节点上的连线调整、锚点生成等会基于基础图形进行计算。
 :::
 
+#### tip 为什么`rect`的`x`,`y`不是直接从`model`中获取的`x`, `y`?
+
+在LogicFlow所有的基础节点中，`model`里面的`x`,`y`都是统一表示中心点。但是`getShape`方法给我们提供直接生成svg dom的方式，在svg中, 对图形位置的控制则存在差异：
+
+- `rect`: 通过`x`, `y`表示图形的位置，但是表示是图形左上角坐标。 所以一般通过中心点，然后减去节点的宽高的一般计算出左上角坐标。
+
+```js
+const { x, y, width, height, radius } = this.props.model;
+// svg dom <rect x="100" y="100" width="100" height="80">
+h("rect", {
+  ...style,
+  x: x - width / 2, 
+  y: y - height / 2,
+  rx: radius,
+  ry: radius,
+  width,
+  height
+}),
+```
+
+- `circle`和`ellipse`: 通过`cx`, `cy`表示图形的位置，含义为中心点的坐标。
+
+```js
+const { x, y, r } = this.props.model;
+// svg dom <circle cx="100", cy="100", r="20">
+h("circle", {
+  ...style,
+  r, // 半径保持不变
+  cx: x, 
+  cy: y,
+})
+
+// 椭圆
+const { x, y, rx, ry } = this.props.model;
+// svg dom <ellipse cx="100", cy="100", rx="20" ry="10">
+h("ellipse", {
+  ...style,
+  cx: x, 
+  cy: y,
+  rx,
+  ry
+})
+```
+
+- `polygon`: 所有的顶点坐标已包含位置
+
+```js
+const { x, y, points } = this.props.model;
+const pointStr = points.map((point) => {
+    return `${point[0] + x}, ${point[1] + y}`
+  }).join(" ");
+// svg dom <polygon points="100,10 250,150 200,110" >
+h("polygon", {
+  ...style,
+  r, // 半径保持不变
+  points: pointStr, // 
+})
+```
+
 #### props
 
 LogicFlow是基于`preact`开发的，我们自定义节点view的时候，可以通过`this.props`获取父组件传递过来的数据。`this.props`对象包含两个属性，分别为:
@@ -268,3 +327,283 @@ path标签属性：
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
+
+## 自定义节点的锚点
+
+以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
+
+```ts
+import { RectNode, RectNodeModel } from '@logicflow/core';
+
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+    const size = 80;
+    this.width = size;
+    this.height = size;
+    // 设置自定义锚点
+    // 只需要为每个锚点设置相对于节点中心的偏移量
+    this.anchorsOffset = [
+      [size / 2, 0], // x 轴上偏移 size / 2
+      [-size / 2, 0], // x 轴上偏移 -size / 2
+    ];
+  }
+}
+lf.register({
+  type: 'square'
+  view: RectNode,
+  model: SquareModel,
+});
+
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形',
+      properties: {}
+    },
+  ]
+});
+```
+
+<example
+  :height="250"
+  iframeId="iframe-2"
+  href="/examples/#/advance/custom-node/anchor"
+/>
+
+在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
+
+## 自定义连接规则校验
+
+在某些时候，我们可能需要控制边的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等，要想达到这种效果，我们需要为节点设置以下两个属性。
+
+- `sourceRules` - 当节点作为边的起始节点（source）时的校验规则
+- `targetRules` - 当节点作为边的目标节点（target）时的校验规则
+
+以正方形（square）为例，在边时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`添加作为`source`节点的校验规则。
+
+```ts
+import { RectNode, RectNodeModel } from '@logicflow/core';
+class SquareModel extends RectNodeModel {
+  setAttributes() {
+  const size = 80;
+  const circleOnlyAsTarget = {
+    message: "正方形节点下一个节点只能是圆形节点",
+    validate: (source: any, target: any) => {
+      return target.type === "circle";
+    },
+  };
+
+  this.width = size;
+  this.height = size;
+  this.anchorsOffset = [
+    [size / 2, 0],
+    [-size / 2, 0]
+  ];
+  this.sourceRules.push(circleOnlyAsTarget);
+}
+lf.register({
+  type: 'square'
+  view: RectNode,
+  model: SquareModel,
+});
+
+lf.render({
+  nodes: [
+    {
+      id: 10,
+      type: 'square',
+      x: 300,
+      y: 200,
+      text: '正方形',
+      properties: {}
+    },
+  ]
+});
+```
+
+<example
+  :height="400"
+  iframeId="iframe-3"
+  href="/examples/#/advance/custom-node/rule"
+/>
+
+在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
+
+`message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`方法有两个参数，分别为边的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
+
+> 当我们在面板上进行边操作的时候，Logic Flow 会校验每一条规则，只有**全部**通过后才能连接。
+
+在边时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），Logic Flow 会对外抛出事件`connection:not-allowed`。
+
+```js
+lf.on('connection:not-allowed', (msg) => {
+  console.log(msg)
+});
+```
+
+## 自定义HTML节点
+
+LogicFlow内置了基础的HTML节点和其他基础节点不一样，我们可以利用LogicFlow的自定义机制，实现各种形态的HTML节点，而且HTML节点内部可以使用任意框架进行渲染。
+
+<example
+  :height="280"
+  iframeId="iframe-6"
+  href="/examples/#/advance/custom-node/html"
+/>
+
+```ts
+class UmlModel extends HtmlNodeModel {
+  setAttributes() {
+    this.text.editable = false; // 禁止节点文本编辑
+    // 设置节点宽高和锚点
+    const width = 200;
+    const height = 130;
+    this.width = width;
+    this.height = height;
+    this.anchorsOffset = [
+      [width / 2, 0],
+      [0, height / 2],
+      [-width / 2, 0],
+      [0, -height/2],
+    ]
+  }
+}
+class UmlNode extends HtmlNode {
+  currrentProperties: string;
+  // 由于setHtml会跟随节点的render触发
+  // 所以自定义html节点需要自己判断组件是否需要更新。
+  // setHtml除了properties发生变化会触发外，节点移动了，
+  // 节点被选中了等model上所有的属性发生变化都会触发。
+  shouldUpdate() {
+    const { properties } = this.getAttributes();
+    if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
+    this.currrentProperties = JSON.stringify(properties)
+    return true;
+  }
+  setHtml(rootEl: HTMLElement) {
+    const { properties } = this.getAttributes();
+    if (!this.shouldUpdate()) return;
+  
+    const el = document.createElement('div');
+    el.className = 'uml-wrapper';
+    const html = `
+      <div>
+        <div class="uml-head">Head</div>
+        <div class="uml-body">
+          <div>+ ${properties.name}</div>
+          <div>+ ${properties.body}</div>
+        </div>
+        <div class="uml-footer">
+          <div>+ setHead(Head $head)</div>
+          <div>+ setBody(Body $body)</div>
+        </div>
+      </div>
+    `
+    el.innerHTML = html;
+    // 需要先把之前渲染的子节点清除掉。
+    rootEl.innerHTML = '';
+    rootEl.appendChild(el);
+  }
+}
+```
+
+### 使用react编写html节点
+
+以为自定义html节点对外暴露的是一个DOM节点，所以你可以使用框架现有的能力来渲染节点。在react中，我们利用`reactDom`的`render`方法，将react组件渲染到dom节点上。
+
+```jsx
+import { HtmlNodeModel, HtmlNode } from '@logicflow/core';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './uml.css';
+
+function Hello(props) {
+  return (
+    <>
+      <h1 className="box-title">title</h1>
+      <div className="box-content">
+        <p>{props.name}</p>
+        <p>{props.body}</p>
+        <p>content3</p>
+      </div>
+    </>
+  )
+}
+
+class BoxxModel extends HtmlNodeModel {
+  setAttributes() {
+    this.text.editable = false;
+    const width = 200;
+    const height = 116;
+    this.width = width;
+    this.height = height;
+    this.anchorsOffset = [
+      [width / 2, 0],
+      [0, height / 2],
+      [-width / 2, 0],
+      [0, -height/2],
+    ]
+  }
+}
+class BoxxNode extends HtmlNode {
+  setHtml(rootEl: HTMLElement) {
+    const { properties } = this.getAttributes();
+    ReactDOM.render(<Hello name={properties.name} body={properties.body}/>, rootEl);
+  }
+}
+
+const boxx = {
+  type: 'boxx',
+  view: BoxxNode,
+  model: BoxxModel
+}
+
+export default boxx;
+
+
+```
+
+```jsx
+// page.jsx
+
+import box from './box.tsx';
+export default function PageIndex() {
+  useEffect(() => {
+    const lf = new LogicFlow({
+      ...config,
+      container: document.querySelector('#graph_html') as HTMLElement
+    });
+    lf.register(box);
+    lf.render({
+      nodes: [
+        {
+          id: 11,
+          type: 'boxx',
+          x: 350,
+          y: 100,
+          properties: {
+            name: 'turbo',
+            body: 'hello'
+          }
+        },
+      ]
+    });
+    lf.on('node:click', ({ data}) => {
+      lf.setProperties(data.id, {
+        name: 'turbo',
+        body: Math.random()
+      })
+    });
+  }, []);
+
+  return (
+    <>
+      <div id="graph_html" className="viewport" />
+    </>
+  )
+}
+```
