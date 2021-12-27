@@ -56,7 +56,10 @@ import HorizontalArrow from './node/HorizontalArrowNode'
 import UpArrow from './node/UpArrowNode'
 import DownArrow from './node/DownArrowNode'
 import VerticalArrow from './node/VerticalArrowNode'
-import Image from './node/ImageNode'
+import ImageSetting from './node/imageNode/Setting'
+import ImageUser from './node/imageNode/User'
+import ImageCloud from './node/imageNode/Cloud'
+import IconMessage from './node/iconNode/Message'
 
 // const LogicFlow = window.LogicFlow
 
@@ -137,13 +140,17 @@ export default {
       lf.register(UpArrow)
       lf.register(DownArrow)
       lf.register(VerticalArrow)
-      lf.register(Image)
+      lf.register(ImageSetting)
+      lf.register(ImageUser)
+      lf.register(ImageCloud)
+      lf.register(IconMessage)
       lf.register(Ployline)
       lf.register(Line)
       lf.register(Bezier)
       lf.setDefaultEdgeType('pro-polyline')
       lf.render(data)
       this.lf = lf
+      console.log(LogicFlow, lf)
       // this.$_initEvent()
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
         this.$nextTick(() => {

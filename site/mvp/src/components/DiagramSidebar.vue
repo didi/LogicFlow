@@ -60,17 +60,17 @@
       </div>
     </div>
     <div>
-      <h1 class="node-category-title">Misc</h1>
-      <div class="node-category">
-        <div class="node-item circle-node"></div>
-        <div class="node-item rect-node"></div>
-        <div class="node-item rect-radius-node"></div>
-        <div class="node-item triangle-node"></div>
-        <div class="node-item ellipse-node"></div>
-        <div class="node-item diamond-node"></div>
-        <div class="node-item cylinde-node"></div>
-        <div class="node-item actor-node"></div>
-        <div class="node-item arrow-node"></div>
+      <h1 class="node-category-title">图片</h1>
+      <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
+      </div>
+      <div class="image-node image-user" @mousedown="dragInNode('image-user')">
+      </div>
+      <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
+      </div>
+    </div>
+    <div>
+      <h1 class="node-category-title">ICON</h1>
+      <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')">
       </div>
     </div>
   </div>
@@ -140,5 +140,31 @@ export default {
   display: block;
   position: relative;
   overflow: hidden;
+}
+.image-node, .icon-node {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+  cursor: pointer;
+}
+.image-setting {
+  background: url('https://dpubstatic.udache.com/static/dpubimg/UzI4AFUcfO/setting.png');
+  background-size: cover;
+}
+.image-user {
+  width: 40px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/-6Fd2uIoJ-/user.png');
+  background-size: cover;
+}
+.image-cloud {
+  width: 40px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/0oqFX1nvbD/cloud.png');
+  background-size: cover;
+}
+.icon-message {
+  height: 20px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/1TZgBoaq8G/message.png');
+  background-size: cover;
 }
 </style>
