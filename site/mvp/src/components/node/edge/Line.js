@@ -16,7 +16,8 @@ class Model extends LineEdgeModel {
   getEdgeStyle () {
     const attributes = super.getEdgeStyle()
     const properties = this.properties;
-    return getShapeStyleFuction(attributes, properties)
+    const style = getShapeStyleFuction(attributes, properties)
+    return { ...style, fill: 'none' }
   }
 }
 export default {
