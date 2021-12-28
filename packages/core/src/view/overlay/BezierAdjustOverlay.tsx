@@ -56,6 +56,7 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     const { endX, endY } = this.state;
     const { bezierModel, type } = this.props;
     bezierModel.updateAdjustAnchor({ x: endX, y: endY }, type);
+    bezierModel.isDragging = false;
   });
   render() {
     const { position } = this.props;

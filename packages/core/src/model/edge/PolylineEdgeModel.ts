@@ -291,6 +291,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   @action
   dragAppendSimple(appendInfo, dragInfo) {
+    // 因为drag事件是mouseDown事件触发的，因此当真实拖拽之后再设置isDragging
+    // 避免因为点击事件造成，在dragStart触发之后，没有触发dragEnd错误设置了isDragging状态，对history计算造成错误
+    this.isDragging = true;
     const {
       start,
       end,
@@ -325,6 +328,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   @action
   dragAppend(appendInfo, dragInfo) {
+    this.isDragging = true;
     const {
       start,
       end,
@@ -430,6 +434,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       const endPoint = pointsList[pointsList.length - 1];
       this.endPoint = Object.assign({}, endPoint);
     }
+    this.isDragging = false;
   }
 
   /* 拖拽之后个更新points，仅更新边，不更新pointsList，

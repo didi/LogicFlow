@@ -81,8 +81,10 @@ class History {
     this.stopWatch = deepObserve(model, debounce(() => {
       // 数据变更后，把最新的当前model数据存起来，并清空redos。
       // 因为这个回调函数的触发，一般是用户交互而引起的，所以按正常逻辑需要清空redos。
-      const data = model.modelToGraphData();
-      this.add(data);
+      const data = model.modelToHistoryData();
+      if (data) {
+        this.add(data);
+      }
     }, this.waitTime));
   }
 }
