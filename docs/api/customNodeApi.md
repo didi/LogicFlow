@@ -24,15 +24,3 @@ setAttributes() {
 getShape(): h.JSX.Element
 ```
 
-### getAttributes
-
-获取节点`model`中的部分属性，其返回值为[数据属性](/api/nodeApi.md#通用属性)和[样式属性](/api/nodeApi.html#样式属性)的合集。
-
-使用示例：
-
-```ts
-getShape() {
-  const attributes = this.getAttributes();
-  // ...
-}
-```

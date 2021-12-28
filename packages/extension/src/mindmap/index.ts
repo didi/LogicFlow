@@ -33,7 +33,7 @@ class MindMap {
       edgeTextEdit: false,
       adjustEdge: false,
     });
-    lf.graphModel.transformMatrix.translate(200, 200);
+    lf.graphModel.transformModel.translate(200, 200);
     this.setContextMenu();
     /**
      * 删除树上的某一个点和这个点后面所有的点
@@ -98,7 +98,7 @@ class MindMap {
       x: data.x,
       y: data.y,
     });
-    this.lf.createEdge({
+    this.lf.addEdge({
       sourceNodeId: data.id,
       targetNodeId: nodeModel.id,
     });

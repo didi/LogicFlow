@@ -20,12 +20,12 @@ export default class MultipleSelect extends Component<IProps> {
   constructor(props) {
     super();
     const {
-      graphModel: { gridSize }, eventCenter,
+      graphModel: { gridSize, eventCenter },
     } = props;
     this.stepDrag = new StepDrag({
       onDraging: this.onDraging,
       step: gridSize,
-      eventType: 'multiple:select',
+      eventType: 'SELECTION',
       eventCenter,
     });
   }
@@ -34,7 +34,8 @@ export default class MultipleSelect extends Component<IProps> {
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { graphModel } = this.props;
-    graphModel.moveElements(graphModel.getSelectElements(true), deltaX, deltaY);
+    const selectElements = graphModel.getSelectElements(true);
+    graphModel.moveNodes(selectElements.nodes.map(node => node.id), deltaX, deltaY);
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
@@ -63,7 +64,7 @@ export default class MultipleSelect extends Component<IProps> {
     });
   };
   render() {
-    const { graphModel: { selectElements, transformMatrix } } = this.props;
+    const { graphModel: { selectElements, transformModel } } = this.props;
     if (selectElements.size <= 1) return;
     let x = Number.MAX_SAFE_INTEGER;
     let y = Number.MAX_SAFE_INTEGER;
@@ -83,8 +84,8 @@ export default class MultipleSelect extends Component<IProps> {
       x1 = Math.max(x1, outline.x1);
       y1 = Math.max(y1, outline.y1);
     });
-    [x, y] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
-    [x1, y1] = transformMatrix.CanvasPointToHtmlPoint([x1, y1]);
+    [x, y] = transformModel.CanvasPointToHtmlPoint([x, y]);
+    [x1, y1] = transformModel.CanvasPointToHtmlPoint([x1, y1]);
     const style = {
       left: `${x - 10}px`,
       top: `${y - 10}px`,

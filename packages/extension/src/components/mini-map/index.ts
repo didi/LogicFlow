@@ -31,8 +31,8 @@ const MiniMap: Extension = {
   __disabledPlugins: ['minimap', 'control', 'selection-select'],
   install(lf, LogicFlow) {
     MiniMap.__lf = lf;
-    MiniMap.__miniMapWidth = lf.width;
-    MiniMap.__miniMapHeight = (lf.width * 220) / 150;
+    MiniMap.__miniMapWidth = lf.graphModel.width;
+    MiniMap.__miniMapHeight = (lf.graphModel.width * 220) / 150;
     MiniMap.__LogicFlow = LogicFlow;
     this.__init();
     // 避免多次install的时候, _isShow状态被修改了

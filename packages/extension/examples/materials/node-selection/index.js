@@ -5,7 +5,6 @@ window.addEventListener('DOMContentLoaded', () => {
     nodeTextDraggable: true,
     multipleSelectKey: 'shift',
     disabledTools: ['multipleSelect'],
-    // metaKeyMultipleSelected: false,
     grid: {
       type: 'dot',
       size: 20,

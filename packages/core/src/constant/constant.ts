@@ -27,7 +27,7 @@ export enum ModelType {
   BEZIER_EDGE = 'bezier-edge',
   GRAPH = 'graph',
 }
-// 区分节点还是连线
+// 区分节点还是边
 export enum ElementType {
   NODE = 'node',
   EDGE = 'edge',
@@ -60,7 +60,6 @@ export enum EventType {
   EDGE_CONTEXTMENU = 'edge:contextmenu',
   EDGE_ADJUST = 'edge:adjust',
   EDGE_EXCHANGE_NODE = 'edge:exchange-node',
-  SELECTION_CONTEXTMENU = 'selection:contextmenu',
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',
   BLANK_DRAG = 'blank:drag',
@@ -69,6 +68,13 @@ export enum EventType {
   BLANK_MOUSEUP = 'blank:mouseup',
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
+  SELECTION_MOUSEDOWN='selection:mousedown',
+  SELECTION_DRAGSTART='selection:dragstart',
+  SELECTION_DRAG='selection:drag',
+  SELECTION_DROP='selection:drop',
+  SELECTION_MOUSEMOVE = 'selection:mousemove',
+  SELECTION_MOUSEUP = 'selection:mouseup',
+  SELECTION_CONTEXTMENU = 'selection:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
   HISTORY_CHANGE = 'history:change',
   TEXT_UPDATE = 'text:update',

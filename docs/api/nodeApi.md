@@ -110,7 +110,7 @@ type NodeConfig = {
 lf.addNode(nodeConfig: NodeConfig);
 ```
 
-### lf.getNodeData
+### lf.getNodeDataById
 
 获取节点数据
 
@@ -141,7 +141,7 @@ type NodeData = {
 #### 用法
 
 ```ts
-lf.getNodeData(nodeId);
+lf.getNodeDataById(nodeId);
 ```
 
 ### lf.setNodeData

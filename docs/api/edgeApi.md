@@ -1,6 +1,6 @@
 # 边 Edge
 
-LogicFlow 的内置连线类型包括
+LogicFlow 的内置边类型包括
 
 - 直线(line)
 - 直角折线(polyline)
@@ -59,7 +59,7 @@ LogicFlow 的内置连线类型包括
 
 ## 通用方法
 
-### lf.createEdge
+### lf.addEdge
 
 创建边
 
@@ -160,14 +160,14 @@ type EdgeAttribute = {
 
 ### lf.removeEdge
 
-基于连线的起终点删除连线
+基于边的起终点删除边
 
 #### 参数
 
 | 名称   | 类型   | 描述            |
 | :----- | :----- | :------- | :-------------- |
-| sourceNodeId | string | 连线起点Id |
-| targetNodeId | string | 连线终点Id |
+| sourceNodeId | string | 边起点Id |
+| targetNodeId | string | 边终点Id |
 
 ```ts
 type EdgeFilter = {
@@ -279,4 +279,4 @@ type PolyPoint = {
 | fill | color | ✅ | 边的颜色 |
 | strokeWidth | number | ✅ | 取值为1 |
 | offset | number | ✅ | 箭头长度 |
-| verticalLength | number | ✅ | 箭头垂直于连线的距离 |
+| verticalLength | number | ✅ | 箭头垂直于边的距离 |

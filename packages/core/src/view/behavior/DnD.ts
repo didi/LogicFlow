@@ -6,10 +6,6 @@ import { BaseNodeModel } from '../../model';
 import { TextConfig } from '../../type';
 import { snapToGrid } from '../../util/geometry';
 
-export type DndOptions = {
-  validate: () => boolean
-};
-
 export type NewNodeConfig = {
   type: string;
   text?: TextConfig | string;
@@ -19,12 +15,10 @@ export type NewNodeConfig = {
 export default class Dnd {
   nodeConfig: NewNodeConfig;
   lf: LogicFlow;
-  options: DndOptions;
   fakerNode: BaseNodeModel;
   constructor(params) {
-    const { options, lf } = params;
+    const { lf } = params;
     this.lf = lf;
-    this.options = options;
   }
   clientToLocalPoint({ x, y }) {
     const gridSize = get(this.lf.options, ['grid', 'size']);
@@ -58,7 +52,7 @@ export default class Dnd {
       this.fakerNode.moveTo(x, y);
       const nodeData = this.fakerNode.getData();
       this.lf.setNodeSnapLine(nodeData);
-      this.lf.eventCenter.emit(EventType.NODE_DND_DRAG, { data: nodeData });
+      this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_DRAG, { data: nodeData });
     }
     return false;
   };
@@ -84,7 +78,7 @@ export default class Dnd {
     this.lf.graphModel.removeFakerNode();
     this.fakerNode = null;
     const nodeData = currentNode.getData();
-    this.lf.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
+    this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
   };
 
   eventMap() {

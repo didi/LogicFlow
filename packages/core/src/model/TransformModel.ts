@@ -13,7 +13,7 @@ export interface TransfromInterface {
   ZOOM_SIZE: number;
   MINI_SCALE_SIZE: number; // 缩小的最小值
   MAX_SCALE_SIZE: number; // 放大的最大值
-  zoom: (isZoomout: ZoomParam) => boolean;
+  zoom: (isZoomout: ZoomParam) => string;
   HtmlPointToCanvasPoint: (point: PointTuple) => PointTuple;
   CanvasPointToHtmlPoint: (point: PointTuple) => PointTuple;
   moveCanvasPointByHtml: (point: PointTuple, x: number, y: number) => PointTuple;
@@ -86,9 +86,14 @@ export default class TransfromModel implements TransfromInterface {
       transform: `matrix(${matrixString})`,
     };
   }
-
+  /**
+   * 放大缩小图形
+   * @param zoomSize 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小
+   * @param point 缩放的原点
+   * @returns {string} -放大缩小的比例
+   */
   @action
-  zoom(zoomSize: ZoomParam = false, point?: PointTuple): boolean {
+  zoom(zoomSize: ZoomParam = false, point?: PointTuple): string {
     let newScaleX = this.SCALE_X;
     let newScaleY = this.SCALE_Y;
     if (zoomSize === true) {
@@ -102,7 +107,7 @@ export default class TransfromModel implements TransfromInterface {
       newScaleY = zoomSize;
     }
     if (newScaleX < this.MINI_SCALE_SIZE || newScaleX > this.MAX_SCALE_SIZE) {
-      return false;
+      return `${this.SCALE_X * 100}%`;
     }
     if (point) {
       this.TRANSLATE_X -= (newScaleX - this.SCALE_X) * point[0];
@@ -111,7 +116,7 @@ export default class TransfromModel implements TransfromInterface {
     this.SCALE_X = newScaleX;
     this.SCALE_Y = newScaleY;
     this.emitGraphTransform('zoom');
-    return true;
+    return `${this.SCALE_X * 100}%`;
   }
   private emitGraphTransform(type) {
     this.eventCenter.emit(EventType.GRAPH_TRANSFORM, {

@@ -1,31 +1,34 @@
 import { computed, observable } from 'mobx';
-import { Point } from '../../type';
+import { cloneDeep } from 'lodash-es';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 class CircleNodeModel extends BaseNodeModel {
   modelType = ModelType.CIRCLE_NODE;
-  @observable r = defaultTheme.circle.r;
+  @observable r = 50;
 
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'circle');
-  }
   @computed get width(): number {
     return this.r * 2;
   }
   @computed get height(): number {
     return this.r * 2;
   }
-  @computed get anchors(): Point[] {
+  getNodeStyle() {
+    const style = super.getNodeStyle();
     const {
-      anchorsOffset, x, y, r,
+      graphModel: {
+        theme: {
+          circle,
+        },
+      },
     } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
-
+    return {
+      ...style,
+      ...cloneDeep(circle),
+    };
+  }
+  getDetaultAnchor() {
+    const { x, y, r } = this;
     return [
       { x, y: y - r, id: `${this.id}_0` },
       { x: x + r, y, id: `${this.id}_1` },

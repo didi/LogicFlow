@@ -14,8 +14,15 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class DiamondResizeModel extends DiamondNodeModel {
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'none';
+    if (style.hover) {
+      style.hover.stroke = 'none';
+    }
+    return style;
+  }
   setAttributes() {
-    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {
@@ -25,32 +32,40 @@ class DiamondResizeModel extends DiamondNodeModel {
   }
 }
 class DiamondResizeView extends DiamondNode {
-  getControlGroup(attributes) {
+  getControlGroup() {
     const {
       model,
       graphModel,
     } = this.props;
     return (
       <ControlGroup
-        {...attributes}
-        nodeModel={model}
+        model={model}
         graphModel={graphModel}
       />
     );
   }
   // getResizeShape绘制图形，功能等同于基础菱形的getShape功能，可以通过复写此方法，进行节点自定义
-  getResizeShape(arrt) {
-    return <g><Polygon {...arrt} /></g>;
+  getResizeShape() {
+    const { model } = this.props;
+    const { points } = model;
+    const style = model.getNodeStyle();
+    return (
+      <g>
+        <Polygon
+          {...style}
+          points={points}
+        />
+      </g>
+    );
   }
   getShape() {
-    const attributes = super.getAttributes() as any;
     const {
       model: { isSelected },
     } = this.props;
     return (
       <g>
-        {this.getResizeShape(attributes)}
-        {isSelected ? this.getControlGroup(attributes) : ''}
+        {this.getResizeShape()}
+        {isSelected ? this.getControlGroup() : ''}
       </g>
     );
   }

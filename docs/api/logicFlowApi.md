@@ -7,37 +7,43 @@
 `LogicFlow` 配置项
 
 ```js
-const lf = new LogicFlow(config: Object)
+const lf = new LogicFlow(options: Options)
 ```
 
-| 名称 | 类型 | 必选 | 默认值 | 描述 |
+| 选项 | 类型 | 必选 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 | container | HTMLElement | ✅ | - | 图的 DOM 容器。 |
-| width | Number | | 100% | 指定画布宽度，单位为 'px'。 |
-| height | Number | | 100% | 指定画布高度，单位为 'px'。 |
+| width | Number | | - | 指定画布宽度，单位为 'px'，默认使用容器宽度。 |
+| height | Number | | - | 指定画布高度，单位为 'px'，默认使用容器高度。 |
 | [background](#background) | false \| Object | |false | 背景，默认无背景 |
 | [grid](#grid) | false \| Object | | false |网格，若设为`false`不开启网格，则为 1px 移动单位，不绘制网格背景，若设置为`true`开启则默认为 20px 点状网格 |
-| textEdit | Boolean | | true | 是否开启文本编辑 |
+| [keyboard](#keyboard) |  Object | | | 自定义键盘相关配置 |
 | [style](#style) | Object | | - | 样式 |
-| isSilentMode | Boolean | | false | 仅浏览不可编辑模式，默认不开启 |
-| hideAnchors | Boolean | | false | 是否隐藏节点的锚点，静默模式下默认隐藏 |
-| hoverOutline | Boolean | | false | hover时是否显示外边框 |
-| edgeType | String | | 'polyline' | 边的类型，支持自定义，内置直线'line'和折线'polyline'，默认折线 |
+| disabledPlugins | string[] | | - | 传入初始化的时候，禁用加载的插件 |
 | snapline | Boolean | | true | 是否启用节点辅助对齐线 |
+| history | Boolean | | true | 是否开启历史记录功能 |
+| partial | Boolean | | false | 是否开启局部渲染功能 |
+| edgeType | String | | 'polyline' | 在图上编辑创建边的类型，支持自定义类型。 |
 | guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
-| disabledPlugins | Array[pluginName] | | - | 控制当前禁用的插件 |
+| disabledTools | string[]| | - | 禁止启用的内置工具，目前logicflow内置工具有'multipleSelect', 'textEdit' |
+| isSilentMode | Boolean | | false | 仅浏览不可编辑模式，默认不开启 |
 |stopZoomGraph|boolean|- |false|禁止缩放画布|
 |stopScrollGraph|boolean|- |false|禁止鼠标滚动移动画布|
 |stopMoveGraph|boolean|- |false|禁止拖动画布|
-|adjustEdge|boolean|- |true|允许调整连线|
-|adjustNodePosition|boolean|- |true|允许拖动节点|
-|hideAnchors|boolean|- |false|隐藏节点所有锚点|
-|hoverOutline|boolean|- |false|鼠标hover的时候显示节点的外框|
+|adjustEdge|boolean|- |true|允许调整边|
+|adjustEdgeStartAndEnd|boolean|- |false|是否允许拖动边的端点来调整连线|
+|adjustNodePosition|boolean|- |true|是否允许拖动节点|
+|hideAnchors| boolean | | false | 是否隐藏节点的锚点，静默模式下默认隐藏 |
+|hoverOutline|boolean|- |true|鼠标hover的时候显示节点的外框|
+|nodeSelectedOutline|boolean|- |true|鼠标hover的时候显示节点的外框|
+|edgeSelectedOutline|boolean|- |true|鼠标hover的时候显示边的外框|
 |nodeTextEdit|boolean|- |true|允许节点文本可以编辑|
-|edgeTextEdit|boolean|- |true|允许连线文本可以编辑|
+|edgeTextEdit|boolean|- |true|允许边文本可以编辑|
+|textEdit| Boolean | | true | 是否开启文本编辑 |
 |nodeTextDraggable|boolean| - |false|允许节点文本可以拖拽|
-|edgeTextDraggable|boolean| - |false|允许连线文本可以拖拽|
-|metaKeyMultipleSelected|boolean| - |false|允许按照meta键多选元素|
+|edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
+|multipleSelectKey|string|  |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
+|idGenerator|function| |-|自定义创建节点、连线时生成id规则。|
 
 ### `background`
 
@@ -70,6 +76,58 @@ export type GridOptions = {
 };
 ```
 
+### `keyboard`
+
+默认不开启键盘快捷操作, 支持选项
+
+```ts
+export interface KeyboardDef {
+  enabled: boolean,
+  shortcuts?: Array<{
+    keys: string | string[],
+    callback: Handler,
+    action?: Action,
+  }>
+}
+```
+
+使用内置快捷键
+
+```js
+const lf = new LogicFlow({
+  keyboard: {
+    enable: true
+  }
+})
+```
+
+内置快捷键功能有：
+
+- `'cmd + c', 'ctrl + c'` 同流程图复制
+- `'cmd + v', 'ctrl + v'` 同流程图粘贴
+- `'cmd + z', 'ctrl + z'` 上一步
+- `'cmd + y', 'ctrl + y'` 下一步
+- `'backspace'` 删除
+
+自定义快捷键
+
+```js
+const lf = new LogicFlow({
+  keyboard: {
+    enable: true,
+    shortcuts: [
+      {
+        keys: ['cmd + o', 'ctrl + o'],
+        callback: () => {
+          // 自定义逻辑
+        }
+      }
+    ]
+  }
+})
+```
+
+
 ### `style`
 
 可以通过style配置主题，详细支持的样式选项见教程[主题 Theme](/guide/advance/theme.html)
@@ -83,19 +141,19 @@ export type GridOptions = {
 
 ## register
 
-注册节点
+注册节点、边
 
 ```js
-register(config):void
+lf.register(config):void
 ```
 
 参数：
 
 | 参数名 | 类型 | 必传 |默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| config.type | String | ✅ | - | 自定义节点的名称 |
-| config.model | Model | ✅ | - | 节点的model |
-| config.view | View | ✅ | - | 节点的view |
+| config.type | String | ✅ | - | 自定义节点、边的名称 |
+| config.model | Model | ✅ | - | 节点、边的model |
+| config.view | View | ✅ | - | 节点、边的view |
 
 示例：
 
@@ -121,6 +179,139 @@ lf.register({
 });
 ```
 
+## setTheme
+
+设置主题, 详情见[主题](/guide/advance/theme.html)
+
+示例
+
+```js
+lf.setTheme({
+  baseNode: {
+    fill: 'rgb(255, 230, 204)',
+    stroke: 'green',
+    strokeDasharray: '3,3'
+  },
+  rect: {
+    fill: '#FFFFFF',
+    strokeDasharray: '10, 1',
+    className: 'custom-cls',
+    radius: 30,
+  },
+  circle: {
+    r: 10,
+    fill: '#9a9b9c'
+  },
+  diamond: {
+    fill: '#238899'
+  },
+  ellipse: {
+    strokeWidth: 3
+  },
+  polygon: {
+    strokeDasharray: 'none'
+  },
+  anchor: {
+    r: 3,
+    fill: '#9a9312',
+    hover: {
+      fill: 'red'
+    }
+  },
+  nodeText: {
+    fontSize: 20,
+    color: 'red',
+    overflowMode: 'autoWrap'
+  },
+  baseEdge: {
+    strokeWidth: 1,
+    strokeDasharray: '3,3'
+  },
+  edgeText: {
+    textWidth: 60,
+    overflowMode: 'autoWrap',
+    background: {
+      fill: '#919810'
+    }
+  },
+  polyline: {
+    offset: 20,
+    strokeDasharray: 'none',
+    strokeWidth: 4,
+  },
+  bezier: {
+    stroke: 'red',
+    adjustLine: {
+      strokeWidth: 2,
+      stroke: 'red'
+    },
+    adjustAnchor: {
+      stroke: 'blue',
+      fill: 'green'
+    }
+  },
+  arrow: {
+    offset: 10, // 箭头长度
+    verticalLength: 3, // 箭头垂直于边的距离
+    fill: 'none',
+    stroke: 'green',
+  },
+  anchorLine: {
+    stroke: 'red'
+  },
+  snapline: {
+    stroke: 'red'
+  },
+  edgeAdjust: {
+    r: 10,
+  },
+  outline: {
+    stroke: 'red',
+    hover: {
+      stroke: 'green'
+    }
+  }
+})
+```
+
+## changeNodeType
+
+修改节点类型
+
+```ts
+changeNodeType(id: string, type: string): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点id |
+| type | String | ✅ |  | 新的类型 |
+
+
+示例：
+
+```js
+lf.changeNodeType('node_id', 'rect')
+```
+
+## getNodeEdges
+
+获取节点连接的所有边的model
+
+```ts
+getNodeEdges(id: string): BaseEdgeModel[]
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点id |
+
+示例：
+
+```js
+const edgeModels = lf.getNodeEdges('node_id')
+```
+
 ## addNode
 
 在图上添加节点。
@@ -136,7 +327,7 @@ addNode(nodeConfig: NodeConfig):nodeModel
 | type | String | ✅ | - | 节点类型名称 |
 | x | Number | ✅ | - | 节点横坐标x |
 | y | Number | ✅ | - | 节点纵坐标y |
-| text | Object | | - | 节点文案内容及位置坐标 |
+| text | Object\|String | | - | 节点文案内容及位置坐标 |
 | id | String | | - | 节点id |
 | properties | Object | |  - | 节点属性，用户可以自定义 |
 
@@ -179,30 +370,99 @@ deleteNode(nodeId: string): void
 lf.deleteNode('id');
 ```
 
-## createEdge
+## cloneNode
 
-创建连接两个节点的连线
+克隆节点
 
 ```js
-createEdge(edgeConfig: EdgeConifg): void
+cloneNode(nodeId: string): BaseNodeModel
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 目标节点id |
+
+示例：
+
+```js
+lf.cloneNode('id')
+```
+## changeNodeId
+
+修改节点的id， 如果不传新的id，会内部自动创建一个。
+
+示例：
+
+```js
+lf.changeNodeId('oldId', 'newId')
+```
+
+## getNodeModelById
+
+获取节点的`model`
+
+```ts
+getNodeModelById(nodeId: string): BaseNodeModel
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+示例：
+
+```js
+lf.getNodeModelById('id')
+```
+
+## getNodeDataById
+
+获取节点的`model`数据
+
+```ts
+getNodeDataById(nodeId: string): NodeConfig
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+示例：
+
+```js
+lf.getNodeDataById('id')
+```
+
+## addEdge
+
+创建连接两个节点的边
+
+```js
+addEdge(edgeConfig: EdgeConifg): void
 ```
 
 参数：
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- |:- | :- |
-| id | String | | - | 连线的id |
-| type | String | | - | 连线的类型 |
-| sourceNodeId | String | ✅ | - | 连线起始节点的id |
-| targetNodeId | String | ✅ | - | 连线终止节点的id |
-| startPoint | Object | | - | 连线起点坐标 |
-| endPoint | Object | | - | 连线终端坐标 |
-| text | String | | - | 连线文案 |
+| id | String | | - | 边的id |
+| type | String | | - | 边的类型 |
+| sourceNodeId | String | ✅ | - | 边起始节点的id |
+| targetNodeId | String | ✅ | - | 边终止节点的id |
+| startPoint | Object | | - | 边起点坐标 |
+| endPoint | Object | | - | 边终端坐标 |
+| text | String\| Object | | - | 边文案 |
 
 示例：
 
 ```js
-lf.createEdge({
+lf.addEdge({
   sourceNodeId: '10',
   targetNodeId: '21',
   startPoint: {
@@ -213,24 +473,43 @@ lf.createEdge({
     x: 33,
     y: 44,
   }
-  text: '连线文案',
+  text: '边文案',
 });
 ```
 
-## removeEdge
+## deleteEdge
 
-基于连线的起终点删除连线
+基于边id删除边
 
 ```js
-removeEdge(config: EdgeFilter): void
+removeEdge(id): void
 ```
 
 参数：
 
 | 名称 | 类型 | 必传 |默认值 | 描述 |
 | :- | :- | :- |:- | :- |
-| sourceNodeId | String | | - | 连线起始节点的id |
-| targetNodeId | String | | - | 连线终止节点的id |
+| id | String | | - | 边的id |
+
+示例：
+
+```js
+lf.deleteEdge('edge_1');
+```
+## deleteEdgeByNodeId
+
+删除指定类型的边, 基于边起点和终点，可以只传其一。
+
+```js
+deleteEdgeByNodeId(config: EdgeFilter): void
+```
+
+参数：
+
+| 名称 | 类型 | 必传 |默认值 | 描述 |
+| :- | :- | :- |:- | :- |
+| sourceNodeId | String | | - | 边起始节点的id |
+| targetNodeId | String | | - | 边终止节点的id |
 
 示例：
 
@@ -239,7 +518,601 @@ lf.removeEdge({
   sourceNodeId:'id1',
   targetNodeId: 'id2'
 });
+
+lf.removeEdge({
+  sourceNodeId:'id1',
+});
+
+lf.removeEdge({
+  targetNodeId: 'id2'
+});
 ```
+
+## getEdgeModelById
+
+基于边Id获取边的`model`
+
+```ts
+getEdgeModelById(edgeId: string): BaseEdgeModel
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| edgeId | String | ✅ | - | 节点id |
+
+示例：
+
+```js
+lf.getEdgeModelById('id')
+```
+
+## getEdgeModels
+
+获取满足条件边的model
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| edgeFilter | Object | ✅ | - | 过滤条件 |
+
+```js
+// 获取所有起点为节点A的边的model
+lf.getEdgeModels({
+  sourceNodeId: 'nodeA_id'
+})
+// 获取所有终点为节点B的边的model
+lf.getEdgeModels({
+  targetNodeId: 'nodeB_id'
+})
+// 获取起点为节点A，终点为节点B的边
+lf.getEdgeModels({
+  sourceNodeId: 'nodeA_id',
+  targetNodeId: 'nodeB_id'
+})
+```
+
+## changeEdgeId
+
+修改边的id， 如果不传新的id，会内部自动创建一个。
+
+示例：
+
+```js
+lf.changeEdgeId('oldId', 'newId')
+```
+
+## getEdgeDataById
+
+通过`id`获取边的数据
+
+```js
+getEdgeDataById(edgeId: string): EdgeConfig
+// 返回值
+export type EdgeConfig = {
+  id: string;
+  type: string;
+  sourceNodeId: string;
+  targetNodeId: string;
+  startPoint?: {
+    x: number;
+    y: number;
+  },
+  endPoint?: {
+    x: number;
+    y: number;
+  },
+  text?: {
+    x: number;
+    y: number;
+    value: string;
+  },
+  pointsList?: Point[];
+  properties?: Record<string, unknown>;
+};
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| edgeId | String | ✅ | - | 边的id |
+
+示例：
+
+```js
+lf.getEdgeDataById('id')
+```
+
+## setDefaultEdgeType
+
+设置边的类型, 也就是设置在节点直接有用户手动绘制的连线类型。
+
+```js
+setDefaultEdgeType(type: EdgeType): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| type | String | ✅ | 'polyline' | 设置边的类型，内置支持的边类型有line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线，用户可以自定义type名切换到用户自定义的边 |
+
+示例：
+
+```js
+lf.setDefaultEdgeType('line')
+```
+## editText
+
+显示指定节点或边的文本编辑框
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ | - | 节点或边的id |
+
+```js
+lf.editText('element_id')
+```
+
+## updateText
+
+更新节点或者边的文案
+
+```ts
+updateText(id: string, value: string): void
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点或者边id |
+| value | String | ✅ |  | 更新后的文本值 |
+
+
+示例：
+
+```js
+lf.updateText('id', 'value')
+```
+
+## deleteElement
+
+删除元素
+
+```ts
+deleteElement(id: string): boolean
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ |  | 节点或者边id |
+
+
+示例：
+
+```js
+lf.deleteElement('node_id')
+```
+
+## selectElementById
+
+将图形选中
+
+参数：
+
+| 参数名 | 类型 | 必传 |默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | string | ✅ | - | 节点或者连线Id |
+| multiple | boolean |  | false | 是否为多选 |
+
+示例：
+
+```ts
+lf.selectElementById(id: string, multiple = false)
+```
+
+## getGraphData
+
+获取流程绘图数据
+
+```ts
+//返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
+getGraphData(): GraphConfigData | unknown
+```
+
+LogicFlow 默认数据格式
+
+```ts
+type GraphConfigData = {
+  nodes: {
+    id?: string;
+    type: string;
+    x: number;
+    y: number;
+    text?: TextConfig;
+    properties?: Record<string, unknown>;
+  }[];
+  edges: {
+      id: string;
+      type: string;
+      sourceNodeId: string;
+      targetNodeId: string;
+      startPoint: any;
+      endPoint: any;
+      text: {
+          x: number;
+          y: number;
+          value: string;
+      };
+      properties: {};
+  }[];
+}
+```
+
+示例：
+
+```js
+lf.getGraphData()
+```
+
+## getGraphRawData
+
+获取流程绘图原始数据， 与getGraphData区别是该方法获取的数据不会受到adapter影响。
+
+```ts
+getGraphRawData(): GraphConfigData
+```
+
+示例：
+
+```js
+lf.getGraphRawData()
+```
+
+## setProperties
+
+设置节点或者边的自定义属性
+
+```ts
+setProperties(id: string, properties: Object): void
+```
+
+示例：
+
+```js
+lf.setProperties('aF2Md2P23moN2gasd', {
+  isRollbackNode: true
+})
+```
+
+## getProperties
+
+获取节点或者边的自定义属性
+
+```ts
+getProperties(id: string): Object
+```
+
+示例：
+
+```js
+lf.getProperties('id')
+```
+
+## toFront
+
+将某个元素放置到顶部。
+
+如果堆叠模式为默认模式，则将原置顶元素重新恢复原有层级。
+
+如果堆叠模式为递增模式，则将需指定元素zIndex设置为当前最大zIndex + 1。
+
+示例：
+
+```js
+lf.toFront('id')
+```
+
+## setElementZIndex
+
+设置元素的zIndex.
+
+注意：默认堆叠模式下，不建议使用此方法。
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | String | ✅ | - | 边或者节点id |
+| zIndex | String\| Number | ✅ | - | 可以传数字，也支持传入`top` 和 'bottom' |
+
+示例：
+
+```js
+// 置为顶部
+lf.setElementZIndex('element_id', 'top')
+// 置为底部
+lf.setElementZIndex('element_id', 'bottom')
+lf.setElementZIndex('element_id', 2000)
+```
+
+## addElements
+
+批量添加节点和边
+
+示例：
+
+```js
+// 置为顶部
+lf.addElements({
+  nodes: [
+    {
+      id: 'node_1',
+      type: 'rect',
+      x: 100,
+      y: 100
+    },
+    {
+      id: 'node_2',
+      type: 'rect',
+      x: 200,
+      y: 300
+    }
+  ],
+  edges: [
+    {
+      id: 'edge_3',
+      type: 'polyline',
+      sourceNodeId: 'node_1',
+      targetNodeId: 'node_2'
+    }
+  ]
+})
+```
+
+## getAreaElement
+
+获取指定区域内的所有元素，此区域必须是DOM层。
+
+例如鼠标绘制选区后，获取选区内的所有元素。
+
+```js
+lf.getAreaElement([100, 100], [500, 500])
+```
+
+
+## getSelectElements
+
+获取选中的所有元素
+
+```ts
+getSelectElements(isIgnoreCheck: boolean): GraphConfigData
+```
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的边, 默认包括。 |
+
+
+```js
+lf.getSelectElements(false)
+```
+
+## clearSelectElements
+
+取消所有元素的选中状态
+
+```js
+lf.clearSelectElements()
+```
+
+## clearData
+
+清空画布
+
+```js
+lf.clearData()
+```
+
+## updateEditConfig
+
+更新流程编辑基本配置.
+
+详细参数见：[editConfig](/api/editConfigModelApi.html)
+
+```js
+lf.updateEditConfig({
+  stopZoomGraph: true
+})
+```
+
+## getEditConfig
+
+获取流程编辑基本配置
+
+详细参数见：[editConfig](/api/editConfigModelApi.html)
+
+```js
+lf.getEditConfig()
+```
+
+## getPointByClient
+
+获取事件位置相对于画布左上角的坐标
+
+画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+
+```js
+getPointByClient(x: number, y: number)
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| x | Number | ✅ | - | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
+| y | Number | ✅ | - | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
+
+返回值：
+
+| 名称 | 类型 | 描述 |
+| :- | :- | :- |
+| point | Point | 相对于画布左上角的两种坐标 |
+
+```ts
+type Position = {
+  x: number;
+  y: number;
+}
+type Point = {
+  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
+  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
+}
+```
+
+示例：
+
+```js
+lf.getPointByClient(event.x, event.y)
+```
+
+## focusOn
+
+定位到画布视口中心
+
+参数：
+
+| 参数名 | 类型 | 必传 |默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| focusOnArgs | object | ✅ | - | 定位所需参数 |
+
+示例：
+
+```ts
+// 定位到画布视口中心到node_1元素所处位置
+lf.focusOn({
+  id: 'node_1'
+})
+// 定位到画布视口中心到坐标[1000, 1000]处
+lf.focusOn({
+  coordinate: {
+    x: 1000,
+    y: 1000
+  }
+})
+```
+## resize
+
+调整画布宽高
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| width | Number | ✅ | - | 画布的宽 |
+| height | Number | ✅ | - | 画布的高 |
+
+```js
+lf.resize(1200, 600)
+```
+
+
+## zoom
+
+放大缩小画布
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| isZoomIn | Boolean或Number | | false | 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小 |
+| isZoomIn | [x,y] | | false | 缩放的原点, 不传默认左上角 |
+
+示例：
+
+```js
+lf.zoom(true)
+```
+
+## resetZoom
+
+重置图形的放大缩写比例为默认
+
+示例：
+
+```js
+lf.resetZoom()
+```
+
+## setZoomMiniSize
+
+设置图形缩小时，能缩放到的最小倍数。参数为0-1自己。默认0.2
+
+```js
+setZoomMiniSize(size: number): void
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| size | Number | ✅ | 0.2 | 最小缩放比，默认0.2 |
+
+示例：
+
+```js
+lf.setZoomMiniSize(0.3)
+```
+
+## setZoomMaxSize
+
+设置放大最大倍数
+
+```js
+setZoomMaxSize(size: number): void
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| size | Number | ✅ | 16 | 最大放大倍数，默认16 |
+
+示例：
+
+```js
+lf.setZoomMaxSize(20)
+```
+
+## getTransform
+
+获取当前画布的放大缩小值
+
+```js
+const transform = lf.getTransform();
+console.log(transform)
+```
+
+## translate
+
+平移图
+
+参数
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| x | Number | ✅ |  | x轴平移距离 |
+| y | Number | ✅ | | y轴平移距离 |
+
+```js
+lf.translate(100, 100)
+```
+
+## resetTranslate
+
+还原图形为初始位置
+
+```js
+lf.resetTranslate()
+```
+
 
 ## on
 
@@ -252,7 +1125,7 @@ on(evt: string, callback: Function): this
   e, // 鼠标的原生事件对象 <MouseEvent>
   data?, // 元素的通用属性
   position?, // 鼠标在画布中的触发点坐标 { x, y }
-  msg?, // 连线的校验信息
+  msg?, // 边的校验信息
 }
 ```
 
@@ -334,9 +1207,54 @@ lf.off('element:click', () => {
 })
 ```
 
+## once
+
+事件监听一次
+
+```js
+once(evt: string, callback: Function): this
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| evt | String | ✅ | - | 事件名称|
+| callback | String | ✅ | - | 回调函数 |
+
+示例：
+
+```js
+lf.once('node:click', () => {
+  console.log('node:click')
+})
+```
+
+## emit
+
+事件监听一次
+
+```js
+emit(evt: string, callback: Function): this
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| evt | String | ✅ | - | 事件名称|
+| callback | String | ✅ | - | 回调函数 |
+
+示例：
+
+```js
+lf.emit('node:click', () => {
+  console.log('node:click')
+})
+```
 ## undo
 
-撤销
+历史记录操作-返回上一步
 
 示例：
 
@@ -346,485 +1264,10 @@ lf.undo()
 
 ## redo
 
-重做
+历史记录操作-恢复下一步
 
 示例：
 
 ```js
 lf.redo()
-```
-
-## zoom
-
-放大缩小
-
-```js
-zoom(0.5, [400, 400]): string
-// 返回值为放大缩小的比例
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| isZoomIn | Boolean或Number | | false | 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小 |
-| isZoomIn | [x,y] | | false | 缩放的原点, 不传默认左上角 |
-
-示例：
-
-```js
-lf.zoom(true)
-```
-
-## resetZoom
-
-还原
-
-```js
-resetZoom(): void
-```
-
-示例：
-
-```js
-lf.resetZoom()
-```
-
-## setZoomMiniSize
-
-设置缩放最小倍数
-
-```js
-setZoomMiniSize(size: number): void
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| size | Number | ✅ | 0.2 | 最小缩放比，默认0.2 |
-
-示例：
-
-```js
-lf.setZoomMiniSize(0.3)
-```
-
-## setZoomMaxSize
-
-设置放大最大倍数
-
-```js
-setZoomMaxSize(size: number): void
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| size | Number | ✅ | 16 | 最大放大倍数，默认16 |
-
-示例：
-
-```js
-lf.setZoomMaxSize(20)
-```
-
-## focusOn
-
-将图形定位到画布中心
-
-```js
-focusOn(focusOnArgs: FocusOnArgs): void
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | String | | - | 图形的id |
-| coordinate | Object | | - | 图形当前的位置坐标 |
-
-示例：
-
-```js
-lf.focusOn({
-  id: '22'
-})
-
-lf.focusOn({
-  coordinate: {
-    x: 11,
-    y: 22
-  }
-})
-```
-
-## getPointByClient
-
-获取事件位置相对于画布左上角的坐标
-
-画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
-
-```js
-getPointByClient(x: number, y: number)
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| x | Number | ✅ | - | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
-| y | Number | ✅ | - | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
-
-返回值：
-
-| 名称 | 类型 | 描述 |
-| :- | :- | :- |
-| point | Point | 相对于画布左上角的两种坐标 |
-
-```ts
-type Position = {
-  x: number;
-  y: number;
-}
-type Point = {
-  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
-  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
-}
-```
-
-示例：
-
-```js
-lf.getPointByClient(event.x, event.y)
-```
-
-## cloneNode
-
-克隆节点
-
-```js
-cloneNode(nodeId: string): BaseNodeModel
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| nodeId | String | ✅ | - | 目标节点id |
-
-示例：
-
-```js
-lf.cloneNode('id')
-```
-
-## getNodeModel
-
-获取节点的`model`数据
-
-```js
-getNodeModel(nodeId: string): BaseNodeModel
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| nodeId | String | ✅ | - | 节点id |
-
-示例：
-
-```js
-lf.getNodeModel('id')
-```
-
-## getEdge
-
-通过边的`id`或边连接的节点的`id`来获取边的`model`，其中通过边的连接节点来获取到的边可能有多个。
-
-```js
-getEdge(config: EdgeFilter): BaseEdgeModel[]
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | String | | - | 边的id |
-| sourceNodeId | String | | - | 边的起始节点id |
-| targetNodeId | String | | - | 边的目标节点id |
-
-示例：
-
-```js
-lf.getEdge({
-  id: 'id'
-})
-lf.getEdge({
-  sourceNodeId: 'id1',
-  targetNodeId: 'id2'
-})
-lf.getEdge({
-  sourceNodeId: 'id1'
-})
-lf.getEdge({
-  targetNodeId: 'id2'
-})
-```
-
-## getEdgeDataById
-
-通过`id`获取边的数据
-
-```js
-getEdgeDataById(edgeId: string): EdgeConfig
-// 返回值
-export type EdgeConfig = {
-  id: string;
-  type: string;
-  sourceNodeId: string;
-  targetNodeId: string;
-  startPoint?: {
-    x: number;
-    y: number;
-  },
-  endPoint?: {
-    x: number;
-    y: number;
-  },
-  text?: {
-    x: number;
-    y: number;
-    value: string;
-  },
-  pointsList?: Point[];
-  properties?: Record<string, unknown>;
-};
-```
-
-参数：
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| edgeId | String | ✅ | - | 边的id |
-
-示例：
-
-```js
-lf.getEdgeDataById('id')
-```
-
-## setDefaultEdgeType
-
-设置边的类型
-
-```js
-setDefaultEdgeType(type: EdgeType): void
-```
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| type | String | ✅ | 'polyline' | 设置边的类型，内置支持的边类型有line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线，用户可以自定义type名切换到用户自定义的边 |
-
-示例：
-
-```js
-lf.setDefaultEdgeType('line')
-```
-
-## getGraphData
-
-获取流程绘图数据
-
-```ts
-//返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
-getGraphData(): GraphConfigData | unknown
-```
-
-LogicFlow 默认数据格式
-
-```ts
-type GraphConfigData = {
-  nodes: {
-    id?: string;
-    type: string;
-    x: number;
-    y: number;
-    text?: TextConfig;
-    properties?: Record<string, unknown>;
-  }[];
-  edges: {
-      id: string;
-      type: string;
-      sourceNodeId: string;
-      targetNodeId: string;
-      startPoint: any;
-      endPoint: any;
-      text: {
-          x: number;
-          y: number;
-          value: string;
-      };
-      properties: {};
-  }[];
-}
-```
-
-示例：
-
-```js
-lf.getGraphData()
-```
-
-## getGraphRawData
-
-获取流程绘图原始数据， 与getGraphData区别是该方法获取的数据不会受到adapter影响。
-
-```ts
-getGraphRawData(): GraphConfigData
-```
-
-示例：
-
-```js
-lf.getGraphRawData()
-```
-
-## setProperties
-
-设置节点或者连线的自定义属性
-
-```ts
-setProperties(id: string, properties: Object): void
-```
-
-示例：
-
-```js
-lf.setProperties('aF2Md2P23moN2gasd', {
-  isRollbackNode: true
-})
-```
-
-## getProperties
-
-获取节点或者连线的自定义属性
-
-```ts
-getProperties(id: string): Object
-```
-
-示例：
-
-```js
-lf.getProperties('id')
-```
-
-
-## changeNodeId
-
-修改节点的id， 如果不传新的id，会内部自动创建一个。
-
-示例：
-
-```js
-lf.changeNodeId('oldId', 'newId')
-```
-
-## changeEdgeId
-
-修改连线的id， 如果不传新的id，会内部自动创建一个。
-
-示例：
-
-```js
-lf.changeEdgeId('oldId', 'newId')
-```
-
-## updateText
-
-更新节点或者连线的文案
-
-```ts
-updateText(id: string, value: string): void
-```
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | String | ✅ |  | 节点或者连线id |
-| value | String | ✅ |  | 更新后的文本值 |
-
-
-示例：
-
-```js
-lf.updateText('id', 'value')
-```
-
-## getEditConfig
-
-获取流程编辑基本配置
-
-
-```js
-lf.getEditConfig()
-```
-
-## updateEditConfig
-
-更新流程编辑基本配置
-
-详细参数见： 
-
-```js
-lf.updateEditConfig({
-  stopZoomGraph: true
-})
-```
-
-## getSelectElements
-
-获取选中的所有元素
-
-```ts
-getSelectElements(isIgnoreCheck: boolean): GraphConfigData
-```
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| isIgnoreCheck | boolean | ✅ | true | 是否包括sourceNode和targetNode没有被选中的连线, 默认包括。 |
-
-
-```js
-lf.getSelectElements(false)
-```
-
-## clearSelectElements
-
-取消所有元素的选中状态
-
-```js
-lf.clearSelectElements()
-```
-
-## select
-
-将指定图形选中
-
-```js
-lf.select(id)
-```
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | string | ✅ |  | 需选中(节点或者连线)id |
-
-## changeNodeType
-
-修改节点类型
-
-```ts
-lf.changeNodeType(id: string, type: string)
 ```

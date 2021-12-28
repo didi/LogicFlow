@@ -32,7 +32,7 @@ LF 中提了供直线、直角折线、光滑曲线 3 种类型的边，本文�
 
 ps：为什么要设置 offset = 10，而不是 offset = 0，或者使用绘制一样的图形加大宽度 (stroke-width) 进行实现呢？考虑到后面会有边起点、终点位置调整，以及扩展功能，这样的方式更加灵活和可控。
 ## 直角折线
-两点之间如果仅使用直线进行连接，当节点数量增多，位置关系复杂时，会出现大量连线和节点交叉和重合的现象，为了更加清晰的表达节点之间的关系，LF 支持直角折线来连接两个节点。
+两点之间如果仅使用直线进行连接，当节点数量增多，位置关系复杂时，会出现大量边和节点交叉和重合的现象，为了更加清晰的表达节点之间的关系，LF 支持直角折线来连接两个节点。
 在 LF 中直角折线使用 svg 中的 polyline 标签进行绘制，关键步骤是找出组成折线的点。考虑美观性，策略为边尽量不与节点的边产生交叉和重合。
 首先假定使用节点上锚点 Start —> 锚点 End 进行连接，以下面的图为例介绍，如何计算直角折线路径的点。
 
@@ -42,7 +42,7 @@ ps：为什么要设置 offset = 10，而不是 offset = 0，或者使用绘制�
 
 <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1b9cb5632654dc7ada3e30dbccacd2f~tplv-k3u1fbpfcp-zoom-1.image" alt="第一步" style="width: 50%; margin-left: 25%"/>
 
-第二步：将包含 StartNext 和 EndPre 连线的盒子命名为 LBox，包含 SBbox 和 LBbox 的盒子命名为 SLBbox，包含 EBbox 和 LBbox 的盒子命名为 ELBbox，取 SLBbox 和 ELBbox 四个角上的点，即图中蓝色的点，这些点为折线路径中可能经过的点。这一步得到的可能的点为【蓝色的点】
+第二步：将包含 StartNext 和 EndPre 边的盒子命名为 LBox，包含 SBbox 和 LBbox 的盒子命名为 SLBbox，包含 EBbox 和 LBbox 的盒子命名为 ELBbox，取 SLBbox 和 ELBbox 四个角上的点，即图中蓝色的点，这些点为折线路径中可能经过的点。这一步得到的可能的点为【蓝色的点】
 
 <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/be8ace615fe6412baf804153d932d6fb~tplv-k3u1fbpfcp-zoom-1.image" alt="第二步" style="width: 50%; margin-left: 25%"/>
 
@@ -126,7 +126,7 @@ fill="none"
 
 ## 箭头
 流程图中箭头标明了流程节点的指向，在 LF 中直线、折线、曲线的箭头使用统一方案实现，在 LF 中的箭头本质是一个包含终点的三角形，其中终点是确定的，需要计算另外 2 点组成三角形。
-- 找出连线的末端切向量线段。  
+- 找出边的末端切向量线段。  
 直线：起点到终点的向量  
 折线：折线中最后一个线段的向量  
 曲线：曲线中一共有 4 个点，取终点对应的支点到终点的向量  

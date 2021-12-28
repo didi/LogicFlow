@@ -1,7 +1,7 @@
 // 各类算法的实现
 
 /*
-* 计算垂直边的与起始点有一定距离对称，连线垂直于边的点
+* 计算垂直边的与起始点有一定距离对称，边垂直于边的点
 * 调用方：计算箭头位置，计算扩大变得点击区域
 */
 export const getVerticalPointOfLine = (config) => {
@@ -19,9 +19,9 @@ export const getVerticalPointOfLine = (config) => {
     rightX: 0,
     rightY: 0,
   };
-  // // 连线与水平线的夹角
+  // // 边与水平线的夹角
   const angleOfHorizontal = Math.atan((end.y - start.y) / (end.x - start.x));
-  // 连线和两边点的夹角
+  // 边和两边点的夹角
   const angleOfPoints = Math.atan(offset / verticalLength);
   // 点到起点的距离
   const len = Math.sqrt(verticalLength * verticalLength + offset * offset);

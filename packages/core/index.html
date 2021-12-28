@@ -96,7 +96,7 @@
     <button onClick="setProperties()">设置属性</button>
     <button onClick="setZoom()">设置大小</button>
     <button onClick="selectElement()">选中指定节点</button>
-    <button onClick="triggerLine()">触发连线</button>
+    <button onClick="triggerLine()">触发边</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -145,7 +145,7 @@
       }
       class UmlNode extends HtmlNode {
         setHtml(rootEl) {
-          const { properties } = this.getAttributes();
+          const { properties } = this.props.model;
           const el = document.createElement('div');
           el.className = 'uml-wrapper';
           const html = `
@@ -201,7 +201,8 @@
         }
         // getShape 的返回值是一个通过 h 方法创建的 svg 元素
         getShape() {
-          const { x, y, width, height, fill, stroke, strokeWidth } = this.getAttributes();
+          const { x, y, width, height } = this.props.model;
+          const { fill, stroke, strokeWidth } = this.props.model.getNodeStyle();
           const attrs = {
             x: x - width / 2,
             y: y - height / 2,
@@ -289,9 +290,8 @@
       // combine
       class CombineNode extends BaseNode {
         getShape() {
-          const attributes = this.getAttributes();
-          const { x, y } = attributes;
-          const { model } = this.props;
+          const { x, y } = this.props.model;
+          const { fill } = this.props.model.getNodeStyle();
           return h(
             'g',
             {
@@ -299,7 +299,7 @@
             },
             h('path', {
               d: 'm  0,6.65 l  0,36.885245901639344 c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 l  0,-36.885245901639344 c -1.639344262295082,-8.196721311475411 -47.540983606557376,-8.196721311475411 -49.18032786885246,0c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0 m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411 49.18032786885246,0m  -49.18032786885246,5.737704918032787c  1.639344262295082,8.196721311475411 47.540983606557376,8.196721311475411  49.18032786885246,0',
-              fill: attributes.fill,
+              fill: fill,
               strokeWidth: 2,
               stroke: 'red',
               fillOpacity: 0.95,
@@ -324,14 +324,6 @@
 
       // connection
       class Connection extends PolylineEdge {
-        getAttributes() {
-          const attributes = super.getAttributes()
-          const { model: { properties } } = this.props;
-          if (properties.isActived) {
-            attributes.stroke = 'red'
-          }
-          return attributes
-        }
         getTextStyle() {
           return {
             background: {
@@ -352,6 +344,7 @@
           }
         }
       }
+      
     </script>
 
     <!-- 实例化 LogicFlow -->
@@ -365,9 +358,10 @@
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
-          // multipleSelectKey: 'shift',
-          // disabledTools: ['multipleSelect'],
-          metaKeyMultipleSelected: true,
+          // hoverOutline: true,
+          multipleSelectKey: 'shift',
+          disabledTools: ['multipleSelect'],
+          // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
@@ -411,7 +405,7 @@
           model: CombineModel,
         });
 
-        // 注册自定义连线
+        // 注册自定义边
         lf.register({
           type: 'connection',
           view: Connection,
@@ -424,6 +418,10 @@
         })
         lf.setTheme(
           {
+            baseNode: {
+              fill: 'red',
+              stroke: 'green'
+            },
             nodeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
           }
@@ -432,126 +430,157 @@
 
         lf.render({
           nodes: [
-            {
-              type: 'uml',
-              x: 100,
-              y: 100,
-              id: 10,
-              properties: {
-                name: 'haod',
-                body: '哈哈哈哈'
-              }
-            },
-            {
-              type: 'uml',
-              x: 300,
-              y: 100,
-              id: 110,
-              properties: {
-                name: 'hello',
-                body: 'better world'
-              }
-            },
-            {
-              type: 'uml',
-              x: 300,
-              y: 200,
-              id: 1110,
-              properties: {
-                name: 'hello',
-                body: 'better world'
-              }
-            },
-            {
+            // {
+            //   type: 'uml',
+            //   x: 100,
+            //   y: 100,
+            //   id: 10,
+            //   properties: {
+            //     name: 'haod',
+            //     body: '哈哈哈哈'
+            //   }
+            // },
+            // {
+            //   type: 'uml',
+            //   x: 300,
+            //   y: 100,
+            //   id: 110,
+            //   properties: {
+            //     name: 'hello',
+            //     body: 'better world'
+            //   }
+            // },
+            // {
+            //   type: 'uml',
+            //   x: 300,
+            //   y: 200,
+            //   id: 1110,
+            //   properties: {
+            //     name: 'hello',
+            //     body: 'better world'
+            //   }
+            // },
+            // {
 
-              type: 'square',
-              x: 300,
-              y: 300,
-              id: 11,
-              text: '啊大大',
-              properties: {
-                isUsed: true
-              }
-            },
-            {
+            //   type: 'square',
+            //   x: 300,
+            //   y: 300,
+            //   id: 11,
+            //   text: '啊大大',
+            //   properties: {
+            //     isUsed: true
+            //   }
+            // },
+            // {
 
-              type: 'square',
-              x: 400,
-              y: 300,
-              id: 111,
-              text: '啊大大',
-              properties: {
-                isUsed: false
-              }
-            },
+            //   type: 'square',
+            //   x: 400,
+            //   y: 300,
+            //   id: 111,
+            //   text: '啊大大',
+            //   properties: {
+            //     isUsed: false
+            //   }
+            // },
+            // {
+            //   type: 'text',
+            //   x: 200,
+            //   y: 400,
+            //   text: {
+            //     x: 200,
+            //     y: 400,
+            //     value: '我是单独的文本节点',
+            //   }
+            // },
+            // {
+            //   type: 'polygon',
+            //   x: 200,
+            //   y: 200,
+            //   id: 50,
+            //   text: 'hhhh',
+            // },
+            // {
+            //   type: 'diamond',
+            //   x: 220,
+            //   y: 220,
+            //   rx: 30,
+            //   ry: 50,
+            //   id: 524,
+            //   text: 'diamond',
+            // },
+            // {
+            //   type: 'user',
+            //   x: 600,
+            //   y: 200,
+            //   id: 20,
+            //   text: {
+            //     value: 'user',
+            //     x: 600,
+            //     y: 200,
+            //   },
+            //   properties: {
+            //     size: 1
+            //   }
+            // },
+            // {
+            //   type: 'user',
+            //   x: 500 * Math.random(),
+            //   y: 600 * Math.random(),
+            //   id: 21,
+            //   properties: {
+            //     size: 2
+            //   }
+            // },
+            // {
+            //   type: 'star',
+            //   x: 400,
+            //   y: 300,
+            //   id: '2222'
+            // },
+            // {
+            //   type: 'combine',
+            //   x: 222,
+            //   y: 40,
+            //   id: 30,
+            // },
+            // {
+            //   type: 'circle',
+            //   x: 500 * Math.random(),
+            //   y: 600 * Math.random(),
+            //   fill: 'blue',
+            //   id: 40,
+            // },
             {
-              type: 'text',
-              x: 200,
-              y: 400,
-              text: {
-                x: 200,
-                y: 400,
-                value: '我是单独的文本节点',
-              }
-            },
-            {
-              type: 'polygon',
-              x: 200,
+              type: 'rect',
+              x: 500,
               y: 200,
-              id: 50,
-              text: 'hhhh',
-            },
-            {
-              type: 'diamond',
-              x: 220,
-              y: 220,
-              rx: 30,
-              ry: 50,
-              id: 524,
-              text: 'diamond',
-            },
-            {
-              type: 'user',
-              x: 600,
-              y: 200,
-              id: 20,
-              text: {
-                value: 'user',
-                x: 600,
-                y: 200,
-              },
-              properties: {
-                size: 1
-              }
-            },
-            {
-              type: 'user',
-              x: 500 * Math.random(),
-              y: 600 * Math.random(),
-              id: 21,
-              properties: {
-                size: 2
-              }
-            },
-            {
-              type: 'star',
-              x: 400,
-              y: 300,
-              id: '2222'
-            },
-            {
-              type: 'combine',
-              x: 222,
-              y: 40,
-              id: 30,
             },
             {
               type: 'circle',
-              x: 500 * Math.random(),
-              y: 600 * Math.random(),
-              fill: 'blue',
-              id: 40,
+              x: 100,
+              y: 200,
             },
+            {
+              type: 'polygon',
+              x: 300,
+              y: 200,
+            },
+            {
+              type: 'ellipse',
+              x: 100,
+              y: 400,
+            },
+            {
+              type: 'diamond',
+              x: 300,
+              y: 400,
+            },
+            {
+              type: 'text',
+              x: 500,
+              y: 400,
+              text: '33333'
+            }
           ].concat(Array.of(...Array(0)).map((item, i) => {
             return {
               id: 'node_' + i,
@@ -560,14 +589,14 @@
               y: (i / 4) * 150,
             }
           })),
-          edges: [
-            {
-              id: 'edge_2222',
-              type: 'polyline',
-              sourceNodeId: 50,
-              targetNodeId: 21,
-            }
-          ]
+          // edges: [
+          //   {
+          //     id: 'edge_2222',
+          //     type: 'connection',
+          //     sourceNodeId: 50,
+          //     targetNodeId: 21,
+          //   }
+          // ]
         });
       }
     </script>
@@ -651,12 +680,12 @@
           })
         }
         window.setZoom = function () {
-          // lf.graphModel.transformMatrix.SCALE_X  = 0.6
-          // lf.graphModel.transformMatrix.SCALE_Y = 0.6
+          // lf.graphModel.transformModel.SCALE_X  = 0.6
+          // lf.graphModel.transformModel.SCALE_Y = 0.6
           lf.zoom(0.6, [400, 400])
         }
         window.selectElement = function () {
-          lf.select('2222')
+          lf.selectElementById('2222')
         }
         window.triggerLine = function () {
           // lf.startConnect()
@@ -686,6 +715,9 @@
         })
         lf.on('node:delete',()=> {
           console.log('nodeup')
+        })
+        lf.on('node:contextmenu', () => {
+          console.log(444)
         })
         lf.on('edge:adjust',({data})=> {
           console.log('edge:adjust', data)

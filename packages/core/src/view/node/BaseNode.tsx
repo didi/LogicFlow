@@ -4,50 +4,24 @@ import GraphModel from '../../model/GraphModel';
 import Anchor from '../Anchor';
 import BaseNodeModel from '../../model/node/BaseNodeModel';
 import BaseText from '../text/BaseText';
-import EventEmitter from '../../event/eventEmitter';
 import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
+import { CommonTheme } from '../../constant/DefaultTheme';
+import { NodeAttributes } from '../../type';
 
 type IProps = {
   model: BaseNodeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 type Istate = {
   isHovered: boolean,
 };
 
-type StyleAttribute = {
-  width: number;
-  height: number;
-  fill: string;
-  fillOpacity?: number;
-  strokeWidth?: number;
-  stroke: string;
-  strokeOpacity?: number;
-  opacity?: number;
-  outlineColor?: string;
-  [key: string]: any;
-};
+type StyleAttribute = CommonTheme;
 
-export type NodeAttributes = {
-  id: string,
-  properties: Record<string, any>,
-  type: string,
-  x: number,
-  y: number,
-  isSelected: boolean,
-  isHovered: boolean,
-  text: {
-    x: number,
-    y: number,
-    value: string;
-    [key: string]: any;
-  },
-} & StyleAttribute;
 export default abstract class BaseNode extends Component<IProps, Istate> {
   static getModel(defaultModel) {
     return defaultModel;
@@ -59,7 +33,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   constructor(props) {
     super();
     const {
-      graphModel: { gridSize }, eventCenter, model,
+      graphModel: { gridSize, eventCenter }, model,
     } = props;
     // 不在构造函数中判断，因为editConfig可能会被动态改变
     this.stepDrag = new StepDrag({
@@ -75,95 +49,15 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     };
   }
   abstract getShape();
-  getShapeStyle(): StyleAttribute {
-    const {
-      model: {
-        width,
-        height,
-        fill,
-        fillOpacity,
-        strokeWidth,
-        stroke,
-        strokeOpacity,
-        opacity,
-        outlineColor,
-      },
-    } = this.props;
-    return {
-      width,
-      height,
-      fill,
-      fillOpacity,
-      strokeWidth,
-      stroke,
-      strokeOpacity,
-      opacity,
-      outlineColor,
-    };
-  }
-  getAttributes(): NodeAttributes {
-    const {
-      model: {
-        id,
-        properties = {},
-        type,
-        x,
-        y,
-        isSelected,
-        isHovered,
-        text,
-      },
-    } = this.props;
-    const style = this.getShapeStyle();
-    return {
-      id,
-      properties: {
-        ...properties,
-      },
-      type,
-      x,
-      y,
-      isSelected,
-      isHovered,
-      text: {
-        ...text,
-      },
-      ...style,
-    };
-  }
-  getProperties(): Record<string, any> {
-    const { model } = this.props;
-    return model.getProperties();
-  }
-  /* 支持节点自定义锚点样式 */
-  getAnchorStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchor } = graphModel.theme;
-    // 防止被重写覆盖主题。
-    return { ...anchor };
-  }
-  /* 支持节点自定义锚点hover样式 */
-  getAnchorHoverStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchorHover } = graphModel.theme;
-    return { ...anchorHover };
-  }
-  /* 锚点创建连线样式 */
-  getNewEdgeStyle(): Record<string, any> {
-    const { graphModel } = this.props;
-    const { anchorLine } = graphModel.theme;
-    return { ...anchorLine };
-  }
   getAnchors() {
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const {
       isSelected, isHitable, isDragging,
     } = model;
     const { isHovered } = this.state;
     if (isHitable && (isSelected || isHovered)) {
-      const style = this.getAnchorStyle();
-      const hoverStyle = this.getAnchorHoverStyle();
-      const edgeStyle = this.getNewEdgeStyle();
+      const style = model.getAnchorStyle();
+      const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
         (anchor, index) => (
           <Anchor
@@ -171,11 +65,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             anchorData={anchor}
             nodeDraging={isDragging}
             style={style}
-            hoverStyle={hoverStyle}
             edgeStyle={edgeStyle}
             anchorIndex={index}
             nodeModel={model}
-            eventCenter={eventCenter}
             graphModel={graphModel}
             setHoverOFF={this.setHoverOFF}
           />
@@ -183,29 +75,22 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     return [];
   }
-  /* 支持节点自定义文案样式 */
-  getTextStyle() {
-    const { graphModel } = this.props;
-    // 透传 nodeText
-    const { nodeText } = graphModel.theme;
-    return { ...nodeText };
-  }
   getText() {
     const { model, graphModel } = this.props;
     // 文本被编辑的时候，显示编辑框，不显示文本。
     if (model.state === ElementState.TEXT_EDIT) {
       return '';
     }
-    const style = this.getTextStyle();
+    const style = model.getTextStyle();
     if (model.text) {
-      const { editConfig } = graphModel;
+      const { editConfigModel } = graphModel;
       let draggable = false;
-      if (model.text.draggable || editConfig.nodeTextDraggable) {
+      if (model.text.draggable || editConfigModel.nodeTextDraggable) {
         draggable = true;
       }
       return (
         <BaseText
-          editable={editConfig.nodeTextEdit && model.text.editable}
+          editable={editConfigModel.nodeTextEdit && model.text.editable}
           style={style}
           model={model}
           graphModel={graphModel}
@@ -236,9 +121,14 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
 
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
-    model.isDragging = true;
-    const { transformMatrix } = graphModel;
-    const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
+    const { isDraging } = this.state;
+    if (!isDraging) {
+      this.setState({
+        isDraging: true,
+      });
+    }
+    const { transformModel } = graphModel;
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     graphModel.moveNode(model.id, curDeltaX, curDeltaY);
   };
   onDragEnd = () => {
@@ -251,7 +141,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
     if (time > 200) return; // 事件大于200ms，认为是拖拽。
-    const { model, eventCenter, graphModel } = this.props;
+    const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
     const position = graphModel.getPointByClient({
@@ -272,25 +162,25 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return;
 
-    const { editConfig } = graphModel;
-    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfig));
+    const { editConfigModel } = graphModel;
+    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
-      if (editConfig.nodeTextEdit && model.text.editable) {
+      if (editConfigModel.nodeTextEdit && model.text.editable) {
         model.setSelected(false);
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
-      eventCenter.emit(EventType.NODE_DBCLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.NODE_DBCLICK, eventOptions);
     } else {
-      eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
-      eventCenter.emit(EventType.NODE_CLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
+      graphModel.eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
   };
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
-    const { model, eventCenter, graphModel } = this.props;
+    const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
 
@@ -300,7 +190,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     graphModel.selectNodeById(model.id);
-    eventCenter.emit(EventType.NODE_CONTEXTMENU, {
+    graphModel.eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,
       position,
@@ -311,8 +201,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { model, graphModel } = this.props;
     this.toFront();
     this.startTime = new Date().getTime();
-    const { editConfig } = graphModel;
-    if (editConfig.adjustNodePosition && model.draggable) {
+    const { editConfigModel } = graphModel;
+    if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev);
     }
   };
@@ -323,10 +213,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     this.setState({
       isHovered: true,
     });
-    const { model, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const nodeData = model.getData();
     model.setHovered(true);
-    eventCenter.emit(EventType.NODE_MOUSEENTER, {
+    graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
       data: nodeData,
       e: ev,
     });
@@ -335,10 +225,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     this.setState({
       isHovered: false,
     });
-    const { model, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const nodeData = model.getData();
     model.setHovered(false);
-    eventCenter.emit(EventType.NODE_MOUSELEAVE, {
+    graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
       e: ev,
     });
@@ -361,9 +251,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   render() {
     const { model, graphModel } = this.props;
     const {
-      editConfig: { hideAnchors, adjustNodePosition },
+      editConfigModel: { hideAnchors, adjustNodePosition },
       gridSize,
-      transformMatrix: { SCALE_X },
+      transformModel: { SCALE_X },
     } = graphModel;
     const {
       isHitable,

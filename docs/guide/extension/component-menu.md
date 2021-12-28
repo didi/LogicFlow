@@ -15,10 +15,10 @@ import '@logicflow/extension/lib/style/index.css'
 LogicFlow.use(Menu);
 ```
 
-`Menu`组件支持菜单包括节点右键菜单、连线右键菜单、画布右键菜单，默认情况下，`Menu`在各个菜单内置了以下功能。
+`Menu`组件支持菜单包括节点右键菜单、边右键菜单、画布右键菜单，默认情况下，`Menu`在各个菜单内置了以下功能。
 
 - 节点右键菜单(nodeMenu)： 删除、复制、编辑文案
-- 连线右键菜单(edgeMenu)：删除、编辑文案
+- 边右键菜单(edgeMenu)：删除、编辑文案
 - 画布右键菜单(graphMenu)：无
 
 <example href="/examples/#/extension/components/menu" :height="300" ></example>
@@ -126,7 +126,7 @@ lf.setMenuConfig({
 
 ## 指定类型元素配置菜单
 
-除了上面的为所有的节点、元素、画布自定义通用菜单外，还可以使用`lf.setMenuByType`为指定类型的节点或连线定义菜单。
+除了上面的为所有的节点、元素、画布自定义通用菜单外，还可以使用`lf.setMenuByType`为指定类型的节点或边定义菜单。
 
 ```ts
 lf.setMenuByType({
@@ -230,7 +230,7 @@ lf.register({
   view: PolylineEdge,
   model: CustomeModel,
 });
-// 设置默认连线的类型为自定义连线类型
+// 设置默认边的类型为自定义边类型
 lf.setDefaultEdgeType('custome_edge');
 ```
 

@@ -18,8 +18,15 @@ class RectResizeModel extends RectNodeModel {
   minHeight = 30;
   maxWidth = 2000;
   maxHeight = 2000;
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'none';
+    if (style.hover) {
+      style.hover.stroke = 'none';
+    }
+    return style;
+  }
   setAttributes() {
-    this.hideOutline = true;
     // @ts-ignore
     const { nodeSize } = this.properties;
     if (nodeSize) {
@@ -29,15 +36,14 @@ class RectResizeModel extends RectNodeModel {
   }
 }
 class RectResizeView extends RectNode {
-  getControlGroup(attributes) {
+  getControlGroup() {
     const {
       model,
       graphModel,
     } = this.props;
     return (
       <ControlGroup
-        {...attributes}
-        nodeModel={model}
+        model={model}
         graphModel={graphModel}
       />
     );
@@ -47,14 +53,13 @@ class RectResizeView extends RectNode {
     return super.getShape();
   }
   getShape() {
-    const attributes = super.getAttributes();
     const {
       model: { isSelected },
     } = this.props;
     return (
       <g>
         {this.getResizeShape()}
-        {isSelected ? this.getControlGroup(attributes) : ''}
+        {isSelected ? this.getControlGroup() : ''}
       </g>
     );
   }

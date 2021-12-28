@@ -2,18 +2,27 @@
   <div class="diagram">
     <diagram-toolbar
       class="diagram-toolbar"
+      v-if="lf"
+      :lf="lf"
+      :activeEdges="activeEdges"
       @changeNodeFillColor="$_changeNodeFill"
       @saveGraph="$_saveGraph"
     />
-    <diagram-sidebar class="diagram-sidebar" @dragInNode="$_dragInNode" :style="{ width: sidebarWidth + 'px'}"/>
-    <div class="diagram-container" ref="container" :style="{ left: sidebarWidth + 'px'}">
-      <div class="diagram-wrapper" :style="{ width: this.diagramWidth + 'px' }">
-        <div class="lf-diagram" ref="diagram" :style="{ width: this.diagramWidth + 'px', height: this.diagramHeight + 'px' }"></div>
+    <div class="diagram-main">
+      <diagram-sidebar class="diagram-sidebar" @dragInNode="$_dragInNode" />
+      <div class="diagram-container" ref="container">
+        <div class="diagram-wrapper">
+          <div class="lf-diagram" ref="diagram"></div>
+        </div>
       </div>
     </div>
-    <diagram-node-panel
+    <div>{{properties}}</div>
+    <!-- 右侧属性面板 -->
+    <PropertyPanel
       class="diagram-panel"
-      v-if="activeNodes.length > 0"
+      v-if="activeNodes.length>0 || activeEdges.length > 0"
+      :onlyEdge="activeNodes.length === 0"
+      :elementsStyle="properties"
       @setStyle="$_setStyle"
       @setZIndex="$_setZIndex"
     />
@@ -22,18 +31,13 @@
 
 <script>
 import LogicFlow from '@logicflow/core'
-// import { NodeResize } from '@logicflow/extension'
+import { SelectionSelect } from '@logicflow/extension'
 import '@logicflow/core/dist/style/index.css'
 import '@logicflow/extension/lib/style/index.css'
 import DiagramToolbar from './DiagramToolbar.vue'
 import DiagramSidebar from './DiagramSidebar.vue'
-import DiagramNodePanel from './DiagramNodePanel.vue'
-// import BaseNode from './node/BaseNode'
-import CircleNode from './node/CircleNode'
-import RectNode from './node/RectNode'
-import TextNode from './node/TextNode'
-// const LogicFlow = window.LogicFlow
-// LogicFlow.use(NodeResize)
+import PropertyPanel from './PropertyPanel.vue'
+import { registerCustomElement } from './node'
 
 export default {
   name: 'Diagram',
@@ -42,14 +46,14 @@ export default {
       sidebarWidth: 200,
       diagramWidth: 0,
       diagramHeight: 0,
+      lf: '',
       filename: '',
       activeNodes: [],
-      activeEdges: []
+      activeEdges: [],
+      properties: {}
     }
   },
   mounted () {
-    this.diagramWidth = this.$refs.container.clientWidth
-    this.diagramHeight = this.$refs.container.clientHeight
     let data = ''
     if (window.location.search) {
       const query = window.location.search.substring(1).split('&').reduce((map, kv) => {
@@ -67,11 +71,12 @@ export default {
   },
   methods: {
     initLogicFlow (data) {
+      // 引入框选插件
+      LogicFlow.use(SelectionSelect)
       const lf = new LogicFlow({
         container: this.$refs.diagram,
         width: this.diagramWidth,
         height: this.diagramHeight,
-        hideOutline: true,
         overlapMode: 1,
         autoWrap: true,
         metaKeyMultipleSelected: true,
@@ -82,29 +87,47 @@ export default {
           visible: false,
           size: 5
         },
-        history: false,
         background: {
-          image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=',
-          repeat: 'repeat'
+          backgroundImage: 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDBkMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDBkMGQwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=")',
+          backgroundRepeat: 'repeat'
         }
       })
       lf.setTheme(
         {
-          nodeText: { autoWrap: true, lineHeight: 1.5 },
-          edgeText: { autoWrap: true, lineHeight: 1.5 }
+          rect: { strokeWidth: 1 },
+          diamond: { strokeWidth: 1 },
+          ellipse: { strokeWidth: 1 },
+          nodeText: { overflowMode: 'autoWrap', lineHeight: 1.5 },
+          edgeText: { overflowMode: 'autoWrap', lineHeight: 1.5 }
         }
       )
-      // lf.register(BaseNode)
-      lf.register(CircleNode)
-      lf.register(RectNode)
-      lf.register(TextNode)
+      // 注册自定义元素
+      registerCustomElement(lf)
+      lf.setDefaultEdgeType('pro-polyline')
       lf.render(data)
       this.lf = lf
       this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
-        const { nodes, edges } = this.lf.getSelectElements()
-        this.activeNodes = nodes
-        this.activeEdges = edges
+        this.$nextTick(() => {
+          const { nodes, edges } = this.lf.getSelectElements()
+          this.$set(this, 'activeNodes', nodes)
+          this.activeNodes = nodes
+          this.activeEdges = edges
+          this.$_getProperty()
+        })
       })
+    },
+    // 获取可以进行设置的属性
+    $_getProperty () {
+      let properties = {}
+      const { nodes, edges } = this.lf.getSelectElements()
+      nodes.forEach(node => {
+        properties = { ...properties, ...node.properties }
+      })
+      edges.forEach(edge => {
+        properties = { ...properties, ...edge.properties }
+      })
+      this.properties = properties
+      return properties
     },
     $_dragInNode (type) {
       this.lf.dnd.startDrag({
@@ -123,9 +146,16 @@ export default {
       this.activeNodes.forEach(({ id }) => {
         this.lf.setProperties(id, item)
       })
+      this.activeEdges.forEach(({ id }) => {
+        this.lf.setProperties(id, item)
+      })
+      this.$_getProperty()
     },
     $_setZIndex (type) {
       this.activeNodes.forEach(({ id }) => {
+        this.lf.setElementZIndex(id, type)
+      })
+      this.activeEdges.forEach(({ id }) => {
         this.lf.setElementZIndex(id, type)
       })
     },
@@ -147,7 +177,7 @@ export default {
   components: {
     DiagramToolbar,
     DiagramSidebar,
-    DiagramNodePanel
+    PropertyPanel
   }
 }
 </script>
@@ -162,12 +192,27 @@ export default {
   box-sizing: border-box;
 }
 .diagram-toolbar {
+  position: absolute;
+  top: 0;
+  left: 200px;
   height: 40px;
-  border-bottom: 1px solid #dadce0;
+  width: 310px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 10;
+  background: #e5e5e5;
+}
+.diagram-main {
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 .diagram-sidebar {
+  width: 200px;
   height: calc(100% - 40px);
   border-right: 1px solid #dadce0;
+  padding: 10px;
 }
 .diagram-panel {
   width: 300px;
@@ -179,22 +224,21 @@ export default {
   border-left: 1px solid #dadce0;
 }
 .diagram-container {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  bottom: 0;
-  overflow: scroll;
+  flex: 1;
 }
 /* 由于背景图和gird不对齐，需要css处理一下 */
 .diagram /deep/ .lf-background {
   left: -9px;
 }
-/* .diagram-wrapper {
-  padding: 100px 200px;
+.diagram-wrapper {
   box-sizing: border-box;
-} */
+  width: 100%;
+  height: 100%;
+}
 .lf-diagram {
   box-shadow: 0px 0px 4px #838284;
+  width: 100%;
+  height: 100%;
 }
 ::-webkit-scrollbar {
   width: 9px;

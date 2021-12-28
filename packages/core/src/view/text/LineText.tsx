@@ -16,22 +16,22 @@ export default class LineText extends BaseText {
   }
   getBackgroud() {
     const model = this.props.model as BaseEdgeModel;
-    const { style } = this.props;
-    const { text, textWidth } = model;
-    let backgroundStyle = pick(style.background, 'fill', 'stroke', 'radius', 'height');
+    const style = model.getTextStyle();
+    const { text } = model;
+    let backgroundStyle = style.background || {};
     const { isHoverd } = this.state;
-    if (isHoverd && style.hoverBackground) {
-      backgroundStyle = { ...backgroundStyle, ...style.hoverBackground };
+    if (isHoverd && style.hover && style.hover.background) {
+      backgroundStyle = { ...backgroundStyle, ...style.hover.background };
     }
     // 存在文本并且文本背景不为透明时计算背景框
     if (text && text.value && backgroundStyle.fill !== 'transparnet') {
-      const { fontSize, autoWrap, lineHeight, wrapPadding } = style;
+      const { fontSize, overflowMode, lineHeight, wrapPadding, textWidth } = style;
       const { value, x, y } = text;
       const rows = String(value).split(/[\r\n]/g);
       // 计算行数
       const rowsLength = rows.length;
       let rectAttr;
-      if (autoWrap && textWidth) {
+      if (overflowMode === 'autoWrap' && textWidth) {
         const textHeight = getHtmlTextHeight({
           rows,
           style: {
@@ -85,6 +85,7 @@ export default class LineText extends BaseText {
     const { model, style } = this.props;
     const { text } = model;
     const { value, x, y } = text;
+    if (!value) return;
     const attr = {
       x,
       y,

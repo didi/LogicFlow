@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 import { defaultTheme } from '../../constant/DefaultTheme';
@@ -33,6 +34,14 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   @observable dbClickPosition: Point;
   constructor(data, graphModel: GraphModel) {
     super(data, graphModel, 'polyline');
+  }
+  getEdgeStyle() {
+    const { polyline } = this.graphModel.theme;
+    const style = super.getEdgeStyle();
+    return {
+      ...style,
+      ...cloneDeep(polyline),
+    };
   }
   getTextPosition() {
     // 在文案为空的情况下，文案位置为双击位置
@@ -428,22 +437,22 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     this.isDragging = false;
   }
 
-  /* 拖拽之后个更新points，仅更新连线，不更新pointsList，
+  /* 拖拽之后个更新points，仅更新边，不更新pointsList，
      appendWidth会依赖pointsList,更新pointsList会重新渲染appendWidth，从而导致不能继续拖拽
      在拖拽结束后再进行pointsList的更新
   */
   @action
   updatePointsAfterDrage(pointsList) {
-    // 找到准确的连接点后,更新points, 更新连线，同时更新依赖points的箭头
+    // 找到准确的连接点后,更新points, 更新边，同时更新依赖points的箭头
     const list = this.updateCrossPoints(pointsList);
     this.points = list.map(point => `${point.x},${point.y}`).join(' ');
   }
-  // 获取连线调整的起点
+  // 获取边调整的起点
   @action
   getAdjustStart() {
     return this.pointsList[0] || this.startPoint;
   }
-  // 获取连线调整的终点
+  // 获取边调整的终点
   @action
   getAdjustEnd() {
     const { pointsList } = this;

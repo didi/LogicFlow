@@ -5,7 +5,7 @@ class NodeSelectionView extends PolygonNode {
   d = 10;
   getShapeStyle() {
     // 设置边框为虚线
-    const style = super.getShapeStyle();
+    const style = this.props.model.getNodeStyle();
     // @ts-ignore
     style.strokeDashArray = '10 5';
 
@@ -13,20 +13,8 @@ class NodeSelectionView extends PolygonNode {
   }
 
   getLabelShape() {
-    const attributes = super.getAttributes();
-    const {
-      x, // 元素中心点
-      y, // 元素中心点
-      width,
-      height,
-      stroke,
-      id,
-      properties: {
-        label_text: labelText,
-        disabled_delete: disabledDelete,
-      },
-    } = attributes;
-
+    const { id, x, y, width, height, properties } = this.props.model;
+    const style = this.props.model.getNodeStyle();
     return h(
       'svg',
       {
@@ -34,51 +22,38 @@ class NodeSelectionView extends PolygonNode {
         y: y - height / 2,
         style: 'z-index: 0; background: none; overflow: auto;',
       },
-      labelText ? h('text', {
+      properties.labelText ? h('text', {
         x: 0,
         y: -5,
         width: 50,
         height: 24,
         fontSize: '16px',
-        fill: stroke,
+        fill: style.stroke,
       }, '方案') : '',
-      disabledDelete ? '' : h('text', {
-        x: labelText ? 50 : 0,
+      properties.disabledDelete ? '' : h('text', {
+        x: properties.labelText ? 50 : 0,
         y: -5,
         width: 50,
         height: 24,
         fontSize: '24px',
         cursor: 'pointer',
-        fill: stroke,
+        fill: style.stroke,
         onclick: this.handleCustomDeleteIconClick.bind(this, id),
       }, 'x'),
     );
   }
 
   getShape() {
-    const attributes = super.getAttributes();
-    const {
-      x, // 元素中心点
-      y, // 元素中心点
-      width,
-      height,
-      fill,
-      stroke,
-      strokeWidth,
-      strokeDashArray,
-      id,
-    } = attributes;
+    const { x, y, width, height, id, radius } = this.props.model;
+    const style = this.props.model.getNodeStyle();
 
     return h('g', {}, [
       h('rect', {
+        ...style,
         x: x - width / 2,
         y: y - height / 2,
-        fill,
-        stroke,
-        strokeWidth,
         width,
         height,
-        strokeDashArray,
         id,
       }),
       this.getLabelShape(),
@@ -154,7 +129,7 @@ class NodeSelectionModel extends PolygonNodeModel {
     let maxY = -Infinity;
 
     nodesIds.forEach((id) => {
-      const model = this.graphModel.getNodeModel(id);
+      const model = this.graphModel.getNodeModelById(id);
       if (!model) return;
       const { width, height, x, y } = model;
       minX = Math.min(minX, x - width / 2 - this.d);
@@ -217,7 +192,7 @@ class NodeSelection {
       node_selection_ids: this.selectNodesIds,
     });
 
-    this.lf.getNodeModel(nodeSelection.id).updatePointsByNodes(this.selectNodesIds);
+    this.lf.getNodeModelById(nodeSelection.id).updatePointsByNodes(this.selectNodesIds);
   }
 
   /**
@@ -248,7 +223,7 @@ class NodeSelection {
       // 如果selectNodesIds中已存在此节点，则取消选中此节点
       let isUnSelected = false;
       if (this.selectNodesIds.includes(val.data.id)) {
-        this.lf.getNodeModel(val.data.id).setSelected(false);
+        this.lf.getNodeModelById(val.data.id).setSelected(false);
         isUnSelected = true;
       }
 

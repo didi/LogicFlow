@@ -20,16 +20,15 @@ import { observer } from '..';
 import ModificationOverlay from './overlay/ModificationOverlay';
 
 type IProps = {
-  getView: (type: string) => typeof Component,
-  tool: Tool,
-  options: Options.Definition,
-  eventCenter: EventEmitter
-  dnd: DnD,
+  getView: (type: string) => typeof Component;
+  tool: Tool;
+  options: Options.Definition;
+  dnd: DnD;
   snaplineModel: SnaplineModel;
-  graphModel: GraphModel,
+  graphModel: GraphModel;
 };
 type InjectedProps = IProps & {
-  graphModel: GraphModel,
+  graphModel: GraphModel;
 };
 
 type ContainerStyle = {
@@ -44,7 +43,7 @@ class Graph extends Component<IProps> {
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
-  getComponent(model: BaseEdgeModel | BaseNodeModel, graphModel: GraphModel, eventCenter: EventEmitter, overlay = 'canvas-overlay') {
+  getComponent(model: BaseEdgeModel | BaseNodeModel, graphModel: GraphModel, overlay = 'canvas-overlay') {
     const { getView } = this.props;
     const View = getView(model.type);
     return (
@@ -53,23 +52,22 @@ class Graph extends Component<IProps> {
         model={model}
         graphModel={graphModel}
         overlay={overlay}
-        eventCenter={eventCenter}
       />
     );
   }
   render() {
     const {
-      graphModel, tool, options, eventCenter, dnd, snaplineModel,
+      graphModel, tool, options, dnd, snaplineModel,
     } = this.props;
     const style: ContainerStyle = {};
-    if (options.width) {
-      style.width = `${options.width}px`;
+    if (graphModel.width) {
+      style.width = `${graphModel.width}px`;
     }
-    if (options.height) {
-      style.height = `${options.height}px`;
+    if (graphModel.height) {
+      style.height = `${graphModel.height}px`;
     }
-    const { fakerNode, editConfig } = graphModel;
-    const { adjustEdge } = editConfig;
+    const { fakerNode, editConfigModel } = graphModel;
+    const { adjustEdge } = editConfigModel;
 
     return (
       <div
@@ -78,22 +76,21 @@ class Graph extends Component<IProps> {
       >
         <CanvasOverlay
           graphModel={graphModel}
-          eventCenter={eventCenter}
           dnd={dnd}
         >
           <g className="lf-base">
             {
               map(graphModel.sortElements, (nodeModel) => (
-                this.getComponent(nodeModel, graphModel, eventCenter)
+                this.getComponent(nodeModel, graphModel)
               ))
             }
           </g>
           {
-            fakerNode ? this.getComponent(fakerNode, graphModel, eventCenter) : ''
+            fakerNode ? this.getComponent(fakerNode, graphModel) : ''
           }
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>
-          {!options.hideOutline ? <OutlineOverlay graphModel={graphModel} /> : ''}
+          <OutlineOverlay graphModel={graphModel} />
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
           {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </ModificationOverlay>

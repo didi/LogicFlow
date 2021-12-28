@@ -16,8 +16,6 @@ export type SnaplinePosition = {
   y?: number;
 };
 
-const defaultStyle = defaultTheme.snapline;
-
 export default class SnaplineModel {
   graphModel: GraphModel;
   // 是否展示水平对齐线
@@ -26,17 +24,16 @@ export default class SnaplineModel {
   @observable isShowVertical: boolean;
   // 对齐线的中心位置，目前仅展示中心对齐的情况，后面可以考虑多种对齐策略
   @observable position: SnaplinePosition;
-  @computed get stroke(): string {
-    return this.graphModel.theme.snapline.stroke || defaultStyle.stroke;
-  }
-  @computed get strokeWidth(): number {
-    return this.graphModel.theme.snapline.strokeWidth || defaultStyle.strokeWidth;
-  }
   constructor(graphModel) {
     this.isShowHorizontal = false;
     this.isShowVertical = false;
     this.position = { x: 0, y: 0 };
     this.graphModel = graphModel;
+  }
+  getStyle() {
+    return {
+      ...this.graphModel.theme.snapline,
+    };
   }
   // 计算节点中心线与其他节点的对齐信息
   private getCenterSnapLine(dragingNode: NodeData, nodes: BaseNodeModel[]): SnaplineInfo {
@@ -76,7 +73,7 @@ export default class SnaplineModel {
       if (fakerNode && fakerNode.id === id) {
         dragingData = getNodeBBox(fakerNode);
       } else {
-        const nodeModel = this.graphModel.getNodeModel(id);
+        const nodeModel = this.graphModel.getNodeModelById(id);
         dragingData = getNodeBBox(nodeModel);
       }
     }
@@ -116,7 +113,7 @@ export default class SnaplineModel {
       if (fakerNode && fakerNode.id === id) {
         dragingData = getNodeBBox(fakerNode);
       } else {
-        const nodeModel = this.graphModel.getNodeModel(id);
+        const nodeModel = this.graphModel.getNodeModelById(id);
         dragingData = getNodeBBox(nodeModel);
       }
     }

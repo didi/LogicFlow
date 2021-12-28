@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.8](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.7...examples@1.0.0-alpha.8) (2021-12-24)
+
+
+### Features
+
+* remove hideOutline ([be86fb1](https://github.com/didi/LogicFlow/commit/be86fb118bd8bb1bd67a999802544eb2d10df0da))
+
+
+
+
+
+# [1.0.0-alpha.7](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.6...examples@1.0.0-alpha.7) (2021-12-22)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.5...examples@1.0.0-alpha.6) (2021-12-22)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [1.0.0-alpha.5](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.4...examples@1.0.0-alpha.5) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge text use model getTextStyle ([85b36ef](https://github.com/didi/LogicFlow/commit/85b36efa14ed9e7a0a5d95e800489d4dfa65b6d6))
+* examples ([5abdd08](https://github.com/didi/LogicFlow/commit/5abdd08f2b8243b27a40b5b489f39cdda559a79f))
+* selection events ([682ba34](https://github.com/didi/LogicFlow/commit/682ba345451a5c5b522ebcd510f9c9e29be5758e))
+
+
+
+
+
+# [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.3...examples@1.0.0-alpha.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* use model instead of getAttribute ([0e51cb0](https://github.com/didi/LogicFlow/commit/0e51cb0681c458bf68a69b8459ce0a4b91951ea4))
+
+
+
+
+
+# [1.0.0-alpha.3](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.1...examples@1.0.0-alpha.3) (2021-12-09)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+# [1.0.0-alpha.1](https://github.com/didi/LogicFlow/compare/examples@0.7.22...examples@1.0.0-alpha.1) (2021-12-09)
+
+
+### Features
+
+* 重构自定义锚点写法 ([657f911](https://github.com/didi/LogicFlow/commit/657f9113eff1207c910080507e94a22c69c10cce))
+
+
+
+
+
 ## [0.7.22](https://github.com/didi/LogicFlow/compare/examples@0.7.21...examples@0.7.22) (2021-12-09)
 
 **Note:** Version bump only for package examples

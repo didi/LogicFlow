@@ -376,29 +376,29 @@ lf.setTheme({
 <summary>点击展开查看锚点hover样式设置</summary>
 
 ```ts
-lf.setTheme({
-  anchorHover: {
-    r: 10, 
-    fill: '#1E90FF',
-    fillOpacity: 0.5,
-    stroke: '#4169E1',
-    strokeWidth: 1,
-    strokeOpacity: 1,
-    opacity: 1,
-  },
-})
+// lf.setTheme({
+//   anchorHover: {
+//     r: 10, 
+//     fill: '#1E90FF',
+//     fillOpacity: 0.5,
+//     stroke: '#4169E1',
+//     strokeWidth: 1,
+//     strokeOpacity: 1,
+//     opacity: 1,
+//   },
+// })
 ```
 </details>
 
-## 锚点连线
+## 锚点边
 
 |key|type|description|default|
 |-|-|-|-|
-|stroke|color|连线颜色|#000000|
-|strokeWidth|number|连线宽度|2|
+|stroke|color|边颜色|#000000|
+|strokeWidth|number|边宽度|2|
 |strokeDasharray|string|图案范式|'3,2'|
 <details>
-<summary>点击展开查看锚点连线样式设置</summary>
+<summary>点击展开查看锚点边样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -415,11 +415,11 @@ lf.setTheme({
 
 |key|type|description|default|
 |-|-|-|-|
-|stroke|color|连线颜色|#000000|
-|strokeWidth|number|连线宽度|2|
-|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
-|hoverStroke|color|连线hover颜色|#000000|
-|selectedStroke|color|连线选中颜色|#000000|
+|stroke|color|边颜色|#000000|
+|strokeWidth|number|边宽度|2|
+|strokeDashArray|string|控制边的点划线的图案范式, 设置为空是为实线|'1,0'|
+|hoverStroke|color|边hover颜色|#000000|
+|selectedStroke|color|边选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
 <details>
@@ -445,11 +445,11 @@ lf.setTheme({
 
 |key|type|description|default|
 |-|-|-|-|
-|stroke|color|连线颜色|#000000|
-|strokeWidth|number|连线宽度|2|
-|strokeDashArray|string|控制连线的点划线的图案范式, 设置为空是为实线|'1,0'|
-|hoverStroke|color|连线hover颜色|#000000|
-|selectedStroke|color|连线选中颜色|#000000|
+|stroke|color|边颜色|#000000|
+|strokeWidth|number|边宽度|2|
+|strokeDashArray|string|控制边的点划线的图案范式, 设置为空是为实线|'1,0'|
+|hoverStroke|color|边hover颜色|#000000|
+|selectedStroke|color|边选中颜色|#000000|
 |outlineColor|color|外边框颜色|#000000|
 |offset|number|折线起终点距离节点的偏移|30|
 |outlineStrokeDashArray|string|控制用来描外边框的点划线的图案范式, 设置为空是为实线|'3,3'|
@@ -473,7 +473,7 @@ lf.setTheme({
 ```
 </details>
 
-## 连线文本
+## 边文本
 
 |key|type|description|default|
 |-|-|-|-|
@@ -500,7 +500,7 @@ lf.setTheme({
 |radius|number|圆角弧度|0|
 
 <details>
-<summary>点击展开查看连线文本样式设置</summary>
+<summary>点击展开查看边文本样式设置</summary>
 
 ```ts
 lf.setTheme({
@@ -533,7 +533,7 @@ lf.setTheme({
 |key|type|description|default|
 |-|-|-|-|
 |offset|number|箭头长度|10|
-|verticalLength|number|箭头垂直于连线的距离|5|
+|verticalLength|number|箭头垂直于边的距离|5|
 <details>
 <summary>点击展开查看箭头样式设置</summary>
 
@@ -541,7 +541,7 @@ lf.setTheme({
 lf.setTheme({
   arrow: {
     offset: 10, // 箭头长度
-    verticalLength: 5, // 箭头垂直于连线的距离
+    verticalLength: 5, // 箭头垂直于边的距离
   },
 })
 ```

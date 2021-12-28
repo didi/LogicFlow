@@ -53,7 +53,7 @@ export default class TextEdit extends Component<IProps, IState> {
     const { graphModel } = this.props;
     const {
       eventCenter,
-      editConfig: {
+      editConfigModel: {
         edgeTextEdit,
         nodeTextEdit,
       },
@@ -68,13 +68,13 @@ export default class TextEdit extends Component<IProps, IState> {
   }
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
-    const { transformMatrix, theme } = graphModel;
+    const { transformModel, theme } = graphModel;
     let { textEditElement } = graphModel;
     let autoStyle;
     if (textEditElement) {
-      // 由于连线上的文本是依据显示的时候动态计算出来的
-      // 所以不能在连线创建的时候就初始化文本位置。
-      // 而是在连线上新建文本的时候创建。
+      // 由于边上的文本是依据显示的时候动态计算出来的
+      // 所以不能在边创建的时候就初始化文本位置。
+      // 而是在边上新建文本的时候创建。
       if (!textEditElement.text?.value) {
         if (textEditElement.BaseType === ElementType.EDGE) {
           textEditElement = textEditElement as BaseEdgeModel;
@@ -87,17 +87,16 @@ export default class TextEdit extends Component<IProps, IState> {
           textEditElement = textEditElement as BaseNodeModel;
         }
       }
-      // 自动换行节点连线通用样式
+      // 自动换行节点边通用样式
       const commonAutoStyle = {
         resize: 'auto',
         whiteSpace: 'normal',
         wordBreak: 'break-all',
       };
       if (textEditElement.BaseType === ElementType.EDGE) {
-        // 如果连线文案自动换行, 设置编辑框宽度
-        const { edgeText: { autoWrap, lineHeight, wrapPadding } } = theme;
-        const { textWidth } = textEditElement;
-        if (autoWrap && textWidth) {
+        // 如果边文案自动换行, 设置编辑框宽度
+        const { edgeText: { overflowMode, lineHeight, wrapPadding, textWidth } } = theme;
+        if (textWidth && overflowMode === 'autoWrap') {
           autoStyle = {
             ...commonAutoStyle,
             width: textWidth,
@@ -108,11 +107,11 @@ export default class TextEdit extends Component<IProps, IState> {
         }
       } else if (textEditElement.BaseType === ElementType.NODE) {
         // 如果节点文案自动换行, 设置编辑框宽度
-        const { nodeText: { autoWrap, lineHeight, wrapPadding } } = theme;
-        const { width, textWidth, modelType } = textEditElement;
+        const { nodeText: { overflowMode, lineHeight, wrapPadding, textWidth } } = theme;
+        const { width, modelType } = textEditElement;
         // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
-        if ((modelType !== ModelType.TEXT_NODE && autoWrap)
-        || (modelType === ModelType.TEXT_NODE && autoWrap && textWidth)) {
+        if ((modelType !== ModelType.TEXT_NODE && overflowMode === 'autoWrap')
+        || (modelType === ModelType.TEXT_NODE && textWidth)) {
           autoStyle = {
             ...commonAutoStyle,
             width: textWidth || width,
@@ -123,7 +122,7 @@ export default class TextEdit extends Component<IProps, IState> {
         }
       }
       const { x, y } = textEditElement.text;
-      const [left, top] = transformMatrix.CanvasPointToHtmlPoint([x, y]);
+      const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y]);
       return {
         style: {
           left,
@@ -144,7 +143,7 @@ export default class TextEdit extends Component<IProps, IState> {
     }
     if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText;
-      graphModel.setElementTextById(id, text);
+      graphModel.updateText(id, text);
       graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { ...this.__prevText });
       this.__prevText.id = '';
       this.__prevText.text = '';
@@ -158,7 +157,7 @@ export default class TextEdit extends Component<IProps, IState> {
         textEditElement,
       },
     } = this.props;
-    if (ev.keyCode === 13 && ev.altKey) {
+    if (ev.key === 'Enter' && ev.altKey) {
       textEditElement.setElementState(0);
     }
     this.__prevText = {

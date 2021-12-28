@@ -119,7 +119,7 @@ const Snapshot = {
     if (childLength) {
       for (let i = 0; i < childLength; i++) {
         const lfLayer = graph.childNodes[i] as SVGGraphicsElement;
-        // 只保留包含节点和连线的基础图层进行下载，其他图层删除
+        // 只保留包含节点和边的基础图层进行下载，其他图层删除
         const layerClassList = lfLayer.classList && Array.from(lfLayer.classList);
         if (layerClassList && layerClassList.indexOf('lf-base') < 0) {
           graph.removeChild(graph.childNodes[i]);
@@ -147,8 +147,8 @@ const Snapshot = {
     const base = document.getElementsByClassName('lf-base')[0];
     const bbox = (base as Element).getBoundingClientRect();
     const { graphModel } = this.lf;
-    const { transformMatrix } = graphModel;
-    const { SCALE_X, SCALE_Y } = transformMatrix;
+    const { transformModel } = graphModel;
+    const { SCALE_X, SCALE_Y } = transformModel;
     const bboxWidth = Math.ceil(bbox.width / SCALE_X);
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y);
     // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边

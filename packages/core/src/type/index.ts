@@ -24,6 +24,7 @@ import EllipseNodeModel from '../model/node/EllipseNodeModel';
 import HtmlNode from '../view/node/HtmlNode';
 import HtmlNodeModel from '../model/node/HtmlNodeModel';
 import * as Options from '../options';
+import { CommonTheme, EdgeTextTheme } from '../constant/DefaultTheme';
 
 export type PointTuple = [number, number];
 
@@ -32,6 +33,29 @@ export type Point = {
   y: number,
   [key: string]: unknown;
 };
+
+/**
+ * 锚点坐标
+ * 为了方便计算
+ * 锚点的位置都是相对于节点中心点的偏移量。
+ */
+export type PointAnchor = {
+  /**
+   * 锚点x轴相对于中心点的偏移量
+   */
+  x: number,
+  /**
+   * 锚点y轴相对于中心点的偏移量
+   */
+  y: number,
+  /**
+   * 锚点Id
+   */
+  id?: string,
+  [key: string]: unknown;
+};
+
+export type AnchorsOffsetItem = PointTuple | PointAnchor;
 
 export type Size = {
   width: number,
@@ -119,7 +143,11 @@ export type EdgeFilter = {
 
 export type EdgeConfig = {
   id?: string;
-  type: string;
+  /**
+   * 边的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
+   * LogicFlow内部默认为polyline
+   */
+  type?: string;
   sourceNodeId: string;
   sourceAnchorId?: string;
   targetNodeId: string;
@@ -163,9 +191,7 @@ export type CommonStyle = {
   strokeOpacity?: number,
   opacity?: number,
   outlineColor?: string,
-  hoverOutlineColor?: string,
   outlineStrokeDashArray?: string,
-  hoverOutlineStrokeDashArray?: string,
 };
 export type RectStyle = CommonStyle & {
   width?: number,
@@ -226,29 +252,14 @@ export type TextStyle = {
   fontFamily?: string,
 };
 export type NodeTextStyle = TextStyle & {
-  autoWrap?: boolean,
   lineHeight?: number,
   wrapPadding?: string,
 
 };
-export type EdgeTextStyle = TextStyle & {
-  background?: {
-    fill?: string,
-    stroke?: string,
-    radius?: number,
-  },
-  hoverBackground?: {
-    fill?: string,
-    stroke?: string,
-    radius?: number,
-  },
-  autoWrap?: boolean,
-  lineHeight?: number,
-  wrapPadding?: string,
-};
+export type EdgeTextStyle = TextStyle & EdgeTextTheme;
 export type ArrowStyle = {
   offset?: number, // 箭头长度
-  verticalLength?: number, // 箭头垂直于连线的距离
+  verticalLength?: number, // 箭头垂直于边的距离
 };
 
 export type EdgeAdjustStyle = {
@@ -257,24 +268,23 @@ export type EdgeAdjustStyle = {
   stroke?: string,
 };
 
-export type Style = {
-  rect?: RectStyle,
-  circle?: CircleStyle,
-  ellipse?: EllipseStyle,
-  diamond?: DiamondStyle,
-  polygon?: PolygonStyle,
-  anchor?: AnchorStyle,
-  text?: TextStyle,
-  nodeText?: NodeTextStyle,
-  edgeText?: EdgeTextStyle,
-  line?: LineStyle,
-  polyline?: PolylineStyle,
-  bezier?: BezierStyle,
-  arrow?: ArrowStyle,
-  anchorLine?: AnchorLineStyle,
-  anchorHover?: AnchorHoverStyle,
-  EdgeAdjustStyle?: EdgeAdjustStyle,
-};
+// export type Style = {
+//   rect?: RectStyle,
+//   circle?: CircleStyle,
+//   ellipse?: EllipseStyle,
+//   diamond?: DiamondStyle,
+//   polygon?: PolygonStyle,
+//   anchor?: AnchorStyle,
+//   text?: TextStyle,
+//   nodeText?: NodeTextStyle,
+//   edgeText?: EdgeTextStyle,
+//   line?: LineStyle,
+//   polyline?: PolylineStyle,
+//   bezier?: BezierStyle,
+//   arrow?: ArrowStyle,
+//   anchorLine?: AnchorLineStyle,
+//   EdgeAdjustStyle?: EdgeAdjustStyle,
+// };
 
 export type GraphTransform = {
   transform: string;
@@ -399,3 +409,28 @@ export type NodeMoveRule = (
 ) => Boolean;
 
 export type ZoomParam = boolean | number;
+
+export type NodeAttributes = {
+  id: string,
+  properties: Record<string, any>,
+  type: string,
+  x: number,
+  y: number,
+  isSelected: boolean,
+  isHovered: boolean,
+  width: number,
+  height: number,
+  text: {
+    x: number,
+    y: number,
+    value: string;
+    [key: string]: any;
+  },
+  [key: string]: any;
+};
+
+export type DiamondAttributes = {
+  points: PointTuple[]
+} & NodeAttributes;
+
+export type ShapeStyleAttribute = CommonTheme;

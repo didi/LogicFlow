@@ -12,14 +12,14 @@ const config = {
 const data = {
   nodes: [
     {
-      id: 10,
+      id: '10',
       type: 'rect',
       x: 150,
       y: 80,
       text: '矩形'
     },
     {
-      id: 20,
+      id: '20',
       type: 'circle',
       x: 400,
       y: 80,
@@ -29,8 +29,8 @@ const data = {
   edges: [
     {
       type: 'line',
-      sourceNodeId: 10,
-      targetNodeId: 20,
+      sourceNodeId: '10',
+      targetNodeId: '20',
       text: '连线',
       endPoint: {
         id: '150-60',
@@ -41,7 +41,7 @@ const data = {
   ]
 };
 
-let lf: LogicFlow;
+let lf;
 
 export default function EventExample() {
   const [event, setEvent] = useState<string>('');

@@ -3,7 +3,6 @@ window.addEventListener('DOMContentLoaded', () => {
     container: document.querySelector('#app'),
     edgeTextDraggable: true,
     nodeTextDraggable: true,
-    metaKeyMultipleSelected: true,
     grid: {
       type: 'dot',
       size: 20,

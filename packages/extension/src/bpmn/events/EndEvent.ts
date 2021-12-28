@@ -19,10 +19,13 @@ class EndEventModel extends CircleNodeModel {
     }
     super(data, graphModel);
   }
+  setAttributes(): void {
+    this.r = 18;
+  }
   getConnectedSourceRules() {
     const rules = super.getConnectedSourceRules();
     const notAsSource = {
-      message: '结束节点不能作为连线的起点',
+      message: '结束节点不能作为边的起点',
       validate: () => false,
     };
     rules.push(notAsSource);
@@ -38,18 +41,18 @@ class EndEventView extends CircleNode {
     };
   }
   getShape() {
-    const { x, y, fill, stroke, strokeWidth, r } = this.getAttributes();
+    const { model } = this.props;
+    const style = model.getNodeStyle();
+    const { x, y, r } = model;
     const outCircle = super.getShape();
     return h(
       'g',
       {},
       outCircle,
       h('circle', {
+        ...style,
         cx: x,
         cy: y,
-        fill,
-        stroke,
-        strokeWidth,
         r: r - 5,
       }),
     );

@@ -15,10 +15,10 @@
         <div class="node-item" @mousedown="dragInNode('triangle')">
           <icon-triangle class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('ellipse')">
+        <div class="node-item" @mousedown="dragInNode('pro-ellipse')">
           <icon-ellipse class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('diamond')">
+        <div class="node-item" @mousedown="dragInNode('pro-diamond')">
           <icon-diamond class="svg-node" />
         </div>
         <div class="node-item" @mousedown="dragInNode('cylinde')">
@@ -33,23 +33,38 @@
         <div class="node-item" @mousedown="dragInNode('pro-text')">
           <icon-text class="svg-node" />
         </div>
-        <div class="node-item" @mousedown="dragInNode('table')">
-          <icon-table class="svg-table" />
+        <div class="node-item" @mousedown="dragInNode('left-arrow')">
+          <icon-left-arrow class="svg-node"/>
+        </div>
+        <div class="node-item" @mousedown="dragInNode('right-arrow')">
+          <icon-right-arrow class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('horizontal-arrow')">
+          <icon-horizontal-arrow class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('up-arrow')">
+          <icon-up-arrow class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('down-arrow')">
+          <icon-down-arrow class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
+          <icon-vertical-arrow class="svg-node" />
         </div>
       </div>
     </div>
     <div>
-      <h1 class="node-category-title">Misc</h1>
-      <div class="node-category">
-        <div class="node-item circle-node"></div>
-        <div class="node-item rect-node"></div>
-        <div class="node-item rect-radius-node"></div>
-        <div class="node-item triangle-node"></div>
-        <div class="node-item ellipse-node"></div>
-        <div class="node-item diamond-node"></div>
-        <div class="node-item cylinde-node"></div>
-        <div class="node-item actor-node"></div>
-        <div class="node-item arrow-node"></div>
+      <h1 class="node-category-title">图片</h1>
+      <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
+      </div>
+      <div class="image-node image-user" @mousedown="dragInNode('image-user')">
+      </div>
+      <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
+      </div>
+    </div>
+    <div>
+      <h1 class="node-category-title">ICON</h1>
+      <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')">
       </div>
     </div>
   </div>
@@ -64,9 +79,14 @@ import IconCylinde from './icon/Cylinde.vue'
 import IconDiamond from './icon/Diamond.vue'
 import IconEllipse from './icon/Ellipse.vue'
 import IconParallelogram from './icon/Parallelogram.vue'
-import IconTable from './icon/Table.vue'
 import IconText from './icon/Text.vue'
 import IconTriangle from './icon/Triangle.vue'
+import IconLeftArrow from './icon/LeftArrow.vue'
+import IconRightArrow from './icon/RightArrow.vue'
+import IconHorizontalArrow from './icon/HorizontalArrow.vue'
+import IconUpArrow from './icon/UpArrow.vue'
+import IconDownArrow from './icon/DownArrow.vue'
+import IconVerticalArrow from './icon/VerticalArrow.vue'
 
 export default {
   name: 'DiagramSidebar',
@@ -84,9 +104,14 @@ export default {
     IconDiamond,
     IconEllipse,
     IconParallelogram,
-    IconTable,
     IconText,
-    IconTriangle
+    IconTriangle,
+    IconRightArrow,
+    IconLeftArrow,
+    IconHorizontalArrow,
+    IconUpArrow,
+    IconDownArrow,
+    IconVerticalArrow
   }
 }
 </script>
@@ -100,7 +125,8 @@ export default {
   font-size: 14px;
   display: block;
   border-bottom: 1px solid #e5e5e5;
-  line-height: 40px;
+  line-height: 30px;
+  margin-bottom: 10px;
 }
 .node-item {
   width: 30px;
@@ -119,5 +145,31 @@ export default {
   display: block;
   position: relative;
   overflow: hidden;
+}
+.image-node, .icon-node {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 10px;
+  cursor: pointer;
+}
+.image-setting {
+  background: url('https://dpubstatic.udache.com/static/dpubimg/UzI4AFUcfO/setting.png');
+  background-size: cover;
+}
+.image-user {
+  width: 40px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/-6Fd2uIoJ-/user.png');
+  background-size: cover;
+}
+.image-cloud {
+  width: 40px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/0oqFX1nvbD/cloud.png');
+  background-size: cover;
+}
+.icon-message {
+  height: 20px;
+  background: url('https://dpubstatic.udache.com/static/dpubimg/1TZgBoaq8G/message.png');
+  background-size: cover;
 }
 </style>
