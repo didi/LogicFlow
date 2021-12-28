@@ -70,7 +70,7 @@ const graphData = {
 :::
 
 ::: tip 连线startPoint、endPoint数据和pointsList为什么是重复的？
-目前，在LogicFlow内部内置了`line`, `polyline`, `bezier`三种基础连线，这三种连线都有`startPoint`、`endPoint`数据。但是其中`line`导出的数据是不会带上`pointsList`。`pointsList`用于线上
+目前，在LogicFlow内部内置了`line`, `polyline`, `bezier`三种基础连线，这三种连线都有`startPoint`、`endPoint`数据。但是其中`line`导出的数据是不会带上`pointsList`。对于`polyline`, `pointsList`表示折线所有的点。对于`bezier`，`pointsList`表示`['起点', '第一个控制点'，'第二个控制点', '终点']`。
 :::
 
 ::: tip properties是用来做什么的？
@@ -86,6 +86,12 @@ properties的LogicFlow保留给具体业务场景使用的数据。
 }
 ```
 PS: 对于如何基于properties中的属性控制节点的样式，请查看后面的自定义节点。
+
+:::
+
+::: tip type的含义是什么？
+
+type表示节点或者连线的类型，这里的类型不仅可以是`rect`,`polyline`这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。
 
 :::
 
