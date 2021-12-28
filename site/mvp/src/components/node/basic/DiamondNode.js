@@ -14,7 +14,6 @@ class DiamondModel extends DiamondResize.model {
   getNodeStyle () {
     const style = super.getNodeStyle()
     const properties = this.getProperties()
-    console.log(style, properties)
     return getShapeStyleFuction(style, properties)
   }
 

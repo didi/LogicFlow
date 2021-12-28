@@ -215,7 +215,6 @@ export default {
       this.$emit('setStyle', {
         lineHeight: val
       })
-      console.log('changeLineHeight', this.style)
     },
     $_changeFontWeight () {
       if (this.style.fontWeight === 'bold') {
@@ -240,7 +239,6 @@ export default {
       }
     },
     $_changeFontStyle () {
-      console.log(this.style.fontStyle)
       if (this.style.fontStyle === 'italic') {
         this.$emit('setStyle', {
           fontStyle: 'normal'

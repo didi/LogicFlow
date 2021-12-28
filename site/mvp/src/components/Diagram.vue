@@ -94,9 +94,8 @@ export default {
       })
       lf.setTheme(
         {
-          rect: { strokeWidth: 1 },
-          diamond: { strokeWidth: 1 },
-          ellipse: { strokeWidth: 1 },
+          baseEdge: { strokeWidth: 1 },
+          baseNode: { strokeWidth: 1 },
           nodeText: { overflowMode: 'autoWrap', lineHeight: 1.5 },
           edgeText: { overflowMode: 'autoWrap', lineHeight: 1.5 }
         }
@@ -209,7 +208,7 @@ export default {
   height: 100%;
 }
 .diagram-sidebar {
-  width: 200px;
+  width: 185px;
   height: calc(100% - 40px);
   border-right: 1px solid #dadce0;
   padding: 10px;
