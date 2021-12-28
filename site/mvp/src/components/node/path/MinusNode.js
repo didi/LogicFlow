@@ -7,7 +7,7 @@ class MinusModel extends RectNode.model {
   constructor(data, graphData) {
     super(data, graphData)
     this.width = 80
-    this.height = 80
+    this.height = 20
   }
   getNodeStyle() {
     const style = super.getNodeStyle()
@@ -27,10 +27,10 @@ class MinusView extends RectNode.view {
     const { x, y, width, height } = this.props.model
     const style = this.props.model.getNodeStyle()
     const pointList = [
-      [x - 1/2 * width, y - 1/6 * height],
-      [x + 1/2 * width, y - 1/6 * height],
-      [x + 1/2 * width, y + 1/6 * height],
-      [x - 1/2 * width, y + 1/6 * height],
+      [x - 1/2 * width, y - 1/2 * height],
+      [x + 1/2 * width, y - 1/2 * height],
+      [x + 1/2 * width, y + 1/2 * height],
+      [x - 1/2 * width, y + 1/2 * height],
     ]
     const points = pointList.map(item => {
       return `${item[0]},${item[1]}`
