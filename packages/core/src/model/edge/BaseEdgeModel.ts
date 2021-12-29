@@ -70,7 +70,7 @@ class BaseEdgeModel implements IBaseModel {
     this.formatText(data);
   }
   /**
-   * @overridable 可以重写
+   * @overridable 支持重写
    * 初始化边数据
    * initNodeData和setAttributes的区别在于
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
@@ -203,7 +203,6 @@ class BaseEdgeModel implements IBaseModel {
   }
   /**
    * 获取被保存时返回的数据
-   * @overridable 支持重写
    */
   getData(): EdgeData {
     const { x, y, value } = this.text;

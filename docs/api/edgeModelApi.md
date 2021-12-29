@@ -58,7 +58,7 @@ LogicFlow所有的边最终都是以SVG DOM的方式渲染。svg的样式相关�
 
 ### getEdgeStyle
 
-支持重写，自定义节点样式属性. 默认为[主题 baseEdge](/api/themeApi.html#baseedge)
+支持重写，自定义边文本样式属性. 默认为[主题 baseEdge](/api/themeApi.html#baseedge)
 
 ```js
 class SequenceFlowModel extends PolylineModel {
@@ -69,4 +69,112 @@ class SequenceFlowModel extends PolylineModel {
     return style;
   }
 }
+```
+
+### getTextStyle
+
+支持重写，自定义边文本样式属性，默认为[主题 edgeText](/api/themeApi.html#edgetext)
+
+```js
+class SequenceFlowModel extends PolylineModel {
+  getTextStyle() {
+    const style = super.getTextStyle();
+    style.color = 'blue';
+    style.fontSize = '20';
+    return style;
+  }
+}
+```
+
+## createId
+
+支持重写，自定义节点id的生成规则. 
+
+::: warning 注意
+
+1. 请保证此方法返回id的唯一性。
+2. 此方法为同步方法，如果想要异步修改节点id, 请参考[#272](https://github.com/didi/LogicFlow/issues/272)
+:::
+
+```js
+import { v4 as uuidv4 } from 'uuid';
+
+class UserTaskModel extends RectNodeModel {
+  createId() {
+    return uuidv4()
+  }
+}
+```
+
+## getData
+
+获取被保存时返回的数据。LogicFlow有固定边数据格式。如果期望在保存数据上添加数据，请添加到properties上。
+
+不支持重写此方法
+
+```js
+const edgeModel = lf.getEdgeModelById('edge_1');
+const edgeData = edgeModel.getData();
+```
+
+## getProperties
+
+获取边属性
+
+不支持重写此方法
+
+```js
+const edgeModel = lf.getEdgeModelById('edge_1');
+const properties = edgeModel.getProperties();
+```
+
+## setProperties
+
+设置节点properties
+
+```js
+const edgeModel = lf.getEdgeModelById('edge_1');
+edgeModel.setProperties({
+  // 自定义properties
+})
+
+```
+
+## setText
+
+设置边文本属性
+
+| 名称 | 类型 | 必传 | 描述 |
+| :- | :- | :- | :- |
+| value | string | - |  文本值 |
+| x | number | - | 边文本x坐标 |
+| y | number | - | 边文本y坐标 |
+| draggable | boolean | - | 文本是否可以拖动 |
+| editable | boolean | - | 文本是否可以编辑 |
+
+```js
+const edgeModel = lf.getEdgeModelById('edge_1');
+edgeModel.setText({
+  value: '',
+  x: 0,
+  y: 0,
+  draggable: false,
+  editable: true,
+})
+```
+
+## updateText
+
+修改边文本内容
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| value | string | true | 无 | 文本值 |
+
+
+```js
+const edgeModel = lf.getEdgeModelById('edge_1');
+edgeModel.updateText('hello world');
 ```

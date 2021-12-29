@@ -135,7 +135,7 @@ lf.on('user:detail', (res) => {})
 
 `属性`
 
-页面编辑基本配置对象, 详情见[editConfigApi](/api/editConfigModel.html)
+页面编辑基本配置对象, 详情见[editConfigApi](/api/editConfigModelApi.html)
 
 ## gridSize
 

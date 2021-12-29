@@ -32,6 +32,7 @@
 |config|object|无| 页面编辑状态配置 |
 
 ```ts
+const { editConfigModel } = lf.graphModel;
 editConfigModel.updateEditConfig({
   stopZoomGraph: true,
 });
@@ -44,5 +45,6 @@ editConfigModel.updateEditConfig({
 获得当前页面编辑状态
 
 ```ts
+const { editConfigModel } = lf.graphModel;
 editConfigModel.getConfig();
 ```
