@@ -8,6 +8,7 @@ const guide = [
       'basic/logic-flow',
       'basic/node',
       'basic/edge',
+      'basic/theme',
       'basic/grid',
       'basic/background',
       'basic/dnd',
@@ -21,10 +22,10 @@ const guide = [
     title: '进阶指引',
     collapsable: false,
     children: [
-      'advance/theme',
+      // 'advance/theme',
       'advance/event',
-      'advance/customNode',
-      'advance/customEdge',
+      // 'advance/customNode',
+      // 'advance/customEdge',
     ]
   },
   {

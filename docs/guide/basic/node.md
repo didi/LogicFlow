@@ -39,6 +39,40 @@ LogicFlow的自定义节点是基于继承来实现。开发者可以继承Logic
 
 <img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
 
+## 选择自定义节点继承的基础节点
+
+LogicFlow内部存在7种基础节点, 自定义节点的时候可以基于需要选择任一一种来继承, 然后取一个符合自己业务意义的名字。
+
+```js
+// 矩形
+import { RectNode, RectNodeModel } from "@logicflow/core";
+// 圆形
+import { CircleNode, CircleNodeModel } from "@logicflow/core";
+// 椭圆
+import { EllipseNode, EllipseNodeModel } from "@logicflow/core";
+// 多边形
+import { PolygonNode, PolygonNodeModel } from "@logicflow/core";
+// 菱形
+import { DiamondNode, DiamondNodeModel } from "@logicflow/core";
+// 文本
+import { TextNode, TextNodeModel } from "@logicflow/core";
+// HTML
+import { HtmlNode, HtmlNodeModel } from "@logicflow/core";
+```
+
+### 二次自定义
+
+由于基于继承的自定义机制，LogicFlow还支持基于自定义节点的基础上，进行二次自定义。以`@logicflow/extension`中提供的可缩放节点为例。
+
+LogicFlow基础节点不支持节点缩放，于是LogicFlow在`extension`包中，基于基础节点，封装了对节点缩放的逻辑，然后发布出去。这样开发者可以直接基于`extension`中的可缩放节点进行自定义。
+
+```js
+import { RectResize } from '@logicflow/extension'
+class CustomNodeModel extends RectResize.model {}
+class CustomNode extends RectResize.view {}
+```
+
+
 ## 自定义一个业务节点
 
 我们以定义一个如下图所示的用户任务节点为例，来实现一个基于内置矩形节点的自定义节点。
@@ -91,36 +125,6 @@ LogicFlow为了开发的时候将开发体验和现在前端流行的开发体�
 
 :::
 
-
-#### 选择自定义节点的model和view
-
-LogicFlow内部存在7种基础节点, 自定义节点的时候可以基于需要选择任一一种来继承, 然后取一个符合自己业务意义的名字。
-
-```js
-// 矩形
-import { RectNode, RectNodeModel } from "@logicflow/core";
-// 圆形
-import { CircleNode, CircleNodeModel } from "@logicflow/core";
-// 椭圆
-import { EllipseNode, EllipseNodeModel } from "@logicflow/core";
-// 多边形
-import { PolygonNode, PolygonNodeModel } from "@logicflow/core";
-// 菱形
-import { DiamondNode, DiamondNodeModel } from "@logicflow/core";
-// 文本
-import { TextNode, TextNodeModel } from "@logicflow/core";
-// HTML
-import { HtmlNode, HtmlNodeModel } from "@logicflow/core";
-```
-
-由于基于继承的自定义机制，LogicFlow还支持基于自定义节点的基础上，进行二次自定义。以`@logicflow/extension`中提供的可缩放节点为例。
-LogicFlow基础节点不支持节点缩放，于是LogicFlow在`extension`包中，基于基础节点，封装了对节点缩放的逻辑，然后发布出去。这样开发者可以直接基于`extension`中的可缩放节点进行自定义。
-
-```js
-import { RectResize } from '@logicflow/extension'
-class CustomNodeModel extends RectResize.model {}
-class CustomNode extends RectResize.view {}
-```
 
 ### 步骤2: 自定义节点model
 
