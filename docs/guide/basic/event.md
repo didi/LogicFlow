@@ -21,7 +21,44 @@ lf.on('node:click,edge:click', (data) => {})
 
 除了造lf上支持监听事件外，还可以使用[eventCenter](/api/eventCenterApi.htm)对象上监听和触发事件。`eventCenter`是一个`graphModel`上的一个属性。所以在自定义节点的时候，我们可以使用`eventCenter`触发自定义事件。
 
+```js
+class ButtonNode extends HtmlNode {
+  setHtml(rootEl) {
+    const { properties } = this.props.model;
+
+    const el = document.createElement("div");
+    el.className = "uml-wrapper";
+    const html = `
+      <div>
+        <div class="uml-head">Head</div>
+        <div class="uml-body">
+          <div><button onclick="setData()">+</button> ${properties.name}</div>
+          <div>${properties.body}</div>
+        </div>
+        <div class="uml-footer">
+          <div>setHead(Head $head)</div>
+          <div>setBody(Body $body)</div>
+        </div>
+      </div>
+    `;
+    el.innerHTML = html;
+    rootEl.innerHTML = "";
+    rootEl.appendChild(el);
+    window.setData = () => {
+      const { graphModel, model } = this.props;
+      graphModel.eventCenter.emit("custom:button-click", model);
+    };
+  }
+}
+```
 
 
 
 ## 示例
+
+<iframe src="https://codesandbox.io/embed/logicflow-step7-dpmgb?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-step7"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
