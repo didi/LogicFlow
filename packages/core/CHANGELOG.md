@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.9...@logicflow/core@1.0.0-alpha.10) (2021-12-29)
+
+
+### Bug Fixes
+
+* history change ([1ed9799](https://github.com/didi/LogicFlow/commit/1ed9799a0321b1d5e761b3e25ae8d874d8c310f3))
+
+
+### Features
+
+* merge master ([2f418bc](https://github.com/didi/LogicFlow/commit/2f418bcbeb60ac7162718d6022047aeb326a50d8))
+
+
+
+
+
 # [1.0.0-alpha.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.8...@logicflow/core@1.0.0-alpha.9) (2021-12-24)
 
 
