@@ -10,6 +10,16 @@ import CylindeNode from './path/CylindeNode'
 import TriangleNode from './path/TriangleNode'
 import ParallelogramNode from './path/ParallelogramNode'
 import ActorNode from './path/ActorNode'
+import StarNode from './path/Star'
+import PentagonNode from './path/PentagonNode'
+import HexagonNode from './path/HexagonNode'
+import SeptagonNode from './path/SeptagonNode'
+import HeptagonNode from './path/HeptagonNode'
+import TrapezoidNode from './path/TrapezoidNode'
+import CrossNode from './path/CrossNode'
+import MinusNode from './path/MinusNode'
+import TimesNode from './path/TimesNode'
+import DivideNode from './path/DivideNode'
 // 多边形绘制的箭头
 import LeftArrow from './arrow/LeftArrow'
 import RightArrow from './arrow/RightArrow'
@@ -41,6 +51,16 @@ export const registerCustomElement = (lf) => {
   lf.register(TriangleNode)
   lf.register(ParallelogramNode)
   lf.register(ActorNode)
+  lf.register(StarNode)
+  lf.register(PentagonNode)
+  lf.register(HexagonNode)
+  lf.register(SeptagonNode)
+  lf.register(HeptagonNode)
+  lf.register(TrapezoidNode)
+  lf.register(CrossNode)
+  lf.register(MinusNode)
+  lf.register(TimesNode)
+  lf.register(DivideNode)
   // 注册多边形绘制的箭头
   lf.register(LeftArrow)
   lf.register(RightArrow)

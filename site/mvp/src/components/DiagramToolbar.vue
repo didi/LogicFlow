@@ -115,7 +115,6 @@ export default {
   },
   methods: {
     $_changeFillColor (val) {
-      // console.log(33, val.hex)
       this.$emit('changeNodeFillColor', val.hex)
     },
     $_saveGraph () {
@@ -128,7 +127,6 @@ export default {
       this.$props.lf.zoom(false)
     },
     $_undo () {
-      console.log(this.$data.undoAble)
       if (this.$data.undoAble) {
         this.$props.lf.undo()
       }

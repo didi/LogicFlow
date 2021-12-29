@@ -10,14 +10,14 @@ class Model extends LineEdgeModel {
   getTextStyle () {
     const style = super.getTextStyle()
     const attributes = super.getAttributes()
-    // console.log(style, attributes.properties)
     return getTextStyleFunction(style, attributes.properties)
   }
 
   getEdgeStyle () {
     const attributes = super.getEdgeStyle()
     const properties = this.properties;
-    return getShapeStyleFuction(attributes, properties)
+    const style = getShapeStyleFuction(attributes, properties)
+    return { ...style, fill: 'none' }
   }
 }
 export default {

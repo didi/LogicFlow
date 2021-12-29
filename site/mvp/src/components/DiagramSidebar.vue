@@ -51,6 +51,36 @@
         <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
           <icon-vertical-arrow class="svg-node" />
         </div>
+        <!-- <div class="node-item" @mousedown="dragInNode('star')">
+          star
+        </div> -->
+        <div class="node-item" @mousedown="dragInNode('pentagon')">
+          <icon-pentagon class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('hexagon')">
+          <icon-hexagon class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('septagon')">
+          <icon-septagon class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('heptagon')">
+          <icon-heptagon class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('trapezoid')">
+          <icon-trapezoid class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('cross')">
+          <icon-cross class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('minus')">
+          <icon-minus class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('times')">
+          <icon-times class="svg-node" />
+        </div>
+        <div class="node-item" @mousedown="dragInNode('divide')">
+          <icon-divide class="svg-node" />
+        </div>
       </div>
     </div>
     <div>
@@ -87,6 +117,15 @@ import IconHorizontalArrow from './icon/HorizontalArrow.vue'
 import IconUpArrow from './icon/UpArrow.vue'
 import IconDownArrow from './icon/DownArrow.vue'
 import IconVerticalArrow from './icon/VerticalArrow.vue'
+import IconPentagon from './icon/Pentagon.vue'
+import IconHexagon from './icon/Hexagon.vue'
+import IconSeptagon from './icon/Septagon.vue'
+import IconHeptagon from './icon/Heptagon.vue'
+import IconTrapezoid from './icon/Trapezoid.vue'
+import IconCross from './icon/Cross.vue'
+import IconMinus from './icon/Minus.vue'
+import IconTimes from './icon/Times.vue'
+import IconDivide from './icon/Divide.vue'
 
 export default {
   name: 'DiagramSidebar',
@@ -111,7 +150,16 @@ export default {
     IconHorizontalArrow,
     IconUpArrow,
     IconDownArrow,
-    IconVerticalArrow
+    IconVerticalArrow,
+    IconPentagon,
+    IconHexagon,
+    IconSeptagon,
+    IconHeptagon,
+    IconTrapezoid,
+    IconCross,
+    IconMinus,
+    IconTimes,
+    IconDivide
   }
 }
 </script>
@@ -129,8 +177,8 @@ export default {
   margin-bottom: 10px;
 }
 .node-item {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   margin-right: 5px;
   display: inline-block;
 }

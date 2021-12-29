@@ -16,7 +16,7 @@ class UpArrowView extends RectNode.view {
     const style = this.props.model.getNodeStyle()
     const ArrowWidth =  1/3 * width;
     const upY = y - 1/2 * height;
-    const upY2 = y - 1/2 * height + 1/2 * width;
+    const upY2 = y - 1/5 * height;
     const downY = y + 1/2 * height;
     const attrs = {
       ...style,
