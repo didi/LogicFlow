@@ -1,7 +1,7 @@
 const guide = [
   'start',
   {
-    title: '基础教程',
+    title: '核心功能',
     collapsable: false,
     children: [
       // 'basic/core',
@@ -9,6 +9,7 @@ const guide = [
       'basic/node',
       'basic/edge',
       'basic/theme',
+      'basic/event',
       'basic/grid',
       'basic/background',
       'basic/dnd',
@@ -19,17 +20,7 @@ const guide = [
     ]
   },
   {
-    title: '进阶指引',
-    collapsable: false,
-    children: [
-      // 'advance/theme',
-      'advance/event',
-      // 'advance/customNode',
-      // 'advance/customEdge',
-    ]
-  },
-  {
-    title: '拓展',
+    title: '拓展功能',
     collapsable: false,
     children: [
       'extension/extension-intro',
@@ -60,6 +51,7 @@ const api = [
   'graphModelApi',
   'nodeModelApi',
   'edgeModelApi',
+  'eventCenterApi',
   'transformModelApi',
   'editConfigModelApi',
   'themeApi',

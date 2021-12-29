@@ -12,6 +12,7 @@ type IProps = {
 export default class HtmlNode extends BaseNode {
   ref: HTMLElement;
   currrentProperties: string;
+  preProperties: string;
   setRef = (dom): void => {
     this.ref = dom;
   };
@@ -40,9 +41,8 @@ export default class HtmlNode extends BaseNode {
    * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.
    */
   shouldUpdate() {
-    const { properties } = this.props.model;
-    if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return;
-    this.currrentProperties = JSON.stringify(properties);
+    if (this.preProperties && this.preProperties === this.currrentProperties) return;
+    this.preProperties = this.currrentProperties;
     return true;
   }
   componentDidMount() {
@@ -58,6 +58,7 @@ export default class HtmlNode extends BaseNode {
   getShape() {
     const { model } = this.props;
     const { x, y, height, width } = model;
+    this.currrentProperties = JSON.stringify(model.properties);
     return (
       <foreignObject
         x={x - width / 2}

@@ -491,19 +491,8 @@ class UmlModel extends HtmlNodeModel {
 }
 class UmlNode extends HtmlNode {
   currrentProperties: string;
-  // 由于setHtml会跟随节点的render触发
-  // 所以自定义html节点需要自己判断组件是否需要更新。
-  // setHtml除了properties发生变化会触发外，节点移动了，
-  // 节点被选中了等model上所有的属性发生变化都会触发。
-  shouldUpdate() {
-    const { properties } = this.getAttributes();
-    if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
-    this.currrentProperties = JSON.stringify(properties)
-    return true;
-  }
   setHtml(rootEl: HTMLElement) {
-    const { properties } = this.getAttributes();
-    if (!this.shouldUpdate()) return;
+    const { properties } = this.props.model;
   
     const el = document.createElement('div');
     el.className = 'uml-wrapper';
