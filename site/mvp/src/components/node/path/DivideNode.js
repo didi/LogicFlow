@@ -51,25 +51,27 @@ class DivideView extends RectNode.view {
     }
 
     // 除号上圆点
-    const upCircleAttrs = {
+    const upEllipseAttrs = {
       ...attrs,
       cy: y - 3/8 * height,
       cx: x,
-      r: 1/8 * height
+      rx: 1/8* width,
+      ry: 1/8 * height
     }
 
     // 除号下圆点
-    const downCircleAttrs = {
+    const downEllipseAttrs = {
       ...attrs,
       cy: y + 3/8 * height,
       cx: x,
-      r: 1/8 * height
+      rx: 1/8 * width,
+      ry: 1/8 * height
     }
 
     return h('g', {}, [
       h('polygon', { ...lineAttrs }),
-      h('circle', { ...upCircleAttrs }),
-      h('circle', { ...downCircleAttrs })
+      h('ellipse', { ...upEllipseAttrs }),
+      h('ellipse', { ...downEllipseAttrs })
     ])
   }
 

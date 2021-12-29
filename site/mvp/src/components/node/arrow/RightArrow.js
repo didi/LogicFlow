@@ -18,7 +18,7 @@ class RightArrowView extends RectNode.view {
     const ArrowHeight =  1/3 * height;
     const leftX = x - 1/2 * width;
     const rightX = x + 1/2 * width;
-    const rightX2 = x + 1/2 * width - 1/2 * height;
+    const rightX2 = x + 1/5 * width;
     const attrs = {
       ...style,
       x,

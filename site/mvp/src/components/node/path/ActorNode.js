@@ -27,11 +27,12 @@ class ActorView extends RectResize.view {
     const { x, y, width, height } = this.props.model
     const style = this.props.model.getNodeStyle()
     // 人物头部圆形
-    const circleAttrs = {
+    const ellipseAttrs = {
       ...style,
       cx: x,
       cy: y - 3/8 * height,
-      r: 1/8 * height,
+      rx: 1/4 * width,
+      ry: 1/8 * height,
       width,
       height
     }
@@ -64,8 +65,8 @@ class ActorView extends RectResize.view {
       style: 'fill: transparent'
     }
     return h('g', {}, [
-      h('circle', {
-        ...circleAttrs,
+      h('ellipse', {
+        ...ellipseAttrs,
       }),
       h('path', {
         ...pathAAttrs,
