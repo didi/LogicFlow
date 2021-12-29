@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.10...@logicflow/core@1.0.0-alpha.11) (2021-12-29)
+
+
+### Bug Fixes
+
+* custom node ([2155c37](https://github.com/didi/LogicFlow/commit/2155c379144469848ea08511c9c1c145105f46df))
+
+
+
+
+
 # [1.0.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.9...@logicflow/core@1.0.0-alpha.10) (2021-12-29)
 
 
