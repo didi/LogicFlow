@@ -82,10 +82,11 @@ export default class LineText extends BaseText {
     });
   };
   getShape() {
-    const { model, style } = this.props;
+    const { model } = this.props;
     const { text } = model;
     const { value, x, y } = text;
     if (!value) return;
+    const style = model.getTextStyle();
     const attr = {
       x,
       y,

@@ -17,7 +17,8 @@ type IProps = {
 };
 
 type Istate = {
-  isHovered: boolean,
+  isHovered: boolean;
+  isDraging?: boolean;
 };
 
 type StyleAttribute = CommonTheme;
@@ -91,7 +92,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       return (
         <BaseText
           editable={editConfigModel.nodeTextEdit && model.text.editable}
-          style={style}
           model={model}
           graphModel={graphModel}
           draggable={draggable}

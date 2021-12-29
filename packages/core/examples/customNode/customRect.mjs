@@ -9,6 +9,14 @@ class CustomNodeModel extends RectNodeModel {
     }
     return style
   }
+  getTextStyle() {
+    const style = super.getTextStyle();
+    style.color = "red";
+    style.overflowMode = "autoWrap";
+    style.textAlign = "right";
+    style.fontSize = 40;
+    return style;
+  }
 }
 
 export default {

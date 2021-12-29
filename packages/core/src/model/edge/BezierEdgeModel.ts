@@ -4,15 +4,15 @@ import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
 import { getBezierControlPoints, IBezierControls } from '../../util/edge';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 export { BezierEdgeModel };
 export default class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE;
-  offset = defaultTheme.bezier.offset;
+  offset;
   @observable path = '';
-  constructor(data, graphModel) {
-    super(data, graphModel, 'bezier');
+  initEdgeData(data): void {
+    this.offset = 100;
+    super.initEdgeData(data);
   }
   getEdgeStyle() {
     const { bezier } = this.graphModel.theme;

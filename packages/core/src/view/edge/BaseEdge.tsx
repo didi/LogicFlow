@@ -5,7 +5,6 @@ import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
 import { ElementState, EventType, ModelType, OverlapMode } from '../../constant/constant';
-import EventEmitter from '../../event/eventEmitter';
 import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
@@ -30,9 +29,6 @@ export default class BaseEdge extends Component<IProps> {
     if (model.state === ElementState.TEXT_EDIT) {
       return '';
     }
-    const { edgeText } = graphModel.theme;
-    const custome = this.getTextStyle();
-    const style = assign({}, edgeText, custome);
     let draggable = false;
     const { editConfigModel } = graphModel;
     if (model.text.draggable || editConfigModel.edgeTextDraggable) {
@@ -43,7 +39,6 @@ export default class BaseEdge extends Component<IProps> {
         editable={editConfigModel.edgeTextEdit && model.text.editable}
         model={model}
         graphModel={graphModel}
-        style={style}
         draggable={draggable}
       />
     );

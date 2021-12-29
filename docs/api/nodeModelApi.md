@@ -11,7 +11,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 
 ## 数据属性
 
-节点的数据属性是指LogicFlow图数据是用于标识节点的数据。数据属性是随着用户操作动态变化的，请勿直接自定义。
+节点的数据属性是指LogicFlow图数据是用于标识节点的数据。在流程图保存时一般都只保存节点的数据属性。
 
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------- | :------------- |
@@ -35,7 +35,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 
 ## 形状属性
 
-LogicFlow的形状属性主要是控制基础节点的主要外观。由于LogicFlow在连线调整、锚点生成这些状态下都需要感知节点的形状，所以自定义节点最终渲染出来的形状一定要和model上的形状属性一致。[详情见](/guide/basic/node.html#自定义一个业务节点)
+LogicFlow的形状属性主要是控制基础节点的主要外观。形状属性可以通过`setAttributes`来设置。[详情见](/guide/basic/node.html#自定义一个业务节点)
 
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------ | :------------- |
@@ -47,6 +47,24 @@ LogicFlow的形状属性主要是控制基础节点的主要外观。由于Logic
 | ry  | number |   | 椭圆节点和菱形节点存在，垂直圆角的半径。会自动基于半径计算出节点的高度 |
 | points  | [number,number][] |   | 多边形节点特有，多边形顶点。会自定基于顶点计算出节点的宽度和高度 |
 
+
+## 其它属性
+
+LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性拿到一些信息。例如拿到`graphModel`, 节点的基础`model`类型等。
+
+| 名称  | 类型   | 是否必须 | 描述           |
+| :---- | :----- | :------ | :------------- |
+| graphModel | object |  ✅ | 整个画布对应的model，[详情见](/api/graphModelApi.html#width) |
+| zIndex | number |  ✅ | 节点在z轴的高度，元素重合时，zIndex高的在上面, 默认为1 |
+| state | number |  ✅ | 元素状态，不同的状态对应着元素显示效果。DEFAULT = 1 默认显示；TEXT_EDIT = 2 此元素正在进行文本编辑；ALLOW_CONNECT = 4, 此元素允许作为当前边的目标节点；NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前边的目标节点 |
+| BaseType |string| ✅ | 当前model的基础类型，对于节点，则固定为`node`。主要用在节点和边混合的时候识别此`model`是节点还是边。 |
+| modelType |string| ✅ | 当前model的类型，可取值有`node`, `rect-node`,`circle-node`,`polygon-node`,`ellipse-node`,`diamond-node`, `html-node`,`text-node` |
+
+::: info modelType与type的区别是什么？
+
+在自定义节点的时候，`type`可以是开发者自定义的任何值，但是在LogicFlow内部，涉及到这个节点的计算时，我们需要感知到这个节点的具体形状，这个时候不能用`type`, 而是要用`modelType`来判断。
+
+:::
 ## 样式属性
 
 LogicFlow所有的节点最终都是以SVG DOM的方式渲染。但是除了形状属性之外，所有的其他属于svg的属性都不会直接存在`nodeModel`。当开发者想要对SVG DOM添加更多的[svg属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)时，可以通过重写`nodeModel`上获取节点样式属性方法来实现。
@@ -151,7 +169,7 @@ initNodeData和setAttributes都可以对nodeModel的属性进行赋值，但是�
 
 ## setAttributes
 
-设置model属性，每次properties发生变化会触发
+设置model形状属性，每次properties发生变化会触发
 
 ```js
 class UserTaskModel extends RectNodeModel {

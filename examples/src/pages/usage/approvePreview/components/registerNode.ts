@@ -8,6 +8,7 @@ import LogicFlow, {
   PolylineEdge,
   PolylineEdgeModel,
   h,
+  EdgeConfig,
 } from "@logicflow/core"
 import GraphModel from "@logicflow/core/types/model/GraphModel";
 import BaseNodeModel from "@logicflow/core/types/model/node/BaseNodeModel";
@@ -147,7 +148,7 @@ export default function RegisteNode(lf: LogicFlow) {
 
 
   class ActionModel extends PolylineEdgeModel { 
-    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+    constructor(data: EdgeConfig, graphModel: GraphModel) {
       super(data, graphModel);
       const property = data.properties as any;
       // @ts-ignore

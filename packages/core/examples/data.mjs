@@ -41,7 +41,7 @@ export const baseData = {
       id: '11',
       sourceNodeId: '1',
       targetNodeId: '3',
-      type: 'bezier'
+      type: 'polyline'
     }
   ]
 }

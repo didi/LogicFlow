@@ -22,17 +22,13 @@ import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 import { getZIndex } from '../../util/zIndex';
 
 class BaseEdgeModel implements IBaseModel {
+  // 数据属性
   id = createUuid();
-  readonly BaseType = ElementType.EDGE;
-  @observable state = 1;
-  modelType = ModelType.EDGE;
-  additionStateData: AdditionData;
-  [propName: string]: any; // 支持自定义
-  graphModel: GraphModel;
-  menu?: MenuConfig[];
-  sourceAnchorId = '';
-  targetAnchorId = '';
-  customTextPosition = false; // 是否自定义边文本位置
+  @observable type = '';
+  @observable sourceNodeId = '';
+  @observable targetNodeId = '';
+  @observable startPoint = null;
+  @observable endPoint = null;
   @observable text = {
     value: '',
     x: 0,
@@ -40,23 +36,29 @@ class BaseEdgeModel implements IBaseModel {
     draggable: false,
     editable: true,
   };
-  @observable type = '';
   @observable properties: Record<string, any> = {};
-  @observable sourceNodeId = '';
-  @observable targetNodeId = '';
-  @observable startPoint = null;
-  @observable endPoint = null;
-  @observable zIndex = 0;
+  @observable points = '';
+  @observable pointsList = [];
+  // 状态属性
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isHitable = true; // 细粒度控制边是否对用户操作进行反应
-  @observable points = '';
-  @observable pointsList = [];
   @observable draggable = true;
+  // 引用属性
+  graphModel: GraphModel;
+  @observable zIndex = 0;
+  readonly BaseType = ElementType.EDGE;
+  modelType = ModelType.EDGE;
+  @observable state = 1;
+  additionStateData: AdditionData;
+  sourceAnchorId = '';
+  targetAnchorId = '';
+  menu?: MenuConfig[];
+  customTextPosition = false; // 是否自定义边文本位置
+  [propName: string]: any; // 支持自定义
 
-  constructor(data: EdgeConfig, graphModel: GraphModel, type) {
+  constructor(data: EdgeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel;
-    this.setStyleFromTheme(type, graphModel);
     this.initEdgeData(data);
     this.setAttributes();
     // 设置边的 anchors，也就是边的两个端点
@@ -67,7 +69,13 @@ class BaseEdgeModel implements IBaseModel {
     // 文本位置依赖于边上的所有拐点
     this.formatText(data);
   }
-
+  /**
+   * @overridable 可以重写
+   * 初始化边数据
+   * initNodeData和setAttributes的区别在于
+   * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
+   * setAttributes除了初始化调用外，还会在properties发生变化了调用。
+   */
   initEdgeData(data) {
     if (!data.properties) {
       data.properties = {};
@@ -88,25 +96,39 @@ class BaseEdgeModel implements IBaseModel {
       this.zIndex = data.zIndex || getZIndex();
     }
   }
-
+  /**
+   * 设置model属性，每次properties发生变化会触发
+   * @overridable 支持重写
+   */
+  setAttributes() { }
+  /**
+   * @overridable 支持重写，自定义此类型节点默认生成方式
+   * @returns string
+   */
   createId() {
     return null;
   }
-
-  setAttributes() { }
-  /* 支持连线自定义文案样式 */
-  getTextStyle() {
-    // 透传 nodeText
-    const { edgeText } = this.graphModel.theme;
-    return cloneDeep(edgeText);
-  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点样式
+   * @returns 自定义边样式
+   */
   getEdgeStyle() {
     const { baseEdge } = this.graphModel.theme;
     return cloneDeep(baseEdge);
   }
   /**
    * @overridable 支持重写
-   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
+   * 获取当前节点文本样式
+   */
+  getTextStyle() {
+    // 透传 edgeText
+    const { edgeText } = this.graphModel.theme;
+    return cloneDeep(edgeText);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取outline样式，重写可以定义此类型边outline样式， 默认使用主题样式
    * @returns 自定义outline样式
    */
   getOutlineStyle(): OutlineTheme {
@@ -115,7 +137,7 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(outline);
   }
   /**
-   * @override 重新自定义文本位置
+   * @overridable 支持重新，重新自定义文本位置
    * @returns 文本位置
    */
   getTextPosition(): Point {
@@ -133,9 +155,10 @@ class BaseEdgeModel implements IBaseModel {
   @computed get textPosition(): Point {
     return this.getTextPosition();
   }
-  move() { }
 
-  /* 获取起点 */
+  /**
+   * 内部方法，计算两个节点相连是起点位置
+   */
   getBeginAnchor(sourceNode, targetNode): Point {
     let position;
     let minDistance;
@@ -153,7 +176,9 @@ class BaseEdgeModel implements IBaseModel {
     return position;
   }
 
-  /* 获取终点 */
+  /**
+   * 内部方法，计算两个节点相连是终点位置
+   */
   getEndAnchor(targetNode): Point {
     let position;
     let minDistance;
@@ -170,11 +195,16 @@ class BaseEdgeModel implements IBaseModel {
     });
     return position;
   }
-
+  /**
+   * 获取当前边的properties
+   */
   getProperties() {
     return toJS(this.properties);
   }
-
+  /**
+   * 获取被保存时返回的数据
+   * @overridable 支持重写
+   */
   getData(): EdgeData {
     const { x, y, value } = this.text;
     const data: EdgeData = {
@@ -213,9 +243,10 @@ class BaseEdgeModel implements IBaseModel {
     };
     this.setAttributes();
   }
-
-  @action
-  formatText(data) {
+  /**
+   * 内部方法，处理初始化文本格式
+   */
+  @action formatText(data) {
     // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition;
     if (!data.text || typeof data.text === 'string') {
@@ -239,16 +270,18 @@ class BaseEdgeModel implements IBaseModel {
       };
     }
   }
-
-  @action
-  resetTextPosition() {
+  /**
+   * 重置文本位置
+   */
+  @action resetTextPosition() {
     const { x, y } = this.textPosition;
     this.text.x = x;
     this.text.y = y;
   }
-
-  @action
-  moveText(deltaX: number, deltaY: number): void {
+  /**
+   * 移动边上的文本
+   */
+  @action moveText(deltaX: number, deltaY: number): void {
     if (this.text) {
       const {
         x,
@@ -266,16 +299,18 @@ class BaseEdgeModel implements IBaseModel {
       };
     }
   }
-
-  @action
-  setText(textConfig): void {
+  /**
+   * 设置文本位置和值
+   */
+  @action setText(textConfig): void {
     if (textConfig) {
       assign(this.text, textConfig);
     }
   }
-
-  @action
-  updateText(value: string): void {
+  /**
+   * 更新文本的值
+   */
+  @action updateText(value: string): void {
     const {
       x,
       y,
@@ -290,7 +325,9 @@ class BaseEdgeModel implements IBaseModel {
       value,
     };
   }
-
+  /**
+   * 内部方法，计算边的起点和终点
+   */
   @action
   setAnchors(): void {
     if (!this.startPoint) {
@@ -325,16 +362,6 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
-  updateStroke(color): void {
-    this.stroke = color;
-  }
-
-  @action
-  updateStrokeWidth(width): void {
-    this.strokeWidth = width;
-  }
-
-  @action
   updateStartPoint(anchor): void {
     this.startPoint = anchor;
   }
@@ -342,14 +369,6 @@ class BaseEdgeModel implements IBaseModel {
   @action
   updateEndPoint(anchor): void {
     this.endPoint = anchor;
-  }
-
-  @action
-  setStyleFromTheme(type, graphModel): void {
-    const { theme } = graphModel;
-    if (theme[type]) {
-      assign(this, theme[type]);
-    }
   }
 
   @action

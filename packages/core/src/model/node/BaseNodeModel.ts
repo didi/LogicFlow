@@ -84,13 +84,13 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
-  // 保留属性
+  // 其它属性
+  graphModel: GraphModel;
   @observable zIndex = 1;
   @observable state = 1;
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
-  graphModel: GraphModel;
   targetRules: ConnectRule[] = [];
   sourceRules: ConnectRule[] = [];
   moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
@@ -151,7 +151,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return null;
   }
   /**
-   * 初始化文本属性，对
+   * 初始化文本属性
    */
   private formatText(data): void {
     if (!data.text) {
@@ -179,7 +179,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
   /**
    * 获取被保存时返回的数据
    * @overridable 支持重写
-   * @returns NodeData
    */
   getData(): NodeData {
     const { x, y, value } = this.text;
@@ -206,7 +205,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
     return data;
   }
-
+  /**
+   * 获取当前节点的properties
+   */
   getProperties() {
     return toJS(this.properties);
   }
@@ -463,11 +464,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
   setElementState(state: number, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
-  }
-
-  @action
-  updateStroke(color): void {
-    this.stroke = color;
   }
 
   @action

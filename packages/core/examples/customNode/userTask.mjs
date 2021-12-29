@@ -25,7 +25,6 @@ class UserTaskView extends RectNode {
     const { model } = this.props;
     const { x, y, width, height, radius, properties } = model;
     const style = model.getNodeStyle();
-    console.log(properties);
     return h("g", {}, [
       h("rect", {
         ...style,
@@ -55,6 +54,14 @@ class UserTaskModel extends RectNodeModel {
     } else {
       style.stroke = "rgb(24, 125, 255)";
     }
+    return style;
+  }
+  getTextStyle() {
+    const style = super.getTextStyle();
+    style.color = "red";
+    style.overflowMode = "ellipsis";
+    style.textAlign = "right";
+    style.fontSize = 20;
     return style;
   }
 }

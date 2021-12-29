@@ -58,32 +58,10 @@ const api = [
   'logicFlowApi',
   'graphModelApi',
   'nodeModelApi',
-  {
-    title: 'Model',
-    collapsable: false,
-    children: [
-      'baseEdgeModelApi',
-      'transformModelApi',
-      'editConfigModelApi',
-    ]
-  },
+  'edgeModelApi',
+  'transformModelApi',
+  'editConfigModelApi',
   'themeApi',
-  {
-    title: '元素',
-    collapsable: false,
-    children: [
-      'nodeApi',
-      'edgeApi',
-    ]
-  },
-  {
-    title: '自定义元素',
-    collapsable: false,
-    children: [
-      'customNodeApi',
-      'customEdgeApi',
-    ]
-  },
 ];
 
 const usage = ["bpmn", "approve"];

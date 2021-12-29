@@ -159,20 +159,9 @@ export type EdgeTextTheme = {
 
 export type EdgeTheme = CommonTheme;
 
-export type EdgePolylineTheme = {
-  /**
-   * 为了避免折线贴着节点导致折线和节点边重合
-   * 设置折线与节点产生垂线的距离。
-   * 详情见http://logic-flow.org/article/article03.html#%E7%9B%B4%E8%A7%92%E6%8A%98%E7%BA%BF
-   */
-  offset?: number;
-} & EdgeTheme;
+export type EdgePolylineTheme = EdgeTheme;
 
 export type EdgeBezierTheme = {
-  /**
-   * 贝塞尔曲线控制点与锚点的距离
-   */
-  offset?: number;
   /**
    * 贝塞尔调整线主题
    */
@@ -333,12 +322,9 @@ export const defaultTheme: Theme = {
     },
   },
   line: {},
-  polyline: {
-    offset: 30,
-  },
+  polyline: {},
   bezier: {
     fill: 'none',
-    offset: 100,
     adjustLine: {
       stroke: '#949494',
     },

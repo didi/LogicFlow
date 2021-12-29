@@ -192,27 +192,11 @@ lf.setTheme({
 })
 ```
 
-## polyline
-
-LogicFlow内置`polyline`都是黑色连线，宽2。
-
-- `offset`表示折线转折点基于节点的距离。
-
-```js
-lf.setTheme({
-  polyline: {
-    offset: 30,
-    stroke: '#000000',
-    strokeWidth: 2,
-  }
-})
-```
 
 ## bezier
 
 LogicFlow内置`bezier`都是黑色连线，宽2。
 
-- `offset`：和折线`offset`不一样，此属性是控制曲线调整手柄的长度。
 - `adjustLine`: 曲线调整手柄的样式。
 - `adjustAnchor`: 曲线调整点的样式。
 
@@ -222,7 +206,6 @@ lf.setTheme({
     fill: 'none',
     stroke: '#000000',
     strokeWidth: 2,
-    offset: 100,
     adjustLine: {
       stroke: '#949494',
     },

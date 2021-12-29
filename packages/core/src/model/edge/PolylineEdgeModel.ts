@@ -29,11 +29,12 @@ import GraphModel from '../GraphModel';
 export { PolylineEdgeModel };
 export default class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE;
-  offset = defaultTheme.polyline.offset;
+  offset;
   draginngPointList;
   @observable dbClickPosition: Point;
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'polyline');
+  initEdgeData(data): void {
+    this.offset = 30;
+    super.initEdgeData(data);
   }
   getEdgeStyle() {
     const { polyline } = this.graphModel.theme;

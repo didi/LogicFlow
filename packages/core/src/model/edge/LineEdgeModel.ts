@@ -6,9 +6,6 @@ import { ModelType } from '../../constant/constant';
 export { LineEdgeModel };
 export default class LineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.LINE_EDGE;
-  constructor(data, graphModel) {
-    super(data, graphModel, 'line');
-  }
   getEdgeStyle() {
     const { line } = this.graphModel.theme;
     const style = super.getEdgeStyle();

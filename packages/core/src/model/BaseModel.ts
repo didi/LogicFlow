@@ -74,7 +74,6 @@ interface IBaseModel {
    * @returns string
    */
   createId(): string;
-  move(deltaX: number, deltaY: number): void;
   moveText(deltaX: number, deltaY: number): void;
   updateText(value: string): void;
   setSelected(flag: boolean): void;
@@ -91,6 +90,7 @@ interface IBaseModel {
 
   updateAttributes(attributes: Object): void;
 
+  getTextStyle(): Record<string, any>;
 }
 
 export {
