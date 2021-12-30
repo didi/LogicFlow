@@ -28,6 +28,14 @@ jobs:
           cp -rf ./docs/.vuepress/dist/* ./deploy
           cp -rf ./examples/build/* ./deploy/examples
 
+      - name: generate mvp
+        run: |
+          cd ./site/mvp
+          npm install
+          npm run build
+          cd ../../
+          cp -rf ./site/mvp/* ./deploy/mvp
+
       - name: deploy to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:

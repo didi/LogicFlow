@@ -57,7 +57,7 @@ const api = [
   'themeApi',
 ];
 
-const usage = ["bpmn", "approve"];
+// const usage = ["bpmn", "approve"];
 
 const article = [
   'article01',
@@ -91,7 +91,24 @@ module.exports = {
     nav: [
       { text: '教程', link: '/guide/start' },
       { text: 'API', link: '/api/logicFlowApi' },
-      { text: '示例', link: '/usage/bpmn' },
+      {
+        text: '示例',
+        link: '#',
+        items: [
+          {
+            text: 'bpmn示例',
+            link: '/usage/bpmn'
+          },
+          {
+            text: '审批流程',
+            link: '/usage/approve'            
+          },
+          {
+            text: '作图工具',
+            link: '/mvp/index.html'            
+          }
+        ]
+      },
       { text: '迁移指南', link: '/migrate' },
       // { text: '版本公告', link: '/version-info/0.3.0' },
       {
@@ -108,9 +125,7 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': guide,
-      // '/version-info/': verisonInfo,
       '/api/': api,
-      '/usage/': usage,
       '/article/': article,
     },
   },

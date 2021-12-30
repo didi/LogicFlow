@@ -16,7 +16,6 @@
         </div>
       </div>
     </div>
-    <div>{{properties}}</div>
     <!-- 右侧属性面板 -->
     <PropertyPanel
       class="diagram-panel"

@@ -952,21 +952,21 @@
     "cssnano-preset-default" "^4.0.0"
     "postcss" "^7.0.0"
 
-"@logicflow/core@^1.0.0-alpha.11", "@logicflow/core@^1.0.0-alpha.9":
-  "integrity" "sha512-izrjpADg0ptJBXTBgZ5bZpUuYUqcPEFQKVRCc4L5RRf1v0q3oPXRdj6ydGIiLNr4/S87PpN57hUefmEEOTvbmQ=="
-  "resolved" "https://registry.npmjs.org/@logicflow/core/-/core-1.0.0-alpha.11.tgz"
-  "version" "1.0.0-alpha.11"
+"@logicflow/core@^1.0.0-alpha.12":
+  "integrity" "sha512-Qq8RUmd22ryiFcpyaREJ+PauumRVslFRxHVstijvKPlfC9yQQ1phzGofETYBKFJ0IMK+fmCppIv9xzmoGWV45Q=="
+  "resolved" "https://registry.npmjs.org/@logicflow/core/-/core-1.0.0-alpha.12.tgz"
+  "version" "1.0.0-alpha.12"
   dependencies:
     "@types/mousetrap" "^1.6.4"
     "mousetrap" "^1.6.5"
     "preact" "^10.4.8"
 
-"@logicflow/extension@^1.0.0-alpha.9":
-  "integrity" "sha512-MUsljI0/fzGOSmkMHqhldyAwXBi28OF2flQ1njL0Cmvog4eqo45HVEhN81XZ6lo2EIckwxq6AjLhbq/OPhYJPw=="
-  "resolved" "https://registry.npmjs.org/@logicflow/extension/-/extension-1.0.0-alpha.11.tgz"
-  "version" "1.0.0-alpha.11"
+"@logicflow/extension@^1.0.0-alpha.12":
+  "integrity" "sha512-Khb+7TycW34aTu96Q20J1LilYa6AOhLi9eAxful8KbdFIPTVXECW3S347IFcS05F/iu6IvH7gZW0NsAtclszpg=="
+  "resolved" "https://registry.npmjs.org/@logicflow/extension/-/extension-1.0.0-alpha.12.tgz"
+  "version" "1.0.0-alpha.12"
   dependencies:
-    "@logicflow/core" "^1.0.0-alpha.11"
+    "@logicflow/core" "^1.0.0-alpha.12"
     "ids" "^1.0.0"
     "preact" "^10.4.8"
 
