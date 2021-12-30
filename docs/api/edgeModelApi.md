@@ -86,6 +86,40 @@ class SequenceFlowModel extends PolylineModel {
 }
 ```
 
+## initEdgeData
+
+支持重写，初始化边数据。
+
+```js
+class UserEdgeModel extends PolylineEdgeModel {
+  initNodeData(data) {
+    super(data);
+    this.offset = 20;
+  }
+}
+```
+
+::: tip 提示
+initEdgeData和setAttributes都可以对edgeModel的属性进行赋值，但是两者的区别在于：
+- `initEdgeData`只在初始化的时候调用，用于初始化的属性。
+- `setAttributes`除了初始化调用外，还会在properties发生变化了调用。
+
+:::
+
+
+## setAttributes
+
+设置model形状属性，每次properties发生变化会触发
+
+```js
+class UserEdgeModel extends PolylineEdgeModel {
+  setAttributes(data) {
+    super(data);
+    this.offset = 20;
+  }
+}
+```
+
 ## createId
 
 支持重写，自定义节点id的生成规则. 

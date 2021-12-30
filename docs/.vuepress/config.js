@@ -92,16 +92,20 @@ module.exports = {
       { text: '教程', link: '/guide/start' },
       { text: 'API', link: '/api/logicFlowApi' },
       { text: '示例', link: '/usage/bpmn' },
-      { text: '常见问题', link: '/FAQ' },
+      { text: '迁移指南', link: '/migrate' },
       // { text: '版本公告', link: '/version-info/0.3.0' },
+      {
+        text: 'v1.x',
+        link: '#',
+        items: [
+          {
+            text: 'v0.7',
+            link: 'https://07.logic-flow.cn/'
+          }
+        ]
+      },
       { text: '文章', link: '/article/article01' },
     ],
-    // thirdLinks: [
-    //   {
-    //     text: 'playground',
-    //     link: 'http://localhost:8001/'
-    //   }
-    // ],
     sidebar: {
       '/guide/': guide,
       // '/version-info/': verisonInfo,

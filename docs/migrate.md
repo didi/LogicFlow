@@ -5,11 +5,13 @@
 ### 主题
 
 logicflow采用的新的主题定义方式，支持直接将自定义的所有svg属性透传到节点上，相比原来的主题方式，提供了更完善的自定义配置。
-原来的`outlineHover`, `edgeAdjust`等改成新的主题方式，详细使用方式见[todo]()
+原来的`outlineHover`, `edgeAdjust`等改成新的主题方式，详细使用方式见[主题 API](api/themeApi.html)。
 
-### 自定义节点
+### 自定义节点和边
 
-- 我们规范了自定义节点的语义，现在主题相关样式相关的属性获取改成在自定义view中用`getShapteStyle()`方法获取，不再支持在model中使用`setAttribute`设置外观相关的属性。也不支持通过`getAttributes()`获取。现在`getAttributes`用于获取非主题样式相关属性，如`text`、`x`、`y`、`properties`等。详细使用方式见[todo]()
+- 我们规范了自定义的方式，现在主题相关样式属性获取改成在自定义`view`中用`model.getNodeStyle()`或者`model.getEdgeStyle()`方法获取，不支持在`view`中通过`getAttributes()`获取。
+- 自定义样式相关属性我们要求在`model`中重写获取样式相关的方法。如[getNodeStyle](/api/nodeModelApi.html#样式属性), [getEdgeStyle](/api/edgeModelApi.html#样式属性)。
+- 我们明确了属性的分类，对于宽、高这类影响连线计算的属性，我们定义为[形状属性](/api/nodeModelApi.html#形状属性), 形状属性只允许在`setAttributes`中定义。
 
 ### lf实例API
 
@@ -25,13 +27,9 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 ### graphModel
 
 - `getNodeModel.transformMatrix` -> `getNodeModel.transformModel`
-- `getNodeModel.setTextEditable` -> `getNodeModel.transformModel`
+- `getNodeModel.setTextEditable()` -> `getNodeModel.editText()`
 - `getNodeModel.editConfig` -> `getNodeModel.editConfigModel`
-- `graphModel.setElementTextById` -> `graphModel.updateText`
-- `graphModel.removeEdgeById` -> `graphModel.deleteEdgeById`
-- `graphModel.removeEdgeBySource` -> `graphModel.deleteEdgeBySource`
-- `graphModel.removeEdgeByTarget` -> `graphModel.deleteEdgeByTarget`
-
-### 自定义节点、连线
-
-LogicFlow 1.0对自定义API进行了统一，也更加容易理解。原来在view上的重写`getAttributes`、`getShapeStyle`方式将会废弃，而是在model中重写`getNodeStyle`、`getEdgeStyle`进行自定义。
+- `graphModel.setElementTextById()` -> `graphModel.updateText()`
+- `graphModel.removeEdgeById()` -> `graphModel.deleteEdgeById()`
+- `graphModel.removeEdgeBySource()` -> `graphModel.deleteEdgeBySource()`
+- `graphModel.removeEdgeByTarget()` -> `graphModel.deleteEdgeByTarget()`
