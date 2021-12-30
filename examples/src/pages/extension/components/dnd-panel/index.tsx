@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import LogicFlow from '@logicflow/core';
 import { DndPanel, SelectionSelect } from '@logicflow/extension'
 import ExampleHeader from '../../../../components/example-header';
-
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,

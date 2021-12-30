@@ -21,10 +21,13 @@ class StartEventModel extends CircleNodeModel {
     // data.text.y += 40;
     super(data, graphModel);
   }
+  setAttributes(): void {
+    this.r = 18;
+  }
   getConnectedTargetRules() {
     const rules = super.getConnectedTargetRules();
     const notAsTarget = {
-      message: '起始节点不能作为连线的终点',
+      message: '起始节点不能作为边的终点',
       validate: () => false,
     };
     rules.push(notAsTarget);
@@ -34,12 +37,6 @@ class StartEventModel extends CircleNodeModel {
 
 class StartEventView extends CircleNode {
   static extendKey = 'StartEventNode';
-  getAttributes() {
-    const attr = super.getAttributes();
-    return {
-      ...attr,
-    };
-  }
 }
 
 const StartEvent = {

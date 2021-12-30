@@ -2,9 +2,7 @@ import { RectNode, h } from '@logicflow/core';
 
 export class RectLabelNodeView extends RectNode {
   getLabelShape() {
-    const attributes = this.getAttributes();
-    const properties = this.getProperties();
-    const { x, y, width, height } = attributes;
+    const { x, y, width, height, properties } = this.props.model;
     return h(
       'text',
       {
@@ -17,12 +15,12 @@ export class RectLabelNodeView extends RectNode {
     );
   }
   getShape() {
-    const attributes = this.getAttributes();
-    const { x, y, width, height } = attributes;
+    const { x, y, width, height } = this.props.model;
+    const style = this.props.model.getNodeStyle();
     // todo: 将basic-shape对外暴露，在这里可以直接用。现在纯手写有点麻烦。
     return h('g', {}, [
       h('rect', {
-        ...attributes,
+        ...style,
         fill: '#FFFFFF',
         x: x - width / 2,
         y: y - height / 2,

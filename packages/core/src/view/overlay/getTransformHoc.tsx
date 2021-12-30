@@ -11,7 +11,7 @@ export default function getTransform<P>(WrappedComponent: ComponentType<P>) {
     getMatrixString(): GraphTransform {
       const { graphModel } = this.props;
       const {
-        transformMatrix: {
+        transformModel: {
           SCALE_X,
           SKEW_Y,
           SKEW_X,

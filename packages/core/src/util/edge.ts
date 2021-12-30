@@ -10,7 +10,7 @@ import {
 } from './node';
 import { getVerticalPointOfLine } from '../algorithm';
 
-/* 手动创建连线时edge->edgeModel */
+/* 手动创建边时edge->edgeModel */
 export const setupEdgeModel = (edge, graphModel) => {
   let model;
   switch (edge.type) {
@@ -73,7 +73,7 @@ export const filterRepeatPoints = (points: PolyPoint[]): PolyPoint[] => {
   return result;
 };
 
-/* 获取简单连线:连线之间除了起始点，只有1个中间点 */
+/* 获取简单边:边之间除了起始点，只有1个中间点 */
 export const getSimplePolyline = (sPoint: PolyPoint, tPoint: PolyPoint): PolyPoint[] => {
   const points = [
     sPoint,
@@ -100,7 +100,7 @@ export const getExpandedBBox = (bbox: PBBox, offset: number): PBBox => {
   };
 };
 
-/* 判断点与中心点连线的方向：是否水平，true水平，false垂直 */
+/* 判断点与中心点边的方向：是否水平，true水平，false垂直 */
 export const pointDirection = (point: PolyPoint, bbox: PBBox): Direction => {
   const dx = Math.abs(point.x - bbox.centerX);
   const dy = Math.abs(point.y - bbox.centerY);
@@ -325,7 +325,7 @@ export const isSegmentsIntersected = (
   return s >= 0 && s <= 1 && t >= 0 && t <= 1;
 };
 
-/* 判断线段与bbox是否是相交的，保证节点之间的连线不会穿过节点自身 */
+/* 判断线段与bbox是否是相交的，保证节点之间的边不会穿过节点自身 */
 export const isSegmentCrossingBBox = (p1: PolyPoint, p2: PolyPoint, bbox: PBBox): boolean => {
   if (bbox.width === 0 && bbox.height === 0) {
     return false;
@@ -714,7 +714,7 @@ type AppendAttributesType = {
   strokeWidth: number,
   strokeDasharray: string,
 };
-// 扩大连线可点区域，获取连线append的信息
+// 扩大边可点区域，获取边append的信息
 export const getAppendAttibutes = (appendInfo) : AppendAttributesType => {
   const { start, end } = appendInfo;
   let d;
@@ -795,9 +795,9 @@ export const getEndTangent = (path: string): Point[] => {
 };
 
 /**
- * 获取移动连线后，文本位置距离连线上的最近的一点
- * @param point 连线上文本的位置
- * @param points 连线的各个拐点
+ * 获取移动边后，文本位置距离边上的最近的一点
+ * @param point 边上文本的位置
+ * @param points 边的各个拐点
  */
 export const getClosestPointOfPolyline = (point: Point, points: string): Point => {
   const { x, y } = point;
@@ -842,7 +842,7 @@ export const getClosestPointOfPolyline = (point: Point, points: string): Point =
       }
     }
   });
-  // 边界：只有一条线段时，沿线段移动节点，当文本超出连线后，文本没有可供参考的线段
+  // 边界：只有一条线段时，沿线段移动节点，当文本超出边后，文本没有可供参考的线段
   if (!crossPoint) {
     const { start, end } = segments[0];
     crossPoint = {
@@ -853,7 +853,7 @@ export const getClosestPointOfPolyline = (point: Point, points: string): Point =
   return crossPoint;
 };
 
-// 规范连线初始化数据
+// 规范边初始化数据
 export const pickEdgeConfig = (data): EdgeConfig => pick(data, [
   'id',
   'type',

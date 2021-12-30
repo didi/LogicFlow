@@ -24,7 +24,7 @@ const genMenus = () => {
     children: JSX.Element;
   }[] = [];
   // eslint-disable-next-line array-callback-return
-  menus.map((menu) => {
+  menus.forEach((menu) => {
     const { path } = menu;
     const { name, group } = routeMaps[path] ?? {};
     const [firstNode] = group.split('.');

@@ -3,16 +3,18 @@ import Path from '../basic-shape/Path';
 import { getVerticalPointOfLine } from '../../algorithm/index';
 import { ArrowInfo } from '../../type/index';
 
-type ArrowStyle = {
-  stroke: string,
-  fill: string,
+export type ArrowStyle = {
+  stroke?: string,
+  fill?: string,
   strokeWidth?: number,
   offset: number,
   verticalLength: number,
 };
+
 type ArrowAttributesType = {
   d: string,
 } & ArrowStyle;
+
 type IProps = {
   arrowInfo: ArrowInfo,
   style: ArrowStyle

@@ -8,6 +8,7 @@ import LogicFlow, {
   PolylineEdge,
   PolylineEdgeModel,
   h,
+  EdgeConfig,
 } from "@logicflow/core"
 import GraphModel from "@logicflow/core/types/model/GraphModel";
 import BaseNodeModel from "@logicflow/core/types/model/node/BaseNodeModel";
@@ -39,14 +40,13 @@ export default function RegisteNode(lf: LogicFlow) {
   class ApproverNode extends RectNode {
     static extendKey = 'UserTaskNode';
     getLabelShape() {
-      const attributes = super.getAttributes();
       const {
         x,
         y,
         width,
         height,
         properties,
-      } = attributes;
+      } = this.props.model;
       const { labelColor, approveTypeLabel } = properties as nodeProperty;
       return h(
         'text',
@@ -62,17 +62,14 @@ export default function RegisteNode(lf: LogicFlow) {
       );
     }
     getShape() {
-      const attributes = super.getAttributes();
       const {
         x,
         y,
         width,
-        height,
-        fill,
-        stroke,
-        strokeWidth,
+        height,        
         radius,
-      } = attributes;
+      } = this.props.model;
+      const style = this.props.model.getNodeStyle();
       return h(
         'g',
         {
@@ -81,13 +78,11 @@ export default function RegisteNode(lf: LogicFlow) {
           h(
             'rect',
             {
+              ...style,
               x: x - width / 2,
               y: y - height / 2,
               rx: radius,
               ry: radius,
-              fill,
-              stroke,
-              strokeWidth,
               width,
               height,
             },
@@ -153,7 +148,7 @@ export default function RegisteNode(lf: LogicFlow) {
 
 
   class ActionModel extends PolylineEdgeModel { 
-    constructor(data: BaseNodeModel, graphModel: GraphModel) {
+    constructor(data: EdgeConfig, graphModel: GraphModel) {
       super(data, graphModel);
       const property = data.properties as any;
       // @ts-ignore

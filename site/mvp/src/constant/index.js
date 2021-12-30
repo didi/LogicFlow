@@ -52,3 +52,18 @@ export const borderStyles = [
     value: 'dotted'
   }
 ]
+
+export const fontFamilies = [
+  {
+    value: 'Arial'
+  },
+  {
+    value: 'Verdana'
+  },
+  {
+    value: 'Georgia'
+  },
+  {
+    value: 'Times New Roman'
+  }
+]

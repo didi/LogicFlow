@@ -39,13 +39,13 @@ export default class PolylineEdge extends BaseEdge {
   onDraging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
     this.isDraging = true;
-    const { transformMatrix, editConfig } = graphModel;
-    const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
+    const { transformModel, editConfigModel } = graphModel;
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     const polylineModel = model as PolylineEdgeModel;
     // 更新当前拖拽的线段信息
     // 1、如果只允许调整中间线段调用dragAppendSimple
     // 2、如果允许调整所有线段调用dragAppend
-    const { adjustEdgeMiddle } = editConfig;
+    const { adjustEdgeMiddle } = editConfigModel;
     if (adjustEdgeMiddle) {
       this.appendInfo = polylineModel.dragAppendSimple(
         this.appendInfo,
@@ -56,7 +56,7 @@ export default class PolylineEdge extends BaseEdge {
     }
   };
   onDragEnd = () => {
-    const { model, eventCenter } = this.props;
+    const { model, graphModel: { eventCenter } } = this.props;
     const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
     this.isDraging = false;
@@ -78,31 +78,15 @@ export default class PolylineEdge extends BaseEdge {
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
   getIsDraging = () => this.isDraging;
-  getAttributes() {
-    const attr = super.getAttributes();
-    const {
-      model: {
-        points,
-      },
-    } = this.props;
-    return {
-      ...attr,
-      points,
-    };
-  }
   getEdge() {
-    const {
-      points,
-      strokeWidth,
-      stroke,
-      strokeDashArray,
-    } = this.getAttributes();
+    const { model } = this.props;
+    const style = model.getEdgeStyle();
     return (
       <Polyline
-        points={points}
-        strokeWidth={strokeWidth}
-        stroke={stroke}
-        strokeDasharray={strokeDashArray}
+        points={model.points}
+        {
+          ...style
+        }
       />
     );
   }
@@ -201,8 +185,8 @@ export default class PolylineEdge extends BaseEdge {
           {this.getAppendShape(appendInfo)}
         </g>
       );
-      const { editConfig } = graphModel;
-      const { adjustEdge, adjustEdgeMiddle } = editConfig;
+      const { editConfigModel } = graphModel;
+      const { adjustEdge, adjustEdgeMiddle } = editConfigModel;
       if (!adjustEdge || !draggable) {
         this.dragHandler = () => { };
       } else {

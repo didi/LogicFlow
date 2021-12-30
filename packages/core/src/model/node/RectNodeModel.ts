@@ -1,18 +1,12 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
-  @observable radius = defaultTheme.rect.radius;
-
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'rect');
-  }
-
+  @observable radius = 0;
   @computed get anchors(): Point[] {
     const {
       anchorsOffset, x, y, width, height,
@@ -26,6 +20,14 @@ class RectNodeModel extends BaseNodeModel {
       { x, y: y + height / 2, id: `${this.id}_2` },
       { x: x - width / 2, y, id: `${this.id}_3` },
     ];
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    const { rect } = this.graphModel.theme;
+    return {
+      ...style,
+      ...cloneDeep(rect),
+    };
   }
 }
 

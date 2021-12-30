@@ -24,7 +24,7 @@ class Group {
         lf.graphModel.moveNodes([...model.children], deltaX, deltaY, true);
         return true;
       }
-      const groupModel = lf.getNodeModel(this.nodeGroupMap.get(model.id));
+      const groupModel = lf.getNodeModelById(this.nodeGroupMap.get(model.id));
       if (groupModel && groupModel.isRestrict) { // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
         const { x1, y1, x2, y2 } = model.getBounds();
         const r = groupModel.isInRange({
@@ -46,13 +46,13 @@ class Group {
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id);
     if (preGroupId) {
-      const preGroup = this.lf.getNodeModel(preGroupId);
+      const preGroup = this.lf.getNodeModelById(preGroupId);
       preGroup.removeChild(data.id);
       this.nodeGroupMap.delete(data.id);
       preGroup.setAllowAppendChild(false);
     }
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
-    const bounds = this.lf.getNodeModel(data.id).getBounds();
+    const bounds = this.lf.getNodeModelById(data.id).getBounds();
     const group = this.getGroup(bounds);
     if (group && data.id !== group.id) {
       group.addChild(data.id);
@@ -65,7 +65,7 @@ class Group {
       this.activeGroup.setAllowAppendChild(false);
       this.activeGroup = undefined;
     }
-    const bounds = this.lf.getNodeModel(data.id).getBounds();
+    const bounds = this.lf.getNodeModelById(data.id).getBounds();
     this.activeGroup = this.getGroup(bounds);
     if (this.activeGroup && this.activeGroup.id !== data.id) {
       this.activeGroup.setAllowAppendChild(true);

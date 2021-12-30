@@ -42,10 +42,9 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   }
   onDraging = ({ deltaX, deltaY }) => {
     const { graphModel, bezierModel, type } = this.props;
-    bezierModel.isDragging = true;
-    const { transformMatrix } = graphModel;
+    const { transformModel } = graphModel;
     const { endX, endY } = this.state;
-    const [x, y] = transformMatrix.moveCanvasPointByHtml(
+    const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
       deltaX,
       deltaY,
@@ -62,20 +61,18 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   render() {
     const { position } = this.props;
     const { x, y } = position;
+    const { bezierModel } = this.props;
     const {
-      adjustAnchorStroke,
-      adjustAnchorFill,
-      adjustAnchorFillOpacity,
-    } = this.props?.graphModel?.theme?.bezier;
+      adjustAnchor,
+    } = bezierModel.getEdgeStyle();
     return (
       <Circle
         className="lf-bezier-adjust-anchor"
         x={x}
         y={y}
-        r={4}
-        stroke={adjustAnchorStroke}
-        fill={adjustAnchorFill}
-        fillOpacity={adjustAnchorFillOpacity}
+        {
+          ...adjustAnchor
+        }
         onMouseDown={this.dragHandler}
       />
     );
@@ -88,14 +85,16 @@ export default class BezierAdjustOverlay extends Component<IProps> {
     const { path, id } = bezier;
     const pointsList = getBezierPoints(path);
     const [start, sNext, ePre, end] = pointsList;
-    const { adjustLineColor } = graphModel.theme.bezier;
+    const { adjustLine } = bezier.getEdgeStyle();
     const result = [];
     result.push(<Line
       x1={start.x}
       y1={start.y}
       x2={sNext.x}
       y2={sNext.y}
-      stroke={adjustLineColor}
+      {
+        ...adjustLine
+      }
     />);
     result.push(<BezierAdjustAnchor
       position={sNext}
@@ -109,7 +108,9 @@ export default class BezierAdjustOverlay extends Component<IProps> {
       y1={end.y}
       x2={ePre.x}
       y2={ePre.y}
-      stroke={adjustLineColor}
+      {
+        ...adjustLine
+      }
     />);
     result.push(<BezierAdjustAnchor
       position={ePre}

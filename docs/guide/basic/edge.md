@@ -1,117 +1,74 @@
+# 边 Edge
 
- # 边 Edge
-
-LogicFlow 的内置连线包括
+和节点一样，LogicFlow也内置一些基础的边。LogicFlow 的内置边包括:
 - 直线(line)
 - 直角折线(polyline)
 - 贝塞尔曲线(bezier)
 
-LogicFlow在扩展中还提供了更多类型的连线
-- 圆角折线(curved-edge)
+效果如下：
 
-## 创建边
-LogicFlow 支持两种创建边的方式
-- 数据配置
-- 函数调用
+<iframe src="https://codesandbox.io/embed/condescending-nash-lx1n1?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="condescending-nash-lx1n1"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
 
-### 通过数据配置创建连接
+## 选择自定义边继承的内置边
 
-在图初始化时，通过配置数据创建连接，**前提是已经创建了节点**。
-```ts
-lf.render({
-  nodes: [...],
-  edges: [
-    {
-      type: 'polyline',
-      sourceNodeId: 10,
-      targetNodeId: 20,
-      text: '直角折线',
+```js
+// 直线
+import { LineEdge, PolylineEdgeModel } from "@logicflow/core";
+// 折线
+import { PolylineEdge, PolylineEdgeModel } from "@logicflow/core";
+// 贝塞尔曲线
+import { BezierEdge, BezierEdgeModel } from "@logicflow/core";
+```
+
+## 基于继承的自定义边
+
+和节点一样，LogicFlow的边也支持基于继承的自定义机制。同样也只需同时继承`view`和`model`。
+但是和节点不一样的是，由于边的编辑复杂度问题，绝大多数情况下，自定义边时不推荐自定义`view`。
+只需要在自定义[edgeModel](/api/edgeModelApi.html)中样式类即可。
+
+```js
+import { PolylineEdgeModel } from "@logicflow/core";
+
+class SequenceModel extends PolylineEdgeModel {
+  setAttributes() {
+    this.offset = 20;
+  }
+  getEdgeStyle() {
+    const style = super.getEdgeStyle();
+    const { properties } = this;
+    if (properties.isActived) {
+      style.strokeDasharray = "4 4";
     }
-  ],
-});
+    style.stroke = "orange";
+    return style;
+  }
+  getTextStyle() {
+    const style = super.getTextStyle();
+    style.color = "#3451F1";
+    style.fontSize = 30;
+    style.background.fill = "#F2F131";
+    return style;
+  }
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = "red";
+    style.hover.stroke = "red";
+    return style;
+  }
+}
+
+export default {
+  type: "sequence",
+  view: PolylineEdge,
+  model: SequenceModel
+};
 ```
 
-<example :height="500" ></example>
-
-### 通过函数创建连接
-
-在实例化 `LogicFlow` 后，通过调用 `lf.createEdge` 创建边。创建边的参数包括边类型、位置信息、文案信息、自定义属性等。内置边的完整配置参见 [Edge API](/api/edgeApi.html)。
-
-```ts
-lf.createEdge({
-  type: 'line',
-  sourceNodeId: '10',
-  targetNodeId: '20',
-  text: '直线',
-});
-```
-
-## 常用方法
-
-```ts
-// 创建边
-lf.createEdge({
-  type: 'polyline',
-  sourceNodeId: '30',
-  targetNodeId: '40',
-  text: '折线'
-});
-
-// 获取边数据
-lf.getEdgeData(edgeId);
-
-// 修改边数据
-lf.setEdgeData({
-  id: '1000',
-  type: 'polyline',
-  sourceNodeId: '30',
-  targetNodeId: '40',
-  startPoint: {
-    id: '300-160'
-    x: 300,
-    y: 160,
-  },
-  endPoint: {
-    id: '380-100'
-    x: 380,
-    y: 100,
-  },
-  pointsList: [
-    {
-      x: 300,
-      y: 160,
-    },
-    {
-      x: 300,
-      y: 130,
-    },
-    {
-      x: 380,
-      y: 130,
-    },
-    {
-      x: 380,
-      y: 100,
-    },
-  ]
-  text: {
-    x: 340,
-    y: 130,
-    value: '折线'
-  },
-  property: {}
-});
-
-// 删除节点A到节点B所有的边
-lf.removeEdge({sourceNodeId: nodeAId, targetNodeId: nodeBId,});
-
-// 删除从节点A开始所有的边
-lf.removeEdge({sourceNodeId: nodeAId});
-
-// 删除到节点B结束所有的边
-lf.removeEdge({targetNodeId: nodeBId});
+[去codesandbox中编辑](https://codesandbox.io/s/logicflow-step5-i4xes?file=/step5/sequence.js)
 
 
-```
-
-Edge 的完整函数参见 [Edge API](/api/EdgeApi.html)。

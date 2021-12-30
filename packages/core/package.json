@@ -1,8 +1,10 @@
 {
   "name": "@logicflow/core",
-  "version": "0.7.16",
+  "version": "1.0.0-alpha.12",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
+  "unpkg": "dist/logic-flow.js",
+  "jsdelivr": "dist/logic-flow.js",
   "license": "Apache-2.0",
   "homepage": "http://logic-flow.org/",
   "types": "types/index.d.ts",
@@ -24,6 +26,7 @@
   },
   "files": [
     "dist",
+    "es",
     "types",
     "README.md"
   ],
@@ -70,8 +73,8 @@
     "ids": "^1.0.0",
     "less-loader": "^6.0.0",
     "lodash-es": "^4.17.15",
-    "mobx": "^4.15.7",
-    "mobx-react": "^5.4.4",
+    "mobx": "^5.15.7",
+    "mobx-react": "^6.3.0",
     "mobx-utils": "^5.6.1",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",

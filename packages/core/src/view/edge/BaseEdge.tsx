@@ -1,64 +1,25 @@
 import { h, Component } from 'preact';
 import { assign } from 'lodash-es';
-import Arrow from './Arrow';
+import Arrow, { ArrowStyle } from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
 import { ElementState, EventType, ModelType, OverlapMode } from '../../constant/constant';
-import EventEmitter from '../../event/eventEmitter';
 import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
+import { isMultipleSelect } from '../../util/graph';
 
 type IProps = {
   model: BaseEdgeModel;
   graphModel: GraphModel;
-  eventCenter: EventEmitter;
 };
 
 export default class BaseEdge extends Component<IProps> {
   startTime: number;
   contextMenuTime: number;
   clickTimer: number;
-  getAttributes() {
-    const {
-      model: {
-        strokeWidth,
-        strokeOpacity,
-        strokeDashArray,
-        isSelected,
-        isHovered,
-        hoverStroke,
-        selectedStroke,
-        properties,
-      },
-    } = this.props;
-    let {
-      model: {
-        stroke,
-      },
-    } = this.props;
-
-    if (isHovered) {
-      stroke = hoverStroke;
-    } else if (isSelected) {
-      stroke = selectedStroke;
-    }
-    return {
-      stroke,
-      strokeWidth,
-      strokeOpacity,
-      strokeDashArray,
-      isSelected,
-      isHovered,
-      hoverStroke,
-      selectedStroke,
-      properties: {
-        ...properties,
-      },
-    };
-  }
   getShape() { }
   getTextStyle() {
   }
@@ -68,20 +29,16 @@ export default class BaseEdge extends Component<IProps> {
     if (model.state === ElementState.TEXT_EDIT) {
       return '';
     }
-    const { edgeText } = graphModel.theme;
-    const custome = this.getTextStyle();
-    const style = assign({}, edgeText, custome);
     let draggable = false;
-    const { editConfig } = graphModel;
-    if (model.text.draggable || editConfig.edgeTextDraggable) {
+    const { editConfigModel } = graphModel;
+    if (model.text.draggable || editConfigModel.edgeTextDraggable) {
       draggable = true;
     }
     return (
       <LineText
-        editable={editConfig.edgeTextEdit && model.text.editable}
+        editable={editConfigModel.edgeTextEdit && model.text.editable}
         model={model}
         graphModel={graphModel}
-        style={style}
         draggable={draggable}
       />
     );
@@ -100,16 +57,14 @@ export default class BaseEdge extends Component<IProps> {
     };
   }
   getArrowStyle() {
-    const { stroke } = this.getAttributes();
-    const { graphModel } = this.props;
-    const { offset, verticalLength } = graphModel.theme.arrow;
+    const { model, graphModel } = this.props;
+    const edgeStyle = model.getEdgeStyle();
+    const { arrow } = graphModel.theme;
     return {
-      stroke,
-      strokeWidth: 1,
-      fill: stroke,
-      offset,
-      verticalLength,
-    };
+      ...edgeStyle,
+      fill: edgeStyle.stroke,
+      ...arrow,
+    } as ArrowStyle;
   }
   getArrow() {
     const arrowInfo = this.getArrowInfo();
@@ -125,7 +80,7 @@ export default class BaseEdge extends Component<IProps> {
   }
   // 起点终点，可以修改起点/终点为其他节点
   getAdjustPoints() {
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const start = model.getAdjustStart();
     const end = model.getAdjustEnd();
     return (
@@ -135,14 +90,12 @@ export default class BaseEdge extends Component<IProps> {
           {...start}
           edgeModel={model}
           graphModel={graphModel}
-          eventCenter={eventCenter}
         />
         <AdjustPoint
           type="TARGET"
           {...end}
           edgeModel={model}
           graphModel={graphModel}
-          eventCenter={eventCenter}
         />
       </g>
     );
@@ -160,7 +113,7 @@ export default class BaseEdge extends Component<IProps> {
     );
   }
   handleHover = (hovered, ev) => {
-    const { model, eventCenter } = this.props;
+    const { model, graphModel: { eventCenter } } = this.props;
     model.setHovered(hovered);
     const eventName = hovered ? EventType.EDGE_MOUSEENTER : EventType.EDGE_MOUSELEAVE;
     const nodeData = model.getData();
@@ -181,7 +134,7 @@ export default class BaseEdge extends Component<IProps> {
     // 节点右击也会触发时间，区分右击和点击(mouseup)
     this.contextMenuTime = new Date().getTime();
     if (this.clickTimer) { clearTimeout(this.clickTimer); }
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
@@ -191,7 +144,7 @@ export default class BaseEdge extends Component<IProps> {
     graphModel.selectEdgeById(model.id);
     // 边数据
     const edgeData = model?.getData();
-    eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
+    graphModel.eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
       data: edgeData,
       e: ev,
       position,
@@ -210,20 +163,20 @@ export default class BaseEdge extends Component<IProps> {
     if (isRightClick) return;
     // 这里 IE 11不能正确显示
     const isDoubleClick = e.detail === 2;
-    const { model, graphModel, eventCenter } = this.props;
+    const { model, graphModel } = this.props;
     const edgeData = model?.getData();
     const position = graphModel.getPointByClient({
       x: e.clientX,
       y: e.clientY,
     });
     if (isDoubleClick) {
-      const { editConfig, textEditElement } = graphModel;
-      // 当前连线正在编辑，需要先重置状态才能变更文本框位置
+      const { editConfigModel, textEditElement } = graphModel;
+      // 当前边正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === model.id) {
         graphModel.setElementStateById(model.id, ElementState.DEFAULT);
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (editConfig.edgeTextEdit && model.text.editable) {
+      if (editConfigModel.edgeTextEdit && model.text.editable) {
         graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT);
       }
       if (model.modelType === ModelType.POLYLINE_EDGE) {
@@ -232,7 +185,7 @@ export default class BaseEdge extends Component<IProps> {
         const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
         polylineEdgeModel.dbClickPosition = crossPoint;
       }
-      eventCenter.emit(EventType.EDGE_DBCLICK, {
+      graphModel.eventCenter.emit(EventType.EDGE_DBCLICK, {
         data: edgeData,
         e,
         position,
@@ -240,20 +193,19 @@ export default class BaseEdge extends Component<IProps> {
     } else { // 单击
       // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
       // 边数据
-      eventCenter.emit(EventType.ELEMENT_CLICK, {
+      graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, {
         data: edgeData,
         e,
         position,
       });
-      eventCenter.emit(EventType.EDGE_CLICK, {
+      graphModel.eventCenter.emit(EventType.EDGE_CLICK, {
         data: edgeData,
         e,
         position,
       });
     }
-
-    const { editConfig: { metaKeyMultipleSelected } } = graphModel;
-    graphModel.selectEdgeById(model.id, e.metaKey && metaKeyMultipleSelected);
+    const { editConfigModel } = graphModel;
+    graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
@@ -266,9 +218,9 @@ export default class BaseEdge extends Component<IProps> {
     }
   }
   render() {
-    const { model: { isSelected }, graphModel: { editConfig } } = this.props;
+    const { model: { isSelected }, graphModel: { editConfigModel } } = this.props;
     const isDraging = this.getIsDraging();
-    const { adjustEdgeStartAndEnd } = editConfig;
+    const { adjustEdgeStartAndEnd } = editConfigModel;
     return (
       <g
         className="lf-edge"

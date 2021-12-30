@@ -6,28 +6,15 @@ import Path from '../basic-shape/Path';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 
 export default class BezierEdge extends BaseEdge {
-  getAttributes() {
-    const attr = super.getAttributes();
-    const { path } = this.props.model as BezierEdgeModel;
-    return {
-      ...attr,
-      path,
-    };
-  }
   getEdge() {
-    const {
-      path,
-      strokeWidth,
-      stroke,
-      strokeDashArray,
-    } = this.getAttributes();
+    const { model } = this.props;
+    const style = model.getEdgeStyle();
     return (
       <Path
-        d={path}
-        strokeWidth={strokeWidth}
-        stroke={stroke}
-        fill="none"
-        strokeDasharray={strokeDashArray}
+        d={model.path}
+        {
+          ...style
+        }
       />
     );
   }
@@ -42,7 +29,7 @@ export default class BezierEdge extends BaseEdge {
   getAppendWidth() {
     const {
       path,
-    } = this.getAttributes();
+    } = this.props.model;
     return (
       <Path
         d={path}

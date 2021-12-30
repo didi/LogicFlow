@@ -1,13 +1,15 @@
 const guide = [
   'start',
   {
-    title: '基础教程',
+    title: '核心功能',
     collapsable: false,
     children: [
       // 'basic/core',
       'basic/logic-flow',
       'basic/node',
       'basic/edge',
+      'basic/theme',
+      'basic/event',
       'basic/grid',
       'basic/background',
       'basic/dnd',
@@ -18,17 +20,7 @@ const guide = [
     ]
   },
   {
-    title: '进阶指引',
-    collapsable: false,
-    children: [
-      'advance/theme',
-      'advance/event',
-      'advance/customNode',
-      'advance/customEdge',
-    ]
-  },
-  {
-    title: '拓展',
+    title: '拓展功能',
     collapsable: false,
     children: [
       'extension/extension-intro',
@@ -56,36 +48,16 @@ const guide = [
 
 const api = [
   'logicFlowApi',
-  {
-    title: 'Model',
-    collapsable: false,
-    children: [
-      'graphModelApi',
-      'baseNodeModelApi',
-      'baseEdgeModelApi',
-      'transformModelApi',
-      'editConfigModelApi',
-    ]
-  },
-  {
-    title: '元素',
-    collapsable: false,
-    children: [
-      'nodeApi',
-      'edgeApi',
-    ]
-  },
-  {
-    title: '自定义元素',
-    collapsable: false,
-    children: [
-      'customNodeApi',
-      'customEdgeApi',
-    ]
-  },
+  'graphModelApi',
+  'nodeModelApi',
+  'edgeModelApi',
+  'eventCenterApi',
+  'transformModelApi',
+  'editConfigModelApi',
+  'themeApi',
 ];
 
-const usage = ["bpmn", "approve"];
+// const usage = ["bpmn", "approve"];
 
 const article = [
   'article01',
@@ -119,22 +91,41 @@ module.exports = {
     nav: [
       { text: '教程', link: '/guide/start' },
       { text: 'API', link: '/api/logicFlowApi' },
-      { text: '示例', link: '/usage/bpmn' },
-      { text: '常见问题', link: '/FAQ' },
+      {
+        text: '示例',
+        link: '#',
+        items: [
+          {
+            text: 'bpmn示例',
+            link: '/usage/bpmn'
+          },
+          {
+            text: '审批流程',
+            link: '/usage/approve'            
+          },
+          {
+            text: '作图工具',
+            link: '/mvp/index.html'            
+          }
+        ]
+      },
+      { text: '迁移指南', link: '/migrate' },
       // { text: '版本公告', link: '/version-info/0.3.0' },
+      {
+        text: 'v1.x',
+        link: '#',
+        items: [
+          {
+            text: 'v0.7',
+            link: 'https://07.logic-flow.cn/'
+          }
+        ]
+      },
       { text: '文章', link: '/article/article01' },
     ],
-    // thirdLinks: [
-    //   {
-    //     text: 'playground',
-    //     link: 'http://localhost:8001/'
-    //   }
-    // ],
     sidebar: {
       '/guide/': guide,
-      // '/version-info/': verisonInfo,
       '/api/': api,
-      '/usage/': usage,
       '/article/': article,
     },
   },

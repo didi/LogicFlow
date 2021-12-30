@@ -2,10 +2,8 @@ import { h } from 'preact';
 
 function Polyline(props) {
   const attrs = {
-    // default
     points: '',
     fill: 'none',
-    // ...props,
   };
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;

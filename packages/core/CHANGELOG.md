@@ -3,6 +3,137 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.11...@logicflow/core@1.0.0-alpha.12) (2021-12-30)
+
+
+### Bug Fixes
+
+* reset offset ([3ab0425](https://github.com/didi/LogicFlow/commit/3ab0425fdba12e934c0380b3f4229314071e630f))
+
+
+
+
+
+# [1.0.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.10...@logicflow/core@1.0.0-alpha.11) (2021-12-29)
+
+
+### Bug Fixes
+
+* custom node ([2155c37](https://github.com/didi/LogicFlow/commit/2155c379144469848ea08511c9c1c145105f46df))
+
+
+
+
+
+# [1.0.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.9...@logicflow/core@1.0.0-alpha.10) (2021-12-29)
+
+
+### Bug Fixes
+
+* history change ([1ed9799](https://github.com/didi/LogicFlow/commit/1ed9799a0321b1d5e761b3e25ae8d874d8c310f3))
+
+
+### Features
+
+* merge master ([2f418bc](https://github.com/didi/LogicFlow/commit/2f418bcbeb60ac7162718d6022047aeb326a50d8))
+
+
+
+
+
+# [1.0.0-alpha.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.8...@logicflow/core@1.0.0-alpha.9) (2021-12-24)
+
+
+### Features
+
+* remove hideOutline ([be86fb1](https://github.com/didi/LogicFlow/commit/be86fb118bd8bb1bd67a999802544eb2d10df0da))
+
+
+
+
+
+# [1.0.0-alpha.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.7...@logicflow/core@1.0.0-alpha.8) (2021-12-22)
+
+
+### Bug Fixes
+
+* recovery getAppend ([2518892](https://github.com/didi/LogicFlow/commit/2518892c656dc07008676206ca4da920e869ed99))
+
+
+### Features
+
+* use deepclone return style ([e2c2af3](https://github.com/didi/LogicFlow/commit/e2c2af3673ff64de71a2e2c3d3f3db8fa84737cf))
+
+
+
+
+
+# [1.0.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.6...@logicflow/core@1.0.0-alpha.7) (2021-12-22)
+
+
+### Bug Fixes
+
+* node resize set default style ([b9def97](https://github.com/didi/LogicFlow/commit/b9def9763f1fa0464c42adeffebf37fe20543151))
+
+
+
+
+
+# [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.4...@logicflow/core@1.0.0-alpha.6) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge setProperties in vue ([ecdaf34](https://github.com/didi/LogicFlow/commit/ecdaf34ad170e410ad979af8413e87bf86e8345b))
+* edge text use model getTextStyle ([85b36ef](https://github.com/didi/LogicFlow/commit/85b36efa14ed9e7a0a5d95e800489d4dfa65b6d6))
+* lf.select -> lf.selectElementById ([f4eea2c](https://github.com/didi/LogicFlow/commit/f4eea2c23ec6ac44acbd404b35d94b74fbb69d00))
+* selection events ([682ba34](https://github.com/didi/LogicFlow/commit/682ba345451a5c5b522ebcd510f9c9e29be5758e))
+
+
+
+
+
+# [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.14...@logicflow/core@1.0.0-alpha.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* html node ([a356297](https://github.com/didi/LogicFlow/commit/a3562974d2dac63f08e531784945bbeb9e25e81d))
+* use model instead of getAttribute ([0e51cb0](https://github.com/didi/LogicFlow/commit/0e51cb0681c458bf68a69b8459ce0a4b91951ea4))
+
+
+### Features
+
+* 重构自定义锚点写法 ([657f911](https://github.com/didi/LogicFlow/commit/657f9113eff1207c910080507e94a22c69c10cce))
+* custom edge ([81cd3be](https://github.com/didi/LogicFlow/commit/81cd3be6a9940553d2eec75b77a3472fdf75eb88))
+* resize width and height ([8275dfb](https://github.com/didi/LogicFlow/commit/8275dfb539449c641c8f61c3f84ebad8a2046f8b))
+* theme and outline ([1b7960d](https://github.com/didi/LogicFlow/commit/1b7960db3bab047e49d187bbb43578a0700d7eef))
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
+# [1.0.0-alpha.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.1...@logicflow/core@1.0.0-alpha.3) (2021-12-09)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+# [1.0.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.13...@logicflow/core@1.0.0-alpha.1) (2021-12-09)
+
+
+### Features
+
+* 重构自定义锚点写法 ([657f911](https://github.com/didi/LogicFlow/commit/657f9113eff1207c910080507e94a22c69c10cce))
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
 ## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@0.7.12...@logicflow/core@0.7.13) (2021-12-09)
 
 

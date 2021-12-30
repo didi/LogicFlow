@@ -5,15 +5,8 @@ import Rect from '../BasicShape/Rect';
 import NodeResize from '../index';
 
 interface IProps {
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  nodeModel: BaseNodeModel,
+  model: BaseNodeModel,
   graphModel: GraphModel,
-  style?: CSSStyleDeclaration,
-  hoverStyle?: CSSStyleDeclaration,
-  edgeStyle?: CSSStyleDeclaration,
 }
 
 interface IState {
@@ -31,13 +24,10 @@ class ControlGroup extends Component<IProps> {
   }
   getResizeControl() {
     const {
-      x,
-      y,
-      width,
-      height,
-      nodeModel,
+      model,
       graphModel,
     } = this.props;
+    const { x, y, width, height } = model;
     const box = {
       minX: x - width / 2,
       minY: y - height / 2,
@@ -67,7 +57,7 @@ class ControlGroup extends Component<IProps> {
       <Control
         index={index}
         {...control}
-        nodeModel={nodeModel}
+        model={model}
         graphModel={graphModel}
       />
     ));
@@ -75,10 +65,12 @@ class ControlGroup extends Component<IProps> {
   // 一般节点被选中了会有outline, 先不用这个
   getGroupSolid() {
     const {
-      x,
-      y,
-      width,
-      height,
+      model: {
+        x,
+        y,
+        width,
+        height,
+      },
     } = this.props;
     const { stroke, strokeWidth, strokeDasharray } = NodeResize.style.outline;
     return (

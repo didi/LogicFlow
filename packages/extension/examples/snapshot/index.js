@@ -50,7 +50,7 @@ window.onload = function () {
   }
   class UmlNode extends HtmlNode {
     setHtml(rootEl) {
-      const { properties } = this.getAttributes();
+      const { properties } = this.props.model;
       const el = document.createElement('div');
       el.className = 'uml-wrapper';
       const html = `
@@ -107,12 +107,6 @@ window.onload = function () {
     view: UserNode,
     model: UserModel,
   });
-  lf.setTheme(
-    {
-      nodeText: {autoWrap: true, lineHeight: 1.5},
-      edgeText: {autoWrap: true, lineHeight: 1.5}
-    }
-  );
   lf.render({
     nodes: [
       {

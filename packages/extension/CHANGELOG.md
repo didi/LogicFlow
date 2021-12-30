@@ -3,6 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.11...@logicflow/extension@1.0.0-alpha.12) (2021-12-30)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.0.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.10...@logicflow/extension@1.0.0-alpha.11) (2021-12-29)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.0.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.9...@logicflow/extension@1.0.0-alpha.10) (2021-12-29)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.0.0-alpha.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.8...@logicflow/extension@1.0.0-alpha.9) (2021-12-24)
+
+
+### Features
+
+* remove hideOutline ([be86fb1](https://github.com/didi/LogicFlow/commit/be86fb118bd8bb1bd67a999802544eb2d10df0da))
+
+
+
+
+
+# [1.0.0-alpha.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.7...@logicflow/extension@1.0.0-alpha.8) (2021-12-22)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.0.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.6...@logicflow/extension@1.0.0-alpha.7) (2021-12-22)
+
+
+### Bug Fixes
+
+* node resize set default style ([b9def97](https://github.com/didi/LogicFlow/commit/b9def9763f1fa0464c42adeffebf37fe20543151))
+
+
+
+
+
+# [1.0.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.4...@logicflow/extension@1.0.0-alpha.6) (2021-12-22)
+
+
+### Bug Fixes
+
+* edge setProperties in vue ([ecdaf34](https://github.com/didi/LogicFlow/commit/ecdaf34ad170e410ad979af8413e87bf86e8345b))
+* lf.select -> lf.selectElementById ([f4eea2c](https://github.com/didi/LogicFlow/commit/f4eea2c23ec6ac44acbd404b35d94b74fbb69d00))
+* mini map ([822adf9](https://github.com/didi/LogicFlow/commit/822adf9bddc53f9c82cd26790e8f83b9eb67f093))
+
+
+
+
+
+# [1.0.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.14...@logicflow/extension@1.0.0-alpha.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* use model instead of getAttribute ([0e51cb0](https://github.com/didi/LogicFlow/commit/0e51cb0681c458bf68a69b8459ce0a4b91951ea4))
+* version typo ([edc73ed](https://github.com/didi/LogicFlow/commit/edc73ede58859412fa1183fb3237013e4c56e9ad))
+
+
+### Features
+
+* custom edge ([81cd3be](https://github.com/didi/LogicFlow/commit/81cd3be6a9940553d2eec75b77a3472fdf75eb88))
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
+# [1.0.0-alpha.3](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.1...@logicflow/extension@1.0.0-alpha.3) (2021-12-09)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.0.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.13...@logicflow/extension@1.0.0-alpha.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* version typo ([edc73ed](https://github.com/didi/LogicFlow/commit/edc73ede58859412fa1183fb3237013e4c56e9ad))
+
+
+### Features
+
+* use loose class properties ([921a09b](https://github.com/didi/LogicFlow/commit/921a09ba4b30a819eb315316e174a7bccfc9ffc8))
+
+
+
+
+
 ## [0.7.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@0.7.12...@logicflow/extension@0.7.13) (2021-12-09)
 
 

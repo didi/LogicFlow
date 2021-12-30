@@ -5,8 +5,8 @@ const lf = new LogicFlow({
 
 class UserNode extends RectNode {
   getLabelShape() {
-    const attributes = super.getAttributes();
-    const { x, y, width, height, stroke } = attributes;
+    const { x, y, width, height } = this.props.model;
+    const { stroke } = this.props.model.getNodeStyle();
     return h(
       'svg',
       {
@@ -24,26 +24,15 @@ class UserNode extends RectNode {
     );
   }
   getShape() {
-    const attributes = super.getAttributes();
-    const {
-      x,
-      y,
-      width,
-      height,
-      fill,
-      stroke,
-      strokeWidth,
-      radius,
-    } = attributes;
+    const { x, y, width, height } = this.props.model;
+    const style = this.props.model.getNodeStyle();
     return h('g', {}, [
       h('rect', {
+        ...style,
         x: x - width / 2,
         y: y - height / 2,
         rx: radius,
         ry: radius,
-        fill,
-        stroke,
-        strokeWidth,
         width,
         height,
       }),

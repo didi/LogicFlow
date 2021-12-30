@@ -1,14 +1,23 @@
 import {
   observable, action, toJS, isObservable,
 } from 'mobx';
-import { assign, pick } from 'lodash-es';
+import { assign, cloneDeep } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
-import { defaultTheme } from '../../constant/DefaultTheme';
+import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ElementState, ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
-  AdditionData, NodeData, NodeAttribute, NodeConfig, NodeMoveRule, Bounds, Point, AnchorConfig,
+  AdditionData,
+  NodeData,
+  NodeConfig,
+  NodeMoveRule,
+  Bounds,
+  AnchorConfig,
+  PointAnchor,
+  AnchorsOffsetItem,
+  PointTuple,
+  ShapeStyleAttribute,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -16,31 +25,13 @@ import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 
-const defaultConfig = assign(
-  {
-    x: 0,
-    y: 0,
-    zIndex: 1,
-    text: {
-      value: '',
-      x: 0,
-      y: 0,
-      draggable: false,
-      editable: true,
-    },
-    hideOutline: false,
-  },
-  defaultTheme.rect,
-  defaultTheme.circle,
-);
-
 export type ConnectRule = {
   message: string;
   validate: (
-    source: BaseNodeModel,
-    target: BaseNodeModel,
-    sourceAnchor: AnchorConfig,
-    targetAnchor: AnchorConfig,
+    source?: BaseNodeModel,
+    target?: BaseNodeModel,
+    sourceAnchor?: AnchorConfig,
+    targetAnchor?: AnchorConfig,
   ) => boolean;
 };
 
@@ -49,68 +40,76 @@ export type ConnectRuleResult = {
   msg?: string;
 };
 
+interface IBaseNodeModel extends IBaseModel {
+  /**
+   * model基础类型，固定为node
+   */
+  readonly BaseType: ElementType.NODE,
+}
+
 export { BaseNodeModel };
-export default class BaseNodeModel implements IBaseModel {
+export default class BaseNodeModel implements IBaseNodeModel {
+  // 数据属性
   id = createUuid();
-  readonly BaseType = ElementType.NODE;
-  modelType = ModelType.NODE;
-  additionStateData: AdditionData;
-  [propName: string]: any; // 支持自定义
-  targetRules: ConnectRule[] = [];
-  sourceRules: ConnectRule[] = [];
-  moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
-  hasSetTargetRules = false; // 用来限制rules的重复值
-  hasSetSourceRules = false; // 用来限制rules的重复值
-  @observable properties: Record<string, any> = {};
   @observable type = '';
-  @observable x = defaultConfig.x;
-  @observable y = defaultConfig.y;
-  @observable
-  private _width = defaultConfig.width;
-  graphModel: GraphModel;
+  @observable x = 0;
+  @observable y = 0;
+  @observable text = {
+    value: '',
+    x: 0,
+    y: 0,
+    draggable: false,
+    editable: true,
+  };
+  @observable properties: Record<string, any> = {};
+  // 形状属性
+  @observable private _width = 100;
   public get width() {
     return this._width;
   }
   public set width(value) {
     this._width = value;
   }
-  @observable
-  private _height = defaultConfig.height;
+  @observable private _height = 80;
   public get height() {
     return this._height;
   }
   public set height(value) {
     this._height = value;
   }
-  @observable fill = defaultConfig.fill;
-  @observable fillOpacity = defaultConfig.fillOpacity;
-  @observable strokeWidth = defaultConfig.strokeWidth;
-  @observable stroke = defaultConfig.stroke;
-  @observable strokeOpacity = defaultConfig.strokeOpacity;
-  @observable opacity = defaultConfig.opacity;
-  @observable outlineColor = defaultConfig.outlineColor;
-  @observable hideOutline = defaultConfig.hideOutline;
-  @observable hoverOutlineColor = defaultConfig.hoverOutlineColor;
-  @observable outlineStrokeDashArray = defaultConfig.outlineStrokeDashArray;
-  @observable hoverOutlineStrokeDashArray = defaultConfig.hoverOutlineStrokeDashArray;
+  @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
+  // 状态属性
   @observable isSelected = false;
   @observable isHovered = false;
   @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable zIndex = defaultConfig.zIndex;
-  @observable anchorsOffset = []; // 根据与(x, y)的偏移量计算anchors的坐标
-  @observable state = 1;
-  @observable text = defaultConfig.text;
   @observable draggable = true;
-
-  constructor(data: NodeConfig, graphModel: GraphModel, type) {
+  // 其它属性
+  graphModel: GraphModel;
+  @observable zIndex = 1;
+  @observable state = 1;
+  readonly BaseType = ElementType.NODE;
+  modelType = ModelType.NODE;
+  additionStateData: AdditionData;
+  targetRules: ConnectRule[] = [];
+  sourceRules: ConnectRule[] = [];
+  moveRules: NodeMoveRule[] = []; // 节点移动之前的hook
+  hasSetTargetRules = false; // 用来限制rules的重复值
+  hasSetSourceRules = false; // 用来限制rules的重复值
+  [propName: string]: any; // 支持自定义
+  constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel;
-    this.setStyleFromTheme(type, graphModel);
     this.initNodeData(data);
     this.setAttributes();
   }
-
-  initNodeData(data) {
+  /**
+   * @overridable 可以重写
+   * 初始化节点数据
+   * initNodeData和setAttributes的区别在于
+   * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
+   * setAttributes除了初始化调用外，还会在properties发生变化了调用。
+   */
+  public initNodeData(data) {
     if (!data.properties) {
       data.properties = {};
     }
@@ -131,12 +130,30 @@ export default class BaseNodeModel implements IBaseModel {
       this.zIndex = data.zIndex || getZIndex();
     }
   }
-
-  createId() {
+  /**
+   * 设置model属性，每次properties发生变化会触发
+   * 例如设置节点的宽度
+   * @example
+   *
+   * setAttributes () {
+   *   this.width = 300
+   *   this.height = 200
+   * }
+   *
+   * @overridable 支持重写
+   */
+  public setAttributes() {}
+  /**
+   * @overridable 支持重写，自定义此类型节点默认生成方式
+   * @returns string
+   */
+  public createId(): string {
     return null;
   }
-  // 格式化text参数，未修改observable不作为action
-  formatText(data): void {
+  /**
+   * 初始化文本属性
+   */
+  private formatText(data): void {
     if (!data.text) {
       data.text = {
         value: '',
@@ -159,10 +176,9 @@ export default class BaseNodeModel implements IBaseModel {
     }
   }
 
-  setAttributes() {}
-
   /**
-   * 保存时获取的数据
+   * 获取被保存时返回的数据
+   * @overridable 支持重写
    */
   getData(): NodeData {
     const { x, y, value } = this.text;
@@ -189,13 +205,62 @@ export default class BaseNodeModel implements IBaseModel {
     }
     return data;
   }
-
+  /**
+   * 获取当前节点的properties
+   */
   getProperties() {
     return toJS(this.properties);
   }
-
   /**
-   * 在连线的时候，是否允许这个节点为source节点，连线到target节点。
+   * @overridable 支持重写
+   * 获取当前节点样式
+   * @returns 自定义节点样式
+   */
+  getNodeStyle(): ShapeStyleAttribute {
+    return {
+      ...this.graphModel.theme.baseNode,
+    };
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点文本样式
+   */
+  getTextStyle() {
+    // 透传 nodeText
+    const { nodeText } = this.graphModel.theme;
+    return cloneDeep(nodeText);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点锚点样式
+   * @returns 自定义样式
+   */
+  getAnchorStyle(): Record<string, any> {
+    const { anchor } = this.graphModel.theme;
+    // 防止被重写覆盖主题。
+    return cloneDeep(anchor);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点锚点拖出连线样式
+   * @returns 自定义锚点拖出样式
+   */
+  getAnchorLineStyle() {
+    const { anchorLine } = this.graphModel.theme;
+    return cloneDeep(anchorLine);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
+   * @returns 自定义outline样式
+   */
+  getOutlineStyle(): OutlineTheme {
+    const { outline } = this.graphModel.theme;
+    return cloneDeep(outline);
+  }
+  /**
+   * @over
+   * 在边的时候，是否允许这个节点为source节点，边到target节点。
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
@@ -229,9 +294,8 @@ export default class BaseNodeModel implements IBaseModel {
     return this.sourceRules;
   }
   /**
-   * 在连线的时候，是否允许这个节点未target节点
+   * 在连线的时候，是否允许这个节点为target节点
    */
-
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
     soureAnchor: AnchorConfig,
@@ -257,6 +321,7 @@ export default class BaseNodeModel implements IBaseModel {
     };
   }
   /**
+   * 内部方法
    * 是否允许移动节点到新的位置
    */
   isAllowMoveNode(deltaX, deltaY) {
@@ -268,35 +333,55 @@ export default class BaseNodeModel implements IBaseModel {
     }
     return true;
   }
-
+  /**
+   * 获取作为连线终点时的所有规则。
+   */
   getConnectedTargetRules(): ConnectRule[] {
     return this.targetRules;
   }
 
-  getAnchorsByOffset(): Point[] {
+  /**
+   * @overridable 子类重写此方法设置锚点
+   * @returns Point[] 锚点坐标构成的数组
+   */
+  public getAnchorsByOffset(): PointAnchor[] {
     const {
-      anchorsOffset, x, y, id,
+      anchorsOffset,
+      id,
+      x,
+      y,
     } = this;
-    return anchorsOffset.map((el, idx) => {
-      if (el.length) {
+    if (anchorsOffset && anchorsOffset.length > 0) {
+      return anchorsOffset.map((el, idx) => {
+        if (el.length) {
+          el = el as PointTuple; // 历史数据格式
+          return {
+            id: `${id}_${idx}`,
+            x: x + el[0],
+            y: y + el[1],
+          };
+        }
+        el = el as PointAnchor;
         return {
-          id: `${id}_${idx}`,
-          x: x + el[0],
-          y: y + el[1],
+          ...el,
+          x: x + el.x,
+          y: y + el.y,
+          id: el.id || `${id}_${idx}`,
         };
-      }
-      return {
-        ...el,
-        x: x + el.x,
-        y: y + el.y,
-        id: el.id || `${id}_${idx}`,
-      };
-    });
+      });
+    }
+    return this.getDetaultAnchor();
   }
   /**
-   * 获取节点区域
+   * 获取节点默认情况下的锚点
    */
-  getBounds(): Bounds {
+  public getDetaultAnchor(): PointAnchor[] {
+    return [];
+  }
+  /**
+   * 获取节点BBox
+   */
+  public getBounds(): Bounds {
     return {
       x1: this.x - this.width / 2,
       y1: this.y - this.height / 2,
@@ -305,14 +390,8 @@ export default class BaseNodeModel implements IBaseModel {
     };
   }
 
-  get anchors() {
-    const {
-      anchorsOffset,
-    } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
-    return [];
+  get anchors(): PointAnchor[] {
+    return this.getAnchorsByOffset();
   }
 
   @action
@@ -382,41 +461,9 @@ export default class BaseNodeModel implements IBaseModel {
   }
 
   @action
-  setElementState(state: ElementState, additionStateData?: AdditionData): void {
+  setElementState(state: number, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
-  }
-
-  @action
-  updateStroke(color): void {
-    this.stroke = color;
-  }
-
-  /* 更新数据 */
-  @action
-  updateData(nodeAttribute: NodeAttribute): void {
-    // formatData兼容vue数据
-    const nodeData = formatData(pick(nodeAttribute, 'type', 'x', 'y', 'text', 'properties'));
-    // 兼容text, object/string类型
-    const {
-      x,
-      y,
-      draggable,
-      editable,
-    } = this.text;
-    if (nodeData.text && typeof nodeData.text === 'string') {
-      nodeData.text = {
-        x,
-        y,
-        value: nodeData.text,
-        draggable,
-        editable,
-      };
-    } else if (typeof nodeData.text === 'object') {
-      const text = { ...this.text, ...nodeData.text };
-      nodeData.text = pick(text, 'x', 'y', 'value', 'draggable', 'editable');
-    }
-    assign(this, nodeData);
   }
 
   @action
@@ -430,7 +477,6 @@ export default class BaseNodeModel implements IBaseModel {
 
   @action
   setProperties(properties): void {
-    // fix: vue setProperties not observable
     this.properties = {
       ...this.properties,
       ...formatData(properties),
@@ -439,15 +485,7 @@ export default class BaseNodeModel implements IBaseModel {
   }
 
   @action
-  setStyleFromTheme(type, graphModel): void {
-    const { theme } = graphModel;
-    if (theme[type]) {
-      assign(this, theme[type]);
-    }
-  }
-
-  @action
-  setZIndex(zindex: number = defaultConfig.zIndex): void {
+  setZIndex(zindex = 1): void {
     this.zIndex = zindex;
   }
 

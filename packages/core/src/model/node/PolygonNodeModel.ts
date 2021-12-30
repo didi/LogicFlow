@@ -1,8 +1,8 @@
 import { computed, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
-import GraphModel from '../GraphModel';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
@@ -12,11 +12,25 @@ class PolygonNodeModel extends BaseNodeModel {
     [50, 100],
     [0, 50],
   ];
-
-  constructor(data, graphModel: GraphModel) {
-    super(data, graphModel, 'polygon');
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    const {
+      graphModel: {
+        theme: {
+          polygon,
+        },
+      },
+    } = this;
+    return {
+      ...style,
+      ...cloneDeep(polygon),
+    };
   }
-
+  /**
+   * 由于大多数情况下，我们初始化拿到的多边形坐标都是基于原点的（例如绘图工具到处的svg）。
+   * 在logicflow中对多边形进行移动，我们不需要去更新points，
+   * 而是去更新多边形中心点即可。
+   */
   @computed get pointsPosition(): Point[] {
     const {
       x, y, width, height,

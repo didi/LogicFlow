@@ -1,19 +1,26 @@
 import { action, observable } from 'mobx';
+import { cloneDeep } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
 import { getBezierControlPoints, IBezierControls } from '../../util/edge';
-import { defaultTheme } from '../../constant/DefaultTheme';
 
 export { BezierEdgeModel };
 export default class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE;
-  offset = defaultTheme.bezier.offset;
   @observable path = '';
-  constructor(data, graphModel) {
-    super(data, graphModel, 'bezier');
+  initEdgeData(data): void {
+    this.offset = 100;
+    super.initEdgeData(data);
   }
-
+  getEdgeStyle() {
+    const { bezier } = this.graphModel.theme;
+    const style = super.getEdgeStyle();
+    return {
+      ...style,
+      ...cloneDeep(bezier),
+    };
+  }
   getTextPosition(): Point {
     if (this.pointsList && this.pointsList.length > 0) {
       let pointsXSum = 0;
@@ -127,12 +134,12 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.path = this.getPath(this.pointsList);
     this.setText(Object.assign({}, this.text, this.textPosition));
   }
-  // 获取连线调整的起点
+  // 获取边调整的起点
   @action
   getAdjustStart() {
     return this.pointsList[0] || this.startPoint;
   }
-  // 获取连线调整的终点
+  // 获取边调整的终点
   @action
   getAdjustEnd() {
     const { pointsList } = this;

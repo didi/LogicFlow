@@ -20,7 +20,6 @@ interface IProps {
   hoverStyle?: Record<string, any>;
   edgeStyle?: Record<string, any>;
   anchorIndex: number;
-  eventCenter: EventEmitter;
   graphModel: GraphModel;
   nodeModel: BaseNodeModel;
   nodeDraging: boolean;
@@ -79,8 +78,8 @@ class Anchor extends Component<IProps, IState> {
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, nodeModel } = this.props;
-    const { transformMatrix, nodes } = graphModel;
-    const [x, y] = transformMatrix.moveCanvasPointByHtml(
+    const { transformModel, nodes } = graphModel;
+    const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
       deltaX,
       deltaY,
@@ -142,17 +141,17 @@ class Anchor extends Component<IProps, IState> {
       endY: 0,
       draging: false,
     });
-    // 清除掉缓存结果 fix:#320 因为创建连线之后，会影响校验结果变化，所以需要重新校验
+    // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
   };
 
   checkEnd = () => {
     const {
-      graphModel, nodeModel, x, y, eventCenter, id,
+      graphModel, nodeModel, x, y, id,
     } = this.props;
     // nodeModel.setSelected(false);
-    /* 创建连线 */
+    /* 创建边 */
     const { nodes, edgeType } = graphModel;
     const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, nodes);
@@ -160,7 +159,7 @@ class Anchor extends Component<IProps, IState> {
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
     }
-    // 没有draging就结束连线
+    // 没有draging就结束边
     if (!draging) return;
     if (info && info.node) {
       const targetNode = info.node;
@@ -178,7 +177,7 @@ class Anchor extends Component<IProps, IState> {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
         // 不允许锚点自己连自己
         if (!(x === info.anchor.x && y === info.anchor.y)) {
-          graphModel.createEdge({
+          graphModel.addEdge({
             type: edgeType,
             sourceNodeId: nodeModel.id,
             sourceAnchorId: id,
@@ -190,7 +189,7 @@ class Anchor extends Component<IProps, IState> {
         }
       } else {
         const nodeData = targetNode.getData();
-        eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
+        graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
           data: nodeData,
           msg: targetMsg || sourceMsg,
         });
@@ -215,21 +214,25 @@ class Anchor extends Component<IProps, IState> {
       endY,
     } = this.state;
     const {
-      x, y, style, edgeStyle, hoverStyle,
+      x, y, style, edgeStyle,
     } = this.props;
+    const hoverStyle = {
+      ...style,
+      ...style.hover,
+    };
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
       <g className="lf-anchor">
         <Circle
           className="lf-node-anchor-hover"
-          {...{ x, y }}
           {...hoverStyle}
+          {...{ x, y }}
           onMouseDown={this.dragHandler}
         />
         <Circle
           className="lf-node-anchor"
-          {...{ x, y }}
           {...style}
+          {...{ x, y }}
           onMouseDown={this.dragHandler}
         />
         {this.isShowLine() && (
@@ -238,8 +241,8 @@ class Anchor extends Component<IProps, IState> {
             y1={startY}
             x2={endX}
             y2={endY}
-            pointer-events="none"
             {...edgeStyle}
+            pointer-events="none"
           />
         )}
       </g>

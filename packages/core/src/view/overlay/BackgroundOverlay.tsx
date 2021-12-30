@@ -1,12 +1,24 @@
 import { h, Component } from 'preact';
 
+/**
+ * 背景配置, 支持css属性配置
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/background
+ * @example
+ * {
+ *  backgroundImage: "url('./img/grid.svg')",
+    backgroundRepeat: 'repeat',
+ * }
+ */
 export type BackgroundConfig = {
-  image?: string;
-  color?: string;
-  repeat?: string;
-  position?: string;
-  size?: string;
-  opacity?: number;
+  /**
+   * 背景图片地址
+   */
+  backgroundImage?: string;
+  /**
+   * 是否重复
+   */
+  backgroundRepeat?: string;
+  [key: string]: any;
 };
 
 type IProps = {
@@ -14,55 +26,12 @@ type IProps = {
 };
 
 export default class BackgroundOverlay extends Component<IProps> {
-  getAttributes() {
+  render() {
     const { background } = this.props;
-    const {
-      image = '',
-      color = '',
-      repeat = 'no-repeat',
-      position = 'center',
-      size = 'auto auto',
-      opacity = 1,
-    } = background;
-    if (color) {
-      return {
-        color,
-        opacity,
-        image: 'none',
-      };
-    }
-    if (image) {
-      return {
-        image: `url(${image})`,
-        repeat,
-        position,
-        size,
-        opacity,
-      };
-    }
-    return {};
-  }
-  getShape() {
-    const {
-      image, color, repeat, size, position, opacity,
-    } = this.getAttributes();
-    const backgroundStyle = {
-      backgroundImage: image,
-      backgroundColor: color,
-      backgroundRepeat: repeat,
-      backgroundPosition: position,
-      backgroundSize: size,
-      opacity,
-    };
     return (
       <div className="lf-background">
-        <div style={backgroundStyle} className="lf-background-area" />
+        <div style={background} className="lf-background-area" />
       </div>
-    );
-  }
-  render() {
-    return (
-      this.getShape()
     );
   }
 }

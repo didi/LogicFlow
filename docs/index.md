@@ -6,75 +6,25 @@ tagline:  专注流程可视化的前端解决方案
 actionText: 开始使用 →
 actionLink: /guide/start
 features:
+- title: 🛠 高拓展性
+  details: 兼容各种产品自定义的流程编辑需求，绝大部分模块以插件的形式实现，支持各模块自由插拔。
+- title: 🚀 重执行
+  details: 流程图能完备的表达业务逻辑，不受流程引擎限制。
 - title: 🎯 专业
   details: 专注于业务流程图的可视化解决方案
-- title: 🚀 开箱即用
-  details: 提供配套能力（undo/对齐线/快捷键），提升用户效率
-- title: 🛠 高拓展性
-  details: 提供自定义能力和数据转换（bpmn），助力定制化的业务场景
+
 footer: Apache-2.0 License | Copyright © 2020-Present DiDi
 ---
 
-## 💎 简单上手
 
-安装一下
+### BPMN风格示例
 
-```sh
-# npm
-$ npm install @logicflow/core --save
+<img src="https://dpubstatic.udache.com/static/dpubimg/CS6S6q9Yxf/lfexample2.gif" />
 
-# yarn
-$ yarn add @logicflow/core
-```
+### 审批流风格示例
 
-调用
+<img src="https://dpubstatic.udache.com/static/dpubimg/uBeSlMEytL/lfexample3.gif" />
 
-```js
-// 创建容器
-<div id="container"></div>
+### 自定义产品应用场景示例
 
-// 准备数据
-const data = {
-  // 节点
-  nodes: [
-    {
-      id: 21,
-      type: 'rect',
-      x: 100,
-      y: 200,
-      text: {
-        value: '矩形节点',
-        x: 100,
-        y: 200,
-      },
-    },
-    {
-      id: 50,
-      type: 'circle',
-      x: 300,
-      y: 400,
-      text: {
-        value: '圆形节点',
-        x: 300,
-        y: 400,
-      },
-    },
-  ],
-  // 边
-  edges:[
-    {
-      type: 'polyline',
-      sourceNodeId: 50,
-      targetNodeId: 21,
-    }
-  ]
-}
-// 渲染画布
-const lf = new LogicFlow({
-  container: document.querySelector('#container'),
-  width: 700,
-  height: 600,
-});
-
-lf.render(data);
-```
+<img src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>

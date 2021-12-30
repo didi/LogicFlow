@@ -370,7 +370,7 @@ function getEdgeConfig(edgeValue, processValue) {
   const textVal = processValue['-name'];
   if (textVal) {
     const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds'];
-    // 如果连线文本换行，则其偏移量应该是最长一行的位置
+    // 如果边文本换行，则其偏移量应该是最长一行的位置
     let textLength = 0;
     textVal.split('\n').forEach(textSpan => {
       if (textLength < textSpan.length) {

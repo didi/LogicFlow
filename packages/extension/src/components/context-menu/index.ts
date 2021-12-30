@@ -89,7 +89,7 @@ class ContextMenu {
       x = data.x + Model.width / 2;
       y = data.y - Model.height / 2;
     }
-    return this.lf.graphModel.transformMatrix.CanvasPointToHtmlPoint([x, y]);
+    return this.lf.graphModel.transformModel.CanvasPointToHtmlPoint([x, y]);
   }
   private createContextMenu() {
     const { isSilentMode } = this.lf.options;
@@ -136,7 +136,7 @@ class ContextMenu {
     if (y === undefined) {
       y = node.y;
     }
-    const nodeModel = this.lf.getNodeModel(node.sourceId);
+    const nodeModel = this.lf.getNodeModelById(node.sourceId);
     const leftTopX = node.x - nodeModel.width + NEXT_X_DISTANCE;
     const leftTopY = y - node.y / 2 - 20;
     const rightBottomX = node.x + nodeModel.width + NEXT_X_DISTANCE;
@@ -168,7 +168,7 @@ class ContextMenu {
         y: newNode.y,
       };
     }
-    this.lf.createEdge({
+    this.lf.addEdge({
       sourceNodeId: node.sourceId,
       targetNodeId: newNode.id,
       startPoint,

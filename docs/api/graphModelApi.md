@@ -1,48 +1,58 @@
 # graphModel
 
-LogicFlow中整个画布对应的model。LogicFlow实例上的大多方法都是在graphModel上进行的简单封装。
+graphModel是LogicFlow中整个画布对应的model。
 
-## nodes
+LogicFlow实例上的大多方法都是在graphModel上进行的简单封装。
 
-`属性`
+可以通过一下几种方法获取到graphModel
 
-画布所有的节点对象
+- 直接从lf属性中获取。`lf.graphModel`
+- 自定义`model`的时候，从构造函数中获取，也可以在方法中从`this`中获取。
+```js
+class CustomModel extends RectNodeModel {
+  getNodeStyle() {
+    const graphModel = this.graphModel
+  }
+}
+```
+- 自定义`view`的时候，从`props`中获取。
+```js
+class CustomNode extends RectNode {
+  getShape() {
+    const { model, graphModel } = this.props;
+    // ...
+  }
+}
+```
 
-## edges
 
-`属性`
+::: warning 注意
+graphModel上所有的属性都是只读，要想修改，请使用提供的对应方法进行修改。
+:::
 
-画布所有的连接对象
-
-## transformMatrix
-
-`属性`
-
-当前画布平移、缩放矩阵model。
-
-详细API[见](/api/transformModelApi.html)
-
-## nodesMap 
-
-`属性`, `只读`
-
-画布所有节点的构成的map
-
-## edgesMap 
-
-`属性`, `只读`
-
-画布所有连线构成的map
-
-## editConfig
+## width
 
 `属性`
 
-页面编辑基本配置对象, 详情见[editConfigApi](/api/editConfigModel.html)
+LogicFlow画布宽度
+
+## height
+
+`属性`
+
+LogicFlow画布高度
+
+## theme
+
+`属性`
+
+主题配置
+
+[详细API](/api/themeApi.html)
 
 ## eventCenter
 
-`属性`, `只读`
+`属性`
 
 logicflow内部的事件中心，可以通过这个对象向外部抛出事件。
 
@@ -65,23 +75,109 @@ class UserTaskModel extends RectNodeModel {
 lf.on('user:detail', (res) => {})
 ```
 
+## topElement
+
+`属性`
+
+位于当前画布顶部的元素。
+此元素只在堆叠模式为默认模式下存在。
+用于在默认模式下将之前的顶部元素恢复初始高度。
+
+## nodeMoveRules
+
+`属性`
+节点移动规则判断, 在节点移动的时候，会出发此数组中的所有规则判断
+
+## edgeType
+
+`属性`
+
+在图上操作创建边时，默认使用的边类型.
+
+## nodes
+
+`属性`
+
+画布所有的节点对象
+
+## edges
+
+`属性`
+
+画布所有的连接对象
+
+
+## overlapMode
+
+`属性`
+
+元素重合时堆叠模式
+
+- 值为`0`: 默认模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
+- 值为`1`: 递增模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会保持层级。
+
+## background
+
+`属性`
+
+画布背景配置
+
+
+## transformModel
+
+`属性`
+
+当前画布平移、缩放矩阵model。
+
+[详细API](/api/transformModelApi.html)
+
+## editConfigModel
+
+`属性`
+
+页面编辑基本配置对象, 详情见[editConfigApi](/api/editConfigModelApi.html)
+
+## gridSize
+
+`属性`
+
+网格大小
+
 ## partial
 
 `属性`
 
 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能。
+## nodesMap 
+
+`属性`
+
+画布所有节点的构成的map
+
+## edgesMap 
+
+`属性`
+
+画布所有边构成的map
+
 
 ## sortElements 
 
-`属性`, `只读`
+`属性`
 
 按照zIndex排序后的元素、zIndex控制元素叠加的时候谁在上面。
 
 ## textEditElement
 
-`属性`, `只读`
+`属性`
 
 当前被编辑的元素
+
+## selectElements
+
+`属性`
+
+当前画布所有被选中的元素
 
 ## getAreaElement
 
@@ -94,6 +190,10 @@ lf.on('user:detail', (res) => {})
 |-|-|-|-|
 |leftTopPoint|PointTuple|无| 区域左上方的点 |
 |rightBottomPoint|PointTuple|无| 区域右下角的点 |
+
+```js
+graphModel.getAreaElement([100, 100], [800, 800])
+```
 
 ## getModel
 
@@ -109,7 +209,13 @@ lf.on('user:detail', (res) => {})
 返回值:
 
 [NodeModel](/api/baseNodeModelApi.html) 或 [EdgeModel](/api/baseEdgeModelApi.html)
-## getNodeModel
+
+
+```js
+graphModel.getModel('rect')
+```
+
+## getNodeModelById
 
 `方法`
 
@@ -123,6 +229,11 @@ lf.on('user:detail', (res) => {})
 返回值
 
 [NodeModel](/api/baseNodeModelApi.html)
+
+```js
+graphModel.getNodeModelById('node_1')
+```
+
 ## getPointByClient
 
 `方法`
@@ -140,15 +251,19 @@ lf.on('user:detail', (res) => {})
 |名称|类型|默认值|说明|
 |-|-|-|-|
 |domOverlayPosition|Position|无| HTML层坐标，一般控制组件的位置时使用此坐标 |
-|canvasOverlayPosition|Position|无| Canvas层坐标，一般节点、连线的坐标是这一层的坐标 |
+|canvasOverlayPosition|Position|无| Canvas层坐标，一般节点、边的坐标是这一层的坐标 |
 
 为什么要这个方法，为什么鼠标点击的同一个位置会产生两个不同的坐标？
 
-因为画布存在缩放和平移。当移动了画布，在视觉上看起来，画布上的元素位置变了，但是在数据层面，画布上的节点和连线位置是没有变化的。反过来举个例子：在一个宽高为1000px * 1000px的画布中间有一个节点，这个节点的位置很可能是`{x: -999,y: -999}`, 因为平移过来的。但是当双击这个节点，我们需要在节点位置显示一个文本输入框的时候，因为输入框是在`domOverlay`层，这一层不像`CanvasOverlay`一样有缩放和平移，其宽高和画布宽高一致。所以这个文本输入框坐标应该是`{x: 500, y: 500}`。
+因为画布存在缩放和平移。当移动了画布，在视觉上看起来，画布上的元素位置变了，但是在数据层面，画布上的节点和边位置是没有变化的。反过来举个例子：在一个宽高为1000px * 1000px的画布中间有一个节点，这个节点的位置很可能是`{x: -999,y: -999}`, 因为平移过来的。但是当双击这个节点，我们需要在节点位置显示一个文本输入框的时候，因为输入框是在`domOverlay`层，这一层不像`CanvasOverlay`一样有缩放和平移，其宽高和画布宽高一致。所以这个文本输入框坐标应该是`{x: 500, y: 500}`。
 
 我们再来看为什么要这个方法？
 
 假设这个画布距离浏览器顶部距离为100，左侧距离也为100. 那么当用户点击画布中心的时候，js监听点击函数拿到的位置应该是`{x: 600, y: 600}`, 这个时候调用这个方法，就可以得到 `canvasOverlayPosition` 为`{x: -999,y: -999}`，`domOverlayPosition` 为 `{x: 500, y: 500}`。开发者就可以基于这两个坐标进行自己需要的开发。比如在`domOverlayPosition`位置显示一个菜单之类的。
+
+```js
+graphModel.getPointByClient({ x: 200, y: 200 })
+```
 
 ## isElementInArea
 
@@ -162,60 +277,77 @@ lf.on('user:detail', (res) => {})
 |element|NodeModel或EdgeModel|无| 元素的model |
 |lt|PointTuple|无| 左上角点 |
 |rb|PointTuple|无| 右下角点 |
-|wholeEdge|boolean|true| 连线是否要所有的节点都在区域内 |
+|wholeEdge|boolean|true| 边是否要所有的节点都在区域内 |
 
 返回值
 
 boolean
 
+```js
+const node = {
+  type: 'rect',
+  x: 300,
+  y: 300
+}
+graphModel.isElementInArea(node, [200, 200], [400, 400])
+```
 ## graphDataToModel
 
 `方法`
 
-将原始数据渲染为graphModel
+使用新的数据重新设置整个画布的元素
+
+注意：将会清除画布上所有已有的节点和边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
 |graphData|GraphConfigData|无| 图的基本数据 |
 
+```js
+const graphData = {
+  nodes: [
+    {
+      id: "node_id_1",
+      type: "rect",
+      x: 100,
+      y: 100,
+      text: { x: 100, y: 100, value: "节点1" },
+      properties: {}
+    },
+    {
+      id: "node_id_2",
+      type: "circle",
+      x: 200,
+      y: 300,
+      text: { x: 200, y: 300, value: "节点2" },
+      properties: {}
+    }
+  ],
+  edges: [
+    {
+      id: "edge_id",
+      type: "polyline",
+      sourceNodeId: "node_id_1",
+      targetNodeId: "node_id_2",
+      text: { x: 139, y: 200, value: "连线" },
+      startPoint: { x: 100, y: 140 },
+      endPoint: { x: 200, y: 250 },
+      pointsList: [
+        { x: 100, y: 140 },
+        { x: 100, y: 200 },
+        { x: 200, y: 200 },
+        { x: 200, y: 250 }
+      ],
+      properties: {}
+    }
+  ]
+}
 
-```ts
-type GraphConfigData = {
-  nodes: NodeConfig[],
-  edges: EdgeConfig[],
-};
-type NodeConfig = {
-  id?: string;
-  type: string;
-  x: number;
-  y: number;
-  text?: TextConfig | string;
-  properties?: Record<string, unknown>;
-};
+graphModel.graphDataToModel(graphData)
 
-type EdgeConfig = {
-  id?: string;
-  type: string;
-  sourceNodeId: string;
-  targetNodeId: string;
-  startPoint?: {
-    x: number;
-    y: number;
-  },
-  endPoint?: {
-    x: number;
-    y: number;
-  },
-  text?: {
-    x: number;
-    y: number;
-    value: string;
-  },
-  pointsList?: Point[];
-  properties?: Record<string, unknown>;
-};
 ```
+
 ## modelToGraphData
 
 `方法`
@@ -223,41 +355,58 @@ type EdgeConfig = {
 获取graphModel对应的原始数据
 
 返回值： GraphConfigData
-## getEdgeModel
+
+```js
+cosnt graphData = graphModel.modelToGraphData();
+console.log(graphData)
+```
+
+## getEdgeModelById
 
 `方法`
 
-获取连线的Model
+获取边的Model
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|edgeId|string|无| 连线Id |
+|edgeId|string|无| 边Id |
 
 返回值
 
 [EdgeModel](/api/baseEdgeModelApi.html)
 
+```js
+cosnt edgeModel = graphModel.getEdgeModelById('edge_id');
+console.log(edgeModel)
+```
+
 ## getElement
 
 `方法`
 
-获取节点或者连线的Model
+获取节点或者边的Model
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|id|string|无| 连线Id或者节点Id |
+|id|string|无| 边Id或者节点Id |
 
 返回值
 
 [EdgeModel](/api/baseEdgeModelApi.html) 或者 [NodeModel](/api/baseNodeModelApi.html) 
 
+
+```js
+cosnt edgeModel = graphModel.getElement('edge_id');
+console.log(edgeModel)
+```
+
 ## getNodeEdges
 
 `方法`
 
-获取指定节点上所有的连线
+获取指定节点上所有的边
 
 入参:
 |名称|类型|默认值|说明|
@@ -268,17 +417,40 @@ type EdgeConfig = {
 
 [NodeModel](/api/baseNodeModelApi.html) 
 
+```js
+cosnt nodeModel = graphModel.getElement('node_id_1');
+console.log(nodeModel)
+```
+
 ## getSelectElements
 
 `方法`
 
 获取选中的元素数据
 
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+|isIgnoreCheck|boolean|true| 是否包括sourceNode和targetNode没有被选中的边,默认包括。 复制的时候不能包括此类边, 因为复制的时候不允许悬空的边|
+
+```js
+cosnt elements = graphModel.getSelectElements(true);
+console.log(elements)
+```
+
 ## updateAttributes
 
 `方法`
 
-更新指定节点的attributes
+修改对应元素 model 中的属性
+
+::: warning 警告
+注意：此方法慎用，除非您对logicflow内部有足够的了解。
+
+大多数情况下，请使用setProperties、updateText、changeNodeId等方法。
+
+例如直接使用此方法修改节点的id,那么就是会导致连接到此节点的边的sourceNodeId出现找不到的情况。
+:::
 
 
 入参:
@@ -287,28 +459,76 @@ type EdgeConfig = {
 |id|string|无| 节点Id |
 |attributes|object|无| 元素属性 |
 
-## setModel
+```js
+graphModel.updateAttributes('node_id_1', {
+  radius: 4
+});
+```
 
-`方法`
+## changeNodeId
 
-设置指定元素类型对于的Model构造函数
+修改节点的id， 如果不传新的id，会内部自动创建一个。
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|type|string|无| 类型 |
-|type|class|无| 此类型的model构造函数 |
+|oldId|string|无| 节点Id |
+|newId|string|无| 新的Id |
+
+
+```js
+graphModel.changeNodeId('node_id_1', 'node_id_2');
+```
+## changeEdgeId
+
+修改边的id， 如果不传新的id，会内部自动创建一个。
+
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+|oldId|string|无| 节点Id |
+|newId|string|无| 新的Id |
+
+```js
+graphModel.changeEdgeId('edge_id_1', 'edge_id_2');
+```
+
 ## toFront
 
 `方法`
 
-将指定节点或者连线放置在前面
+将指定节点或者边放置在前面
+
+如果堆叠模式为默认模式，则将原置顶元素重新恢复原有层级。
+
+如果堆叠模式为递增模式，则将需指定元素zIndex设置为当前最大zIndex + 1。
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点id或连线id |
+| id | string | 无 | 节点id或边id |
 
+```js
+graphModel.toFront('edge_id_1');
+```
+
+## setElementZIndex
+
+`方法`
+
+设置元素的zIndex.
+
+注意：默认堆叠模式下，不建议使用此方法。
+
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+| id | string | 无 | 节点id或边id |
+| zIndex | number\|'top'\|'bottom' | 无 | 节点id或边id |
+
+```js
+graphModel.setElementZIndex('top');
+```
 ## deleteNode
 
 `方法`
@@ -319,6 +539,10 @@ type EdgeConfig = {
 |名称|类型|默认值|说明|
 |-|-|-|-|
 | id | string | 无 | 节点ID |
+
+```js
+graphModel.deleteNode('node_1');
+```
 ## addNode
 
 `方法`
@@ -330,6 +554,14 @@ type EdgeConfig = {
 |-|-|-|-|
 | nodeConfig | NodeConfig | 无 | 节点配置 |
 
+```js
+graphModel.addNode({
+  type: 'rect',
+  x: 300,
+  y: 300
+});
+```
+
 ## cloneNode
 
 `方法`
@@ -340,6 +572,10 @@ type EdgeConfig = {
 |名称|类型|默认值|说明|
 |-|-|-|-|
 | nodeId | string | 无 | 节点id |
+
+```js
+graphModel.cloneNode('node_1');
+```
 
 ## moveNode
 
@@ -353,48 +589,71 @@ type EdgeConfig = {
 | nodeId | string | 无 | 节点id |
 | deltaX | number | 无 | 移动x轴距离 |
 | deltaY | number | 无 | 移动y轴距离 |
+| isignoreRule | boolean | false | 是否忽略移动规则限制 |
 
-## setTextEditable(id: ElementModeId)
+
+```js
+graphModel.moveNode('node_1', 10, 10, true);
+```
+
+## moveNode2Coordinate
 
 `方法`
 
-设置元素本文变为编辑状态
+移动节点-绝对位置
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点id或者连线id |
+| nodeId | string | 无 | 节点id |
+| x | number | 无 | 移动x轴距离 |
+| y | number | 无 | 移动y轴距离 |
+| isignoreRule | boolean | false | 是否忽略移动规则限制 |
 
 
-## createEdge
+```js
+graphModel.moveNode2Coordinate('node_1', 100, 100, true);
+```
+
+
+## editText
 
 `方法`
 
-添加连线
+显示节点、连线文本编辑框, 进入编辑状态
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| edgeConfig | EdgeConfig | 无 | 连线配置 |
-## moveEdge
+| id | string | 无 | 节点id或者边id |
+
+```js
+graphModel.editText('node_1');
+```
+## addEdge
 
 `方法`
 
-移动连线
+添加边
 
 入参:
-
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| edgeId | string | 无 | 连线id |
-| deltaX | number | 无 | 移动x轴距离 |
-| deltaY | number | 无 | 移动y轴距离 |
+| edgeConfig | EdgeConfig | 无 | 边配置 |
 
-## removeEdge
+```js
+graphModel.addEdge({
+  type: 'polyline',
+  sourceNodeId: 'node_1',
+  targetNodeId: 'node_2',
+});
+```
+
+## deleteEdgeBySourceAndTarget
 
 `方法`
 
-删除连线
+删除边
 
 入参:
 
@@ -403,44 +662,63 @@ type EdgeConfig = {
 | sourceNodeId | string | 无 | 起点id |
 | targetNodeId | string | 无 | 结束节点ID |
 
-## removeEdgeById
+```js
+graphModel.deleteEdgeBySourceAndTarget('node_1','node_2');
+```
+
+## deleteEdgeById
 
 `方法`
 
-基于Id删除连线
+基于边Id删除边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线id |
+| id | string | 无 | 边id |
 
-## removeEdgeBySource
+```js
+graphModel.deleteEdgeById('edge_1');
+```
+
+## deleteEdgeBySource
 
 `方法`
 
-删除指定节点为起点的所有连线
+删除指定节点为起点的所有边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线起点id |
+| id | string | 无 | 边起点id |
 
-## removeEdgeByTarget
+```js
+graphModel.deleteEdgeBySource('node_1');
+```
+
+## deleteEdgeByTarget
 
 `方法`
 
-删除指定节点为目标点的所有连线
+删除指定节点为目标点的所有边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 连线目的点id |
+| id | string | 无 | 边目的点id |
 
-## setElementTextById(id: ElementModeId, value: string)
+```js
+graphModel.deleteEdgeByTarget('node_1');
+```
+## updateText
 
 `方法`
 
-设置指定元素的文本
+设置指定元素的文案
+
+```js
+graphModel.updateText('node_1', 'hello world');
+```
 
 ## selectNodeById
 
@@ -454,84 +732,102 @@ type EdgeConfig = {
 | id | string | 无 | 节点id |
 | multiple | boolean | 无 | 是否多选 |
 
+```js
+graphModel.selectNodeById('node_1', true);
+```
+
 ## selectEdgeById
 
 `方法`
 
-选中连线
+选中边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
 | id | string | 无 | 节点id |
 | multiple | boolean | 无 | 是否多选 |
+
+```js
+graphModel.selectEdgeById('edge_1', true);
+```
 ## selectElementById
 
 `方法`
 
-选中节点和连线
+选中节点和边
 
 入参:
 |名称|类型|默认值|说明|
 |-|-|-|-|
-| id | string | 无 | 节点或连线id |
+| id | string | 无 | 节点或边id |
 | multiple | boolean | 无 | 是否多选 |
 
+```js
+graphModel.selectElementById('edge_1', true);
+```
 ## clearSelectElements
 
 `方法`
 
 取消所有被选中元素的选中状态
 
-## moveElements
 
-`方法` `废弃`
-
-批量移动元素（将要废弃，请使用批量移动节点）
-
-参数
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| elements | graphDataConfig | true | 无 | 图元素配置|
-|deltaX| number | true | 无 | 移动的x轴距离|
-|deltaY| number | true | 无 | 移动的y轴距离|
-
-```ts
-type graphDataConfig = {
-  nodes: NodeConfig[],
-}
+```js
+graphModel.clearSelectElements();
 ```
 
 ## moveNodes
 
 `方法`
 
-批量移动节点
+批量移动节点，节点移动的时候，会动态计算所有节点与未移动节点的边位置
+
+移动的节点之间的边会保持相对位置
 
 参数
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| nodeIds | nodeId[] | true | 无 | 图元素配置|
+| nodeIds | string[] | true | 无 | 所有节点id|
 |deltaX| number | true | 无 | 移动的x轴距离|
 |deltaY| number | true | 无 | 移动的y轴距离|
 
-```ts
-type nodeId = string;
+```js
+graphModel.moveNodes(['node_id', 'node_2'], 10, 10);
 ```
 
-## changeEdgeType
+## addNodeMoveRules
+
+添加节点移动限制规则，在节点移动的时候触发。
+
+如果方法返回false, 则会阻止节点移动。
+
+```js
+graphModel.addNodeMoveRules((nodeModel, x, y) => {
+  if (nodeModel.properties.disabled) {
+    return false
+  }
+  return true
+});
+```
+
+## setDefaultEdgeType
 
 `方法`
 
-修改默认连线的类型
+修改默认边的类型
 
 参数
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| type | string | true | 无 | 连线类型 |
+| type | string | true | 无 | 边类型 |
+
+
+```js
+graphModel.setDefaultEdgeType('bezier');
+```
 
 ## changeNodeType
 
@@ -546,31 +842,53 @@ type nodeId = string;
 | id | string | true | 无 | 节点 |
 | type | string | true | 无 | 节点类型 |
 
+```js
+graphModel.changeNodeType('node_1', 'circle');
+```
+
+## changeEdgeType
+
+`方法`
+
+修改指定节点的类型
+
+参数
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| id | string | true | 无 | 节点 |
+| type | string | true | 无 | 边类型 |
+
+```js
+graphModel.changeEdgeType('edge_1', 'bezier');
+```
+
+## setTheme
+
+设置主题
+
+```js
+graphModel.setTheme({
+  rect: {
+    fill: "red"
+  }
+});
+```
+
+## resize
+
+重新设置画布的宽高
+
+```js
+graphModel.resize(1000, 600);
+```
+
 ## clearData
 
 `方法`
 
 清空画布所有元素
 
-## setElementStateById
-
-`方法`
-
-设置指定元素状态
-
-参数
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | string | true | 无 | 元素Id |
-| state | ElementState | true | 无 | 元素状态 |
-
-```ts
-export enum ElementState {
-  DEFAULT = 1, // 原始状态
-  TEXT_EDIT = 2, // 编辑框显示
-  SHOW_MENU = 3, // 菜单显示
-  ALLOW_CONNECT = 4, // 允许连线连接
-  NOT_ALLOW_CONNECT = 5, // 不允许连线连接
-}
+```js
+graphModel.clearData();
 ```

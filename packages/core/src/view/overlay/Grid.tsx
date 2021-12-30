@@ -41,6 +41,7 @@ export default class Grid extends Component<IProps> {
     return <rect width={length} height={length} rx={length / 2} ry={length / 2} fill={color} opacity={opacity} />;
   }
   // 网格类型为交叉线
+  // todo: 采用背景缩放的方式，实现更好的体验
   renderMesh() {
     const { config: { color, thickness = 1 }, size, visible } = this.props;
     const strokeWidth = Math.min(Math.max(1, thickness), size / 2); // 1 < strokeWidth < size /2
@@ -53,7 +54,7 @@ export default class Grid extends Component<IProps> {
   }
   render() {
     // TODO 生成网格️️️✔、网格支持 options（size）✔
-    const { type, size, graphModel: { transformMatrix } } = this.props;
+    const { type, size, graphModel: { transformModel } } = this.props;
     const {
       SCALE_X,
       SKEW_Y,
@@ -61,12 +62,12 @@ export default class Grid extends Component<IProps> {
       SCALE_Y,
       TRANSLATE_X,
       TRANSLATE_Y,
-    } = transformMatrix;
+    } = transformModel;
     const matrixString = [SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y].join(',');
     const transform = `matrix(${matrixString})`;
-    const transitionStyle = {
-      transition: 'all 0.1s ease',
-    };
+    // const transitionStyle = {
+    //   transition: 'all 0.1s ease',
+    // };
     return (
       <div className="lf-grid">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
@@ -79,7 +80,6 @@ export default class Grid extends Component<IProps> {
               y="0"
               width={size}
               height={size}
-              style={transitionStyle}
             >
               {type === 'dot' && this.renderDot()}
               {type === 'mesh' && this.renderMesh()}

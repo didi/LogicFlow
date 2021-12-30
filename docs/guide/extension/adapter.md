@@ -2,10 +2,10 @@
 
 ## LogicFlow 的数据格式
 
-在 LogicFlow 中，一个流程图是由**节点**和**连线**组成的。
+在 LogicFlow 中，一个流程图是由**节点**和**边**组成的。
 
 - 对于一个节点，我们需要知道这个节点的 **id**、[**类型**](./adapter.html#类型)、**位置**、**文本**、[**properties**](./adapter.html#properties)
-- 对于一个连线，我们则需要知道这个连线的 **id**、[**类型**](./adapter.html#类型)、起始节点id（**sourceNodeId**）、目标节点id（**targetNodeId**）、**文本**、[**properties**](./adapter.html#properties) 以及连线的起点位置（**startPoint**），连线的终点位置（**endPoint**）。
+- 对于一个边，我们则需要知道这个边的 **id**、[**类型**](./adapter.html#类型)、起始节点id（**sourceNodeId**）、目标节点id（**targetNodeId**）、**文本**、[**properties**](./adapter.html#properties) 以及边的起点位置（**startPoint**），边的终点位置（**endPoint**）。
   
   - 折线的额外数据`pointsList`，因为折线是可以被用户手动调整的，所以增加此字段用于记录这个折线的具体路径。
 

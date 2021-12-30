@@ -5,8 +5,6 @@ import * as type from '../../type';
 type IProps = {
   className?: string,
   radius?: number,
-  stroke?: string,
-  strokeDasharray?: string,
 } & type.Point & type.Size;
 
 // TODO: 默认样式引入
@@ -17,36 +15,27 @@ export default function Rect(props: IProps) {
     y,
     width,
     height,
-    radius,
     className,
+    radius,
   } = props;
 
   const leftTopX = x - width / 2;
   const leftTopY = y - height / 2;
-
-  const attrs = {
-    // default
-    width: 10,
-    height: 10,
-    cx: 0,
-    cy: 0,
-    rx: radius || 0,
-    ry: radius || 0,
-    fill: 'transparent',
-    fillOpacity: 1,
-    strokeWidth: '1px',
-    stroke: '#000',
-    strokeOpacity: 1,
-    className: `lf-basic-shape ${className}`,
-    x: 0,
-    y: 0,
-  };
+  const attrs: Record<string, any> = {};
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;
     if (valueType !== 'object') {
       attrs[k] = v;
     }
   });
+
+  if (className) {
+    attrs.className = `lf-basic-shape ${className}`;
+  }
+  if (radius) {
+    attrs.rx = radius;
+    attrs.ry = radius;
+  }
   attrs.x = leftTopX;
   attrs.y = leftTopY;
   return (
@@ -55,8 +44,6 @@ export default function Rect(props: IProps) {
 }
 
 Rect.defaultProps = {
-  radius: 0,
-  stroke: '',
-  strokeDasharray: '',
   className: '',
+  radius: '',
 };

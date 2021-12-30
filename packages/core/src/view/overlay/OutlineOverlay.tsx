@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 import { ElementType, ModelType } from '../../constant/constant';
-import { LineEdgeModel } from '../../model';
+import { BaseNodeModel, LineEdgeModel } from '../../model';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 import GraphModel from '../../model/GraphModel';
@@ -15,12 +15,12 @@ type IProps = {
 @observer
 export default class OutlineOverlay extends Component<IProps> {
   // 节点outline
-  getNodeOutline() {
+  getNodesOutline() {
     const { graphModel } = this.props;
-    const { selectElements, editConfig: { hoverOutline, nodeSelectedOutline } } = graphModel;
+    const { nodes, editConfigModel: { hoverOutline, nodeSelectedOutline } } = graphModel;
     const nodeOutline = [];
-    selectElements.forEach(element => {
-      if (element.BaseType === ElementType.NODE) {
+    nodes.forEach(element => {
+      if (element.isHovered || element.isSelected) {
         const {
           isHovered,
           isSelected,
@@ -28,25 +28,31 @@ export default class OutlineOverlay extends Component<IProps> {
           y,
           width,
           height,
-          hideOutline,
-          outlineColor,
-          hoverOutlineColor,
-          outlineStrokeDashArray,
-          hoverOutlineStrokeDashArray,
         } = element;
-        if (!hideOutline && (nodeSelectedOutline || (hoverOutline && isHovered))) {
-          const color = isSelected ? outlineColor : hoverOutlineColor;
-          const strokeDashArray = isSelected ? outlineStrokeDashArray : hoverOutlineStrokeDashArray;
+        if ((nodeSelectedOutline && isSelected) || (hoverOutline && isHovered)) {
+          const style = (element as BaseNodeModel).getOutlineStyle();
+          let attributes = {};
+          Object.keys(style).forEach((key) => {
+            if (key !== 'hover') {
+              attributes[key] = style[key];
+            }
+          });
+          if (isHovered) {
+            const hoverStyle = style.hover;
+            attributes = {
+              ...attributes,
+              ...hoverStyle,
+            };
+          }
           nodeOutline.push(
             <Rect
               className="lf-outline-node"
               {...{
                 x, y, width: width + 10, height: height + 10,
               }}
-              radius={0}
-              fill="none"
-              stroke={color}
-              strokeDasharray={strokeDashArray}
+              {
+                ...attributes
+              }
             />,
           );
         }
@@ -56,11 +62,13 @@ export default class OutlineOverlay extends Component<IProps> {
   }
   // 边的outline
   getEdgeOutline() {
-    const { graphModel: { edges: edgeList, editConfig: { edgeSelectedOutline } } } = this.props;
+    const {
+      graphModel: { edges: edgeList, editConfigModel: { edgeSelectedOutline, hoverOutline } },
+    } = this.props;
     const edgeOutline = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
-      if (!edge.hideOutline && edge.isSelected && edgeSelectedOutline) {
+      if ((edgeSelectedOutline && edge.isSelected) || (hoverOutline && edge.isHovered)) {
         if (edge.modelType === ModelType.LINE_EDGE) {
           edgeOutline.push(this.getLineOutline(edge));
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {
@@ -79,18 +87,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const y = (startPoint.y + endPoint.y) / 2;
     const width = Math.abs(startPoint.x - endPoint.x) + 10;
     const height = Math.abs(startPoint.y - endPoint.y) + 10;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.line;
+    const style = line.getOutlineStyle();
     return (
       <Rect
         className="lf-outline-edge"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
@@ -102,18 +108,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const {
       x, y, width, height,
     } = bbox;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.polyline;
+    const style = polyline.getOutlineStyle();
     return (
       <Rect
         className="lf-outline"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
@@ -125,18 +129,16 @@ export default class OutlineOverlay extends Component<IProps> {
     const {
       x, y, width, height,
     } = bbox;
-    const { graphModel } = this.props;
-    const { outlineColor, outlineStrokeDashArray } = graphModel.theme.bezier;
+    const style = bezier.getOutlineStyle();
     return (
       <Rect
         className="lf-outline"
         {...{
           x, y, width, height,
         }}
-        radius={0}
-        fill="none"
-        stroke={outlineColor}
-        strokeDasharray={outlineStrokeDashArray}
+        {
+          ...style
+        }
       />
     );
   }
@@ -144,7 +146,7 @@ export default class OutlineOverlay extends Component<IProps> {
   render() {
     return (
       <g className="lf-outline">
-        {this.getNodeOutline()}
+        {this.getNodesOutline()}
         {this.getEdgeOutline()}
       </g>
     );

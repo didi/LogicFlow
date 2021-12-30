@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', () => {
     container: document.querySelector('#app'),
     edgeTextDraggable: true,
     nodeTextDraggable: true,
-    metaKeyMultipleSelected: true,
+    multipleSelectKey: 'meta',
     grid: true,
   });
   lf.render({});

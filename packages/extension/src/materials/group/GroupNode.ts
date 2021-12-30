@@ -9,6 +9,7 @@ class GroupNodeModel extends RectNodeModel {
     this.height = 200;
     this.strokeWidth = 1;
     this.zIndex = 0;
+    this.radius = 0;
   }
   /**
    * 设置是否允许子节点被拖动移除分组
@@ -47,11 +48,6 @@ class GroupNode extends RectNode {
    * 重新toFront，阻止其置顶
    */
   toFront() {}
-  getShapeStyle() {
-    const shape = super.getShapeStyle();
-    shape.radius = 0;
-    return shape;
-  }
 }
 
 export default {

@@ -4,12 +4,10 @@ import { StepDrag } from '../../util/drag';
 import Text from '../basic-shape/Text';
 import { IBaseModel } from '../../model/BaseModel';
 import { ElementState } from '../../constant/constant';
-import { EdgeTextStyle } from '../../type';
 
 type IProps = {
   model: IBaseModel;
   graphModel: GraphModel;
-  style: EdgeTextStyle;
   draggable: boolean;
   editable: boolean;
 };
@@ -33,7 +31,7 @@ export default class BaseText extends Component<IProps, IState> {
     });
   }
   getShape() {
-    const { model, style } = this.props;
+    const { model } = this.props;
     const { text } = model;
     const { value, x, y } = text;
     const attr = {
@@ -42,6 +40,7 @@ export default class BaseText extends Component<IProps, IState> {
       className: 'lf-element-text',
       value,
     };
+    const style = model.getTextStyle();
     return (
       <Text {...attr} {...style} model={model} />
     );
@@ -50,10 +49,10 @@ export default class BaseText extends Component<IProps, IState> {
     const {
       model,
       graphModel: {
-        transformMatrix,
+        transformModel,
       },
     } = this.props;
-    const [curDeltaX, curDeltaY] = transformMatrix.fixDeltaXY(deltaX, deltaY);
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     model.moveText(curDeltaX, curDeltaY);
   };
   dblClickHandler = () => {
@@ -68,7 +67,7 @@ export default class BaseText extends Component<IProps, IState> {
     const {
       draggable,
       graphModel: {
-        editConfig: { nodeTextDraggable },
+        editConfigModel: { nodeTextDraggable },
       },
     } = this.props;
     if (draggable || nodeTextDraggable) {
