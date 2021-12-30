@@ -8,7 +8,6 @@ import { getBezierControlPoints, IBezierControls } from '../../util/edge';
 export { BezierEdgeModel };
 export default class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE;
-  offset;
   @observable path = '';
   initEdgeData(data): void {
     this.offset = 100;

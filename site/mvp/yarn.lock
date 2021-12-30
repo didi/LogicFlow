@@ -952,21 +952,21 @@
     "cssnano-preset-default" "^4.0.0"
     "postcss" "^7.0.0"
 
-"@logicflow/core@^1.0.0-alpha.6":
-  "integrity" "sha512-bbW5sNZvIBXkm5hJMeiJ6ACLjHRHqvU2qpRRCK+SFbuL97NFQArM2mHbg/YeDKXwTPOUo9BiV8E4cUKI19WlbA=="
-  "resolved" "https://registry.npmmirror.com/@logicflow/core/download/@logicflow/core-1.0.0-alpha.6.tgz"
-  "version" "1.0.0-alpha.6"
+"@logicflow/core@^1.0.0-alpha.11", "@logicflow/core@^1.0.0-alpha.9":
+  "integrity" "sha512-izrjpADg0ptJBXTBgZ5bZpUuYUqcPEFQKVRCc4L5RRf1v0q3oPXRdj6ydGIiLNr4/S87PpN57hUefmEEOTvbmQ=="
+  "resolved" "https://registry.npmjs.org/@logicflow/core/-/core-1.0.0-alpha.11.tgz"
+  "version" "1.0.0-alpha.11"
   dependencies:
     "@types/mousetrap" "^1.6.4"
     "mousetrap" "^1.6.5"
     "preact" "^10.4.8"
 
-"@logicflow/extension@^1.0.0-alpha.6":
-  "integrity" "sha512-xsO7pch0XqI4WMTaxjRsIXk1Nr5J0i4qsfmmZyZ9+/LFo/G2bba9ql/oHnsljMvfS+E4DfkCu/RG5rQnK0uqPw=="
-  "resolved" "https://registry.npmmirror.com/@logicflow/extension/download/@logicflow/extension-1.0.0-alpha.6.tgz"
-  "version" "1.0.0-alpha.6"
+"@logicflow/extension@^1.0.0-alpha.9":
+  "integrity" "sha512-MUsljI0/fzGOSmkMHqhldyAwXBi28OF2flQ1njL0Cmvog4eqo45HVEhN81XZ6lo2EIckwxq6AjLhbq/OPhYJPw=="
+  "resolved" "https://registry.npmjs.org/@logicflow/extension/-/extension-1.0.0-alpha.11.tgz"
+  "version" "1.0.0-alpha.11"
   dependencies:
-    "@logicflow/core" "^1.0.0-alpha.6"
+    "@logicflow/core" "^1.0.0-alpha.11"
     "ids" "^1.0.0"
     "preact" "^10.4.8"
 
@@ -2380,8 +2380,8 @@
     "supports-color" "^7.1.0"
 
 "chalk@^4.1.0":
-  "integrity" "sha1-qsTit3NKdAhnrrFr8CqtVWoeegE="
-  "resolved" "https://registry.npmmirror.com/chalk/download/chalk-4.1.2.tgz"
+  "integrity" "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="
+  "resolved" "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
   "version" "4.1.2"
   dependencies:
     "ansi-styles" "^4.1.0"
@@ -5339,8 +5339,8 @@
     "json5" "^1.0.1"
 
 "loader-utils@^2.0.0":
-  "integrity" "sha1-1uO0+4GHByGuTghoqxHdY4NowSk="
-  "resolved" "https://registry.npmmirror.com/loader-utils/download/loader-utils-2.0.2.tgz?cache=0&sync_timestamp=1636687952028&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Floader-utils%2Fdownload%2Floader-utils-2.0.2.tgz"
+  "integrity" "sha512-TM57VeHptv569d/GKh6TAYdzKblwDNiumOdkFnejjD0XwTH87K90w3O7AiJRqdQoXygvi1VQTJTLGhJl7WqA7A=="
+  "resolved" "https://registry.npmjs.org/loader-utils/-/loader-utils-2.0.2.tgz"
   "version" "2.0.2"
   dependencies:
     "big.js" "^5.2.2"
@@ -8426,8 +8426,8 @@
   "version" "2.3.4"
 
 "vue-loader-v16@npm:vue-loader@^16.1.0":
-  "integrity" "sha1-1D5nXe9bqTRdbH8FkUwT2GGZcIc="
-  "resolved" "https://registry.npmmirror.com/vue-loader/download/vue-loader-16.8.3.tgz?cache=0&sync_timestamp=1636034570924&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fvue-loader%2Fdownload%2Fvue-loader-16.8.3.tgz"
+  "integrity" "sha512-7vKN45IxsKxe5GcVCbc2qFU5aWzyiLrYJyUuMz4BQLKctCj/fmCa0w6fGiiQ2cLFetNcek1ppGJQDCup0c1hpA=="
+  "resolved" "https://registry.npmjs.org/vue-loader/-/vue-loader-16.8.3.tgz"
   "version" "16.8.3"
   dependencies:
     "chalk" "^4.1.0"
@@ -8603,7 +8603,7 @@
     "source-list-map" "^2.0.0"
     "source-map" "~0.6.1"
 
-"webpack@^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.1.0 || ^5.0.0-0", "webpack@^4.4.0", "webpack@>=2", "webpack@>=2.0.0 <5.0.0", "webpack@>=4.0.0":
+"webpack@^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.4.0", "webpack@>=2", "webpack@>=2.0.0 <5.0.0", "webpack@>=4.0.0":
   "integrity" "sha1-v5tEBOogoHNgXgoBHRiNd8tq1UI="
   "resolved" "https://registry.npmmirror.com/webpack/download/webpack-4.46.0.tgz"
   "version" "4.46.0"

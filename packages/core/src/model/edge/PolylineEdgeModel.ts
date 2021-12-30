@@ -24,12 +24,10 @@ import {
 } from '../../util/edge';
 import RectNodeModel from '../node/RectNodeModel';
 import BaseEdgeModel from './BaseEdgeModel';
-import GraphModel from '../GraphModel';
 
 export { PolylineEdgeModel };
 export default class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE;
-  offset;
   draginngPointList;
   @observable dbClickPosition: Point;
   initEdgeData(data): void {
