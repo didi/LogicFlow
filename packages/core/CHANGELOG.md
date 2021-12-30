@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.11...@logicflow/core@1.0.0-alpha.12) (2021-12-30)
+
+
+### Bug Fixes
+
+* reset offset ([3ab0425](https://github.com/didi/LogicFlow/commit/3ab0425fdba12e934c0380b3f4229314071e630f))
+
+
+
+
+
 # [1.0.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.10...@logicflow/core@1.0.0-alpha.11) (2021-12-29)
 
 
