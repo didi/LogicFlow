@@ -8,7 +8,6 @@ import BackgroundOverlay from './overlay/BackgroundOverlay';
 import Grid from './overlay/Grid';
 import Tool from '../tool';
 import * as Options from '../options';
-import EventEmitter from '../event/eventEmitter';
 import DnD from './behavior/DnD';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';

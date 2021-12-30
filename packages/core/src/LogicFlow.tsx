@@ -35,7 +35,7 @@ import {
 import { initDefaultShortcut } from './keyboard/shortcut';
 import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
-import { EditConfigInterface } from './model/editConfigModel';
+import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
 
 if (process.env.NODE_ENV === 'development') {
