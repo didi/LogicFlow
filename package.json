@@ -1,7 +1,7 @@
 {
   "name": "logicflow",
   "private": true,
-  "description": "一款流程图编辑框架",
+  "description": "一款高拓展性、重执行、专业的流程图编辑框架",
   "license": "Apache-2.0",
   "author": "LogicFlow-Team",
   "workspaces": [

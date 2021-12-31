@@ -2,7 +2,7 @@
 home: true
 heroImage: /new-logo.png
 heroText:  
-tagline:  专注于业务自定义的流程图编辑框架
+tagline:  
 actionText: 开始使用 →
 actionLink: /guide/start
 features:
