@@ -105,7 +105,8 @@ module.exports = {
           },
           {
             text: '作图工具',
-            link: '/mvp/index.html'            
+            link: '/mvp/index.html' ,
+            target: '_blank'           
           }
         ]
       },
