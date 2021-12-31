@@ -2,7 +2,7 @@
 home: true
 heroImage: /new-logo.png
 heroText:  
-tagline:  专注流程可视化的前端解决方案
+tagline:  专注于业务自定义的流程图编辑框架
 actionText: 开始使用 →
 actionLink: /guide/start
 features:
@@ -11,7 +11,7 @@ features:
 - title: 🚀 重执行
   details: 流程图能完备的表达业务逻辑，不受流程引擎限制。
 - title: 🎯 专业
-  details: 专注于业务流程图的可视化解决方案
+  details: 专注于业务自定义的流程图编辑框架
 
 footer: Apache-2.0 License | Copyright © 2020-Present DiDi
 ---

@@ -5,7 +5,7 @@ LogicFlow 的内置了一些基础节点，开发者在实际应用场景中，�
 ## 认识LogicFlow的基础节点
 
 
-LogicFlow是基于svg做的流程图可视化编辑工具，所以我们的节点和连线都是svg基本形状，对LogicFlow节点样式的修改，也就是对svg基本形状的修改。LogicFlow内部存在7种基础节点，分别为：
+LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连线都是svg基本形状，对LogicFlow节点样式的修改，也就是对svg基本形状的修改。LogicFlow内部存在7种基础节点，分别为：
 
 - 矩形：[rect](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect)
 - 圆形: [circle](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle)
