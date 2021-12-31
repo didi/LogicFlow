@@ -20,21 +20,22 @@
   </a>
 </p>
 
-LogicFlow 是一款流程可视化的前端框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
+LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
 
 ## 特性
 
-- 🎯 专业
-
-  专注于业务流程可视化的解决方案
-
-- 🚀 快速搭建
-
-  提供配套能力（undo/对齐线/键盘）快速搭建流程图编辑器，提升研发效率
 
 - 🛠 高拓展性
+  
+  兼容各种产品自定义的流程编辑需求，绝大部分模块以插件的形式实现，支持各模块自由插拔。
 
-  提供自定义能力和插件能力，助力定制化的业务场景
+- 🚀 重执行
+  
+  流程图能完备的表达业务逻辑，不受流程引擎限制。
+
+- 🎯 专业
+  
+  专注于业务流程图编辑的框架
 
 ## 使用
 
@@ -153,13 +154,6 @@ lf.render(data);
 <image src="https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif"/>
 
 [代码地址](https://github.com/xinxin93/logicflow_vue_demo)
-
-## 整体架构
-
-![jiagou](https://dpubstatic.udache.com/static/dpubimg/fg7q5j_5nG/lfjk.png)
-
-[详细介绍](https://github.com/didi/LogicFlow/wiki)
-
 ## 联系我们
 
 ### 加入微信群
