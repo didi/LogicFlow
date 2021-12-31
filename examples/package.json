@@ -1,6 +1,6 @@
 {
   "name": "examples",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
