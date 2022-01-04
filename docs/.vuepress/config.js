@@ -14,7 +14,7 @@ const guide = [
       'basic/background',
       'basic/dnd',
       'basic/keyboard',
-      'basic/redoundo',
+      // 'basic/redoundo',
       'basic/snapline',
       'basic/silent-mode',
     ]

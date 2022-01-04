@@ -1,11 +1,13 @@
 # editConfigModel
 
-控制页面编辑状态
+editConfigModel是控制页面编辑状态。详细用法见[设置图编辑方式](/guide/basic/silent-mode.html)
+
 
 ## 属性说明
 
 | 属性名                  | 类型    | 默认值 | 说明                                                                   |
 | ----------------------- | ------- | ------ | ---------------------------------------------------------------------- |
+| isSilentMode           | boolean | false  | 是否为静默模式                                                           |
 | stopZoomGraph           | boolean | false  | 禁止缩放画布                                                           |
 | stopScrollGraph         | boolean | false  | 禁止鼠标滚动移动画布                                                   |
 | stopMoveGraph           | boolean | false  | 禁止拖动画布                                                           |
@@ -19,6 +21,7 @@
 | nodeTextDraggable       | boolean | false  | 允许节点文本可以拖拽                                                   |
 | edgeTextDraggable       | boolean | false  | 允许边文本可以拖拽                                                   |
 | metaKeyMultipleSelected | boolean | false  | 允许按照 meta 键多选元素                                               |
+
 
 ## updateEditConfig
 
