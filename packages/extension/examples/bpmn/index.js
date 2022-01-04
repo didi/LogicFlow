@@ -177,7 +177,8 @@ window.onload = function () {
     console.log(data1);
   });
   document.querySelector('#js_get_data').addEventListener('click', () => {
-    const data = lf.getGraphRawData();
+    // const data = lf.getGraphRawData();
+    const data = lf.getSelectElements(true);
     console.log(data);
   })
   document.querySelector('#js_show_menu').addEventListener('click', () => {

@@ -11,31 +11,9 @@ const lf = new LogicFlow({
   },
 });
 ```
+## 内置快捷键功能
 
-<example :height="300" ></example>
-
-通过 keyboard 的声明可以看出，除了 enabled 是必传项，其他都是可选的配置。
-
-```ts
-export interface KeyboardDef {
-  enabled: boolean,
-  shortcuts?: Array<{
-    keys: string | string[],
-    callback: Handler,
-    action?: Action,
-  }> | {
-    keys: string | string[],
-    callback: Handler,
-    action?: Action,
-  }
-}
-```   
-shortcuts 则可以定义用户自定义的一组快捷键
-值得一提的是 keys 的规则，与[mousetrap](https://www.npmjs.com/package/mousetrap)一致。
-
-## 内置快捷键
-
-参考不同的产品，内置了复制，粘贴，redo/undo 的快捷键。
+参考不同的产品，内置了复制，粘贴，redo/undo，删除 的快捷键。
 
 | 快捷键   | 功能   |
 | :----- | :----- |
@@ -43,24 +21,41 @@ shortcuts 则可以定义用户自定义的一组快捷键
 | cmd + v 或 ctrl + v | 粘贴节点 |
 | cmd + z 或 ctrl + z | 撤销操作 |
 | cmd + y 或 ctrl + y | 回退操作 |
+| backspace | 删除操作 |
 
-## 如何阻止删除或者拷贝行为
-通过创建 `LogicFlow` 实例时传入 options 的 guards 属性可以配置守卫, 目前支持两种 beforeClone 和 beforeDelete，回调函数的参数data是LogicFlow倒出的 NodeData｜EdgeData 类型， 从data可以拿到节点或者边的信息，继续进行业务逻辑判断。
-```ts
+## 自定义快捷键
+
+shortcuts 则可以定义用户自定义的一组快捷键
+值得一提的是 keys 的规则，与[mousetrap](https://www.npmjs.com/package/mousetrap)一致。
+
+我们已自定义删除功能为例，在删除之前添加一个确认操作。
+
+```js
 const lf = new LogicFlow({
-  container: document.querySelector('#app'),
-  guards: {
-    beforeClone(data) {
-      console.log('beforeClone', data)
-      return false
-    },
-    beforeDelete(data) {
-      console.log('beforeDelete', data)
-      return false
-    }
+  // ...
+  keyboard: {
+    enabled: true,
+    shortcuts: [
+      {
+        keys: ["backspace"],
+        callback: () => {
+          const r = window.confirm("确定要删除吗？");
+          if (r) {
+            const elements = lf.getSelectElements(true);
+            lf.clearSelectElements();
+            elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
+            elements.nodes.forEach((node) => lf.deleteNode(node.id));
+          }
+        }
+      }
+    ]
   }
 });
 ```
 
-当 beforeClone 返回 true 时，则认为保持克隆的行为， 返回 false 时，则阻止克隆。
-当 beforeDelete 返回 true 时，则保持删除的行为，返回 false 时，则阻止删除。
+<iframe src="https://codesandbox.io/embed/logicflow-base10-eerft?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base10"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
