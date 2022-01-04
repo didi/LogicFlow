@@ -1,10 +1,16 @@
 # 网格 Grid
 
-> 网格是指渲染/移动节点的最小单位，网格在 DOM 层级中位于背景层之上，图形元素层之下。
+网格是指渲染/移动节点的最小单位。网格最主要的作用是在移动节点的时候，保证每个节点中心点的位置都是在网格上。这样更有利于节点直接的对其。一般来说，网格的间隔越大，在编辑流程图的时候，节点就更好对其；网格的间隔约小，拖动节点的感觉就更加流出。
 
 网格默认关闭，渲染/移动最小单位为 1px，若开启网格，则网格默认大小为 20px，渲染节点时表示以 20 为最小单位对齐到网络，移动节点时表示每次移动最小距离为 20px。
 
-> 在设置节点坐标时候会按照网格的大小来对坐标进行转换，如设置中心点位置`{ x: 124, y: 138 }` 的节点渲染到画布后的实际位置为 `{ x: 120, y: 140 }`
+::: warning 注意
+在设置节点坐标时候会按照网格的大小来对坐标进行转换，如设置中心点位置`{ x: 124, y: 138 }` 的节点渲染到画布后的实际位置为 `{ x: 120, y: 140 }`。所以使用LogicFlow替换项目中旧的流程设计器时，需要对历史数据的坐标进行处理。
+:::
+
+::: tip 提示
+在实际开发中，如果期望节点既可以中心对齐，也可以按照两边对齐。那么自定义节点的宽高需要是grid的偶数倍。也就是假设grid为20，那么所有的节点宽度最好是20、40、80、120这种偶数倍的宽度。
+:::
 
 ## 开启网格
 在创建画布的时候通过配置 `grid` 来设置网格属性
@@ -47,4 +53,9 @@ export type GridOptions = {
 
 ## 示例
 
-<example :height="280" ></example>
+<iframe src="https://codesandbox.io/embed/logicflow-base8-hxtqr?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base8"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
