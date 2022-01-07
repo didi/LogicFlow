@@ -18,3 +18,9 @@ document.querySelector('#js_resize').addEventListener('click', () => {
 document.querySelector('#js_show_input').addEventListener('click', () => {
   lf.editText('11')
 })
+
+document.querySelector('#js_focus_on').addEventListener('click', () => {
+  lf.focusOn({
+    id: '2'
+  })
+})

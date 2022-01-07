@@ -24,24 +24,24 @@ const guide = [
     collapsable: false,
     children: [
       'extension/extension-intro',
-      'extension/snapshot',
-      'extension/adapter',
-      'extension/bpmn-element',
-      'extension/extension-node-resize',
-      'extension/extension-insert-node-in-polyline.md',
       {
-        title: '组件',
+        title: '内置插件',
         collapsable: true,
         children: [
+          'extension/component-menu',
+          'extension/snapshot',
+          'extension/adapter',
+          'extension/bpmn-element',
+          'extension/extension-node-resize',
+          'extension/extension-insert-node-in-polyline.md',
           'extension/extension-components',
           'extension/component-control',
-          'extension/component-menu',
           'extension/component-dnd-panel',
           'extension/component-selection',
           'extension/component-minimap',
-          'extension/component-custom'
         ]
       },
+      'extension/component-custom'
     ]
   }
 ];

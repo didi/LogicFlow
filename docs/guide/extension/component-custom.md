@@ -1,4 +1,4 @@
-# 自定义组件
+# 自定义插件
 
 当内置组件的功能或样式不能满足业务需求时，我们可以根据 Logic Flow 提供的 [API](/api/logicFlowApi.html) 自己实现相应的组件，例如[拖拽示例](/guide/basic/dnd.html)中的拖拽面板。
 
