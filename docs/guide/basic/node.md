@@ -365,24 +365,6 @@ class SquareModel extends RectNodeModel {
     ];
   }
 }
-lf.register({
-  type: 'square'
-  view: RectNode,
-  model: SquareModel,
-});
-
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
 ```
 
 <example
@@ -406,40 +388,24 @@ lf.render({
 import { RectNode, RectNodeModel } from '@logicflow/core';
 class SquareModel extends RectNodeModel {
   setAttributes() {
-  const size = 80;
-  const circleOnlyAsTarget = {
-    message: "正方形节点下一个节点只能是圆形节点",
-    validate: (source: any, target: any) => {
-      return target.type === "circle";
-    },
-  };
+    const size = 80;
+    const circleOnlyAsTarget = {
+      message: "正方形节点下一个节点只能是圆形节点",
+      validate: (source: any, target: any) => {
+        return target.type === "circle";
+      },
+    };
 
-  this.width = size;
-  this.height = size;
-  this.anchorsOffset = [
-    [size / 2, 0],
-    [-size / 2, 0]
-  ];
-  this.sourceRules.push(circleOnlyAsTarget);
+    this.width = size;
+    this.height = size;
+    this.anchorsOffset = [
+      [size / 2, 0],
+      [-size / 2, 0]
+    ];
+    this.sourceRules.push(circleOnlyAsTarget);
+  }
 }
-lf.register({
-  type: 'square'
-  view: RectNode,
-  model: SquareModel,
-});
 
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
 ```
 
 <example

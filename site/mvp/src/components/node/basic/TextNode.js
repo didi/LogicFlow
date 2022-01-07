@@ -3,6 +3,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
 
 // 文本节点
 class TextNewNode extends TextNode {
+}
+class TextNewModel extends TextNodeModel {
   getNodeStyle () {
     const style = super.getNodeStyle()
     const properties = this.getProperties()
@@ -19,8 +21,7 @@ class TextNewNode extends TextNode {
     }
     return getTextStyleFunction(style, properties)
   }
-}
-class TextNewModel extends TextNodeModel {
+
   setAttributes () {
     super.setAttributes()
     if (!this.text.value) {

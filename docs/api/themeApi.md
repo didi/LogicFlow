@@ -107,8 +107,11 @@ LogicFlow内置`text`节点字体大小为12, 颜色为黑色。
 ```js
 lf.setTheme({
   text: {
-    fill: '#000000',
+    color: '#000000',
     fontSize: 12,
+    background: {
+      fill: 'transparent',
+    },
   },
 })
 ```

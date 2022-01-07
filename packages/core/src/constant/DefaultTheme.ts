@@ -292,9 +292,12 @@ export const defaultTheme: Theme = {
   ellipse: {},
   polygon: {},
   text: {
-    fill: '#000000',
+    color: '#000000',
     stroke: 'none',
     fontSize: 12,
+    background: {
+      fill: 'transparent',
+    },
   },
   anchor: {
     stroke: '#000000',
