@@ -9,7 +9,6 @@ class CustomHtmlModel extends HtmlNodeModel {
 }
 class CustomHtmlNode extends HtmlNode {
   setHtml(rootEl) {
-    console.log('3333')
     rootEl.innerHTML = ''
     const el = document.createElement('input')
     rootEl.appendChild(el);

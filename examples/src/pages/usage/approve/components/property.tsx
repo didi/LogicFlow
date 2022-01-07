@@ -6,7 +6,6 @@ import { IApproveUser } from '../type';
 import 'antd/dist/antd.css';
 // @ts-ignore
 export default function PropertyPanel(nodeData, updateproperty, hidePropertyPanel) {
-  console.log(nodeData.properties)
   const getApproveList = () => {
     const approveUserOption: JSX.Element[] = []
     approveUser.forEach((item: IApproveUser) => {

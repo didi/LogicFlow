@@ -162,7 +162,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         onWheel={this.zoomHandler}
         onMouseDown={this.mouseDownHandler}
         onContextMenu={this.handleContextMenu}
-        className={isDraging ? 'lf-dragging' : 'lf-drag-able'}
+        className={isDraging ? 'lf-canvas-overlay lf-dragging' : 'lf-canvas-overlay lf-drag-able'}
         {...dnd.eventMap()}
       >
         <g transform={transform}>

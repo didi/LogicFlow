@@ -28,8 +28,6 @@ export default function BpmnIo(props: IProps) {
   const { lf } = props;
   function downloadXml() {
     const data = lf.getGraphData() as string;
-    // console.log(xml);
-    console.log(data);
     download('logic-flow.xml', data);
   }
   function uploadXml(ev: React.ChangeEvent<HTMLInputElement>) {
