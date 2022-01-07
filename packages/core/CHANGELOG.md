@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.12...@logicflow/core@1.0.1-alpha.0) (2022-01-07)
+
+
+### Bug Fixes
+
+* focus on ([2301c09](https://github.com/didi/LogicFlow/commit/2301c094f2853591741101623da879ea7e0d22de))
+* rewrite text node getTextStyle ([2717203](https://github.com/didi/LogicFlow/commit/27172038a282404c02697986736bf10955117d16))
+* typo EditConfigMode ([fed381b](https://github.com/didi/LogicFlow/commit/fed381b47ec3786f43d043c07c33f01458239840))
+
+
+### Features
+
+* release 1.0.0🎉🎉 ([670fed7](https://github.com/didi/LogicFlow/commit/670fed7fa3e0cb0ee39501251d177c693694ef59))
+
+
+
+
+
 # [1.0.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.11...@logicflow/core@1.0.0-alpha.12) (2021-12-30)
 
 

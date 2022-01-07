@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.12...@logicflow/extension@1.0.1-alpha.0) (2022-01-07)
+
+
+### Features
+
+* release 1.0.0🎉🎉 ([670fed7](https://github.com/didi/LogicFlow/commit/670fed7fa3e0cb0ee39501251d177c693694ef59))
+* remove node selection ([92d4b7a](https://github.com/didi/LogicFlow/commit/92d4b7a88727b8dd213487f09e1117afa5c48310))
+
+
+
+
+
 # [1.0.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.11...@logicflow/extension@1.0.0-alpha.12) (2021-12-30)
 
 **Note:** Version bump only for package @logicflow/extension
