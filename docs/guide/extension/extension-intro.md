@@ -1,38 +1,28 @@
 # 简介
 
-> LogicFlow 最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。
+> LogicFlow 最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。为了让LogicFlow的拓展性足够强，LogicFlow将所有的非核心功能都使用插件的方式开发，然后将这些插件放到`@logicflow/extension`包中。
+## 使用插件
 
-目前所有内置的拓展都在`@logicflow/extension`包中，其中包括`BpmnElement`、`Snapshot`、`Adapter`以及三个内置组件。
-
-## 使用拓展
-
+npm方式
 ```js
 import { BpmnElement } from '@logicflow/extension';
 LogicFlow.use(BpmnElement);
 ```
 
+cdn方式
+
 ```html
-<script src="/logic-flow.js"></script>
-<script src="/lib/BpmnElement.js"></script>
+<!--LogicFlow core包css-->
+<link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
+<!--LogicFlow extension包css-->
+<link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<!--LogicFlow core包js-->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
+<!--LogicFlow的插件支持单个引入，这里以菜单插件为例-->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/Menu.js"></script>
 <script>
-  LogicFlow.use(BpmnElement);
+  LogicFlow.use(Menu);
 </script>
 ```
 
-## 自定义拓展
-
-实现一个 LogicFlow 的扩展非常简单，那就是对外暴露一个对象，这个对象有一个方法 install。LogicFlow 会在初始化的时候执行这个方法，将其实例传递进来。开发者基于这个实例，利用 LogicFlow 的自定义机制开发，就可以实现一个插件。
-
-```js
-window.ResizeNode = {
-  name: 'resize-node',
-  // lf实例化的时候触发
-  install: function(lf, LogicFlow) {
-    // 基于lf进行扩展
-  },
-  // 流程渲染到界面时触发
-  render: function (lf, container) {}
-}
-```
-
-
+## 内置插件

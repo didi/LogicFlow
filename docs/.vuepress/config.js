@@ -20,7 +20,7 @@ const guide = [
     ]
   },
   {
-    title: '拓展功能',
+    title: '插件功能',
     collapsable: false,
     children: [
       'extension/extension-intro',
