@@ -97,17 +97,17 @@ export default {
 
 ```js
 // main.js
-import UserNode from './UserNode.js'
+import UserTask from './UserTaskNode.js'
 
 const lf = new LogicFlow({
   container: document.querySelector('#container')
 });
-lf.register(UserNode);
+lf.register(UserTask);
 
 lf.render({
   nodes: [
     {
-      type: 'UserNode',
+      type: 'UserTask',
       x: 100,
       y: 100
     }
