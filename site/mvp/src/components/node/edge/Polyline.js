@@ -9,8 +9,7 @@ class Model extends PolylineEdgeModel {
   }
   getTextStyle () {
     const style = super.getTextStyle()
-    const attributes = super.getAttributes()
-    return getTextStyleFunction(style, attributes.properties)
+    return getTextStyleFunction(style, this.properties)
   }
 
   getEdgeStyle () {

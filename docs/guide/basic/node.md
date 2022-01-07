@@ -523,7 +523,7 @@ class BoxxModel extends HtmlNodeModel {
 }
 class BoxxNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     ReactDOM.render(<Hello name={properties.name} body={properties.body}/>, rootEl);
   }
 }
