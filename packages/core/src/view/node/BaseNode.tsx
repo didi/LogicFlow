@@ -82,7 +82,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     if (model.state === ElementState.TEXT_EDIT) {
       return '';
     }
-    const style = model.getTextStyle();
     if (model.text) {
       const { editConfigModel } = graphModel;
       let draggable = false;

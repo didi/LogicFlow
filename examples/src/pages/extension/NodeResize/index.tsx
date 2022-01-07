@@ -88,7 +88,6 @@ export default function NodeResizeExample() {
     lf.render(data);
     // 节点缩放后更新文案位置
     lf.on('node:resize', (data) => {
-      console.log(data);
       const { newNodeSize } = data;
       const { id, type } = newNodeSize;
       if (type === 'bpmn:exclusiveGateway' || type === 'bpmn:startEvent') {

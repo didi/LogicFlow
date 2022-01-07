@@ -315,7 +315,7 @@ export default class LogicFlow {
       }
     }
     const { x, y } = coordinate;
-    transformModel.focusOn(x, y, this.width, this.height);
+    transformModel.focusOn(x, y, this.graphModel.width, this.graphModel.height);
   }
   /**
    * 设置主题样式

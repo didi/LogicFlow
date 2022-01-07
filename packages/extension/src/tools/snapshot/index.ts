@@ -53,7 +53,7 @@ const Snapshot = {
         });
       }
     });
-    const svgRootElement = lf.container.querySelector('svg');
+    const svgRootElement = lf.container.querySelector('.lf-canvas-overlay');
     return svgRootElement;
   },
   triggerDownload(imgURI: string) {
@@ -111,10 +111,26 @@ const Snapshot = {
       });
     });
   },
+  getClassRules() {
+    let rules = '';
+    const { styleSheets } = document;
+    for (let i = 0; i < styleSheets.length; i++) {
+      const sheet = styleSheets[i];
+      for (let j = 0; j < sheet.cssRules.length; j++) {
+        rules += sheet.cssRules[j].cssText;
+      }
+    }
+    return rules;
+  },
   // 获取图片生成中中间产物canvas对象，用户转换为其他需要的格式
   getCanvasData(svg: SVGGraphicsElement, backgroundColor: string) {
     const copy = svg.cloneNode(true);
     const graph = copy.lastChild;
+    const style = document.createElement('style');
+    style.innerHTML = this.getClassRules();
+    const foreignObject = document.createElement('foreignObject');
+    foreignObject.appendChild(style);
+    copy.appendChild(foreignObject);
     let childLength = graph.childNodes && graph.childNodes.length;
     if (childLength) {
       for (let i = 0; i < childLength; i++) {

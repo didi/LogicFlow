@@ -43,11 +43,8 @@ LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、�
 
 ```sh
 # npm
-$ npm install @logicflow/core --save
+$ npm install @logicflow/core @logicflow/extension --save
 
-
-# yarn
-$ yarn add @logicflow/core
 ```
 
 ### 代码示例
@@ -163,3 +160,7 @@ lf.render(data);
 ### 加入 QQ 群
 
 <image src="https://dpubstatic.udache.com/static/dpubimg/VMBzV7jhh8/qq.png" width="300"/>
+
+### 贡献代码
+
+LogicFlow对外持开放态度，不论是只修改文档的标点符合还是对LogicFlow的整体功能有大的重构我们都欢迎。对于您的每一个PR我们都会认真查看、回复、合并。详情见[LogicFlow贡献指南](https://github.com/didi/LogicFlow/blob/master/CONTRIBUTING.md)

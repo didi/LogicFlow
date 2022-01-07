@@ -97,17 +97,17 @@ export default {
 
 ```js
 // main.js
-import UserNode from './UserNode.js'
+import UserTask from './UserTaskNode.js'
 
 const lf = new LogicFlow({
   container: document.querySelector('#container')
 });
-lf.register(UserNode);
+lf.register(UserTask);
 
 lf.render({
   nodes: [
     {
-      type: 'UserNode',
+      type: 'UserTask',
       x: 100,
       y: 100
     }
@@ -365,24 +365,6 @@ class SquareModel extends RectNodeModel {
     ];
   }
 }
-lf.register({
-  type: 'square'
-  view: RectNode,
-  model: SquareModel,
-});
-
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
 ```
 
 <example
@@ -406,40 +388,24 @@ lf.render({
 import { RectNode, RectNodeModel } from '@logicflow/core';
 class SquareModel extends RectNodeModel {
   setAttributes() {
-  const size = 80;
-  const circleOnlyAsTarget = {
-    message: "正方形节点下一个节点只能是圆形节点",
-    validate: (source: any, target: any) => {
-      return target.type === "circle";
-    },
-  };
+    const size = 80;
+    const circleOnlyAsTarget = {
+      message: "正方形节点下一个节点只能是圆形节点",
+      validate: (source: any, target: any) => {
+        return target.type === "circle";
+      },
+    };
 
-  this.width = size;
-  this.height = size;
-  this.anchorsOffset = [
-    [size / 2, 0],
-    [-size / 2, 0]
-  ];
-  this.sourceRules.push(circleOnlyAsTarget);
+    this.width = size;
+    this.height = size;
+    this.anchorsOffset = [
+      [size / 2, 0],
+      [-size / 2, 0]
+    ];
+    this.sourceRules.push(circleOnlyAsTarget);
+  }
 }
-lf.register({
-  type: 'square'
-  view: RectNode,
-  model: SquareModel,
-});
 
-lf.render({
-  nodes: [
-    {
-      id: 10,
-      type: 'square',
-      x: 300,
-      y: 200,
-      text: '正方形',
-      properties: {}
-    },
-  ]
-});
 ```
 
 <example
@@ -557,7 +523,7 @@ class BoxxModel extends HtmlNodeModel {
 }
 class BoxxNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     ReactDOM.render(<Hello name={properties.name} body={properties.body}/>, rootEl);
   }
 }

@@ -29,6 +29,14 @@ window.onload = function () {
   });
   // 方便调试
   window.lf = lf;
+  lf.setTheme({
+    nodeText: {
+      color: '#000000',
+      overflowMode: 'autoWrap',
+      lineHeight: 1.2,
+      fontSize: 14,
+    },
+  })
   class UserModel extends RectNodeModel {
   }
   class UserNode extends RectNode {
@@ -65,32 +73,6 @@ window.onload = function () {
             <div>+ setBody(Body $body)</div>
           </div>
         </div>
-        <style>
-          .uml-wrapper {
-            background: #68FCE2;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            border: 2px solid #838382;
-            box-sizing: border-box;
-          }
-          .uml-head {
-            text-align: center;
-            line-height: 30px;
-            font-size: 16px;
-            font-weight: bold;
-          }
-          .uml-body {
-            border-top: 1px solid #838382;
-            border-bottom: 1px solid #838382;
-            padding: 5px 10px;
-            font-size: 12px;
-          }
-          .uml-footer {
-            padding: 5px 10px;
-            font-size: 14px;
-          }
-        </style>
       `
       el.innerHTML = html;
       rootEl.innerHTML = '';
@@ -113,7 +95,7 @@ window.onload = function () {
         type: 'uml',
         x: 100,
         y: 100,
-        id: 10,
+        id: 100,
         properties: {
           name: 'haod',
           body: '哈哈哈哈'

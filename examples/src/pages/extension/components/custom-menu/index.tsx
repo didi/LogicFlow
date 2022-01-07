@@ -79,7 +79,6 @@ export default function CustomMenuExample() {
         {
           text: '属性',
           callback(edge: any) {
-            console.log(edge);
             
             alert(`
               边id：${edge.id}

@@ -7,7 +7,7 @@ const lf = new LogicFlow({
 
 class UserNode extends HtmlNode {
   shouldUpdate() {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
     this.currrentProperties = JSON.stringify(properties)
     return true;
@@ -15,7 +15,7 @@ class UserNode extends HtmlNode {
   setHtml(rootEl) {
     // todo: 和react不一样，还没有找到合适的利用vue内置的diff算法来计算节点是否需要更新。
     if (!this.shouldUpdate()) return;
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     const { model } = this.props;
     const el = document.createElement('div');
     rootEl.innerHTML = '';
@@ -72,5 +72,3 @@ lf.render({
     }
   ]
 });
-
-console.log(111);

@@ -3,11 +3,12 @@ class CustomTextModel extends TextNodeModel {
     this.rx = 30
     this.ry = 30
   }
-  getNodeStyle() {
-    const style = super.getNodeStyle();
+  getTextStyle() {
+    const style = super.getTextStyle();
     if (this.properties.isSelected) {
       style.color = 'red'
     }
+    style.fontSize = 40;
     return style
   }
 }

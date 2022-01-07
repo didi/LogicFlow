@@ -1,21 +1,12 @@
 class HtmlCard extends HtmlNode {
-  shouldUpdate() {
-    const { properties } = this.getAttributes();
-    if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
-    this.currrentProperties = JSON.stringify(properties)
-    return true;
-  }
   // 重写HtmlNode的setHtml，来控制html节点内容。
   setHtml(rootEl) {
-    // todo: 和react不一样，还没有找到合适的利用vue内置的diff算法来计算节点是否需要更新。
-    if (!this.shouldUpdate()) return;
-    // const { properties } = this.getAttributes();
     const cardEl = this.getCardEl();
     rootEl.innerHtml = '';
     rootEl.appendChild(cardEl);
   }
   getCardEl() {
-    const { properties } = this.getAttributes();
+    const { properties } = this.props.model;
     const el = document.createElement('div');
     el.className = 'html-card';
 

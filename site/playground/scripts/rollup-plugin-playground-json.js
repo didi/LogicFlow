@@ -12,7 +12,6 @@ function copyPlaygroundJson() {
       configJson = JSON.parse(configJson);
       const examples = configJson.examples;
       examples.forEach((example) => {
-        console.log(example);
         const exampleJsonPath = path.resolve(targetDir, `${example.key}.playground.json`)
         const jsonObjct = generatePlaygroundJson(example.key)
         fs.writeFileSync(exampleJsonPath, JSON.stringify(jsonObjct));

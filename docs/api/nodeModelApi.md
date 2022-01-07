@@ -60,7 +60,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | BaseType |string| ✅ | 当前model的基础类型，对于节点，则固定为`node`。主要用在节点和边混合的时候识别此`model`是节点还是边。 |
 | modelType |string| ✅ | 当前model的类型，可取值有`node`, `rect-node`,`circle-node`,`polygon-node`,`ellipse-node`,`diamond-node`, `html-node`,`text-node` |
 
-::: info modelType与type的区别是什么？
+::: tip modelType与type的区别是什么？
 
 在自定义节点的时候，`type`可以是开发者自定义的任何值，但是在LogicFlow内部，涉及到这个节点的计算时，我们需要感知到这个节点的具体形状，这个时候不能用`type`, 而是要用`modelType`来判断。
 

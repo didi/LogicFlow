@@ -63,5 +63,3 @@ lf.render({
     }
   ]
 });
-
-console.log(111);
