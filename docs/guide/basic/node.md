@@ -163,6 +163,13 @@ LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自�
 
 LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/nodeModelApi.html#形状属性)
 
+<iframe src="https://codesandbox.io/embed/epic-cookies-cmqxg?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="epic-cookies-cmqxg"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
 #### 基于properties属性自定义节点样式
 
 在实际业务中，存在这样的情况，例如在审批场景中，自定义的审批节点存在3种状态：
@@ -171,6 +178,8 @@ LogicFlow对于不同的基础节点，存在一些各基础节点自己特有�
 
 
 ### 步骤3: 自定义节点view
+
+LogicFlow在自定义节点的`model`时,可以定义节点的基础形状、样式等属性。但是当开发者需要一个更加复杂的节点时，可以使用LogicFlow提供的自定义节点`view`的方式。
 
 ```js
 class UserTaskView extends RectNode {
@@ -579,3 +588,13 @@ export default function PageIndex() {
   )
 }
 ```
+
+### 自定义HTML节点示例
+
+<iframe src="https://codesandbox.io/embed/logicflow-step7-dpmgb?fontsize=14&hidenavigation=1&module=%2Fstep7%2FcustomNode.js&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-step7"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+   
