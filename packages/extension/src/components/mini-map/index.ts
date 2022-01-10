@@ -80,8 +80,8 @@ const MiniMap: Extension = {
     miniMapWrap.style.width = `${MiniMap.__width}px`;
     miniMapWrap.style.height = `${MiniMap.__height}px`;
     MiniMap.__lfMap = new MiniMap.__LogicFlow({
-      width: MiniMap.__lf.width,
-      height: (MiniMap.__lf.width * 220) / 150,
+      width: MiniMap.__lf.graphModel.width,
+      height: (MiniMap.__lf.graphModel.width * 220) / 150,
       container: miniMapWrap,
       isSilentMode: true,
       stopZoomGraph: true,
@@ -252,16 +252,17 @@ const MiniMap: Extension = {
     const viewStyle = MiniMap.__viewport.style;
     viewStyle.width = `${MiniMap.__width - 4}px`;
     viewStyle.height = `${
-      (MiniMap.__width - 4) / (MiniMap.__lf.width / MiniMap.__lf.height)
+      (MiniMap.__width - 4) / (MiniMap.__lf.graphModel.width / MiniMap.__lf.graphModel.height)
     }px`;
     // top
     const { TRANSLATE_X, TRANSLATE_Y } = MiniMap.__lf.getTransform();
 
     const realWidth = right - left;
     // 视口实际宽 = 视口默认宽 / (所有元素一起占据的真实宽 / 绘布宽)
-    const realViewPortWidth = (MiniMap.__width - 4) / (realWidth / MiniMap.__lf.width);
+    const realViewPortWidth = (MiniMap.__width - 4) / (realWidth / MiniMap.__lf.graphModel.width);
     // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
-    const realViewPortHeight = realViewPortWidth / (MiniMap.__lf.width / MiniMap.__lf.height);
+    const graphRatio = (MiniMap.__lf.graphModel.width / MiniMap.__lf.graphModel.height);
+    const realViewPortHeight = realViewPortWidth / graphRatio;
 
     MiniMap.__viewPortTop = TRANSLATE_Y > 0 ? 0 : -TRANSLATE_Y * scale;
     MiniMap.__viewPortLeft = -TRANSLATE_X * scale;
