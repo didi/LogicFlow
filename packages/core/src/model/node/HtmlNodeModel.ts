@@ -5,13 +5,10 @@ import { ModelType } from '../../constant/constant';
 
 class HtmlNodeModel extends BaseNodeModel {
   modelType = ModelType.HTML_NODE;
-  @computed get anchors(): Point[] {
+  getDetaultAnchor() {
     const {
-      anchorsOffset, x, y, width, height,
+      x, y, width, height,
     } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
     return [
       { x, y: y - height / 2, id: `${this.id}_0` },
       { x: x + width / 2, y, id: `${this.id}_1` },

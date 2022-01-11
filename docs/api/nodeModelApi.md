@@ -223,15 +223,29 @@ const nodeModel = lf.getNodeModelById('node_1');
 const properties = nodeModel.getProperties();
 ```
 
-## getAnchorsByOffset
+## getDetaultAnchor
 
-获取节点锚点的偏移量
+重新设置默认锚点, 可以给锚点加上id等自定义属性，用于对锚点的验证。
 
 ```ts
-class cNode extend BaseNodeModel {
-  getAnchorsByOffset() {
-    const offset = super.getAnchorsByOffset()
-    return offset;
+class cNode extend RectNodeModel {
+  // 定义节点只有左右两个锚点. 锚点位置通过中心点和宽度算出来。
+  getDetaultAnchor() {
+    const { width, height, x, y, id } = this;
+    return [
+      {
+        x: x - width / 2,
+        y,
+        name: 'left',
+        id: `${id}_0`
+      },
+      {
+        x: x + width / 2,
+        y,
+        name: 'right',
+        id: `${id}_1`
+      },
+    ]
   }
 }
 ```
