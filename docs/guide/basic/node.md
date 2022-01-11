@@ -412,7 +412,7 @@ import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class SquareModel extends RectNodeModel {
   getDetaultAnchor() {
-    const { width, height, x, y } = this; 
+    const { width, height, x, y, id } = this; 
     return [
       {
         x: x - width / 2,
@@ -433,6 +433,12 @@ class SquareModel extends RectNodeModel {
 
 上面的示例中，我们自定义锚点的时候，不仅可以定义锚点的坐标，还可以给锚点加上任一属性。有了这些属性，我们可以再做很多额外的事情。例如，我们增加一个校验规则，只允许节点从右边连出，从左边连入；或者加个id, 在获取数据的时候保存当前连线从那个锚点连接到那个锚点。
 
+<iframe src="https://codesandbox.io/embed/quirky-leftpad-ou2i0?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="quirky-leftpad-ou2i0"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
 
 ::: tip 提示
 在实际开发中，存在隐藏锚点的需求，可以参考github issue [如何隐藏锚点？](https://github.com/didi/LogicFlow/issues/454)，可以查看code sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hideAnchor/index.js)
