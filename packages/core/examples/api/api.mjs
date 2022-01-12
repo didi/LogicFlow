@@ -24,3 +24,11 @@ document.querySelector('#js_focus_on').addEventListener('click', () => {
     id: '2'
   })
 })
+
+document.querySelector('#js_change_edge_type').addEventListener('change', (e) => {
+  // console.log(this, e.target.value)
+  const { edges, nodes } = lf.getGraphData();
+  if (edges.length) {
+    lf.changeEdgeType(edges[0].id, e.target.value)
+  }
+})
