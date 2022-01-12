@@ -313,24 +313,39 @@ export const getCrossPointWithPolyone = (
       a = end;
       b = start;
     }
-    const k = (b.y - a.y) / (b.x - a.x);
-    const m = (a.x * b.y - b.x * a.y) / (a.x - b.x);
-    let pointXY;
-    if (k > Number.MAX_SAFE_INTEGER || m > Number.MAX_SAFE_INTEGER) {
+    let pointXY = {
+      x: point.x,
+      y: point.y,
+    };
+    // 如果多边形当前线段是垂直,求交点
+    if (a.x === b.x && direction === SegmentDirection.HORIZONTAL) {
       pointXY = {
-        x: point.x,
+        x: a.x,
         y: point.y,
       };
-    } else if (direction === SegmentDirection.HORIZONTAL) {
-      pointXY = {
-        x: (point.y - m) / k,
-        y: point.y,
-      };
-    } else if (direction === SegmentDirection.VERTICAL) {
+    }
+    // 如果多边形当前线段是水平,求交点
+    if (a.y === b.y && direction === SegmentDirection.VERTICAL) {
       pointXY = {
         x: point.x,
-        y: k * point.x + m,
+        y: a.y,
       };
+    }
+    // 如果线段不是水平或者垂直, 使用向量方程进行计算
+    if (a.x !== b.x && a.y !== b.y) {
+      const k = (b.y - a.y) / (b.x - a.x);
+      const m = (a.x * b.y - b.x * a.y) / (a.x - b.x);
+      if (direction === SegmentDirection.HORIZONTAL) {
+        pointXY = {
+          x: (point.y - m) / k,
+          y: point.y,
+        };
+      } else if (direction === SegmentDirection.VERTICAL) {
+        pointXY = {
+          x: point.x,
+          y: k * point.x + m,
+        };
+      }
     }
     // 如果交点在线段上
     const inSegment = isInSegment(pointXY, start, end);
