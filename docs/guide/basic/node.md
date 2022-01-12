@@ -405,12 +405,21 @@ lf.on('connection:not-allowed', (msg) => {
 
 ## 自定义节点的锚点
 
-以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
+对于各种基础类型节点，我们都内置了默认锚点。LogicFlow支持通过重写获取锚点的方法来实现自定义节点的锚点。
 
 ```ts
 import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class SquareModel extends RectNodeModel {
+  setAttribute() {
+    const rule = {
+      message: "只允许从右边的锚点连出",
+      validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
+        return sourceAnchor.name === "right";
+      }
+    };
+    this.sourceRules.push(rule);
+  }
   getDetaultAnchor() {
     const { width, height, x, y, id } = this; 
     return [
