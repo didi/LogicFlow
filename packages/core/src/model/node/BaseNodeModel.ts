@@ -442,7 +442,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   @action
   updateText(value: string): void {
-    this.text.value = value;
+    this.text = {
+      ...this.text,
+      value,
+    };
   }
 
   @action

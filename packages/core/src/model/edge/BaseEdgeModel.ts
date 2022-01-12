@@ -310,17 +310,8 @@ class BaseEdgeModel implements IBaseModel {
    * 更新文本的值
    */
   @action updateText(value: string): void {
-    const {
-      x,
-      y,
-      draggable,
-      editable,
-    } = this.text;
     this.text = {
-      x,
-      y,
-      draggable,
-      editable,
+      ...this.text,
       value,
     };
   }
