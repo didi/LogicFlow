@@ -223,14 +223,14 @@ const nodeModel = lf.getNodeModelById('node_1');
 const properties = nodeModel.getProperties();
 ```
 
-## getDetaultAnchor
+## getDefaultAnchor
 
 重新设置默认锚点, 可以给锚点加上id等自定义属性，用于对锚点的验证。
 
 ```ts
 class cNode extend RectNodeModel {
   // 定义节点只有左右两个锚点. 锚点位置通过中心点和宽度算出来。
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const { width, height, x, y, id } = this;
     return [
       {

@@ -97,7 +97,7 @@ class NodeSelectionModel extends PolygonNodeModel {
     }
   }
 
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     return [];
   }
 

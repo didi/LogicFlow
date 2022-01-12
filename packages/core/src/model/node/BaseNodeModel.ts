@@ -369,13 +369,13 @@ export default class BaseNodeModel implements IBaseNodeModel {
         };
       });
     }
-    return this.getDetaultAnchor();
+    return this.getDefaultAnchor();
   }
   /**
    * @overridable 子类重写此方法设置默认锚点
    * 获取节点默认情况下的锚点
    */
-  public getDetaultAnchor(): PointAnchor[] {
+  public getDefaultAnchor(): PointAnchor[] {
     return [];
   }
   /**

@@ -53,7 +53,7 @@ class UserTaskModel extends RectNodeModel {
     };
     this.sourceRules.push(circleOnlyAsTarget);
   }
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const { width, height, x, y } = this; 
     return [
       {

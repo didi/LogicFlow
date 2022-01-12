@@ -420,7 +420,7 @@ class SquareModel extends RectNodeModel {
     };
     this.sourceRules.push(rule);
   }
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const { width, height, x, y, id } = this; 
     return [
       {

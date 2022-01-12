@@ -70,7 +70,7 @@ class DiamondNodeModel extends BaseNodeModel {
     return max - min;
   }
 
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     return this.points.map(([x1, y1], idx) => ({ x: x1, y: y1, id: `${this.id}_${idx}` }));
   }
 }
