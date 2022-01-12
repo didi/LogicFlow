@@ -28,13 +28,11 @@ class EllipseNodeModel extends BaseNodeModel {
   @computed get height(): number {
     return this.ry * 2;
   }
-  @computed get anchors(): Point[] {
+
+  getDetaultAnchor() {
     const {
-      anchorsOffset, x, y, rx, ry,
+      x, y, rx, ry,
     } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
     return [
       { x, y: y - ry, id: `${this.id}_0` },
       { x: x + rx, y, id: `${this.id}_1` },

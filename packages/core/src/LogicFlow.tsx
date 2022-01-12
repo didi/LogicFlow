@@ -371,6 +371,14 @@ export default class LogicFlow {
     this.graphModel.changeNodeType(id, type);
   }
   /**
+   * 切换边的类型
+   * @param id 边Id
+   * @param type 边类型
+   */
+  changeEdgeType(id: string, type: string): void {
+    this.graphModel.changeEdgeType(id, type);
+  }
+  /**
    * 获取节点连接的所有边的model
    * @param nodeId 节点ID
    * @returns model数组

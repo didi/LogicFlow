@@ -96,32 +96,32 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.pointsList = [start, sNext, ePre, end];
     this.path = this.getPath(this.pointsList);
   }
-
-  @action
-  updatePath() {
-    const start = {
-      x: this.startPoint.x,
-      y: this.startPoint.y,
-    };
-    const end = {
-      x: this.endPoint.x,
-      y: this.endPoint.y,
-    };
-    const [, sNext, ePre] = this.pointsList;
-    this.pointsList = [start, sNext, ePre, end];
-    this.path = this.getPath(this.pointsList);
-  }
+  // 为了曲线更好看，移动节点的时候，重新计算曲线，不再保留原来的控制点
+  // @action
+  // updatePath() {
+  //   const start = {
+  //     x: this.startPoint.x,
+  //     y: this.startPoint.y,
+  //   };
+  //   const end = {
+  //     x: this.endPoint.x,
+  //     y: this.endPoint.y,
+  //   };
+  //   const [, sNext, ePre] = this.pointsList;
+  //   this.pointsList = [start, sNext, ePre, end];
+  //   this.path = this.getPath(this.pointsList);
+  // }
 
   @action
   updateStartPoint(anchor) {
     this.startPoint = anchor;
-    this.updatePath();
+    this.updatePoints();
   }
 
   @action
   updateEndPoint(anchor) {
     this.endPoint = anchor;
-    this.updatePath();
+    this.updatePoints();
   }
 
   @action

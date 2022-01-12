@@ -1,15 +1,9 @@
 import { CircleNode, CircleNodeModel } from '@logicflow/core';
 
 class Model extends CircleNodeModel {
-  getAnchorsByOffset() {
+  getDetaultAnchor() {
     return []
   }
-  // setAttributes () {
-  //   this.anchorsOffset = [
-  //     [this.r, 0],
-  //     [-this.r, 0],
-  //   ];
-  // }
 }
 
 class View extends CircleNode {

@@ -84,3 +84,7 @@ document.querySelector('#select_js').addEventListener('click', () => {
     isSelected: true
   })
 })
+
+document.querySelector('#get_data').addEventListener('click', () => {
+  console.log(lf.graphModel)
+})

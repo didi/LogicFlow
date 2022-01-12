@@ -1008,6 +1008,8 @@ class GraphModel {
     if (!Model) {
       throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`);
     }
+    // 为了保持切换类型时不复用上一个类型的轨迹
+    delete data.pointsList;
     const newEdgeModel = new Model(data, this);
     this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
   }
