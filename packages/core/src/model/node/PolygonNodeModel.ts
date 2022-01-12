@@ -68,7 +68,7 @@ class PolygonNodeModel extends BaseNodeModel {
     return max - min;
   }
 
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const {
       x, y, width, height, points,
     } = this;

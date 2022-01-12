@@ -5,7 +5,7 @@ import { ModelType } from '../../constant/constant';
 
 class HtmlNodeModel extends BaseNodeModel {
   modelType = ModelType.HTML_NODE;
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const {
       x, y, width, height,
     } = this;

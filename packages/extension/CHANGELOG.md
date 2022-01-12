@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.12...@logicflow/extension@1.0.4) (2022-01-12)
+
+
+### Bug Fixes
+
+* mini map viewport ([38c2408](https://github.com/didi/LogicFlow/commit/38c2408e0f8a76dd0b49b9271dd259fd8b6fa684))
+
+
+### Features
+
+* release 1.0.0🎉🎉 ([670fed7](https://github.com/didi/LogicFlow/commit/670fed7fa3e0cb0ee39501251d177c693694ef59))
+* remove node selection ([92d4b7a](https://github.com/didi/LogicFlow/commit/92d4b7a88727b8dd213487f09e1117afa5c48310))
+
+
+
+
+
 ## [1.0.1-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.12...@logicflow/extension@1.0.1) (2022-01-07)
 
 

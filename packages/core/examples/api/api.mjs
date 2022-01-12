@@ -32,3 +32,6 @@ document.querySelector('#js_change_edge_type').addEventListener('change', (e) =>
     lf.changeEdgeType(edges[0].id, e.target.value)
   }
 })
+document.querySelector('#js_updateText').addEventListener('click', (e) => {
+  lf.updateText('11', '4444')
+})

@@ -29,7 +29,7 @@ class EllipseNodeModel extends BaseNodeModel {
     return this.ry * 2;
   }
 
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const {
       x, y, rx, ry,
     } = this;

@@ -1,7 +1,7 @@
 import { CircleNode, CircleNodeModel } from '@logicflow/core';
 
 class Model extends CircleNodeModel {
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     return []
   }
 }

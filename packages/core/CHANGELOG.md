@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.12...@logicflow/core@1.0.4) (2022-01-12)
+
+
+### Bug Fixes
+
+* change edge type remove pointsList ([433c8e8](https://github.com/didi/LogicFlow/commit/433c8e805da226e37550c7abd770748f8c8a8bdc))
+* focus on ([2301c09](https://github.com/didi/LogicFlow/commit/2301c094f2853591741101623da879ea7e0d22de))
+* mini map viewport ([38c2408](https://github.com/didi/LogicFlow/commit/38c2408e0f8a76dd0b49b9271dd259fd8b6fa684))
+* move edge not keep controls ([b8f28f3](https://github.com/didi/LogicFlow/commit/b8f28f38d943ab2881a2f375603025e01573c0d8))
+* node updateText observable ([b04f96a](https://github.com/didi/LogicFlow/commit/b04f96abf639befeaa5cf22be9407955926a5118))
+* rewrite text node getTextStyle ([2717203](https://github.com/didi/LogicFlow/commit/27172038a282404c02697986736bf10955117d16))
+* typo EditConfigMode ([fed381b](https://github.com/didi/LogicFlow/commit/fed381b47ec3786f43d043c07c33f01458239840))
+
+
+### Features
+
+* release 1.0.0🎉🎉 ([670fed7](https://github.com/didi/LogicFlow/commit/670fed7fa3e0cb0ee39501251d177c693694ef59))
+
+
+
+
+
 ## [1.0.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.12...@logicflow/core@1.0.1) (2022-01-07)
 
 

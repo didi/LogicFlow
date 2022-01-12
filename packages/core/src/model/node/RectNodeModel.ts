@@ -6,7 +6,7 @@ import { ModelType } from '../../constant/constant';
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
   @observable radius = 0;
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const { x, y, width, height } = this;
     return [
       { x, y: y - height / 2, id: `${this.id}_0` },

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.11...examples@1.0.4) (2022-01-12)
+
+
+### Features
+
+* release 1.0.0🎉🎉 ([670fed7](https://github.com/didi/LogicFlow/commit/670fed7fa3e0cb0ee39501251d177c693694ef59))
+
+
+
+
+
 ## [1.0.1-alpha.0](https://github.com/didi/LogicFlow/compare/examples@1.0.0-alpha.11...examples@1.0.1) (2022-01-07)
 
 
