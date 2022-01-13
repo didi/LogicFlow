@@ -148,7 +148,7 @@ window.onload = function () {
     window.sessionStorage.setItem('lf-data', data);
   });
   document.querySelector('#download-img').addEventListener('click', () => {
-    lf.getSnapshot('logic-flow.png');
+    lf.getSnapshot();
   });
   document.querySelector('#upload').addEventListener('change', function (ev) {
     const file = ev.target.files[0];

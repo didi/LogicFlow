@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
