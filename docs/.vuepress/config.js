@@ -29,16 +29,16 @@ const guide = [
         collapsable: true,
         children: [
           'extension/component-menu',
+          'extension/component-dnd-panel',
+          'extension/component-control',
+          'extension/component-minimap',
+          'extension/component-selection',
           'extension/snapshot',
-          'extension/adapter',
-          'extension/bpmn-element',
           'extension/extension-node-resize',
           'extension/extension-insert-node-in-polyline.md',
-          'extension/extension-components',
-          'extension/component-control',
-          'extension/component-dnd-panel',
-          'extension/component-selection',
-          'extension/component-minimap',
+          // 'extension/extension-components',
+          'extension/adapter',
+          'extension/bpmn-element',
         ]
       },
       'extension/component-custom'
