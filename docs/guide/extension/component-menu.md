@@ -21,8 +21,6 @@ LogicFlow.use(Menu);
 - 边右键菜单(edgeMenu)：删除、编辑文案
 - 画布右键菜单(graphMenu)：无
 
-<example href="/examples/#/extension/components/menu" :height="300" ></example>
-
 ## 菜单配置项
 
 菜单中的每一项功能，可以用一条配置进行表示。具体字段如下
@@ -256,3 +254,12 @@ lf.setDefaultEdgeType('custome_edge');
 通过对设置这些class，可以覆盖默认样式，美化字体颜色，设置菜单项icon等。
 
 注意，以上介绍的菜单配置必须在 `lf.render()`之前调用。
+
+### 示例
+
+<iframe src="https://codesandbox.io/embed/dazzling-hypatia-en8s9?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base16"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
