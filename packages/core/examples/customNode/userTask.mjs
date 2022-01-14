@@ -44,7 +44,31 @@ class UserTaskModel extends RectNodeModel {
   setAttributes() {
     this.width = 100;
     this.height = 100;
+    const circleOnlyAsTarget = {
+      message: "正方形节点下一个节点只能是圆形节点",
+      validate: (source, target, sourceAnchor, targetAnchor) => {
+        console.log(source, target, sourceAnchor, targetAnchor);
+        return true;
+      },
+    };
+    this.sourceRules.push(circleOnlyAsTarget);
   }
+  getDefaultAnchor() {
+    const { width, height, x, y } = this; 
+    return [
+      {
+        x: x - width / 2,
+        y,
+        id: this.id + '_0'
+      },
+      {
+        x: x + width / 2,
+        y,
+        id: this.id + '_1'
+      }
+    ]
+  }
+  
   getNodeStyle() {
     const style = super.getNodeStyle();
     const properties = this.properties;

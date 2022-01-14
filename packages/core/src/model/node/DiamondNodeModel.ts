@@ -70,14 +70,8 @@ class DiamondNodeModel extends BaseNodeModel {
     return max - min;
   }
 
-  @computed get anchors(): Point[] {
-    const {
-      anchorsOffset, points,
-    } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
-    return points.map(([x1, y1], idx) => ({ x: x1, y: y1, id: `${this.id}_${idx}` }));
+  getDefaultAnchor() {
+    return this.points.map(([x1, y1], idx) => ({ x: x1, y: y1, id: `${this.id}_${idx}` }));
   }
 }
 

@@ -126,11 +126,6 @@ const Snapshot = {
   getCanvasData(svg: SVGGraphicsElement, backgroundColor: string) {
     const copy = svg.cloneNode(true);
     const graph = copy.lastChild;
-    const style = document.createElement('style');
-    style.innerHTML = this.getClassRules();
-    const foreignObject = document.createElement('foreignObject');
-    foreignObject.appendChild(style);
-    copy.appendChild(foreignObject);
     let childLength = graph.childNodes && graph.childNodes.length;
     if (childLength) {
       for (let i = 0; i < childLength; i++) {
@@ -182,6 +177,11 @@ const Snapshot = {
       ctx.clearRect(0, 0, bboxWidth, bboxHeight);
     }
     const img = new Image();
+    const style = document.createElement('style');
+    style.innerHTML = this.getClassRules();
+    const foreignObject = document.createElement('foreignObject');
+    foreignObject.appendChild(style);
+    copy.appendChild(foreignObject);
     return new Promise((resolve) => {
       img.onload = () => {
         ctx.drawImage(img, 0, 0);

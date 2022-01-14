@@ -27,7 +27,7 @@ class CircleNodeModel extends BaseNodeModel {
       ...cloneDeep(circle),
     };
   }
-  getDetaultAnchor() {
+  getDefaultAnchor() {
     const { x, y, r } = this;
     return [
       { x, y: y - r, id: `${this.id}_0` },

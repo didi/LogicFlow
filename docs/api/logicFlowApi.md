@@ -491,6 +491,16 @@ lf.getEdgeModels({
 lf.changeEdgeId('oldId', 'newId')
 ```
 
+## changeEdgeType
+
+切换边的类型
+
+示例：
+
+```js
+lf.changeEdgeType('edgeId', 'bezier')
+```
+
 ## getEdgeDataById
 
 通过`id`获取边的数据

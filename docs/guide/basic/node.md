@@ -354,36 +354,6 @@ path标签属性：
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
-## 自定义节点的锚点
-
-以正方形节点为例，如果我们只想使用水平方向上的左右两个锚点，则需要设置附加属性`anchorsOffset`。
-
-```ts
-import { RectNode, RectNodeModel } from '@logicflow/core';
-
-class SquareModel extends RectNodeModel {
-  setAttributes() {
-    const size = 80;
-    this.width = size;
-    this.height = size;
-    // 设置自定义锚点
-    // 只需要为每个锚点设置相对于节点中心的偏移量
-    this.anchorsOffset = [
-      [size / 2, 0], // x 轴上偏移 size / 2
-      [-size / 2, 0], // x 轴上偏移 -size / 2
-    ];
-  }
-}
-```
-
-<example
-  :height="250"
-  iframeId="iframe-2"
-  href="/examples/#/advance/custom-node/anchor"
-/>
-
-在上例中，我们为`anchorsOffset`设置了一个数组，数组的每一项都是锚点相对于节点中心`(x, y)`的偏移量，例如`[size / 2, 0]`表示在 x 轴方向上从节点中心向右偏移宽度的一半，y 轴方向上不偏移。
-
 ## 自定义连接规则校验
 
 在某些时候，我们可能需要控制边的连接方式，比如开始节点不能被其它节点连接、结束节点不能连接其他节点、用户节点后面必须是判断节点等，要想达到这种效果，我们需要为节点设置以下两个属性。
@@ -400,17 +370,13 @@ class SquareModel extends RectNodeModel {
     const size = 80;
     const circleOnlyAsTarget = {
       message: "正方形节点下一个节点只能是圆形节点",
-      validate: (source: any, target: any) => {
+      validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
         return target.type === "circle";
       },
     };
 
     this.width = size;
     this.height = size;
-    this.anchorsOffset = [
-      [size / 2, 0],
-      [-size / 2, 0]
-    ];
     this.sourceRules.push(circleOnlyAsTarget);
   }
 }
@@ -436,6 +402,56 @@ lf.on('connection:not-allowed', (msg) => {
   console.log(msg)
 });
 ```
+
+## 自定义节点的锚点
+
+对于各种基础类型节点，我们都内置了默认锚点。LogicFlow支持通过重写获取锚点的方法来实现自定义节点的锚点。
+
+```ts
+import { RectNode, RectNodeModel } from '@logicflow/core';
+
+class SquareModel extends RectNodeModel {
+  setAttribute() {
+    const rule = {
+      message: "只允许从右边的锚点连出",
+      validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
+        return sourceAnchor.name === "right";
+      }
+    };
+    this.sourceRules.push(rule);
+  }
+  getDefaultAnchor() {
+    const { width, height, x, y, id } = this; 
+    return [
+      {
+        x: x - width / 2,
+        y,
+        name: 'left',
+        id: `${id}_0`
+      },
+      {
+        x: x + width / 2,
+        y,
+        name: 'right',
+        id: `${id}_1`
+      },
+    ]
+  }
+}
+```
+
+上面的示例中，我们自定义锚点的时候，不仅可以定义锚点的坐标，还可以给锚点加上任一属性。有了这些属性，我们可以再做很多额外的事情。例如，我们增加一个校验规则，只允许节点从右边连出，从左边连入；或者加个id, 在获取数据的时候保存当前连线从那个锚点连接到那个锚点。
+
+<iframe src="https://codesandbox.io/embed/quirky-leftpad-ou2i0?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="quirky-leftpad-ou2i0"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+::: tip 提示
+在实际开发中，存在隐藏锚点的需求，可以参考github issue [如何隐藏锚点？](https://github.com/didi/LogicFlow/issues/454)，可以查看code sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hideAnchor/index.js)
+:::
 
 ## 自定义HTML节点
 

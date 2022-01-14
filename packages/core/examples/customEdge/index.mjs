@@ -17,6 +17,7 @@ const lf = new LogicFlow({
 lf.register(customPolyline);
 lf.register(customLine);
 lf.register(customBezier);
+lf.setDefaultEdgeType("bezier");
 baseData.edges.push({
   type: 'custom-bezier',
   sourceNodeId: '1',
@@ -33,4 +34,14 @@ baseData.edges.push({
     isActived: true
   }
 });
-lf.render(baseData);
+const data = window.sessionStorage.getItem('custom-edge-data');
+if (data) {
+  lf.render(JSON.parse(data));
+} else {
+  lf.render(baseData);
+}
+
+document.querySelector('#js_save').addEventListener('click', () => {
+  const data = lf.getGraphData()
+  window.sessionStorage.setItem('custom-edge-data', JSON.stringify(data));
+})

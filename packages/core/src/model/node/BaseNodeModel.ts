@@ -341,10 +341,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   /**
-   * @overridable 子类重写此方法设置锚点
    * @returns Point[] 锚点坐标构成的数组
    */
-  public getAnchorsByOffset(): PointAnchor[] {
+  getAnchorsByOffset(): PointAnchor[] {
     const {
       anchorsOffset,
       id,
@@ -370,12 +369,13 @@ export default class BaseNodeModel implements IBaseNodeModel {
         };
       });
     }
-    return this.getDetaultAnchor();
+    return this.getDefaultAnchor();
   }
   /**
+   * @overridable 子类重写此方法设置默认锚点
    * 获取节点默认情况下的锚点
    */
-  public getDetaultAnchor(): PointAnchor[] {
+  public getDefaultAnchor(): PointAnchor[] {
     return [];
   }
   /**
@@ -442,7 +442,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   @action
   updateText(value: string): void {
-    this.text.value = value;
+    this.text = {
+      ...this.text,
+      value,
+    };
   }
 
   @action

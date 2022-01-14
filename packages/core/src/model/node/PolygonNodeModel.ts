@@ -67,13 +67,11 @@ class PolygonNodeModel extends BaseNodeModel {
     });
     return max - min;
   }
-  @computed get anchors(): Point[] {
+
+  getDefaultAnchor() {
     const {
-      anchorsOffset, x, y, width, height, points,
+      x, y, width, height, points,
     } = this;
-    if (anchorsOffset && anchorsOffset.length > 0) {
-      return this.getAnchorsByOffset();
-    }
     return points.map(([x1, y1], idx) => ({
       x: x + x1 - width / 2,
       y: y + y1 - height / 2,
