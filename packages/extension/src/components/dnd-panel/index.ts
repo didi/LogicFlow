@@ -4,6 +4,7 @@ type ShapeItem = {
   type?: string;
   text?: string;
   icon?: string;
+  label?: string;
   className?: string;
   properties?: Record<string, any>;
   callback?: () => void;
@@ -38,7 +39,7 @@ class DndPanel {
     domContainer.appendChild(this.panelEl);
     this.domContainer = domContainer;
   }
-  private createDndItem(shapeItem): HTMLElement {
+  private createDndItem(shapeItem: ShapeItem): HTMLElement {
     const el = document.createElement('div');
     el.className = shapeItem.className ? `lf-dnd-item ${shapeItem.className}` : 'lf-dnd-item';
     const shape = document.createElement('div');
