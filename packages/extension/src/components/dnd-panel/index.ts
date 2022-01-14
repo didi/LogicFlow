@@ -7,7 +7,7 @@ type ShapeItem = {
   label?: string;
   className?: string;
   properties?: Record<string, any>;
-  callback?: () => void;
+  callback?: (lf: LogicFlow, container: HTMLElement) => void;
 };
 
 class DndPanel {
@@ -63,7 +63,7 @@ class DndPanel {
         });
       }
       if (shapeItem.callback) {
-        shapeItem.callback();
+        shapeItem.callback(this.lf, this.domContainer);
       }
     };
     return el;
