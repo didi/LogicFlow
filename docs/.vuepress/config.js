@@ -75,7 +75,7 @@ const verisonInfo = [
 
 module.exports = {
   title: 'LogicFlow',
-  description: 'LogicFlow desc',
+  description: 'LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、编辑所必需的功能和灵活的节点自定义、插件等拓展机制。LogicFlow支持前端研发自定义开发各种逻辑编排场景，如流程图、ER图、BPMN流程等。',
   head: [['link', { rel: 'icon', href: '/new-logo.svg' }]],
   plugins: ['@vuepress-reco/vuepress-plugin-back-to-top'],
   themeConfig: {
