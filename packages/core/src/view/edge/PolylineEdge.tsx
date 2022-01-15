@@ -3,7 +3,7 @@ import Polyline from '../basic-shape/Polyline';
 import BaseEdge from './BaseEdge';
 import { EventType, SegmentDirection } from '../../constant/constant';
 import { AppendInfo, ArrowInfo, IEdgeState } from '../../type/index';
-import { poins2PointsList } from '../../util/edge';
+import { points2PointsList } from '../../util/edge';
 import { getVerticalPointOfLine } from '../../algorithm';
 import Path from '../basic-shape/Path';
 import { createDrag } from '../../util/drag';
@@ -107,7 +107,7 @@ export default class PolylineEdge extends BaseEdge {
       hover,
       isSelected,
     };
-    const currentPositionList = poins2PointsList(points);
+    const currentPositionList = points2PointsList(points);
     // 两点重合时不计算起终点
     if (currentPositionList.length >= 2) {
       arrowInfo.start = currentPositionList[currentPositionList.length - 2];
@@ -115,7 +115,7 @@ export default class PolylineEdge extends BaseEdge {
     }
     return arrowInfo;
   }
-  getAppendAttibutes(appendInfo: AppendInfo): AppendAttributesType {
+  getAppendAttributes(appendInfo: AppendInfo): AppendAttributesType {
     const { start, end } = appendInfo;
     let d;
     if (start.x === end.x && start.y === end.y) {
@@ -146,7 +146,7 @@ export default class PolylineEdge extends BaseEdge {
   getAppendShape(appendInfo: AppendInfo) {
     const {
       d, strokeWidth, fill, strokeDasharray, stroke,
-    } = this.getAppendAttibutes(appendInfo);
+    } = this.getAppendAttributes(appendInfo);
     return (
       <Path
         d={d}

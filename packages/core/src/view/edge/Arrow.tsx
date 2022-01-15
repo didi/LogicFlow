@@ -21,7 +21,7 @@ type IProps = {
 };
 
 export default class Arrow extends Component<IProps> {
-  getArrowAttibutes(): ArrowAttributesType {
+  getArrowAttributes(): ArrowAttributesType {
     const { arrowInfo, style } = this.props;
     const { start, end } = arrowInfo;
     const config = {
@@ -42,7 +42,7 @@ export default class Arrow extends Component<IProps> {
   getShape() {
     const {
       d, strokeWidth, stroke, fill,
-    } = this.getArrowAttibutes();
+    } = this.getArrowAttributes();
     return (
       <Path
         d={d}

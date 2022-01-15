@@ -612,7 +612,7 @@ export const segmentDirection = (start: Point, end: Point): Direction => {
   return direction;
 };
 
-export const poins2PointsList = (points: string): PolyPoint[] => {
+export const points2PointsList = (points: string): PolyPoint[] => {
   const currentPositionList = points.split(' ');
   const pointsList = [];
   currentPositionList && currentPositionList.forEach(item => {
@@ -715,7 +715,7 @@ type AppendAttributesType = {
   strokeDasharray: string,
 };
 // 扩大边可点区域，获取边append的信息
-export const getAppendAttibutes = (appendInfo) : AppendAttributesType => {
+export const getAppendAttributes = (appendInfo) : AppendAttributesType => {
   const { start, end } = appendInfo;
   let d;
   if (start.x === end.x && start.y === end.y) {
@@ -801,7 +801,7 @@ export const getEndTangent = (path: string): Point[] => {
  */
 export const getClosestPointOfPolyline = (point: Point, points: string): Point => {
   const { x, y } = point;
-  const pointsPosition = poins2PointsList(points);
+  const pointsPosition = points2PointsList(points);
   let minDistance = Number.MAX_SAFE_INTEGER;
   let crossPoint;
   const segments = [];

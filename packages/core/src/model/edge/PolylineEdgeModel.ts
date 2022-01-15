@@ -19,7 +19,7 @@ import {
   isSegmentsInNode,
   isSegmentsCrossNode,
   segmentDirection,
-  poins2PointsList,
+  points2PointsList,
   pointFilter,
 } from '../../util/edge';
 import RectNodeModel from '../node/RectNodeModel';
@@ -51,7 +51,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         x, y,
       };
     }
-    const currentPositionList = poins2PointsList(this.points);
+    const currentPositionList = points2PointsList(this.points);
     const [p1, p2] = getLongestEdge(currentPositionList);
     return {
       x: (p1.x + p2.x) / 2,
@@ -422,7 +422,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   @action
   dragAppendEnd() {
     if (this.draginngPointList) {
-      const pointsList = poins2PointsList(this.points);
+      const pointsList = points2PointsList(this.points);
       // 更新pointsList，重新渲染appendWidth
       this.pointsList = pointsList.map(i => i);
       // draginngPointList清空

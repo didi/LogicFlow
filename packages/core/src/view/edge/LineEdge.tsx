@@ -2,7 +2,7 @@ import { h } from 'preact';
 import Line from '../basic-shape/Line';
 import Path from '../basic-shape/Path';
 import BaseEdge from './BaseEdge';
-import { getAppendAttibutes } from '../../util/edge';
+import { getAppendAttributes } from '../../util/edge';
 
 export default class LineEdge extends BaseEdge {
   getEdge() {
@@ -37,7 +37,7 @@ export default class LineEdge extends BaseEdge {
     };
     const {
       d, strokeWidth, fill, strokeDasharray, stroke,
-    } = getAppendAttibutes(appendInfo);
+    } = getAppendAttributes(appendInfo);
     return (
       <Path
         d={d}
