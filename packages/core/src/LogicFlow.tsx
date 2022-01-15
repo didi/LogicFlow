@@ -912,7 +912,8 @@ export default class LogicFlow {
       console.warn(`不存在为${nodeConfig.type}类型的节点`);
       return;
     }
-    const fakerNodeModel = new Model(nodeConfig, this.graphModel);
+    // * initNodeData区分是否为虚拟节点
+    const fakerNodeModel = new Model({ ...nodeConfig, virtual: true }, this.graphModel);
     this.graphModel.setFakerNode(fakerNodeModel);
     return fakerNodeModel;
   }
