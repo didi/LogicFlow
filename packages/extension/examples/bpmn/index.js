@@ -102,6 +102,21 @@ window.onload = function () {
     endConfig,
     groupConfig,
   ]);
+  lf.extension.control.addItem({
+    iconClass: 'custom-minimap',
+    title: '',
+    text: '导航',
+    onMouseEnter: (lf, ev) => {
+      const position = lf.getPointByClient(ev.x, ev.y);
+      MiniMap.show(position.domOverlayPosition.x - 120, position.domOverlayPosition.y + 35);
+    },
+    onClick: (lf, ev) => {
+      // console.log(MiniMap, ev);
+      const position = lf.getPointByClient(ev.x, ev.y);
+      // console.log(position);
+      MiniMap.show(position.domOverlayPosition.x - 120, position.domOverlayPosition.y + 35);
+    },
+  });
   // lf.setContextMenuItems
   lf.setContextMenuByType('bpmn:userTask', [
     userConfig,
