@@ -1,7 +1,7 @@
 import { ModelType } from '../constant/constant';
 import PolylineEdgeModel from '../model/edge/PolylineEdgeModel';
 import BezierEdgeModel from '../model/edge/BezierEdgeModel';
-import { poins2PointsList, getBBoxOfPoints, getBezierPoints } from '../util/edge';
+import { points2PointsList, getBBoxOfPoints, getBezierPoints } from '../util/edge';
 
 // 获取节点的out
 export const getNodeOutline = ({
@@ -29,7 +29,7 @@ export const getLineOutline = (edge) => {
 
 export const getPolylineOutline = (edge) => {
   const { points } = edge;
-  const pointsList = poins2PointsList(points);
+  const pointsList = points2PointsList(points);
   const bbox = getBBoxOfPoints(pointsList, 8);
   const {
     x, y, width, height,
