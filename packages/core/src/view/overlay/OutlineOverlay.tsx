@@ -4,7 +4,7 @@ import { BaseNodeModel, LineEdgeModel } from '../../model';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 import GraphModel from '../../model/GraphModel';
-import { poins2PointsList, getBezierPoints, getBBoxOfPoints } from '../../util/edge';
+import { points2PointsList, getBezierPoints, getBBoxOfPoints } from '../../util/edge';
 import Rect from '../basic-shape/Rect';
 import { observer } from '../..';
 
@@ -103,7 +103,7 @@ export default class OutlineOverlay extends Component<IProps> {
   // 折线outline
   getPolylineOutline(polyline: PolylineEdgeModel) {
     const { points } = polyline;
-    const pointsList = poins2PointsList(points);
+    const pointsList = points2PointsList(points);
     const bbox = getBBoxOfPoints(pointsList, 8);
     const {
       x, y, width, height,
