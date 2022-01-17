@@ -71,4 +71,30 @@ export default {
 
 [去codesandbox中编辑](https://codesandbox.io/s/logicflow-step5-i4xes?file=/step5/sequence.js)
 
+## 保存锚点信息
+
+默认情况下，LogicFlow只记录节点与节点的信息。但是在一些业务场景下，需要关注到锚点，比如在UML类图中的关联关系；或者锚点表示节点的入口和出口之类。这个时候需要重写连线的保存方法，将锚点信息也一起保存。
+
+```js
+class CustomEdgeModel2 extends LineEdgeModel {
+  /**
+   * 重写此方法，使保存数据是能带上锚点数据。
+   */
+  getData() {
+    const data = super.getData();
+    data.sourceAnchorId = this.sourceAnchorId;
+    data.targetAnchorId = this.targetAnchorId;
+    return data;
+  }
+}
+```
+
+
+<iframe src="https://codesandbox.io/embed/logicflow-base17-h5pis?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base17"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
 
