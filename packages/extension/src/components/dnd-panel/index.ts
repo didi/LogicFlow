@@ -27,10 +27,12 @@ class DndPanel {
     };
   }
   render(lf, domContainer) {
-    if (this.panelEl) {
-      domContainer.removeChild(this.panelEl);
+    this.destroy();
+    if (!this.shapeList || this.shapeList.length === 0) {
+      // 首次render后失败后，后续调用setPatternItems支持渲染
+      this.domContainer = domContainer;
+      return;
     }
-    if (!this.shapeList || this.shapeList.length === 0) return;
     this.panelEl = document.createElement('div');
     this.panelEl.className = 'lf-dndpanel';
     this.shapeList.forEach(shapeItem => {
@@ -38,6 +40,11 @@ class DndPanel {
     });
     domContainer.appendChild(this.panelEl);
     this.domContainer = domContainer;
+  }
+  destroy() {
+    if (this.domContainer && this.panelEl && this.domContainer.contains(this.panelEl)) {
+      this.domContainer.removeChild(this.panelEl);
+    }
   }
   private createDndItem(shapeItem: ShapeItem): HTMLElement {
     const el = document.createElement('div');
