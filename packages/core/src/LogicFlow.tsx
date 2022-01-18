@@ -79,7 +79,13 @@ export default class LogicFlow {
   options: Options.Definition;
   snaplineModel: SnaplineModel;
   components: ComponentRender[] = [];
-
+  /**
+   * 个性配置的插件，覆盖全局配置的插件
+   */
+  plugins: Extension[];
+  /**
+   * 全局配置的插件，所有的LogicFlow都会使用
+   */
   static extensions: Map<string, Extension> = new Map();
   /**
    * 自定义数据格式转换方法
@@ -103,6 +109,7 @@ export default class LogicFlow {
     options = Options.get(options);
     this.options = options;
     this.container = options.container;
+    this.plugins = options.plugins;
     // model 初始化
     this.graphModel = new GraphModel({
       ...options,
@@ -863,7 +870,9 @@ export default class LogicFlow {
     this.extensions.set(pluginName, extension);
   }
   private installPlugins(disabledPlugins = []) {
-    LogicFlow.extensions.forEach((extension) => {
+    // 安装插件，优先使用个性插件
+    const extensions = this.plugins ?? LogicFlow.extensions;
+    extensions.forEach((extension) => {
       const pluginName = extension.pluginName || extension.name;
       if (disabledPlugins.indexOf(pluginName) === -1) {
         this.installPlugin(extension);

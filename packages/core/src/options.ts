@@ -4,6 +4,7 @@ import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
 import {
   NodeData,
   EdgeData,
+  Extension,
   GraphConfigData,
 } from './type';
 import { KeyboardDef } from './keyboard';
@@ -93,6 +94,10 @@ export type Definition = {
    * todo: 将multipleSelect放到插件中
    */
   disabledTools?: string[];
+  /**
+   * 是否配置个性插件，覆盖全局配置的插件
+   */
+  plugins?: Extension[];
   [key: string]: any;
 } & EditConfigInterface;
 
