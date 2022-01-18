@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.4...@logicflow/extension@1.0.7-alpha.0) (2022-01-18)
+
+
+### Bug Fixes
+
+* bpmn example use new control ([eb11ffa](https://github.com/didi/LogicFlow/commit/eb11ffa464e563946b58f7e0f18e2bc58383d9c0))
+* dnd-panel render ([26799eb](https://github.com/didi/LogicFlow/commit/26799ebe5ff1f396cb01c14b71ae8482ba4e2f50))
+* graphDownload ([2e94d30](https://github.com/didi/LogicFlow/commit/2e94d300b15784e6b29fde731c1eb87cacb82869))
+* pattern callback ([1d29050](https://github.com/didi/LogicFlow/commit/1d290501712f74b13a1e4f5d3ae2d85109aa55dd))
+* rewrite control extension ([2e70363](https://github.com/didi/LogicFlow/commit/2e70363b7f1ac9fb3e0924f4cc439d412c6e492e))
+* type error ShapeItem ([9551c6d](https://github.com/didi/LogicFlow/commit/9551c6d4cd973e3f8f1dab71cb908b755deb401c))
+* typo ([facccdf](https://github.com/didi/LogicFlow/commit/facccdf3b98d44650c75e34a66ed33f5e0d8f75e))
+
+
+
+
+
 ## [1.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.0-alpha.12...@logicflow/extension@1.0.4) (2022-01-12)
 
 

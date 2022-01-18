@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.4...@logicflow/core@1.0.7-alpha.0) (2022-01-18)
+
+
+### Bug Fixes
+
+* add virtual field ([5894ae0](https://github.com/didi/LogicFlow/commit/5894ae0104bc567ef4678662b8e571c1c1d19820))
+* error name ([ef10a93](https://github.com/didi/LogicFlow/commit/ef10a93198b34017fbec7dedb4c66a39ceff5536))
+* **core:** adjust polyline bugfix ([e87f2c9](https://github.com/didi/LogicFlow/commit/e87f2c9c772558b2de0d6850ca528a59cbafaf6f))
+* typo ([facccdf](https://github.com/didi/LogicFlow/commit/facccdf3b98d44650c75e34a66ed33f5e0d8f75e))
+
+
+### Features
+
+* lf support plugins ([3dacdb6](https://github.com/didi/LogicFlow/commit/3dacdb6e39ff0fa84b0c3e525bf3e6d1b91a29f4))
+
+
+
+
+
 ## [1.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.0-alpha.12...@logicflow/core@1.0.4) (2022-01-12)
 
 
