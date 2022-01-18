@@ -694,7 +694,7 @@ class GraphModel {
    * @param {object} edgeConfig
    */
   @action
-  addEdge(edgeConfig: EdgeConfig): EdgeConfig {
+  addEdge(edgeConfig: EdgeConfig): BaseEdgeModel {
     const edgeOriginData = formatData(edgeConfig);
     // 边的类型优先级：自定义>全局>默认
     let { type } = edgeOriginData;
