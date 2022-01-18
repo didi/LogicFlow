@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.7-alpha.0...@logicflow/extension@1.0.7-alpha.1) (2022-01-18)
+
+
+### Features
+
+* add lfJson2Xml and lfXml2Json ([928a0d4](https://github.com/didi/LogicFlow/commit/928a0d42fd7cba383fe4768d1eafd01b59b668c3))
+
+
+
+
+
 ## [1.0.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.4...@logicflow/extension@1.0.7-alpha.0) (2022-01-18)
 
 

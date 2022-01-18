@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.7-alpha.0...@logicflow/core@1.0.7-alpha.1) (2022-01-18)
+
+
+### Bug Fixes
+
+* addEdge return edgeModel ([e91f995](https://github.com/didi/LogicFlow/commit/e91f99502a9f7bafcf93e4aac1f32dfc3fb0a603))
+
+
+
+
+
 ## [1.0.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.0.4...@logicflow/core@1.0.7-alpha.0) (2022-01-18)
 
 
