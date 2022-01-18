@@ -463,8 +463,8 @@ export default class LogicFlow {
    * })
    * @param {object} edgeConfig
    */
-  addEdge(edgeConfig: EdgeConfig): void {
-    this.graphModel.addEdge(edgeConfig);
+  addEdge(edgeConfig: EdgeConfig): _Model.BaseEdgeModel {
+    return this.graphModel.addEdge(edgeConfig);
   }
   /**
    * 删除边

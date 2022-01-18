@@ -555,7 +555,7 @@ graphModel.deleteNode('node_1');
 | nodeConfig | NodeConfig | 无 | 节点配置 |
 
 ```js
-graphModel.addNode({
+const nodeModel = graphModel.addNode({
   type: 'rect',
   x: 300,
   y: 300
@@ -574,7 +574,7 @@ graphModel.addNode({
 | nodeId | string | 无 | 节点id |
 
 ```js
-graphModel.cloneNode('node_1');
+const nodeModel = graphModel.cloneNode('node_1');
 ```
 
 ## moveNode
@@ -642,7 +642,7 @@ graphModel.editText('node_1');
 | edgeConfig | EdgeConfig | 无 | 边配置 |
 
 ```js
-graphModel.addEdge({
+const edgeModel = graphModel.addEdge({
   type: 'polyline',
   sourceNodeId: 'node_1',
   targetNodeId: 'node_2',

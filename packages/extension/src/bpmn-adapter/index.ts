@@ -1,6 +1,6 @@
 import { getBpmnId } from './bpmnIds';
-import json2xml from './json2xml';
-import XML from './xml2json';
+import { lfJson2Xml } from './json2xml';
+import { lfXml2Json } from './xml2json';
 
 import {
   ExclusiveGatewayConfig,
@@ -488,13 +488,12 @@ const BpmnXmlAdapter = {
     lf.adapterOut = this.adapterXmlOut;
   },
   adapterXmlIn(bpmnData) {
-    // @ts-ignore
-    const json = new XML.ObjTree().parseXML(bpmnData);
+    const json = lfXml2Json(bpmnData);
     return BpmnAdapter.adapterIn(json);
   },
   adapterXmlOut(data) {
     const outData = BpmnAdapter.adapterOut(data);
-    return json2xml(outData);
+    return lfJson2Xml(outData);
   },
 };
 

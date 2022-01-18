@@ -92,4 +92,9 @@ lf.setPatternItems([
 
 使用`DndPanel`组件，可以快捷的拖拽面板，如下所示
 
-<example href="/examples/#/extension/components/dnd-panel"></example>
+<iframe src="https://codesandbox.io/embed/elastic-mahavira-1ucwp?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="elastic-mahavira-1ucwp"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>

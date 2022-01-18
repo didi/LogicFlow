@@ -1,6 +1,6 @@
 # MiniMap
 
-## 启用
+### 启用
 
 ```ts
 import LogicFlow from '@logicflow/core';
@@ -10,7 +10,7 @@ import '@logicflow/extension/lib/style/index.css'
 LogicFlow.use(MiniMap);
 ```
 
-## 显示
+### 显示
 
 引入 mini-map 后默认不展示，需要手动开启显示。
 
@@ -29,20 +29,17 @@ MiniMap.show(leftPosition?: number, topPosition?: number);
 
 > `MiniMap.show()`必须在`lf.render()`后调用。
 
-## 隐藏
+### 隐藏
 
 ```ts
 MiniMap.hide();
 ```
 
-## 禁用插件
+### 示例
 
-MiniMap和正常的画布共享LogicFlow，可以在MiniMap中不显示某些插件，例如不显示工具栏。
-
-```ts
-MiniMap.init({
-  disabledPlugins: [Control.name, Snapshot.name, SelectionSelect.name]
-})
-```
-
-<example href="/examples/#/extension/components/mini-map" :height="350" ></example>
+<iframe src="https://codesandbox.io/embed/intelligent-matsumoto-t1dc5?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="intelligent-matsumoto-t1dc5"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>

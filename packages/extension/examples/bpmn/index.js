@@ -8,6 +8,20 @@ window.onload = function () {
     // // stopMoveGraph: true,
     // multipleSelectedKey: 'meta', // alt, shift
     hideAnchors: false,
+    plugins: [
+      BpmnElement,
+      MiniMap,
+      FlowPath,
+      AutoLayout,
+      DndPanel,
+      Menu,
+      ContextMenu,
+      Group,
+      Control,
+      BpmnXmlAdapter,
+      Snapshot,
+      SelectionSelect,
+    ],
     // isSilentMode: true,
     grid: {
       type: 'dot',

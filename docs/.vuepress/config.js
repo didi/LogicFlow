@@ -26,19 +26,19 @@ const guide = [
       'extension/extension-intro',
       {
         title: '内置插件',
-        collapsable: true,
+        collapsable: false,
         children: [
           'extension/component-menu',
           'extension/component-dnd-panel',
           'extension/component-control',
           'extension/component-minimap',
           'extension/component-selection',
-          'extension/snapshot',
           'extension/extension-node-resize',
           'extension/extension-insert-node-in-polyline.md',
           // 'extension/extension-components',
           'extension/adapter',
           'extension/bpmn-element',
+          'extension/snapshot',
         ]
       },
       'extension/component-custom'
@@ -91,7 +91,45 @@ module.exports = {
     editLinkText: '在 Github 上改善此页',
     nav: [
       { text: '教程', link: '/guide/start' },
-      { text: 'API', link: '/api/logicFlowApi' },
+      { 
+        text: 'API',
+        link: '#',
+        items: [
+          // link: '/api/logicFlowApi'
+          {
+            text: "LogicFlow实例",
+            link: "/api/logicFlowApi"
+          },
+          {
+            text: "graphModel",
+            link: "/api/graphModelApi"
+          },
+          {
+            text: "nodeModel",
+            link: "/api/nodeModelApi"
+          },
+          {
+            text: "edgeModel",
+            link: "/api/edgeModelApi"
+          },
+          {
+            text: "主题",
+            link: "/api/themeApi"
+          },
+          {
+            text: "事件",
+            link: "/api/eventCenterApi"
+          },
+          {
+            text: "transformModel",
+            link: "/api/transformModelApi"
+          },
+          {
+            text: "editConfigModel",
+            link: "/api/editConfigModelApi"
+          }
+        ]
+      },
       {
         text: '示例',
         link: '#',

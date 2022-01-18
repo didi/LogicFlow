@@ -49,10 +49,14 @@ function toXml(v, name, ind, deep) {
    return xml;
 };
 
-export default function json2xml(o) {
+function lfJson2Xml(o) {
    let xmlStr= "";
    for (var m in o) {
       xmlStr += toXml(o[m], m, "\t\n", 0);
    }
    return xmlStr;
 }
+
+export {
+   lfJson2Xml
+};
