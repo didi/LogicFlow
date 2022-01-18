@@ -1,6 +1,8 @@
-# 导出图片
+# 导出
 
-## 使用方式
+## 导出图片
+
+### 使用方式
 
 **第一步**: 注册插件
 
@@ -28,6 +30,13 @@ document.getElementById('download').addEventListener('click', () => {
 
 值得一提的是：通过此插件截取下载的图片不会因为偏移、缩放受到影响。
 
-## 示例
+### 示例
 
 <example :height="250" ></example>
+
+## 导出xml
+
+1.0.7 新增
+
+LogicFlow默认生成的数据是json格式，可能会有一些流程引擎需要前端提供xml格式数据。`@logicflow/extension`提供了`lfJson2Xml`和`lfXml2Json`两个插件，用于将json和xml进行互相转换。
+

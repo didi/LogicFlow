@@ -516,4 +516,10 @@ which I will do instead of keeping this documentation like it is.
 // ========================================================================
 */
 
-export default XML;
+const lfXml2Json = (xmlData) => {
+  return new XML.ObjTree().parseXML(xmlData)
+};
+
+export {
+  lfXml2Json,
+};

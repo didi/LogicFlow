@@ -170,6 +170,10 @@ LogicFlow对于不同的基础节点，存在一些各基础节点自己特有�
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
+::: warning 注意
+
+:::
+
 #### 基于properties属性自定义节点样式
 
 在实际业务中，存在这样的情况，例如在审批场景中，自定义的审批节点存在3种状态：

@@ -19,7 +19,8 @@ const packagesEntry = {
   InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
   FlowPath: path.resolve(__dirname, '../src/tools/flow-path/index.ts'),
   AutoLayout: path.resolve(__dirname, '../src/tools/auto-layout/index.ts'),
-  // MindMap: path.resolve(__dirname, '../src/mindmap/index.ts'),
+  lfXml2Json: path.resolve(__dirname, '../src/bpmn-adapter/xml2json.ts'),
+  lfJson2Xml: path.resolve(__dirname, '../src/bpmn-adapter/json2xml.ts'),
 };
 
 module.exports = {

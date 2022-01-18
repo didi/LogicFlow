@@ -159,3 +159,22 @@ document.getElementById('base64').addEventListener('click', () => {
     console.log(width, height)
   })
 })
+
+document.querySelector("#downloadXml").addEventListener("click", () => {
+  const data = lf.getGraphData();
+  console.log(lfJson2Xml(data));
+  download('logicflow.xml', lfJson2Xml(data));
+})
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}

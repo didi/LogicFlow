@@ -26,19 +26,19 @@ const guide = [
       'extension/extension-intro',
       {
         title: '内置插件',
-        collapsable: true,
+        collapsable: false,
         children: [
           'extension/component-menu',
           'extension/component-dnd-panel',
           'extension/component-control',
           'extension/component-minimap',
           'extension/component-selection',
-          'extension/snapshot',
           'extension/extension-node-resize',
           'extension/extension-insert-node-in-polyline.md',
           // 'extension/extension-components',
           'extension/adapter',
           'extension/bpmn-element',
+          'extension/snapshot',
         ]
       },
       'extension/component-custom'
