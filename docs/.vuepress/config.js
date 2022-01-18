@@ -91,7 +91,45 @@ module.exports = {
     editLinkText: '在 Github 上改善此页',
     nav: [
       { text: '教程', link: '/guide/start' },
-      { text: 'API', link: '/api/logicFlowApi' },
+      { 
+        text: 'API',
+        link: '#',
+        items: [
+          // link: '/api/logicFlowApi'
+          {
+            text: "LogicFlow实例",
+            link: "/api/logicFlowApi"
+          },
+          {
+            text: "graphModel",
+            link: "/api/graphModelApi"
+          },
+          {
+            text: "nodeModel",
+            link: "/api/nodeModelApi"
+          },
+          {
+            text: "edgeModel",
+            link: "/api/edgeModelApi"
+          },
+          {
+            text: "主题",
+            link: "/api/themeApi"
+          },
+          {
+            text: "事件",
+            link: "/api/eventCenterApi"
+          },
+          {
+            text: "transformModel",
+            link: "/api/transformModelApi"
+          },
+          {
+            text: "editConfigModel",
+            link: "/api/editConfigModelApi"
+          }
+        ]
+      },
       {
         text: '示例',
         link: '#',

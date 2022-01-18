@@ -80,7 +80,7 @@ lf.render({
 
 ### 在vue或者react等前端框架中使用logicflow
 
-LogicFlow本身是已umd打包为纯JS格式的包，所以不论是vue还是react中都可以使用。这里需要注意一个点，那就是初始化LogicFlow实例的时候，传入的参数container,必须要dom上存在这个节点，不然会报错`请检查 container 参数是否有效`。
+LogicFlow本身是以umd打包为纯JS的包，所以不论是vue还是react中都可以使用。这里需要注意一个点，那就是初始化LogicFlow实例的时候，传入的参数container,必须要dom上存在这个节点，不然会报错`请检查 container 参数是否有效`。
 
 [在Sandbox查看vue示例](https://codesandbox.io/s/github/towersxu/logicflow-vue-base/tree/main/?fontsize=14&hidenavigation=1&theme=dark)
 ```vue
