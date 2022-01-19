@@ -26,8 +26,6 @@ class MiniMap {
     this.__miniMapWidth = lf.graphModel.width;
     this.__miniMapHeight = (lf.graphModel.width * 220) / 150;
     this.__LogicFlow = LogicFlow;
-    // 避免多次install的时候, _isShow状态被修改了
-    this.__isShow = false;
     this.__init();
   }
   render(lf, container) {
