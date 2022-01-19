@@ -26,17 +26,17 @@ class Menu {
   private __menuDOM: HTMLElement;
   private menuTypeMap: Map<string, MenuItem[]>;
   private __currentData: any;
-  static pluginName = 'Menu';
+  static pluginName = 'menu';
   constructor({ lf }) {
     this.__menuDOM = document.createElement('ul');
     this.lf = lf;
     this.menuTypeMap = new Map();
     this.init();
     this.lf.setMenuConfig = (config) => {
-      this.resetMenuItem(config);
+      this.setMenuConfig(config);
     };
     this.lf.addMenuConfig = (config) => {
-      this.addMenuItem(config);
+      this.addMenuConfig(config);
     };
     this.lf.setMenuByType = (config) => {
       this.setMenuByType(config);
@@ -237,7 +237,7 @@ class Menu {
     return menuList;
   }
   // 复写菜单
-  private resetMenuItem(config: MenuConfig) {
+  setMenuConfig(config: MenuConfig) {
     if (!config) {
       return;
     }
@@ -252,7 +252,7 @@ class Menu {
       && this.menuTypeMap.set(DefalutGraphMenuKey, config.graphMenu ? config.graphMenu : []);
   }
   // 在默认菜单后面追加菜单项
-  private addMenuItem(config: MenuConfig) {
+  addMenuConfig(config: MenuConfig) {
     if (!config) {
       return;
     }
@@ -275,8 +275,8 @@ class Menu {
    * 复写添加
    */
   changeMenuItem(type: SetType, config: MenuConfig) {
-    if (type === 'add') this.addMenuItem(config);
-    else if (type === 'reset') this.resetMenuItem(config);
+    if (type === 'add') this.addMenuConfig(config);
+    else if (type === 'reset') this.setMenuConfig(config);
     else {
       throw new Error(
         'The first parameter of changeMenuConfig should be \'add\' or \'reset\'',

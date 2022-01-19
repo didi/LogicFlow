@@ -11,7 +11,7 @@ const NEXT_X_DISTANCE = 200;
 const NEXT_Y_DISTANCE = 100;
 
 class ContextMenu {
-  static pluginName = 'ContextMenu';
+  static pluginName = 'contextMenu';
   private __menuDOM: HTMLElement;
   private lf: any;
   private _activeData: any;
@@ -22,25 +22,18 @@ class ContextMenu {
     this.lf = lf;
     this.__menuDOM = document.createElement('div');
     this.__menuDOM.className = 'lf-inner-context';
-    // const commonMenu = [];
     this.menuTypeMap.set(COMMON_TYPE_KEY, []);
-
     this.lf.setContextMenuByType = (type, menus) => {
       this.menuTypeMap.set(type, menus);
     };
     this.lf.setContextMenuItems = (menus) => {
-      this.menuTypeMap.set(COMMON_TYPE_KEY, menus);
+      this.setContextMenuItems(menus);
     };
     this.lf.showContextMenu = (data) => {
-      if (!data || !data.id) {
-        console.warn('请检查传入的参数');
-        return;
-      }
-      this._activeData = data;
-      this.createContextMenu();
+      this.showContextMenu(data);
     };
     this.lf.hideContextMenu = () => {
-      this.hideMenu();
+      this.hideContextMenu();
     };
   }
   render(lf, container) {
@@ -55,8 +48,35 @@ class ContextMenu {
       this.createContextMenu();
     });
     lf.on('blank:click', () => {
-      this.hideMenu();
+      this.hideContextMenu();
     });
+  }
+  /**
+   * 隐藏菜单
+   */
+  hideContextMenu() {
+    this.__menuDOM.innerHTML = '';
+    this.__menuDOM.style.display = 'none';
+    if (this.isShow) {
+      this.container.removeChild(this.__menuDOM);
+    }
+    this.lf.off('node:delete,edge:delete,node:drag,graph:transform', this.listenDelete);
+    this.isShow = false;
+  }
+  /**
+   * 显示指定元素菜单
+   * @param data 节点id、节点类型、菜单位置
+   */
+  showContextMenu(data) {
+    if (!data || !data.id) {
+      console.warn('请检查传入的参数');
+      return;
+    }
+    this._activeData = data;
+    this.createContextMenu();
+  }
+  setContextMenuItems(menus) {
+    this.menuTypeMap.set(COMMON_TYPE_KEY, menus);
   }
   /**
    * 获取新菜单位置
@@ -110,7 +130,7 @@ class ContextMenu {
         menuItem.className = `${menuItem.className} ${item.className}`;
       }
       img.addEventListener('click', () => {
-        this.hideMenu();
+        this.hideContextMenu();
         if (item.callback) {
           item.callback(this._activeData);
         } else {
@@ -188,18 +208,8 @@ class ContextMenu {
   }
 
   listenDelete = () => {
-    this.hideMenu();
+    this.hideContextMenu();
   };
-
-  private hideMenu() {
-    this.__menuDOM.innerHTML = '';
-    this.__menuDOM.style.display = 'none';
-    if (this.isShow) {
-      this.container.removeChild(this.__menuDOM);
-    }
-    this.lf.off('node:delete,edge:delete,node:drag,graph:transform', this.listenDelete);
-    this.isShow = false;
-  }
 }
 
 export default ContextMenu;

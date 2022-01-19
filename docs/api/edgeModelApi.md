@@ -58,7 +58,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 
 LogicFlow所有的边最终都是以SVG DOM的方式渲染。svg的样式相关属性都不会直接存在`edgeModel`。当开发者想要对SVG DOM添加更多的[svg属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)时，可以通过重写`edgeModel`上获取边样式属性方法来实现。
 
-### getEdgeStyle
+## getEdgeStyle
 
 支持重写，自定义边文本样式属性. 默认为[主题 baseEdge](/api/themeApi.html#baseedge)
 
@@ -73,7 +73,7 @@ class SequenceFlowModel extends PolylineModel {
 }
 ```
 
-### getTextStyle
+## getTextStyle
 
 支持重写，自定义边文本样式属性，默认为[主题 edgeText](/api/themeApi.html#edgetext)
 

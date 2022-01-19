@@ -11,9 +11,9 @@ type ControlItem = {
 };
 
 class Control {
-  lf: LogicFlow;
+  private lf: LogicFlow;
   static pluginName = 'control';
-  controlItems: ControlItem[] = [
+  private controlItems: ControlItem[] = [
     {
       key: 'zoom-out',
       iconClass: 'lf-control-zoomOut',
@@ -60,11 +60,10 @@ class Control {
       },
     },
   ];
-  domContainer: HTMLElement;
-  toolEl: HTMLElement;
+  private domContainer: HTMLElement;
+  private toolEl: HTMLElement;
   constructor({ lf }) {
     this.lf = lf;
-    this.lf.extension = { ...(this.lf.extension ?? {}), [Control.pluginName]: this };
   }
   render(lf, domContainer) {
     this.destroy();

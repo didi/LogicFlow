@@ -341,6 +341,7 @@ export interface LogicFlowContractor {
 }
 
 export interface ExtensionContractor {
+  pluginName: string;
   new({
     lf: LogicFlow,
     LogicFlow: LogicFlowContractor,

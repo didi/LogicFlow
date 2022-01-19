@@ -1,38 +1,26 @@
 # 自定义插件
 
-当内置组件的功能或样式不能满足业务需求时，我们可以根据 Logic Flow 提供的 [API](/api/logicFlowApi.html) 自己实现相应的组件，例如[拖拽示例](/guide/basic/dnd.html)中的拖拽面板。
+LogicFlow提供了很多的插件，但是这些插件都是一些具有普适性的插件，不一定都符合业务需求。下面将以一个具体示例，向大家介绍如何定义符合自己业务的插件。
 
-Logic Flow 维护了一个覆盖在`Graph`之上的组件层，这个组件层会向所包含的组件传递一些数据，如果想要将自己的组件插入到这一层中，我们需要暴露一个含有`install`方法的对象，以便将组件注册进 Logic Flow，除此之外还要提供一个`render`方法，Logic Flow 会将自身实例、内部数据以及组件层 DOM 传入进来。
-
-> 将组件插入内部组件层完全是可选的。
-
-以上文中的拖拽面板为例，其基本结构如下。
+## 插件的基础格式
 
 ```js
-// 若开发环境为 Rect
-import React from 'react';
-import ReactDom from 'react-dom';
-import YourApp from 'YourApp.jsx';
-
-const Dnd = {
-  install(lf) {},
-  render(lf, container) {
-    ReactDom.render(<YourApp />, container);
+class PluginCls {
+  static pluginName = 'pluginName',
+  constructor({ lf, LogicFlow }) {
+    // do anything
+  }
+  render(lf, domOverlay) {
+    // do anything
+  }
+  destroy() {
+    // do anythine
   }
 }
 ```
 
-```js
-// 若开发环境为 Vue
-import createApp from 'vue';
-import YourApp from 'YourApp.vue';
-
-const Dnd = {
-  install(lf) {},
-  render(lf, container) {
-    createApp(YourApp).mount(`#${container.id}`);
-  }
-}
-```
-
-自定义组件的详细案例请参考拖拽面板的实现[源码](https://github.com/didi/LogicFlow/blob/master/packages/extension/src/components/dnd-panel/index.ts)
+- LogicFlow对插件的要求是一个类。
+- 这个类有个静态属性`pluginName`用于标识插件的名称。同名的插件在初始化`lf`实例的时候会覆盖。
+- 在初始化`lf`实例的时候，会同时初始化插件，此时会传入参数`lf`和`LogicFlow`。可以在`constructor`中对lf进行扩展
+- 在`lf`渲染完成后，会调用插件实例的`render`方法(如有)。可以在这个方法中
+  

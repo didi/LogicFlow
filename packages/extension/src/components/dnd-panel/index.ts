@@ -14,16 +14,12 @@ class DndPanel {
   lf: LogicFlow;
   shapeList: ShapeItem[];
   panelEl: HTMLDivElement;
-  static pluginName = 'DndPanel';
+  static pluginName = 'dndPanel';
   domContainer: HTMLElement;
   constructor({ lf }) {
     this.lf = lf;
     this.lf.setPatternItems = (shapeList) => {
-      this.shapeList = shapeList;
-      // 支持渲染后重新设置拖拽面板
-      if (this.domContainer) {
-        this.render(this.lf, this.domContainer);
-      }
+      this.setPatternItems(shapeList);
     };
   }
   render(lf, domContainer) {
@@ -44,6 +40,13 @@ class DndPanel {
   destroy() {
     if (this.domContainer && this.panelEl && this.domContainer.contains(this.panelEl)) {
       this.domContainer.removeChild(this.panelEl);
+    }
+  }
+  setPatternItems(shapeList) {
+    this.shapeList = shapeList;
+    // 支持渲染后重新设置拖拽面板
+    if (this.domContainer) {
+      this.render(this.lf, this.domContainer);
     }
   }
   private createDndItem(shapeItem: ShapeItem): HTMLElement {
