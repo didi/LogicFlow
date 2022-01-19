@@ -3,6 +3,7 @@ export enum ModelType {
   CIRCLE_NODE = 'circle-node',
   POLYGON_NODE = 'polygon-node',
   RECT_NODE = 'rect-node',
+  HTML_NODE = 'html-node',
   TEXT_NODE = 'text-node',
   ELLIPSE_NODE = 'ellipse-node',
   DIAMOND_NODE = 'diamond-node',

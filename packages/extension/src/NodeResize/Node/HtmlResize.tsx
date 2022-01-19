@@ -1,4 +1,4 @@
-import { BaseNodeModel, GraphModel, h, RectNode, RectNodeModel } from '@logicflow/core';
+import { BaseNodeModel, GraphModel, h, HtmlNode, HtmlNodeModel } from '@logicflow/core';
 import ControlGroup from '../Control/ControlGroup';
 
 interface IProps {
@@ -12,7 +12,7 @@ interface IProps {
   hoverStyle?: CSSStyleDeclaration,
   edgeStyle?: CSSStyleDeclaration,
 }
-class RectResizeModel extends RectNodeModel {
+class HtmlResizeModel extends HtmlNodeModel {
   minWidth = 30;
   minHeight = 30;
   maxWidth = 2000;
@@ -34,7 +34,7 @@ class RectResizeModel extends RectNodeModel {
     }
   }
 }
-class RectResizeView extends RectNode {
+class HtmlResizeView extends HtmlNode {
   getControlGroup() {
     const {
       model,
@@ -64,10 +64,10 @@ class RectResizeView extends RectNode {
   }
 }
 
-const RectResize = {
-  type: 'rect',
-  view: RectResizeView,
-  model: RectResizeModel,
+const HtmlResize = {
+  type: 'html',
+  view: HtmlResizeView,
+  model: HtmlResizeModel,
 };
 
-export default RectResize;
+export default HtmlResize;

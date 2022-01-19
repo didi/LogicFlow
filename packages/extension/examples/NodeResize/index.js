@@ -26,8 +26,8 @@ window.onload = function () {
       },
       {
         id: 20,
-        type: 'rect',
-        x: 400,
+        type: 'html',
+        x: 500,
         y: 100,
       },
     ],
