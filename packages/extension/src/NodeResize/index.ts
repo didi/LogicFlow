@@ -1,6 +1,7 @@
 import RectResize from './Node/RectResize';
 import EllipseResize from './Node/EllipseResize';
 import DiamondResize from './Node/DiamondResize';
+import HtmlResize from './Node/HtmlResize';
 
 const NodeResize = {
   pluginName: 'node-resize',
@@ -56,6 +57,11 @@ const NodeResize = {
       type: DiamondResize.type,
       view: DiamondResize.view,
       model: DiamondResize.model,
+    });
+    lf.register({
+      type: HtmlResize.type,
+      view: HtmlResize.view,
+      model: HtmlResize.model,
     });
   },
 };

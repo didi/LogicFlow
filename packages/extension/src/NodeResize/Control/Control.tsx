@@ -312,7 +312,8 @@ class Control extends Component<IProps> {
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { modelType } = this.nodeModel;
-    if (modelType === ModelType.RECT_NODE) {
+    // html和矩形的计算方式是一样的，共用一个方法
+    if (modelType === ModelType.RECT_NODE || modelType === ModelType.HTML_NODE) {
       this.updateRect({ deltaX, deltaY });
     } else if (modelType === ModelType.ELLIPSE_NODE) {
       this.updateEllipse({ deltaX, deltaY });

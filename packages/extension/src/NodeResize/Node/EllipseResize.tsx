@@ -1,6 +1,5 @@
 import { BaseNodeModel, GraphModel, h, EllipseNode, EllipseNodeModel } from '@logicflow/core';
 import ControlGroup from '../Control/ControlGroup';
-import Ellipse from '../BasicShape/Ellipse';
 
 interface IProps {
   x: number,
@@ -55,20 +54,7 @@ class EllipseResizeView extends EllipseNode {
   }
   // getResizeShape绘制图形，功能等同于基础椭圆的getShape功能，可以通过复写此方法，进行节点自定义
   getResizeShape() {
-    const { model } = this.props;
-    const { rx, ry, x, y } = model;
-    const style = model.getNodeStyle();
-    return (
-      <g>
-        <Ellipse
-          {...style}
-          rx={rx}
-          ry={ry}
-          x={x}
-          y={y}
-        />
-      </g>
-    );
+    return super.getShape();
   }
   getShape() {
     const {
