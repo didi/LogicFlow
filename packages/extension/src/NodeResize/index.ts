@@ -4,7 +4,7 @@ import DiamondResize from './Node/DiamondResize';
 import HtmlResize from './Node/HtmlResize';
 
 const NodeResize = {
-  pluginName: 'node-resize',
+  pluginName: 'nodeResize',
   // 拖动step
   step: 0,
   // 边框和contol拖动点样式的设置

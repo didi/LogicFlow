@@ -35,7 +35,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 
 ## 形状属性
 
-LogicFlow的形状属性主要是控制基础节点的主要外观。形状属性可以通过`setAttributes`来设置。
+LogicFlow的形状属性主要是控制基础节点的主要外观。形状属性可以通过`setAttributes`或者`initNodeData`来设置。具体设置方式见[自定义节点的形状属性](/guide/basic/node.html#自定义节点的形状属性)。
 
 | 名称  | 类型   | 是否必须 | 描述           |
 | :---- | :----- | :------ | :------------- |
@@ -69,7 +69,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 
 LogicFlow所有的节点最终都是以SVG DOM的方式渲染。但是除了形状属性之外，所有的其他属于svg的属性都不会直接存在`nodeModel`。当开发者想要对SVG DOM添加更多的[svg属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)时，可以通过重写`nodeModel`上获取节点样式属性方法来实现。
 
-### getNodeStyle
+## getNodeStyle
 
 支持重写，自定义节点样式属性. 默认为[主题 baseNode](/api/themeApi.html#basenode)
 
@@ -84,7 +84,7 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-### getTextStyle
+## getTextStyle
 
 支持重写，自定义节点文本样式属性，默认为[主题 nodeText](/api/themeApi.html#nodetext)
 
@@ -98,7 +98,7 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-### getAnchorStyle
+## getAnchorStyle
 
 支持重写，自定义节点锚点样式属性，默认为[主题 anchor](/api/themeApi.html#anchor)
 
@@ -116,7 +116,7 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-### getAnchorLineStyle
+## getAnchorLineStyle
 
 支持重写，自定义节点锚点拖出连接线的样式属性，默认为[主题 anchorline](/api/themeApi.html#anchorline)
 
@@ -147,12 +147,23 @@ class UserTaskModel extends RectNodeModel {
 
 ## initNodeData
 
-支持重写，初始化节点数据。
+支持重写，初始化节点数据，将传入的图数据（data）转换为节点属性, 所以需要调用`super.initNodeData`触发转换方法。
+
+- 在`super.initNodeData`之前，对图数据进行处理。
+- 在`super.initNodeData`之后，对节点属性进行初始化。
 
 ```js
 class UserTaskModel extends RectResize.model {
   initNodeData(data) {
-    super(data);
+    // 可以在super之前，强制设置节点文本位置不居中，而且在节点下面
+    if (!data.text || typeof data.text === 'string') {
+      data.text = {
+        value: data.text || "",
+        x: data.x,
+        y: data.y + 40,
+      };
+    }
+    super.initNodeData(data);
     this.width = 100;
     this.height = 80;
   }

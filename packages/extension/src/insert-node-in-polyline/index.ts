@@ -2,7 +2,7 @@ import { PolylineEdgeModel } from '@logicflow/core';
 import { isNodeInSegement } from './edge';
 
 const InsertNodeInPolyline = {
-  pluginName: 'insert-node-in-polyline',
+  pluginName: 'insertNodeInPolyline',
   _lf: null,
   dndAdd: true, // dnd 添加节点到折线上的开关
   dropAdd: true, // 移动节点到折线上的开关

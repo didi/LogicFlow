@@ -35,9 +35,11 @@ LogicFlow的基础节点是比较简单的，但是在业务中对节点外观�
 LogicFlow推荐在实际应用场景中，所有的节点都使用自定义节点，将节点的type定义为符合项目业务意义的名称。而不是使用圆形、矩形这种仅表示外观的节点。
 :::
 
-LogicFlow的自定义节点是基于继承来实现。开发者可以继承LogicFlow内置的节点，然后利用面向对象的[重写](https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin)机制。重写节点样式相关的方法，来达到自定义节点的效果。
+LogicFlow是基于继承来实现自定义节点、边。开发者可以继承LogicFlow内置的节点，然后利用面向对象的[重写](https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin)机制。重写节点样式相关的方法，来达到自定义节点样式的效果。
 
-<img src="../../assets/images/custom-node.png" alt="节点继承原理" style="zoom: 80%;"  />
+![logicflow-1.0-2.png](../../assets/images/logicflow-1.0-2.png)
+
+> 此图也是用LogicFlow画出来的。见[作图工具](/mvp/index.html)。
 
 ## 选择自定义节点继承的基础节点
 
@@ -128,11 +130,70 @@ LogicFlow为了开发的时候将开发体验和现在前端流行的开发体�
 
 ### 步骤2: 自定义节点model
 
+
+LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`两种方式。更多详细定义方法，请查看[NodeModelApi](../../api/nodeModelApi.md)
+
+#### 自定义节点的样式属性
+
+在LogicFlow中，外观属性表示控制着节点`边框`、`颜色`这类偏外观的属性。这些属性是可以直接通过[主题配置](/api/themeApi.html)来控制。自定义节点样式可以看做在主题的基础上基于当前节点的类型进行再次定义。例如在主题中对所有`rect`节点都定义其边框颜色为红色`stroke: red`。 那么可以在自定义节点`UserTask`的时候，重新定义`UserTask`边框为蓝色`stroke: blue`。
+
+更细粒度的节点样式控制方法，详情见[API 样式属性](/api/nodeModelApi.html#样式属性)
+
 ```js
 class UserTaskModel extends RectNodeModel {
-  setAttributes() {
-    this.width = 100;
-    this.height = 100;
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    style.stroke = 'blue';
+    style.strokDasharray = '3 3';
+    return style;
+  }
+}
+```
+
+#### 自定义节点的形状属性
+
+在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`radius`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
+
+LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/nodeModelApi.html#形状属性)
+
+```js
+class customRectModel extends RectNodeModel {
+  initNodeData(data) {
+    super.initNodeData(data);
+    this.width = 200;
+    this.height = 80;
+    this.radius = 50;
+  }
+}
+```
+
+<iframe src="https://codesandbox.io/embed/epic-cookies-cmqxg?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="epic-cookies-cmqxg"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+
+::: warning 注意
+
+如果不在`model`中设置形状属性，而是直接在`view`中直接定义生成图形的宽高这种形状属性，会出现锚点位置、outline大小不正确的情况。同时，连线的位置也可能会出现错乱。
+
+:::
+
+#### 基于properties属性自定义节点样式
+
+在实际业务中，存在这样的情况，例如在审批场景中，自定义的审批节点存在3种状态：
+
+一种是流程还没有走到这个节点的默认状态，一种是流程审批通过状态，一种是审批不通过的驳回状态。在外观上我们需要对不同的状态显示不同的颜色。LogicFlow的图数据中提到，不论是节点还是边，LogicFlow都保留了properties字段，用于给开发者存放自己的业务属性。示例如下，`properties`的`statu`属性就是一个自定义的业务属性，开发者在自定义节点样式的时候，可以基于`properties`中的属性来控制节点显示不同的样式。
+
+```js
+class UserTaskModel extends RectNodeModel {
+  initNodeData(data) {
+    super.initNodeData(data);
+    this.width = 80;
+    this.height = 60;
+    this.radius = 5;
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
@@ -148,38 +209,6 @@ class UserTaskModel extends RectNodeModel {
   }
 }
 ```
-
-LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`两种方式。
-
-#### 自定义节点的样式属性
-
-在LogicFlow中，外观属性表示控制着节点`边框`、`颜色`这类偏外观的属性。这些属性是可以直接通过[主题配置](/api/themeApi.html)来控制。自定义节点样式可以看做在主题的基础上基于当前节点的类型进行再次定义。例如在主题中对所有`rect`节点都定义其边框颜色为红色`stroke: red`。 那么可以在自定义节点`UserTask`的时候，重新定义`UserTask`边框为蓝色`stroke: blue`。
-
-更细粒度的节点样式控制方法，详情见[API 样式属性](/api/nodeModelApi.html#样式属性)
-
-#### 自定义节点的形状属性
-
-在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`radius`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要使用`setAttributes`。
-
-LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/nodeModelApi.html#形状属性)
-
-<iframe src="https://codesandbox.io/embed/epic-cookies-cmqxg?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="epic-cookies-cmqxg"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
-
-::: warning 注意
-
-:::
-
-#### 基于properties属性自定义节点样式
-
-在实际业务中，存在这样的情况，例如在审批场景中，自定义的审批节点存在3种状态：
-
-一种是流程还没有走到这个节点的默认状态，一种是流程审批通过状态，一种是审批不通过的驳回状态。在外观上我们需要对不同的状态显示不同的颜色。LogicFlow的图数据中提到，不论是节点还是边，LogicFlow都保留了properties字段，用于给开发者存放自己的业务属性。在上面示例中，`properties`的`statu`属性就是一个自定义的业务属性，开发者在自定义节点样式的时候，可以基于`properties`中的属性来控制节点显示不同的样式。
-
 
 ### 步骤3: 自定义节点view
 

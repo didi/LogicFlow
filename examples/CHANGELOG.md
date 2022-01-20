@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0-alpha.0](https://github.com/didi/LogicFlow/compare/examples@1.0.5...examples@1.1.0-alpha.0) (2022-01-20)
+
+
+### Features
+
+* change MiniMap.show -> lf.extension.miniMap.show ([39e1a2f](https://github.com/didi/LogicFlow/commit/39e1a2fb254e480418275641880f454e5101e0c3))
+
+
+
+
+
 ## [1.0.5](https://github.com/didi/LogicFlow/compare/examples@1.0.5-alpha.1...examples@1.0.5) (2022-01-18)
 
 **Note:** Version bump only for package examples

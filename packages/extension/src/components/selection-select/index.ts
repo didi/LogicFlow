@@ -14,28 +14,17 @@ class SelectionSelect {
   };
   __disabled = false;
   isDefalutStopMoveGraph = false;
-  static pluginName = 'selection-select';
+  static pluginName = 'selectionSelect';
   constructor({ lf }) {
     this.lf = lf;
     // 初始化isDefalutStopMoveGraph取值
     const { stopMoveGraph } = lf.getEditConfig();
     this.isDefalutStopMoveGraph = stopMoveGraph;
     lf.openSelectionSelect = () => {
-      if (!stopMoveGraph) {
-        this.isDefalutStopMoveGraph = false;
-        lf.updateEditConfig({
-          stopMoveGraph: true,
-        });
-      }
-      this.open();
+      this.openSelectionSelect();
     };
     lf.closeSelectionSelect = () => {
-      if (!this.isDefalutStopMoveGraph) {
-        lf.updateEditConfig({
-          stopMoveGraph: false,
-        });
-      }
-      this.close();
+      this.closeSelectionSelect();
     };
   }
   render(lf, domContainer) {
@@ -60,6 +49,30 @@ class SelectionSelect {
       document.addEventListener('mousemove', this.__draw);
       document.addEventListener('mouseup', this.__drawOff);
     });
+  }
+  /**
+   * 开启选区
+   */
+  openSelectionSelect() {
+    const { stopMoveGraph } = this.lf.getEditConfig();
+    if (!stopMoveGraph) {
+      this.isDefalutStopMoveGraph = false;
+      this.lf.updateEditConfig({
+        stopMoveGraph: true,
+      });
+    }
+    this.open();
+  }
+  /**
+   * 关闭选区
+   */
+  closeSelectionSelect() {
+    if (!this.isDefalutStopMoveGraph) {
+      this.lf.updateEditConfig({
+        stopMoveGraph: false,
+      });
+    }
+    this.close();
   }
   __draw = (ev) => {
     const {

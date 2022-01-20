@@ -4,7 +4,7 @@ interface CurvedEdgePlugin extends Extension {
   [x: string]: any;
 }
 class CurvedEdgeView extends PolylineEdge {
-  static extendKey = 'CurvedEdge';
+  static extendKey = 'curvedEdge';
   getEdge() {
     const {
       strokeWidth,

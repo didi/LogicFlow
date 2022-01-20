@@ -2,7 +2,7 @@ import { RectNodeModel } from '@logicflow/core';
 import { RectLabelNodeView } from './RectLabelNodeView';
 
 const RectLabelNode = {
-  pluginName: 'rect-label-node',
+  pluginName: 'rectLabelNode',
   install(lf) {
     lf.register({
       type: 'rect-label',

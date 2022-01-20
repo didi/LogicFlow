@@ -62,10 +62,10 @@ export default function DndPanelExample() {
 
   function handleSwitch() {
     if (show) {
-      MiniMap.hide();
+      lf.extension.miniMap.hide();
       setShow(false);
     } else {
-      MiniMap.show();
+      lf.extension.miniMap.show();
       setShow(true);
     }
   }

@@ -56,7 +56,7 @@ export default function CustomMenuExample() {
       },
       container: document.querySelector('#graph') as HTMLElement
     }) as MenuLogicFlow;
-    lf.addMenuConfig({
+    lf.extension.menu.addMenuConfig({
       nodeMenu: [
         {
           text: '分享',

@@ -45,7 +45,7 @@ LogicFlow.use(Menu);
 
 ## 追加菜单选项
 
-通过`lf.addMenuConfig`方法可以在原有菜单的基础上追加新的选项，具体配置示例如下
+通过`lf.extension.menu.addMenuConfig`方法可以在原有菜单的基础上追加新的选项，具体配置示例如下：
 
 ```ts
 import LogicFlow from '@logicflow/core';
@@ -58,7 +58,7 @@ const lf = new LogicFlow({
   container: document.getElementById('app');
 });
 // 为菜单追加选项（必须在 lf.render() 之前设置）
-lf.addMenuConfig({
+lf.extension.menu.addMenuConfig({
   nodeMenu: [
     {
       text: '分享',
@@ -108,7 +108,7 @@ lf.render();
 如果默认菜单中存在不需要的选项，或者无法满足需求，可以通过`lf.setMenuConfig`重置菜单，更换为自定义菜单。
 
 ```ts
-lf.setMenuConfig({
+lf.extension.menu.setMenuConfig({
     nodeMenu: [
       {
         text: '删除',
@@ -127,7 +127,7 @@ lf.setMenuConfig({
 除了上面的为所有的节点、元素、画布自定义通用菜单外，还可以使用`lf.setMenuByType`为指定类型的节点或边定义菜单。
 
 ```ts
-lf.setMenuByType({
+lf.extension.menu.setMenuByType({
   type: 'bpmn:startEvent',
   menu: [
     {
@@ -144,10 +144,10 @@ lf.setMenuByType({
 
 除了上面的为某种类型元素设置菜单外，还可以在自定义元素的时候，为节点处于不同业务状态下设置菜单。
 
-- 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单
-- 由于自定义的model中可能无法直接拿到lf实例对象，此时可以通过`this.graphModel`拿到graphModel对象。graphModel对象详细说明请参考API/graphModel
+- 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单。
+- 由于自定义的model中可能无法直接拿到lf实例对象，此时可以通过`this.graphModel`拿到graphModel对象。graphModel对象详细说明请参考API/graphModel。
 - 如果还希望在点击菜单后进行业务处理，可以通过`graphModel`的`eventCenter`发送自定义事件，然后自己在`lf`实例上监听此事件。
-- 优先级：指定业务状态设置菜单 > 指定类型元素配置菜单 > 通用菜单配置 > 默认菜单
+- 优先级：指定业务状态设置菜单 > 指定类型元素配置菜单 > 通用菜单配置 > 默认菜单。
 
 ```ts
 // customNode.ts

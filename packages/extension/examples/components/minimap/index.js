@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
     keyboard: {
       enabled: true,
     },
+    plugins: [Control, MiniMap],
     snapline: true,
   });
   lf.register({
@@ -17,6 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
     view: RectNode,
     model: RectNodeModel,
   })
+  console.log(lf.extension);
   lf.render({
     nodes: [
       {
@@ -67,6 +69,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelector('#mini-map').addEventListener('click', () => {
-    MiniMap.show();
+    lf.extension.minimap.show();
   })
 })

@@ -84,9 +84,14 @@ export default class LogicFlow {
    */
   plugins: Extension[];
   /**
-   * 全局配置的插件，所有的LogicFlow都会使用
+   * 全局配置的插件，所有的LogicFlow示例都会使用
    */
   static extensions: Map<string, Extension> = new Map();
+  /**
+   * 插件扩展方法
+   * @example
+   */
+  extension: Record<string, any> = {};
   /**
    * 自定义数据格式转换方法
    * 当接入系统格式和logicflow格式不一直的时候，可以自定义此方法来转换数据格式
@@ -880,15 +885,14 @@ export default class LogicFlow {
     });
   }
   /**
-   * 加载插件
-   * 注意，不建议插件用这种方式加载，此方式只会出发render方法，
-   * 可能不会实时出发cont
+   * 加载插件-内部方法
    */
   private installPlugin(extension) {
     if (typeof extension === 'object') {
       const { install, render: renderComponent } = extension;
       install && install.call(extension, this, LogicFlow);
       renderComponent && this.components.push(renderComponent.bind(extension));
+      this.extension[extension.pluginName] = extension;
       return;
     }
     const ExtensionContructor = extension as ExtensionContractor;
@@ -899,6 +903,7 @@ export default class LogicFlow {
     extensionInstance.render && this.components.push(
       extensionInstance.render.bind(extensionInstance),
     );
+    this.extension[ExtensionContructor.pluginName] = extensionInstance;
   }
   /**
    * 修改对应元素 model 中的属性

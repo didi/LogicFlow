@@ -15,6 +15,10 @@ LogicFlow.use(MiniMap);
 引入 mini-map 后默认不展示，需要手动开启显示。
 
 ```ts
+// 1.1.0 以上
+lf.extension.minimap.show(leftPosition?: number, topPosition?: number)
+
+// 1.1.0 以下
 MiniMap.show(leftPosition?: number, topPosition?: number);
 ```
 
@@ -32,7 +36,12 @@ MiniMap.show(leftPosition?: number, topPosition?: number);
 ### 隐藏
 
 ```ts
+// 1.1.0 以上
+lf.extension.minimap.hide()
+
+// 1.1.0 以下
 MiniMap.hide();
+
 ```
 
 ### 示例

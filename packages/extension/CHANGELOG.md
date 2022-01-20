@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.7...@logicflow/extension@1.1.0-alpha.0) (2022-01-20)
+
+
+### Features
+
+* change MiniMap.show -> lf.extension.miniMap.show ([39e1a2f](https://github.com/didi/LogicFlow/commit/39e1a2fb254e480418275641880f454e5101e0c3))
+* **extension:** htmlNode resize ([24209af](https://github.com/didi/LogicFlow/commit/24209afc16f8dd7acf824fd5231ee3e8266d45d7))
+
+
+
+
+
 ## [1.0.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.0.7-alpha.1...@logicflow/extension@1.0.7) (2022-01-18)
 
 **Note:** Version bump only for package @logicflow/extension

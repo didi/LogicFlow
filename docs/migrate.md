@@ -33,3 +33,12 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 - `graphModel.removeEdgeById()` -> `graphModel.deleteEdgeById()`
 - `graphModel.removeEdgeBySource()` -> `graphModel.deleteEdgeBySource()`
 - `graphModel.removeEdgeByTarget()` -> `graphModel.deleteEdgeByTarget()`
+
+## 从1.0 升级到1.1
+
+1.1版本对插件进行了规范，现在要求所有的插件必须使用class的方式实现。然后插件的方法可以通过`lf.extension.插件名称.插件方法`来调用。原来的`lf.插件方法`仍然可用，后续版本将废弃。
+
+### MiniMap插件
+
+- `MiniMap.show()` -> `lf.extension.miniMap.show()`
+- `MiniMap.hide()` -> `lf.extension.miniMap.hide()`

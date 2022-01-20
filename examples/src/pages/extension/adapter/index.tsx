@@ -33,7 +33,7 @@ export default function AdapterExample() {
       stopScrollGraph: true,
       stopZoomGraph: true,
     });
-    lf.setPatternItems(dndItem);
+    lf.extension.dndPanel.setPatternItems(dndItem);
     lf.render();
   }, []);
 

@@ -21,7 +21,7 @@ window.onload = function () {
       // ]
     }
   });
-  lf.setPatternItems([
+  lf.extension.dndPanel.setPatternItems([
     {
       label: '中心主题',
       // type: 'mark:root',
