@@ -9,7 +9,7 @@ class PluginCls {
   constructor({ lf, LogicFlow }) {
     // do anything
   }
-  render(lf, domOverlay) {
+  render(lf, toolOverlay) {
     // do anything
   }
   destroy() {
@@ -30,10 +30,95 @@ class PluginCls {
 
 ### 增加插入选项方法
 
-监听节点、连线被点击，基于当前被点击的元素
+LogicFlow会将插件的实例以插件名称的形式挂载到`lf.extension`上，这样我们在`class`中的方法就可以用`lf.extension.插件名称.插件方法`调用了。
 
+```js
+class ContextPad {
+  /**
+   * 设置通用的菜单选项
+   */
+  setContextMenuItems(items) {
+    this.commonMenuItems = items;
+  }
+}
 
+ContextPad.pluginName = "contextPad";
 
+// 调用方法
 
+lf.extension.contextPad.setContextMenuItems([
+  {
+    icon: "...",
+    callback: () => {}
+  }
+])
+```
+
+### 监听节点被点击
+
+在插件被初始化时，会将`lf`以参数的形式传递给插件，这时可以利用`lf`监听画布上发生的事件。
+
+```js
+class ContextPad {
+  constructor({ lf }) {
+    lf.on("node:click", (data) => {
+      this.showContextPad(data)
+    })
+  }
+  showContextPad() {
+    // ...
+  }
+}
+```
+
+### 在画布指定位置显示HTML内容
+
+插件的render函数有两个参数，一个是`lf`, 第二个参数是`toolOverlay`, 也就是组件层。LogicFlow的画布是由多个图层组成，而组件层则是专门用来渲染自定义的组件。
+
+**LogicFlow的图分层**
+
+<img src="../assets/../../assets/images/overlay.png" width="200">
+
+所以这里我们只需要将菜单插入到`toolOverlay`, 然后将其菜单移动到对应的位置即可。
+
+```js
+class ContextPad {
+  render(lf, toolOverlay) {
+    this.toolOverlay = toolOverlay;
+  }
+  createMenu () {
+    this.__menuDOM = document.createElement('div')
+  }
+  // 计算出菜单应该显示的位置（节点的右上角）
+  getContextMenuPosition() {
+    const data = this._activeData;
+    const Model = this.lf.graphModel.getElement(data.id);
+    let x;
+    let y;
+    if (Model.BaseType === "node") {
+      x = data.x + Model.width / 2;
+      y = data.y - Model.height / 2;
+    }
+    return this.lf.graphModel.transformModel.CanvasPointToHtmlPoint([x, y]);
+  }
+  showMenu () {
+    const [x, y] = this.getContextMenuPosition();
+    this.__menuDOM.style.display = "flex";
+    // 将菜单显示到对应的位置
+    this.__menuDOM.style.top = `${y}px`;
+    this.__menuDOM.style.left = `${x + 10}px`;
+    this.toolOverlay.appendChild(this.__menuDOM);
+  }
+}
+```
+
+## 完整示例
+
+<iframe src="https://codesandbox.io/embed/logicflow-base22-rl301?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base22"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
 
   

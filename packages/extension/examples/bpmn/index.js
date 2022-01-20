@@ -107,7 +107,7 @@ window.onload = function () {
       });
     }
   }
-  lf.setPatternItems([
+  lf.extension.dndPanel.setPatternItems([
     selectionConfig,
     startConfig,
     userConfig,

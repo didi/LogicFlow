@@ -55,7 +55,7 @@ export default function SnapshotExample() {
             ...config,
             container: document.querySelector('#graph') as HTMLElement
         });
-        lf.setPatternItems([
+        lf.extension.dndPanel.setPatternItems([
             {
                 type: 'circle',
                 label: '圆形',
