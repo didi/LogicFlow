@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
     ]
   });
   document.querySelector('#selectBtn').addEventListener('click', () => {
-    lf.openSelectionSelect();
+    lf.extension.selectionSelect.openSelectionSelect();
   })
   
 })

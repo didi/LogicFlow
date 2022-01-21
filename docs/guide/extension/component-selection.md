@@ -12,12 +12,17 @@ LogicFlow.use(SelectionSelect);
 
 ```ts
 lf.openSelectionSelect();
+
+// 1.1.0新增用法
+lf.extension.selectionSelect.openSelectionSelect();
 ```
 
 ### 关闭
 
 ```ts
 lf.closeSelectionSelect();
+// 1.1.0新增用法
+lf.extension.selectionSelect.closeSelectionSelect();
 ```
 
 <example href="/examples/#/extension/components/selection" :height="300" ></example>

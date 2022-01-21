@@ -24,7 +24,7 @@ class ContextMenu {
     this.__menuDOM.className = 'lf-inner-context';
     this.menuTypeMap.set(COMMON_TYPE_KEY, []);
     this.lf.setContextMenuByType = (type, menus) => {
-      this.menuTypeMap.set(type, menus);
+      this.setContextMenuByType(type, menus);
     };
     this.lf.setContextMenuItems = (menus) => {
       this.setContextMenuItems(menus);
@@ -50,6 +50,9 @@ class ContextMenu {
     lf.on('blank:click', () => {
       this.hideContextMenu();
     });
+  }
+  setContextMenuByType(type, menus) {
+    this.menuTypeMap.set(type, menus);
   }
   /**
    * 隐藏菜单
