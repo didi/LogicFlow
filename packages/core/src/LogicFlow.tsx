@@ -37,7 +37,7 @@ import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
-import { ElementType } from './constant/constant';
+import { ElementType, EventType } from './constant/constant';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
@@ -1029,5 +1029,6 @@ export default class LogicFlow {
         graphModel={this.graphModel}
       />
     ), this.container);
+    this.emit(EventType.GRAPH_RENDERED, graphData);
   }
 }

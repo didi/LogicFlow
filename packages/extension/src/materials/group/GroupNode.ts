@@ -2,8 +2,18 @@ import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class GroupNodeModel extends RectNodeModel {
   readonly isGroup = true;
-  children = new Set();
-  isRestrict = true; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
+  children: Set<string>;
+  isRestrict: boolean; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
+  initNodeData(data): void {
+    super.initNodeData(data);
+    let children = [];
+    if (Array.isArray(data.children)) {
+      children = data.children;
+    }
+    // 初始化组的子节点
+    this.children = new Set(children);
+    this.isRestrict = false;
+  }
   setAttributes() {
     this.width = 500;
     this.height = 200;

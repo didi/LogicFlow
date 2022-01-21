@@ -13,37 +13,38 @@ const lf = new LogicFlow(options: Options)
 | 选项 | 类型 | 必选 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 | container | HTMLElement | ✅ | - | 图的 DOM 容器。 |
-| width | Number | | - | 指定画布宽度，单位为 'px'，默认使用容器宽度。 |
-| height | Number | | - | 指定画布高度，单位为 'px'，默认使用容器高度。 |
-| [background](#background) | false \| Object | |false | 背景，默认无背景 |
-| [grid](#grid) | false \| Object | | false |网格，若设为`false`不开启网格，则为 1px 移动单位，不绘制网格背景，若设置为`true`开启则默认为 20px 点状网格 |
-| [keyboard](#keyboard) |  Object | | | 自定义键盘相关配置 |
-| [style](#style) | Object | | - | 样式 |
-| disabledPlugins | string[] | | - | 传入初始化的时候，禁用加载的插件 |
-| snapline | Boolean | | true | 是否启用节点辅助对齐线 |
-| history | Boolean | | true | 是否开启历史记录功能 |
-| partial | Boolean | | false | 是否开启局部渲染功能 |
-| edgeType | String | | 'polyline' | 在图上编辑创建边的类型，支持自定义类型。 |
-| guards | Array | | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
-| disabledTools | string[]| | - | 禁止启用的内置工具，目前logicflow内置工具有'multipleSelect', 'textEdit' |
-| isSilentMode | Boolean | | false | 仅浏览不可编辑模式，默认不开启 |
+| width | Number |- | - | 指定画布宽度，单位为 'px'，默认使用容器宽度。 |
+| height | Number |- | - | 指定画布高度，单位为 'px'，默认使用容器高度。 |
+| [background](#background) | false \| Object |- |false | 背景，默认无背景 |
+| [grid](#grid) | false \| Object |- | false |网格，若设为`false`不开启网格，则为 1px 移动单位，不绘制网格背景，若设置为`true`开启则默认为 20px 点状网格 |
+| [keyboard](#keyboard) | Object |- | -| 自定义键盘相关配置 |
+| [style](#style) | Object |- | - | 样式 |
+| disabledPlugins | string[] |- | - | 传入初始化的时候，禁用加载的插件 |
+| snapline | Boolean |- | true | 是否启用节点辅助对齐线 |
+| history | Boolean |- | true | 是否开启历史记录功能 |
+| partial | Boolean |- | false | 是否开启局部渲染功能 |
+| edgeType | String |- | 'polyline' | 在图上编辑创建边的类型，支持自定义类型。 |
+| guards | Array |- | - | 是否增加守卫函数，函数返回true则执行默认逻辑，返回false则阻止 |
+| disabledTools | string[]|- | - | 禁止启用的内置工具，目前logicflow内置工具有'multipleSelect', 'textEdit' |
+| isSilentMode | Boolean |- | false | 仅浏览不可编辑模式，默认不开启 |
 |stopZoomGraph|boolean|- |false|禁止缩放画布|
 |stopScrollGraph|boolean|- |false|禁止鼠标滚动移动画布|
 |stopMoveGraph|boolean|- |false|禁止拖动画布|
 |adjustEdge|boolean|- |true|允许调整边|
 |adjustEdgeStartAndEnd|boolean|- |false|是否允许拖动边的端点来调整连线|
 |adjustNodePosition|boolean|- |true|是否允许拖动节点|
-|hideAnchors| boolean | | false | 是否隐藏节点的锚点，静默模式下默认隐藏 |
+|hideAnchors| boolean |- | false | 是否隐藏节点的锚点，静默模式下默认隐藏 |
 |hoverOutline|boolean|- |true|鼠标hover的时候显示节点的外框|
 |nodeSelectedOutline|boolean|- |true|鼠标hover的时候显示节点的外框|
 |edgeSelectedOutline|boolean|- |true|鼠标hover的时候显示边的外框|
 |nodeTextEdit|boolean|- |true|允许节点文本可以编辑|
 |edgeTextEdit|boolean|- |true|允许边文本可以编辑|
-|textEdit| Boolean | | true | 是否开启文本编辑 |
+|textEdit| Boolean | -| true | 是否开启文本编辑 |
 |nodeTextDraggable|boolean| - |false|允许节点文本可以拖拽|
 |edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
-|multipleSelectKey|string|  |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
-|idGenerator|function| |-|自定义创建节点、连线时生成id规则。|
+|multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
+|idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
+|plugins|Array| -|-|当前LogicFlow实力加载的插件，不传则采用全局插件。|
 
 ### `background`
 

@@ -41,8 +41,10 @@ class Group {
     lf.on('node:drop', this.appendNodeToGrop);
     lf.on('node:dnd-move', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
+    // lf.on('group:add-node', this.nodeAppendIn);
   }
   appendNodeToGrop = ({ data }) => {
+    console.log(333);
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id);
     if (preGroupId) {
@@ -93,4 +95,7 @@ class Group {
   }
 }
 
-export { Group };
+export {
+  Group,
+  GroupNode,
+};

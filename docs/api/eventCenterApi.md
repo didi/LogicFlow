@@ -70,6 +70,7 @@ LogicFlow提供了事件系统用于告知开发者当前流程图发生的事�
 | 'blank:drop'        | 画布拖拽放开 | e           |
 | 'text:update'       | 文案更新     | data        |
 | 'graph:transform'       | 画布平移或者缩放触发     | data        |
+| 'graph:rendered'       | 画布渲染数据后触发. 即lf.render(graphData)方法被调用后触发。 `v1.1.0新增`    | graphData        |
 
 事件对象包含如下内容。
 
@@ -143,39 +144,6 @@ eventCenter.on('element:click', (args) => {
 })
 ```
 
-事件名称全集：
-
-```js
-export enum EventType {
-  ELEMENT_CLICK = 'element:click', // 是 node:click & edge:click 的并集
-  NODE_CLICK = 'node:click',
-  NODE_DBCLICK = 'node:dbclick',
-  NODE_DELETE = 'node:delete',
-  NODE_ADD = 'node:add',
-  NODE_MOUSEDOWN = 'node:mousedown',
-  NODE_DRAGSTART = 'node:dragstart',
-  NODE_DRAG = 'node:drag',
-  NODE_DROP = 'node:drop',
-  NODE_MOUSEUP = 'node:mouseup',
-  NODE_MOUSEMOVE = 'node:mousemove',
-  NODE_CONTEXTMENU = 'node:contextmenu',
-  EDGE_DELETE = 'edge:delete',
-  EDGE_ADD = 'edge:add',
-  EDGE_CLICK = 'edge:click',
-  EDGE_DBCLICK = 'edge:dbclick',
-  EDGE_CONTEXTMENU = 'edge:contextmenu',
-  BLANK_MOUSEDOWN = 'blank:mousedown',
-  BLANK_MOUSEMOVE = 'blank:mousemove',
-  BLANK_MOUSEUP = 'blank:mouseup',
-  BLANK_DRAGSTART = 'blank:dragstart',
-  BLANK_DRAG = 'blank:drag',
-  BLANK_DROP = 'blank:drop',
-  BLANK_CLICK = 'blank:click',
-  BLANK_CONTEXTMENU = 'blank:contextmenu',
-  CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
-  HISTORY_CHANGE = 'history:change',
-}
-```
 
 ## off
 
