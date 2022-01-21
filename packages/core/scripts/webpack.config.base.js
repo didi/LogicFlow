@@ -39,6 +39,10 @@ module.exports = {
                   {
                     useBuiltIns: 'usage',
                     corejs: '3.3',
+                    targets: {
+                      node: 'current',
+                      "browsers": ["last 2 versions", "> 1%", "not IE 11"]
+                    },
                   },
                 ],
               ],

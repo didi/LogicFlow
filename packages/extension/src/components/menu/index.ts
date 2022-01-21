@@ -32,13 +32,13 @@ class Menu {
     this.lf = lf;
     this.menuTypeMap = new Map();
     this.init();
-    this.lf.extension.menu.setMenuConfig = (config) => {
+    this.lf.setMenuConfig = (config) => {
       this.setMenuConfig(config);
     };
-    this.lf.extension.menu.addMenuConfig = (config) => {
+    this.lf.addMenuConfig = (config) => {
       this.addMenuConfig(config);
     };
-    this.lf.extension.menu.setMenuByType = (config) => {
+    this.lf.setMenuByType = (config) => {
       this.setMenuByType(config);
     };
   }

@@ -139,9 +139,9 @@ export default {
     $_selectionSelect () {
       this.selectionOpened = !this.selectionOpened
       if (this.selectionOpened) {
-        this.lf.openSelectionSelect()
+        this.lf.extension.selectionSelect.openSelectionSelect()
       } else {
-        this.lf.closeSelectionSelect()
+        this.lf.extension.selectionSelect.closeSelectionSelect()
       }
     },
     $_changeLineType(value) {
