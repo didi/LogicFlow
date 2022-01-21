@@ -35,16 +35,28 @@ class Group {
         });
         return r;
       }
+
       return true;
     });
     lf.on('node:add', this.appendNodeToGrop);
     lf.on('node:drop', this.appendNodeToGrop);
     lf.on('node:dnd-move', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
-    // lf.on('group:add-node', this.nodeAppendIn);
+    lf.on('graph:rendered', this.graphRendered);
   }
+  graphRendered = (data) => {
+    // 如果节点
+    if (data && data.nodes) {
+      data.nodes.forEach(node => {
+        if (node.children) {
+          node.children.forEach(nodeId => {
+            this.nodeGroupMap.set(nodeId, node.id);
+          });
+        }
+      });
+    }
+  };
   appendNodeToGrop = ({ data }) => {
-    console.log(333);
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id);
     if (preGroupId) {

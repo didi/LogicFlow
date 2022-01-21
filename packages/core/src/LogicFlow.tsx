@@ -1029,6 +1029,6 @@ export default class LogicFlow {
         graphModel={this.graphModel}
       />
     ), this.container);
-    this.emit(EventType.GRAPH_RENDERED, graphData);
+    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData());
   }
 }

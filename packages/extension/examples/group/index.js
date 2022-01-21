@@ -2,14 +2,48 @@ const lf = new LogicFlow({
   container: document.querySelector('#app'),
   grid: true,
   width: 1000,
+  keyboard: {
+    enabled: true
+  },
   plugins: [Group,Control],
   height: 500
+})
+
+class MyGroup extends GroupNode.view {
+
+}
+
+class MyGroupModel extends GroupNode.model {
+  initNodeData(data) {
+    super.initNodeData(data);
+    this.isRestrict = true;
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle();
+    style.stroke = '#AEAFAE';
+    style.strokeDasharray = '3 3';
+    style.strokeWidth = 1;
+    return style;
+  }
+  getOutlineStyle() {
+    const style = super.getOutlineStyle();
+    style.stroke = 'transparent';
+    style.hover.stroke = 'transparent';
+    return style;
+  }
+}
+
+
+lf.register({
+  type: 'my-group',
+  model: MyGroupModel,
+  view: MyGroup
 })
 
 lf.render({
   nodes: [
     {
-      type: 'group',
+      type: 'my-group',
       x: 400,
       y: 400,
       children: [

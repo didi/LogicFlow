@@ -41,16 +41,34 @@ class GroupNodeModel extends RectNodeModel {
       this.stroke = 'rgb(24, 125, 255)';
     }
   }
+  /**
+   * 添加分组子节点
+   * @param id 节点id
+   */
   addChild(id) {
-    this.children.add(id);
+    this.beforeAddChild(() => {
+      this.children.add(id);
+    });
   }
+  /**
+   * 删除分组子节点
+   * @param id 节点id
+   */
   removeChild(id) {
-    this.children.delete(id);
+    this.beforeRemoveChild(() => {
+      this.children.delete(id);
+    });
   }
   getData() {
     const data = super.getData();
     data.children = [...this.children];
     return data;
+  }
+  beforeAddChild(next) {
+    next();
+  }
+  beforeRemoveChild(next) {
+    next();
   }
 }
 class GroupNode extends RectNode {
