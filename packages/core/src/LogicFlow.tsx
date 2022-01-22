@@ -37,6 +37,7 @@ import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
+import { ElementType } from './constant/constant';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
@@ -364,15 +365,29 @@ export default class LogicFlow {
    * @param id 元素id
    */
   deleteElement(id): boolean {
-    const NodeModel = this.graphModel.getNodeModelById(id);
-    if (NodeModel) {
-      return this.deleteNode(id);
-    }
-    const EdgeModel = this.graphModel.getEdgeModelById(id);
-    if (EdgeModel) {
-      return this.deleteEdge(id);
-    }
-    return false;
+    const model = this.getModelById(id);
+    if (!model) return false;
+    const callback = {
+      [ElementType.NODE]: this.deleteNode,
+      [ElementType.EDGE]: this.deleteEdge,
+    };
+
+    const { BaseType } = model;
+    return callback[BaseType]?.call(this, id) ?? false;
+  }
+  /**
+   * 获取节点或边对象
+   * @param id id
+   */
+  getModelById(id: string): _Model.BaseNodeModel | _Model.BaseEdgeModel {
+    return this.graphModel.getElement(id);
+  }
+  /**
+   * 获取节点或边的数据
+   * @param id id
+   */
+  getDataById(id: string): NodeConfig | EdgeConfig {
+    return this.graphModel.getElement(id).getData();
   }
   /**
    * 修改指定节点类型

@@ -158,6 +158,12 @@ class GraphModel {
       return eMap;
     }, {});
   }
+  @computed get modelsMap(): { [key: string]: BaseNodeModel | BaseEdgeModel } {
+    return [...this.nodes, ...this.edges].reduce((eMap, model) => {
+      eMap[model.id] = model;
+      return eMap;
+    }, {});
+  }
   /**
    * 基于zIndex对元素进行排序。
    * todo: 性能优化
@@ -399,13 +405,8 @@ class GraphModel {
   /**
    * 获取节点或者边的model
    */
-  getElement(id: string): IBaseModel | undefined {
-    const nodeModel = this.getNodeModelById(id);
-    if (nodeModel) {
-      return nodeModel;
-    }
-    const edgeModel = this.getEdgeModelById(id);
-    return edgeModel;
+  getElement(id: string): BaseNodeModel | BaseEdgeModel | undefined {
+    return this.modelsMap[id];
   }
   /**
    * 所有节点上所有边的model
