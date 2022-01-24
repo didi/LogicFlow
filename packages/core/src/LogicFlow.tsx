@@ -342,6 +342,8 @@ export default class LogicFlow {
    * 重新设置画布的宽高
    */
   resize(width: number, height: number): void {
+    this.options.width = width ?? this.options.width;
+    this.options.height = height ?? this.options.height;
     this.graphModel.resize(width, height);
   }
   /**

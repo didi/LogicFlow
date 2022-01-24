@@ -59,10 +59,11 @@ class Graph extends Component<IProps> {
       graphModel, tool, options, dnd, snaplineModel,
     } = this.props;
     const style: ContainerStyle = {};
-    if (graphModel.width) {
+    // 如果初始化的时候，不传宽高，则默认为父容器宽高。
+    if (options.width) {
       style.width = `${graphModel.width}px`;
     }
-    if (graphModel.height) {
+    if (options.height) {
       style.height = `${graphModel.height}px`;
     }
     const { fakerNode, editConfigModel } = graphModel;

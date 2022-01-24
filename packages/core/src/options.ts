@@ -123,12 +123,6 @@ export function get(options: Definition) {
       },
     }, grid);
   }
-  if (!options.width) {
-    options.width = container.getBoundingClientRect().width;
-  }
-  if (!options.height) {
-    options.height = container.getBoundingClientRect().height;
-  }
   return assign({}, defaults, options);
 }
 

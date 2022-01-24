@@ -140,8 +140,8 @@ class GraphModel {
     this.transformModel = new TransfromModel(this.eventCenter);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
-    this.width = width;
-    this.height = height;
+    this.width = width ?? container.getBoundingClientRect().width;
+    this.height = height ?? container.getBoundingClientRect().height;
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
@@ -1025,8 +1025,8 @@ class GraphModel {
    * 重新设置画布的宽高
    */
   @action resize(width: number, height: number): void {
-    this.width = width ?? width;
-    this.height = height ?? height;
+    this.width = width ?? this.width;
+    this.height = height ?? this.height;
   }
   /**
    * 清空画布
