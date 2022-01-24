@@ -5,18 +5,18 @@ const lf = new LogicFlow({
   keyboard: {
     enabled: true
   },
-  plugins: [Group,Control],
+  plugins: [Group, Control],
   height: 500
 })
 
 class MyGroup extends GroupNode.view {
-
 }
 
 class MyGroupModel extends GroupNode.model {
   initNodeData(data) {
     super.initNodeData(data);
     this.isRestrict = true;
+    this.resizable = true;
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
@@ -47,17 +47,23 @@ lf.render({
       x: 400,
       y: 400,
       children: [
-        'rect_1'
+        'rect_2'
       ]
     },
     {
-      id: 'rect_1',
-      type: 'rect',
+      id: 'group',
+      type: 'group',
+      x: 700,
+      y: 200
+    },
+    {
+      id: 'rect_2',
+      type: 'circle',
       x: 400,
       y: 400
     },
     {
-      id: 'rect_2',
+      id: 'rect_3',
       type: 'circle',
       x: 200,
       y: 200

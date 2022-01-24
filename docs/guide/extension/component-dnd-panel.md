@@ -38,6 +38,7 @@ PatternItem：
 
 ```js
 import LogicFlow from '@logicflow/core';
+import "@logicflow/core/dist/style/index.css";
 import { DndPanel, SelectionSelect } from '@logicflow/extension';
 import '@logicflow/extension/lib/style/index.css'
 

@@ -37,6 +37,7 @@ npm install @logicflow/extension
 
 ```js
 import LogicFlow from '@logicflow/core'
+import "@logicflow/core/dist/style/index.css";
 
 const lf = new LogicFlow({
   container: document.querySelector("#app"),

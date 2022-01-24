@@ -1,9 +1,10 @@
-import { RectNode, RectNodeModel } from '@logicflow/core';
+import { RectResize } from '../../NodeResize';
 
-class GroupNodeModel extends RectNodeModel {
+class GroupNodeModel extends RectResize.model {
   readonly isGroup = true;
   children: Set<string>;
   isRestrict: boolean; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
+  resizable: boolean; // 分组节点是否允许调整大小。
   initNodeData(data): void {
     super.initNodeData(data);
     let children = [];
@@ -12,14 +13,12 @@ class GroupNodeModel extends RectNodeModel {
     }
     // 初始化组的子节点
     this.children = new Set(children);
-    this.isRestrict = false;
-  }
-  setAttributes() {
     this.width = 500;
     this.height = 200;
-    this.strokeWidth = 1;
-    this.zIndex = 0;
+    this.zIndex = -1;
     this.radius = 0;
+    this.isRestrict = false;
+    this.resizable = false;
   }
   /**
    * 设置是否允许子节点被拖动移除分组
@@ -71,11 +70,14 @@ class GroupNodeModel extends RectNodeModel {
     next();
   }
 }
-class GroupNode extends RectNode {
+class GroupNode extends RectResize.view {
   /**
    * 重新toFront，阻止其置顶
    */
   toFront() {}
+  getControlGroup() {
+    return this.props.model.resizable ? super.getControlGroup() : null;
+  }
 }
 
 export default {

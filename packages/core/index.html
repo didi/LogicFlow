@@ -12,17 +12,25 @@
     body {
       padding: 0;
       margin: 0;
+      width: 100%;
+      height: 100%;
     }
 
     body {
       background-color: #FFF;
+      position: relative;
     }
 
     #app {
-      margin-top: 30px;
-      margin-left: 30px;
-      width: 800px;
-      height: 500px;
+      /* margin-top: 30px;
+      margin-left: 30px; */
+      /* width: 800px;
+      height: 500px; */
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     *:focus {
@@ -76,11 +84,17 @@
     .lf-text-input {
       font-size: 12px;
     }
+    .buttons {
+      position: absolute;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+    }
   </style>
 </head>
 
 <body>
-  <div>
+  <div class="buttons">
     <div class="rect" onmousedown="mouseDownRect()"></div>
     <div class="circle" onmousedown="mouseDownCircle()"></div>
     <div class="text" onmousedown="mouseDownText()">文本</div>

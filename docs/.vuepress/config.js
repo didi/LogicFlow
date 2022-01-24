@@ -34,6 +34,7 @@ const guide = [
           'extension/component-minimap',
           'extension/component-selection',
           'extension/extension-node-resize',
+          'extension/component-group',
           'extension/extension-insert-node-in-polyline.md',
           // 'extension/extension-components',
           'extension/adapter',

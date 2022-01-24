@@ -44,3 +44,7 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 
 - `MiniMap.show()` -> `lf.extension.miniMap.show()`
 - `MiniMap.hide()` -> `lf.extension.miniMap.hide()`
+
+### 新增group功能
+
+- 详情见教程-[分组](./guide/extension/component-group.md)

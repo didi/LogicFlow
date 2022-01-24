@@ -215,6 +215,10 @@ window.onload = function () {
     console.log(nodes[0]);
     lf.showContextMenu(nodes[0]);
   })
+  document.querySelector('#js_resize').addEventListener('click', () => {
+    lf.resize(1200, 400)
+  })
+
   function renderXml(xml) {
     lf.render(xml);
   }
