@@ -19,8 +19,17 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | type | String | ✅ | 节点类型 |
 | x | number | ✅ | 节点中心x轴坐标 |
 | y | number | ✅ | 节点中心y轴坐标 |
-| text | Object/String  |    | 节点文本 |
+| text | TextObject  |    | 节点文本 |
 | properties | Object |    | 节点业务自定义属性 |
+
+**TextObject**
+| 名称  | 类型   | 是否必须 | 描述           |
+| :---- | :----- | :------- | :------------- |
+| value    | String |    | 文本内容 |
+| x | number | ✅ | 文本中心x轴坐标 |
+| y | number | ✅ | 文本中心y轴坐标 |
+| draggable | boolean | ✅ | 文本是否允许被拖动调整位置，保存时不会保存此属性 |
+| editable | boolean | ✅ | 文本是否允许被双击编辑，保存时不会保存此属性 |
 
 ## 状态属性
 

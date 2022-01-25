@@ -486,6 +486,26 @@ class SquareModel extends RectNodeModel {
 在实际开发中，存在隐藏锚点的需求，可以参考github issue [如何隐藏锚点？](https://github.com/didi/LogicFlow/issues/454)，可以查看code sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hideAnchor/index.js)
 :::
 
+## 自定义节点文本
+
+LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](../../api/nodeModelApi.md)中的`textObject`
+
+```js
+class CustomNodeModel extends RectNodeModel {
+  initNodeData(data) {
+    super.initNodeData(data)
+    this.text.draggable = false; // 不允许文本被拖动
+    this.text.editable = false; // 不允许文本被编辑
+  }
+  getTextStyle() {
+    const style = super.getTextStyle();
+    style.fontSize = 16;
+    style.color = 'red';
+    return style;
+  }
+}
+```
+
 ## 自定义HTML节点
 
 LogicFlow内置了基础的HTML节点和其他基础节点不一样，我们可以利用LogicFlow的自定义机制，实现各种形态的HTML节点，而且HTML节点内部可以使用任意框架进行渲染。
