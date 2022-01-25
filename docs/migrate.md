@@ -48,3 +48,8 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 ### 新增group功能
 
 - 详情见教程-[分组](./guide/extension/component-group.md)
+
+### bugfix
+
+- 修复了[#481](https://github.com/didi/LogicFlow/issues/481)首次导出后，删除远处存在的节点再进行导出，图片导出出现空白
+  
