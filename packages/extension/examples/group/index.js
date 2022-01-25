@@ -17,18 +17,14 @@ class MyGroupModel extends GroupNode.model {
     super.initNodeData(data);
     this.isRestrict = true;
     this.resizable = true;
+    this.width = 500;
+    this.height = 300;
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
     style.stroke = '#AEAFAE';
     style.strokeDasharray = '3 3';
     style.strokeWidth = 1;
-    return style;
-  }
-  getOutlineStyle() {
-    const style = super.getOutlineStyle();
-    style.stroke = 'transparent';
-    style.hover.stroke = 'transparent';
     return style;
   }
 }

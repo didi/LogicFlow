@@ -75,14 +75,18 @@ class Group {
     }
   };
   setActiveGroup = ({ data }) => {
-    if (this.activeGroup) {
-      this.activeGroup.setAllowAppendChild(false);
-      this.activeGroup = undefined;
-    }
-    const bounds = this.lf.getNodeModelById(data.id).getBounds();
-    this.activeGroup = this.getGroup(bounds);
-    if (this.activeGroup && this.activeGroup.id !== data.id) {
-      this.activeGroup.setAllowAppendChild(true);
+    const nodeModel = this.lf.getNodeModelById(data.id);
+    if (nodeModel.isGroup) return;
+    const bounds = nodeModel.getBounds();
+    const newGroup = this.getGroup(bounds);
+    if (newGroup || newGroup !== this.activeGroup) {
+      if (this.activeGroup) {
+        this.activeGroup.setAllowAppendChild(false);
+      }
+      if (newGroup) {
+        this.activeGroup = newGroup;
+        this.activeGroup.setAllowAppendChild(true);
+      }
     }
   };
   getGroups() {

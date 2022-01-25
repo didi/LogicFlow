@@ -1,3 +1,4 @@
+import { h } from '@logicflow/core';
 import { RectResize } from '../../NodeResize';
 
 class GroupNodeModel extends RectResize.model {
@@ -15,16 +16,13 @@ class GroupNodeModel extends RectResize.model {
     this.children = new Set(children);
     this.width = 500;
     this.height = 200;
+    // todo: 参考bpmn.js, 分组和未加入分组的节点重合时，未加入分组的节点在分组之下。方便标识。
     this.zIndex = -1;
     this.radius = 0;
+    this.text.editable = false;
+    this.text.draggable = false;
     this.isRestrict = false;
     this.resizable = false;
-  }
-  /**
-   * 设置是否允许子节点被拖动移除分组
-   */
-  setIsRestrict(isRestrict) {
-    this.isRestrict = isRestrict;
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)
@@ -32,42 +30,37 @@ class GroupNodeModel extends RectResize.model {
     && y1 >= (this.y - this.height / 2)
     && y2 <= (this.y + this.height / 2);
   }
-  // todo: 更好的方式定义分组的样式
   setAllowAppendChild(isAllow) {
-    if (isAllow) {
-      this.stroke = 'red';
-    } else {
-      this.stroke = 'rgb(24, 125, 255)';
-    }
+    this.setProperty('groupAddable', isAllow);
   }
   /**
    * 添加分组子节点
    * @param id 节点id
    */
   addChild(id) {
-    this.beforeAddChild(() => {
-      this.children.add(id);
-    });
+    this.children.add(id);
   }
   /**
    * 删除分组子节点
    * @param id 节点id
    */
   removeChild(id) {
-    this.beforeRemoveChild(() => {
-      this.children.delete(id);
-    });
+    this.children.delete(id);
+  }
+  getAddableOutlineStyle() {
+    return {
+      stroke: '#FEB663',
+      strokeWidth: 2,
+      strokeDasharray: '4 4',
+      fill: 'transparent',
+    };
   }
   getData() {
     const data = super.getData();
     data.children = [...this.children];
+    const { properties } = data;
+    delete properties.groupAddable;
     return data;
-  }
-  beforeAddChild(next) {
-    next();
-  }
-  beforeRemoveChild(next) {
-    next();
   }
 }
 class GroupNode extends RectResize.view {
@@ -77,6 +70,29 @@ class GroupNode extends RectResize.view {
   toFront() {}
   getControlGroup() {
     return this.props.model.resizable ? super.getControlGroup() : null;
+  }
+  getAddedableShape() {
+    const { width, height, x, y, radius, properties } = this.props.model;
+    if (!properties.groupAddable) return null;
+    const { strokeWidth } = this.props.model.getNodeStyle();
+    const style: Record<string, any> = this.props.model.getAddableOutlineStyle();
+    const newWidth = width + strokeWidth + 8;
+    const newHeight = height + strokeWidth + 8;
+    return h('rect', {
+      ...style,
+      width: newWidth,
+      height: newHeight,
+      x: x - newWidth / 2,
+      y: y - newHeight / 2,
+      rx: radius,
+      ry: radius,
+    });
+  }
+  getResizeShape() {
+    return h('g', {}, [
+      this.getAddedableShape(),
+      super.getResizeShape(),
+    ]);
   }
 }
 
