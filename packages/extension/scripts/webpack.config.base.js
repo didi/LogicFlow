@@ -16,11 +16,11 @@ const packagesEntry = {
   InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
   SelectionSelect: path.resolve(__dirname, '../src/components/selection-select/index.ts'),
   NodeResize: path.resolve(__dirname, '../src/NodeResize/index.ts'),
-  InsertNodeInPolyline: path.resolve(__dirname, '../src/insert-node-in-polyline/index.ts'),
   FlowPath: path.resolve(__dirname, '../src/tools/flow-path/index.ts'),
   AutoLayout: path.resolve(__dirname, '../src/tools/auto-layout/index.ts'),
   lfXml2Json: path.resolve(__dirname, '../src/bpmn-adapter/xml2json.ts'),
   lfJson2Xml: path.resolve(__dirname, '../src/bpmn-adapter/json2xml.ts'),
+  GroupShrink: path.resolve(__dirname, '../src/group-shrink/index.ts'),
 };
 
 module.exports = {
@@ -104,6 +104,6 @@ module.exports = {
     ],
   },
   externals: {
-    '@logicflow/core': 'window'
-  }
+    '@logicflow/core': 'window',
+  },
 };
