@@ -1015,6 +1015,54 @@ class GraphModel {
     this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
   }
   /**
+   * 获取所有以此节点为终点的边
+   */
+  @action getNodeIncomingEdge(nodeId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.targetNodeId === nodeId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
+   * 获取所有以此节点为起点的边
+   */
+  @action getNodeOutgoingEdge(nodeId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.sourceNodeId === nodeId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
+   * 获取节点连接到的所有起始节点
+   */
+  @action getNodeIncomingNode(nodeId) {
+    const nodes = [];
+    this.edges.forEach(edge => {
+      if (edge.targetNodeId === nodeId) {
+        nodes.push(this.nodesMap[edge.sourceNodeId].model);
+      }
+    });
+    return nodes;
+  }
+  /**
+   * 获取节点连接到的所有目标节点
+   */
+  @action getNodeOutgoingNode(nodeId) {
+    const nodes = [];
+    this.edges.forEach(edge => {
+      if (edge.sourceNodeId === nodeId) {
+        nodes.push(this.nodesMap[edge.targetNodeId].model);
+      }
+    });
+    return nodes;
+  }
+  /**
    * 设置主题
    * todo docs link
    */

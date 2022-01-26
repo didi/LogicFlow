@@ -603,6 +603,30 @@ export default class LogicFlow {
     return this.getEdgeModelById(edgeId)?.getData();
   }
   /**
+   * 获取所有以此节点为终点的边
+   */
+  getNodeIncomingEdge(nodeId) {
+    return this.graphModel.getNodeIncomingEdge(nodeId);
+  }
+  /**
+   * 获取所有以此节点为起点的边
+   */
+  getNodeOutgoingEdge(nodeId) {
+    return this.graphModel.getNodeOutgoingEdge(nodeId);
+  }
+  /**
+   * 获取节点连接到的所有起始节点
+   */
+  getNodeIncomingNode(nodeId) {
+    return this.graphModel.getNodeIncomingNode(nodeId);
+  }
+  /**
+   * 获取节点连接到的所有目标节点
+   */
+  getNodeOutgoingNode(nodeId) {
+    return this.graphModel.getNodeOutgoingNode(nodeId);
+  }
+  /**
    * 显示节点、连线文本编辑框
    * @param id 元素id
    */
