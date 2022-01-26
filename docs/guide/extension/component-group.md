@@ -27,6 +27,29 @@ lf.render({
 })
 ```
 
+## group的数据格式
+
+`group`对LogicFlow来说是一种特殊的节点，所以其数据格式仍然和节点基本一致。但是相对于普通的节点，`group`节点多了一个`children`属性，用来存储其子节点Id.
+
+```js
+lf.render({
+  nodes: [
+    {
+      type: "group",
+      x: 400,
+      y: 400,
+      children: ["rect_2"]
+    },
+    {
+      id: "rect_2",
+      type: "circle",
+      x: 400,
+      y: 400
+    }
+  ]
+})
+```
+
 ## 自定义分组
 
 在实际业务中，我们建议和自定义节点一样，开发者基于自己的业务自定义分组，然后给分组取个符合自己业务的名字。例如在bpmn中的子分组，取名叫做`subProcess`，然后自定义分组节点的样式。
@@ -104,3 +127,12 @@ class MyGroupModel extends GroupNode.model {
 ```
 
 ## 示例
+
+<iframe src="https://codesandbox.io/embed/bold-moore-vgvpf?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="bold-moore-vgvpf"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+   

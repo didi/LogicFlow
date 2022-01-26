@@ -436,6 +436,50 @@ lf.on('connection:not-allowed', (msg) => {
 });
 ```
 
+## 限制节点移动
+
+有些时候，我们需要更加细粒度的控制节点什么时候可以移动，什么时候不可以移动，比如在实现分组插件时，需要控制分组节点子节点不允许移动出分组。
+
+和连线规则类似，我们可以给节点的`moveRules`添加规则函数。
+
+```ts
+class MovableNodeModel extends RectNodeModel {
+  initNodeData(data) {
+    super.initNodeData(data);
+    this.moveRules.push((model, deltaX, deltaY) => {
+      // 不允许移动到坐标为负值的地方
+      if (
+        model.x + deltaX - this.width / 2 < 0 ||
+        model.y + deltaY - this.height / 2 < 0
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }
+}
+
+```
+
+在`graphModel`中支持添加全局移动规则，例如在移动A节点的时候，期望把B节点也一起移动了。
+
+```js
+lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
+  // 如果移动的是分组，那么分组的子节点也跟着移动。
+  if (model.isGroup && model.children) {
+    lf.graphModel.moveNodes(model.children, deltaX, deltaY, true);
+  }
+  return true;
+});
+```
+
+<iframe src="https://codesandbox.io/embed/exciting-galileo-18sm6?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="exciting-galileo-18sm6"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
 ## 自定义节点的锚点
 
 对于各种基础类型节点，我们都内置了默认锚点。LogicFlow支持通过重写获取锚点的方法来实现自定义节点的锚点。

@@ -23,6 +23,7 @@ class GroupNodeModel extends RectResize.model {
     this.text.draggable = false;
     this.isRestrict = false;
     this.resizable = false;
+    this.autoToFront = false;
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)
@@ -64,10 +65,6 @@ class GroupNodeModel extends RectResize.model {
   }
 }
 class GroupNode extends RectResize.view {
-  /**
-   * 重新toFront，阻止其置顶
-   */
-  toFront() {}
   getControlGroup() {
     return this.props.model.resizable ? super.getControlGroup() : null;
   }

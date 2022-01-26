@@ -68,6 +68,11 @@ const article = [
   'LogicFlow发布1.0'
 ];
 
+const release = [
+  '1.0',
+  '1.1'
+]
+
 const verisonInfo = [
   '0.3.0',
   '0.4.0',
@@ -150,8 +155,20 @@ module.exports = {
           }
         ]
       },
-      { text: '迁移指南', link: '/migrate' },
-      // { text: '版本公告', link: '/version-info/0.3.0' },
+      { 
+        text: '版本指南',
+        link: '#',
+        items: [
+          {
+            text: '从1.0升级到1.1',
+            link: '/release/1.1'
+          },
+          {
+            text: '从0.7升级到1.0',
+            link: '/release/1.0'
+          }
+        ]
+      },
       {
         text: 'v1.x',
         link: '#',
@@ -167,6 +184,7 @@ module.exports = {
     sidebar: {
       '/guide/': guide,
       '/api/': api,
+      '/release/': release,
       '/article/': article,
     },
   },

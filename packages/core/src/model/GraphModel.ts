@@ -654,9 +654,9 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    nodeModel.move(deltaX, deltaY, isignoreRule);
+    const r = nodeModel.move(deltaX, deltaY, isignoreRule);
     // 2) 移动边
-    this.moveEdge(nodeId, deltaX, deltaY);
+    r && this.moveEdge(nodeId, deltaX, deltaY);
   }
 
   /**

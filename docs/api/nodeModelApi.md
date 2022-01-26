@@ -68,6 +68,8 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | state | number |  ✅ | 元素状态，不同的状态对应着元素显示效果。DEFAULT = 1 默认显示；TEXT_EDIT = 2 此元素正在进行文本编辑；ALLOW_CONNECT = 4, 此元素允许作为当前边的目标节点；NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前边的目标节点 |
 | BaseType |string| ✅ | 当前model的基础类型，对于节点，则固定为`node`。主要用在节点和边混合的时候识别此`model`是节点还是边。 |
 | modelType |string| ✅ | 当前model的类型，可取值有`node`, `rect-node`,`circle-node`,`polygon-node`,`ellipse-node`,`diamond-node`, `html-node`,`text-node` |
+| moveRules | array | | 节点被移动之前，添加的校验规则 |
+| autoToFront | boolean | ✅ | 控制节点选中时是否自动置顶，默认为true. |
 
 ::: tip modelType与type的区别是什么？
 

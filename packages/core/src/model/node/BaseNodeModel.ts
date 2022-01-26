@@ -88,6 +88,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   graphModel: GraphModel;
   @observable zIndex = 1;
   @observable state = 1;
+  @observable autoToFront = true; // 节点选中时是否自动置顶，默认为true.
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
@@ -401,25 +402,27 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
   }
   @action
-  move(deltaX, deltaY, isignoreRule = false): void {
-    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return;
+  move(deltaX, deltaY, isignoreRule = false): boolean {
+    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
     const targetX = this.x + deltaX;
     const targetY = this.y + deltaY;
     this.x = targetX;
     this.y = targetY;
     this.text && this.moveText(deltaX, deltaY);
+    return true;
   }
 
   @action
-  moveTo(x, y, isignoreRule = false): void {
+  moveTo(x, y, isignoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return;
+    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
     if (this.text) {
       this.text && this.moveText(deltaX, deltaY);
     }
     this.x = x;
     this.y = y;
+    return true;
   }
 
   @action

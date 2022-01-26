@@ -65,7 +65,7 @@ class Anchor extends Component<IProps, IState> {
     const { overlapMode } = graphModel;
     // nodeModel.setSelected(true);
     graphModel.selectNodeById(nodeModel.id);
-    if (overlapMode !== OverlapMode.INCREASE) {
+    if (overlapMode !== OverlapMode.INCREASE && nodeModel.autoToFront) {
       graphModel.toFront(nodeModel.id);
     }
     this.setState({
