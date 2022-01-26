@@ -84,6 +84,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
+  @observable visible = true;
   // 其它属性
   graphModel: GraphModel;
   @observable zIndex = 1;

@@ -1,11 +1,19 @@
 import { h } from '@logicflow/core';
 import { RectResize } from '../../NodeResize';
 
+const defaultWidth = 500;
+const defaultHeight = 300;
+
 class GroupNodeModel extends RectResize.model {
   readonly isGroup = true;
   children: Set<string>;
   isRestrict: boolean; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
   resizable: boolean; // 分组节点是否允许调整大小。
+  // isFolded: boolean;
+  foldedWidth = 100;
+  foldedHeight = 40;
+  unfoldedWidth = defaultWidth;
+  unfoldedHight = defaultHeight;
   initNodeData(data): void {
     super.initNodeData(data);
     let children = [];
@@ -14,8 +22,8 @@ class GroupNodeModel extends RectResize.model {
     }
     // 初始化组的子节点
     this.children = new Set(children);
-    this.width = 500;
-    this.height = 200;
+    this.width = defaultWidth;
+    this.height = defaultHeight;
     // todo: 参考bpmn.js, 分组和未加入分组的节点重合时，未加入分组的节点在分组之下。方便标识。
     this.zIndex = -1;
     this.radius = 0;
@@ -24,6 +32,27 @@ class GroupNodeModel extends RectResize.model {
     this.isRestrict = false;
     this.resizable = false;
     this.autoToFront = false;
+    this.isFolded = false;
+    this.properties.isFolded = false;
+  }
+  foldGroup(isFolded) {
+    this.setProperty('isFolded', isFolded);
+    this.children.forEach((elementId) => {
+      this.graphModel.getElement(elementId).visible = !isFolded;
+    });
+    if (isFolded) {
+      this.x = this.x - this.width / 2 + this.foldedWidth / 2;
+      this.y = this.y - this.height / 2 + this.foldedHeight / 2;
+      this.unfoldedWidth = this.width;
+      this.unfoldedHight = this.height;
+      this.width = this.foldedWidth;
+      this.height = this.foldedHeight;
+    } else {
+      this.width = this.unfoldedWidth;
+      this.height = this.unfoldedHight;
+      this.x = this.x + this.width / 2 - this.foldedWidth / 2;
+      this.y = this.y + this.height / 2 - this.foldedHeight / 2;
+    }
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)
@@ -61,6 +90,7 @@ class GroupNodeModel extends RectResize.model {
     data.children = [...this.children];
     const { properties } = data;
     delete properties.groupAddable;
+    delete properties.isFolded;
     return data;
   }
 }
@@ -85,10 +115,45 @@ class GroupNode extends RectResize.view {
       ry: radius,
     });
   }
+  getFoldIcon() {
+    const { model } = this.props;
+    const foldX = model.x - model.width / 2 + 5;
+    const foldY = model.y - model.height / 2 + 5;
+    const iconIcon = h('path', {
+      fill: 'none',
+      stroke: '#818281',
+      strokeWidth: 2,
+      'pointer-events': 'none',
+      d: model.properties.isFolded
+        ? `M ${foldX + 3},${foldY + 6} ${foldX + 11},${foldY + 6} M${foldX + 7},${foldY + 2} ${foldX + 7},${foldY + 10}`
+        : `M ${foldX + 3},${foldY + 6} ${foldX + 11},${foldY + 6} `,
+    });
+    return h('g',
+      {},
+      [
+        h('rect', {
+          height: 12,
+          width: 14,
+          rx: 2,
+          ry: 2,
+          strokeWidth: 1,
+          fill: '#F4F5F6',
+          stroke: '#CECECE',
+          cursor: 'pointer',
+          x: model.x - model.width / 2 + 5,
+          y: model.y - model.height / 2 + 5,
+          onClick: () => {
+            model.foldGroup(!model.properties.isFolded);
+          },
+        }),
+        iconIcon,
+      ]);
+  }
   getResizeShape() {
     return h('g', {}, [
       this.getAddedableShape(),
       super.getResizeShape(),
+      this.getFoldIcon(),
     ]);
   }
 }

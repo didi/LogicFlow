@@ -59,6 +59,7 @@ interface IBaseModel {
    * 元素是否被选中
    */
   isSelected: boolean;
+  visible: boolean;
   /**
    * 元素堆叠是层级，默认情况下节点zIndex值为1，边zIndex为0。
    * todo：写完善

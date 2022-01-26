@@ -170,7 +170,6 @@ class GraphModel {
    */
   @computed get sortElements() {
     let elements: IBaseModel[] = [];
-    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     elements = elements.sort((a, b) => a.zIndex - b.zIndex);
@@ -183,7 +182,9 @@ class GraphModel {
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
-      if (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false)) {
+      if (currentItem.visible
+        && (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false))
+      ) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;
         }
@@ -228,7 +229,6 @@ class GraphModel {
   getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
     const areaElements = [];
     const elements = [];
-    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
