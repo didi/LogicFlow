@@ -14,7 +14,7 @@
     "directory": "packages/core"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
+    "dev": "cross-env NODE_ENV=development webpack serve --client-log-level warning --config scripts/webpack.config.dev.js",
     "clean": "rimraf dist lib esm cjs",
     "build": "npm run build:umd",
     "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style",
@@ -68,7 +68,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-webpack-plugin": "^2.1.0",
-    "html-webpack-plugin": "^4.2.0",
+    "html-webpack-plugin": "^5.3.1",
     "husky": "^4.2.5",
     "ids": "^1.0.0",
     "less-loader": "^6.0.0",
@@ -85,10 +85,10 @@
     "typescript": "^3.8.3",
     "url-loader": "^4.1.0",
     "uuid": "^8.2.0",
-    "webpack": "^4.43.0",
+    "webpack": "^5.25.1",
     "webpack-bundle-analyzer": "^3.7.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "browserslist": [
     "> 3%",

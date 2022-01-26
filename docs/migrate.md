@@ -44,3 +44,22 @@ logicflow采用的新的主题定义方式，支持直接将自定义的所有sv
 
 - `MiniMap.show()` -> `lf.extension.miniMap.show()`
 - `MiniMap.hide()` -> `lf.extension.miniMap.hide()`
+
+### 其它
+
+修改了babel配置,移除对对过时浏览器的支持以减小打包后的体积。
+
+```js
+// packages/core/scripts/webpack.config.base.js
+[
+  '@babel/preset-env',
+  {
+    useBuiltIns: 'usage',
+    corejs: '3.3',
+    targets: {
+      node: 'current', 
+      browsers: ["last 2 versions", "> 1%", "not IE 11","not dead"]
+    },
+  },
+],
+```
