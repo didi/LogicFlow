@@ -19,15 +19,13 @@ class GroupShrink {
    */
   startShrink(group) {
     if (group.type !== 'group') {
-      console.log('只有分组节点可以收缩');
-      return;
+      throw new Error('Only groupNode can be shrinked!');
     }
     this.group = group;
     const nodeModel = this.lf.getNodeModelById(group.id);
     const { shrinkProperty: shrinkConfig } = nodeModel.getProperties();
     if (shrinkConfig && shrinkConfig.shrinked) {
-      console.log('不能再收缩了');
-      return;
+      throw new Error('GroupNode which is shrinked cannot be shrinked again!');
     }
     const shrinkProperty = {
       shrinked: true,
@@ -75,8 +73,9 @@ class GroupShrink {
     const { shrinkProperty = {} } = nodeModel.getProperties();
     const { shrinked, groupNode, innerNodes, innerEdges } = shrinkProperty;
     if (!shrinked) {
-      console.log('不能再展开了');
-      return;
+      throw new Error(
+        'GroupNode which is not shrinked cannot be expanded',
+      );
     }
     // 重新渲染分组节点
     this.lf.deleteNode(group.id);
