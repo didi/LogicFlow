@@ -84,25 +84,32 @@ class GroupNodeModel extends RectResize.model {
     const outgoingEdges = this.graphModel.getNodeOutgoingEdge(nodeId);
     inCommingEdges.concat(outgoingEdges).forEach((edgeModel, index) => {
       edgeModel.visible = !isFolded;
-      const isCommingEdge = edgeModel.targetNodeId === nodeId;
-      if (isFolded) {
-        const data = edgeModel.getData();
-        data.id = `${data.id}__${index}`;
-        if (isCommingEdge) {
-          data.endPoint = undefined;
-          data.targetNodeId = this.id;
-        } else {
-          data.startPoint = undefined;
-          data.sourceNodeId = this.id;
+      if (isFolded
+        && (
+          !this.children.has(edgeModel.targetNodeId)
+          || !this.children.has(edgeModel.sourceNodeId)
+        )
+      ) {
+        const isCommingEdge = edgeModel.targetNodeId === nodeId;
+        if (isFolded) {
+          const data = edgeModel.getData();
+          data.id = `${data.id}__${index}`;
+          if (isCommingEdge) {
+            data.endPoint = undefined;
+            data.targetNodeId = this.id;
+          } else {
+            data.startPoint = undefined;
+            data.sourceNodeId = this.id;
+          }
+          data.text = data.text?.value;
+          data.pointsList = undefined;
+          const model = this.graphModel.addEdge(data);
+          model.virtual = true;
+          // 强制不保存group连线数据
+          model.getData = () => null;
+          model.text.editable = false;
+          model.isFoldedEdge = true;
         }
-        data.text = data.text?.value;
-        data.pointsList = undefined;
-        const model = this.graphModel.addEdge(data);
-        model.virtual = true;
-        // 强制不保存group连线数据
-        model.getData = () => null;
-        model.text.editable = false;
-        model.isFoldedEdge = true;
       }
     });
   }
