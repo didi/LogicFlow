@@ -79,14 +79,37 @@ lf.register({
 
 ## groupModel的属性和方法
 
-分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见[nodeModel](../../api/nodeModelApi.md)
+分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见[nodeModel](../../api/nodeModelApi.md)。
 
 ### 状态属性
 
-| 名称  | 类型   | 是否必须 | 描述           |
-| :---- | :----- | :------ | :------------- |
-| isRestrict | boolean |  ✅ | 是否限制分组子节点拖出分组，默认false |
-| resizable  | boolean |  ✅ | 分组是否支持手动调整大小，默认false   |
+| 名称  | 类型   |  描述           |
+| :---- | :----- | :------------- |
+| isRestrict | boolean | 是否限制分组子节点拖出分组，默认false |
+| resizable  | boolean |  分组是否支持手动调整大小，默认false   |
+| foldable  | boolean |  分组是否显示展开收起按钮，默认false   |
+| width  | number |  分组宽度   |
+| height  | number |   分组高度   |
+| foldedWidth  | number |  分组折叠后的宽度   |
+| foldedHeight  | number |  分组折叠后的高度   |
+| isGroup  | boolean |  只读，永远为true, 用于识别`model`为`group`。   |
+
+group的属性设置方式和节点一样，可以在`groupModel`的`initNodeData`或`setAttributes`方法中设置。
+
+```js
+class MyGroupModel extends GroupNode.model {
+  initNodeData(data) {
+    super.initNodeData(data);
+    this.isRestrict = true;
+    this.resizable = true;
+    this.foldable = true;
+    this.width = 500;
+    this.height = 300;
+    this.foldedWidth = 50;
+    this.foldedHeight = 50;
+  }
+}
+```
 
 ### addChild
 
@@ -111,9 +134,18 @@ const groupModel = lf.getNodeModelById('group_id');
 groupModel.removeChild('node_id_1');
 ```
 
+### foldGroup
+
+收起分组, 参数为`true`表示收起分组、false表示展开分组
+
+```js
+const groupModel = lf.getNodeModelById('group_id');
+groupModel.foldGroup(true);
+```
+
 ### getAddableOutlineStyle
 
-设置拖动节点到分组上是，分组高亮的提示颜色。
+设置拖动节点到分组上时，分组高亮的提示效果样式。
 
 ```js
 class MyGroupModel extends GroupNode.model {

@@ -17,4 +17,3 @@ export * from './tools/flow-path';
 export * from './tools/auto-layout';
 export * from './bpmn-adapter/xml2json';
 export * from './bpmn-adapter/json2xml';
-export * from './group-shrink';

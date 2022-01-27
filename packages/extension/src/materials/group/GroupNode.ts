@@ -9,9 +9,9 @@ class GroupNodeModel extends RectResize.model {
   children: Set<string>;
   isRestrict: boolean; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
   resizable: boolean; // 分组节点是否允许调整大小。
-  // isFolded: boolean;
-  foldedWidth = 100;
-  foldedHeight = 40;
+  foldable: boolean; // 分组节点是否允许调整大小。
+  foldedWidth: number;
+  foldedHeight: number;
   unfoldedWidth = defaultWidth;
   unfoldedHight = defaultHeight;
   initNodeData(data): void {
@@ -24,6 +24,8 @@ class GroupNodeModel extends RectResize.model {
     this.children = new Set(children);
     this.width = defaultWidth;
     this.height = defaultHeight;
+    this.foldedWidth = 80;
+    this.foldedHeight = 60;
     // todo: 参考bpmn.js, 分组和未加入分组的节点重合时，未加入分组的节点在分组之下。方便标识。
     this.zIndex = -1;
     this.radius = 0;
@@ -32,7 +34,7 @@ class GroupNodeModel extends RectResize.model {
     this.isRestrict = false;
     this.resizable = false;
     this.autoToFront = false;
-    this.isFolded = false;
+    this.foldable = false;
     this.properties.isFolded = false;
   }
   foldGroup(isFolded) {
@@ -178,6 +180,7 @@ class GroupNode extends RectResize.view {
     const { model } = this.props;
     const foldX = model.x - model.width / 2 + 5;
     const foldY = model.y - model.height / 2 + 5;
+    if (!model.foldable) return null;
     const iconIcon = h('path', {
       fill: 'none',
       stroke: '#818281',

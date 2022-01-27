@@ -17,8 +17,11 @@ class MyGroupModel extends GroupNode.model {
     super.initNodeData(data);
     this.isRestrict = true;
     this.resizable = true;
+    this.foldable = true;
     this.width = 500;
     this.height = 300;
+    this.foldedWidth = 60;
+    this.foldedHeight = 60;
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
