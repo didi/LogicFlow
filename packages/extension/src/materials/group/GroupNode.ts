@@ -37,6 +37,11 @@ class GroupNodeModel extends RectResize.model {
     this.foldable = false;
     this.properties.isFolded = false;
   }
+  getResizeOutlineStyle() {
+    const style = super.getResizeOutlineStyle();
+    style.stroke = 'none';
+    return style;
+  }
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
     if (isFolded) {
@@ -157,7 +162,8 @@ class GroupNodeModel extends RectResize.model {
 }
 class GroupNode extends RectResize.view {
   getControlGroup() {
-    return this.props.model.resizable ? super.getControlGroup() : null;
+    const { resizable, properties } = this.props.model;
+    return resizable && !properties.isFolded ? super.getControlGroup() : null;
   }
   getAddedableShape() {
     const { width, height, x, y, radius, properties } = this.props.model;

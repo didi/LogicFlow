@@ -32,7 +32,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^1.1.0-alpha.4",
+    "@logicflow/core": "^1.1.0-alpha.5",
     "ids": "^1.0.0",
     "preact": "^10.4.8"
   },

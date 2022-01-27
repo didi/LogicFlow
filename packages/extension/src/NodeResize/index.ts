@@ -7,41 +7,6 @@ const NodeResize = {
   pluginName: 'nodeResize',
   // 拖动step
   step: 0,
-  // 边框和contol拖动点样式的设置
-  style: {
-    outline: {
-      stroke: '#000000',
-      strokeWidth: 1,
-      strokeDasharray: '3,3',
-    },
-    controlPoint: {
-      width: 7,
-      height: 7,
-      fill: '#FFFFFF',
-      stroke: '#000000',
-    },
-  },
-  // 缩放范围
-  sizeRange: {
-    // rect: {
-    //   minWidth: 30,
-    //   minHeight: 30,
-    //   maxWidth: 300,
-    //   maxHeight: 300,
-    // },
-    ellipse: {
-      minRx: 15,
-      minRy: 15,
-      maxRx: 150,
-      maxRy: 150,
-    },
-    diamond: {
-      minRx: 15,
-      minRy: 15,
-      maxRx: 150,
-      maxRy: 150,
-    },
-  },
   install(lf) {
     lf.register({
       type: RectResize.type,
@@ -73,4 +38,5 @@ export {
   RectResize,
   EllipseResize,
   DiamondResize,
+  HtmlResize,
 };

@@ -787,11 +787,11 @@ class GraphModel {
    */
   @action
   deleteEdgeById(id) {
-    const idx = this.edgesMap[id].index;
     const edge = this.edgesMap[id];
     if (!edge) {
       return;
     }
+    const idx = this.edgesMap[id].index;
     const edgeData = this.edgesMap[id].model.getData();
     this.edges.splice(idx, 1);
     this.eventCenter.emit(EventType.EDGE_DELETE, { data: edgeData });

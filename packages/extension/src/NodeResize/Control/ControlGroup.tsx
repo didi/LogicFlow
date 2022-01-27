@@ -2,7 +2,6 @@ import { h, Component } from 'preact';
 import { BaseNodeModel, GraphModel } from '@logicflow/core';
 import Control from './Control';
 import Rect from '../BasicShape/Rect';
-import NodeResize from '../index';
 
 interface IProps {
   model: BaseNodeModel,
@@ -36,18 +35,22 @@ class ControlGroup extends Component<IProps> {
     };
     const { minX, minY, maxX, maxY } = box;
     const controlList = [
+      // 左上角
       {
         x: minX,
         y: minY,
       },
+      // 右上角
       {
         x: maxX,
         y: minY,
       },
+      // 右下角
       {
         x: maxX,
         y: maxY,
       },
+      // 左下角
       {
         x: minX,
         y: maxY,
@@ -65,24 +68,25 @@ class ControlGroup extends Component<IProps> {
   // 一般节点被选中了会有outline, 先不用这个
   getGroupSolid() {
     const {
-      model: {
-        x,
-        y,
-        width,
-        height,
-      },
+      model,
     } = this.props;
-    const { stroke, strokeWidth, strokeDasharray } = NodeResize.style.outline;
+    const {
+      x,
+      y,
+      width,
+      height,
+    } = model;
+    const style = model.getResizeOutlineStyle();
     return (
       <Rect
         fill="none"
+        {
+          ...style
+        }
         x={x}
         y={y}
         width={width}
         height={height}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        strokeDasharray={strokeDasharray}
       />
     );
   }
