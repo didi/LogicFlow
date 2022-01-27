@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.4...@logicflow/extension@1.1.0-alpha.6) (2022-01-27)
+
+
+### Bug Fixes
+
+* not create new edge while edge source and target both in group ([9ec3197](https://github.com/didi/LogicFlow/commit/9ec31975a81f0fc75f13fd54b6624dbd953b04c2))
+
+
+
+
+
 # [1.1.0-alpha.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.4...@logicflow/extension@1.1.0-alpha.5) (2022-01-27)
 
 
