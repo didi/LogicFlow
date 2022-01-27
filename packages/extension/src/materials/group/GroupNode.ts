@@ -37,9 +37,6 @@ class GroupNodeModel extends RectResize.model {
   }
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
-    this.children.forEach((elementId) => {
-      this.graphModel.getElement(elementId).visible = !isFolded;
-    });
     if (isFolded) {
       this.x = this.x - this.width / 2 + this.foldedWidth / 2;
       this.y = this.y - this.height / 2 + this.foldedHeight / 2;
@@ -53,6 +50,61 @@ class GroupNodeModel extends RectResize.model {
       this.x = this.x + this.width / 2 - this.foldedWidth / 2;
       this.y = this.y + this.height / 2 - this.foldedHeight / 2;
     }
+    // 移动分组上的连线
+    const inCommingEdges = this.graphModel.getNodeIncomingEdge(this.id);
+    const outgoingEdges = this.graphModel.getNodeOutgoingEdge(this.id);
+    inCommingEdges.concat(outgoingEdges).forEach((edgeModel) => {
+      this.graphModel.deleteEdgeById(edgeModel.id);
+      if (!edgeModel.isFoldedEdge) {
+        const isCommingEdge = edgeModel.targetNodeId === this.id;
+        const data = edgeModel.getData();
+        if (isCommingEdge) {
+          data.endPoint = undefined;
+        } else {
+          data.startPoint = undefined;
+        }
+        data.pointsList = undefined;
+        this.graphModel.addEdge(data);
+      }
+    });
+    this.children.forEach((elementId) => {
+      const nodeModel = this.graphModel.getElement(elementId);
+      nodeModel.visible = !isFolded;
+      this.foldEdge(elementId, isFolded);
+    });
+  }
+  /**
+   * 折叠分组的时候，处理分组内部子节点上的连线
+   * 1. 为了保证校验规则不被打乱，所以只隐藏子节点上面的连线。
+   * 2. 重新创建一个属性一样的边。
+   * 3. 这个边拥有virtual=true的属性，表示不支持直接修改此边内容。
+   */
+  private foldEdge(nodeId, isFolded) {
+    const inCommingEdges = this.graphModel.getNodeIncomingEdge(nodeId);
+    const outgoingEdges = this.graphModel.getNodeOutgoingEdge(nodeId);
+    inCommingEdges.concat(outgoingEdges).forEach((edgeModel, index) => {
+      edgeModel.visible = !isFolded;
+      const isCommingEdge = edgeModel.targetNodeId === nodeId;
+      if (isFolded) {
+        const data = edgeModel.getData();
+        data.id = `${data.id}__${index}`;
+        if (isCommingEdge) {
+          data.endPoint = undefined;
+          data.targetNodeId = this.id;
+        } else {
+          data.startPoint = undefined;
+          data.sourceNodeId = this.id;
+        }
+        data.text = data.text?.value;
+        data.pointsList = undefined;
+        const model = this.graphModel.addEdge(data);
+        model.virtual = true;
+        // 强制不保存group连线数据
+        model.getData = () => null;
+        model.text.editable = false;
+        model.isFoldedEdge = true;
+      }
+    });
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)

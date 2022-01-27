@@ -352,8 +352,16 @@ class GraphModel {
    * 获取画布数据
    */
   modelToGraphData(): GraphConfigData {
-    const edges = this.edges.map(edge => edge.getData());
-    const nodes = this.nodes.map(node => node.getData());
+    const edges = [];
+    this.edges.forEach(edge => {
+      const data = edge.getData();
+      if (data) edges.push(data);
+    });
+    const nodes = [];
+    this.nodes.forEach(node => {
+      const data = node.getData();
+      if (data) nodes.push(data);
+    });
     return {
       nodes,
       edges,
