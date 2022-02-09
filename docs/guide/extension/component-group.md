@@ -168,4 +168,6 @@ class MyGroupModel extends GroupNode.model {
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
-   
+::: tip 关于泳道
+分组功能不是泳道，需要开发者在分组的基础上自己实现。后续LogicFlow提供的Bpmn全功能支持会支持BPMN泳道。也欢迎自己实现了的同学给我们PR。
+:::
