@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.6...@logicflow/extension@1.1.0-alpha.7) (2022-02-09)
+
+
+### Features
+
+* group listen node:dnd-drag event ([3934d9c](https://github.com/didi/LogicFlow/commit/3934d9cb40dbe38aafccf4f94b0c880204fd1c1d))
+
+
+
+
+
 # [1.1.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.4...@logicflow/extension@1.1.0-alpha.6) (2022-01-27)
 
 
