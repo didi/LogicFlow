@@ -35,3 +35,16 @@ document.querySelector('#js_change_edge_type').addEventListener('change', (e) =>
 document.querySelector('#js_updateText').addEventListener('click', (e) => {
   lf.updateText('11', '4444')
 })
+
+document.querySelector('#js_getNodeIncomingEdge').addEventListener('click', () => {
+  console.log(lf.getNodeIncomingEdge('3'))
+})
+document.querySelector('#js_getNodeOutgoingEdge').addEventListener('click', () => {
+  console.log(lf.getNodeOutgoingEdge('3'))
+})
+document.querySelector('#js_getNodeIncomingNode').addEventListener('click', () => {
+  console.log(lf.getNodeIncomingNode('3'))
+})
+document.querySelector('#js_getNodeOutgoingNode').addEventListener('click', () => {
+  console.log(lf.getNodeOutgoingNode('3'))
+})

@@ -242,7 +242,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   toFront() {
     const { model, graphModel } = this.props;
     const { overlapMode } = graphModel;
-    if (overlapMode !== OverlapMode.INCREASE) {
+    if (overlapMode !== OverlapMode.INCREASE && model.autoToFront) {
       graphModel.toFront(model.id);
     }
   }

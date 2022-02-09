@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.7...@logicflow/extension@1.1.0) (2022-02-09)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+# [1.1.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.6...@logicflow/extension@1.1.0-alpha.7) (2022-02-09)
+
+
+### Features
+
+* group listen node:dnd-drag event ([3934d9c](https://github.com/didi/LogicFlow/commit/3934d9cb40dbe38aafccf4f94b0c880204fd1c1d))
+
+
+
+
+
+# [1.1.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.4...@logicflow/extension@1.1.0-alpha.6) (2022-01-27)
+
+
+### Bug Fixes
+
+* not create new edge while edge source and target both in group ([9ec3197](https://github.com/didi/LogicFlow/commit/9ec31975a81f0fc75f13fd54b6624dbd953b04c2))
+
+
+
+
+
+# [1.1.0-alpha.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.4...@logicflow/extension@1.1.0-alpha.5) (2022-01-27)
+
+
+### Bug Fixes
+
+* not create new edge while edge source and target both in group ([9ec3197](https://github.com/didi/LogicFlow/commit/9ec31975a81f0fc75f13fd54b6624dbd953b04c2))
+
+
+
+
+
+# [1.1.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.2...@logicflow/extension@1.1.0-alpha.4) (2022-01-27)
+
+
+### Bug Fixes
+
+* extensition-GroupShrink console->throw error ([c7cf0ef](https://github.com/didi/LogicFlow/commit/c7cf0effc1ba5ac171dfe345400ffe307386f0da))
+* use autoToFront property take node to front ([3a8a7cc](https://github.com/didi/LogicFlow/commit/3a8a7cc6a981f53837f8774aa3130b7e6d5593b9))
+
+
+### Features
+
+* add attribute visible to element ([4676427](https://github.com/didi/LogicFlow/commit/46764279f6667354b1d67186e0f131f764c3eb79))
+* add extension-GroupShrink ([99e5414](https://github.com/didi/LogicFlow/commit/99e5414be5ac0168128320f255eb0882251c7a9c))
+* add graph:rendered event ([a3838c3](https://github.com/didi/LogicFlow/commit/a3838c385328bc9e3a41e39c555736d5f59de573))
+* add group hook ([a955e7c](https://github.com/didi/LogicFlow/commit/a955e7ca151e0dd547a3995bbfed42e68f25183a))
+* group support fold ([c1d8c10](https://github.com/didi/LogicFlow/commit/c1d8c109b25a3145c8c6858c4b6b5f0b6bf072ba))
+* group support getAddableOutlineStyle ([a34f58c](https://github.com/didi/LogicFlow/commit/a34f58c11e9e73ab6dfd9536ac0980368281e62c))
+* group support resize ([d9e2403](https://github.com/didi/LogicFlow/commit/d9e2403e00bce05c65d4d5b018ac3e2b9072cecd))
+
+
+
+
+
 # [1.1.0-alpha.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.0-alpha.1...@logicflow/extension@1.1.0-alpha.2) (2022-01-21)
 
 **Note:** Version bump only for package @logicflow/extension

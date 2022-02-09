@@ -42,6 +42,12 @@ export const baseData = {
       sourceNodeId: '1',
       targetNodeId: '3',
       type: 'polyline'
+    },
+    {
+      id: '111',
+      sourceNodeId: '3',
+      targetNodeId: '2',
+      type: 'polyline'
     }
   ]
 }

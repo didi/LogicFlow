@@ -28,6 +28,7 @@ LogicFlow中所有的边都会有一个edgeModel与其对应。由于数据驱�
 | isHovered  | boolean |  ✅ | 边是否在hover状态   |
 | isHitable  | boolean |  ✅ | 边是否可点击       |
 | draggable  | boolean |  ✅ | 边是否可拖动       |
+| visible  | boolean |  ✅ | 边是否显示, `1.1.0`新增 |
 
 ## 形状属性
 

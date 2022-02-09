@@ -14,6 +14,10 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class DiamondResizeModel extends DiamondNodeModel {
+  minWidth = 30;
+  minHeight = 30;
+  maxWidth = 2000;
+  maxHeight = 2000;
   getOutlineStyle() {
     const style = super.getOutlineStyle();
     style.stroke = 'none';
@@ -21,6 +25,21 @@ class DiamondResizeModel extends DiamondNodeModel {
       style.hover.stroke = 'none';
     }
     return style;
+  }
+  getResizeOutlineStyle() {
+    return {
+      stroke: '#000000',
+      strokeWidth: 1,
+      strokeDasharray: '3,3',
+    };
+  }
+  getControlPointStyle() {
+    return {
+      width: 7,
+      height: 7,
+      fill: '#FFFFFF',
+      stroke: '#000000',
+    };
   }
   setAttributes() {
     // @ts-ignore

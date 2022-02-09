@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.7...@logicflow/core@1.1.0) (2022-02-09)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+# [1.1.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.6...@logicflow/core@1.1.0-alpha.7) (2022-02-09)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+# [1.1.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.4...@logicflow/core@1.1.0-alpha.6) (2022-01-27)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+# [1.1.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.2...@logicflow/core@1.1.0-alpha.4) (2022-01-27)
+
+
+### Bug Fixes
+
+* use autoToFront property take node to front ([3a8a7cc](https://github.com/didi/LogicFlow/commit/3a8a7cc6a981f53837f8774aa3130b7e6d5593b9))
+
+
+### Features
+
+* add attribute visible to element ([4676427](https://github.com/didi/LogicFlow/commit/46764279f6667354b1d67186e0f131f764c3eb79))
+* add getModelById & getDataById ([ad8d4e6](https://github.com/didi/LogicFlow/commit/ad8d4e62ff781914017ce478fa07ccdb36f0fe75))
+* add graph:rendered event ([a3838c3](https://github.com/didi/LogicFlow/commit/a3838c385328bc9e3a41e39c555736d5f59de573))
+* add group hook ([a955e7c](https://github.com/didi/LogicFlow/commit/a955e7ca151e0dd547a3995bbfed42e68f25183a))
+* group support fold ([c1d8c10](https://github.com/didi/LogicFlow/commit/c1d8c109b25a3145c8c6858c4b6b5f0b6bf072ba))
+* group support resize ([d9e2403](https://github.com/didi/LogicFlow/commit/d9e2403e00bce05c65d4d5b018ac3e2b9072cecd))
+
+
+
+
+
 # [1.1.0-alpha.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.1...@logicflow/core@1.1.0-alpha.2) (2022-01-21)
 
 **Note:** Version bump only for package @logicflow/core

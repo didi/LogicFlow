@@ -25,6 +25,21 @@ class HtmlResizeModel extends HtmlNodeModel {
     }
     return style;
   }
+  getResizeOutlineStyle() {
+    return {
+      stroke: '#000000',
+      strokeWidth: 1,
+      strokeDasharray: '3,3',
+    };
+  }
+  getControlPointStyle() {
+    return {
+      width: 7,
+      height: 7,
+      fill: '#FFFFFF',
+      stroke: '#000000',
+    };
+  }
   setAttributes() {
     // @ts-ignore
     const { nodeSize } = this.properties;

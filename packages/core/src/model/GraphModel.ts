@@ -140,8 +140,8 @@ class GraphModel {
     this.transformModel = new TransfromModel(this.eventCenter);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
-    this.width = width;
-    this.height = height;
+    this.width = width ?? container.getBoundingClientRect().width;
+    this.height = height ?? container.getBoundingClientRect().height;
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
@@ -170,7 +170,6 @@ class GraphModel {
    */
   @computed get sortElements() {
     let elements: IBaseModel[] = [];
-    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     elements = elements.sort((a, b) => a.zIndex - b.zIndex);
@@ -183,7 +182,9 @@ class GraphModel {
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
-      if (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false)) {
+      if (currentItem.visible
+        && (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false))
+      ) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;
         }
@@ -228,7 +229,6 @@ class GraphModel {
   getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
     const areaElements = [];
     const elements = [];
-    // IE BUG: mobx observer对象使用解构会导致IE11出现问题
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
@@ -352,8 +352,16 @@ class GraphModel {
    * 获取画布数据
    */
   modelToGraphData(): GraphConfigData {
-    const edges = this.edges.map(edge => edge.getData());
-    const nodes = this.nodes.map(node => node.getData());
+    const edges = [];
+    this.edges.forEach(edge => {
+      const data = edge.getData();
+      if (data) edges.push(data);
+    });
+    const nodes = [];
+    this.nodes.forEach(node => {
+      const data = node.getData();
+      if (data) nodes.push(data);
+    });
     return {
       nodes,
       edges,
@@ -654,9 +662,9 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    nodeModel.move(deltaX, deltaY, isignoreRule);
+    const r = nodeModel.move(deltaX, deltaY, isignoreRule);
     // 2) 移动边
-    this.moveEdge(nodeId, deltaX, deltaY);
+    r && this.moveEdge(nodeId, deltaX, deltaY);
   }
 
   /**
@@ -779,11 +787,11 @@ class GraphModel {
    */
   @action
   deleteEdgeById(id) {
-    const idx = this.edgesMap[id].index;
     const edge = this.edgesMap[id];
     if (!edge) {
       return;
     }
+    const idx = this.edgesMap[id].index;
     const edgeData = this.edgesMap[id].model.getData();
     this.edges.splice(idx, 1);
     this.eventCenter.emit(EventType.EDGE_DELETE, { data: edgeData });
@@ -1015,6 +1023,54 @@ class GraphModel {
     this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
   }
   /**
+   * 获取所有以此节点为终点的边
+   */
+  @action getNodeIncomingEdge(nodeId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.targetNodeId === nodeId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
+   * 获取所有以此节点为起点的边
+   */
+  @action getNodeOutgoingEdge(nodeId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.sourceNodeId === nodeId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
+   * 获取节点连接到的所有起始节点
+   */
+  @action getNodeIncomingNode(nodeId) {
+    const nodes = [];
+    this.edges.forEach(edge => {
+      if (edge.targetNodeId === nodeId) {
+        nodes.push(this.nodesMap[edge.sourceNodeId].model);
+      }
+    });
+    return nodes;
+  }
+  /**
+   * 获取节点连接到的所有目标节点
+   */
+  @action getNodeOutgoingNode(nodeId) {
+    const nodes = [];
+    this.edges.forEach(edge => {
+      if (edge.sourceNodeId === nodeId) {
+        nodes.push(this.nodesMap[edge.targetNodeId].model);
+      }
+    });
+    return nodes;
+  }
+  /**
    * 设置主题
    * todo docs link
    */
@@ -1025,8 +1081,8 @@ class GraphModel {
    * 重新设置画布的宽高
    */
   @action resize(width: number, height: number): void {
-    this.width = width ?? width;
-    this.height = height ?? height;
+    this.width = width ?? this.width;
+    this.height = height ?? this.height;
   }
   /**
    * 清空画布

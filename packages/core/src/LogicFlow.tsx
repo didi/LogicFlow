@@ -37,7 +37,7 @@ import SnaplineModel from './model/SnaplineModel';
 import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
-import { ElementType } from './constant/constant';
+import { ElementType, EventType } from './constant/constant';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
@@ -342,6 +342,8 @@ export default class LogicFlow {
    * 重新设置画布的宽高
    */
   resize(width: number, height: number): void {
+    this.options.width = width ?? this.options.width;
+    this.options.height = height ?? this.options.height;
     this.graphModel.resize(width, height);
   }
   /**
@@ -599,6 +601,30 @@ export default class LogicFlow {
    */
   getEdgeDataById(edgeId: string): EdgeData {
     return this.getEdgeModelById(edgeId)?.getData();
+  }
+  /**
+   * 获取所有以此节点为终点的边
+   */
+  getNodeIncomingEdge(nodeId) {
+    return this.graphModel.getNodeIncomingEdge(nodeId);
+  }
+  /**
+   * 获取所有以此节点为起点的边
+   */
+  getNodeOutgoingEdge(nodeId) {
+    return this.graphModel.getNodeOutgoingEdge(nodeId);
+  }
+  /**
+   * 获取节点连接到的所有起始节点
+   */
+  getNodeIncomingNode(nodeId) {
+    return this.graphModel.getNodeIncomingNode(nodeId);
+  }
+  /**
+   * 获取节点连接到的所有目标节点
+   */
+  getNodeOutgoingNode(nodeId) {
+    return this.graphModel.getNodeOutgoingNode(nodeId);
   }
   /**
    * 显示节点、连线文本编辑框
@@ -1029,5 +1055,6 @@ export default class LogicFlow {
         graphModel={this.graphModel}
       />
     ), this.container);
+    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData());
   }
 }

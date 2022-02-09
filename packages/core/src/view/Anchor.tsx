@@ -65,7 +65,7 @@ class Anchor extends Component<IProps, IState> {
     const { overlapMode } = graphModel;
     // nodeModel.setSelected(true);
     graphModel.selectNodeById(nodeModel.id);
-    if (overlapMode !== OverlapMode.INCREASE) {
+    if (overlapMode !== OverlapMode.INCREASE && nodeModel.autoToFront) {
       graphModel.toFront(nodeModel.id);
     }
     this.setState({
@@ -78,7 +78,7 @@ class Anchor extends Component<IProps, IState> {
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, nodeModel } = this.props;
-    const { transformModel, nodes } = graphModel;
+    const { transformModel } = graphModel;
     const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
       deltaX,
@@ -89,7 +89,7 @@ class Anchor extends Component<IProps, IState> {
       endY: y,
       draging: true,
     });
-    const info = targetNodeInfo({ x: endX, y: endY }, nodes);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     if (info) {
       const targetNode = info.node;
       this.preTargetNode = targetNode;
@@ -152,9 +152,9 @@ class Anchor extends Component<IProps, IState> {
     } = this.props;
     // nodeModel.setSelected(false);
     /* 创建边 */
-    const { nodes, edgeType } = graphModel;
+    const { edgeType } = graphModel;
     const { endX, endY, draging } = this.state;
-    const info = targetNodeInfo({ x: endX, y: endY }, nodes);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);

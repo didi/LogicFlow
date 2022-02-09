@@ -19,8 +19,17 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | type | String | ✅ | 节点类型 |
 | x | number | ✅ | 节点中心x轴坐标 |
 | y | number | ✅ | 节点中心y轴坐标 |
-| text | Object/String  |    | 节点文本 |
+| text | TextObject  |    | 节点文本 |
 | properties | Object |    | 节点业务自定义属性 |
+
+**TextObject**
+| 名称  | 类型   | 是否必须 | 描述           |
+| :---- | :----- | :------- | :------------- |
+| value    | String |    | 文本内容 |
+| x | number | ✅ | 文本中心x轴坐标 |
+| y | number | ✅ | 文本中心y轴坐标 |
+| draggable | boolean | ✅ | 文本是否允许被拖动调整位置，保存时不会保存此属性 |
+| editable | boolean | ✅ | 文本是否允许被双击编辑，保存时不会保存此属性 |
 
 ## 状态属性
 
@@ -32,6 +41,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | isHovered  | boolean |  ✅ | 节点是否在hover状态   |
 | isHitable  | boolean |  ✅ | 节点是否可点击       |
 | draggable  | boolean |  ✅ | 节点是否可拖动       |
+| visible  | boolean |  ✅ | 边是否显示, `1.1.0`新增 |
 
 ## 形状属性
 
@@ -59,6 +69,8 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | state | number |  ✅ | 元素状态，不同的状态对应着元素显示效果。DEFAULT = 1 默认显示；TEXT_EDIT = 2 此元素正在进行文本编辑；ALLOW_CONNECT = 4, 此元素允许作为当前边的目标节点；NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前边的目标节点 |
 | BaseType |string| ✅ | 当前model的基础类型，对于节点，则固定为`node`。主要用在节点和边混合的时候识别此`model`是节点还是边。 |
 | modelType |string| ✅ | 当前model的类型，可取值有`node`, `rect-node`,`circle-node`,`polygon-node`,`ellipse-node`,`diamond-node`, `html-node`,`text-node` |
+| moveRules | array | | 节点被移动之前，添加的校验规则 |
+| autoToFront | boolean | ✅ | 控制节点选中时是否自动置顶，默认为true. |
 
 ::: tip modelType与type的区别是什么？
 

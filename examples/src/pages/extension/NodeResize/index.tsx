@@ -56,11 +56,6 @@ let lf: LogicFlow;
 export default function NodeResizeExample() {
 
   useEffect(() => {
-    NodeResize.style.outline = {
-      ...NodeResize.style.outline,
-      stroke: '#1E90FF',
-      strokeDasharray: '',
-    }
     LogicFlow.use(NodeResize);
     lf = new LogicFlow({
       ...config,

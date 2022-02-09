@@ -6,21 +6,25 @@ const Snapshot = {
   pluginName: 'snapshot',
   install(lf) {
     this.lf = lf;
-    this.offsetX = Number.MAX_SAFE_INTEGER;
-    this.offsetY = Number.MAX_SAFE_INTEGER;
     /* 下载快照 */
     lf.getSnapshot = (fileName: string, backgroundColor: string) => {
+      this.offsetX = Number.MAX_SAFE_INTEGER;
+      this.offsetY = Number.MAX_SAFE_INTEGER;
       this.fileName = fileName || `logic-flow.${Date.now()}.png`;
       const svgRootElement = this.getSvgRootElement(lf);
       this.downloadSvg(svgRootElement, this.fileName, backgroundColor);
     };
     /* 获取Blob对象，用户图片上传 */
     lf.getSnapshotBlob = (backgroundColor: string) => {
+      this.offsetX = Number.MAX_SAFE_INTEGER;
+      this.offsetY = Number.MAX_SAFE_INTEGER;
       const svgRootElement = this.getSvgRootElement(lf);
       return this.getBlob(svgRootElement, backgroundColor);
     };
     /* 获取Base64对象，用户图片上传 */
     lf.getSnapshotBase64 = (backgroundColor: string) => {
+      this.offsetX = Number.MAX_SAFE_INTEGER;
+      this.offsetY = Number.MAX_SAFE_INTEGER;
       const svgRootElement = this.getSvgRootElement(lf);
       return this.getBase64(svgRootElement, backgroundColor);
     };
@@ -168,6 +172,7 @@ const Snapshot = {
     canvas.width = bboxWidth * dpr + 80;
     canvas.height = bboxHeight * dpr + 80;
     const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.scale(dpr, dpr);
     // 如果有背景色，设置流程图导出的背景色
     if (backgroundColor) {

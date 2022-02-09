@@ -2,7 +2,6 @@ import { h, Component } from 'preact';
 import { BaseNodeModel, DiamondNodeModel, EllipseNodeModel, GraphModel, LogicFlowUtil, RectNodeModel } from '@logicflow/core';
 import Rect from '../BasicShape/Rect';
 import { getDiamondReizeEdgePoint, getEllipseReizeEdgePoint, getRectReizeEdgePoint, ModelType } from './Util';
-import NodeResize from '../index';
 
 const { createDrag } = LogicFlowUtil;
 
@@ -251,15 +250,15 @@ class Control extends Component<IProps> {
     });
     // 限制放大缩小的最大最小范围
     const {
-      minRx,
-      minRy,
-      maxRx,
-      maxRy,
-    } = NodeResize.sizeRange.ellipse;
-    if (size.width < minRx
-      || size.width > maxRx
-      || size.height < minRy
-      || size.height > maxRy
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.nodeModel;
+    if (size.width < (minWidth / 2)
+      || size.width > (maxWidth / 2)
+      || size.height < (minHeight / 2)
+      || size.height > (maxHeight / 2)
     ) {
       return;
     }
@@ -315,6 +314,7 @@ class Control extends Component<IProps> {
     // html和矩形的计算方式是一样的，共用一个方法
     if (modelType === ModelType.RECT_NODE || modelType === ModelType.HTML_NODE) {
       this.updateRect({ deltaX, deltaY });
+      // this.nodeModel.resize(deltaX, deltaY);
     } else if (modelType === ModelType.ELLIPSE_NODE) {
       this.updateEllipse({ deltaX, deltaY });
     } else if (modelType === ModelType.DIAMOND_NODE) {
@@ -323,20 +323,15 @@ class Control extends Component<IProps> {
   };
   render() {
     const {
-      x, y, style, index,
+      x, y, index, model,
     } = this.props;
-    const { width, height, fill, stroke,
-    } = NodeResize.style.controlPoint;
+    const style = model.getControlPointStyle();
     return (
       <g className={`lf-resize-control-${index}`}>
         <Rect
           className="lf-node-control"
           {...{ x, y }}
           {...style}
-          width={width}
-          height={height}
-          fill={fill}
-          stroke={stroke}
           onMouseDown={this.dragHandler}
         />
       </g>

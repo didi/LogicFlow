@@ -117,7 +117,7 @@ lf.render({
     }
   ]
 });
-MiniMap.show(0, 0);
+lf.extension.miniMap.show(0, 0);
 document.querySelector('#getJson').addEventListener('click', () => {
   const data = lf.getGraphData();
   console.log(data);

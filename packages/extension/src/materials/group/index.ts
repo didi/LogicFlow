@@ -35,13 +35,27 @@ class Group {
         });
         return r;
       }
+
       return true;
     });
     lf.on('node:add', this.appendNodeToGrop);
     lf.on('node:drop', this.appendNodeToGrop);
-    lf.on('node:dnd-move', this.setActiveGroup);
+    lf.on('node:dnd-drag', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
+    lf.on('graph:rendered', this.graphRendered);
   }
+  graphRendered = (data) => {
+    // 如果节点
+    if (data && data.nodes) {
+      data.nodes.forEach(node => {
+        if (node.children) {
+          node.children.forEach(nodeId => {
+            this.nodeGroupMap.set(nodeId, node.id);
+          });
+        }
+      });
+    }
+  };
   appendNodeToGrop = ({ data }) => {
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id);
@@ -61,14 +75,18 @@ class Group {
     }
   };
   setActiveGroup = ({ data }) => {
-    if (this.activeGroup) {
-      this.activeGroup.setAllowAppendChild(false);
-      this.activeGroup = undefined;
-    }
-    const bounds = this.lf.getNodeModelById(data.id).getBounds();
-    this.activeGroup = this.getGroup(bounds);
-    if (this.activeGroup && this.activeGroup.id !== data.id) {
-      this.activeGroup.setAllowAppendChild(true);
+    const nodeModel = this.lf.getNodeModelById(data.id);
+    if (nodeModel.isGroup) return;
+    const bounds = nodeModel.getBounds();
+    const newGroup = this.getGroup(bounds);
+    if (newGroup || newGroup !== this.activeGroup) {
+      if (this.activeGroup) {
+        this.activeGroup.setAllowAppendChild(false);
+      }
+      if (newGroup) {
+        this.activeGroup = newGroup;
+        this.activeGroup.setAllowAppendChild(true);
+      }
     }
   };
   getGroups() {
@@ -93,4 +111,7 @@ class Group {
   }
 }
 
-export { Group };
+export {
+  Group,
+  GroupNode,
+};
