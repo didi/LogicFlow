@@ -13,6 +13,7 @@ import {
 import { isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
 import { getBytesLength } from './edge';
+import { GraphModel } from '..';
 
 /* 获取所有锚点 */
 export const getAnchors = (data): Point[] => {
@@ -29,24 +30,41 @@ type NodeContaint = {
 };
 
 /* 手动边时获取目标节点的信息：目标节点，目标节点的锚点index以及坐标 */
-export const targetNodeInfo = (position: Point, nodes:BaseNode[]): NodeContaint => {
+export const targetNodeInfo = (position: Point, graphModel: GraphModel): NodeContaint => {
+  const { nodes } = graphModel;
   let nodeInfo;
   for (let i = nodes.length - 1; i >= 0; i--) {
-    const inNode = isInNodeBbox(position, nodes[i]);
+    const targetNode = nodes[i];
+    const inNode = isInNodeBbox(position, targetNode);
     if (inNode) {
-      const anchorInfo = getClosestAnchor(position, nodes[i]);
+      const anchorInfo = getClosestAnchor(position, targetNode);
       if (anchorInfo) { // 不能连接到没有锚点的节点
         const currentNodeInfo = {
-          node: nodes[i],
+          node: targetNode,
           anchorIndex: anchorInfo.index,
           anchor: anchorInfo.anchor,
         };
-        nodeInfo = currentNodeInfo;
-        break;
+        // fix: 489; 多个节点重合时，连线连接上面的那一个。
+        if (!nodeInfo || isNodeHigher(targetNode, nodeInfo.node, graphModel)) {
+          nodeInfo = currentNodeInfo;
+        }
       }
     }
+
   }
   return nodeInfo;
+};
+/**
+ * 比较两个节点
+ */
+const isNodeHigher = (node1, node2, graphModel) => {
+  if (node1.zIndex > node2.zIndex) {
+    return true;
+  }
+  if (graphModel.nodesMap[node1.id].index > graphModel.nodesMap[node2.id].index) {
+    return true;
+  }
+  return false;
 };
 
 type AnchorInfo = {

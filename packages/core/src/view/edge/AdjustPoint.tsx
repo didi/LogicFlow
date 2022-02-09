@@ -82,8 +82,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     });
     // 调整过程中实时更新路径
     const { edgeModel } = this.props;
-    const { nodes } = graphModel;
-    const info = targetNodeInfo({ x: endX, y: endY }, nodes);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
     if (info && info.node) {
       let params;
@@ -119,9 +118,8 @@ export default class AdjustPoint extends Component<IProps, IState> {
     const {
       graphModel, edgeModel, type,
     } = this.props;
-    const { nodes } = graphModel;
     const { endX, endY, draging } = this.state;
-    const info = targetNodeInfo({ x: endX, y: endY }, nodes);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 没有draging就结束边
     if (!draging) return;
     // 如果找到目标节点，删除老边，创建新边
