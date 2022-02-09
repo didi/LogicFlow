@@ -97,4 +97,61 @@ class CustomEdgeModel2 extends LineEdgeModel {
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
+## 自定义边文本位置
 
+默认情况下，边上文本的位置是用户双击点击边时的位置。如果是通过API的方式给边添加的文本，文本位置按照如下规则。
+
+- line: 起点和终点中间
+- polyline: 最长线段中间
+- bezier: 起点、终点、调整点中间
+
+LogicFlow支持开发者自定义文本位置，例如文本位置永远在边起点旁边。定义方式为将属性`customTextPosition`设置为true, 然后重写`getTextPosition`方法, 此方法发回的坐标就是文本的坐标。
+
+```js
+class CustomEdgeModel extends PolylineEdgeModel {
+  customTextPosition = true;
+  getTextPosition() {
+    const position = super.getTextPosition();
+    const currentPositionList = this.points.split(" ");
+    const pointsList = [];
+    currentPositionList &&
+      currentPositionList.forEach((item) => {
+        const [x, y] = item.split(",");
+        pointsList.push({ x: Number(x), y: Number(y) });
+      });
+    if (currentPositionList.length > 1) {
+      let [x1, y1] = currentPositionList[0].split(",");
+      let [x2, y2] = currentPositionList[1].split(",");
+      let distence = 50;
+      x1 = Number(x1);
+      y1 = Number(y1);
+      x2 = Number(x2);
+      y2 = Number(y2);
+      if (x1 === x2) {
+        // 垂直
+        if (y2 < y1) {
+          distence = -50;
+        }
+        position.y = y1 + distence;
+        position.x = x1;
+      } else {
+        if (x2 < x1) {
+          distence = -50;
+        }
+        position.x = x1 + distence;
+        position.y = y1 - 10;
+      }
+    }
+    return position;
+  }
+}
+```
+
+### 示例
+
+<iframe src="https://codesandbox.io/embed/laughing-dream-x3v87?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base25"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>

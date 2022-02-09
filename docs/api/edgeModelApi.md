@@ -53,6 +53,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | modelType |string| ✅ | 当前model的类型，可取值有`edge`,`polyline`,`bezier`,`line` |
 | sourceAnchorId| string | - | 连线起点锚点id |
 | targetAnchorId| string | - | 连线终点锚点id |
+| customTextPosition| boolean | - | 自定义连线文本位置 |
 
 
 ## 样式属性
@@ -215,3 +216,8 @@ edgeModel.setText({
 const edgeModel = lf.getEdgeModelById('edge_1');
 edgeModel.updateText('hello world');
 ```
+
+## getTextPosition
+
+支持重写，自定义连线上文本位置。
+
