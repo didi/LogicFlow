@@ -40,7 +40,7 @@ class Group {
     });
     lf.on('node:add', this.appendNodeToGrop);
     lf.on('node:drop', this.appendNodeToGrop);
-    lf.on('node:dnd-move', this.setActiveGroup);
+    lf.on('node:dnd-drag', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
     lf.on('graph:rendered', this.graphRendered);
   }
