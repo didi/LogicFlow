@@ -28,6 +28,9 @@ class MyGroupModel extends GroupNode.model {
     style.stroke = '#AEAFAE';
     style.strokeDasharray = '3 3';
     style.strokeWidth = 1;
+    if (this.isFolded) {
+      style.fill = 'red';
+    }
     return style;
   }
 }

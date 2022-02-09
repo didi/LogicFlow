@@ -1,6 +1,6 @@
 # 分组
 
-LogicFlow支持分组，分组是LogicFlow内置的自定义节点。所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。
+LogicFlow支持分组。分组是LogicFlow内置的自定义节点, 所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。
 
 ## 默认分组
 
@@ -92,6 +92,7 @@ lf.register({
 | height  | number |   分组高度   |
 | foldedWidth  | number |  分组折叠后的宽度   |
 | foldedHeight  | number |  分组折叠后的高度   |
+| isFolded  | boolean |  只读，表示分组是否被折叠。   |
 | isGroup  | boolean |  只读，永远为true, 用于识别`model`为`group`。   |
 
 group的属性设置方式和节点一样，可以在`groupModel`的`initNodeData`或`setAttributes`方法中设置。

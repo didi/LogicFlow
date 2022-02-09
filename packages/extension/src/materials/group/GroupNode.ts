@@ -12,6 +12,7 @@ class GroupNodeModel extends RectResize.model {
   foldable: boolean; // 分组节点是否允许调整大小。
   foldedWidth: number;
   foldedHeight: number;
+  isFolded: boolean; // 是否收起
   unfoldedWidth = defaultWidth;
   unfoldedHight = defaultHeight;
   initNodeData(data): void {
@@ -36,6 +37,7 @@ class GroupNodeModel extends RectResize.model {
     this.autoToFront = false;
     this.foldable = false;
     this.properties.isFolded = false;
+    this.isFolded = this.properties.isFolded;
   }
   getResizeOutlineStyle() {
     const style = super.getResizeOutlineStyle();
@@ -44,6 +46,7 @@ class GroupNodeModel extends RectResize.model {
   }
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
+    this.isFolded = isFolded;
     if (isFolded) {
       this.x = this.x - this.width / 2 + this.foldedWidth / 2;
       this.y = this.y - this.height / 2 + this.foldedHeight / 2;
