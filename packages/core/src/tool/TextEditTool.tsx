@@ -162,7 +162,7 @@ export default class TextEdit extends Component<IProps, IState> {
     }
     this.__prevText = {
       type: textEditElement.type,
-      text: value,
+      text: value.replace(/(\r\n)+$|(\n)+$/, ''), // fix #488: 文本后面的换行符不保留
       id: textEditElement.id,
     };
   };

@@ -174,7 +174,6 @@ class BaseEdgeModel implements IBaseModel {
         position = anchor;
       }
     });
-    // 如果对于没有锚点的节点，期望和它建立连线，获取
     return position;
   }
 
