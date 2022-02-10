@@ -63,7 +63,6 @@ class GroupNodeModel extends RectResize.model {
     // 移动分组上的连线
     const inCommingEdges = this.graphModel.getNodeIncomingEdge(this.id);
     const outgoingEdges = this.graphModel.getNodeOutgoingEdge(this.id);
-    console.log(444);
     inCommingEdges.concat(outgoingEdges).forEach((edgeModel) => {
       this.graphModel.deleteEdgeById(edgeModel.id);
       if (!edgeModel.isFoldedEdge) {
@@ -75,7 +74,6 @@ class GroupNodeModel extends RectResize.model {
           data.startPoint = undefined;
         }
         data.pointsList = undefined;
-        console.log(data);
         this.graphModel.addEdge(data);
       }
     });
