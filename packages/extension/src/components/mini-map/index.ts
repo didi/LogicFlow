@@ -54,7 +54,7 @@ class MiniMap {
   /**
    * 显示mini map
    */
-  show = (leftPosition, topPosition) => {
+  show = (leftPosition?: number, topPosition?: number) => {
     this.__setView();
     if (!this.__isShow) {
       this.__createMiniMap(leftPosition, topPosition);

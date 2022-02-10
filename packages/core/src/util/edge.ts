@@ -748,7 +748,7 @@ export type IBezierControls = {
   ePre: Point
 };
 
-// beizer曲线
+// bezier曲线
 export const getBezierControlPoints = ({
   start,
   end,

@@ -69,6 +69,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelector('#mini-map').addEventListener('click', () => {
-    lf.extension.minimap.show();
+    lf.extension.miniMap.show();
   })
 })

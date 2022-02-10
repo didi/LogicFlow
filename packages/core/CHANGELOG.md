@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0...@logicflow/core@1.1.1) (2022-02-10)
+
+
+### Features
+
+* check width and height type ([141c667](https://github.com/didi/LogicFlow/commit/141c6678503870a9d7503864353ad6cc7493fd24))
+
+
+
+
+
 # [1.1.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0-alpha.7...@logicflow/core@1.1.0) (2022-02-09)
 
 **Note:** Version bump only for package @logicflow/core
