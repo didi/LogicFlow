@@ -11,7 +11,7 @@ LogicFlow中所有的边都会有一个edgeModel与其对应。由于数据驱�
 | id    | String |  ✅  | 边 id|
 | type | String | ✅ | 边类型 |
 | sourceNodeId | string | ✅ | 开始节点Id |
-| sourceNodeId | string | ✅ | 结束节点Id |
+| targetNodeId | string | ✅ | 结束节点Id |
 | startPoint | Point | ✅ | 边的开始坐标 |
 | endPoint | Point | ✅ | 边的坐标 |
 | text | Object/String  |    | 边文本 |
@@ -96,8 +96,8 @@ class SequenceFlowModel extends PolylineModel {
 
 ```js
 class UserEdgeModel extends PolylineEdgeModel {
-  initNodeData(data) {
-    super(data);
+  initEdgeData(data) {
+    super.initEdgeData(data);
     this.offset = 20;
   }
 }
