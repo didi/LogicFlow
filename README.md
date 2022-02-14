@@ -163,4 +163,4 @@ lf.render(data);
 
 ### 贡献代码
 
-LogicFlow对外持开放态度，不论是只修改文档的标点符合还是对LogicFlow的整体功能有大的重构我们都欢迎。对于您的每一个PR我们都会认真查看、回复、合并。详情见[LogicFlow贡献指南](https://github.com/didi/LogicFlow/blob/master/CONTRIBUTING.md)
+LogicFlow对外持开放态度，不论是只修改文档的标点符号还是对LogicFlow的整体功能有大的重构我们都欢迎。对于您的每一个PR我们都会认真查看、回复、合并。详情见[LogicFlow贡献指南](https://github.com/didi/LogicFlow/blob/master/CONTRIBUTING.md)
