@@ -95,7 +95,7 @@ PointTuple
 ```js
 const { transformModel } = lf.graphModel;
 const point = transformModel.HtmlPointToCanvasPoint([100, 100]);
-// 如何画布x轴平移了+100，那么返回的值为[0, 100]
+// 如果画布x轴平移了+100，那么返回的值为[0, 100]
 ```
 
 ## CanvasPointToHtmlPoint
@@ -117,5 +117,5 @@ PointTuple
 ```js
 const { transformModel } = lf.graphModel;
 const point = transformModel.CanvasPointToHtmlPoint([100, 100]);
-// 如何画布x轴平移了+100，那么返回的值为[200, 100]
+// 如果画布x轴平移了+100，那么返回的值为[200, 100]
 ```
