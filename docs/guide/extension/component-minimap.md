@@ -16,7 +16,7 @@ LogicFlow.use(MiniMap);
 
 ```ts
 // 1.1.0 以上
-lf.extension.minimap.show(leftPosition?: number, topPosition?: number)
+lf.extension.miniMap.show(leftPosition?: number, topPosition?: number)
 
 // 1.1.0 以下
 MiniMap.show(leftPosition?: number, topPosition?: number);
@@ -37,7 +37,7 @@ MiniMap.show(leftPosition?: number, topPosition?: number);
 
 ```ts
 // 1.1.0 以上
-lf.extension.minimap.hide()
+lf.extension.miniMap.hide()
 
 // 1.1.0 以下
 MiniMap.hide();
