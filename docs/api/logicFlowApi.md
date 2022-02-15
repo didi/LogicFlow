@@ -546,7 +546,7 @@ lf.getEdgeDataById('id')
 
 ## setDefaultEdgeType
 
-设置边的类型, 也就是设置在节点直接有用户手动绘制的连线类型。
+设置边的类型, 也就是设置在节点直接由用户手动绘制的连线类型。
 
 ```js
 setDefaultEdgeType(type: EdgeType): void
