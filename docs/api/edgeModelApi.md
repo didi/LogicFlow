@@ -69,7 +69,7 @@ class SequenceFlowModel extends PolylineModel {
   getEdgeStyle() {
     const style = super.getEdgeStyle();
     style.stroke = 'blue';
-    style.strokDasharray = '3 3';
+    style.strokeDasharray = '3 3';
     return style;
   }
 }

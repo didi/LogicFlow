@@ -90,7 +90,7 @@ class UserTaskModel extends RectNodeModel {
   getNodeStyle() {
     const style = super.getNodeStyle();
     style.stroke = 'blue';
-    style.strokDasharray = '3 3';
+    style.strokeDasharray = '3 3';
     return style;
   }
 }
