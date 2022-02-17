@@ -112,7 +112,7 @@ export default {
 </style>
 ```
 
-[在Sandbox查看react示例](https://codesandbox.io/s/github/towersxu/logicflow-vue-base/tree/main/?fontsize=14&hidenavigation=1&theme=dark)
+[在Sandbox查看react示例](https://codesandbox.io/s/github/towersxu/logicflow-react-base/tree/main/?fontsize=14&hidenavigation=1&theme=dark)
 
 ```js
 
