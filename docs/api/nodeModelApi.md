@@ -116,7 +116,7 @@ class UserTaskModel extends RectNodeModel {
 
 ```js
 class UserTaskModel extends RectNodeModel {
-  getAnchorStyle() {
+  getAnchorStyle(anchorInfo) {
     const style = super.getAnchorStyle();
     style.stroke = "rgb(24, 125, 255)";
     style.r = 3;
@@ -266,12 +266,22 @@ class cNode extend RectNodeModel {
         x: x + width / 2,
         y,
         name: 'right',
-        id: `${id}_1`
+        id: `${id}_1`,
+        edgeAddable: false
       },
     ]
   }
 }
 ```
+
+锚点属性
+
+| 名称  | 类型   | 是否必须 | 描述           |
+| :---- | :----- | :------ | :------------- |
+| x | number | ✅ | 锚点x坐标|
+| y | number | ✅ | 锚点y坐标|
+| id | string | ✅ | 锚点id|
+| edgeAddable | boolean | ✅ | 是否允许此锚点手动创建连线，默认为true |
 
 ## getConnectedSourceRules
 

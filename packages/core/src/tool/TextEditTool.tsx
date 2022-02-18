@@ -150,8 +150,7 @@ export default class TextEdit extends Component<IProps, IState> {
       this.__prevText.type = '';
     }
   }
-  keyupHandler = (ev: KeyboardEvent) => {
-    const { innerText: value } = ev.target as HTMLElement;
+  keyupHandler = (ev) => {
     const {
       graphModel: {
         textEditElement,
@@ -160,6 +159,14 @@ export default class TextEdit extends Component<IProps, IState> {
     if (ev.key === 'Enter' && ev.altKey) {
       textEditElement.setElementState(0);
     }
+  };
+  inputHandler = (ev) => {
+    const { innerText: value } = ev.target as HTMLElement;
+    const {
+      graphModel: {
+        textEditElement,
+      },
+    } = this.props;
     this.__prevText = {
       type: textEditElement.type,
       text: value.replace(/(\r\n)+$|(\n)+$/, ''), // fix #488: 文本后面的换行符不保留
@@ -189,6 +196,7 @@ export default class TextEdit extends Component<IProps, IState> {
             ref={this.ref}
             key={textEditElement.id}
             onKeyUp={this.keyupHandler}
+            onInput={this.inputHandler}
           >
             {textEditElement.text?.value}
           </div>

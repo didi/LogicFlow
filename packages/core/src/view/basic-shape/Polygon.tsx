@@ -9,7 +9,7 @@ export default function Polygon(props) {
     stroke: '#000',
     strokeOpacity: 1,
     points: '',
-    className: `lf-basic-shape ${className}`,
+    className: 'lf-basic-shape',
   };
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;
@@ -17,6 +17,9 @@ export default function Polygon(props) {
       attrs[k] = v;
     }
   });
+  if (className) {
+    attrs.className = `lf-basic-shape ${className}`;
+  }
   attrs.points = points.map(point => point.join(',')).join(' ');
 
   return (

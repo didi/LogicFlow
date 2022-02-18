@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.3-alpha.0...@logicflow/extension@1.1.3) (2022-02-18)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [1.1.3-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.1...@logicflow/extension@1.1.3-alpha.0) (2022-02-18)
+
+
+### Features
+
+* remove console ([7771e65](https://github.com/didi/LogicFlow/commit/7771e6591dd25e51077930da4fe985d5e280d7e9))
+
+
+
+
+
 ## [1.1.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.1...@logicflow/extension@1.1.2) (2022-02-10)
 
 

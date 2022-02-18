@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.3-alpha.0...@logicflow/core@1.1.3) (2022-02-18)
+
+
+### Bug Fixes
+
+* stop edit text when input enter + alt ([438daec](https://github.com/didi/LogicFlow/commit/438daec1de3378f25b245feda8a71bead6c96ba8))
+
+
+
+
+
+## [1.1.3-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.1...@logicflow/core@1.1.3-alpha.0) (2022-02-18)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
 ## [1.1.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.0...@logicflow/core@1.1.1) (2022-02-10)
 
 

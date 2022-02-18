@@ -252,7 +252,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点锚点样式
    * @returns 自定义样式
    */
-  getAnchorStyle(): Record<string, any> {
+  getAnchorStyle(anchorInfo): Record<string, any> {
     const { anchor } = this.graphModel.theme;
     // 防止被重写覆盖主题。
     return cloneDeep(anchor);

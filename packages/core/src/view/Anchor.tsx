@@ -12,9 +12,9 @@ import { AnchorConfig } from '../type';
 type TargetNodeId = string;
 
 interface IProps {
-  x: number;
-  y: number;
-  id?: string;
+  // x: number;
+  // y: number;
+  // id?: string;
   anchorData: AnchorConfig,
   style?: Record<string, any>;
   hoverStyle?: Record<string, any>;
@@ -60,7 +60,7 @@ class Anchor extends Component<IProps, IState> {
   }
   onDragStart = () => {
     const {
-      x, y, nodeModel, graphModel,
+      anchorData: { x, y }, nodeModel, graphModel,
     } = this.props;
     const { overlapMode } = graphModel;
     // nodeModel.setSelected(true);
@@ -77,7 +77,9 @@ class Anchor extends Component<IProps, IState> {
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
-    const { graphModel, nodeModel } = this.props;
+    const {
+      graphModel, nodeModel, anchorData: { id },
+    } = this.props;
     const { transformModel } = graphModel;
     const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
@@ -92,11 +94,19 @@ class Anchor extends Component<IProps, IState> {
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     if (info) {
       const targetNode = info.node;
-      this.preTargetNode = targetNode;
       const anchorId = info.anchor.id;
+      if (this.preTargetNode && this.preTargetNode !== info.node) {
+        this.preTargetNode.setElementState(ElementState.DEFAULT);
+      }
+      // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
+      if (id === anchorId) {
+        return;
+      }
+      this.preTargetNode = targetNode;
       // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
-      const targetInfoId = `${targetNode.id}_${anchorId}`;
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过
+      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${id}`;
+
+      // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
       if (!this.targetRuleResults.has(targetInfoId)) {
         const { anchorData } = this.props;
         const targetAnchor = info.anchor;
@@ -111,7 +121,7 @@ class Anchor extends Component<IProps, IState> {
           targetAnchor,
         );
         this.sourceRuleResults.set(
-          targetNode.id,
+          targetInfoId,
           formateAnchorConnectValidateData(sourceRuleResult),
         );
         this.targetRuleResults.set(
@@ -119,7 +129,7 @@ class Anchor extends Component<IProps, IState> {
           formateAnchorConnectValidateData(targetRuleResult),
         );
       }
-      const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetNode.id);
+      const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetInfoId);
       const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
       // 实时提示出即将链接的锚点
       if (isSourcePass && isTargetPass) {
@@ -148,7 +158,7 @@ class Anchor extends Component<IProps, IState> {
 
   checkEnd = () => {
     const {
-      graphModel, nodeModel, x, y, id,
+      graphModel, nodeModel, anchorData: { x, y, id },
     } = this.props;
     // nodeModel.setSelected(false);
     /* 创建边 */
@@ -163,30 +173,27 @@ class Anchor extends Component<IProps, IState> {
     if (!draging) return;
     if (info && info.node) {
       const targetNode = info.node;
+      const anchorId = info.anchor.id;
+      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${id}`;
       const {
         isAllPass: isSourcePass,
         msg: sourceMsg,
-      } = this.sourceRuleResults.get(targetNode.id) || {};
-      const anchorId = info.anchor.id;
-      const targetInfoId = `${targetNode.id}_${anchorId}`;
+      } = this.sourceRuleResults.get(targetInfoId) || {};
       const {
         isAllPass: isTargetPass,
         msg: targetMsg,
       } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.ALLOW_CONNECT);
-        // 不允许锚点自己连自己
-        if (!(x === info.anchor.x && y === info.anchor.y)) {
-          graphModel.addEdge({
-            type: edgeType,
-            sourceNodeId: nodeModel.id,
-            sourceAnchorId: id,
-            startPoint: { x, y },
-            targetNodeId: info.node.id,
-            targetAnchorId: info.anchor.id,
-            endPoint: { x: info.anchor.x, y: info.anchor.y },
-          });
-        }
+        graphModel.addEdge({
+          type: edgeType,
+          sourceNodeId: nodeModel.id,
+          sourceAnchorId: id,
+          startPoint: { x, y },
+          targetNodeId: info.node.id,
+          targetAnchorId: info.anchor.id,
+          endPoint: { x: info.anchor.x, y: info.anchor.y },
+        });
       } else {
         const nodeData = targetNode.getData();
         graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
@@ -214,26 +221,34 @@ class Anchor extends Component<IProps, IState> {
       endY,
     } = this.state;
     const {
-      x, y, style, edgeStyle,
+      anchorData: { x, y, edgeAddable }, style, edgeStyle,
     } = this.props;
     const hoverStyle = {
       ...style,
       ...style.hover,
     };
     return (
-      // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改，svg结构也不要做修改否则会引起下载bug
+      // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改类名
       <g className="lf-anchor">
         <Circle
           className="lf-node-anchor-hover"
           {...hoverStyle}
           {...{ x, y }}
-          onMouseDown={this.dragHandler}
+          onMouseDown={(ev) => {
+            if (edgeAddable !== false) {
+              this.dragHandler(ev);
+            }
+          }}
         />
         <Circle
           className="lf-node-anchor"
           {...style}
           {...{ x, y }}
-          onMouseDown={this.dragHandler}
+          onMouseDown={(ev) => {
+            if (edgeAddable !== false) {
+              this.dragHandler(ev);
+            }
+          }}
         />
         {this.isShowLine() && (
           <Line

@@ -404,7 +404,7 @@ class SquareModel extends RectNodeModel {
     const circleOnlyAsTarget = {
       message: "正方形节点下一个节点只能是圆形节点",
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
-        return target.type === "circle";
+        return targetNode.type === "circle";
       },
     };
 
@@ -416,11 +416,11 @@ class SquareModel extends RectNodeModel {
 
 ```
 
-<example
+<!-- <example
   :height="400"
   iframeId="iframe-3"
   href="/examples/#/advance/custom-node/rule"
-/>
+/> -->
 
 在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
 
@@ -497,19 +497,32 @@ class SquareModel extends RectNodeModel {
     };
     this.sourceRules.push(rule);
   }
+  getAnchorStyle(anchorInfo) {
+    const style = super.getAnchorStyle();
+    if (anchorInfo.type === 'left') {
+      style.fill = 'red'
+      style.hover.fill = 'transparent'
+      style.hover.stroke = 'transpanrent'
+      style.className = 'lf-hide-default'
+    } else {
+      style.fill = 'green'
+    }
+    return style;
+  }
   getDefaultAnchor() {
     const { width, height, x, y, id } = this; 
     return [
       {
         x: x - width / 2,
         y,
-        name: 'left',
+        type: 'left',
+        edgeAddable: false, // 控制锚点是否可以从此锚点手动创建连线。默认为true。
         id: `${id}_0`
       },
       {
         x: x + width / 2,
         y,
-        name: 'right',
+        type: 'right',
         id: `${id}_1`
       },
     ]
@@ -517,7 +530,11 @@ class SquareModel extends RectNodeModel {
 }
 ```
 
-上面的示例中，我们自定义锚点的时候，不仅可以定义锚点的坐标，还可以给锚点加上任一属性。有了这些属性，我们可以再做很多额外的事情。例如，我们增加一个校验规则，只允许节点从右边连出，从左边连入；或者加个id, 在获取数据的时候保存当前连线从那个锚点连接到那个锚点。
+上面的示例中，我们自定义锚点的时候，不仅可以定义锚点的数量和位置，还可以给锚点加上任意属性。有了这些属性，我们可以再做很多额外的事情。例如，我们增加一个校验规则，只允许节点从右边连出，从左边连入；或者加个id, 在获取数据的时候保存当前连线从那个锚点连接到那个锚点。
+
+:::warning 注意
+一定要确保锚点id唯一，否则可能会出现在连线规则校验不准确的问题。
+:::
 
 <iframe src="https://codesandbox.io/embed/quirky-leftpad-ou2i0?fontsize=14&hidenavigation=1&theme=dark&view=preview"
      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
@@ -553,12 +570,6 @@ class CustomNodeModel extends RectNodeModel {
 ## 自定义HTML节点
 
 LogicFlow内置了基础的HTML节点和其他基础节点不一样，我们可以利用LogicFlow的自定义机制，实现各种形态的HTML节点，而且HTML节点内部可以使用任意框架进行渲染。
-
-<example
-  :height="280"
-  iframeId="iframe-6"
-  href="/examples/#/advance/custom-node/html"
-/>
 
 ```ts
 class UmlModel extends HtmlNodeModel {
