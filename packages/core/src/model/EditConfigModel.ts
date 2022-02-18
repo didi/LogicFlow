@@ -88,6 +88,7 @@ const SilentConfig = {
 };
 
 const keys = [
+  'isSilentMode',
   'stopZoomGraph',
   'stopScrollGraph',
   'stopMoveGraph',
@@ -107,6 +108,7 @@ const keys = [
  * 页面编辑配置
  */
 export default class EditConfigModel {
+  @observable isSilentMode = false;
   @observable stopZoomGraph = false;
   @observable stopScrollGraph = false;
   @observable stopMoveGraph = false;
@@ -141,7 +143,7 @@ export default class EditConfigModel {
     }
     // 如果不传，默认undefined表示非静默模式
     if (isSilentMode === true) {
-      const slientConfig = pick(SilentConfig, keys);
+      const silentConfig = pick(SilentConfig, keys);
       // 在修改之前，
       this.defaultConfig = {
         stopZoomGraph: this.stopZoomGraph,
@@ -160,7 +162,7 @@ export default class EditConfigModel {
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
       };
-      assign(conf, slientConfig);
+      assign(conf, silentConfig);
     }
     // 如果不传，默认undefined表示允许文本编辑
     if (textEdit === false) {
