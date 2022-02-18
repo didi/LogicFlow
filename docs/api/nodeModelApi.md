@@ -71,8 +71,8 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | modelType |string| ✅ | 当前model的类型，可取值有`node`, `rect-node`,`circle-node`,`polygon-node`,`ellipse-node`,`diamond-node`, `html-node`,`text-node` |
 | moveRules | array | | 节点被移动之前，添加的校验规则 |
 | autoToFront | boolean | ✅ | 控制节点选中时是否自动置顶，默认为true. |
-| incoming | object | ✅ | 进入当前节点的所有边和节点 |
-| outgoing | object | ✅ | 离开当前节点的所有边和节点 |
+| incoming | object | ✅ | 进入当前节点的所有边和节点，`v1.1.4` |
+| outgoing | object | ✅ | 离开当前节点的所有边和节点, `v1.1.4` |
 
 ::: tip modelType与type的区别是什么？
 

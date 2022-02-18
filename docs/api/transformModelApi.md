@@ -6,13 +6,13 @@
 type PointTuple = [number, number]
 ```
 
-## zoom(isZoomIn, point)
+## zoom(zoomSize, point)
 
 放大缩小画布. 放大缩小的刻度是`transformModel.ZOOM_SIZE`
 
 |名称|类型|默认值|说明|
 |-|-|-|-|
-|isZoomIn|boolean|false| 是否放大， false表示缩小|
+|isZoomIn|boolean|false| 放大缩小的值，支持传入0-n之间的数字。小于1表示缩小，大于1表示放大。也支持传入true和false按照内置的刻度放大缩小|
 |point|PointTuple|无|放大缩小基准点，可以理解为transform-origin|
 
 ```js
