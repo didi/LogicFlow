@@ -1,5 +1,5 @@
 import {
-  observable, action, toJS, isObservable,
+  observable, action, toJS, isObservable, computed,
 } from 'mobx';
 import { assign, cloneDeep } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
@@ -24,6 +24,7 @@ import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
 import { pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
+import { BaseEdgeModel } from '../edge';
 
 export type ConnectRule = {
   message: string;
@@ -103,6 +104,20 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this.graphModel = graphModel;
     this.initNodeData(data);
     this.setAttributes();
+  }
+  // 获取进入当前节点的边和节点
+  @computed get incoming(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
+    return {
+      nodes: this.graphModel.getNodeIncomingNode(this.id),
+      edges: this.graphModel.getNodeIncomingEdge(this.id),
+    };
+  }
+  // 获取离开当前节点的边和节点
+  @computed get outgoing(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
+    return {
+      nodes: this.graphModel.getNodeOutgoingNode(this.id),
+      edges: this.graphModel.getNodeOutgoingEdge(this.id),
+    };
   }
   /**
    * @overridable 可以重写
