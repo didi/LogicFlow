@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "1.1.3-alpha.0",
+  "version": "1.1.3",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "unpkg": "dist/logic-flow.js",
