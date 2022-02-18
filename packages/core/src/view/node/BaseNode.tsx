@@ -56,22 +56,23 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     } = model;
     const { isHovered } = this.state;
     if (isHitable && (isSelected || isHovered)) {
-      const style = model.getAnchorStyle();
       const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
-        (anchor, index) => (
-          <Anchor
-            {...anchor}
-            anchorData={anchor}
-            nodeDraging={isDragging}
-            style={style}
-            edgeStyle={edgeStyle}
-            anchorIndex={index}
-            nodeModel={model}
-            graphModel={graphModel}
-            setHoverOFF={this.setHoverOFF}
-          />
-        ));
+        (anchor, index) => {
+          const style = model.getAnchorStyle(anchor);
+          return (
+            <Anchor
+              anchorData={anchor}
+              nodeDraging={isDragging}
+              style={style}
+              edgeStyle={edgeStyle}
+              anchorIndex={index}
+              nodeModel={model}
+              graphModel={graphModel}
+              setHoverOFF={this.setHoverOFF}
+            />
+          );
+        });
     }
     return [];
   }

@@ -31,6 +31,8 @@ export default function Rect(props: IProps) {
 
   if (className) {
     attrs.className = `lf-basic-shape ${className}`;
+  } else {
+    attrs.className = 'lf-basic-shape';
   }
   if (radius) {
     attrs.rx = radius;
