@@ -416,11 +416,11 @@ class SquareModel extends RectNodeModel {
 
 ```
 
-<example
+<!-- <example
   :height="400"
   iframeId="iframe-3"
   href="/examples/#/advance/custom-node/rule"
-/>
+/> -->
 
 在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
 
@@ -553,12 +553,6 @@ class CustomNodeModel extends RectNodeModel {
 ## 自定义HTML节点
 
 LogicFlow内置了基础的HTML节点和其他基础节点不一样，我们可以利用LogicFlow的自定义机制，实现各种形态的HTML节点，而且HTML节点内部可以使用任意框架进行渲染。
-
-<example
-  :height="280"
-  iframeId="iframe-6"
-  href="/examples/#/advance/custom-node/html"
-/>
 
 ```ts
 class UmlModel extends HtmlNodeModel {

@@ -150,7 +150,7 @@ export default class TextEdit extends Component<IProps, IState> {
       this.__prevText.type = '';
     }
   }
-  keyupHandler = (ev: KeyboardEvent) => {
+  keyupHandler = (ev) => {
     const { innerText: value } = ev.target as HTMLElement;
     const {
       graphModel: {
@@ -188,7 +188,7 @@ export default class TextEdit extends Component<IProps, IState> {
             style={style}
             ref={this.ref}
             key={textEditElement.id}
-            onKeyUp={this.keyupHandler}
+            onInput={this.keyupHandler}
           >
             {textEditElement.text?.value}
           </div>
