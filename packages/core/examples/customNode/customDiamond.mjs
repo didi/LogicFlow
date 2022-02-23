@@ -11,6 +11,9 @@ class CustomDiamondModel extends DiamondNodeModel {
     if (this.isHovered) {
       style.stroke = 'red'
     }
+    if (this.state === 5) {
+      style.fill = 'red'
+    }
     return style
   }
 }

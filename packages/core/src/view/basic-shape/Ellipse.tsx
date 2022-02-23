@@ -6,8 +6,9 @@ export default function Ellipse(props) {
     y = 0,
     rx = 4,
     ry = 4,
+    className,
   } = props;
-  const attrs = {
+  const attrs: Record<string, any> = {
     cx: x,
     cy: y,
     rx,
@@ -17,7 +18,6 @@ export default function Ellipse(props) {
     strokeWidth: '1',
     stroke: '#000',
     strokeOpacity: 1,
-    // ...props,
   };
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;
@@ -25,6 +25,11 @@ export default function Ellipse(props) {
       attrs[k] = v;
     }
   });
+  if (className) {
+    attrs.className = `lf-basic-shape ${className}`;
+  } else {
+    attrs.className = 'lf-basic-shape';
+  }
   return (
     <ellipse {...attrs} />
   );

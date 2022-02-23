@@ -48,3 +48,8 @@ document.querySelector('#js_getNodeIncomingNode').addEventListener('click', () =
 document.querySelector('#js_getNodeOutgoingNode').addEventListener('click', () => {
   console.log(lf.getNodeOutgoingNode('3'))
 })
+
+document.querySelector('#js_deleteNode').addEventListener('click', () => {
+  lf.deleteNode('1')
+  lf.deleteNode('1')
+})

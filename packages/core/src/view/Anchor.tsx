@@ -184,7 +184,7 @@ class Anchor extends Component<IProps, IState> {
         msg: targetMsg,
       } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
-        targetNode.setElementState(ElementState.ALLOW_CONNECT);
+        targetNode.setElementState(ElementState.DEFAULT);
         graphModel.addEdge({
           type: edgeType,
           sourceNodeId: nodeModel.id,
