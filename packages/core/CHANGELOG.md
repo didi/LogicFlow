@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.3...@logicflow/core@1.1.4) (2022-02-23)
+
+
+### Bug Fixes
+
+* change node state to default when create edge success ([9f57894](https://github.com/didi/LogicFlow/commit/9f57894034c9b6d86323e93d22a1185fe433843c))
+* editConfigModel add isSilentMode ([8fcd571](https://github.com/didi/LogicFlow/commit/8fcd57143ccf1055a2c176ef417d7498ef178694))
+
+
+### Features
+
+* node model add incoming & outgoing ([8cf1469](https://github.com/didi/LogicFlow/commit/8cf14690b3c8378b11e5028700539a8fdb12bee1))
+* update docs ([c60d9d7](https://github.com/didi/LogicFlow/commit/c60d9d75f167ac32d871810ef2c5f7dbc5403462))
+
+
+
+
+
 ## [1.1.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.3-alpha.0...@logicflow/core@1.1.3) (2022-02-18)
 
 
