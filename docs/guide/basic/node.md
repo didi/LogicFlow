@@ -434,6 +434,12 @@ lf.on('connection:not-allowed', (msg) => {
 
 在节点model中，有个state属性，当节点连接规则校验不通过时，state属性值为5。我们可以通过这个属性来实现连线是节点的提示效果。
 
+<iframe src="https://codesandbox.io/embed/long-star-d4j86e?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-vue-rules"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
 
 ## 限制节点移动
 
