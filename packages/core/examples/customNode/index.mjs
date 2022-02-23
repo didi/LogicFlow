@@ -101,6 +101,30 @@ lf.render({
   ]
 });
 
+lf.on('anchor:dragstart', ({ data, nodeModel }) => {
+  if (nodeModel.type === 'hexagonNode') {
+    lf.graphModel.nodes.forEach(node => {
+      if (node.type === 'customCircle') {
+        node.setProperties({
+          isConnectable: true
+        })
+      }
+    });
+  }
+})
+
+lf.on('anchor:drop', ({ data, nodeModel }) => {
+  if (nodeModel.type === 'hexagonNode') {
+    lf.graphModel.nodes.forEach(node => {
+      if (node.type === 'customCircle') {
+        node.setProperties({
+          isConnectable: false
+        })
+      }
+    });
+  }
+})
+
 document.querySelector('#select_js').addEventListener('click', () => {
   lf.setProperties('custom-111', {
     isSelected: true

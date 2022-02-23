@@ -11,6 +11,9 @@ class CustomCircleModel extends CircleNodeModel {
     if (this.isHovered) {
       style.stroke = 'green'
     }
+    if (this.properties.isConnectable) {
+      style.fill = 'green'
+    }
     return style
   }
 }
