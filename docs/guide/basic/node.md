@@ -416,12 +416,6 @@ class SquareModel extends RectNodeModel {
 
 ```
 
-<!-- <example
-  :height="400"
-  iframeId="iframe-3"
-  href="/examples/#/advance/custom-node/rule"
-/> -->
-
 在上例中，我们为`model`的`sourceRules`属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
 
 `message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`方法有两个参数，分别为边的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
@@ -435,6 +429,11 @@ lf.on('connection:not-allowed', (msg) => {
   console.log(msg)
 });
 ```
+
+**设置不同状态下节点的样式**
+
+在节点model中，有个state属性，当节点连接规则校验不通过时，state属性值为5。我们可以通过这个属性来实现连线是节点的提示效果。
+
 
 ## 限制节点移动
 

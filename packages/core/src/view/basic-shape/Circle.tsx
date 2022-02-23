@@ -5,8 +5,9 @@ export default function Circle(props) {
     x = 0,
     y = 0,
     r = 4,
+    className,
   } = props;
-  const attrs = {
+  const attrs: Record<string, any> = {
     cx: x,
     cy: y,
     r,
@@ -15,7 +16,6 @@ export default function Circle(props) {
     strokeWidth: '1',
     stroke: '#000',
     strokeOpacity: 1,
-    className: 'lf-basic-shape',
   };
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;
@@ -23,6 +23,11 @@ export default function Circle(props) {
       attrs[k] = v;
     }
   });
+  if (className) {
+    attrs.className = `lf-basic-shape ${className}`;
+  } else {
+    attrs.className = 'lf-basic-shape';
+  }
   return (
     <circle {...attrs} />
   );

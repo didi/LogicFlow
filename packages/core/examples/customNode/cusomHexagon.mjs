@@ -15,6 +15,17 @@ class CustomHexagonModel extends PolygonNodeModel {
     ];
     this.points = pointList;
   }
+  getConnectedSourceRules() {
+    const rules = super.getConnectedSourceRules();
+    const geteWayOnlyAsTarget = {
+      message: '下一个节点只能是customCircle',
+      validate: (source, target, sourceAnchor, targetAnchor) => {
+        return target.type === 'customCircle';
+      },
+    };
+    rules.push(geteWayOnlyAsTarget);
+    return rules;
+  }
   getNodeStyle() {
     const style = super.getNodeStyle();
     if (this.properties.isSelected) {

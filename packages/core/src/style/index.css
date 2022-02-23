@@ -26,9 +26,7 @@
 .lf-node-not-allow {
   cursor: not-allowed;
 }
-.lf-node-not-allow .lf-basic-shape {
-  fill: #f9dee5;
-}
+
 .lf-polyline-append-ns-resize {
   cursor: ns-resize;
 }
