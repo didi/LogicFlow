@@ -100,6 +100,7 @@ export default class BaseEdge extends Component<IProps> {
       </g>
     );
   }
+  getAnimation() { }
   getAppendWidth() {
     return <g />;
   }
@@ -218,9 +219,13 @@ export default class BaseEdge extends Component<IProps> {
     }
   }
   render() {
-    const { model: { isSelected }, graphModel: { editConfigModel } } = this.props;
+    const { model: { isSelected }, graphModel } = this.props;
     const isDraging = this.getIsDraging();
-    const { adjustEdgeStartAndEnd } = editConfigModel;
+    const { editConfigModel: { adjustEdgeStartAndEnd }, animation } = graphModel;
+    // performance 只允许出现一条edge有动画
+    const isShowAnimation = isSelected && animation.edge
+      && graphModel.getSelectElements().edges.length === 1;
+
     return (
       <g
         className="lf-edge"
@@ -233,6 +238,7 @@ export default class BaseEdge extends Component<IProps> {
       >
         {this.getShape()}
         {this.getAppend()}
+        {isShowAnimation && this.getAnimation()}
         {this.getText()}
         {this.getArrow()}
         {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}

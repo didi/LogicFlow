@@ -21,7 +21,15 @@
 .lf-edge-append {
   cursor: pointer;
 }
-
+.lf-edge-animation {
+  stroke-dashoffset: 100%;
+  animation: dash 5s linear infinite;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 /* node */
 .lf-node-not-allow {
   cursor: not-allowed;

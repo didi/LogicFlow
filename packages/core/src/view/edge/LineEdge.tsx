@@ -28,6 +28,28 @@ export default class LineEdge extends BaseEdge {
       </g>
     );
   }
+  getAnimation() {
+    const { model } = this.props;
+    const { stroke, className, strokeDasharray } = model.getAnimation();
+    const { startPoint, endPoint } = model;
+    const style = model.getEdgeStyle();
+    return (
+      <g>
+        <Line
+          {
+            ...style
+          }
+          x1={startPoint.x}
+          y1={startPoint.y}
+          x2={endPoint.x}
+          y2={endPoint.y}
+          className={className}
+          strokeDasharray={strokeDasharray}
+          stroke={stroke}
+        />
+      </g>
+    );
+  }
   getAppendWidth() {
     const { model } = this.props;
     const { startPoint, endPoint } = model;

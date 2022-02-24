@@ -97,6 +97,24 @@ export default class PolylineEdge extends BaseEdge {
       </g>
     );
   }
+  getAnimation() {
+    const { model } = this.props;
+    const { stroke, className, strokeDasharray } = model.getAnimation();
+    const style = model.getEdgeStyle();
+    return (
+      <g>
+        <Polyline
+          points={model.points}
+          {
+            ...style
+          }
+          className={className}
+          strokeDasharray={strokeDasharray}
+          stroke={stroke}
+        />
+      </g>
+    );
+  }
   getArrowInfo(): ArrowInfo {
     const { model } = this.props;
     const { points, isSelected } = model;

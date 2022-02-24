@@ -19,6 +19,7 @@ const lf = new LogicFlow(options: Options)
 | [grid](#grid) | false \| Object |- | false |网格，若设为`false`不开启网格，则为 1px 移动单位，不绘制网格背景，若设置为`true`开启则默认为 20px 点状网格 |
 | [keyboard](#keyboard) | Object |- | -| 自定义键盘相关配置 |
 | [style](#style) | Object |- | - | 样式 |
+| animation | Boolean \| Object |- | - | 是否开启动画功能，可统一开关和单独配置 |
 | disabledPlugins | string[] |- | - | 传入初始化的时候，禁用加载的插件 |
 | snapline | Boolean |- | true | 是否启用节点辅助对齐线 |
 | history | Boolean |- | true | 是否开启历史记录功能 |

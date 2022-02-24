@@ -50,6 +50,12 @@ LogicFlow画布高度
 
 [详细API](/api/themeApi.html)
 
+## animation
+
+`属性`
+
+动画状态配置，是否已打开对应的动画
+
 ## eventCenter
 
 `属性`

@@ -25,6 +25,24 @@ export default class BezierEdge extends BaseEdge {
       </g>
     );
   }
+  getAnimation() {
+    const { model } = this.props;
+    const { stroke, className, strokeDasharray } = model.getAnimation();
+    const style = model.getEdgeStyle();
+    return (
+      <g>
+        <Path
+          d={model.path}
+          {
+            ...style
+          }
+          className={className}
+          strokeDasharray={strokeDasharray}
+          stroke={stroke}
+        />
+      </g>
+    );
+  }
   // 扩大bezier曲线可点击范围
   getAppendWidth() {
     const {
