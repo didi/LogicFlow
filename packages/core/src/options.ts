@@ -10,6 +10,7 @@ import {
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
+import { AnimationConfig } from './constant/DefaultAnimation';
 
 export type EdgeType = 'line' | 'polyline' | 'bezier' | any;
 
@@ -98,6 +99,13 @@ export type Definition = {
    * 是否配置个性插件，覆盖全局配置的插件
    */
   plugins?: Extension[];
+  /**
+   * 控制是否开启动画
+   * false: 关闭所有动画
+   * true: 开启所有动画
+   * AnimationConfig: 配置部分动画开启
+   */
+  animation?: boolean | Partial<AnimationConfig>;
   [key: string]: any;
 } & EditConfigInterface;
 

@@ -22,6 +22,8 @@ import { createUuid } from '../util';
 import { getMinIndex, getZIndex } from '../util/zIndex';
 import { Theme } from '../constant/DefaultTheme';
 import { Definition } from '../options';
+import { AnimationConfig } from '../constant/DefaultAnimation';
+import { updateAnimation } from '../util/animation';
 
 type BaseNodeModelId = string; // 节点ID
 type BaseEdgeModelId = string; // 边ID
@@ -63,6 +65,10 @@ class GraphModel {
    * 用于在默认模式下将之前的顶部元素恢复初始高度。
    */
   topElement: BaseNodeModel | BaseEdgeModel;
+  /**
+   * 控制是否开启动画
+   */
+  animation: AnimationConfig;
   /**
    * 自定义全局id生成器
    * @see todo docs link
@@ -129,6 +135,7 @@ class GraphModel {
       width,
       height,
       idGenerator,
+      animation,
     } = options;
     this.background = background;
     if (typeof grid === 'object') {
@@ -142,6 +149,7 @@ class GraphModel {
     this.edgeType = options.edgeType || 'polyline';
     this.width = width ?? container.getBoundingClientRect().width;
     this.height = height ?? container.getBoundingClientRect().height;
+    this.animation = updateAnimation(animation);
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;

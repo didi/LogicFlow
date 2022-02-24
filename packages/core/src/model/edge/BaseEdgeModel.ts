@@ -17,6 +17,7 @@ import {
   ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import { OutlineTheme } from '../../constant/DefaultTheme';
+import { defaultAnimationData } from '../../constant/DefaultAnimation';
 import { formatData } from '../../util/compatible';
 import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
 import { getZIndex } from '../../util/zIndex';
@@ -56,6 +57,7 @@ class BaseEdgeModel implements IBaseModel {
   targetAnchorId = '';
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
+  animationData = defaultAnimationData;
   [propName: string]: any; // 支持自定义
 
   constructor(data: EdgeConfig, graphModel: GraphModel) {
@@ -126,6 +128,15 @@ class BaseEdgeModel implements IBaseModel {
     // 透传 edgeText
     const { edgeText } = this.graphModel.theme;
     return cloneDeep(edgeText);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前边的动画样式
+   * @returns 自定义边动画样式
+   */
+  getAnimation() {
+    const { animationData } = this;
+    return cloneDeep(animationData);
   }
   /**
    * @overridable 支持重写
