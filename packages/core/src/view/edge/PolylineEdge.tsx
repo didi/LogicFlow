@@ -109,7 +109,7 @@ export default class PolylineEdge extends BaseEdge {
             ...style
           }
           className={className}
-          strokeDasharray={strokeDasharray.join(' ')}
+          strokeDasharray={strokeDasharray}
           stroke={stroke}
         />
       </g>

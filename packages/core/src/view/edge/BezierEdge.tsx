@@ -37,7 +37,7 @@ export default class BezierEdge extends BaseEdge {
             ...style
           }
           className={className}
-          strokeDasharray={strokeDasharray.join(' ')}
+          strokeDasharray={strokeDasharray}
           stroke={stroke}
         />
       </g>

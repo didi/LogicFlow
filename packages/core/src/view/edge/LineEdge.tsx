@@ -44,7 +44,7 @@ export default class LineEdge extends BaseEdge {
           x2={endPoint.x}
           y2={endPoint.y}
           className={className}
-          strokeDasharray={strokeDasharray.join(' ')}
+          strokeDasharray={strokeDasharray}
           stroke={stroke}
         />
       </g>

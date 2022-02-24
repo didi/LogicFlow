@@ -5,7 +5,7 @@ export type AnimationConfig = {
 
 export type Animation = {
   stroke: string;
-  strokeDasharray: number[];
+  strokeDasharray: string;
   className: string;
 };
 
@@ -23,6 +23,6 @@ export const defaultAnimationOpenConfig: AnimationConfig = {
 
 export const defaultAnimationData: Animation = {
   stroke: 'red',
-  strokeDasharray: [40, 200],
+  strokeDasharray: '40 200',
   className: 'lf-edge-animation',
 };
