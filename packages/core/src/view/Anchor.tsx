@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { createDrag } from '../util/drag';
+import { StepDrag } from '../util/drag';
 import { formateAnchorConnectValidateData, targetNodeInfo, distance } from '../util/node';
 import Circle from './basic-shape/Circle';
 import Line from './basic-shape/Line';
@@ -36,10 +36,10 @@ interface IState {
 
 class Anchor extends Component<IProps, IState> {
   preTargetNode: BaseNodeModel;
-  dragHandler: Function;
   sourceRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，source的校验规则产生的结果不同
   targetRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，target的校验规则不同
-  constructor() {
+  dragHandler: StepDrag;
+  constructor(props) {
     super();
     this.sourceRuleResults = new Map();
     this.targetRuleResults = new Map();
@@ -51,8 +51,7 @@ class Anchor extends Component<IProps, IState> {
       endY: 0,
       draging: false,
     };
-
-    this.dragHandler = createDrag({
+    this.dragHandler = new StepDrag({
       onDragStart: this.onDragStart,
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
@@ -251,7 +250,7 @@ class Anchor extends Component<IProps, IState> {
           {...{ x, y }}
           onMouseDown={(ev) => {
             if (edgeAddable !== false) {
-              this.dragHandler(ev);
+              this.dragHandler.handleMouseDown(ev);
             }
           }}
         />
@@ -261,7 +260,7 @@ class Anchor extends Component<IProps, IState> {
           {...{ x, y }}
           onMouseDown={(ev) => {
             if (edgeAddable !== false) {
-              this.dragHandler(ev);
+              this.dragHandler.handleMouseDown(ev);
             }
           }}
         />

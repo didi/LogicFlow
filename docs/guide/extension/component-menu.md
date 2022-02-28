@@ -140,6 +140,17 @@ lf.extension.menu.setMenuByType({
 })
 ```
 
+## 设置选区菜单
+
+在使用了选区插件后，选区组件也会出现菜单，可以通过设置菜单项为空来实现不显示菜单效果。
+
+```ts
+lf.extension.menu.setMenuByType({
+   type: 'lf:defaultSelectionMenu',
+   menu: []
+})
+```
+
 ## 指定业务状态设置菜单
 
 除了上面的为某种类型元素设置菜单外，还可以在自定义元素的时候，为节点处于不同业务状态下设置菜单。
@@ -216,7 +227,7 @@ class CustomModel extends PolylineEdgeModel {
         icon: true,
         callback(edge) {
           const comfirm = window.confirm('你确定要删除吗？');
-          comfirm && this.graphModel.deleteEdge(edge.id);
+          comfirm && this.graphModel.deleteEdgeById(edge.id);
         },
       },
     ];
