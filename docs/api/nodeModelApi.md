@@ -146,7 +146,7 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-### getOutlineStyle
+## getOutlineStyle
 
 支持重写，自定义节点轮廓框的样式属性，默认为[主题 outline](/api/themeApi.html#outline)
 

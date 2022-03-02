@@ -61,7 +61,6 @@ LogicFlow提供了事件系统用于告知开发者当前流程图发生的事�
 | 事件名                   | 说明              | 事件对象          |
 | :----------------------- | :---------------- | :---------------- |
 | 'anchor:dragstart'          | 锚点连线开始拖动         | data, e, nodeModel |
-| 'anchor:drag'             | 锚点连线拖动中            | data, e, nodeModel |
 | 'anchor:drop'           | 锚点连线拖动完成           | data, e, nodeModel           |
 
 事件对象包含如下内容：

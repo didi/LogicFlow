@@ -328,17 +328,33 @@ class BaseEdgeModel implements IBaseModel {
     };
   }
   /**
-   * 内部方法，计算边的起点和终点
+   * 内部方法，计算边的起点和终点和其对于的锚点Id
    */
   @action
   setAnchors(): void {
-    if (!this.startPoint) {
-      const position = this.getBeginAnchor(this.sourceNode, this.targetNode);
-      this.startPoint = position;
+    if (!this.sourceAnchorId || !this.startPoint) {
+      const anchor = this.getBeginAnchor(this.sourceNode, this.targetNode);
+      if (!this.startPoint) {
+        this.startPoint = {
+          x: anchor.x,
+          y: anchor.y,
+        };
+      }
+      if (!this.sourceAnchorId) {
+        this.sourceAnchorId = anchor.id;
+      }
     }
-    if (!this.endPoint) {
-      const position = this.getEndAnchor(this.targetNode);
-      this.endPoint = position;
+    if (!this.targetAnchorId || !this.endPoint) {
+      const anchor = this.getEndAnchor(this.targetNode);
+      if (!this.endPoint) {
+        this.endPoint = {
+          x: anchor.x,
+          y: anchor.y,
+        };
+      }
+      if (!this.targetAnchorId) {
+        this.targetAnchorId = anchor.id;
+      }
     }
   }
 

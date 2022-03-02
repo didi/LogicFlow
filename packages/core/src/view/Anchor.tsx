@@ -144,11 +144,6 @@ class Anchor extends Component<IProps, IState> {
       // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
       this.preTargetNode.setElementState(ElementState.DEFAULT);
     }
-    graphModel.eventCenter.emit(EventType.ANCHOR_DRAG, {
-      data: anchorData,
-      e: event,
-      nodeModel,
-    });
   };
   onDragEnd = (event) => {
     this.checkEnd();

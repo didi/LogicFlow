@@ -4,9 +4,10 @@ import { BaseEdgeModel } from '../../model/edge';
 import GraphModel from '../../model/GraphModel';
 import Circle from '../basic-shape/Circle';
 import { createDrag } from '../../util/drag';
-import { targetNodeInfo } from '../../util/node';
+import { formateAnchorConnectValidateData, targetNodeInfo } from '../../util/node';
 import { Point } from '../../type';
-import { EventType, ModelType } from '../../constant/constant';
+import { ElementState, EventType, ModelType } from '../../constant/constant';
+import { BaseNodeModel } from '../..';
 
 interface IProps {
   x: number;
@@ -36,6 +37,9 @@ enum AdjustType {
 export default class AdjustPoint extends Component<IProps, IState> {
   dragHandler: Function;
   oldEdge: OldEdge;
+  preTargetNode: any;
+  targetRuleResults: Map<any, any>;
+  sourceRuleResults: Map<any, any>;
   constructor() {
     super();
     this.state = {
@@ -43,6 +47,9 @@ export default class AdjustPoint extends Component<IProps, IState> {
       endX: 0,
       endY: 0,
     };
+    this.targetRuleResults = new Map();
+    this.sourceRuleResults = new Map();
+    // todo: 换成stepDrag，参考anchor对外抛出事件
     this.dragHandler = createDrag({
       onDragStart: this.onDragStart,
       onDraging: this.onDraging,
@@ -65,6 +72,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       endY: y,
       draging: true,
     });
+    edgeModel.isHitable = false;
   };
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
@@ -84,7 +92,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     const { edgeModel } = this.props;
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
-    if (info && info.node) {
+    if (info && info.node && this.isAllowAdjust(info)) {
       let params;
       const { startPoint, endPoint, sourceNode, targetNode } = edgeModel;
       if (type === AdjustType.SOURCE) {
@@ -118,12 +126,13 @@ export default class AdjustPoint extends Component<IProps, IState> {
     const {
       graphModel, edgeModel, type,
     } = this.props;
+    edgeModel.isHitable = true;
     const { endX, endY, draging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 没有draging就结束边
     if (!draging) return;
     // 如果找到目标节点，删除老边，创建新边
-    if (info && info.node) {
+    if (info && info.node && this.isAllowAdjust(info)) {
       const edgeData = edgeModel.getData();
       let createEdgeInfo = {
         ...edgeData,
@@ -165,6 +174,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 如果没有找到目标节点，还原边
       this.recoveryEdge();
     }
+    this.preTargetNode?.setElementState(ElementState.DEFAULT);
   };
   // 还原边
   recoveryEdge = () => {
@@ -186,6 +196,73 @@ export default class AdjustPoint extends Component<IProps, IState> {
     return edgeAdjust;
   };
 
+  isAllowAdjust(info) {
+    const {
+      edgeModel: { id, sourceNode, targetNode, sourceAnchorId, targetAnchorId },
+      type,
+    } = this.props;
+    // const newTargetNode = info.node;
+    let newSourceNode: BaseNodeModel = null;
+    let newTargetNode: BaseNodeModel = null;
+    let newSourceAnchor = null;
+    let newTargetAnchor = null;
+
+    // 如果调整的是连线起点
+    if (type === AdjustType.SOURCE) {
+      newSourceNode = info.node;
+      newTargetNode = targetNode;
+      newSourceAnchor = info.anchor;
+      newTargetAnchor = targetNode.getAnchorInfo(targetAnchorId);
+    } else {
+      newSourceNode = sourceNode;
+      newTargetNode = info.node;
+      newTargetAnchor = info.anchor;
+      newSourceAnchor = sourceNode.getAnchorInfo(sourceAnchorId);
+    }
+    // 如果前一个接触的节点和此时接触的节点不相等，则将前一个节点状态重新设置为默认状态。
+    if (this.preTargetNode && this.preTargetNode !== info.node) {
+      this.preTargetNode.setElementState(ElementState.DEFAULT);
+    }
+    this.preTargetNode = info.node;
+    // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
+    if (newTargetAnchor.id === newSourceAnchor.id) {
+      return false;
+    }
+    const targetInfoId = `${newSourceNode.id}_${newTargetNode.id}_${newSourceAnchor.id}_${newTargetAnchor.id}`;
+    // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
+    if (!this.targetRuleResults.has(targetInfoId)) {
+      const sourceRuleResult = newSourceNode.isAllowConnectedAsSource(
+        newTargetNode,
+        newSourceAnchor,
+        newTargetAnchor,
+      );
+      const targetRuleResult = newTargetNode.isAllowConnectedAsTarget(
+        newSourceNode,
+        newSourceAnchor,
+        newTargetAnchor,
+      );
+      this.sourceRuleResults.set(
+        targetInfoId,
+        formateAnchorConnectValidateData(sourceRuleResult),
+      );
+      this.targetRuleResults.set(
+        targetInfoId,
+        formateAnchorConnectValidateData(targetRuleResult),
+      );
+    }
+    const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetInfoId);
+    const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
+    // 实时提示出即将连接的节点是否允许连接
+    const state = (isSourcePass && isTargetPass)
+      ? ElementState.ALLOW_CONNECT
+      : ElementState.NOT_ALLOW_CONNECT;
+    if (type === AdjustType.SOURCE) {
+      newSourceNode.setElementState(state);
+    } else {
+      newTargetNode.setElementState(state);
+    }
+    return isSourcePass && isTargetPass;
+  }
   render() {
     const { x, y } = this.props;
     const { draging } = this.state;

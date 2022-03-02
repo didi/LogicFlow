@@ -13,7 +13,7 @@ const lf = new LogicFlow({
   adjustEdgeStartAndEnd: true,
   width: 1000,
   grid: true,
-  height: 400,
+  height: 600,
   // hoverOutline: false
 })
 
@@ -132,5 +132,5 @@ document.querySelector('#select_js').addEventListener('click', () => {
 })
 
 document.querySelector('#get_data').addEventListener('click', () => {
-  console.log(lf.graphModel)
+  console.log(lf.getGraphData())
 })
