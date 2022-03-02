@@ -146,7 +146,7 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-### getOutlineStyle
+## getOutlineStyle
 
 支持重写，自定义节点轮廓框的样式属性，默认为[主题 outline](/api/themeApi.html#outline)
 
@@ -332,30 +332,6 @@ class StartEventModel extends CircleNodeModel {
   }
 }
 ```
-
-## setText
-
-设置节点文本
-
-| 名称 | 类型 | 必传 | 描述 |
-| :- | :- | :- | :- |
-| value | string | - |  文本值 |
-| x | number | - | 节点文本x坐标 |
-| y | number | - | 节点文本y坐标 |
-| draggable | boolean | - | 文本是否可以拖动 |
-| editable | boolean | - | 文本是否可以编辑 |
-
-```js
-const nodeModel = lf.getNodeModelById('node_1');
-nodeModel.setText({
-  value: '',
-  x: 0,
-  y: 0,
-  draggable: false,
-  editable: true,
-})
-```
-
 
 ## updateText
 

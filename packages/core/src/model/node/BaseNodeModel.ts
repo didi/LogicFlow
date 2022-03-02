@@ -1,7 +1,7 @@
 import {
   observable, action, toJS, isObservable, computed,
 } from 'mobx';
-import { assign, cloneDeep } from 'lodash-es';
+import { assign, cloneDeep, isNil } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
@@ -409,6 +409,17 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   get anchors(): PointAnchor[] {
     return this.getAnchorsByOffset();
+  }
+
+  getAnchorInfo(anchorId: string) {
+    if (isNil(anchorId)) return;
+
+    for (let i = 0; i < this.anchors.length; i++) {
+      const anchor = this.anchors[i];
+      if (anchor.id === anchorId) {
+        return anchor;
+      }
+    }
   }
 
   @action

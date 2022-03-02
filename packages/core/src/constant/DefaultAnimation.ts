@@ -23,6 +23,6 @@ export const defaultAnimationOpenConfig: AnimationConfig = {
 
 export const defaultAnimationData: Animation = {
   stroke: 'red',
-  strokeDasharray: '40 200',
+  strokeDasharray: '10 200',
   className: 'lf-edge-animation',
 };

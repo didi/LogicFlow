@@ -219,28 +219,29 @@ export default class BaseEdge extends Component<IProps> {
     }
   }
   render() {
-    const { model: { isSelected }, graphModel } = this.props;
+    const { model: { isSelected, isHitable }, graphModel } = this.props;
     const isDraging = this.getIsDraging();
     const { editConfigModel: { adjustEdgeStartAndEnd }, animation } = graphModel;
     // performance 只允许出现一条edge有动画
     const isShowAnimation = isSelected && animation.edge
       && graphModel.getSelectElements().edges.length === 1;
-
     return (
-      <g
-        className="lf-edge"
-        onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMouseUp}
-        onContextMenu={this.handleContextMenu}
-        onMouseOver={this.setHoverON}
-        onMouseEnter={this.setHoverON}
-        onMouseLeave={this.setHoverOFF}
-      >
-        {this.getShape()}
-        {this.getAppend()}
-        {isShowAnimation && this.getAnimation()}
-        {this.getText()}
-        {this.getArrow()}
+      <g>
+        <g
+          className={isHitable ? 'lf-edge' : 'lf-edge pointer-none'}
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
+          onContextMenu={this.handleContextMenu}
+          onMouseOver={this.setHoverON}
+          onMouseEnter={this.setHoverON}
+          onMouseLeave={this.setHoverOFF}
+        >
+          {this.getShape()}
+          {this.getAppend()}
+          {isShowAnimation && this.getAnimation()}
+          {this.getText()}
+          {this.getArrow()}
+        </g>
         {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}
       </g>
     );

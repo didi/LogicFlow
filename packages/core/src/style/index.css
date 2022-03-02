@@ -18,6 +18,9 @@
 .lf-anchor:hover .lf-node-anchor-hover {
   visibility: visible;
 }
+.lf-edge.pointer-none {
+  pointer-events: none;
+}
 .lf-edge-append {
   cursor: pointer;
 }

@@ -29,6 +29,7 @@ import { CommonTheme, EdgeTextTheme } from '../constant/DefaultTheme';
 export type PointTuple = [number, number];
 
 export type Point = {
+  id?: string,
   x: number,
   y: number,
   [key: string]: unknown;

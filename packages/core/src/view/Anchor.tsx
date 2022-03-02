@@ -1,12 +1,12 @@
 import { h, Component } from 'preact';
-import { createDrag } from '../util/drag';
+import { StepDrag } from '../util/drag';
 import { formateAnchorConnectValidateData, targetNodeInfo, distance } from '../util/node';
 import Circle from './basic-shape/Circle';
 import Line from './basic-shape/Line';
 import { ElementState, EventType, OverlapMode } from '../constant/constant';
 import BaseNodeModel, { ConnectRuleResult } from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
-import EventEmitter from '../event/eventEmitter';
+// import EventEmitter from '../event/eventEmitter';
 import { AnchorConfig } from '../type';
 
 type TargetNodeId = string;
@@ -36,10 +36,10 @@ interface IState {
 
 class Anchor extends Component<IProps, IState> {
   preTargetNode: BaseNodeModel;
-  dragHandler: Function;
   sourceRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，source的校验规则产生的结果不同
   targetRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，target的校验规则不同
-  constructor() {
+  dragHandler: StepDrag;
+  constructor(props) {
     super();
     this.sourceRuleResults = new Map();
     this.targetRuleResults = new Map();
@@ -51,16 +51,15 @@ class Anchor extends Component<IProps, IState> {
       endY: 0,
       draging: false,
     };
-
-    this.dragHandler = createDrag({
+    this.dragHandler = new StepDrag({
       onDragStart: this.onDragStart,
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
     });
   }
-  onDragStart = () => {
+  onDragStart = ({ event }) => {
     const {
-      anchorData: { x, y }, nodeModel, graphModel,
+      anchorData, nodeModel, graphModel,
     } = this.props;
     const { overlapMode } = graphModel;
     // nodeModel.setSelected(true);
@@ -68,17 +67,22 @@ class Anchor extends Component<IProps, IState> {
     if (overlapMode !== OverlapMode.INCREASE && nodeModel.autoToFront) {
       graphModel.toFront(nodeModel.id);
     }
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGSTART, {
+      data: anchorData,
+      e: event,
+      nodeModel,
+    });
     this.setState({
-      startX: x,
-      startY: y,
-      endX: x,
-      endY: y,
+      startX: anchorData.x,
+      startY: anchorData.y,
+      endX: anchorData.x,
+      endY: anchorData.y,
     });
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDraging = ({ deltaX, deltaY, event }) => {
     const { endX, endY } = this.state;
     const {
-      graphModel, nodeModel, anchorData: { id },
+      graphModel, nodeModel, anchorData,
     } = this.props;
     const { transformModel } = graphModel;
     const [x, y] = transformModel.moveCanvasPointByHtml(
@@ -99,16 +103,15 @@ class Anchor extends Component<IProps, IState> {
         this.preTargetNode.setElementState(ElementState.DEFAULT);
       }
       // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
-      if (id === anchorId) {
+      if (anchorData.id === anchorId) {
         return;
       }
       this.preTargetNode = targetNode;
       // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
-      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${id}`;
+      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`;
 
       // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
       if (!this.targetRuleResults.has(targetInfoId)) {
-        const { anchorData } = this.props;
         const targetAnchor = info.anchor;
         const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
           targetNode,
@@ -142,7 +145,7 @@ class Anchor extends Component<IProps, IState> {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
     }
   };
-  onDragEnd = () => {
+  onDragEnd = (event) => {
     this.checkEnd();
     this.setState({
       startX: 0,
@@ -154,6 +157,12 @@ class Anchor extends Component<IProps, IState> {
     // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
+    const { graphModel, nodeModel, anchorData } = this.props;
+    graphModel.eventCenter.emit(EventType.ANCHOR_DROP, {
+      data: anchorData,
+      e: event,
+      nodeModel,
+    });
   };
 
   checkEnd = () => {
@@ -236,7 +245,7 @@ class Anchor extends Component<IProps, IState> {
           {...{ x, y }}
           onMouseDown={(ev) => {
             if (edgeAddable !== false) {
-              this.dragHandler(ev);
+              this.dragHandler.handleMouseDown(ev);
             }
           }}
         />
@@ -246,7 +255,7 @@ class Anchor extends Component<IProps, IState> {
           {...{ x, y }}
           onMouseDown={(ev) => {
             if (edgeAddable !== false) {
-              this.dragHandler(ev);
+              this.dragHandler.handleMouseDown(ev);
             }
           }}
         />
