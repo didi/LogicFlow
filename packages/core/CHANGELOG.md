@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.4...@logicflow/core@1.1.5) (2022-03-02)
+
+
+### Bug Fixes
+
+* change strokeDasharray type from array to string ([dd9d42e](https://github.com/didi/LogicFlow/commit/dd9d42ed26da46558592124533954f23b28aade2))
+* edge animation demo ([e8895cc](https://github.com/didi/LogicFlow/commit/e8895cc230fccf007638db2cdfd79b25f7cba1b9))
+* trigger dragstart when dragging ([5ff04c8](https://github.com/didi/LogicFlow/commit/5ff04c807364a03554135d57c49b4f181b6f2414))
+
+
+### Features
+
+* anchor add event api ([4309b81](https://github.com/didi/LogicFlow/commit/4309b81902280f0dacb7fb169b6b9c34f06de3f7))
+* support animation ([c58c147](https://github.com/didi/LogicFlow/commit/c58c147c172901604834dda1a0dbb62a5f653579))
+
+
+
+
+
 ## [1.1.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.3...@logicflow/core@1.1.4) (2022-02-23)
 
 
