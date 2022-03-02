@@ -30,20 +30,10 @@ class MiniMap {
   }
   render(lf, container) {
     this.__container = container;
-    const events = [
-      'node:add',
-      'node:delete',
-      'edge:add',
-      'edge:delete',
-      'node:drop',
-      'blank:drop',
-    ];
-    events.forEach((eventName) => {
-      this.__lf.on(eventName, () => {
-        if (this.__isShow) {
-          this.__setView();
-        }
-      });
+    this.__lf.on('history:change', () => {
+      if (this.__isShow) {
+        this.__setView();
+      }
     });
   }
   init(option) {
