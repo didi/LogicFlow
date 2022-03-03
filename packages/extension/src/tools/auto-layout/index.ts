@@ -16,9 +16,24 @@ class AutoLayout {
   lf: LogicFlow;
   levelHeight: any[];
   newNodeMap: Map<string, any>;
+  trunk: any[];
   static pluginName = 'AutoLayout';
   constructor({ lf }) {
     this.lf = lf;
+    /**
+     * 用于记录上一次调用layout时计算出的trunk
+     * 当旧trunk和新trunk长度一致时，用于选择旧trunk,
+     * a->b->c->d
+     *    |->e
+     * e后面新增f节点时候，旧逻辑会返回新trunk[a,b,e,f]
+     * 界面布局变成
+     * a->b->e->f
+     *    |->c->d
+     * 其实只想要这样 尽量少变化
+     * a->b->c->d
+     *    |->e->f
+     * */
+    this.trunk = [];
     // 给lf添加方法
     lf.layout = (startNodeType) => {
       const data = this.lf.getGraphRawData();
@@ -36,11 +51,19 @@ class AutoLayout {
   // nodes: [], edges: [],
   layout(data, path) {
     let trunk = [];
-    path.forEach(p => {
-      if (p.elements.length > trunk.length) {
-        trunk = p.elements;
+    path.forEach((p) => {
+      const { elements } = p;
+      if (elements.length > trunk.length) {
+        trunk = elements;
+      } else if (elements.length === trunk.length) {
+        // 考虑是否替换为旧的trunk
+        if (JSON.stringify(elements) === JSON.stringify(this.trunk)) {
+          trunk = this.trunk;
+        }
       }
     });
+    // 记录上一次trunk
+    this.trunk = trunk;
     const nodeMap = this.formatData(data);
     const newGraphData = {
       nodes: [],
@@ -89,7 +112,13 @@ class AutoLayout {
         if (!n1.isFixed) {
           const nextYLevel = this.getLevelHeight(xLevel + 1);
           this.addLevelHeight(xLevel, 1);
-          this.setNodePosition(nextInfo.nodeId, nodeMap, newGraphData, xLevel + 1, nextYLevel + 1);
+          this.setNodePosition(
+            nextInfo.nodeId,
+            nodeMap,
+            newGraphData,
+            xLevel + 1,
+            nextYLevel + 1,
+          );
         } else {
           // todo: 如果下一个节点是已经定位的，则需要考虑边的规避
         }
@@ -182,7 +211,8 @@ class AutoLayout {
   private formatData(data) {
     const nodeMap = data.nodes.reduce((nMap, node) => {
       const { type, properties, text, x, y } = node;
-      if (text && typeof text === 'object') { // 坐标转换为偏移量
+      if (text && typeof text === 'object') {
+        // 坐标转换为偏移量
         text.x = text.x - x;
         text.y = text.y - y;
       }
@@ -238,6 +268,4 @@ class AutoLayout {
   }
 }
 
-export {
-  AutoLayout,
-};
+export { AutoLayout };
