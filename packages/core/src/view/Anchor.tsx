@@ -8,6 +8,7 @@ import BaseNodeModel, { ConnectRuleResult } from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';
 // import EventEmitter from '../event/eventEmitter';
 import { AnchorConfig } from '../type';
+import { BaseNode } from './node';
 
 type TargetNodeId = string;
 
@@ -16,6 +17,7 @@ interface IProps {
   // y: number;
   // id?: string;
   anchorData: AnchorConfig,
+  node: BaseNode,
   style?: Record<string, any>;
   hoverStyle?: Record<string, any>;
   edgeStyle?: Record<string, any>;
@@ -39,7 +41,7 @@ class Anchor extends Component<IProps, IState> {
   sourceRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，source的校验规则产生的结果不同
   targetRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，target的校验规则不同
   dragHandler: StepDrag;
-  constructor(props) {
+  constructor() {
     super();
     this.sourceRuleResults = new Map();
     this.targetRuleResults = new Map();
@@ -56,6 +58,35 @@ class Anchor extends Component<IProps, IState> {
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
     });
+  }
+  getAnchorShape() {
+    const {
+      anchorData,
+      style,
+      node,
+    } = this.props;
+    const anchorShape = node.getAnchorShape(anchorData);
+    console.log(4444, anchorShape);
+    if (anchorShape) return anchorShape;
+    const { x, y } = anchorData;
+    const hoverStyle = {
+      ...style,
+      ...style.hover,
+    };
+    return (
+      <g>
+        <Circle
+          className="lf-node-anchor-hover"
+          {...hoverStyle}
+          {...{ x, y }}
+        />
+        <Circle
+          className="lf-node-anchor"
+          {...style}
+          {...{ x, y }}
+        />
+      </g>
+    );
   }
   onDragStart = ({ event }) => {
     const {
@@ -230,35 +261,20 @@ class Anchor extends Component<IProps, IState> {
       endY,
     } = this.state;
     const {
-      anchorData: { x, y, edgeAddable }, style, edgeStyle,
+      anchorData: { edgeAddable }, edgeStyle,
     } = this.props;
-    const hoverStyle = {
-      ...style,
-      ...style.hover,
-    };
     return (
       // className="lf-anchor" 作为下载时，需要将锚点删除的依据，不要修改类名
       <g className="lf-anchor">
-        <Circle
-          className="lf-node-anchor-hover"
-          {...hoverStyle}
-          {...{ x, y }}
+        <g
           onMouseDown={(ev) => {
             if (edgeAddable !== false) {
               this.dragHandler.handleMouseDown(ev);
             }
           }}
-        />
-        <Circle
-          className="lf-node-anchor"
-          {...style}
-          {...{ x, y }}
-          onMouseDown={(ev) => {
-            if (edgeAddable !== false) {
-              this.dragHandler.handleMouseDown(ev);
-            }
-          }}
-        />
+        >
+          { this.getAnchorShape() }
+        </g>
         {this.isShowLine() && (
           <Line
             x1={startX}

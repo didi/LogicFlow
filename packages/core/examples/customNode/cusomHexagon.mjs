@@ -1,3 +1,5 @@
+// import { h } from "preact";
+
 class CustomHexagonModel extends PolygonNodeModel {
   setAttributes() {
     const width = 100;
@@ -38,8 +40,21 @@ class CustomHexagonModel extends PolygonNodeModel {
   }
 }
 
+class CusomHexagonView extends PolygonNode {
+  getAnchorShape(anchorData) {
+    const { x, y } = anchorData;
+    return h('rect', {
+      x: x - 5,
+      y: y - 5,
+      width: 10,
+      height: 10,
+      className: 'custom-anchor'
+    })
+  }
+}
+
 export default {
   type: 'hexagonNode',
   model: CustomHexagonModel,
-  view: PolygonNode
+  view: CusomHexagonView
 }
