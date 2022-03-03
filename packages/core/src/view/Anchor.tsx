@@ -66,7 +66,6 @@ class Anchor extends Component<IProps, IState> {
       node,
     } = this.props;
     const anchorShape = node.getAnchorShape(anchorData);
-    console.log(4444, anchorShape);
     if (anchorShape) return anchorShape;
     const { x, y } = anchorData;
     const hoverStyle = {

@@ -59,7 +59,7 @@ export default class TextEdit extends Component<IProps, IState> {
       },
     } = graphModel;
     if (edgeTextEdit || nodeTextEdit) {
-      eventCenter.on(EventType.GRAPH_TRANSFORM, () => {
+      eventCenter.on(`${EventType.GRAPH_TRANSFORM},${EventType.NODE_CLICK},${EventType.BLANK_CLICK} `, () => {
         if (graphModel.textEditElement) {
           graphModel.textEditElement.setElementState(ElementState.DEFAULT);
         }

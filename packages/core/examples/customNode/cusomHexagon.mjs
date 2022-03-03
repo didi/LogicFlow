@@ -16,6 +16,7 @@ class CustomHexagonModel extends PolygonNodeModel {
       [x - 0.5 * width, y],
     ];
     this.points = pointList;
+    this.text.editable = false;
   }
   getConnectedSourceRules() {
     const rules = super.getConnectedSourceRules();

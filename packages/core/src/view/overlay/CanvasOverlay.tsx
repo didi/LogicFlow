@@ -100,12 +100,9 @@ class CanvasOverlay extends Component<IProps, Istate> {
     const target = ev.target as HTMLElement;
     if (target.getAttribute('name') === 'canvas-overlay') {
       const { graphModel } = this.props;
-      const { textEditElement, selectElements } = graphModel;
+      const { selectElements } = graphModel;
       if (selectElements.size > 0) {
         graphModel.clearSelectElements();
-      }
-      if (textEditElement) {
-        textEditElement.setElementState(ElementState.DEFAULT);
       }
       graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev });
     }
