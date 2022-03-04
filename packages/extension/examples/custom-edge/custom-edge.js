@@ -1,5 +1,9 @@
 class CustomEdgeModel extends PolylineEdgeModel {
-  customTextPosition = true;
+  // customTextPosition = true;
+  initEdgeData(data) {
+    super.initEdgeData(data);
+    this.customTextPosition = true;
+  }
   getTextPosition() {
     const position = super.getTextPosition();
     const currentPositionList = this.points.split(' ');
