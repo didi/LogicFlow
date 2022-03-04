@@ -349,6 +349,63 @@ getNodeDataById(nodeId: string): NodeConfig
 ```js
 lf.getNodeDataById('id')
 ```
+## getNodeIncomingNode
+
+获取节点所有的上一级节点
+
+```ts
+getNodeIncomingNode(nodeId: string): BaseNodeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+## getNodeOutgoingNode
+
+获取节点所有的下一级节点
+
+```ts
+getNodeOutgoingNode(nodeId: string): BaseNodeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+
+## getNodeIncomingEdge
+
+获取所有以此节点为终点的边
+
+```ts
+getNodeIncomingEdge(nodeId: string): BaseEdgeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+## getNodeOutgoingEdge
+
+获取所有以此节点为起点的边
+
+```ts
+getNodeOutgoingEdge(nodeId: string): BaseEdgeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
 
 ## addEdge
 
