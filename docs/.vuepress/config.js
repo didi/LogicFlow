@@ -64,7 +64,7 @@ const article = [
   'article01',
   'article02',
   'article03',
-  // 'NodeResize',
+  'NodeResize',
   'LogicFlow发布1.0'
 ];
 
