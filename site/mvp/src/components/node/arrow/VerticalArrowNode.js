@@ -4,8 +4,8 @@ import RectNode from '../basic/RectNode'
 // 竖直箭头
 
 class VerticalArrowModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 40
     this.height = 80
   }

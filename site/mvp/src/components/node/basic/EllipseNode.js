@@ -2,8 +2,8 @@ import CircleNode from './CircleNode'
 
 // 椭圆
 class EllipseNewModel extends CircleNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.rx = 60
     this.ry = 30
   }

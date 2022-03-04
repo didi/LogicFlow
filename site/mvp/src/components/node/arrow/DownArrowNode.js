@@ -4,8 +4,8 @@ import RectNode from '../basic/RectNode'
 // 下箭头
 
 class DownArrowModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 50
     this.height = 80
   }

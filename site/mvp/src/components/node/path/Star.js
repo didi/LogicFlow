@@ -3,8 +3,8 @@ import RectNode from '../basic/RectNode'
 
 // 五角星
 class StarModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData);
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 80;
     this.height = 80;
   }

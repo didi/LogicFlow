@@ -3,8 +3,8 @@ import RectNode from '../basic/RectNode'
 
 // 上箭头
 class UpArrowModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 50
     this.height = 80
   }

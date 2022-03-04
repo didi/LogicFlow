@@ -4,8 +4,8 @@ import RectNode from '../basic/RectNode'
 // 水平双箭头
 
 class HorizontalArrowModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 80
     this.height = 40
   }

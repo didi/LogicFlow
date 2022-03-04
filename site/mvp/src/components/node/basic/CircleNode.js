@@ -3,8 +3,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
 
 // 圆形
 class CircleNewModel extends EllipseResize.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.rx = 35
     this.ry = 35
   }
