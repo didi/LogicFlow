@@ -4,8 +4,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
 
 // 平行四边形
 class ParallelogramModel extends RectResize.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 100
     this.height = 60
   }

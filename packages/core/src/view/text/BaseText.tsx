@@ -31,15 +31,23 @@ export default class BaseText extends Component<IProps, IState> {
     });
   }
   getShape() {
-    const { model } = this.props;
+    const { model, graphModel } = this.props;
     const { text } = model;
-    const { value, x, y } = text;
+    const { editConfigModel } = graphModel;
+    const { value, x, y, editable, draggable } = text;
     const attr = {
       x,
       y,
-      className: 'lf-element-text',
+      className: '',
       value,
     };
+    if (editable) {
+      attr.className = 'lf-element-text';
+    } else if (draggable || editConfigModel.nodeTextDraggable) {
+      attr.className = 'lf-text-draggable';
+    } else {
+      attr.className = 'lf-text-disabled';
+    }
     const style = model.getTextStyle();
     return (
       <Text {...attr} {...style} model={model} />

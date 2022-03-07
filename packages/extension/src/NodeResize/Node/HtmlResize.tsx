@@ -17,6 +17,14 @@ class HtmlResizeModel extends HtmlNodeModel {
   minHeight = 30;
   maxWidth = 2000;
   maxHeight = 2000;
+  constructor(data, graphModel) {
+    super(data, graphModel);
+    const { nodeSize } = this.properties;
+    if (nodeSize) {
+      this.width = nodeSize.width;
+      this.height = nodeSize.height;
+    }
+  }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
     style.stroke = 'none';
@@ -39,14 +47,6 @@ class HtmlResizeModel extends HtmlNodeModel {
       fill: '#FFFFFF',
       stroke: '#000000',
     };
-  }
-  setAttributes() {
-    // @ts-ignore
-    const { nodeSize } = this.properties;
-    if (nodeSize) {
-      this.width = nodeSize.width;
-      this.height = nodeSize.height;
-    }
   }
 }
 class HtmlResizeView extends HtmlNode {

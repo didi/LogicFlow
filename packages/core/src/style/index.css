@@ -9,6 +9,12 @@
 .lf-element-text {
   cursor: text;
 }
+.lf-text-disabled {
+  pointer-events: none;
+}
+.lf-text-draggable {
+  cursor: move;
+}
 .lf-node-anchor {
   cursor: crosshair;
 }

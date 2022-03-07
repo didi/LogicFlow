@@ -6,8 +6,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
  * model控制初始化的值
  */
 class DiamondModel extends DiamondResize.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.rx = 35
     this.ry = 35
   }

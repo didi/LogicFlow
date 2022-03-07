@@ -19,8 +19,11 @@ class EllipseResizeModel extends EllipseNodeModel {
   maxHeight = 2000;
   constructor(data, graphModel) {
     super(data, graphModel);
-    this.rx = 50;
-    this.ry = 50;
+    const { nodeSize } = this.properties;
+    if (nodeSize) {
+      this.rx = nodeSize.rx;
+      this.ry = nodeSize.ry;
+    }
   }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
@@ -44,14 +47,6 @@ class EllipseResizeModel extends EllipseNodeModel {
       fill: '#FFFFFF',
       stroke: '#000000',
     };
-  }
-  setAttributes() {
-    // @ts-ignore
-    const { nodeSize } = this.properties;
-    if (nodeSize) {
-      this.rx = nodeSize.rx;
-      this.ry = nodeSize.ry;
-    }
   }
 }
 class EllipseResizeView extends EllipseNode {

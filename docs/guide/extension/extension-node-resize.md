@@ -1,21 +1,97 @@
 # 节点缩放
-
-## 支持缩放的节点类型
-目前节点缩放支持的节点类型如下：
-- 矩形
-- 椭圆
-- 菱形
-- HTML节点
 ## 使用
+
+LogicFlow在extension包中提供了`RectResize`、`EllipseResize`、`DiamonResize`、`HtmlResize`这4种支持缩放的基础节点, 每个节点都有`view`和`model`这两个属性。节点的缩放也是利用LogicFlow的自定义节点机制，使开发者可以继承这4种可以缩放的节点，来实现节点的缩放。
+
+以我们需要一个可以缩放的矩形为例，在以前我们不支持节点缩放时，我们自定义节点方式为：
 ```js
-import LogicFlow from '@logicflow/core';
-import { NodeResize } from '@logicflow/extension';
-import "@logicflow/core/dist/style/index.css";
-import '@logicflow/extension/lib/style/index.css'
+// 不可以缩放的节点
+import { RectNode, RectNodeModel } from '@logicflow/core'
+class CustomNode extends RectNode {}
+class CustomNodeModel extends RectNodeModel {}
+export default {
+  type: 'custom-node',
+  model: CustomNodeModel,
+  view: CustomNode
+}
+```
+
+如果我们期望自定义的节点可以缩放，那么则改成：
+```js
+// 支持缩放的节点
+import { RectResize } from '@logicflow/extension'
+class CustomNode extends RectResize.view {}
+class CustomNodeModel extends RectResize.model {}
+export default {
+  type: 'custom-node',
+  model: CustomNodeModel,
+  view: CustomNode
+}
+```
+
+### 设置节点的形状属性
+
+LogicFlow把节点的宽高、半径等属性称之为[形状属性](/api/nodeModelApi.html#形状属性)，我们可以重写model中的[initNodeData](/api/nodeModelApi.html#getoutlinestyle)或者[setAttributes](/api/nodeModelApi.html#setattributes)方法来设置节点的形状属性。但是当节点可以缩放后，我们不能在`setAttributes`中设置宽高，只能在`initNodeData`中设置。
+
+```js
+class ResizableRectModel extends RectResize.model {
+  initNodeData(data) {
+    super.initNodeData(data)
+    this.width = 100;
+    this.height = 40;
+  }
+}
+```
+
+### 自定义节点的view
+
+在自定义节点中提到过，对于样式属性比较复杂的节点，我们可以重写`view`中的`getShape`方法来实现自定义节点真实渲染的外观。但是由于自定义节点需要在节点外观上填加用于缩放的调整点，所以对于自定义可缩放节点的view，我们需要重写`getResizeShape`, 而不是`getShape`。
+
+```js
+import { RectResize } from '@logicflow/extension';
+
+class ResizableRectModel extends RectResize.model {
+  initNodeData(data) {
+    super.initNodeData(data)
+    this.width = 100;
+    this.height = 40;
+    this.text.draggable = true;
+  }
+}
+class ResizableRectView extends RectResize.view {
+  /**
+   * 此方法替代自定义节点的getShape方法。
+   */
+  getResizeShape() {
+    const { model } = this.props;
+    const { x, y, width, height, radius, properties } = model;
+    const style = model.getNodeStyle();
+    return h("g", {}, [
+      h("rect", {
+        ...style,
+        x: x - width / 2,
+        y: y - height / 2,
+        rx: radius,
+        ry: radius,
+        width,
+        height
+      }),
+    ]);
+  }
+}
+
+export default {
+  type: "resizable-rect",
+  view: ResizableRectView,
+  model: ResizableRectModel
+};
+
 ```
 
 ## 事件
+
 节点缩放后抛出事件`node:resize`，抛出数据包括节点缩放前后的节点位置、节点大小信息， 数据为{oldNodeSize, newNodeSize}, 详细字段如下。
+
 | 名称  | 类型   | 描述           |
 | :---- | :----- | :------------- |
 | id    | String | 节点 id|
@@ -33,3 +109,14 @@ lf.on('node:resize', ({oldNodeSize, newNodeSize}) => {
   console.log(oldNodeSize, newNodeSize)
 })
 ```
+
+## 示例
+
+地址: [https://codesandbox.io/s/prod-resonance-ztpvtv](https://codesandbox.io/s/prod-resonance-ztpvtv?file=/step_26_nodeResize/index.js)
+
+<iframe src="https://codesandbox.io/embed/prod-resonance-ztpvtv?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="prod-resonance-ztpvtv"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>

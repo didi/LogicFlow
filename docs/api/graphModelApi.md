@@ -805,6 +805,8 @@ graphModel.moveNodes(['node_id', 'node_2'], 10, 10);
 
 ## addNodeMoveRules
 
+`方法`
+
 添加节点移动限制规则，在节点移动的时候触发。
 
 如果方法返回false, 则会阻止节点移动。
@@ -817,6 +819,73 @@ graphModel.addNodeMoveRules((nodeModel, x, y) => {
   return true
 });
 ```
+
+## getNodeIncomingNode
+
+`方法`
+
+获取节点所有的上一级节点
+
+```ts
+graphModel.getNodeIncomingNode(nodeId: string): BaseNodeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+## getNodeOutgoingNode
+
+`方法`
+
+获取节点所有的下一级节点
+
+```ts
+graphModel.getNodeOutgoingNode(nodeId: string): BaseNodeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+
+## getNodeIncomingEdge
+
+`方法`
+
+获取所有以此节点为终点的边
+
+```ts
+graphModel.getNodeIncomingEdge(nodeId: string): BaseEdgeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
+
+## getNodeOutgoingEdge
+
+`方法`
+
+获取所有以此节点为起点的边
+
+```ts
+graphModel.getNodeOutgoingEdge(nodeId: string): BaseEdgeModel[]
+```
+
+参数：
+
+| 名称 | 类型 | 必传 | 默认值 | 描述 |
+| :- | :- | :- | :- | :- |
+| nodeId | String | ✅ | - | 节点id |
+
 
 ## setDefaultEdgeType
 

@@ -17,6 +17,14 @@ class RectResizeModel extends RectNodeModel {
   minHeight = 30;
   maxWidth = 2000;
   maxHeight = 2000;
+  constructor(data, graphModel) {
+    super(data, graphModel);
+    const { nodeSize } = this.properties;
+    if (nodeSize) {
+      this.width = nodeSize.width;
+      this.height = nodeSize.height;
+    }
+  }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
     style.stroke = 'none';
@@ -40,14 +48,6 @@ class RectResizeModel extends RectNodeModel {
       fill: '#FFFFFF',
       stroke: '#000000',
     };
-  }
-  setAttributes() {
-    // @ts-ignore
-    const { nodeSize } = this.properties;
-    if (nodeSize) {
-      this.width = nodeSize.width;
-      this.height = nodeSize.height;
-    }
   }
   resize(deltaX, deltaY) {
     console.log(deltaX, deltaY);

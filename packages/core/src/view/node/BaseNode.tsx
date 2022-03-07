@@ -49,6 +49,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     };
   }
   abstract getShape();
+  getAnchorShape(anchorData): h.JSX.Element {
+    return null;
+  }
   getAnchors() {
     const { model, graphModel } = this.props;
     const {
@@ -64,6 +67,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
             <Anchor
               anchorData={anchor}
               nodeDraging={isDragging}
+              node={this}
               style={style}
               edgeStyle={edgeStyle}
               anchorIndex={index}

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.7-alpha.0...@logicflow/extension@1.1.7-alpha.1) (2022-03-04)
+
+
+### Bug Fixes
+
+* node resize can`t set shape attributes ([9811e93](https://github.com/didi/LogicFlow/commit/9811e931adcab3e9c4ec5836e40d5ca766eb04e4))
+
+
+
+
+
+## [1.1.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.6...@logicflow/extension@1.1.7-alpha.0) (2022-03-03)
+
+
+### Performance Improvements
+
+* 优化layout trunk ([e261441](https://github.com/didi/LogicFlow/commit/e261441e6b3ab928939bda43101dd5e0348da9f8))
+
+
+
+
+
 ## [1.1.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.5...@logicflow/extension@1.1.6) (2022-03-02)
 
 **Note:** Version bump only for package @logicflow/extension

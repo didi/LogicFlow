@@ -4,8 +4,8 @@ import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil
 
 // 七边形
 class SeptagonModel extends RectNode.model {
-  constructor(data, graphData) {
-    super(data, graphData)
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 80
     this.height = 80
   }

@@ -3,8 +3,8 @@ import { RectResize } from '@logicflow/extension'
 import { getShapeStyleFuction, getTextStyleFunction } from '../getShapeStyleUtil'
 // 人物
 class ActorModel extends RectResize.model {
-  constructor(data, graphData) {
-    super(data, graphData);
+  initNodeData(data) {
+    super.initNodeData(data)
     this.width = 40;
     this.height = 80;
   }

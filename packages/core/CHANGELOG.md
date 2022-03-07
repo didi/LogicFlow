@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.6...@logicflow/core@1.1.7-alpha.0) (2022-03-03)
+
+
+### Bug Fixes
+
+* click node cancel edit text ([a514665](https://github.com/didi/LogicFlow/commit/a5146652b78d665d7058b7d810a26af07659ca43))
+
+
+### Features
+
+* add getAnchorShape function which allow rewrite anchor shape ([e5a7d77](https://github.com/didi/LogicFlow/commit/e5a7d77b898c93ece38e28fbdbef443ec8d23fcc))
+
+
+
+
+
 ## [1.1.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.5...@logicflow/core@1.1.6) (2022-03-02)
 
 **Note:** Version bump only for package @logicflow/core
