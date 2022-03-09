@@ -419,7 +419,10 @@
           view: CombineNode,
           model: CombineModel,
         });
-
+        lf.on('history:change', () => {
+          const data = lf.getGraphData()
+          console.log(data)
+        })
         // 注册自定义边
         lf.register({
           type: 'connection',

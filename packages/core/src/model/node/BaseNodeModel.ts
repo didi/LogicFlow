@@ -105,14 +105,18 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this.initNodeData(data);
     this.setAttributes();
   }
-  // 获取进入当前节点的边和节点
+  /**
+   * 获取进入当前节点的边和节点
+   */
   @computed get incoming(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
     return {
       nodes: this.graphModel.getNodeIncomingNode(this.id),
       edges: this.graphModel.getNodeIncomingEdge(this.id),
     };
   }
-  // 获取离开当前节点的边和节点
+  /*
+   * 获取离开当前节点的边和节点
+   */
   @computed get outgoing(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
     return {
       nodes: this.graphModel.getNodeOutgoingNode(this.id),

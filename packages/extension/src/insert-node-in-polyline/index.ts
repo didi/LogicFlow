@@ -1,24 +1,26 @@
-import { PolylineEdgeModel } from '@logicflow/core';
+import LogicFlow, { PolylineEdgeModel } from '@logicflow/core';
 import { isNodeInSegement } from './edge';
 
-const InsertNodeInPolyline = {
-  pluginName: 'insertNodeInPolyline',
-  _lf: null,
-  dndAdd: true, // dnd 添加节点到折线上的开关
-  dropAdd: true, // 移动节点到折线上的开关
-  install(lf) {
-    InsertNodeInPolyline._lf = lf;
+class InsertNodeInPolyline {
+  static pluginName = 'insertNodeInPolyline';
+  _lf: LogicFlow;
+  dndAdd: boolean; // dnd 添加节点到折线上的开关
+  dropAdd: boolean; // 移动节点到折线上的开关
+  constructor({ lf }) {
+    this._lf = lf;
+    this.dndAdd = true;
+    this.dropAdd = true;
     this.eventHandler();
-  },
+  }
   eventHandler() {
     // 监听事件
-    if (InsertNodeInPolyline.dndAdd) {
-      InsertNodeInPolyline._lf.on('node:dnd-add', ({ data }) => {
-        InsertNodeInPolyline.insetNode(data);
+    if (this.dndAdd) {
+      this._lf.on('node:dnd-add', ({ data }) => {
+        this.insetNode(data);
       });
     }
-    if (InsertNodeInPolyline.dropAdd) {
-      InsertNodeInPolyline._lf.on('node:drop', ({ data }) => {
+    if (this.dropAdd) {
+      this._lf.on('node:drop', ({ data }) => {
         const { edges } = this._lf.graphModel;
         const { id } = data;
         let pureNode = true;
@@ -29,11 +31,11 @@ const InsertNodeInPolyline = {
           }
         }
         if (pureNode) {
-          InsertNodeInPolyline.insetNode(data);
+          this.insetNode(data);
         }
       });
     }
-  },
+  }
   insetNode(nodeData): void {
     const { edges } = this._lf.graphModel;
     const nodeModel = this._lf.getNodeModelById(nodeData.id);
@@ -58,8 +60,8 @@ const InsertNodeInPolyline = {
         break;
       }
     }
-  },
-};
+  }
+}
 
 export { InsertNodeInPolyline };
 
