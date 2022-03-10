@@ -100,6 +100,7 @@ const keys = [
   'hideAnchors',
   'hoverOutline',
   'nodeSelectedOutline',
+  'edgeSelectedOutline',
   'nodeTextEdit',
   'edgeTextEdit',
   'nodeTextDraggable',

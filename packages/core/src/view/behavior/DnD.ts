@@ -10,6 +10,7 @@ export type NewNodeConfig = {
   type: string;
   text?: TextConfig | string;
   properties?: Record<string, unknown>;
+  [key: string]: any;
 };
 
 export default class Dnd {

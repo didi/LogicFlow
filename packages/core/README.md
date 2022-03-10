@@ -151,9 +151,17 @@ lf.render(data);
 
 #### vue 应用 demo
 
+[代码地址](https://github.com/xinxin93/logicflow_vue_demo)
+
 ![图片：vue应用](https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif)
 
-[代码地址](https://github.com/xinxin93/logicflow_vue_demo)
+
+#### vue3 node-red风格示例
+
+[Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
+
+![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
+
 ## 联系我们
 
 ### 加入微信群
