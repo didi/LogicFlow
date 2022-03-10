@@ -161,6 +161,13 @@ LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生�
 示例图如下:
 ![logicflow-1.0-4.png](/docs/assets/images/LogicFlow-1.0-4.png)
 
+
+#### vue3 node-red风格示例
+
+[Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
+
+![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
+
 ## 联系我们
 
 ### 加入微信群
