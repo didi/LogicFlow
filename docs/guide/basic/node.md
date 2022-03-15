@@ -150,6 +150,8 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
+
+
 #### 自定义节点的形状属性
 
 在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`radius`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
@@ -210,6 +212,9 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
+::: tip 提示
+如果不了解为什么`this.properties`打印出来是一个Proxy对象, 无法看到属性。请查看issue [https://github.com/didi/LogicFlow/issues/530](https://github.com/didi/LogicFlow/issues/530)
+:::
 ### 步骤3: 自定义节点view
 
 LogicFlow在自定义节点的`model`时,可以定义节点的基础形状、样式等属性。但是当开发者需要一个更加复杂的节点时，可以使用LogicFlow提供的自定义节点`view`的方式。
