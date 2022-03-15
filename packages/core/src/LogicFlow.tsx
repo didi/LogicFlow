@@ -867,6 +867,13 @@ export default class LogicFlow {
     this.translate(-TRANSLATE_X, -TRANSLATE_Y);
   }
 
+  /**
+   * 画布居中显示 
+   */
+   translateCenter(): void { 
+    this.graphModel.translateCenter();
+  }
+
   // 事件系统----------------------------------------------
   /**
    * 监听事件

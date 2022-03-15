@@ -1099,6 +1099,39 @@ class GraphModel {
     this.nodes = [];
     this.edges = [];
   }
+  /**
+   * 将画布整体移动到画布中心
+   */
+   @action translateCenter(): void { 
+    const { nodes, width, height, rootEl, transformModel } = this;
+    if(!nodes.length){ return; }
+ 
+    const containerWidth = width || rootEl.clientWidth;
+    const containerHeight = height || rootEl.clientHeight; 
+
+    let minX = undefined,
+        minY = undefined,
+        maxX = undefined,
+        maxY = undefined;
+
+    // 获取所有节点组成的虚拟矩型框的四角坐标的xy最大最小值
+    nodes.forEach(({ x, y }) => {  
+        minX = minX ? Math.min(minX, x) : x;
+        maxX = maxX ? Math.max(maxX, x) : x;
+        minY = minY ? Math.min(minY, y) : y;
+        maxY = maxY ? Math.max(maxY, y) : y;
+    }); 
+
+    const virtualRectWidth = (maxX - minX) || 0;
+    const virtualRectHeight = (maxY - minY) || 0;
+
+    // 获取虚拟矩型的中心坐标
+    const virtualRectCenterPositionX = minX + virtualRectWidth / 2;
+    const virtualRectCenterPositionY = minY + virtualRectHeight / 2;  
+
+    // 将虚拟矩型移动到画布中心
+    transformModel.focusOn(virtualRectCenterPositionX, virtualRectCenterPositionY, containerWidth, containerHeight); 
+   }
 }
 
 export { GraphModel };
