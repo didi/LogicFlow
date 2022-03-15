@@ -31,6 +31,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
       onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'BLANK',
+      isStopPropagation: false,
       eventCenter,
       model: null,
     });
