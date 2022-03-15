@@ -867,6 +867,42 @@ export default class LogicFlow {
     this.translate(-TRANSLATE_X, -TRANSLATE_Y);
   }
 
+  /**
+   * 画布居中显示 
+   */
+   translateCenter(): void {
+    const { nodes } = this.getGraphData(); 
+    if(!nodes.length){ return; }
+
+    const { width, height, transformModel } = this.graphModel; 
+    const container = this.container; 
+    const containerWidth = width || container.clientWidth;
+    const containerHeight = height || container.clientHeight; 
+
+    let minX = undefined,
+        minY = undefined,
+        maxX = undefined,
+        maxY = undefined;
+
+    // 获取所有节点组成的虚拟矩型框的四角坐标的xy最大最小值
+    nodes.forEach(({ x, y }) => {  
+        minX = minX ? Math.min(minX, x) : x;
+        maxX = maxX ? Math.max(maxX, x) : x;
+        minY = minY ? Math.min(minY, y) : y;
+        maxY = maxY ? Math.max(maxY, y) : y;
+    }); 
+
+    const virtualRectWidth = (maxX - minX) || 0;
+    const virtualRectHeight = (maxY - minY) || 0;
+
+    // 获取虚拟矩型的中心坐标
+    const virtualRectCenterPositionX = minX + virtualRectWidth / 2;
+    const virtualRectCenterPositionY = minY + virtualRectHeight / 2;  
+
+    // 将虚拟矩型移动到画布中心
+    transformModel.focusOn(virtualRectCenterPositionX, virtualRectCenterPositionY, containerWidth, containerHeight);
+  }
+
   // 事件系统----------------------------------------------
   /**
    * 监听事件
