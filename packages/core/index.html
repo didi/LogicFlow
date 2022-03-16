@@ -111,6 +111,7 @@
     <button onClick="setZoom()">设置大小</button>
     <button onClick="selectElement()">选中指定节点</button>
     <button onClick="triggerLine()">触发边</button>
+    <button onClick="translateCenter()">居中</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -707,6 +708,9 @@
         }
         window.triggerLine = function () {
           // lf.startConnect()
+        }
+        window.translateCenter = function () {
+          lf.translateCenter()
         }
       }
     </script>

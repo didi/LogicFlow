@@ -868,9 +868,9 @@ export default class LogicFlow {
   }
 
   /**
-   * 画布居中显示 
+   * 图形画布居中显示
    */
-   translateCenter(): void { 
+  translateCenter(): void {
     this.graphModel.translateCenter();
   }
 
