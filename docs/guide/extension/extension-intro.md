@@ -14,9 +14,9 @@ cdn方式
 
 ```html
 <!--LogicFlow core包css-->
-<link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
 <!--LogicFlow extension包css-->
-<link ref="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
 <!--LogicFlow core包js-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
 <!--LogicFlow的插件支持单个引入，这里以菜单插件为例-->
