@@ -874,6 +874,14 @@ export default class LogicFlow {
     this.graphModel.translateCenter();
   }
 
+  /**
+   * 图形适应屏幕大小
+   * @param offset number 距离盒子四周的距离， 默认为20
+   */
+  fitView(offset: number): void {
+    this.graphModel.fitView(offset);
+  }
+
   // 事件系统----------------------------------------------
   /**
    * 监听事件
