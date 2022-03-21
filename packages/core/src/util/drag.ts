@@ -166,6 +166,11 @@ class StepDrag {
     this.onDragEnd({ event: e });
     this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
   };
+  cancelDrag = () => {
+    DOC.removeEventListener('mousemove', this.handleMouseMove, false);
+    DOC.removeEventListener('mouseup', this.handleMouseUp, false);
+    this.isDraging = false;
+  };
 }
 
 export {

@@ -13,10 +13,6 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class EllipseResizeModel extends EllipseNodeModel {
-  minWidth = 30;
-  minHeight = 30;
-  maxWidth = 2000;
-  maxHeight = 2000;
   constructor(data, graphModel) {
     super(data, graphModel);
     const { nodeSize } = this.properties;
@@ -24,6 +20,13 @@ class EllipseResizeModel extends EllipseNodeModel {
       this.rx = nodeSize.rx;
       this.ry = nodeSize.ry;
     }
+  }
+  initNodeData(data: any): void {
+    super.initNodeData(data);
+    this.minWidth = 30;
+    this.minHeight = 30;
+    this.maxWidth = 2000;
+    this.maxHeight = 2000;
   }
   getOutlineStyle() {
     const style = super.getOutlineStyle();

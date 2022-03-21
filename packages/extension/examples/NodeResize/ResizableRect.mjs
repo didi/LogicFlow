@@ -3,6 +3,8 @@ class ResizableRectModel extends RectResize.model {
     super.initNodeData(data)
     this.width = 100;
     this.height = 40;
+    this.maxWidth = 400;
+    this.maxHeight = 400;
     this.text.draggable = true;
   }
   getNodeStyle() {

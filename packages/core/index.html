@@ -380,6 +380,7 @@
           disabledTools: ['multipleSelect'],
           // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
+          stopMoveGraph: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
@@ -729,9 +730,9 @@
         lf.on('text:update', (data) => {
           console.log('test:update', data)
         });
-        // lf.on('graph:transform', (data) => {
-        //   console.log(data)
-        // })
+        lf.on('blank:mousemove', (data) => {
+          console.log(data)
+        })
         lf.on('node:click', ({ data }) => {
           // const model = lf.graphModel.getElement(data.id)
           // model.fill = 'red'

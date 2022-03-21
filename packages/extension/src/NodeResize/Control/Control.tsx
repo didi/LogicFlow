@@ -3,7 +3,7 @@ import { BaseNodeModel, DiamondNodeModel, EllipseNodeModel, GraphModel, LogicFlo
 import Rect from '../BasicShape/Rect';
 import { getDiamondReizeEdgePoint, getEllipseReizeEdgePoint, getRectReizeEdgePoint, ModelType } from './Util';
 
-const { createDrag } = LogicFlowUtil;
+const { StepDrag } = LogicFlowUtil;
 
 type TargetNodeId = string;
 
@@ -24,10 +24,10 @@ interface IState {
   draging: boolean,
 }
 class Control extends Component<IProps> {
-  dragHandler: Function;
   index: number;
   nodeModel: BaseNodeModel;
   graphModel: GraphModel;
+  dragHandler: LogicFlowUtil.StepDrag;
   constructor(props) {
     super();
     this.index = props.index;
@@ -40,8 +40,11 @@ class Control extends Component<IProps> {
     if (gridSize > 1) {
       step = 2 * gridSize;
     }
+    if (this.nodeModel.gridSize) {
+      step = 2 * this.nodeModel.gridSize;
+    }
     this.state = {};
-    this.dragHandler = createDrag({
+    this.dragHandler = new StepDrag({
       onDraging: this.onDraging,
       step,
     });
@@ -118,6 +121,8 @@ class Control extends Component<IProps> {
       || size.height < minHeight
       || size.height > maxHeight
     ) {
+      // 为了避免放到和缩小位置和鼠标不一致的问题
+      this.dragHandler.cancelDrag();
       return;
     }
     this.updatePosition({ deltaX, deltaY });
@@ -191,15 +196,16 @@ class Control extends Component<IProps> {
       || size.height < (minHeight / 2)
       || size.height > (maxHeight / 2)
     ) {
+      this.dragHandler.cancelDrag();
       return;
     }
     // 更新中心点位置，更新文案位置
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
-    this.nodeModel.rx = size.width;
+    this.nodeModel.rx = this.nodeModel.rx + deltaX / 2;
     // @ts-ignore
-    this.nodeModel.ry = size.height;
+    this.nodeModel.ry = this.nodeModel.ry + deltaY / 2;
     this.nodeModel.setProperties({
       nodeSize:
       {
@@ -260,15 +266,16 @@ class Control extends Component<IProps> {
       || size.height < (minHeight / 2)
       || size.height > (maxHeight / 2)
     ) {
+      this.dragHandler.cancelDrag();
       return;
     }
     // 更新中心点位置，更新文案位置
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
-    this.nodeModel.rx = size.width;
+    this.nodeModel.rx = this.nodeModel.rx + deltaX / 2;
     // @ts-ignore
-    this.nodeModel.ry = size.height;
+    this.nodeModel.ry = this.nodeModel.ry + deltaY / 2;
     this.nodeModel.setProperties({
       nodeSize:
       {
@@ -332,7 +339,7 @@ class Control extends Component<IProps> {
           className="lf-node-control"
           {...{ x, y }}
           {...style}
-          onMouseDown={this.dragHandler}
+          onMouseDown={this.dragHandler.handleMouseDown}
         />
       </g>
     );
