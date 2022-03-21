@@ -436,3 +436,10 @@ export type DiamondAttributes = {
 } & NodeAttributes;
 
 export type ShapeStyleAttribute = CommonTheme;
+
+export type VirtualRectSize = {
+  virtualRectWidth: number,
+  virtualRectHeight: number,
+  virtualRectCenterPositionX: number,
+  virtualRectCenterPositionY: number,
+};

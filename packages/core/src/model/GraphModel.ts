@@ -9,7 +9,14 @@ import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType, OverlapMode,
 } from '../constant/constant';
 import {
-  AdditionData, Point, NodeConfig, EdgeConfig, PointTuple, NodeMoveRule, GraphConfigData,
+  AdditionData,
+  Point,
+  NodeConfig,
+  EdgeConfig,
+  PointTuple,
+  NodeMoveRule,
+  GraphConfigData,
+  VirtualRectSize,
 } from '../type';
 import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
@@ -1099,6 +1106,42 @@ class GraphModel {
     this.nodes = [];
     this.edges = [];
   }
+
+  /**
+   * 获取图形区域虚拟矩型的尺寸和中心坐标
+   * @returns
+   */
+  getVirtualRectSize(): VirtualRectSize {
+    const { nodes } = this;
+    let nodesX = [];
+    let nodesY = [];
+    // 获取所有节点组成的x，y轴最大最小值，这里考虑了图形的长宽和边框
+    nodes.forEach((node) => {
+      const { x, y, width, height } = node;
+      const { strokeWidth = 0 } = node.getNodeStyle();
+      nodesX = nodesX.concat([x + width / 2 + strokeWidth, x - width / 2 - strokeWidth]);
+      nodesY = nodesY.concat([y + height / 2 + strokeWidth, y - height / 2 - strokeWidth]);
+    });
+
+    const minX = Math.min(...nodesX);
+    const maxX = Math.max(...nodesX);
+    const minY = Math.min(...nodesY);
+    const maxY = Math.max(...nodesY);
+
+    const virtualRectWidth = (maxX - minX) || 0;
+    const virtualRectHeight = (maxY - minY) || 0;
+
+    // 获取虚拟矩型的中心坐标
+    const virtualRectCenterPositionX = minX + virtualRectWidth / 2;
+    const virtualRectCenterPositionY = minY + virtualRectHeight / 2;
+
+    return {
+      virtualRectWidth,
+      virtualRectHeight,
+      virtualRectCenterPositionX,
+      virtualRectCenterPositionY,
+    };
+  }
   /**
    * 将图形整体移动到画布中心
    */
@@ -1109,26 +1152,47 @@ class GraphModel {
     const containerWidth = width || rootEl.clientWidth;
     const containerHeight = height || rootEl.clientHeight;
 
-    let minX;
-    let minY;
-    let maxX;
-    let maxY;
+    const {
+      virtualRectCenterPositionX,
+      virtualRectCenterPositionY,
+    } = this.getVirtualRectSize();
 
-    // 获取所有节点组成的虚拟矩型框的四角坐标的xy最大最小值
-    nodes.forEach(({ x, y }) => {
-      minX = minX ? Math.min(minX, x) : x;
-      maxX = maxX ? Math.max(maxX, x) : x;
-      minY = minY ? Math.min(minY, y) : y;
-      maxY = maxY ? Math.max(maxY, y) : y;
-    });
+    // 将虚拟矩型移动到画布中心
+    transformModel.focusOn(
+      virtualRectCenterPositionX,
+      virtualRectCenterPositionY,
+      containerWidth,
+      containerHeight,
+    );
+  }
 
-    const virtualRectWidth = (maxX - minX) || 0;
-    const virtualRectHeight = (maxY - minY) || 0;
+  /**
+   * 画布图形适应屏幕大小
+   * @param offset number 距离盒子四周的距离， 默认为20
+   */
+  @action fitView(offset = 20): void {
+    console.log('offset', offset);
+    const { nodes, width, height, rootEl, transformModel } = this;
+    if (!nodes.length) { return; }
+    const containerWidth = width || rootEl.clientWidth;
+    const containerHeight = height || rootEl.clientHeight;
 
-    // 获取虚拟矩型的中心坐标
-    const virtualRectCenterPositionX = minX + virtualRectWidth / 2;
-    const virtualRectCenterPositionY = minY + virtualRectHeight / 2;
+    const {
+      virtualRectWidth,
+      virtualRectHeight,
+      virtualRectCenterPositionX,
+      virtualRectCenterPositionY,
+    } = this.getVirtualRectSize();
 
+    const zoomRatioX = (virtualRectWidth + offset) / containerWidth;
+    const zoomRatioY = (virtualRectHeight + offset) / containerHeight;
+
+    let zoomRatio = 0;
+    zoomRatio = 1 / Math.max(zoomRatioX, zoomRatioY);
+
+    const point: PointTuple = [containerWidth / 2, containerHeight / 2];
+    // 适应画布大小
+    transformModel.zoom(zoomRatio, point);
     // 将虚拟矩型移动到画布中心
     transformModel.focusOn(
       virtualRectCenterPositionX,
