@@ -25,6 +25,8 @@ LogicFlow分为`core`包和`extension`包。由于LogicFlow本身会有一些预
 
 ```
 
+LogicFlow所有的插件地址：[https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/](https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/)
+
 ### 使用npm引入
 
 ```shell

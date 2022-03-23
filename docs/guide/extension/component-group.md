@@ -159,6 +159,11 @@ class MyGroupModel extends GroupNode.model {
 }
 ```
 
+::: warning 如何阻止节点连接到分组上?
+分组是一种特殊的节点，所以仍然可以通过[自定义连接规则校验](http://logic-flow.org/guide/basic/node.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9E%E6%8E%A5%E8%A7%84%E5%88%99%E6%A0%A1%E9%AA%8C)来实现不允许节点和分组直接相连。但是请不要将分组的锚点数量设置为0，因为在分组被折叠时，会通过分组的锚点与外部节点相连来表示分组内部节点与外部节点的关系。
+:::
+
+
 ## 示例
 
 <iframe src="https://codesandbox.io/embed/bold-moore-vgvpf?fontsize=14&hidenavigation=1&theme=dark&view=preview"

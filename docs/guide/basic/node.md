@@ -512,7 +512,7 @@ class SquareModel extends RectNodeModel {
     this.sourceRules.push(rule);
   }
   getAnchorStyle(anchorInfo) {
-    const style = super.getAnchorStyle();
+    const style = super.getAnchorStyle(anchorInfo);
     if (anchorInfo.type === 'left') {
       style.fill = 'red'
       style.hover.fill = 'transparent'

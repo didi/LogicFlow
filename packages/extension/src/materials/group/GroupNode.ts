@@ -6,13 +6,34 @@ const defaultHeight = 300;
 
 class GroupNodeModel extends RectResize.model {
   readonly isGroup = true;
+  /**
+   * 此分组的子节点Id
+   */
   children: Set<string>;
-  isRestrict: boolean; // 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
-  resizable: boolean; // 分组节点是否允许调整大小。
-  foldable: boolean; // 分组节点是否允许调整大小。
+  /**
+   * 其子节点是否被禁止通过拖拽移出分组。 默认false，允许拖拽移除分组。
+   */
+  isRestrict: boolean;
+  /**
+   * 分组节点是否允许调整大小。
+   */
+  resizable: boolean;
+  /**
+   * 分组节点是否允许折叠
+   */
+  foldable: boolean;
+  /**
+   * 折叠后的宽度
+   */
   foldedWidth: number;
+  /**
+   * 折叠后的高度
+   */
   foldedHeight: number;
-  isFolded: boolean; // 是否收起
+  /**
+   * 分组折叠状态
+   */
+  isFolded: boolean;
   unfoldedWidth = defaultWidth;
   unfoldedHight = defaultHeight;
   initNodeData(data): void {
@@ -44,9 +65,16 @@ class GroupNodeModel extends RectResize.model {
     style.stroke = 'none';
     return style;
   }
+  /**
+   * 折叠分组
+   * 1. 折叠分组的宽高
+   * 2. 处理分组子节点
+   * 3. 处理连线
+   */
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
     this.isFolded = isFolded;
+    // step 1
     if (isFolded) {
       this.x = this.x - this.width / 2 + this.foldedWidth / 2;
       this.y = this.y - this.height / 2 + this.foldedHeight / 2;
@@ -60,68 +88,113 @@ class GroupNodeModel extends RectResize.model {
       this.x = this.x + this.width / 2 - this.foldedWidth / 2;
       this.y = this.y + this.height / 2 - this.foldedHeight / 2;
     }
-    // 移动分组上的连线
-    const inCommingEdges = this.graphModel.getNodeIncomingEdge(this.id);
-    const outgoingEdges = this.graphModel.getNodeOutgoingEdge(this.id);
-    inCommingEdges.concat(outgoingEdges).forEach((edgeModel) => {
-      this.graphModel.deleteEdgeById(edgeModel.id);
-      if (!edgeModel.isFoldedEdge) {
-        const isCommingEdge = edgeModel.targetNodeId === this.id;
-        const data = edgeModel.getData();
-        if (isCommingEdge) {
-          data.endPoint = undefined;
-        } else {
-          data.startPoint = undefined;
-        }
-        data.pointsList = undefined;
-        this.graphModel.addEdge(data);
-      }
-    });
+    // step 2
+    let allEdges = this.incoming.edges.concat(this.outgoing.edges);
     this.children.forEach((elementId) => {
       const nodeModel = this.graphModel.getElement(elementId);
       nodeModel.visible = !isFolded;
-      this.foldEdge(elementId, isFolded);
+      allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
     });
+    // step 3
+    this.foldEdge(isFolded, allEdges);
+  }
+  getAnchorStyle(anchorInfo) {
+    const style = super.getAnchorStyle(anchorInfo);
+    style.stroke = 'transparent';
+    style.fill = 'transparent';
+    style.hover.fill = 'transparent';
+    style.hover.stroke = 'transparent';
+    return style;
   }
   /**
-   * 折叠分组的时候，处理分组内部子节点上的连线
-   * 1. 为了保证校验规则不被打乱，所以只隐藏子节点上面的连线。
-   * 2. 重新创建一个属性一样的边。
-   * 3. 这个边拥有virtual=true的属性，表示不支持直接修改此边内容。
+   * 折叠分组的时候，处理分组自身的连线和分组内部子节点上的连线
+   * 边的分类：
+   *   - 虚拟边：分组被收起时，表示分组本身与外部节点关系的边。
+   *   - 真实边：分组本身或者分组内部节点与外部节点节点（非收起分组）关系的边。
+   * 如果一个分组，本身与外部节点有M条连线，且内部N个子节点与外部节点有连线，那么这个分组收起时会生成M+N条连线。
+   * 折叠分组时：
+   *   - 原有的虚拟边删除；
+   *   - 创建一个虚拟边；
+   *   - 真实边则隐藏；
+   * 展开分组是：
+   *   - 原有的虚拟边删除；
+   *   - 如果目外部点是收起的分组，则创建虚拟边；
+   *   - 如果外部节点是普通节点，则显示真实边；
    */
-  private foldEdge(nodeId, isFolded) {
-    const inCommingEdges = this.graphModel.getNodeIncomingEdge(nodeId);
-    const outgoingEdges = this.graphModel.getNodeOutgoingEdge(nodeId);
-    inCommingEdges.concat(outgoingEdges).forEach((edgeModel, index) => {
-      edgeModel.visible = !isFolded;
-      if (isFolded
-        && (
-          !this.children.has(edgeModel.targetNodeId)
-          || !this.children.has(edgeModel.sourceNodeId)
-        )
-      ) {
-        const isCommingEdge = edgeModel.targetNodeId === nodeId;
-        if (isFolded) {
-          const data = edgeModel.getData();
-          data.id = `${data.id}__${index}`;
-          if (isCommingEdge) {
-            data.endPoint = undefined;
-            data.targetNodeId = this.id;
-          } else {
-            data.startPoint = undefined;
-            data.sourceNodeId = this.id;
-          }
-          data.text = data.text?.value;
-          data.pointsList = undefined;
-          const model = this.graphModel.addEdge(data);
-          model.virtual = true;
-          // 强制不保存group连线数据
-          model.getData = () => null;
-          model.text.editable = false;
-          model.isFoldedEdge = true;
+  private foldEdge(isFolded, allEdges) {
+    allEdges.forEach((edgeModel, index) => {
+      const {
+        id,
+        sourceNodeId,
+        targetNodeId,
+        startPoint,
+        endPoint,
+        type,
+        properties,
+        text,
+      } = edgeModel;
+      const data = {
+        id: `${id}__${index}`,
+        sourceNodeId,
+        targetNodeId,
+        startPoint,
+        endPoint,
+        type,
+        properties,
+        text: text?.value,
+      };
+      if (edgeModel.virtual) {
+        this.graphModel.deleteEdgeById(edgeModel.id);
+      }
+      // 折叠时，处理未被隐藏的边的逻辑
+      if (isFolded && edgeModel.visible !== false) {
+        // 需要确认此分组节点是新连线的起点还是终点
+        // 创建一个虚拟边，虚拟边相对真实边，起点或者终点从一起分组内部的节点成为了分组，
+        // 如果需要被隐藏的边的起点在需要折叠的分组中，那么设置虚拟边的开始节点为此分组
+        if (this.children.has(sourceNodeId) || this.id === sourceNodeId) {
+          data.startPoint = undefined;
+          data.sourceNodeId = this.id;
+        } else {
+          data.endPoint = undefined;
+          data.targetNodeId = this.id;
+        }
+        this.createVirtualEdge(data);
+        edgeModel.visible = false;
+      }
+      // 展开时，处理被隐藏的边的逻辑
+      if (!isFolded && edgeModel.visible === false) {
+        // 展开分组时：判断真实边的起点和终点是否有任一节点在已折叠分组中，如果不是，则显示真实边。如果是，这修改这个边的对应目标节点id来创建虚拟边。
+        let targetNodeIdGroup = this.graphModel.group.getNodeGroup(targetNodeId);
+        // 考虑目标节点本来就是分组的情况
+        if (!targetNodeIdGroup) {
+          targetNodeIdGroup = this.graphModel.getNodeModelById(targetNodeId);
+        }
+        let sourceNodeIdGroup = this.graphModel.group.getNodeGroup(sourceNodeId);
+        if (!sourceNodeIdGroup) {
+          sourceNodeIdGroup = this.graphModel.getNodeModelById(sourceNodeId);
+        }
+        if (targetNodeIdGroup && targetNodeIdGroup.isGroup && targetNodeIdGroup.isFolded) {
+          data.targetNodeId = targetNodeIdGroup.id;
+          data.endPoint = undefined;
+          this.createVirtualEdge(data);
+        } else if (sourceNodeIdGroup && sourceNodeIdGroup.isGroup && sourceNodeIdGroup.isFolded) {
+          data.sourceNodeId = sourceNodeIdGroup.id;
+          data.startPoint = undefined;
+          this.createVirtualEdge(data);
+        } else {
+          edgeModel.visible = true;
         }
       }
     });
+  }
+  createVirtualEdge(edgeData) {
+    edgeData.pointsList = undefined;
+    const model = this.graphModel.addEdge(edgeData);
+    model.virtual = true;
+    // 强制不保存group连线数据
+    model.getData = () => null;
+    model.text.editable = false;
+    model.isFoldedEdge = true;
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)

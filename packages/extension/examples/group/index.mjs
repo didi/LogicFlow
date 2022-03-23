@@ -1,12 +1,12 @@
 const lf = new LogicFlow({
   container: document.querySelector('#app'),
   grid: true,
-  width: 1000,
+  width: 1400,
   keyboard: {
     enabled: true
   },
   plugins: [Group, Control, DndPanel],
-  height: 500
+  height: 800
 })
 
 
@@ -31,6 +31,16 @@ class MyGroupModel extends GroupNode.model {
 class MyGroup1 extends GroupNode.view {}
 
 class MyGroupModel1 extends GroupNode.model {
+  setAttributes() {
+    const size = 80;
+    const circleOnlyAsTarget = {
+      message: "正方形节点下一个节点只能是圆形节点",
+      validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
+        return false;
+      },
+    };
+    this.targetRules.push(circleOnlyAsTarget);
+  }
   initNodeData(data) {
     super.initNodeData(data);
     this.foldable = true;
@@ -49,9 +59,6 @@ class MyGroupModel1 extends GroupNode.model {
       style.fill = "#47C769";
     }
     return style;
-  }
-  getDefaultAnchor() {
-    return [];
   }
 }
 
@@ -105,11 +112,24 @@ lf.render({
       y: 100
     },
     {
+      id: "circle_4",
+      type: "circle",
+      x: 800,
+      y: 140
+    },
+    {
       id: "group_2",
       type: "sub-process",
       x: 300,
       y: 120,
       children: ["rect_3"]
+    },
+    {
+      id: "group_4",
+      type: "sub-process",
+      x: 800,
+      y: 120,
+      children: ["circle_4"]
     }
   ]
 });

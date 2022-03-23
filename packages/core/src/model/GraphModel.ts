@@ -134,6 +134,7 @@ class GraphModel {
    * 外部拖动节点进入画布的过程中，用fakerNode来和画布上正是的节点区分开
    */
   @observable fakerNode: BaseNodeModel;
+  [key: string]: any; // 允许在groupModel上扩展属性
   constructor(options: Definition) {
     const {
       container,
