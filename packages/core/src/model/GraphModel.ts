@@ -1172,7 +1172,6 @@ class GraphModel {
    * @param offset number 距离盒子四周的距离， 默认为20
    */
   @action fitView(offset = 20): void {
-    console.log('offset', offset);
     const { nodes, width, height, rootEl, transformModel } = this;
     if (!nodes.length) { return; }
     const containerWidth = width || rootEl.clientWidth;

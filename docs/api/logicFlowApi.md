@@ -1109,6 +1109,14 @@ lf.translate(100, 100)
 lf.resetTranslate()
 ```
 
+## fitView
+
+将整个流程图缩小到画布能全部显示
+
+```js
+lf.fitView()
+```
+
 
 ## on
 
