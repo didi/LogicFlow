@@ -394,7 +394,7 @@ class GraphModel {
         nodeDraging = true;
         break;
       } else {
-        nodes.push(nodeMode.getData());
+        nodes.push(nodeMode.getHistoryData());
       }
     }
     if (nodeDraging) {
@@ -409,7 +409,7 @@ class GraphModel {
         edgeDraging = true;
         break;
       } else {
-        edges.push(edgeMode.getData());
+        edges.push(edgeMode.getHistoryData());
       }
     }
     if (edgeDraging) {

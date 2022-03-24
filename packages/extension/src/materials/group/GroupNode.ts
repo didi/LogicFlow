@@ -57,8 +57,16 @@ class GroupNodeModel extends RectResize.model {
     this.resizable = false;
     this.autoToFront = false;
     this.foldable = false;
-    this.properties.isFolded = false;
+    if (this.properties.isFolded === undefined) {
+      this.properties.isFolded = false;
+    }
     this.isFolded = this.properties.isFolded;
+    // fixme: 虽然默认保存的分组不会收起，但是如果重写保存数据分组了，
+    // 此处代码会导致多一个history记录
+    setTimeout(() => {
+      this.isFolded && this.foldGroup(this.isFolded);
+    });
+    // this.foldGroup(this.isFolded);
   }
   getResizeOutlineStyle() {
     const style = super.getResizeOutlineStyle();
@@ -233,6 +241,17 @@ class GroupNodeModel extends RectResize.model {
     const { properties } = data;
     delete properties.groupAddable;
     delete properties.isFolded;
+    return data;
+  }
+  getHistoryData() {
+    const data = super.getData();
+    data.children = [...this.children];
+    const { properties } = data;
+    delete properties.groupAddable;
+    if (properties.isFolded) { // 如果分组被折叠
+      data.x = data.x + this.unfoldedWidth / 2 - this.foldedWidth / 2;
+      data.y = data.y + this.unfoldedHight / 2 - this.foldedHeight / 2;
+    }
     return data;
   }
 }
