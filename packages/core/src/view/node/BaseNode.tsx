@@ -41,6 +41,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'NODE',
+      isStopPropagation: false,
       eventCenter,
       model,
     });

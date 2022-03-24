@@ -132,14 +132,18 @@ class CanvasOverlay extends Component<IProps, Istate> {
         gridSize,
       },
     } = this.props;
-    if (!editConfigModel.stopMoveGraph) {
-      this.stepDrag.setStep(gridSize * SCALE_X);
-      this.stepDrag.handleMouseDown(ev);
-    } else {
-      eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev });
+    const target = ev.target as HTMLElement;
+    const isFrozenElement = !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition;
+    if (target.getAttribute('name') === 'canvas-overlay' || isFrozenElement) {
+      if (!editConfigModel.stopMoveGraph) {
+        this.stepDrag.setStep(gridSize * SCALE_X);
+        this.stepDrag.handleMouseDown(ev);
+      } else {
+        eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev });
+      }
+      // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
+      this.clickHandler(ev);
     }
-    // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
-    this.clickHandler(ev);
   };
   render() {
     const {

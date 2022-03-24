@@ -3,9 +3,10 @@
 window.onload = function () {
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
-    // edgeTextDraggable: true,
-    // nodeTextDraggable: true,
-    // // stopMoveGraph: true,
+    edgeTextDraggable: true,
+    nodeTextDraggable: true,
+    adjustNodePosition: false,
+    // stopMoveGraph: true,
     // multipleSelectedKey: 'meta', // alt, shift
     hideAnchors: false,
     plugins: [
