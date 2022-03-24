@@ -23,6 +23,7 @@ type Istate = {
 type StyleAttribute = CommonTheme;
 
 export default abstract class BaseNode extends Component<IProps, Istate> {
+  t: any;
   static getModel(defaultModel) {
     return defaultModel;
   }
@@ -59,7 +60,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       isSelected, isHitable, isDragging,
     } = model;
     const { isHovered } = this.state;
-    if (isHitable && (isSelected || isHovered)) {
+    if (isHitable && (isSelected || isHovered) && !isDragging) {
       const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
         (anchor, index) => {
@@ -67,7 +68,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
           return (
             <Anchor
               anchorData={anchor}
-              nodeDraging={isDragging}
               node={this}
               style={style}
               edgeStyle={edgeStyle}
@@ -123,19 +123,62 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     return className;
   }
 
-  onDraging = ({ deltaX, deltaY }) => {
+  onDraging = ({ event }) => {
     const { model, graphModel } = this.props;
-    const { isDraging } = this.state;
-    if (!isDraging) {
-      this.setState({
-        isDraging: true,
-      });
+    // const { isDragging } = model;
+    const {
+      editConfigModel,
+      transformModel,
+      width,
+      height,
+      gridSize,
+    } = graphModel;
+    model.isDragging = true;
+    const { clientX, clientY } = event;
+    const {
+      domOverlayPosition: { x, y },
+      canvasOverlayPosition,
+    } = graphModel.getPointByClient({
+      x: clientX,
+      y: clientY,
+    });
+    if (x < 0
+      || y < 0
+      || x > graphModel.width
+      || y > graphModel.height) { // 鼠标超出画布
+      this.stepDrag.cancelDrag();
+      this.onDragEnd();
+      return;
     }
-    const { transformModel } = graphModel;
-    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
-    graphModel.moveNode(model.id, curDeltaX, curDeltaY);
+    // 如果禁止移动画布，则不触发。
+    const size = Math.max(gridSize, 20);
+    let nearBoundary = [];
+    if (x - model.width / 2 < 0) {
+      nearBoundary = [size, 0];
+    } else if (x + model.width / 2 - width > 0) {
+      nearBoundary = [-size, 0];
+    } else if (y - model.height / 2 < 0) {
+      nearBoundary = [0, size];
+    } else if (y + model.height / 2 - height > 0) {
+      nearBoundary = [0, -size];
+    }
+    if (this.t) {
+      clearInterval(this.t);
+    }
+    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
+      this.t = setInterval(() => {
+        const [translateX, translateY] = nearBoundary;
+        transformModel.translate(translateX, translateY);
+        graphModel.moveNode(model.id, -translateX, -translateY);
+      }, 50);
+    } else {
+      graphModel.moveNode2Coordinate(model.id, canvasOverlayPosition.x, canvasOverlayPosition.y);
+    }
   };
   onDragEnd = () => {
+    if (this.t) {
+      clearInterval(this.t);
+    }
     const { model } = this.props;
     model.isDragging = false;
   };

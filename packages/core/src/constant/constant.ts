@@ -61,6 +61,7 @@ export enum EventType {
   EDGE_ADJUST = 'edge:adjust',
   EDGE_EXCHANGE_NODE = 'edge:exchange-node',
   ANCHOR_DRAGSTART = 'anchor:dragstart',
+  ANCHOR_DRAG = 'anchor:drag',
   ANCHOR_DROP = 'anchor:drop',
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',

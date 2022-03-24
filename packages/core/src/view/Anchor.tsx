@@ -24,7 +24,6 @@ interface IProps {
   anchorIndex: number;
   graphModel: GraphModel;
   nodeModel: BaseNodeModel;
-  nodeDraging: boolean;
   setHoverOFF: Function;
 }
 
@@ -109,20 +108,29 @@ class Anchor extends Component<IProps, IState> {
       endY: anchorData.y,
     });
   };
-  onDraging = ({ deltaX, deltaY, event }) => {
+  onDraging = ({ event }) => {
     const { endX, endY } = this.state;
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;
-    const { transformModel } = graphModel;
-    const [x, y] = transformModel.moveCanvasPointByHtml(
-      [endX, endY],
-      deltaX,
-      deltaY,
+    const {
+      transformModel,
+      eventCenter,
+      width,
+      height,
+      editConfigModel,
+    } = graphModel;
+    const { clientX, clientY } = event;
+    const { domOverlayPosition: { x, y } } = graphModel.getPointByClient({
+      x: clientX,
+      y: clientY,
+    });
+    const [x1, y1] = transformModel.HtmlPointToCanvasPoint(
+      [x, y],
     );
     this.setState({
-      endX: x,
-      endY: y,
+      endX: x1,
+      endY: y1,
       draging: true,
     });
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
@@ -173,6 +181,27 @@ class Anchor extends Component<IProps, IState> {
     } else if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
       this.preTargetNode.setElementState(ElementState.DEFAULT);
+    }
+    eventCenter.emit(EventType.ANCHOR_DRAG, {
+      data: anchorData,
+      e: event,
+      nodeModel,
+    });
+    // 如果禁止移动画布，则不触发。
+    if (editConfigModel.stopMoveGraph) {
+      return;
+    }
+    if (x < 10) {
+      transformModel.translate(10, 0);
+    }
+    if (x + 10 > width) {
+      transformModel.translate(-10, 0);
+    }
+    if (y < 10) {
+      transformModel.translate(0, 10);
+    }
+    if (y + 10 > height) {
+      transformModel.translate(0, -10);
     }
   };
   onDragEnd = (event) => {

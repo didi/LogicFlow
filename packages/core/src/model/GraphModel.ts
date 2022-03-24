@@ -199,7 +199,10 @@ class GraphModel {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
       if (currentItem.visible
-        && (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false))
+        && (!this.partial
+          || currentItem.isSelected
+          || this.isElementInArea(currentItem, visibleLt, visibleRb, false)
+        )
       ) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;

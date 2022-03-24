@@ -93,12 +93,12 @@ lf.register({
 
 lf.render({
   nodes: [
-    // {
-    //   type: "my-group",
-    //   x: 400,
-    //   y: 400,
-    //   children: ["rect_2"]
-    // },
+    {
+      type: "my-group",
+      x: 400,
+      y: 400,
+      children: ["rect_2"]
+    },
     {
       id: "rect_2",
       type: "circle",
@@ -117,16 +117,16 @@ lf.render({
       x: 800,
       y: 140
     },
-    // {
-    //   id: "group_2",
-    //   type: "sub-process",
-    //   x: 300,
-    //   y: 120,
-    //   children: ["rect_3"],
-    //   properties: {
-    //     isFolded: true
-    //   }
-    // },
+    {
+      id: "group_2",
+      type: "sub-process",
+      x: 300,
+      y: 120,
+      children: ["rect_3"],
+      properties: {
+        isFolded: true
+      }
+    },
     {
       id: "group_4",
       type: "sub-process",

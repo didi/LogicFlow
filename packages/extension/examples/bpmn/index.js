@@ -5,7 +5,7 @@ window.onload = function () {
     container: document.querySelector('#app'),
     edgeTextDraggable: true,
     nodeTextDraggable: true,
-    adjustNodePosition: false,
+    // adjustNodePosition: false,
     // stopMoveGraph: true,
     // multipleSelectedKey: 'meta', // alt, shift
     hideAnchors: false,
