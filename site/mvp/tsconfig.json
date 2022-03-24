@@ -15,7 +15,9 @@
     "noEmit": true,
     "strictPropertyInitialization": false
   },
-  "include": [],
+  "include": [
+    "src/*"
+  ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",

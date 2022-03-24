@@ -317,7 +317,7 @@ h("rect", {
   ...style,
   x: x - width / 2, 
   y: y - height / 2,
-  rx: radius,
+  rx: radius, // 注意这里是rx而不是radius
   ry: radius,
   width,
   height
@@ -362,6 +362,10 @@ h("polygon", {
   points: pointStr, // 
 })
 ```
+
+::: tip 自定义矩形的view时radius设置
+在`model`中，`radius`是矩形节点的形状属性。但是在自定义`view`时需要注意，svg里面设置矩形的圆角并不是用`radius`，而是使用[rx](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/rx), ry。所以在自定义`view`的矩形时，需要将model中`radius`的赋值给`rx`和`ry`，否则圆角将不生效。
+:::
 
 #### props
 
@@ -508,7 +512,7 @@ class SquareModel extends RectNodeModel {
     this.sourceRules.push(rule);
   }
   getAnchorStyle(anchorInfo) {
-    const style = super.getAnchorStyle();
+    const style = super.getAnchorStyle(anchorInfo);
     if (anchorInfo.type === 'left') {
       style.fill = 'red'
       style.hover.fill = 'transparent'

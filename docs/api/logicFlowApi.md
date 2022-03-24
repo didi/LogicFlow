@@ -49,16 +49,18 @@ const lf = new LogicFlow(options: Options)
 
 ### `background`
 
-背景默认无，支持选项：
+背景默认无；支持透传任何样式属性到背景层
 
 ```js
 export type BackgroundConfig = {
-  image?: string; // 背景图片地址
-  color?: string; // 背景色
-  repeat?: string; // 背景图片重复
-  position?: string; // 背景图片位置
-  size?: string; // 背景图片尺寸
-  opacity?: number; // 背景透明度
+  backgroundImage?: string; // 背景图片地址
+  backgroundColor?: string; // 背景色
+  backgroundRepeat?: string;  // 背景图片重复
+  backgroundPosition?: string; // 背景图片位置
+  backgroundSize?: string;  // 背景图片尺寸
+  backgroundOpacity?: number; // 背景透明度
+  filter?: string; // 滤镜
+  [key: any]: any;
 };
 ```
 
@@ -1107,6 +1109,14 @@ lf.translate(100, 100)
 
 ```js
 lf.resetTranslate()
+```
+
+## fitView
+
+将整个流程图缩小到画布能全部显示
+
+```js
+lf.fitView()
 ```
 
 

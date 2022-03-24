@@ -421,11 +421,11 @@ console.log(edgeModel)
 
 返回值
 
-[NodeModel](/api/baseNodeModelApi.html) 
+[EdgeModel](/api/baseEdgeModelApi.html) 
 
 ```js
-cosnt nodeModel = graphModel.getElement('node_id_1');
-console.log(nodeModel)
+cosnt edgeModels = graphModel.getNodeEdges('node_id_1');
+console.log(edgeModels)
 ```
 
 ## getSelectElements

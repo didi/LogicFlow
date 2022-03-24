@@ -13,10 +13,6 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class RectResizeModel extends RectNodeModel {
-  minWidth = 30;
-  minHeight = 30;
-  maxWidth = 2000;
-  maxHeight = 2000;
   constructor(data, graphModel) {
     super(data, graphModel);
     const { nodeSize } = this.properties;
@@ -24,6 +20,13 @@ class RectResizeModel extends RectNodeModel {
       this.width = nodeSize.width;
       this.height = nodeSize.height;
     }
+  }
+  initNodeData(data: any): void {
+    super.initNodeData(data);
+    this.minWidth = 30;
+    this.minHeight = 30;
+    this.maxWidth = 2000;
+    this.maxHeight = 2000;
   }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
@@ -36,7 +39,7 @@ class RectResizeModel extends RectNodeModel {
   getResizeOutlineStyle() {
     return {
       fill: 'none',
-      stroke: '#000000',
+      stroke: 'transparent', // 矩形默认不显示调整边框
       strokeWidth: 1,
       strokeDasharray: '3,3',
     };

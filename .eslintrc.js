@@ -27,6 +27,7 @@ module.exports = {
       pragma: 'h',
     },
   },
+  ignorePatterns: ["**/*.mjs"],
   rules: {
     'indent': ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],

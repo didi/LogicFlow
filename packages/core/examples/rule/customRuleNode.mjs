@@ -36,7 +36,7 @@ class CustomHexagonModel extends PolygonNodeModel {
     return style
   }
   getAnchorStyle(anchorInfo) {
-    const style = super.getAnchorStyle();
+    const style = super.getAnchorStyle(anchorInfo);
     if (anchorInfo.name === 'left') {
       style.stroke = 'red';
       style.strokeWidth = 2;

@@ -38,7 +38,9 @@ class Group {
 
       return true;
     });
+    lf.graphModel.group = this;
     lf.on('node:add', this.appendNodeToGrop);
+    lf.on('node:delete', this.deleteGroupChild);
     lf.on('node:drop', this.appendNodeToGrop);
     lf.on('node:dnd-drag', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
@@ -74,6 +76,14 @@ class Group {
       group.setAllowAppendChild(false);
     }
   };
+  deleteGroupChild = ({ data }) => {
+    const groupId = this.nodeGroupMap.get(data.id);
+    if (groupId) {
+      const group = this.lf.getNodeModelById(groupId);
+      group.removeChild(data.id);
+      this.nodeGroupMap.delete(data.id);
+    }
+  };
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
     if (nodeModel.isGroup) return;
@@ -89,14 +99,6 @@ class Group {
       }
     }
   };
-  getGroups() {
-    const groups = [];
-    this.lf.graphModel.nodes.forEach((nodeModel) => {
-      if (nodeModel.isGroup) {
-        groups.push(nodeModel);
-      }
-    });
-  }
   /**
    * 获取自定位置其所属分组
    */
@@ -107,6 +109,15 @@ class Group {
       if (model.isGroup && model.isInRange(bounds)) {
         return model;
       }
+    }
+  }
+  /**
+   * 获取某个节点所属的groupModel
+   */
+  getNodeGroup(nodeId) {
+    const groupId = this.nodeGroupMap.get(nodeId);
+    if (groupId) {
+      return this.lf.getNodeModelById(groupId);
     }
   }
 }

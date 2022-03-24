@@ -113,6 +113,7 @@
     <button onClick="triggerLine()">触发边</button>
     <button onClick="translateCenter()">居中</button>
     <button onClick="fitView()">适应屏幕</button>
+    <button onClick="getNodeEdges()">获取节点所有的边</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -369,8 +370,8 @@
         const lf = new LogicFlow({
           container: document.querySelector('#app'),
           // hideAnchors: true,
-          // width: 700,
-          // height: 500,
+          width: 700,
+          height: 500,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
@@ -380,6 +381,7 @@
           disabledTools: ['multipleSelect'],
           // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
+          // stopMoveGraph: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
@@ -642,6 +644,11 @@
             y: 100,
           })
         }
+        window.getNodeEdges = function getNodeEdges() {
+          const a = lf.getSelectElements().nodes[0].id;
+          const edgeModels = lf.getNodeEdges(a)
+          console.log(edgeModels);
+        }
         window.mouseDownText = function mouseDownText() {
           lf.dnd.startDrag({
             type: 'text',
@@ -729,9 +736,9 @@
         lf.on('text:update', (data) => {
           console.log('test:update', data)
         });
-        // lf.on('graph:transform', (data) => {
-        //   console.log(data)
-        // })
+        lf.on('blank:mousemove', (data) => {
+          console.log(data)
+        })
         lf.on('node:click', ({ data }) => {
           // const model = lf.graphModel.getElement(data.id)
           // model.fill = 'red'

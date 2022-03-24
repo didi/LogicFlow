@@ -21,6 +21,9 @@ window.addEventListener('DOMContentLoaded', () => {
     model: RectNodeModel,
   })
   lf.closeSelectionSelect()
+  lf.on('selection:selected', (data) => {
+    console.log(data)
+  })
   lf.render({
     nodes: [
       {

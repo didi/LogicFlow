@@ -137,7 +137,7 @@ window.onload = function () {
         y: 100,
       },
       {
-        id: 'diamond_34',
+        id: 'diamond_36',
         type: 'resizable-hexagon',
         x: 900,
         y: 250,

@@ -121,7 +121,7 @@ class UserTaskModel extends RectNodeModel {
 ```js
 class UserTaskModel extends RectNodeModel {
   getAnchorStyle(anchorInfo) {
-    const style = super.getAnchorStyle();
+    const style = super.getAnchorStyle(anchorInfo);
     style.stroke = "rgb(24, 125, 255)";
     style.r = 3;
     style.hover.r = 8;

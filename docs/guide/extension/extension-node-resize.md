@@ -110,7 +110,73 @@ lf.on('node:resize', ({oldNodeSize, newNodeSize}) => {
 })
 ```
 
-## 示例
+## 设置放大缩小的最大最小值 
+
+`v1.1.8`后，节点的放大缩小支持设置最大值和最小值。 
+
+```js
+class ResizableRectModel extends RectResize.model {
+  initNodeData(data) {
+    super.initNodeData(data)
+    this.width = 100;
+    this.height = 40;
+    this.maxWidth = 400;
+    this.maxHeight = 400;
+  }
+}
+```
+
+## 设置放大缩小的调整默认距离
+
+`v1.1.8`后，支持设置节点的`girdSize`属性，用来控制鼠标移动多少距离后开始缩放节点。
+
+```js
+class ResizableRectModel extends RectResize.model {
+  initNodeData(data) {
+    super.initNodeData(data)
+    this.gridSize = 400;
+  }
+}
+```
+
+::: tip 关于节点缩放的gridSize
+大多数情况下，为了保证节点的`整齐`，便于节点之间的上下左右对齐。`logicflow`默认在放大缩小时，只有鼠标移动的距离达到初始化画布传入的`gridSize`两倍时才改变节点的大小。但是这样会有一个缺点，那就是调整的时候有卡顿的感觉。可以再不改变初始化`gridSize`的情况下，单独设置每个节点的`gridSize`来让放大缩小节点更流畅。
+:::
+
+## 设置调整边框样式
+
+可放大缩小节点在被选中时，会贴着节点显示一个虚线框（矩形没有）。可以通过重写`getResizeOutlineStyle`方法实现自定义其样式。
+
+```js
+class ResizableRectModel extends RectResize.model {
+  getResizeOutlineStyle() {
+    return {
+      stroke: '#000000',
+      strokeWidth: 1,
+      strokeDasharray: '3,3',
+    };
+  }
+}
+```
+
+## 设置调整点样式
+
+可放大缩小节点在被选中时，会在虚线框的四个角生成调整节点大小的操作点，可以通过重写`getControlPointStyle`方法实现自定义其样式。
+
+
+```js
+class ResizableRectModel extends RectResize.model {
+  getControlPointStyle() {
+    return {
+      width: 7,
+      height: 7,
+      fill: '#FFFFFF',
+      stroke: '#000000',
+    };
+  }
+}
+```
+
 
 地址: [https://codesandbox.io/s/prod-resonance-ztpvtv](https://codesandbox.io/s/prod-resonance-ztpvtv?file=/step_26_nodeResize/index.js)
 
