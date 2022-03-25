@@ -392,8 +392,20 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
+  moveStartPoint(deltaX, deltaY): void {
+    this.startPoint.x += deltaX;
+    this.startPoint.y += deltaY;
+  }
+
+  @action
   updateEndPoint(anchor): void {
     this.endPoint = anchor;
+  }
+
+  @action
+  moveEndPoint(deltaX, deltaY): void {
+    this.endPoint.x += deltaX;
+    this.endPoint.y += deltaY;
   }
 
   @action

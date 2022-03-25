@@ -277,8 +277,23 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
+  moveStartPoint(deltaX, deltaY): void {
+    this.startPoint.x += deltaX;
+    this.startPoint.y += deltaY;
+    this.updatePoints();
+    // todo: 尽量保持边的整体轮廓, 通过deltaX和deltaY更新pointsList，而不是重新计算。
+  }
+
+  @action
   updateEndPoint(anchor) {
     this.endPoint = anchor;
+    this.updatePoints();
+  }
+
+  @action
+  moveEndPoint(deltaX, deltaY): void {
+    this.endPoint.x += deltaX;
+    this.endPoint.y += deltaY;
     this.updatePoints();
   }
 

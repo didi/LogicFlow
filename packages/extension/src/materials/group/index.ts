@@ -70,10 +70,16 @@ class Group {
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
     const bounds = this.lf.getNodeModelById(data.id).getBounds();
     const group = this.getGroup(bounds);
-    if (group && data.id !== group.id) {
+    if (!group) return;
+    if (data.id !== group.id) {
       group.addChild(data.id);
       this.nodeGroupMap.set(data.id, group.id);
       group.setAllowAppendChild(false);
+    } else if (data.children && data.children.length > 0) {
+      // 表示当前添加的节点是一个新增的group
+      data.children.forEach((nodeId) => {
+        this.nodeGroupMap.set(nodeId, data.id);
+      });
     }
   };
   deleteGroupChild = ({ data }) => {

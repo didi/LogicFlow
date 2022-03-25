@@ -82,6 +82,7 @@ class GroupNodeModel extends RectResize.model {
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
     this.isFolded = isFolded;
+    console.log(44);
     // step 1
     if (isFolded) {
       this.x = this.x - this.width / 2 + this.foldedWidth / 2;
@@ -154,6 +155,15 @@ class GroupNodeModel extends RectResize.model {
       if (edgeModel.virtual) {
         this.graphModel.deleteEdgeById(edgeModel.id);
       }
+      let targetNodeIdGroup = this.graphModel.group.getNodeGroup(targetNodeId);
+      // 考虑目标节点本来就是分组的情况
+      if (!targetNodeIdGroup) {
+        targetNodeIdGroup = this.graphModel.getNodeModelById(targetNodeId);
+      }
+      let sourceNodeIdGroup = this.graphModel.group.getNodeGroup(sourceNodeId);
+      if (!sourceNodeIdGroup) {
+        sourceNodeIdGroup = this.graphModel.getNodeModelById(sourceNodeId);
+      }
       // 折叠时，处理未被隐藏的边的逻辑
       if (isFolded && edgeModel.visible !== false) {
         // 需要确认此分组节点是新连线的起点还是终点
@@ -166,21 +176,15 @@ class GroupNodeModel extends RectResize.model {
           data.endPoint = undefined;
           data.targetNodeId = this.id;
         }
-        this.createVirtualEdge(data);
+        // 如果边的起点和终点都在分组内部，则不创建新的虚拟边
+        if (targetNodeIdGroup.id !== this.id || sourceNodeIdGroup.id !== this.id) {
+          this.createVirtualEdge(data);
+        }
         edgeModel.visible = false;
       }
       // 展开时，处理被隐藏的边的逻辑
       if (!isFolded && edgeModel.visible === false) {
         // 展开分组时：判断真实边的起点和终点是否有任一节点在已折叠分组中，如果不是，则显示真实边。如果是，这修改这个边的对应目标节点id来创建虚拟边。
-        let targetNodeIdGroup = this.graphModel.group.getNodeGroup(targetNodeId);
-        // 考虑目标节点本来就是分组的情况
-        if (!targetNodeIdGroup) {
-          targetNodeIdGroup = this.graphModel.getNodeModelById(targetNodeId);
-        }
-        let sourceNodeIdGroup = this.graphModel.group.getNodeGroup(sourceNodeId);
-        if (!sourceNodeIdGroup) {
-          sourceNodeIdGroup = this.graphModel.getNodeModelById(sourceNodeId);
-        }
         if (targetNodeIdGroup && targetNodeIdGroup.isGroup && targetNodeIdGroup.isFolded) {
           data.targetNodeId = targetNodeIdGroup.id;
           data.endPoint = undefined;
