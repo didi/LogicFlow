@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.8-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.7-alpha.0...@logicflow/core@1.1.8-alpha.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* 修复了`group`插件在多个`group`节点一起被折叠报错的问题。 ([396736e](https://github.com/didi/LogicFlow/commit/396736e07c320985f7c779b272085ba1f66f1083))
+* group undo cannot fold ([5860d7e](https://github.com/didi/LogicFlow/commit/5860d7ef4770f655fab1bb5ee6114dc63757b725))
+
+
+### Features
+
+* 调整translateCenter方法的挂载对象 ([d10a526](https://github.com/didi/LogicFlow/commit/d10a5263c1c922ee0b0356c01dde248dec6fe5d0))
+* 画布居中代码优化 ([d06b162](https://github.com/didi/LogicFlow/commit/d06b16296c0e655c93f6e6670f09156c89c7204e))
+* 优化画布图形居中虚拟矩形的计算规则，新增适应屏幕大小功能 ([e0c0ea1](https://github.com/didi/LogicFlow/commit/e0c0ea15f4962ca9502606fec6ddc070d65c78a7))
+* 支持画布整体居中 ([39b1532](https://github.com/didi/LogicFlow/commit/39b15324bb978b2842f6638a9fa0626621910323))
+* add node resize maxwidth and maxheight ([e98f575](https://github.com/didi/LogicFlow/commit/e98f575d19c5c7c9a74c7ad3302c1a8cb02bd5e3))
+* add vue3 example ([9969b97](https://github.com/didi/LogicFlow/commit/9969b978d93ce863901d364bc5f01a9b9f6db269))
+* optimize drag node behavior ([f88042d](https://github.com/didi/LogicFlow/commit/f88042d5623a0983003bd70098b4e0c12ba60d3d))
+
+
+
+
+
 ## [1.1.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.7-alpha.0...@logicflow/core@1.1.7) (2022-03-07)
 
 **Note:** Version bump only for package @logicflow/core
