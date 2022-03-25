@@ -199,7 +199,10 @@ class GraphModel {
       const currentItem = elements[i];
       // 如果节点不在可见区域，且不是全元素显示模式，则隐藏节点。
       if (currentItem.visible
-        && (!this.partial || this.isElementInArea(currentItem, visibleLt, visibleRb, false))
+        && (!this.partial
+          || currentItem.isSelected
+          || this.isElementInArea(currentItem, visibleLt, visibleRb, false)
+        )
       ) {
         if (currentItem.zIndex === ElementMaxzIndex) {
           topElementIdx = showElements.length;
@@ -394,7 +397,7 @@ class GraphModel {
         nodeDraging = true;
         break;
       } else {
-        nodes.push(nodeMode.getData());
+        nodes.push(nodeMode.getHistoryData());
       }
     }
     if (nodeDraging) {
@@ -409,7 +412,7 @@ class GraphModel {
         edgeDraging = true;
         break;
       } else {
-        edges.push(edgeMode.getData());
+        edges.push(edgeMode.getHistoryData());
       }
     }
     if (edgeDraging) {
@@ -751,16 +754,18 @@ class GraphModel {
       const nodeAsSource = this.edges[i].sourceNodeId === nodeId;
       const nodeAsTarget = this.edges[i].targetNodeId === nodeId;
       if (nodeAsSource) {
-        edgeModel.updateStartPoint({
-          x: edgeModel.startPoint.x + deltaX,
-          y: edgeModel.startPoint.y + deltaY,
-        });
+        // edgeModel.updateStartPoint({
+        //   x: edgeModel.startPoint.x + deltaX,
+        //   y: edgeModel.startPoint.y + deltaY,
+        // });
+        edgeModel.moveStartPoint(deltaX, deltaY);
       }
       if (nodeAsTarget) {
-        edgeModel.updateEndPoint({
-          x: edgeModel.endPoint.x + deltaX,
-          y: edgeModel.endPoint.y + deltaY,
-        });
+        // edgeModel.updateEndPoint({
+        //   x: edgeModel.endPoint.x + deltaX,
+        //   y: edgeModel.endPoint.y + deltaY,
+        // });
+        edgeModel.moveEndPoint(deltaX, deltaY);
       }
       // 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新边距离最短距离的点
       // 最大程度保持节点位置不变且在边上

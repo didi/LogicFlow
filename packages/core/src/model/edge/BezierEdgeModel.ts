@@ -84,6 +84,10 @@ export default class BezierEdgeModel extends BaseEdgeModel {
 
   @action
   updatePoints() {
+    const { sNext, ePre } = this.getControls();
+    this.updatePath(sNext, ePre);
+  }
+  updatePath(sNext, ePre) {
     const start = {
       x: this.startPoint.x,
       y: this.startPoint.y,
@@ -92,26 +96,14 @@ export default class BezierEdgeModel extends BaseEdgeModel {
       x: this.endPoint.x,
       y: this.endPoint.y,
     };
-    const { sNext, ePre } = this.getControls();
+    if (!sNext || !ePre) {
+      const control = this.getControls();
+      sNext = control.sNext;
+      ePre = control.ePre;
+    }
     this.pointsList = [start, sNext, ePre, end];
     this.path = this.getPath(this.pointsList);
   }
-  // 为了曲线更好看，移动节点的时候，重新计算曲线，不再保留原来的控制点
-  // @action
-  // updatePath() {
-  //   const start = {
-  //     x: this.startPoint.x,
-  //     y: this.startPoint.y,
-  //   };
-  //   const end = {
-  //     x: this.endPoint.x,
-  //     y: this.endPoint.y,
-  //   };
-  //   const [, sNext, ePre] = this.pointsList;
-  //   this.pointsList = [start, sNext, ePre, end];
-  //   this.path = this.getPath(this.pointsList);
-  // }
-
   @action
   updateStartPoint(anchor) {
     this.startPoint = anchor;
@@ -123,7 +115,26 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.endPoint = anchor;
     this.updatePoints();
   }
-
+  @action
+  moveStartPoint(deltaX, deltaY): void {
+    this.startPoint.x += deltaX;
+    this.startPoint.y += deltaY;
+    const [, sNext, ePre] = this.pointsList;
+    // 保持调整点一起移动
+    sNext.x += deltaX;
+    sNext.y += deltaY;
+    this.updatePath(sNext, ePre);
+  }
+  @action
+  moveEndPoint(deltaX, deltaY): void {
+    this.endPoint.x += deltaX;
+    this.endPoint.y += deltaY;
+    const [, sNext, ePre] = this.pointsList;
+    // 保持调整点一起移动
+    ePre.x += deltaX;
+    ePre.y += deltaY;
+    this.updatePath(sNext, ePre);
+  }
   @action
   updateAdjustAnchor(anchor: Point, type: string) {
     if (type === 'sNext') {

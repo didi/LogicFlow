@@ -3,6 +3,7 @@ import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
+// import { snapToGrid } from './geometry';
 
 const DOC = window.document;
 const LEFT_MOUSE_BUTTON_CODE = 0;

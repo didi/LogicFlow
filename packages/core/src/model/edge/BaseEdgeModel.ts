@@ -239,7 +239,14 @@ class BaseEdgeModel implements IBaseModel {
     }
     return data;
   }
-
+  /**
+   * 用于在历史记录时获取节点数据，
+   * 在某些情况下，如果希望某个属性变化不引起history的变化，
+   * 可以重写此方法。
+   */
+  getHistoryData(): EdgeData {
+    return this.getData();
+  }
   @action
   setProperty(key, val): void {
     this.properties[key] = formatData(val);
@@ -385,8 +392,20 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
+  moveStartPoint(deltaX, deltaY): void {
+    this.startPoint.x += deltaX;
+    this.startPoint.y += deltaY;
+  }
+
+  @action
   updateEndPoint(anchor): void {
     this.endPoint = anchor;
+  }
+
+  @action
+  moveEndPoint(deltaX, deltaY): void {
+    this.endPoint.x += deltaX;
+    this.endPoint.y += deltaY;
   }
 
   @action

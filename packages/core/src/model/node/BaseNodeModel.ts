@@ -227,6 +227,14 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return data;
   }
   /**
+   * 用于在历史记录时获取节点数据，
+   * 在某些情况下，如果希望某个属性变化不引起history的变化，
+   * 可以重写此方法。
+   */
+  getHistoryData(): NodeData {
+    return this.getData();
+  }
+  /**
    * 获取当前节点的properties
    */
   getProperties() {

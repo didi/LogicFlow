@@ -122,14 +122,20 @@ lf.render({
       type: "sub-process",
       x: 300,
       y: 120,
-      children: ["rect_3"]
+      children: ["rect_3"],
+      properties: {
+        isFolded: true
+      }
     },
     {
       id: "group_4",
       type: "sub-process",
       x: 800,
       y: 120,
-      children: ["circle_4"]
+      children: ["circle_4"],
+      properties: {
+        isFolded: true
+      }
     }
   ]
 });
