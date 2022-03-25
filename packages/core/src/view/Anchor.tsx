@@ -40,6 +40,7 @@ class Anchor extends Component<IProps, IState> {
   sourceRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，source的校验规则产生的结果不同
   targetRuleResults: Map<TargetNodeId, ConnectRuleResult>; // 不同的target，target的校验规则不同
   dragHandler: StepDrag;
+  t: any;
   constructor() {
     super();
     this.sourceRuleResults = new Map();
@@ -109,7 +110,6 @@ class Anchor extends Component<IProps, IState> {
     });
   };
   onDraging = ({ event }) => {
-    const { endX, endY } = this.state;
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;
@@ -121,90 +121,55 @@ class Anchor extends Component<IProps, IState> {
       editConfigModel,
     } = graphModel;
     const { clientX, clientY } = event;
-    const { domOverlayPosition: { x, y } } = graphModel.getPointByClient({
+    const {
+      domOverlayPosition: { x, y },
+      canvasOverlayPosition: { x: x1, y: y1 },
+    } = graphModel.getPointByClient({
       x: clientX,
       y: clientY,
     });
-    const [x1, y1] = transformModel.HtmlPointToCanvasPoint(
-      [x, y],
-    );
+    if (this.t) {
+      clearInterval(this.t);
+    }
+    let nearBoundary = [];
+    const size = 10;
+    if (x < 10) {
+      nearBoundary = [size, 0];
+    } else if (x + 10 > width) {
+      nearBoundary = [-size, 0];
+    } else if (y < 10) {
+      nearBoundary = [0, size];
+    } else if (y + 10 > height) {
+      nearBoundary = [0, -size];
+    }
     this.setState({
       endX: x1,
       endY: y1,
       draging: true,
     });
-    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
-    if (info) {
-      const targetNode = info.node;
-      const anchorId = info.anchor.id;
-      if (this.preTargetNode && this.preTargetNode !== info.node) {
-        this.preTargetNode.setElementState(ElementState.DEFAULT);
-      }
-      // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
-      if (anchorData.id === anchorId) {
-        return;
-      }
-      this.preTargetNode = targetNode;
-      // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
-      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`;
-
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
-      if (!this.targetRuleResults.has(targetInfoId)) {
-        const targetAnchor = info.anchor;
-        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
-          targetNode,
-          anchorData,
-          targetAnchor,
-        );
-        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
-          nodeModel,
-          anchorData,
-          targetAnchor,
-        );
-        this.sourceRuleResults.set(
-          targetInfoId,
-          formateAnchorConnectValidateData(sourceRuleResult),
-        );
-        this.targetRuleResults.set(
-          targetInfoId,
-          formateAnchorConnectValidateData(targetRuleResult),
-        );
-      }
-      const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetInfoId);
-      const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
-      // 实时提示出即将链接的锚点
-      if (isSourcePass && isTargetPass) {
-        targetNode.setElementState(ElementState.ALLOW_CONNECT);
-      } else {
-        targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT);
-      }
-    } else if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
-      // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
-      this.preTargetNode.setElementState(ElementState.DEFAULT);
+    this.moveAnchorEnd(x1, y1);
+    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
+      this.t = setInterval(() => {
+        const [translateX, translateY] = nearBoundary;
+        transformModel.translate(translateX, translateY);
+        const { endX, endY } = this.state;
+        this.setState({
+          endX: endX - translateX,
+          endY: endY - translateY,
+        });
+        this.moveAnchorEnd(endX - translateX, endY - translateY);
+      }, 50);
     }
     eventCenter.emit(EventType.ANCHOR_DRAG, {
       data: anchorData,
       e: event,
       nodeModel,
     });
-    // 如果禁止移动画布，则不触发。
-    if (editConfigModel.stopMoveGraph) {
-      return;
-    }
-    if (x < 10) {
-      transformModel.translate(10, 0);
-    }
-    if (x + 10 > width) {
-      transformModel.translate(-10, 0);
-    }
-    if (y < 10) {
-      transformModel.translate(0, 10);
-    }
-    if (y + 10 > height) {
-      transformModel.translate(0, -10);
-    }
   };
   onDragEnd = (event) => {
+    if (this.t) {
+      clearInterval(this.t);
+    }
     this.checkEnd();
     this.setState({
       startX: 0,
@@ -271,6 +236,58 @@ class Anchor extends Component<IProps, IState> {
       }
     }
   };
+  moveAnchorEnd(endX: number, endY: number) {
+    const { graphModel, nodeModel, anchorData } = this.props;
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
+    if (info) {
+      const targetNode = info.node;
+      const anchorId = info.anchor.id;
+      if (this.preTargetNode && this.preTargetNode !== info.node) {
+        this.preTargetNode.setElementState(ElementState.DEFAULT);
+      }
+      // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
+      if (anchorData.id === anchorId) {
+        return;
+      }
+      this.preTargetNode = targetNode;
+      // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
+      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`;
+
+      // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
+      if (!this.targetRuleResults.has(targetInfoId)) {
+        const targetAnchor = info.anchor;
+        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+          targetNode,
+          anchorData,
+          targetAnchor,
+        );
+        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+          nodeModel,
+          anchorData,
+          targetAnchor,
+        );
+        this.sourceRuleResults.set(
+          targetInfoId,
+          formateAnchorConnectValidateData(sourceRuleResult),
+        );
+        this.targetRuleResults.set(
+          targetInfoId,
+          formateAnchorConnectValidateData(targetRuleResult),
+        );
+      }
+      const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetInfoId);
+      const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
+      // 实时提示出即将链接的锚点
+      if (isSourcePass && isTargetPass) {
+        targetNode.setElementState(ElementState.ALLOW_CONNECT);
+      } else {
+        targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT);
+      }
+    } else if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
+      // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
+      this.preTargetNode.setElementState(ElementState.DEFAULT);
+    }
+  }
   isShowLine() {
     const {
       startX,

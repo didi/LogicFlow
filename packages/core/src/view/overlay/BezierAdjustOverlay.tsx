@@ -3,7 +3,7 @@ import { ModelType } from '../../constant/constant';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import { Point } from '../../type';
-import { createDrag } from '../../util/drag';
+import { StepDrag } from '../../util/drag';
 import { getBezierPoints } from '../../util/edge';
 import Circle from '../basic-shape/Circle';
 import Line from '../basic-shape/Line';
@@ -27,35 +27,26 @@ type IState = {
 
 // bezier曲线的可调整锚点
 class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
-  dragHandler: Function;
-  constructor(props) {
+  dragHandler: StepDrag;
+  constructor() {
     super();
-    this.dragHandler = createDrag({
+    this.dragHandler = new StepDrag({
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
     });
-    const { position } = props;
-    this.state = {
-      endX: position.x,
-      endY: position.y,
-    };
   }
-  onDraging = ({ deltaX, deltaY }) => {
+  onDraging = ({ event }) => {
     const { graphModel, bezierModel, type } = this.props;
-    const { transformModel } = graphModel;
-    const { endX, endY } = this.state;
-    const [x, y] = transformModel.moveCanvasPointByHtml(
-      [endX, endY],
-      deltaX,
-      deltaY,
-    );
-    this.setState({ endX: x, endY: y });
+    const {
+      canvasOverlayPosition: { x, y },
+    } = graphModel.getPointByClient({
+      x: event.clientX,
+      y: event.clientY,
+    });
     bezierModel.updateAdjustAnchor({ x, y }, type);
   };
   onDragEnd = (() => {
-    const { endX, endY } = this.state;
-    const { bezierModel, type } = this.props;
-    bezierModel.updateAdjustAnchor({ x: endX, y: endY }, type);
+    const { bezierModel } = this.props;
     bezierModel.isDragging = false;
   });
   render() {
@@ -73,7 +64,11 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
         {
           ...adjustAnchor
         }
-        onMouseDown={this.dragHandler}
+        onMouseDown={(ev) => {
+          // if (edgeAddable !== false) {
+          this.dragHandler.handleMouseDown(ev);
+          // }
+        }}
       />
     );
   }
