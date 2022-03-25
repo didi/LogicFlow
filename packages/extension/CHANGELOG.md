@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.8-alpha.0...@logicflow/extension@1.1.9-alpha.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* 修复新增分组子节点未被记录的问题 ([24d9fc9](https://github.com/didi/LogicFlow/commit/24d9fc9d056f34141520da4a3f9482fe031ec325))
+
+
+
+
+
 ## [1.1.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.8-alpha.0...@logicflow/extension@1.1.8) (2022-03-25)
 
 
