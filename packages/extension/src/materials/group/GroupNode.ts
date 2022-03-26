@@ -82,7 +82,6 @@ class GroupNodeModel extends RectResize.model {
   foldGroup(isFolded) {
     this.setProperty('isFolded', isFolded);
     this.isFolded = isFolded;
-    console.log(44);
     // step 1
     if (isFolded) {
       this.x = this.x - this.width / 2 + this.foldedWidth / 2;

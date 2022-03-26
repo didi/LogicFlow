@@ -24,6 +24,7 @@ type StyleAttribute = CommonTheme;
 
 export default abstract class BaseNode extends Component<IProps, Istate> {
   t: any;
+  moveOffset: { x: number; y: number; };
   static getModel(defaultModel) {
     return defaultModel;
   }
@@ -38,6 +39,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     } = props;
     // 不在构造函数中判断，因为editConfig可能会被动态改变
     this.stepDrag = new StepDrag({
+      onDragStart: this.onDragStart,
       onDraging: this.onDraging,
       onDragEnd: this.onDragEnd,
       step: gridSize,
@@ -122,7 +124,19 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     return className;
   }
-
+  onDragStart = ({ event: { clientX, clientY } }) => {
+    const { model, graphModel } = this.props;
+    const {
+      canvasOverlayPosition: { x, y },
+    } = graphModel.getPointByClient({
+      x: clientX,
+      y: clientY,
+    });
+    this.moveOffset = {
+      x: model.x - x,
+      y: model.y - y,
+    };
+  };
   onDraging = ({ event }) => {
     const { model, graphModel } = this.props;
     // const { isDragging } = model;
@@ -135,31 +149,39 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     } = graphModel;
     model.isDragging = true;
     const { clientX, clientY } = event;
-    const {
-      domOverlayPosition: { x, y },
-      canvasOverlayPosition,
+    let {
+      canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
       x: clientX,
       y: clientY,
     });
-    if (x < 0
-      || y < 0
-      || x > graphModel.width
-      || y > graphModel.height) { // 鼠标超出画布
-      this.stepDrag.cancelDrag();
-      this.onDragEnd();
+    const [x1, y1] = transformModel.CanvasPointToHtmlPoint([x, y]);
+    if (x1 < 0
+      || y1 < 0
+      || x1 > graphModel.width
+      || y1 > graphModel.height) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
       return;
     }
-    // 如果禁止移动画布，则不触发。
+    // 1. 考虑画布被缩放
+    // 2. 考虑鼠标位置不再节点中心
+    x = x + this.moveOffset.x;
+    y = y + this.moveOffset.y;
+    // 取节点左上角和右下角，计算节点移动是否超出范围
+    const [leftTopX, leftTopY] = transformModel.CanvasPointToHtmlPoint(
+      [x - model.width / 2, y - model.height / 2],
+    );
+    const [rightBottomX, rightBottomY] = transformModel.CanvasPointToHtmlPoint(
+      [x + model.width / 2, y + model.height / 2],
+    );
     const size = Math.max(gridSize, 20);
     let nearBoundary = [];
-    if (x - model.width / 2 < 0) {
+    if (leftTopX < 0) {
       nearBoundary = [size, 0];
-    } else if (x + model.width / 2 - width > 0) {
+    } else if (rightBottomX > graphModel.width) {
       nearBoundary = [-size, 0];
-    } else if (y - model.height / 2 < 0) {
+    } else if (leftTopY < 0) {
       nearBoundary = [0, size];
-    } else if (y + model.height / 2 - height > 0) {
+    } else if (rightBottomY > graphModel.height) {
       nearBoundary = [0, -size];
     }
     if (this.t) {
@@ -169,10 +191,16 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       this.t = setInterval(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);
-        graphModel.moveNode(model.id, -translateX, -translateY);
+        graphModel.moveNode(
+          model.id, -translateX / transformModel.SCALE_X, -translateY / transformModel.SCALE_X,
+        );
       }, 50);
     } else {
-      graphModel.moveNode2Coordinate(model.id, canvasOverlayPosition.x, canvasOverlayPosition.y);
+      graphModel.moveNode2Coordinate(
+        model.id,
+        x,
+        y,
+      );
     }
   };
   onDragEnd = () => {
