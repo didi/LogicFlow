@@ -399,6 +399,15 @@ export type AnchorConfig = {
   [key: string]: any;
 };
 /**
+ * 移动规则结果，可以支持允许水平移动，不允许垂直移动。
+ * 在分组移动到边缘时有用到。
+ */
+export type IsAllowMove = {
+  x: boolean;
+  y: boolean;
+};
+
+/**
  * 限制节点移动规则
  * model: 移动节点的model
  * deltaX: 移动的x轴距离
@@ -408,7 +417,7 @@ export type NodeMoveRule = (
   model: BaseNodeModel,
   deltaX: number,
   deltaY: number,
-) => Boolean;
+) => Boolean | IsAllowMove;
 
 export type ZoomParam = boolean | number;
 

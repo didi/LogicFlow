@@ -209,9 +209,15 @@ class GroupNodeModel extends RectResize.model {
   }
   isInRange({ x1, y1, x2, y2 }) {
     return x1 >= (this.x - this.width / 2)
-    && x2 <= (this.x + this.width / 2)
-    && y1 >= (this.y - this.height / 2)
-    && y2 <= (this.y + this.height / 2);
+      && x2 <= (this.x + this.width / 2)
+      && y1 >= (this.y - this.height / 2)
+      && y2 <= (this.y + this.height / 2);
+  }
+  isAllowMoveTo({ x1, y1, x2, y2 }) {
+    return {
+      x: x1 >= (this.x - this.width / 2) && x2 <= (this.x + this.width / 2),
+      y: y1 >= (this.y - this.height / 2) && y2 <= (this.y + this.height / 2),
+    };
   }
   setAllowAppendChild(isAllow) {
     this.setProperty('groupAddable', isAllow);

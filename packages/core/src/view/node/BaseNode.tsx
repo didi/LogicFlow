@@ -9,6 +9,7 @@ import { StepDrag } from '../../util/drag';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
 import { CommonTheme } from '../../constant/DefaultTheme';
+import { cancelRaf, createRaf } from '../../util/raf';
 
 type IProps = {
   model: BaseNodeModel;
@@ -158,8 +159,8 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const [x1, y1] = transformModel.CanvasPointToHtmlPoint([x, y]);
     if (x1 < 0
       || y1 < 0
-      || x1 > graphModel.width
-      || y1 > graphModel.height) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
+      || x1 > width
+      || y1 > height) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
       return;
     }
     // 1. 考虑画布被缩放
@@ -185,16 +186,16 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       nearBoundary = [0, -size];
     }
     if (this.t) {
-      clearInterval(this.t);
+      cancelRaf(this.t);
     }
     if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
-      this.t = setInterval(() => {
+      this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);
         graphModel.moveNode(
           model.id, -translateX / transformModel.SCALE_X, -translateY / transformModel.SCALE_X,
         );
-      }, 50);
+      });
     } else {
       graphModel.moveNode2Coordinate(
         model.id,
@@ -205,7 +206,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   onDragEnd = () => {
     if (this.t) {
-      clearInterval(this.t);
+      cancelRaf(this.t);
     }
     const { model } = this.props;
     model.isDragging = false;
