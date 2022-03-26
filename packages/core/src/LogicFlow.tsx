@@ -704,8 +704,13 @@ export default class LogicFlow {
    * @param leftTopPoint 区域左上角坐标, dom层坐标
    * @param rightBottomPoint 区域右下角坐标，dom层坐标
    */
-  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint)
+  getAreaElement(
+    leftTopPoint: PointTuple,
+    rightBottomPoint: PointTuple,
+    wholeEdge = true,
+    wholeNode = true,
+  ) {
+    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)
       .map(element => element.getData());
   }
   /**
