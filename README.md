@@ -148,15 +148,16 @@ BPMN： http://logic-flow.org/examples/#/extension/bpmn
 
 #### vue 应用 demo
 
+> 源码地址 [[代码地址](https://github.com/xinxin93/logicflow_vue_demo)](https://github.com/xinxin93/logicflow_vue_demo)
+
 ![https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif](https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif)
 
-[代码地址](https://github.com/xinxin93/logicflow_vue_demo)
 
 #### 作图工具示例
 
 LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生成数据在流程引擎可执行的流程图工具。也支持实现类似ProcessOn这种自由控制样式的作图工具。
 
-> 地址：[http://logic-flow.org/mvp/index.html](http://logic-flow.org/mvp/index.html)
+> 源码地址：[http://logic-flow.org/mvp/index.html](http://logic-flow.org/mvp/index.html)
 
 示例图如下:
 ![logicflow-1.0-4.png](/docs/assets/images/LogicFlow-1.0-4.png)
@@ -164,7 +165,7 @@ LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生�
 
 #### vue3 node-red风格示例
 
-[Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
+> 源码地址: [[Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)](https://github.com/Logic-Flow/logicflow-node-red-vue3)
 
 ![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
 
