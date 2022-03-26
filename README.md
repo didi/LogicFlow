@@ -148,7 +148,7 @@ BPMN： http://logic-flow.org/examples/#/extension/bpmn
 
 #### vue 应用 demo
 
-> 源码地址 [[代码地址](https://github.com/xinxin93/logicflow_vue_demo)](https://github.com/xinxin93/logicflow_vue_demo)
+> 源码地址 [https://github.com/xinxin93/logicflow_vue_demo](https://github.com/xinxin93/logicflow_vue_demo)
 
 ![https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif](https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif)
 
@@ -165,7 +165,7 @@ LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生�
 
 #### vue3 node-red风格示例
 
-> 源码地址: [[Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)](https://github.com/Logic-Flow/logicflow-node-red-vue3)
+> 源码地址: [https://github.com/Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
 
 ![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
 
