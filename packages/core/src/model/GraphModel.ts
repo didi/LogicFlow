@@ -189,7 +189,7 @@ class GraphModel {
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     elements = elements.sort((a, b) => a.zIndex - b.zIndex);
-    // 只显示可见区域的节点和边以及和这个可以区域节点的节点
+    // 只显示可见区域的节点和边
     const showElements = [];
     let topElementIdx = -1;
     // todo: 缓存, 优化计算效率
@@ -201,7 +201,7 @@ class GraphModel {
       if (currentItem.visible
         && (!this.partial
           || currentItem.isSelected
-          || this.isElementInArea(currentItem, visibleLt, visibleRb, false)
+          || this.isElementInArea(currentItem, visibleLt, visibleRb, false, false)
         )
       ) {
         if (currentItem.zIndex === ElementMaxzIndex) {
@@ -244,15 +244,24 @@ class GraphModel {
   }
   /**
    * 获取指定区域内的所有元素
+   * @param leftTopPoint 表示区域左上角的点
+   * @param rightBottomPoint 表示区域右下角的点
+   * @param wholeEdge 是否要整个边都在区域内部
+   * @param wholeNode 是否要整个节点都在区域内部
    */
-  getAreaElement(leftTopPoint: PointTuple, rightBottomPoint: PointTuple) {
+  getAreaElement(
+    leftTopPoint: PointTuple,
+    rightBottomPoint: PointTuple,
+    wholeEdge = true,
+    wholeNode = true,
+  ) {
     const areaElements = [];
     const elements = [];
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
-      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint)) {
+      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)) {
         areaElements.push(currentItem);
       }
     }
@@ -300,8 +309,10 @@ class GraphModel {
    * @param element 节点或者边
    * @param lt 左上角点
    * @param rb 右下角点
+   * @param wholeEdge 边的起点和终点都在区域内才算
+   * @param wholeNode 节点的box都在区域内才算
    */
-  isElementInArea(element, lt: PointTuple, rb: PointTuple, wholeEdge = true) {
+  isElementInArea(element, lt: PointTuple, rb: PointTuple, wholeEdge = true, wholeNode = true) {
     if (element.BaseType === ElementType.NODE) {
       element = element as BaseNodeModel;
       // 节点是否在选区内，判断逻辑为如果节点的bbox的四个角上的点都在选区内，则判断节点在选区内
@@ -312,12 +323,12 @@ class GraphModel {
         { x: maxX, y: maxY },
         { x: minX, y: maxY },
       ];
-      let inArea = true;
+      let inArea = wholeNode;
       for (let i = 0; i < bboxPointsList.length; i++) {
         let { x, y } = bboxPointsList[i];
         [x, y] = this.transformModel.CanvasPointToHtmlPoint([x, y]);
-        if (!isPointInArea([x, y], lt, rb)) {
-          inArea = false;
+        if (isPointInArea([x, y], lt, rb) !== wholeNode) {
+          inArea = !wholeNode;
           break;
         }
       }

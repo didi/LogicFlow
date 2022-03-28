@@ -14,6 +14,8 @@ class SelectionSelect {
   };
   __disabled = false;
   isDefalutStopMoveGraph = false;
+  isWholeNode = true;
+  isWholeEdge = true;
   static pluginName = 'selectionSelect';
   constructor({ lf }) {
     this.lf = lf;
@@ -49,6 +51,15 @@ class SelectionSelect {
       document.addEventListener('mousemove', this.__draw);
       document.addEventListener('mouseup', this.__drawOff);
     });
+  }
+  /**
+   * 设置选中的灵敏度
+   * @param isWholeEdge 是否要边的起点终点都在选区范围才算选中。默认true
+   * @param isWholeNode 是否要节点的全部点都在选区范围才算选中。默认true
+   */
+  setSelectionSense(isWholeEdge = true, isWholeNode = true) {
+    this.isWholeEdge = isWholeEdge;
+    this.isWholeNode = isWholeNode;
   }
   /**
    * 开启选区
@@ -104,9 +115,13 @@ class SelectionSelect {
     this.__domContainer.removeChild(this.wrapper);
     const { x, y } = this.startPoint;
     const { x: x1, y: y1 } = this.endPoint;
+    // 选区太小的情况就忽略
+    if (Math.abs(x1 - x) < 10 && Math.abs(y1 - y) < 10) {
+      return;
+    }
     const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)];
     const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)];
-    const elements = this.lf.getAreaElement(lt, rt);
+    const elements = this.lf.getAreaElement(lt, rt, this.isWholeEdge, this.isWholeNode);
     elements.forEach((element) => {
       this.lf.selectElementById(element.id, true);
     });

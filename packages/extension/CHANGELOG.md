@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.9-alpha.1...@logicflow/extension@1.1.9) (2022-03-26)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [1.1.9-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.9-alpha.0...@logicflow/extension@1.1.9-alpha.1) (2022-03-26)
+
+
+### Features
+
+* optimize move group children behavior ([d492f20](https://github.com/didi/LogicFlow/commit/d492f20a7205c81a709f7a151b9127a2709d81a4))
+* optimize move node behavior ([d0e4e85](https://github.com/didi/LogicFlow/commit/d0e4e856cf58e92a98e309cdd698724bc1163295))
+
+
+
+
+
+## [1.1.9-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.8-alpha.0...@logicflow/extension@1.1.9-alpha.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* 修复新增分组子节点未被记录的问题 ([24d9fc9](https://github.com/didi/LogicFlow/commit/24d9fc9d056f34141520da4a3f9482fe031ec325))
+
+
+
+
+
 ## [1.1.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.8-alpha.0...@logicflow/extension@1.1.8) (2022-03-25)
 
 

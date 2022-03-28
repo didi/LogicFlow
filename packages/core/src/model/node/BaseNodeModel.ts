@@ -18,6 +18,7 @@ import {
   AnchorsOffsetItem,
   PointTuple,
   ShapeStyleAttribute,
+  IsAllowMove,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -40,7 +41,6 @@ export type ConnectRuleResult = {
   isAllPass: boolean;
   msg?: string;
 };
-
 interface IBaseNodeModel extends IBaseModel {
   /**
    * model基础类型，固定为node
@@ -353,14 +353,28 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * 内部方法
    * 是否允许移动节点到新的位置
    */
-  isAllowMoveNode(deltaX, deltaY) {
-    for (const rule of this.moveRules) {
-      if (!rule(this, deltaX, deltaY)) return false;
+  isAllowMoveNode(deltaX, deltaY): boolean | IsAllowMove {
+    let isAllowMoveX = true;
+    let isAllowMoveY = true;
+    const rules = this.moveRules.concat(this.graphModel.nodeMoveRules);
+    for (const rule of rules) {
+      const r = rule(this, deltaX, deltaY);
+      if (!r) return false;
+      if (
+        typeof r === 'object'
+      ) {
+        const r1 = r as IsAllowMove;
+        if (r1.x === false && r1.y === false) {
+          return false;
+        }
+        isAllowMoveX = isAllowMoveX && r1.x;
+        isAllowMoveY = isAllowMoveY && r1.y;
+      }
     }
-    for (const rule of this.graphModel.nodeMoveRules) {
-      if (!rule(this, deltaX, deltaY)) return false;
-    }
-    return true;
+    return {
+      x: isAllowMoveX,
+      y: isAllowMoveY,
+    };
   }
   /**
    * 获取作为连线终点时的所有规则。
@@ -442,13 +456,32 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
   @action
   move(deltaX, deltaY, isignoreRule = false): boolean {
-    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
-    const targetX = this.x + deltaX;
-    const targetY = this.y + deltaY;
-    this.x = targetX;
-    this.y = targetY;
-    this.text && this.moveText(deltaX, deltaY);
-    return true;
+    let isAllowMoveX = false;
+    let isAllowMoveY = false;
+    if (isignoreRule) {
+      isAllowMoveX = true;
+      isAllowMoveY = true;
+    } else {
+      const r = this.isAllowMoveNode(deltaX, deltaY);
+      if (typeof r === 'boolean') {
+        isAllowMoveX = r;
+        isAllowMoveY = r;
+      } else {
+        isAllowMoveX = r.x;
+        isAllowMoveY = r.y;
+      }
+    }
+    if (isAllowMoveX) {
+      const targetX = this.x + deltaX;
+      this.x = targetX;
+      this.text && this.moveText(deltaX, 0);
+    }
+    if (isAllowMoveY) {
+      const targetY = this.y + deltaY;
+      this.y = targetY;
+      this.text && this.moveText(deltaX, deltaY);
+    }
+    return isAllowMoveX || isAllowMoveY;
   }
 
   @action
