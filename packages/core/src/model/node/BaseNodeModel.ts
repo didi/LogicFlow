@@ -479,7 +479,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     if (isAllowMoveY) {
       const targetY = this.y + deltaY;
       this.y = targetY;
-      this.text && this.moveText(deltaX, deltaY);
+      this.text && this.moveText(0, deltaY);
     }
     return isAllowMoveX || isAllowMoveY;
   }
