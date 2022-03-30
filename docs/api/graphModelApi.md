@@ -636,6 +636,33 @@ graphModel.moveNode2Coordinate('node_1', 100, 100, true);
 ```js
 graphModel.editText('node_1');
 ```
+
+:::warning 注意
+当初始化lf实例的时候，传入的设置了文本不可编辑，这个时候LogicFlow内部不会监听事件去取消元素的编辑状态。这个时候需要自己手动监听, 然后使用`setElementState`方法取消文本编辑状态。
+:::
+
+## setElementState
+
+`方法`
+
+设置元素的状态
+
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+| type | number | 无 | 1表示默认状态；2表示文本编辑中；4表示不节点不允许被连接；5表示节点允许连接 |
+
+例如在某些场景中，节点和连线都默认不允许编辑的。但是当某些操作后，就允许编辑了，这个时候可以通过此方法将元素从编辑状态设置为不可以编辑状态。
+
+```js
+lf.on('node:dbclick', ({ data }) => {
+  lf.graphModel.editText(data.id);
+  lf.once('graph:transform,node:click,blank:click', () => {
+    lf.graphModel.textEditElement.setElementState(1);
+  })
+})
+```
+
 ## addEdge
 
 `方法`

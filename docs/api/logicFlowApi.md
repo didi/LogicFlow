@@ -623,15 +623,7 @@ lf.setDefaultEdgeType('line')
 ```
 ## editText
 
-显示指定节点或边的文本编辑框
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | String | ✅ | - | 节点或边的id |
-
-```js
-lf.editText('element_id')
-```
+同[graphModel.editText](/api/graphModelApi.html#edittext)
 
 ## updateText
 
