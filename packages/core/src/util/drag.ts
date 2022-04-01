@@ -84,7 +84,6 @@ class StepDrag {
   eventCenter: EventEmitter | null;
   model?: BaseNodeModel | BaseEdgeModel;
   startTime?: number;
-  isGrag: boolean;
   constructor({
     onDragStart = noop,
     onDraging = noop,

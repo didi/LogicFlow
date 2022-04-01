@@ -12,14 +12,14 @@ type IProps = {
   graphModel: GraphModel;
   dnd: Dnd
 };
-type Istate = {
+type IState = {
   isDraging: boolean,
 };
 // type InjectedProps = IProps & {
 //   transformStyle: GraphTransform
 // };
 @observer
-class CanvasOverlay extends Component<IProps, Istate> {
+class CanvasOverlay extends Component<IProps, IState> {
   stepDrag: StepDrag;
   stepScrollX = 0;
   stepScrollY = 0;

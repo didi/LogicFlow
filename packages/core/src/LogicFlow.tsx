@@ -19,7 +19,6 @@ import {
   EdgeConfig,
   EdgeFilter,
   NodeConfig,
-  NodeAttribute,
   Extension,
   ComponentRender,
   FocusOnArgs,
@@ -956,15 +955,15 @@ export default class LogicFlow {
       this.extension[extension.pluginName] = extension;
       return;
     }
-    const ExtensionContructor = extension as ExtensionContractor;
-    const extensionInstance = new ExtensionContructor({
+    const ExtensionConstructor = extension as ExtensionContractor;
+    const extensionInstance = new ExtensionConstructor({
       lf: this,
       LogicFlow,
     });
     extensionInstance.render && this.components.push(
       extensionInstance.render.bind(extensionInstance),
     );
-    this.extension[ExtensionContructor.pluginName] = extensionInstance;
+    this.extension[ExtensionConstructor.pluginName] = extensionInstance;
   }
   /**
    * 修改对应元素 model 中的属性
@@ -1054,7 +1053,7 @@ export default class LogicFlow {
    *     },
    *     {
    *       id: 'node_2',
-   *       type: 'circel',
+   *       type: 'circle',
    *       x: 300,
    *       y: 200
    *     }

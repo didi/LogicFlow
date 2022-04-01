@@ -12,7 +12,7 @@ type IProps = {
   editable: boolean;
 };
 type IState = {
-  isHoverd: boolean;
+  isHovered: boolean;
 };
 
 export default class BaseText extends Component<IProps, IState> {

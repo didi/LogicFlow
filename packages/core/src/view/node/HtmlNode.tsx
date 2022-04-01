@@ -1,17 +1,9 @@
 import { h } from 'preact';
 import BaseNode from './BaseNode';
-import { RectNodeModel } from '../../model';
-import GraphModel from '../../model/GraphModel';
-import EventEmitter from '../../event/eventEmitter';
-
-type IProps = {
-  model: RectNodeModel;
-  graphModel: GraphModel;
-};
 
 export default class HtmlNode extends BaseNode {
   ref: HTMLElement;
-  currrentProperties: string;
+  currentProperties: string;
   preProperties: string;
   setRef = (dom): void => {
     this.ref = dom;
@@ -41,8 +33,8 @@ export default class HtmlNode extends BaseNode {
    * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.
    */
   shouldUpdate() {
-    if (this.preProperties && this.preProperties === this.currrentProperties) return;
-    this.preProperties = this.currrentProperties;
+    if (this.preProperties && this.preProperties === this.currentProperties) return;
+    this.preProperties = this.currentProperties;
     return true;
   }
   componentDidMount() {
@@ -58,7 +50,7 @@ export default class HtmlNode extends BaseNode {
   getShape() {
     const { model } = this.props;
     const { x, y, height, width } = model;
-    this.currrentProperties = JSON.stringify(model.properties);
+    this.currentProperties = JSON.stringify(model.properties);
     return (
       <foreignObject
         x={x - width / 2}

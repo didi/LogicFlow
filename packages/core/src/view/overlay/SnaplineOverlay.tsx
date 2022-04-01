@@ -25,7 +25,7 @@ export default class SnaplineOverlay extends Component<IProps> {
       ...style,
       stroke: isShowHorizontal ? style.stroke : 'none',
     };
-    const vertailLine = {
+    const verticalLine = {
       x1: x,
       y1: -100000,
       x2: x,
@@ -36,7 +36,7 @@ export default class SnaplineOverlay extends Component<IProps> {
     return (
       <g className="lf-snapline">
         <Line {...horizontalLine} />
-        <Line {...vertailLine} />
+        <Line {...verticalLine} />
       </g>
     );
   }

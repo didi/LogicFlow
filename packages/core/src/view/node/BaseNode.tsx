@@ -16,14 +16,14 @@ type IProps = {
   graphModel: GraphModel;
 };
 
-type Istate = {
+type IState = {
   isHovered: boolean;
   isDraging?: boolean;
 };
 
 type StyleAttribute = CommonTheme;
 
-export default abstract class BaseNode extends Component<IProps, Istate> {
+export default abstract class BaseNode extends Component<IProps, IState> {
   t: any;
   moveOffset: { x: number; y: number; };
   static getModel(defaultModel) {

@@ -311,7 +311,7 @@ export const getCrossPointWithEllipse = (
 };
 
 /* 求点在垂直或者水平方向上与多边形的交点 */
-export const getCrossPointWithPolyone = (
+export const getCrossPointWithPolygon = (
   point: Point, direction: Direction, node: BaseNode,
 ): Point => {
   const { pointsPosition } = node as PolygonNode;

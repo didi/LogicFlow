@@ -11,20 +11,20 @@ export default class LineText extends BaseText {
   constructor(config) {
     super(config);
     this.state = {
-      isHoverd: false,
+      isHovered: false,
     };
   }
-  getBackgroud() {
+  getBackground() {
     const model = this.props.model as BaseEdgeModel;
     const style = model.getTextStyle();
     const { text } = model;
     let backgroundStyle = style.background || {};
-    const { isHoverd } = this.state;
-    if (isHoverd && style.hover && style.hover.background) {
+    const { isHovered } = this.state;
+    if (isHovered && style.hover && style.hover.background) {
       backgroundStyle = { ...backgroundStyle, ...style.hover.background };
     }
     // 存在文本并且文本背景不为透明时计算背景框
-    if (text && text.value && backgroundStyle.fill !== 'transparnet') {
+    if (text && text.value && backgroundStyle.fill !== 'transparent') {
       const { fontSize, overflowMode, lineHeight, wrapPadding, textWidth } = style;
       const { value, x, y } = text;
       const rows = String(value).split(/[\r\n]/g);
@@ -73,12 +73,12 @@ export default class LineText extends BaseText {
   }
   setHoverON = () => {
     this.setState({
-      isHoverd: true,
+      isHovered: true,
     });
   };
   setHoverOFF = () => {
     this.setState({
-      isHoverd: false,
+      isHovered: false,
     });
   };
   getShape() {
@@ -100,7 +100,7 @@ export default class LineText extends BaseText {
         onMouseEnter={this.setHoverON}
         onMouseLeave={this.setHoverOFF}
       >
-        {this.getBackgroud()}
+        {this.getBackground()}
         <Text {...attr} model={model} />
       </g>
     );
