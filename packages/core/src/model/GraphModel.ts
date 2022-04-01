@@ -3,7 +3,7 @@ import { map } from 'lodash-es';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
 import EditConfigModel from './EditConfigModel';
-import TransfromModel from './TransformModel';
+import TransformModel from './TransformModel';
 import { IBaseModel } from './BaseModel';
 import {
   ElementState, ModelType, EventType, ElementMaxzIndex, ElementType, OverlapMode,
@@ -114,7 +114,7 @@ class GraphModel {
    * 控制画布的缩放、平移
    * @see todo link
    */
-  @observable transformModel: TransfromModel;
+  @observable transformModel: TransformModel;
   /**
    * 控制流程图编辑相关配置
    * @see todo link
@@ -150,7 +150,7 @@ class GraphModel {
     this.rootEl = container;
     this.editConfigModel = new EditConfigModel(options);
     this.eventCenter = new EventEmitter();
-    this.transformModel = new TransfromModel(this.eventCenter);
+    this.transformModel = new TransformModel(this.eventCenter);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
     if (!options.width) {

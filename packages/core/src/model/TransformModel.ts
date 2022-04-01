@@ -3,7 +3,7 @@ import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import { PointTuple, ZoomParam } from '../type';
 
-export interface TransfromInterface {
+export interface TransformInterface {
   SCALE_X: number;
   SKEW_Y: number;
   SKEW_X: number;
@@ -20,7 +20,7 @@ export interface TransfromInterface {
   getTransformStyle: () => { transform: string };
 }
 
-export default class TransfromModel implements TransfromInterface {
+export default class TransformModel implements TransformInterface {
   MINI_SCALE_SIZE = 0.2;
   MAX_SCALE_SIZE = 16;
   @observable SCALE_X = 1;

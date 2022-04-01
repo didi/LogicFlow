@@ -159,11 +159,11 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   // 获取在拖拽过程中可能产生的点
-  getDragingPoints(direction, positioType, position, anchorList, draggingPointList) {
+  getDraggingPoints(direction, positionType, position, anchorList, draggingPointList) {
     const pointList = draggingPointList.map(i => i);
     const anchor = this.getAfterAnchor(direction, position, anchorList);
     const crossPoint = this.getCrossPoint(direction, position, anchor);
-    if (positioType === 'start') {
+    if (positionType === 'start') {
       pointList.unshift(crossPoint);
       pointList.unshift(anchor);
     } else {
@@ -373,7 +373,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           // 如果不在节点内部，更换起点为线段与节点的交点
           const anchorList = this.sourceNode.anchors;
-          draggingPointList = this.getDragingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
+          draggingPointList = this.getDraggingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
         }
       }
       if (endIndex === this.pointsList.length - 1) {
@@ -385,7 +385,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           // 如果不在节点内部，更换终点为线段与节点的交点
           const anchorList = this.targetNode.anchors;
-          draggingPointList = this.getDragingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
+          draggingPointList = this.getDraggingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
         }
       }
       draggingPointList = pointFilter(draggingPointList);
@@ -407,7 +407,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         const inNode = isInNode(startPosition, this.sourceNode);
         if (!inNode) {
           const anchorList = this.sourceNode.anchors;
-          draggingPointList = this.getDragingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
+          draggingPointList = this.getDraggingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
         }
       }
       if (endIndex === this.pointsList.length - 1) {
@@ -417,7 +417,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         const inNode = isInNode(endPosition, this.targetNode);
         if (!inNode) {
           const anchorList = this.targetNode.anchors;
-          draggingPointList = this.getDragingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
+          draggingPointList = this.getDraggingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
         }
       }
       draggingPointList = pointFilter(draggingPointList);
