@@ -207,20 +207,18 @@ eventCenter.once('node:click', () => {
 
 ## emit
 
-事件监听一次
+触发事件
 
 参数：
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 | evt | String | ✅ | - | 事件名称|
-| callback | String | ✅ | - | 回调函数 |
+| args | Array | ✅ | - | 触发事件参数 |
 
 示例：
 
 ```js
 const { eventCenter } = lf.graphModel;
-eventCenter.emit('node:click', () => {
-  console.log('node:click')
-})
+eventCenter.emit("custom:button-click", data);
 ```

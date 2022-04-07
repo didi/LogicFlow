@@ -140,8 +140,6 @@ class GraphModel {
       container,
       background = {},
       grid,
-      width,
-      height,
       idGenerator,
       animation,
     } = options;
@@ -155,8 +153,14 @@ class GraphModel {
     this.transformModel = new TransfromModel(this.eventCenter);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
-    this.width = width ?? container.getBoundingClientRect().width;
-    this.height = height ?? container.getBoundingClientRect().height;
+    if (!options.width) {
+      options.width = container.getBoundingClientRect().width;
+    }
+    if (!options.height) {
+      options.height = container.getBoundingClientRect().height;
+    }
+    this.width = options.width;
+    this.height = options.height;
     this.animation = updateAnimation(animation);
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;

@@ -1024,11 +1024,23 @@ export default class LogicFlow {
   setView(type: string, component) {
     this.viewMap.set(type, component);
   }
-  /**
-   * 内部保留方法
-   * 获取指定类型的view
-   */
-  getView = (type: string) => this.viewMap.get(type);
+  renderRawData(graphRawData) {
+    this.graphModel.graphDataToModel(formatData(graphRawData));
+    if (!this.options.isSilentMode && this.options.history !== false) {
+      this.history.watch(this.graphModel);
+    }
+    render((
+      <Graph
+        getView={this.getView}
+        tool={this.tool}
+        options={this.options}
+        dnd={this.dnd}
+        snaplineModel={this.snaplineModel}
+        graphModel={this.graphModel}
+      />
+    ), this.container);
+    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData());
+  }
   /**
    * 渲染图
    * @example
@@ -1061,20 +1073,11 @@ export default class LogicFlow {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
     }
-    this.graphModel.graphDataToModel(formatData(graphData));
-    if (!this.options.isSilentMode && this.options.history !== false) {
-      this.history.watch(this.graphModel);
-    }
-    render((
-      <Graph
-        getView={this.getView}
-        tool={this.tool}
-        options={this.options}
-        dnd={this.dnd}
-        snaplineModel={this.snaplineModel}
-        graphModel={this.graphModel}
-      />
-    ), this.container);
-    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData());
+    this.renderRawData(graphData);
   }
+  /**
+   * 内部保留方法
+   * 获取指定类型的view
+   */
+  getView = (type: string) => this.viewMap.get(type);
 }

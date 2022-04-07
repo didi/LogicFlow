@@ -183,6 +183,32 @@ lf.register({
 });
 ```
 
+## render
+
+渲染图数据
+
+```js
+const lf = new LogicFlow({
+  ...
+})
+lf.render(graphData)
+```
+
+## renderRawData
+
+渲染图原始数据，和`render`的区别是在使用`adapter`后，如何还想渲染logicflow格式的数据，可以用此方法。
+
+```js
+const lf = new LogicFlow({
+  ...
+})
+lf.render({
+  nodes: [],
+  edges: []
+})
+```
+
+
 ## setTheme
 
 设置主题, 详情见[主题](/api/themeApi.html)
@@ -623,15 +649,7 @@ lf.setDefaultEdgeType('line')
 ```
 ## editText
 
-显示指定节点或边的文本编辑框
-
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :- | :- | :- | :- | :- |
-| id | String | ✅ | - | 节点或边的id |
-
-```js
-lf.editText('element_id')
-```
+同[graphModel.editText](/api/graphModelApi.html#edittext)
 
 ## updateText
 
@@ -1205,10 +1223,10 @@ lf.once('node:click', () => {
 
 ## emit
 
-事件监听一次
+触发事件
 
 ```js
-emit(evt: string, callback: Function): this
+emit(evt: string, ...args): this
 ```
 
 参数：
@@ -1216,14 +1234,12 @@ emit(evt: string, callback: Function): this
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 | evt | String | ✅ | - | 事件名称|
-| callback | String | ✅ | - | 回调函数 |
+| args | Array | ✅ | - | 触发事件参数 |
 
 示例：
 
 ```js
-lf.emit('node:click', () => {
-  console.log('node:click')
-})
+lf.eventCenter.emit("custom:button-click", model);
 ```
 ## undo
 
