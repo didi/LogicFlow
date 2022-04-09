@@ -71,14 +71,14 @@ interface IBaseModel {
    * 在自定义节点的时候，可以重写此方法基于自己的规则生成id。
    * 注意，此方法必须是同步的。
    * 如果想要异步修改Id，建议删除此节点后再同一位置创建一个新的节点。
-   * @overridable 可以重写
+   * @override 可以重写
    * @returns string
    */
   createId(): string;
   moveText(deltaX: number, deltaY: number): void;
   updateText(value: string): void;
   setSelected(flag: boolean): void;
-  setZIndex(zindex?: number): void;
+  setZIndex(zIndex?: number): void;
   /**
    * 设置Node|Edge等model的状态
    * @param state 状态

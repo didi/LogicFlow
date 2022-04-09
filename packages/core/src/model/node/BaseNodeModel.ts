@@ -124,7 +124,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     };
   }
   /**
-   * @overridable 可以重写
+   * @override 可以重写
    * 初始化节点数据
    * initNodeData和setAttributes的区别在于
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
@@ -161,11 +161,11 @@ export default class BaseNodeModel implements IBaseNodeModel {
    *   this.height = 200
    * }
    *
-   * @overridable 支持重写
+   * @override 支持重写
    */
   public setAttributes() {}
   /**
-   * @overridable 支持重写，自定义此类型节点默认生成方式
+   * @override 支持重写，自定义此类型节点默认生成方式
    * @returns string
    */
   public createId(): string {
@@ -199,7 +199,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   /**
    * 获取被保存时返回的数据
-   * @overridable 支持重写
+   * @override 支持重写
    */
   getData(): NodeData {
     const { x, y, value } = this.text;
@@ -241,7 +241,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return toJS(this.properties);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点样式
    * @returns 自定义节点样式
    */
@@ -251,7 +251,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     };
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点文本样式
    */
   getTextStyle() {
@@ -260,7 +260,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return cloneDeep(nodeText);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点锚点样式
    * @returns 自定义样式
    */
@@ -270,7 +270,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return cloneDeep(anchor);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点锚点拖出连线样式
    * @returns 自定义锚点拖出样式
    */
@@ -279,7 +279,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return cloneDeep(anchorLine);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取outline样式，重写可以定义此类型节点outline样式， 默认使用主题样式
    * @returns 自定义outline样式
    */
@@ -293,7 +293,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
-    soureAnchor: AnchorConfig,
+    sourceAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetSourceRules
@@ -304,7 +304,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor)) {
+      if (!rule.validate.call(this, this, target, sourceAnchor, targetAnchor)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -327,7 +327,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
-    soureAnchor: AnchorConfig,
+    sourceAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetTargetRules
@@ -338,7 +338,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor)) {
+      if (!rule.validate.call(this, source, this, sourceAnchor, targetAnchor)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -415,7 +415,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return this.getDefaultAnchor();
   }
   /**
-   * @overridable 子类重写此方法设置默认锚点
+   * @override 子类重写此方法设置默认锚点
    * 获取节点默认情况下的锚点
    */
   public getDefaultAnchor(): PointAnchor[] {
@@ -455,10 +455,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
   }
   @action
-  move(deltaX, deltaY, isignoreRule = false): boolean {
+  move(deltaX, deltaY, isIgnoreRule = false): boolean {
     let isAllowMoveX = false;
     let isAllowMoveY = false;
-    if (isignoreRule) {
+    if (isIgnoreRule) {
       isAllowMoveX = true;
       isAllowMoveY = true;
     } else {
@@ -485,10 +485,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  moveTo(x, y, isignoreRule = false): boolean {
+  moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
+    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
     if (this.text) {
       this.text && this.moveText(deltaX, deltaY);
     }
@@ -563,8 +563,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setZIndex(zindex = 1): void {
-    this.zIndex = zindex;
+  setZIndex(zIndex = 1): void {
+    this.zIndex = zIndex;
   }
 
   @action

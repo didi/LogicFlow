@@ -13,15 +13,15 @@ class SelectionSelect {
     y: number,
   };
   __disabled = false;
-  isDefalutStopMoveGraph = false;
+  isDefaultStopMoveGraph = false;
   isWholeNode = true;
   isWholeEdge = true;
   static pluginName = 'selectionSelect';
   constructor({ lf }) {
     this.lf = lf;
-    // 初始化isDefalutStopMoveGraph取值
+    // 初始化isDefaultStopMoveGraph取值
     const { stopMoveGraph } = lf.getEditConfig();
-    this.isDefalutStopMoveGraph = stopMoveGraph;
+    this.isDefaultStopMoveGraph = stopMoveGraph;
     lf.openSelectionSelect = () => {
       this.openSelectionSelect();
     };
@@ -67,7 +67,7 @@ class SelectionSelect {
   openSelectionSelect() {
     const { stopMoveGraph } = this.lf.getEditConfig();
     if (!stopMoveGraph) {
-      this.isDefalutStopMoveGraph = false;
+      this.isDefaultStopMoveGraph = false;
       this.lf.updateEditConfig({
         stopMoveGraph: true,
       });
@@ -78,7 +78,7 @@ class SelectionSelect {
    * 关闭选区
    */
   closeSelectionSelect() {
-    if (!this.isDefalutStopMoveGraph) {
+    if (!this.isDefaultStopMoveGraph) {
       this.lf.updateEditConfig({
         stopMoveGraph: false,
       });

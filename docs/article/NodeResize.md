@@ -89,13 +89,13 @@ const edges = this.getNodeEdges(id);
 // 更新从节点连出边的起点
 edges.sourceEdges.forEach(item => {
   params.point = item.startPoint;
-  afterPoint = getRectReizeEdgePoint(params);
+  afterPoint = getRectResizeEdgePoint(params);
   item.updateStartPoint(afterPoint);
 });
 // 更新连入节点边的终点
 edges.targetEdges.forEach(item => {
   params.point = item.endPoint;
-  afterPoint = getRectReizeEdgePoint(params);
+  afterPoint = getRectResizeEdgePoint(params);
   item.updateEndPoint(afterPoint);
 });
 ```

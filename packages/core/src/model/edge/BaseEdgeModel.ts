@@ -73,7 +73,7 @@ class BaseEdgeModel implements IBaseModel {
     this.formatText(data);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 初始化边数据
    * initNodeData和setAttributes的区别在于
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
@@ -101,18 +101,18 @@ class BaseEdgeModel implements IBaseModel {
   }
   /**
    * 设置model属性，每次properties发生变化会触发
-   * @overridable 支持重写
+   * @override 支持重写
    */
   setAttributes() { }
   /**
-   * @overridable 支持重写，自定义此类型节点默认生成方式
+   * @override 支持重写，自定义此类型节点默认生成方式
    * @returns string
    */
   createId() {
     return null;
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点样式
    * @returns 自定义边样式
    */
@@ -121,7 +121,7 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(baseEdge);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前节点文本样式
    */
   getTextStyle() {
@@ -130,7 +130,7 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(edgeText);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取当前边的动画样式
    * @returns 自定义边动画样式
    */
@@ -139,7 +139,7 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(animationData);
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 获取outline样式，重写可以定义此类型边outline样式， 默认使用主题样式
    * @returns 自定义outline样式
    */
@@ -149,7 +149,7 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(outline);
   }
   /**
-   * @overridable 支持重新，重新自定义文本位置
+   * @override 支持重新，重新自定义文本位置
    * @returns 文本位置
    */
   getTextPosition(): Point {

@@ -40,7 +40,7 @@ export default function Text(props) {
       }
     }
     if (rowsLength > 1) {
-      const tspans = rows.map(((row, i) => {
+      const tSpans = rows.map(((row, i) => {
         // 保证文字居中，文字Y轴偏移为当前行数对应中心行数的偏移行 * 行高
         const tspanLineHeight = fontSize + 2;
         const offsetY = (i - (rowsLength - 1) / 2) * tspanLineHeight;
@@ -50,7 +50,7 @@ export default function Text(props) {
       }));
       return (
         <text {...attrs}>
-          {tspans}
+          {tSpans}
         </text>
       );
     }

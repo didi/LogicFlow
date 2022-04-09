@@ -55,7 +55,7 @@ class Anchor extends Component<IProps, IState> {
     };
     this.dragHandler = new StepDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
     });
   }
@@ -109,7 +109,7 @@ class Anchor extends Component<IProps, IState> {
       endY: anchorData.y,
     });
   };
-  onDraging = ({ event }) => {
+  onDragging = ({ event }) => {
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;

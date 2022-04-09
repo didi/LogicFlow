@@ -54,7 +54,7 @@ function convertNodeToTurboElement(node) {
   };
 }
 
-// 将LogicFlow中的Eedg数据转换为Turbo元素数据
+// 将LogicFlow中的Edge数据转换为Turbo元素数据
 function convertEdgeToTurboElement(edge) {
   const {
     id,
@@ -107,7 +107,7 @@ export function toTurboData(data) {
   return turboData;
 }
 
-// 将Turbo元素数据转换为LogicFlow中的Eedg数据
+// 将Turbo元素数据转换为LogicFlow中的Edge数据
 function convertFlowElementToEdge(element) {
   const {
     incoming, outgoing, properties, key,

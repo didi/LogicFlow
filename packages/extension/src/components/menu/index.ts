@@ -15,10 +15,10 @@ export type MenuConfig = {
   graphMenu?: MenuItem[] | false;
 };
 
-const DefalutNodeMenuKey = 'lf:defaultNodeMenu';
-const DefalutEdgeMenuKey = 'lf:defaultEdgeMenu';
-const DefalutGraphMenuKey = 'lf:defaultGraphMenu';
-const DefalutSelectionMenuKey = 'lf:defaultSelectionMenu';
+const DefaultNodeMenuKey = 'lf:defaultNodeMenu';
+const DefaultEdgeMenuKey = 'lf:defaultEdgeMenu';
+const DefaultGraphMenuKey = 'lf:defaultGraphMenu';
+const DefaultSelectionMenuKey = 'lf:defaultSelectionMenu';
 
 class Menu {
   lf: LogicFlow;
@@ -46,7 +46,7 @@ class Menu {
    * 初始化设置默认内置菜单栏
    */
   private init() {
-    const defalutNodeMenu = [
+    const defaultNodeMenu = [
       {
         text: '删除',
         callback: (node) => {
@@ -66,7 +66,7 @@ class Menu {
         },
       },
     ];
-    this.menuTypeMap.set(DefalutNodeMenuKey, defalutNodeMenu);
+    this.menuTypeMap.set(DefaultNodeMenuKey, defaultNodeMenu);
 
     const defaultEdgeMenu = [
       {
@@ -82,11 +82,11 @@ class Menu {
         },
       },
     ];
-    this.menuTypeMap.set(DefalutEdgeMenuKey, defaultEdgeMenu);
+    this.menuTypeMap.set(DefaultEdgeMenuKey, defaultEdgeMenu);
 
-    this.menuTypeMap.set(DefalutGraphMenuKey, []);
+    this.menuTypeMap.set(DefaultGraphMenuKey, []);
 
-    const DefalutSelectionMenu = [
+    const DefaultSelectionMenu = [
       {
         text: '删除',
         callback: (elements) => {
@@ -96,7 +96,7 @@ class Menu {
         },
       },
     ];
-    this.menuTypeMap.set(DefalutSelectionMenuKey, DefalutSelectionMenu);
+    this.menuTypeMap.set(DefaultSelectionMenuKey, DefaultSelectionMenu);
   }
   render(lf, container) {
     this.__container = container;
@@ -138,7 +138,7 @@ class Menu {
       } else if (typeMenus) { // 如果定义当前节点类型的元素
         menuList = typeMenus;
       } else { // 最后取全局默认
-        menuList = this.menuTypeMap.get(DefalutNodeMenuKey);
+        menuList = this.menuTypeMap.get(DefaultNodeMenuKey);
       }
       this.__currentData = data;
       this.showMenu(x, y, menuList);
@@ -155,18 +155,18 @@ class Menu {
       } else if (typeMenus) { // 如果定义当前边类型的元素
         menuList = typeMenus;
       } else { // 最后取全局默认
-        menuList = this.menuTypeMap.get(DefalutEdgeMenuKey);
+        menuList = this.menuTypeMap.get(DefaultEdgeMenuKey);
       }
       this.__currentData = data;
       this.showMenu(x, y, menuList);
     });
     this.lf.on('blank:contextmenu', ({ position }) => {
-      const menuList = this.menuTypeMap.get(DefalutGraphMenuKey);
+      const menuList = this.menuTypeMap.get(DefaultGraphMenuKey);
       const { domOverlayPosition: { x, y } } = position;
       this.showMenu(x, y, menuList);
     });
     this.lf.on('selection:contextmenu', ({ data, position }) => {
-      const menuList = this.menuTypeMap.get(DefalutSelectionMenuKey);
+      const menuList = this.menuTypeMap.get(DefaultSelectionMenuKey);
       const { domOverlayPosition: { x, y } } = position;
       this.__currentData = data;
       this.showMenu(x, y, menuList);
@@ -243,13 +243,13 @@ class Menu {
     }
     // node
     config.nodeMenu !== undefined
-      && this.menuTypeMap.set(DefalutNodeMenuKey, config.nodeMenu ? config.nodeMenu : []);
+      && this.menuTypeMap.set(DefaultNodeMenuKey, config.nodeMenu ? config.nodeMenu : []);
     // edge
     config.edgeMenu !== undefined
-      && this.menuTypeMap.set(DefalutEdgeMenuKey, config.edgeMenu ? config.edgeMenu : []);
+      && this.menuTypeMap.set(DefaultEdgeMenuKey, config.edgeMenu ? config.edgeMenu : []);
     // graph
     config.graphMenu !== undefined
-      && this.menuTypeMap.set(DefalutGraphMenuKey, config.graphMenu ? config.graphMenu : []);
+      && this.menuTypeMap.set(DefaultGraphMenuKey, config.graphMenu ? config.graphMenu : []);
   }
   // 在默认菜单后面追加菜单项
   addMenuConfig(config: MenuConfig) {
@@ -258,16 +258,16 @@ class Menu {
     }
     // 追加项时，只支持数组类型，对false不做操作
     if (Array.isArray(config.nodeMenu)) {
-      const menuList = this.menuTypeMap.get(DefalutNodeMenuKey);
-      this.menuTypeMap.set(DefalutNodeMenuKey, menuList.concat(config.nodeMenu));
+      const menuList = this.menuTypeMap.get(DefaultNodeMenuKey);
+      this.menuTypeMap.set(DefaultNodeMenuKey, menuList.concat(config.nodeMenu));
     }
     if (Array.isArray(config.edgeMenu)) {
-      const menuList = this.menuTypeMap.get(DefalutEdgeMenuKey);
-      this.menuTypeMap.set(DefalutEdgeMenuKey, menuList.concat(config.edgeMenu));
+      const menuList = this.menuTypeMap.get(DefaultEdgeMenuKey);
+      this.menuTypeMap.set(DefaultEdgeMenuKey, menuList.concat(config.edgeMenu));
     }
     if (Array.isArray(config.graphMenu)) {
-      const menuList = this.menuTypeMap.get(DefalutGraphMenuKey);
-      this.menuTypeMap.set(DefalutGraphMenuKey, menuList.concat(config.graphMenu));
+      const menuList = this.menuTypeMap.get(DefaultGraphMenuKey);
+      this.menuTypeMap.set(DefaultGraphMenuKey, menuList.concat(config.graphMenu));
     }
   }
   /**

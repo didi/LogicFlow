@@ -39,9 +39,9 @@ class Group {
       return true;
     });
     lf.graphModel.group = this;
-    lf.on('node:add', this.appendNodeToGrop);
+    lf.on('node:add', this.appendNodeToGroup);
     lf.on('node:delete', this.deleteGroupChild);
-    lf.on('node:drop', this.appendNodeToGrop);
+    lf.on('node:drop', this.appendNodeToGroup);
     lf.on('node:dnd-drag', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
     lf.on('graph:rendered', this.graphRendered);
@@ -58,7 +58,7 @@ class Group {
       });
     }
   };
-  appendNodeToGrop = ({ data }) => {
+  appendNodeToGroup = ({ data }) => {
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id);
     if (preGroupId) {

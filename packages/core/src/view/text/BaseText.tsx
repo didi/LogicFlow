@@ -24,7 +24,7 @@ export default class BaseText extends Component<IProps, IState> {
     super();
     const { model, draggable } = config;
     this.stepDrag = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       step: 1,
       model,
       isStopPropagation: draggable,
@@ -53,7 +53,7 @@ export default class BaseText extends Component<IProps, IState> {
       <Text {...attr} {...style} model={model} />
     );
   }
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const {
       model,
       graphModel: {

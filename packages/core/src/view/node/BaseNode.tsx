@@ -18,7 +18,7 @@ type IProps = {
 
 type IState = {
   isHovered: boolean;
-  isDraging?: boolean;
+  isDragging?: boolean;
 };
 
 type StyleAttribute = CommonTheme;
@@ -41,7 +41,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     // 不在构造函数中判断，因为editConfig可能会被动态改变
     this.stepDrag = new StepDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'NODE',
@@ -107,7 +107,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     }
   }
   getStateClassName() {
-    const { model: { state, isDraging } } = this.props;
+    const { model: { state, isDragging } } = this.props;
     let className = 'lf-node';
     switch (state) {
       case ElementState.ALLOW_CONNECT:
@@ -120,7 +120,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         className += ' lf-node-default';
         break;
     }
-    if (isDraging) {
+    if (isDragging) {
       className += ' lf-isDragging';
     }
     return className;
@@ -138,7 +138,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       y: model.y - y,
     };
   };
-  onDraging = ({ event }) => {
+  onDragging = ({ event }) => {
     const { model, graphModel } = this.props;
     // const { isDragging } = model;
     const {

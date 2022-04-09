@@ -124,11 +124,11 @@ class MiniMap {
       // 因为获取的节点不知道真实的宽高，这里需要补充一点数值
       nodes.forEach(({ x, y, width = 200, height = 200 }) => {
         const nodeLeft = x - width / 2;
-        const noderight = x + width / 2;
+        const nodeRight = x + width / 2;
         const nodeTop = y - height / 2;
         const nodeBottom = y + height / 2;
         left = nodeLeft < left ? nodeLeft : left;
-        right = noderight > right ? noderight : right;
+        right = nodeRight > right ? nodeRight : right;
         top = nodeTop < top ? nodeTop : top;
         bottom = nodeBottom > bottom ? nodeBottom : bottom;
       });

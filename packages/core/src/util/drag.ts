@@ -10,21 +10,21 @@ const LEFT_MOUSE_BUTTON_CODE = 0;
 
 function createDrag({
   onDragStart = noop,
-  onDraging = noop,
+  onDragging = noop,
   onDragEnd = noop,
   step = 1,
   isStopPropagation = true,
 }) {
-  let isDraging = false;
-  let isStartDraging = false;
+  let isDragging = false;
+  let isStartDragging = false;
   let startX = 0;
   let startY = 0;
   let sumDeltaX = 0;
   let sumDeltaY = 0;
   function handleMouseMove(e: MouseEvent) {
     if (isStopPropagation) e.stopPropagation();
-    if (!isStartDraging) return;
-    isDraging = true;
+    if (!isStartDragging) return;
+    isDragging = true;
     sumDeltaX += e.clientX - startX;
     sumDeltaY += e.clientY - startY;
     startX = e.clientX;
@@ -36,17 +36,17 @@ function createDrag({
       const deltaY = sumDeltaY - remainderY;
       sumDeltaX = remainderX;
       sumDeltaY = remainderY;
-      onDraging({ deltaX, deltaY, event: e });
+      onDragging({ deltaX, deltaY, event: e });
     }
   }
 
   function handleMouseUp(e: MouseEvent) {
     if (isStopPropagation) e.stopPropagation();
-    isStartDraging = false;
+    isStartDragging = false;
     DOC.removeEventListener('mousemove', handleMouseMove, false);
     DOC.removeEventListener('mouseup', handleMouseUp, false);
-    if (!isDraging) return;
-    isDraging = false;
+    if (!isDragging) return;
+    isDragging = false;
     return onDragEnd({ event: e });
   }
 
@@ -54,7 +54,7 @@ function createDrag({
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return;
     if (isStopPropagation) e.stopPropagation();
 
-    isStartDraging = true;
+    isStartDragging = true;
     startX = e.clientX;
     startY = e.clientY;
 
@@ -70,12 +70,12 @@ function createDrag({
 // 因为在绘制的过程中因为放大缩小，移动的真实的step则是变化的。
 class StepDrag {
   onDragStart: Function;
-  onDraging: Function;
+  onDragging: Function;
   onDragEnd: Function;
   step: number;
   isStopPropagation: boolean;
-  isDraging = false;
-  isStartDraging = false;
+  isDragging = false;
+  isStartDragging = false;
   startX = 0;
   startY = 0;
   sumDeltaX = 0;
@@ -86,7 +86,7 @@ class StepDrag {
   startTime?: number;
   constructor({
     onDragStart = noop,
-    onDraging = noop,
+    onDragging = noop,
     onDragEnd = noop,
     eventType = '',
     eventCenter = null,
@@ -95,7 +95,7 @@ class StepDrag {
     model = null,
   }) {
     this.onDragStart = onDragStart;
-    this.onDraging = onDraging;
+    this.onDragging = onDragging;
     this.onDragEnd = onDragEnd;
     this.step = step;
     this.isStopPropagation = isStopPropagation;
@@ -109,7 +109,7 @@ class StepDrag {
   handleMouseDown = (e: MouseEvent) => {
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return;
     if (this.isStopPropagation) e.stopPropagation();
-    this.isStartDraging = true;
+    this.isStartDragging = true;
     this.startX = e.clientX;
     this.startY = e.clientY;
 
@@ -121,7 +121,7 @@ class StepDrag {
   };
   handleMouseMove = (e: MouseEvent) => {
     if (this.isStopPropagation) e.stopPropagation();
-    if (!this.isStartDraging) return;
+    if (!this.isStartDragging) return;
     this.sumDeltaX += e.clientX - this.startX;
     this.sumDeltaY += e.clientY - this.startY;
     this.startX = e.clientX;
@@ -141,35 +141,35 @@ class StepDrag {
       /**
        * 为了区分点击和拖动，在鼠标没有拖动时，不触发dragstart。
        */
-      if (!this.isDraging) {
+      if (!this.isDragging) {
         this.eventCenter?.emit(EventType[`${this.eventType}_DRAGSTART`], { e, data: elementData });
         this.onDragStart({ event: e });
       }
-      this.isDraging = true;
+      this.isDragging = true;
       // 为了让dragstart和drag不在同一个事件循环中，使drag事件放到下一个消息队列中。
       setTimeout(() => {
-        this.onDraging({ deltaX, deltaY, event: e });
+        this.onDragging({ deltaX, deltaY, event: e });
         this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: elementData });
         this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
       }, 0);
     }
   };
   handleMouseUp = (e: MouseEvent) => {
-    this.isStartDraging = false;
+    this.isStartDragging = false;
     if (this.isStopPropagation) e.stopPropagation();
     DOC.removeEventListener('mousemove', this.handleMouseMove, false);
     DOC.removeEventListener('mouseup', this.handleMouseUp, false);
     const elementData = this.model?.getData();
     this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
-    if (!this.isDraging) return;
-    this.isDraging = false;
+    if (!this.isDragging) return;
+    this.isDragging = false;
     this.onDragEnd({ event: e });
     this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
   };
   cancelDrag = () => {
     DOC.removeEventListener('mousemove', this.handleMouseMove, false);
     DOC.removeEventListener('mouseup', this.handleMouseUp, false);
-    this.isDraging = false;
+    this.isDragging = false;
   };
 }
 

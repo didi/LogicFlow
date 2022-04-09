@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import { BaseNodeModel, DiamondNodeModel, EllipseNodeModel, GraphModel, LogicFlowUtil, RectNodeModel } from '@logicflow/core';
 import Rect from '../BasicShape/Rect';
-import { getDiamondReizeEdgePoint, getEllipseReizeEdgePoint, getRectReizeEdgePoint, ModelType } from './Util';
+import { getDiamondResizeEdgePoint, getEllipseResizeEdgePoint, getRectResizeEdgePoint, ModelType } from './Util';
 
 const { StepDrag } = LogicFlowUtil;
 
@@ -21,7 +21,7 @@ interface IState {
   startY: number,
   endX: number,
   endY: number,
-  draging: boolean,
+  dragging: boolean,
 }
 class Control extends Component<IProps> {
   index: number;
@@ -45,7 +45,7 @@ class Control extends Component<IProps> {
     }
     this.state = {};
     this.dragHandler = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       step,
     });
   }
@@ -160,12 +160,12 @@ class Control extends Component<IProps> {
     let afterPoint;
     edges.sourceEdges.forEach(item => {
       params.point = item.startPoint;
-      afterPoint = getRectReizeEdgePoint(params);
+      afterPoint = getRectResizeEdgePoint(params);
       item.updateStartPoint(afterPoint);
     });
     edges.targetEdges.forEach(item => {
       params.point = item.endPoint;
-      afterPoint = getRectReizeEdgePoint(params);
+      afterPoint = getRectResizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
     this.eventEmit({ beforeNode, afterNode });
@@ -230,12 +230,12 @@ class Control extends Component<IProps> {
     let afterPoint;
     edges.sourceEdges.forEach(item => {
       params.point = item.startPoint;
-      afterPoint = getEllipseReizeEdgePoint(params);
+      afterPoint = getEllipseResizeEdgePoint(params);
       item.updateStartPoint(afterPoint);
     });
     edges.targetEdges.forEach(item => {
       params.point = item.endPoint;
-      afterPoint = getEllipseReizeEdgePoint(params);
+      afterPoint = getEllipseResizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
     this.eventEmit({ beforeNode: { ...beforeNode, rx, ry }, afterNode });
@@ -300,12 +300,12 @@ class Control extends Component<IProps> {
     const edges = this.getNodeEdges(id);
     edges.sourceEdges.forEach(item => {
       params.point = item.startPoint;
-      afterPoint = getDiamondReizeEdgePoint(params);
+      afterPoint = getDiamondResizeEdgePoint(params);
       item.updateStartPoint(afterPoint);
     });
     edges.targetEdges.forEach(item => {
       params.point = item.endPoint;
-      afterPoint = getDiamondReizeEdgePoint(params);
+      afterPoint = getDiamondResizeEdgePoint(params);
       item.updateEndPoint(afterPoint);
     });
     this.eventEmit({ beforeNode, afterNode });
@@ -316,7 +316,7 @@ class Control extends Component<IProps> {
     const newNodeSize = { id, modelType, type, ...afterNode };
     this.graphModel.eventCenter.emit('node:resize', { oldNodeSize, newNodeSize });
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { modelType } = this.nodeModel;
     // html和矩形的计算方式是一样的，共用一个方法
     if (modelType === ModelType.RECT_NODE || modelType === ModelType.HTML_NODE) {

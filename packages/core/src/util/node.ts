@@ -207,8 +207,8 @@ export const getClosestRadiusCenter = (
       closestRadiusPoint = item;
     }
   });
-  const corssPoint = getCrossPointWithCircle(point, direction, closestRadiusPoint);
-  return corssPoint;
+  const crossPoint = getCrossPointWithCircle(point, direction, closestRadiusPoint);
+  return crossPoint;
 };
 /* 求点在垂直或者水平方向上与圆形的交点 */
 export const getCrossPointWithCircle = (
@@ -255,7 +255,7 @@ export const pointEdgeDirection = (point: Point, node: BaseNode): Direction => {
 export const inStraightLineOfRect = (point: Point, node: BaseNode): boolean => {
   const rect = node as RectNode;
   let isInStraight = false;
-  const rectStragit = {
+  const rectBox = {
     minX: rect.x - rect.width / 2 + rect.radius,
     maxX: rect.x + rect.width / 2 - rect.radius,
     minY: rect.y - rect.height / 2 + rect.radius,
@@ -265,9 +265,9 @@ export const inStraightLineOfRect = (point: Point, node: BaseNode): boolean => {
     x, y, width, height,
   } = rect;
   if (point.y === y + (height / 2) || point.y === y - (height / 2)) {
-    isInStraight = point.x > rectStragit.minX && point.x < rectStragit.maxX;
+    isInStraight = point.x > rectBox.minX && point.x < rectBox.maxX;
   } else if (point.x === x + (width / 2) || point.x === x - (width / 2)) {
-    isInStraight = point.y > rectStragit.minY && point.y < rectStragit.maxY;
+    isInStraight = point.y > rectBox.minY && point.y < rectBox.maxY;
   }
   return isInStraight;
 };

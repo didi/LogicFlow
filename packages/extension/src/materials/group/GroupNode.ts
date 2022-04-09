@@ -269,7 +269,7 @@ class GroupNode extends RectResize.view {
     const { resizable, properties } = this.props.model;
     return resizable && !properties.isFolded ? super.getControlGroup() : null;
   }
-  getAddedableShape() {
+  getAddAbleShape() {
     const { width, height, x, y, radius, properties } = this.props.model;
     if (!properties.groupAddable) return null;
     const { strokeWidth } = this.props.model.getNodeStyle();
@@ -323,7 +323,7 @@ class GroupNode extends RectResize.view {
   }
   getResizeShape() {
     return h('g', {}, [
-      this.getAddedableShape(),
+      this.getAddAbleShape(),
       super.getResizeShape(),
       this.getFoldIcon(),
     ]);

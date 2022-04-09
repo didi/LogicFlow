@@ -12,7 +12,7 @@ export default class HtmlNode extends BaseNode {
     return this.ref;
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 自定义HTML节点内容
    * @param {HTMLElement} rootEl 自定义HTML节点内容可以挂载的dom节点
    * @example
@@ -27,7 +27,7 @@ export default class HtmlNode extends BaseNode {
     rootEl.appendChild(document.createElement('div'));
   }
   /**
-   * @overridable 支持重写
+   * @override 支持重写
    * 和react的shouldComponentUpdate类似，都是为了避免出发不必要的render.
    * 但是这里不一样的地方在于，setHtml方法，我们只在properties发生变化了后再触发。
    * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.

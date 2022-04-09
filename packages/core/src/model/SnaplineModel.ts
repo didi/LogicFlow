@@ -142,13 +142,13 @@ export default class SnaplineModel {
     return assign({ isShowVertical, position: { x: verticalX } });
   }
   // 计算节点与其他节点的对齐信息
-  getSnapLinePosition(dragingNode: NodeData, nodes: BaseNodeModel[]): SnaplineInfo {
-    const snaplineInfo = this.getCenterSnapLine(dragingNode, nodes);
+  getSnapLinePosition(draggingNode: NodeData, nodes: BaseNodeModel[]): SnaplineInfo {
+    const snaplineInfo = this.getCenterSnapLine(draggingNode, nodes);
     const { isShowHorizontal, isShowVertical } = snaplineInfo;
     // 中心对齐优先级最高
     // 如果没有中心坐标的水平对齐，计算上下边框的对齐
     if (!isShowHorizontal) {
-      const horizontalSnapline = this.getHorizontalSnapline(dragingNode, nodes);
+      const horizontalSnapline = this.getHorizontalSnapline(draggingNode, nodes);
       if (horizontalSnapline.isShowHorizontal) {
         snaplineInfo.isShowHorizontal = horizontalSnapline.isShowHorizontal;
         snaplineInfo.position.y = horizontalSnapline.position.y;
@@ -156,7 +156,7 @@ export default class SnaplineModel {
     }
     // 如果没有中心坐标的垂直对齐，计算左右边框的对齐
     if (!isShowVertical) {
-      const verticalSnapline = this.getVerticalSnapline(dragingNode, nodes);
+      const verticalSnapline = this.getVerticalSnapline(draggingNode, nodes);
       if (verticalSnapline.isShowVertical) {
         snaplineInfo.isShowVertical = verticalSnapline.isShowVertical;
         snaplineInfo.position.x = verticalSnapline.position.x;

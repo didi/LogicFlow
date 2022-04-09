@@ -1,6 +1,6 @@
 /**
  * 自动布局插件
- * 依赖flowpath插件
+ * 依赖flow-path插件
  * 未完善
  */
 
@@ -148,7 +148,7 @@ class AutoLayout {
     const target = this.newNodeMap.get(targetNodeId);
     const { width, height } = this.getShape(sourceNodeId);
     const { width: targetWidth, height: targetHeight } = this.getShape(targetNodeId);
-    const postionType = this.getRelativePosition(source, target);
+    const positionType = this.getRelativePosition(source, target);
     const startPoint = {
       x: source.x,
       y: source.y,
@@ -157,7 +157,7 @@ class AutoLayout {
       x: target.x,
       y: target.y,
     };
-    switch (postionType) {
+    switch (positionType) {
       case POSITION_TYPE.LEFT:
         startPoint.x = source.x + width / 2;
         endPoint.x = target.x - targetWidth / 2;
@@ -183,20 +183,20 @@ class AutoLayout {
    * source一定在target左边。
    * 1. 如果source和target在同一x, y坐标内容。
    * 2. 如果source在target左上方。
-   * 3. 如果souce在target左下方。
+   * 3. 如果source在target左下方。
    */
   private getRelativePosition(source, target) {
     const { y } = source;
     const { y: y1 } = target;
-    let postionType;
+    let positionType;
     if (y < y1) {
-      postionType = -1;
+      positionType = -1;
     } else if (y === y1) {
-      postionType = 0;
+      positionType = 0;
     } else {
-      postionType = 1;
+      positionType = 1;
     }
-    return postionType;
+    return positionType;
   }
   /**
    * 获取边节点图形的宽高。

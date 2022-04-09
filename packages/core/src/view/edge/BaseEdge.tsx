@@ -220,7 +220,7 @@ export default class BaseEdge extends Component<IProps> {
   }
   render() {
     const { model: { isSelected, isHitable }, graphModel } = this.props;
-    const isDraging = this.getIsDraging();
+    const isDragging = this.getIsDraging();
     const { editConfigModel: { adjustEdgeStartAndEnd }, animation } = graphModel;
     // performance 只允许出现一条edge有动画
     const isShowAnimation = isSelected && animation.edge
@@ -242,7 +242,7 @@ export default class BaseEdge extends Component<IProps> {
           {this.getText()}
           {this.getArrow()}
         </g>
-        {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}
+        {(adjustEdgeStartAndEnd && isSelected && !isDragging) ? this.getAdjustPoints() : ''}
       </g>
     );
   }

@@ -52,7 +52,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     // todo: 换成stepDrag，参考anchor对外抛出事件
     this.dragHandler = createDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
     });
   }
@@ -74,7 +74,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     });
     edgeModel.isHitable = false;
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, type } = this.props;
     const { transformModel } = graphModel;

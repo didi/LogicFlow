@@ -164,11 +164,11 @@ class ContextMenu {
     const leftTopY = y - node.y / 2 - 20;
     const rightBottomX = node.x + nodeModel.width + NEXT_X_DISTANCE;
     const rightBottomY = y + node.y / 2 + 20;
-    const exsitElements = this.lf.getAreaElement(
+    const existElements = this.lf.getAreaElement(
       [leftTopX, leftTopY],
       [rightBottomX, rightBottomY],
     );
-    if (exsitElements.length) {
+    if (existElements.length) {
       y = y + NEXT_Y_DISTANCE;
       this.addNode(node, y);
       return;
