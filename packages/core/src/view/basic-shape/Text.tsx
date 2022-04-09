@@ -73,6 +73,7 @@ function renderHtmlText(props) {
     overflowMode,
     x,
     y,
+    className,
   } = props;
   const { width, textHeight } = model;
   const textRealWidth = props.textWidth || width;
@@ -105,6 +106,7 @@ function renderHtmlText(props) {
         height={foreignObjectHeight}
         x={x - textRealWidth / 2}
         y={y - foreignObjectHeight / 2}
+        className={className}
       >
         <div
           className="lf-node-text-auto-wrap"
