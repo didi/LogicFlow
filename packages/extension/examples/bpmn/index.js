@@ -33,6 +33,7 @@ window.onload = function () {
     },
     snapline: true,
   });
+  lf.extension.bpmnXmlAdapter.processAttributes['-engine-type'] = 'trubo';
   lf.setMenuConfig({
     nodeMenu: [
       {
