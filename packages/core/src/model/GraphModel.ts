@@ -6,7 +6,7 @@ import EditConfigModel from './EditConfigModel';
 import TransfromModel from './TransformModel';
 import { IBaseModel } from './BaseModel';
 import {
-  ElementState, ModelType, EventType, ElementMaxzIndex, ElementType, OverlapMode,
+  ElementState, ModelType, EventType, ElementMaxZIndex, ElementType, OverlapMode,
 } from '../constant/constant';
 import {
   AdditionData,
@@ -208,7 +208,7 @@ class GraphModel {
           || this.isElementInArea(currentItem, visibleLt, visibleRb, false, false)
         )
       ) {
-        if (currentItem.zIndex === ElementMaxzIndex) {
+        if (currentItem.zIndex === ElementMaxZIndex) {
           topElementIdx = showElements.length;
         }
         showElements.push(currentItem);
@@ -403,34 +403,34 @@ class GraphModel {
   }
   // 用户history记录的数据，忽略拖拽过程中的数据变更
   modelToHistoryData() {
-    let nodeDraging = false;
+    let nodeDragging = false;
     const nodes = [];
     // 如果有节点在拖拽中，不更新history
     for (let i = 0; i < this.nodes.length; i++) {
       const nodeMode = this.nodes[i];
       if (nodeMode.isDragging) {
-        nodeDraging = true;
+        nodeDragging = true;
         break;
       } else {
         nodes.push(nodeMode.getHistoryData());
       }
     }
-    if (nodeDraging) {
+    if (nodeDragging) {
       return false;
     }
     // 如果有边在拖拽中，不更新history
-    let edgeDraging = false;
+    let edgeDragging = false;
     const edges = [];
     for (let j = 0; j < this.edges.length; j++) {
       const edgeMode = this.edges[j];
       if (edgeMode.isDragging) {
-        edgeDraging = true;
+        edgeDragging = true;
         break;
       } else {
         edges.push(edgeMode.getHistoryData());
       }
     }
-    if (edgeDraging) {
+    if (edgeDragging) {
       return false;
     }
     return {
@@ -593,7 +593,7 @@ class GraphModel {
     if (element) {
       if (this.overlapMode === OverlapMode.DEFAULT) {
         this.topElement?.setZIndex();
-        element.setZIndex(ElementMaxzIndex);
+        element.setZIndex(ElementMaxZIndex);
         this.topElement = element;
       }
       if (this.overlapMode === OverlapMode.INCREASE) {
@@ -685,10 +685,10 @@ class GraphModel {
    * @param nodeModel 节点Id
    * @param deltaX X轴移动距离
    * @param deltaY Y轴移动距离
-   * @param isignoreRule 是否忽略移动规则限制
+   * @param isIgnoreRule 是否忽略移动规则限制
    */
   @action
-  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number, isignoreRule = false) {
+  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number, isIgnoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -696,7 +696,7 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    const r = nodeModel.move(deltaX, deltaY, isignoreRule);
+    const r = nodeModel.move(deltaX, deltaY, isIgnoreRule);
     // 2) 移动边
     r && this.moveEdge(nodeId, deltaX, deltaY);
   }
@@ -708,7 +708,7 @@ class GraphModel {
    * @param y Y轴目标位置
    */
   @action
-  moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number, isignoreRule = false) {
+  moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number, isIgnoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -722,7 +722,7 @@ class GraphModel {
     } = nodeModel;
     const deltaX = x - originX;
     const deltaY = y - originY;
-    this.moveNode(nodeId, deltaX, deltaY, isignoreRule);
+    this.moveNode(nodeId, deltaX, deltaY, isIgnoreRule);
   }
   /**
    * 显示节点、连线文本编辑框
@@ -959,8 +959,8 @@ class GraphModel {
    * 移动的节点之间的边会保持相对位置
    */
   @action
-  moveNodes(nodeIds: string[], deltaX: number, deltaY: number, isignoreRule = false) {
-    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isignoreRule));
+  moveNodes(nodeIds: string[], deltaX: number, deltaY: number, isIgnoreRule = false) {
+    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isIgnoreRule));
   }
   /**
    * 添加节点移动限制规则，在节点移动的时候触发。

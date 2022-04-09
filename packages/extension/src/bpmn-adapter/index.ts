@@ -62,8 +62,8 @@ enum BpmnElements {
 const defaultAttrs = ['-name', '-id', 'bpmn:incoming', 'bpmn:outgoing', '-sourceRef', '-targetRef'];
 
 /**
- * 将普通json转换为xmljson
- * xmljson中properity会以“-”开头
+ * 将普通json转换为xmlJson
+ * xmlJson中property会以“-”开头
  * 如果没有“-”表示为子节点
  */
 function toXmlJson(json) {
@@ -139,8 +139,6 @@ function convertLf2ProcessData(bpmnProcessData, data) {
   });
   const sequenceFlow = data.edges.map((edge: EdgeConfig) => {
     const targetNode = nodeMap.get(edge.targetNodeId);
-    // @see https://github.com/didi/LogicFlow/issues/325
-    // 需要保证incomming在outgoing之前
     if (!targetNode['bpmn:incoming']) {
       targetNode['bpmn:incoming'] = edge.id;
     } else if (Array.isArray(targetNode['bpmn:incoming'])) {
@@ -151,17 +149,17 @@ function convertLf2ProcessData(bpmnProcessData, data) {
         edge.id,
       ];
     }
-    const sourceNode = nodeMap.get(edge.sourceNodeId);
-    if (!sourceNode['bpmn:outgoing']) {
-      sourceNode['bpmn:outgoing'] = edge.id;
-    } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
-      sourceNode['bpmn:outgoing'].push(edge.id);
-    } else { // 字符串转数组
-      sourceNode['bpmn:outgoing'] = [
-        sourceNode['bpmn:outgoing'],
-        edge.id,
-      ];
-    }
+    // const sourceNode = nodeMap.get(edge.sourceNodeId);
+    // if (!sourceNode['bpmn:outgoing']) {
+    //   sourceNode['bpmn:outgoing'] = edge.id;
+    // } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
+    //   sourceNode['bpmn:outgoing'].push(edge.id);
+    // } else { // 字符串转数组
+    //   sourceNode['bpmn:outgoing'] = [
+    //     sourceNode['bpmn:outgoing'],
+    //     edge.id,
+    //   ];
+    // }
     const edgeConfig = {
       '-id': edge.id,
       '-sourceRef': edge.sourceNodeId,
@@ -175,6 +173,21 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       Object.assign(edgeConfig, properties);
     }
     return edgeConfig;
+  });
+  // @see https://github.com/didi/LogicFlow/issues/325
+  // 需要保证incomming在outgoing之前
+  data.edges.forEach((edge: EdgeConfig) => {
+    const sourceNode = nodeMap.get(edge.sourceNodeId);
+    if (!sourceNode['bpmn:outgoing']) {
+      sourceNode['bpmn:outgoing'] = edge.id;
+    } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
+      sourceNode['bpmn:outgoing'].push(edge.id);
+    } else { // 字符串转数组
+      sourceNode['bpmn:outgoing'] = [
+        sourceNode['bpmn:outgoing'],
+        edge.id,
+      ];
+    }
   });
   bpmnProcessData[BpmnElements.FLOW] = sequenceFlow;
 }
@@ -414,6 +427,7 @@ function getEdgeConfig(edgeValue, processValue) {
 
 const BpmnAdapter = {
   pluginName: 'bpmn-adapter',
+  isExecutable: 'true',
   install(lf) {
     lf.adapterIn = this.adapterIn;
     lf.adapterOut = this.adapterOut;
@@ -425,7 +439,7 @@ const BpmnAdapter = {
   adapterOut(data) {
     const bpmnProcessData = {
       '-id': `Process_${getBpmnId()}`,
-      '-isExecutable': 'false',
+      '-isExecutable': this.isExecutable,
     };
     convertLf2ProcessData(bpmnProcessData, data);
     const bpmnDiagramData = {
