@@ -74,8 +74,6 @@ export default {
       LogicFlow.use(SelectionSelect)
       const lf = new LogicFlow({
         container: this.$refs.diagram,
-        width: this.diagramWidth,
-        height: this.diagramHeight,
         overlapMode: 1,
         autoWrap: true,
         metaKeyMultipleSelected: true,

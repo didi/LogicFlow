@@ -90,7 +90,7 @@ export enum SegmentDirection {
   VERTICAL = 'vertical',
 }
 
-export const ElementMaxzIndex = 9999;
+export const ElementMaxZIndex = 9999;
 
 export enum OverlapMode {
   DEFAULT = 0,
