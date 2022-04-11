@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.12-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.11...@logicflow/core@1.1.12-alpha.0) (2022-04-09)
+
+
+### Bug Fixes
+
+* cannot move node while width and height value is zero ([39238a2](https://github.com/didi/LogicFlow/commit/39238a27b741c7367b7a94c760d4083a2103239d))
+
+
+### Features
+
+* add api renderRawData ([07b3d80](https://github.com/didi/LogicFlow/commit/07b3d806052428a9d2edf66db2db7e0938ce010e))
+
+
+
+
+
 ## [1.1.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.10...@logicflow/core@1.1.11) (2022-03-29)
 
 **Note:** Version bump only for package @logicflow/core
