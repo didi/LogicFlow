@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.12...@logicflow/core@1.2.0-alpha.0) (2022-04-13)
+
+
+### Bug Fixes
+
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+* typo error ([83d46e1](https://github.com/didi/LogicFlow/commit/83d46e11a1aaf8a5af13eef8305aa360069bfc03))
+* typo error ([5b878ae](https://github.com/didi/LogicFlow/commit/5b878aeb8bf783b059645cffb5d7a2c11400dbf9))
+
+
+### Features
+
+* support autowrap text custom class name ([a2ca253](https://github.com/didi/LogicFlow/commit/a2ca253bc95dcb135f5c27232f39ec5badc08aca))
+
+
+
+
+
 ## [1.1.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.12-alpha.0...@logicflow/core@1.1.12) (2022-04-13)
 
 **Note:** Version bump only for package @logicflow/core
