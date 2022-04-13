@@ -148,24 +148,27 @@ class StepDrag {
       }
       this.isDraging = true;
       // 为了让dragstart和drag不在同一个事件循环中，使drag事件放到下一个消息队列中。
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.onDraging({ deltaX, deltaY, event: e });
         this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: elementData });
         this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
-      }, 0);
+      });
     }
   };
   handleMouseUp = (e: MouseEvent) => {
     this.isStartDraging = false;
     if (this.isStopPropagation) e.stopPropagation();
-    DOC.removeEventListener('mousemove', this.handleMouseMove, false);
-    DOC.removeEventListener('mouseup', this.handleMouseUp, false);
-    const elementData = this.model?.getData();
-    this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
-    if (!this.isDraging) return;
-    this.isDraging = false;
-    this.onDragEnd({ event: e });
-    this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
+    // fix #568: 如果onDraging在下一个事件循环中触发，而drop在当前事件循环，会出现问题。
+    Promise.resolve().then(() => {
+      DOC.removeEventListener('mousemove', this.handleMouseMove, false);
+      DOC.removeEventListener('mouseup', this.handleMouseUp, false);
+      const elementData = this.model?.getData();
+      this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
+      if (!this.isDraging) return;
+      this.isDraging = false;
+      this.onDragEnd({ event: e });
+      this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
+    });
   };
   cancelDrag = () => {
     DOC.removeEventListener('mousemove', this.handleMouseMove, false);
