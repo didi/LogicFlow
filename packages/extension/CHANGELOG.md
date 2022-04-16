@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.12...@logicflow/extension@1.1.13) (2022-04-16)
+
+
+### Features
+
+* add useGlobalRules and customCssRules property ([88dadb8](https://github.com/didi/LogicFlow/commit/88dadb8e2c96d9f7ee4d4c286a6aa42c8941baaf))
+
+
+
+
+
 ## [1.1.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.12-alpha.0...@logicflow/extension@1.1.12) (2022-04-13)
 
 **Note:** Version bump only for package @logicflow/extension
