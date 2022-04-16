@@ -375,8 +375,8 @@
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
-          hoverOutline: false,
-          nodeSelectedOutline: false,
+          // hoverOutline: false,
+          // nodeSelectedOutline: false,
           multipleSelectKey: 'shift',
           disabledTools: ['multipleSelect'],
           // metaKeyMultipleSelected: false,
@@ -628,12 +628,8 @@
       function InitElementFunction() {
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
-            type: 'uml',
-            width: 50,
-            height: 50,
-            x: 100,
-            y: 100,
-            fill: '#fff',
+            type: 'text',
+            text: 'xxxxx'
           })
         }
         window.mouseDownCircle = function mouseDownRect() {

@@ -44,7 +44,7 @@ window.onload = function () {
   class UmlModel extends HtmlNodeModel {
     setAttributes() {
       const width = 200;
-      const height = 130;
+      const height = 230;
       this.width = width;
       this.height = height;
       const properties = this.properties;
@@ -64,11 +64,11 @@ window.onload = function () {
       const html = `
         <div>
           <div class="uml-head">Head</div>
-          <div class="uml-body">
+          <div class="uml-body demo2">
             <div>+ ${properties.name}</div>
             <div>+ ${properties.body}</div>
           </div>
-          <div class="uml-footer">
+          <div class="uml-footer demo1">
             <div>+ setHead(Head $head)</div>
             <div>+ setBody(Body $body)</div>
           </div>
@@ -143,6 +143,19 @@ window.onload = function () {
       }
     ],
   });
+  lf.extension.snapshot.useGlobalRules = false
+  lf.extension.snapshot.customCssRules = `
+    .lf-node-text-auto-wrap-content{
+      line-height: 1.2;
+      background: transparent;
+      text-align: center;
+      word-break: break-all;
+      width: 100%;
+    }
+    .lf-canvas-overlay {
+      background: red;
+    }
+  `
 }
 document.getElementById('download').addEventListener('click', () => {
   lf.getSnapshot()
