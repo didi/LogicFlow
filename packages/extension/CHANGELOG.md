@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.1...@logicflow/extension@1.2.0-alpha.2) (2022-04-16)
+
+
+### Features
+
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+
+
+
+
+
 # [1.2.0-alpha.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.0...@logicflow/extension@1.2.0-alpha.1) (2022-04-16)
 
 
