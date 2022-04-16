@@ -22,14 +22,16 @@ const DefalutSelectionMenuKey = 'lf:defaultSelectionMenu';
 
 class Menu {
   lf: LogicFlow;
+  LogicFlow: any;
   private __container: HTMLElement;
   private __menuDOM: HTMLElement;
   private menuTypeMap: Map<string, MenuItem[]>;
   private __currentData: any;
   static pluginName = 'menu';
-  constructor({ lf }) {
+  constructor(args) {
     this.__menuDOM = document.createElement('ul');
-    this.lf = lf;
+    this.lf = args.lf;
+    this.LogicFlow = args.LogicFlow;
     this.menuTypeMap = new Map();
     this.init();
     this.lf.setMenuConfig = (config) => {
@@ -48,19 +50,19 @@ class Menu {
   private init() {
     const defalutNodeMenu = [
       {
-        text: '删除',
+        text: this.LogicFlow.t('删除'),
         callback: (node) => {
           this.lf.deleteNode(node.id);
         },
       },
       {
-        text: '编辑文本',
+        text: this.LogicFlow.t('编辑文本'),
         callback: (node) => {
           this.lf.graphModel.editText(node.id);
         },
       },
       {
-        text: '复制',
+        text: this.LogicFlow.t('复制'),
         callback: (node) => {
           this.lf.cloneNode(node.id);
         },
@@ -70,13 +72,13 @@ class Menu {
 
     const defaultEdgeMenu = [
       {
-        text: '删除',
+        text: this.LogicFlow.t('删除'),
         callback: (edge) => {
           this.lf.deleteEdge(edge.id);
         },
       },
       {
-        text: '编辑文本',
+        text: this.LogicFlow.t('编辑文本'),
         callback: (edge) => {
           this.lf.graphModel.editText(edge.id);
         },
@@ -88,7 +90,7 @@ class Menu {
 
     const DefalutSelectionMenu = [
       {
-        text: '删除',
+        text: this.LogicFlow.t('删除'),
         callback: (elements) => {
           this.lf.clearSelectElements();
           elements.edges.forEach(edge => this.lf.deleteEdge(edge.id));

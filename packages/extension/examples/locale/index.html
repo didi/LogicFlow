@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LOGIC FLOW</title>
+  <link rel="stylesheet" href="/core/dist/style/index.css">
+  <link rel="stylesheet" href="/extension/src/style/index.css">
+  <style>
+    html,body {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color: #FFF;
+    }
+    .rules-graph {
+      margin-top: 30px;
+      margin-left: 30px;
+      position: relative;
+    }
+    .pattern {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      z-index: 111;
+      align-items: center;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+      padding: 10px 0;
+    }
+    #app {
+      width: 500px;
+      height: 500px;
+      border: 1px solid #efefef;
+    }
+  </style>
+</head>
+<body>
+  <div class="rules-graph">
+    <select class="locale-switcher">
+      <option value="en">English</option>
+      <option value="zh-hans">Chinese (中文)</option>
+    </select>
+    <div id="app"></div>
+  </div>
+  <script src="/core/dist/logic-flow.js"></script>
+  <script src="./index.js"></script>
+  <script src="/DndPanel.js"></script>
+  <script src="/EnLocale.js"></script>
+  <script src="/Menu.js"></script>
+  <script src="/Control.js"></script>
+  <script>
+    LogicFlow.use(EnLocale);
+    LogicFlow.use(Menu);
+    LogicFlow.use(Control);
+    LogicFlow.use(DndPanel);
+  </script>
+</body>
+</html>
