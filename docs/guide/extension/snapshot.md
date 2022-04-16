@@ -25,6 +25,8 @@ const lf = new LogicFlow({
 // 可以使用任意方式触发，然后将绘制的图形下载到本地磁盘上
 document.getElementById('download').addEventListener('click', () => {
   lf.getSnapshot()
+  // 或者 1.1.13版本
+  // lf.extension.snapshot.getSnapshot()
 })
 ```
 
@@ -48,6 +50,25 @@ lf.render(data);
 const xml = lfJson2Xml(lf.getGraphData())
 ```
 
+### 自定义下载css
+
+为了保持流程图生成的图片与画布上效果一致，`snapshot`插件默认会将当前页面所有的css规则都加载克隆到canvas中。可以修改`useGlobalRules`来禁止加载所有css规则，然后通过`customCssRules`来自定义下载流程图属性。
+
+```js
+  lf.extension.snapshot.useGlobalRules = false
+  lf.extension.snapshot.customCssRules = `
+    .lf-node-text-auto-wrap-content{
+      line-height: 1.2;
+      background: transparent;
+      text-align: center;
+      word-break: break-all;
+      width: 100%;
+    }
+    .lf-canvas-overlay {
+      background: red;
+    }
+  `
+```
 ### 示例
 
 <iframe src="https://codesandbox.io/embed/logicflow-base21-o3vqi?fontsize=14&hidenavigation=1&theme=dark&view=preview"

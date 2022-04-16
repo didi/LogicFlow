@@ -6,6 +6,7 @@ import BaseNodeModel from '../../model/node/BaseNodeModel';
 import BaseText from '../text/BaseText';
 import { ElementState, EventType, OverlapMode } from '../../constant/constant';
 import { StepDrag } from '../../util/drag';
+import { snapToGrid } from '../../util/geometry';
 import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
 import { CommonTheme } from '../../constant/DefaultTheme';
@@ -167,6 +168,9 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     // 2. 考虑鼠标位置不再节点中心
     x = x + this.moveOffset.x;
     y = y + this.moveOffset.y;
+    // 将x, y移动到grid上
+    x = snapToGrid(x, gridSize);
+    y = snapToGrid(y, gridSize);
     // 取节点左上角和右下角，计算节点移动是否超出范围
     const [leftTopX, leftTopY] = transformModel.CanvasPointToHtmlPoint(
       [x - model.width / 2, y - model.height / 2],
