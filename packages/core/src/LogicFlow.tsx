@@ -1023,6 +1023,14 @@ export default class LogicFlow {
   setView(type: string, component) {
     this.viewMap.set(type, component);
   }
+  /**
+     * 内部保留方法
+     * 用于支持国际化
+     */
+  static t(text: string): string {
+    return text;
+  }
+
   renderRawData(graphRawData) {
     this.graphModel.graphDataToModel(formatData(graphRawData));
     if (!this.options.isSilentMode && this.options.history !== false) {

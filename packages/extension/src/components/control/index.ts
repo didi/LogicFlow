@@ -12,58 +12,61 @@ type ControlItem = {
 
 class Control {
   private lf: LogicFlow;
+  private LogicFlow: any;
   static pluginName = 'control';
-  private controlItems: ControlItem[] = [
-    {
-      key: 'zoom-out',
-      iconClass: 'lf-control-zoomOut',
-      title: '缩小流程图',
-      text: '缩小',
-      onClick: () => {
-        this.lf.zoom(false);
-      },
-    },
-    {
-      key: 'zoom-in',
-      iconClass: 'lf-control-zoomIn',
-      title: '放大流程图',
-      text: '放大',
-      onClick: () => {
-        this.lf.zoom(true);
-      },
-    },
-    {
-      key: 'reset',
-      iconClass: 'lf-control-fit',
-      title: '恢复流程原有尺寸',
-      text: '适应',
-      onClick: () => {
-        this.lf.resetZoom();
-      },
-    },
-    {
-      key: 'undo',
-      iconClass: 'lf-control-undo',
-      title: '回到上一步',
-      text: '上一步',
-      onClick: () => {
-        this.lf.undo();
-      },
-    },
-    {
-      key: 'redo',
-      iconClass: 'lf-control-redo',
-      title: '移到下一步',
-      text: '下一步',
-      onClick: () => {
-        this.lf.redo();
-      },
-    },
-  ];
+  private controlItems: ControlItem[];
   private domContainer: HTMLElement;
   private toolEl: HTMLElement;
-  constructor({ lf }) {
-    this.lf = lf;
+  constructor(args) {
+    this.lf = args.lf;
+    this.LogicFlow = args.LogicFlow;
+    this.controlItems = [
+      {
+        key: 'zoom-out',
+        iconClass: 'lf-control-zoomOut',
+        title: this.LogicFlow.t('缩小流程图'),
+        text: this.LogicFlow.t('缩小'),
+        onClick: () => {
+          this.lf.zoom(false);
+        },
+      },
+      {
+        key: 'zoom-in',
+        iconClass: 'lf-control-zoomIn',
+        title: this.LogicFlow.t('放大流程图'),
+        text: this.LogicFlow.t('放大'),
+        onClick: () => {
+          this.lf.zoom(true);
+        },
+      },
+      {
+        key: 'reset',
+        iconClass: 'lf-control-fit',
+        title: this.LogicFlow.t('恢复流程原有尺寸'),
+        text: this.LogicFlow.t('适应'),
+        onClick: () => {
+          this.lf.resetZoom();
+        },
+      },
+      {
+        key: 'undo',
+        iconClass: 'lf-control-undo',
+        title: this.LogicFlow.t('回到上一步'),
+        text: this.LogicFlow.t('上一步'),
+        onClick: () => {
+          this.lf.undo();
+        },
+      },
+      {
+        key: 'redo',
+        iconClass: 'lf-control-redo',
+        title: this.LogicFlow.t('移到下一步'),
+        text: this.LogicFlow.t('下一步'),
+        onClick: () => {
+          this.lf.redo();
+        },
+      },
+    ];
   }
   render(lf, domContainer) {
     this.destroy();
