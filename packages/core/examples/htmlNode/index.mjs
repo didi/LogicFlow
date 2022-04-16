@@ -31,3 +31,10 @@ lf.on("custom:button-click", (model) => {
     body: "LogicFlow"
   });
 });
+
+
+document.querySelector('#js_change').addEventListener('click', () => {
+  lf.getNodeModelById('custom-111').setProperty({
+    name: undefined
+  })
+})
