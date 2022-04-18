@@ -5,7 +5,7 @@ import customBezier from './customBezier.mjs';
 
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
-  adjustEdgeStartAndEnd: true,
+  // adjustEdgeStartAndEnd: true,
   width: 1000,
   grid: true,
   // edgeType: 'custom-polyline',
@@ -19,21 +19,21 @@ lf.register(customLine);
 lf.register(customBezier);
 lf.setDefaultEdgeType("bezier");
 baseData.edges.push({
-  type: 'custom-bezier',
+  type: 'custom-polyline',
   sourceNodeId: '1',
   targetNodeId: '4',
   properties: {
     isActived: false
   }
 });
-baseData.edges.push({
-  type: 'custom-line',
-  sourceNodeId: '2',
-  targetNodeId: '4',
-  properties: {
-    isActived: true
-  }
-});
+// baseData.edges.push({
+//   type: 'custom-line',
+//   sourceNodeId: '2',
+//   targetNodeId: '4',
+//   properties: {
+//     isActived: true
+//   }
+// });
 const data = window.sessionStorage.getItem('custom-edge-data');
 if (data) {
   lf.render(JSON.parse(data));

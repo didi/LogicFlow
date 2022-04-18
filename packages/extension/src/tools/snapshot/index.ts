@@ -2,35 +2,31 @@
  * 快照插件，生成视图
  */
 
-const Snapshot = {
-  pluginName: 'snapshot',
-  install(lf) {
+class Snapshot {
+  static pluginName = 'snapshot';
+  lf: any;
+  offsetX: number;
+  offsetY: number;
+  fileName: string;
+  customCssRules: string;
+  useGlobalRules: boolean;
+  constructor({ lf }) {
     this.lf = lf;
+    this.customCssRules = '';
+    this.useGlobalRules = true;
     /* 下载快照 */
     lf.getSnapshot = (fileName: string, backgroundColor: string) => {
-      this.offsetX = Number.MAX_SAFE_INTEGER;
-      this.offsetY = Number.MAX_SAFE_INTEGER;
-      this.fileName = fileName || `logic-flow.${Date.now()}.png`;
-      const svgRootElement = this.getSvgRootElement(lf);
-      this.downloadSvg(svgRootElement, this.fileName, backgroundColor);
+      this.getSnapshot(fileName, backgroundColor);
     };
     /* 获取Blob对象，用户图片上传 */
-    lf.getSnapshotBlob = (backgroundColor: string) => {
-      this.offsetX = Number.MAX_SAFE_INTEGER;
-      this.offsetY = Number.MAX_SAFE_INTEGER;
-      const svgRootElement = this.getSvgRootElement(lf);
-      return this.getBlob(svgRootElement, backgroundColor);
-    };
+    lf.getSnapshotBlob = (backgroundColor: string) => this.getSnapshotBlob(backgroundColor);
     /* 获取Base64对象，用户图片上传 */
-    lf.getSnapshotBase64 = (backgroundColor: string) => {
-      this.offsetX = Number.MAX_SAFE_INTEGER;
-      this.offsetY = Number.MAX_SAFE_INTEGER;
-      const svgRootElement = this.getSvgRootElement(lf);
-      return this.getBase64(svgRootElement, backgroundColor);
-    };
-  },
+    lf.getSnapshotBase64 = (backgroundColor: string) => this.getSnapshotBase64(backgroundColor);
+  }
   /* 获取svgRoot对象 */
   getSvgRootElement(lf) {
+    this.offsetX = Number.MAX_SAFE_INTEGER;
+    this.offsetY = Number.MAX_SAFE_INTEGER;
     lf.graphModel.nodes.forEach(item => {
       const {
         x, width, y, height,
@@ -59,7 +55,7 @@ const Snapshot = {
     });
     const svgRootElement = lf.container.querySelector('.lf-canvas-overlay');
     return svgRootElement;
-  },
+  }
   triggerDownload(imgURI: string) {
     const evt = new MouseEvent('click', {
       view: window,
@@ -71,7 +67,7 @@ const Snapshot = {
     a.setAttribute('href', imgURI);
     a.setAttribute('target', '_blank');
     a.dispatchEvent(evt);
-  },
+  }
   removeAnchor(element) {
     const { childNodes } = element;
     let childLength = element.childNodes && element.childNodes.length;
@@ -84,48 +80,56 @@ const Snapshot = {
         i--;
       }
     }
-  },
+  }
   /* 下载图片 */
-  downloadSvg(svg: SVGGraphicsElement, fileName: string, backgroundColor: string) {
-    this.getCanvasData(svg, backgroundColor).then(canvas => {
-      const imgURI = canvas
-        .toDataURL('image/png')
+  getSnapshot(fileName: string, backgroundColor: string) {
+    this.fileName = fileName || `logic-flow.${Date.now()}.png`;
+    const svg = this.getSvgRootElement(this.lf);
+    this.getCanvasData(svg, backgroundColor).then((canvas: HTMLCanvasElement) => {
+      const imgURI = canvas.toDataURL('image/png')
         .replace('image/png', 'image/octet-stream');
-      this.triggerDownload(imgURI, fileName);
+      this.triggerDownload(imgURI);
     });
-  },
+  }
   /* 获取base64对象 */
-  getBase64(svg: SVGGraphicsElement, backgroundColor: string) {
+  getSnapshotBase64(backgroundColor: string) {
+    const svg = this.getSvgRootElement(this.lf);
     return new Promise((resolve) => {
-      this.getCanvasData(svg, backgroundColor).then(canvas => {
+      this.getCanvasData(svg, backgroundColor).then((canvas: HTMLCanvasElement) => {
         const base64 = canvas.toDataURL('image/png');
         // 输出图片数据以及图片宽高
         resolve({ data: base64, width: canvas.width, height: canvas.height });
       });
     });
-  },
+  }
   /* 获取Blob对象 */
-  getBlob(svg: SVGGraphicsElement, backgroundColor: string) {
+  getSnapshotBlob(backgroundColor: string) {
+    const svg = this.getSvgRootElement(this.lf);
     return new Promise((resolve) => {
-      this.getCanvasData(svg, backgroundColor).then(canvas => {
+      this.getCanvasData(svg, backgroundColor).then((canvas: HTMLCanvasElement) => {
         canvas.toBlob(blob => {
           // 输出图片数据以及图片宽高
           resolve({ data: blob, width: canvas.width, height: canvas.height });
         }, 'image/png');
       });
     });
-  },
+  }
   getClassRules() {
     let rules = '';
-    const { styleSheets } = document;
-    for (let i = 0; i < styleSheets.length; i++) {
-      const sheet = styleSheets[i];
-      for (let j = 0; j < sheet.cssRules.length; j++) {
-        rules += sheet.cssRules[j].cssText;
+    if (this.useGlobalRules) {
+      const { styleSheets } = document;
+      for (let i = 0; i < styleSheets.length; i++) {
+        const sheet = styleSheets[i];
+        for (let j = 0; j < sheet.cssRules.length; j++) {
+          rules += sheet.cssRules[j].cssText;
+        }
       }
     }
+    if (this.customCssRules) {
+      rules += this.customCssRules;
+    }
     return rules;
-  },
+  }
   // 获取图片生成中中间产物canvas对象，用户转换为其他需要的格式
   getCanvasData(svg: SVGGraphicsElement, backgroundColor: string) {
     const copy = svg.cloneNode(true);
@@ -196,13 +200,14 @@ const Snapshot = {
       因为svg中存在dom存放在foreignObject元素中
       SVG图形转成img对象
       todo: 会导致一些清晰度问题这个需要再解决
+      fixme: XMLSerializer的中的css background url不会下载图片
       */
       const svg2Img = `data:image/svg+xml;charset=utf-8,${new XMLSerializer().serializeToString(copy)}`;
       const imgSrc = svg2Img.replace(/\n/g, '').replace(/\t/g, '').replace(/#/g, '%23');
       img.src = imgSrc;
     });
-  },
-};
+  }
+}
 
 export default Snapshot;
 
