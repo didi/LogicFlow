@@ -106,13 +106,13 @@ class Control {
       text.title = item.title;
       text.innerText = item.text;
       itemContainer.append(icon, text);
-      switch (item.text) {
-        case '上一步':
+      switch (item.key) {
+        case 'undo':
           this.lf.on('history:change', ({ data: { undoAble } }) => {
             itemContainer.className = undoAble ? NORMAL : DISABLED;
           });
           break;
-        case '下一步':
+        case 'redo':
           this.lf.on('history:change', ({ data: { redoAble } }) => {
             itemContainer.className = redoAble ? NORMAL : DISABLED;
           });
