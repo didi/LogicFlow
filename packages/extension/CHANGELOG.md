@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.3](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.2...@logicflow/extension@1.2.0-alpha.3) (2022-04-19)
+
+
+### Bug Fixes
+
+* update turbo adapter ([205e6c8](https://github.com/didi/LogicFlow/commit/205e6c8e7cb8809ad1f04ec6b8c92b5d25416257))
+
+
+
+
+
 # [1.2.0-alpha.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.1...@logicflow/extension@1.2.0-alpha.2) (2022-04-16)
 
 
