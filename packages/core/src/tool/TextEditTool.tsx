@@ -173,6 +173,10 @@ export default class TextEdit extends Component<IProps, IState> {
       id: textEditElement.id,
     };
   };
+  // fix: #587
+  keydownHandler = (ev) => {
+    ev.stopPropagation();
+  };
   placeCaretAtEnd(el) {
     if (window.getSelection !== undefined && document.createRange !== undefined) {
       const range = document.createRange();
@@ -196,6 +200,7 @@ export default class TextEdit extends Component<IProps, IState> {
             ref={this.ref}
             key={textEditElement.id}
             onKeyUp={this.keyupHandler}
+            onKeyDown={this.keydownHandler}
             onInput={this.inputHandler}
           >
             {textEditElement.text?.value}
