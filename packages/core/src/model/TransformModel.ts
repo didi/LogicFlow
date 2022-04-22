@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import { PointTuple, ZoomParam } from '../type';
@@ -23,15 +23,29 @@ export interface TransformInterface {
 export default class TransformModel implements TransformInterface {
   MINI_SCALE_SIZE = 0.2;
   MAX_SCALE_SIZE = 16;
-  @observable SCALE_X = 1;
-  @observable SKEW_Y = 0;
-  @observable SKEW_X = 0;
-  @observable SCALE_Y = 1;
-  @observable TRANSLATE_X = 0;
-  @observable TRANSLATE_Y = 0;
-  @observable ZOOM_SIZE = 0.04;
+  SCALE_X = 1;
+  SKEW_Y = 0;
+  SKEW_X = 0;
+  SCALE_Y = 1;
+  TRANSLATE_X = 0;
+  TRANSLATE_Y = 0;
+  ZOOM_SIZE = 0.04;
   eventCenter: EventEmitter;
   constructor(eventCenter) {
+    makeObservable(this, {
+      SCALE_X: observable,
+      SKEW_Y: observable,
+      SKEW_X: observable,
+      SCALE_Y: observable,
+      TRANSLATE_X: observable,
+      TRANSLATE_Y: observable,
+      ZOOM_SIZE: observable,
+      zoom: action,
+      resetZoom: action,
+      translate: action,
+      focusOn: action,
+    });
+
     this.eventCenter = eventCenter;
   }
   setZoomMiniSize(size: number): void {
@@ -92,7 +106,6 @@ export default class TransformModel implements TransformInterface {
    * @param point 缩放的原点
    * @returns {string} -放大缩小的比例
    */
-  @action
   zoom(zoomSize: ZoomParam = false, point?: PointTuple): string {
     let newScaleX = this.SCALE_X;
     let newScaleY = this.SCALE_Y;
@@ -131,14 +144,12 @@ export default class TransformModel implements TransformInterface {
       },
     });
   }
-  @action
-  resetZoom() : void {
+  resetZoom(): void {
     this.SCALE_X = 1;
     this.SCALE_Y = 1;
     this.emitGraphTransform('resetZoom');
   }
 
-  @action
   translate(x: number, y: number) {
     this.TRANSLATE_X += x;
     this.TRANSLATE_Y += y;
@@ -152,7 +163,6 @@ export default class TransformModel implements TransformInterface {
    * @param width 画布宽
    * @param height 画布高
    */
-  @action
   focusOn(targetX: number, targetY: number, width: number, height: number) {
     const [x, y] = this.CanvasPointToHtmlPoint([targetX, targetY]);
     const [deltaX, deltaY] = [width / 2 - x, height / 2 - y];

@@ -23,6 +23,7 @@ class CanvasOverlay extends Component<IProps, IState> {
   stepDrag: StepDrag;
   stepScrollX = 0;
   stepScrollY = 0;
+  ref: HTMLElement;
   constructor(props: IProps) {
     super();
     const { graphModel: { gridSize, eventCenter } } = props;
@@ -40,9 +41,36 @@ class CanvasOverlay extends Component<IProps, IState> {
       isDragging: false,
     };
   }
-  // get InjectedProps() {
-  //   return this.props as InjectedProps;
-  // }
+  componentDidMount() {
+    const { graphModel: { editConfigModel: {
+      stopScrollGraph,
+      stopZoomGraph,
+    } } } = this.props;
+    if (!stopScrollGraph || !stopZoomGraph) {
+      this.rootEl.addEventListener('mousewheel', this.zoomHandler, {
+        passive: true,
+      });
+    }
+    this.rootEl.addEventListener('mousedown', this.mouseDownHandler);
+    this.rootEl.addEventListener('contextmenu', this.handleContextMenu);
+  }
+  componentWillUnmount(): void {
+    const { graphModel: { editConfigModel: {
+      stopScrollGraph,
+      stopZoomGraph,
+    } } } = this.props;
+    if (!stopScrollGraph || !stopZoomGraph) {
+      this.rootEl.removeEventListener('mousewheel', this.zoomHandler);
+    }
+    this.rootEl.removeEventListener('mousedown', this.mouseDownHandler);
+    this.rootEl.removeEventListener('contextmenu', this.handleContextMenu);
+  }
+  setRef = (dom): void => {
+    this.ref = dom;
+  };
+  get rootEl() {
+    return this.ref;
+  }
   onDragging = ({ deltaX, deltaY }) => {
     this.setState({
       isDragging: true,
@@ -68,7 +96,6 @@ class CanvasOverlay extends Component<IProps, IState> {
     const { deltaX: eX, deltaY: eY } = ev;
     // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键没有按住, 那么移动画布
     if (!editConfigModel.stopScrollGraph && ev.ctrlKey !== true) {
-      ev.preventDefault();
       this.stepScrollX += eX;
       this.stepScrollY += eY;
       if (Math.abs(this.stepScrollX) >= gridSize) {
@@ -87,7 +114,6 @@ class CanvasOverlay extends Component<IProps, IState> {
     }
     // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住ctrl键也不能缩放了。
     if (!editConfigModel.stopZoomGraph) {
-      ev.preventDefault();
       const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
@@ -117,7 +143,6 @@ class CanvasOverlay extends Component<IProps, IState> {
         x: ev.clientX,
         y: ev.clientY,
       });
-      // graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
       graphModel.eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
     }
   };
@@ -161,9 +186,8 @@ class CanvasOverlay extends Component<IProps, IState> {
         width="100%"
         height="100%"
         name="canvas-overlay"
-        onWheel={this.zoomHandler}
-        onMouseDown={this.mouseDownHandler}
-        onContextMenu={this.handleContextMenu}
+        ref={this.setRef}
+        // onContextMenu={this.handleContextMenu}
         className={isDragging ? 'lf-canvas-overlay lf-dragging' : 'lf-canvas-overlay lf-drag-able'}
         {...dnd.eventMap()}
       >

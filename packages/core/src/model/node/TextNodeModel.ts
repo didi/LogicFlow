@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
@@ -6,6 +6,16 @@ import { getSvgTextWidthHeight } from '../../util/node';
 
 class TextNodeModel extends BaseNodeModel {
   modelType = ModelType.TEXT_NODE;
+
+  constructor(data, graphModel) {
+    super(data, graphModel);
+
+    makeObservable(this, {
+      width: computed,
+      height: computed,
+    });
+  }
+
   getTextStyle() {
     const style = super.getTextStyle();
     const { text } = this.graphModel.theme;
@@ -14,7 +24,7 @@ class TextNodeModel extends BaseNodeModel {
       ...cloneDeep(text),
     };
   }
-  @computed get width(): number {
+  get width(): number {
     const rows = String(this.text.value).split(/[\r\n]/g);
     const { fontSize } = this.getTextStyle();
     const { width } = getSvgTextWidthHeight({
@@ -24,7 +34,7 @@ class TextNodeModel extends BaseNodeModel {
     });
     return width;
   }
-  @computed get height(): number {
+  get height(): number {
     const rows = String(this.text.value).split(/[\r\n]/g);
     const { fontSize } = this.getTextStyle();
     const { height } = getSvgTextWidthHeight({

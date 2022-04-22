@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, observable, makeObservable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
@@ -6,8 +6,22 @@ import { ModelType } from '../../constant/constant';
 
 class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE;
-  @observable rx = 30;
-  @observable ry = 50;
+  rx = 30;
+  ry = 50;
+
+  constructor(data, graphData) {
+    super(data, graphData);
+
+    makeObservable(this, {
+      rx: observable,
+      ry: observable,
+      points: computed,
+      pointsPosition: computed,
+      width: computed,
+      height: computed,
+    });
+  }
+
   getNodeStyle() {
     const style = super.getNodeStyle();
     const {
@@ -22,7 +36,7 @@ class DiamondNodeModel extends BaseNodeModel {
       ...cloneDeep(diamond),
     };
   }
-  @computed get points(): PointTuple[] {
+  get points(): PointTuple[] {
     const {
       x, y, rx, ry,
     } = this;
@@ -34,7 +48,7 @@ class DiamondNodeModel extends BaseNodeModel {
     ];
   }
 
-  @computed get pointsPosition(): Point[] {
+  get pointsPosition(): Point[] {
     const pointsPosition = this.points.map(item => ({
       x: item[0],
       y: item[1],
@@ -42,7 +56,7 @@ class DiamondNodeModel extends BaseNodeModel {
     return pointsPosition;
   }
 
-  @computed get width(): number {
+  get width(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
     this.points.forEach(([x]) => {
@@ -56,7 +70,7 @@ class DiamondNodeModel extends BaseNodeModel {
     return max - min;
   }
 
-  @computed get height(): number {
+  get height(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
     this.points.forEach(([, y]) => {

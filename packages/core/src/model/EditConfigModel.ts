@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { assign, pick } from 'lodash-es';
 
 export interface EditConfigInterface {
@@ -111,28 +111,47 @@ const keys = [
  * 页面编辑配置
  */
 export default class EditConfigModel {
-  @observable isSilentMode = false;
-  @observable stopZoomGraph = false;
-  @observable stopScrollGraph = false;
-  @observable stopMoveGraph = false;
-  @observable adjustEdge = true;
-  @observable adjustEdgeMiddle = false;
-  @observable adjustEdgeStartAndEnd = false;
-  @observable adjustNodePosition = true;
-  @observable hideAnchors = false;
-  @observable hoverOutline = true;
-  @observable nodeSelectedOutline = true;
-  @observable edgeSelectedOutline = true;
-  @observable nodeTextEdit = true;
-  @observable edgeTextEdit = true;
-  @observable nodeTextDraggable = false;
-  @observable edgeTextDraggable = false;
+  isSilentMode = false;
+  stopZoomGraph = false;
+  stopScrollGraph = false;
+  stopMoveGraph = false;
+  adjustEdge = true;
+  adjustEdgeMiddle = false;
+  adjustEdgeStartAndEnd = false;
+  adjustNodePosition = true;
+  hideAnchors = false;
+  hoverOutline = true;
+  nodeSelectedOutline = true;
+  edgeSelectedOutline = true;
+  nodeTextEdit = true;
+  edgeTextEdit = true;
+  nodeTextDraggable = false;
+  edgeTextDraggable = false;
   multipleSelectKey = '';
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
+    makeObservable(this, {
+      isSilentMode: observable,
+      stopZoomGraph: observable,
+      stopScrollGraph: observable,
+      stopMoveGraph: observable,
+      adjustEdge: observable,
+      adjustEdgeMiddle: observable,
+      adjustEdgeStartAndEnd: observable,
+      adjustNodePosition: observable,
+      hideAnchors: observable,
+      hoverOutline: observable,
+      nodeSelectedOutline: observable,
+      edgeSelectedOutline: observable,
+      nodeTextEdit: observable,
+      edgeTextEdit: observable,
+      nodeTextDraggable: observable,
+      edgeTextDraggable: observable,
+      updateEditConfig: action,
+    });
+
     assign(this, this.getConfigDetail(config));
   }
-  @action
   updateEditConfig(config) {
     const newConfig = this.getConfigDetail(config);
     assign(this, newConfig);

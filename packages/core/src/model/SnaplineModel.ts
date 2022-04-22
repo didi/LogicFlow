@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { assign } from 'lodash-es';
 import GraphModel from './GraphModel';
 import { NodeData } from '../type/index';
@@ -18,12 +18,20 @@ export type SnaplinePosition = {
 export default class SnaplineModel {
   graphModel: GraphModel;
   // 是否展示水平对齐线
-  @observable isShowHorizontal: boolean;
+  isShowHorizontal: boolean;
   // 是否展示垂直对齐线
-  @observable isShowVertical: boolean;
+  isShowVertical: boolean;
   // 对齐线的中心位置，目前仅展示中心对齐的情况，后面可以考虑多种对齐策略
-  @observable position: SnaplinePosition;
+  position: SnaplinePosition;
   constructor(graphModel) {
+    makeObservable(this, {
+      isShowHorizontal: observable,
+      isShowVertical: observable,
+      position: observable,
+      clearSnapline: action,
+      setNodeSnapLine: action,
+    });
+
     this.isShowHorizontal = false;
     this.isShowVertical = false;
     this.position = { x: 0, y: 0 };
@@ -172,14 +180,12 @@ export default class SnaplineModel {
     this.isShowVertical = isShowVertical;
   }
   // 清空对齐信息，对齐线消失
-  @action
   clearSnapline(): void {
     this.position = { x: 0, y: 0 };
     this.isShowHorizontal = false;
     this.isShowVertical = false;
   }
   // 设置节点对齐线
-  @action
   setNodeSnapLine(nodeData: NodeData): void {
     const { nodes } = this.graphModel;
     const info = this.getSnapLinePosition(nodeData, nodes);

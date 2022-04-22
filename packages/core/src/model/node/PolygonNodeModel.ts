@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, observable, makeObservable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
@@ -6,12 +6,23 @@ import { ModelType } from '../../constant/constant';
 
 class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE;
-  @observable points: PointTuple[] = [
+  points: PointTuple[] = [
     [50, 0],
     [100, 50],
     [50, 100],
     [0, 50],
   ];
+  constructor(data, graphModel) {
+    super(data, graphModel);
+
+    makeObservable(this, {
+      points: observable,
+      pointsPosition: computed,
+      width: computed,
+      height: computed,
+    });
+  }
+
   getNodeStyle() {
     const style = super.getNodeStyle();
     const {
@@ -31,7 +42,7 @@ class PolygonNodeModel extends BaseNodeModel {
    * 在logicflow中对多边形进行移动，我们不需要去更新points，
    * 而是去更新多边形中心点即可。
    */
-  @computed get pointsPosition(): Point[] {
+  get pointsPosition(): Point[] {
     const {
       x, y, width, height,
     } = this;
@@ -41,7 +52,7 @@ class PolygonNodeModel extends BaseNodeModel {
     }));
     return pointsPosition;
   }
-  @computed get width(): number {
+  get width(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
     this.points.forEach(([x]) => {
@@ -54,7 +65,7 @@ class PolygonNodeModel extends BaseNodeModel {
     });
     return max - min;
   }
-  @computed get height(): number {
+  get height(): number {
     let min = Number.MAX_SAFE_INTEGER;
     let max = Number.MIN_SAFE_INTEGER;
     this.points.forEach(([, y]) => {

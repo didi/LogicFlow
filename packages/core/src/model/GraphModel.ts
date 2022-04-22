@@ -1,4 +1,4 @@
-import { action, observable, computed } from 'mobx';
+import { action, observable, computed, makeObservable } from 'mobx';
 import { map } from 'lodash-es';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
@@ -47,11 +47,11 @@ class GraphModel {
   /**
    * LogicFlow画布宽度
    */
-  @observable width: number;
+  width: number;
   /**
    * LogicFlow画布高度
    */
-  @observable height: number;
+  height: number;
   /**
    * 主题配置
    * @see todo docs link
@@ -89,53 +89,111 @@ class GraphModel {
   /**
    * 在图上操作创建边时，默认使用的边类型.
    */
-  @observable edgeType: string;
+  edgeType: string;
   /**
    * 当前图上所有节点的model
    */
-  @observable nodes: BaseNodeModel[] = [];
+  nodes: BaseNodeModel[] = [];
   /**
    * 当前图上所有边的model
    */
-  @observable edges: BaseEdgeModel[] = [];
+  edges: BaseEdgeModel[] = [];
   /**
    * 元素重合时堆叠模式
    * 默认模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
    * 递增模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会保持层级。
    * @see todo link
    */
-  @observable overlapMode = OverlapMode.DEFAULT;
+  overlapMode = OverlapMode.DEFAULT;
   /**
    * 背景配置
    * @see todo link
    */
-  @observable background;
+  background;
   /**
    * 控制画布的缩放、平移
    * @see todo link
    */
-  @observable transformModel: TransformModel;
+  transformModel: TransformModel;
   /**
    * 控制流程图编辑相关配置
    * @see todo link
    */
-  @observable editConfigModel: EditConfigModel;
+  editConfigModel: EditConfigModel;
   /**
    * 网格大小
    * @see todo link
    */
-  @observable gridSize = 1;
+  gridSize = 1;
   /**
    * 局部渲染
    * @see todo logicflow性能
    */
-  @observable partial = false;
+  partial = false;
   /**
    * 外部拖动节点进入画布的过程中，用fakerNode来和画布上正是的节点区分开
    */
-  @observable fakerNode: BaseNodeModel;
+  fakerNode: BaseNodeModel;
   [key: string]: any; // 允许在groupModel上扩展属性
   constructor(options: Definition) {
+    makeObservable(this, {
+      width: observable,
+      height: observable,
+      edgeType: observable,
+      nodes: observable,
+      edges: observable,
+      overlapMode: observable,
+      background: observable,
+      transformModel: observable,
+      editConfigModel: observable,
+      gridSize: observable,
+      partial: observable,
+      fakerNode: observable,
+      nodesMap: computed,
+      edgesMap: computed,
+      modelsMap: computed,
+      sortElements: computed,
+      textEditElement: computed,
+      selectElements: computed,
+      setFakerNode: action,
+      removeFakerNode: action,
+      setModel: action,
+      toFront: action,
+      setElementZIndex: action,
+      deleteNode: action,
+      addNode: action,
+      cloneNode: action,
+      moveNode: action,
+      moveNode2Coordinate: action,
+      editText: action,
+      addEdge: action,
+      moveEdge: action,
+      deleteEdgeBySourceAndTarget: action,
+      deleteEdgeById: action,
+      deleteEdgeBySource: action,
+      deleteEdgeByTarget: action,
+      graphDataToModel: action,
+      setElementStateById: action,
+      updateText: action,
+      selectNodeById: action,
+      selectEdgeById: action,
+      selectElementById: action,
+      clearSelectElements: action,
+      moveNodes: action,
+      setDefaultEdgeType: action,
+      changeNodeType: action,
+      changeEdgeType: action,
+      getNodeIncomingEdge: action,
+      getNodeOutgoingEdge: action,
+      getNodeIncomingNode: action,
+      getNodeOutgoingNode: action,
+      setTheme: action,
+      resize: action,
+      clearData: action,
+      translateCenter: action,
+      fitView: action,
+    });
+
     const {
       container,
       background = {},
@@ -166,19 +224,19 @@ class GraphModel {
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
   }
-  @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
+  get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
     return this.nodes.reduce((nMap, model, index) => {
       nMap[model.id] = { index, model };
       return nMap;
     }, {});
   }
-  @computed get edgesMap(): { [key: string]: { index: number, model: BaseEdgeModel } } {
+  get edgesMap(): { [key: string]: { index: number, model: BaseEdgeModel } } {
     return this.edges.reduce((eMap, model, index) => {
       eMap[model.id] = { index, model };
       return eMap;
     }, {});
   }
-  @computed get modelsMap(): { [key: string]: BaseNodeModel | BaseEdgeModel } {
+  get modelsMap(): { [key: string]: BaseNodeModel | BaseEdgeModel } {
     return [...this.nodes, ...this.edges].reduce((eMap, model) => {
       eMap[model.id] = model;
       return eMap;
@@ -188,7 +246,7 @@ class GraphModel {
    * 基于zIndex对元素进行排序。
    * todo: 性能优化
    */
-  @computed get sortElements() {
+  get sortElements() {
     let elements: IBaseModel[] = [];
     this.nodes.forEach(node => elements.push(node));
     this.edges.forEach(edge => elements.push(edge));
@@ -224,7 +282,7 @@ class GraphModel {
   /**
    * 当前编辑的元素，低频操作，先循环找。
    */
-  @computed get textEditElement() {
+  get textEditElement() {
     const textEditNode = this.nodes.find(node => node.state === ElementState.TEXT_EDIT);
     const textEditEdge = this.edges.find(edge => edge.state === ElementState.TEXT_EDIT);
     return textEditNode || textEditEdge;
@@ -232,7 +290,7 @@ class GraphModel {
   /**
    * 当前画布所有被选中的元素
    */
-  @computed get selectElements() {
+  get selectElements() {
     const elements = new Map();
     this.nodes.forEach(node => {
       if (node.isSelected) {
@@ -372,14 +430,19 @@ class GraphModel {
           node.text.y -= getGridOffset(nodeY, this.gridSize);
         }
       }
-      return new Model(node, this);
+      const model = new Model(node, this);
+      // 为了避免子类在constructor中的设置覆盖父类初始化的设置。将实例对象的初始化和默认数据的构造分离。
+      model.init();
+      return model;
     });
     this.edges = map(graphData.edges, edge => {
       const Model = this.getModel(edge.type);
       if (!Model) {
         throw new Error(`找不到${edge.type}对应的边。`);
       }
-      return new Model(edge, this);
+      const model = new Model(edge, this);
+      model.init();
+      return model;
     });
   }
   /**
@@ -562,21 +625,18 @@ class GraphModel {
   /**
    * 内部保留方法，请勿直接使用
    */
-  @action
   setFakerNode(nodeModel: BaseNodeModel) {
     this.fakerNode = nodeModel;
   }
   /**
    * 内部保留方法，请勿直接使用
    */
-  @action
   removeFakerNode() {
     this.fakerNode = null;
   }
   /**
    * 设置指定类型的Model,请勿直接使用
    */
-  @action
   setModel(type: string, ModelClass) {
     return this.modelMap.set(type, ModelClass);
   }
@@ -587,7 +647,6 @@ class GraphModel {
    * @see todo link 堆叠模式
    * @param id 元素Id
    */
-  @action
   toFront(id) {
     const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model;
     if (element) {
@@ -608,7 +667,6 @@ class GraphModel {
    * @param id 元素id
    * @param zIndex zIndex的值，可以传数字，也支持传入'top' 和 'bottom'
    */
-  @action
   setElementZIndex(id: string, zIndex: number | 'top' | 'bottom') {
     const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model;
     if (element) {
@@ -629,7 +687,6 @@ class GraphModel {
    * 删除节点
    * @param {string} nodeId 节点Id
    */
-  @action
   deleteNode(id) {
     const nodeData = this.nodesMap[id].model.getData();
     this.deleteEdgeBySource(id);
@@ -641,7 +698,6 @@ class GraphModel {
    * 添加节点
    * @param nodeConfig 节点配置
    */
-  @action
   addNode(nodeConfig: NodeConfig) {
     const nodeOriginData = formatData(nodeConfig);
     // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
@@ -654,6 +710,7 @@ class GraphModel {
     }
     // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
     const nodeModel = new Model(nodeOriginData, this);
+    nodeModel.init();
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();
     this.eventCenter.emit(EventType.NODE_ADD, { data: nodeData });
@@ -664,7 +721,6 @@ class GraphModel {
   * 克隆节点
   * @param nodeId 节点Id
   */
-  @action
   cloneNode(nodeId: string): BaseNodeModel {
     const Model = this.getNodeModelById(nodeId);
     const data = Model.getData();
@@ -687,8 +743,12 @@ class GraphModel {
    * @param deltaY Y轴移动距离
    * @param isIgnoreRule 是否忽略移动规则限制
    */
-  @action
-  moveNode(nodeId: BaseNodeModelId, deltaX: number, deltaY: number, isIgnoreRule = false) {
+  moveNode(
+    nodeId: BaseNodeModelId,
+    deltaX: number,
+    deltaY: number,
+    isIgnoreRule = false,
+  ) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
     if (!node) {
@@ -707,7 +767,6 @@ class GraphModel {
    * @param x X轴目标位置
    * @param y Y轴目标位置
    */
-  @action
   moveNode2Coordinate(nodeId: BaseNodeModelId, x: number, y: number, isIgnoreRule = false) {
     // 1) 移动节点
     const node = this.nodesMap[nodeId];
@@ -728,7 +787,6 @@ class GraphModel {
    * 显示节点、连线文本编辑框
    * @param elementId 节点id
    */
-  @action
   editText(id: ElementModeId) {
     this.setElementStateById(id, ElementState.TEXT_EDIT);
   }
@@ -736,7 +794,6 @@ class GraphModel {
    * 给两个节点之间添加一条边
    * @param {object} edgeConfig
    */
-  @action
   addEdge(edgeConfig: EdgeConfig): BaseEdgeModel {
     const edgeOriginData = formatData(edgeConfig);
     // 边的类型优先级：自定义>全局>默认
@@ -752,6 +809,7 @@ class GraphModel {
       throw new Error(`找不到${type}对应的边，请确认是否已注册此类型边。`);
     }
     const edgeModel = new Model({ ...edgeOriginData, type }, this);
+    edgeModel.init();
     const edgeData = edgeModel.getData();
     this.edges.push(edgeModel);
     this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData });
@@ -760,7 +818,6 @@ class GraphModel {
   /**
    * 移动边，内部方法，请勿直接使用
    */
-  @action
   moveEdge(nodeId: BaseNodeModelId, deltaX: number, deltaY: number) {
     /* 更新相关边位置 */
     for (let i = 0; i < this.edges.length; i++) {
@@ -805,7 +862,6 @@ class GraphModel {
    * @param sourceNodeId 边的起始节点
    * @param targetNodeId 边的目的节点
    */
-  @action
   deleteEdgeBySourceAndTarget(sourceNodeId, targetNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].sourceNodeId === sourceNodeId
@@ -821,7 +877,6 @@ class GraphModel {
   /**
    * 基于边Id删除边
    */
-  @action
   deleteEdgeById(id) {
     const edge = this.edgesMap[id];
     if (!edge) {
@@ -835,7 +890,6 @@ class GraphModel {
   /**
    * 删除以节点Id为起点的所有边
    */
-  @action
   deleteEdgeBySource(sourceNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].sourceNodeId === sourceNodeId) {
@@ -849,7 +903,6 @@ class GraphModel {
   /**
    * 删除以节点Id为终点的所有边
    */
-  @action
   deleteEdgeByTarget(targetNodeId) {
     for (let i = 0; i < this.edges.length; i++) {
       if (this.edges[i].targetNodeId === targetNodeId) {
@@ -865,7 +918,6 @@ class GraphModel {
    * 例如文本编辑、菜单显示等。
    * additionStateData: 传递的额外值，如菜单显示的时候，需要传递期望菜单显示的位置。
    */
-  @action
   setElementStateById(id: ElementModeId, state: number, additionStateData?: AdditionData) {
     this.nodes.forEach((node) => {
       if (node.id === id) {
@@ -887,7 +939,6 @@ class GraphModel {
    * @param id 节点或者边id
    * @param value 文案内容
    */
-  @action
   updateText(id: ElementModeId, value: string) {
     this.nodes.forEach((node) => {
       if (node.id === id) {
@@ -906,7 +957,7 @@ class GraphModel {
    * @param id 节点Id
    * @param multiple 是否为多选，如果为多选，则不去掉原有已选择节点的选中状态
    */
-  @action selectNodeById(id: string, multiple = false) {
+  selectNodeById(id: string, multiple = false) {
     if (!multiple) {
       this.clearSelectElements();
     }
@@ -918,7 +969,7 @@ class GraphModel {
    * @param id 边Id
    * @param multiple 是否为多选，如果为多选，则不去掉原已选中边的状态
    */
-  @action selectEdgeById(id: string, multiple = false) {
+  selectEdgeById(id: string, multiple = false) {
     if (!multiple) {
       this.clearSelectElements();
     }
@@ -930,7 +981,6 @@ class GraphModel {
    * @param id 选择元素ID
    * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
    */
-  @action
   selectElementById(id: string, multiple = false) {
     if (!multiple) {
       this.clearSelectElements();
@@ -941,7 +991,6 @@ class GraphModel {
   /**
    * 将所有选中的元素设置为非选中
    */
-  @action
   clearSelectElements() {
     this.selectElements.forEach(element => {
       element?.setSelected(false);
@@ -958,7 +1007,6 @@ class GraphModel {
    * 批量移动节点，节点移动的时候，会动态计算所有节点与未移动节点的边位置
    * 移动的节点之间的边会保持相对位置
    */
-  @action
   moveNodes(nodeIds: string[], deltaX: number, deltaY: number, isIgnoreRule = false) {
     nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isIgnoreRule));
   }
@@ -986,7 +1034,6 @@ class GraphModel {
    * 也就是设置在节点直接有用户手动绘制的连线类型。
    * @param type Options.EdgeType
    */
-  @action
   setDefaultEdgeType(type: string): void {
     this.edgeType = type;
   }
@@ -995,7 +1042,6 @@ class GraphModel {
   * @param id 节点id
   * @param type 节点类型
   */
-  @action
   changeNodeType(id, type: string): void {
     const nodeModel = this.getNodeModelById(id);
     if (!nodeModel) {
@@ -1009,6 +1055,7 @@ class GraphModel {
       throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`);
     }
     const newNodeModel = new Model(data, this);
+    newNodeModel.init();
     this.nodes.splice(this.nodesMap[id].index, 1, newNodeModel);
     // 微调边
     const edgeModels = this.getNodeEdges(id);
@@ -1038,7 +1085,7 @@ class GraphModel {
    * @param id 边Id
    * @param type 边类型
    */
-  @action changeEdgeType(id, type) {
+  changeEdgeType(id, type) {
     const edgeModel = this.getEdgeModelById(id);
     if (!edgeModel) {
       console.warn(`找不到id为${id}的边`);
@@ -1056,12 +1103,13 @@ class GraphModel {
     // 为了保持切换类型时不复用上一个类型的轨迹
     delete data.pointsList;
     const newEdgeModel = new Model(data, this);
+    newEdgeModel.init();
     this.edges.splice(this.edgesMap[id].index, 1, newEdgeModel);
   }
   /**
    * 获取所有以此节点为终点的边
    */
-  @action getNodeIncomingEdge(nodeId) {
+  getNodeIncomingEdge(nodeId) {
     const edges = [];
     this.edges.forEach(edge => {
       if (edge.targetNodeId === nodeId) {
@@ -1073,7 +1121,7 @@ class GraphModel {
   /**
    * 获取所有以此节点为起点的边
    */
-  @action getNodeOutgoingEdge(nodeId) {
+  getNodeOutgoingEdge(nodeId) {
     const edges = [];
     this.edges.forEach(edge => {
       if (edge.sourceNodeId === nodeId) {
@@ -1085,7 +1133,7 @@ class GraphModel {
   /**
    * 获取节点连接到的所有起始节点
    */
-  @action getNodeIncomingNode(nodeId) {
+  getNodeIncomingNode(nodeId) {
     const nodes = [];
     this.edges.forEach(edge => {
       if (edge.targetNodeId === nodeId) {
@@ -1097,7 +1145,7 @@ class GraphModel {
   /**
    * 获取节点连接到的所有目标节点
    */
-  @action getNodeOutgoingNode(nodeId) {
+  getNodeOutgoingNode(nodeId) {
     const nodes = [];
     this.edges.forEach(edge => {
       if (edge.sourceNodeId === nodeId) {
@@ -1110,20 +1158,20 @@ class GraphModel {
    * 设置主题
    * todo docs link
    */
-  @action setTheme(style: Theme) {
+  setTheme(style: Theme) {
     this.theme = updateTheme({ ...this.theme, ...style });
   }
   /**
    * 重新设置画布的宽高
    */
-  @action resize(width: number, height: number): void {
+  resize(width: number, height: number): void {
     this.width = width ?? this.width;
     this.height = height ?? this.height;
   }
   /**
    * 清空画布
    */
-  @action clearData(): void {
+  clearData(): void {
     this.nodes = [];
     this.edges = [];
   }
@@ -1166,7 +1214,7 @@ class GraphModel {
   /**
    * 将图形整体移动到画布中心
    */
-  @action translateCenter(): void {
+  translateCenter(): void {
     const { nodes, width, height, rootEl, transformModel } = this;
     if (!nodes.length) { return; }
 
@@ -1191,7 +1239,7 @@ class GraphModel {
    * 画布图形适应屏幕大小
    * @param offset number 距离盒子四周的距离， 默认为20
    */
-  @action fitView(offset = 20): void {
+  fitView(offset = 20): void {
     const { nodes, width, height, rootEl, transformModel } = this;
     if (!nodes.length) { return; }
     const containerWidth = width || rootEl.clientWidth;

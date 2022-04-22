@@ -988,6 +988,7 @@ export default class LogicFlow {
     }
     // * initNodeData区分是否为虚拟节点
     const fakerNodeModel = new Model({ ...nodeConfig, virtual: true }, this.graphModel);
+    fakerNodeModel.init();
     // fix #572: 由于正常节点不关心此属性，不会将其加入model。
     // 但是上面的constructor还是要传，历史原因，有人会在constructor中基于virtual属性进行额外处理。
     fakerNodeModel.virtual = true;

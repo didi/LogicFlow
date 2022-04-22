@@ -11744,27 +11744,27 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.5"
 
-mobx-react-lite@^2.2.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-2.2.2.tgz#87c217dc72b4e47b22493daf155daf3759f868a6"
-  integrity sha512-2SlXALHIkyUPDsV4VTKVR9DW7K3Ksh1aaIv3NrNJygTbhXe2A9GrcKHZ2ovIiOp/BXilOcTYemfHHZubP431dg==
+mobx-react-lite@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmmirror.com/mobx-react-lite/-/mobx-react-lite-3.3.0.tgz#7174e807201943beff6f9d3701492314c9fc0db3"
+  integrity sha512-U/kMSFtV/bNVgY01FuiGWpRkaQVHozBq5CEBZltFvPt4FcV111hEWkgwqVg9GPPZSEuEdV438PEz8mk8mKpYlA==
 
-mobx-react@^6.3.0:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-6.3.1.tgz#204f9756e42e19d91cb6598837063b7e7de87c52"
-  integrity sha512-IOxdJGnRSNSJrL2uGpWO5w9JH5q5HoxEqwOF4gye1gmZYdjoYkkMzSGMDnRCUpN/BNzZcFoMdHXrjvkwO7KgaQ==
+mobx-react@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.npmmirror.com/mobx-react/-/mobx-react-7.3.0.tgz#a17dedb71b75dad2337e3f95eb753179f6cfe732"
+  integrity sha512-RGEcwZokopqyJE5JPwXKB9FWMSqFM9NJVO2QPI+z6laJTJeBHqvPicjnKgY5mvihxTeXB1+72TnooqUePeGV1g==
   dependencies:
-    mobx-react-lite "^2.2.0"
+    mobx-react-lite "^3.3.0"
 
-mobx-utils@^5.6.1:
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-5.6.2.tgz#4858acbdb03f0470e260854f87e8c2ba916ebaec"
-  integrity sha512-a/WlXyGkp6F12b01sTarENpxbmlRgPHFyR1Xv2bsSjQBm5dcOtd16ONb40/vOqck8L99NHpI+C9MXQ+SZ8f+yw==
+mobx-utils@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.npmmirror.com/mobx-utils/-/mobx-utils-6.0.5.tgz#0cce9afb07fbba1fb559f959f8cea1f44baa7252"
+  integrity sha512-QOduwicYedD4mwYZRl8+c3BalljFDcubg+PUGqBkn8tOuBoj2q7GhjXBP6JXM9J+Zh+2mePK8IoToeLfqr3Z/w==
 
-mobx@^5.15.7:
-  version "5.15.7"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.15.7.tgz#b9a5f2b6251f5d96980d13c78e9b5d8d4ce22665"
-  integrity sha512-wyM3FghTkhmC+hQjyPGGFdpehrcX1KOXsDuERhfK2YbJemkUhEB+6wzEN639T21onxlfYBmriA1PFnvxTUhcKw==
+mobx@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.npmmirror.com/mobx/-/mobx-6.5.0.tgz#dc2d028b1882737f6e813fc92454381e438b7ad3"
+  integrity sha512-pHZ/cySF00FVENDWIDzJyoObFahK6Eg4d0papqm6d7yMkxWTZ/S/csqJX1A3PsYy4t5k3z2QnlwuCfMW5lSEwA==
 
 modify-values@^1.0.0:
   version "1.0.1"
@@ -13780,7 +13780,7 @@ prompts@2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prompts@^2.0.1:
+prompts@2.4.2, prompts@^2.0.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.4.2.tgz#7b57e73b3a48029ad10ebd44f74b01722a4cb069"
   integrity sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==
