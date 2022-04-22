@@ -6,6 +6,9 @@
   background: #ffffff;
   user-select: none;
 }
+.lf-graph svg {
+  display: block;
+}
 .lf-element-text {
   cursor: text;
 }
