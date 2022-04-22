@@ -386,6 +386,22 @@
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
+            shortcuts: [
+              {
+                keys: ["backspace"],
+                callback: () => {
+                  const r = window.confirm("确定要删除吗？");
+                  if (r) {
+                    const elements = lf.getSelectElements(true);
+                    lf.clearSelectElements();
+                    elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
+                    elements.nodes.forEach((node) => lf.deleteNode(node.id));
+                  }
+                  // console.log(1)
+                }
+              }
+            ]
+
           },
           partial: true,
           background: {
