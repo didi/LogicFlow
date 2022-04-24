@@ -11756,11 +11756,6 @@ mobx-react@^7.3.0:
   dependencies:
     mobx-react-lite "^3.3.0"
 
-mobx-utils@^6.0.5:
-  version "6.0.5"
-  resolved "https://registry.npmmirror.com/mobx-utils/-/mobx-utils-6.0.5.tgz#0cce9afb07fbba1fb559f959f8cea1f44baa7252"
-  integrity sha512-QOduwicYedD4mwYZRl8+c3BalljFDcubg+PUGqBkn8tOuBoj2q7GhjXBP6JXM9J+Zh+2mePK8IoToeLfqr3Z/w==
-
 mobx@^6.5.0:
   version "6.5.0"
   resolved "https://registry.npmmirror.com/mobx/-/mobx-6.5.0.tgz#dc2d028b1882737f6e813fc92454381e438b7ad3"

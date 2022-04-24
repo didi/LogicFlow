@@ -75,7 +75,6 @@
     "lodash-es": "^4.17.15",
     "mobx": "^6.5.0",
     "mobx-react": "^7.3.0",
-    "mobx-utils": "^6.0.5",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "standard-version": "^9.0.0",

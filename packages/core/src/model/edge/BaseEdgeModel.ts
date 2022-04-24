@@ -12,7 +12,7 @@ import {
   EdgeConfig,
 } from '../../type/index';
 import {
-  ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
@@ -294,6 +294,12 @@ class BaseEdgeModel implements IBaseModel {
   }
   setProperty(key, val): void {
     this.properties[key] = formatData(val);
+    this.graphModel.eventCenter.emit(EventType.EDGE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: {
+        [key]: val,
+      },
+    });
     this.setAttributes();
   }
 
@@ -302,6 +308,10 @@ class BaseEdgeModel implements IBaseModel {
       ...this.properties,
       ...formatData(properties),
     };
+    this.graphModel.eventCenter.emit(EventType.EDGE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: properties,
+    });
     this.setAttributes();
   }
   /**
@@ -372,10 +382,18 @@ class BaseEdgeModel implements IBaseModel {
    * 更新文本的值
    */
   updateText(value: string): void {
+    const { id, type, text: { value: oldValue } } = this;
+    const preText = {
+      id,
+      type,
+      oldValue,
+      newValue: value,
+    };
     this.text = {
       ...this.text,
       value,
     };
+    this.graphModel.eventCenter.emit(EventType.EDGE_TEXT_UPDATE, preText);
   }
   /**
    * 内部方法，计算边的起点和终点和其对于的锚点Id

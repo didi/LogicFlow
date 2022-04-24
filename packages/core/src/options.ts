@@ -70,6 +70,13 @@ export type Definition = {
    */
   history?: boolean;
   /**
+   * 节点、连线的属性的变化是否会记录到history中，默认是。
+   * 例如：节点的一个属性为active, 在自定义节点时这个属性为true节点高亮。
+   * 那么在isPropertiesChangeHistory为true的情况下，将节点active设置为true
+   * 会在历史记录中多一个active为false的快照。
+   */
+  isPropertiesChangeHistory?: boolean;
+  /**
    * 是否开启局部渲染，默认不开启
    */
   partial?: boolean;
@@ -142,5 +149,6 @@ export const defaults = {
   background: false,
   grid: false,
   textEdit: true,
+  isPropertiesChangeHistory: true,
   disabledTools: [],
 };

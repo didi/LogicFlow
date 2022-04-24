@@ -121,7 +121,9 @@ export default class LogicFlow {
     });
     // 附加功能初始化
     this.tool = new Tool(this);
-    this.history = new History(this.graphModel.eventCenter);
+    if (!this.options.isSilentMode && this.options.history !== false) {
+      this.history = new History(this.graphModel, options.isPropertiesChangeHistory);
+    }
     this.dnd = new Dnd({ lf: this });
     this.keyboard = new Keyboard({ lf: this, keyboard: options.keyboard });
     // 不可编辑模式没有开启，且没有关闭对齐线
@@ -913,7 +915,7 @@ export default class LogicFlow {
   /**
    * 触发监听事件
    */
-  emit(evt: string, arg: any) {
+  emit(evt: string, arg?: any) {
     this.graphModel.eventCenter.emit(evt, arg);
   }
 
@@ -1035,22 +1037,22 @@ export default class LogicFlow {
     return text;
   }
 
-  renderRawData(graphRawData) {
+  renderRawData(graphRawData, isForce = false) {
     this.graphModel.graphDataToModel(formatData(graphRawData));
-    if (!this.options.isSilentMode && this.options.history !== false) {
-      this.history.watch(this.graphModel);
+    this.emit(EventType.GRAPH_RENDERED, graphRawData);
+    if (!this.isRendered || isForce) {
+      render((
+        <Graph
+          getView={this.getView}
+          tool={this.tool}
+          options={this.options}
+          dnd={this.dnd}
+          snaplineModel={this.snaplineModel}
+          graphModel={this.graphModel}
+        />
+      ), this.container);
+      this.isRendered = true;
     }
-    render((
-      <Graph
-        getView={this.getView}
-        tool={this.tool}
-        options={this.options}
-        dnd={this.dnd}
-        snaplineModel={this.snaplineModel}
-        graphModel={this.graphModel}
-      />
-    ), this.container);
-    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData());
   }
   /**
    * 渲染图
@@ -1080,11 +1082,11 @@ export default class LogicFlow {
    * })
    * @param graphData 图数据
    */
-  render(graphData = {}) {
+  render(graphData = {}, isForce = false) {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData);
     }
-    this.renderRawData(graphData);
+    this.renderRawData(graphData, isForce);
   }
   /**
    * 内部保留方法

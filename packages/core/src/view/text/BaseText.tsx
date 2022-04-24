@@ -3,7 +3,7 @@ import GraphModel from '../../model/GraphModel';
 import { StepDrag } from '../../util/drag';
 import Text from '../basic-shape/Text';
 import { IBaseModel } from '../../model/BaseModel';
-import { ElementState } from '../../constant/constant';
+import { ElementState, EventType } from '../../constant/constant';
 
 type IProps = {
   model: IBaseModel;
@@ -25,6 +25,7 @@ export default class BaseText extends Component<IProps, IState> {
     const { model, draggable } = config;
     this.stepDrag = new StepDrag({
       onDragging: this.onDragging,
+      onDragEnd: this.onDragEnd,
       step: 1,
       model,
       isStopPropagation: draggable,
@@ -62,6 +63,15 @@ export default class BaseText extends Component<IProps, IState> {
     } = this.props;
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     model.moveText(curDeltaX, curDeltaY);
+  };
+  onDragEnd = (e) => {
+    const {
+      model,
+      graphModel: {
+        eventCenter,
+      },
+    } = this.props;
+    eventCenter?.emit(EventType.TEXT_DROP, { e, data: model });
   };
   dblClickHandler = () => {
     // 静默模式下，双击不更改状态，不可编辑

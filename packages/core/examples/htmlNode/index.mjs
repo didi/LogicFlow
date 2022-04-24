@@ -34,7 +34,7 @@ lf.on("custom:button-click", (model) => {
 
 
 document.querySelector('#js_change').addEventListener('click', () => {
-  lf.getNodeModelById('custom-111').setProperty({
+  lf.getNodeModelById('custom-111').setProperties({
     name: undefined
   })
 })

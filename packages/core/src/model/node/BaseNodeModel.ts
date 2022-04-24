@@ -3,7 +3,7 @@ import { assign, cloneDeep, isNil } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import {
   AdditionData,
@@ -525,13 +525,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
-    if (this.text) {
-      this.text && this.moveText(deltaX, deltaY);
-    }
-    this.x = x;
-    this.y = y;
-    return true;
+    return this.move(deltaX, deltaY, isIgnoreRule);
   }
 
   moveText(deltaX, deltaY): void {
@@ -552,10 +546,15 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   updateText(value: string): void {
+    const { id } = this;
     this.text = {
       ...this.text,
       value,
     };
+    this.graphModel.eventCenter.emit(EventType.NODE_TEXT_UPDATE, {
+      id,
+      text: this.text,
+    });
   }
 
   setSelected(flag = true): void {
@@ -581,6 +580,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
       [key]: formatData(val),
     };
     this.setAttributes();
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: {
+        [key]: val,
+      },
+    });
   }
 
   setProperties(properties): void {
@@ -589,12 +594,18 @@ export default class BaseNodeModel implements IBaseNodeModel {
       ...formatData(properties),
     };
     this.setAttributes();
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: properties,
+    });
   }
 
   setZIndex(zIndex = 1): void {
     this.zIndex = zIndex;
   }
-
+  /**
+   * @deprecated 不推荐直接使用updateAttributes，请使用setProperties、updateText、move等方法更新节点属性。
+   */
   updateAttributes(attributes) {
     assign(this, attributes);
   }

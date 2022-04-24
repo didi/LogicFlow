@@ -114,6 +114,7 @@
     <button onClick="translateCenter()">居中</button>
     <button onClick="fitView()">适应屏幕</button>
     <button onClick="getNodeEdges()">获取节点所有的边</button>
+    <button onClick="reRender()">重新渲染数据</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -122,8 +123,6 @@
     <script>
       window.onload = function () {
         InitLogicFlow();
-        InitElementFunction();
-        InitLogicFlowEvent();
       }
     </script>
 
@@ -353,12 +352,14 @@
         }
       }
       class ConnectionModel extends PolylineEdgeModel {
-        setAttributes() {
+        getEdgeStyle() {
           this.textWidth = 200;
+          const style = super.getEdgeStyle();
           const { properties } = this;
-          if (properties.isActived) {
-            this.stroke = 'red'
+          if (properties.isActive) {
+            style.stroke = 'red'
           }
+          return style;
         }
       }
       
@@ -378,6 +379,7 @@
           // hoverOutline: false,
           // nodeSelectedOutline: false,
           multipleSelectKey: 'meta',
+          isPropertiesChangeHistory: false,
           // disabledTools: ['multipleSelect'],
           // adjustEdgeMiddle: true,
           // stopMoveGraph: true,
@@ -463,8 +465,9 @@
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
           }
         );
-        lf.setDefaultEdgeType('bezier');
-
+        lf.setDefaultEdgeType('connection');
+        InitLogicFlowEvent();
+        InitElementFunction();
         lf.render({
           nodes: [
             // {
@@ -655,6 +658,17 @@
             y: 100,
           })
         }
+        window.reRender = function reRender() {
+          lf.render({
+            nodes: [
+              {
+                type: 'circle',
+                x: 200,
+                y: 200
+              }
+            ]
+          })
+        }
         window.getNodeEdges = function getNodeEdges() {
           const a = lf.getSelectElements().nodes[0].id;
           const edgeModels = lf.getNodeEdges(a)
@@ -708,14 +722,15 @@
           const { nodes, edges } = lf.getSelectElements()
           nodes.forEach(({ id }) => {
             lf.setProperties(id, {
-              isActived: true
+              isActive: true
             })
           })
           edges.forEach(({ id }) => {
             lf.setProperties(id, {
-              isActived: true
+              isActive: true
             })
           })
+          // lf.emit('history:insert')
         }
         window.setZoom = function () {
           // lf.graphModel.transformModel.SCALE_X  = 0.6
@@ -741,11 +756,12 @@
     <script>
       function InitLogicFlowEvent() {
         lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
+          console.log('history:change', 2233, undoAble, redoAble)
           document.getElementById('undo').disabled = !undoAble
           document.getElementById('redo').disabled = !redoAble
         });
-        lf.on('text:update', (data) => {
-          console.log('test:update', data)
+        lf.on('graph:rendered', (data) => {
+          console.log('graph:rendered', data)
         });
         lf.on('blank:mousemove', (data) => {
           console.log(data)

@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import { ModelType } from '../../constant/constant';
+import { EventType, ModelType } from '../../constant/constant';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import { Point } from '../../type';
@@ -46,8 +46,12 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     bezierModel.updateAdjustAnchor({ x, y }, type);
   };
   onDragEnd = (() => {
-    const { bezierModel } = this.props;
+    const { bezierModel, graphModel: { eventCenter } } = this.props;
     bezierModel.isDragging = false;
+    eventCenter.emit(
+      EventType.EDGE_ADJUST,
+      { data: bezierModel.getData() },
+    );
   });
   render() {
     const { position } = this.props;
@@ -123,6 +127,7 @@ export default class BezierAdjustOverlay extends Component<IProps> {
     const edgeAdjust = [];
     for (let i = 0; i < edgeList.length; i++) {
       const edge = edgeList[i];
+      // TODO: polyline的adjust tool也迁移到这里来。
       if (edge.isSelected && edge.modelType === ModelType.BEZIER_EDGE && edge.draggable) {
         edgeAdjust.push(this.getBezierAdjust(edge as BezierEdgeModel, graphModel));
       }
