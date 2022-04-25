@@ -84,6 +84,11 @@ module.exports = {
   description: 'LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、编辑所必需的功能和灵活的节点自定义、插件等拓展机制。LogicFlow支持前端研发自定义开发各种逻辑编排场景，如流程图、ER图、BPMN流程等。',
   head: [['link', { rel: 'icon', href: '/new-logo.svg' }]],
   plugins: ['@vuepress-reco/vuepress-plugin-back-to-top'],
+  configureWebpack: (config, isServer) => {
+    if (!isServer) {
+      config.output.publicPath = './'
+    }
+  },
   themeConfig: {
     sidebarDepth: 1,
     logo: '/horizontal-logo.png',
@@ -104,35 +109,35 @@ module.exports = {
           // link: '/api/logicFlowApi'
           {
             text: "LogicFlow实例",
-            link: "/api/logicFlowApi"
+            link: "./api/logicFlowApi"
           },
           {
             text: "graphModel",
-            link: "/api/graphModelApi"
+            link: "./api/graphModelApi"
           },
           {
             text: "nodeModel",
-            link: "/api/nodeModelApi"
+            link: "./api/nodeModelApi"
           },
           {
             text: "edgeModel",
-            link: "/api/edgeModelApi"
+            link: "./api/edgeModelApi"
           },
           {
             text: "主题",
-            link: "/api/themeApi"
+            link: "./api/themeApi"
           },
           {
             text: "事件",
-            link: "/api/eventCenterApi"
+            link: "./api/eventCenterApi"
           },
           {
             text: "transformModel",
-            link: "/api/transformModelApi"
+            link: "./api/transformModelApi"
           },
           {
             text: "editConfigModel",
-            link: "/api/editConfigModelApi"
+            link: "./api/editConfigModelApi"
           }
         ]
       },
@@ -142,15 +147,15 @@ module.exports = {
         items: [
           {
             text: 'bpmn示例',
-            link: '/usage/bpmn'
+            link: './usage/bpmn'
           },
           {
             text: '审批流程',
-            link: '/usage/approve'            
+            link: './usage/approve'            
           },
           {
             text: '作图工具',
-            link: '/mvp/index.html' ,
+            link: './mvp/index.html' ,
             target: '_blank'           
           }
         ]
@@ -161,11 +166,11 @@ module.exports = {
         items: [
           {
             text: '从1.0升级到1.1',
-            link: '/release/1.1'
+            link: './release/1.1'
           },
           {
             text: '从0.7升级到1.0',
-            link: '/release/1.0'
+            link: './release/1.0'
           }
         ]
       },
@@ -179,13 +184,13 @@ module.exports = {
           }
         ]
       },
-      { text: '文章', link: '/article/article01' },
+      { text: '文章', link: './article/article01' },
     ],
     sidebar: {
-      '/guide/': guide,
-      '/api/': api,
-      '/release/': release,
-      '/article/': article,
+      './guide/': guide,
+      './api/': api,
+      './release/': release,
+      './article/': article,
     },
   },
 };

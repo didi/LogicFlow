@@ -649,7 +649,7 @@ lf.setDefaultEdgeType('line')
 ```
 ## editText
 
-同[graphModel.editText](/api/graphModelApi.html#edittext)
+同[graphModel.editText](./api/graphModelApi.html#edittext)
 
 ## updateText
 

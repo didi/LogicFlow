@@ -27,9 +27,9 @@ LogicFlow提供了事件系统用于告知开发者当前流程图发生的事�
 
 | 属性     | 类型       | 值                                                                                                  |
 | :------- | :--------- | :-------------------------------------------------------------------------------------------------- |
-| data     | Object     | 节点的[数据属性](/api/nodeModelApi.md#数据属性)                                                          |
+| data     | Object     | 节点的[数据属性](./api/nodeModelApi.md#数据属性)                                                          |
 | e        | MouseEvent | 原生的鼠标事件对象                                                                                  |
-| position | Object     | 鼠标触发点在画布中的坐标（参照[getPointByClient](/api/logicFlowApi.html#getpointbyclient)的返回值） |
+| position | Object     | 鼠标触发点在画布中的坐标（参照[getPointByClient](./api/logicFlowApi.html#getpointbyclient)的返回值） |
 
 ## 边事件
 

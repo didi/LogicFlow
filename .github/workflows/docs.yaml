@@ -5,7 +5,45 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/v1.2.0'
+    if: github.ref == 'refs/heads/v1.2.0' && github.repository === 'Logic-Flow/LogicFlow'    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: load dependences
+        run: |
+          npm run bootstrap
+
+      - name: generate static file
+        run: |
+          npm run docs:build
+          rm -rf ./deploy
+          mkdir -p deploy/examples
+          cp -rf ./docs/.vuepress/dist/* ./deploy
+
+      - name: generate mvp
+        run: |
+          cd ./site/mvp
+          npm install
+          npm run build
+          cd ../../
+          mkdir -p deploy/mvp
+          cp -rf ./site/mvp/dist/* ./deploy/mvp
+
+      - name: deploy to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          cname: logic-flow.cn
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.repository === 'didi/LogicFlow'    
     steps:
       - uses: actions/checkout@v2
 

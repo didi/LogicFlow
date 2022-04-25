@@ -1,6 +1,7 @@
 // 统一对外导出
 import LogicFlow from './LogicFlow';
 import * as LogicFlowUtil from './util';
+// @ts-ignore
 import { version } from '../package.json';
 
 export { h } from 'preact';

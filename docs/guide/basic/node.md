@@ -372,7 +372,7 @@ h("polygon", {
 LogicFlow是基于`preact`开发的，我们自定义节点view的时候，可以通过`this.props`获取父组件传递过来的数据。`this.props`对象包含两个属性，分别为:
 
 - `model`: 表示自定义节点的model
-- [graphModel](/api/graphModelApi.html): 表示logicflow整个图的model
+- [graphModel](./api/graphModelApi.html): 表示logicflow整个图的model
 
 #### 图标的path如何获取
 
