@@ -5,7 +5,7 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/v1.2.0' && github.repository === 'Logic-Flow/LogicFlow'    
+    if: github.repository === 'Logic-Flow/LogicFlow'
     steps:
       - uses: actions/checkout@v2
 
@@ -43,7 +43,7 @@ jobs:
           cname: logic-flow.cn
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.repository === 'didi/LogicFlow'    
+    if: github.repository === 'didi/LogicFlow'    
     steps:
       - uses: actions/checkout@v2
 
