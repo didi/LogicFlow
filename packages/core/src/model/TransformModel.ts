@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx';
+import { observable, action, makeObservable } from '../util/stateUtil';
 import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import { PointTuple, ZoomParam } from '../type';

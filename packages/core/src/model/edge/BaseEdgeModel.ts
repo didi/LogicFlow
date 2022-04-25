@@ -1,5 +1,5 @@
-import { action, observable, computed, toJS, makeObservable } from 'mobx';
 import { assign, cloneDeep } from 'lodash-es';
+import { action, observable, computed, toJS, makeObservable } from '../../util/stateUtil';
 import { createUuid } from '../../util/uuid';
 import { getAnchors } from '../../util/node';
 import { IBaseModel } from '../BaseModel';

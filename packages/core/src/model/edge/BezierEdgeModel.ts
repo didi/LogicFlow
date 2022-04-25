@@ -1,8 +1,8 @@
-import { action, observable, makeObservable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
+import { action, observable, makeObservable } from '../../util/stateUtil';
 import { getBezierControlPoints, IBezierControls } from '../../util/edge';
 
 export { BezierEdgeModel };

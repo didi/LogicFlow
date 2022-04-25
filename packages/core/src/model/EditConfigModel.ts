@@ -1,5 +1,5 @@
-import { observable, action, makeObservable } from 'mobx';
 import { assign, pick } from 'lodash-es';
+import { observable, action, makeObservable } from '../util/stateUtil';
 
 export interface EditConfigInterface {
   /**

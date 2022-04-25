@@ -1,5 +1,5 @@
-import { action, observable, computed, makeObservable } from 'mobx';
 import { map } from 'lodash-es';
+import { action, observable, computed, makeObservable, configure } from '../util/stateUtil';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
 import EditConfigModel from './EditConfigModel';
@@ -38,6 +38,7 @@ type ElementModeId = string;
 type BaseElementModel = BaseNodeModel | BaseEdgeModel;
 const VisibleMoreSpace = 200;
 
+configure({ isolateGlobalState: true });
 class GraphModel {
   /**
    * LogicFlow画布挂载元素

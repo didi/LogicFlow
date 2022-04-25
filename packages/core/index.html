@@ -274,31 +274,32 @@
 
       // user
       class UserNode extends RectNode {
-        getAnchorStyle() {
-          return {
-            stroke: '#18905F',
-            strokeWidth: 2,
-          };
-        }
-        getTextStyle() {
-          return {
-            fontSize: 12,
-            fill: '#FFFFFF',
-            autoWrap: true,
-            lineHeight: 1.5,
-            wrapPadding: '2px 3px',
-          };
-        }
+        // getAnchorStyle() {
+        //   return {
+        //     stroke: '#18905F',
+        //     strokeWidth: 2,
+        //   };
+        // }
+        // getTextStyle() {
+        //   return {
+        //     fontSize: 12,
+        //     fill: '#FFFFFF',
+        //     autoWrap: true,
+        //     lineHeight: 1.5,
+        //     wrapPadding: '2px 3px',
+        //   };
+        // }
       }
       class UserModel extends RectNodeModel {
+        
         setAttributes() {
           const { size } = this.properties;
-          this.width = size * 40;
-          this.height = size * 40;
+          // this.width = size * 40;
+          this.height = 10;
           this.textWidth = 150;
           this.stroke = '#18905F';
           this.fill = 'red';
-          this.radius = 10;
+          // this.radius = 10;
           this.text.value = 'id:' + this.id;
         }
       }
@@ -601,7 +602,7 @@
               y: 200,
             },
             {
-              type: 'polygon',
+              type: 'user',
               x: 300,
               y: 200,
             },
@@ -644,6 +645,7 @@
     <!-- 元素相关方法 -->
     <script>
       function InitElementFunction() {
+        console.log(LogicFlow.version)
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
             type: 'text',

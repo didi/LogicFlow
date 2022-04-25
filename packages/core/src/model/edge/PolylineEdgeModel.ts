@@ -1,8 +1,8 @@
-import { observable, action, makeObservable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { observable, action, makeObservable } from '../../util/stateUtil';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
-import { defaultTheme } from '../../constant/DefaultTheme';
+
 import {
   isInNode,
   distance,

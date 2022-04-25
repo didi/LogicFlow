@@ -1,7 +1,5 @@
 import { render, h } from 'preact';
-import { observer } from 'mobx-react';
-// import * as mobx from 'mobx';
-// import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
+import { observer } from './util/stateUtil';
 import GraphModel from './model/GraphModel';
 import Graph from './view/Graph';
 import Dnd from './view/behavior/DnD';

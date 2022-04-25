@@ -1,5 +1,5 @@
-import { action, observable, makeObservable } from 'mobx';
 import { assign } from 'lodash-es';
+import { action, observable, makeObservable } from '../util/stateUtil';
 import GraphModel from './GraphModel';
 import { NodeData } from '../type/index';
 import { getNodeBBox } from '../util/node';
