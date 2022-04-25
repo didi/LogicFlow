@@ -131,7 +131,7 @@ LogicFlow为了开发的时候将开发体验和现在前端流行的开发体�
 ### 步骤2: 自定义节点model
 
 
-LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`两种方式。更多详细定义方法，请查看[NodeModelApi](../../api/nodeModelApi.md)
+LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`两种方式。更多详细定义方法，请查看[NodeModelApi](.././api/nodeModelApi.md)
 
 #### 自定义节点的样式属性
 
@@ -372,7 +372,7 @@ h("polygon", {
 LogicFlow是基于`preact`开发的，我们自定义节点view的时候，可以通过`this.props`获取父组件传递过来的数据。`this.props`对象包含两个属性，分别为:
 
 - `model`: 表示自定义节点的model
-- [graphModel](./api/graphModelApi.html): 表示logicflow整个图的model
+- [graphModel](/api/graphModelApi.html): 表示logicflow整个图的model
 
 #### 图标的path如何获取
 
@@ -563,7 +563,7 @@ class SquareModel extends RectNodeModel {
 
 ## 自定义节点文本
 
-LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](../../api/nodeModelApi.md)中的`textObject`
+LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](.././api/nodeModelApi.md)中的`textObject`
 
 ```js
 class CustomNodeModel extends RectNodeModel {

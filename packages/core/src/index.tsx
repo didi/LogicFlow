@@ -8,7 +8,7 @@ export { h } from 'preact';
 
 export * from './util/stateUtil';
 
-export { LogicFlowUtil, version };
+export { LogicFlowUtil, version, LogicFlow };
 
 export * from './type/index';
 export * from './view';
