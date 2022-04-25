@@ -14,16 +14,19 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: load dependency
+      - name: load dependences
         run: |
           npm run bootstrap
 
       - name: generate static file
         run: |
+          npm run build:types
           npm run docs:build
+          npm run build
           rm -rf ./deploy
           mkdir -p deploy/examples
           cp -rf ./docs/.vuepress/dist/* ./deploy
+          cp -rf ./examples/build/* ./deploy/examples
 
       - name: generate mvp
         run: |
@@ -40,4 +43,4 @@ jobs:
           force_orphan: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deploy
-          cname: logic-flow.cn
+          cname: logic-flow.org
