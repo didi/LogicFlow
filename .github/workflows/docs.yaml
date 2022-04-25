@@ -5,7 +5,7 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.repository === 'Logic-Flow/LogicFlow'
+    if: github.ref == 'refs/heads/v1.2.0'
     steps:
       - uses: actions/checkout@v2
 
@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: load dependences
+      - name: load dependency
         run: |
           npm run bootstrap
 
@@ -41,44 +41,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deploy
           cname: logic-flow.cn
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.repository === 'didi/LogicFlow'    
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Use node v12
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-
-      - name: load dependences
-        run: |
-          npm run bootstrap
-
-      - name: generate static file
-        run: |
-          npm run build:types
-          npm run docs:build
-          npm run build
-          rm -rf ./deploy
-          mkdir -p deploy/examples
-          cp -rf ./docs/.vuepress/dist/* ./deploy
-          cp -rf ./examples/build/* ./deploy/examples
-
-      - name: generate mvp
-        run: |
-          cd ./site/mvp
-          npm install
-          npm run build
-          cd ../../
-          mkdir -p deploy/mvp
-          cp -rf ./site/mvp/dist/* ./deploy/mvp
-
-      - name: deploy to github pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          force_orphan: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./deploy
-          cname: logic-flow.org
