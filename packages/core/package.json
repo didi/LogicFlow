@@ -19,7 +19,7 @@
     "build": "npm run build:umd",
     "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style",
     "build-analyse": "cross-env analyse=true npm run build",
-    "types": "tsc -d --declarationDir ./tempTypes --outDir temp && mv ./tempTypes/src ./types && rimraf temp && rimraf tempTypes",
+    "types": "tsc -d --declarationDir ./tempTypes --outDir temp && rimraf types && mv ./tempTypes/src ./types && rimraf temp && rimraf tempTypes",
     "lint": "eslint . --ext .ts,.tsx",
     "publish-lib": "npm run types & npm run clean && npm run build && npm publish",
     "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next"
