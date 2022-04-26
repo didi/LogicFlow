@@ -100,18 +100,26 @@ export const getExpandedBBox = (bbox: PBBox, offset: number): PBBox => {
   };
 };
 
-/* 判断点与中心点边的方向：是否水平，true水平，false垂直 */
-export const pointDirection = (point: PolyPoint, bbox: PBBox): Direction => {
-  const dx = Math.abs(point.x - bbox.centerX);
-  const dy = Math.abs(point.y - bbox.centerY);
-  return dx / bbox.width > dy / bbox.height
-    ? SegmentDirection.HORIZONTAL
-    : SegmentDirection.VERTICAL;
+/**
+ * 判断点与中心点边的方向：是否水平，true水平，false垂直
+ */
+export const pointDirection = (point: PolyPoint, node: BaseNode): Direction => {
+  const yDistance = point.y - node.y;
+  const xDistance = point.x - node.x;
+  if (yDistance === 0) return SegmentDirection.HORIZONTAL;
+  if (xDistance === 0) return SegmentDirection.VERTICAL;
+  if (
+    point.x > (node.x - node.width / 2)
+    && point.x < (node.x + node.width / 2)
+  ) {
+    return SegmentDirection.VERTICAL;
+  }
+  return SegmentDirection.HORIZONTAL;
 };
 
 /* 获取扩展图形上的点，即起始终点相邻的点，上一个或者下一个节点 */
-export const getExpandedBBoxPoint = (bbox: PBBox, point: PolyPoint): PolyPoint => {
-  const direction = pointDirection(point, bbox);
+export const getExpandedBBoxPoint = (bbox: PBBox, point: PolyPoint, direction): PolyPoint => {
+  // const direction = pointDirection(point, bbox);
   if (direction === SegmentDirection.HORIZONTAL) {
     return {
       x: point.x > bbox.centerX ? bbox.maxX : bbox.minX,
@@ -463,7 +471,14 @@ export const pointFilter = (points: PolyPoint[]): PolyPoint[] => {
   return allPoints;
 };
 
-/* 计算折线点 */
+/**
+ * 计算折线点
+ * @param start 连线的开始点坐标
+ * @param end 连线的结束点坐标
+ * @param sNode 连线连接的开始节点
+ * @param tNode 连线连接的结束节点
+ * @param offset 连线箭头距离
+ */
 export const getPolylinePoints = (
   start: PolyPoint,
   end: PolyPoint,
@@ -471,12 +486,22 @@ export const getPolylinePoints = (
   tNode: BaseNode,
   offset: number,
 ): PolyPoint[] => {
+  // 开始节点的范围
   const sBBox = getBoxByOriginNode(sNode);
+  // 结束节点的范围
   const tBBox = getBoxByOriginNode(tNode);
+  // 开始节点+连线箭头距离扩大后的范围
   const sxBBox = getExpandedBBox(sBBox, offset);
+  // 结束节点+连线箭头距离扩大后的范围
   const txBBox = getExpandedBBox(tBBox, offset);
-  const sPoint = getExpandedBBoxPoint(sxBBox, start);
-  const tPoint = getExpandedBBoxPoint(txBBox, end);
+  // 点所在接节点的方向
+  const sDirection = pointDirection(start, sNode);
+  // 在扩大后的矩形区域中获取一个新的连线开始点
+  const sPoint = getExpandedBBoxPoint(sxBBox, start, sDirection);
+  // 点所在接节点的方向
+  const tDirection = pointDirection(end, tNode);
+  // 在扩大后的矩形区域中获取一个新的连线结束点
+  const tPoint = getExpandedBBoxPoint(txBBox, end, tDirection);
   // 当加上offset后的bbox有重合，直接简单计算节点
   if (isBboxOverLapping(sxBBox, txBBox)) {
     const points = getSimplePoints(start, end, sPoint, tPoint);
@@ -760,8 +785,10 @@ export const getBezierControlPoints = ({
   const tBBox = getNodeBBox(targetNode);
   const sExpendBBox = getExpandedBBox(sBBox, offset);
   const tExpendBBox = getExpandedBBox(tBBox, offset);
-  const sNext = getExpandedBBoxPoint(sExpendBBox, start);
-  const ePre = getExpandedBBoxPoint(tExpendBBox, end);
+  const sDirection = pointDirection(start, sourceNode);
+  const sNext = getExpandedBBoxPoint(sExpendBBox, start, sDirection);
+  const tDirection = pointDirection(end, targetNode);
+  const ePre = getExpandedBBoxPoint(tExpendBBox, end, tDirection);
   return { sNext, ePre };
 };
 

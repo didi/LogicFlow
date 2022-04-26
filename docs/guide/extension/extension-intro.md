@@ -26,6 +26,8 @@ cdn方式
 </script>
 ```
 
+LogicFlow所有的插件地址：[https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/](https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/)
+
 ### 安装插件到实例上
 
 `v1.0.7` 新增
