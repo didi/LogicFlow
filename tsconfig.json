@@ -23,6 +23,7 @@
     "node_modules",
     "**/*.spec.ts",
     "**/*.d.ts",
-    "packages/core/types"
+    "packages/core/types",
+    "packages/engine/examples"
   ]
 }

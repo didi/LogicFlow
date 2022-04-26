@@ -6,10 +6,22 @@
   <meta name="format-detection" content="telephone=no, email=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LOGIC ENGINE</title>
+  <!-- 引入组件库 -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+  <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+  <!-- cdn太慢，直接加载到本地来 -->
+  <link rel="stylesheet" href="./static/element.css">
+  <script src="./static/vue.js"></script>
+  <script src="./static/element.js"></script>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-<script src="/index.js"></script>
-<script src="./main.mjs" type="module"></script>
+  <div id="app">
+    <el-button id="js_button" type="primary" plain size="small" @click="geSetting">设置</el-button>
+  </div>
+  <script src="/index.js"></script>
+  <script src="./index.mjs" type="module"></script>
 </body>
 
 </html>
