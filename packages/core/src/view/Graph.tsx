@@ -15,7 +15,7 @@ import SnaplineOverlay from './overlay/SnaplineOverlay';
 import SnaplineModel from '../model/SnaplineModel';
 import OutlineOverlay from './overlay/OutlineOverlay';
 import BezierAdjustOverlay from './overlay/BezierAdjustOverlay';
-import { observer } from '..';
+import { observer } from '../util/stateUtil';
 import ModificationOverlay from './overlay/ModificationOverlay';
 
 type IProps = {

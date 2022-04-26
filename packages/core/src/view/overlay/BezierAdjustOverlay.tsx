@@ -7,7 +7,7 @@ import { StepDrag } from '../../util/drag';
 import { getBezierPoints } from '../../util/edge';
 import Circle from '../basic-shape/Circle';
 import Line from '../basic-shape/Line';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 
 type IProps = {
   graphModel: GraphModel;

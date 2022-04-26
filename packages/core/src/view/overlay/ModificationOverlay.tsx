@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 import GraphModel from '../../model/GraphModel';
 
 type IProps = {

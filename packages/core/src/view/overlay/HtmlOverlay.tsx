@@ -8,7 +8,7 @@ import { h, Component } from 'preact';
 import GraphModel from '../../model/GraphModel';
 // import getTransform from './getTransformHoc';
 // import { GraphTransform } from '../../type';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 
 type IProps = {
   graphModel: GraphModel
