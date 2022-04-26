@@ -1,7 +1,7 @@
 import {
   h, Component,
 } from 'preact';
-import { observer } from '..';
+import { observer } from '../util/stateUtil';
 import LogicFlow from '../LogicFlow';
 // import BaseNodeModel from '../model/node/BaseNodeModel';
 import GraphModel from '../model/GraphModel';

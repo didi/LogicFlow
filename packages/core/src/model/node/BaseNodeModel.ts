@@ -1,11 +1,9 @@
-import {
-  observable, action, toJS, isObservable, computed,
-} from 'mobx';
 import { assign, cloneDeep, isNil } from 'lodash-es';
+import { observable, action, toJS, isObservable, computed, makeObservable } from '../../util/stateUtil';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import {
   AdditionData,
@@ -52,45 +50,45 @@ export { BaseNodeModel };
 export default class BaseNodeModel implements IBaseNodeModel {
   // 数据属性
   id = createUuid();
-  @observable type = '';
-  @observable x = 0;
-  @observable y = 0;
-  @observable text = {
+  type = '';
+  x = 0;
+  y = 0;
+  text = {
     value: '',
     x: 0,
     y: 0,
     draggable: false,
     editable: true,
   };
-  @observable properties: Record<string, any> = {};
+  properties: Record<string, any> = {};
   // 形状属性
-  @observable private _width = 100;
+  private _width = 100;
   public get width() {
     return this._width;
   }
   public set width(value) {
     this._width = value;
   }
-  @observable private _height = 80;
+  private _height = 80;
   public get height() {
     return this._height;
   }
   public set height(value) {
     this._height = value;
   }
-  @observable anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
+  anchorsOffset: AnchorsOffsetItem[] = []; // 根据与(x, y)的偏移量计算anchors的坐标
   // 状态属性
-  @observable isSelected = false;
-  @observable isHovered = false;
-  @observable isDragging = false;
-  @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
-  @observable draggable = true;
-  @observable visible = true;
+  isSelected = false;
+  isHovered = false;
+  isDragging = false;
+  isHitable = true; // 细粒度控制节点是否对用户操作进行反应
+  draggable = true;
+  visible = true;
   // 其它属性
   graphModel: GraphModel;
-  @observable zIndex = 1;
-  @observable state = 1;
-  @observable autoToFront = true; // 节点选中时是否自动置顶，默认为true.
+  zIndex = 1;
+  state = 1;
+  autoToFront = true; // 节点选中时是否自动置顶，默认为true.
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
@@ -101,14 +99,53 @@ export default class BaseNodeModel implements IBaseNodeModel {
   hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: any; // 支持自定义
   constructor(data: NodeConfig, graphModel: GraphModel) {
+    makeObservable<BaseNodeModel, '_width' | '_height'>(this, {
+      type: observable,
+      x: observable,
+      y: observable,
+      text: observable,
+      properties: observable,
+      _width: observable,
+      _height: observable,
+      anchorsOffset: observable,
+      isSelected: observable,
+      isHovered: observable,
+      isDragging: observable,
+      isHitable: observable,
+      draggable: observable,
+      visible: observable,
+      zIndex: observable,
+      state: observable,
+      autoToFront: observable,
+      incoming: computed,
+      outgoing: computed,
+      addNodeMoveRules: action,
+      move: action,
+      moveTo: action,
+      setIsDragging: action,
+      moveText: action,
+      updateText: action,
+      setSelected: action,
+      setHovered: action,
+      setHitable: action,
+      setElementState: action,
+      setProperty: action,
+      setProperties: action,
+      setZIndex: action,
+      updateAttributes: action,
+    });
+
     this.graphModel = graphModel;
-    this.initNodeData(data);
+    this.data = data;
+  }
+  init() {
+    this.initNodeData(this.data);
     this.setAttributes();
   }
   /**
    * 获取进入当前节点的边和节点
    */
-  @computed get incoming(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
+  get incoming(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
     return {
       nodes: this.graphModel.getNodeIncomingNode(this.id),
       edges: this.graphModel.getNodeIncomingEdge(this.id),
@@ -117,7 +154,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   /*
    * 获取离开当前节点的边和节点
    */
-  @computed get outgoing(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
+  get outgoing(): { nodes: BaseNodeModel[], edges: BaseEdgeModel[] } {
     return {
       nodes: this.graphModel.getNodeOutgoingNode(this.id),
       edges: this.graphModel.getNodeOutgoingEdge(this.id),
@@ -225,6 +262,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
       };
     }
     return data;
+  }
+  setIsDragging(isDragging) {
+    this.isDragging = isDragging;
   }
   /**
    * 用于在历史记录时获取节点数据，
@@ -448,13 +488,11 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action
   addNodeMoveRules(fn: NodeMoveRule) {
     if (!this.moveRules.includes(fn)) {
       this.moveRules.push(fn);
     }
   }
-  @action
   move(deltaX, deltaY, isIgnoreRule = false): boolean {
     let isAllowMoveX = false;
     let isAllowMoveY = false;
@@ -484,20 +522,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
     return isAllowMoveX || isAllowMoveY;
   }
 
-  @action
   moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
-    if (this.text) {
-      this.text && this.moveText(deltaX, deltaY);
-    }
-    this.x = x;
-    this.y = y;
-    return true;
+    return this.move(deltaX, deltaY, isIgnoreRule);
   }
 
-  @action
   moveText(deltaX, deltaY): void {
     const {
       x,
@@ -515,59 +545,67 @@ export default class BaseNodeModel implements IBaseNodeModel {
     };
   }
 
-  @action
   updateText(value: string): void {
+    const { id } = this;
     this.text = {
       ...this.text,
       value,
     };
+    this.graphModel.eventCenter.emit(EventType.NODE_TEXT_UPDATE, {
+      id,
+      text: this.text,
+    });
   }
 
-  @action
   setSelected(flag = true): void {
     this.isSelected = flag;
   }
 
-  @action
   setHovered(flag = true): void {
     this.isHovered = flag;
   }
 
-  @action
   setHitable(flag = true): void {
     this.isHitable = flag;
   }
 
-  @action
   setElementState(state: number, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
   }
 
-  @action
   setProperty(key, val): void {
     this.properties = {
       ...this.properties,
       [key]: formatData(val),
     };
     this.setAttributes();
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: {
+        [key]: val,
+      },
+    });
   }
 
-  @action
   setProperties(properties): void {
     this.properties = {
       ...this.properties,
       ...formatData(properties),
     };
     this.setAttributes();
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: properties,
+    });
   }
 
-  @action
   setZIndex(zIndex = 1): void {
     this.zIndex = zIndex;
   }
-
-  @action
+  /**
+   * @deprecated 不推荐直接使用updateAttributes，请使用setProperties、updateText、move等方法更新节点属性。
+   */
   updateAttributes(attributes) {
     assign(this, attributes);
   }

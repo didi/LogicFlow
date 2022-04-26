@@ -9,8 +9,6 @@ type EventsType = Record<string, EventType[]>;
 
 export type CallbackType = (...args: any[]) => void;
 
-const WILDCARD = '*';
-
 export { EventEmitter };
 /* event-emitter */
 export default class EventEmitter {
@@ -55,8 +53,8 @@ export default class EventEmitter {
      */
   emit(evts: string, eventArgs: EventArgs) {
     evts?.split(',').forEach((evt) => {
+      evt = evt.trim();
       const events = this._events[evt] || [];
-      const wildcardEvents = this._events[WILDCARD] || [];
       // 实际的处理 emit 方法
       const doEmit = (es: EventType[]) => {
         let { length } = es;
@@ -78,7 +76,6 @@ export default class EventEmitter {
         }
       };
       doEmit(events);
-      doEmit(wildcardEvents);
     });
   }
 
@@ -93,6 +90,7 @@ export default class EventEmitter {
       this._events = {};
     }
     evts.split(',').forEach((evt) => {
+      evt = evt.trim();
       if (!callback) {
         // evt 存在，callback 为空，清除事件所有方法
         delete this._events[evt];

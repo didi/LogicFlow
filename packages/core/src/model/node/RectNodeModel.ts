@@ -1,11 +1,20 @@
-import { observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { observable, makeObservable } from '../../util/stateUtil';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 
 class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE;
-  @observable radius = 0;
+  radius = 0;
+
+  constructor(data, graphModel) {
+    super(data, graphModel);
+
+    makeObservable(this, {
+      radius: observable,
+    });
+  }
+
   getDefaultAnchor() {
     const { x, y, width, height } = this;
     return [

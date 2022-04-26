@@ -1,17 +1,14 @@
 // 统一对外导出
-import { observer as mobxObserver } from 'mobx-react';
-import { h } from 'preact';
 import LogicFlow from './LogicFlow';
-
 import * as LogicFlowUtil from './util';
+// @ts-ignore
+import { version } from '../package.json';
 
-export function observer<P>(props: P) {
-  return mobxObserver(props as any);
-}
+export { h } from 'preact';
 
-export { LogicFlow, h };
+export * from './util/stateUtil';
 
-export { LogicFlowUtil };
+export { LogicFlowUtil, version, LogicFlow };
 
 export * from './type/index';
 export * from './view';

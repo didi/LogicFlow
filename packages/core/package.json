@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "1.2.0-alpha.2",
+  "version": "1.2.0-alpha.4",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/logic-flow.js",
   "unpkg": "dist/logic-flow.js",
@@ -19,7 +19,7 @@
     "build": "npm run build:umd",
     "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style",
     "build-analyse": "cross-env analyse=true npm run build",
-    "types": "tsc -d --declarationDir ./types --outDir temp && rimraf temp",
+    "types": "tsc -d --declarationDir ./tempTypes --outDir temp && rimraf types && mv ./tempTypes/src ./types && rimraf temp && rimraf tempTypes",
     "lint": "eslint . --ext .ts,.tsx",
     "publish-lib": "npm run types & npm run clean && npm run build && npm publish",
     "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next"
@@ -73,9 +73,8 @@
     "ids": "^1.0.0",
     "less-loader": "^6.0.0",
     "lodash-es": "^4.17.15",
-    "mobx": "^5.15.7",
-    "mobx-react": "^6.3.0",
-    "mobx-utils": "^5.6.1",
+    "mobx": "^6.5.0",
+    "mobx-react": "^7.3.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "standard-version": "^9.0.0",

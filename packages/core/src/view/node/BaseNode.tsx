@@ -149,7 +149,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       height,
       gridSize,
     } = graphModel;
-    model.isDragging = true;
+    model.setIsDragging(true);
     const { clientX, clientY } = event;
     let {
       canvasOverlayPosition: { x, y },
@@ -213,7 +213,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       cancelRaf(this.t);
     }
     const { model } = this.props;
-    model.isDragging = false;
+    model.setIsDragging(false);
   };
   handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit

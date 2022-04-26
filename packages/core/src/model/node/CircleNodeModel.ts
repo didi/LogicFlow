@@ -1,16 +1,26 @@
-import { computed, observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { computed, observable, makeObservable } from '../../util/stateUtil';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 
 class CircleNodeModel extends BaseNodeModel {
   modelType = ModelType.CIRCLE_NODE;
-  @observable r = 50;
+  r = 50;
 
-  @computed get width(): number {
+  constructor(data, graphData) {
+    super(data, graphData);
+
+    makeObservable(this, {
+      r: observable,
+      width: computed,
+      height: computed,
+    });
+  }
+
+  get width(): number {
     return this.r * 2;
   }
-  @computed get height(): number {
+  get height(): number {
     return this.r * 2;
   }
   getNodeStyle() {

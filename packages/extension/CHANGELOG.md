@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.14...@logicflow/extension@1.2.0-alpha.4) (2022-04-25)
+
+
+### Bug Fixes
+
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+
+
+### Features
+
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+
+
+
+
+
+# [1.2.0-alpha.3](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.2...@logicflow/extension@1.2.0-alpha.3) (2022-04-19)
+
+
+### Bug Fixes
+
+* update turbo adapter ([205e6c8](https://github.com/didi/LogicFlow/commit/205e6c8e7cb8809ad1f04ec6b8c92b5d25416257))
+
+
+
+
+
 # [1.2.0-alpha.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.1...@logicflow/extension@1.2.0-alpha.2) (2022-04-16)
 
 

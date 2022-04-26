@@ -1,7 +1,6 @@
 import {
   debounce, isEqual, last, cloneDeep,
 } from 'lodash-es';
-import { deepObserve } from 'mobx-utils';
 import EventEmitter from '../event/eventEmitter';
 import { EventType } from '../constant/constant';
 
@@ -16,29 +15,53 @@ class History {
   // 所以waitTime值越小，History对数据变化越敏感，存的undos就越细。
   waitTime = 100;
   eventCenter: EventEmitter;
+  model: any;
 
-  constructor(eventCenter) {
-    this.eventCenter = eventCenter;
+  constructor(graphModel, isPropertiesChangeHistory) {
+    this.eventCenter = graphModel.eventCenter;
+    const {
+      NODE_ADD,
+      EDGE_ADD,
+      NODE_DROP,
+      EDGE_ADJUST,
+      SELECTION_DROP,
+      TEXT_DROP,
+      NODE_TEXT_UPDATE,
+      EDGE_TEXT_UPDATE,
+      GRAPH_RENDERED,
+      NODE_PROPERTY_UPDATE,
+      EDGE_PROPERTY_UPDATE,
+      HISTORY_INSERT,
+    } = EventType;
+    let historyChangeKeys = `
+      ${NODE_ADD},
+      ${EDGE_ADD},
+      ${NODE_DROP},
+      ${EDGE_ADJUST},
+      ${SELECTION_DROP},
+      ${TEXT_DROP},
+      ${NODE_TEXT_UPDATE},
+      ${EDGE_TEXT_UPDATE},
+      ${GRAPH_RENDERED}
+    `;
+    if (isPropertiesChangeHistory) {
+      historyChangeKeys += `,${NODE_PROPERTY_UPDATE},${EDGE_PROPERTY_UPDATE}`;
+    }
+    this.model = graphModel;
+    graphModel.eventCenter.on(historyChangeKeys, this.listenHistoryChange);
+    graphModel.eventCenter.on(HISTORY_INSERT, (data) => {
+      if (!data) {
+        data = this.model.modelToHistoryData();
+      }
+      this.add(data);
+    });
   }
 
   add(data) {
+    // 避免加入相同的快照。
     if (isEqual(last(this.undos), data)) return;
     this.undos.push(data);
-    // 因为undo的时候，会触发add.
-    // 所以需要区分这个add是undo触发的，还是用户正常操作触发的。
-    // 如果是用户正常操作触发的，需要清空redos
-    if (!isEqual(this.curData, data)) {
-      this.redos = [];
-    }
-    this.eventCenter.emit(EventType.HISTORY_CHANGE,
-      {
-        data: {
-          undos: this.undos,
-          redos: this.redos,
-          undoAble: this.undos.length > 1,
-          redoAble: this.redos.length > 0,
-        },
-      });
+    this.redos = [];
     if (this.undos.length > this.maxSize) {
       this.undos.shift();
     }
@@ -56,9 +79,9 @@ class History {
     if (!this.undoAble()) return;
     const preData = this.undos.pop();
     this.redos.push(preData);
-    const curData = this.undos.pop();
-    this.curData = cloneDeep(curData);
-    return curData;
+    this.curData = this.undos[this.undos.length - 1];
+    this.emitHistoryChange();
+    return cloneDeep(this.curData);
   }
 
   redoAble() {
@@ -68,25 +91,30 @@ class History {
   redo() {
     if (!this.redoAble()) return;
     const curData = this.redos.pop();
-    this.curData = cloneDeep(curData);
+    this.curData = curData;
+    this.undos.push(this.curData);
+    this.emitHistoryChange();
     return curData;
   }
 
-  watch(model) {
-    this.stopWatch && this.stopWatch();
-
-    // 把当前watch的model转换一下数据存起来，无需清空redos。
-    this.undos.push(model.modelToGraphData());
-
-    this.stopWatch = deepObserve(model, debounce(() => {
-      // 数据变更后，把最新的当前model数据存起来，并清空redos。
-      // 因为这个回调函数的触发，一般是用户交互而引起的，所以按正常逻辑需要清空redos。
-      const data = model.modelToHistoryData();
-      if (data) {
-        this.add(data);
-      }
-    }, this.waitTime));
+  emitHistoryChange() {
+    this.eventCenter.emit(EventType.HISTORY_CHANGE,
+      {
+        data: {
+          undos: this.undos,
+          redos: this.redos,
+          undoAble: this.undos.length > 1,
+          redoAble: this.redos.length > 0,
+        },
+      });
   }
+  listenHistoryChange = () => {
+    const data = this.model.modelToHistoryData();
+    if (data) {
+      this.add(data);
+      this.emitHistoryChange();
+    }
+  };
 }
 
 export { History };

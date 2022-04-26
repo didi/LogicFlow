@@ -1,8 +1,8 @@
-import { observable, action } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { observable, action, makeObservable } from '../../util/stateUtil';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
-import { defaultTheme } from '../../constant/DefaultTheme';
+
 import {
   isInNode,
   distance,
@@ -29,7 +29,18 @@ export { PolylineEdgeModel };
 export default class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE;
   draggingPointList;
-  @observable dbClickPosition: Point;
+  dbClickPosition: Point;
+
+  constructor(data, graphModel) {
+    super(data, graphModel);
+
+    makeObservable(this, {
+      dbClickPosition: observable,
+      dragAppend: action,
+      dragAppendEnd: action,
+    });
+  }
+
   initEdgeData(data): void {
     this.offset = 30;
     super.initEdgeData(data);
@@ -248,7 +259,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     });
   }
 
-  @action
   initPoints() {
     if (this.pointsList.length > 0) {
       this.points = this.pointsList.map(point => `${point.x},${point.y}`).join(' ');
@@ -257,7 +267,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     }
   }
 
-  @action
   updatePoints() {
     const pointsList = getPolylinePoints(
       { x: this.startPoint.x, y: this.startPoint.y },
@@ -270,13 +279,11 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     this.points = pointsList.map(point => `${point.x},${point.y}`).join(' ');
   }
 
-  @action
   updateStartPoint(anchor) {
     this.startPoint = anchor;
     this.updatePoints();
   }
 
-  @action
   moveStartPoint(deltaX, deltaY): void {
     this.startPoint.x += deltaX;
     this.startPoint.y += deltaY;
@@ -284,26 +291,22 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     // todo: 尽量保持边的整体轮廓, 通过deltaX和deltaY更新pointsList，而不是重新计算。
   }
 
-  @action
   updateEndPoint(anchor) {
     this.endPoint = anchor;
     this.updatePoints();
   }
 
-  @action
   moveEndPoint(deltaX, deltaY): void {
     this.endPoint.x += deltaX;
     this.endPoint.y += deltaY;
     this.updatePoints();
   }
 
-  @action
   dragAppendStart() {
     // mobx observer 对象被iterator处理会有问题
     this.draggingPointList = this.pointsList.map(i => i);
   }
 
-  @action
   dragAppendSimple(appendInfo, dragInfo) {
     // 因为drag事件是mouseDown事件触发的，因此当真实拖拽之后再设置isDragging
     // 避免因为点击事件造成，在dragStart触发之后，没有触发dragEnd错误设置了isDragging状态，对history计算造成错误
@@ -340,7 +343,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     };
   }
 
-  @action
   dragAppend(appendInfo, dragInfo) {
     this.isDragging = true;
     const {
@@ -434,7 +436,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     };
   }
 
-  @action
   dragAppendEnd() {
     if (this.draggingPointList) {
       const pointsList = points2PointsList(this.points);
@@ -455,25 +456,21 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
      appendWidth会依赖pointsList,更新pointsList会重新渲染appendWidth，从而导致不能继续拖拽
      在拖拽结束后再进行pointsList的更新
   */
-  @action
   updatePointsAfterDrag(pointsList) {
     // 找到准确的连接点后,更新points, 更新边，同时更新依赖points的箭头
     const list = this.updateCrossPoints(pointsList);
     this.points = list.map(point => `${point.x},${point.y}`).join(' ');
   }
   // 获取边调整的起点
-  @action
   getAdjustStart() {
     return this.pointsList[0] || this.startPoint;
   }
   // 获取边调整的终点
-  @action
   getAdjustEnd() {
     const { pointsList } = this;
     return pointsList[pointsList.length - 1] || this.endPoint;
   }
   // 起终点拖拽调整过程中，进行折线路径更新
-  @action
   updateAfterAdjustStartAndEnd({ startPoint, endPoint, sourceNode, targetNode }) {
     const pointsList = getPolylinePoints(
       { x: startPoint.x, y: startPoint.y },

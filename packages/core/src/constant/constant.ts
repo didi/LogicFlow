@@ -50,6 +50,8 @@ export enum EventType {
   NODE_MOUSEMOVE = 'node:mousemove',
   NODE_MOUSEENTER = 'node:mouseenter',
   NODE_MOUSELEAVE = 'node:mouseleave',
+  NODE_TEXT_UPDATE = 'node:text-update',
+  NODE_PROPERTY_UPDATE = 'node:property-update',
   NODE_CONTEXTMENU = 'node:contextmenu',
   EDGE_DELETE = 'edge:delete',
   EDGE_ADD = 'edge:add',
@@ -57,6 +59,8 @@ export enum EventType {
   EDGE_DBCLICK = 'edge:dbclick',
   EDGE_MOUSEENTER = 'edge:mouseenter',
   EDGE_MOUSELEAVE = 'edge:mouseleave',
+  EDGE_TEXT_UPDATE = 'edge:text-update',
+  EDGE_PROPERTY_UPDATE = 'edge:property-update',
   EDGE_CONTEXTMENU = 'edge:contextmenu',
   EDGE_ADJUST = 'edge:adjust',
   EDGE_EXCHANGE_NODE = 'edge:exchange-node',
@@ -80,7 +84,9 @@ export enum EventType {
   SELECTION_CONTEXTMENU = 'selection:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
   HISTORY_CHANGE = 'history:change',
+  HISTORY_INSERT = 'history:insert',
   TEXT_UPDATE = 'text:update',
+  TEXT_DROP = 'text:drop',
   GRAPH_TRANSFORM = 'graph:transform',
   GRAPH_RENDERED = 'graph:rendered'
 }

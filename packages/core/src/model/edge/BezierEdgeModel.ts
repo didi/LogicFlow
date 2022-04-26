@@ -1,14 +1,22 @@
-import { action, observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';
+import { action, observable, makeObservable } from '../../util/stateUtil';
 import { getBezierControlPoints, IBezierControls } from '../../util/edge';
 
 export { BezierEdgeModel };
 export default class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE;
-  @observable path = '';
+  path = '';
+
+  constructor(data, graphModel) {
+    super(data, graphModel);
+    makeObservable(this, {
+      path: observable,
+      updateAdjustAnchor: action,
+    });
+  }
   initEdgeData(data): void {
     this.offset = 100;
     super.initEdgeData(data);
@@ -73,7 +81,6 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     ${ePre.x} ${ePre.y},
     ${end.x} ${end.y}`;
   }
-  @action
   initPoints() {
     if (this.pointsList.length > 0) {
       this.path = this.getPath(this.pointsList);
@@ -82,7 +89,6 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     }
   }
 
-  @action
   updatePoints() {
     const { sNext, ePre } = this.getControls();
     this.updatePath(sNext, ePre);
@@ -104,18 +110,15 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.pointsList = [start, sNext, ePre, end];
     this.path = this.getPath(this.pointsList);
   }
-  @action
   updateStartPoint(anchor) {
     this.startPoint = anchor;
     this.updatePoints();
   }
 
-  @action
   updateEndPoint(anchor) {
     this.endPoint = anchor;
     this.updatePoints();
   }
-  @action
   moveStartPoint(deltaX, deltaY): void {
     this.startPoint.x += deltaX;
     this.startPoint.y += deltaY;
@@ -125,7 +128,6 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     sNext.y += deltaY;
     this.updatePath(sNext, ePre);
   }
-  @action
   moveEndPoint(deltaX, deltaY): void {
     this.endPoint.x += deltaX;
     this.endPoint.y += deltaY;
@@ -135,7 +137,6 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     ePre.y += deltaY;
     this.updatePath(sNext, ePre);
   }
-  @action
   updateAdjustAnchor(anchor: Point, type: string) {
     if (type === 'sNext') {
       this.pointsList[1] = anchor;
@@ -146,18 +147,15 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.setText(Object.assign({}, this.text, this.textPosition));
   }
   // 获取边调整的起点
-  @action
   getAdjustStart() {
     return this.pointsList[0] || this.startPoint;
   }
   // 获取边调整的终点
-  @action
   getAdjustEnd() {
     const { pointsList } = this;
     return pointsList[pointsList.length - 1] || this.endPoint;
   }
   // 起终点拖拽调整过程中，进行曲线路径更新
-  @action
   updateAfterAdjustStartAndEnd({ startPoint, endPoint, sourceNode, targetNode }) {
     const { sNext, ePre } = getBezierControlPoints(
       {

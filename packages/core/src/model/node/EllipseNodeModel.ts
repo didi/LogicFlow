@@ -1,13 +1,24 @@
-import { computed, observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
-import { Point } from '../../type';
+import { computed, observable, makeObservable } from '../../util/stateUtil';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 
 class EllipseNodeModel extends BaseNodeModel {
   modelType = ModelType.ELLIPSE_NODE;
-  @observable rx = 30;
-  @observable ry = 45;
+  rx = 30;
+  ry = 45;
+
+  constructor(data, graphData) {
+    super(data, graphData);
+
+    makeObservable(this, {
+      rx: observable,
+      ry: observable,
+      width: computed,
+      height: computed,
+    });
+  }
+
   getNodeStyle() {
     const style = super.getNodeStyle();
     const {
@@ -22,10 +33,10 @@ class EllipseNodeModel extends BaseNodeModel {
       ...cloneDeep(ellipse),
     };
   }
-  @computed get width(): number {
+  get width(): number {
     return this.rx * 2;
   }
-  @computed get height(): number {
+  get height(): number {
     return this.ry * 2;
   }
 

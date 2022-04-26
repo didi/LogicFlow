@@ -114,6 +114,7 @@
     <button onClick="translateCenter()">居中</button>
     <button onClick="fitView()">适应屏幕</button>
     <button onClick="getNodeEdges()">获取节点所有的边</button>
+    <button onClick="reRender()">重新渲染数据</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -122,8 +123,6 @@
     <script>
       window.onload = function () {
         InitLogicFlow();
-        InitElementFunction();
-        InitLogicFlowEvent();
       }
     </script>
 
@@ -275,31 +274,32 @@
 
       // user
       class UserNode extends RectNode {
-        getAnchorStyle() {
-          return {
-            stroke: '#18905F',
-            strokeWidth: 2,
-          };
-        }
-        getTextStyle() {
-          return {
-            fontSize: 12,
-            fill: '#FFFFFF',
-            autoWrap: true,
-            lineHeight: 1.5,
-            wrapPadding: '2px 3px',
-          };
-        }
+        // getAnchorStyle() {
+        //   return {
+        //     stroke: '#18905F',
+        //     strokeWidth: 2,
+        //   };
+        // }
+        // getTextStyle() {
+        //   return {
+        //     fontSize: 12,
+        //     fill: '#FFFFFF',
+        //     autoWrap: true,
+        //     lineHeight: 1.5,
+        //     wrapPadding: '2px 3px',
+        //   };
+        // }
       }
       class UserModel extends RectNodeModel {
+        
         setAttributes() {
           const { size } = this.properties;
-          this.width = size * 40;
-          this.height = size * 40;
+          // this.width = size * 40;
+          this.height = 10;
           this.textWidth = 150;
           this.stroke = '#18905F';
           this.fill = 'red';
-          this.radius = 10;
+          // this.radius = 10;
           this.text.value = 'id:' + this.id;
         }
       }
@@ -353,12 +353,14 @@
         }
       }
       class ConnectionModel extends PolylineEdgeModel {
-        setAttributes() {
+        getEdgeStyle() {
           this.textWidth = 200;
+          const style = super.getEdgeStyle();
           const { properties } = this;
-          if (properties.isActived) {
-            this.stroke = 'red'
+          if (properties.isActive) {
+            style.stroke = 'red'
           }
+          return style;
         }
       }
       
@@ -370,22 +372,38 @@
         const lf = new LogicFlow({
           container: document.querySelector('#app'),
           // hideAnchors: true,
-          width: 700,
-          height: 500,
+          // width: 700,
+          // height: 500,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
           // hoverOutline: false,
           // nodeSelectedOutline: false,
-          multipleSelectKey: 'shift',
-          disabledTools: ['multipleSelect'],
-          // metaKeyMultipleSelected: false,
+          multipleSelectKey: 'meta',
+          isPropertiesChangeHistory: false,
+          // disabledTools: ['multipleSelect'],
           // adjustEdgeMiddle: true,
           // stopMoveGraph: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
+            shortcuts: [
+              {
+                keys: ["backspace"],
+                callback: () => {
+                  const r = window.confirm("确定要删除吗？");
+                  if (r) {
+                    const elements = lf.getSelectElements(true);
+                    lf.clearSelectElements();
+                    elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
+                    elements.nodes.forEach((node) => lf.deleteNode(node.id));
+                  }
+                  // console.log(1)
+                }
+              }
+            ]
+
           },
           partial: true,
           background: {
@@ -448,8 +466,9 @@
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
           }
         );
-        lf.setDefaultEdgeType('bezier');
-
+        lf.setDefaultEdgeType('connection');
+        InitLogicFlowEvent();
+        InitElementFunction();
         lf.render({
           nodes: [
             // {
@@ -583,7 +602,7 @@
               y: 200,
             },
             {
-              type: 'polygon',
+              type: 'user',
               x: 300,
               y: 200,
             },
@@ -626,6 +645,7 @@
     <!-- 元素相关方法 -->
     <script>
       function InitElementFunction() {
+        console.log(LogicFlow.version)
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
             type: 'text',
@@ -638,6 +658,17 @@
             r: 25,
             x: 100,
             y: 100,
+          })
+        }
+        window.reRender = function reRender() {
+          lf.render({
+            nodes: [
+              {
+                type: 'circle',
+                x: 200,
+                y: 200
+              }
+            ]
           })
         }
         window.getNodeEdges = function getNodeEdges() {
@@ -693,14 +724,15 @@
           const { nodes, edges } = lf.getSelectElements()
           nodes.forEach(({ id }) => {
             lf.setProperties(id, {
-              isActived: true
+              isActive: true
             })
           })
           edges.forEach(({ id }) => {
             lf.setProperties(id, {
-              isActived: true
+              isActive: true
             })
           })
+          // lf.emit('history:insert')
         }
         window.setZoom = function () {
           // lf.graphModel.transformModel.SCALE_X  = 0.6
@@ -726,11 +758,12 @@
     <script>
       function InitLogicFlowEvent() {
         lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
+          console.log('history:change', 2233, undoAble, redoAble)
           document.getElementById('undo').disabled = !undoAble
           document.getElementById('redo').disabled = !redoAble
         });
-        lf.on('text:update', (data) => {
-          console.log('test:update', data)
+        lf.on('graph:rendered', (data) => {
+          console.log('graph:rendered', data)
         });
         lf.on('blank:mousemove', (data) => {
           console.log(data)

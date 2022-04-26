@@ -1,7 +1,5 @@
-import {
-  action, observable, computed, toJS,
-} from 'mobx';
 import { assign, cloneDeep } from 'lodash-es';
+import { action, observable, computed, toJS, makeObservable } from '../../util/stateUtil';
 import { createUuid } from '../../util/uuid';
 import { getAnchors } from '../../util/node';
 import { IBaseModel } from '../BaseModel';
@@ -14,7 +12,7 @@ import {
   EdgeConfig,
 } from '../../type/index';
 import {
-  ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
@@ -25,33 +23,33 @@ import { getZIndex } from '../../util/zIndex';
 class BaseEdgeModel implements IBaseModel {
   // 数据属性
   id = createUuid();
-  @observable type = '';
-  @observable sourceNodeId = '';
-  @observable targetNodeId = '';
-  @observable startPoint = null;
-  @observable endPoint = null;
-  @observable text = {
+  type = '';
+  sourceNodeId = '';
+  targetNodeId = '';
+  startPoint = null;
+  endPoint = null;
+  text = {
     value: '',
     x: 0,
     y: 0,
     draggable: false,
     editable: true,
   };
-  @observable properties: Record<string, any> = {};
-  @observable points = '';
-  @observable pointsList = [];
+  properties: Record<string, any> = {};
+  points = '';
+  pointsList = [];
   // 状态属性
-  @observable isSelected = false;
-  @observable isHovered = false;
-  @observable isHitable = true; // 细粒度控制边是否对用户操作进行反应
-  @observable draggable = true;
-  @observable visible = true;
+  isSelected = false;
+  isHovered = false;
+  isHitable = true; // 细粒度控制边是否对用户操作进行反应
+  draggable = true;
+  visible = true;
   // 引用属性
   graphModel: GraphModel;
-  @observable zIndex = 0;
+  zIndex = 0;
   readonly BaseType = ElementType.EDGE;
   modelType = ModelType.EDGE;
-  @observable state = 1;
+  state = 1;
   additionStateData: AdditionData;
   sourceAnchorId = '';
   targetAnchorId = '';
@@ -61,8 +59,55 @@ class BaseEdgeModel implements IBaseModel {
   [propName: string]: any; // 支持自定义
 
   constructor(data: EdgeConfig, graphModel: GraphModel) {
+    makeObservable(this, {
+      type: observable,
+      sourceNodeId: observable,
+      targetNodeId: observable,
+      startPoint: observable,
+      endPoint: observable,
+      text: observable,
+      properties: observable,
+      points: observable,
+      pointsList: observable,
+      isSelected: observable,
+      isHovered: observable,
+      isHitable: observable,
+      draggable: observable,
+      visible: observable,
+      zIndex: observable,
+      state: observable,
+      sourceNode: computed,
+      targetNode: computed,
+      textPosition: computed,
+      setProperty: action,
+      setProperties: action,
+      formatText: action,
+      resetTextPosition: action,
+      moveText: action,
+      setText: action,
+      updateText: action,
+      setAnchors: action,
+      setSelected: action,
+      setHovered: action,
+      setHitable: action,
+      setElementState: action,
+      updateStartPoint: action,
+      moveStartPoint: action,
+      updateEndPoint: action,
+      moveEndPoint: action,
+      setZIndex: action,
+      initPoints: action,
+      updateAttributes: action,
+      getAdjustStart: action,
+      getAdjustEnd: action,
+      updateAfterAdjustStartAndEnd: action,
+    });
+
     this.graphModel = graphModel;
-    this.initEdgeData(data);
+    this.data = data;
+  }
+  init() {
+    this.initEdgeData(this.data);
     this.setAttributes();
     // 设置边的 anchors，也就是边的两个端点
     // 端点依赖于 edgeData 的 sourceNode 和 targetNode
@@ -70,7 +115,7 @@ class BaseEdgeModel implements IBaseModel {
     // 边的拐点依赖于两个端点
     this.initPoints();
     // 文本位置依赖于边上的所有拐点
-    this.formatText(data);
+    this.formatText(this.data);
   }
   /**
    * @override 支持重写
@@ -158,13 +203,13 @@ class BaseEdgeModel implements IBaseModel {
       y: 0,
     };
   }
-  @computed get sourceNode() {
+  get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
   }
-  @computed get targetNode() {
+  get targetNode() {
     return this.graphModel?.nodesMap[this.targetNodeId]?.model;
   }
-  @computed get textPosition(): Point {
+  get textPosition(): Point {
     return this.getTextPosition();
   }
 
@@ -247,24 +292,32 @@ class BaseEdgeModel implements IBaseModel {
   getHistoryData(): EdgeData {
     return this.getData();
   }
-  @action
   setProperty(key, val): void {
     this.properties[key] = formatData(val);
+    this.graphModel.eventCenter.emit(EventType.EDGE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: {
+        [key]: val,
+      },
+    });
     this.setAttributes();
   }
 
-  @action
   setProperties(properties): void {
     this.properties = {
       ...this.properties,
       ...formatData(properties),
     };
+    this.graphModel.eventCenter.emit(EventType.EDGE_PROPERTY_UPDATE, {
+      id: this.id,
+      data: properties,
+    });
     this.setAttributes();
   }
   /**
    * 内部方法，处理初始化文本格式
    */
-  @action formatText(data) {
+  formatText(data) {
     // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition;
     if (!data.text || typeof data.text === 'string') {
@@ -291,7 +344,7 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 重置文本位置
    */
-  @action resetTextPosition() {
+  resetTextPosition() {
     const { x, y } = this.textPosition;
     this.text.x = x;
     this.text.y = y;
@@ -299,7 +352,7 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 移动边上的文本
    */
-  @action moveText(deltaX: number, deltaY: number): void {
+  moveText(deltaX: number, deltaY: number): void {
     if (this.text) {
       const {
         x,
@@ -320,7 +373,7 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 设置文本位置和值
    */
-  @action setText(textConfig): void {
+  setText(textConfig): void {
     if (textConfig) {
       assign(this.text, textConfig);
     }
@@ -328,16 +381,23 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 更新文本的值
    */
-  @action updateText(value: string): void {
+  updateText(value: string): void {
+    const { id, type, text: { value: oldValue } } = this;
+    const preText = {
+      id,
+      type,
+      oldValue,
+      newValue: value,
+    };
     this.text = {
       ...this.text,
       value,
     };
+    this.graphModel.eventCenter.emit(EventType.EDGE_TEXT_UPDATE, preText);
   }
   /**
    * 内部方法，计算边的起点和终点和其对于的锚点Id
    */
-  @action
   setAnchors(): void {
     if (!this.sourceAnchorId || !this.startPoint) {
       const anchor = this.getBeginAnchor(this.sourceNode, this.targetNode);
@@ -365,73 +425,59 @@ class BaseEdgeModel implements IBaseModel {
     }
   }
 
-  @action
   setSelected(flag = true): void {
     this.isSelected = flag;
   }
 
-  @action
   setHovered(flag = true): void {
     this.isHovered = flag;
   }
 
-  @action
   setHitable(flag = true): void {
     this.isHitable = flag;
   }
 
-  @action
   setElementState(state: number, additionStateData?: AdditionData): void {
     this.state = state;
     this.additionStateData = additionStateData;
   }
 
-  @action
   updateStartPoint(anchor): void {
     this.startPoint = anchor;
   }
 
-  @action
   moveStartPoint(deltaX, deltaY): void {
     this.startPoint.x += deltaX;
     this.startPoint.y += deltaY;
   }
 
-  @action
   updateEndPoint(anchor): void {
     this.endPoint = anchor;
   }
 
-  @action
   moveEndPoint(deltaX, deltaY): void {
     this.endPoint.x += deltaX;
     this.endPoint.y += deltaY;
   }
 
-  @action
   setZIndex(zIndex = 0): void {
     this.zIndex = zIndex;
   }
 
-  @action
   initPoints() {}
 
-  @action
   updateAttributes(attributes) {
     assign(this, attributes);
   }
   // 获取边调整的起点
-  @action
   getAdjustStart() {
     return this.startPoint;
   }
   // 获取边调整的终点
-  @action
   getAdjustEnd() {
     return this.endPoint;
   }
   // 起终点拖拽调整过程中，进行直线路径更新
-  @action
   updateAfterAdjustStartAndEnd({ startPoint, endPoint }) {
     this.updateStartPoint({ x: startPoint.x, y: startPoint.y });
     this.updateEndPoint({ x: endPoint.x, y: endPoint.y });

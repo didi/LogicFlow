@@ -14,7 +14,7 @@ const guide = [
       'basic/background',
       'basic/dnd',
       'basic/keyboard',
-      // 'basic/redoundo',
+      'basic/history',
       'basic/snapline',
       'basic/silent-mode',
     ]
@@ -70,7 +70,8 @@ const article = [
 
 const release = [
   '1.0',
-  '1.1'
+  '1.1',
+  '1.2'
 ]
 
 const verisonInfo = [
@@ -99,7 +100,6 @@ module.exports = {
       { text: '教程', link: '/guide/start' },
       { 
         text: 'API',
-        link: '#',
         items: [
           // link: '/api/logicFlowApi'
           {
@@ -138,7 +138,6 @@ module.exports = {
       },
       {
         text: '示例',
-        link: '#',
         items: [
           {
             text: 'bpmn示例',
@@ -157,8 +156,11 @@ module.exports = {
       },
       { 
         text: '版本指南',
-        link: '#',
         items: [
+          {
+            text: '从1.1升级到1.2',
+            link: '/release/1.2'
+          },
           {
             text: '从1.0升级到1.1',
             link: '/release/1.1'
@@ -171,7 +173,6 @@ module.exports = {
       },
       {
         text: 'v1.x',
-        link: '#',
         items: [
           {
             text: 'v0.7',
