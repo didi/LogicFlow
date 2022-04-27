@@ -175,7 +175,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     return edgeConfig;
   });
   // @see https://github.com/didi/LogicFlow/issues/325
-  // 需要保证incomming在outgoing之前
+  // 需要保证incoming在outgoing之前
   data.edges.forEach((edge: EdgeConfig) => {
     const sourceNode = nodeMap.get(edge.sourceNodeId);
     if (!sourceNode['bpmn:outgoing']) {

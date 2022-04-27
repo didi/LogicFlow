@@ -195,10 +195,11 @@
 
           this.width = size;
           this.height = size;
-          this.anchorsOffset = [
-            [size / 2, 0],
-            [-size / 2, 0]
-          ];
+          // this.anchorsOffset = [
+          //   [size / 2, 0],
+          //   [-size / 2, 0]
+          // ];
+          this.radius = 5;
           this.sourceRules.push(circleOnlyAsTarget);
         }
       }
@@ -217,7 +218,7 @@
         }
         // getShape 的返回值是一个通过 h 方法创建的 svg 元素
         getShape() {
-          const { x, y, width, height } = this.props.model;
+          const { x, y, width, height, radius } = this.props.model;
           const { fill, stroke, strokeWidth } = this.props.model.getNodeStyle();
           const attrs = {
             x: x - width / 2,
@@ -226,6 +227,8 @@
             height,
             stroke,
             fill,
+            rx: radius,
+            ry: radius,
             strokeWidth
           }
           // 使用 h 方法创建一个矩形
@@ -295,12 +298,37 @@
         setAttributes() {
           const { size } = this.properties;
           // this.width = size * 40;
-          this.height = 10;
+          this.height = 20;
+          this.width = 200;
           this.textWidth = 150;
           this.stroke = '#18905F';
           this.fill = 'red';
-          // this.radius = 10;
+          this.radius = 10;
           this.text.value = 'id:' + this.id;
+        }
+        getDefaultAnchor() {
+          const { width, height, x, y, id } = this; 
+          return [
+            {
+              x: x - width / 2,
+              y,
+              type: 'left',
+              edgeAddable: false, // 控制锚点是否可以从此锚点手动创建连线。默认为true。
+              id: `${id}_0`
+            },
+            {
+              x: x + width / 2,
+              y,
+              type: 'right',
+              id: `${id}_1`
+            },
+            {
+              x: x + width / 3,
+              y: y - height / 2,
+              type: 'right',
+              id: `${id}_1`
+            },
+          ]
         }
       }
 
@@ -607,7 +635,7 @@
               y: 200,
             },
             {
-              type: 'ellipse',
+              type: 'square',
               x: 100,
               y: 400,
             },

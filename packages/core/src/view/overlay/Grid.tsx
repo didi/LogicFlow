@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import GraphModel from '../../model/GraphModel';
 import { createUuid } from '../../util/uuid';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 
 export type GridOptions = {
   /**

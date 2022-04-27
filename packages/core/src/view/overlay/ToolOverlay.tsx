@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
+import { observer } from '../../util/stateUtil';
 import GraphModel from '../../model/GraphModel';
 import LogicFlow from '../../LogicFlow';
-import { observer } from '../..';
 
 type IProps = {
   graphModel: GraphModel;

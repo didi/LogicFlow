@@ -6,7 +6,7 @@ import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import { points2PointsList, getBezierPoints, getBBoxOfPoints } from '../../util/edge';
 import Rect from '../basic-shape/Rect';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 
 type IProps = {
   graphModel: GraphModel;

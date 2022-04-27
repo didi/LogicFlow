@@ -85,6 +85,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         anchor = item;
       }
     });
+    console.log(444, JSON.stringify(anchor));
     return anchor;
   }
 
@@ -408,6 +409,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         };
         const inNode = isInNode(startPosition, this.sourceNode);
         if (!inNode) {
+          // FIXME: 如果某一条边上没有任何锚点，会有问题
           const anchorList = this.sourceNode.anchors;
           draggingPointList = this.getDraggingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
         }

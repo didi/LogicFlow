@@ -1,6 +1,5 @@
 import { configure } from 'mobx';
 import { observer as mobxObserver } from 'mobx-react';
-import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
 
 configure({ isolateGlobalState: true });
 

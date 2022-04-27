@@ -6,7 +6,7 @@ import { StepDrag } from '../../util/drag';
 import EventEmitter from '../../event/eventEmitter';
 // import { GraphTransform } from '../../type';
 import Dnd from '../behavior/DnD';
-import { observer } from '../..';
+import { observer } from '../../util/stateUtil';
 
 type IProps = {
   graphModel: GraphModel;

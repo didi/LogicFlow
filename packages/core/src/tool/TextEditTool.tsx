@@ -6,8 +6,8 @@ import LogicFlow from '../LogicFlow';
 import GraphModel from '../model/GraphModel';
 import BaseEdgeModel from '../model/edge/BaseEdgeModel';
 import BaseNodeModel from '../model/node/BaseNodeModel';
+import { observer } from '../util/stateUtil';
 import { ElementState, ElementType, EventType, ModelType } from '../constant/constant';
-import { observer } from '..';
 // import { ElementState } from '../constant/constant';
 
 type Style = {
