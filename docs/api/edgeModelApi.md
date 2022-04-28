@@ -131,8 +131,7 @@ initEdgeData和setAttributes都可以对edgeModel的属性进行赋值，但是�
 
 ```js
 class UserEdgeModel extends PolylineEdgeModel {
-  setAttributes(data) {
-    super(data);
+  setAttributes() {
     this.offset = 20;
   }
 }

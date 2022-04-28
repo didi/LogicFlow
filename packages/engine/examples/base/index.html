@@ -15,12 +15,59 @@
   <script src="./static/vue.js"></script>
   <script src="./static/element.js"></script>
   <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="http://127.0.0.1:9093/src/style/index.css" />
 </head>
 <body>
   <div id="app">
-    <el-button id="js_button" type="primary" plain size="small" @click="geSetting">设置</el-button>
+    <el-button id="js_button" type="primary" plain size="small" @click="geSetting">获取数据</el-button>
+    <div style="width: 500px;">
+      <el-table
+        v-if="tableData.length > 0"
+        :data="tableData"
+        size="small"
+        style="width: 100%">
+        <el-table-column
+          prop="name"
+          label="项目名称"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="html_url"
+          label="git地址"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="创建时间">
+        </el-table-column>
+      </el-table>
+      <el-dialog
+        title="设置"
+        :visible.sync="visible"
+        >
+        <span>请确认是否要发起请求获取信息</span>
+        <div slot="footer">
+          <el-button @click="dialogCancel" size="small">取 消</el-button>
+          <el-button type="primary" @click="dialogSure" size="small">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
+  <div id="flow">
+    <el-button type="primary" plain size="small" @click="openFlow">设置流程图</el-button>
+    <el-dialog
+      title="设置"
+      :visible.sync="visible"
+      :fullscreen="true"
+      width="100%"
+      @close="updateGraph"
+      >
+      <div id="flowContainer"></div>
+    </el-dialog>
+  </div>
+  <script src="http://127.0.0.1:9093/logic-flow.js"></script>
   <script src="/index.js"></script>
+  <script src="./flow.mjs" type="module"></script>
   <script src="./index.mjs" type="module"></script>
 </body>
 

@@ -3,3 +3,33 @@
   width: 200px;
   border: 1px solid #898789;
 }
+#flowContainer {
+  height: 100%;
+}
+.el-dialog.is-fullscreen .el-dialog__body {
+  height: calc(100% - 134px);
+}
+/*自定义锚点样式*/
+.custom-anchor {
+  stroke: #999;
+  stroke-width: 1;
+  fill: #d9d9d9;
+  cursor: crosshair;
+  rx: 3;
+  ry: 3;
+}
+.custom-anchor:hover {
+  fill: #ff7f0e;
+  stroke: #ff7f0e;
+}
+.lf-node-not-allow .custom-anchor:hover {
+  stroke: #999;
+  fill: #d9d9d9;
+  cursor: not-allowed;
+}
+.incomming-anchor {
+  stroke: #d79b00;
+}
+.outgoing-anchor {
+  stroke: #82b366;
+}
