@@ -108,7 +108,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
   }
   getStateClassName() {
-    const { model: { state, isDraging } } = this.props;
+    const { model: { state, isDraging, isSelected } } = this.props;
     let className = 'lf-node';
     switch (state) {
       case ElementState.ALLOW_CONNECT:
@@ -123,6 +123,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
     if (isDraging) {
       className += ' lf-isDragging';
+    }
+    if (isSelected) {
+      className += ' lf-node-selected';
     }
     return className;
   }
