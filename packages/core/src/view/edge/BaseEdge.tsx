@@ -228,7 +228,11 @@ export default class BaseEdge extends Component<IProps> {
     return (
       <g>
         <g
-          className={isHitable ? 'lf-edge' : 'lf-edge pointer-none'}
+          className={[
+            'lf-edge',
+            !isHitable && 'pointer-none',
+            isSelected && 'lf-edge-selected',
+          ].filter(Boolean).join(' ')}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onContextMenu={this.handleContextMenu}
