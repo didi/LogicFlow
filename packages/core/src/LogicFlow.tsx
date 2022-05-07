@@ -882,7 +882,7 @@ export default class LogicFlow {
   /**
    * 图形适应屏幕大小
    * @param verticalOffset number 距离盒子上下的距离， 默认为20
-   * @param horizontalOffset number 距离盒子左右的距离， 默认为20
+   * @param horizontalOffset number 距离盒子左右的距离， 默认为verticalOffset
    */
   fitView(verticalOffset?: number, horizontalOffset?: number): void {
     this.graphModel.fitView(verticalOffset, horizontalOffset);

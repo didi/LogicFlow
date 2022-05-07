@@ -1190,9 +1190,9 @@ class GraphModel {
   /**
    * 画布图形适应屏幕大小
    * @param verticalOffset number 距离盒子上下的距离， 默认为20
-   * @param horizontalOffset number 距离盒子左右的距离， 默认为20
+   * @param horizontalOffset number 距离盒子左右的距离， 默认为verticalOffset
    */
-  @action fitView(verticalOffset = 20, horizontalOffset = 20): void {
+  @action fitView(verticalOffset = 20, horizontalOffset?: number): void {
     const { nodes, width, height, rootEl, transformModel } = this;
     if (!nodes.length) { return; }
     const containerWidth = width || rootEl.clientWidth;
@@ -1205,7 +1205,7 @@ class GraphModel {
       virtualRectCenterPositionY,
     } = this.getVirtualRectSize();
 
-    const zoomRatioX = (virtualRectWidth + horizontalOffset) / containerWidth;
+    const zoomRatioX = (virtualRectWidth + (horizontalOffset ?? horizontalOffset)) / containerWidth;
     const zoomRatioY = (virtualRectHeight + verticalOffset) / containerHeight;
 
     let zoomRatio = 0;
