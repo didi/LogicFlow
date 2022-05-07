@@ -1205,7 +1205,7 @@ class GraphModel {
       virtualRectCenterPositionY,
     } = this.getVirtualRectSize();
 
-    const zoomRatioX = (virtualRectWidth + (horizontalOffset ?? horizontalOffset)) / containerWidth;
+    const zoomRatioX = (virtualRectWidth + (horizontalOffset ?? verticalOffset)) / containerWidth;
     const zoomRatioY = (virtualRectHeight + verticalOffset) / containerHeight;
 
     let zoomRatio = 0;
