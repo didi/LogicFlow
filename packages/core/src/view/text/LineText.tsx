@@ -24,7 +24,7 @@ export default class LineText extends BaseText {
       backgroundStyle = { ...backgroundStyle, ...style.hover.background };
     }
     // 存在文本并且文本背景不为透明时计算背景框
-    if (text && text.value && backgroundStyle.fill !== 'transparnet') {
+    if (text && text.value && backgroundStyle.fill !== 'transparent') {
       const { fontSize, overflowMode, lineHeight, wrapPadding, textWidth } = style;
       const { value } = text;
       let { x, y } = text;
