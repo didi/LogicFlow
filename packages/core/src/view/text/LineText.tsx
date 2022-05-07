@@ -26,7 +26,8 @@ export default class LineText extends BaseText {
     // 存在文本并且文本背景不为透明时计算背景框
     if (text && text.value && backgroundStyle.fill !== 'transparnet') {
       const { fontSize, overflowMode, lineHeight, wrapPadding, textWidth } = style;
-      const { value, x, y } = text;
+      const { value } = text;
+      let { x, y } = text;
       const rows = String(value).split(/[\r\n]/g);
       // 计算行数
       const rowsLength = rows.length;
@@ -59,7 +60,26 @@ export default class LineText extends BaseText {
         });
         // 背景框宽度，最长一行字节数/2 * fontsize + 2
         // 背景框宽度， 行数 * fontsize + 2
-        const { width, height } = getSvgTextWidthHeight({ rows, fontSize, rowsLength });
+        let { width, height } = getSvgTextWidthHeight({ rows, fontSize, rowsLength });
+        // 根据设置的padding调整width, height, x, y的值
+        if (typeof backgroundStyle.wrapPadding === 'string') {
+          let paddings = backgroundStyle.wrapPadding.split(',')
+            .filter(padding => padding.trim())
+            .map(padding => parseFloat(padding.trim()));
+          if (paddings.length > 0 && paddings.length <= 4) {
+            if (paddings.length === 1) {
+              paddings = [paddings[0], paddings[0], paddings[0], paddings[0]];
+            } else if (paddings.length === 2) {
+              paddings = [paddings[0], paddings[1], paddings[0], paddings[1]];
+            } else if (paddings.length === 3) {
+              paddings = [paddings[0], paddings[1], paddings[2], paddings[1]];
+            }
+            width += paddings[1] + paddings[3];
+            height += paddings[0] + paddings[2];
+            x = x + (paddings[1] - paddings[3]) / 2;
+            y = y + (paddings[2] - paddings[0]) / 2;
+          }
+        }
         rectAttr = {
           ...backgroundStyle,
           x: x - 1,

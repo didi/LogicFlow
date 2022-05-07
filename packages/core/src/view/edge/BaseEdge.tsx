@@ -59,10 +59,13 @@ export default class BaseEdge extends Component<IProps> {
   getArrowStyle() {
     const { model, graphModel } = this.props;
     const edgeStyle = model.getEdgeStyle();
+    const edgeAnimationStyle = model.getEdgeAnimationStyle();
     const { arrow } = graphModel.theme;
+    const stroke = model.isAnimation ? edgeAnimationStyle.stroke : edgeStyle.stroke;
     return {
       ...edgeStyle,
-      fill: edgeStyle.stroke,
+      fill: stroke,
+      stroke,
       ...arrow,
     } as ArrowStyle;
   }
@@ -228,7 +231,11 @@ export default class BaseEdge extends Component<IProps> {
     return (
       <g>
         <g
-          className={isHitable ? 'lf-edge' : 'lf-edge pointer-none'}
+          className={[
+            'lf-edge',
+            !isHitable && 'pointer-none',
+            isSelected && 'lf-edge-selected',
+          ].filter(Boolean).join(' ')}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onContextMenu={this.handleContextMenu}

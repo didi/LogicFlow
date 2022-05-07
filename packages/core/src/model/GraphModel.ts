@@ -1222,6 +1222,22 @@ class GraphModel {
       containerHeight,
     );
   }
+  /**
+   * 开启边的动画
+   * @param edgeId any
+   */
+  @action openEdgeAnimation(edgeId: any): void {
+    const edgeModel = this.getEdgeModelById(edgeId);
+    edgeModel.openEdgeAnimation();
+  }
+  /**
+   * 关闭边的动画
+   * @param edgeId any
+   */
+  @action closeEdgeAnimation(edgeId: any): void {
+    const edgeModel = this.getEdgeModelById(edgeId);
+    edgeModel.closeEdgeAnimation();
+  }
 }
 
 export { GraphModel };

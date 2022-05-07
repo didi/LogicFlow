@@ -887,6 +887,20 @@ export default class LogicFlow {
   fitView(verticalOffset?: number, horizontalOffset?: number): void {
     this.graphModel.fitView(verticalOffset, horizontalOffset);
   }
+  /**
+   * 开启边的动画
+   * @param edgeId any
+   */
+  openEdgeAnimation(edgeId: any): void {
+    this.graphModel.openEdgeAnimation(edgeId);
+  }
+  /**
+   * 关闭边的动画
+   * @param edgeId any
+   */
+  closeEdgeAnimation(edgeId: any): void {
+    this.graphModel.closeEdgeAnimation(edgeId);
+  }
 
   // 事件系统----------------------------------------------
   /**
