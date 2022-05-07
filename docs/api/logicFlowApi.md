@@ -45,7 +45,7 @@ const lf = new LogicFlow(options: Options)
 |edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
 |multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
-|plugins|Array| -|-|当前LogicFlow实力加载的插件，不传则采用全局插件。|
+|plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
 
 ### `background`
 
@@ -100,7 +100,7 @@ export interface KeyboardDef {
 ```js
 const lf = new LogicFlow({
   keyboard: {
-    enable: true
+    enabled: true
   }
 })
 ```
