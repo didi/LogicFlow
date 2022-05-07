@@ -59,10 +59,13 @@ export default class BaseEdge extends Component<IProps> {
   getArrowStyle() {
     const { model, graphModel } = this.props;
     const edgeStyle = model.getEdgeStyle();
+    const edgeAnimationStyle = model.getEdgeAnimationStyle();
     const { arrow } = graphModel.theme;
+    const stroke = model.isAnimation ? edgeAnimationStyle.stroke : edgeStyle.stroke;
     return {
       ...edgeStyle,
-      fill: edgeStyle.stroke,
+      fill: stroke,
+      stroke,
       ...arrow,
     } as ArrowStyle;
   }

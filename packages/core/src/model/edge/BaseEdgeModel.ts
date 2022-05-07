@@ -46,6 +46,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable isHitable = true; // 细粒度控制边是否对用户操作进行反应
   @observable draggable = true;
   @observable visible = true;
+  @observable isAnimation = false;
   // 引用属性
   graphModel: GraphModel;
   @observable zIndex = 0;
@@ -137,6 +138,15 @@ class BaseEdgeModel implements IBaseModel {
   getAnimation() {
     const { animationData } = this;
     return cloneDeep(animationData);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前边的动画样式
+   * @returns 自定义边动画样式
+   */
+  getEdgeAnimationStyle() {
+    const { edgeAnimation } = this.graphModel.theme;
+    return cloneDeep(edgeAnimation);
   }
   /**
    * @overridable 支持重写
@@ -378,6 +388,16 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setHitable(flag = true): void {
     this.isHitable = flag;
+  }
+
+  @action
+  openEdgeAnimation(): void {
+    this.isAnimation = true;
+  }
+
+  @action
+  closeEdgeAnimation(): void {
+    this.isAnimation = false;
   }
 
   @action

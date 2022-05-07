@@ -883,8 +883,22 @@ export default class LogicFlow {
    * 图形适应屏幕大小
    * @param offset number 距离盒子四周的距离， 默认为20
    */
-  fitView(offset: number): void {
+  fitView(offset?: number): void {
     this.graphModel.fitView(offset);
+  }
+  /**
+   * 开启边的动画
+   * @param edgeId any
+   */
+  openEdgeAnimation(edgeId: any): void {
+    this.graphModel.openEdgeAnimation(edgeId);
+  }
+  /**
+   * 关闭边的动画
+   * @param edgeId any
+   */
+  closeEdgeAnimation(edgeId: any): void {
+    this.graphModel.closeEdgeAnimation(edgeId);
   }
 
   // 事件系统----------------------------------------------

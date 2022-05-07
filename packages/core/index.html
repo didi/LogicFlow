@@ -18,7 +18,7 @@
 
     body {
       background-color: #FFF;
-      position: relative;
+      position: relative; 
     }
 
     #app {
@@ -114,6 +114,8 @@
     <button onClick="translateCenter()">居中</button>
     <button onClick="fitView()">适应屏幕</button>
     <button onClick="getNodeEdges()">获取节点所有的边</button>
+    <button onClick="openEdgeAnimation()">启动边动画</button>
+    <button onClick="closeEdgeAnimation()">关闭边动画</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -362,6 +364,19 @@
         }
       }
       
+      class AnimationEdge extends BezierEdge {
+  
+      }
+
+      class AnimationEdgeModel extends BezierEdgeModel {
+        getEdgeAnimationStyle() {
+          const style = super.getEdgeAnimationStyle();  
+          style.stroke = 'blue'
+          style.animationDuration = '30s'
+          style.animationDirection = 'reverse'
+          return style
+        }  
+      }
     </script>
 
     <!-- 实例化 LogicFlow -->
@@ -370,8 +385,8 @@
         const lf = new LogicFlow({
           container: document.querySelector('#app'),
           // hideAnchors: true,
-          width: 700,
-          height: 500,
+          width: 1700,
+          height: 1000,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
@@ -409,7 +424,7 @@
           },
           grid: true,
           edgeTextDraggable: true,
-          edgeType: 'line',
+          edgeType: 'animationEdge',
           // 全局自定义id
           idGenerator(type) {
             return type + '_' + Math.random()
@@ -449,6 +464,12 @@
           view: Connection,
           model: ConnectionModel,
         })
+
+        lf.register({
+          type: 'animationEdge',
+          view: AnimationEdge,
+          model: AnimationEdgeModel
+        })
         lf.register({
           type: 'uml',
           view: UmlNode,
@@ -464,7 +485,7 @@
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
           }
         );
-        lf.setDefaultEdgeType('bezier');
+        lf.setDefaultEdgeType('animationEdge');
 
         lf.render({
           nodes: [
@@ -630,7 +651,7 @@
           // edges: [
           //   {
           //     id: 'edge_2222',
-          //     type: 'connection',
+          //     type: 'AnimationEdge',
           //     sourceNodeId: 50,
           //     targetNodeId: 21,
           //   }
@@ -734,6 +755,20 @@
         }
         window.fitView = function () {
           lf.fitView(100)
+        }
+
+        window.openEdgeAnimation = function () {
+          const { edges } = lf.getGraphData();  
+          edges.forEach(({id}) => {
+            lf.openEdgeAnimation(id)
+          }) 
+        }
+
+        window.closeEdgeAnimation = function() {
+          const { edges } = lf.getGraphData();  
+          edges.forEach(({id}) => {
+            lf.closeEdgeAnimation(id)
+          })
         }
       }
     </script>
