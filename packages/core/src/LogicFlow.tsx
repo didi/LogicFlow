@@ -885,6 +885,9 @@ export default class LogicFlow {
    * @param horizontalOffset number 距离盒子左右的距离， 默认为20
    */
   fitView(verticalOffset?: number, horizontalOffset?: number): void {
+    if (horizontalOffset === undefined) {
+      horizontalOffset = verticalOffset; // 兼容以前的只传一个参数的情况
+    }
     this.graphModel.fitView(verticalOffset, horizontalOffset);
   }
   /**

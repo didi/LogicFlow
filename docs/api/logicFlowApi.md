@@ -1134,7 +1134,7 @@ lf.resetTranslate()
 将整个流程图缩小到画布能全部显示
 
 ```js
-lf.fitView()
+lf.fitView(deltaX, deltaY)
 ```
 
 

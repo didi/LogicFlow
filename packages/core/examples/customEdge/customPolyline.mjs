@@ -8,6 +8,17 @@ class CustomPolylineModel extends PolylineEdgeModel {
     style.stroke = 'green'
     return style;
   }
+  getTextStyle() {
+    return {
+      fontSize: 12,
+      autoWrap: true,
+      lineHeight: 1.5,
+      background: {
+        fill: '#ff00ff',
+        wrapPadding: '0px,12px',
+      }
+    };
+  }
 }
 
 class CustomPolyline extends PolylineEdge {
