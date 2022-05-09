@@ -122,7 +122,7 @@ class CustomEdgeModel extends PolylineEdgeModel {
     if (currentPositionList.length > 1) {
       let [x1, y1] = currentPositionList[0].split(",");
       let [x2, y2] = currentPositionList[1].split(",");
-      let distence = 50;
+      let distance = 50;
       x1 = Number(x1);
       y1 = Number(y1);
       x2 = Number(x2);
@@ -130,15 +130,15 @@ class CustomEdgeModel extends PolylineEdgeModel {
       if (x1 === x2) {
         // 垂直
         if (y2 < y1) {
-          distence = -50;
+          distance = -50;
         }
-        position.y = y1 + distence;
+        position.y = y1 + distance;
         position.x = x1;
       } else {
         if (x2 < x1) {
-          distence = -50;
+          distance = -50;
         }
-        position.x = x1 + distence;
+        position.x = x1 + distance;
         position.y = y1 - 10;
       }
     }
@@ -152,6 +152,33 @@ class CustomEdgeModel extends PolylineEdgeModel {
 <iframe src="https://codesandbox.io/embed/laughing-dream-x3v87?fontsize=14&hidenavigation=1&theme=dark&view=preview"
      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
      title="logicflow-base25"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+## 给边开启动画
+
+由于LogicFlow是基于svg的流程图编辑框架，所以我们可以给svg添加动画的方式来给流程图添加动画效果。为了方便使用，我们也内置了基础的动画效果。在定义边的时候，可以将属性`isAnimation`设置为true就可以让边动起来，也可以使用`lf.openEdgeAnimation(edgeId)`来开启边的默认动画。
+
+```js
+class CustomEdgeModel extends PolylineEdgeModel {
+  setAttributes() {
+    this.isAnimation = true;
+  }
+  getEdgeAnimationStyle() {
+    const style = super.getEdgeAnimationStyle();
+    style.strokeDasharray = "5 5";
+    style.animationDuration = "10s";
+    return style;
+  }
+}
+``` 
+
+### 示例
+
+<iframe src="https://codesandbox.io/embed/suspicious-tree-hw82v8?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow026-edgeAnimation"
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
