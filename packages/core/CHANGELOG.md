@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.15](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.14...@logicflow/core@1.1.15) (2022-05-07)
+
+
+### Bug Fixes
+
+* remove unnecessary object ([b0b7507](https://github.com/didi/LogicFlow/commit/b0b7507443d5c8dd0d133bd109d26f036a1a945a))
+
+
+### Features
+
+* add lf-node-select className to node when it is selected ([ce8f6ae](https://github.com/didi/LogicFlow/commit/ce8f6ae4f284de9896c3a0dc4791804b5bb7d23e))
+* lf-edge-select className to edge when it is selected ([6c5c301](https://github.com/didi/LogicFlow/commit/6c5c3015913a6a148c09f621873b539a3bb282c0))
+* setting horizontal and vertical offset separately for fitView ([37c464c](https://github.com/didi/LogicFlow/commit/37c464c1bb4539275e87c62e8c7e2d6701df742b))
+* support edge animation ([d66edec](https://github.com/didi/LogicFlow/commit/d66edec3c834a13242446d26cf0ac630f24495e5))
+* support wrapPadding for edge text which overflowMode is't autoWrap ([f5cc079](https://github.com/didi/LogicFlow/commit/f5cc0792dd9232dd0331312a2358519a96a9a278))
+
+
+
+
+
 ## [1.1.14](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.13...@logicflow/core@1.1.14) (2022-04-22)
 
 **Note:** Version bump only for package @logicflow/core

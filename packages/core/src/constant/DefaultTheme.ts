@@ -149,6 +149,10 @@ export type EdgeTextTheme = {
    * 文本背景样式
    */
   background?: {
+    /**
+     * 背景区域padding
+     * wrapPadding: '5px,10px'
+     */
     wrapPadding?: string;
   } & RectTheme;
   /**
