@@ -51,11 +51,12 @@ LogicFlow.use(Menu);
 import LogicFlow from '@logicflow/core';
 import { Menu } from '@logicflow/extension';
 
-// 注册组件
-LogicFlow.use(Menu);
+
 // 实例化 Logic Flow
 const lf = new LogicFlow({
-  container: document.getElementById('app');
+  container: document.getElementById('app'),
+  // 注册组件
+  plugins: [ Menu ],
 });
 // 为菜单追加选项（必须在 lf.render() 之前设置）
 lf.extension.menu.addMenuConfig({
@@ -156,7 +157,7 @@ lf.extension.menu.setMenuByType({
 除了上面的为某种类型元素设置菜单外，还可以在自定义元素的时候，为节点处于不同业务状态下设置菜单。
 
 - 通过自定义节点，设置其menu，从而为节点设置定制的自定义菜单。
-- 由于自定义的model中可能无法直接拿到lf实例对象，此时可以通过`this.graphModel`拿到graphModel对象。graphModel对象详细说明请参考API/graphModel。
+- 由于自定义的model中可能无法直接拿到lf实例对象，此时可以通过`this.graphModel`拿到graphModel对象。graphModel对象详细说明请参考[API/graphModel](http://logic-flow.org/api/graphModelApi.html)。
 - 如果还希望在点击菜单后进行业务处理，可以通过`graphModel`的`eventCenter`发送自定义事件，然后自己在`lf`实例上监听此事件。
 - 优先级：指定业务状态设置菜单 > 指定类型元素配置菜单 > 通用菜单配置 > 默认菜单。
 
