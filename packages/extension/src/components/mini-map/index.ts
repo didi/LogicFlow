@@ -35,6 +35,11 @@ class MiniMap {
         this.__setView();
       }
     });
+    this.__lf.on('graph:transform', () => {
+      if (this.__isShow) {
+        this.__setView();
+      }
+    });
   }
   init(option) {
     this.__disabledPlugins = this.__disabledPlugins.concat(
