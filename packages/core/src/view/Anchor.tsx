@@ -170,7 +170,7 @@ class Anchor extends Component<IProps, IState> {
     if (this.t) {
       clearInterval(this.t);
     }
-    this.checkEnd();
+    this.checkEnd(event);
     this.setState({
       startX: 0,
       startY: 0,
@@ -181,15 +181,9 @@ class Anchor extends Component<IProps, IState> {
     // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
-    const { graphModel, nodeModel, anchorData } = this.props;
-    graphModel.eventCenter.emit(EventType.ANCHOR_DROP, {
-      data: anchorData,
-      e: event,
-      nodeModel,
-    });
   };
 
-  checkEnd = () => {
+  checkEnd = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
     } = this.props;
@@ -218,7 +212,7 @@ class Anchor extends Component<IProps, IState> {
       } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.DEFAULT);
-        graphModel.addEdge({
+        const edgeModel = graphModel.addEdge({
           type: edgeType,
           sourceNodeId: nodeModel.id,
           sourceAnchorId: id,
@@ -226,6 +220,13 @@ class Anchor extends Component<IProps, IState> {
           targetNodeId: info.node.id,
           targetAnchorId: info.anchor.id,
           endPoint: { x: info.anchor.x, y: info.anchor.y },
+        });
+        const { anchorData } = this.props;
+        graphModel.eventCenter.emit(EventType.ANCHOR_DROP, {
+          data: anchorData,
+          e: event,
+          nodeModel,
+          edgeModel,
         });
       } else {
         const nodeData = targetNode.getData();
