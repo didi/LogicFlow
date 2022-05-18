@@ -243,6 +243,15 @@ export default class LogicFlow {
     this.setView(config.type, vClass);
     this.graphModel.setModel(config.type, config.model);
   }
+  /**
+   * 批量注册
+   * @param elements 注册的元素
+   */
+  batchRegister(elements = []) {
+    elements.forEach((element) => {
+      this.registerElement(element);
+    });
+  }
   private defaultRegister() {
     // register default shape
     this.registerElement({

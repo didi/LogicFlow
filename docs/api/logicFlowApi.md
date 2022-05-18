@@ -183,6 +183,25 @@ lf.register({
 });
 ```
 
+## batchRegister
+
+批量注册
+
+```ts
+lf.register([
+  {
+    type: 'user',
+    view: UserNode,
+    model: UserModel,
+  },
+    {
+    type: 'user1',
+    view: UserNode1,
+    model: UserModel1,
+  },
+);
+```
+
 ## render
 
 渲染图数据
