@@ -71,6 +71,100 @@ export default {
 
 [去codesandbox中编辑](https://codesandbox.io/s/logicflow-step5-i4xes?file=/step5/sequence.js)
 
+##基于React组件自定义边
+
+使用以下方法可以基于React组件自定义边，你可以在边上添加任何你想要的React组件，甚至将原有的边通过样式隐藏，使用React重新绘制
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+import { BaseEdgeModel, LineEdge, h } from "@logicflow/core";
+
+const DEFAULT_WIDTH = 48;
+const DEFAULT_HEIGHT = 32;
+
+class CustomEdgeModel extends BaseEdgeModel {
+  getEdgeStyle() {
+    const edgeStyle = super.getEdgeStyle();
+    //可以自己设置线的显示样式，甚至隐藏掉原本的线，自己用react绘制
+    edgeStyle.strokeDasharray = "4 4";
+    edgeStyle.stroke = "#DDDFE3";
+    return edgeStyle;
+  }
+}
+
+const CustomLine: React.FC = () => {
+  return <div className="custom-edge">aaa</div>;
+};
+
+class CustomEdgeView extends LineEdge {
+  getEdge() {
+    const { model } = this.props;
+    const {
+      customWidth = DEFAULT_WIDTH,
+      customHeight = DEFAULT_HEIGHT
+    } = model.getProperties();
+    const id = model.id;
+    const edgeStyle = model.getEdgeStyle();
+    const { startPoint, endPoint } = model;
+    const lineData = {
+      x1: startPoint.x,
+      y1: startPoint.y,
+      x2: endPoint.x,
+      y2: endPoint.y
+    };
+    const positionData = {
+      x: (startPoint.x + endPoint.x - customWidth) / 2,
+      y: (startPoint.y + endPoint.y - customHeight) / 2,
+      width: customWidth,
+      height: customHeight
+    };
+    const wrapperStyle = {
+      width: customWidth,
+      height: customHeight
+    };
+
+    setTimeout(() => {
+      ReactDOM.render(<CustomLine />, document.querySelector("#" + id));
+    }, 0);
+    return h("g", {}, [
+      h("line", { ...lineData, ...edgeStyle }),
+      h("foreignObject", { ...positionData }, [
+        h("div", {
+          id,
+          style: wrapperStyle,
+          className: "lf-custom-edge-wrapper"
+        })
+      ])
+    ]);
+  }
+
+  getArrow() {
+    return h("g", {}, []);
+  }
+
+  getAppend() {
+    return h("g", {}, []);
+  }
+}
+
+export default {
+  type: "CustomEdge",
+  view: CustomEdgeView,
+  model: CustomEdgeModel
+};
+
+```
+
+### 示例
+
+<iframe src="https://codesandbox.io/embed/zealous-monad-2q21no?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow-base25"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
 ## 保存锚点信息
 
 默认情况下，LogicFlow只记录节点与节点的信息。但是在一些业务场景下，需要关注到锚点，比如在UML类图中的关联关系；或者锚点表示节点的入口和出口之类。这个时候需要重写连线的保存方法，将锚点信息也一起保存。
