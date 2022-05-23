@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.17](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.16...@logicflow/extension@1.1.17) (2022-05-23)
+
+
+### Bug Fixes
+
+* use blank:drop instead of graph:transform ([c7fc211](https://github.com/didi/LogicFlow/commit/c7fc211438715528651ef4923849a793c325a2c8))
+
+
+
+
+
 ## [1.1.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.14...@logicflow/extension@1.1.16) (2022-05-18)
 
 **Note:** Version bump only for package @logicflow/extension
