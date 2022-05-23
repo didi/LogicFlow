@@ -71,7 +71,7 @@ export default {
 
 [去codesandbox中编辑](https://codesandbox.io/s/logicflow-step5-i4xes?file=/step5/sequence.js)
 
-##基于React组件自定义边
+## 基于React组件自定义边
 
 使用以下方法可以基于React组件自定义边，你可以在边上添加任何你想要的React组件，甚至将原有的边通过样式隐藏，使用React重新绘制
 
