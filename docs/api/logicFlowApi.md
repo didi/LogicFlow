@@ -188,7 +188,7 @@ lf.register({
 批量注册
 
 ```ts
-lf.register([
+lf.batchRegister([
   {
     type: 'user',
     view: UserNode,
