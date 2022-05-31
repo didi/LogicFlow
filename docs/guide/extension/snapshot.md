@@ -52,7 +52,7 @@ const xml = lfJson2Xml(lf.getGraphData())
 
 ### 自定义下载css
 
-为了保持流程图生成的图片与画布上效果一致，`snapshot`插件默认会将当前页面所有的css规则都加载克隆到canvas中。可以修改`useGlobalRules`来禁止加载所有css规则，然后通过`customCssRules`来自定义下载流程图属性。
+为了保持流程图生成的图片与画布上效果一致，`snapshot`插件默认会将当前页面所有的css规则都加载克隆到canvas中, 但是可能会因为CSS文件跨域引起报错，参考issue[575](https://github.com/didi/LogicFlow/issues/575)。可以修改`useGlobalRules`来禁止加载所有css规则，然后通过`customCssRules`来自定义下载流程图属性。
 
 ```js
   lf.extension.snapshot.useGlobalRules = false
