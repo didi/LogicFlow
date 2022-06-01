@@ -59,6 +59,10 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
+  @observable arrowConfig = {
+    markerEnd: `url(#marker-end-${this.id})`,
+    markerStart: '',
+  }; // 箭头属性
   [propName: string]: any; // 支持自定义
 
   constructor(data: EdgeConfig, graphModel: GraphModel) {
