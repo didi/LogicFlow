@@ -9,7 +9,7 @@ export default class BezierEdge extends BaseEdge {
   getEdge() {
     const { model } = this.props;
     const style = model.getEdgeStyle();
-    const { path, isAnimation } = model;
+    const { path, isAnimation, arrowConfig } = model;
     const animationStyle = model.getEdgeAnimationStyle();
     const {
       strokeDasharray,
@@ -27,6 +27,7 @@ export default class BezierEdge extends BaseEdge {
         {
           ...style
         }
+        {...arrowConfig}
         {
           ...isAnimation ? {
             strokeDasharray,

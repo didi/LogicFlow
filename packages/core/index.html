@@ -98,6 +98,8 @@
     <div class="rect" onmousedown="mouseDownRect()"></div>
     <div class="circle" onmousedown="mouseDownCircle()"></div>
     <div class="text" onmousedown="mouseDownText()">文本</div>
+    <button class="text" onClick="setArrow(1)">箭头1</button>
+    <button class="text" onClick="setArrow(2)">箭头2</button>
     <button onClick="focusOn()">定位到五角星</button>
     <button id="undo" onClick="undo()" disabled>上一步</button>
     <button id="redo" onClick="redo()" disabled>下一步</button>
@@ -356,13 +358,63 @@
             }
           };
         }
+
+        getEndArrow() {
+          const { model, graphModel } = this.props;
+          const { id } = model;
+          const { arrow } = graphModel.theme;
+          const { offset, verticalLength } = arrow;
+          const { stroke, strokeWidth } = this.getArrowStyle();
+          const markerAttr = {
+            id: `marker-end-${id}`,
+            refX: -1,
+            overflow: 'visible',
+            orient: 'auto',
+            markerUnits: 'userSpaceOnUse'
+          }
+          const pathAttr = {
+            stroke,
+            strokeWidth,
+            d: 'M 0 0 -10 -5 -10 5 z'
+          }
+          return (
+             h("g", {},[
+              h("marker", { ...markerAttr }, [
+                h('path', {
+                  ...pathAttr,
+                  fill: stroke,
+                })
+              ]),
+              h("marker", { ...markerAttr, id: `marker-end-1-${id}` }, [
+                h('path', {
+                  ...pathAttr,
+                  d: 'M 0 0 -10 5'
+                })
+              ]),
+              h("marker", { ...markerAttr, id: `marker-end-2-${id}` }, [
+                h('path', {
+                  ...pathAttr,
+                  fill: stroke,
+                  d: 'M -10 0  -20 -5 -30 0 -20 5 z'
+                })
+              ])
+            ])
+          )
+        }
       }
       class ConnectionModel extends PolylineEdgeModel {
         setAttributes() {
           this.textWidth = 200;
+          // this.arrowConfig = {
+          //   markerEnd: `url(#marker-end-${this.id})`,
+          //   markerStart: `url(#marker-start-${this.id})`,
+          // };
           const { properties } = this;
           if (properties.isActived) {
             this.stroke = 'red'
+          }
+          if (properties.arrow) {
+            this.arrowConfig.markerEnd = properties.arrow.markerEnd
           }
         }
       }
@@ -486,9 +538,16 @@
             },
             nodeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
             edgeText: { overflowMode: 'ellipsis', lineHeight: 1.5 },
+            polyline: {
+              stroke: 'red',
+            },
+            arrow: {
+              offset: 12, // 箭头长度
+              verticalLength: 4, // 箭头垂直于边的距离
+            }
           }
         );
-        lf.setDefaultEdgeType('animationEdge');
+        lf.setDefaultEdgeType('connection');
 
         lf.render({
           nodes: [
@@ -618,11 +677,13 @@
               y: 200,
             },
             {
+              id: 2, 
               type: 'circle',
               x: 100,
               y: 200,
             },
             {
+              id: 1,
               type: 'polygon',
               x: 300,
               y: 200,
@@ -651,14 +712,19 @@
               y: (i / 4) * 150,
             }
           })),
-          // edges: [
-          //   {
-          //     id: 'edge_2222',
-          //     type: 'AnimationEdge',
-          //     sourceNodeId: 50,
-          //     targetNodeId: 21,
-          //   }
-          // ]
+          edges: [
+            {
+              id: 'connection_1',
+              type: 'connection',
+              sourceNodeId: 1,
+              targetNodeId: 2,
+              properties: {
+                arrow: {
+                  markerEnd: 'url(#marker-end-1-connection_1)'
+                }
+              }
+            }
+          ]
         });
       }
     </script>
@@ -740,6 +806,36 @@
             lf.setProperties(id, {
               isActived: true
             })
+          })
+        }
+        window.setProperties = function () {
+          const { nodes, edges } = lf.getSelectElements()
+          nodes.forEach(({ id }) => {
+            lf.setProperties(id, {
+              isActived: true
+            })
+          })
+          edges.forEach(({ id }) => {
+            lf.setProperties(id, {
+              isActived: true
+            })
+          })
+        }
+        window.setArrow = function (arrowName) {
+
+          const { edges } = lf.getSelectElements()
+          edges.forEach(({ id, properties }) => {
+            const markerEndName = `url(#marker-end-${ arrowName }-${ id })`
+            lf.setProperties(id, {
+              arrow: {
+                ...properties.arrowConfig,
+                markerEnd: markerEndName
+              }
+            })
+            const edgeModel = lf.getEdgeModelById(id)
+            const { arrowConfig } = edgeModel
+            edgeModel.arrowConfig.markerEnd = markerEndName
+            console.log(edgeModel)
           })
         }
         window.setZoom = function () {
