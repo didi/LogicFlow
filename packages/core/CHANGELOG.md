@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.19](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.18...@logicflow/core@1.1.19) (2022-06-01)
+
+
+### Features
+
+* arrow marker, fixes [#637](https://github.com/didi/LogicFlow/issues/637) ([98720b9](https://github.com/didi/LogicFlow/commit/98720b944fd17f343ecf7ec59a5f1d0e79b59a4d))
+
+
+
+
+
 ## [1.1.18](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.17...@logicflow/core@1.1.18) (2022-05-23)
 
 **Note:** Version bump only for package @logicflow/core
