@@ -12,6 +12,7 @@ import {
   EdgeData,
   MenuConfig,
   EdgeConfig,
+  ShapeStyleAttribute,
 } from '../../type/index';
 import {
   ModelType, ElementType, OverlapMode,
@@ -59,6 +60,7 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
+  @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
   @observable arrowConfig = {
     markerEnd: `url(#marker-end-${this.id})`,
     markerStart: '',
@@ -122,8 +124,10 @@ class BaseEdgeModel implements IBaseModel {
    * @returns 自定义边样式
    */
   getEdgeStyle() {
-    const { baseEdge } = this.graphModel.theme;
-    return cloneDeep(baseEdge);
+    return {
+      ...this.graphModel.theme.baseEdge,
+      ...this.style,
+    };
   }
   /**
    * @overridable 支持重写
@@ -275,6 +279,31 @@ class BaseEdgeModel implements IBaseModel {
     };
     this.setAttributes();
   }
+
+  // 设置样式
+  @action
+  setStyle(key, val): void {
+    this.style = {
+      ...this.style,
+      [key]: formatData(val),
+    };
+  }
+
+  @action
+  setStyles(styles): void {
+    this.style = {
+      ...this.style,
+      ...formatData(styles),
+    };
+  }
+
+  @action
+  updateStyles(styles): void {
+    this.style = {
+      ...formatData(styles),
+    };
+  }
+
   /**
    * 内部方法，处理初始化文本格式
    */
