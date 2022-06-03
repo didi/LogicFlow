@@ -149,6 +149,9 @@ export default class BaseEdge extends Component<IProps> {
     });
   };
   setHoverON = (ev) => {
+    // ! hover多次触发, onMouseOver + onMouseEnter
+    const { model: { isHovered } } = this.props;
+    if (isHovered) return;
     this.handleHover(true, ev);
   };
   setHoverOFF = (ev) => {
