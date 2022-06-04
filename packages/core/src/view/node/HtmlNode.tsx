@@ -58,9 +58,11 @@ export default class HtmlNode extends BaseNode {
   getShape() {
     const { model } = this.props;
     const { x, y, height, width } = model;
+    const style = model.getNodeStyle();
     this.currrentProperties = JSON.stringify(model.properties);
     return (
       <foreignObject
+        {...style}
         x={x - width / 2}
         y={y - height / 2}
         width={width}
