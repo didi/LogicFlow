@@ -67,9 +67,11 @@ class Control extends Component<IProps> {
   // 更新中心点位置，更新文案位置
   updatePosition = ({ deltaX, deltaY }) => {
     const { x, y } = this.nodeModel;
-    this.nodeModel.x = x + deltaX / 2;
-    this.nodeModel.y = y + deltaY / 2;
     this.nodeModel.moveText(deltaX / 2, deltaY / 2);
+    this.nodeModel.updateAttributes({
+      x: x + deltaX / 2,
+      y: y + deltaY / 2,
+    });
   };
   // 计算control拖动后，节点的宽高
   getResize = ({ index, deltaX, deltaY, width, height, pct = 1 }) => {
@@ -127,14 +129,16 @@ class Control extends Component<IProps> {
     }
     this.updatePosition({ deltaX, deltaY });
     // 更新宽高
-    this.nodeModel.width = size.width;
-    this.nodeModel.height = size.height;
     this.nodeModel.setProperties({
       nodeSize:
       {
         width: size.width,
         height: size.height,
       },
+    });
+    this.nodeModel.updateAttributes({
+      width: size.width,
+      height: size.height,
     });
     const edges = this.getNodeEdges(id);
     const beforeNode = {

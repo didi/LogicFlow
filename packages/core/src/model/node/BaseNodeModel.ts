@@ -604,9 +604,16 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this.zIndex = zIndex;
   }
   /**
-   * @deprecated 不推荐直接使用updateAttributes，请使用setProperties、updateText、move等方法更新节点属性。
+   * 设置节点属性；
+   * 支持属性请参考节点属性文档
+   * http://logic-flow.org/api/nodeModelApi.html#%E6%95%B0%E6%8D%AE%E5%B1%9E%E6%80%A7
+   * @example
+   * nodeModel.updateAttributes({
+   *  width: 100,
+   *  height: 100
+   * })
    */
   updateAttributes(attributes) {
-    assign(this, attributes);
+    assign(this, cloneDeep(attributes));
   }
 }
