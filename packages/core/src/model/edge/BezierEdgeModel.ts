@@ -82,7 +82,7 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     ${end.x} ${end.y}`;
   }
   initPoints() {
-    if (this.pointsList.length > 0) {
+    if (this.pointsList && this.pointsList.length > 0) {
       this.path = this.getPath(this.pointsList);
     } else {
       this.updatePoints();

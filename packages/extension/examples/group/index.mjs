@@ -5,7 +5,7 @@ const lf = new LogicFlow({
   keyboard: {
     enabled: true
   },
-  plugins: [Group, Control, DndPanel],
+  plugins: [Group, Control, DndPanel, SelectionSelect],
   height: 800
 })
 
@@ -155,4 +155,8 @@ document.querySelector('#render').addEventListener('click', () => {
       }
     ]
   })
+})
+
+document.querySelector('#selection').addEventListener('click', () => {
+  lf.extension.selectionSelect.openSelectionSelect();
 })

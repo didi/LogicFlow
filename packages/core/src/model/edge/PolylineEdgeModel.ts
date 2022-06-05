@@ -261,7 +261,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   initPoints() {
-    if (this.pointsList.length > 0) {
+    if (this.pointsList && this.pointsList.length > 0) {
       this.points = this.pointsList.map(point => `${point.x},${point.y}`).join(' ');
     } else {
       this.updatePoints();
