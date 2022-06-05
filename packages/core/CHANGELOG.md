@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.4...@logicflow/core@1.2.0-alpha.5) (2022-06-05)
+
+
+### Bug Fixes
+
+* node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
+
+
+### Features
+
+* fix observer ([6a1ae3b](https://github.com/didi/LogicFlow/commit/6a1ae3bc16b84d778c0aeed7776dc5e73ec72e2f))
+
+
+
+
+
 # [1.2.0-alpha.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.14...@logicflow/core@1.2.0-alpha.4) (2022-04-25)
 
 
