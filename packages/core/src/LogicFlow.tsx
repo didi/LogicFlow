@@ -242,6 +242,15 @@ export default class LogicFlow {
     this.setView(config.type, vClass);
     this.graphModel.setModel(config.type, config.model);
   }
+  /**
+   * 批量注册
+   * @param elements 注册的元素
+   */
+  batchRegister(elements = []) {
+    elements.forEach((element) => {
+      this.registerElement(element);
+    });
+  }
   private defaultRegister() {
     // register default shape
     this.registerElement({
@@ -880,10 +889,28 @@ export default class LogicFlow {
 
   /**
    * 图形适应屏幕大小
-   * @param offset number 距离盒子四周的距离， 默认为20
+   * @param verticalOffset number 距离盒子上下的距离， 默认为20
+   * @param horizontalOffset number 距离盒子左右的距离， 默认为20
    */
-  fitView(offset: number): void {
-    this.graphModel.fitView(offset);
+  fitView(verticalOffset?: number, horizontalOffset?: number): void {
+    if (horizontalOffset === undefined) {
+      horizontalOffset = verticalOffset; // 兼容以前的只传一个参数的情况
+    }
+    this.graphModel.fitView(verticalOffset, horizontalOffset);
+  }
+  /**
+   * 开启边的动画
+   * @param edgeId any
+   */
+  openEdgeAnimation(edgeId: any): void {
+    this.graphModel.openEdgeAnimation(edgeId);
+  }
+  /**
+   * 关闭边的动画
+   * @param edgeId any
+   */
+  closeEdgeAnimation(edgeId: any): void {
+    this.graphModel.closeEdgeAnimation(edgeId);
   }
 
   // 事件系统----------------------------------------------

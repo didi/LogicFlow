@@ -8,11 +8,10 @@ type IProps = {
 function Path(props: IProps) {
   const attrs = {
     d: '',
-    // ...props,
   };
   Object.entries(props).forEach(([k, v]) => {
     const valueType = typeof v;
-    if (valueType !== 'object') {
+    if (k === 'style' || valueType !== 'object') {
       attrs[k] = v;
     }
   });

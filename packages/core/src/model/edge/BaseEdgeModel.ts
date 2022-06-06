@@ -10,6 +10,7 @@ import {
   EdgeData,
   MenuConfig,
   EdgeConfig,
+  ShapeStyleAttribute,
 } from '../../type/index';
 import {
   ModelType, ElementType, OverlapMode, EventType,
@@ -45,6 +46,7 @@ class BaseEdgeModel implements IBaseModel {
   draggable = true;
   visible = true;
   virtual = false; // 如果此属性为true, 则保存图时将不会保存此边
+  isAnimation = false;
   // 引用属性
   graphModel: GraphModel;
   zIndex = 0;
@@ -57,6 +59,11 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
+  @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
+  @observable arrowConfig = {
+    markerEnd: `url(#marker-end-${this.id})`,
+    markerStart: '',
+  }; // 箭头属性
   [propName: string]: any; // 支持自定义
 
   constructor(data: EdgeConfig, graphModel: GraphModel) {
@@ -75,6 +82,7 @@ class BaseEdgeModel implements IBaseModel {
       isHitable: observable,
       draggable: observable,
       visible: observable,
+      isAnimation: observable,
       zIndex: observable,
       state: observable,
       sourceNode: computed,
@@ -163,8 +171,10 @@ class BaseEdgeModel implements IBaseModel {
    * @returns 自定义边样式
    */
   getEdgeStyle() {
-    const { baseEdge } = this.graphModel.theme;
-    return cloneDeep(baseEdge);
+    return {
+      ...this.graphModel.theme.baseEdge,
+      ...this.style,
+    };
   }
   /**
    * @override 支持重写
@@ -185,7 +195,16 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(animationData);
   }
   /**
-   * @override 支持重写
+   * @overridable 支持重写
+   * 获取当前边的动画样式
+   * @returns 自定义边动画样式
+   */
+  getEdgeAnimationStyle() {
+    const { edgeAnimation } = this.graphModel.theme;
+    return cloneDeep(edgeAnimation);
+  }
+  /**
+   * @overridable 支持重写
    * 获取outline样式，重写可以定义此类型边outline样式， 默认使用主题样式
    * @returns 自定义outline样式
    */
@@ -315,6 +334,31 @@ class BaseEdgeModel implements IBaseModel {
     });
     this.setAttributes();
   }
+
+  // 设置样式
+  @action
+  setStyle(key, val): void {
+    this.style = {
+      ...this.style,
+      [key]: formatData(val),
+    };
+  }
+
+  @action
+  setStyles(styles): void {
+    this.style = {
+      ...this.style,
+      ...formatData(styles),
+    };
+  }
+
+  @action
+  updateStyles(styles): void {
+    this.style = {
+      ...formatData(styles),
+    };
+  }
+
   /**
    * 内部方法，处理初始化文本格式
    */
@@ -436,6 +480,14 @@ class BaseEdgeModel implements IBaseModel {
 
   setHitable(flag = true): void {
     this.isHitable = flag;
+  }
+
+  openEdgeAnimation(): void {
+    this.isAnimation = true;
+  }
+
+  closeEdgeAnimation(): void {
+    this.isAnimation = false;
   }
 
   setElementState(state: number, additionStateData?: AdditionData): void {

@@ -90,6 +90,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   zIndex = 1;
   state = 1;
   autoToFront = true; // 节点选中时是否自动置顶，默认为true.
+  style: ShapeStyleAttribute = { }; // 每个节点自己的样式，动态修改
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
@@ -117,6 +118,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
       visible: observable,
       zIndex: observable,
       state: observable,
+      style: observable,
       autoToFront: observable,
       incoming: computed,
       outgoing: computed,
@@ -289,6 +291,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   getNodeStyle(): ShapeStyleAttribute {
     return {
       ...this.graphModel.theme.baseNode,
+      ...this.style,
     };
   }
   /**
@@ -601,8 +604,28 @@ export default class BaseNodeModel implements IBaseNodeModel {
     });
   }
 
-  setZIndex(zIndex = 1): void {
-    this.zIndex = zIndex;
+  setStyle(key, val): void {
+    this.style = {
+      ...this.style,
+      [key]: formatData(val),
+    };
+  }
+
+  setStyles(styles): void {
+    this.style = {
+      ...this.style,
+      ...formatData(styles),
+    };
+  }
+
+  updateStyles(styles): void {
+    this.style = {
+      ...formatData(styles),
+    };
+  }
+
+  setZIndex(zindex = 1): void {
+    this.zIndex = zindex;
   }
   /**
    * 设置节点属性；

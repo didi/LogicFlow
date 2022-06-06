@@ -1238,9 +1238,10 @@ class GraphModel {
 
   /**
    * 画布图形适应屏幕大小
-   * @param offset number 距离盒子四周的距离， 默认为20
+   * @param verticalOffset number 距离盒子上下的距离， 默认为20
+   * @param horizontalOffset number 距离盒子左右的距离， 默认为20
    */
-  fitView(offset = 20): void {
+  fitView(verticalOffset = 20, horizontalOffset = 20): void {
     const { nodes, width, height, rootEl, transformModel } = this;
     if (!nodes.length) { return; }
     const containerWidth = width || rootEl.clientWidth;
@@ -1253,8 +1254,8 @@ class GraphModel {
       virtualRectCenterPositionY,
     } = this.getVirtualRectSize();
 
-    const zoomRatioX = (virtualRectWidth + offset) / containerWidth;
-    const zoomRatioY = (virtualRectHeight + offset) / containerHeight;
+    const zoomRatioX = (virtualRectWidth + horizontalOffset) / containerWidth;
+    const zoomRatioY = (virtualRectHeight + verticalOffset) / containerHeight;
 
     let zoomRatio = 0;
     zoomRatio = 1 / Math.max(zoomRatioX, zoomRatioY);
@@ -1269,6 +1270,22 @@ class GraphModel {
       containerWidth,
       containerHeight,
     );
+  }
+  /**
+   * 开启边的动画
+   * @param edgeId any
+   */
+  @action openEdgeAnimation(edgeId: any): void {
+    const edgeModel = this.getEdgeModelById(edgeId);
+    edgeModel.openEdgeAnimation();
+  }
+  /**
+   * 关闭边的动画
+   * @param edgeId any
+   */
+  @action closeEdgeAnimation(edgeId: any): void {
+    const edgeModel = this.getEdgeModelById(edgeId);
+    edgeModel.closeEdgeAnimation();
   }
 }
 

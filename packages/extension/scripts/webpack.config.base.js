@@ -21,6 +21,7 @@ const packagesEntry = {
   lfXml2Json: path.resolve(__dirname, '../src/bpmn-adapter/xml2json.ts'),
   lfJson2Xml: path.resolve(__dirname, '../src/bpmn-adapter/json2xml.ts'),
   EnLocale: path.resolve(__dirname, '../src/locale/en-locale/index.ts'),
+  Highlight: path.resolve(__dirname, '../src/components/highlight/index.ts'),
   // GroupShrink: path.resolve(__dirname, '../src/group-shrink/index.ts'),
 };
 

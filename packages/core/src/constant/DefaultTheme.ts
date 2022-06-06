@@ -149,6 +149,10 @@ export type EdgeTextTheme = {
    * 文本背景样式
    */
   background?: {
+    /**
+     * 背景区域padding
+     * wrapPadding: '5px,10px'
+     */
     wrapPadding?: string;
   } & RectTheme;
   /**
@@ -194,6 +198,20 @@ export type OutlineTheme = {
    */
   hover?: CommonTheme;
 } & CommonTheme;
+
+/**
+ * 边动画主题
+ */
+export type EdgeAnimation = {
+  stroke?: string;
+  strokeDasharray?: string;
+  strokeDashoffset?: string;
+  animationName?: string;
+  animationDuration?: string;
+  animationIterationCount?: string;
+  animationTimingFunction?: string;
+  animationDirection?: string;
+};
 
 export type Theme = {
   /**
@@ -274,6 +292,10 @@ export type Theme = {
    * 节点选择状态下外侧的选框样式
    */
   outline?: OutlineTheme,
+  /**
+   * 边动画样式
+   */
+  edgeAnimation?: EdgeAnimation,
 };
 
 export const defaultTheme: Theme = {
@@ -364,5 +386,15 @@ export const defaultTheme: Theme = {
     hover: {
       stroke: '#949494',
     },
+  },
+  edgeAnimation: {
+    stroke: 'red',
+    strokeDasharray: '10 10',
+    strokeDashoffset: '100%',
+    animationName: 'dash',
+    animationDuration: '20s',
+    animationIterationCount: 'infinite',
+    animationTimingFunction: 'linear',
+    animationDirection: 'normal',
   },
 };

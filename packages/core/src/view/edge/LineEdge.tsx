@@ -7,8 +7,19 @@ import { getAppendAttributes } from '../../util/edge';
 export default class LineEdge extends BaseEdge {
   getEdge() {
     const { model } = this.props;
-    const { startPoint, endPoint } = model;
+    const { startPoint, endPoint, isAnimation, arrowConfig } = model;
     const style = model.getEdgeStyle();
+    const animationStyle = model.getEdgeAnimationStyle();
+    const {
+      strokeDasharray,
+      stroke,
+      strokeDashoffset,
+      animationName,
+      animationDuration,
+      animationIterationCount,
+      animationTimingFunction,
+      animationDirection,
+    } = animationStyle;
     return (
       <Line
         {
@@ -18,6 +29,21 @@ export default class LineEdge extends BaseEdge {
         y1={startPoint.y}
         x2={endPoint.x}
         y2={endPoint.y}
+        {...arrowConfig}
+        {
+          ...isAnimation ? {
+            strokeDasharray,
+            stroke,
+            style: {
+              strokeDashoffset,
+              animationName,
+              animationDuration,
+              animationIterationCount,
+              animationTimingFunction,
+              animationDirection,
+            },
+          } : {}
+        }
       />
     );
   }

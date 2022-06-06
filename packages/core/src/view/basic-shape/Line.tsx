@@ -11,9 +11,13 @@ function Line(props) {
     // ...props,
   };
   Object.entries(props).forEach(([k, v]) => {
-    const valueType = typeof v;
-    if (valueType !== 'object') {
+    if (k === 'style') {
       attrs[k] = v;
+    } else {
+      const valueType = typeof v;
+      if (valueType !== 'object') {
+        attrs[k] = v;
+      }
     }
   });
   return (

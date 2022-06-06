@@ -18,3 +18,4 @@ export * from './tools/auto-layout';
 export * from './bpmn-adapter/xml2json';
 export * from './bpmn-adapter/json2xml';
 export * from './locale/en-locale';
+export * from './components/highlight';

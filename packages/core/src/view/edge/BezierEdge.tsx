@@ -9,11 +9,38 @@ export default class BezierEdge extends BaseEdge {
   getEdge() {
     const { model } = this.props;
     const style = model.getEdgeStyle();
+    const { path, isAnimation, arrowConfig } = model;
+    const animationStyle = model.getEdgeAnimationStyle();
+    const {
+      strokeDasharray,
+      stroke,
+      strokeDashoffset,
+      animationName,
+      animationDuration,
+      animationIterationCount,
+      animationTimingFunction,
+      animationDirection,
+    } = animationStyle;
     return (
       <Path
-        d={model.path}
+        d={path}
         {
           ...style
+        }
+        {...arrowConfig}
+        {
+          ...isAnimation ? {
+            strokeDasharray,
+            stroke,
+            style: {
+              strokeDashoffset,
+              animationName,
+              animationDuration,
+              animationIterationCount,
+              animationTimingFunction,
+              animationDirection,
+            },
+          } : {}
         }
       />
     );
