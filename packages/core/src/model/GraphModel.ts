@@ -453,12 +453,12 @@ class GraphModel {
     const edges = [];
     this.edges.forEach(edge => {
       const data = edge.getData();
-      if (data) edges.push(data);
+      if (data && !edge.virtual) edges.push(data);
     });
     const nodes = [];
     this.nodes.forEach(node => {
       const data = node.getData();
-      if (data) nodes.push(data);
+      if (data && !node.virtual) nodes.push(data);
     });
     return {
       nodes,

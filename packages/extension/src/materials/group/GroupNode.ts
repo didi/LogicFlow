@@ -84,23 +84,29 @@ class GroupNodeModel extends RectResize.model {
     this.isFolded = isFolded;
     // step 1
     if (isFolded) {
-      this.x = this.x - this.width / 2 + this.foldedWidth / 2;
-      this.y = this.y - this.height / 2 + this.foldedHeight / 2;
       this.unfoldedWidth = this.width;
       this.unfoldedHight = this.height;
-      this.width = this.foldedWidth;
-      this.height = this.foldedHeight;
+      this.updateAttributes({
+        x: this.x - this.width / 2 + this.foldedWidth / 2,
+        y: this.y - this.height / 2 + this.foldedHeight / 2,
+        width: this.foldedWidth,
+        height: this.foldedHeight,
+      });
     } else {
-      this.width = this.unfoldedWidth;
-      this.height = this.unfoldedHight;
-      this.x = this.x + this.width / 2 - this.foldedWidth / 2;
-      this.y = this.y + this.height / 2 - this.foldedHeight / 2;
+      this.updateAttributes({
+        width: this.unfoldedWidth,
+        height: this.unfoldedHight,
+        x: this.x + this.unfoldedWidth / 2 - this.foldedWidth / 2,
+        y: this.y + this.unfoldedHight / 2 - this.foldedHeight / 2,
+      });
     }
     // step 2
     let allEdges = this.incoming.edges.concat(this.outgoing.edges);
     this.children.forEach((elementId) => {
       const nodeModel = this.graphModel.getElement(elementId);
-      nodeModel.visible = !isFolded;
+      nodeModel.updateAttributes({
+        visible: !isFolded,
+      });
       allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
     });
     // step 3
@@ -179,7 +185,9 @@ class GroupNodeModel extends RectResize.model {
         if (targetNodeIdGroup.id !== this.id || sourceNodeIdGroup.id !== this.id) {
           this.createVirtualEdge(data);
         }
-        edgeModel.visible = false;
+        edgeModel.updateAttributes({
+          visible: false,
+        });
       }
       // 展开时，处理被隐藏的边的逻辑
       if (!isFolded && edgeModel.visible === false) {
@@ -193,7 +201,9 @@ class GroupNodeModel extends RectResize.model {
           data.startPoint = undefined;
           this.createVirtualEdge(data);
         } else {
-          edgeModel.visible = true;
+          edgeModel.updateAttributes({
+            visible: true,
+          });
         }
       }
     });
@@ -203,7 +213,7 @@ class GroupNodeModel extends RectResize.model {
     const model = this.graphModel.addEdge(edgeData);
     model.virtual = true;
     // 强制不保存group连线数据
-    model.getData = () => null;
+    // model.getData = () => null;
     model.text.editable = false;
     model.isFoldedEdge = true;
   }

@@ -84,6 +84,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   draggable = true;
   visible = true;
+  virtual = false; // 如果此属性为true, 则保存图时将不会保存此节点
   // 其它属性
   graphModel: GraphModel;
   zIndex = 1;

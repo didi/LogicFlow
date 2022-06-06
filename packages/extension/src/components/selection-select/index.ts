@@ -121,12 +121,31 @@ class SelectionSelect {
     }
     const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)];
     const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)];
-    const elements = this.lf.getAreaElement(lt, rt, this.isWholeEdge, this.isWholeNode);
+    const elements = this.lf.graphModel.getAreaElement(lt, rt, this.isWholeEdge, this.isWholeNode);
     elements.forEach((element) => {
-      this.lf.selectElementById(element.id, true);
+      if (this.isSelectElement(element)) {
+        this.lf.selectElementById(element.id, true);
+      }
     });
     this.lf.emit('selection:selected', elements);
   };
+  isSelectElement(elementModel) {
+    // 如果不可见，则不被选中
+    if (!elementModel.visible) return false;
+    const { group } = this.lf.extension;
+    // 节点在group中,则不被选中
+    if (group) {
+      if (elementModel.BaseType === 'node' && group.getNodeGroup(elementModel.id)) return false;
+      if (elementModel.BaseType === 'edge') {
+        if (group.getNodeGroup(elementModel.sourceNodeId)
+          || group.getNodeGroup(elementModel.targetNodeId)
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   open() {
     this.__disabled = false;
   }
