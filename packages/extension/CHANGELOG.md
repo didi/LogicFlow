@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.5...@logicflow/extension@1.2.0-alpha.6) (2022-06-06)
+
+
+### Bug Fixes
+
+* use blank:drop instead of graph:transform ([c7fc211](https://github.com/didi/LogicFlow/commit/c7fc211438715528651ef4923849a793c325a2c8))
+
+
+### Features
+
+* add highlight plugin ([8081f91](https://github.com/didi/LogicFlow/commit/8081f91c448d4ed204f517a555af59c13bbde55f))
+
+
+
+
+
 # [1.2.0-alpha.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.4...@logicflow/extension@1.2.0-alpha.5) (2022-06-05)
 
 

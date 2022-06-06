@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.5...@logicflow/core@1.2.0-alpha.6) (2022-06-06)
+
+
+### Bug Fixes
+
+* edge:mouseenter trigger twice ([2b4e80a](https://github.com/didi/LogicFlow/commit/2b4e80a14ab21b47e7f6d0bc774006b244450a5c))
+* foreignObject support style ([92e37f4](https://github.com/didi/LogicFlow/commit/92e37f403c93b48a612e97c73ffdcf374b5287c8))
+* merge resolve ([2e0e921](https://github.com/didi/LogicFlow/commit/2e0e9216e9a6d48cc08a1a376f1efdc6a7221a30))
+* remove unnecessary object ([fa6ad3f](https://github.com/didi/LogicFlow/commit/fa6ad3ff2c36a9a7979e03eb89ba2ca8c66b8a0b))
+
+
+### Features
+
+* add highlight plugin ([8081f91](https://github.com/didi/LogicFlow/commit/8081f91c448d4ed204f517a555af59c13bbde55f))
+* add lf-node-select className to node when it is selected ([ce8f6ae](https://github.com/didi/LogicFlow/commit/ce8f6ae4f284de9896c3a0dc4791804b5bb7d23e))
+* arrow marker, fixes [#637](https://github.com/didi/LogicFlow/issues/637) ([98720b9](https://github.com/didi/LogicFlow/commit/98720b944fd17f343ecf7ec59a5f1d0e79b59a4d))
+* lf-edge-select className to edge when it is selected ([6c5c301](https://github.com/didi/LogicFlow/commit/6c5c3015913a6a148c09f621873b539a3bb282c0))
+* setting horizontal and vertical offset separately for fitView ([37c464c](https://github.com/didi/LogicFlow/commit/37c464c1bb4539275e87c62e8c7e2d6701df742b))
+* support edge animation ([d66edec](https://github.com/didi/LogicFlow/commit/d66edec3c834a13242446d26cf0ac630f24495e5))
+* support wrapPadding for edge text which overflowMode is't autoWrap ([f5cc079](https://github.com/didi/LogicFlow/commit/f5cc0792dd9232dd0331312a2358519a96a9a278))
+* triger anchor-drop event when edge created ([4b355c2](https://github.com/didi/LogicFlow/commit/4b355c2361134fb85bce23b1d660f15b1476ce80))
+
+
+
+
+
 # [1.2.0-alpha.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.4...@logicflow/core@1.2.0-alpha.5) (2022-06-05)
 
 
