@@ -1275,7 +1275,7 @@ class GraphModel {
    * 开启边的动画
    * @param edgeId any
    */
-  @action openEdgeAnimation(edgeId: any): void {
+  openEdgeAnimation(edgeId: any): void {
     const edgeModel = this.getEdgeModelById(edgeId);
     edgeModel.openEdgeAnimation();
   }
@@ -1283,7 +1283,7 @@ class GraphModel {
    * 关闭边的动画
    * @param edgeId any
    */
-  @action closeEdgeAnimation(edgeId: any): void {
+  closeEdgeAnimation(edgeId: any): void {
     const edgeModel = this.getEdgeModelById(edgeId);
     edgeModel.closeEdgeAnimation();
   }

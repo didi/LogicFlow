@@ -59,8 +59,8 @@ class BaseEdgeModel implements IBaseModel {
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
-  @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
-  @observable arrowConfig = {
+  style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
+  arrowConfig = {
     markerEnd: `url(#marker-end-${this.id})`,
     markerStart: '',
   }; // 箭头属性
@@ -85,6 +85,8 @@ class BaseEdgeModel implements IBaseModel {
       isAnimation: observable,
       zIndex: observable,
       state: observable,
+      arrowConfig: observable,
+      style: observable,
       sourceNode: computed,
       targetNode: computed,
       textPosition: computed,
@@ -336,7 +338,6 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   // 设置样式
-  @action
   setStyle(key, val): void {
     this.style = {
       ...this.style,
@@ -344,7 +345,6 @@ class BaseEdgeModel implements IBaseModel {
     };
   }
 
-  @action
   setStyles(styles): void {
     this.style = {
       ...this.style,
@@ -352,7 +352,6 @@ class BaseEdgeModel implements IBaseModel {
     };
   }
 
-  @action
   updateStyles(styles): void {
     this.style = {
       ...formatData(styles),

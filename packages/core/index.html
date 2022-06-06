@@ -432,6 +432,7 @@
       }
       class ConnectionModel extends PolylineEdgeModel {
         getEdgeStyle() {
+          const style = super.getEdgeStyle()
           this.textWidth = 200;
           // this.arrowConfig = {
           //   markerEnd: `url(#marker-end-${this.id})`,
@@ -444,6 +445,7 @@
           if (properties.arrow) {
             this.arrowConfig.markerEnd = properties.arrow.markerEnd
           }
+          return style
         }
       }
       
@@ -758,6 +760,7 @@
 
     <!-- 元素相关方法 -->
     <script>
+      InitElementFunction()
       function InitElementFunction() {
         console.log(LogicFlow.version)
         window.mouseDownRect = function mouseDownCircle() {
@@ -862,7 +865,6 @@
           })
         }
         window.setArrow = function (arrowName) {
-
           const { edges } = lf.getSelectElements()
           edges.forEach(({ id, properties }) => {
             const markerEndName = `url(#marker-end-${ arrowName }-${ id })`
