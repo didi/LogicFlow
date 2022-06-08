@@ -2,9 +2,9 @@
   "name": "@logicflow/core",
   "version": "1.1.19",
   "description": "LogicFlow core, to quickly build flowchart editor",
-  "main": "dist/logic-flow.js",
-  "unpkg": "dist/logic-flow.js",
-  "jsdelivr": "dist/logic-flow.js",
+  "main": "index.js",
+  "unpkg": "dist/logic-flow.min.js",
+  "jsdelivr": "dist/logic-flow.min.js",
   "license": "Apache-2.0",
   "homepage": "http://logic-flow.org/",
   "types": "types/index.d.ts",
@@ -28,7 +28,8 @@
     "dist",
     "es",
     "types",
-    "README.md"
+    "README.md",
+    "index.js"
   ],
   "dependencies": {
     "@types/mousetrap": "^1.6.4",
