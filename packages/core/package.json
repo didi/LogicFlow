@@ -1,8 +1,8 @@
 {
   "name": "@logicflow/core",
-  "version": "1.1.19",
+  "version": "1.1.20",
   "description": "LogicFlow core, to quickly build flowchart editor",
-  "main": "index.js",
+  "main": "dist/entry.js",
   "unpkg": "dist/logic-flow.min.js",
   "jsdelivr": "dist/logic-flow.min.js",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "clean": "rimraf dist lib esm cjs",
     "build": "npm run build:umd",
-    "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style",
+    "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style && cp scripts/entry.js dist",
     "build-analyse": "cross-env analyse=true npm run build",
     "types": "tsc -d --declarationDir ./types --outDir temp && rimraf temp",
     "lint": "eslint . --ext .ts,.tsx",
@@ -28,8 +28,7 @@
     "dist",
     "es",
     "types",
-    "README.md",
-    "index.js"
+    "README.md"
   ],
   "dependencies": {
     "@types/mousetrap": "^1.6.4",
