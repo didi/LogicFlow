@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.20](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.19...@logicflow/core@1.1.20) (2022-06-08)
+
+
+### Bug Fixes
+
+* edge:mouseenter trigger twice ([2b4e80a](https://github.com/didi/LogicFlow/commit/2b4e80a14ab21b47e7f6d0bc774006b244450a5c))
+* foreignObject support style ([92e37f4](https://github.com/didi/LogicFlow/commit/92e37f403c93b48a612e97c73ffdcf374b5287c8))
+
+
+### Features
+
+* add highlight plugin ([8081f91](https://github.com/didi/LogicFlow/commit/8081f91c448d4ed204f517a555af59c13bbde55f))
+
+
+
+
+
 ## [1.1.19](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.18...@logicflow/core@1.1.19) (2022-06-01)
 
 

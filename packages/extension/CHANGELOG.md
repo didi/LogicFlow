@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.20](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.19...@logicflow/extension@1.1.20) (2022-06-08)
+
+
+### Features
+
+* add highlight plugin ([8081f91](https://github.com/didi/LogicFlow/commit/8081f91c448d4ed204f517a555af59c13bbde55f))
+
+
+
+
+
 ## [1.1.19](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.18...@logicflow/extension@1.1.19) (2022-06-01)
 
 **Note:** Version bump only for package @logicflow/extension
