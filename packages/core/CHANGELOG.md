@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.20...@logicflow/core@1.2.0-alpha.7) (2022-06-09)
+
+
+### Bug Fixes
+
+* merge resolve ([2e0e921](https://github.com/didi/LogicFlow/commit/2e0e9216e9a6d48cc08a1a376f1efdc6a7221a30))
+* node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
+* svg 100% document height don`t work ([964d932](https://github.com/didi/LogicFlow/commit/964d93262040d12852ab65a86fc113316dd21c85))
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+* typo error ([83d46e1](https://github.com/didi/LogicFlow/commit/83d46e11a1aaf8a5af13eef8305aa360069bfc03))
+* typo error ([5b878ae](https://github.com/didi/LogicFlow/commit/5b878aeb8bf783b059645cffb5d7a2c11400dbf9))
+
+
+### Features
+
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+* fix observer ([6a1ae3b](https://github.com/didi/LogicFlow/commit/6a1ae3bc16b84d778c0aeed7776dc5e73ec72e2f))
+* history support add snapshot ([638da90](https://github.com/didi/LogicFlow/commit/638da90ca713ecb7112d6d0d45ab7097776d134a))
+* support autowrap text custom class name ([a2ca253](https://github.com/didi/LogicFlow/commit/a2ca253bc95dcb135f5c27232f39ec5badc08aca))
+* update mobx and refactor history ([6ac6b9e](https://github.com/didi/LogicFlow/commit/6ac6b9ea42b13a5d0e6291a4634fd430ad4ba6e2))
+
+
+
+
+
 # [1.2.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.5...@logicflow/core@1.2.0-alpha.6) (2022-06-06)
 
 

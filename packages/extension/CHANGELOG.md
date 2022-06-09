@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.20...@logicflow/extension@1.2.0-alpha.7) (2022-06-09)
+
+
+### Bug Fixes
+
+* node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+
+
+### Features
+
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+
+
+
+
+
 # [1.2.0-alpha.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.5...@logicflow/extension@1.2.0-alpha.6) (2022-06-06)
 
 
