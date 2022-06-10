@@ -36,8 +36,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
     makeObservable(this, {
       dbClickPosition: observable,
-      dragAppend: action,
-      dragAppendEnd: action,
     });
   }
 
@@ -85,7 +83,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
         anchor = item;
       }
     });
-    console.log(444, JSON.stringify(anchor));
     return anchor;
   }
 
@@ -305,7 +302,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   dragAppendStart() {
     // mobx observer 对象被iterator处理会有问题
-    this.draggingPointList = this.pointsList.map(i => i);
+    this.draggingPointList = this.pointsList.map(({ x, y }) => ({ x, y }));
   }
 
   dragAppendSimple(appendInfo, dragInfo) {
@@ -320,24 +317,22 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       direction,
     } = appendInfo;
     const { pointsList } = this;
-    let draggingPointList = pointsList;
+    const pointsListNew = pointsList.map((({ x, y }) => ({ x, y })));
     if (direction === SegmentDirection.HORIZONTAL) {
       // 水平，仅调整y坐标，拿到当前线段两个端点移动后的坐标
-      pointsList[startIndex] = { x: start.x, y: start.y + dragInfo.y };
-      pointsList[endIndex] = { x: end.x, y: end.y + dragInfo.y };
-      draggingPointList = this.pointsList.map(i => i);
+      pointsListNew[startIndex] = { x: start.x, y: start.y + dragInfo.y };
+      pointsListNew[endIndex] = { x: end.x, y: end.y + dragInfo.y };
     } else if (direction === SegmentDirection.VERTICAL) {
       // 垂直，仅调整x坐标， 与水平调整同理
-      pointsList[startIndex] = { x: start.x + dragInfo.x, y: start.y };
-      pointsList[endIndex] = { x: end.x + dragInfo.x, y: end.y };
-      draggingPointList = this.pointsList.map(i => i);
+      pointsListNew[startIndex] = { x: start.x + dragInfo.x, y: start.y };
+      pointsListNew[endIndex] = { x: end.x + dragInfo.x, y: end.y };
     }
-    this.updatePointsAfterDrag(draggingPointList);
-    this.draggingPointList = draggingPointList;
+    this.updatePointsAfterDrag(pointsListNew);
+    this.draggingPointList = pointsListNew;
     this.setText(Object.assign({}, this.text, this.textPosition));
     return {
-      start: Object.assign({}, pointsList[startIndex]),
-      end: Object.assign({}, pointsList[endIndex]),
+      start: Object.assign({}, pointsListNew[startIndex]),
+      end: Object.assign({}, pointsListNew[endIndex]),
       startIndex,
       endIndex,
       direction,
@@ -355,17 +350,18 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     } = appendInfo;
 
     const { pointsList } = this;
+    const pointsListNew = pointsList.map((({ x, y }) => ({ x, y })));
     if (direction === SegmentDirection.HORIZONTAL) {
       // 水平，仅调整y坐标
       // step1: 拿到当前线段两个端点移动后的坐标
-      pointsList[startIndex] = { x: start.x, y: start.y + dragInfo.y };
-      pointsList[endIndex] = { x: end.x, y: end.y + dragInfo.y };
+      pointsListNew[startIndex] = { x: start.x, y: start.y + dragInfo.y };
+      pointsListNew[endIndex] = { x: end.x, y: end.y + dragInfo.y };
       // step2: 计算拖拽后,两个端点与节点外框的交点
       // 定义一个拖住中节点list
-      let draggingPointList = this.pointsList.map(i => i);
-      if (startIndex !== 0 && endIndex !== this.pointsList.length - 1) {
+      let draggingPointList = pointsListNew;
+      if (startIndex !== 0 && endIndex !== pointsListNew.length - 1) {
         // 2.1)如果线段没有连接起终点，过滤会穿插在图形内部的线段，取整个图形离线段最近的点
-        draggingPointList = this.removeCrossPoints(startIndex, endIndex, draggingPointList);
+        draggingPointList = this.removeCrossPoints(startIndex, endIndex, pointsListNew);
       }
       if (startIndex === 0) {
         // 2.2)如果线段连接了起点, 判断起点是否在节点内部
@@ -379,7 +375,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
           draggingPointList = this.getDraggingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
         }
       }
-      if (endIndex === this.pointsList.length - 1) {
+      if (endIndex === pointsListNew.length - 1) {
         // 2.2)如果线段连接了终点, 判断起点是否在节点内部
         const endPosition = {
           x: end.x, y: end.y + dragInfo.y,
@@ -397,10 +393,10 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       this.draggingPointList = draggingPointList;
     } else if (direction === SegmentDirection.VERTICAL) {
       // 垂直，仅调整x坐标， 与水平调整同理
-      pointsList[startIndex] = { x: start.x + dragInfo.x, y: start.y };
-      pointsList[endIndex] = { x: end.x + dragInfo.x, y: end.y };
-      let draggingPointList = this.pointsList.map(i => i);
-      if (startIndex !== 0 && endIndex !== this.pointsList.length - 1) {
+      pointsListNew[startIndex] = { x: start.x + dragInfo.x, y: start.y };
+      pointsListNew[endIndex] = { x: end.x + dragInfo.x, y: end.y };
+      let draggingPointList = pointsListNew;
+      if (startIndex !== 0 && endIndex !== pointsListNew.length - 1) {
         draggingPointList = this.removeCrossPoints(startIndex, endIndex, draggingPointList);
       }
       if (startIndex === 0) {
@@ -414,7 +410,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
           draggingPointList = this.getDraggingPoints(direction, 'start', startPosition, anchorList, draggingPointList);
         }
       }
-      if (endIndex === this.pointsList.length - 1) {
+      if (endIndex === pointsListNew.length - 1) {
         const endPosition = {
           x: end.x + dragInfo.x, y: end.y,
         };
@@ -430,8 +426,8 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
     }
     this.setText(Object.assign({}, this.text, this.textPosition));
     return {
-      start: Object.assign({}, pointsList[startIndex]),
-      end: Object.assign({}, pointsList[endIndex]),
+      start: Object.assign({}, pointsListNew[startIndex]),
+      end: Object.assign({}, pointsListNew[endIndex]),
       startIndex,
       endIndex,
       direction,
@@ -441,15 +437,16 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   dragAppendEnd() {
     if (this.draggingPointList) {
       const pointsList = points2PointsList(this.points);
-      // 更新pointsList，重新渲染appendWidth
-      this.pointsList = pointsList.map(i => i);
       // draggingPointList清空
       this.draggingPointList = [];
       // 更新起终点
       const startPoint = pointsList[0];
-      this.startPoint = Object.assign({}, startPoint);
       const endPoint = pointsList[pointsList.length - 1];
-      this.endPoint = Object.assign({}, endPoint);
+      this.updateAttributes({
+        startPoint: cloneDeep(startPoint),
+        endPoint: cloneDeep(endPoint),
+        pointsList: cloneDeep(pointsList),
+      });
     }
     this.isDragging = false;
   }
@@ -461,7 +458,9 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   updatePointsAfterDrag(pointsList) {
     // 找到准确的连接点后,更新points, 更新边，同时更新依赖points的箭头
     const list = this.updateCrossPoints(pointsList);
-    this.points = list.map(point => `${point.x},${point.y}`).join(' ');
+    this.updateAttributes({
+      points: list.map(point => `${point.x},${point.y}`).join(' '),
+    });
   }
   // 获取边调整的起点
   getAdjustStart() {

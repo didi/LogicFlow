@@ -195,7 +195,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
+    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph && editConfigModel.autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);

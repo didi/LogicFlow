@@ -443,7 +443,10 @@
             style.stroke = 'red'
           }
           if (properties.arrow) {
-            this.arrowConfig.markerEnd = properties.arrow.markerEnd
+            // this.arrowConfig.markerEnd = properties.arrow.markerEnd
+            this.updateAttributes({
+              markerEnd: properties.arrow.markerEnd
+            })
           }
           return style
         }

@@ -218,6 +218,9 @@ class GraphModel {
     if (!options.height) {
       options.height = container.getBoundingClientRect().height;
     }
+    if (!options.width || !options.height) {
+      console.warn('画布初始化确实宽高');
+    }
     this.width = options.width;
     this.height = options.height;
     this.animation = updateAnimation(animation);

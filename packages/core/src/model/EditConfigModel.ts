@@ -71,6 +71,12 @@ export interface EditConfigInterface {
    * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string;
+  /**
+   * 拖动节点靠近画布边缘时，
+   * 是否自动扩张画布.
+   * 默认false。
+   */
+  autoExpand?: string;
 }
 
 const SilentConfig = {
@@ -86,6 +92,7 @@ const SilentConfig = {
   edgeTextEdit: false,
   nodeTextDraggable: false,
   edgeTextDraggable: false,
+  autoExpand: false,
 };
 
 const keys = [
@@ -106,6 +113,7 @@ const keys = [
   'nodeTextDraggable',
   'edgeTextDraggable',
   'multipleSelectKey',
+  'autoExpand',
 ];
 /**
  * 页面编辑配置
@@ -127,6 +135,7 @@ export default class EditConfigModel {
   edgeTextEdit = true;
   nodeTextDraggable = false;
   edgeTextDraggable = false;
+  autoExpand = false;
   multipleSelectKey = '';
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
@@ -147,6 +156,7 @@ export default class EditConfigModel {
       edgeTextEdit: observable,
       nodeTextDraggable: observable,
       edgeTextDraggable: observable,
+      autoExpand: observable,
       updateEditConfig: action,
     });
 
@@ -183,6 +193,7 @@ export default class EditConfigModel {
         edgeTextEdit: this.edgeTextEdit,
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
+        autoExpand: this.autoExpand,
       };
       assign(conf, silentConfig);
     }
