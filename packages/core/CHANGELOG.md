@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.7...@logicflow/core@1.2.0-alpha.8) (2022-06-10)
+
+
+### Bug Fixes
+
+* use clone object ([9e1f7a0](https://github.com/didi/LogicFlow/commit/9e1f7a014634713d5178d471458adfd3a0ce216e))
+
+
+
+
+
 # [1.2.0-alpha.7](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.20...@logicflow/core@1.2.0-alpha.7) (2022-06-09)
 
 
