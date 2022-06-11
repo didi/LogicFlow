@@ -86,7 +86,7 @@ class Control extends Component<IProps> {
         resize.height = height - deltaY * pct;
         break;
       case 2:
-        resize.width = width + deltaX;
+        resize.width = width + deltaX * pct;
         resize.height = height + deltaY * pct;
         break;
       case 3:
@@ -207,9 +207,9 @@ class Control extends Component<IProps> {
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
-    this.nodeModel.rx = this.nodeModel.rx + deltaX / 2;
+    this.nodeModel.rx = size.width;
     // @ts-ignore
-    this.nodeModel.ry = this.nodeModel.ry + deltaY / 2;
+    this.nodeModel.ry = size.height;
     this.nodeModel.setProperties({
       nodeSize:
       {
@@ -277,9 +277,9 @@ class Control extends Component<IProps> {
     this.updatePosition({ deltaX, deltaY });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
-    this.nodeModel.rx = this.nodeModel.rx + deltaX / 2;
+    this.nodeModel.rx = size.width;
     // @ts-ignore
-    this.nodeModel.ry = this.nodeModel.ry + deltaY / 2;
+    this.nodeModel.ry = size.height;
     this.nodeModel.setProperties({
       nodeSize:
       {
