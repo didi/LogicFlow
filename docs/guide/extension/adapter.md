@@ -78,8 +78,7 @@ lf.adapterOut = function (logicFlowData) {
 
 ## 使用内置的数据转换工具
 
-LogicFlow 内置通用的 bpmn-js 兼容的转换工具。可以支持将 LogicFlow 上绘制的图在 bpmn-js 上显示，也支持 bpmn-js 上绘制的图在 LogicFlow 上显示。[LogicFlow2Bpmn](/bpmn/index.html)
-
+LogicFlow 内置通用的 bpmn-js 兼容的转换工具。可以支持将 LogicFlow 上绘制的图在 bpmn-js 上显示，也支持 bpmn-js 上绘制的图在 LogicFlow 上显示。[LogicFlow2Bpmn](https://github.com/didi/LogicFlow/tree/master/packages/extension/src/bpmn-adapter)
 ### bpmnAdapter
 
 ```ts
