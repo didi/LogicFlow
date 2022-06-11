@@ -123,11 +123,13 @@ export default class TextEdit extends Component<IProps, IState> {
       }
       const { x, y } = textEditElement.text;
       const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y]);
+      const textStyle = textEditElement.getTextStyle();
       return {
         style: {
           left,
           top,
           ...autoStyle,
+          ...textStyle,
         },
       };
     }
