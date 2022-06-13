@@ -180,6 +180,7 @@ module.exports = {
         ]
       },
       { text: '文章', link: '/article/article01' },
+      { text: 'gitee镜像', link: 'https://gitee.com/logic-flow/LogicFlow' },
     ],
     sidebar: {
       '/guide/': guide,
