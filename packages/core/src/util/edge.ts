@@ -104,17 +104,19 @@ export const getExpandedBBox = (bbox: PBBox, offset: number): PBBox => {
  * 判断点与中心点边的方向：是否水平，true水平，false垂直
  */
 export const pointDirection = (point: PolyPoint, node: BaseNode): Direction => {
-  const yDistance = point.y - node.y;
-  const xDistance = point.x - node.x;
-  if (yDistance === 0) return SegmentDirection.HORIZONTAL;
-  if (xDistance === 0) return SegmentDirection.VERTICAL;
-  if (
-    point.x > (node.x - node.width / 2)
-    && point.x < (node.x + node.width / 2)
-  ) {
-    return SegmentDirection.VERTICAL;
+  const dx = Math.abs(point.x - node.x);
+  const dy = Math.abs(point.y - node.y);
+  const { width, height } = node;
+  const hDistance = width / 2 - dx; // 锚点距离节点左右两边的最小距离，值大于0表示在minX与maxX之间
+  const vDistance = height / 2 - dy; // 锚点距离节点上下两边的最小距离，值大于0表示在minY与maxY之间
+  if (hDistance > 0 && vDistance > 0) {
+    // 锚点在节点内部，寻找与锚点距离最近的边的方向
+    return hDistance < vDistance ? SegmentDirection.HORIZONTAL : SegmentDirection.VERTICAL;
   }
-  return SegmentDirection.HORIZONTAL;
+  // 锚点在节点边上或者节点外部，比较锚点斜率(dy/dx)与节点斜率(height/width)
+  return dx / node.width > dy / node.height
+    ? SegmentDirection.HORIZONTAL
+    : SegmentDirection.VERTICAL;
 };
 
 /* 获取扩展图形上的点，即起始终点相邻的点，上一个或者下一个节点 */
