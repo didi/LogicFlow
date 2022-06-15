@@ -196,3 +196,10 @@
 .lf-edge-adjust-point {
   cursor: move;
 }
+/*
+ * svg默认会多5px，强制全部设置为block
+ * @see https://stackoverflow.com/questions/41437423/difference-between-display-inline-and-block-on-svg-elements
+ */
+.lf-graph svg {
+  display: block;
+}
