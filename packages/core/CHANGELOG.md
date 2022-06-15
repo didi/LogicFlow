@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.9...@logicflow/core@1.2.0-alpha.10) (2022-06-15)
+
+
+### Bug Fixes
+
+* svg mysterious space ([0414eb7](https://github.com/didi/LogicFlow/commit/0414eb72859837c6665c5195855ec88fd263367b))
+
+
+
+
+
 # [1.2.0-alpha.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.8...@logicflow/core@1.2.0-alpha.9) (2022-06-13)
 
 **Note:** Version bump only for package @logicflow/core
