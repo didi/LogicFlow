@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.10...@logicflow/core@1.2.0-alpha.11) (2022-06-15)
+
+
+### Features
+
+* fix width and height is zero cause can not move node ([f28b1fb](https://github.com/didi/LogicFlow/commit/f28b1fb415ccb92b50f60e027bb96b3848bcae4c))
+
+
+
+
+
 # [1.2.0-alpha.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.9...@logicflow/core@1.2.0-alpha.10) (2022-06-15)
 
 
