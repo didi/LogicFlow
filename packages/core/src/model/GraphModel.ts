@@ -218,8 +218,8 @@ class GraphModel {
     if (!options.height) {
       options.height = container.getBoundingClientRect().height;
     }
-    if (!options.width || !options.height) {
-      console.warn('画布初始化确实宽高');
+    if ((!options.width || !options.height) && options.autoExpand) {
+      console.warn('画布初始化缺少宽高，可能会出现节点无法拖动的情况');
     }
     this.width = options.width;
     this.height = options.height;

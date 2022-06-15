@@ -146,7 +146,10 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     const { model, graphModel } = this.props;
     // const { isDragging } = model;
     const {
-      editConfigModel,
+      editConfigModel: {
+        stopMoveGraph,
+        autoExpand,
+      },
       transformModel,
       width,
       height,
@@ -161,10 +164,12 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       y: clientY,
     });
     const [x1, y1] = transformModel.CanvasPointToHtmlPoint([x, y]);
-    if (x1 < 0
+    if (autoExpand
+      && !stopMoveGraph
+      && (x1 < 0
       || y1 < 0
       || x1 > width
-      || y1 > height) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
+      || y1 > height)) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
       return;
     }
     // 1. 考虑画布被缩放
@@ -195,7 +200,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph && editConfigModel.autoExpand) {
+    if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);

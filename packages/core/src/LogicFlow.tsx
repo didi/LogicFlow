@@ -55,14 +55,6 @@ export default class LogicFlow {
    */
   container: HTMLElement;
   /**
-   * 只读：画布宽度
-   */
-  width: number;
-  /**
-   * 只读：画布高度
-   */
-  height: number;
-  /**
    * 只读：控制整个logicflow画布的model
    */
   graphModel: GraphModel;

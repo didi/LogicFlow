@@ -18,16 +18,6 @@ git clone <your forked repository>
 npm run bootstrap
 ```
 
-### 构建 types 并打包
-
-LF 使用 monorepo 的形式进行管理，各个 package 之间存在依赖关系，所以需要先构建一次类型和源码才能进行开发。
-
-```shell
-npm run build:types
-
-npm run build
-```
-
 ### 启动本地开发
 
 开发 core 包
@@ -40,6 +30,18 @@ npm run dev
 npm run dev:core
 ```
 
+### 构建 types 并打包
+
+LF 使用 monorepo 的形式进行管理，各个 package 之间存在依赖关系，所以需要先构建一次类型和源码才能进行开发。
+
+```shell
+npm run build:types
+
+npm run build
+```
+
+### 启动extension
+
 开发 extension
 
 ```shell
@@ -49,6 +51,8 @@ npm run dev
 # 或跳过以上“构建部分”直接运行
 npm run dev:extension
 ```
+
+访问 http://127.0.0.1:9092/extension/examples/
 
 ### 项目配置修改
 
