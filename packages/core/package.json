@@ -17,12 +17,13 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "clean": "rimraf dist lib esm cjs",
     "build": "npm run build:umd",
-    "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && cp -r src/style/ dist/style && cp scripts/entry.js dist",
+    "build:umd": "cross-env NODE_ENV=production webpack --config scripts/webpack.config.build.js && npm run copy",
     "build-analyse": "cross-env analyse=true npm run build",
     "types": "tsc -d --declarationDir ./types --outDir temp && rimraf temp",
     "lint": "eslint . --ext .ts,.tsx",
     "publish-lib": "npm run types & npm run clean && npm run build && npm publish",
-    "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next"
+    "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next",
+    "copy":"node ./scripts/copy.js"
   },
   "files": [
     "dist",
