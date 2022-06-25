@@ -118,7 +118,10 @@ class Anchor extends Component<IProps, IState> {
       eventCenter,
       width,
       height,
-      editConfigModel,
+      editConfigModel: {
+        autoExpand,
+        stopMoveGraph,
+      },
     } = graphModel;
     const { clientX, clientY } = event;
     const {
@@ -148,7 +151,7 @@ class Anchor extends Component<IProps, IState> {
       dragging: true,
     });
     this.moveAnchorEnd(x1, y1);
-    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
+    if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = setInterval(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);

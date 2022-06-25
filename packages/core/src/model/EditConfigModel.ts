@@ -72,11 +72,11 @@ export interface EditConfigInterface {
    */
   multipleSelectKey?: string;
   /**
-   * 拖动节点靠近画布边缘时，
+   * 拖动节点或者连线靠近画布边缘时，
    * 是否自动扩张画布.
    * 默认false。
    */
-  autoExpand?: string;
+  autoExpand?: boolean;
 }
 
 const SilentConfig = {
