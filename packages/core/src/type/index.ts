@@ -72,6 +72,10 @@ export type GraphConfigData = {
   edges: EdgeConfig[],
 };
 
+export interface GraphData extends GraphConfigData {
+  properties: Record<string, unknown>,
+}
+
 // 节点数据属性
 export type NodeConfig = {
   id?: string;

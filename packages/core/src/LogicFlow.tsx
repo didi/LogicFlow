@@ -25,6 +25,7 @@ import {
   FocusOnArgs,
   EdgeData,
   GraphConfigData,
+  GraphData,
   RegisterElementFn,
   RegisterParam,
   RegisterConfig,
@@ -99,14 +100,14 @@ export default class LogicFlow {
    * 详情请参考adapter
    * @see todo
    */
-  adapterIn: (data: unknown) => GraphConfigData;
+  adapterIn: (data: unknown) => GraphData;
   /**
    * 自定义数据格式转换方法
    * 把logicflow输入的格式转换也接入系统需要的格式
    * 详情请参考adapter
    * @see todo
    */
-  adapterOut: (data: GraphConfigData) => unknown;
+  adapterOut: (data: GraphData) => unknown;
   /**
    * 支持插件在logicflow实例上增加自定义方法
    */
@@ -643,20 +644,35 @@ export default class LogicFlow {
     this.graphModel.editText(id);
   }
   /**
-   * 设置元素的自定义属性
+   * 设置元素或lf实例上的自定义属性
    * @see todo docs link
-   * @param id 元素的id
+   * @param id 元素的id，如果为null则设置lf实例上的自定义属性
    * @param properties 自定义属性
    */
-  setProperties(id: string, properties: Object): void {
-    this.graphModel.getElement(id)?.setProperties(formatData(properties));
+  setProperties(properties: Object): void;
+  setProperties(id: string, properties?: Object): void;
+  setProperties(
+    id: string | Object,
+    properties?: Object,
+  ): void {
+    if (!properties) {
+      properties = id as Object;
+      this.graphModel.setProperties(properties);
+      return;
+    }
+    this.graphModel.getElement(id as string)?.setProperties(formatData(properties));
   }
   /**
-   * 获取元素的自定义属性
-   * @param id 元素的id
+   * 获取元素或lf实例上的自定义属性
+   * @param id 元素的id，如为空则返回lf实例上的自定义属性
    * @returns 自定义属性
    */
-  getProperties(id: string): Object {
+  getProperties(): Object;
+  getProperties(id?: string): Object;
+  getProperties(id?: string): Object {
+    if (id === null) {
+      return this.graphModel.getProperties();
+    }
     return this.graphModel.getElement(id)?.getProperties();
   }
   /**
@@ -741,10 +757,10 @@ export default class LogicFlow {
    * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
    * 如果实现通用插件，请使用getGraphRawData
    */
-  getGraphData(): GraphConfigData | any {
+  getGraphData(): GraphData | any {
     const data = this.graphModel.modelToGraphData();
     if (this.adapterOut) {
-      return this.adapterOut(data as GraphConfigData);
+      return this.adapterOut(data as GraphData);
     }
     return data;
   }
@@ -752,7 +768,7 @@ export default class LogicFlow {
    * 获取流程绘图原始数据
    * 在存在adapter时，可以使用getGraphRawData获取图原始数据
    */
-  getGraphRawData(): GraphConfigData {
+  getGraphRawData(): GraphData {
     return this.graphModel.modelToGraphData();
   }
   /**

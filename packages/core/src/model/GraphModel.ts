@@ -1,4 +1,4 @@
-import { action, observable, computed } from 'mobx';
+import { action, observable, computed, toJS } from 'mobx';
 import { map } from 'lodash-es';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
@@ -16,6 +16,7 @@ import {
   PointTuple,
   NodeMoveRule,
   GraphConfigData,
+  GraphData,
   VirtualRectSize,
 } from '../type';
 import { updateTheme } from '../util/theme';
@@ -98,6 +99,10 @@ class GraphModel {
    * 当前图上所有边的model
    */
   @observable edges: BaseEdgeModel[] = [];
+  /**
+   * 自定义数据
+   */
+  @observable properties: Record<string, any> = {};
   /**
    * 元素重合时堆叠模式
    * 默认模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
@@ -307,7 +312,12 @@ class GraphModel {
       },
     };
   }
-
+  /**
+   * 获取properties
+   */
+  getProperties() {
+    return toJS(this.properties);
+  }
   /**
    * 判断一个元素是否在指定矩形区域内。
    * @param element 节点或者边
@@ -385,7 +395,7 @@ class GraphModel {
   /**
    * 获取画布数据
    */
-  modelToGraphData(): GraphConfigData {
+  modelToGraphData(): GraphData {
     const edges = [];
     this.edges.forEach(edge => {
       const data = edge.getData();
@@ -396,9 +406,12 @@ class GraphModel {
       const data = node.getData();
       if (data) nodes.push(data);
     });
+
+    const { properties } = this;
     return {
       nodes,
       edges,
+      properties: toJS(properties),
     };
   }
   // 用户history记录的数据，忽略拖拽过程中的数据变更
@@ -565,6 +578,16 @@ class GraphModel {
   @action
   setFakerNode(nodeModel: BaseNodeModel) {
     this.fakerNode = nodeModel;
+  }
+  /**
+   * 设置自定义属性
+   */
+  @action
+  setProperties(properties: any): void {
+    this.properties = {
+      ...this.properties,
+      ...formatData(properties),
+    };
   }
   /**
    * 内部保留方法，请勿直接使用
@@ -1126,6 +1149,7 @@ class GraphModel {
   @action clearData(): void {
     this.nodes = [];
     this.edges = [];
+    this.properties = {};
   }
 
   /**
