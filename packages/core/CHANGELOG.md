@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.11...@logicflow/core@1.2.0-alpha.12) (2022-06-29)
+
+
+### Bug Fixes
+
+* use autoExpand ([c03b9ce](https://github.com/didi/LogicFlow/commit/c03b9ce2cb1b39957c62f46a3b87d8cfedfd8912))
+
+
+
+
+
 # [1.2.0-alpha.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.10...@logicflow/core@1.2.0-alpha.11) (2022-06-15)
 
 
