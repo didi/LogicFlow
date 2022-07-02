@@ -159,6 +159,8 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.width = options.width || this.rootEl.getBoundingClientRect().width;
+    this.height = options.height || this.rootEl.getBoundingClientRect().height;
   }
   @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
     return this.nodes.reduce((nMap, model, index) => {
