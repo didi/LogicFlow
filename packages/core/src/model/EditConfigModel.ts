@@ -106,6 +106,7 @@ const keys = [
   'nodeTextDraggable',
   'edgeTextDraggable',
   'multipleSelectKey',
+  'autoExpand',
 ];
 /**
  * 页面编辑配置
@@ -127,6 +128,7 @@ export default class EditConfigModel {
   @observable edgeTextEdit = true;
   @observable nodeTextDraggable = false;
   @observable edgeTextDraggable = false;
+  @observable autoExpand = true;
   multipleSelectKey = '';
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
@@ -164,6 +166,7 @@ export default class EditConfigModel {
         edgeTextEdit: this.edgeTextEdit,
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
+        autoExpand: this.autoExpand,
       };
       assign(conf, silentConfig);
     }

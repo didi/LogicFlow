@@ -153,12 +153,6 @@ class GraphModel {
     this.transformModel = new TransfromModel(this.eventCenter);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
-    if (!options.width) {
-      options.width = container.getBoundingClientRect().width;
-    }
-    if (!options.height) {
-      options.height = container.getBoundingClientRect().height;
-    }
     this.width = options.width;
     this.height = options.height;
     this.animation = updateAnimation(animation);
@@ -357,6 +351,9 @@ class GraphModel {
    * @param { object } graphData 图数据
    */
   graphDataToModel(graphData: GraphConfigData) {
+    if (!this.width || !this.height) {
+      this.resize();
+    }
     this.nodes = map(graphData.nodes, node => {
       const Model = this.getModel(node.type);
       if (!Model) {
@@ -1116,9 +1113,12 @@ class GraphModel {
   /**
    * 重新设置画布的宽高
    */
-  @action resize(width: number, height: number): void {
-    this.width = width ?? this.width;
-    this.height = height ?? this.height;
+  @action resize(width?: number, height?: number): void {
+    this.width = width || this.rootEl.getBoundingClientRect().width;
+    this.height = height || this.rootEl.getBoundingClientRect().height;
+    if (!this.width || !this.height) {
+      console.warn('渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675');
+    }
   }
   /**
    * 清空画布
