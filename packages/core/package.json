@@ -1,9 +1,11 @@
 {
   "name": "@logicflow/core",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/entry.js",
+  "module": "dist/logic-flow.js",
   "unpkg": "dist/logic-flow.min.js",
+  "sideEffects": true,
   "jsdelivr": "dist/logic-flow.min.js",
   "license": "Apache-2.0",
   "homepage": "http://logic-flow.org/",
@@ -23,7 +25,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "publish-lib": "npm run types & npm run clean && npm run build && npm publish",
     "publish-next": "npm run types & npm run clean && npm run build && npm publish --tag next",
-    "copy":"node ./scripts/copy.js"
+    "copy": "node ./scripts/copy.js"
   },
   "files": [
     "dist",

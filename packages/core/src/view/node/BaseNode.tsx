@@ -146,7 +146,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { model, graphModel } = this.props;
     // const { isDragging } = model;
     const {
-      editConfigModel,
+      editConfigModel: {
+        stopMoveGraph,
+        autoExpand,
+      },
       transformModel,
       width,
       height,
@@ -161,12 +164,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       y: clientY,
     });
     const [x1, y1] = transformModel.CanvasPointToHtmlPoint([x, y]);
-    if (x1 < 0
-      || y1 < 0
-      || x1 > width
-      || y1 > height) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
-      return;
-    }
     // 1. 考虑画布被缩放
     // 2. 考虑鼠标位置不再节点中心
     x = x + this.moveOffset.x;
@@ -174,6 +171,18 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 将x, y移动到grid上
     x = snapToGrid(x, gridSize);
     y = snapToGrid(y, gridSize);
+    if (!width || !height) {
+      graphModel.moveNode2Coordinate(
+        model.id,
+        x,
+        y,
+      );
+      return;
+    }
+    const isOutCanvas = x1 < 0 || y1 < 0 || x1 > width || y1 > height;
+    if (autoExpand && !stopMoveGraph && isOutCanvas) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
+      return;
+    }
     // 取节点左上角和右下角，计算节点移动是否超出范围
     const [leftTopX, leftTopY] = transformModel.CanvasPointToHtmlPoint(
       [x - model.width / 2, y - model.height / 2],
@@ -195,7 +204,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    if (nearBoundary.length > 0 && !editConfigModel.stopMoveGraph) {
+    if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);

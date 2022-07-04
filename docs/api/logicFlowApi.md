@@ -46,6 +46,7 @@ const lf = new LogicFlow(options: Options)
 |multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
+|autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。|
 
 ### `background`
 

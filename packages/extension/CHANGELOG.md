@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.21](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.20...@logicflow/extension@1.1.21) (2022-07-02)
+
+
+### Bug Fixes
+
+* **extension-selection:** 修复开启selection后,右键仍会出现上下文菜单的问题 ([d15330c](https://github.com/didi/LogicFlow/commit/d15330cdbfc3f2018bf58058014a12ec6147e154))
+
+
+
+
+
 ## [1.1.20](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.19...@logicflow/extension@1.1.20) (2022-06-08)
 
 
