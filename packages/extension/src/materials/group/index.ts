@@ -20,23 +20,32 @@ class Group {
     lf.register(GroupNode);
     this.lf = lf;
     lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
-      if (model.isGroup) { // 如果移动的是分组，那么分组的子节点也跟着移动。
-        lf.graphModel.moveNodes([...model.children], deltaX, deltaY, true);
-        return true;
-      }
       const groupModel = lf.getNodeModelById(this.nodeGroupMap.get(model.id));
-      if (groupModel && groupModel.isRestrict) { // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
+      let allowMove: boolean | { x: boolean; y: boolean } = true;
+      if (groupModel && groupModel.isRestrict) {
+        // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
         const { x1, y1, x2, y2 } = model.getBounds();
-        const r = groupModel.isAllowMoveTo({
+        allowMove = groupModel.isAllowMoveTo({
           x1: x1 + deltaX,
           y1: y1 + deltaY,
           x2: x2 + deltaX,
           y2: y2 + deltaY,
         });
-        return r;
       }
-
-      return true;
+      if (model.isGroup) {
+        // 如果移动的是分组，那么分组的子节点也跟着移动。
+        if (allowMove === true) {
+          lf.graphModel.moveNodes([...model.getChildren()], deltaX, deltaY, true);
+        } else if (typeof allowMove !== 'boolean') {
+          lf.graphModel.moveNodes(
+            [...model.getChildren()],
+            allowMove.x ? deltaX : 0,
+            allowMove.y ? deltaY : 0,
+            true,
+          );
+        }
+      }
+      return allowMove;
     });
     lf.graphModel.group = this;
     lf.on('node:add', this.appendNodeToGroup);
@@ -68,8 +77,7 @@ class Group {
       preGroup.setAllowAppendChild(false);
     }
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
-    const bounds = this.lf.getNodeModelById(data.id).getBounds();
-    const group = this.getGroup(bounds);
+    const group = this.getGroup(this.lf.getNodeModelById(data.id));
     if (!group) return;
     if (data.id !== group.id) {
       group.addChild(data.id);
@@ -93,8 +101,7 @@ class Group {
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
     if (nodeModel.isGroup) return;
-    const bounds = nodeModel.getBounds();
-    const newGroup = this.getGroup(bounds);
+    const newGroup = this.getGroup(nodeModel);
     if (newGroup || newGroup !== this.activeGroup) {
       if (this.activeGroup) {
         this.activeGroup.setAllowAppendChild(false);
@@ -108,14 +115,30 @@ class Group {
   /**
    * 获取自定位置其所属分组
    */
-  getGroup(bounds: Bounds): BaseNodeModel | undefined {
+  getGroup(nodeModel: BaseNodeModel): BaseNodeModel | undefined {
+    if (nodeModel.nestable === false) {
+      return null;
+    }
+    const bounds = nodeModel.getBounds();
     const { nodes } = this.lf.graphModel;
+    let selectedModel: BaseNodeModel | undefined = null;
     for (let i = 0; i < nodes.length; i++) {
       const model = nodes[i];
-      if (model.isGroup && model.isInRange(bounds)) {
-        return model;
+      if (model !== nodeModel && model.isGroup && model.isInRange(bounds)) {
+        if (selectedModel) {
+          if (selectedModel.zIndex > model.zIndex) {
+            selectedModel = model;
+          } else if (selectedModel.zIndex === model.zIndex) {
+            if (!model.isInRange(selectedModel.getBounds())) {
+              selectedModel = model;
+            }
+          }
+        } else {
+          selectedModel = model;
+        }
       }
     }
+    return selectedModel;
   }
   /**
    * 获取某个节点所属的groupModel
