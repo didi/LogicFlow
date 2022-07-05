@@ -156,19 +156,19 @@ module.exports = {
         ]
       },
       {
-        text: 'v1.1',
+        text: 'v1.1.x',
         link: '#',
         items: [
           {
-            text: '从1.0升级到1.1',
+            text: 'v1.1.x',
             link: '/release/1.1'
           },
           {
-            text: '从0.7升级到1.0',
+            text: 'v1.0.x',
             link: '/release/1.0'
           },
           {
-            text: 'v0.7',
+            text: 'v0.7.x',
             link: 'https://07.logic-flow.cn/'
           }
         ]
