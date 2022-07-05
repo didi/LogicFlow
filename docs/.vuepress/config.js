@@ -156,7 +156,7 @@ module.exports = {
         ]
       },
       {
-        text: '版本: 1.1, 1.0, 0.7',
+        text: 'v1.1',
         link: '#',
         items: [
           {
