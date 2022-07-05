@@ -57,6 +57,8 @@ class GroupNodeModel extends RectResize.model {
     this.resizable = false;
     this.autoToFront = false;
     this.foldable = false;
+    // 是否可以被嵌套
+    this.nestable = false;
     if (this.properties.isFolded === undefined) {
       this.properties.isFolded = false;
     }
@@ -83,6 +85,22 @@ class GroupNodeModel extends RectResize.model {
     this.setProperty('isFolded', isFolded);
     this.isFolded = isFolded;
     // step 1
+    this.foldRect(isFolded);
+    // step 2
+    const allEdges = this.foldChildren(isFolded);
+    // step 3
+    console.log({ allEdges });
+    this.foldEdge(isFolded, allEdges);
+  }
+  getAnchorStyle(anchorInfo) {
+    const style = super.getAnchorStyle(anchorInfo);
+    style.stroke = 'transparent';
+    style.fill = 'transparent';
+    style.hover.fill = 'transparent';
+    style.hover.stroke = 'transparent';
+    return style;
+  }
+  foldRect(isFolded) {
     if (isFolded) {
       this.unfoldedWidth = this.width;
       this.unfoldedHight = this.height;
@@ -100,25 +118,22 @@ class GroupNodeModel extends RectResize.model {
         y: this.y + this.unfoldedHight / 2 - this.foldedHeight / 2,
       });
     }
-    // step 2
+  }
+  foldChildren(isFolded) {
     let allEdges = this.incoming.edges.concat(this.outgoing.edges);
     this.children.forEach((elementId) => {
       const nodeModel = this.graphModel.getElement(elementId);
+      if (nodeModel.isGroup) {
+        const childEdges = nodeModel.foldChildren(isFolded || nodeModel.isFolded);
+        allEdges = allEdges.concat(childEdges);
+        nodeModel.foldEdge(isFolded, childEdges);
+      }
+      allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
       nodeModel.updateAttributes({
         visible: !isFolded,
       });
-      allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
     });
-    // step 3
-    this.foldEdge(isFolded, allEdges);
-  }
-  getAnchorStyle(anchorInfo) {
-    const style = super.getAnchorStyle(anchorInfo);
-    style.stroke = 'transparent';
-    style.fill = 'transparent';
-    style.hover.fill = 'transparent';
-    style.hover.stroke = 'transparent';
-    return style;
+    return allEdges;
   }
   /**
    * 折叠分组的时候，处理分组自身的连线和分组内部子节点上的连线
@@ -245,6 +260,18 @@ class GroupNodeModel extends RectResize.model {
    */
   removeChild(id) {
     this.children.delete(id);
+  }
+  /**
+   * 获得包含嵌套组的所有子节点
+   */
+  getChildren() {
+    return [...this.children].flatMap(child => {
+      const model = this.graphModel.getElement(child);
+      if (model.isGroup) {
+        return [child, ...model.getChildren()];
+      }
+      return child;
+    });
   }
   getAddableOutlineStyle() {
     return {

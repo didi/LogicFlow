@@ -17,8 +17,12 @@ class MyGroupModel extends GroupNode.model {
     super.initNodeData(data);
     this.isRestrict = true;
     this.resizable = true;
-    this.width = 480;
-    this.height = 280;
+    // this.width = 480;
+    // this.height = 280;
+    this.width = data.width;
+    this.height = data.height;
+    this.foldable = true;
+    this.nestable = true;
   }
   getNodeStyle() {
     const style = super.getNodeStyle();
@@ -94,9 +98,32 @@ lf.register({
 lf.render({
   nodes: [
     {
+      id: "group_0",
       type: "my-group",
       x: 400,
       y: 400,
+      width: 500,
+      height: 300,
+      text: {
+        value: "group_0",
+        x: 150,
+        y: 250,
+      },
+      children: ["group_1"],
+      test: "test"
+    },
+    {
+      id: "group_1",
+      type: "my-group",
+      x: 400,
+      y: 400,
+      width: 400,
+      height: 200,
+      text: {
+        value: "group_1",
+        x: 200,
+        y: 300,
+      },
       children: ["rect_2"]
     },
     {
