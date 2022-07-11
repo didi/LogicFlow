@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.12...@logicflow/core@1.2.0-alpha.13) (2022-07-11)
+
+
+### Bug Fixes
+
+* 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
+* 修复node:delete不触发history的问题 ([a8fb672](https://github.com/didi/LogicFlow/commit/a8fb67212ec9e21ec290a09e9c0a6c76dbcbba02))
+
+
+
+
+
 # [1.2.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.11...@logicflow/core@1.2.0-alpha.12) (2022-06-29)
 
 

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.12...@logicflow/extension@1.2.0-alpha.13) (2022-07-11)
+
+
+### Bug Fixes
+
+* 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
+
+
+### Features
+
+* allow groups being nested by other groups ([02772d7](https://github.com/didi/LogicFlow/commit/02772d72123a5f35b296a49cf811fc2f7eda2243))
+
+
+
+
+
 # [1.2.0-alpha.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.11...@logicflow/extension@1.2.0-alpha.12) (2022-06-29)
 
 **Note:** Version bump only for package @logicflow/extension
