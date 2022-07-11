@@ -61,7 +61,7 @@ class BaseEdgeModel implements IBaseModel {
   animationData = defaultAnimationData;
   style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
   arrowConfig = {
-    markerEnd: `url(#marker-end-${this.id})`,
+    markerEnd: '',
     markerStart: '',
   }; // 箭头属性
   [propName: string]: any; // 支持自定义
@@ -154,6 +154,7 @@ class BaseEdgeModel implements IBaseModel {
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex();
     }
+    this.arrowConfig.markerEnd = `url(#marker-end-${this.id})`;
   }
   /**
    * 设置model属性，每次properties发生变化会触发

@@ -24,7 +24,6 @@ function toXml(v, name, ind, deep) {
       xml += addIndSpace(ind, deep) + "<" + name;
       for (let m in v) {
          if (m.charAt(0) == "-") {
-            console.log(m, v[m]);
             xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
          } else {
             hasChild = true;
