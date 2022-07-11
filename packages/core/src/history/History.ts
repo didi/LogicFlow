@@ -21,7 +21,11 @@ class History {
     this.eventCenter = graphModel.eventCenter;
     const {
       NODE_ADD,
+      NODE_DELETE,
+      NODE_DND_ADD,
       EDGE_ADD,
+      EDGE_DELETE,
+      TEXT_UPDATE,
       NODE_DROP,
       EDGE_ADJUST,
       SELECTION_DROP,
@@ -36,6 +40,10 @@ class History {
     let historyChangeKeys = `
       ${NODE_ADD},
       ${EDGE_ADD},
+      ${NODE_DELETE},
+      ${NODE_DND_ADD},
+      ${EDGE_DELETE},
+      ${TEXT_UPDATE},
       ${NODE_DROP},
       ${EDGE_ADJUST},
       ${SELECTION_DROP},
