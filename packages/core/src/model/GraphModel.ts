@@ -227,6 +227,8 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.width = options.width || this.rootEl.getBoundingClientRect().width;
+    this.height = options.height || this.rootEl.getBoundingClientRect().height;
   }
   get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
     return this.nodes.reduce((nMap, model, index) => {
@@ -419,6 +421,9 @@ class GraphModel {
    * @param { object } graphData 图数据
    */
   graphDataToModel(graphData: GraphConfigData) {
+    if (!this.width || !this.height) {
+      this.resize();
+    }
     this.nodes = map(graphData.nodes, node => {
       const Model = this.getModel(node.type);
       if (!Model) {
@@ -1169,8 +1174,11 @@ class GraphModel {
    * 重新设置画布的宽高
    */
   resize(width: number, height: number): void {
-    this.width = width ?? this.width;
-    this.height = height ?? this.height;
+    this.width = width || this.rootEl.getBoundingClientRect().width;
+    this.height = height || this.rootEl.getBoundingClientRect().height;
+    if (!this.width || !this.height) {
+      console.warn('渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675');
+    }
   }
   /**
    * 清空画布

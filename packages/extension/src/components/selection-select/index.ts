@@ -44,6 +44,9 @@ class SelectionSelect {
       this.endPoint = { x, y };
       const wrapper = document.createElement('div');
       wrapper.className = 'lf-selection-select';
+      wrapper.oncontextmenu = function prevent(ev: PointerEvent) {
+        ev.preventDefault();
+      };
       wrapper.style.top = `${this.startPoint.y}px`;
       wrapper.style.left = `${this.startPoint.x}px`;
       domContainer.appendChild(wrapper);
@@ -112,6 +115,7 @@ class SelectionSelect {
   __drawOff = () => {
     document.removeEventListener('mousemove', this.__draw);
     document.removeEventListener('mouseup', this.__drawOff);
+    this.wrapper.oncontextmenu = null;
     this.__domContainer.removeChild(this.wrapper);
     const { x, y } = this.startPoint;
     const { x: x1, y: y1 } = this.endPoint;

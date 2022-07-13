@@ -179,6 +179,18 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     // 将x, y移动到grid上
     x = snapToGrid(x, gridSize);
     y = snapToGrid(y, gridSize);
+    if (!width || !height) {
+      graphModel.moveNode2Coordinate(
+        model.id,
+        x,
+        y,
+      );
+      return;
+    }
+    const isOutCanvas = x1 < 0 || y1 < 0 || x1 > width || y1 > height;
+    if (autoExpand && !stopMoveGraph && isOutCanvas) { // 鼠标超出画布后的拖动，不处理，而是让上一次setInterval持续滚动画布
+      return;
+    }
     // 取节点左上角和右下角，计算节点移动是否超出范围
     const [leftTopX, leftTopY] = transformModel.CanvasPointToHtmlPoint(
       [x - model.width / 2, y - model.height / 2],

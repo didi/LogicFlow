@@ -340,11 +340,12 @@ export default class LogicFlow {
   }
   /**
    * 重新设置画布的宽高
+   * 不传会自动计算画布宽高
    */
-  resize(width: number, height: number): void {
-    this.options.width = width ?? this.options.width;
-    this.options.height = height ?? this.options.height;
+  resize(width?: number, height?: number): void {
     this.graphModel.resize(width, height);
+    this.options.width = this.graphModel.width;
+    this.options.height = this.graphModel.height;
   }
   /**
    * 设置默认的边类型。

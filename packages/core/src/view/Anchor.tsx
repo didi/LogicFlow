@@ -9,6 +9,7 @@ import GraphModel from '../model/GraphModel';
 // import EventEmitter from '../event/eventEmitter';
 import { AnchorConfig } from '../type';
 import { BaseNode } from './node';
+import { cancelRaf, createRaf } from '../util/raf';
 
 type TargetNodeId = string;
 
@@ -132,7 +133,7 @@ class Anchor extends Component<IProps, IState> {
       y: clientY,
     });
     if (this.t) {
-      clearInterval(this.t);
+      cancelRaf(this.t);
     }
     let nearBoundary = [];
     const size = 10;
@@ -152,7 +153,7 @@ class Anchor extends Component<IProps, IState> {
     });
     this.moveAnchorEnd(x1, y1);
     if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
-      this.t = setInterval(() => {
+      this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);
         const { endX, endY } = this.state;
@@ -161,7 +162,7 @@ class Anchor extends Component<IProps, IState> {
           endY: endY - translateY,
         });
         this.moveAnchorEnd(endX - translateX, endY - translateY);
-      }, 50);
+      });
     }
     eventCenter.emit(EventType.ANCHOR_DRAG, {
       data: anchorData,

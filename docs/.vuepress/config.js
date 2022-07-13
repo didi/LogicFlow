@@ -98,7 +98,7 @@ module.exports = {
     editLinkText: '在 Github 上改善此页',
     nav: [
       { text: '教程', link: '/guide/start' },
-      { 
+      {
         text: 'API',
         items: [
           // link: '/api/logicFlowApi'
@@ -145,42 +145,35 @@ module.exports = {
           },
           {
             text: '审批流程',
-            link: '/usage/approve'            
+            link: '/usage/approve'
           },
           {
             text: '作图工具',
             link: '/mvp/index.html' ,
-            target: '_blank'           
-          }
-        ]
-      },
-      { 
-        text: '版本指南',
-        items: [
-          {
-            text: '从1.1升级到1.2',
-            link: '/release/1.2'
-          },
-          {
-            text: '从1.0升级到1.1',
-            link: '/release/1.1'
-          },
-          {
-            text: '从0.7升级到1.0',
-            link: '/release/1.0'
+            target: '_blank'
           }
         ]
       },
       {
-        text: 'v1.x',
+        text: 'v1.1.x',
+        link: '#',
         items: [
           {
-            text: 'v0.7',
+            text: 'v1.1.x',
+            link: '/release/1.1'
+          },
+          {
+            text: 'v1.0.x',
+            link: '/release/1.0'
+          },
+          {
+            text: 'v0.7.x',
             link: 'https://07.logic-flow.cn/'
           }
         ]
       },
       { text: '文章', link: '/article/article01' },
+      { text: 'gitee镜像', link: 'https://gitee.com/logic-flow/LogicFlow' },
     ],
     sidebar: {
       '/guide/': guide,

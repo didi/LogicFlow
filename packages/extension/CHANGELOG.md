@@ -17,6 +17,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
+## [1.1.21](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.20...@logicflow/extension@1.1.21) (2022-07-02)
+
+
+### Bug Fixes
+
+* **extension-selection:** 修复开启selection后,右键仍会出现上下文菜单的问题 ([d15330c](https://github.com/didi/LogicFlow/commit/d15330cdbfc3f2018bf58058014a12ec6147e154))
+
+
+
+
+
+## [1.1.20](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.19...@logicflow/extension@1.1.20) (2022-06-08)
 
 
 ### Features

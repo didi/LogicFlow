@@ -19,7 +19,7 @@ lf.on('node:click,edge:click', (data) => {})
 
 ## 自定义事件
 
-除了造lf上支持监听事件外，还可以使用[eventCenter](/api/eventCenterApi.htm)对象上监听和触发事件。`eventCenter`是一个`graphModel`上的一个属性。所以在自定义节点的时候，我们可以使用`eventCenter`触发自定义事件。
+除了lf上支持的监听事件外，还可以使用[eventCenter](/api/graphModelApi.html#eventcenter)对象来监听和触发事件。`eventCenter`是一个`graphModel`上的一个属性。所以在自定义节点的时候，我们可以使用`eventCenter`触发自定义事件。
 
 ```js
 class ButtonNode extends HtmlNode {

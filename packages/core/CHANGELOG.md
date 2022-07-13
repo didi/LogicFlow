@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [1.2.0-alpha.14](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.13...@logicflow/core@1.2.0-alpha.14) (2022-07-13)
+## [1.1.21](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.20...@logicflow/core@1.1.21) (2022-07-02)
+
+
+### Bug Fixes
+
+* 处理mini大小错误的问题 ([8ef7619](https://github.com/didi/LogicFlow/commit/8ef7619e8f994b9cee2b2544fd3f5bae9f8c0c57))
+* 修复节点无法拖动的问题 ([f6caac9](https://github.com/didi/LogicFlow/commit/f6caac9eebaaf9146ed07d26705befd8c8b71298))
+
+
+
+
+
+## [1.1.20](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.19...@logicflow/core@1.1.20) (2022-06-08)
 
 
 ### Bug Fixes
