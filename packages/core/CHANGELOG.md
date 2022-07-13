@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.14](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.13...@logicflow/core@1.2.0-alpha.14) (2022-07-13)
+
+
+### Bug Fixes
+
+* 调整bezier曲线生成逻辑,现在相同的起终点连线不会重复了 ([5d60fb5](https://github.com/didi/LogicFlow/commit/5d60fb576de9a6554b977aea457e5dcc4d9eaf42))
+
+
+
+
+
 # [1.2.0-alpha.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.12...@logicflow/core@1.2.0-alpha.13) (2022-07-11)
 
 
