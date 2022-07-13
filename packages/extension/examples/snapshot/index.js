@@ -27,8 +27,33 @@ window.onload = function () {
     // nodeTextDraggable: true,
     edgeTextDraggable: true
   });
+  const lf1 = new LogicFlow({
+    container: document.querySelector('#app1'),
+    width: 700,
+    height: 300,
+    tool: {
+      menu: true,
+      control: true,
+    },
+    grid: {
+      type: 'dot',
+      size: 20,
+    },
+    graphMenuConfig: [
+      {
+        text: '分享',
+        className: 'lf-menu-item',
+        callback(graphModel) {
+          alert('分享')
+        },
+      }
+    ],
+    // nodeTextDraggable: true,
+    edgeTextDraggable: true
+  });
   // 方便调试
   window.lf = lf;
+  window.lf1 = lf1;
   lf.setTheme({
     nodeText: {
       color: '#000000',
@@ -156,9 +181,61 @@ window.onload = function () {
       background: red;
     }
   `
+  lf1.register({
+    type: 'uml',
+    view: UmlNode,
+    model: UmlModel,
+  })
+  lf1.register({
+    type: 'user',
+    view: UserNode,
+    model: UserModel,
+  });
+  lf1.render({
+    nodes: [
+      {
+        type: 'rect',
+        x: 500,
+        y: 300,
+        text: {
+          value: '你好2',
+          x: 500,
+          y: 300,
+        },
+        id: 11,
+      },
+      {
+        type: 'rect',
+        x: 700,
+        y: 300,
+        text: {
+          value: '你好3',
+          x: 700,
+          y: 300,
+        },
+        id: 12,
+      }
+    ]
+  });
+  lf1.extension.snapshot.useGlobalRules = false
+  lf1.extension.snapshot.customCssRules = `
+    .lf-node-text-auto-wrap-content{
+      line-height: 1.2;
+      background: transparent;
+      text-align: center;
+      word-break: break-all;
+      width: 100%;
+    }
+    .lf-canvas-overlay {
+      background: red;
+    }
+  `
 }
 document.getElementById('download').addEventListener('click', () => {
   lf.getSnapshot()
+})
+document.getElementById('download1').addEventListener('click', () => {
+  lf1.getSnapshot()
 })
 document.getElementById('preview').addEventListener('click', () => {
   lf.getSnapshotBlob('#FFFFFF').then(({data, width, height})=> {

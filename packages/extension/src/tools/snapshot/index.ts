@@ -163,7 +163,7 @@ class Snapshot {
     真实dom存在缩放影响其宽高数值
     在得到真实宽高后除以缩放比例即可得到正常宽高
     */
-    const base = document.getElementsByClassName('lf-base')[0];
+    const base = this.lf.graphModel.rootEl.querySelector('.lf-base');
     const bbox = (base as Element).getBoundingClientRect();
     const { graphModel } = this.lf;
     const { transformModel } = graphModel;
