@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [1.2.0-alpha.14](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.13...@logicflow/extension@1.2.0-alpha.14) (2022-07-13)
+## [1.1.22](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.21...@logicflow/extension@1.1.22) (2022-07-13)
 
 **Note:** Version bump only for package @logicflow/extension
 
