@@ -35,6 +35,8 @@ export type Point = {
   [key: string]: unknown;
 };
 
+export type Vector2 = [number, number];
+
 /**
  * 锚点坐标
  * 为了方便计算

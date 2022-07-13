@@ -7,6 +7,7 @@ const lf = new LogicFlow({
   container: document.querySelector('#container'),
   // adjustEdgeStartAndEnd: true,
   width: 1000,
+  autoExpand: false,
   grid: true,
   // edgeType: 'custom-polyline',
   keyboard: {

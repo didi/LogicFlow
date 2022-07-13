@@ -18,7 +18,7 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     });
   }
   initEdgeData(data): void {
-    this.offset = 100;
+    this.offset = 0;
     super.initEdgeData(data);
   }
   getEdgeStyle() {

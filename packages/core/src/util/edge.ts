@@ -774,7 +774,6 @@ export type IBezierControls = {
   sNext: Point,
   ePre: Point
 };
-
 // bezier曲线
 export const getBezierControlPoints = ({
   start,
@@ -783,14 +782,39 @@ export const getBezierControlPoints = ({
   targetNode,
   offset,
 }): IBezierControls => {
+  const nodeDistance = Math.max(
+    Math.abs(sourceNode.x - targetNode.x), Math.abs(sourceNode.y - targetNode.y),
+  );
+  offset = offset || nodeDistance / 4;
   const sBBox = getNodeBBox(sourceNode);
   const tBBox = getNodeBBox(targetNode);
   const sExpendBBox = getExpandedBBox(sBBox, offset);
   const tExpendBBox = getExpandedBBox(tBBox, offset);
   const sDirection = pointDirection(start, sourceNode);
-  const sNext = getExpandedBBoxPoint(sExpendBBox, start, sDirection);
   const tDirection = pointDirection(end, targetNode);
+  // 1. 避免两个节点连出的多个连线重合。
+  // 2. 避免开始节点和结束节点方向相同时成为一个穿过节点的直线。
+  const sNext = getExpandedBBoxPoint(sExpendBBox, start, sDirection);
   const ePre = getExpandedBBoxPoint(tExpendBBox, end, tDirection);
+  // 计算起点的调整点是否需要偏移
+  // 如果起点的调整点方向和连线方向相反，则添加偏移量
+  // 如果终点的调整点方向与连线方向
+  const randomNumberX = Math.ceil((Math.random() + 0.5) * offset);
+  const randomNumberY = Math.ceil((Math.random() + 0.5) * offset);
+  // 如果是调整点在节点水平方向，那么调整的点Y需要向着另一个节点的方向进行一定随机量的偏移。
+  // 如果是调整点在节点垂直方向，那么调整的点X需要向着另一个节点的方向进行一定随机量的偏移。
+  if (sDirection === SegmentDirection.HORIZONTAL) {
+    sNext.y += (sourceNode.y >= targetNode.y ? randomNumberY : -randomNumberY);
+  }
+  if (sDirection === SegmentDirection.VERTICAL) {
+    sNext.x += (sourceNode.x >= targetNode.x ? randomNumberX : -randomNumberX);
+  }
+  if (tDirection === SegmentDirection.HORIZONTAL) {
+    ePre.y += (sourceNode.y > targetNode.y ? randomNumberY : -randomNumberY);
+  }
+  if (tDirection === SegmentDirection.VERTICAL) {
+    ePre.x += (sourceNode.x > targetNode.x ? randomNumberX : -randomNumberX);
+  }
   return { sNext, ePre };
 };
 
