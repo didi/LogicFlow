@@ -256,8 +256,7 @@ class MiniMap {
     const realViewPortHeight = realViewPortWidth / graphRatio;
 
     this.__viewPortTop = TRANSLATE_Y > 0 ? 0 : -TRANSLATE_Y * scale;
-    this.__viewPortLeft = -TRANSLATE_X * scale;
-
+    this.__viewPortLeft = TRANSLATE_X > 0 ? 0 : -TRANSLATE_X * scale;
     this.__viewPortWidth = realViewPortWidth;
     this.__viewPortHeight = realViewPortHeight;
     viewStyle.top = `${this.__viewPortTop}px`;
@@ -280,12 +279,17 @@ class MiniMap {
       y: e.y,
     };
   };
-  __drag = (e) => {
+  moveViewport = (top, left) => {
     const viewStyle = this.__viewport.style;
-    this.__viewPortTop += e.y - this.__startPosition.y;
-    this.__viewPortLeft += e.x - this.__startPosition.x;
+    this.__viewPortTop = top;
+    this.__viewPortLeft = left;
     viewStyle.top = `${this.__viewPortTop}px`;
     viewStyle.left = `${this.__viewPortLeft}px`;
+  };
+  __drag = (e) => {
+    const top = this.__viewPortTop + e.y - this.__startPosition.y;
+    const left = this.__viewPortLeft + e.x - this.__startPosition.x;
+    this.moveViewport(top, left);
     this.__startPosition = {
       x: e.x,
       y: e.y,
@@ -304,6 +308,21 @@ class MiniMap {
   __drop = () => {
     document.removeEventListener('mousemove', this.__drag);
     document.removeEventListener('mouseup', this.__drop);
+    let top = this.__viewPortTop;
+    let left = this.__viewPortLeft;
+    if (this.__viewPortLeft > this.__width) {
+      left = this.__width - this.__viewPortWidth;
+    }
+    if (this.__viewPortTop > this.__height) {
+      top = this.__height - this.__viewPortHeight;
+    }
+    if (this.__viewPortLeft < -this.__width) {
+      left = 0;
+    }
+    if (this.__viewPortTop < -this.__height) {
+      top = 0;
+    }
+    this.moveViewport(top, left);
   };
 }
 
