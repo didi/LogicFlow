@@ -22,7 +22,7 @@ npm run build
 # 回到 examples 目录下
 cd examples
 
-yarn start
+yarn dev
 ```
 
 ### 打包构建
