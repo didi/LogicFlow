@@ -1173,7 +1173,7 @@ class GraphModel {
   /**
    * 重新设置画布的宽高
    */
-  resize(width: number, height: number): void {
+  resize(width?: number, height?: number): void {
     this.width = width || this.rootEl.getBoundingClientRect().width;
     this.height = height || this.rootEl.getBoundingClientRect().height;
     if (!this.width || !this.height) {

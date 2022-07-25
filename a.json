@@ -1,0 +1,26 @@
+{
+  "fields": [
+    {
+      "type": "h5Bill",
+      "label": "账单组件",
+      "isMarginBottom": true,
+      "previewType": "ck",
+      "gid": "w1658473373731",
+      "name": "w1658473373731",
+      "labelEn": "zhangdanzujian_tjyyv"
+    }
+  ],
+  "renderJson": [
+    [
+      {
+        "type": "h5Bill",
+        "label": "账单组件",
+        "isMarginBottom": true,
+        "previewType": "ck",
+        "gid": "w1658473373731",
+        "name": "w1658473373731",
+        "labelEn": "zhangdanzujian_tjyyv"
+      }
+    ]
+  ]
+}

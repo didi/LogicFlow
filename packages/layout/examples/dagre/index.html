@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LOGIC FLOW</title>
+  <link rel="stylesheet" href="http://127.0.0.1:9093/src/style/index.css">
+  <style>
+    html,body {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color: #FFF;
+    }
+    .rect-node {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #000;
+      background: #fff;
+    }
+
+    .circle-node {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      background: #fff;
+    }
+    #app {
+      width: 1200px;
+      height: 600px;
+      /* margin: 0 auto; */
+    }
+  </style>
+</head>
+<body>
+  <button id="layout">设置布局</button>
+  <div class="rect-node"></div>
+  <div class="circle-node"></div>
+  <div id="app">11</div>
+  <script src="http://127.0.0.1:9093/logic-flow.js"></script>
+  <script src="/dagre.js"></script>
+  <script type="module" src="index.mjs"></script>
+</body>
+</html>
