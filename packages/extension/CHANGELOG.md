@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.15](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.22...@logicflow/extension@1.2.0-alpha.15) (2022-07-26)
+
+
+### Bug Fixes
+
+* 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
+* node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+
+
+### Features
+
+* allow groups being nested by other groups ([02772d7](https://github.com/didi/LogicFlow/commit/02772d72123a5f35b296a49cf811fc2f7eda2243))
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+
+
+
+
+
 # [1.2.0-alpha.14](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.13...@logicflow/extension@1.2.0-alpha.14) (2022-07-13)
 ## [1.1.22](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.21...@logicflow/extension@1.1.22) (2022-07-13)
 

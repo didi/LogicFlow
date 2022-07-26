@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.2.0-alpha.15 (2022-07-26)
+
+
+### Bug Fixes
+
+* 调整节点文案位置 ([3c753a5](https://github.com/didi/LogicFlow/commit/3c753a5139dcc8fe3d1f4e14a2a9e994c1071c02))
+* add dagre layout ([963a311](https://github.com/didi/LogicFlow/commit/963a31119c048f612fc09b5c036ae92a537559c1))
+
+
+### Features
+
+* 美化dagre生成的流程图 ([577609c](https://github.com/didi/LogicFlow/commit/577609c7ca93edd45c77170276c5106478a2ca1d))
+
+
+
+
+
 # [1.2.0-alpha.14](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.13...@logicflow/extension@1.2.0-alpha.14) (2022-07-13)
 ## [1.1.22](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.21...@logicflow/extension@1.1.22) (2022-07-13)
 
