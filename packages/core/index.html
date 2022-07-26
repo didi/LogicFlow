@@ -916,6 +916,11 @@
             lf.closeEdgeAnimation(id)
           })
         }
+
+        window.showCanvas = function() {
+          document.querySelector('#app').style.display = 'block'
+          lf.render()
+        }
       }
     </script>
 

@@ -9,6 +9,7 @@ import {
   getNodeBBox, isInNode, distance,
 } from './node';
 import { getVerticalPointOfLine } from '../algorithm';
+import { getDirectionVector, isContraryDirection, isSameDirection } from './vector';
 
 /* 手动创建边时edge->edgeModel */
 export const setupEdgeModel = (edge, graphModel) => {
@@ -796,6 +797,18 @@ export const getBezierControlPoints = ({
   // 2. 避免开始节点和结束节点方向相同时成为一个穿过节点的直线。
   const sNext = getExpandedBBoxPoint(sExpendBBox, start, sDirection);
   const ePre = getExpandedBBoxPoint(tExpendBBox, end, tDirection);
+  // 如果两个节点水平或垂直并且连线在两个节点最近的锚点之间，则不产生偏移，保证连线看起来像是直线
+  const vector1 = getDirectionVector(sourceNode, start);
+  const vector2 = getDirectionVector(targetNode, end);
+  const vector3 = getDirectionVector(sourceNode, targetNode);
+  // 当开始节点控制连线的方向和连线方向相同，并且结束节点控制连线相反的时候，则意味这两个节点直接相连。此时不需要对控制点进行偏移调整
+  if (isSameDirection(vector1, vector3) && isContraryDirection(vector2, vector3)) {
+    return { sNext, ePre };
+  }
+  // 当开始节点控制连线方向和连线方向相反的时候或者结束节点控制连线形同的时候，增大偏移量，实现更美观的效果。
+  if (isSameDirection(vector2, vector3) || isContraryDirection(vector1, vector3)) {
+    offset = offset * 2;
+  }
   // 计算起点的调整点是否需要偏移
   // 如果起点的调整点方向和连线方向相反，则添加偏移量
   // 如果终点的调整点方向与连线方向

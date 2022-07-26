@@ -37,6 +37,10 @@ export type Point = {
 
 export type Vector2 = [number, number];
 
+export type DirectionVectorNumber = 0 | 1 | -1;
+
+export type DirectionVector2 = [DirectionVectorNumber, DirectionVectorNumber];
+
 /**
  * 锚点坐标
  * 为了方便计算
