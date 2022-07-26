@@ -37,7 +37,7 @@
   stroke-dashoffset: 100%;
   animation: dash 5s linear infinite;
 }
-@keyframes dash {
+@keyframes lf-dash {
   to {
     stroke-dashoffset: 0;
   }

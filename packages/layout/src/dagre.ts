@@ -1,8 +1,9 @@
-import { DagreLayout } from '@antv/layout';
+import { DagreLayout, DagreLayoutOptions } from '@antv/layout';
 
 export class Dagre {
   static pluginName = 'dagre';
   lf: any;
+  option: DagreLayoutOptions;
   render(lf) {
     this.lf = lf;
   }
@@ -22,12 +23,14 @@ export class Dagre {
    */
   layout(option = {}) {
     const { nodes, edges } = this.lf.graphModel;
-    const layoutInstance = new DagreLayout({
+    this.option = {
       type: 'dagre',
       rankdir: 'LR',
+      nodesep: 20,
       begin: [100, 100],
       ...option,
-    });
+    };
+    const layoutInstance = new DagreLayout(this.option);
     const layoutData = layoutInstance.layout({
       nodes: nodes.map((node) => ({
         id: node.id,
@@ -61,11 +64,55 @@ export class Dagre {
       // @ts-ignore: pass edge data
       const { model } = edge;
       const data = model.getData();
-      data.pointsList = undefined;
-      data.startPoint = undefined;
-      data.endPoint = undefined;
+      data.pointsList = this.calcPointsList(model, newGraphData.nodes);
+      if (data.pointsList) {
+        const [first, next, third, last] = data.pointsList;
+        data.startPoint = { x: first.x, y: first.y };
+        data.endPoint = { x: last.x, y: last.y };
+        if (data.text && data.text.value) {
+          data.text = {
+            x: (third.x + last.x) / 2,
+            y: last.y,
+            value: data.text.value,
+          };
+        }
+      } else {
+        data.startPoint = undefined;
+        data.endPoint = undefined;
+        if (data.text && data.text.value) {
+          data.text = data.text.value;
+        }
+      }
       newGraphData.edges.push(data);
     });
     this.lf.render(newGraphData);
+  }
+  calcPointsList(model, nodes) {
+    console.log(this.option.rankdir, model.modelType);
+    // 在节点确认从左向右后，通过计算来保证节点连线清晰。
+    if (this.option.rankdir === 'LR' && model.modelType === 'polyline-edge') {
+      const sourceNodeModel = this.lf.getNodeModelById(model.sourceNodeId);
+      const targetNodeModel = this.lf.getNodeModelById(model.targetNodeId);
+      const newSourceNodeData = nodes.find(node => node.id === model.sourceNodeId);
+      const newTargetNodeData = nodes.find(node => node.id === model.targetNodeId);
+      const firstPoint = {
+        x: newSourceNodeData.x + sourceNodeModel.width / 2,
+        y: newSourceNodeData.y,
+      };
+      const nextPoint = {
+        x: newSourceNodeData.x + sourceNodeModel.width / 2 + (model.offset || 50),
+        y: newSourceNodeData.y,
+      };
+      const thirdPoint = {
+        x: newSourceNodeData.x + sourceNodeModel.width / 2 + (model.offset || 50),
+        y: newTargetNodeData.y,
+      };
+      const lastPoint = {
+        x: newTargetNodeData.x - targetNodeModel.width / 2,
+        y: newTargetNodeData.y,
+      };
+      return [firstPoint, nextPoint, thirdPoint, lastPoint];
+    }
+    return undefined;
   }
 }
