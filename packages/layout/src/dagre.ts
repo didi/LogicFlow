@@ -7,6 +7,23 @@ export class Dagre {
   render(lf) {
     this.lf = lf;
   }
+  getBytesLength(word: string): number {
+    if (!word) {
+      return 0;
+    }
+    let totalLength = 0;
+    for (let i = 0; i < word.length; i++) {
+      const c = word.charCodeAt(i);
+      if ((word.match(/[A-Z]/))) {
+        totalLength += 1.5;
+      } else if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
+        totalLength += 1;
+      } else {
+        totalLength += 2;
+      }
+    }
+    return totalLength;
+  }
   /**
    * option: {
    *   rankdir: "TB", // layout 方向, 可选 TB, BT, LR, RL
@@ -71,7 +88,7 @@ export class Dagre {
         data.endPoint = { x: last.x, y: last.y };
         if (data.text && data.text.value) {
           data.text = {
-            x: (third.x + last.x) / 2,
+            x: last.x - this.getBytesLength(data.text.value) * 6 - 10,
             y: last.y,
             value: data.text.value,
           };
