@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-alpha.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.15...@logicflow/core@1.2.0-alpha.16) (2022-07-27)
+
+
+### Bug Fixes
+
+* 处理自动布局向回连线的问题 ([ac36d08](https://github.com/didi/LogicFlow/commit/ac36d08ef14206a7bf589c97147d9a7f621b03a3))
+
+
+
+
+
 # [1.2.0-alpha.15](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.22...@logicflow/core@1.2.0-alpha.15) (2022-07-26)
 
 
