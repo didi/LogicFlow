@@ -20,6 +20,10 @@ export default class BaseEdge extends Component<IProps> {
   contextMenuTime: number;
   clickTimer: number;
   getShape() { }
+  /**
+   * 支持重写此方法来实现在连线上定义额外内容。
+   */
+  getExtraShape() {}
   getTextStyle() {
   }
   getText() {
