@@ -47,6 +47,7 @@ const lf = new LogicFlow(options: Options)
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
 |autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。|
+|overlapMode|-|-|元素重合的堆叠模式，默认为连线在下、节点在上，选中元素在最上面。可以设置为1，表示自增模式（作图工具场景常用）。|
 
 ### `background`
 
