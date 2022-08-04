@@ -172,8 +172,9 @@ class Anchor extends Component<IProps, IState> {
   };
   onDragEnd = (event) => {
     if (this.t) {
-      clearInterval(this.t);
+      cancelRaf(this.t);
     }
+    console.log(555, 'dragend');
     this.checkEnd(event);
     this.setState({
       startX: 0,
