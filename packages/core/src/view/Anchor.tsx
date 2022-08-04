@@ -174,7 +174,6 @@ class Anchor extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    console.log(555, 'dragend');
     this.checkEnd(event);
     this.setState({
       startX: 0,
