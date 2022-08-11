@@ -719,9 +719,15 @@ export default class LogicFlow {
     rightBottomPoint: PointTuple,
     wholeEdge = true,
     wholeNode = true,
+    ignoreHideElement = false,
   ) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)
-      .map(element => element.getData());
+    return this.graphModel.getAreaElement(
+      leftTopPoint,
+      rightBottomPoint,
+      wholeEdge,
+      wholeNode,
+      ignoreHideElement,
+    ).map(element => element.getData());
   }
   /**
    * 获取选中的元素数据

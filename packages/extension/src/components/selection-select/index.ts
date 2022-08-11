@@ -13,15 +13,15 @@ class SelectionSelect {
     y: number,
   };
   __disabled = false;
-  isDefalutStopMoveGraph = false;
+  isDefaultStopMoveGraph = false;
   isWholeNode = true;
   isWholeEdge = true;
   static pluginName = 'selectionSelect';
   constructor({ lf }) {
     this.lf = lf;
-    // 初始化isDefalutStopMoveGraph取值
+    // 初始化isDefaultStopMoveGraph取值
     const { stopMoveGraph } = lf.getEditConfig();
-    this.isDefalutStopMoveGraph = stopMoveGraph;
+    this.isDefaultStopMoveGraph = stopMoveGraph;
     lf.openSelectionSelect = () => {
       this.openSelectionSelect();
     };
@@ -70,7 +70,7 @@ class SelectionSelect {
   openSelectionSelect() {
     const { stopMoveGraph } = this.lf.getEditConfig();
     if (!stopMoveGraph) {
-      this.isDefalutStopMoveGraph = false;
+      this.isDefaultStopMoveGraph = false;
       this.lf.updateEditConfig({
         stopMoveGraph: true,
       });
@@ -81,7 +81,7 @@ class SelectionSelect {
    * 关闭选区
    */
   closeSelectionSelect() {
-    if (!this.isDefalutStopMoveGraph) {
+    if (!this.isDefaultStopMoveGraph) {
       this.lf.updateEditConfig({
         stopMoveGraph: false,
       });
@@ -125,9 +125,15 @@ class SelectionSelect {
     }
     const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)];
     const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)];
-    const elements = this.lf.getAreaElement(lt, rt, this.isWholeEdge, this.isWholeNode);
+    const elements = this.lf.graphModel.getAreaElement(
+      lt, rt, this.isWholeEdge, this.isWholeNode, true,
+    );
+    const { group } = this.lf.graphModel;
     elements.forEach((element) => {
-      this.lf.selectElementById(element.id, true);
+      // 如果节点属于分组，则不不选中节点
+      if (!group || !group.getNodeGroup(element.id)) {
+        this.lf.selectElementById(element.id, true);
+      }
     });
     this.lf.emit('selection:selected', elements);
   };

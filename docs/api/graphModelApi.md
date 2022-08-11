@@ -196,6 +196,10 @@ lf.on('user:detail', (res) => {})
 |-|-|-|-|
 |leftTopPoint|PointTuple|无| 区域左上方的点 |
 |rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|wholeEdge|boolean|无| 是否要整个边都在区域内部 |
+|wholeNode|boolean|无| 是否要整个节点都在区域内部 |
+|ignoreHideElement|boolean|无| 是否忽略隐藏的节点 |
 
 ```js
 graphModel.getAreaElement([100, 100], [800, 800])

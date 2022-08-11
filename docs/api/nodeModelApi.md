@@ -41,7 +41,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | isHovered  | boolean |  ✅ | 节点是否在hover状态   |
 | isHitable  | boolean |  ✅ | 节点是否可点击       |
 | draggable  | boolean |  ✅ | 节点是否可拖动       |
-| visible  | boolean |  ✅ | 边是否显示, `1.1.0`新增 |
+| visible  | boolean |  ✅ | 是否显示, `1.1.0`新增 |
 
 ## 形状属性
 
@@ -75,6 +75,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | autoToFront | boolean | ✅ | 控制节点选中时是否自动置顶，默认为true. |
 | incoming | object | ✅ | 进入当前节点的所有边和节点，`v1.1.4` |
 | outgoing | object | ✅ | 离开当前节点的所有边和节点, `v1.1.4` |
+| virtual | boolean| - | 是否为虚拟节点，默认false。当为true时导出数据不会包含此元素。 `v1.1.24`|
 
 ::: tip modelType与type的区别是什么？
 

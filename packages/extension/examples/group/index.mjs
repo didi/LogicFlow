@@ -5,10 +5,18 @@ const lf = new LogicFlow({
   keyboard: {
     enabled: true
   },
-  plugins: [Group, Control, DndPanel],
+  plugins: [Group, Control, DndPanel, SelectionSelect],
   height: 800
 })
 
+lf.extension.control.addItem({
+  iconClass: "custom-minimap",
+  title: "",
+  text: "框选",
+  onClick: (lf, ev) => {
+    lf.extension.selectionSelect.openSelectionSelect()
+  }
+})
 
 class MyGroup extends GroupNode.view {}
 
