@@ -893,6 +893,16 @@ lf.addElements({
 
 例如鼠标绘制选区后，获取选区内的所有元素。
 
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+|leftTopPoint|PointTuple|无| 区域左上方的点 |
+|rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|wholeEdge|boolean|无| 是否要整个边都在区域内部 |
+|wholeNode|boolean|无| 是否要整个节点都在区域内部 |
+|ignoreHideElement|boolean|无| 是否忽略隐藏的节点 |
+
 ```js
 lf.getAreaElement([100, 100], [500, 500])
 ```

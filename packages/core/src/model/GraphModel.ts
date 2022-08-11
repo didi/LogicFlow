@@ -248,12 +248,14 @@ class GraphModel {
    * @param rightBottomPoint 表示区域右下角的点
    * @param wholeEdge 是否要整个边都在区域内部
    * @param wholeNode 是否要整个节点都在区域内部
+   * @param ignoreHideElement 是否忽略隐藏的节点
    */
   getAreaElement(
     leftTopPoint: PointTuple,
     rightBottomPoint: PointTuple,
     wholeEdge = true,
     wholeNode = true,
+    ignoreHideElement = false,
   ) {
     const areaElements = [];
     const elements = [];
@@ -261,7 +263,10 @@ class GraphModel {
     this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
-      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)) {
+      if (
+        (!ignoreHideElement || currentItem.visible)
+        && this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)
+      ) {
         areaElements.push(currentItem);
       }
     }
@@ -388,12 +393,12 @@ class GraphModel {
     const edges = [];
     this.edges.forEach(edge => {
       const data = edge.getData();
-      if (data) edges.push(data);
+      if (data && !edge.virtual) edges.push(data);
     });
     const nodes = [];
     this.nodes.forEach(node => {
       const data = node.getData();
-      if (data) nodes.push(data);
+      if (data && !node.virtual) nodes.push(data);
     });
     return {
       nodes,

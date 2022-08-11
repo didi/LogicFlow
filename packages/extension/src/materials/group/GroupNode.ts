@@ -203,7 +203,7 @@ class GroupNodeModel extends RectResize.model {
     const model = this.graphModel.addEdge(edgeData);
     model.virtual = true;
     // 强制不保存group连线数据
-    model.getData = () => null;
+    // model.getData = () => null;
     model.text.editable = false;
     model.isFoldedEdge = true;
   }

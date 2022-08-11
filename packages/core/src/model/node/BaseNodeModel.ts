@@ -86,6 +86,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
   @observable visible = true;
+  virtual = false;
   // 其它属性
   graphModel: GraphModel;
   @observable zIndex = 1;
@@ -457,10 +458,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
   }
   @action
-  move(deltaX, deltaY, isignoreRule = false): boolean {
+  move(deltaX, deltaY, isIgnoreRule = false): boolean {
     let isAllowMoveX = false;
     let isAllowMoveY = false;
-    if (isignoreRule) {
+    if (isIgnoreRule) {
       isAllowMoveX = true;
       isAllowMoveY = true;
     } else {
@@ -487,10 +488,10 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  moveTo(x, y, isignoreRule = false): boolean {
+  moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    if (!isignoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
+    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
     if (this.text) {
       this.text && this.moveText(deltaX, deltaY);
     }
