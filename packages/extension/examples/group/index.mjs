@@ -34,12 +34,12 @@ class MyGroupModel extends GroupNode.model {
     style.strokeWidth = 1;
     return style;
   }
-  isAllowAppendIn(nodeData) {
-    if (nodeData.type === 'rect') {
-      return false
-    }
-    return true
-  }
+  // isAllowAppendIn(nodeData) {
+  //   if (nodeData.type === 'rect') {
+  //     return false
+  //   }
+  //   return true
+  // }
 }
 
 class MyGroup1 extends GroupNode.view {}
@@ -74,9 +74,9 @@ class MyGroupModel1 extends GroupNode.model {
     }
     return style;
   }
-  isAllowAppendIn(nodeData) {
-    return false
-  }
+  // isAllowAppendIn(nodeData) {
+  //   return false
+  // }
 }
 
 

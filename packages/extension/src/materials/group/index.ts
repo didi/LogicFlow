@@ -21,7 +21,8 @@ class Group {
     this.lf = lf;
     lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
       if (model.isGroup) { // 如果移动的是分组，那么分组的子节点也跟着移动。
-        lf.graphModel.moveNodes([...model.children], deltaX, deltaY, true);
+        const nodeIds = this.getNodeAllChild(model);
+        lf.graphModel.moveNodes(nodeIds, deltaX, deltaY, true);
         return true;
       }
       const groupModel = lf.getNodeModelById(this.nodeGroupMap.get(model.id));
@@ -45,6 +46,22 @@ class Group {
     lf.on('node:dnd-drag', this.setActiveGroup);
     lf.on('node:drag', this.setActiveGroup);
     lf.on('graph:rendered', this.graphRendered);
+  }
+  /**
+   * 获取一个节点内部所有的子节点，包裹分组的子节点
+   */
+  getNodeAllChild(model) {
+    let nodeIds = [];
+    if (model.children) {
+      model.children.forEach((nodeId) => {
+        nodeIds.push(nodeId);
+        const nodeModel = this.lf.getNodeModelById(nodeId);
+        if (nodeModel.isGroup) {
+          nodeIds = nodeIds.concat(this.getNodeAllChild(nodeModel));
+        }
+      });
+    }
+    return nodeIds;
   }
   graphRendered = (data) => {
     // 如果节点
@@ -100,21 +117,19 @@ class Group {
   };
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
-    if (nodeModel.isGroup) return;
     const bounds = nodeModel.getBounds();
     const newGroup = this.getGroup(bounds);
-    if (newGroup || newGroup !== this.activeGroup) {
-      if (this.activeGroup) {
-        this.activeGroup.setAllowAppendChild(false);
+    if (this.activeGroup) {
+      this.activeGroup.setAllowAppendChild(false);
+    }
+    if (nodeModel.isGroup && newGroup.id === data.id) return;
+    if (newGroup) {
+      const isAllowAppendIn = newGroup.isAllowAppendIn(data);
+      if (!isAllowAppendIn) {
+        return;
       }
-      if (newGroup) {
-        const isAllowAppendIn = newGroup.isAllowAppendIn(data);
-        if (!isAllowAppendIn) {
-          return;
-        }
-        this.activeGroup = newGroup;
-        this.activeGroup.setAllowAppendChild(true);
-      }
+      this.activeGroup = newGroup;
+      this.activeGroup.setAllowAppendChild(true);
     }
   };
   /**
