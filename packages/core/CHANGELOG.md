@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.25](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.24...@logicflow/core@1.1.25) (2022-08-21)
+
+
+### Features
+
+* group add isAllowAppendIn to support pick node append in group ([e54f798](https://github.com/didi/LogicFlow/commit/e54f79845996e763098cb5749100c76063160023))
+
+
+
+
+
 ## [1.1.24](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.23...@logicflow/core@1.1.24) (2022-08-11)
 
 **Note:** Version bump only for package @logicflow/core

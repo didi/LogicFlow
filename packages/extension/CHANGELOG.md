@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.25](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.24...@logicflow/extension@1.1.25) (2022-08-21)
+
+
+### Bug Fixes
+
+* 修复分组嵌套分组时子分组内部节点无法跟随移动的问题 ([c7edb01](https://github.com/didi/LogicFlow/commit/c7edb013907b474a65ed495817f983a3f1aafcae))
+
+
+### Features
+
+* group add isAllowAppendIn to support pick node append in group ([e54f798](https://github.com/didi/LogicFlow/commit/e54f79845996e763098cb5749100c76063160023))
+
+
+
+
+
 ## [1.1.24](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.23...@logicflow/extension@1.1.24) (2022-08-11)
 
 **Note:** Version bump only for package @logicflow/extension
