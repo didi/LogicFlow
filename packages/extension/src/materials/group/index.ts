@@ -71,6 +71,14 @@ class Group {
     const bounds = this.lf.getNodeModelById(data.id).getBounds();
     const group = this.getGroup(bounds);
     if (!group) return;
+    const isAllowAppendIn = group.isAllowAppendIn(data);
+    if (!isAllowAppendIn) {
+      this.lf.emit('group:not-allowed', {
+        group: group.getData(),
+        node: data,
+      });
+      return;
+    }
     if (data.id !== group.id) {
       group.addChild(data.id);
       this.nodeGroupMap.set(data.id, group.id);
@@ -100,6 +108,10 @@ class Group {
         this.activeGroup.setAllowAppendChild(false);
       }
       if (newGroup) {
+        const isAllowAppendIn = newGroup.isAllowAppendIn(data);
+        if (!isAllowAppendIn) {
+          return;
+        }
         this.activeGroup = newGroup;
         this.activeGroup.setAllowAppendChild(true);
       }
