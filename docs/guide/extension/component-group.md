@@ -144,6 +144,25 @@ const groupModel = lf.getNodeModelById('group_id');
 groupModel.foldGroup(true);
 ```
 
+
+### isAllowAppendIn(nodeData)
+
+校验是否允许传入节点添加到此分组中，默认所有的节点都可以。
+
+```js
+class MyGroupModel extends GroupNode.model {
+  isAllowAppendIn(nodeData) {
+    // 设置只允许custom-rect节点被添加到此分组中
+    return nodeData.type === 'custom-rect'
+  }
+}
+```
+
+::: tip
+在节点不被允许添加到分组中时，节点仍然会显示在用户放的位置，只是这个节点不属于分组。如果你希望添加的节点被删除，可以监听`group:not-allowed`事件，然后手动删除这个节点。
+:::
+
+
 ### getAddableOutlineStyle
 
 设置拖动节点到分组上时，分组高亮的提示效果样式。
@@ -158,6 +177,7 @@ class MyGroupModel extends GroupNode.model {
   }
 }
 ```
+
 
 ::: warning 如何阻止节点连接到分组上?
 分组是一种特殊的节点，所以仍然可以通过[自定义连接规则校验](http://logic-flow.org/guide/basic/node.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9E%E6%8E%A5%E8%A7%84%E5%88%99%E6%A0%A1%E9%AA%8C)来实现不允许节点和分组直接相连。但是请不要将分组的锚点数量设置为0，因为在分组被折叠时，会通过分组的锚点与外部节点相连来表示分组内部节点与外部节点的关系。

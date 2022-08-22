@@ -34,6 +34,12 @@ class MyGroupModel extends GroupNode.model {
     style.strokeWidth = 1;
     return style;
   }
+  // isAllowAppendIn(nodeData) {
+  //   if (nodeData.type === 'rect') {
+  //     return false
+  //   }
+  //   return true
+  // }
 }
 
 class MyGroup1 extends GroupNode.view {}
@@ -68,6 +74,9 @@ class MyGroupModel1 extends GroupNode.model {
     }
     return style;
   }
+  // isAllowAppendIn(nodeData) {
+  //   return false
+  // }
 }
 
 
@@ -163,4 +172,7 @@ document.querySelector('#render').addEventListener('click', () => {
       }
     ]
   })
+})
+lf.on('group:not-allowed', (data) => {
+  console.log('此节点不允许添加到分组中', data)
 })

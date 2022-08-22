@@ -700,9 +700,9 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    const r = nodeModel.move(deltaX, deltaY, isignoreRule);
+    [deltaX, deltaY] = nodeModel.getMoveDistance(deltaX, deltaY, isignoreRule);
     // 2) 移动边
-    r && this.moveEdge(nodeId, deltaX, deltaY);
+    this.moveEdge(nodeId, deltaX, deltaY);
   }
 
   /**

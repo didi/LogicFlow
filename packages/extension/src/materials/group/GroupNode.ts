@@ -263,6 +263,12 @@ class GroupNodeModel extends RectResize.model {
     }
     return data;
   }
+  /**
+   * 是否允许此节点添加到此分组中
+   */
+  isAllowAppendIn(nodeData) {
+    return true;
+  }
 }
 class GroupNode extends RectResize.view {
   getControlGroup() {

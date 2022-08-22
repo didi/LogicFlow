@@ -120,6 +120,7 @@
     <button onClick="openEdgeAnimation()">启动边动画</button>
     <button onClick="closeEdgeAnimation()">关闭边动画</button>
     <button onClick="showCanvas()">显示流程图</button>
+    <button onClick="deleteNode()">删除节点1</button>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -459,21 +460,23 @@
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
-            shortcuts: [
-              {
-                keys: ["backspace"],
-                callback: () => {
-                  const r = window.confirm("确定要删除吗？");
-                  if (r) {
-                    const elements = lf.getSelectElements(true);
-                    lf.clearSelectElements();
-                    elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
-                    elements.nodes.forEach((node) => lf.deleteNode(node.id));
-                  }
-                  // console.log(1)
-                }
-              }
-            ]
+            // shortcuts: [
+            //   {
+            //     keys: ["backspace"],
+            //     callback: () => {
+            //       const r = window.confirm("确定要删除吗？");
+            //       if (r) {
+            //         const elements = lf.getSelectElements(true);
+            //         lf.clearSelectElements();
+            //         elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
+            //         elements.nodes.forEach((node) => lf.deleteNode(node.id));
+            //         const graphData = lf.getGraphData()
+            //         console.log(42, graphData, graphData.nodes.length)
+            //       }
+            //       // console.log(1)
+            //     }
+            //   }
+            // ]
 
           },
           partial: true,
@@ -874,6 +877,10 @@
             lf.closeEdgeAnimation(id)
           })
         }
+        window.deleteNode = function () {
+          const d = lf.deleteNode(1)
+          console.log(d, lf.getGraphData().nodes.length)
+        }
       }
     </script>
 
@@ -899,6 +906,8 @@
         })
         lf.on('node:delete',()=> {
           console.log('nodeup')
+          const graphData = lf.getGraphData()
+          console.log(graphData, graphData.nodes.length)
         })
         lf.on('node:contextmenu', () => {
           console.log(444)

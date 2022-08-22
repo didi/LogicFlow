@@ -486,7 +486,39 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
     return isAllowMoveX || isAllowMoveY;
   }
-
+  @action
+  getMoveDistance(deltaX: number, deltaY: number, isIgnoreRule = false) : [number, number] {
+    let isAllowMoveX = false;
+    let isAllowMoveY = false;
+    let moveX = 0;
+    let moveY = 0;
+    if (isIgnoreRule) {
+      isAllowMoveX = true;
+      isAllowMoveY = true;
+    } else {
+      const r = this.isAllowMoveNode(deltaX, deltaY);
+      if (typeof r === 'boolean') {
+        isAllowMoveX = r;
+        isAllowMoveY = r;
+      } else {
+        isAllowMoveX = r.x;
+        isAllowMoveY = r.y;
+      }
+    }
+    if (isAllowMoveX && deltaX) {
+      const targetX = this.x + deltaX;
+      this.x = targetX;
+      this.text && this.moveText(deltaX, 0);
+      moveX = deltaX;
+    }
+    if (isAllowMoveY && deltaY) {
+      const targetY = this.y + deltaY;
+      this.y = targetY;
+      this.text && this.moveText(0, deltaY);
+      moveY = deltaY;
+    }
+    return [moveX, moveY];
+  }
   @action
   moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
