@@ -106,6 +106,18 @@ export type Definition = {
    * AnimationConfig: 配置部分动画开启
    */
   animation?: boolean | Partial<AnimationConfig>;
+
+  /**
+   * 节点间连线、连线变更时的边的生成规则
+   * @param sourceNode 起始节点数据
+   * @param targetNode 终止节点数据
+   * @param currentEdge 当前边的数据, 仅移动已有边的时候有值
+   *
+   * @return undefined: 使用默认边
+   *        string: 自定义边类型
+   *        any: 自定义边及其他数据
+   */
+  edgeGenerator?: (sourceNode: any, targetNode: any, currentEdge?: any) => string | any | undefined;
   [key: string]: any;
 } & EditConfigInterface;
 

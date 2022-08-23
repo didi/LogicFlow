@@ -216,8 +216,12 @@ class Anchor extends Component<IProps, IState> {
       } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.DEFAULT);
+        const edgeData = graphModel.edgeGenerator(
+          nodeModel.getData(),
+          graphModel.getNodeModelById(info.node.id).getData(),
+        );
         const edgeModel = graphModel.addEdge({
-          type: edgeType,
+          ...edgeData,
           sourceNodeId: nodeModel.id,
           sourceAnchorId: id,
           startPoint: { x, y },

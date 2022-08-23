@@ -266,7 +266,24 @@ class CustomEdgeModel extends PolylineEdgeModel {
     return style;
   }
 }
-``` 
+```
+
+## 自定义不同节点连接的边的规则
+初始化流程图时, 可以通过 `edgeType` 设置默认的边. 当不同节点需要使用的边时, 则可以通过 `edgeGenerator` 来定义使用边的规则.
+
+```js
+const lf = new LogicFlow({
+  ...,
+  // 默认边
+  edgeType: 'bezier',
+  // 移动已有边时会有 currentEdge 信息, 否则为空
+  edgeGenerator: (sourceNode, targetNode, currentEdge) => {
+    // 起始节点类型 rect 时使用 自定义的边 custom-edge
+    if (sourceNode.type === 'rect') return 'custom-edge'
+  }
+})
+
+```
 
 ### 示例
 
