@@ -22,7 +22,7 @@ import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
 import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
-import { getClosestPointOfPolyline } from '../util/edge';
+import { getClosestPointOfPolyline, createEdgeGenerator } from '../util/edge';
 import { formatData } from '../util/compatible';
 import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 import { createUuid } from '../util';
@@ -81,6 +81,10 @@ class GraphModel {
    * @see todo docs link
    */
   idGenerator: (type?: string) => string;
+  /**
+   * 节点间连线、连线变更时的边的生成规则
+   */
+  edgeGenerator: Definition['edgeGenerator'];
   /**
    * 节点移动规则判断
    * 在节点移动的时候，会出发此数组中的所有规则判断
@@ -141,6 +145,7 @@ class GraphModel {
       background = {},
       grid,
       idGenerator,
+      edgeGenerator,
       animation,
     } = options;
     this.background = background;
@@ -159,6 +164,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
   }

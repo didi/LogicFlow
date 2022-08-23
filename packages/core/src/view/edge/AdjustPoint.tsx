@@ -142,8 +142,13 @@ export default class AdjustPoint extends Component<IProps, IState> {
       };
       // 根据调整点是边的起点或重点，计算创建边需要的参数
       if (type === AdjustType.SOURCE) {
+        const edgeInfo = graphModel.edgeGenerator(
+          graphModel.getNodeModelById(info.node.id).getData(),
+          graphModel.getNodeModelById(edgeModel.targetNodeId).getData(),
+          createEdgeInfo,
+        );
         createEdgeInfo = {
-          ...createEdgeInfo,
+          ...edgeInfo,
           sourceNodeId: info.node.id,
           sourceAnchorId: info.anchor.id,
           startPoint: { x: info.anchor.x, y: info.anchor.y },
@@ -151,8 +156,13 @@ export default class AdjustPoint extends Component<IProps, IState> {
           endPoint: { ...edgeModel.endPoint },
         };
       } else if (type === AdjustType.TARGET) {
+        const edgeInfo = graphModel.edgeGenerator(
+          graphModel.getNodeModelById(edgeModel.sourceNodeId).getData(),
+          graphModel.getNodeModelById(info.node.id).getData(),
+          createEdgeInfo,
+        );
         createEdgeInfo = {
-          ...createEdgeInfo,
+          ...edgeInfo,
           sourceNodeId: edgeModel.sourceNodeId,
           startPoint: { ...edgeModel.startPoint },
           targetNodeId: info.node.id,
