@@ -72,13 +72,6 @@ class BaseEdgeModel implements IBaseModel {
     this.graphModel = graphModel;
     this.initEdgeData(data);
     this.setAttributes();
-    // 设置边的 anchors，也就是边的两个端点
-    // 端点依赖于 edgeData 的 sourceNode 和 targetNode
-    this.setAnchors();
-    // 边的拐点依赖于两个端点
-    this.initPoints();
-    // 文本位置依赖于边上的所有拐点
-    this.formatText(data);
   }
   /**
    * @overridable 支持重写
@@ -106,6 +99,13 @@ class BaseEdgeModel implements IBaseModel {
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex();
     }
+    // 设置边的 anchors，也就是边的两个端点
+    // 端点依赖于 edgeData 的 sourceNode 和 targetNode
+    this.setAnchors();
+    // 边的拐点依赖于两个端点
+    this.initPoints();
+    // 文本位置依赖于边上的所有拐点
+    this.formatText(data);
   }
   /**
    * 设置model属性，每次properties发生变化会触发
