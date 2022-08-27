@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.26](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.25...@logicflow/core@1.1.26) (2022-08-27)
+
+
+### Bug Fixes
+
+* 修正 BaseEdgeModel 构造函数属性初始化顺序 ([b4f8f3a](https://github.com/didi/LogicFlow/commit/b4f8f3a0066f6cb0b95c79c4b5febbcf833a7386))
+
+
+### Features
+
+* 增加 edgeGenerator 选项, 可自定义连边规则 ([a9aff50](https://github.com/didi/LogicFlow/commit/a9aff50b87559c9549d2eb6943797a75e09d62a3))
+
+
+
+
+
 ## [1.1.25](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.24...@logicflow/core@1.1.25) (2022-08-21)
 
 
