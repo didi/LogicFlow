@@ -88,6 +88,10 @@ export default {
 
 ```
 
+::: tip 提示
+对于继承`HtmlResize`的节点，自定义`view`请继续使用自定义HTML节点的`view`的`setHtml`方法。
+:::
+
 ## 事件
 
 节点缩放后抛出事件`node:resize`，抛出数据包括节点缩放前后的节点位置、节点大小信息， 数据为{oldNodeSize, newNodeSize}, 详细字段如下。
