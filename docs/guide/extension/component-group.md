@@ -158,7 +158,7 @@ class MyGroupModel extends GroupNode.model {
 }
 ```
 
-::: tip
+::: tip 提示
 在节点不被允许添加到分组中时，节点仍然会显示在用户放的位置，只是这个节点不属于分组。如果你希望添加的节点被删除，可以监听`group:not-allowed`事件，然后手动删除这个节点。
 :::
 
