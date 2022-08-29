@@ -408,17 +408,15 @@ path标签属性：
 ```ts
 import { RectNode, RectNodeModel } from '@logicflow/core';
 class SquareModel extends RectNodeModel {
-  setAttributes() {
-    const size = 80;
+  initNodeData(data) {
+    super.initNodeData(data);
+
     const circleOnlyAsTarget = {
       message: "正方形节点下一个节点只能是圆形节点",
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
         return targetNode.type === "circle";
       },
     };
-
-    this.width = size;
-    this.height = size;
     this.sourceRules.push(circleOnlyAsTarget);
   }
 }
@@ -502,7 +500,9 @@ lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
 import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class SquareModel extends RectNodeModel {
-  setAttribute() {
+  initNodeData(data) {
+    super.initNodeData(data);
+
     const rule = {
       message: "只允许从右边的锚点连出",
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
