@@ -662,7 +662,8 @@ class GraphModel {
     if (!Model) {
       throw new Error(`找不到${nodeOriginData.type}对应的节点，请确认是否已注册此类型节点。`);
     }
-    // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
+    nodeOriginData.x = snapToGrid(nodeOriginData.x, this.gridSize);
+    nodeOriginData.y = snapToGrid(nodeOriginData.y, this.gridSize);
     const nodeModel = new Model(nodeOriginData, this);
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();

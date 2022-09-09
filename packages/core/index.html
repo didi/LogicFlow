@@ -755,8 +755,6 @@
           lf.dnd.startDrag({
             type: 'circle',
             r: 25,
-            x: 100,
-            y: 100,
           })
         }
         window.getNodeEdges = function getNodeEdges() {
@@ -909,6 +907,14 @@
           // console.log(lf.getGraphData())
           // lf.changeNodeId(data.id)
         })
+        lf.on("blank:contextmenu", ({ e, position }) => {
+          console.log("Ok");
+          lf.addNode({
+            type: "circle",
+            x: position.canvasOverlayPosition.x,
+            y: position.canvasOverlayPosition.y
+          });
+        });
         lf.on('node:delete',()=> {
           console.log('nodeup')
           const graphData = lf.getGraphData()
