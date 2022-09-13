@@ -268,8 +268,18 @@ class CustomEdgeModel extends PolylineEdgeModel {
 }
 ```
 
-## 自定义不同节点连接的边的规则
-初始化流程图时, 可以通过 `edgeType` 设置默认的边. 当不同节点需要使用的边时, 则可以通过 `edgeGenerator` 来定义使用边的规则.
+### 示例
+
+<iframe src="https://codesandbox.io/embed/suspicious-tree-hw82v8?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="logicflow026-edgeAnimation"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+## 自定义节点之间边的类型
+
+默认情况下，通过从锚点手动连接节点生成的边为初始化`edgeType`指定的类型，也可以通过`lf.setDefaultEdgeType(edgeType)`来指定。但是当需要不同的节点之间连接的边类型不一样时，就只有自定义节点之间边的类型了。
 
 ```js
 const lf = new LogicFlow({
@@ -285,11 +295,57 @@ const lf = new LogicFlow({
 
 ```
 
-### 示例
 
-<iframe src="https://codesandbox.io/embed/suspicious-tree-hw82v8?fontsize=14&hidenavigation=1&theme=dark&view=preview"
-     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="logicflow026-edgeAnimation"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
+## 自定义箭头
+
+在`1.1.27`版本后，LogicFlow支持单独自定义连线两端的箭头。和之前的自定义方式一样，支持通过主题自定义大小等基本数据和通过重写对应的方法实现完全的自定义。
+
+### 主题设置
+
+```js
+lf.setTheme({ 
+  arrow: {
+    offset: 4, // 箭头垂线长度
+    verticalLength: 2, // 箭头底线长度
+  }
+})
+```
+
+### 自定义箭头形状
+
+在自定义连线view的时候，可以重写`getEndArrow`和`getStartArrow`方法来实现自定义连线两端的图形，这两个方法可以返回的任意`svg`图形。
+
+这里以通过连线属性中的arrowType来控制连线不同的外观为例。
+
+```js
+class Connection extends PolylineEdge {
+  getEndArrow() {
+    const { model, graphModel } = this.props;
+    const { id, properties: { arrowType } } = model;
+    const { stroke, strokeWidth } = this.getArrowStyle();
+    const pathAttr = {
+      stroke,
+      strokeWidth
+    }
+    if (arrowType === 'empty') {  // 空心箭头
+      return h('path', {
+        ...pathAttr,
+        fill: '#FFF',
+        d: 'M -10 0  -20 -5 -30 0 -20 5 z'
+      })
+    } else if (arrowType === 'half') { // 半箭头
+      return (
+        h('path', {
+          ...pathAttr,
+          d: 'M 0 0 -10 5'
+        })
+      )
+    }
+    return h('path', {
+      ...pathAttr,
+      d: 'M 0 0 -10 -5 -10 5 z'
+    })
+  }
+}
+```
+

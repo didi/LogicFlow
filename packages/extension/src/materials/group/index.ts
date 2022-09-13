@@ -122,15 +122,13 @@ class Group {
     if (this.activeGroup) {
       this.activeGroup.setAllowAppendChild(false);
     }
-    if (nodeModel.isGroup && newGroup.id === data.id) return;
-    if (newGroup) {
-      const isAllowAppendIn = newGroup.isAllowAppendIn(data);
-      if (!isAllowAppendIn) {
-        return;
-      }
-      this.activeGroup = newGroup;
-      this.activeGroup.setAllowAppendChild(true);
+    if (!newGroup || (nodeModel.isGroup && newGroup.id === data.id)) return;
+    const isAllowAppendIn = newGroup.isAllowAppendIn(data);
+    if (!isAllowAppendIn) {
+      return;
     }
+    this.activeGroup = newGroup;
+    this.activeGroup.setAllowAppendChild(true);
   };
   /**
    * 获取自定位置其所属分组

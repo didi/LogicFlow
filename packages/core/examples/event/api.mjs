@@ -18,3 +18,15 @@ lf.on('node:drop', ({ data }) => {
     console.log(d)
   }, 100)
 })
+lf.on('node:click', ({ data }) => {
+  console.log('node:click', data)
+})
+lf.on('node:dbclick', ({ data }) => {
+  console.log('node:dbclick', data)
+})
+lf.on('node:drop', () => {
+  console.log('node:drop')
+})
+lf.on('node:contextmenu', () => {
+  console.log('node:contextmenu')
+})

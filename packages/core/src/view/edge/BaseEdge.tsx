@@ -69,39 +69,28 @@ export default class BaseEdge extends Component<IProps> {
     } as ArrowStyle;
   }
   getArrow() {
+    const { model: { id } } = this.props;
+    const { refY = 0, refX = 2 } = this.getArrowStyle();
     return (
       <g>
         <defs>
-          {this.getStartArrow()}
-          {this.getEndArrow()}
+          <marker id={`marker-start-${id}`} refX={refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
+            {this.getStartArrow()}
+          </marker>
+          <marker id={`marker-end-${id}`} refX={refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
+            {this.getEndArrow()}
+          </marker>
         </defs>
       </g>
     );
   }
   getStartArrow() {
-    const { model, graphModel } = this.props;
-    const { id } = model;
-    const { arrow } = graphModel.theme;
-    const { offset, verticalLength } = arrow;
-    const { stroke, strokeWidth } = this.getArrowStyle();
-    return (
-      <marker id={`marker-start-${id}`} refX="-1" overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
-        <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />
-      </marker>
-    );
-
+    const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
+    return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
   getEndArrow() {
-    const { model, graphModel } = this.props;
-    const { id } = model;
-    const { arrow } = graphModel.theme;
-    const { offset, verticalLength } = arrow;
-    const { stroke, strokeWidth } = this.getArrowStyle();
-    return (
-      <marker id={`marker-end-${id}`} refX="-1" overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
-        <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} transform="rotate(180)" d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />
-      </marker>
-    );
+    const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
+    return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} transform="rotate(180)" d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
   // 起点终点，可以修改起点/终点为其他节点
   getAdjustPoints() {

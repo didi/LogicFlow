@@ -99,8 +99,8 @@
     <div class="rect" onmousedown="mouseDownRect()"></div>
     <div class="circle" onmousedown="mouseDownCircle()"></div>
     <div class="text" onmousedown="mouseDownText()">文本</div>
-    <button class="text" onClick="setArrow(1)">箭头1</button>
-    <button class="text" onClick="setArrow(2)">箭头2</button>
+    <button class="text" onClick="setArrow('half')">箭头1</button>
+    <button class="text" onClick="setArrow('empty')">箭头2</button>
     <button onClick="focusOn()">定位到五角星</button>
     <button id="undo" onClick="undo()" disabled>上一步</button>
     <button id="redo" onClick="redo()" disabled>下一步</button>
@@ -131,6 +131,7 @@
         InitLogicFlow();
         InitElementFunction();
         InitLogicFlowEvent();
+        window.showCanvas()
       }
     </script>
 
@@ -364,54 +365,37 @@
 
         getEndArrow() {
           const { model, graphModel } = this.props;
-          const { id } = model;
-          const { arrow } = graphModel.theme;
-          const { offset, verticalLength } = arrow;
+          const { id, properties: { arrowType } } = model;
           const { stroke, strokeWidth } = this.getArrowStyle();
-          const markerAttr = {
-            id: `marker-end-${id}`,
-            refX: -1,
-            overflow: 'visible',
-            orient: 'auto',
-            markerUnits: 'userSpaceOnUse'
-          }
           const pathAttr = {
             stroke,
-            strokeWidth,
-            d: 'M 0 0 -10 -5 -10 5 z'
+            strokeWidth
           }
-          return (
-             h("g", {},[
-              h("marker", { ...markerAttr }, [
-                h('path', {
-                  ...pathAttr,
-                  fill: stroke,
-                })
-              ]),
-              h("marker", { ...markerAttr, id: `marker-end-1-${id}` }, [
-                h('path', {
-                  ...pathAttr,
-                  d: 'M 0 0 -10 5'
-                })
-              ]),
-              h("marker", { ...markerAttr, id: `marker-end-2-${id}` }, [
-                h('path', {
-                  ...pathAttr,
-                  fill: stroke,
-                  d: 'M -10 0  -20 -5 -30 0 -20 5 z'
-                })
-              ])
-            ])
-          )
+          // 空心箭头
+          if (arrowType === 'empty') {
+            return h('path', {
+              ...pathAttr,
+              fill: '#FFF',
+              d: 'M -10 0  -20 -5 -30 0 -20 5 z'
+            })
+          } else if (arrowType === 'half') { // 半箭头
+            return (
+              h('path', {
+                ...pathAttr,
+                d: 'M 0 0 -10 5'
+              })
+            )
+          }
+          return h('path', {
+            ...pathAttr,
+            fill: stroke,
+            d: 'M 0 0 -10 -5 -10 5 z'
+          })
         }
       }
       class ConnectionModel extends PolylineEdgeModel {
         setAttributes() {
           this.textWidth = 200;
-          // this.arrowConfig = {
-          //   markerEnd: `url(#marker-end-${this.id})`,
-          //   markerStart: `url(#marker-start-${this.id})`,
-          // };
           const { properties } = this;
           if (properties.isActived) {
             this.stroke = 'red'
@@ -553,8 +537,8 @@
               stroke: 'red',
             },
             arrow: {
-              offset: 12, // 箭头长度
-              verticalLength: 4, // 箭头垂直于边的距离
+              offset: 4, // 箭头长度
+              verticalLength: 2, // 箭头垂直于边的距离
             }
           }
         );
@@ -737,9 +721,9 @@
                 sourceNodeId: 1,
                 targetNodeId: 2,
                 properties: {
-                  arrow: {
-                    markerEnd: 'url(#marker-end-1-connection_1)'
-                  }
+                  // arrow: {
+                  //   markerEnd: 'url(#marker-end-1-connection_1)'
+                  // }
                 }
               }
             ]
@@ -755,8 +739,6 @@
           lf.dnd.startDrag({
             type: 'circle',
             r: 25,
-            x: 100,
-            y: 100,
           })
         }
         window.getNodeEdges = function getNodeEdges() {
@@ -838,17 +820,10 @@
 
           const { edges } = lf.getSelectElements()
           edges.forEach(({ id, properties }) => {
-            const markerEndName = `url(#marker-end-${ arrowName }-${ id })`
+            console.log(4444, properties);
             lf.setProperties(id, {
-              arrow: {
-                ...properties.arrowConfig,
-                markerEnd: markerEndName
-              }
+              arrowType: arrowName
             })
-            const edgeModel = lf.getEdgeModelById(id)
-            const { arrowConfig } = edgeModel
-            edgeModel.arrowConfig.markerEnd = markerEndName
-            console.log(edgeModel)
           })
         }
         window.setZoom = function () {
@@ -909,6 +884,14 @@
           // console.log(lf.getGraphData())
           // lf.changeNodeId(data.id)
         })
+        lf.on("blank:contextmenu", ({ e, position }) => {
+          console.log("Ok");
+          lf.addNode({
+            type: "circle",
+            x: position.canvasOverlayPosition.x,
+            y: position.canvasOverlayPosition.y
+          });
+        });
         lf.on('node:delete',()=> {
           console.log('nodeup')
           const graphData = lf.getGraphData()
