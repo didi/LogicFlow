@@ -22,6 +22,16 @@ lf.render({
         name: 'hello',
         body: 'world'
       }
+    },
+    {
+      id: 'custom-112',
+      type: 'button-node',
+      x: 300,
+      y: 300,
+      properties: {
+        name: 'hello',
+        body: 'world'
+      }
     }
   ]
 });
@@ -31,3 +41,16 @@ lf.on("custom:button-click", (model) => {
     body: "LogicFlow"
   });
 });
+
+document.querySelector('#event-test').addEventListener('click', () => {
+  console.log('click')
+})
+document.querySelector('#event-test-wrapper').addEventListener('mousedown', (ev) => {
+  // console.log(ev)
+  console.log('mousedown')
+  ev.stopPropagation()
+  ev.preventDefault()
+})
+document.querySelector('#event-test').addEventListener('mousedown', (ev) => {
+  console.log('mousedown')
+})

@@ -232,7 +232,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
-    if (time > 200) return; // 事件大于200ms，认为是拖拽。
+    if (time > 200) return; // 事件大于200ms，认为是拖拽, 不触发click事件。
     const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
@@ -291,7 +291,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
-    this.toFront();
     this.startTime = new Date().getTime();
     const { editConfigModel } = graphModel;
     if (editConfigModel.adjustNodePosition && model.draggable) {
@@ -375,7 +374,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         <g
           className={this.getStateClassName()}
           onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleClick}
+          onClick={this.handleClick}
           onMouseEnter={this.setHoverON}
           onMouseOver={this.setHoverON}
           onMouseLeave={this.setHoverOFF}
