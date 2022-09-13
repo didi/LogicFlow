@@ -156,6 +156,7 @@ export default class TextEdit extends Component<IProps, IState> {
         textEditElement,
       },
     } = this.props;
+    // 按下alt+enter表示输入完成
     if (ev.key === 'Enter' && ev.altKey) {
       textEditElement.setElementState(0);
     }
@@ -173,7 +174,7 @@ export default class TextEdit extends Component<IProps, IState> {
       id: textEditElement.id,
     };
   };
-  // fix: #587
+  // fix: #587 #760
   keydownHandler = (ev) => {
     ev.stopPropagation();
   };
@@ -201,6 +202,7 @@ export default class TextEdit extends Component<IProps, IState> {
             key={textEditElement.id}
             onKeyUp={this.keyupHandler}
             onKeyDown={this.keydownHandler}
+            onKeyPress={this.keydownHandler}
             onInput={this.inputHandler}
           >
             {textEditElement.text?.value}
