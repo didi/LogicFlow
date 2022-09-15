@@ -47,7 +47,7 @@ const lf = new LogicFlow(options: Options)
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
 |edgeGenerator|function| -|-|连接节点及移动边时边的生成规则|
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
-|autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。|
+|autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。 注意，如果出现拖动节点到某个位置画布就不停滚动的问题，是因为初始化画布的时候宽高有问题。如果画布宽高不定，建议关闭autoExpand。|
 |overlapMode|number|-|-|元素重合的堆叠模式，默认为连线在下、节点在上，选中元素在最上面。可以设置为1，表示自增模式（作图工具场景常用）。|
 
 ### `background`
