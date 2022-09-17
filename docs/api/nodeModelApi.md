@@ -41,6 +41,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | isHovered  | boolean |  ✅ | 节点是否在hover状态   |
 | isHitable  | boolean |  ✅ | 节点是否可点击       |
 | draggable  | boolean |  ✅ | 节点是否可拖动       |
+| isShowAnchor  | boolean |  ✅ | 是否显示锚点       |
 | visible  | boolean |  ✅ | 是否显示, `1.1.0`新增 |
 
 ## 形状属性

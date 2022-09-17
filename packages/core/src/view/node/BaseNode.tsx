@@ -18,7 +18,6 @@ type IProps = {
 };
 
 type Istate = {
-  isHovered: boolean;
   isDraging?: boolean;
 };
 
@@ -50,9 +49,6 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       eventCenter,
       model,
     });
-    this.state = {
-      isHovered: false,
-    };
   }
   abstract getShape();
   getAnchorShape(anchorData): h.JSX.Element {
@@ -61,10 +57,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   getAnchors() {
     const { model, graphModel } = this.props;
     const {
-      isSelected, isHitable, isDragging,
+      isSelected, isHitable, isDragging, isShowAnchor,
     } = model;
-    const { isHovered } = this.state;
-    if (isHitable && (isSelected || isHovered) && !isDragging) {
+    if (isHitable && (isSelected || isShowAnchor) && !isDragging) {
       const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
         (anchor, index) => {
@@ -297,14 +292,11 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       this.stepDrag && this.stepDrag.handleMouseDown(ev);
     }
   };
-  // 不清楚以前为啥要把hover状态放到model中，先改回来。
+  // 为什么将hover状态放到model中？
+  // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverON = (ev) => {
-    const { isHovered } = this.state;
-    if (isHovered) return;
-    this.setState({
-      isHovered: true,
-    });
     const { model, graphModel } = this.props;
+    if (model.isHovered) return;
     const nodeData = model.getData();
     model.setHovered(true);
     graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
@@ -313,11 +305,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     });
   };
   setHoverOFF = (ev) => {
-    this.setState({
-      isHovered: false,
-    });
     const { model, graphModel } = this.props;
     const nodeData = model.getData();
+    if (!model.isHovered) return;
     model.setHovered(false);
     graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,

@@ -82,6 +82,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   // 状态属性
   @observable isSelected = false;
   @observable isHovered = false;
+  @observable isShowAnchor = false;
   @observable isDragging = false;
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
@@ -566,6 +567,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setHovered(flag = true): void {
     this.isHovered = flag;
+    this.setIsShowAnchor(flag);
+  }
+
+  @action
+  setIsShowAnchor(flag = true): void {
+    this.isShowAnchor = flag;
   }
 
   @action
