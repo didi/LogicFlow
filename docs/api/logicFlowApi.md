@@ -803,6 +803,20 @@ lf.setProperties('aF2Md2P23moN2gasd', {
 })
 ```
 
+## deleteProperty
+
+删除节点属性
+
+```ts
+deleteProperty(id: string, key: string): void
+```
+
+示例：
+
+```js
+lf.deleteProperty('aF2Md2P23moN2gasd', 'isRollbackNode')
+```
+
 ## getProperties
 
 获取节点或者边的自定义属性

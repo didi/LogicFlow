@@ -603,7 +603,11 @@ export default class BaseNodeModel implements IBaseNodeModel {
     };
     this.setAttributes();
   }
-
+  @action
+  deleteProperty(key: string): void {
+    delete this.properties[key];
+    this.setAttributes();
+  }
   @action
   setStyle(key, val): void {
     this.style = {

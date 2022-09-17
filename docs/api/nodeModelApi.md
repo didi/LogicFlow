@@ -366,10 +366,22 @@ nodeModel.setZIndex(999);
 
 ```js
 lf.on("node:click", ({ data }) => {
-  lf.setProperties(data.id, {
+  lf.getNodeModelById(data.id).setProperties({
     disabled: !data.properties.disabled,
     scale: 2
   });
+});
+
+```
+
+## deleteProperty
+
+删除节点的某个属性
+
+```js
+lf.on("node:click", ({ data }) => {
+  lf.getNodeModelById(data.id).deleteProperty('disabled');
+  lf.getNodeModelById(data.id).deleteProperty('scale');
 });
 
 ```

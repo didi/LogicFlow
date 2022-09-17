@@ -182,13 +182,25 @@ const properties = edgeModel.getProperties();
 
 ## setProperties
 
-设置节点properties
+设置边properties
 
 ```js
 const edgeModel = lf.getEdgeModelById('edge_1');
 edgeModel.setProperties({
   // 自定义properties
 })
+
+```
+
+## deleteProperty
+
+删除边的某个属性
+
+```js
+lf.on("edge:click", ({ data }) => {
+  lf.getEdgeModelById(data.id).deleteProperty('disabled');
+  lf.getEdgeModelById(data.id).deleteProperty('scale');
+});
 
 ```
 

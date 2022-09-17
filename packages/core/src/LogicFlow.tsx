@@ -652,6 +652,9 @@ export default class LogicFlow {
   setProperties(id: string, properties: Object): void {
     this.graphModel.getElement(id)?.setProperties(formatData(properties));
   }
+  deleteProperty(id: string, key: string): void {
+    this.graphModel.getElement(id)?.deleteProperty(key);
+  }
   /**
    * 获取元素的自定义属性
    * @param id 元素的id

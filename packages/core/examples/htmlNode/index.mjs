@@ -94,7 +94,7 @@ lf.on("anchor:dragstart", ({ data, nodeModel }) => {
   if (nodeModel.type === "sql-node") {
     lf.graphModel.nodes.forEach((node) => {
       if (node.type === "sql-node" && nodeModel.id !== node.id) {
-        node.setIsShowAnchor(true);
+        node.isShowAnchor = true;
         node.setProperties({
           isConnection: true
         });
@@ -106,10 +106,8 @@ lf.on("anchor:dragend", ({ data, nodeModel }) => {
   if (nodeModel.type === "sql-node") {
     lf.graphModel.nodes.forEach((node) => {
       if (node.type === "sql-node" && nodeModel.id !== node.id) {
-        node.setIsShowAnchor(false);
-        node.setProperties({
-          isConnection: false
-        });
+        node.isShowAnchor = false;
+        lf.deleteProperty(node.id, 'isConnection');
       }
     });
   }
