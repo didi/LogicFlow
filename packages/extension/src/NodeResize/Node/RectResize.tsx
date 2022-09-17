@@ -30,6 +30,12 @@ class RectResizeModel extends RectNodeModel {
   }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
+    const {
+      editConfigModel: {
+        isSilentMode,
+      },
+    } = this.graphModel;
+    if (isSilentMode) return style;
     style.stroke = 'none';
     if (style.hover) {
       style.hover.stroke = 'none';
@@ -76,11 +82,16 @@ class RectResizeView extends RectNode {
   getShape() {
     const {
       model: { isSelected },
+      graphModel: {
+        editConfigModel: {
+          isSilentMode,
+        },
+      },
     } = this.props;
     return (
       <g>
         {this.getResizeShape()}
-        {isSelected ? this.getControlGroup() : ''}
+        {isSelected && !isSilentMode ? this.getControlGroup() : ''}
       </g>
     );
   }

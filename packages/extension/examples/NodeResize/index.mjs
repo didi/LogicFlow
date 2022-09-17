@@ -9,6 +9,7 @@ window.onload = function () {
   // eslint-disable-next-line no-undef
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
+    // isSilentMode: true,
     // fixme: grid成为了必传的了
     grid: false,
     keyboard: {
