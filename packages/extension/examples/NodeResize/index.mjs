@@ -10,10 +10,7 @@ window.onload = function () {
   const lf = new LogicFlow({
     container: document.querySelector('#app'),
     // fixme: grid成为了必传的了
-    grid: {
-      type: 'dot',
-      size: 10,
-    },
+    grid: false,
     keyboard: {
       enabled: true,
     },
