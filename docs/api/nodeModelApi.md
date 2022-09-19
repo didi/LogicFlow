@@ -41,6 +41,7 @@ nodeModel上节点属性有很多，由于用途不一样，我们对其进行�
 | isHovered  | boolean |  ✅ | 节点是否在hover状态   |
 | isHitable  | boolean |  ✅ | 节点是否可点击       |
 | draggable  | boolean |  ✅ | 节点是否可拖动       |
+| isShowAnchor  | boolean |  ✅ | 是否显示锚点       |
 | visible  | boolean |  ✅ | 是否显示, `1.1.0`新增 |
 
 ## 形状属性
@@ -365,10 +366,22 @@ nodeModel.setZIndex(999);
 
 ```js
 lf.on("node:click", ({ data }) => {
-  lf.setProperties(data.id, {
+  lf.getNodeModelById(data.id).setProperties({
     disabled: !data.properties.disabled,
     scale: 2
   });
+});
+
+```
+
+## deleteProperty
+
+删除节点的某个属性
+
+```js
+lf.on("node:click", ({ data }) => {
+  lf.getNodeModelById(data.id).deleteProperty('disabled');
+  lf.getNodeModelById(data.id).deleteProperty('scale');
 });
 
 ```

@@ -30,6 +30,12 @@ class HtmlResizeModel extends HtmlNodeModel {
   }
   getOutlineStyle() {
     const style = super.getOutlineStyle();
+    const {
+      editConfigModel: {
+        isSilentMode,
+      },
+    } = this.graphModel;
+    if (isSilentMode) return style;
     style.stroke = 'none';
     if (style.hover) {
       style.hover.stroke = 'none';
@@ -72,11 +78,16 @@ class HtmlResizeView extends HtmlNode {
   getShape() {
     const {
       model: { isSelected },
+      graphModel: {
+        editConfigModel: {
+          isSilentMode,
+        },
+      },
     } = this.props;
     return (
       <g>
         {this.getResizeShape()}
-        {isSelected ? this.getControlGroup() : ''}
+        {isSelected && !isSilentMode ? this.getControlGroup() : ''}
       </g>
     );
   }

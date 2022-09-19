@@ -185,6 +185,14 @@ class Anchor extends Component<IProps, IState> {
     // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
+    const {
+      graphModel, nodeModel, anchorData,
+    } = this.props;
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
+      data: anchorData,
+      e: event,
+      nodeModel,
+    });
   };
 
   checkEnd = (event) => {

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.28](https://github.com/didi/LogicFlow/compare/examples@1.1.27...examples@1.1.28) (2022-09-17)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
 ## [1.1.27](https://github.com/didi/LogicFlow/compare/examples@1.1.26...examples@1.1.27) (2022-09-13)
 
 **Note:** Version bump only for package examples

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.28](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.27...@logicflow/core@1.1.28) (2022-09-17)
+
+
+### Features
+
+* add api delete node and edge property ([9a7c729](https://github.com/didi/LogicFlow/commit/9a7c729c463f5de555d102aa8d22341adf9b3db7))
+
+
+
+
+
 ## [1.1.27](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.26...@logicflow/core@1.1.27) (2022-09-13)
 
 **Note:** Version bump only for package @logicflow/core
