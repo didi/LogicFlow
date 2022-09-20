@@ -3,7 +3,7 @@ import LineEdgeModel from '../model/edge/LineEdgeModel';
 import PolylineEdgeModel from '../model/edge/PolylineEdgeModel';
 import BaseNode from '../model/node/BaseNodeModel';
 import { Point, Direction, EdgeConfig } from '../type/index';
-import { getCorssPointOfLine, isInSegment } from '../algorithm/edge';
+import { getCrossPointOfLine, isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
 import {
   getNodeBBox, isInNode, distance,
@@ -597,7 +597,7 @@ export const getCrossPointInRect = (start: Point, end: Point, node: BaseNode): P
     }
   }
   if (crossSegments) {
-    point = getCorssPointOfLine(start, end, crossSegments[0], crossSegments[1]);
+    point = getCrossPointOfLine(start, end, crossSegments[0], crossSegments[1]);
   }
   return point;
 };
