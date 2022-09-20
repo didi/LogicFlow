@@ -1,4 +1,4 @@
-# 框选
+# 框选 SelectionSelect
 
 ```ts
 import LogicFlow from '@logicflow/core';

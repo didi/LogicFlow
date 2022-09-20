@@ -1,4 +1,4 @@
-# BPMN 元素
+# BPMN元素 BpmnElement
 
 > BPMN 是目前较为著名的 workflow 的建模语言标准之一。LogicFlow 实现了 BPMN 扩展，可以直接使用 LogicFlow 来绘制兼容 BPMN2.0 规范的流程，并且其导出的数据可以在 Activiti 流程引擎上运行。
 

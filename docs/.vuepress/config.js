@@ -35,6 +35,7 @@ const guide = [
           'extension/component-selection',
           'extension/extension-node-resize',
           'extension/component-group',
+          'extension/curved-edge',
           'extension/extension-insert-node-in-polyline.md',
           // 'extension/extension-components',
           'extension/adapter',
