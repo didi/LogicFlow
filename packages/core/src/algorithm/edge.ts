@@ -4,7 +4,7 @@ import { Point } from '../type/index';
 入参：线段1端点: ab, 线段2端点： cd,
 返回值：有交点返回交点，无交点返回false
  */
-export const getCorssPointOfLine = (a: Point, b: Point, c: Point, d: Point) => {
+export const getCrossPointOfLine = (a: Point, b: Point, c: Point, d: Point) => {
   /** 1 解线性方程组, 求线段交点. * */
   // 如果分母为0 则平行或共线, 不相交
   const denominator = (b.y - a.y) * (d.x - c.x) - (a.x - b.x) * (c.y - d.y);
