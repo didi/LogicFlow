@@ -3,7 +3,7 @@ import Rect from '../basic-shape/Rect';
 import BaseNode from './BaseNode';
 
 export default class TextNode extends BaseNode {
-  getBackgroud() {
+  getBackground() {
     const { model } = this.props;
     const style = model.getTextStyle();
     const { text } = model;
@@ -25,7 +25,7 @@ export default class TextNode extends BaseNode {
   getShape() {
     return (
       <g>
-        {this.getBackgroud()}
+        {this.getBackground()}
       </g>
     );
   }

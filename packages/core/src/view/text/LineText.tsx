@@ -14,7 +14,7 @@ export default class LineText extends BaseText {
       isHoverd: false,
     };
   }
-  getBackgroud() {
+  getBackground() {
     const model = this.props.model as BaseEdgeModel;
     const style = model.getTextStyle();
     const { text } = model;
@@ -120,7 +120,7 @@ export default class LineText extends BaseText {
         onMouseEnter={this.setHoverON}
         onMouseLeave={this.setHoverOFF}
       >
-        {this.getBackgroud()}
+        {this.getBackground()}
         <Text {...attr} model={model} />
       </g>
     );
