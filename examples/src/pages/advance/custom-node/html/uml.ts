@@ -18,7 +18,7 @@ class UmlModel extends HtmlNodeModel {
   }
 }
 class UmlNode extends HtmlNode {
-  currrentProperties: string;
+  currentProperties: string;
   setHtml(rootEl: HTMLElement) {
     const { properties } = this.props.model;
     const el = document.createElement('div');
