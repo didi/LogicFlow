@@ -467,8 +467,8 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
-  setZIndex(zindex = 0): void {
-    this.zIndex = zindex;
+  setZIndex(zIndex = 0): void {
+    this.zIndex = zIndex;
   }
 
   @action

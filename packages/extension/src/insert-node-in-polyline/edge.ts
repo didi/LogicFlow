@@ -51,7 +51,7 @@ const segmentDirection = (start: Point, end: Point) => {
 };
 
 // 节点是够在线段内，求出节点与线段的交点
-export const corssPointInSegement = (node: BaseNodeModel, start:Point, end: Point) => {
+export const crossPointInSegement = (node: BaseNodeModel, start:Point, end: Point) => {
   const bBox = getNodeBBox(node);
   const direction = segmentDirection(start, end);
   const maxX = Math.max(start.x, end.x);
@@ -104,7 +104,7 @@ export const isNodeInSegement = (node: BaseNodeModel, polyline: PolylineEdgeMode
   for (let i = 0; i < pointsList.length - 1; i++) {
     if (isInSegment({ x, y }, pointsList[i], pointsList[i + 1])
     ) {
-      const bBoxCross = corssPointInSegement(node, pointsList[i], pointsList[i + 1]);
+      const bBoxCross = crossPointInSegement(node, pointsList[i], pointsList[i + 1]);
       if (bBoxCross) {
         return {
           crossIndex: i + 1,

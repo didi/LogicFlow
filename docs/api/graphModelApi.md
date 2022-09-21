@@ -599,7 +599,7 @@ const nodeModel = graphModel.cloneNode('node_1');
 | nodeId | string | 无 | 节点id |
 | deltaX | number | 无 | 移动x轴距离 |
 | deltaY | number | 无 | 移动y轴距离 |
-| isignoreRule | boolean | false | 是否忽略移动规则限制 |
+| isIgnoreRule | boolean | false | 是否忽略移动规则限制 |
 
 
 ```js
@@ -618,7 +618,7 @@ graphModel.moveNode('node_1', 10, 10, true);
 | nodeId | string | 无 | 节点id |
 | x | number | 无 | 移动x轴距离 |
 | y | number | 无 | 移动y轴距离 |
-| isignoreRule | boolean | false | 是否忽略移动规则限制 |
+| isIgnoreRule | boolean | false | 是否忽略移动规则限制 |
 
 
 ```js

@@ -12,14 +12,14 @@ type IProps = {
   graphModel: GraphModel;
   dnd: Dnd
 };
-type Istate = {
-  isDraging: boolean,
+type IState = {
+  isDragging: boolean,
 };
 // type InjectedProps = IProps & {
 //   transformStyle: GraphTransform
 // };
 @observer
-class CanvasOverlay extends Component<IProps, Istate> {
+class CanvasOverlay extends Component<IProps, IState> {
   stepDrag: StepDrag;
   stepScrollX = 0;
   stepScrollY = 0;
@@ -27,7 +27,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
     super();
     const { graphModel: { gridSize, eventCenter } } = props;
     this.stepDrag = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'BLANK',
@@ -37,15 +37,15 @@ class CanvasOverlay extends Component<IProps, Istate> {
     });
     // 当ctrl键被按住的时候，可以放大缩小。
     this.state = {
-      isDraging: false,
+      isDragging: false,
     };
   }
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     this.setState({
-      isDraging: true,
+      isDragging: true,
     });
     const {
       graphModel: {
@@ -60,7 +60,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
   };
   onDragEnd = () => {
     this.setState({
-      isDraging: false,
+      isDragging: false,
     });
   };
   zoomHandler = (ev: WheelEvent) => {
@@ -73,14 +73,14 @@ class CanvasOverlay extends Component<IProps, Istate> {
       this.stepScrollY += eY;
       if (Math.abs(this.stepScrollX) >= gridSize) {
         const remainderX = this.stepScrollX % gridSize;
-        const moveDistence = this.stepScrollX - remainderX;
-        transformModel.translate(-moveDistence * transformModel.SCALE_X, 0);
+        const moveDistance = this.stepScrollX - remainderX;
+        transformModel.translate(-moveDistance * transformModel.SCALE_X, 0);
         this.stepScrollX = remainderX;
       }
       if (Math.abs(this.stepScrollY) >= gridSize) {
         const remainderY = this.stepScrollY % gridSize;
-        const moveDistenceY = this.stepScrollY - remainderY;
-        transformModel.translate(0, -moveDistenceY * transformModel.SCALE_Y);
+        const moveDistanceY = this.stepScrollY - remainderY;
+        transformModel.translate(0, -moveDistanceY * transformModel.SCALE_Y);
         this.stepScrollY = remainderY;
       }
       return;
@@ -153,7 +153,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
     } = this.props;
     const { transform } = transformModel.getTransformStyle();
     const { children, dnd } = this.props;
-    const { isDraging } = this.state;
+    const { isDragging } = this.state;
 
     return (
       <svg
@@ -164,7 +164,7 @@ class CanvasOverlay extends Component<IProps, Istate> {
         onWheel={this.zoomHandler}
         onMouseDown={this.mouseDownHandler}
         onContextMenu={this.handleContextMenu}
-        className={isDraging ? 'lf-canvas-overlay lf-dragging' : 'lf-canvas-overlay lf-drag-able'}
+        className={isDragging ? 'lf-canvas-overlay lf-dragging' : 'lf-canvas-overlay lf-drag-able'}
         {...dnd.eventMap()}
       >
         <g transform={transform}>

@@ -65,7 +65,7 @@ function registerStart(lf) {
 function registerUser(lf) {
   class UserTaskNode extends RectNode {
   }
-  class UsetTaskModel extends RectNodeModel {
+  class UserTaskModel extends RectNodeModel {
     constructor(data, graphModel) {
       if (data.text && typeof data.text === 'string') {
         data.text = {
@@ -85,7 +85,7 @@ function registerUser(lf) {
   }
   lf.register({
     view: UserTaskNode,
-    model: UsetTaskModel,
+    model: UserTaskModel,
     type: 'user-task',
   });
 }

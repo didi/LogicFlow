@@ -21,7 +21,7 @@ interface IState {
   startY: number,
   endX: number,
   endY: number,
-  draging: boolean,
+  dragging: boolean,
 }
 class Control extends Component<IProps> {
   index: number;
@@ -44,7 +44,7 @@ class Control extends Component<IProps> {
     // }
     this.state = {};
     this.dragHandler = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: 1,
     });
@@ -316,7 +316,7 @@ class Control extends Component<IProps> {
     const newNodeSize = { id, modelType, type, ...afterNode };
     this.graphModel.eventCenter.emit('node:resize', { oldNodeSize, newNodeSize });
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { transformModel } = this.graphModel;
     const { modelType } = this.nodeModel;
     [deltaX, deltaY] = transformModel.fixDeltaXY(deltaX, deltaY);

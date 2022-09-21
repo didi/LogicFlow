@@ -18,7 +18,7 @@ interface IProps {
   edgeModel: BaseEdgeModel;
 }
 interface IState {
-  draging: boolean;
+  dragging: boolean;
   endX: number;
   endY: number;
 }
@@ -43,7 +43,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
   constructor() {
     super();
     this.state = {
-      draging: false,
+      dragging: false,
       endX: 0,
       endY: 0,
     };
@@ -52,7 +52,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     // todo: 换成stepDrag，参考anchor对外抛出事件
     this.dragHandler = createDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
     });
   }
@@ -70,11 +70,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
-      draging: true,
+      dragging: true,
     });
     edgeModel.isHitable = false;
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, type } = this.props;
     const { transformModel } = graphModel;
@@ -86,7 +86,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
-      draging: true,
+      dragging: true,
     });
     // 调整过程中实时更新路径
     const { edgeModel } = this.props;
@@ -121,16 +121,16 @@ export default class AdjustPoint extends Component<IProps, IState> {
   onDragEnd = () => {
     // 将状态置为非拖拽状态
     this.setState({
-      draging: false,
+      dragging: false,
     });
     const {
       graphModel, edgeModel, type,
     } = this.props;
     edgeModel.isHitable = true;
-    const { endX, endY, draging } = this.state;
+    const { endX, endY, dragging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
-    // 没有draging就结束边
-    if (!draging) return;
+    // 没有dragging就结束边
+    if (!dragging) return;
     // 如果找到目标节点，删除老边，创建新边
     if (info && info.node && this.isAllowAdjust(info)) {
       const edgeData = edgeModel.getData();
@@ -275,7 +275,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
   }
   render() {
     const { x, y } = this.props;
-    const { draging } = this.state;
+    const { dragging } = this.state;
     const style = this.getAdjustPointStyle();
     return (
       <g>
@@ -284,7 +284,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
           {...style}
           {...{ x, y }}
           onMouseDown={this.dragHandler}
-          pointer-events={draging ? 'none' : ''}
+          pointer-events={dragging ? 'none' : ''}
         />
       </g>
     );

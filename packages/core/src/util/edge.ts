@@ -447,20 +447,20 @@ export const getBoxByOriginNode = (node: BaseNode): PBBox => {
 };
 /* 保证一条直线上只有2个节点： 删除x/y相同的中间节点 */
 export const pointFilter = (points: PolyPoint[]): PolyPoint[] => {
-  const allpoints = points;
+  const allPoints = points;
   let i = 1;
-  while (i < allpoints.length - 1) {
-    const pre = allpoints[i - 1];
-    const current = allpoints[i];
-    const next = allpoints[i + 1];
+  while (i < allPoints.length - 1) {
+    const pre = allPoints[i - 1];
+    const current = allPoints[i];
+    const next = allPoints[i + 1];
     if ((pre.x === current.x && current.x === next.x)
       || (pre.y === current.y && current.y === next.y)) {
-      allpoints.splice(i, 1);
+      allPoints.splice(i, 1);
     } else {
       i++;
     }
   }
-  return allpoints;
+  return allPoints;
 };
 
 /* 计算折线点 */

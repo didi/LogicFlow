@@ -33,7 +33,7 @@ interface IState {
   startY: number;
   endX: number;
   endY: number;
-  draging: boolean;
+  dragging: boolean;
 }
 
 class Anchor extends Component<IProps, IState> {
@@ -52,11 +52,11 @@ class Anchor extends Component<IProps, IState> {
       startY: 0,
       endX: 0,
       endY: 0,
-      draging: false,
+      dragging: false,
     };
     this.dragHandler = new StepDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
     });
   }
@@ -110,7 +110,7 @@ class Anchor extends Component<IProps, IState> {
       endY: anchorData.y,
     });
   };
-  onDraging = ({ event }) => {
+  onDragging = ({ event }) => {
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;
@@ -149,7 +149,7 @@ class Anchor extends Component<IProps, IState> {
     this.setState({
       endX: x1,
       endY: y1,
-      draging: true,
+      dragging: true,
     });
     this.moveAnchorEnd(x1, y1);
     if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
@@ -180,7 +180,7 @@ class Anchor extends Component<IProps, IState> {
       startY: 0,
       endX: 0,
       endY: 0,
-      draging: false,
+      dragging: false,
     });
     // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
@@ -202,14 +202,14 @@ class Anchor extends Component<IProps, IState> {
     // nodeModel.setSelected(false);
     /* 创建边 */
     const { edgeType } = graphModel;
-    const { endX, endY, draging } = this.state;
+    const { endX, endY, dragging } = this.state;
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
     }
-    // 没有draging就结束边
-    if (!draging) return;
+    // 没有dragging就结束边
+    if (!dragging) return;
     if (info && info.node) {
       const targetNode = info.node;
       const anchorId = info.anchor.id;

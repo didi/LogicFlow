@@ -3,7 +3,7 @@ import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import { PointTuple, ZoomParam } from '../type';
 
-export interface TransfromInterface {
+export interface TransformInterface {
   SCALE_X: number;
   SKEW_Y: number;
   SKEW_X: number;
@@ -13,14 +13,14 @@ export interface TransfromInterface {
   ZOOM_SIZE: number;
   MINI_SCALE_SIZE: number; // 缩小的最小值
   MAX_SCALE_SIZE: number; // 放大的最大值
-  zoom: (isZoomout: ZoomParam) => string;
+  zoom: (isZoomOut: ZoomParam) => string;
   HtmlPointToCanvasPoint: (point: PointTuple) => PointTuple;
   CanvasPointToHtmlPoint: (point: PointTuple) => PointTuple;
   moveCanvasPointByHtml: (point: PointTuple, x: number, y: number) => PointTuple;
   getTransformStyle: () => { transform: string };
 }
 
-export default class TransfromModel implements TransfromInterface {
+export default class TransformModel implements TransformInterface {
   MINI_SCALE_SIZE = 0.2;
   MAX_SCALE_SIZE = 16;
   @observable SCALE_X = 1;
@@ -59,7 +59,7 @@ export default class TransfromModel implements TransfromInterface {
   }
 
   /**
-   * 将一个在canvas上的点，向x轴方向移动directionX距离，向y轴方向移动dirctionY距离。
+   * 将一个在canvas上的点，向x轴方向移动directionX距离，向y轴方向移动directionY距离。
    * 因为canvas可能被缩小或者放大了，所以其在canvas层移动的距离需要计算上缩放的量。
    * @param point 点
    * @param directionX x轴距离

@@ -84,17 +84,17 @@ class Keyboard {
   }
 
   private getKeys(keys: string | string[]) {
-    return (Array.isArray(keys) ? keys : [keys]).map((key) => this.formatkey(key));
+    return (Array.isArray(keys) ? keys : [keys]).map((key) => this.formatKey(key));
   }
 
-  protected formatkey(key: string) {
-    const formated = key
+  protected formatKey(key: string) {
+    const formatted = key
       .toLowerCase()
       .replace(/\s/g, '')
       .replace('delete', 'del')
       .replace('cmd', 'command');
 
-    return formated;
+    return formatted;
   }
 }
 

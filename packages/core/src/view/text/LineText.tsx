@@ -112,7 +112,7 @@ export default class LineText extends BaseText {
       y,
       className: 'lf-element-text',
       value,
-      ...style, // 透传 edageText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
+      ...style, // 透传 edgeText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
     };
     return (
       <g

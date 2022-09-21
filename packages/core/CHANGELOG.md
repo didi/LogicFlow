@@ -793,7 +793,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **core:** update text position after draging edge ([e430c14](https://github.com/didi/LogicFlow/commit/e430c14c3a0edec26ad0ba24afa7da70aa90421e))
+* **core:** update text position after dragging edge ([e430c14](https://github.com/didi/LogicFlow/commit/e430c14c3a0edec26ad0ba24afa7da70aa90421e))
 
 
 

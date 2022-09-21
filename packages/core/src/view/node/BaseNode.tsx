@@ -17,13 +17,13 @@ type IProps = {
   graphModel: GraphModel;
 };
 
-type Istate = {
-  isDraging?: boolean;
+type IState = {
+  isDragging?: boolean;
 };
 
 type StyleAttribute = CommonTheme;
 
-export default abstract class BaseNode extends Component<IProps, Istate> {
+export default abstract class BaseNode extends Component<IProps, IState> {
   t: any;
   moveOffset: { x: number; y: number; };
   static getModel(defaultModel) {
@@ -41,7 +41,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 不在构造函数中判断，因为editConfig可能会被动态改变
     this.stepDrag = new StepDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: gridSize,
       eventType: 'NODE',
@@ -103,7 +103,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     }
   }
   getStateClassName() {
-    const { model: { state, isDraging, isSelected } } = this.props;
+    const { model: { state, isDragging, isSelected } } = this.props;
     let className = 'lf-node';
     switch (state) {
       case ElementState.ALLOW_CONNECT:
@@ -116,7 +116,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
         className += ' lf-node-default';
         break;
     }
-    if (isDraging) {
+    if (isDragging) {
       className += ' lf-isDragging';
     }
     if (isSelected) {
@@ -137,7 +137,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       y: model.y - y,
     };
   };
-  onDraging = ({ event }) => {
+  onDragging = ({ event }) => {
     const { model, graphModel } = this.props;
     // const { isDragging } = model;
     const {
