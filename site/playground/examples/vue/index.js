@@ -8,8 +8,8 @@ const lf = new LogicFlow({
 class UserNode extends HtmlNode {
   shouldUpdate() {
     const { properties } = this.props.model;
-    if (this.currrentProperties && this.currrentProperties === JSON.stringify(properties)) return false;
-    this.currrentProperties = JSON.stringify(properties)
+    if (this.currentProperties && this.currentProperties === JSON.stringify(properties)) return false;
+    this.currentProperties = JSON.stringify(properties)
     return true;
   }
   setHtml(rootEl) {
