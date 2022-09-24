@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.28...@logicflow/core@1.1.29) (2022-09-24)
+
+
+### Bug Fixes
+
+* Fix typo: currrentProperties -> currentProperties ([71650b7](https://github.com/didi/LogicFlow/commit/71650b7c51d1ffd9c8b828f26ad2189e3b9cb7a4))
+* Fix typo: getBackgroud -> getBackground ([3ea0c36](https://github.com/didi/LogicFlow/commit/3ea0c369747b75b321a95b22af75d2afc07b9c7a))
+* Fix typo: getCorssPointOfLine -> getCrossPointOfLine ([a2c44b0](https://github.com/didi/LogicFlow/commit/a2c44b09518f089df98eec711ea9b51f8351ac24))
+
+
+### Features
+
+* update turbo plugin ([ed512ca](https://github.com/didi/LogicFlow/commit/ed512ca21d21829cd7c114140b006964fc4090e4))
+
+
+
+
+
 ## [1.1.28](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.27...@logicflow/core@1.1.28) (2022-09-17)
 
 
