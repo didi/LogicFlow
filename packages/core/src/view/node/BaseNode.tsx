@@ -60,9 +60,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       isSelected, isHitable, isDragging, isShowAnchor,
     } = model;
     if (isHitable && (isSelected || isShowAnchor) && !isDragging) {
-      const edgeStyle = model.getAnchorLineStyle();
       return map(model.anchors,
         (anchor, index) => {
+          const edgeStyle = model.getAnchorLineStyle(anchor);
           const style = model.getAnchorStyle(anchor);
           return (
             <Anchor

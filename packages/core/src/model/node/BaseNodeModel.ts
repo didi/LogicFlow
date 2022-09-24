@@ -278,7 +278,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点锚点拖出连线样式
    * @returns 自定义锚点拖出样式
    */
-  getAnchorLineStyle() {
+  getAnchorLineStyle(anchorInfo) {
     const { anchorLine } = this.graphModel.theme;
     return cloneDeep(anchorLine);
   }
