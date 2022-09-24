@@ -62,6 +62,7 @@ class BaseEdgeModel implements IBaseModel {
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
   @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
+  // TODO: 每个边独立生成一个marker没必要
   @observable arrowConfig = {
     markerEnd: `url(#marker-end-${this.id})`,
     markerStart: '',
@@ -284,7 +285,17 @@ class BaseEdgeModel implements IBaseModel {
     };
     this.setAttributes();
   }
-
+  @action
+  changeEdgeId(id: string) {
+    const { markerEnd, markerStart } = this.arrowConfig;
+    if (markerStart && markerStart === `url(#marker-start-${this.id})`) {
+      this.arrowConfig.markerStart = `url(#marker-start-${id})`;
+    }
+    if (markerEnd && markerEnd === `url(#marker-end-${this.id})`) {
+      this.arrowConfig.markerEnd = `url(#marker-end-${id})`;
+    }
+    this.id = id;
+  }
   // 设置样式
   @action
   setStyle(key, val): void {
