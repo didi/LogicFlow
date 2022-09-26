@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.28...@logicflow/extension@1.1.29) (2022-09-24)
+
+
+### Features
+
+* add curved edge ([b64928a](https://github.com/didi/LogicFlow/commit/b64928a486385aaa13f9dc07a28e790c982f5ada))
+* update turbo plugin ([ed512ca](https://github.com/didi/LogicFlow/commit/ed512ca21d21829cd7c114140b006964fc4090e4))
+
+
+
+
+
 ## [1.1.28](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.27...@logicflow/extension@1.1.28) (2022-09-17)
 
 **Note:** Version bump only for package @logicflow/extension

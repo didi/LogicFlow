@@ -564,7 +564,8 @@ class GraphModel {
     }
     this.edges.forEach((edge) => {
       if (edge.id === oldId) {
-        edge.id = newId;
+        // edge.id = newId;
+        edge.changeEdgeId(newId);
       }
     });
     return newId;

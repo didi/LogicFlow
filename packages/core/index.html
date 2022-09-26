@@ -88,6 +88,8 @@
     .buttons {
       position: absolute;
       z-index: 1;
+    }
+    .button-list {
       display: flex;
       align-items: center;
     }
@@ -96,31 +98,38 @@
 
 <body>
   <div class="buttons">
-    <div class="rect" onmousedown="mouseDownRect()"></div>
-    <div class="circle" onmousedown="mouseDownCircle()"></div>
-    <div class="text" onmousedown="mouseDownText()">文本</div>
-    <button class="text" onClick="setArrow('half')">箭头1</button>
-    <button class="text" onClick="setArrow('empty')">箭头2</button>
-    <button onClick="focusOn()">定位到五角星</button>
-    <button id="undo" onClick="undo()" disabled>上一步</button>
-    <button id="redo" onClick="redo()" disabled>下一步</button>
-    <button id="clearData" onClick="clearData()">清空数据</button>
-    <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
-    <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
-    <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
-    <button onClick="getData()">获取数据</button>
-    <button onClick="getRefreshData()">属性流程图节点id</button>
-    <button onClick="setProperties()">设置属性</button>
-    <button onClick="setZoom()">设置大小</button>
-    <button onClick="selectElement()">选中指定节点</button>
-    <button onClick="triggerLine()">触发边</button>
-    <button onClick="translateCenter()">居中</button>
-    <button onClick="fitView()">适应屏幕</button>
-    <button onClick="getNodeEdges()">获取节点所有的边</button>
-    <button onClick="openEdgeAnimation()">启动边动画</button>
-    <button onClick="closeEdgeAnimation()">关闭边动画</button>
-    <button onClick="showCanvas()">显示流程图</button>
-    <button onClick="deleteNode()">删除节点1</button>
+    <div class="button-list">
+      <button class="text" onClick="setArrow('half')">箭头1</button>
+      <button class="text" onClick="setArrow('empty')">箭头2</button>
+      <button onClick="focusOn()">定位到五角星</button>
+      <button id="undo" onClick="undo()" disabled>上一步</button>
+      <button id="redo" onClick="redo()" disabled>下一步</button>
+      <button id="clearData" onClick="clearData()">清空数据</button>
+      <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
+      <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
+      <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
+      <button id="changeEdgeId" onClick="changeEdgeId()">修改边Id</button>
+    </div>
+    <div class="button-list">
+      <button onClick="getData()">获取数据</button>
+      <button onClick="getRefreshData()">属性流程图节点id</button>
+      <button onClick="setProperties()">设置属性</button>
+      <button onClick="setZoom()">设置大小</button>
+      <button onClick="selectElement()">选中指定节点</button>
+      <button onClick="triggerLine()">触发边</button>
+      <button onClick="translateCenter()">居中</button>
+      <button onClick="fitView()">适应屏幕</button>
+      <button onClick="getNodeEdges()">获取节点所有的边</button>
+      <button onClick="openEdgeAnimation()">启动边动画</button>
+      <button onClick="closeEdgeAnimation()">关闭边动画</button>
+      <button onClick="showCanvas()">显示流程图</button>
+      <button onClick="deleteNode()">删除节点1</button>
+    </div>
+    <div class="button-list">
+      <div class="rect" onmousedown="mouseDownRect()"></div>
+      <div class="circle" onmousedown="mouseDownCircle()"></div>
+      <div class="text" onmousedown="mouseDownText()">文本</div>
+    </div>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -428,7 +437,7 @@
           container: document.querySelector('#app'),
           // hideAnchors: true,
           // width: 1200,
-          // height: 400,
+          height: 400,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
@@ -860,6 +869,12 @@
         window.deleteNode = function () {
           const d = lf.deleteNode(1)
           console.log(d, lf.getGraphData().nodes.length)
+        }
+        window.changeEdgeId = function () {
+          const { edges } = lf.getGraphData();
+          edges.forEach(({ id }) => {
+            lf.changeEdgeId(id, 'edge_' + id)
+          })
         }
       }
     </script>

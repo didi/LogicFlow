@@ -140,7 +140,7 @@ class UserTaskModel extends RectNodeModel {
 
 ```js
 class UserTaskModel extends RectNodeModel {
-  getAnchorLineStyle() {
+  getAnchorLineStyle(anchorInfo) {
     const style = super.getAnchorLineStyle();
     style.stroke = "rgb(24, 125, 255)";
     return style;

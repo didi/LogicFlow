@@ -85,7 +85,7 @@ function convertEdgeToTurboElement(edge) {
       text,
       startPoint: JSON.stringify(startPoint),
       endPoint: JSON.stringify(endPoint),
-      pointsList: JSON.stringify(text),
+      pointsList: JSON.stringify(pointsList),
     },
     key: id,
   };
@@ -125,7 +125,7 @@ function convertFlowElementToEdge(element) {
     endPoint,
     pointsList,
   } = properties;
-  const edge = {
+  const edge: Record<string, any> = {
     id: key,
     type: TurboTypeMap[type],
     sourceNodeId: incoming[0],
@@ -134,16 +134,13 @@ function convertFlowElementToEdge(element) {
     properties: {},
   };
   if (startPoint) {
-    // @ts-ignore
     edge.startPoint = JSON.parse(startPoint);
   }
   if (endPoint) {
-    // @ts-ignore
     edge.endPoint = JSON.parse(endPoint);
   }
   if (pointsList) {
-    // @ts-ignore
-    edge.endPoint = JSON.parse(pointsList);
+    edge.pointsList = JSON.parse(pointsList);
   }
   // 这种转换方式，在自定义属性中不能与excludeProperties中的属性重名，否则将在转换过程中丢失
   const excludeProperties = ['startPoint', 'endPoint', 'pointsList', 'text'];
@@ -161,6 +158,7 @@ function convertFlowElementToNode(element) {
   let {
     x, y,
   } = properties;
+  const { text } = properties;
   if (x === undefined) {
     const [{ x: x1, y: y1 }, { x: x2, y: y2 }] = bounds;
     x = (x1 + x2) / 2;
@@ -171,7 +169,7 @@ function convertFlowElementToNode(element) {
     type: TurboTypeMap[type],
     x,
     y,
-    text: properties.text,
+    text,
     properties: {},
   };
   // 这种转换方式，在自定义属性中不能与excludeProperties中的属性重名，否则将在转换过程中丢失
