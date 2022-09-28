@@ -224,7 +224,7 @@ lf.render(graphData)
 const lf = new LogicFlow({
   ...
 })
-lf.render({
+lf.renderRawData({
   nodes: [],
   edges: []
 })
