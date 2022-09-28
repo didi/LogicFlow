@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [1.2.0-alpha.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-alpha.15...@logicflow/extension@1.2.0-alpha.16) (2022-07-27)
+## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.28...@logicflow/extension@1.1.29) (2022-09-24)
+
+
+### Features
+
+* add curved edge ([b64928a](https://github.com/didi/LogicFlow/commit/b64928a486385aaa13f9dc07a28e790c982f5ada))
+* update turbo plugin ([ed512ca](https://github.com/didi/LogicFlow/commit/ed512ca21d21829cd7c114140b006964fc4090e4))
+
+
+
+
+
+## [1.1.28](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.27...@logicflow/extension@1.1.28) (2022-09-17)
 
 **Note:** Version bump only for package @logicflow/extension
 
@@ -12,6 +25,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [1.2.0-alpha.15](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.22...@logicflow/extension@1.2.0-alpha.15) (2022-07-26)
+## [1.1.27](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.26...@logicflow/extension@1.1.27) (2022-09-13)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [1.1.26](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.25...@logicflow/extension@1.1.26) (2022-08-27)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [1.1.25](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.24...@logicflow/extension@1.1.25) (2022-08-21)
 
 
 ### Bug Fixes
@@ -19,12 +49,30 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
 * node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
 * typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+* 修复分组嵌套分组时子分组内部节点无法跟随移动的问题 ([c7edb01](https://github.com/didi/LogicFlow/commit/c7edb013907b474a65ed495817f983a3f1aafcae))
 
 
 ### Features
 
 * allow groups being nested by other groups ([02772d7](https://github.com/didi/LogicFlow/commit/02772d72123a5f35b296a49cf811fc2f7eda2243))
 * english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+* group add isAllowAppendIn to support pick node append in group ([e54f798](https://github.com/didi/LogicFlow/commit/e54f79845996e763098cb5749100c76063160023))
+
+
+
+
+
+## [1.1.24](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.23...@logicflow/extension@1.1.24) (2022-08-11)
+
+**Note:** Version bump only for package @logicflow/extension
+
+
+
+
+
+## [1.1.23](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.22...@logicflow/extension@1.1.23) (2022-08-04)
+
+**Note:** Version bump only for package @logicflow/extension
 
 
 

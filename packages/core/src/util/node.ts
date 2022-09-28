@@ -387,6 +387,7 @@ export const pickNodeConfig = (data): NodeConfig => {
     'y',
     'text',
     'properties',
+    'virtual', // 区域节点是否为dnd添加的虚拟节点
   ]);
   return nodeData;
 };

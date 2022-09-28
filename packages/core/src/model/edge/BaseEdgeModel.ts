@@ -60,8 +60,9 @@ class BaseEdgeModel implements IBaseModel {
   customTextPosition = false; // 是否自定义边文本位置
   animationData = defaultAnimationData;
   style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
+  // TODO: 每个边独立生成一个marker没必要
   arrowConfig = {
-    markerEnd: '',
+    markerEnd: `url(#marker-end-${this.id})`,
     markerStart: '',
   }; // 箭头属性
   [propName: string]: any; // 支持自定义
@@ -155,6 +156,13 @@ class BaseEdgeModel implements IBaseModel {
       this.zIndex = data.zIndex || getZIndex();
     }
     this.arrowConfig.markerEnd = `url(#marker-end-${this.id})`;
+    // 设置边的 anchors，也就是边的两个端点
+    // 端点依赖于 edgeData 的 sourceNode 和 targetNode
+    this.setAnchors();
+    // 边的拐点依赖于两个端点
+    this.initPoints();
+    // 文本位置依赖于边上的所有拐点
+    this.formatText(data);
   }
   /**
    * 设置model属性，每次properties发生变化会触发
@@ -326,6 +334,12 @@ class BaseEdgeModel implements IBaseModel {
     this.setAttributes();
   }
 
+  @action
+  deleteProperty(key: string): void {
+    delete this.properties[key];
+    this.setAttributes();
+  }
+  @action
   setProperties(properties): void {
     this.properties = {
       ...this.properties,
@@ -337,7 +351,17 @@ class BaseEdgeModel implements IBaseModel {
     });
     this.setAttributes();
   }
-
+  @action
+  changeEdgeId(id: string) {
+    const { markerEnd, markerStart } = this.arrowConfig;
+    if (markerStart && markerStart === `url(#marker-start-${this.id})`) {
+      this.arrowConfig.markerStart = `url(#marker-start-${id})`;
+    }
+    if (markerEnd && markerEnd === `url(#marker-end-${this.id})`) {
+      this.arrowConfig.markerEnd = `url(#marker-end-${id})`;
+    }
+    this.id = id;
+  }
   // 设置样式
   setStyle(key, val): void {
     this.style = {

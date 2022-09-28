@@ -643,6 +643,9 @@ export default class LogicFlow {
   setProperties(id: string, properties: Object): void {
     this.graphModel.getElement(id)?.setProperties(formatData(properties));
   }
+  deleteProperty(id: string, key: string): void {
+    this.graphModel.getElement(id)?.deleteProperty(key);
+  }
   /**
    * 获取元素的自定义属性
    * @param id 元素的id
@@ -710,9 +713,15 @@ export default class LogicFlow {
     rightBottomPoint: PointTuple,
     wholeEdge = true,
     wholeNode = true,
+    ignoreHideElement = false,
   ) {
-    return this.graphModel.getAreaElement(leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)
-      .map(element => element.getData());
+    return this.graphModel.getAreaElement(
+      leftTopPoint,
+      rightBottomPoint,
+      wholeEdge,
+      wholeNode,
+      ignoreHideElement,
+    ).map(element => element.getData());
   }
   /**
    * 获取选中的元素数据

@@ -1,4 +1,4 @@
-# MiniMap
+# 小地图 MiniMap
 
 ### 启用
 

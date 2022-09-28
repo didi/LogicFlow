@@ -4,6 +4,50 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [1.2.0-alpha.16](https://github.com/didi/LogicFlow/compare/examples@1.2.0-alpha.15...examples@1.2.0-alpha.16) (2022-07-27)
+## [1.1.29](https://github.com/didi/LogicFlow/compare/examples@1.1.28...examples@1.1.29) (2022-09-24)
+
+
+### Bug Fixes
+
+* Fix typo: currrentProperties -> currentProperties ([71650b7](https://github.com/didi/LogicFlow/commit/71650b7c51d1ffd9c8b828f26ad2189e3b9cb7a4))
+
+
+
+
+
+## [1.1.28](https://github.com/didi/LogicFlow/compare/examples@1.1.27...examples@1.1.28) (2022-09-17)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [1.1.27](https://github.com/didi/LogicFlow/compare/examples@1.1.26...examples@1.1.27) (2022-09-13)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [1.1.26](https://github.com/didi/LogicFlow/compare/examples@1.1.25...examples@1.1.26) (2022-08-27)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [1.1.25](https://github.com/didi/LogicFlow/compare/examples@1.1.24...examples@1.1.25) (2022-08-21)
+
+**Note:** Version bump only for package examples
+
+
+
+
+
+## [1.1.24](https://github.com/didi/LogicFlow/compare/examples@1.1.23...examples@1.1.24) (2022-08-11)
 
 **Note:** Version bump only for package examples
 
@@ -12,6 +56,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [1.2.0-alpha.15](https://github.com/didi/LogicFlow/compare/examples@1.1.22...examples@1.2.0-alpha.15) (2022-07-26)
+## [1.1.23](https://github.com/didi/LogicFlow/compare/examples@1.1.22...examples@1.1.23) (2022-08-04)
 
 
 ### Bug Fixes

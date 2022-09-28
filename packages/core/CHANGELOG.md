@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [1.2.0-alpha.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.15...@logicflow/core@1.2.0-alpha.16) (2022-07-27)
+## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.28...@logicflow/core@1.1.29) (2022-09-24)
 
 
 ### Bug Fixes
@@ -15,6 +16,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [1.2.0-alpha.15](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.22...@logicflow/core@1.2.0-alpha.15) (2022-07-26)
+* Fix typo: currrentProperties -> currentProperties ([71650b7](https://github.com/didi/LogicFlow/commit/71650b7c51d1ffd9c8b828f26ad2189e3b9cb7a4))
+* Fix typo: getBackgroud -> getBackground ([3ea0c36](https://github.com/didi/LogicFlow/commit/3ea0c369747b75b321a95b22af75d2afc07b9c7a))
+* Fix typo: getCorssPointOfLine -> getCrossPointOfLine ([a2c44b0](https://github.com/didi/LogicFlow/commit/a2c44b09518f089df98eec711ea9b51f8351ac24))
+
+
+### Features
+
+* update turbo plugin ([ed512ca](https://github.com/didi/LogicFlow/commit/ed512ca21d21829cd7c114140b006964fc4090e4))
+
+
+
+
+
+## [1.1.28](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.27...@logicflow/core@1.1.28) (2022-09-17)
+
+
+### Features
+
+* add api delete node and edge property ([9a7c729](https://github.com/didi/LogicFlow/commit/9a7c729c463f5de555d102aa8d22341adf9b3db7))
+
+
+
+
+
+## [1.1.27](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.26...@logicflow/core@1.1.27) (2022-09-13)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+## [1.1.26](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.25...@logicflow/core@1.1.26) (2022-08-27)
 
 
 ### Bug Fixes
@@ -33,6 +67,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * typo error ([5b878ae](https://github.com/didi/LogicFlow/commit/5b878aeb8bf783b059645cffb5d7a2c11400dbf9))
 * use autoExpand ([c03b9ce](https://github.com/didi/LogicFlow/commit/c03b9ce2cb1b39957c62f46a3b87d8cfedfd8912))
 * use clone object ([9e1f7a0](https://github.com/didi/LogicFlow/commit/9e1f7a014634713d5178d471458adfd3a0ce216e))
+* 修正 BaseEdgeModel 构造函数属性初始化顺序 ([b4f8f3a](https://github.com/didi/LogicFlow/commit/b4f8f3a0066f6cb0b95c79c4b5febbcf833a7386))
+
+
+### Features
+
+* 增加 edgeGenerator 选项, 可自定义连边规则 ([a9aff50](https://github.com/didi/LogicFlow/commit/a9aff50b87559c9549d2eb6943797a75e09d62a3))
+
+
+
+
+
+## [1.1.25](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.24...@logicflow/core@1.1.25) (2022-08-21)
 
 
 ### Features
@@ -44,6 +90,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * history support add snapshot ([638da90](https://github.com/didi/LogicFlow/commit/638da90ca713ecb7112d6d0d45ab7097776d134a))
 * support autowrap text custom class name ([a2ca253](https://github.com/didi/LogicFlow/commit/a2ca253bc95dcb135f5c27232f39ec5badc08aca))
 * update mobx and refactor history ([6ac6b9e](https://github.com/didi/LogicFlow/commit/6ac6b9ea42b13a5d0e6291a4634fd430ad4ba6e2))
+* group add isAllowAppendIn to support pick node append in group ([e54f798](https://github.com/didi/LogicFlow/commit/e54f79845996e763098cb5749100c76063160023))
+
+
+
+
+
+## [1.1.24](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.23...@logicflow/core@1.1.24) (2022-08-11)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
+## [1.1.23](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.22...@logicflow/core@1.1.23) (2022-08-04)
+
+**Note:** Version bump only for package @logicflow/core
 
 
 

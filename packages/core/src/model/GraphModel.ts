@@ -22,7 +22,7 @@ import { updateTheme } from '../util/theme';
 import EventEmitter from '../event/eventEmitter';
 import { snapToGrid, getGridOffset } from '../util/geometry';
 import { isPointInArea } from '../util/graph';
-import { getClosestPointOfPolyline } from '../util/edge';
+import { getClosestPointOfPolyline, createEdgeGenerator } from '../util/edge';
 import { formatData } from '../util/compatible';
 import { getNodeAnchorPosition, getNodeBBox } from '../util/node';
 import { createUuid } from '../util';
@@ -82,6 +82,10 @@ class GraphModel {
    * @see todo docs link
    */
   idGenerator: (type?: string) => string;
+  /**
+   * 节点间连线、连线变更时的边的生成规则
+   */
+  edgeGenerator: Definition['edgeGenerator'];
   /**
    * 节点移动规则判断
    * 在节点移动的时候，会出发此数组中的所有规则判断
@@ -200,6 +204,7 @@ class GraphModel {
       background = {},
       grid,
       idGenerator,
+      edgeGenerator,
       animation,
     } = options;
     this.background = background;
@@ -227,6 +232,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
   }
@@ -316,12 +322,14 @@ class GraphModel {
    * @param rightBottomPoint 表示区域右下角的点
    * @param wholeEdge 是否要整个边都在区域内部
    * @param wholeNode 是否要整个节点都在区域内部
+   * @param ignoreHideElement 是否忽略隐藏的节点
    */
   getAreaElement(
     leftTopPoint: PointTuple,
     rightBottomPoint: PointTuple,
     wholeEdge = true,
     wholeNode = true,
+    ignoreHideElement = false,
   ) {
     const areaElements = [];
     const elements = [];
@@ -329,7 +337,10 @@ class GraphModel {
     this.edges.forEach(edge => elements.push(edge));
     for (let i = 0; i < elements.length; i++) {
       const currentItem = elements[i];
-      if (this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)) {
+      if (
+        (!ignoreHideElement || currentItem.visible)
+        && this.isElementInArea(currentItem, leftTopPoint, rightBottomPoint, wholeEdge, wholeNode)
+      ) {
         areaElements.push(currentItem);
       }
     }
@@ -626,7 +637,8 @@ class GraphModel {
     }
     this.edges.forEach((edge) => {
       if (edge.id === oldId) {
-        edge.id = newId;
+        // edge.id = newId;
+        edge.changeEdgeId(newId);
       }
     });
     return newId;
@@ -717,7 +729,8 @@ class GraphModel {
     if (!Model) {
       throw new Error(`找不到${nodeOriginData.type}对应的节点，请确认是否已注册此类型节点。`);
     }
-    // TODO 元素的 model 不应该直接可以操作 graphModel 的属性，但可以调方法
+    nodeOriginData.x = snapToGrid(nodeOriginData.x, this.gridSize);
+    nodeOriginData.y = snapToGrid(nodeOriginData.y, this.gridSize);
     const nodeModel = new Model(nodeOriginData, this);
     nodeModel.init();
     this.nodes.push(nodeModel);
@@ -765,9 +778,9 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    const r = nodeModel.move(deltaX, deltaY, isIgnoreRule);
+    [deltaX, deltaY] = nodeModel.getMoveDistance(deltaX, deltaY, isignoreRule);
     // 2) 移动边
-    r && this.moveEdge(nodeId, deltaX, deltaY);
+    this.moveEdge(nodeId, deltaX, deltaY);
   }
 
   /**

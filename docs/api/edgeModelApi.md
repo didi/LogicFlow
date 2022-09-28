@@ -54,7 +54,7 @@ LogicFlow在`model`上还维护一些属性，开发者可以通过这些属性�
 | sourceAnchorId| string | - | 连线起点锚点id |
 | targetAnchorId| string | - | 连线终点锚点id |
 | customTextPosition| boolean | - | 自定义连线文本位置 |
-
+| virtual | boolean| - | 是否为虚拟节点，默认false。当为true时导出数据不会包含此元素。 `v1.1.24`|
 
 ## 样式属性
 
@@ -182,13 +182,25 @@ const properties = edgeModel.getProperties();
 
 ## setProperties
 
-设置节点properties
+设置边properties
 
 ```js
 const edgeModel = lf.getEdgeModelById('edge_1');
 edgeModel.setProperties({
   // 自定义properties
 })
+
+```
+
+## deleteProperty
+
+删除边的某个属性
+
+```js
+lf.on("edge:click", ({ data }) => {
+  lf.getEdgeModelById(data.id).deleteProperty('disabled');
+  lf.getEdgeModelById(data.id).deleteProperty('scale');
+});
 
 ```
 

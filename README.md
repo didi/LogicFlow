@@ -138,17 +138,26 @@ lf.render(data);
 
 基于上述拓展的能力，前端研发能够根据实际业务场景的需求，灵活的开发出所需的节点、组件等。下面有两个基于 LogicFlow 拓展能力做出的流程图：
 
-BPMN： http://logic-flow.org/examples/#/extension/bpmn
+### BPMN应用demo
+
+示例地址：http://logic-flow.org/examples/#/extension/bpmn
+
+源码地址：https://github.com/didi/LogicFlow/tree/master/examples/src/pages/usage/bpmn
 
 ![图片:bpmn](https://dpubstatic.udache.com/static/dpubimg/CS6S6q9Yxf/lfexample2.gif)
 
-审批流程：http://logic-flow.org/examples/#/extension/approve
+
+#### 审批流应用demo
+
+示例地址：http://logic-flow.org/examples/#/usage/approve
+
+源码地址：https://github.com/didi/LogicFlow/tree/master/examples/src/pages/usage/approve
 
 ![图片: 审批流](https://dpubstatic.udache.com/static/dpubimg/uBeSlMEytL/lfexample3.gif)
 
 #### vue 应用 demo
 
-> 源码地址 [https://github.com/xinxin93/logicflow_vue_demo](https://github.com/xinxin93/logicflow_vue_demo)
+源码地址 [https://github.com/xinxin93/logicflow_vue_demo](https://github.com/xinxin93/logicflow_vue_demo)
 
 ![https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif](https://dpubstatic.udache.com/static/dpubimg/e35cef10-bb7c-4662-a494-f5aac024c092.gif)
 
@@ -157,7 +166,9 @@ BPMN： http://logic-flow.org/examples/#/extension/bpmn
 
 LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生成数据在流程引擎可执行的流程图工具。也支持实现类似ProcessOn这种自由控制样式的作图工具。
 
-> 源码地址：[http://logic-flow.org/mvp/index.html](http://logic-flow.org/mvp/index.html)
+示例地址：[http://logic-flow.org/mvp/index.html](http://logic-flow.org/mvp/index.html)
+
+源码地址：[https://github.com/didi/LogicFlow/tree/master/site/mvp](https://github.com/didi/LogicFlow/tree/master/site/mvp)
 
 示例图如下:
 ![logicflow-1.0-4.png](/docs/assets/images/LogicFlow-1.0-4.png)
@@ -165,7 +176,7 @@ LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生�
 
 #### vue3 node-red风格示例
 
-> 源码地址: [https://github.com/Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
+源码地址: [https://github.com/Logic-Flow/logicflow-node-red-vue3](https://github.com/Logic-Flow/logicflow-node-red-vue3)
 
 ![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
 

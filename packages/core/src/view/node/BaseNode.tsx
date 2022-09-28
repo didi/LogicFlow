@@ -50,9 +50,6 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       eventCenter,
       model,
     });
-    this.state = {
-      isHovered: false,
-    };
   }
   abstract getShape();
   getAnchorShape(anchorData): h.JSX.Element {
@@ -61,13 +58,12 @@ export default abstract class BaseNode extends Component<IProps, IState> {
   getAnchors() {
     const { model, graphModel } = this.props;
     const {
-      isSelected, isHitable, isDragging,
+      isSelected, isHitable, isDragging, isShowAnchor,
     } = model;
-    const { isHovered } = this.state;
-    if (isHitable && (isSelected || isHovered) && !isDragging) {
-      const edgeStyle = model.getAnchorLineStyle();
+    if (isHitable && (isSelected || isShowAnchor) && !isDragging) {
       return map(model.anchors,
         (anchor, index) => {
+          const edgeStyle = model.getAnchorLineStyle(anchor);
           const style = model.getAnchorStyle(anchor);
           return (
             <Anchor
@@ -240,7 +236,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
-    if (time > 200) return; // 事件大于200ms，认为是拖拽。
+    if (time > 200) return; // 事件大于200ms，认为是拖拽, 不触发click事件。
     const { model, graphModel } = this.props;
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
@@ -299,21 +295,17 @@ export default abstract class BaseNode extends Component<IProps, IState> {
   };
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props;
-    this.toFront();
     this.startTime = new Date().getTime();
     const { editConfigModel } = graphModel;
     if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev);
     }
   };
-  // 不清楚以前为啥要把hover状态放到model中，先改回来。
+  // 为什么将hover状态放到model中？
+  // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverON = (ev) => {
-    const { isHovered } = this.state;
-    if (isHovered) return;
-    this.setState({
-      isHovered: true,
-    });
     const { model, graphModel } = this.props;
+    if (model.isHovered) return;
     const nodeData = model.getData();
     model.setHovered(true);
     graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
@@ -322,11 +314,9 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     });
   };
   setHoverOFF = (ev) => {
-    this.setState({
-      isHovered: false,
-    });
     const { model, graphModel } = this.props;
     const nodeData = model.getData();
+    if (!model.isHovered) return;
     model.setHovered(false);
     graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
@@ -383,7 +373,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         <g
           className={this.getStateClassName()}
           onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleClick}
+          onClick={this.handleClick}
           onMouseEnter={this.setHoverON}
           onMouseOver={this.setHoverON}
           onMouseLeave={this.setHoverOFF}

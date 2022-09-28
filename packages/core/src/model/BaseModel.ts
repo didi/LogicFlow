@@ -59,7 +59,14 @@ interface IBaseModel {
    * 元素是否被选中
    */
   isSelected: boolean;
+  /**
+   * 节点是否显示
+   */
   visible: boolean;
+  /**
+   * 节点是否可以通过getGraphData获取
+   */
+  virtual: boolean;
   /**
    * 元素堆叠是层级，默认情况下节点zIndex值为1，边zIndex为0。
    * todo：写完善

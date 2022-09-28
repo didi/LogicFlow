@@ -9,6 +9,14 @@ const lf = new LogicFlow({
   height: 800
 })
 
+lf.extension.control.addItem({
+  iconClass: "custom-minimap",
+  title: "",
+  text: "框选",
+  onClick: (lf, ev) => {
+    lf.extension.selectionSelect.openSelectionSelect()
+  }
+})
 
 class MyGroup extends GroupNode.view {}
 
@@ -30,6 +38,12 @@ class MyGroupModel extends GroupNode.model {
     style.strokeWidth = 1;
     return style;
   }
+  // isAllowAppendIn(nodeData) {
+  //   if (nodeData.type === 'rect') {
+  //     return false
+  //   }
+  //   return true
+  // }
 }
 
 class MyGroup1 extends GroupNode.view {}
@@ -64,11 +78,14 @@ class MyGroupModel1 extends GroupNode.model {
     }
     return style;
   }
+  // isAllowAppendIn(nodeData) {
+  //   return false
+  // }
 }
 
 
 const rect = {
-  type: 'rect',
+  type: 'my-group',
   label: 'rect',
   icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAAHeEJUAAAAABGdBTUEAALGPC/xhBQAAAvVJREFUOBGNVEFrE0EU/mY3bQoiFlOkaUJrQUQoWMGePLX24EH0IIoHKQiCV0G8iE1covgLiqA/QTzVm1JPogc9tIJYFaQtlhQxqYjSpunu+L7JvmUTU3AgmTfvffPNN++9WSA1DO182f6xwILzD5btfAoQmwL5KJEwiQyVbSVZ0IgRyV6PTpIJ81E5ZvqfHQR0HUOBHW4L5Et2kQ6Zf7iAOhTFAA8s0pEP7AXO1uAA52SbqGk6h/6J45LaLhO64ByfcUzM39V7ZiAdS2yCePPEIQYvTUHqM/n7dgQNfBKWPjpF4ISk8q3J4nB11qw6X8l+FsF3EhlkEMfrjIer3wJTLwS2aCNcj4DbGxXTw00JmAuO+Ni6bBxVUCvS5d9aa04+so4pHW5jLTywuXAL7jJ+D06sl82Sgl2JuVBQn498zkc2bGKxULHjCnSMadBKYDYYHAtsby1EQ5lNGrQd4Y3v4Zo0XdGEmDno46yCM9Tk+RiJmUYHS/aXHPNTcjxcbTFna000PFJHIVZ5lFRqRpJWk9/+QtlOUYJj9HG5pVFEU7zqIYDVsw2s+AJaD8wTd2umgSCCyUxgGsS1Y6TBwXQQTFuZaHcd8gAGioE90hlsY+wMcs30RduYtxanjMGal8H5dMW67dmT1JFtYUEe8LiQLRsPZ6IIc7A4J5tqco3T0pnv/4u0kyzrYUq7gASuEyI8VXKvB9Odytv6jS/PNaZBln0nioJG/AVQRZvApOdhjj3Jt8QC8Im09SafwdBdvIpztpxWxpeKCC+EsFdS8DCyuCn2munFpL7ctHKp+Xc5cMybeIyMAN33SPL3ZR9QV1XVwLyzHm6Iv0/yeUuUb7PPlZC4D4HZkeu6dpF4v9j9MreGtMbxMMRLIcjJic9yHi7WQ3yVKzZVWUr5UrViJvn1FfUlwe/KYVfYyWRLSGNu16hR01U9IacajXPei0wx/5BqgInvJN+MMNtNme7ReU9SBbgntovn0kKHpFg7UogZvaZiOue/q1SBo9ktHzQAAAAASUVORK5CYII=',
 }
@@ -183,7 +200,6 @@ document.querySelector('#render').addEventListener('click', () => {
     ]
   })
 })
-
-document.querySelector('#selection').addEventListener('click', () => {
-  lf.extension.selectionSelect.openSelectionSelect();
+lf.on('group:not-allowed', (data) => {
+  console.log('此节点不允许添加到分组中', data)
 })

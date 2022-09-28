@@ -67,6 +67,7 @@ export enum EventType {
   ANCHOR_DRAGSTART = 'anchor:dragstart',
   ANCHOR_DRAG = 'anchor:drag',
   ANCHOR_DROP = 'anchor:drop',
+  ANCHOR_DRAGEND = 'anchor:dragend',
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',
   BLANK_DRAG = 'blank:drag',

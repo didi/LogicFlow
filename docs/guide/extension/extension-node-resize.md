@@ -1,4 +1,4 @@
-# 节点缩放
+# 节点缩放 NodeResize
 ## 使用
 
 LogicFlow在extension包中提供了`RectResize`、`EllipseResize`、`DiamonResize`、`HtmlResize`这4种支持缩放的基础节点, 每个节点都有`view`和`model`这两个属性。节点的缩放也是利用LogicFlow的自定义节点机制，使开发者可以继承这4种可以缩放的节点，来实现节点的缩放。
@@ -87,6 +87,10 @@ export default {
 };
 
 ```
+
+::: tip 提示
+对于继承`HtmlResize`的节点，自定义`view`请继续使用自定义HTML节点的`view`的`setHtml`方法。
+:::
 
 ## 事件
 

@@ -88,6 +88,8 @@
     .buttons {
       position: absolute;
       z-index: 1;
+    }
+    .button-list {
       display: flex;
       align-items: center;
     }
@@ -96,31 +98,38 @@
 
 <body>
   <div class="buttons">
-    <div class="rect" onmousedown="mouseDownRect()"></div>
-    <div class="circle" onmousedown="mouseDownCircle()"></div>
-    <div class="text" onmousedown="mouseDownText()">文本</div>
-    <button class="text" onClick="setArrow(1)">箭头1</button>
-    <button class="text" onClick="setArrow(2)">箭头2</button>
-    <button onClick="focusOn()">定位到五角星</button>
-    <button id="undo" onClick="undo()" disabled>上一步</button>
-    <button id="redo" onClick="redo()" disabled>下一步</button>
-    <button id="clearData" onClick="clearData()">清空数据</button>
-    <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
-    <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
-    <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
-    <button onClick="getData()">获取数据</button>
-    <button onClick="getRefreshData()">属性流程图节点id</button>
-    <button onClick="setProperties()">设置属性</button>
-    <button onClick="setZoom()">设置大小</button>
-    <button onClick="selectElement()">选中指定节点</button>
-    <button onClick="triggerLine()">触发边</button>
-    <button onClick="translateCenter()">居中</button>
-    <button onClick="fitView()">适应屏幕</button>
-    <button onClick="getNodeEdges()">获取节点所有的边</button>
-    <button onClick="reRender()">重新渲染数据</button>
-    <button onClick="openEdgeAnimation()">启动边动画</button>
-    <button onClick="closeEdgeAnimation()">关闭边动画</button>
-    <button onClick="showCanvas()">显示流程图</button>
+    <div class="button-list">
+      <button class="text" onClick="setArrow('half')">箭头1</button>
+      <button class="text" onClick="setArrow('empty')">箭头2</button>
+      <button onClick="focusOn()">定位到五角星</button>
+      <button id="undo" onClick="undo()" disabled>上一步</button>
+      <button id="redo" onClick="redo()" disabled>下一步</button>
+      <button id="clearData" onClick="clearData()">清空数据</button>
+      <button id="changeType" onClick="changeNodeType()">切换节点为五角星</button>
+      <button id="changeConfig" onClick="changeEditConfig()">修改配置</button>
+      <button id="changeConfig2" onClick="focusOut()">取消编辑</button>
+      <button id="changeEdgeId" onClick="changeEdgeId()">修改边Id</button>
+    </div>
+    <div class="button-list">
+      <button onClick="getData()">获取数据</button>
+      <button onClick="getRefreshData()">属性流程图节点id</button>
+      <button onClick="setProperties()">设置属性</button>
+      <button onClick="setZoom()">设置大小</button>
+      <button onClick="selectElement()">选中指定节点</button>
+      <button onClick="triggerLine()">触发边</button>
+      <button onClick="translateCenter()">居中</button>
+      <button onClick="fitView()">适应屏幕</button>
+      <button onClick="getNodeEdges()">获取节点所有的边</button>
+      <button onClick="openEdgeAnimation()">启动边动画</button>
+      <button onClick="closeEdgeAnimation()">关闭边动画</button>
+      <button onClick="showCanvas()">显示流程图</button>
+      <button onClick="deleteNode()">删除节点1</button>
+    </div>
+    <div class="button-list">
+      <div class="rect" onmousedown="mouseDownRect()"></div>
+      <div class="circle" onmousedown="mouseDownCircle()"></div>
+      <div class="text" onmousedown="mouseDownText()">文本</div>
+    </div>
   </div>
   <div id="app"></div>
   <div id="debug"></div>
@@ -129,6 +138,9 @@
     <script>
       window.onload = function () {
         InitLogicFlow();
+        InitElementFunction();
+        InitLogicFlowEvent();
+        window.showCanvas()
       }
     </script>
 
@@ -391,55 +403,38 @@
 
         getEndArrow() {
           const { model, graphModel } = this.props;
-          const { id } = model;
-          const { arrow } = graphModel.theme;
-          const { offset, verticalLength } = arrow;
+          const { id, properties: { arrowType } } = model;
           const { stroke, strokeWidth } = this.getArrowStyle();
-          const markerAttr = {
-            id: `marker-end-${id}`,
-            refX: -1,
-            overflow: 'visible',
-            orient: 'auto',
-            markerUnits: 'userSpaceOnUse'
-          }
           const pathAttr = {
             stroke,
-            strokeWidth,
-            d: 'M 0 0 -10 -5 -10 5 z'
+            strokeWidth
           }
-          return (
-             h("g", {},[
-              h("marker", { ...markerAttr }, [
-                h('path', {
-                  ...pathAttr,
-                  fill: stroke,
-                })
-              ]),
-              h("marker", { ...markerAttr, id: `marker-end-1-${id}` }, [
-                h('path', {
-                  ...pathAttr,
-                  d: 'M 0 0 -10 5'
-                })
-              ]),
-              h("marker", { ...markerAttr, id: `marker-end-2-${id}` }, [
-                h('path', {
-                  ...pathAttr,
-                  fill: stroke,
-                  d: 'M -10 0  -20 -5 -30 0 -20 5 z'
-                })
-              ])
-            ])
-          )
+          // 空心箭头
+          if (arrowType === 'empty') {
+            return h('path', {
+              ...pathAttr,
+              fill: '#FFF',
+              d: 'M -10 0  -20 -5 -30 0 -20 5 z'
+            })
+          } else if (arrowType === 'half') { // 半箭头
+            return (
+              h('path', {
+                ...pathAttr,
+                d: 'M 0 0 -10 5'
+              })
+            )
+          }
+          return h('path', {
+            ...pathAttr,
+            fill: stroke,
+            d: 'M 0 0 -10 -5 -10 5 z'
+          })
         }
       }
       class ConnectionModel extends PolylineEdgeModel {
         getEdgeStyle() {
           const style = super.getEdgeStyle()
           this.textWidth = 200;
-          // this.arrowConfig = {
-          //   markerEnd: `url(#marker-end-${this.id})`,
-          //   markerStart: `url(#marker-start-${this.id})`,
-          // };
           const { properties } = this;
           if (properties.isActive) {
             style.stroke = 'red'
@@ -477,6 +472,8 @@
           // hideAnchors: true,
           // width: 1700,
           // height: 1000,
+          // width: 1200,
+          height: 400,
           // adjustNodePosition: false,
           // isSilentMode: true,
           // overlapMode: 1,
@@ -485,27 +482,33 @@
           multipleSelectKey: 'meta',
           isPropertiesChangeHistory: false,
           // disabledTools: ['multipleSelect'],
+          multipleSelectKey: 'shift',
+          disabledTools: ['multipleSelect'],
+          // autoExpand: true,
+          // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
           // stopMoveGraph: true,
           adjustEdgeStartAndEnd: true,
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
-            shortcuts: [
-              {
-                keys: ["backspace"],
-                callback: () => {
-                  const r = window.confirm("确定要删除吗？");
-                  if (r) {
-                    const elements = lf.getSelectElements(true);
-                    lf.clearSelectElements();
-                    elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
-                    elements.nodes.forEach((node) => lf.deleteNode(node.id));
-                  }
-                  // console.log(1)
-                }
-              }
-            ]
+            // shortcuts: [
+            //   {
+            //     keys: ["backspace"],
+            //     callback: () => {
+            //       const r = window.confirm("确定要删除吗？");
+            //       if (r) {
+            //         const elements = lf.getSelectElements(true);
+            //         lf.clearSelectElements();
+            //         elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
+            //         elements.nodes.forEach((node) => lf.deleteNode(node.id));
+            //         const graphData = lf.getGraphData()
+            //         console.log(42, graphData, graphData.nodes.length)
+            //       }
+            //       // console.log(1)
+            //     }
+            //   }
+            // ]
 
           },
           partial: true,
@@ -514,8 +517,13 @@
           },
           grid: true,
           edgeTextDraggable: true,
-          edgeType: 'animationEdge',
+          // edgeType: 'bezier',
           // 全局自定义id
+          edgeGenerator: (sourceNode, targetNode, currentEdge) => {
+            // 起始节点类型 rect 时使用 自定义的边 custom-edge
+            if (sourceNode.type === 'rect') return 'bezier'
+            return 'polyline'
+          },
           idGenerator(type) {
             return type + '_' + Math.random()
           }
@@ -577,8 +585,8 @@
               stroke: 'red',
             },
             arrow: {
-              offset: 12, // 箭头长度
-              verticalLength: 4, // 箭头垂直于边的距离
+              offset: 4, // 箭头长度
+              verticalLength: 2, // 箭头垂直于边的距离
             }
           }
         );
@@ -760,6 +768,7 @@
             }
           ]
         });
+        lf.setDefaultEdgeType('polyline');
       }
     </script>
 
@@ -768,6 +777,186 @@
       InitElementFunction()
       function InitElementFunction() {
         console.log(LogicFlow.version)
+        window.showCanvas = function () {
+          document.querySelector('#app').style.display = 'block'
+          lf.render({
+            nodes: [
+              // {
+              //   type: 'uml',
+              //   x: 100,
+              //   y: 100,
+              //   id: 10,
+              //   properties: {
+              //     name: 'haod',
+              //     body: '哈哈哈哈'
+              //   }
+              // },
+              // {
+              //   type: 'uml',
+              //   x: 300,
+              //   y: 100,
+              //   id: 110,
+              //   properties: {
+              //     name: 'hello',
+              //     body: 'better world'
+              //   }
+              // },
+              // {
+              //   type: 'uml',
+              //   x: 300,
+              //   y: 200,
+              //   id: 1110,
+              //   properties: {
+              //     name: 'hello',
+              //     body: 'better world'
+              //   }
+              // },
+              // {
+
+              //   type: 'square',
+              //   x: 300,
+              //   y: 300,
+              //   id: 11,
+              //   text: '啊大大',
+              //   properties: {
+              //     isUsed: true
+              //   }
+              // },
+              // {
+
+              //   type: 'square',
+              //   x: 400,
+              //   y: 300,
+              //   id: 111,
+              //   text: '啊大大',
+              //   properties: {
+              //     isUsed: false
+              //   }
+              // },
+              // {
+              //   type: 'text',
+              //   x: 200,
+              //   y: 400,
+              //   text: {
+              //     x: 200,
+              //     y: 400,
+              //     value: '我是单独的文本节点',
+              //   }
+              // },
+              // {
+              //   type: 'polygon',
+              //   x: 200,
+              //   y: 200,
+              //   id: 50,
+              //   text: 'hhhh',
+              // },
+              // {
+              //   type: 'diamond',
+              //   x: 220,
+              //   y: 220,
+              //   rx: 30,
+              //   ry: 50,
+              //   id: 524,
+              //   text: 'diamond',
+              // },
+              // {
+              //   type: 'user',
+              //   x: 600,
+              //   y: 200,
+              //   id: 20,
+              //   text: {
+              //     value: 'user',
+              //     x: 600,
+              //     y: 200,
+              //   },
+              //   properties: {
+              //     size: 1
+              //   }
+              // },
+              // {
+              //   type: 'user',
+              //   x: 500 * Math.random(),
+              //   y: 600 * Math.random(),
+              //   id: 21,
+              //   properties: {
+              //     size: 2
+              //   }
+              // },
+              // {
+              //   type: 'star',
+              //   x: 400,
+              //   y: 300,
+              //   id: '2222'
+              // },
+              // {
+              //   type: 'combine',
+              //   x: 222,
+              //   y: 40,
+              //   id: 30,
+              // },
+              // {
+              //   type: 'circle',
+              //   x: 500 * Math.random(),
+              //   y: 600 * Math.random(),
+              //   fill: 'blue',
+              //   id: 40,
+              // },
+              {
+                type: 'rect',
+                x: 500,
+                y: 200,
+              },
+              {
+                id: 2, 
+                type: 'circle',
+                x: 100,
+                y: 200,
+              },
+              {
+                id: 1,
+                type: 'polygon',
+                x: 300,
+                y: 200,
+              },
+              {
+                type: 'ellipse',
+                x: 100,
+                y: 400,
+              },
+              {
+                type: 'diamond',
+                x: 300,
+                y: 400,
+              },
+              {
+                type: 'text',
+                x: 500,
+                y: 400,
+                text: '33333'
+              }
+            ].concat(Array.of(...Array(0)).map((item, i) => {
+              return {
+                id: 'node_' + i,
+                type: 'circle',
+                x: (i % 4) * 150,
+                y: (i / 4) * 150,
+              }
+            })),
+            edges: [
+              {
+                id: 'connection_1',
+                type: 'connection',
+                sourceNodeId: 1,
+                targetNodeId: 2,
+                properties: {
+                  // arrow: {
+                  //   markerEnd: 'url(#marker-end-1-connection_1)'
+                  // }
+                }
+              }
+            ]
+          });
+        }
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
             type: 'text',
@@ -778,8 +967,6 @@
           lf.dnd.startDrag({
             type: 'circle',
             r: 25,
-            x: 100,
-            y: 100,
           })
         }
         window.reRender = function reRender() {
@@ -872,17 +1059,10 @@
         window.setArrow = function (arrowName) {
           const { edges } = lf.getSelectElements()
           edges.forEach(({ id, properties }) => {
-            const markerEndName = `url(#marker-end-${ arrowName }-${ id })`
+            console.log(4444, properties);
             lf.setProperties(id, {
-              arrow: {
-                ...properties.arrowConfig,
-                markerEnd: markerEndName
-              }
+              arrowType: arrowName
             })
-            const edgeModel = lf.getEdgeModelById(id)
-            const { arrowConfig } = edgeModel
-            edgeModel.arrowConfig.markerEnd = markerEndName
-            console.log(edgeModel)
           })
         }
         window.setZoom = function () {
@@ -920,6 +1100,15 @@
         window.showCanvas = function() {
           document.querySelector('#app').style.display = 'block'
           lf.render()
+        window.deleteNode = function () {
+          const d = lf.deleteNode(1)
+          console.log(d, lf.getGraphData().nodes.length)
+        }
+        window.changeEdgeId = function () {
+          const { edges } = lf.getGraphData();
+          edges.forEach(({ id }) => {
+            lf.changeEdgeId(id, 'edge_' + id)
+          })
         }
       }
     </script>
@@ -945,8 +1134,18 @@
           // console.log(lf.getGraphData())
           // lf.changeNodeId(data.id)
         })
+        lf.on("blank:contextmenu", ({ e, position }) => {
+          console.log("Ok");
+          lf.addNode({
+            type: "circle",
+            x: position.canvasOverlayPosition.x,
+            y: position.canvasOverlayPosition.y
+          });
+        });
         lf.on('node:delete',()=> {
           console.log('nodeup')
+          const graphData = lf.getGraphData()
+          console.log(graphData, graphData.nodes.length)
         })
         lf.on('node:contextmenu', () => {
           console.log(444)

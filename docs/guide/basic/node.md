@@ -121,7 +121,7 @@ lf.render({
 
 从上面的代码，可以看到，在自定义一个节点的时候，我们需要定义节点的`model`和`view`。这是因为由于LogicFlow基于MVVM模式，所有自定义节点和连线的时候，我们需要自定义`view`和`model`。大多数情况下，需要通过重写定义`model`上获取样式相关的方法和重写`view`上的`getShape`来定义更复杂的节点外观。
 
-::: tip 
+::: tip 提示
 
 LogicFlow为了开发的时候将开发体验和现在前端流行的开发体验对齐，也为了在代码层面更好的理解，让更多的人可以参与进来，我们基于preact、mobx以MVVM模式进行开发。如果大家熟悉react开发的话，可以直接阅读我们的源码，你们可以发现整个项目阅读起来难度和你自己开发的项目差不多。**我们欢迎大家一起参与进来。**
 
@@ -408,17 +408,15 @@ path标签属性：
 ```ts
 import { RectNode, RectNodeModel } from '@logicflow/core';
 class SquareModel extends RectNodeModel {
-  setAttributes() {
-    const size = 80;
+  initNodeData(data) {
+    super.initNodeData(data);
+
     const circleOnlyAsTarget = {
       message: "正方形节点下一个节点只能是圆形节点",
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
         return targetNode.type === "circle";
       },
     };
-
-    this.width = size;
-    this.height = size;
     this.sourceRules.push(circleOnlyAsTarget);
   }
 }
@@ -502,7 +500,9 @@ lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
 import { RectNode, RectNodeModel } from '@logicflow/core';
 
 class SquareModel extends RectNodeModel {
-  setAttribute() {
+  initNodeData(data) {
+    super.initNodeData(data);
+
     const rule = {
       message: "只允许从右边的锚点连出",
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
@@ -603,7 +603,7 @@ class UmlModel extends HtmlNodeModel {
   }
 }
 class UmlNode extends HtmlNode {
-  currrentProperties: string;
+  currentProperties: string;
   setHtml(rootEl: HTMLElement) {
     const { properties } = this.props.model;
   

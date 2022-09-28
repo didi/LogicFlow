@@ -33,20 +33,20 @@ class Control extends Component<IProps> {
     this.index = props.index;
     this.nodeModel = props.model;
     this.graphModel = props.graphModel;
-    const { gridSize } = this.graphModel;
     // 为保证对齐线功能正常使用，step默认是网格grid的两倍，
     // 没有网格设置，默认为2，保证坐标是整数
-    let step = 2;
-    if (gridSize > 1) {
-      step = 2 * gridSize;
-    }
-    if (this.nodeModel.gridSize) {
-      step = 2 * this.nodeModel.gridSize;
-    }
+    // let step = 2;
+    // if (gridSize > 1) {
+    //   step = 2 * gridSize;
+    // }
+    // if (this.nodeModel.gridSize) {
+    //   step = 2 * this.nodeModel.gridSize;
+    // }
     this.state = {};
     this.dragHandler = new StepDrag({
-      onDragging: this.onDragging,
-      step,
+      onDraging: this.onDragging,
+      onDragEnd: this.onDragEnd,
+      step: 1,
     });
   }
   getNodeEdges(nodeId) {
@@ -320,8 +320,10 @@ class Control extends Component<IProps> {
     const newNodeSize = { id, modelType, type, ...afterNode };
     this.graphModel.eventCenter.emit('node:resize', { oldNodeSize, newNodeSize });
   };
-  onDragging = ({ deltaX, deltaY }) => {
+  onDraging = ({ deltaX, deltaY }) => {
+    const { transformModel } = this.graphModel;
     const { modelType } = this.nodeModel;
+    [deltaX, deltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     // html和矩形的计算方式是一样的，共用一个方法
     if (modelType === ModelType.RECT_NODE || modelType === ModelType.HTML_NODE) {
       this.updateRect({ deltaX, deltaY });
@@ -331,6 +333,15 @@ class Control extends Component<IProps> {
     } else if (modelType === ModelType.DIAMOND_NODE) {
       this.updateDiamond({ deltaX, deltaY });
     }
+  };
+  /**
+   * 由于将拖拽放大缩小改成丝滑模式，这个时候需要在拖拽结束的时候，将节点的位置更新到grid上.
+   */
+  onDragEnd = () => {
+    const { gridSize = 1 } = this.graphModel;
+    const x = gridSize * Math.round(this.nodeModel.x / gridSize);
+    const y = gridSize * Math.round(this.nodeModel.y / gridSize);
+    this.nodeModel.moveTo(x, y);
   };
   render() {
     const {

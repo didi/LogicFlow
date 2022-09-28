@@ -172,7 +172,7 @@ class Anchor extends Component<IProps, IState> {
   };
   onDragEnd = (event) => {
     if (this.t) {
-      clearInterval(this.t);
+      cancelRaf(this.t);
     }
     this.checkEnd(event);
     this.setState({
@@ -185,6 +185,14 @@ class Anchor extends Component<IProps, IState> {
     // 清除掉缓存结果 fix:#320 因为创建边之后，会影响校验结果变化，所以需要重新校验
     this.sourceRuleResults.clear();
     this.targetRuleResults.clear();
+    const {
+      graphModel, nodeModel, anchorData,
+    } = this.props;
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
+      data: anchorData,
+      e: event,
+      nodeModel,
+    });
   };
 
   checkEnd = (event) => {
@@ -216,8 +224,12 @@ class Anchor extends Component<IProps, IState> {
       } = this.targetRuleResults.get(targetInfoId) || {};
       if (isSourcePass && isTargetPass) {
         targetNode.setElementState(ElementState.DEFAULT);
+        const edgeData = graphModel.edgeGenerator(
+          nodeModel.getData(),
+          graphModel.getNodeModelById(info.node.id).getData(),
+        );
         const edgeModel = graphModel.addEdge({
-          type: edgeType,
+          ...edgeData,
           sourceNodeId: nodeModel.id,
           sourceAnchorId: id,
           startPoint: { x, y },

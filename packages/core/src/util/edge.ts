@@ -951,3 +951,24 @@ export const twoPointDistance = (source: Position, target: Position) => {
   // };
   return Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
 };
+
+/**
+ * 包装边生成函数
+ * @param graphModel graph model
+ * @param generator 用户自定义的边生成函数
+ */
+export function createEdgeGenerator(graphModel: any, generator?: Function) {
+  if (typeof generator !== 'function') {
+    return (sourceNode: any, targetNode: any, currentEdge?: any) => Object.assign({
+      type: graphModel.edgeType }, currentEdge);
+  }
+  return (sourceNode: any, targetNode: any, currentEdge?: any) => {
+    const result = generator(sourceNode, targetNode, currentEdge);
+    // 无结果使用默认类型
+    if (!result) return { type: graphModel.edgeType };
+    if (typeof result === 'string') {
+      return Object.assign({}, currentEdge, { type: result });
+    }
+    return Object.assign({ type: result }, currentEdge);
+  };
+}

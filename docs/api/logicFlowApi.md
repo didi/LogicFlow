@@ -45,8 +45,10 @@ const lf = new LogicFlow(options: Options)
 |edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
 |multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
+|edgeGenerator|function| -|-|连接节点及移动边时边的生成规则|
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
-|autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。|
+|autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。 注意，如果出现拖动节点到某个位置画布就不停滚动的问题，是因为初始化画布的时候宽高有问题。如果画布宽高不定，建议关闭autoExpand。|
+|overlapMode|number|-|-|元素重合的堆叠模式，默认为连线在下、节点在上，选中元素在最上面。可以设置为1，表示自增模式（作图工具场景常用）。|
 
 ### `background`
 
@@ -801,6 +803,20 @@ lf.setProperties('aF2Md2P23moN2gasd', {
 })
 ```
 
+## deleteProperty
+
+删除节点属性
+
+```ts
+deleteProperty(id: string, key: string): void
+```
+
+示例：
+
+```js
+lf.deleteProperty('aF2Md2P23moN2gasd', 'isRollbackNode')
+```
+
 ## getProperties
 
 获取节点或者边的自定义属性
@@ -891,6 +907,16 @@ lf.addElements({
 获取指定区域内的所有元素，此区域必须是DOM层。
 
 例如鼠标绘制选区后，获取选区内的所有元素。
+
+入参:
+|名称|类型|默认值|说明|
+|-|-|-|-|
+|leftTopPoint|PointTuple|无| 区域左上方的点 |
+|rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|rightBottomPoint|PointTuple|无| 区域右下角的点 |
+|wholeEdge|boolean|无| 是否要整个边都在区域内部 |
+|wholeNode|boolean|无| 是否要整个节点都在区域内部 |
+|ignoreHideElement|boolean|无| 是否忽略隐藏的节点 |
 
 ```js
 lf.getAreaElement([100, 100], [500, 500])

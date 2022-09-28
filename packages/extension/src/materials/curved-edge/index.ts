@@ -1,18 +1,28 @@
-import { Extension, PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
+import { PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
 
-interface CurvedEdgePlugin extends Extension {
-  [x: string]: any;
-}
-class CurvedEdgeView extends PolylineEdge {
-  static extendKey = 'curvedEdge';
+class CurvedEdge extends PolylineEdge {
+  pointFilter(points) {
+    const allPoints = points;
+    let i = 1;
+    while (i < allPoints.length - 1) {
+      const [x, y] = allPoints[i - 1];
+      const [x1, y1] = allPoints[i];
+      const [x2, y2] = allPoints[i + 1];
+      if ((x === x1 && x1 === x2)
+        || (y === y1 && y1 === y2)) {
+        allPoints.splice(i, 1);
+      } else {
+        i++;
+      }
+    }
+    return allPoints;
+  }
   getEdge() {
-    const {
-      strokeWidth,
-      stroke,
-      strokeDashArray,
-    } = this.props.model.getEdgeStyle();
-    const { points } = this.props.model;
-    const points2 = points.split(' ').map((p) => p.split(',').map(a => Number(a)));
+    const { model } = this.props;
+    const { points, isAnimation, arrowConfig, radius = 5 } = model;
+    const style = model.getEdgeStyle();
+    const animationStyle = model.getEdgeAnimationStyle();
+    const points2 = this.pointFilter(points.split(' ').map((p) => p.split(',').map(a => Number(a))));
     const [startX, startY] = points2[0];
     let d = `M${startX} ${startY}`;
     // 1) 如果一个点不为开始和结束，则在这个点的前后增加弧度开始和结束点。
@@ -20,40 +30,42 @@ class CurvedEdgeView extends PolylineEdge {
     //    如果x相同则前一个点的x也不变，
     //    y为（这个点的y 大于前一个点的y, 则 为 这个点的y - 5；小于前一个点的y, 则为这个点的y+5）
     //    同理，判断这个点与后一个点的x,y是否相同，如果x相同，则y进行加减，如果y相同，则x进行加减
-    // todo: 好丑，看看怎么优化下
-    const space = 5;
     for (let i = 1; i < points2.length - 1; i++) {
       const [preX, preY] = points2[i - 1];
       const [currentX, currentY] = points2[i];
       const [nextX, nextY] = points2[i + 1];
       if (currentX === preX && currentY !== preY) {
-        const y = currentY > preY ? currentY - space : currentY + space;
+        const y = currentY > preY ? currentY - radius : currentY + radius;
         d = `${d} L ${currentX} ${y}`;
       }
       if (currentY === preY && currentX !== preX) {
-        const x = currentX > preX ? currentX - space : currentX + space;
+        const x = currentX > preX ? currentX - radius : currentX + radius;
         d = `${d} L ${x} ${currentY}`;
       }
       d = `${d} Q ${currentX} ${currentY}`;
       if (currentX === nextX && currentY !== nextY) {
-        const y = currentY > nextY ? currentY - space : currentY + space;
+        const y = currentY > nextY ? currentY - radius : currentY + radius;
         d = `${d} ${currentX} ${y}`;
       }
       if (currentY === nextY && currentX !== nextX) {
-        const x = currentX > nextX ? currentX - space : currentX + space;
+        const x = currentX > nextX ? currentX - radius : currentX + radius;
         d = `${d} ${x} ${currentY}`;
       }
     }
     const [endX, endY] = points2[points2.length - 1];
     d = `${d} L ${endX} ${endY}`;
+    const attrs = {
+      d,
+      style: isAnimation ? animationStyle : {},
+      ...style,
+      ...arrowConfig,
+      fill: 'none',
+    };
     return h(
       'path',
       {
         d,
-        strokeWidth,
-        stroke,
-        fill: 'none',
-        strokeDashArray,
+        ...attrs,
       },
     );
   }
@@ -62,23 +74,8 @@ class CurvedEdgeView extends PolylineEdge {
 class CurvedEdgeModel extends PolylineEdgeModel {
 }
 
-const CurvedEdge: CurvedEdgePlugin = {
-  pluginName: 'curved-edge',
-  curvedSpace: 5,
-  init({ curvedSpace }) {
-    CurvedEdge.curvedSpace = curvedSpace;
-  },
-  install(lf) {
-    lf.register({
-      type: 'curved-edge',
-      view: CurvedEdgeView,
-      model: CurvedEdgeModel,
-    });
-  },
-};
-
-export default CurvedEdge;
-
 export {
   CurvedEdge,
+  // CurvedEdgeView,
+  CurvedEdgeModel,
 };

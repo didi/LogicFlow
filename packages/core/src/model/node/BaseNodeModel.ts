@@ -82,6 +82,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   isHovered = false;
   isDragging = false;
   isHitable = true; // 细粒度控制节点是否对用户操作进行反应
+  isShowAnchor = false;
   draggable = true;
   visible = true;
   virtual = false; // 如果此属性为true, 则保存图时将不会保存此节点
@@ -318,7 +319,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点锚点拖出连线样式
    * @returns 自定义锚点拖出样式
    */
-  getAnchorLineStyle() {
+  getAnchorLineStyle(anchorInfo) {
     const { anchorLine } = this.graphModel.theme;
     return cloneDeep(anchorLine);
   }
@@ -525,11 +526,48 @@ export default class BaseNodeModel implements IBaseNodeModel {
     }
     return isAllowMoveX || isAllowMoveY;
   }
-
+  getMoveDistance(deltaX: number, deltaY: number, isIgnoreRule = false) : [number, number] {
+    let isAllowMoveX = false;
+    let isAllowMoveY = false;
+    let moveX = 0;
+    let moveY = 0;
+    if (isIgnoreRule) {
+      isAllowMoveX = true;
+      isAllowMoveY = true;
+    } else {
+      const r = this.isAllowMoveNode(deltaX, deltaY);
+      if (typeof r === 'boolean') {
+        isAllowMoveX = r;
+        isAllowMoveY = r;
+      } else {
+        isAllowMoveX = r.x;
+        isAllowMoveY = r.y;
+      }
+    }
+    if (isAllowMoveX && deltaX) {
+      const targetX = this.x + deltaX;
+      this.x = targetX;
+      this.text && this.moveText(deltaX, 0);
+      moveX = deltaX;
+    }
+    if (isAllowMoveY && deltaY) {
+      const targetY = this.y + deltaY;
+      this.y = targetY;
+      this.text && this.moveText(0, deltaY);
+      moveY = deltaY;
+    }
+    return [moveX, moveY];
+  }
   moveTo(x, y, isIgnoreRule = false): boolean {
     const deltaX = x - this.x;
     const deltaY = y - this.y;
-    return this.move(deltaX, deltaY, isIgnoreRule);
+    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false;
+    if (this.text) {
+      this.text && this.moveText(deltaX, deltaY);
+    }
+    this.x = x;
+    this.y = y;
+    return true;
   }
 
   moveText(deltaX, deltaY): void {
@@ -567,6 +605,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   setHovered(flag = true): void {
     this.isHovered = flag;
+    this.setIsShowAnchor(flag);
+  }
+
+  @action
+  setIsShowAnchor(flag = true): void {
+    this.isShowAnchor = flag;
   }
 
   setHitable(flag = true): void {
@@ -603,7 +647,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
       data: properties,
     });
   }
-
+  @action
+  deleteProperty(key: string): void {
+    delete this.properties[key];
+    this.setAttributes();
+  }
+  @action
   setStyle(key, val): void {
     this.style = {
       ...this.style,
