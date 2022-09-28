@@ -778,7 +778,7 @@ class GraphModel {
       return;
     }
     const nodeModel = node.model;
-    [deltaX, deltaY] = nodeModel.getMoveDistance(deltaX, deltaY, isignoreRule);
+    [deltaX, deltaY] = nodeModel.getMoveDistance(deltaX, deltaY, isIgnoreRule);
     // 2) 移动边
     this.moveEdge(nodeId, deltaX, deltaY);
   }

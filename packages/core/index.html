@@ -774,7 +774,6 @@
 
     <!-- 元素相关方法 -->
     <script>
-      InitElementFunction()
       function InitElementFunction() {
         console.log(LogicFlow.version)
         window.showCanvas = function () {
@@ -1100,6 +1099,7 @@
         window.showCanvas = function() {
           document.querySelector('#app').style.display = 'block'
           lf.render()
+        }
         window.deleteNode = function () {
           const d = lf.deleteNode(1)
           console.log(d, lf.getGraphData().nodes.length)
@@ -1112,8 +1112,6 @@
         }
       }
     </script>
-
-    <!-- LogicFlow 相关事件 -->
     <script>
       function InitLogicFlowEvent() {
         lf.on('history:change', ({ data: { undoAble, redoAble } }) => {
@@ -1124,9 +1122,6 @@
         lf.on('graph:rendered', (data) => {
           console.log('graph:rendered', data)
         });
-        lf.on('blank:mousemove', (data) => {
-          console.log(data)
-        })
         lf.on('node:click', ({ data }) => {
           // const model = lf.graphModel.getElement(data.id)
           // model.fill = 'red'

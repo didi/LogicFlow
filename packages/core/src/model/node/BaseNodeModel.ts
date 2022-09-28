@@ -608,7 +608,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
     this.setIsShowAnchor(flag);
   }
 
-  @action
   setIsShowAnchor(flag = true): void {
     this.isShowAnchor = flag;
   }
@@ -647,12 +646,12 @@ export default class BaseNodeModel implements IBaseNodeModel {
       data: properties,
     });
   }
-  @action
+
   deleteProperty(key: string): void {
     delete this.properties[key];
     this.setAttributes();
   }
-  @action
+
   setStyle(key, val): void {
     this.style = {
       ...this.style,

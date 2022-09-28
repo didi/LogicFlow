@@ -129,8 +129,7 @@ class Group {
   };
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
-    const bounds = nodeModel.getBounds();
-    const newGroup = this.getGroup(bounds);
+    const newGroup = this.getGroup(nodeModel);
     if (this.activeGroup) {
       this.activeGroup.setAllowAppendChild(false);
     }

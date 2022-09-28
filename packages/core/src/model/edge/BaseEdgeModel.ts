@@ -334,12 +334,11 @@ class BaseEdgeModel implements IBaseModel {
     this.setAttributes();
   }
 
-  @action
   deleteProperty(key: string): void {
     delete this.properties[key];
     this.setAttributes();
   }
-  @action
+
   setProperties(properties): void {
     this.properties = {
       ...this.properties,
@@ -351,7 +350,7 @@ class BaseEdgeModel implements IBaseModel {
     });
     this.setAttributes();
   }
-  @action
+
   changeEdgeId(id: string) {
     const { markerEnd, markerStart } = this.arrowConfig;
     if (markerStart && markerStart === `url(#marker-start-${this.id})`) {
