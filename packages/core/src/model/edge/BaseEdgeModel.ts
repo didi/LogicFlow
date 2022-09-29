@@ -13,7 +13,7 @@ import {
   ShapeStyleAttribute,
 } from '../../type/index';
 import {
-  ModelType, ElementType, OverlapMode, EventType, ElementMaxZIndex,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
@@ -495,9 +495,6 @@ class BaseEdgeModel implements IBaseModel {
 
   setSelected(flag = true): void {
     this.isSelected = flag;
-    if (this.graphModel.overlapMode === OverlapMode.DEFAULT) {
-      this.zIndex = flag ? ElementMaxZIndex : 0;
-    }
   }
 
   setHovered(flag = true): void {

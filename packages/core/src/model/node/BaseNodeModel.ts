@@ -3,7 +3,7 @@ import { observable, action, toJS, isObservable, computed, makeObservable } from
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ModelType, ElementType, OverlapMode, EventType, ElementMaxZIndex,
+  ModelType, ElementType, OverlapMode, EventType,
 } from '../../constant/constant';
 import {
   AdditionData,
@@ -601,9 +601,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   setSelected(flag = true): void {
     this.isSelected = flag;
-    if (this.graphModel.overlapMode === OverlapMode.DEFAULT) {
-      this.zIndex = flag ? ElementMaxZIndex : 1;
-    }
   }
 
   setHovered(flag = true): void {
