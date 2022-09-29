@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.29...@logicflow/core@1.2.0-next.0) (2022-09-29)
+
+
+### Bug Fixes
+
+* 处理贝塞尔曲线在连接相同方向上也成曲线的问题 ([4ce2139](https://github.com/didi/LogicFlow/commit/4ce21391ae92c7907f264f175de269f8ec504b3e))
+* 处理折线没拖拽成直线后继续拖到报错的问题 ([8e1bf3f](https://github.com/didi/LogicFlow/commit/8e1bf3f9e0c80020bb0c4feffd26bcac70f73c89))
+* 处理自动布局向回连线的问题 ([ac36d08](https://github.com/didi/LogicFlow/commit/ac36d08ef14206a7bf589c97147d9a7f621b03a3))
+* 调整bezier曲线生成逻辑,现在相同的起终点连线不会重复了 ([5d60fb5](https://github.com/didi/LogicFlow/commit/5d60fb576de9a6554b977aea457e5dcc4d9eaf42))
+* 修复回显时不显示箭头的问题 ([1eb8881](https://github.com/didi/LogicFlow/commit/1eb8881b8b83d1235d8409a285dcd31b73a8e635))
+* 修复node:delete不触发history的问题 ([a8fb672](https://github.com/didi/LogicFlow/commit/a8fb67212ec9e21ec290a09e9c0a6c76dbcbba02))
+* add dagre layout ([963a311](https://github.com/didi/LogicFlow/commit/963a31119c048f612fc09b5c036ae92a537559c1))
+* merge resolve ([2e0e921](https://github.com/didi/LogicFlow/commit/2e0e9216e9a6d48cc08a1a376f1efdc6a7221a30))
+* node line closet node while width height ratio too large ([6f5e55c](https://github.com/didi/LogicFlow/commit/6f5e55c531849a29548550e66b7611c586f16e37))
+* svg 100% document height don`t work ([964d932](https://github.com/didi/LogicFlow/commit/964d93262040d12852ab65a86fc113316dd21c85))
+* svg mysterious space ([0414eb7](https://github.com/didi/LogicFlow/commit/0414eb72859837c6665c5195855ec88fd263367b))
+* typo error ([47f4c2b](https://github.com/didi/LogicFlow/commit/47f4c2b8bd35b3abe7bc9ecf08573e1eb5fcff51))
+* typo error ([83d46e1](https://github.com/didi/LogicFlow/commit/83d46e11a1aaf8a5af13eef8305aa360069bfc03))
+* typo error ([5b878ae](https://github.com/didi/LogicFlow/commit/5b878aeb8bf783b059645cffb5d7a2c11400dbf9))
+* use autoExpand ([c03b9ce](https://github.com/didi/LogicFlow/commit/c03b9ce2cb1b39957c62f46a3b87d8cfedfd8912))
+* use clone object ([9e1f7a0](https://github.com/didi/LogicFlow/commit/9e1f7a014634713d5178d471458adfd3a0ce216e))
+
+
+### Features
+
+* 美化dagre生成的流程图 ([577609c](https://github.com/didi/LogicFlow/commit/577609c7ca93edd45c77170276c5106478a2ca1d))
+* add getExtraShape method for define extra element ([cd702ef](https://github.com/didi/LogicFlow/commit/cd702ef0254f9e39f48f9366559c88cd816fd0bd))
+* english locale extension ([88a7dd8](https://github.com/didi/LogicFlow/commit/88a7dd8fb357d658299de52328cf878d43a300ce))
+* fix observer ([6a1ae3b](https://github.com/didi/LogicFlow/commit/6a1ae3bc16b84d778c0aeed7776dc5e73ec72e2f))
+* fix width and height is zero cause can not move node ([f28b1fb](https://github.com/didi/LogicFlow/commit/f28b1fb415ccb92b50f60e027bb96b3848bcae4c))
+* history support add snapshot ([638da90](https://github.com/didi/LogicFlow/commit/638da90ca713ecb7112d6d0d45ab7097776d134a))
+* keep typo ([3a017c8](https://github.com/didi/LogicFlow/commit/3a017c8855d66cb444388267de6c090bc0fb0c89))
+* merga master ([81b93c6](https://github.com/didi/LogicFlow/commit/81b93c654fb7d267259b2d17cec161e28f41d469))
+* set selected element zindex 9999 instead of always front ([b8a2708](https://github.com/didi/LogicFlow/commit/b8a27085e7a86f3d6d8d654447d3c1d4116e5f16))
+* support autowrap text custom class name ([a2ca253](https://github.com/didi/LogicFlow/commit/a2ca253bc95dcb135f5c27232f39ec5badc08aca))
+* sync master change ([dd4c539](https://github.com/didi/LogicFlow/commit/dd4c53900ea1d01fd7a4b57dd2c576a6e363eacc))
+* update mobx and refactor history ([6ac6b9e](https://github.com/didi/LogicFlow/commit/6ac6b9ea42b13a5d0e6291a4634fd430ad4ba6e2))
+
+
+
+
+
 # [1.2.0-alpha.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-alpha.15...@logicflow/core@1.2.0-alpha.16) (2022-07-27)
 ## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.28...@logicflow/core@1.1.29) (2022-09-24)
 
