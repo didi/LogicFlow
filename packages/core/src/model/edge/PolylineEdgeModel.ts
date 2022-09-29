@@ -348,7 +348,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       endIndex,
       direction,
     } = appendInfo;
-
     const { pointsList } = this;
     const pointsListNew = pointsList.map((({ x, y }) => ({ x, y })));
     if (direction === SegmentDirection.HORIZONTAL) {
@@ -387,7 +386,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
           draggingPointList = this.getDraggingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
         }
       }
-      draggingPointList = pointFilter(draggingPointList);
       this.updatePointsAfterDrag(draggingPointList);
       // step3: 调整到对应外框的位置后，执行updatePointsAfterDrag，找到当前线段和图形的准确交点
       this.draggingPointList = draggingPointList;
@@ -420,7 +418,6 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
           draggingPointList = this.getDraggingPoints(direction, 'end', endPosition, anchorList, draggingPointList);
         }
       }
-      draggingPointList = pointFilter(draggingPointList);
       this.updatePointsAfterDrag(draggingPointList);
       this.draggingPointList = draggingPointList;
     }
@@ -436,7 +433,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   dragAppendEnd() {
     if (this.draggingPointList) {
-      const pointsList = points2PointsList(this.points);
+      const pointsList = pointFilter(points2PointsList(this.points));
       // draggingPointList清空
       this.draggingPointList = [];
       // 更新起终点

@@ -37,79 +37,11 @@ LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、�
   
   专注于业务流程图编辑的框架
 
-## 使用
+## 官方文档
 
-### 安装
+http://logic-flow.org
 
-```sh
-# npm
-$ npm install @logicflow/core @logicflow/extension --save
-
-```
-
-### 代码示例
-
-```js
-// 创建容器
-<div id="container"></div>;
-
-// 准备数据
-const data = {
-  // 节点
-  nodes: [
-    {
-      id: 21,
-      type: 'rect',
-      x: 100,
-      y: 200,
-      text: {
-        value: '矩形节点',
-        x: 100,
-        y: 200,
-      },
-    },
-    {
-      id: 50,
-      type: 'circle',
-      x: 300,
-      y: 400,
-      text: {
-        value: '圆形节点',
-        x: 300,
-        y: 400,
-      },
-    },
-  ],
-  // 边
-  edges: [
-    {
-      type: 'polyline',
-      sourceNodeId: 50,
-      targetNodeId: 21,
-    },
-  ],
-};
-// 渲染画布
-const lf = new LogicFlow({
-  container: document.querySelector('#container'),
-  width: 700,
-  height: 600,
-});
-
-lf.render(data);
-```
-
-## 文档
-
-[官方文档](http://logic-flow.org)
-
-- [快速上手](http://logic-flow.org/guide/start.html#安装)
-- [基础教程](http://logic-flow.org/guide/basic/logic-flow.html)
-- [进阶指南](http://logic-flow.org/guide/advance/theme.html)
-- [拓展](http://logic-flow.org/guide/extension/extension-components.html)
-- [示例](http://logic-flow.org/usage/bpmn.html)
-
-## 核心能力
+## 演示示例
 
 ### 流程图编辑器快速搭建
 

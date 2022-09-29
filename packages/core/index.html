@@ -488,7 +488,8 @@
           // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
           // stopMoveGraph: true,
-          adjustEdgeStartAndEnd: true,
+          // adjustEdgeStartAndEnd: false,
+          // adjustEdge: false,
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
@@ -918,6 +919,7 @@
                 y: 200,
               },
               {
+                id: "2222",
                 type: 'ellipse',
                 x: 100,
                 y: 400,
@@ -958,7 +960,7 @@
         }
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({
-            type: 'text',
+            type: 'rect',
             text: 'xxxxx'
           })
         }
