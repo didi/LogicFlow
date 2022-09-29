@@ -227,7 +227,7 @@ export default class BaseEdge extends Component<IProps> {
     this.toFront();
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
-  getIsDraging = () => false;
+  getIsDragging = () => false;
   toFront() {
     const { graphModel, model } = this.props;
     const { overlapMode } = graphModel;
@@ -237,7 +237,7 @@ export default class BaseEdge extends Component<IProps> {
   }
   render() {
     const { model: { isSelected, isHitable }, graphModel } = this.props;
-    const isDraging = this.getIsDraging();
+    const isDragging = this.getIsDragging();
     const { editConfigModel: { adjustEdgeStartAndEnd }, animation } = graphModel;
     // performance 只允许出现一条edge有动画
     const isShowAnimation = isSelected && animation.edge
@@ -263,7 +263,7 @@ export default class BaseEdge extends Component<IProps> {
           {this.getText()}
           {this.getArrow()}
         </g>
-        {(adjustEdgeStartAndEnd && isSelected && !isDraging) ? this.getAdjustPoints() : ''}
+        {(adjustEdgeStartAndEnd && isSelected && !isDragging) ? this.getAdjustPoints() : ''}
       </g>
     );
   }
