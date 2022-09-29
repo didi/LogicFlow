@@ -197,7 +197,6 @@ class GraphModel {
     elements = elements.sort((a, b) => a.zIndex - b.zIndex);
     // 只显示可见区域的节点和边
     const showElements = [];
-    let topElementIdx = -1;
     // todo: 缓存, 优化计算效率
     const visibleLt: PointTuple = [-VisibleMoreSpace, -VisibleMoreSpace];
     const visibleRb: PointTuple = [this.width + VisibleMoreSpace, this.height + VisibleMoreSpace];
@@ -210,16 +209,8 @@ class GraphModel {
           || this.isElementInArea(currentItem, visibleLt, visibleRb, false, false)
         )
       ) {
-        if (currentItem.zIndex === ElementMaxzIndex) {
-          topElementIdx = showElements.length;
-        }
         showElements.push(currentItem);
       }
-    }
-    if (topElementIdx !== -1) {
-      const lastElement = showElements[showElements.length - 1];
-      showElements[showElements.length - 1] = showElements[topElementIdx];
-      showElements[topElementIdx] = lastElement;
     }
     return showElements;
   }

@@ -5,7 +5,7 @@ import { assign, cloneDeep, isNil } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ModelType, ElementType, OverlapMode,
+  ModelType, ElementType, OverlapMode, ElementMaxzIndex,
 } from '../../constant/constant';
 import {
   AdditionData,
@@ -562,6 +562,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setSelected(flag = true): void {
     this.isSelected = flag;
+    if (this.graphModel.overlapMode === OverlapMode.DEFAULT) {
+      this.zIndex = flag ? ElementMaxzIndex : 1;
+    }
   }
 
   @action
