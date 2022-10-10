@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [1.1.31](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.30...@logicflow/core@1.1.31) (2022-11-12)
+# [1.2.0-next.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.0...@logicflow/core@1.2.0-next.1) (2022-10-10)
+
+
+### Features
+
+* separate select and setZindex behavior ([53d0293](https://github.com/didi/LogicFlow/commit/53d029317eea3161d63f4837ddea66b845a8e274))
+
+
+
+
+
+# [1.2.0-next.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.29...@logicflow/core@1.2.0-next.0) (2022-09-29)
 
 
 ### Bug Fixes
