@@ -89,7 +89,6 @@ class GroupNodeModel extends RectResize.model {
     // step 2
     const allEdges = this.foldChildren(isFolded);
     // step 3
-    console.log({ allEdges });
     this.foldEdge(isFolded, allEdges);
   }
   getAnchorStyle(anchorInfo) {
