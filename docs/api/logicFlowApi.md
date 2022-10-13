@@ -137,7 +137,7 @@ const lf = new LogicFlow({
 
 ### `style`
 
-可以通过style配置主题，详细支持的样式选项见教程[主题 Theme](/guide/advance/theme.html)
+可以通过style配置主题，详细支持的样式选项见教程[主题 Theme](/guide/basic/theme.html)
 
 ### `snapline`
 
