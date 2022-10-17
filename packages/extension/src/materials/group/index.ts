@@ -40,11 +40,9 @@ class Group {
       return true;
     });
     lf.graphModel.group = this;
-    lf.on('node:add', this.appendNodeToGroup);
+    lf.on('node:add,node:drop', this.appendNodeToGroup);
     lf.on('node:delete', this.deleteGroupChild);
-    lf.on('node:drop', this.appendNodeToGroup);
-    lf.on('node:dnd-drag', this.setActiveGroup);
-    lf.on('node:drag', this.setActiveGroup);
+    lf.on('node:dnd-drag,node:drag', this.setActiveGroup);
     lf.on('graph:rendered', this.graphRendered);
   }
   /**
@@ -86,7 +84,7 @@ class Group {
     }
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
     const bounds = this.lf.getNodeModelById(data.id).getBounds();
-    const group = this.getGroup(bounds);
+    const group = this.getGroup(bounds, data);
     if (!group) return;
     const isAllowAppendIn = group.isAllowAppendIn(data);
     if (!isAllowAppendIn) {
@@ -118,7 +116,7 @@ class Group {
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
     const bounds = nodeModel.getBounds();
-    const newGroup = this.getGroup(bounds);
+    const newGroup = this.getGroup(bounds, data);
     if (this.activeGroup) {
       this.activeGroup.setAllowAppendChild(false);
     }
@@ -132,15 +130,22 @@ class Group {
   };
   /**
    * 获取自定位置其所属分组
+   * 当分组重合时，优先返回最上层的分组
    */
-  getGroup(bounds: Bounds): BaseNodeModel | undefined {
+  getGroup(bounds: Bounds, nodeData: BaseNodeModel): BaseNodeModel | undefined {
     const { nodes } = this.lf.graphModel;
-    for (let i = 0; i < nodes.length; i++) {
-      const model = nodes[i];
-      if (model.isGroup && model.isInRange(bounds)) {
-        return model;
+    const groups = nodes.filter(
+      node => node.isGroup && node.isInRange(bounds) && node.id !== nodeData.id,
+    );
+    if (groups.length === 0) return;
+    if (groups.length === 1) return groups[0];
+    let topGroup = groups[groups.length - 1];
+    for (let i = groups.length - 2; i >= 0; i--) {
+      if (groups[i].zIndex > topGroup.zIndex) {
+        topGroup = groups[i];
       }
     }
+    return topGroup;
   }
   /**
    * 获取某个节点所属的groupModel

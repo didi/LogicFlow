@@ -309,10 +309,11 @@ export default class LogicFlow {
    * 将图形选中
    * @param id 选择元素ID
    * @param multiple 是否允许多选，如果为true，不会将上一个选中的元素重置
+   * @param toFront 是否将选中的元素置顶，默认为true
    */
-  selectElementById(id: string, multiple = false) {
+  selectElementById(id: string, multiple = false, toFront = true) {
     this.graphModel.selectElementById(id, multiple);
-    if (!multiple) {
+    if (!multiple && toFront) {
       this.graphModel.toFront(id);
     }
   }
