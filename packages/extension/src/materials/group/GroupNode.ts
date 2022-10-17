@@ -3,6 +3,7 @@ import { RectResize } from '../../NodeResize';
 
 const defaultWidth = 500;
 const defaultHeight = 300;
+const DEFAULT_BOTTOM_Z_INDEX = -10000;
 
 class GroupNodeModel extends RectResize.model {
   readonly isGroup = true;
@@ -48,7 +49,7 @@ class GroupNodeModel extends RectResize.model {
     this.height = defaultHeight;
     this.foldedWidth = 80;
     this.foldedHeight = 60;
-    this.zIndex = -1001;
+    this.zIndex = DEFAULT_BOTTOM_Z_INDEX;
     this.radius = 0;
     this.text.editable = false;
     this.text.draggable = false;
@@ -254,6 +255,7 @@ class GroupNodeModel extends RectResize.model {
   getHistoryData() {
     const data = super.getData();
     data.children = [...this.children];
+    data.isGroup = true;
     const { properties } = data;
     delete properties.groupAddable;
     if (properties.isFolded) { // 如果分组被折叠
@@ -273,7 +275,6 @@ class GroupNodeModel extends RectResize.model {
    */
   toBack() {
     this.zIndex--;
-    // if (this.parent) {}
   }
 }
 class GroupNode extends RectResize.view {
