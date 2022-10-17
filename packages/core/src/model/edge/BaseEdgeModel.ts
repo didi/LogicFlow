@@ -427,9 +427,6 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setSelected(flag = true): void {
     this.isSelected = flag;
-    if (this.graphModel.overlapMode === OverlapMode.DEFAULT) {
-      this.zIndex = flag ? ElementMaxzIndex : 0;
-    }
   }
 
   @action
