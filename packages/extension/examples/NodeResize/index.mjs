@@ -22,6 +22,41 @@ window.onload = function () {
   lf.register(ResizableHtml);
   lf.register(ResizableHexagon);
 
+  lf.extension.menu.setMenuConfig({
+    nodeMenu: [
+      {
+        text: '开启等比例缩放',
+        callback(data) {
+          const model = lf.getNodeModelById(data.id);
+          if (model) {
+            try {
+              model.enableProportionResize();
+              console.log('开启等比例缩放');
+            } catch (error) {
+              console.log('enableProportionResize() 方法未定义');
+            }
+          }
+        }
+      },
+      {
+        text: '关闭等比例缩放',
+        callback(data) {
+          const model = lf.getNodeModelById(data.id);
+          if (model) {
+            try {
+              model.enableProportionResize(false);
+              console.log('关闭等比例缩放');
+            } catch (error) {
+              console.log('enableProportionResize() 方法未定义');
+            }
+          }
+        }
+      },
+    ],
+    edgeMenu: [],
+    graphMenu: []
+  });
+
   lf.render({
     nodes: [
       {
