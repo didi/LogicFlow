@@ -562,9 +562,6 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setSelected(flag = true): void {
     this.isSelected = flag;
-    if (this.graphModel.overlapMode === OverlapMode.DEFAULT) {
-      this.zIndex = flag ? ElementMaxzIndex : 1;
-    }
   }
 
   @action

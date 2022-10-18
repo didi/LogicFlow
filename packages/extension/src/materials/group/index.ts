@@ -11,9 +11,12 @@ type Bounds = {
   y2: number,
 };
 
+const DEFAULT_TOP_Z_INDEX = -1000;
+const DEFAULT_BOTTOM_Z_INDEX = -10000;
 class Group {
   static pluginName = 'group';
   lf: LogicFlow;
+  topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX;
   activeGroup: any;
   nodeGroupMap: Map<BaseNodeId, GroupId> = new Map();
   constructor({ lf }) {
@@ -40,11 +43,10 @@ class Group {
       return true;
     });
     lf.graphModel.group = this;
-    lf.on('node:add', this.appendNodeToGroup);
+    lf.on('node:add,node:drop', this.appendNodeToGroup);
     lf.on('node:delete', this.deleteGroupChild);
-    lf.on('node:drop', this.appendNodeToGroup);
-    lf.on('node:dnd-drag', this.setActiveGroup);
-    lf.on('node:drag', this.setActiveGroup);
+    lf.on('node:dnd-drag,node:drag', this.setActiveGroup);
+    lf.on('node:click', this.nodeSelected);
     lf.on('graph:rendered', this.graphRendered);
   }
   /**
@@ -85,8 +87,9 @@ class Group {
       preGroup.setAllowAppendChild(false);
     }
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
-    const bounds = this.lf.getNodeModelById(data.id).getBounds();
-    const group = this.getGroup(bounds);
+    const nodeModel = this.lf.getNodeModelById(data.id);
+    const bounds = nodeModel.getBounds();
+    const group = this.getGroup(bounds, data);
     if (!group) return;
     const isAllowAppendIn = group.isAllowAppendIn(data);
     if (!isAllowAppendIn) {
@@ -96,18 +99,25 @@ class Group {
       });
       return;
     }
-    if (data.id !== group.id) {
-      group.addChild(data.id);
-      this.nodeGroupMap.set(data.id, group.id);
-      group.setAllowAppendChild(false);
-    } else if (data.children && data.children.length > 0) {
-      // 表示当前添加的节点是一个新增的group
+    group.addChild(data.id);
+    this.nodeGroupMap.set(data.id, group.id);
+    group.setAllowAppendChild(false);
+    // 如果这个节点是分组，那么将其子节点也记录下来
+    if (nodeModel.isGroup) {
       data.children.forEach((nodeId) => {
         this.nodeGroupMap.set(nodeId, data.id);
       });
+      this.nodeSelected({ data });
     }
   };
   deleteGroupChild = ({ data }) => {
+    // 如果删除的是分组节点，则同时删除分组的子节点
+    if (data.children) {
+      data.children.forEach((nodeId) => {
+        this.nodeGroupMap.delete(nodeId);
+        this.lf.deleteNode(nodeId);
+      });
+    }
     const groupId = this.nodeGroupMap.get(data.id);
     if (groupId) {
       const group = this.lf.getNodeModelById(groupId);
@@ -118,7 +128,7 @@ class Group {
   setActiveGroup = ({ data }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
     const bounds = nodeModel.getBounds();
-    const newGroup = this.getGroup(bounds);
+    const newGroup = this.getGroup(bounds, data);
     if (this.activeGroup) {
       this.activeGroup.setAllowAppendChild(false);
     }
@@ -131,16 +141,62 @@ class Group {
     this.activeGroup.setAllowAppendChild(true);
   };
   /**
-   * 获取自定位置其所属分组
+   * 1. 分组节点默认在普通节点下面。
+   * 2. 分组节点被选中后，会将分组节点以及其内部的其他分组节点放到其余分组节点的上面。
+   * 3. 分组节点取消选中后，不会将分组节点重置为原来的高度。
+   * 4. 由于LogicFlow核心目标是支持用户手动绘制流程图，所以不考虑一张流程图超过1000个分组节点的情况。
    */
-  getGroup(bounds: Bounds): BaseNodeModel | undefined {
-    const { nodes } = this.lf.graphModel;
-    for (let i = 0; i < nodes.length; i++) {
-      const model = nodes[i];
-      if (model.isGroup && model.isInRange(bounds)) {
-        return model;
+  nodeSelected = ({ data }) => {
+    const nodeModel = this.lf.getNodeModelById(data.id);
+    this.toFrontGroup(nodeModel);
+    // 重置所有的group zIndex,防止group节点zIndex增长为正。
+    if (this.topGroupZIndex > DEFAULT_TOP_Z_INDEX) {
+      this.topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX;
+      const allGroups = this.lf.graphModel.nodes
+        .filter(node => node.isGroup)
+        .sort((a, b) => a.zIndex - b.zIndex);
+      let preZIndex = 0;
+      for (let i = 0; i < allGroups.length; i++) {
+        const group = allGroups[i];
+        if (group.zIndex !== preZIndex) {
+          this.topGroupZIndex++;
+          preZIndex = group.zIndex;
+        }
+        group.setZIndex(this.topGroupZIndex);
       }
     }
+  };
+  toFrontGroup = (model) => {
+    if (!model || !model.isGroup) {
+      return;
+    }
+    this.topGroupZIndex++;
+    model.setZIndex(this.topGroupZIndex);
+    if (model.children) {
+      model.children.forEach((nodeId) => {
+        const node = this.lf.getNodeModelById(nodeId);
+        this.toFrontGroup(node);
+      });
+    }
+  };
+  /**
+   * 获取自定位置其所属分组
+   * 当分组重合时，优先返回最上层的分组
+   */
+  getGroup(bounds: Bounds, nodeData: BaseNodeModel): BaseNodeModel | undefined {
+    const { nodes } = this.lf.graphModel;
+    const groups = nodes.filter(
+      node => node.isGroup && node.isInRange(bounds) && node.id !== nodeData.id,
+    );
+    if (groups.length === 0) return;
+    if (groups.length === 1) return groups[0];
+    let topGroup = groups[groups.length - 1];
+    for (let i = groups.length - 2; i >= 0; i--) {
+      if (groups[i].zIndex > topGroup.zIndex) {
+        topGroup = groups[i];
+      }
+    }
+    return topGroup;
   }
   /**
    * 获取某个节点所属的groupModel

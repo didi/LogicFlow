@@ -3,6 +3,7 @@ import { RectResize } from '../../NodeResize';
 
 const defaultWidth = 500;
 const defaultHeight = 300;
+const DEFAULT_BOTTOM_Z_INDEX = -10000;
 
 class GroupNodeModel extends RectResize.model {
   readonly isGroup = true;
@@ -48,8 +49,7 @@ class GroupNodeModel extends RectResize.model {
     this.height = defaultHeight;
     this.foldedWidth = 80;
     this.foldedHeight = 60;
-    // todo: 参考bpmn.js, 分组和未加入分组的节点重合时，未加入分组的节点在分组之下。方便标识。
-    this.zIndex = -1;
+    this.zIndex = DEFAULT_BOTTOM_Z_INDEX;
     this.radius = 0;
     this.text.editable = false;
     this.text.draggable = false;
@@ -255,6 +255,7 @@ class GroupNodeModel extends RectResize.model {
   getHistoryData() {
     const data = super.getData();
     data.children = [...this.children];
+    data.isGroup = true;
     const { properties } = data;
     delete properties.groupAddable;
     if (properties.isFolded) { // 如果分组被折叠
@@ -269,13 +270,19 @@ class GroupNodeModel extends RectResize.model {
   isAllowAppendIn(nodeData) {
     return true;
   }
+  /**
+   * 当groupA被添加到groupB中时，将groupB及groupB所属的group的zIndex减1
+   */
+  toBack() {
+    this.zIndex--;
+  }
 }
 class GroupNode extends RectResize.view {
   getControlGroup() {
     const { resizable, properties } = this.props.model;
     return resizable && !properties.isFolded ? super.getControlGroup() : null;
   }
-  getAddedableShape() {
+  getAddableShape() {
     const { width, height, x, y, radius, properties } = this.props.model;
     if (!properties.groupAddable) return null;
     const { strokeWidth } = this.props.model.getNodeStyle();
@@ -329,7 +336,7 @@ class GroupNode extends RectResize.view {
   }
   getResizeShape() {
     return h('g', {}, [
-      this.getAddedableShape(),
+      this.getAddableShape(),
       super.getResizeShape(),
       this.getFoldIcon(),
     ]);
