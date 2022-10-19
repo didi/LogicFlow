@@ -13,6 +13,11 @@ interface IProps {
   edgeStyle?: CSSStyleDeclaration,
 }
 class RectResizeModel extends RectNodeModel {
+  private PCTResizeInfo: {
+    ResizePCT: { widthPCT: number, hightPCT: number },
+    ResizeBasis: { basisWidth: number, basisHeight: number },
+    ScaleLimit: { maxScaleLimit: number, minScaleLimit: number}
+  };
   constructor(data, graphModel) {
     super(data, graphModel);
     const { nodeSize } = this.properties;
@@ -60,6 +65,22 @@ class RectResizeModel extends RectNodeModel {
   }
   resize(deltaX, deltaY) {
     console.log(deltaX, deltaY);
+  }
+  // 该方法需要在重设宽高和最大、最小限制后被调用，不建议在 initNodeData() 方法中使用
+  enableProportionResize(turnOn = true) {
+    if (turnOn) {
+      const ResizePCT = { widthPCT: 100, hightPCT: 100 };
+      const ResizeBasis = { basisWidth: this.width, basisHeight: this.height };
+      const ScaleLimit = {
+        maxScaleLimit: Math.min((this.maxWidth / this.width) * 100,
+          (this.maxHeight / this.height) * 100),
+        minScaleLimit: Math.max((this.minWidth / this.width) * 100,
+          (this.minHeight / this.height) * 100),
+      };
+      this.PCTResizeInfo = { ResizePCT, ResizeBasis, ScaleLimit };
+    } else {
+      delete this.PCTResizeInfo;
+    }
   }
 }
 class RectResizeView extends RectNode {
