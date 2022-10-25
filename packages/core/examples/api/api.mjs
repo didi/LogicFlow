@@ -3,6 +3,8 @@ import { baseData } from '../data.mjs'
 const lf = new LogicFlow({
   container: document.querySelector('#container'),
   adjustEdgeStartAndEnd: true,
+  nodeTextEdit: false,
+  edgeTextEdit: false,
   width: 1000,
   grid: true,
   height: 400,
@@ -52,4 +54,10 @@ document.querySelector('#js_getNodeOutgoingNode').addEventListener('click', () =
 document.querySelector('#js_deleteNode').addEventListener('click', () => {
   lf.deleteNode('1')
   lf.deleteNode('1')
+})
+
+document.querySelector('#js_updateEditConfig').addEventListener('click', () => {
+  lf.updateEditConfig({
+    nodeTextEdit: true
+  })
 })
