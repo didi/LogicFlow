@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.30](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.29...@logicflow/core@1.1.30) (2022-10-30)
+
+
+### Bug Fixes
+
+* 处理折线没拖拽成直线后继续拖到报错的问题 ([8e1bf3f](https://github.com/didi/LogicFlow/commit/8e1bf3f9e0c80020bb0c4feffd26bcac70f73c89))
+* keep GroupNode in bottom when select node ([9e3086a](https://github.com/didi/LogicFlow/commit/9e3086a3d5faac116c10ea3dc9ac6796b686ed24))
+
+
+### Features
+
+* keep typo ([3a017c8](https://github.com/didi/LogicFlow/commit/3a017c8855d66cb444388267de6c090bc0fb0c89))
+* set selected element zindex 9999 instead of always front ([b8a2708](https://github.com/didi/LogicFlow/commit/b8a27085e7a86f3d6d8d654447d3c1d4116e5f16))
+
+
+
+
+
 ## [1.1.29](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.28...@logicflow/core@1.1.29) (2022-09-24)
 
 
