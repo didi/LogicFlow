@@ -32,9 +32,9 @@
 }
 .lf-edge-animation {
   stroke-dashoffset: 100%;
-  animation: dash 5s linear infinite;
+  animation: lf_animate_dash 5s linear infinite;
 }
-@keyframes dash {
+@keyframes lf_animate_dash {
   to {
     stroke-dashoffset: 0;
   }

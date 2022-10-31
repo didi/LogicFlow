@@ -391,7 +391,7 @@ export const defaultTheme: Theme = {
     stroke: 'red',
     strokeDasharray: '10 10',
     strokeDashoffset: '100%',
-    animationName: 'dash',
+    animationName: 'lf_animate_dash',
     animationDuration: '20s',
     animationIterationCount: 'infinite',
     animationTimingFunction: 'linear',
