@@ -68,13 +68,13 @@ export default class BaseEdge extends Component<IProps> {
       ...arrow,
     } as ArrowStyle;
   }
-  getArrow() {
+  getArrow(): h.JSX.Element | null {
     const { model: { id } } = this.props;
     const { refY = 0, refX = 2 } = this.getArrowStyle();
     return (
       <g>
         <defs>
-          <marker id={`marker-start-${id}`} refX={refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
+          <marker id={`marker-start-${id}`} refX={-refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
             {this.getStartArrow()}
           </marker>
           <marker id={`marker-end-${id}`} refX={refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
@@ -84,11 +84,11 @@ export default class BaseEdge extends Component<IProps> {
       </g>
     );
   }
-  getStartArrow() {
+  getStartArrow(): h.JSX.Element | null {
     const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
     return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
-  getEndArrow() {
+  getEndArrow(): h.JSX.Element | null {
     const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
     return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} transform="rotate(180)" d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
