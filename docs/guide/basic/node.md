@@ -632,7 +632,7 @@ class UmlNode extends HtmlNode {
 
 ### 使用react编写html节点
 
-以为自定义html节点对外暴露的是一个DOM节点，所以你可以使用框架现有的能力来渲染节点。在react中，我们利用`reactDom`的`render`方法，将react组件渲染到dom节点上。
+因为自定义html节点对外暴露的是一个DOM节点，所以你可以使用框架现有的能力来渲染节点。在react中，我们利用`reactDom`的`render`方法，将react组件渲染到dom节点上。
 
 ```jsx
 import { HtmlNodeModel, HtmlNode } from '@logicflow/core';
