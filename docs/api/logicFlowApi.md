@@ -43,7 +43,7 @@ const lf = new LogicFlow(options: Options)
 |textEdit| Boolean | -| true | 是否开启文本编辑 |
 |nodeTextDraggable|boolean| - |false|允许节点文本可以拖拽|
 |edgeTextDraggable|boolean| - |false|允许边文本可以拖拽|
-|multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt。 支持组合键点击元素实现多选|
+|multipleSelectKey|string| - |-|多选按键, 可选meta(cmd)、shift、alt、ctrl(Mac上ctrl + 点击节点会触发上下文菜单，所以ctrl尽量用在非Mac系统)。 支持组合键点击元素实现多选|
 |idGenerator|function| -|-|自定义创建节点、连线时生成id规则。|
 |edgeGenerator|function| -|-|连接节点及移动边时边的生成规则|
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|

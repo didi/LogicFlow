@@ -34,6 +34,9 @@ export const isMultipleSelect = (e: MouseEvent, editConfigModel): boolean => {
     case 'shift':
       isMultiple = e.shiftKey;
       break;
+    case 'ctrl':
+      isMultiple = e.ctrlKey; // Mac上ctrl + 点击节点会触发上下文菜单，所以ctrl尽量用在非Mac系统
+      break;
     default:
       isMultiple = false;
       break;
