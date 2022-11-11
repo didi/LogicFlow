@@ -79,7 +79,10 @@ export default class Dnd {
     this.lf.graphModel.removeFakerNode();
     this.fakerNode = null;
     const nodeData = currentNode.getData();
-    this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, { data: nodeData });
+    this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, {
+      data: nodeData,
+      e,
+    });
   };
 
   eventMap() {
