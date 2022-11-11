@@ -86,6 +86,10 @@ class GraphModel {
    */
   edgeGenerator: Definition['edgeGenerator'];
   /**
+   * 手动连接边时获取目标节点上，需要连接的锚点
+   */
+  getTargetAnchor: Definition['getTargetAnchor'];
+  /**
    * 节点移动规则判断
    * 在节点移动的时候，会出发此数组中的所有规则判断
    */
@@ -146,6 +150,7 @@ class GraphModel {
       grid,
       idGenerator,
       edgeGenerator,
+      getTargetAnchor,
       animation,
     } = options;
     this.background = background;
@@ -165,6 +170,7 @@ class GraphModel {
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
+    this.getTargetAnchor = getTargetAnchor;
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
   }

@@ -6,9 +6,12 @@ import {
   EdgeData,
   Extension,
   GraphConfigData,
+  Point,
+  AnchorInfo,
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
+import BaseNode from './model/node/BaseNodeModel';
 import { Theme } from './constant/DefaultTheme';
 import { AnimationConfig } from './constant/DefaultAnimation';
 
@@ -118,7 +121,16 @@ export type Definition = {
    *        any: 自定义边及其他数据
    */
   edgeGenerator?: (sourceNode: any, targetNode: any, currentEdge?: any) => string | any | undefined;
-  [key: string]: any;
+  /**
+   * 手动连接边时获取目标节点上，需要连接的锚点
+   *
+   * @param position 连接边时鼠标在目标节点上释放时的坐标
+   * @param node 目标节点
+   *
+   * @return 返回需要连接的锚点
+   */
+  getTargetAnchor: (position: Point, node: BaseNode) => AnchorInfo;
+  [key: string]: any
 } & EditConfigInterface;
 
 export interface GuardsTypes {

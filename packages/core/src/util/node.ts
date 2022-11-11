@@ -9,6 +9,7 @@ import {
   Direction,
   NodeConfig,
   AnchorConfig,
+  AnchorInfo,
 } from '../type';
 import { isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
@@ -37,7 +38,7 @@ export const targetNodeInfo = (position: Point, graphModel: GraphModel): NodeCon
     const targetNode = nodes[i];
     const inNode = isInNodeBbox(position, targetNode);
     if (inNode) {
-      const anchorInfo = getClosestAnchor(position, targetNode);
+      const anchorInfo = (graphModel.getTargetAnchor || getClosestAnchor)(position, targetNode);
       if (anchorInfo) { // 不能连接到没有锚点的节点
         const currentNodeInfo = {
           node: targetNode,
@@ -67,11 +68,7 @@ const isNodeHigher = (node1, node2, graphModel) => {
   return false;
 };
 
-type AnchorInfo = {
-  index: number,
-  anchor: Point,
-};
-/* 手动边时获取目标节点上，距离目标位置最近的锚点 */
+/* 手动连接边时获取目标节点上，距离目标位置最近的锚点 */
 const getClosestAnchor = (position: Point, node: BaseNode): AnchorInfo => {
   const anchors = getAnchors(node);
   let closest;
