@@ -702,11 +702,15 @@ export default class LogicFlow {
       elements.nodes.push(nodeModel);
     }
     edges.forEach(edge => {
-      const sourceId = edge.sourceNodeId;
-      const targetId = edge.targetNodeId;
-      if (nodeIdMap[sourceId]) edge.sourceNodeId = nodeIdMap[sourceId];
-      if (nodeIdMap[targetId]) edge.targetNodeId = nodeIdMap[targetId];
-      const edgeModel = this.graphModel.addEdge(edge);
+      let sourceId = edge.sourceNodeId;
+      let targetId = edge.targetNodeId;
+      if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId];
+      if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId];
+      const edgeModel = this.graphModel.addEdge({
+        ...edge,
+        sourceNodeId: sourceId,
+        targetNodeId: targetId,
+      });
       elements.edges.push(edgeModel);
     });
     return elements;
