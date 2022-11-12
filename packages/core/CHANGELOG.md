@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.31](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.30...@logicflow/core@1.1.31) (2022-11-12)
+
+
+### Bug Fixes
+
+* **core:** fix the arrow position and getArrow type,fixes [#851](https://github.com/didi/LogicFlow/issues/851) ([10eebe2](https://github.com/didi/LogicFlow/commit/10eebe2cba13c308c4e4a411c4561e58446723ea))
+
+
+### Features
+
+* add event parameter for node:dnd-add event ([35466b1](https://github.com/didi/LogicFlow/commit/35466b1801aae0783b8ae6b6d16e4a60bb4f6c31))
+* allow use ctrl key to select multiple elements ([e46a2d2](https://github.com/didi/LogicFlow/commit/e46a2d25304f751fd0ee74722bed9f81b478003b))
+
+
+
+
+
 ## [1.1.30](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.29...@logicflow/core@1.1.30) (2022-10-30)
 
 
