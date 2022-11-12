@@ -126,7 +126,7 @@ export default class LogicFlow {
     this.dnd = new Dnd({ lf: this });
     this.keyboard = new Keyboard({ lf: this, keyboard: options.keyboard });
     // 不可编辑模式没有开启，且没有关闭对齐线
-    if (!options.isSilentMode && options.snapline !== false) {
+    if (options.snapline !== false) {
       this.snaplineModel = new SnaplineModel(this.graphModel);
       snaplineTool(this.graphModel.eventCenter, this.snaplineModel);
     }
@@ -1068,7 +1068,7 @@ export default class LogicFlow {
   }
   renderRawData(graphRawData) {
     this.graphModel.graphDataToModel(formatData(graphRawData));
-    if (!this.options.isSilentMode && this.options.history !== false) {
+    if (this.options.history !== false) {
       this.history.watch(this.graphModel);
     }
     render((

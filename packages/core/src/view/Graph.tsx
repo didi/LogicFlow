@@ -92,7 +92,7 @@ class Graph extends Component<IProps> {
         <ModificationOverlay graphModel={graphModel}>
           <OutlineOverlay graphModel={graphModel} />
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
-          {!options.isSilentMode && options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
+          {options.snapline !== false ? <SnaplineOverlay snaplineModel={snaplineModel} /> : ''}
         </ModificationOverlay>
         <ToolOverlay graphModel={graphModel} tool={tool} />
         {options.background && <BackgroundOverlay background={options.background} />}
