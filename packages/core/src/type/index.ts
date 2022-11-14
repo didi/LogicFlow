@@ -58,6 +58,11 @@ export type PointAnchor = {
 
 export type AnchorsOffsetItem = PointTuple | PointAnchor;
 
+export type AnchorInfo = {
+  index: number,
+  anchor: Point,
+};
+
 export type Size = {
   width: number,
   height: number,
