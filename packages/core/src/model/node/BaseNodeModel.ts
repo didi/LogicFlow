@@ -19,11 +19,13 @@ import {
   PointTuple,
   ShapeStyleAttribute,
   IsAllowMove,
+  Point,
+  AnchorInfo,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
 import { formatData } from '../../util/compatible';
-import { pickNodeConfig } from '../../util/node';
+import { getClosestAnchor, pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 import { BaseEdgeModel } from '../edge';
 
@@ -425,6 +427,15 @@ export default class BaseNodeModel implements IBaseNodeModel {
   public getDefaultAnchor(): PointAnchor[] {
     return [];
   }
+
+  /**
+   * @overridable 子类重写此方法获取手动连接边到节点时，需要连接的锚点
+   * 手动连接边到节点时，需要连接的锚点
+   */
+  public getTargetAnchor(position: Point): AnchorInfo {
+    return getClosestAnchor(position, this);
+  }
+
   /**
    * 获取节点BBox
    */
