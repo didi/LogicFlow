@@ -422,7 +422,6 @@ class MiniMap {
     });
   };
   __drop = () => {
-    console.log('---__drop-----');
     document.removeEventListener('mousemove', this.__drag);
     document.removeEventListener('mouseup', this.__drop);
     let top = this.__viewPortTop;
@@ -445,7 +444,6 @@ class MiniMap {
     if (this.__draging) {
       this.__draging = false;
     } else {
-      console.log('---__mapClick-----');
       const { layerX, layerY } = e;
       const ViewPortCenterX = layerX;
       const ViewPortCenterY = layerY;
