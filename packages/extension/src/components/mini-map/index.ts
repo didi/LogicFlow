@@ -1,5 +1,29 @@
+import { throttle } from 'lodash-es';
+
+interface MiniMapStaticOption {
+  width?: number,
+  height?: number,
+  isShowHeader?: boolean,
+  isShowCloseIcon?: boolean,
+  leftPosition?: number,
+  rightPosition?: number,
+  topPosition?: number,
+  bottomPosition?: number,
+  headerTitle?: string,
+}
 class MiniMap {
   static pluginName = 'miniMap';
+  static width = 150;
+  static height = 220;
+  static viewPortWidth = 150;
+  static viewPortHeight = 75;
+  static isShowHeader = true;
+  static isShowCloseIcon = true;
+  static leftPosition = 0;
+  static topPosition = 0;
+  static rightPosition = null;
+  static bottomPosition = null;
+  static headerTitle = '导航';
   __lf = null;
   __container = null;
   __miniMapWrap = null;
@@ -8,6 +32,10 @@ class MiniMap {
   __viewport = null;
   __width = 150;
   __height = 220;
+  __leftPosition = undefined;
+  __topPosition = undefined;
+  __rightPosition = undefined;
+  __bottomPosition = undefined;
   __miniMapWidth =450;
   __miniMapHeight = 660;
   __viewPortTop = 0;
@@ -20,13 +48,63 @@ class MiniMap {
   __resetDataY = 0;
   __LogicFlow = null;
   __isShow = false;
+  __isShowHeader = true;
+  __isShowCloseIcon = true;
+  __draging = false;
   __disabledPlugins = ['miniMap', 'control', 'selectionSelect'];
   constructor({ lf, LogicFlow }) {
     this.__lf = lf;
+    this.__width = MiniMap.width;
+    this.__height = MiniMap.height;
+    this.__isShowHeader = MiniMap.isShowHeader;
+    this.__isShowCloseIcon = MiniMap.isShowCloseIcon;
+    this.__viewPortWidth = MiniMap.viewPortWidth;
+    this.__viewPortHeight = MiniMap.viewPortHeight;
+    this.__leftPosition = MiniMap.leftPosition;
+    this.__topPosition = MiniMap.topPosition;
+    this.__rightPosition = MiniMap.rightPosition;
+    this.__bottomPosition = MiniMap.bottomPosition;
     this.__miniMapWidth = lf.graphModel.width;
-    this.__miniMapHeight = (lf.graphModel.width * 220) / 150;
+    this.__miniMapHeight = (lf.graphModel.width * this.__height) / this.__width;
     this.__LogicFlow = LogicFlow;
     this.__init();
+  }
+  static setOption(option: MiniMapStaticOption) {
+    const options = Object.keys(option);
+    options.forEach(item => {
+      switch (item) {
+        case 'width':
+          MiniMap.width = option.width;
+          MiniMap.viewPortWidth = option.width;
+          break;
+        case 'height':
+          MiniMap.height = option.height;
+          break;
+        case 'isShowHeader':
+          MiniMap.isShowHeader = option.isShowHeader;
+          break;
+        case 'isShowCloseIcon':
+          MiniMap.isShowCloseIcon = option.isShowCloseIcon;
+          break;
+        case 'leftPosition':
+          MiniMap.leftPosition = option.leftPosition;
+          break;
+        case 'topPosition':
+          MiniMap.topPosition = option.topPosition;
+          break;
+        case 'rightPosition':
+          MiniMap.rightPosition = option.rightPosition;
+          break;
+        case 'bottomPosition':
+          MiniMap.bottomPosition = option.bottomPosition;
+          break;
+        case 'headerTitle':
+          MiniMap.headerTitle = option.headerTitle;
+          break;
+        default:
+          break;
+      }
+    });
   }
   render(lf, container) {
     this.__container = container;
@@ -35,11 +113,11 @@ class MiniMap {
         this.__setView();
       }
     });
-    this.__lf.on('blank:drop', () => {
+    this.__lf.on('graph:transform', throttle(() => {
       if (this.__isShow) {
         this.__setView();
       }
-    });
+    }, 300));
   }
   init(option) {
     this.__disabledPlugins = this.__disabledPlugins.concat(
@@ -48,7 +126,7 @@ class MiniMap {
   }
   /**
    * 显示mini map
-   */
+  */
   show = (leftPosition?: number, topPosition?: number) => {
     this.__setView();
     if (!this.__isShow) {
@@ -65,14 +143,20 @@ class MiniMap {
     }
     this.__isShow = false;
   };
+  reset = () => {
+    this.__lf.resetTranslate();
+    this.__lf.resetZoom();
+    this.hide();
+    this.show();
+  };
   __init() {
     const miniMapWrap = document.createElement('div');
     miniMapWrap.className = 'lf-mini-map-graph';
-    miniMapWrap.style.width = `${this.__width}px`;
+    miniMapWrap.style.width = `${this.__width + 4}px`;
     miniMapWrap.style.height = `${this.__height}px`;
     this.__lfMap = new this.__LogicFlow({
       width: this.__lf.graphModel.width,
-      height: (this.__lf.graphModel.width * 220) / 150,
+      height: (this.__lf.graphModel.width * this.__height) / this.__width,
       container: miniMapWrap,
       isSilentMode: true,
       stopZoomGraph: true,
@@ -87,23 +171,41 @@ class MiniMap {
     this.__lfMap.adapterOut = (a) => a;
     this.__miniMapWrap = miniMapWrap;
     this.__createViewPort();
+    miniMapWrap.addEventListener('click', this.__mapClick);
   }
-  __createMiniMap(left, top) {
+  private __createMiniMap(left?: number, top?: number) {
     const miniMapContainer = document.createElement('div');
     const miniMapWrap = this.__miniMapWrap;
     miniMapContainer.appendChild(miniMapWrap);
-    if (typeof left !== 'undefined' && typeof top !== 'undefined') {
-      miniMapContainer.style.left = `${left}px`;
-      miniMapContainer.style.top = `${top}px`;
+    if (typeof left !== 'undefined' || typeof top !== 'undefined') {
+      miniMapContainer.style.left = `${left || 0}px`;
+      miniMapContainer.style.top = `${top || 0}px`;
+    } else {
+      if (typeof this.__rightPosition !== 'undefined') {
+        miniMapContainer.style.right = `${this.__rightPosition}px`;
+      } else if (typeof this.__leftPosition !== 'undefined') {
+        miniMapContainer.style.left = `${this.__leftPosition}px`;
+      }
+      if (typeof this.__bottomPosition !== 'undefined') {
+        miniMapContainer.style.bottom = `${this.__bottomPosition}px`;
+      } else if (typeof this.__topPosition !== 'undefined') {
+        miniMapContainer.style.top = `${this.__topPosition}px`;
+      }
     }
     miniMapContainer.style.position = 'absolute';
     miniMapContainer.className = 'lf-mini-map';
+    if (!this.__isShowCloseIcon) {
+      miniMapContainer.classList.add('lf-mini-map-no-close-icon');
+    }
+    if (!this.__isShowHeader) {
+      miniMapContainer.classList.add('lf-mini-map-no-header');
+    }
     this.__container.appendChild(miniMapContainer);
     this.__miniMapWrap.appendChild(this.__viewport);
 
     const header = document.createElement('div');
     header.className = 'lf-mini-map-header';
-    header.innerText = '导航';
+    header.innerText = MiniMap.headerTitle;
     miniMapContainer.appendChild(header);
 
     const close = document.createElement('span');
@@ -204,7 +306,8 @@ class MiniMap {
    */
   __setView() {
     // 1. 获取到图中所有的节点中的位置，将其偏移到原点开始（避免节点位置为负的时候无法展示问题）。
-    const data = this.__resetData(this.__lf.getGraphRawData());
+    const graphData = this.__lf.getGraphRawData();
+    const data = this.__resetData(graphData);
     // 由于随时都会有新节点注册进来，需要同步将注册的
     const { viewMap } : { viewMap: Map<string, any> } = this.__lf;
     const { modelMap } : { modelMap: Map<string, any> } = this.__lf.graphModel;
@@ -241,28 +344,39 @@ class MiniMap {
   // 设置视口
   __setViewPort(scale, { left, right, top, bottom }) {
     const viewStyle = this.__viewport.style;
-    viewStyle.width = `${this.__width - 4}px`;
+    viewStyle.width = `${this.__viewPortWidth}px`;
     viewStyle.height = `${
-      (this.__width - 4) / (this.__lf.graphModel.width / this.__lf.graphModel.height)
+      (this.__viewPortWidth) / (this.__lf.graphModel.width / this.__lf.graphModel.height)
     }px`;
     // top
-    const { TRANSLATE_X, TRANSLATE_Y } = this.__lf.getTransform();
-
+    const { TRANSLATE_X, TRANSLATE_Y, SCALE_X, SCALE_Y } = this.__lf.getTransform();
     const realWidth = right - left;
     // 视口实际宽 = 视口默认宽 / (所有元素一起占据的真实宽 / 绘布宽)
-    const realViewPortWidth = (this.__width - 4) / (realWidth / this.__lf.graphModel.width);
+    const viewPortWidth = (this.__width) / (realWidth / this.__lf.graphModel.width);
+    const realViewPortWidth = MiniMap.viewPortWidth * (viewPortWidth / this.__width);
     // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
     const graphRatio = (this.__lf.graphModel.width / this.__lf.graphModel.height);
     const realViewPortHeight = realViewPortWidth / graphRatio;
-
-    this.__viewPortTop = TRANSLATE_Y > 0 ? 0 : -TRANSLATE_Y * scale;
-    this.__viewPortLeft = TRANSLATE_X > 0 ? 0 : -TRANSLATE_X * scale;
+    const graphData = this.__lf.getGraphRawData();
+    const { left: graphLeft, top: graphTop } = this.__getBounds(graphData);
+    let viewportLeft = 0;
+    let viewportTop = 0;
+    if (graphLeft < 0) {
+      viewportLeft = graphLeft;
+    }
+    if (graphTop < 0) {
+      viewportTop = graphTop;
+    }
+    viewportLeft += TRANSLATE_X / SCALE_X;
+    viewportTop += TRANSLATE_Y / SCALE_Y;
+    this.__viewPortTop = viewportTop > 0 ? 0 : (-viewportTop * scale) / SCALE_X;
+    this.__viewPortLeft = viewportLeft > 0 ? 0 : (-viewportLeft * scale) / SCALE_X;
     this.__viewPortWidth = realViewPortWidth;
     this.__viewPortHeight = realViewPortHeight;
     viewStyle.top = `${this.__viewPortTop}px`;
     viewStyle.left = `${this.__viewPortLeft}px`;
-    viewStyle.width = `${realViewPortWidth}px`;
-    viewStyle.height = `${realViewPortHeight}px`;
+    viewStyle.width = `${realViewPortWidth / SCALE_X}px`;
+    viewStyle.height = `${realViewPortHeight / SCALE_Y}px`;
   }
   // 预览视窗
   __createViewPort() {
@@ -287,6 +401,8 @@ class MiniMap {
     viewStyle.left = `${this.__viewPortLeft}px`;
   };
   __drag = (e) => {
+    console.log('---__drag-----');
+    this.__draging = true;
     const top = this.__viewPortTop + e.y - this.__startPosition.y;
     const left = this.__viewPortLeft + e.x - this.__startPosition.x;
     this.moveViewport(top, left);
@@ -306,6 +422,7 @@ class MiniMap {
     });
   };
   __drop = () => {
+    console.log('---__drop-----');
     document.removeEventListener('mousemove', this.__drag);
     document.removeEventListener('mouseup', this.__drop);
     let top = this.__viewPortTop;
@@ -323,6 +440,21 @@ class MiniMap {
       top = 0;
     }
     this.moveViewport(top, left);
+  };
+  __mapClick = (e) => {
+    if (this.__draging) {
+      this.__draging = false;
+    } else {
+      console.log('---__mapClick-----');
+      const { layerX, layerY } = e;
+      const ViewPortCenterX = layerX;
+      const ViewPortCenterY = layerY;
+      const graphData = this.__lf.getGraphRawData();
+      const { left, top } = this.__getBounds(graphData);
+      const resetGraphX = left + ViewPortCenterX / this.__viewPortScale;
+      const resetGraphY = top + ViewPortCenterY / this.__viewPortScale;
+      this.__lf.focusOn({ coordinate: { x: resetGraphX, y: resetGraphY } });
+    }
   };
 }
 
