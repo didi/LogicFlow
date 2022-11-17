@@ -14,6 +14,7 @@
 | isShowCloseIcon | boolean | true | 是否展示小地图关闭 |
 | headerTitle | string | 导航 | 小地图标题 |
 
+
 ```ts
 interface MiniMapStaticOption {
   width?: number,
@@ -26,15 +27,14 @@ interface MiniMapStaticOption {
   bottomPosition?: number,
   headerTitle?: string,
 }
-```ts
-
+```
 ### 启用
 
 ```ts
 import LogicFlow from '@logicflow/core';
 import { MiniMap } from '@logicflow/extension';
 import '@logicflow/extension/lib/style/index.css';
-// 注意：需要在创建lf实例之前使用 MiniMap.setOption方法需要在1.1.31以上使用
+// 注意：需要在创建lf实例之前使用 MiniMap.setOption方法需要在1.1.32以上使用
 MiniMap.setOption({
     width: 200,
     height: 170,
