@@ -41,15 +41,15 @@ lf.extension.control.addItem({
 
 ```js
 // 删除缩小
-lf.extension.control.addItem('zoom-out');
+lf.extension.control.removeItem('zoom-out');
 // 删除放大
-lf.extension.control.addItem('zoom-in');
+lf.extension.control.removeItem('zoom-in');
 // 删除适应
-lf.extension.control.addItem('reset');
+lf.extension.control.removeItem('reset');
 // 删除上一步
-lf.extension.control.addItem('undo');
+lf.extension.control.removeItem('undo');
 // 删除下一步
-lf.extension.control.addItem('redo');
+lf.extension.control.removeItem('redo');
 ```
 
 ### 示例
