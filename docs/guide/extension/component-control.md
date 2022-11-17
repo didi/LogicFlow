@@ -37,6 +37,20 @@ lf.extension.control.addItem({
   }
 });
 ```
+### 删除选项
+
+```js
+// 删除缩小
+lf.extension.control.addItem('zoom-out');
+// 删除放大
+lf.extension.control.addItem('zoom-in');
+// 删除适应
+lf.extension.control.addItem('reset');
+// 删除上一步
+lf.extension.control.addItem('undo');
+// 删除下一步
+lf.extension.control.addItem('redo');
+```
 
 ### 示例
 
