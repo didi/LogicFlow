@@ -34,7 +34,7 @@ interface MiniMapStaticOption {
 import LogicFlow from '@logicflow/core';
 import { MiniMap } from '@logicflow/extension';
 import '@logicflow/extension/lib/style/index.css';
-// 注意：需要在创建lf实例之前使用 MiniMap.setOption方法需要在1.1.32以上使用
+// 注意：需要在创建lf实例之前使用 MiniMap.setOption方法需要在1.1.32发布后使用
 MiniMap.setOption({
     width: 200,
     height: 170,
