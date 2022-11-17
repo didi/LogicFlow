@@ -401,7 +401,6 @@ class MiniMap {
     viewStyle.left = `${this.__viewPortLeft}px`;
   };
   __drag = (e) => {
-    console.log('---__drag-----');
     this.__draging = true;
     const top = this.__viewPortTop + e.y - this.__startPosition.y;
     const left = this.__viewPortLeft + e.x - this.__startPosition.x;
