@@ -34,16 +34,19 @@ interface MiniMapStaticOption {
 import LogicFlow from '@logicflow/core';
 import { MiniMap } from '@logicflow/extension';
 import '@logicflow/extension/lib/style/index.css';
-// 注意：需要在创建lf实例之前使用 MiniMap.setOption方法需要在1.1.32发布后使用
-MiniMap.setOption({
-    width: 200,
-    height: 170,
-    headerTitle: '缩略图',
-    topPosition: 20, // 在原图的右上角
-    rightPosition: 20, // 在原图的右上角
-})
-
-LogicFlow.use(MiniMap);
+const lf = new LogicFlow({
+  container: document.querySelector('#app'),
+  plugins: [MiniMap],
+  pluginsOptions: {
+    MiniMap: {
+      width: 200,
+      height: 170,
+      headerTitle: '缩略图',
+      rightPosition: 20,
+      bottomPosition: 100,
+    }
+  },
+});
 ```
 
 ### 显示

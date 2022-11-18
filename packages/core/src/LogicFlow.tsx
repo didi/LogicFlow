@@ -1002,6 +1002,7 @@ export default class LogicFlow {
     const extensionInstance = new ExtensionContructor({
       lf: this,
       LogicFlow,
+      options: this.options.pluginsOptions,
     });
     extensionInstance.render && this.components.push(
       extensionInstance.render.bind(extensionInstance),

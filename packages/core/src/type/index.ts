@@ -351,6 +351,7 @@ export interface ExtensionContractor {
   new({
     lf: LogicFlow,
     LogicFlow: LogicFlowContractor,
+    options: any,
   });
   render?: Function;
 }
