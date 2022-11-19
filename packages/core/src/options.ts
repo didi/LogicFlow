@@ -100,6 +100,10 @@ export type Definition = {
    */
   plugins?: Extension[];
   /**
+   * 插件配置参数，包含所有插件的参数，用户在插件内进行访问，也可以再插件之间读取
+   */
+  pluginsOptions?: Record<string, any>;
+  /**
    * 控制是否开启动画
    * false: 关闭所有动画
    * true: 开启所有动画

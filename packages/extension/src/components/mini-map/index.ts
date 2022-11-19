@@ -52,59 +52,15 @@ class MiniMap {
   private isShowCloseIcon = true;
   private draging = false;
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect'];
-  constructor({ lf, LogicFlow }) {
+  constructor({ lf, LogicFlow, options }) {
     this.lf = lf;
-    this.width = MiniMap.width;
-    this.height = MiniMap.height;
-    this.isShowHeader = MiniMap.isShowHeader;
-    this.isShowCloseIcon = MiniMap.isShowCloseIcon;
-    this.viewPortWidth = MiniMap.viewPortWidth;
-    this.viewPortHeight = MiniMap.viewPortHeight;
-    this.leftPosition = MiniMap.leftPosition;
-    this.topPosition = MiniMap.topPosition;
-    this.rightPosition = MiniMap.rightPosition;
-    this.bottomPosition = MiniMap.bottomPosition;
+    if (options && options.MiniMap) {
+      this.setOption(options);
+    }
     this.miniMapWidth = lf.graphModel.width;
     this.miniMapHeight = (lf.graphModel.width * this.height) / this.width;
     this.LogicFlow = LogicFlow;
     this.initMiniMap();
-  }
-  static setOption(option: MiniMapStaticOption) {
-    const options = Object.keys(option);
-    options.forEach(item => {
-      switch (item) {
-        case 'width':
-          MiniMap.width = option.width;
-          MiniMap.viewPortWidth = option.width;
-          break;
-        case 'height':
-          MiniMap.height = option.height;
-          break;
-        case 'isShowHeader':
-          MiniMap.isShowHeader = option.isShowHeader;
-          break;
-        case 'isShowCloseIcon':
-          MiniMap.isShowCloseIcon = option.isShowCloseIcon;
-          break;
-        case 'leftPosition':
-          MiniMap.leftPosition = option.leftPosition;
-          break;
-        case 'topPosition':
-          MiniMap.topPosition = option.topPosition;
-          break;
-        case 'rightPosition':
-          MiniMap.rightPosition = option.rightPosition;
-          break;
-        case 'bottomPosition':
-          MiniMap.bottomPosition = option.bottomPosition;
-          break;
-        case 'headerTitle':
-          MiniMap.headerTitle = option.headerTitle;
-          break;
-        default:
-          break;
-      }
-    });
   }
   render(lf, container) {
     this.container = container;
@@ -114,7 +70,8 @@ class MiniMap {
       }
     });
     this.lf.on('graph:transform', throttle(() => {
-      if (this.isShow) {
+      // 小地图已展示，并且没有拖拽小地图视口
+      if (this.isShow && !this.draging) {
         this.setView();
       }
     }, 300));
@@ -149,6 +106,27 @@ class MiniMap {
     this.hide();
     this.show();
   };
+  private setOption(options) {
+    const {
+      width = 150,
+      height = 220,
+      isShowHeader = true,
+      isShowCloseIcon = true,
+      leftPosition = 0,
+      topPosition = 0,
+      rightPosition,
+      bottomPosition,
+    } = options.MiniMap as MiniMapStaticOption;
+    this.width = width;
+    this.height = height;
+    this.isShowHeader = isShowHeader;
+    this.isShowCloseIcon = isShowCloseIcon;
+    this.viewPortWidth = width;
+    this.leftPosition = leftPosition;
+    this.topPosition = topPosition;
+    this.rightPosition = rightPosition;
+    this.bottomPosition = bottomPosition;
+  }
   private initMiniMap() {
     const miniMapWrap = document.createElement('div');
     miniMapWrap.className = 'lf-mini-map-graph';
@@ -347,29 +325,23 @@ class MiniMap {
     viewStyle.height = `${
       (this.viewPortWidth) / (this.lf.graphModel.width / this.lf.graphModel.height)
     }px`;
-    // top
     const { TRANSLATE_X, TRANSLATE_Y, SCALE_X, SCALE_Y } = this.lf.getTransform();
     const realWidth = right - left;
-    // 视口实际宽 = 视口默认宽 / (所有元素一起占据的真实宽 / 绘布宽)
+    // 视口宽 = 小地图宽 / (所有元素一起占据的真实宽 / 绘布宽)
     const viewPortWidth = (this.width) / (realWidth / this.lf.graphModel.width);
-    const realViewPortWidth = MiniMap.viewPortWidth * (viewPortWidth / this.width);
-    // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
+    // 实际视口宽 = 小地图宽 * 占宽度比例
+    const realViewPortWidth = this.width * (viewPortWidth / this.width);
     const graphRatio = (this.lf.graphModel.width / this.lf.graphModel.height);
+    // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
     const realViewPortHeight = realViewPortWidth / graphRatio;
     const graphData = this.lf.getGraphRawData();
     const { left: graphLeft, top: graphTop } = this.getBounds(graphData);
-    let viewportLeft = 0;
-    let viewportTop = 0;
-    if (graphLeft < 0) {
-      viewportLeft = graphLeft;
-    }
-    if (graphTop < 0) {
-      viewportTop = graphTop;
-    }
+    let viewportLeft = graphLeft;
+    let viewportTop = graphTop;
     viewportLeft += TRANSLATE_X / SCALE_X;
     viewportTop += TRANSLATE_Y / SCALE_Y;
-    this.viewPortTop = viewportTop > 0 ? 0 : (-viewportTop * scale) / SCALE_X;
-    this.viewPortLeft = viewportLeft > 0 ? 0 : (-viewportLeft * scale) / SCALE_X;
+    this.viewPortTop = viewportTop > 0 ? 0 : (-viewportTop * scale);
+    this.viewPortLeft = viewportLeft > 0 ? 0 : (-viewportLeft * scale);
     this.viewPortWidth = realViewPortWidth;
     this.viewPortHeight = realViewPortHeight;
     viewStyle.top = `${this.viewPortTop}px`;
