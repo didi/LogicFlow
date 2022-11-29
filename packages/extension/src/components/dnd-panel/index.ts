@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core';
+import LogicFlow, { render } from '@logicflow/core';
 
 type ShapeItem = {
   type?: string;
@@ -55,12 +55,20 @@ class DndPanel {
     const shape = document.createElement('div');
     shape.className = 'lf-dnd-shape';
     if (shapeItem.icon) {
-      shape.style.backgroundImage = `url(${shapeItem.icon})`;
+      if (typeof shapeItem.icon === 'string') {
+        shape.style.backgroundImage = `url(${shapeItem.icon})`;
+      } else if (typeof shapeItem.icon === 'object' && shapeItem.icon["$$typeof"]) {
+        render(shapeItem.icon, shape);
+      }
     }
     el.appendChild(shape);
     if (shapeItem.label) {
       const text = document.createElement('div');
-      text.innerText = shapeItem.label;
+      if (typeof shapeItem.label === 'string' || typeof shapeItem.label === 'number') {
+        text.innerText = shapeItem.label;
+      } else if (typeof shapeItem.label === 'object' && shapeItem.label["$$typeof"]) {
+        render(shapeItem.label, text);
+      }
       text.className = 'lf-dnd-text';
       el.appendChild(text);
     }
