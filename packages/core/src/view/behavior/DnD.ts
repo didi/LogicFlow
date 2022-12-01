@@ -71,7 +71,7 @@ export default class Dnd {
     const currentNode = this.lf.addNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({ x: e.clientX, y: e.clientY }),
-    });
+    }, EventType.NODE_DND_ADD);
     e.preventDefault();
     e.stopPropagation();
     this.nodeConfig = null;
@@ -79,10 +79,10 @@ export default class Dnd {
     this.lf.graphModel.removeFakerNode();
     this.fakerNode = null;
     const nodeData = currentNode.getData();
-    this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, {
-      data: nodeData,
-      e,
-    });
+    // this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_ADD, {
+    //   data: nodeData,
+    //   e,
+    // });
   };
 
   eventMap() {
