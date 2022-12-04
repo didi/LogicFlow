@@ -54,8 +54,11 @@ class DndPanel {
     el.className = shapeItem.className ? `lf-dnd-item ${shapeItem.className}` : 'lf-dnd-item';
     const shape = document.createElement('div');
     shape.className = 'lf-dnd-shape';
+    // if (typeof shapeItem.icon === 'string') {
     if (shapeItem.icon) {
       shape.style.backgroundImage = `url(${shapeItem.icon})`;
+    // } else {
+    //   shape.appendChild(shapeItem.icon);
     }
     el.appendChild(shape);
     if (shapeItem.label) {
@@ -76,6 +79,24 @@ class DndPanel {
         shapeItem.callback(this.lf, this.domContainer);
       }
     };
+    el.ondblclick = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-dbclick', {
+        e,
+        data: shapeItem,
+      })
+    }
+    el.onclick = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-click', {
+        e,
+        data: shapeItem,
+      })
+    }
+    el.oncontextmenu = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-contextmenu', {
+        e,
+        data: shapeItem,
+      })
+    }
     return el;
   }
 }
