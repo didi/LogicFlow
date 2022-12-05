@@ -734,7 +734,7 @@ lf.selectElementById(id: string, multiple = false)
 获取流程绘图数据
 
 ```ts
-//返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
+//返回值，如果是应用了adapter插件，且设置了adapterOut，返回为转换后的数据格式，否则为默认的格式
 getGraphData(): GraphConfigData | unknown
 ```
 
