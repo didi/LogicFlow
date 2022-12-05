@@ -124,6 +124,7 @@
       <button onClick="closeEdgeAnimation()">关闭边动画</button>
       <button onClick="showCanvas()">显示流程图</button>
       <button onClick="deleteNode()">删除节点1</button>
+      <button id="btnMoveAllNodes" onClick="moveAllNodes()">选中的节点一起移动</button>
     </div>
     <div class="button-list">
       <div class="rect" onmousedown="mouseDownRect()"></div>
@@ -877,6 +878,21 @@
           edges.forEach(({ id }) => {
             lf.changeEdgeId(id, 'edge_' + id)
           })
+        }
+
+        window.moveAllNodes = function () {
+          const button = document.getElementById('btnMoveAllNodes');
+          if (button.innerHTML === '选中的节点一起移动') {
+            lf.updateEditConfig({
+              moveAllSelectedNodesWhenMultipleSelectToolDisabled: true
+            })
+            button.innerHTML = '选中的节点不一起移动'
+          } else {
+            lf.updateEditConfig({
+              moveAllSelectedNodesWhenMultipleSelectToolDisabled: false
+            })
+            button.innerHTML = '选中的节点一起移动'
+          }
         }
       }
     </script>

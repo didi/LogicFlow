@@ -139,11 +139,12 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
   };
   onDraging = ({ event }) => {
     const { model, graphModel } = this.props;
-    // const { isDragging } = model;
+    const { isSelected } = model;
     const {
       editConfigModel: {
         stopMoveGraph,
         autoExpand,
+        moveAllSelectedNodesWhenMultipleSelectToolDisabled,
       },
       transformModel,
       width,
@@ -166,12 +167,25 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     // 将x, y移动到grid上
     x = snapToGrid(x, gridSize);
     y = snapToGrid(y, gridSize);
+
+    const moveNodes = (deltaX, deltaY) => {
+      if (isSelected && moveAllSelectedNodesWhenMultipleSelectToolDisabled) {
+        graphModel.moveNodes(
+          graphModel.getSelectElements().nodes.map(node => node.id),
+          deltaX,
+          deltaY,
+        );
+      } else {
+        graphModel.moveNode(
+          model.id,
+          deltaX,
+          deltaY,
+        );
+      }
+    };
+
     if (!width || !height) {
-      graphModel.moveNode2Coordinate(
-        model.id,
-        x,
-        y,
-      );
+      moveNodes(x - model.x, y - model.y);
       return;
     }
     const isOutCanvas = x1 < 0 || y1 < 0 || x1 > width || y1 > height;
@@ -203,16 +217,10 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);
-        graphModel.moveNode(
-          model.id, -translateX / transformModel.SCALE_X, -translateY / transformModel.SCALE_X,
-        );
+        moveNodes(-translateX / transformModel.SCALE_X, -translateY / transformModel.SCALE_X);
       });
     } else {
-      graphModel.moveNode2Coordinate(
-        model.id,
-        x,
-        y,
-      );
+      moveNodes(x - model.x, y - model.y);
     }
   };
   onDragEnd = () => {

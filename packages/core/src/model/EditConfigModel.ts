@@ -71,6 +71,10 @@ export interface EditConfigInterface {
    * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string;
+  /**
+   * 在MultipleSelectTool禁用的情况下拖动多选节点中的某个节点时，其它被选中节点是否跟随移动
+   */
+  moveAllSelectedNodesWhenMultipleSelectToolDisabled?: boolean;
 }
 
 const SilentConfig = {
@@ -86,6 +90,7 @@ const SilentConfig = {
   edgeTextEdit: false,
   nodeTextDraggable: false,
   edgeTextDraggable: false,
+  moveAllSelectedNodesWhenMultipleSelectToolDisabled: false,
 };
 
 const keys = [
@@ -107,6 +112,7 @@ const keys = [
   'edgeTextDraggable',
   'multipleSelectKey',
   'autoExpand',
+  'moveAllSelectedNodesWhenMultipleSelectToolDisabled',
 ];
 /**
  * 页面编辑配置
@@ -130,6 +136,7 @@ export default class EditConfigModel {
   @observable edgeTextDraggable = false;
   @observable autoExpand = true;
   multipleSelectKey = '';
+  @observable moveAllSelectedNodesWhenMultipleSelectToolDisabled = false;
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
     assign(this, this.getConfigDetail(config));
