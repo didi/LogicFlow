@@ -642,9 +642,10 @@ class GraphModel {
   /**
    * 添加节点
    * @param nodeConfig 节点配置
+   * @param eventType 新增节点事件类型，默认EventType.NODE_ADD
    */
   @action
-  addNode(nodeConfig: NodeConfig) {
+  addNode(nodeConfig: NodeConfig, eventType: EventType = EventType.NODE_ADD) {
     const nodeOriginData = formatData(nodeConfig);
     // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
     if (nodeOriginData.id && this.nodesMap[nodeConfig.id]) {
@@ -659,7 +660,7 @@ class GraphModel {
     const nodeModel = new Model(nodeOriginData, this);
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();
-    this.eventCenter.emit(EventType.NODE_ADD, { data: nodeData });
+    this.eventCenter.emit(eventType, { data: nodeData });
     return nodeModel;
   }
 

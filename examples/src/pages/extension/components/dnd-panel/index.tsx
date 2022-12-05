@@ -82,7 +82,12 @@ export default function DndPanelExample() {
       //   ])
       // }
     ]);
+    // 订阅dnd panel事件
+    // lf.graphModel.eventCenter.on('dnd:panel-dbclick', (args) => {
+    //   console.log('args', args);
+    // })
     lf.render();
+
   }, []);
 
   return (

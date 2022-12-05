@@ -84,6 +84,24 @@ class DndPanel {
         shapeItem.callback(this.lf, this.domContainer);
       }
     };
+    el.ondblclick = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-dbclick', {
+        e,
+        data: shapeItem,
+      })
+    }
+    el.onclick = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-click', {
+        e,
+        data: shapeItem,
+      })
+    }
+    el.oncontextmenu = (e) => {
+      this.lf.graphModel.eventCenter.emit('dnd:panel-contextmenu', {
+        e,
+        data: shapeItem,
+      })
+    }
     return el;
   }
 }

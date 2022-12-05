@@ -429,9 +429,10 @@ export default class LogicFlow {
   /**
    * 添加节点
    * @param nodeConfig 节点配置
+   * @param eventType 新增节点事件类型，默认EventType.NODE_ADD
    */
-  addNode(nodeConfig: NodeConfig): _Model.BaseNodeModel {
-    return this.graphModel.addNode(nodeConfig);
+  addNode(nodeConfig: NodeConfig, eventType: EventType = EventType.NODE_ADD): _Model.BaseNodeModel {
+    return this.graphModel.addNode(nodeConfig, eventType);
   }
   /**
    * 删除节点
