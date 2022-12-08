@@ -197,4 +197,4 @@ please add wechat "logic-flow" to join the user group
 
 ### How to Contribute  
 
-LogicFlow is open to the outside, whether it is just fixing docment typo or a major reconstruction of the overall function of LogicFlow, we welcome it. For each of your PRs, we will carefully review, reply, and merge them. details can see [LogicFlow Contribution Guides](
+LogicFlow is open to the outside, whether it is just fixing docment typo or a major reconstruction of the overall function of LogicFlow, we welcome it. For each of your PRs, we will carefully review, reply, and merge them. Details can see [LogicFlow Contribution Guides](https://github.com/didi/LogicFlow/blob/master/CONTRIBUTING.md).
