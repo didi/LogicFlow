@@ -1,6 +1,6 @@
 import { PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
 
-class CurvedEdge extends PolylineEdge {
+class CurvedEdgeView extends PolylineEdge {
   pointFilter(points) {
     const allPoints = points;
     let i = 1;
@@ -74,8 +74,12 @@ class CurvedEdge extends PolylineEdge {
 class CurvedEdgeModel extends PolylineEdgeModel {
 }
 
-export {
-  CurvedEdge,
-  // CurvedEdgeView,
-  CurvedEdgeModel,
+const CurvedEdge = {
+  type: 'curved-edge',
+  view: CurvedEdgeView,
+  model: CurvedEdgeModel,
 };
+
+export { CurvedEdge };
+
+export default CurvedEdge;
