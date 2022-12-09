@@ -250,8 +250,13 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     if (isRightClick) return;
 
     const { editConfigModel } = graphModel;
-    graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfigModel));
-    this.toFront();
+    // 在multipleSelect tool禁用的情况下，允许取消选中节点
+    if (model.isSelected && !isDoubleClick && isMultipleSelect(e, editConfigModel)) {
+      model.setSelected(false);
+    } else {
+      graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfigModel));
+      this.toFront();
+    }
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
