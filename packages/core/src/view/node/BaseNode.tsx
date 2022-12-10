@@ -276,7 +276,9 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       y: ev.clientY,
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
-    graphModel.selectNodeById(model.id);
+    if (!model.isSelected) {
+      graphModel.selectNodeById(model.id);
+    }
     graphModel.eventCenter.emit(EventType.NODE_CONTEXTMENU, {
       data: nodeData,
       e: ev,
