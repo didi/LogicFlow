@@ -159,7 +159,9 @@ export default class BaseEdge extends Component<IProps> {
     });
     graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
     this.toFront();
-    graphModel.selectEdgeById(model.id);
+    if (!model.isSelected) {
+      graphModel.selectEdgeById(model.id);
+    }
     // 边数据
     const edgeData = model?.getData();
     graphModel.eventCenter.emit(EventType.EDGE_CONTEXTMENU, {
