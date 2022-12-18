@@ -216,8 +216,8 @@ class BaseEdgeModel implements IBaseModel {
     let minDistance;
     const targetAnchors = getAnchors(targetNode);
     targetAnchors.forEach((anchor) => {
-      const distance = twoPointDistance(anchor, this.startPoint);
-      if (!minDistance) {
+      const distance = twoPointDistance(anchor, this.endPoint);
+      if (minDistance === undefined) {
         minDistance = distance;
         position = anchor;
       } else if (distance < minDistance) {
