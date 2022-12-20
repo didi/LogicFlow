@@ -1,4 +1,5 @@
 import { PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
+import searchMiddleIndex from './searchMiddleIndex';
 
 class CurvedEdge extends PolylineEdge {
   pointFilter(points) {
@@ -23,6 +24,19 @@ class CurvedEdge extends PolylineEdge {
     const style = model.getEdgeStyle();
     const animationStyle = model.getEdgeAnimationStyle();
     const points2 = this.pointFilter(points.split(' ').map((p) => p.split(',').map(a => Number(a))));
+    const res = searchMiddleIndex(points2);
+    if (res) {
+      const [first, last] = res;
+      const firstPoint = points2[first];
+      const lastPoint = points2[last];
+      const flag = firstPoint.some((num, index) => num === lastPoint[index]);
+      if (!flag) {
+        const diff = (lastPoint[1] - firstPoint[1]) / 2;
+        const firstNextPoint = [lastPoint[0], lastPoint[1] - diff];
+        const lastPrePoint = [firstPoint[0], firstPoint[1] + diff];
+        points2.splice(first + 1, 0, lastPrePoint, firstNextPoint);
+      }
+    }
     const [startX, startY] = points2[0];
     let d = `M${startX} ${startY}`;
     // 1) 如果一个点不为开始和结束，则在这个点的前后增加弧度开始和结束点。
