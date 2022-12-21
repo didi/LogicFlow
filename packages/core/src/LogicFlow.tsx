@@ -1098,7 +1098,7 @@ export default class LogicFlow {
    *     },
    *     {
    *       id: 'node_2',
-   *       type: 'circel',
+   *       type: 'circle',
    *       x: 300,
    *       y: 200
    *     }
