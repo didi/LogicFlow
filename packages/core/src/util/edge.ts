@@ -883,6 +883,12 @@ export const twoPointDistance = (source: Position, target: Position) => {
   //   x: Math.abs(p2.x),
   //   y: Math.abs(p2.y),
   // };
+  if (!target) {
+    target = {
+      x: 0,
+      y: 0,
+    };
+  }
   return Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2);
 };
 
