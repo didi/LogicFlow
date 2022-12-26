@@ -196,7 +196,7 @@ class BaseEdgeModel implements IBaseModel {
     let minDistance;
     const sourceAnchors = getAnchors(sourceNode);
     sourceAnchors.forEach((anchor) => {
-      const distance = twoPointDistance(anchor, this.startPoint);
+      const distance = twoPointDistance(anchor, targetNode);
       if (minDistance === undefined) {
         minDistance = distance;
         position = anchor;
@@ -216,7 +216,7 @@ class BaseEdgeModel implements IBaseModel {
     let minDistance;
     const targetAnchors = getAnchors(targetNode);
     targetAnchors.forEach((anchor) => {
-      const distance = twoPointDistance(anchor, this.endPoint);
+      const distance = twoPointDistance(anchor, this.startPoint);
       if (minDistance === undefined) {
         minDistance = distance;
         position = anchor;
