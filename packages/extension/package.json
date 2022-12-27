@@ -34,6 +34,7 @@
   "dependencies": {
     "@logicflow/core": "^1.1.31",
     "ids": "^1.0.0",
+    "lodash-es": "^4.17.21",
     "preact": "^10.4.8"
   },
   "standard-version": {
@@ -73,7 +74,6 @@
     "eslint-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^4.2.0",
     "less-loader": "^6.0.0",
-    "lodash-es": "^4.17.21",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "standard-version": "^9.0.0",
