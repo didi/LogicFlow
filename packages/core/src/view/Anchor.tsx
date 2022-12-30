@@ -170,7 +170,7 @@ class Anchor extends Component<IProps, IState> {
       nodeModel,
     });
   };
-  onDragEnd = (event) => {
+  onDragEnd = ({ event }) => {
     if (this.t) {
       cancelRaf(this.t);
     }
