@@ -83,6 +83,7 @@ class StepDrag {
   eventType: string;
   eventCenter: EventEmitter | null;
   model?: BaseNodeModel | BaseEdgeModel;
+  data?: object;
   startTime?: number;
   isGrag: boolean;
   constructor({
@@ -94,6 +95,7 @@ class StepDrag {
     step = 1,
     isStopPropagation = true,
     model = null,
+    data = null,
   }) {
     this.onDragStart = onDragStart;
     this.onDraging = onDraging;
@@ -103,6 +105,7 @@ class StepDrag {
     this.eventType = eventType;
     this.eventCenter = eventCenter;
     this.model = model;
+    this.data = data;
   }
   setStep(step: number) {
     this.step = step;
@@ -117,7 +120,7 @@ class StepDrag {
     DOC.addEventListener('mousemove', this.handleMouseMove, false);
     DOC.addEventListener('mouseup', this.handleMouseUp, false);
     const elementData = this.model?.getData();
-    this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEDOWN`], { e, data: elementData });
+    this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEDOWN`], { e, data: this.data || elementData });
     this.startTime = new Date().getTime();
   };
   handleMouseMove = (e: MouseEvent) => {
@@ -143,15 +146,15 @@ class StepDrag {
        * 为了区分点击和拖动，在鼠标没有拖动时，不触发dragstart。
        */
       if (!this.isDraging) {
-        this.eventCenter?.emit(EventType[`${this.eventType}_DRAGSTART`], { e, data: elementData });
+        this.eventCenter?.emit(EventType[`${this.eventType}_DRAGSTART`], { e, data: this.data || elementData });
         this.onDragStart({ event: e });
       }
       this.isDraging = true;
       // 为了让dragstart和drag不在同一个事件循环中，使drag事件放到下一个消息队列中。
       Promise.resolve().then(() => {
         this.onDraging({ deltaX, deltaY, event: e });
-        this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: elementData });
-        this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: elementData });
+        this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], { e, data: this.data || elementData });
+        this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], { e, data: this.data || elementData });
       });
     }
   };
@@ -163,11 +166,11 @@ class StepDrag {
       DOC.removeEventListener('mousemove', this.handleMouseMove, false);
       DOC.removeEventListener('mouseup', this.handleMouseUp, false);
       const elementData = this.model?.getData();
-      this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: elementData });
+      this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], { e, data: this.data || elementData });
       if (!this.isDraging) return;
       this.isDraging = false;
       this.onDragEnd({ event: e });
-      this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: elementData });
+      this.eventCenter?.emit(EventType[`${this.eventType}_DROP`], { e, data: this.data || elementData });
     });
   };
   cancelDrag = () => {
