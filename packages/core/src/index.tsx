@@ -18,5 +18,6 @@ export * from './view';
 export * from './model';
 export * from './keyboard';
 export * from './options';
+export { ElementState, ModelType, ElementType, EventType } from './constant/constant';
 
 export default LogicFlow;
