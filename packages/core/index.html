@@ -449,7 +449,7 @@
           // metaKeyMultipleSelected: false,
           // adjustEdgeMiddle: true,
           // stopMoveGraph: true,
-          // adjustEdgeStartAndEnd: false,
+          adjustEdgeStartAndEnd: true,
           // adjustEdge: false,
           edgeTextEdit: true,
           keyboard: {
@@ -553,6 +553,27 @@
           }
         );
         lf.setDefaultEdgeType('polyline');
+        lf.on('adjustPoint:mousedown', (e) => {
+          console.log('adjustPoint:mousedown', e);
+        })
+        lf.on('adjustPoint:mouseup', () => {
+          console.log('adjustPoint:mouseup');
+        })
+        lf.on('adjustPoint:mousemove', () => {
+          console.log('adjustPoint:mousemove');
+        })
+        lf.on('adjustPoint:dragstart', () => {
+          console.log('adjustPoint:dragstart');
+        })
+        lf.on('adjustPoint:drag', () => {
+          console.log('adjustPoint:drag');
+        })
+        lf.on('adjustPoint:drop', () => {
+          console.log('adjustPoint:drop');
+        })
+        lf.on('adjustPoint:dragend', () => {
+          console.log('adjustPoint:dragend');
+        })
       }
     </script>
 
