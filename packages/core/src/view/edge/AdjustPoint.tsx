@@ -283,11 +283,19 @@ export default class AdjustPoint extends Component<IProps, IState> {
         newTargetNode,
         newSourceAnchor,
         newTargetAnchor,
+        {
+          adjustSourcePoint: type === AdjustType.SOURCE,
+          edgeId: id,
+        },
       );
       const targetRuleResult = newTargetNode.isAllowConnectedAsTarget(
         newSourceNode,
         newSourceAnchor,
         newTargetAnchor,
+        {
+          adjustSourcePoint: type === AdjustType.SOURCE,
+          edgeId: id,
+        },
       );
       this.sourceRuleResults.set(
         targetInfoId,

@@ -15,6 +15,7 @@ import {
   Bounds,
   AnchorConfig,
   PointAnchor,
+  AdjustInfo,
   AnchorsOffsetItem,
   PointTuple,
   ShapeStyleAttribute,
@@ -36,6 +37,7 @@ export type ConnectRule = {
     target?: BaseNodeModel,
     sourceAnchor?: AnchorConfig,
     targetAnchor?: AnchorConfig,
+    adjustInfo?: AdjustInfo,
   ) => boolean;
 };
 
@@ -301,6 +303,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     target: BaseNodeModel,
     soureAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
+    adjustInfo?: AdjustInfo,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetSourceRules
       ? this.getConnectedSourceRules()
@@ -310,7 +313,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor)) {
+      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor, adjustInfo)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -335,6 +338,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     source: BaseNodeModel,
     soureAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
+    adjustInfo?: AdjustInfo,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetTargetRules
       ? this.getConnectedTargetRules()
@@ -344,7 +348,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor)) {
+      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor, adjustInfo)) {
         isAllPass = false;
         msg = rule.message;
         break;
