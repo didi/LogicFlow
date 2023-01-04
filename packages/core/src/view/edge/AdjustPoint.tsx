@@ -147,9 +147,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 没有draging就结束边
       if (!draging) return;
       // 如果找到目标节点，删除老边，创建新边
+      let needRecoveryEdge = false;
+      let createEdgeInfo;
       if (info && info.node && this.isAllowAdjust(info)) {
         const edgeData = edgeModel.getData();
-        let createEdgeInfo = {
+        createEdgeInfo = {
           ...edgeData,
           sourceAnchorId: '',
           targetAnchorId: '',
@@ -170,6 +172,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
             targetNodeId: edgeModel.targetNodeId,
             endPoint: { ...edgeModel.endPoint },
           };
+          // 找到的是原有的源节点上的原锚点时，还原边
+          if (edgeModel.sourceNodeId === info.node.id
+            && edgeModel.sourceAnchorId === info.anchor.id) {
+            needRecoveryEdge = true;
+          }
         } else if (type === AdjustType.TARGET) {
           const edgeInfo = graphModel.edgeGenerator(
             graphModel.getNodeModelById(edgeModel.sourceNodeId).getData(),
@@ -184,7 +191,16 @@ export default class AdjustPoint extends Component<IProps, IState> {
             targetAnchorId: info.anchor.id,
             endPoint: { x: info.anchor.x, y: info.anchor.y },
           };
+          // 找到的是原有的目标节点上的原锚点时，还原边
+          if (edgeModel.targetNodeId === info.node.id
+            && edgeModel.targetAnchorId === info.anchor.id) {
+            needRecoveryEdge = true;
+          }
         }
+      } else {
+        needRecoveryEdge = true;
+      }
+      if (!needRecoveryEdge) {
         // 为了保证id不变必须要先删除老边，再创建新边，创建新边是会判断是否有重复的id
         // 删除老边
         graphModel.deleteEdgeById(edgeModel.id);
