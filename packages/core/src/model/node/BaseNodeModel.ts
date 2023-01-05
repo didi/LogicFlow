@@ -15,7 +15,6 @@ import {
   Bounds,
   AnchorConfig,
   PointAnchor,
-  AdjustInfo,
   AnchorsOffsetItem,
   PointTuple,
   ShapeStyleAttribute,
@@ -37,7 +36,8 @@ export type ConnectRule = {
     target?: BaseNodeModel,
     sourceAnchor?: AnchorConfig,
     targetAnchor?: AnchorConfig,
-    adjustInfo?: AdjustInfo,
+    // 调整的边的id，在开启adjustEdgeStartAndEnd后调整边连接的节点时会传入，见https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306
+    edgeId?: string,
   ) => boolean;
 };
 
@@ -298,12 +298,14 @@ export default class BaseNodeModel implements IBaseNodeModel {
   /**
    * @over
    * 在边的时候，是否允许这个节点为source节点，边到target节点。
+   *
+   * @param edgeId 调整的边的id，在开启adjustEdgeStartAndEnd后调整边连接的节点时会传入，见https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
     soureAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
-    adjustInfo?: AdjustInfo,
+    edgeId?: string,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetSourceRules
       ? this.getConnectedSourceRules()
@@ -313,7 +315,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor, adjustInfo)) {
+      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor, edgeId)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -333,12 +335,14 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
   /**
    * 在连线的时候，是否允许这个节点为target节点
+   *
+   * @param edgeId 调整的边的id，在开启adjustEdgeStartAndEnd后调整边连接的节点时会传入，见https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306
    */
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
     soureAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
-    adjustInfo?: AdjustInfo,
+    edgeId?: string,
   ): ConnectRuleResult | Boolean {
     const rules = !this.hasSetTargetRules
       ? this.getConnectedTargetRules()
@@ -348,7 +352,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor, adjustInfo)) {
+      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor, edgeId)) {
         isAllPass = false;
         msg = rule.message;
         break;

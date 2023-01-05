@@ -63,17 +63,6 @@ export type AnchorInfo = {
   anchor: Point,
 };
 
-/**
- * 调整边连接的节点时的相关信息
- */
-export type AdjustInfo = {
-  /**
-   * 是否调整的是边的起始点
-   */
-  adjustSourcePoint: boolean,
-  edgeId: string,
-};
-
 export type Size = {
   width: number,
   height: number,
