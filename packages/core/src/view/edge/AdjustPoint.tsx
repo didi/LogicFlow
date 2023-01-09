@@ -91,7 +91,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
   onDraging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, type } = this.props;
-    const { transformModel } = graphModel;
+    const { transformModel, editConfigModel } = graphModel;
     const [x, y] = transformModel.moveCanvasPointByHtml(
       [endX, endY],
       deltaX,
@@ -130,6 +130,10 @@ export default class AdjustPoint extends Component<IProps, IState> {
       edgeModel.updateStartPoint({ x, y });
     } else if (type === AdjustType.TARGET) {
       edgeModel.updateEndPoint({ x, y });
+    }
+
+    if (edgeModel.text.value && editConfigModel.adjustEdge) {
+      edgeModel.setText(Object.assign({}, edgeModel.text, edgeModel.textPosition));
     }
   };
   onDragEnd = ({ event }) => {
