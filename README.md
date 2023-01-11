@@ -112,6 +112,11 @@ lf.render(data);
 - [拓展](http://logic-flow.org/guide/extension/extension-components.html)
 - [示例](http://logic-flow.org/usage/bpmn.html)
 
+非官方
+
+- [Vuejs3.x + Typescript 上手指南](https://www.yuque.com/fe-xiaoxin/zeots5)
+- [Vuejs3.x + Typescript 在线案例](https://1024code.com/collections/25)
+
 ## 核心能力
 
 ### 流程图编辑器快速搭建
