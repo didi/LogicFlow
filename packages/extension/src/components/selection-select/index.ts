@@ -37,6 +37,11 @@ class SelectionSelect {
       if (!config.stopMoveGraph || this.__disabled) {
         return;
       }
+      // 禁用右键框选，修复可能导致画布出现多个框选框不消失的问题，见https://github.com/didi/LogicFlow/issues/985
+      const isRightClick = e.button === 2;
+      if (isRightClick) {
+        return;
+      }
       const {
         domOverlayPosition: { x, y },
       } = lf.getPointByClient(e.clientX, e.clientY);
