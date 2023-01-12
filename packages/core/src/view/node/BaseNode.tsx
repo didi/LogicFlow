@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { map } from 'lodash-es';
+import { debounce, map } from 'lodash-es';
 import GraphModel from '../../model/GraphModel';
 import Anchor from '../Anchor';
 import BaseNodeModel from '../../model/node/BaseNodeModel';
@@ -222,7 +222,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
     const { model } = this.props;
     model.isDragging = false;
   };
-  handleClick = (e: MouseEvent) => {
+  handleClick = debounce((e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     if (!this.startTime) return;
@@ -269,7 +269,7 @@ export default abstract class BaseNode extends Component<IProps, Istate> {
       graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, eventOptions);
       graphModel.eventCenter.emit(EventType.NODE_CLICK, eventOptions);
     }
-  };
+  }, 300);
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
     const { model, graphModel } = this.props;

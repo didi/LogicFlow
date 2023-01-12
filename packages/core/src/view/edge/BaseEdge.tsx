@@ -9,6 +9,7 @@ import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
 import { isMultipleSelect } from '../../util/graph';
+import { debounce } from 'lodash-es';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -175,7 +176,7 @@ export default class BaseEdge extends Component<IProps> {
     this.startTime = new Date().getTime();
   };
   // todo: 去掉setTimeout
-  handleMouseUp = (e: MouseEvent) => {
+  handleMouseUp = debounce((e: MouseEvent) => {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
     if (time > 200) return; // 事件大于200ms，认为是拖拽。
@@ -227,7 +228,7 @@ export default class BaseEdge extends Component<IProps> {
     const { editConfigModel } = graphModel;
     graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
-  };
+  }, 300);
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
   getIsDragging = () => false;
   toFront() {
