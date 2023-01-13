@@ -70,8 +70,9 @@ const article = [
 ];
 
 const release = [
+  '1.2',
+  '1.1',
   '1.0',
-  '1.1'
 ]
 
 const verisonInfo = [
@@ -157,9 +158,13 @@ module.exports = {
         ]
       },
       {
-        text: 'v1.1.x',
+        text: '版本发布',
         link: '#',
         items: [
+          {
+            text: 'v1.2.x',
+            link: '/release/1.2'
+          },
           {
             text: 'v1.1.x',
             link: '/release/1.1'
