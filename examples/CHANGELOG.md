@@ -3,7 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.2](https://github.com/didi/LogicFlow/compare/examples@1.1.31...examples@1.2.0-next.2) (2023-01-13)
+
+
+### Bug Fixes
+
+* curved edge example ([20c953b](https://github.com/didi/LogicFlow/commit/20c953bc214583deacd7ce929047f17a00be784f))
+
+
+### Features
+
+* add event to dnd-penal ([9707cfb](https://github.com/didi/LogicFlow/commit/9707cfb927f13b0e6dd022230c5466f145d48cf8))
+
+
+
+
+
 ## [1.1.31](https://github.com/didi/LogicFlow/compare/examples@1.1.30...examples@1.1.31) (2022-11-12)
+# [1.2.0-next.1](https://github.com/didi/LogicFlow/compare/examples@1.2.0-next.0...examples@1.2.0-next.1) (2022-10-10)
 
 **Note:** Version bump only for package examples
 
@@ -12,6 +29,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 ## [1.1.30](https://github.com/didi/LogicFlow/compare/examples@1.1.29...examples@1.1.30) (2022-10-30)
+# [1.2.0-next.0](https://github.com/didi/LogicFlow/compare/examples@1.1.29...examples@1.2.0-next.0) (2022-09-29)
 
 **Note:** Version bump only for package examples
 

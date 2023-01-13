@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LogicFlow, { EdgeType } from '@logicflow/core';
-import { CurvedEdge } from '@logicflow/extension';
+import { CurvedEdge, CurvedEdgeModel } from '@logicflow/extension';
 import ExampleHeader from '../../../components/example-header';
 
 type EdgeTypeUn = EdgeType | 'curved-edge';
@@ -90,11 +90,15 @@ export default function EdgeExample() {
 
   useEffect(() => {
     // @ts-ignore
-    LogicFlow.use(CurvedEdge);
     const logicflow = new LogicFlow({
       ...config,
       container: document.querySelector('#graph') as HTMLElement
     });
+    logicflow.register({
+      type: 'curved-edge',
+      model: CurvedEdgeModel,
+      view: CurvedEdge
+    })
     logicflow.render(data);
     setLf(logicflow);
   }, []);

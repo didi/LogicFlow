@@ -3,7 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.31...@logicflow/core@1.2.0-next.2) (2023-01-13)
+
+
+### Bug Fixes
+
+* getEndAnchor ([0f4e843](https://github.com/didi/LogicFlow/commit/0f4e843370351014a817b2dc07f9e8e6af581921))
+* twoPointDistance无法获取target参数 ([c760a29](https://github.com/didi/LogicFlow/commit/c760a29abfe2acd76a6f276976451cc827215e95))
+* typos ([ee9f3cd](https://github.com/didi/LogicFlow/commit/ee9f3cd40a819b13887938bf5e6018f77e575917))
+
+
+### Features
+
+* Modify the addNode event type ([122f42c](https://github.com/didi/LogicFlow/commit/122f42c06af5038e250418e5be6b65805050b902))
+* node model增加getTaretAnchor方法获取手动连接边到节点时需要连接的锚点(默认返回距离目标位置最近的锚点) ([dfa0421](https://github.com/didi/LogicFlow/commit/dfa04212f6fe0bc5d8b3adfcb90827c1a770a336))
+* 增加本文溢出省略时鼠标移动到文本tip显示全文 ([f14897a](https://github.com/didi/LogicFlow/commit/f14897a076c5ef75f1a7e9f05746bb44f75e92d0))
+* **core&extension:** add pluginOptions attribute on lf instance ([47cd816](https://github.com/didi/LogicFlow/commit/47cd81647532a724456b191d0050f87e833cb968))
+
+
+
+
+
 ## [1.1.31](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.30...@logicflow/core@1.1.31) (2022-11-12)
+# [1.2.0-next.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.0...@logicflow/core@1.2.0-next.1) (2022-10-10)
+
+
+### Features
+
+* separate select and setZindex behavior ([53d0293](https://github.com/didi/LogicFlow/commit/53d029317eea3161d63f4837ddea66b845a8e274))
+
+
+
+
+
+# [1.2.0-next.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.29...@logicflow/core@1.2.0-next.0) (2022-09-29)
 
 
 ### Bug Fixes

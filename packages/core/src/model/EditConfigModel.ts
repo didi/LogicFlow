@@ -128,7 +128,7 @@ export default class EditConfigModel {
   @observable edgeTextEdit = true;
   @observable nodeTextDraggable = false;
   @observable edgeTextDraggable = false;
-  @observable autoExpand = true;
+  @observable autoExpand = false;
   multipleSelectKey = '';
   defaultConfig = {}; // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
