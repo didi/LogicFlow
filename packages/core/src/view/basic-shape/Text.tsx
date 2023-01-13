@@ -116,6 +116,7 @@ function renderHtmlText(props) {
         >
           <div
             className={isEllipsis ? 'lf-node-text-ellipsis-content' : 'lf-node-text-auto-wrap-content'}
+            title={isEllipsis ? rows.join('') : ''}
             style={{
               ...props,
             }}
