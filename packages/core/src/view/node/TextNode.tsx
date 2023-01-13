@@ -7,7 +7,7 @@ export default class TextNode extends BaseNode {
     const { model } = this.props;
     const style = model.getTextStyle();
     const { text } = model;
-    if (text && text.value && style.background && style.background.fill !== 'transparnet') {
+    if (text && text.value && style.background && style.background.fill !== 'transparent') {
       const { x, y } = text;
       // 背景框宽度，最长一行字节数/2 * fontsize + 2
       // 背景框宽度， 行数 * fontsize + 2

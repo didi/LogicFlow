@@ -23,7 +23,7 @@ export default class MultipleSelect extends Component<IProps> {
       graphModel: { gridSize, eventCenter },
     } = props;
     this.stepDrag = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       step: gridSize,
       eventType: 'SELECTION',
       eventCenter,
@@ -32,7 +32,7 @@ export default class MultipleSelect extends Component<IProps> {
   handleMouseDown = (ev: MouseEvent) => {
     this.stepDrag.handleMouseDown(ev);
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { graphModel } = this.props;
     const selectElements = graphModel.getSelectElements(true);
     graphModel.moveNodes(selectElements.nodes.map(node => node.id), deltaX, deltaY);

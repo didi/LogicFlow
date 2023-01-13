@@ -31,11 +31,11 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
   constructor() {
     super();
     this.dragHandler = new StepDrag({
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
     });
   }
-  onDraging = ({ event }) => {
+  onDragging = ({ event }) => {
     const { graphModel, bezierModel, type } = this.props;
     const {
       canvasOverlayPosition: { x, y },

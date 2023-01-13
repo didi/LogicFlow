@@ -122,7 +122,7 @@ class NodeSelectionModel extends PolygonNodeModel {
    */
   updatePointsByNodes(nodesIds) {
     // TODO: 临时方案矩形
-    const points = [];
+    const points: [number, number][] = [];
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
@@ -148,9 +148,9 @@ class NodeSelectionModel extends PolygonNodeModel {
 
 class NodeSelection {
   static pluginName = 'node-selection';
-  lf = null; // lf 实例
-  selectNodes = []; // 选择的nodes
-  currentClickNode = null; // 当前点击的节点，选中的节点是无序的
+  lf; // lf 实例
+  selectNodes: any[] = []; // 选择的nodes
+  currentClickNode; // 当前点击的节点，选中的节点是无序的
   d = 10;
 
   constructor({ lf }) {

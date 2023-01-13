@@ -13,7 +13,7 @@ interface IState {
   startY: number,
   endX: number,
   endY: number,
-  draging: boolean,
+  dragging: boolean,
 }
 
 class ControlGroup extends Component<IProps> {

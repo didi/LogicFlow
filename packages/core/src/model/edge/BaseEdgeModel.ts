@@ -15,7 +15,7 @@ import {
   ShapeStyleAttribute,
 } from '../../type/index';
 import {
-  ModelType, ElementType, OverlapMode, ElementMaxzIndex,
+  ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
@@ -478,8 +478,8 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   @action
-  setZIndex(zindex = 0): void {
-    this.zIndex = zindex;
+  setZIndex(zIndex = 0): void {
+    this.zIndex = zIndex;
   }
 
   @action

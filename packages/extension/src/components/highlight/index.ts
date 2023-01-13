@@ -130,9 +130,7 @@ class Highlight {
 
     Object.values(this.lf.graphModel.modelsMap).forEach((item) => {
       //  所有节点样式都进行备份
-      // eslint-disable-next-line operator-linebreak
-      const oStyle =
-        item.BaseType === 'node' ? item.getNodeStyle() : item.getEdgeStyle();
+      const oStyle = item.BaseType === 'node' ? item.getNodeStyle() : item.getEdgeStyle();
       this.tempStyles[item.id] = { ...oStyle };
 
       //  所有节点都设置透明度为0.1

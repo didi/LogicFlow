@@ -66,6 +66,7 @@ class Graph extends Component<IProps> {
     if (options.height) {
       style.height = `${graphModel.height}px`;
     }
+    const grid = options.grid as Object;
     const { fakerNode, editConfigModel } = graphModel;
     const { adjustEdge } = editConfigModel;
 
@@ -96,7 +97,7 @@ class Graph extends Component<IProps> {
         </ModificationOverlay>
         <ToolOverlay graphModel={graphModel} tool={tool} />
         {options.background && <BackgroundOverlay background={options.background} />}
-        {options.grid && <Grid {...options.grid} graphModel={graphModel} />}
+        {options.grid && <Grid {...grid} graphModel={graphModel} />}
       </div>
     );
   }

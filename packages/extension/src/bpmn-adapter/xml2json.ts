@@ -43,25 +43,25 @@ XML.ObjTree.prototype.parseXML = function (xml) {
 //  method: parseHTTP( url, options, callback )  
 
 XML.ObjTree.prototype.parseHTTP = function (url, options, callback) {
-  var myopt = {};
+  var myOpt = {};
   for (var key in options) {
-    myopt[key] = options[key];                  // copy object  
+    myOpt[key] = options[key];                  // copy object  
   }
-  if (!myopt.method) {
-    if (typeof (myopt.postBody) == "undefined" &&
-      typeof (myopt.postbody) == "undefined" &&
-      typeof (myopt.parameters) == "undefined") {
-      myopt.method = "get";
+  if (!myOpt.method) {
+    if (typeof (myOpt.postBody) == "undefined" &&
+      typeof (myOpt.postbody) == "undefined" &&
+      typeof (myOpt.parameters) == "undefined") {
+      myOpt.method = "get";
     } else {
-      myopt.method = "post";
+      myOpt.method = "post";
     }
   }
   if (callback) {
-    myopt.asynchronous = true;                  // async-mode  
+    myOpt.asynchronous = true;                  // async-mode  
     var __this = this;
     var __func = callback;
-    var __save = myopt.onComplete;
-    myopt.onComplete = function (trans) {
+    var __save = myOpt.onComplete;
+    myOpt.onComplete = function (trans) {
       var tree;
       if (trans && trans.responseXML && trans.responseXML.documentElement) {
         tree = __this.parseDOM(trans.responseXML.documentElement);
@@ -70,15 +70,15 @@ XML.ObjTree.prototype.parseHTTP = function (url, options, callback) {
       if (__save) __save(trans);
     };
   } else {
-    myopt.asynchronous = false;                 // sync-mode  
+    myOpt.asynchronous = false;                 // sync-mode  
   }
   var trans;
   if (typeof (HTTP) != "undefined" && HTTP.Request) {
-    myopt.uri = url;
-    var req = new HTTP.Request(myopt);        // JSAN  
+    myOpt.uri = url;
+    var req = new HTTP.Request(myOpt);
     if (req) trans = req.transport;
   } else if (typeof (Ajax) != "undefined" && Ajax.Request) {
-    var req = new Ajax.Request(url, myopt);   // ptorotype.js  
+    var req = new Ajax.Request(url, myOpt);
     if (req) trans = req.transport;
   }
   if (callback) return trans;
@@ -86,8 +86,6 @@ XML.ObjTree.prototype.parseHTTP = function (url, options, callback) {
     return this.parseDOM(trans.responseXML.documentElement);
   }
 }
-
-//  method: parseDOM( documentroot )  
 
 XML.ObjTree.prototype.parseDOM = function (root) {
   if (!root) return;
@@ -126,12 +124,12 @@ XML.ObjTree.prototype.parseElement = function (elem) {
     return elem.nodeValue;
   }
 
-  var retval;
+  var retVal;
   var cnt = {};
 
   //  parse attributes  
   if (elem.attributes && elem.attributes.length) {
-    retval = {};
+    retVal = {};
     for (var i = 0; i < elem.attributes.length; i++) {
       var key = elem.attributes[i].nodeName;
       if (typeof (key) != "string") continue;
@@ -140,26 +138,26 @@ XML.ObjTree.prototype.parseElement = function (elem) {
       key = this.attr_prefix + key;
       if (typeof (cnt[key]) == "undefined") cnt[key] = 0;
       cnt[key]++;
-      this.addNode(retval, key, cnt[key], val);
+      this.addNode(retVal, key, cnt[key], val);
     }
   }
 
   //  parse child nodes (recursive)  
   if (elem.childNodes && elem.childNodes.length) {
-    var textonly = true;
-    if (retval) textonly = false;        // some attributes exists  
-    for (var i = 0; i < elem.childNodes.length && textonly; i++) {
-      var ntype = elem.childNodes[i].nodeType;
-      if (ntype == 3 || ntype == 4) continue;
-      textonly = false;
+    var textOnly = true;
+    if (retVal) textOnly = false;        // some attributes exists  
+    for (var i = 0; i < elem.childNodes.length && textOnly; i++) {
+      var nType = elem.childNodes[i].nodeType;
+      if (nType == 3 || nType == 4) continue;
+      textOnly = false;
     }
-    if (textonly) {
-      if (!retval) retval = "";
+    if (textOnly) {
+      if (!retVal) retVal = "";
       for (var i = 0; i < elem.childNodes.length; i++) {
-        retval += elem.childNodes[i].nodeValue;
+        retVal += elem.childNodes[i].nodeValue;
       }
     } else {
-      if (!retval) retval = {};
+      if (!retVal) retVal = {};
       for (var i = 0; i < elem.childNodes.length; i++) {
         var key = elem.childNodes[i].nodeName;
         if (typeof (key) != "string") continue;
@@ -167,22 +165,22 @@ XML.ObjTree.prototype.parseElement = function (elem) {
         if (!val) continue;
         if (typeof (cnt[key]) == "undefined") cnt[key] = 0;
         cnt[key]++;
-        this.addNode(retval, key, cnt[key], val);
+        this.addNode(retVal, key, cnt[key], val);
       }
     }
   }
-  return retval;
+  return retVal;
 };
 
 //  method: addNode( hash, key, count, value )  
 
-XML.ObjTree.prototype.addNode = function (hash, key, cnts, val) {
+XML.ObjTree.prototype.addNode = function (hash, key, counts, val) {
   if (this.__force_array[key]) {
-    if (cnts == 1) hash[key] = [];
+    if (counts == 1) hash[key] = [];
     hash[key][hash[key].length] = val;      // push  
-  } else if (cnts == 1) {                   // 1st sibling  
+  } else if (counts == 1) {                   // 1st sibling  
     hash[key] = val;
-  } else if (cnts == 2) {                   // 2nd sibling  
+  } else if (counts == 2) {                   // 2nd sibling  
     hash[key] = [hash[key], val];
   } else {                                    // 3rd sibling and more  
     hash[key][hash[key].length] = val;
@@ -293,7 +291,7 @@ alert( "error: "+tree2.response.error );
 
 =head1 DESCRIPTION
 
-XML.ObjTree class is a parser/generater between XML source code
+XML.ObjTree class is a parser/generator between XML source code
 and JavaScript object like E4X, ECMAScript for XML.
 This is a JavaScript version of the XML::TreePP module for Perl.
 This also works as a wrapper for XMLHTTPRequest and successor to JKL.ParseXML class
@@ -343,7 +341,7 @@ A array is used because this family has two boys.
 
 tree.family.children.boy[0];    # first boy's name
 tree.family.children.boy[1];    # second boy's name
-tree.family.children.girl;      # (girl has no other sisiters)
+tree.family.children.girl;      # (girl has no other sisters)
 
 =head1 METHODS
 
@@ -367,12 +365,12 @@ The default character is '-'.
 Or set '@' to access attribute values like E4X, ECMAScript for XML.
 The length of attr_prefix must be just one character and not be empty.
 
-=head2 tree = xotree.parseXML( xmlsrc );
+=head2 tree = xotree.parseXML( xmlSrc );
 
 This method loads an XML document using the supplied string
 and returns its JavaScript object converted.
 
-=head2 tree = xotree.parseDOM( domnode );
+=head2 tree = xotree.parseDOM( domNode );
 
 This method parses a DOM tree (ex. responseXML.documentElement)
 and returns its JavaScript object converted.
@@ -401,7 +399,7 @@ XMLHTTPRequest's asynchronous mode is used.
 This mode calls a callback function with XML file's JavaScript object converted
 after the response is completed.
 
-=head2 xmlsrc = xotree.writeXML( tree );
+=head2 xmlSrc = xotree.writeXML( tree );
 
 This method parses a JavaScript object tree
 and returns its XML source generated.
@@ -415,8 +413,8 @@ or both of a text node and other child nodes,
 text node's value is moved to a special node named "#text".
 
 var xotree = new XML.ObjTree();
-var xmlsrc = '<span class="author">Kawasaki Yusuke</span>';
-var tree = xotree.parseXML( xmlsrc );
+var xmlSrc = '<span class="author">Kawasaki Yusuke</span>';
+var tree = xotree.parseXML( xmlSrc );
 var class = tree.span["-class"];        # attribute
 var name  = tree.span["#text"];         # text node
 
@@ -446,7 +444,7 @@ alert( tree.response.error );
 };
 xotree.parseHTTP( url, opts, func );
 
-This code send a trackback ping and shows its response code.
+This code send a track back ping and shows its response code.
 
 =head2 Simple RSS reader
 
@@ -458,14 +456,14 @@ var url = "http://example.com/news-rdf.xml";
 var func = function( tree ) {
 var elem = document.getElementById("rss_here");
 for( var i=0; i<tree["rdf:RDF"].item.length; i++ ) {
-var divtag = document.createElement( "div" );
-var atag = document.createElement( "a" );
-atag.href = tree["rdf:RDF"].item[i].link;
+var divTag = document.createElement( "div" );
+var aTag = document.createElement( "a" );
+aTag.href = tree["rdf:RDF"].item[i].link;
 var title = tree["rdf:RDF"].item[i].title;
-var tnode = document.createTextNode( title );
-atag.appendChild( tnode );
-divtag.appendChild( atag );
-elem.appendChild( divtag );
+var tNode = document.createTextNode( title );
+aTag.appendChild( tNode );
+divTag.appendChild( aTag );
+elem.appendChild( divTag );
 }
 };
 xotree.parseHTTP( url, {}, func );
@@ -475,7 +473,7 @@ xotree.parseHTTP( url, {}, func );
 If you wish to use prototype.js's Ajax.Request class by yourself:
 
 var xotree = new XML.ObjTree();
-var reqtree = {
+var reqTree = {
 methodCall: {
 methodName: "weblogUpdates.ping",
 params: {
@@ -486,13 +484,13 @@ param: [
 }
 }
 };
-var reqxml = xotree.writeXML( reqtree );       // JS-Object to XML code
+var reqxml = xotree.writeXML( reqTree );       // JS-Object to XML code
 var url = "http://example.com/xmlrpc";
 var func = function( req ) {
-var resdom = req.responseXML.documentElement;
+var resDom = req.responseXML.documentElement;
 xotree.force_array = [ "member" ];
-var restree = xotree.parseDOM( resdom );   // XML-DOM to JS-Object
-alert( restree.methodResponse.params.param.value.struct.member[0].value.string );
+var resTree = xotree.parseDOM( resDom );   // XML-DOM to JS-Object
+alert( resTree.methodResponse.params.param.value.struct.member[0].value.string );
 };
 var opt = {
 method:         "post",

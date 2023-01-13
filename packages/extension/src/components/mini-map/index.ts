@@ -50,7 +50,7 @@ class MiniMap {
   private isShow = false;
   private isShowHeader = true;
   private isShowCloseIcon = true;
-  private draging = false;
+  private dragging = false;
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect'];
   constructor({ lf, LogicFlow, options }) {
     this.lf = lf;
@@ -71,7 +71,7 @@ class MiniMap {
     });
     this.lf.on('graph:transform', throttle(() => {
       // 小地图已展示，并且没有拖拽小地图视口
-      if (this.isShow && !this.draging) {
+      if (this.isShow && !this.dragging) {
         this.setView();
       }
     }, 300));
@@ -208,11 +208,11 @@ class MiniMap {
       // 因为获取的节点不知道真实的宽高，这里需要补充一点数值
       nodes.forEach(({ x, y, width = 200, height = 200 }) => {
         const nodeLeft = x - width / 2;
-        const noderight = x + width / 2;
+        const nodeRight = x + width / 2;
         const nodeTop = y - height / 2;
         const nodeBottom = y + height / 2;
         left = nodeLeft < left ? nodeLeft : left;
-        right = noderight > right ? noderight : right;
+        right = nodeRight > right ? nodeRight : right;
         top = nodeTop < top ? nodeTop : top;
         bottom = nodeBottom > bottom ? nodeBottom : bottom;
       });
@@ -372,7 +372,7 @@ class MiniMap {
     viewStyle.left = `${this.viewPortLeft}px`;
   };
   private drag = (e) => {
-    this.draging = true;
+    this.dragging = true;
     const top = this.viewPortTop + e.y - this.startPosition.y;
     const left = this.viewPortLeft + e.x - this.startPosition.x;
     this.moveViewport(top, left);
@@ -411,8 +411,8 @@ class MiniMap {
     this.moveViewport(top, left);
   };
   private mapClick = (e) => {
-    if (this.draging) {
-      this.draging = false;
+    if (this.dragging) {
+      this.dragging = false;
     } else {
       const { layerX, layerY } = e;
       const ViewPortCenterX = layerX;

@@ -11,7 +11,7 @@ export default class LineText extends BaseText {
   constructor(config) {
     super(config);
     this.state = {
-      isHoverd: false,
+      isHovered: false,
     };
   }
   getBackground() {
@@ -19,8 +19,8 @@ export default class LineText extends BaseText {
     const style = model.getTextStyle();
     const { text } = model;
     let backgroundStyle = style.background || {};
-    const { isHoverd } = this.state;
-    if (isHoverd && style.hover && style.hover.background) {
+    const { isHovered } = this.state;
+    if (isHovered && style.hover && style.hover.background) {
       backgroundStyle = { ...backgroundStyle, ...style.hover.background };
     }
     // 存在文本并且文本背景不为透明时计算背景框
@@ -93,12 +93,12 @@ export default class LineText extends BaseText {
   }
   setHoverON = () => {
     this.setState({
-      isHoverd: true,
+      isHovered: true,
     });
   };
   setHoverOFF = () => {
     this.setState({
-      isHoverd: false,
+      isHovered: false,
     });
   };
   getShape() {
@@ -112,7 +112,7 @@ export default class LineText extends BaseText {
       y,
       className: 'lf-element-text',
       value,
-      ...style, // 透传 edageText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
+      ...style, // 透传 edgeText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
     };
     return (
       <g

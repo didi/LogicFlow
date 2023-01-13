@@ -84,10 +84,10 @@ class Keyboard {
   }
 
   private getKeys(keys: string | string[]) {
-    return (Array.isArray(keys) ? keys : [keys]).map((key) => this.formatkey(key));
+    return (Array.isArray(keys) ? keys : [keys]).map((key) => this.formatKey(key));
   }
 
-  protected formatkey(key: string) {
+  protected formatKey(key: string) {
     const formated = key
       .toLowerCase()
       .replace(/\s/g, '')

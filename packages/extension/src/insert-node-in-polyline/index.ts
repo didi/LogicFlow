@@ -1,5 +1,5 @@
 import LogicFlow, { PolylineEdgeModel } from '@logicflow/core';
-import { isNodeInSegement } from './edge';
+import { isNodeInSegment } from './edge';
 
 class InsertNodeInPolyline {
   static pluginName = 'insertNodeInPolyline';
@@ -41,7 +41,7 @@ class InsertNodeInPolyline {
     const nodeModel = this._lf.getNodeModelById(nodeData.id);
     for (let i = 0; i < edges.length; i++) {
       // eslint-disable-next-line max-len
-      const { crossIndex, crossPoints } = isNodeInSegement(nodeModel, edges[i] as PolylineEdgeModel);
+      const { crossIndex, crossPoints } = isNodeInSegment(nodeModel, edges[i] as PolylineEdgeModel);
       if (crossIndex >= 0) {
         const { sourceNodeId, targetNodeId, id, type, pointsList } = edges[i];
         this._lf.addEdge({
