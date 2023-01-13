@@ -24,7 +24,7 @@ function getNodeBox(node) {
   };
 }
 // 计算矩形radius设置后，四个圆角的圆心
-function getRidusCenter(node) {
+function getRadiusCenter(node) {
   const nodeBox = getNodeBox(node);
   const { radius } = node;
   const { minX, minY, maxX, maxY } = nodeBox;
@@ -48,7 +48,7 @@ function getRidusCenter(node) {
   ];
 }
 // 获取矩形resize之后，与矩形连接边的新端点
-export function getRectReizeEdgePoint({ point, beforeNode, afterNode }) {
+export function getRectResizeEdgePoint({ point, beforeNode, afterNode }) {
   const { x, y } = point;
   const afterPoint = {
     x, y,
@@ -94,8 +94,8 @@ export function getRectReizeEdgePoint({ point, beforeNode, afterNode }) {
     }
   } else {
     // 在圆角部分
-    const beeforCoc = getRidusCenter(beforeNode);
-    const afterCoc = getRidusCenter(afterNode);
+    const beforeCoc = getRadiusCenter(beforeNode);
+    const afterCoc = getRadiusCenter(afterNode);
     const nodeBox = getNodeBox(beforeNode);
     const { minX, minY, maxX, maxY } = nodeBox;
     let index = -1;
@@ -114,7 +114,7 @@ export function getRectReizeEdgePoint({ point, beforeNode, afterNode }) {
     }
     if (index > -1) {
       // 根据夹角角度计算位置
-      const angle = Math.atan2((y - beeforCoc[index].y), (x - beeforCoc[index].x));
+      const angle = Math.atan2((y - beforeCoc[index].y), (x - beforeCoc[index].x));
       afterPoint.x = afterCoc[index].x + radius * Math.cos(angle);
       afterPoint.y = afterCoc[index].y + radius * Math.sin(angle);
     }
@@ -122,7 +122,7 @@ export function getRectReizeEdgePoint({ point, beforeNode, afterNode }) {
   return afterPoint;
 }
 // 获取椭圆resize之后，与椭圆连接边的新端点
-export function getEllipseReizeEdgePoint({ point, beforeNode, afterNode }) {
+export function getEllipseResizeEdgePoint({ point, beforeNode, afterNode }) {
   const { rx, ry } = afterNode;
   let afterPoint = point;
   // 将椭圆中心当做中心点(0,0)，放大缩小前点与X周夹角
@@ -156,7 +156,7 @@ export function getEllipseReizeEdgePoint({ point, beforeNode, afterNode }) {
   return afterPoint;
 }
 // 获取菱形resize之后，与菱形连接边的新端点
-export function getDiamondReizeEdgePoint({ point, beforeNode, afterNode }) {
+export function getDiamondResizeEdgePoint({ point, beforeNode, afterNode }) {
   let afterPoint = point;
   let x;
   let y;

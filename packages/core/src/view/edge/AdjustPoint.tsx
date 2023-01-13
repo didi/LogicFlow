@@ -17,7 +17,7 @@ interface IProps {
   edgeModel: BaseEdgeModel;
 }
 interface IState {
-  draging: boolean;
+  dragging: boolean;
   endX: number;
   endY: number;
 }
@@ -43,7 +43,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
   constructor(props) {
     super();
     this.state = {
-      draging: false,
+      dragging: false,
       endX: 0,
       endY: 0,
     };
@@ -57,7 +57,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     };
     this.stepDrag = new StepDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       eventType: 'ADJUST_POINT',
       isStopPropagation: false,
@@ -84,11 +84,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
-      draging: true,
+      dragging: true,
     });
     edgeModel.isHitable = false;
   };
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
     const { graphModel, type } = this.props;
     const { transformModel, editConfigModel } = graphModel;
@@ -100,7 +100,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     this.setState({
       endX: x,
       endY: y,
-      draging: true,
+      dragging: true,
     });
     // 调整过程中实时更新路径
     const { edgeModel } = this.props;
@@ -140,16 +140,16 @@ export default class AdjustPoint extends Component<IProps, IState> {
     try {
       // 将状态置为非拖拽状态
       this.setState({
-        draging: false,
+        dragging: false,
       });
       const {
         graphModel, edgeModel, type,
       } = this.props;
       edgeModel.isHitable = true;
-      const { endX, endY, draging } = this.state;
+      const { endX, endY, dragging } = this.state;
       const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
-      // 没有draging就结束边
-      if (!draging) return;
+      // 没有dragging就结束边
+      if (!dragging) return;
       // 如果找到目标节点，删除老边，创建新边
       let needRecoveryEdge = false;
       let createEdgeInfo;
@@ -319,7 +319,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
   }
   render() {
     const { x, y } = this.props;
-    const { draging } = this.state;
+    const { dragging } = this.state;
     const style = this.getAdjustPointStyle();
     return (
       <g>
@@ -328,7 +328,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
           {...style}
           {...{ x, y }}
           onMouseDown={this.handleMouseDown}
-          pointer-events={draging ? 'none' : ''}
+          pointer-events={dragging ? 'none' : ''}
         />
       </g>
     );

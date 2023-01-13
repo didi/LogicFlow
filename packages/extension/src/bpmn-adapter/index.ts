@@ -62,8 +62,8 @@ enum BpmnElements {
 const defaultAttrs = ['-name', '-id', 'bpmn:incoming', 'bpmn:outgoing', '-sourceRef', '-targetRef'];
 
 /**
- * 将普通json转换为xmljson
- * xmljson中properity会以“-”开头
+ * 将普通json转换为xmlJson
+ * xmlJson中property会以“-”开头
  * 如果没有“-”表示为子节点
  */
 function toXmlJson(json) {

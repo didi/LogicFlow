@@ -310,7 +310,7 @@ export type FocusOnArgs = {
 export type ComponentRender = (lf: LogicFlow, container: HTMLElement) => void;
 export interface Extension {
   pluginName: string; // 插件名称，之后用于插件覆盖和细粒度控制加载那些插件
-  install?: (lf: LogicFlow, LogicFlow: LogicFlowContractor) => void;
+  install?: (lf: LogicFlow, LogicFlow: LogicFlowConstructor) => void;
   render?: ComponentRender;
   destroy?: () => void;
   [props: string]: any;
@@ -342,17 +342,19 @@ export interface ModelContractor {
   new(data, graphModel): unknown; // todo: 这里应该怎么写？
 }
 
-export interface LogicFlowContractor {
+export interface LogicFlowConstructor {
   new(option: Options.Definition): LogicFlow;
 }
 
-export interface ExtensionContractor {
+export type ExtensionOptions = {
+  lf: LogicFlow,
+  LogicFlow: LogicFlowConstructor,
+  options: Record<string, any>
+};
+
+export interface ExtensionConstructor {
   pluginName: string;
-  new({
-    lf: LogicFlow,
-    LogicFlow: LogicFlowContractor,
-    options: any,
-  });
+  new(ExtensionOptions: ExtensionOptions): Extension;
   render?: Function;
 }
 

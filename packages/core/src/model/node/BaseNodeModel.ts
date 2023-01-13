@@ -5,7 +5,7 @@ import { assign, cloneDeep, isNil } from 'lodash-es';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {
-  ModelType, ElementType, OverlapMode, ElementMaxzIndex,
+  ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
 import {
   AdditionData,
@@ -303,7 +303,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
-    soureAnchor: AnchorConfig,
+    sourceAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
     edgeId?: string,
   ): ConnectRuleResult | Boolean {
@@ -315,7 +315,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, this, target, soureAnchor, targetAnchor, edgeId)) {
+      if (!rule.validate.call(this, this, target, sourceAnchor, targetAnchor, edgeId)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -340,7 +340,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
-    soureAnchor: AnchorConfig,
+    sourceAnchor: AnchorConfig,
     targetAnchor: AnchorConfig,
     edgeId?: string,
   ): ConnectRuleResult | Boolean {
@@ -352,7 +352,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
     let msg: string;
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
-      if (!rule.validate.call(this, source, this, soureAnchor, targetAnchor, edgeId)) {
+      if (!rule.validate.call(this, source, this, sourceAnchor, targetAnchor, edgeId)) {
         isAllPass = false;
         msg = rule.message;
         break;
@@ -651,8 +651,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setZIndex(zindex = 1): void {
-    this.zIndex = zindex;
+  setZIndex(zIndex = 1): void {
+    this.zIndex = zIndex;
   }
 
   @action

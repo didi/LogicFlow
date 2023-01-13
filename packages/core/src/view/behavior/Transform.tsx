@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 
-export default class TransfromGraph extends Component {
+export default class TransformGraph extends Component {
   render() {
     const { children } = this.props;
     return (

@@ -19,14 +19,14 @@ type AppendAttributesType = {
 
 export default class PolylineEdge extends BaseEdge {
   drag;
-  isDraging: boolean;
+  isDragging: boolean;
   appendInfo: AppendInfo;
   dragHandler: (ev: MouseEvent) => void;
   constructor() {
     super();
     this.drag = createDrag({
       onDragStart: this.onDragStart,
-      onDraging: this.onDraging,
+      onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       isStopPropagation: false,
     });
@@ -36,9 +36,9 @@ export default class PolylineEdge extends BaseEdge {
     polylineModel.dragAppendStart();
   };
 
-  onDraging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
-    this.isDraging = true;
+    this.isDragging = true;
     const { transformModel, editConfigModel } = graphModel;
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     const polylineModel = model as PolylineEdgeModel;
@@ -59,7 +59,7 @@ export default class PolylineEdge extends BaseEdge {
     const { model, graphModel: { eventCenter } } = this.props;
     const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
-    this.isDraging = false;
+    this.isDragging = false;
     // 情况当前拖拽的线段信息
     this.appendInfo = undefined;
     // 向外抛出事件
@@ -77,7 +77,7 @@ export default class PolylineEdge extends BaseEdge {
     this.appendInfo = appendInfo;
   };
   // 是否正在拖拽，在折线调整时，不展示起终点的调整点
-  getIsDragging = () => this.isDraging;
+  getIsDragging = () => this.isDragging;
   getEdge() {
     const { model } = this.props;
     const { points, isAnimation, arrowConfig } = model;
@@ -255,7 +255,7 @@ export default class PolylineEdge extends BaseEdge {
         }
         append = (
           <g
-            className={this.isDraging ? 'lf-dragging' : 'lf-drag-able'}
+            className={this.isDragging ? 'lf-dragging' : 'lf-drag-able'}
             onMouseDown={(e) => this.beforeDragStart(e, appendInfo)}
           >
             <g

@@ -28,7 +28,7 @@ import {
   RegisterElementFn,
   RegisterParam,
   RegisterConfig,
-  ExtensionContractor,
+  ExtensionConstructor,
   ZoomParam,
   PointTuple,
 } from './type';
@@ -999,8 +999,8 @@ export default class LogicFlow {
       this.extension[extension.pluginName] = extension;
       return;
     }
-    const ExtensionContructor = extension as ExtensionContractor;
-    const extensionInstance = new ExtensionContructor({
+    const ExtensionCls = extension as ExtensionConstructor;
+    const extensionInstance = new ExtensionCls({
       lf: this,
       LogicFlow,
       options: this.options.pluginsOptions,
@@ -1008,7 +1008,7 @@ export default class LogicFlow {
     extensionInstance.render && this.components.push(
       extensionInstance.render.bind(extensionInstance),
     );
-    this.extension[ExtensionContructor.pluginName] = extensionInstance;
+    this.extension[ExtensionCls.pluginName] = extensionInstance;
   }
   /**
    * 修改对应元素 model 中的属性
