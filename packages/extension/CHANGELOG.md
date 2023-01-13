@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.31...@logicflow/extension@1.2.0-next.2) (2023-01-13)
+
+
+### Bug Fixes
+
+* issues890 ([0aa4312](https://github.com/didi/LogicFlow/commit/0aa431230879735a63cb9701364b4ab27bde5610))
+* move lodash-es to dependencies ([b9c5206](https://github.com/didi/LogicFlow/commit/b9c5206a6cdc0d36aecdbc89889238f3f1973de0))
+* typos ([ee9f3cd](https://github.com/didi/LogicFlow/commit/ee9f3cd40a819b13887938bf5e6018f77e575917))
+* **extension:** minimap remove console ([f788d87](https://github.com/didi/LogicFlow/commit/f788d873a73be89bb15c2d0a5b0a70848580c7ad))
+* **extension:** minimap remove console ([521f76c](https://github.com/didi/LogicFlow/commit/521f76c4d3db9b44421748daefb706f927a642d6))
+
+
+### Features
+
+* add event to dnd-penal ([9707cfb](https://github.com/didi/LogicFlow/commit/9707cfb927f13b0e6dd022230c5466f145d48cf8))
+* **core&extension:** add pluginOptions attribute on lf instance ([47cd816](https://github.com/didi/LogicFlow/commit/47cd81647532a724456b191d0050f87e833cb968))
+* **extension:** minimap enhance, fixes [#802](https://github.com/didi/LogicFlow/issues/802) ([15c6ca3](https://github.com/didi/LogicFlow/commit/15c6ca3d53026b6a18ffd41d0ff3167add96b7fd))
+* **extension:** minimap pirvate modifier ([238fc5f](https://github.com/didi/LogicFlow/commit/238fc5f42fd5e20fb9cc57f10e45380e574c0f64))
+
+
+
+
+
 ## [1.1.31](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.1.30...@logicflow/extension@1.1.31) (2022-11-12)
 # [1.2.0-next.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0-next.0...@logicflow/extension@1.2.0-next.1) (2022-10-10)
 
