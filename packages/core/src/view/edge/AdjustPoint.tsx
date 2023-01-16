@@ -86,7 +86,8 @@ export default class AdjustPoint extends Component<IProps, IState> {
       endY: y,
       dragging: true,
     });
-    edgeModel.isHitable = false;
+    // 拖拽AdjustPoint时不修改edgeModel.isHitable，避免偶尔会出现边不能点击问题(https://github.com/didi/LogicFlow/issues/974)
+    // edgeModel.isHitable = false;
   };
   onDragging = ({ deltaX, deltaY }) => {
     const { endX, endY } = this.state;
@@ -145,7 +146,8 @@ export default class AdjustPoint extends Component<IProps, IState> {
       const {
         graphModel, edgeModel, type,
       } = this.props;
-      edgeModel.isHitable = true;
+      // 拖拽AdjustPoint时不修改edgeModel.isHitable，避免偶尔会出现边不能点击问题(https://github.com/didi/LogicFlow/issues/974)
+      // edgeModel.isHitable = true;
       const { endX, endY, dragging } = this.state;
       const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
       // 没有dragging就结束边
