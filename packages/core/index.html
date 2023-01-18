@@ -18,7 +18,7 @@
 
     body {
       background-color: #FFF;
-      position: relative; 
+      position: relative;
     }
 
     #app {
@@ -414,19 +414,19 @@
           }
         }
       }
-      
+
       class AnimationEdge extends BezierEdge {
-  
+
       }
 
       class AnimationEdgeModel extends BezierEdgeModel {
         getEdgeAnimationStyle() {
-          const style = super.getEdgeAnimationStyle();  
+          const style = super.getEdgeAnimationStyle();
           style.stroke = 'blue'
           style.animationDuration = '30s'
           style.animationDirection = 'reverse'
           return style
-        }  
+        }
       }
     </script>
 
@@ -710,7 +710,7 @@
                 y: 200,
               },
               {
-                id: 2, 
+                id: 2,
                 type: 'circle',
                 x: 100,
                 y: 200,
@@ -877,14 +877,14 @@
         }
 
         window.openEdgeAnimation = function () {
-          const { edges } = lf.getGraphData();  
+          const { edges } = lf.getGraphData();
           edges.forEach(({id}) => {
             lf.openEdgeAnimation(id)
-          }) 
+          })
         }
 
         window.closeEdgeAnimation = function() {
-          const { edges } = lf.getGraphData();  
+          const { edges } = lf.getGraphData();
           edges.forEach(({id}) => {
             lf.closeEdgeAnimation(id)
           })
@@ -937,6 +937,9 @@
         })
         lf.on('node:contextmenu', () => {
           console.log(444)
+        })
+        lf.on('edge:dragging',({data})=> {
+          console.log('edge:dragging', data)
         })
         lf.on('edge:adjust',({data})=> {
           console.log('edge:adjust', data)

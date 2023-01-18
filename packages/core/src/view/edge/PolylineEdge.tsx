@@ -39,7 +39,7 @@ export default class PolylineEdge extends BaseEdge {
   onDragging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
     this.isDragging = true;
-    const { transformModel, editConfigModel } = graphModel;
+    const { transformModel, editConfigModel, eventCenter } = graphModel;
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
     const polylineModel = model as PolylineEdgeModel;
     // 更新当前拖拽的线段信息
@@ -54,6 +54,10 @@ export default class PolylineEdge extends BaseEdge {
     } else {
       this.appendInfo = polylineModel.dragAppend(this.appendInfo, { x: curDeltaX, y: curDeltaY });
     }
+    eventCenter.emit(
+      EventType.EDGE_DRAGGING,
+      { data: polylineModel.getData() },
+    );
   };
   onDragEnd = () => {
     const { model, graphModel: { eventCenter } } = this.props;
@@ -175,8 +179,8 @@ export default class PolylineEdge extends BaseEdge {
       };
       const startPosition = getVerticalPointOfLine({ ...config, type: 'start' });
       const endPosition = getVerticalPointOfLine({ ...config, type: 'end' });
-      d = `M${startPosition.leftX} ${startPosition.leftY} 
-      L${startPosition.rightX} ${startPosition.rightY} 
+      d = `M${startPosition.leftX} ${startPosition.leftY}
+      L${startPosition.rightX} ${startPosition.rightY}
       L${endPosition.rightX} ${endPosition.rightY}
       L${endPosition.leftX} ${endPosition.leftY} z`;
     }
