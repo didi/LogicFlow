@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import { h, Component, createRef } from 'preact';
 import { ArrowStyle } from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
@@ -19,6 +19,7 @@ export default class BaseEdge extends Component<IProps> {
   startTime: number;
   contextMenuTime: number;
   clickTimer: number;
+  textRef = createRef();
   getShape() { }
   getTextStyle() {
   }
@@ -35,6 +36,7 @@ export default class BaseEdge extends Component<IProps> {
     }
     return (
       <LineText
+        ref={this.textRef}
         editable={editConfigModel.edgeTextEdit && model.text.editable}
         model={model}
         graphModel={graphModel}
@@ -141,9 +143,13 @@ export default class BaseEdge extends Component<IProps> {
     // ! hover多次触发, onMouseOver + onMouseEnter
     const { model: { isHovered } } = this.props;
     if (isHovered) return;
+    this.textRef && this.textRef.current.setHoverON();
     this.handleHover(true, ev);
   };
   setHoverOFF = (ev) => {
+    const { model: { isHovered } } = this.props;
+    if (!isHovered) return;
+    this.textRef && this.textRef.current.setHoverOFF();
     this.handleHover(false, ev);
   };
   // 右键点击节点，设置节点未现在菜单状态
