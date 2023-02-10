@@ -2,6 +2,7 @@ const lf = new LogicFlow({
   container: document.querySelector('#app'),
   grid: true,
   width: 1400,
+  multipleSelectKey: 'alt',
   autoExpand: false,
   keyboard: {
     enabled: true

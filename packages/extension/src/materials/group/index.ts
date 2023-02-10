@@ -43,7 +43,7 @@ class Group {
       return true;
     });
     lf.graphModel.group = this;
-    lf.on('node:add,node:drop', this.appendNodeToGroup);
+    lf.on('node:add,node:drop,node:dnd-add', this.appendNodeToGroup);
     lf.on('node:delete', this.deleteGroupChild);
     lf.on('node:dnd-drag,node:drag', this.setActiveGroup);
     lf.on('node:click', this.nodeSelected);
@@ -107,7 +107,7 @@ class Group {
       data.children.forEach((nodeId) => {
         this.nodeGroupMap.set(nodeId, data.id);
       });
-      this.nodeSelected({ data });
+      this.nodeSelected({ data, isSelected: false, isMultiple: false });
     }
   };
   deleteGroupChild = ({ data }) => {
@@ -146,7 +146,7 @@ class Group {
    * 3. 分组节点取消选中后，不会将分组节点重置为原来的高度。
    * 4. 由于LogicFlow核心目标是支持用户手动绘制流程图，所以不考虑一张流程图超过1000个分组节点的情况。
    */
-  nodeSelected = ({ data }) => {
+  nodeSelected = ({ data, isMultiple, isSelected }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
     this.toFrontGroup(nodeModel);
     // 重置所有的group zIndex,防止group节点zIndex增长为正。
@@ -163,6 +163,24 @@ class Group {
           preZIndex = group.zIndex;
         }
         group.setZIndex(this.topGroupZIndex);
+      }
+    }
+    // FIX #1004
+    // 如果节点被多选，
+    // 这个节点是分组，则将分组的所有子节点取消选中
+    // 这个节点是分组的子节点，且其所属分组节点已选，则取消选中
+    if (isMultiple && isSelected) {
+      if (nodeModel.isGroup) {
+        nodeModel.children.forEach((child) => {
+          const childModel = this.lf.graphModel.getElement(child);
+          childModel.setSelected(false);
+        });
+      } else {
+        const groupId = this.nodeGroupMap.get(data.id);
+        if (groupId) {
+          const groupModel = this.lf.getNodeModelById(groupId);
+          groupModel.isSelected && nodeModel.setSelected(false);
+        }
       }
     }
   };
