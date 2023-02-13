@@ -297,7 +297,7 @@ export type GraphTransform = {
   transformOrigin: string;
 };
 
-export type EventArgs = Record<string, number | object | string>;
+export type EventArgs = Record<string, number | object | string | boolean>;
 
 export type FocusOnArgs = {
   id?: string;

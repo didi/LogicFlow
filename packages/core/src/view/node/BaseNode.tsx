@@ -11,6 +11,7 @@ import { isIe } from '../../util/browser';
 import { isMultipleSelect } from '../../util/graph';
 import { CommonTheme } from '../../constant/DefaultTheme';
 import { cancelRaf, createRaf } from '../../util/raf';
+import { EventArgs } from '../../type';
 
 type IProps = {
   model: BaseNodeModel;
@@ -236,10 +237,12 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       y: e.clientY,
     });
 
-    const eventOptions = {
+    const eventOptions: EventArgs = {
       data: nodeData,
       e,
       position,
+      isSelected: false,
+      isMultiple: false,
     };
 
     const isRightClick = e.button === 2;
@@ -251,10 +254,14 @@ export default abstract class BaseNode extends Component<IProps, IState> {
 
     const { editConfigModel } = graphModel;
     // 在multipleSelect tool禁用的情况下，允许取消选中节点
-    if (model.isSelected && !isDoubleClick && isMultipleSelect(e, editConfigModel)) {
+    const isMultiple = isMultipleSelect(e, editConfigModel);
+    eventOptions.isMultiple = isMultiple;
+    if (model.isSelected && !isDoubleClick && isMultiple) {
+      eventOptions.isSelected = false;
       model.setSelected(false);
     } else {
-      graphModel.selectNodeById(model.id, isMultipleSelect(e, editConfigModel));
+      graphModel.selectNodeById(model.id, isMultiple);
+      eventOptions.isSelected = true;
       this.toFront();
     }
 

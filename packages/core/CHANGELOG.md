@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.2...@logicflow/core@1.2.0-next.3) (2023-02-13)
+
+
+### Bug Fixes
+
+* 修复边的isHoverd失效问题 ([0ebd6b6](https://github.com/didi/LogicFlow/commit/0ebd6b6218fc3225b918c2cb657d89b933537a75))
+
+
+
+
+
 # [1.2.0-next.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.1.31...@logicflow/core@1.2.0-next.2) (2023-01-13)
 
 

@@ -114,7 +114,7 @@ npm whoami
 lerna version patch
 ```
 
-lerna version 的详细使用方式见[这里](https://github.com/lerna/lerna/tree/main/commands/version#readme)
+lerna version 的详细使用方式见[这里](https://github.com/lerna/lerna/tree/main/libs/commands/version#readme)
 
 ### 发布版本
 
