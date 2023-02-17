@@ -60,6 +60,7 @@ class MyGroupModel1 extends GroupNode.model {
   initNodeData(data) {
     super.initNodeData(data);
     this.foldable = true;
+    this.resizable = true;
     this.width = 400;
     this.height = 200;
   }
@@ -168,17 +169,13 @@ lf.render({
 document.querySelector('#getData').addEventListener('click', () => {
   const data = lf.getGraphData();
   console.log(data);
+  window.sessionStorage.setItem('group_data', JSON.stringify(data))
 })
 document.querySelector('#render').addEventListener('click', () => {
-  lf.render({
-    nodes: [
-      {
-        type: 'circle',
-        x: 300,
-        y: 100
-      }
-    ]
-  })
+  const data = window.sessionStorage.getItem('group_data')
+  if (data) {
+    lf.render(JSON.parse(data))
+  }
 })
 lf.on('group:not-allowed', (data) => {
   console.log('此节点不允许添加到分组中', data)
