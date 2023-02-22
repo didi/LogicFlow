@@ -773,17 +773,9 @@ class GraphModel {
       const nodeAsSource = this.edges[i].sourceNodeId === nodeId;
       const nodeAsTarget = this.edges[i].targetNodeId === nodeId;
       if (nodeAsSource) {
-        // edgeModel.updateStartPoint({
-        //   x: edgeModel.startPoint.x + deltaX,
-        //   y: edgeModel.startPoint.y + deltaY,
-        // });
         edgeModel.moveStartPoint(deltaX, deltaY);
       }
       if (nodeAsTarget) {
-        // edgeModel.updateEndPoint({
-        //   x: edgeModel.endPoint.x + deltaX,
-        //   y: edgeModel.endPoint.y + deltaY,
-        // });
         edgeModel.moveEndPoint(deltaX, deltaY);
       }
       // 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新边距离最短距离的点
@@ -964,7 +956,32 @@ class GraphModel {
    */
   @action
   moveNodes(nodeIds: string[], deltaX: number, deltaY: number, isIgnoreRule = false) {
-    nodeIds.forEach(nodeId => this.moveNode(nodeId, deltaX, deltaY, isIgnoreRule));
+    // FIX: https://github.com/didi/LogicFlow/issues/1015
+    // 如果节点之间存在连线，则只移动连线一次。
+    const nodeIdMap = nodeIds.reduce((acc, cur) => {
+      const nodeModel = this.nodesMap[cur].model;
+      const moveDistance = nodeModel.getMoveDistance(deltaX, deltaY, isIgnoreRule);
+      acc[cur] = moveDistance;
+      return acc;
+    }, {});
+    for (let i = 0; i < this.edges.length; i++) {
+      const edgeModel = this.edges[i];
+      const sourceMoveDistance = nodeIdMap[edgeModel.sourceNodeId];
+      let textDistanceX;
+      let textDistanceY;
+      if (sourceMoveDistance) {
+        [textDistanceX, textDistanceY] = sourceMoveDistance;
+        edgeModel.moveStartPoint(textDistanceX, textDistanceY);
+      }
+      const targetMoveDistance = nodeIdMap[edgeModel.sourceNodeId];
+      if (targetMoveDistance) {
+        [textDistanceX, textDistanceY] = targetMoveDistance;
+        edgeModel.moveEndPoint(textDistanceX, textDistanceY);
+      }
+      if (sourceMoveDistance || targetMoveDistance) {
+        edgeModel.moveText(textDistanceX, textDistanceY);
+      }
+    }
   }
   /**
    * 添加节点移动限制规则，在节点移动的时候触发。

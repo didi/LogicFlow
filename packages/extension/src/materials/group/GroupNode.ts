@@ -100,6 +100,10 @@ class GroupNodeModel extends RectResize.model {
     let allEdges = this.incoming.edges.concat(this.outgoing.edges);
     this.children.forEach((elementId) => {
       const nodeModel = this.graphModel.getElement(elementId);
+      // FIX: https://github.com/didi/LogicFlow/issues/1007
+      if (nodeModel.isGroup && !nodeModel.isFolded) {
+        nodeModel.foldGroup(isFolded);
+      }
       nodeModel.visible = !isFolded;
       allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
     });

@@ -1,4 +1,5 @@
 import { Point, PolylineEdgeModel, BaseNodeModel } from '@logicflow/core';
+import { cloneDeep } from 'lodash-es';
 // 这个里面的函数有些在core中已经存在，为了解耦关系，没有引用
 
 enum SegmentDirection {
@@ -6,15 +7,43 @@ enum SegmentDirection {
   VERTICAL = 'vertical',
 }
 
-/* 判断一个点是否在线段中
-入参点：point, 线段起终点，start,end,
-返回值： 在线段中true，否则false
-*/
-export const isInSegment = (point, start, end) => {
-  const { x, y } = point;
-  return (x - start.x) * (x - end.x) <= 0
-    && (y - start.y) * (y - end.y) <= 0;
+/**
+ * 判断一个点是否在线段中
+ * @param point 判断的点
+ * @param start 线段的起点
+ * @param end 线段的终点
+ * @param deviation 误差范围
+ * @returns boolean
+ */
+export const isInSegment = (point, start, end, deviation = 0) => {
+  const distance = distToSegment(point, start, end);
+  return distance <= deviation;
 };
+
+function sqr(x) {
+  return x * x;
+}
+
+function dist2(v, w) {
+  return sqr(v.x - w.x) + sqr(v.y - w.y);
+}
+
+export const distToSegmentSquared = (p, v, w) => {
+  const l2 = dist2(v, w);
+  if (l2 === 0) return dist2(p, v);
+  let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+  t = Math.max(0, Math.min(1, t));
+  return dist2(p, {
+    x: v.x + t * (w.x - v.x),
+    y: v.y + t * (w.y - v.y),
+  });
+};
+
+export const distToSegment = (
+  point: Point,
+  start: Point,
+  end: Point,
+) => Math.sqrt(distToSegmentSquared(point, start, end));
 
 /* 获取节点bbox */
 const getNodeBBox = (node: BaseNodeModel) => {
@@ -61,28 +90,28 @@ export const crossPointInSegment = (node: BaseNodeModel, start:Point, end: Point
   const { x, y, width, height } = node;
   if (direction === SegmentDirection.HORIZONTAL) {
     // 同一水平线
-    if (start.y === y && maxX >= bBox.maxX && minX <= bBox.minX) {
+    if (maxX >= bBox.maxX && minX <= bBox.minX) {
       return {
         startCrossPoint: {
           x: start.x > end.x ? x + (width / 2) : x - (width / 2),
-          y,
+          y: start.y,
         },
         endCrossPoint: {
           x: start.x > end.x ? x - (width / 2) : x + (width / 2),
-          y,
+          y: start.y,
         },
       };
     }
   } else if (direction === SegmentDirection.VERTICAL) {
     // 同一垂直线
-    if (start.x === node.x && maxY >= bBox.maxY && minY <= bBox.minY) {
+    if (maxY >= bBox.maxY && minY <= bBox.minY) {
       return {
         startCrossPoint: {
-          x,
+          x: start.x,
           y: start.y > end.y ? y + (height / 2) : y - (height / 2),
         },
         endCrossPoint: {
-          x,
+          x: start.x,
           y: start.y > end.y ? y - (height / 2) : y + (height / 2),
         },
       };
@@ -98,12 +127,11 @@ interface SegmentCross {
 }
 // 节点是否在线段内
 // eslint-disable-next-line max-len
-export const isNodeInSegment = (node: BaseNodeModel, polyline: PolylineEdgeModel): SegmentCross => {
+export const isNodeInSegment = (node: BaseNodeModel, polyline: PolylineEdgeModel, deviation = 0): SegmentCross => {
   const { x, y } = node;
   const { pointsList } = polyline;
   for (let i = 0; i < pointsList.length - 1; i++) {
-    if (isInSegment({ x, y }, pointsList[i], pointsList[i + 1])
-    ) {
+    if (isInSegment({ x, y }, pointsList[i], pointsList[i + 1], deviation)) {
       const bBoxCross = crossPointInSegment(node, pointsList[i], pointsList[i + 1]);
       if (bBoxCross) {
         return {
