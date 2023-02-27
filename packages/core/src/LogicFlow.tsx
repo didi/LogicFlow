@@ -400,7 +400,7 @@ export default class LogicFlow {
    * @param id id
    */
   getDataById(id: string): NodeConfig | EdgeConfig {
-    return this.graphModel.getElement(id).getData();
+    return this.graphModel.getElement(id)?.getData();
   }
   /**
    * 修改指定节点类型
