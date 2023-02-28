@@ -9,6 +9,7 @@ import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
 import { isMultipleSelect } from '../../util/graph';
+import Circle from '../basic-shape/Circle';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -20,14 +21,29 @@ export default class BaseEdge extends Component<IProps> {
   contextMenuTime: number;
   clickTimer: number;
   textRef = createRef();
-  getShape() { }
+  /**
+   * 不支持重写，请使用getEdge
+   */
+  getShape() {
+    return (
+      <g>
+        {this.getEdge()}
+      </g>
+    );
+  }
+  /**
+   * @deprecated 请使用model.getTextStyle
+   */
   getTextStyle() {
   }
-  getText() {
+  /**
+   * @overridable 可重写，自定义边文本DOM
+   */
+  getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props;
     // 文本被编辑的时候，显示编辑框，不显示文本。
     if (model.state === ElementState.TEXT_EDIT) {
-      return '';
+      return null;
     }
     let draggable = false;
     const { editConfigModel } = graphModel;
@@ -44,6 +60,9 @@ export default class BaseEdge extends Component<IProps> {
       />
     );
   }
+  /**
+   * @deprecated
+   */
   getArrowInfo(): ArrowInfo {
     const { model } = this.props;
     const {
@@ -57,22 +76,20 @@ export default class BaseEdge extends Component<IProps> {
       isSelected,
     };
   }
+  /**
+   * @deprecated 请使用model.getArrowStyle
+   */
   getArrowStyle() {
-    const { model, graphModel } = this.props;
-    const edgeStyle = model.getEdgeStyle();
-    const edgeAnimationStyle = model.getEdgeAnimationStyle();
-    const { arrow } = graphModel.theme;
-    const stroke = model.isAnimation ? edgeAnimationStyle.stroke : edgeStyle.stroke;
-    return {
-      ...edgeStyle,
-      fill: stroke,
-      stroke,
-      ...arrow,
-    } as ArrowStyle;
+    console.error('getArrowStyle is deprecated in 1.2.0, please use model.getArrowStyle');
+    return null;
   }
-  getArrow(): h.JSX.Element | null {
-    const { model: { id } } = this.props;
-    const { refY = 0, refX = 2 } = this.getArrowStyle();
+  /**
+   * 定义边的箭头，不支持重写。请使用getStartArrow和getEndArrow
+   */
+  private getArrow(): h.JSX.Element | null {
+    const { model } = this.props;
+    const { id } = model;
+    const { refY = 0, refX = 2 } = model.getArrowStyle();
     return (
       <g>
         <defs>
@@ -86,16 +103,74 @@ export default class BaseEdge extends Component<IProps> {
       </g>
     );
   }
+  /**
+   * @overridable 可重写，自定义边起点箭头形状。
+   * @example
+   * getStartArrow() {
+   *  const { model } = this.props;
+   *  const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
+   *  return (
+   *    h('path', {
+   *      d: ''
+   *    })
+   *  )
+   * }
+   */
   getStartArrow(): h.JSX.Element | null {
-    const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
+    const { model } = this.props;
+    const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
     return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
+  /**
+   * @overridable 可重写，自定义边终点箭头形状。
+   * @example
+   * getEndArrow() {
+   *  const { model } = this.props;
+   *  const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
+   *  return (
+   *    h('path', {
+   *      d: ''
+   *    })
+   *  )
+   * }
+   */
   getEndArrow(): h.JSX.Element | null {
-    const { stroke, strokeWidth, offset, verticalLength } = this.getArrowStyle();
+    const { model } = this.props;
+    const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
     return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} transform="rotate(180)" d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
   }
-  // 起点终点，可以修改起点/终点为其他节点
-  getAdjustPoints() {
+  /**
+   * @overridable 可重写，自定义调整边连接节点形状。在开启了adjustEdgeStartAndEnd的时候，会显示调整点。
+   * @param x 调整点x坐标
+   * @param y 调整点y坐标
+   * @example
+   * getAdjustPointShape(x, y) {
+   *  const { model } = this.props;
+   *  const style = model.getAdjustPointStyle();
+   *  return (
+   *    h('circle', {
+   *      ...style,
+   *     x,
+   *     y
+   *    })
+   *  )
+   * }
+   */
+  getAdjustPointShape = (x, y): h.JSX.Element | null => {
+    const { model } = this.props;
+    const style = model.getAdjustPointStyle();
+    return (
+      <Circle
+        className="lf-edge-adjust-point"
+        {...style}
+        {...{ x, y }}
+      />
+    );
+  };
+  /**
+   * 不支持重写。请使用getAdjustPointShape
+   */
+  private getAdjustPoints() {
     const { model, graphModel } = this.props;
     const start = model.getAdjustStart();
     const end = model.getAdjustEnd();
@@ -104,22 +179,36 @@ export default class BaseEdge extends Component<IProps> {
         <AdjustPoint
           type="SOURCE"
           {...start}
+          getAdjustPointShape={this.getAdjustPointShape}
           edgeModel={model}
           graphModel={graphModel}
         />
         <AdjustPoint
           type="TARGET"
           {...end}
+          getAdjustPointShape={this.getAdjustPointShape}
           edgeModel={model}
           graphModel={graphModel}
         />
       </g>
     );
   }
-  getAnimation() { }
-  getAppendWidth() {
+  /**
+   * @deprecated
+   */
+  getAnimation() {
+    console.error('getAnimation is deprecated in 1.2.0, please use model.getEdgeAnimationStyle');
+  }
+  /**
+   * @overridable 可重写，在完全自定义边的时候，可以重写此方法，来自定义边的选区。
+   */
+  public getAppendWidth() {
     return <g />;
   }
+  /**
+   * 不建议重写，此方法为扩大边选区，方便用户点击选中边。
+   * 如果需要自定义边选区，请使用getAppendWidth。
+   */
   getAppend() {
     return (
       <g
@@ -129,6 +218,9 @@ export default class BaseEdge extends Component<IProps> {
       </g>
     );
   }
+  /**
+   * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
+   */
   handleHover = (hovered, ev) => {
     const { model, graphModel: { eventCenter } } = this.props;
     model.setHovered(hovered);
@@ -139,6 +231,9 @@ export default class BaseEdge extends Component<IProps> {
       e: ev,
     });
   };
+  /**
+   * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
+   */
   setHoverON = (ev) => {
     // ! hover多次触发, onMouseOver + onMouseEnter
     const { model: { isHovered } } = this.props;
@@ -146,13 +241,18 @@ export default class BaseEdge extends Component<IProps> {
     this.textRef && this.textRef.current.setHoverON();
     this.handleHover(true, ev);
   };
+  /**
+   * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
+   */
   setHoverOFF = (ev) => {
     const { model: { isHovered } } = this.props;
     if (!isHovered) return;
     this.textRef && this.textRef.current.setHoverOFF();
     this.handleHover(false, ev);
   };
-  // 右键点击节点，设置节点未现在菜单状态
+  /**
+   * 不支持重写，如果想要基于contextmenu事件做处理，请监听edge:contextmenu事件。
+   */
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
     // 节点右击也会触发时间，区分右击和点击(mouseup)
@@ -176,11 +276,16 @@ export default class BaseEdge extends Component<IProps> {
       position,
     });
   };
+  /**
+   * 不支持重写
+   */
   handleMouseDown = (e) => {
     e.stopPropagation();
     this.startTime = new Date().getTime();
   };
-  // todo: 去掉setTimeout
+  /**
+   * 不支持重写
+   */
   handleMouseUp = (e: MouseEvent) => {
     if (!this.startTime) return;
     const time = new Date().getTime() - this.startTime;
@@ -234,8 +339,16 @@ export default class BaseEdge extends Component<IProps> {
     graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel));
     this.toFront();
   };
-  // 是否正在拖拽，在折线调整时，不展示起终点的调整点
-  getIsDragging = () => false;
+  /**
+   * @overridable 支持重写, 此方法为获取边的形状，如果需要自定义边的形状，请重写此方法。
+   * @example https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge?id=%e5%9f%ba%e4%ba%8e-react-%e7%bb%84%e4%bb%b6%e8%87%aa%e5%ae%9a%e4%b9%89%e8%be%b9
+   */
+  getEdge(): h.JSX.Element | null {
+    return null;
+  }
+  /**
+   * @overridable 支持重写, 此方法为边在被选中时将其置顶，如果不需要此功能，可以重写此方法。
+   */
   toFront() {
     const { graphModel, model } = this.props;
     const { overlapMode } = graphModel;
@@ -243,13 +356,12 @@ export default class BaseEdge extends Component<IProps> {
       graphModel.toFront(model.id);
     }
   }
+  /**
+   * 不建议重写，如果要自定义边的形状，请重写getEdge方法。
+   */
   render() {
-    const { model: { isSelected, isHitable }, graphModel } = this.props;
-    const isDragging = this.getIsDragging();
-    const { editConfigModel: { adjustEdgeStartAndEnd }, animation } = graphModel;
-    // performance 只允许出现一条edge有动画
-    const isShowAnimation = isSelected && animation.edge
-      && graphModel.getSelectElements().edges.length === 1;
+    const { model: { isSelected, isHitable, isShowAdjustPoint }, graphModel } = this.props;
+    const { animation } = graphModel;
     return (
       <g>
         <g
@@ -267,11 +379,10 @@ export default class BaseEdge extends Component<IProps> {
         >
           {this.getShape()}
           {this.getAppend()}
-          {isShowAnimation && this.getAnimation()}
           {this.getText()}
           {this.getArrow()}
         </g>
-        {(adjustEdgeStartAndEnd && isSelected && !isDragging) ? this.getAdjustPoints() : ''}
+        {(isShowAdjustPoint && isSelected) ? this.getAdjustPoints() : ''}
       </g>
     );
   }

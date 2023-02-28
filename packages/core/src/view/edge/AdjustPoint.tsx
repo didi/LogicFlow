@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import { BaseEdgeModel } from '../../model/edge';
 import GraphModel from '../../model/GraphModel';
-import Circle from '../basic-shape/Circle';
 import { StepDrag } from '../../util/drag';
 import { formateAnchorConnectValidateData, targetNodeInfo } from '../../util/node';
 import { Point } from '../../type';
@@ -13,6 +12,7 @@ interface IProps {
   y: number;
   type: AdjustType;
   id?: string;
+  getAdjustPointShape: Function;
   graphModel: GraphModel;
   edgeModel: BaseEdgeModel;
 }
@@ -245,8 +245,9 @@ export default class AdjustPoint extends Component<IProps, IState> {
   // 调整点的样式默认从主题中读取， 可以复写此方法进行更加个性化的自定义
   // 目前仅支持圆形图标进行标识，可以从圆形的r和颜色上进行调整
   getAdjustPointStyle = () => {
-    const { graphModel: { theme } } = this.props;
+    const { graphModel: { theme }, edgeModel } = this.props;
     const { edgeAdjust } = theme;
+
     return edgeAdjust;
   };
 
@@ -320,18 +321,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     return isSourcePass && isTargetPass;
   }
   render() {
-    const { x, y } = this.props;
+    const { x, y, getAdjustPointShape } = this.props;
     const { dragging } = this.state;
-    const style = this.getAdjustPointStyle();
     return (
-      <g>
-        <Circle
-          className="lf-edge-adjust-point"
-          {...style}
-          {...{ x, y }}
-          onMouseDown={this.handleMouseDown}
-          pointer-events={dragging ? 'none' : ''}
-        />
+      <g pointerEvents={dragging ? 'none' : ''} onMouseDown={this.handleMouseDown}>
+        { getAdjustPointShape(x, y, dragging)}
       </g>
     );
   }
