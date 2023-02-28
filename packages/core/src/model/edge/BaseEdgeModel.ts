@@ -17,7 +17,7 @@ import {
 import {
   ModelType, ElementType, OverlapMode,
 } from '../../constant/constant';
-import { OutlineTheme } from '../../constant/DefaultTheme';
+import { ArrowTheme, OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
 import { formatData } from '../../util/compatible';
 import { pickEdgeConfig, twoPointDistance } from '../../util/edge';
@@ -49,6 +49,7 @@ class BaseEdgeModel implements IBaseModel {
   @observable visible = true;
   virtual = false;
   @observable isAnimation = false;
+  @observable isShowAdjustPoint = false; // 是否显示边两端的调整点
   // 引用属性
   graphModel: GraphModel;
   @observable zIndex = 0;
@@ -60,7 +61,6 @@ class BaseEdgeModel implements IBaseModel {
   targetAnchorId = '';
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
-  animationData = defaultAnimationData;
   @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
   // TODO: 每个边独立生成一个marker没必要
   @observable arrowConfig = {
@@ -75,11 +75,11 @@ class BaseEdgeModel implements IBaseModel {
     this.setAttributes();
   }
   /**
-   * @overridable 支持重写
    * 初始化边数据
+   * @overridable 支持重写
    * initNodeData和setAttributes的区别在于
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
-   * setAttributes除了初始化调用外，还会在properties发生变化了调用。
+   * setAttributes除了初始化调用外，还会在properties发生变化后调用。
    */
   initEdgeData(data) {
     if (!data.properties) {
@@ -94,7 +94,9 @@ class BaseEdgeModel implements IBaseModel {
       const nodeId = this.createId();
       if (nodeId) data.id = nodeId;
     }
-
+    this.arrowConfig.markerEnd = `url(#marker-end-${data.id})`;
+    const { editConfigModel: { adjustEdgeStartAndEnd } } = this.graphModel;
+    this.isShowAdjustPoint = adjustEdgeStartAndEnd;
     assign(this, pickEdgeConfig(data));
     const { overlapMode } = this.graphModel;
     if (overlapMode === OverlapMode.INCREASE) {
@@ -109,31 +111,41 @@ class BaseEdgeModel implements IBaseModel {
     this.formatText(data);
   }
   /**
-   * 设置model属性，每次properties发生变化会触发
+   * 设置model属性
    * @overridable 支持重写
+   * 每次properties发生变化会触发
    */
   setAttributes() { }
-  /**
-   * @overridable 支持重写，自定义此类型节点默认生成方式
-   * @returns string
-   */
-  createId() {
+  createId(): string {
     return null;
   }
   /**
+   * 自定义边样式
+   *
    * @overridable 支持重写
-   * 获取当前节点样式
    * @returns 自定义边样式
    */
-  getEdgeStyle() {
+  getEdgeStyle(): ShapeStyleAttribute {
     return {
       ...this.graphModel.theme.baseEdge,
       ...this.style,
     };
   }
   /**
+   * 自定义边调整点样式
+   *
    * @overridable 支持重写
-   * 获取当前节点文本样式
+   * 在isShowAdjustPoint为true时会显示调整点。
+   */
+  getAdjustPointStyle() {
+    return {
+      ...this.graphModel.theme.edgeAdjust,
+    };
+  }
+  /**
+   * 自定义边文本样式
+   *
+   * @overridable 支持重写
    */
   getTextStyle() {
     // 透传 edgeText
@@ -141,27 +153,57 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(edgeText);
   }
   /**
+   * 自定义边动画样式
+   *
    * @overridable 支持重写
-   * 获取当前边的动画样式
-   * @returns 自定义边动画样式
-   */
-  getAnimation() {
-    const { animationData } = this;
-    return cloneDeep(animationData);
-  }
-  /**
-   * @overridable 支持重写
-   * 获取当前边的动画样式
-   * @returns 自定义边动画样式
+   * @example
+   * getEdgeAnimationStyle() {
+   *   const style = super.getEdgeAnimationStyle();
+   *   style.stroke = 'blue'
+   *   style.animationDuration = '30s'
+   *   style.animationDirection = 'reverse'
+   *   return style
+   * }
    */
   getEdgeAnimationStyle() {
     const { edgeAnimation } = this.graphModel.theme;
     return cloneDeep(edgeAnimation);
   }
   /**
+   * 自定义边箭头样式
+   *
    * @overridable 支持重写
-   * 获取outline样式，重写可以定义此类型边outline样式， 默认使用主题样式
-   * @returns 自定义outline样式
+   * @example
+   * getArrowStyle() {
+   *   const style = super.getArrowStyle();
+   *   style.stroke = 'green';
+   *   return style;
+   * }
+   */
+  getArrowStyle(): ArrowTheme {
+    const edgeStyle = this.getEdgeStyle();
+    const edgeAnimationStyle = this.getEdgeAnimationStyle();
+    const { arrow } = this.graphModel.theme;
+    const stroke = this.isAnimation ? edgeAnimationStyle.stroke : edgeStyle.stroke;
+    return {
+      ...edgeStyle,
+      fill: stroke,
+      stroke,
+      ...arrow,
+    };
+  }
+  /**
+   * 自定义边被选中时展示其范围的矩形框样式
+   *
+   * @overridable 支持重写
+   * @example
+   * // 隐藏outline
+   * getOutlineStyle() {
+   *   const style = super.getOutlineStyle();
+   *   style.stroke = "none";
+   *   style.hover.stroke = "none";
+   *   return style;
+   * }
    */
   getOutlineStyle(): OutlineTheme {
     const { graphModel } = this;
@@ -169,8 +211,9 @@ class BaseEdgeModel implements IBaseModel {
     return cloneDeep(outline);
   }
   /**
-   * @overridable 支持重新，重新自定义文本位置
-   * @returns 文本位置
+   * 重新自定义文本位置
+   *
+   * @overridable 支持重写
    */
   getTextPosition(): Point {
     return {
@@ -178,9 +221,15 @@ class BaseEdgeModel implements IBaseModel {
       y: 0,
     };
   }
+  /**
+   * 边的前一个节点
+   */
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model;
   }
+  /**
+   * 边的后一个节点
+   */
   @computed get targetNode() {
     return this.graphModel?.nodesMap[this.targetNodeId]?.model;
   }
@@ -235,6 +284,8 @@ class BaseEdgeModel implements IBaseModel {
   }
   /**
    * 获取被保存时返回的数据
+   *
+   * @overridable 支持重写
    */
   getData(): EdgeData {
     const { x, y, value } = this.text;
@@ -260,23 +311,40 @@ class BaseEdgeModel implements IBaseModel {
     return data;
   }
   /**
-   * 用于在历史记录时获取节点数据，
+   * 获取边的数据
+   *
+   * @overridable 支持重写
+   * 用于在历史记录时获取节点数据。
    * 在某些情况下，如果希望某个属性变化不引起history的变化，
    * 可以重写此方法。
    */
   getHistoryData(): EdgeData {
     return this.getData();
   }
+  /**
+   * 设置边的属性，会触发重新渲染
+   * @param key 属性名
+   * @param val 属性值
+   */
   @action
   setProperty(key, val): void {
     this.properties[key] = formatData(val);
     this.setAttributes();
   }
+  /**
+   * 删除边的属性，会触发重新渲染
+   * @param key 属性名
+   */
   @action
   deleteProperty(key: string): void {
     delete this.properties[key];
     this.setAttributes();
   }
+  /**
+   * 设置边的属性，会触发重新渲染
+   * @param key 属性名
+   * @param val 属性值
+   */
   @action
   setProperties(properties): void {
     this.properties = {
@@ -285,6 +353,9 @@ class BaseEdgeModel implements IBaseModel {
     };
     this.setAttributes();
   }
+  /**
+   * 修改边的id
+   */
   @action
   changeEdgeId(id: string) {
     const { markerEnd, markerStart } = this.arrowConfig;
@@ -296,15 +367,21 @@ class BaseEdgeModel implements IBaseModel {
     }
     this.id = id;
   }
-  // 设置样式
+  /**
+   * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
+   * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
+   */
   @action
-  setStyle(key, val): void {
+  setStyle(key: string, val): void {
     this.style = {
       ...this.style,
       [key]: formatData(val),
     };
   }
-
+  /**
+   * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
+   * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
+   */
   @action
   setStyles(styles): void {
     this.style = {
@@ -312,7 +389,10 @@ class BaseEdgeModel implements IBaseModel {
       ...formatData(styles),
     };
   }
-
+  /**
+   * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
+   * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
+   */
   @action
   updateStyles(styles): void {
     this.style = {

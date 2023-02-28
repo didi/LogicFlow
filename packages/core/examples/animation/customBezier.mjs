@@ -2,11 +2,6 @@ class CustomBezierModel extends BezierEdgeModel {
   setAttributes () {
     this.offset = 40;
   }
-  getAnimation() {
-    const animation = super.getAnimation();
-    animation.stroke = "blue";
-    return animation;
-  }
   getEdgeStyle() {
     const style = super.getEdgeStyle();
     const { properties } = this;

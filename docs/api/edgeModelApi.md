@@ -75,19 +75,6 @@ class SequenceFlowModel extends PolylineModel {
 }
 ```
 
-## getAnimation
-
-支持重写，自定义边的流向动画
-
-```js
-class CustomBezierModel extends BezierEdgeModel {
-  getAnimation() {
-    const animation = super.getAnimation();
-    animation.stroke = 'blue';
-    return animation;
-  }
-}
-```
 
 ## getTextStyle
 

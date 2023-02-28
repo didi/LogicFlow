@@ -371,11 +371,13 @@
             }
           };
         }
-
+        handleHover (hovered, ev) {
+          super.handleHover(hovered, ev);
+        }
         getEndArrow() {
           const { model, graphModel } = this.props;
           const { id, properties: { arrowType } } = model;
-          const { stroke, strokeWidth } = this.getArrowStyle();
+          const { stroke, strokeWidth } = model.getArrowStyle();
           const pathAttr = {
             stroke,
             strokeWidth
@@ -412,6 +414,11 @@
           if (properties.arrow) {
             this.arrowConfig.markerEnd = properties.arrow.markerEnd
           }
+        }
+        getArrowStyle () {
+          const style = super.getArrowStyle();
+          style.stroke = 'green';
+          return style;
         }
       }
       
@@ -484,6 +491,7 @@
           edgeGenerator: (sourceNode, targetNode, currentEdge) => {
             // 起始节点类型 rect 时使用 自定义的边 custom-edge
             if (sourceNode.type === 'rect') return 'bezier'
+            if (currentEdge) return currentEdge.type
             return 'polyline'
           },
           idGenerator(type) {
@@ -546,34 +554,13 @@
             polyline: {
               stroke: 'red',
             },
-            arrow: {
-              offset: 4, // 箭头长度
-              verticalLength: 2, // 箭头垂直于边的距离
-            }
+            // arrow: {
+            //   offset: 4, // 箭头长度
+            //   verticalLength: 2, // 箭头垂直于边的距离
+            // }
           }
         );
         lf.setDefaultEdgeType('polyline');
-        lf.on('adjustPoint:mousedown', (e) => {
-          console.log('adjustPoint:mousedown', e);
-        })
-        lf.on('adjustPoint:mouseup', () => {
-          console.log('adjustPoint:mouseup');
-        })
-        lf.on('adjustPoint:mousemove', () => {
-          console.log('adjustPoint:mousemove');
-        })
-        lf.on('adjustPoint:dragstart', () => {
-          console.log('adjustPoint:dragstart');
-        })
-        lf.on('adjustPoint:drag', () => {
-          console.log('adjustPoint:drag');
-        })
-        lf.on('adjustPoint:drop', () => {
-          console.log('adjustPoint:drop');
-        })
-        lf.on('adjustPoint:dragend', () => {
-          console.log('adjustPoint:dragend');
-        })
       }
     </script>
 

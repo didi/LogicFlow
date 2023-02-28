@@ -6,7 +6,7 @@ import { AppendInfo, ArrowInfo, IEdgeState } from '../../type/index';
 import { points2PointsList } from '../../util/edge';
 import { getVerticalPointOfLine } from '../../algorithm';
 import Path from '../basic-shape/Path';
-import { createDrag } from '../../util/drag';
+import { StepDrag } from '../../util/drag';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 
 type AppendAttributesType = {
@@ -20,22 +20,29 @@ type AppendAttributesType = {
 export default class PolylineEdge extends BaseEdge {
   drag;
   isDragging: boolean;
+  isShowAdjustPointTemp: boolean;
   appendInfo: AppendInfo;
-  dragHandler: (ev: MouseEvent) => void;
   constructor() {
     super();
-    this.drag = createDrag({
+    this.drag = new StepDrag({
       onDragStart: this.onDragStart,
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       isStopPropagation: false,
     });
   }
+  /**
+   * 不支持重写
+   */
   onDragStart = () => {
     const polylineModel = this.props.model as PolylineEdgeModel;
     polylineModel.dragAppendStart();
+    this.isShowAdjustPointTemp = polylineModel.isShowAdjustPoint;
+    polylineModel.isShowAdjustPoint = false;
   };
-
+  /**
+   * 不支持重写
+   */
   onDragging = ({ deltaX, deltaY }) => {
     const { model, graphModel } = this.props;
     this.isDragging = true;
@@ -55,11 +62,15 @@ export default class PolylineEdge extends BaseEdge {
       this.appendInfo = polylineModel.dragAppend(this.appendInfo, { x: curDeltaX, y: curDeltaY });
     }
   };
+  /**
+   * 不支持重写
+   */
   onDragEnd = () => {
     const { model, graphModel: { eventCenter } } = this.props;
     const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
     this.isDragging = false;
+    polylineModel.isShowAdjustPoint = this.isShowAdjustPointTemp;
     // 情况当前拖拽的线段信息
     this.appendInfo = undefined;
     // 向外抛出事件
@@ -68,16 +79,21 @@ export default class PolylineEdge extends BaseEdge {
       { data: polylineModel.getData() },
     );
   };
+  /**
+   * 不支持重写
+   */
   beforeDragStart = (e, appendInfo) => {
     // 如果允许拖拽调整触发事件处理
     if (appendInfo.dragAble) {
-      this.dragHandler(e);
+      this.drag.handleMouseDown(e);
     }
     // 记录当前拖拽的线段信息
     this.appendInfo = appendInfo;
   };
-  // 是否正在拖拽，在折线调整时，不展示起终点的调整点
-  getIsDragging = () => this.isDragging;
+  /**
+   * @overridable 支持重写, 此方法为获取边的形状，如果需要自定义边的形状，请重写此方法。
+   * @example https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge?id=%e5%9f%ba%e4%ba%8e-react-%e7%bb%84%e4%bb%b6%e8%87%aa%e5%ae%9a%e4%b9%89%e8%be%b9
+   */
   getEdge() {
     const { model } = this.props;
     const { points, isAnimation, arrowConfig } = model;
@@ -117,31 +133,9 @@ export default class PolylineEdge extends BaseEdge {
       />
     );
   }
-  getShape() {
-    return (
-      <g>
-        {this.getEdge()}
-      </g>
-    );
-  }
-  getAnimation() {
-    const { model } = this.props;
-    const { stroke, className, strokeDasharray } = model.getAnimation();
-    const style = model.getEdgeStyle();
-    return (
-      <g>
-        <Polyline
-          points={model.points}
-          {
-            ...style
-          }
-          className={className}
-          strokeDasharray={strokeDasharray}
-          stroke={stroke}
-        />
-      </g>
-    );
-  }
+  /**
+   * @deprecated
+   */
   getArrowInfo(): ArrowInfo {
     const { model } = this.props;
     const { points, isSelected } = model;
@@ -160,7 +154,7 @@ export default class PolylineEdge extends BaseEdge {
     }
     return arrowInfo;
   }
-  getAppendAttributes(appendInfo: AppendInfo): AppendAttributesType {
+  private getAppendAttributes(appendInfo: AppendInfo): AppendAttributesType {
     const { start, end } = appendInfo;
     let d;
     if (start.x === end.x && start.y === end.y) {
@@ -188,7 +182,7 @@ export default class PolylineEdge extends BaseEdge {
       strokeDasharray: '4, 4',
     };
   }
-  getAppendShape(appendInfo: AppendInfo) {
+  private getAppendShape(appendInfo: AppendInfo) {
     const {
       d, strokeWidth, fill, strokeDasharray, stroke,
     } = this.getAppendAttributes(appendInfo);
@@ -202,6 +196,9 @@ export default class PolylineEdge extends BaseEdge {
       />
     );
   }
+  /**
+   * @overridable 可重写，在完全自定义边的时候，可以重写此方法，来自定义边的选区。
+   */
   getAppendWidth() {
     const { model, graphModel } = this.props;
     const { pointsList, draggable } = model;
@@ -232,10 +229,7 @@ export default class PolylineEdge extends BaseEdge {
       );
       const { editConfigModel } = graphModel;
       const { adjustEdge, adjustEdgeMiddle } = editConfigModel;
-      if (!adjustEdge || !draggable) {
-        this.dragHandler = () => { };
-      } else {
-        this.dragHandler = this.drag;
+      if (adjustEdge && draggable) {
         const { startIndex, endIndex } = appendInfo;
         // 如果不允许调整起点和终点相连的线段，设置该线段appendInfo的dragAble为false
         const dragDisable = adjustEdgeMiddle && (startIndex === 0 || endIndex === pointsLen - 1);

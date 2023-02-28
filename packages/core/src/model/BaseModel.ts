@@ -5,13 +5,15 @@ import { TextConfig, AdditionData, Point } from '../type';
 interface IBaseModel {
   /**
    * 节点或者边的id.
+   *
    * 默认情况下，使用uuidv4生成。
    * 如果想要自定义，可以重写createId生成。
    */
   id: string;
   /**
-   * 不可自定义
    * model对应的图形外观类型（eg: 圆形、矩形、多边形等）
+   *
+   * 不可自定义
    * 用于logicflow内部计算使用。
    */
   modelType: string;
@@ -31,6 +33,7 @@ interface IBaseModel {
   type: string;
   /**
    * 元素状态
+   *
    * 不同的状态对应着元素显示效果。
    * 请勿直接修改。
    * logicflow内部将元素状态分为5种：
@@ -48,6 +51,7 @@ interface IBaseModel {
   additionStateData: AdditionData;
   /**
    * 元素上的文本
+   *
    * logicflow中存在两种文本
    * 一种是脱离边和节点单独存在的文本
    * 一种是必须和边、节点关联的文本。
@@ -74,6 +78,7 @@ interface IBaseModel {
   zIndex: number;
   /**
    * 创建节点ID
+   *
    * 默认情况下，logicflow内部使用uuidv4生成id。
    * 在自定义节点的时候，可以重写此方法基于自己的规则生成id。
    * 注意，此方法必须是同步的。
