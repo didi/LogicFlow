@@ -952,21 +952,21 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@logicflow/core@^1.1.7-alpha.1":
-  version "1.1.7-alpha.1"
-  resolved "https://registry.yarnpkg.com/@logicflow/core/-/core-1.1.7-alpha.1.tgz#9cff5c0da0b69f6a7cb27b9d4a4f24b22131d510"
-  integrity sha512-gMdVbqcveFJFjSiG0q8XjSr8jg+odh6skw9cbyCzlrYFcyiVDcf+rMJa8jI3QdFYR/zm8cZnM+5Iwj7/FH8Qyw==
+"@logicflow/core@^1.2.0-next.1", "@logicflow/core@^1.2.0-next.4":
+  version "1.2.0-next.1"
+  resolved "http://registry.npm.xiaojukeji.com/@logicflow/core/download/@logicflow/core-1.2.0-next.1.tgz#c867eb93ec56ec7b38c9ed7e18089a494743fe13"
+  integrity sha1-yGfrk+xW7Hs4ye1+GAiaSUdD/hM=
   dependencies:
     "@types/mousetrap" "^1.6.4"
     mousetrap "^1.6.5"
     preact "^10.4.8"
 
-"@logicflow/extension@^1.1.7-alpha.1":
-  version "1.1.7-alpha.1"
-  resolved "https://registry.yarnpkg.com/@logicflow/extension/-/extension-1.1.7-alpha.1.tgz#649541937e219b5fb5e81841ef94d1ead107e4e2"
-  integrity sha512-EZoHeetpkvEgVxg4raS+wAv2A8oyaXg5XY0hOeppmXYEpbTZ1Btjhlz9MmyoYwzKkJwke4/zUqpy8FEbDwOEdQ==
+"@logicflow/extension@^1.2.0-next.4":
+  version "1.2.0-next.1"
+  resolved "http://registry.npm.xiaojukeji.com/@logicflow/extension/download/@logicflow/extension-1.2.0-next.1.tgz#3c085349b318df9e45e1fd1d3c7cb719de37878f"
+  integrity sha1-PAhTSbMY355F4f0dPHy3Gd43h48=
   dependencies:
-    "@logicflow/core" "^1.1.7-alpha.1"
+    "@logicflow/core" "^1.2.0-next.1"
     ids "^1.0.0"
     preact "^10.4.8"
 
