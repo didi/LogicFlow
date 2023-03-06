@@ -29,7 +29,7 @@ class Keyboard {
     this.options = options;
     const { lf } = options;
     this.target = lf.container;
-    this.mousetrap = new Mousetrap(this.target);
+    this.mousetrap = new Mousetrap();
     if (options.keyboard.enabled) {
       this.enable(true);
     }

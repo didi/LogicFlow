@@ -185,6 +185,13 @@ code link:  [https://github.com/Logic-Flow/logicflow-node-red-vue3](https://gith
 
 ![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
 
+#### LogicFlow with draft-js
+
+code link:  [https://github.com/towersxu/draft-flow](https://github.com/towersxu/draft-flow)
+
+![draft-flow](https://cdn.jsdelivr.net/gh/towersxu/draft-flow@latest/packages/website/public/redis.png)
+
+
 ## Contact US
 
 ### Join Wechat

@@ -188,6 +188,12 @@ LogicFlow不仅支持开发类似bpmn.js这种固定整体样式、更偏向生�
 
 ![node-red](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/node-red.png)
 
+#### 手绘风格插件示例
+
+源码地址: [https://github.com/towersxu/draft-flow](https://github.com/towersxu/draft-flow)
+
+![draft-flow](https://cdn.jsdelivr.net/gh/towersxu/draft-flow@latest/packages/website/public/redis.png)
+
 ## 联系我们
 
 ### 加入微信群
