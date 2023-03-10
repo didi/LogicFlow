@@ -55,7 +55,7 @@ interface IBaseNodeModel extends IBaseModel {
 export { BaseNodeModel };
 export default class BaseNodeModel implements IBaseNodeModel {
   // 数据属性
-  id = createUuid();
+  id = '';
   @observable type = '';
   @observable x = 0;
   @observable y = 0;
@@ -146,9 +146,8 @@ export default class BaseNodeModel implements IBaseNodeModel {
       // 自定义节点id > 全局定义id > 内置
       const { idGenerator } = this.graphModel;
       const globalId = idGenerator && idGenerator(data.type);
-      if (globalId) data.id = globalId;
-      const customNodeId = this.createId();
-      if (customNodeId) data.id = customNodeId;
+      const nodeId = this.createId();
+      data.id = nodeId || globalId || createUuid();
     }
 
     this.formatText(data);
