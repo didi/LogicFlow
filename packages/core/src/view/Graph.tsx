@@ -73,6 +73,7 @@ class Graph extends Component<IProps> {
     return (
       <div
         className="lf-graph"
+        flow-id={graphModel.flowId}
         style={style}
       >
         <CanvasOverlay

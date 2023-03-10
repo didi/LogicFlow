@@ -167,6 +167,7 @@ class GraphModel {
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
+    this.flowId = createUuid();
   }
   @computed get nodesMap(): { [key: string]: { index: number, model: BaseNodeModel } } {
     return this.nodes.reduce((nMap, model, index) => {
