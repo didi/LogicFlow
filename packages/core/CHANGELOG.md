@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.5...@logicflow/core@1.2.0) (2023-03-13)
+
+
+### Bug Fixes
+
+* trigger extension render in difference env ([9be1f58](https://github.com/didi/LogicFlow/commit/9be1f58a3768fd48117e1143939c8a92f61191dc))
+
+
+
+
+
 # [1.2.0-next.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.4...@logicflow/core@1.2.0-next.5) (2023-03-10)
 
 
