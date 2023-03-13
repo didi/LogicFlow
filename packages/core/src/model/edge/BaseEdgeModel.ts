@@ -25,7 +25,7 @@ import { getZIndex } from '../../util/zIndex';
 
 class BaseEdgeModel implements IBaseModel {
   // 数据属性
-  id = createUuid();
+  id = '';
   @observable type = '';
   @observable sourceNodeId = '';
   @observable targetNodeId = '';
@@ -90,9 +90,8 @@ class BaseEdgeModel implements IBaseModel {
       // 自定义边id > 全局定义边id > 内置
       const { idGenerator } = this.graphModel;
       const globalId = idGenerator && idGenerator(data.type);
-      if (globalId) data.id = globalId;
       const nodeId = this.createId();
-      if (nodeId) data.id = nodeId;
+      data.id = nodeId || globalId || createUuid();
     }
     this.arrowConfig.markerEnd = `url(#marker-end-${data.id})`;
     const { editConfigModel: { adjustEdgeStartAndEnd } } = this.graphModel;

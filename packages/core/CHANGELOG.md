@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-next.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.4...@logicflow/core@1.2.0-next.5) (2023-03-10)
+
+
+### Bug Fixes
+
+* compatiable witch React.StrictMode ([7da8266](https://github.com/didi/LogicFlow/commit/7da82668f2179b0be19fc9c425dd3bbcc15efd7f))
+* 修复getData时出现报错的情况 ([12cbb06](https://github.com/didi/LogicFlow/commit/12cbb06ef3e45e76ea70a3d8128df66f5e47cd56))
+* 修复初始化节点的时候不传入id导致箭头不显示的问题 ([dfff4cd](https://github.com/didi/LogicFlow/commit/dfff4cd1cf466ae881d297ed9785ef59ad65619a))
+
+
+
+
+
 # [1.2.0-next.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0-next.3...@logicflow/core@1.2.0-next.4) (2023-02-22)
 
 **Note:** Version bump only for package @logicflow/core

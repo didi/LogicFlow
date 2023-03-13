@@ -19,7 +19,6 @@ import {
   EdgeConfig,
   EdgeFilter,
   NodeConfig,
-  NodeAttribute,
   Extension,
   ComponentRender,
   FocusOnArgs,
@@ -38,6 +37,7 @@ import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
 import { ElementType, EventType } from './constant/constant';
+import { createUuid } from './util';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require

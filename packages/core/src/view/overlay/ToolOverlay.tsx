@@ -10,12 +10,13 @@ type IProps = {
 
 @observer
 export default class ToolOverlay extends Component<IProps> {
-  setToolOverlayRef = (element) => {
-    const { tool } = this.props;
+  componentDidUpdate(): void {
+    const { tool, graphModel } = this.props;
+    const ToolOverlayElement = document.querySelector(`#ToolOverlay_${graphModel.flowId}`) as HTMLElement;
     const lf: LogicFlow = tool.getInstance();
-    lf.components.forEach(render => render(lf, element));
+    lf.components.forEach(render => render(lf, ToolOverlayElement));
     lf.components = []; // 保证extension组件的render只执行一次
-  };
+  }
   /**
    * 外部传入的一般是HTMLElement
    */
@@ -30,8 +31,9 @@ export default class ToolOverlay extends Component<IProps> {
     return components;
   }
   render() {
+    const { graphModel } = this.props;
     return (
-      <div className="lf-tool-overlay" ref={this.setToolOverlayRef}>
+      <div className="lf-tool-overlay" id={`ToolOverlay_${graphModel.flowId}`}>
         {
           this.getTools()
         }
