@@ -21,11 +21,10 @@ jobs:
       - name: generate static file
         run: |
           npm run build:types
-          npm run docs:build
           npm run build
           rm -rf ./deploy
           mkdir -p deploy/examples
-          cp -rf ./docs/.vuepress/dist/* ./deploy
+          cp -rf ./docs/.vuepress/index.html ./deploy
           cp -rf ./examples/build/* ./deploy/examples
 
       - name: generate mvp
