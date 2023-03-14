@@ -8,7 +8,7 @@
   "sideEffects": true,
   "jsdelivr": "dist/logic-flow.min.js",
   "license": "Apache-2.0",
-  "homepage": "http://logic-flow.org/",
+  "homepage": "https://docs.logic-flow.cn",
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",

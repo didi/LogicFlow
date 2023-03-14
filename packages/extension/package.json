@@ -4,7 +4,7 @@
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
-  "homepage": "http://logic-flow.org/",
+  "homepage": "https://docs.logic-flow.cn",
   "types": "es/index.d.ts",
   "repository": {
     "type": "git",

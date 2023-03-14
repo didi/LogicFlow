@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="http://logic-flow.org" target="_blank">
+  <a href="https://docs.logic-flow.cn" target="_blank">
     <img
-      src="http://logic-flow.org/new-logo.png"
+      src="https://docs.logic-flow.cn/docs/_images/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
@@ -104,13 +104,10 @@ lf.render(data);
 
 ## 文档
 
-[官方文档](http://logic-flow.org)
+[官方文档](https://docs.logic-flow.cn)
 
-- [快速上手](http://logic-flow.org/guide/start.html#安装)
-- [基础教程](http://logic-flow.org/guide/basic/logic-flow.html)
-- [进阶指南](http://logic-flow.org/guide/advance/theme.html)
-- [拓展](http://logic-flow.org/guide/extension/extension-components.html)
-- [示例](http://logic-flow.org/usage/bpmn.html)
+- [快速上手](https://docs.logic-flow.cn/docs/#/zh/guide/start)
+- [示例](https://docs.logic-flow.cn/examples/#/gallery)
 
 ## 核心能力
 

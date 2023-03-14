@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="http://logic-flow.org" target="_blank">
+  <a href="https://docs.logic-flow.cn" target="_blank">
     <img
-      src="http://logic-flow.org/new-logo.png"
+      src="https://docs.logic-flow.cn/docs/_images/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
@@ -104,13 +104,10 @@ lf.render(data);
 
 ## Document
 
-[Our Document Address](http://logic-flow.org)
+[Our Document Address](https://docs.logic-flow.cn)
 
-- [Get Started](http://logic-flow.org/guide/start.html#安装)
-- [Basic Tutorial](http://logic-flow.org/guide/basic/logic-flow.html)
-- [Advanced Guides](http://logic-flow.org/guide/advance/theme.html)
-- [Extension](http://logic-flow.org/guide/extension/extension-components.html)
-- [Demo](http://logic-flow.org/usage/bpmn.html)
+- [Get Started](https://docs.logic-flow.cn/docs/#/en/guide/start)
+- [Demo](https://docs.logic-flow.cn/examples/#/gallery)
 
 ## Core Capability
 
