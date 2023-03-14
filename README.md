@@ -61,34 +61,26 @@ const data = {
   // 节点
   nodes: [
     {
-      id: 21,
+      id: '21',
       type: 'rect',
       x: 100,
       y: 200,
-      text: {
-        value: '矩形节点',
-        x: 100,
-        y: 200,
-      },
+      text: '矩形节点',
     },
     {
-      id: 50,
+      id: '50',
       type: 'circle',
       x: 300,
       y: 400,
-      text: {
-        value: '圆形节点',
-        x: 300,
-        y: 400,
-      },
+      text: '圆形节点',
     },
   ],
   // 边
   edges: [
     {
       type: 'polyline',
-      sourceNodeId: 50,
-      targetNodeId: 21,
+      sourceNodeId: '50',
+      targetNodeId: '21',
     },
   ],
 };
