@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="http://logic-flow.org" target="_blank">
+  <a href="https://docs.logic-flow.cn" target="_blank">
     <img
-      src="http://logic-flow.org/new-logo.png"
+      src="https://docs.logic-flow.cn/docs/_images/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
@@ -61,34 +61,26 @@ const data = {
   // node data
   nodes: [
     {
-      id: 21,
+      id: '21',
       type: 'rect',
       x: 100,
       y: 200,
-      text: {
-        value: '矩形节点',
-        x: 100,
-        y: 200,
-      },
+      text: 'rect node',
     },
     {
-      id: 50,
+      id: '50',
       type: 'circle',
       x: 300,
       y: 400,
-      text: {
-        value: '圆形节点',
-        x: 300,
-        y: 400,
-      },
+      text: 'circle node',
     },
   ],
   // edge data
   edges: [
     {
       type: 'polyline',
-      sourceNodeId: 50,
-      targetNodeId: 21,
+      sourceNodeId: '50',
+      targetNodeId: '21',
     },
   ],
 };
@@ -104,13 +96,10 @@ lf.render(data);
 
 ## Document
 
-[Our Document Address](http://logic-flow.org)
+[Our Document Address](https://docs.logic-flow.cn)
 
-- [Get Started](http://logic-flow.org/guide/start.html#安装)
-- [Basic Tutorial](http://logic-flow.org/guide/basic/logic-flow.html)
-- [Advanced Guides](http://logic-flow.org/guide/advance/theme.html)
-- [Extension](http://logic-flow.org/guide/extension/extension-components.html)
-- [Demo](http://logic-flow.org/usage/bpmn.html)
+- [Get Started](https://docs.logic-flow.cn/docs/#/en/guide/start)
+- [Demo](https://docs.logic-flow.cn/examples/#/gallery)
 
 ## Core Capability
 

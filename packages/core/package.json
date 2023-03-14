@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "LogicFlow core, to quickly build flowchart editor",
   "main": "dist/entry.js",
   "module": "dist/logic-flow.js",
@@ -8,7 +8,7 @@
   "sideEffects": true,
   "jsdelivr": "dist/logic-flow.min.js",
   "license": "Apache-2.0",
-  "homepage": "http://logic-flow.org/",
+  "homepage": "https://docs.logic-flow.cn",
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",

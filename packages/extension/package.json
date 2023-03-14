@@ -1,10 +1,10 @@
 {
   "name": "@logicflow/extension",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
-  "homepage": "http://logic-flow.org/",
+  "homepage": "https://docs.logic-flow.cn",
   "types": "es/index.d.ts",
   "repository": {
     "type": "git",
@@ -32,7 +32,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^1.2.0",
+    "@logicflow/core": "^1.2.1",
     "ids": "^1.0.0",
     "lodash-es": "^4.17.21",
     "preact": "^10.4.8"
