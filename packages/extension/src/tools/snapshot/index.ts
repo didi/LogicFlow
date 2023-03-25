@@ -193,8 +193,26 @@ class Snapshot {
     copy.appendChild(foreignObject);
     return new Promise((resolve) => {
       img.onload = () => {
-        ctx.drawImage(img, 0, 0);
-        resolve(canvas);
+        const isFirefox = navigator.userAgent.indexOf('Firefox') > -1;
+        try {
+          if (isFirefox) {
+            createImageBitmap(img, {
+              resizeWidth: canvas.width,
+              resizeHeight: canvas.height,
+            }).then((imageBitmap) => {
+              // 在回调函数中使用 drawImage() 方法绘制图像
+              ctx.drawImage(imageBitmap, 0, 0);
+              resolve(canvas);
+            });
+          } else {
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas);
+          }
+        } catch (e) {
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas);
+        }
+
       };
       /*
       因为svg中存在dom存放在foreignObject元素中
