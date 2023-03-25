@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.2...@logicflow/core@1.2.3) (2023-03-25)
+
+
+### Bug Fixes
+
+* update edge path while move nodes([#1027](https://github.com/didi/LogicFlow/issues/1027)) ([9179b62](https://github.com/didi/LogicFlow/commit/9179b621018c51f60f5f12458cd1c487e50b4d63))
+
+
+
+
+
 ## [1.2.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0...@logicflow/core@1.2.2) (2023-03-25)
 
 
