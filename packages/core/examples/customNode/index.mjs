@@ -136,6 +136,10 @@ lf.on('anchor:drop', ({ data, nodeModel }) => {
   }
 })
 
+lf.on('connection:not-allowed', (data) => {
+  console.log(data)
+})
+
 document.querySelector('#select_js').addEventListener('click', () => {
   lf.setProperties('custom-111', {
     isSelected: true

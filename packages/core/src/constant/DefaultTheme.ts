@@ -31,6 +31,8 @@ export type CommonTheme = {
    * 我们会把你定义的所有属性最终传递到DOM上
    * 详情请参考svg属性规范
    * https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute
+   * 注意: 请不要在主题中设置“形状属性”，例如：x、y、width、height、radius、r、rx、ry
+   * @see https://docs.logic-flow.cn/docs/#/zh/api/themeApi?id=%e5%bd%a2%e7%8a%b6%e5%b1%9e%e6%80%a7）
    */
   [key: string]: any;
 };
@@ -40,34 +42,14 @@ export type CommonTheme = {
  * svg基础图形-矩形
  * https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect
  */
-export type RectTheme = {
-  /**
-   * 矩形的默认宽度
-   */
-  width?: number;
-  /**
-   * 矩形的默认高度
-   */
-  height?: number;
-  /**
-   * 圆角
-   * 注意，矩形圆角请使用radius
-   * 不要使用rx和ry
-   */
-  radius?: number;
-} & CommonTheme;
+export type RectTheme = CommonTheme;
 
 /**
  * circle主题样式
  * svg基础图形-圆形
  * https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle
  */
-export type CircleTheme = {
-  /**
-   * 默认半径
-   */
-  r?: number;
-} & CommonTheme;
+export type CircleTheme = CommonTheme;
 /**
  * polygon主题样式
  * svg基础图形-多边形
