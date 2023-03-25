@@ -107,7 +107,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     const { edgeModel } = this.props;
     const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
-    if (info && info.node && this.isAllowAdjust(info)) {
+    if (info && info.node && this.isAllowAdjust(info).pass) {
       let params;
       const { startPoint, endPoint, sourceNode, targetNode } = edgeModel;
       if (type === AdjustType.SOURCE) {
@@ -155,55 +155,67 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 如果找到目标节点，删除老边，创建新边
       let needRecoveryEdge = false;
       let createEdgeInfo;
-      if (info && info.node && this.isAllowAdjust(info)) {
-        const edgeData = edgeModel.getData();
-        createEdgeInfo = {
-          ...edgeData,
-          sourceAnchorId: '',
-          targetAnchorId: '',
-          text: edgeData?.text?.value || '',
-        };
-        // 根据调整点是边的起点或重点，计算创建边需要的参数
-        if (type === AdjustType.SOURCE) {
-          const edgeInfo = graphModel.edgeGenerator(
-            graphModel.getNodeModelById(info.node.id).getData(),
-            graphModel.getNodeModelById(edgeModel.targetNodeId).getData(),
-            createEdgeInfo,
-          );
+      if (info && info.node) {
+        const { pass, msg, newTargetNode } = this.isAllowAdjust(info);
+        if (pass) {
+          const edgeData = edgeModel.getData();
           createEdgeInfo = {
-            ...edgeInfo,
-            sourceNodeId: info.node.id,
-            sourceAnchorId: info.anchor.id,
-            startPoint: { x: info.anchor.x, y: info.anchor.y },
-            targetNodeId: edgeModel.targetNodeId,
-            endPoint: { ...edgeModel.endPoint },
+            ...edgeData,
+            sourceAnchorId: '',
+            targetAnchorId: '',
+            text: edgeData?.text?.value || '',
           };
-          // 找到的是原有的源节点上的原锚点时，还原边
-          if (edgeModel.sourceNodeId === info.node.id
-            && edgeModel.sourceAnchorId === info.anchor.id) {
-            needRecoveryEdge = true;
+          // 根据调整点是边的起点或重点，计算创建边需要的参数
+          if (type === AdjustType.SOURCE) {
+            const edgeInfo = graphModel.edgeGenerator(
+              graphModel.getNodeModelById(info.node.id).getData(),
+              graphModel.getNodeModelById(edgeModel.targetNodeId).getData(),
+              createEdgeInfo,
+            );
+            createEdgeInfo = {
+              ...edgeInfo,
+              sourceNodeId: info.node.id,
+              sourceAnchorId: info.anchor.id,
+              startPoint: { x: info.anchor.x, y: info.anchor.y },
+              targetNodeId: edgeModel.targetNodeId,
+              endPoint: { ...edgeModel.endPoint },
+            };
+            // 找到的是原有的源节点上的原锚点时，还原边
+            if (edgeModel.sourceNodeId === info.node.id
+              && edgeModel.sourceAnchorId === info.anchor.id) {
+              needRecoveryEdge = true;
+            }
+          } else if (type === AdjustType.TARGET) {
+            const edgeInfo = graphModel.edgeGenerator(
+              graphModel.getNodeModelById(edgeModel.sourceNodeId).getData(),
+              graphModel.getNodeModelById(info.node.id).getData(),
+              createEdgeInfo,
+            );
+            createEdgeInfo = {
+              ...edgeInfo,
+              sourceNodeId: edgeModel.sourceNodeId,
+              startPoint: { ...edgeModel.startPoint },
+              targetNodeId: info.node.id,
+              targetAnchorId: info.anchor.id,
+              endPoint: { x: info.anchor.x, y: info.anchor.y },
+            };
+            // 找到的是原有的目标节点上的原锚点时，还原边
+            if (edgeModel.targetNodeId === info.node.id
+              && edgeModel.targetAnchorId === info.anchor.id) {
+              needRecoveryEdge = true;
+            }
           }
-        } else if (type === AdjustType.TARGET) {
-          const edgeInfo = graphModel.edgeGenerator(
-            graphModel.getNodeModelById(edgeModel.sourceNodeId).getData(),
-            graphModel.getNodeModelById(info.node.id).getData(),
-            createEdgeInfo,
-          );
-          createEdgeInfo = {
-            ...edgeInfo,
-            sourceNodeId: edgeModel.sourceNodeId,
-            startPoint: { ...edgeModel.startPoint },
-            targetNodeId: info.node.id,
-            targetAnchorId: info.anchor.id,
-            endPoint: { x: info.anchor.x, y: info.anchor.y },
-          };
-          // 找到的是原有的目标节点上的原锚点时，还原边
-          if (edgeModel.targetNodeId === info.node.id
-            && edgeModel.targetAnchorId === info.anchor.id) {
-            needRecoveryEdge = true;
-          }
+        } else {
+          // 如果没有通过校验，还原边并抛出CONNECTION_NOT_ALLOWED事件
+          needRecoveryEdge = true;
+          const nodeData = newTargetNode.getData();
+          graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
+            data: nodeData,
+            msg,
+          });
         }
       } else {
+        // 如果没有找到目标节点，还原边
         needRecoveryEdge = true;
       }
       if (!needRecoveryEdge) {
@@ -211,14 +223,14 @@ export default class AdjustPoint extends Component<IProps, IState> {
         // 删除老边
         graphModel.deleteEdgeById(edgeModel.id);
         // 创建新边
-        const edge = graphModel.addEdge({ ...createEdgeInfo }) as BaseEdgeModel;
+        const edge = graphModel.addEdge({ ...createEdgeInfo });
         // 向外抛出事件
         graphModel.eventCenter.emit(
           EventType.EDGE_EXCHANGE_NODE,
           { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } },
         );
       } else {
-        // 如果没有找到目标节点，还原边
+        // 如果没有找到目标节点或者没有通过校验，还原边
         this.recoveryEdge();
       }
       this.preTargetNode?.setElementState(ElementState.DEFAULT);
@@ -251,7 +263,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     return edgeAdjust;
   };
 
-  isAllowAdjust(info) {
+  isAllowAdjust(info): {
+    pass: boolean;
+    msg?: string;
+    newTargetNode: BaseNodeModel
+  } {
     const {
       edgeModel: { id, sourceNode, targetNode, sourceAnchorId, targetAnchorId },
       type,
@@ -281,7 +297,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     this.preTargetNode = info.node;
     // #500 不允许锚点自己连自己, 在锚点一开始连接的时候, 不触发自己连接自己的校验。
     if (newTargetAnchor.id === newSourceAnchor.id) {
-      return false;
+      return {
+        pass: false,
+        msg: '',
+        newTargetNode,
+      };
     }
     const targetInfoId = `${newSourceNode.id}_${newTargetNode.id}_${newSourceAnchor.id}_${newTargetAnchor.id}`;
     // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
@@ -307,8 +327,8 @@ export default class AdjustPoint extends Component<IProps, IState> {
         formateAnchorConnectValidateData(targetRuleResult),
       );
     }
-    const { isAllPass: isSourcePass } = this.sourceRuleResults.get(targetInfoId);
-    const { isAllPass: isTargetPass } = this.targetRuleResults.get(targetInfoId);
+    const { isAllPass: isSourcePass, msg: sourceMsg } = this.sourceRuleResults.get(targetInfoId);
+    const { isAllPass: isTargetPass, msg: targetMsg } = this.targetRuleResults.get(targetInfoId);
     // 实时提示出即将连接的节点是否允许连接
     const state = (isSourcePass && isTargetPass)
       ? ElementState.ALLOW_CONNECT
@@ -318,7 +338,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     } else {
       newTargetNode.setElementState(state);
     }
-    return isSourcePass && isTargetPass;
+    return {
+      pass: isSourcePass && isTargetPass,
+      msg: targetMsg || sourceMsg,
+      newTargetNode,
+    };
   }
   render() {
     const { x, y, getAdjustPointShape } = this.props;
