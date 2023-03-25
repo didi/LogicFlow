@@ -974,7 +974,7 @@ class GraphModel {
         [textDistanceX, textDistanceY] = sourceMoveDistance;
         edgeModel.moveStartPoint(textDistanceX, textDistanceY);
       }
-      const targetMoveDistance = nodeIdMap[edgeModel.sourceNodeId];
+      const targetMoveDistance = nodeIdMap[edgeModel.targetNodeId];
       if (targetMoveDistance) {
         [textDistanceX, textDistanceY] = targetMoveDistance;
         edgeModel.moveEndPoint(textDistanceX, textDistanceY);
