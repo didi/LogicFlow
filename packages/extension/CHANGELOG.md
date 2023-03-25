@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0...@logicflow/extension@1.2.2) (2023-03-25)
+
+
+### Bug Fixes
+
+* export images compatible with Firefox([#269](https://github.com/didi/LogicFlow/issues/269)) ([d87065e](https://github.com/didi/LogicFlow/commit/d87065e404a6569fb16ee5c0d4c01bb67c2e117d))
+* update logicflow site url ([8774efe](https://github.com/didi/LogicFlow/commit/8774efe5eb8411819e1a44f8c4698111f6fb6ea5))
+* virtual models cannot be included in group children.([#1022](https://github.com/didi/LogicFlow/issues/1022)) ([76d559d](https://github.com/didi/LogicFlow/commit/76d559d64f2033e541d8a1d631e240f8f9644ad9))
+
+
+
+
+
 ## [1.2.1](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.0...@logicflow/extension@1.2.1) (2023-03-14)
 
 **Note:** Version bump only for package @logicflow/extension
