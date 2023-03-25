@@ -250,7 +250,13 @@ class GroupNodeModel extends RectResize.model {
   }
   getData() {
     const data = super.getData();
-    data.children = [...this.children];
+    data.children = [];
+    this.children.forEach((childId) => {
+      const model = this.graphModel.getNodeModelById(childId);
+      if (model && !model.virtual) {
+        data.children.push(childId);
+      }
+    });
     const { properties } = data;
     delete properties.groupAddable;
     delete properties.isFolded;
