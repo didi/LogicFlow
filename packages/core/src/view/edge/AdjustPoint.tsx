@@ -345,11 +345,11 @@ export default class AdjustPoint extends Component<IProps, IState> {
     };
   }
   render() {
-    const { x, y, getAdjustPointShape } = this.props;
+    const { x, y, getAdjustPointShape, edgeModel } = this.props;
     const { dragging } = this.state;
     return (
       <g pointerEvents={dragging ? 'none' : ''} onMouseDown={this.handleMouseDown}>
-        { getAdjustPointShape(x, y, dragging)}
+        { !dragging ? getAdjustPointShape(x, y, edgeModel) : ''}
       </g>
     );
   }

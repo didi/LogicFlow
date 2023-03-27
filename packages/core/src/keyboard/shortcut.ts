@@ -43,14 +43,14 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
 
   // 复制
   keyboard.on(['cmd + c', 'ctrl + c'], () => {
-    if (!keyboardOptions.enabled) return;
-    if (graph.textEditElement) return;
+    if (!keyboardOptions.enabled) return true;
+    if (graph.textEditElement) return true;
     const { guards } = lf.options;
     const elements = graph.getSelectElements(false);
     const enabledClone = guards && guards.beforeClone ? guards.beforeClone(elements) : true;
-    if (!enabledClone) {
+    if (!enabledClone || (elements.nodes.length === 0 && elements.edges.length === 0)) {
       selected = null;
-      return false;
+      return true;
     }
     selected = elements;
     selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
@@ -59,12 +59,12 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
   });
   // 粘贴
   keyboard.on(['cmd + v', 'ctrl + v'], () => {
-    if (!keyboardOptions.enabled) return;
-    if (graph.textEditElement) return;
+    if (!keyboardOptions.enabled) return true;
+    if (graph.textEditElement) return true;
     if (selected && (selected.nodes || selected.edges)) {
       lf.clearSelectElements();
       const addElements = lf.addElements(selected);
-      if (!addElements) return;
+      if (!addElements) return true;
       addElements.nodes.forEach(node => lf.selectElementById(node.id, true));
       addElements.edges.forEach(edge => lf.selectElementById(edge.id, true));
       selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
@@ -74,22 +74,22 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
   });
   // undo
   keyboard.on(['cmd + z', 'ctrl + z'], () => {
-    if (!keyboardOptions.enabled) return;
-    if (graph.textEditElement) return;
+    if (!keyboardOptions.enabled) return true;
+    if (graph.textEditElement) return true;
     lf.undo();
     return false;
   });
   // redo
   keyboard.on(['cmd + y', 'ctrl + y'], () => {
-    if (!keyboardOptions.enabled) return;
-    if (graph.textEditElement) return;
+    if (!keyboardOptions.enabled) return true;
+    if (graph.textEditElement) return true;
     lf.redo();
     return false;
   });
   // delete
   keyboard.on(['backspace'], () => {
-    if (!keyboardOptions.enabled) return;
-    if (graph.textEditElement) return;
+    if (!keyboardOptions.enabled) return true;
+    if (graph.textEditElement) return true;
     const elements = graph.getSelectElements(true);
     lf.clearSelectElements();
     elements.edges.forEach(edge => lf.deleteEdge(edge.id));

@@ -156,8 +156,7 @@ export default class BaseEdge extends Component<IProps> {
    *  )
    * }
    */
-  getAdjustPointShape = (x, y): h.JSX.Element | null => {
-    const { model } = this.props;
+  getAdjustPointShape(x, y, model): h.JSX.Element | null {
     const style = model.getAdjustPointStyle();
     return (
       <Circle
@@ -166,7 +165,7 @@ export default class BaseEdge extends Component<IProps> {
         {...{ x, y }}
       />
     );
-  };
+  }
   /**
    * 不支持重写。请使用getAdjustPointShape
    */

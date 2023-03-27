@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.2...@logicflow/core@1.2.3) (2023-03-25)
+
+
+### Bug Fixes
+
+* update edge path while move nodes([#1027](https://github.com/didi/LogicFlow/issues/1027)) ([9179b62](https://github.com/didi/LogicFlow/commit/9179b621018c51f60f5f12458cd1c487e50b4d63))
+
+
+
+
+
+## [1.2.2](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0...@logicflow/core@1.2.2) (2023-03-25)
+
+
+### Bug Fixes
+
+* keep the default browser reaction.([#1046](https://github.com/didi/LogicFlow/issues/1046)) ([533f747](https://github.com/didi/LogicFlow/commit/533f7477eccd2c48290d7550ad17f5487eca21e6))
+* remove shape attributes from theme types.([#1052](https://github.com/didi/LogicFlow/issues/1052)) ([5a315a2](https://github.com/didi/LogicFlow/commit/5a315a2bfbe3a43ecdc2d558da1c3695a32ab342))
+* update logicflow site url ([8774efe](https://github.com/didi/LogicFlow/commit/8774efe5eb8411819e1a44f8c4698111f6fb6ea5))
+
+
+
+
+
 ## [1.2.1](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.0...@logicflow/core@1.2.1) (2023-03-14)
 
 **Note:** Version bump only for package @logicflow/core

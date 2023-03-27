@@ -24,10 +24,10 @@
     #app {
       /* margin-top: 30px;
       margin-left: 30px; */
-      /* width: 800px;
-      height: 500px; */
-      width: 100%;
-      height: 100%;
+      width: 800px;
+      height: 500px;
+      /* width: 100%;
+      height: 100%; */
       position: absolute;
       top: 0;
       left: 0;
@@ -129,9 +129,12 @@
       <div class="rect" onmousedown="mouseDownRect()"></div>
       <div class="circle" onmousedown="mouseDownCircle()"></div>
       <div class="text" onmousedown="mouseDownText()">文本</div>
+      <span>复制我</span>
     </div>
   </div>
+  
   <div id="app"></div>
+  <textarea id="data" style="width: 100px; height: 200px;float: right;"></textarea>
   <div id="debug"></div>
   <%= htmlWebpackPlugin.tags.bodyTags %>
 
@@ -361,6 +364,18 @@
 
       // connection
       class Connection extends PolylineEdge {
+        getAdjustPointShape(x, y, model, isDragging) {
+          return h("g", {}, [
+            h("image", {
+              x: x - 9,
+              y: y - 9,
+              width: 18,
+              height: 18,
+              cursor: 'move',
+              'href': 'data:image/svg+xml;base64,PCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSIyMnB4IiBoZWlnaHQ9IjIycHgiIHZlcnNpb249IjEuMSI+PGNpcmNsZSBjeD0iMTEiIGN5PSIxMSIgcj0iNyIgc3Ryb2tlPSIjZmZmIiBmaWxsPSIjMjliNmYyIi8+PGNpcmNsZSBjeD0iMTEiIGN5PSIxMSIgcj0iMyIgc3Ryb2tlPSIjZmZmIiBmaWxsPSJ0cmFuc3BhcmVudCIvPjwvc3ZnPg=='
+            }),
+          ]);
+        }
         getTextStyle() {
           return {
             background: {
@@ -554,6 +569,10 @@
             polyline: {
               stroke: 'red',
             },
+            rect: {
+              width: 200,
+              height: 40,
+            }
             // arrow: {
             //   offset: 4, // 箭头长度
             //   verticalLength: 2, // 箭头垂直于边的距离
