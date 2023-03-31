@@ -16,6 +16,24 @@ npm run build:types
 npm run build
 ```
 
+- 针对于 core 包的监听，你可以执行：
+
+```shell
+npm run watch:core
+```
+
+- 针对于 extension 包的监听，你可以执行：
+
+```shell
+npm run watch:extension
+```
+
+- 如果 core 包和 extension 包都想监听，你可以执行：
+
+```shell
+npm run watch
+```
+
 ### 启动调试
 
 ```shell
