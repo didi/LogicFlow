@@ -142,9 +142,9 @@ class GroupNodeModel extends RectResize.model {
         startPoint,
         endPoint,
         type,
-        properties,
         text,
       } = edgeModel;
+      const properties = edgeModel.getProperties();
       const data = {
         id: `${id}__${index}`,
         sourceNodeId,

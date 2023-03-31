@@ -347,7 +347,7 @@ class BaseEdgeModel implements IBaseModel {
   @action
   setProperties(properties): void {
     this.properties = {
-      ...this.properties,
+      ...toJS(this.properties),
       ...formatData(properties),
     };
     this.setAttributes();
@@ -468,7 +468,7 @@ class BaseEdgeModel implements IBaseModel {
    */
   @action updateText(value: string): void {
     this.text = {
-      ...this.text,
+      ...toJS(this.text),
       value,
     };
   }
