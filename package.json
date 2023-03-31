@@ -21,7 +21,10 @@
     "build:example": "lerna run build --scope examples",
     "lerna:publish": "lerna publish from-git",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "watch": "lerna watch -- lerna run build --since --ignore examples",
+    "watch:core": "lerna watch --scope @logicflow/core -- lerna run build --scope @logicflow/core",
+    "watch:extension": "lerna watch --scope @logicflow/extension -- lerna run build --scope @logicflow/extension"
   },
   "dependencies": {},
   "devDependencies": {
@@ -43,7 +46,7 @@
     "eslint-webpack-plugin": "^2.1.0",
     "husky": "^6.0.0",
     "inquirer": "^7.3.3",
-    "lerna": "^3.22.1",
+    "lerna": "^6.5.1",
     "lint-staged": "^10.5.4",
     "shelljs": "^0.8.4",
     "typescript": "^3.8.3",
