@@ -952,22 +952,23 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@logicflow/core@^1.2.0-next.1", "@logicflow/core@^1.2.0-next.4":
-  version "1.2.0-next.1"
-  resolved "http://registry.npm.xiaojukeji.com/@logicflow/core/download/@logicflow/core-1.2.0-next.1.tgz#c867eb93ec56ec7b38c9ed7e18089a494743fe13"
-  integrity sha1-yGfrk+xW7Hs4ye1+GAiaSUdD/hM=
+"@logicflow/core@^1.2.0-next.4", "@logicflow/core@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@logicflow/core/-/core-1.2.1.tgz#da4beb3dbd2f5620fc359c3823a39b221916884b"
+  integrity sha512-m6/K7I85jFfCWcrNEQQpchomUWM4ZUjcOhHjsVhejnfpoEx7jke3tSJlh41LyT9hIUEIy7nxnphp5L4YB+InCA==
   dependencies:
     "@types/mousetrap" "^1.6.4"
     mousetrap "^1.6.5"
     preact "^10.4.8"
 
 "@logicflow/extension@^1.2.0-next.4":
-  version "1.2.0-next.1"
-  resolved "http://registry.npm.xiaojukeji.com/@logicflow/extension/download/@logicflow/extension-1.2.0-next.1.tgz#3c085349b318df9e45e1fd1d3c7cb719de37878f"
-  integrity sha1-PAhTSbMY355F4f0dPHy3Gd43h48=
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@logicflow/extension/-/extension-1.2.1.tgz#c79d7c90f46063ee503f4ff57f2902b9ca6f24c5"
+  integrity sha512-C006Y73sqe0x5ArWzTWc2YglhDNs+Ck/eXJnnaZ89uYqyVDdLgr/6RBjL8JAV41Lg7EQMB1yqmfUW53tCPTRtw==
   dependencies:
-    "@logicflow/core" "^1.2.0-next.1"
+    "@logicflow/core" "^1.2.1"
     ids "^1.0.0"
+    lodash-es "^4.17.21"
     preact "^10.4.8"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -5279,6 +5280,11 @@ locate-path@^5.0.0:
   integrity sha1-Gvujlq/WdqbUJQTQpno6frn2KqA=
   dependencies:
     p-locate "^4.1.0"
+
+lodash-es@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
