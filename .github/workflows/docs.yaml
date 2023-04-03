@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use node v12
+      - name: Use node v16
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '16.x'
 
       - name: load dependences
         run: |
@@ -42,4 +42,3 @@ jobs:
           force_orphan: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deploy
-          cname: logic-flow.org
