@@ -88,6 +88,8 @@ export default class BezierEdgeModel extends BaseEdgeModel {
     this.updatePath(sNext, ePre);
   }
   updatePath(sNext, ePre) {
+    sNext = cloneDeep(sNext);
+    ePre = cloneDeep(ePre);
     const start = {
       x: this.startPoint.x,
       y: this.startPoint.y,

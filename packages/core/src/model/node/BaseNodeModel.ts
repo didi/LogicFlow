@@ -572,7 +572,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   updateText(value: string): void {
     this.text = {
-      ...this.text,
+      ...toJS(this.text),
       value,
     };
   }
@@ -607,7 +607,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setProperty(key, val): void {
     this.properties = {
-      ...this.properties,
+      ...toJS(this.properties),
       [key]: formatData(val),
     };
     this.setAttributes();
@@ -616,7 +616,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setProperties(properties): void {
     this.properties = {
-      ...this.properties,
+      ...toJS(this.properties),
       ...formatData(properties),
     };
     this.setAttributes();
