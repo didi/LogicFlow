@@ -139,8 +139,6 @@ function convertLf2ProcessData(bpmnProcessData, data) {
   });
   const sequenceFlow = data.edges.map((edge: EdgeConfig) => {
     const targetNode = nodeMap.get(edge.targetNodeId);
-    // @see https://github.com/didi/LogicFlow/issues/325
-    // 需要保证incomming在outgoing之前
     if (!targetNode['bpmn:incoming']) {
       targetNode['bpmn:incoming'] = edge.id;
     } else if (Array.isArray(targetNode['bpmn:incoming'])) {
@@ -148,17 +146,6 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     } else {
       targetNode['bpmn:incoming'] = [
         targetNode['bpmn:incoming'],
-        edge.id,
-      ];
-    }
-    const sourceNode = nodeMap.get(edge.sourceNodeId);
-    if (!sourceNode['bpmn:outgoing']) {
-      sourceNode['bpmn:outgoing'] = edge.id;
-    } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
-      sourceNode['bpmn:outgoing'].push(edge.id);
-    } else { // 字符串转数组
-      sourceNode['bpmn:outgoing'] = [
-        sourceNode['bpmn:outgoing'],
         edge.id,
       ];
     }
@@ -175,6 +162,21 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       Object.assign(edgeConfig, properties);
     }
     return edgeConfig;
+  });
+  // @see https://github.com/didi/LogicFlow/issues/325
+  // 需要保证incoming在outgoing之前
+  data.edges.forEach((edge: EdgeConfig) => {
+    const sourceNode = nodeMap.get(edge.sourceNodeId);
+    if (!sourceNode['bpmn:outgoing']) {
+      sourceNode['bpmn:outgoing'] = edge.id;
+    } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
+      sourceNode['bpmn:outgoing'].push(edge.id);
+    } else { // 字符串转数组
+      sourceNode['bpmn:outgoing'] = [
+        sourceNode['bpmn:outgoing'],
+        edge.id,
+      ];
+    }
   });
   bpmnProcessData[BpmnElements.FLOW] = sequenceFlow;
 }
@@ -412,53 +414,72 @@ function getEdgeConfig(edgeValue, processValue) {
   return edge;
 }
 
-const BpmnAdapter = {
-  pluginName: 'bpmn-adapter',
-  install(lf) {
-    lf.adapterIn = this.adapterIn;
-    lf.adapterOut = this.adapterOut;
-  },
-  shapeConfigMap: new Map(),
-  setCustomShape(key, val) {
-    this.shapeConfigMap.set(key, val);
-  },
-  adapterOut(data) {
-    const bpmnProcessData = {
+class BpmnAdapter {
+  static pluginName = 'bpmn-adapter';
+  static shapeConfigMap = new Map();
+  processAttributes: {
+    ['-isExecutable']: string
+    ['-id']: string
+  };
+  definitionAttributes: {
+    ['-id']: string;
+    ['-xmlns:xsi']: string;
+    ['-xmlns:bpmn']: string;
+    ['-xmlns:bpmndi']: string;
+    ['-xmlns:dc']: string;
+    ['-xmlns:di']: string;
+    ['-targetNamespace']: string;
+    ['-exporter']: string;
+    ['-exporterVersion']: string;
+    [key: string]: any;
+  };
+  constructor({ lf }) {
+    lf.adapterIn = (data) => this.adapterIn(data);
+    lf.adapterOut = (data) => this.adapterOut(data);
+    this.processAttributes = {
+      '-isExecutable': 'true',
       '-id': `Process_${getBpmnId()}`,
-      '-isExecutable': 'false',
     };
+    this.definitionAttributes = {
+      '-id': `Definitions_${getBpmnId()}`,
+      '-xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+      '-xmlns:bpmn': 'http://www.omg.org/spec/BPMN/20100524/MODEL',
+      '-xmlns:bpmndi': 'http://www.omg.org/spec/BPMN/20100524/DI',
+      '-xmlns:dc': 'http://www.omg.org/spec/DD/20100524/DC',
+      '-xmlns:di': 'http://www.omg.org/spec/DD/20100524/DI',
+      '-targetNamespace': 'http://logic-flow.org',
+      '-exporter': 'logicflow',
+      '-exporterVersion': '1.2.0',
+    };
+  }
+  setCustomShape(key, val) {
+    BpmnAdapter.shapeConfigMap.set(key, val);
+  }
+  adapterOut = (data) => {
+    const bpmnProcessData = { ...this.processAttributes };
     convertLf2ProcessData(bpmnProcessData, data);
     const bpmnDiagramData = {
       '-id': 'BPMNPlane_1',
       '-bpmnElement': bpmnProcessData['-id'],
     };
     convertLf2DiagramData(bpmnDiagramData, data);
+    const definitions = this.definitionAttributes;
+    definitions['bpmn:process'] = bpmnProcessData;
+    definitions['bpmndi:BPMNDiagram'] = {
+      '-id': 'BPMNDiagram_1',
+      'bpmndi:BPMNPlane': bpmnDiagramData,
+    };
     const bpmnData = {
-      'bpmn:definitions': {
-        '-id': `Definitions_${getBpmnId()}`,
-        '-xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-        '-xmlns:bpmn': 'http://www.omg.org/spec/BPMN/20100524/MODEL',
-        '-xmlns:bpmndi': 'http://www.omg.org/spec/BPMN/20100524/DI',
-        '-xmlns:dc': 'http://www.omg.org/spec/DD/20100524/DC',
-        '-xmlns:di': 'http://www.omg.org/spec/DD/20100524/DI',
-        '-targetNamespace': 'http://bpmn.io/schema/bpmn',
-        '-exporter': 'bpmn-js (https://demo.bpmn.io)',
-        '-exporterVersion': '7.3.0',
-        'bpmn:process': bpmnProcessData,
-        'bpmndi:BPMNDiagram': {
-          '-id': 'BPMNDiagram_1',
-          'bpmndi:BPMNPlane': bpmnDiagramData,
-        },
-      },
+      'bpmn:definitions': definitions,
     };
     return bpmnData;
-  },
-  adapterIn(bpmnData) {
+  };
+  adapterIn = (bpmnData) => {
     if (bpmnData) {
       return convertBpmn2LfData(bpmnData);
     }
-  },
-};
+  };
+}
 
 BpmnAdapter.shapeConfigMap.set(BpmnElements.START, {
   width: StartEventConfig.width,
@@ -481,21 +502,23 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
   height: UserTaskConfig.height,
 });
 
-const BpmnXmlAdapter = {
-  pluginName: 'bpmnXmlAdapter',
-  install(lf) {
+class BpmnXmlAdapter extends BpmnAdapter {
+  static pluginName = 'bpmnXmlAdapter';
+  constructor(data) {
+    super(data);
+    const { lf } = data;
     lf.adapterIn = this.adapterXmlIn;
     lf.adapterOut = this.adapterXmlOut;
-  },
-  adapterXmlIn(bpmnData) {
+  }
+  adapterXmlIn = (bpmnData) => {
     const json = lfXml2Json(bpmnData);
-    return BpmnAdapter.adapterIn(json);
-  },
-  adapterXmlOut(data) {
-    const outData = BpmnAdapter.adapterOut(data);
+    return this.adapterIn(json);
+  };
+  adapterXmlOut = (data) => {
+    const outData = this.adapterOut(data);
     return lfJson2Xml(outData);
-  },
-};
+  };
+}
 
 export {
   BpmnAdapter,
