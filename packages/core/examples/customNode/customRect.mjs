@@ -17,10 +17,17 @@ class CustomNodeModel extends RectNodeModel {
     style.fontSize = 40;
     return style;
   }
+  getData () {
+    return {
+      ...super.getData(),
+      width: this.width,
+      height: this.height,
+    }
+  }
 }
 
 export default {
-  type: 'customNode',
+  type: 'customRect',
   model: CustomNodeModel,
   view: RectNode
 }
