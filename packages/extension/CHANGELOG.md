@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.3...@logicflow/extension@1.2.4) (2023-04-10)
+
+
+### Bug Fixes
+
+* fix bug 571 ([90ba0cf](https://github.com/didi/LogicFlow/commit/90ba0cf5b84d1c15be503ba26ccae23e1a4e1d50))
+* observable object cannot appear twice([#837](https://github.com/didi/LogicFlow/issues/837)) ([16f338f](https://github.com/didi/LogicFlow/commit/16f338fe8df7a1cce546f5f5fa07b90864b902f4))
+
+
+
+
+
 ## [1.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.2...@logicflow/extension@1.2.3) (2023-03-25)
 
 **Note:** Version bump only for package @logicflow/extension
