@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.3...@logicflow/core@1.2.4) (2023-04-10)
+
+
+### Bug Fixes
+
+* observable object cannot appear twice([#837](https://github.com/didi/LogicFlow/issues/837)) ([16f338f](https://github.com/didi/LogicFlow/commit/16f338fe8df7a1cce546f5f5fa07b90864b902f4))
+
+
+### Features
+
+* optimize the local development process ([1e188be](https://github.com/didi/LogicFlow/commit/1e188be57f59bb35ee90740ae5b0a835e29e7d0a))
+* use deepclone instead of json parse([#304](https://github.com/didi/LogicFlow/issues/304)) ([502abde](https://github.com/didi/LogicFlow/commit/502abde9155c692f95e0de9c8e9171806de29701))
+
+
+
+
+
 ## [1.2.3](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.2...@logicflow/core@1.2.3) (2023-03-25)
 
 
