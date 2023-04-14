@@ -10,6 +10,13 @@ class Model extends RectNodeModel {
       },
     };
 
+    const circleOnlyAsSource = {
+      message: '正方形节点上一个节点只能是圆形节点',
+      validate: (source: any, target: any) => {
+        return source.type === 'circle';
+      },
+    };
+
     this.width = size;
     this.height = size;
     this.anchorsOffset = [
@@ -17,6 +24,8 @@ class Model extends RectNodeModel {
       [-size / 2, 0],
     ];
     this.sourceRules.push(circleOnlyAsTarget);
+    this.targetRules.push(circleOnlyAsSource);
+
   }
 }
 
