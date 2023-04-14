@@ -96,13 +96,16 @@ export default class BaseEdge extends Component<IProps> {
     const { id } = model;
     const { refY = 0, refX = 2 } = model.getArrowStyle();
     const [start, end] = this.getLastTwoPoints();
-    const theta = degrees(
-      getTangentOfVector({
-        x: end.x - start.x,
-        y: end.y - start.y,
-        z: 0,
-      }),
-    );
+    let theta: string | number = 'auto';
+    if (start !== null && end !== null) {
+      theta = degrees(
+        getTangentOfVector({
+          x: end.x - start.x,
+          y: end.y - start.y,
+          z: 0,
+        }),
+      );
+    }
     return (
       <g>
         <defs>
