@@ -1,5 +1,5 @@
-import { action, observable, computed } from 'mobx';
 import { map } from 'lodash-es';
+import { action, observable, computed } from '../util/mobx';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
 import EditConfigModel from './EditConfigModel';

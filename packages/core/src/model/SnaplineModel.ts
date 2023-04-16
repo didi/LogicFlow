@@ -1,8 +1,7 @@
-import { action, computed, observable } from 'mobx';
 import { assign } from 'lodash-es';
 import GraphModel from './GraphModel';
+import { action, observable } from '../util/mobx';
 import { NodeData } from '../type/index';
-import { defaultTheme } from '../constant/DefaultTheme';
 import { getNodeBBox } from '../util/node';
 import BaseNodeModel from './node/BaseNodeModel';
 

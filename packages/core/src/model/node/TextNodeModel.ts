@@ -1,5 +1,5 @@
-import { computed } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { computed } from '../../util/mobx';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 import { getSvgTextWidthHeight } from '../../util/node';

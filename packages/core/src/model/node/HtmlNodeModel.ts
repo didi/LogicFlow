@@ -1,5 +1,3 @@
-import { computed } from 'mobx';
-import { Point } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
 

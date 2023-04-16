@@ -1,5 +1,5 @@
-import { observable, action } from 'mobx';
 import { assign, pick } from 'lodash-es';
+import { observable, action } from '../util/mobx';
 
 export interface EditConfigInterface {
   /**
