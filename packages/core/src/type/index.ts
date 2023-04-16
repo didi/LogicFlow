@@ -28,10 +28,18 @@ import { CommonTheme, EdgeTextTheme } from '../constant/DefaultTheme';
 
 export type PointTuple = [number, number];
 
+export type Vector = {
+  id?: string;
+  x: number;
+  y: number;
+  z: 0;
+  [key: string]: unknown;
+};
+
 export type Point = {
-  id?: string,
-  x: number,
-  y: number,
+  id?: string;
+  x: number;
+  y: number;
   [key: string]: unknown;
 };
 
@@ -44,28 +52,28 @@ export type PointAnchor = {
   /**
    * 锚点x轴相对于中心点的偏移量
    */
-  x: number,
+  x: number;
   /**
    * 锚点y轴相对于中心点的偏移量
    */
-  y: number,
+  y: number;
   /**
    * 锚点Id
    */
-  id?: string,
+  id?: string;
   [key: string]: unknown;
 };
 
 export type AnchorsOffsetItem = PointTuple | PointAnchor;
 
 export type AnchorInfo = {
-  index: number,
-  anchor: Point,
+  index: number;
+  anchor: Point;
 };
 
 export type Size = {
-  width: number,
-  height: number,
+  width: number;
+  height: number;
 };
 
 export type TextConfig = {
@@ -73,8 +81,8 @@ export type TextConfig = {
 } & Point;
 
 export type GraphConfigData = {
-  nodes: NodeConfig[],
-  edges: EdgeConfig[],
+  nodes: NodeConfig[];
+  edges: EdgeConfig[];
 };
 
 // 节点数据属性
@@ -118,33 +126,33 @@ export type MenuConfig = {
 export type AdditionData = Record<string, unknown>;
 // 边数据
 export type EdgeData = {
-  id: string,
-  type: string,
-  sourceNodeId: string,
-  startPoint: Point,
-  targetNodeId: string,
-  endPoint: Point,
-  text?: TextConfig,
+  id: string;
+  type: string;
+  sourceNodeId: string;
+  startPoint: Point;
+  targetNodeId: string;
+  endPoint: Point;
+  text?: TextConfig;
   properties: Record<string, unknown>;
   zIndex?: number;
-  pointsList?: Point[], // 折线、曲线会输出pointsList
+  pointsList?: Point[]; // 折线、曲线会输出pointsList
 };
 // 边属性
 export type EdgeAttribute = {
-  id: string,
-  type?: string,
-  sourceNodeId?: string,
-  startPoint?: Point,
-  targetNodeId?: string,
-  endPoint?: Point,
-  text?: TextConfig,
+  id: string;
+  type?: string;
+  sourceNodeId?: string;
+  startPoint?: Point;
+  targetNodeId?: string;
+  endPoint?: Point;
+  text?: TextConfig;
   properties?: Record<string, unknown>;
 };
 
 export type EdgeFilter = {
-  id?: string,
-  sourceNodeId?: string,
-  targetNodeId?: string,
+  id?: string;
+  sourceNodeId?: string;
+  targetNodeId?: string;
 };
 
 export type EdgeConfig = {
@@ -161,16 +169,18 @@ export type EdgeConfig = {
   startPoint?: {
     x: number;
     y: number;
-  },
+  };
   endPoint?: {
     x: number;
     y: number;
-  },
-  text?: {
+  };
+  text?:
+  | {
     x: number;
     y: number;
     value: string;
-  } | string,
+  }
+  | string;
   pointsList?: Point[];
   zIndex?: number;
   properties?: Record<string, unknown>;
@@ -182,96 +192,95 @@ type RightBottomX = number;
 type RightBottomY = number;
 
 export type Bounds = {
-  x1: LeftTopX,
-  y1: LeftTopY,
-  x2: RightBottomX,
-  y2: RightBottomY,
+  x1: LeftTopX;
+  y1: LeftTopY;
+  x2: RightBottomX;
+  y2: RightBottomY;
 };
 
 // 节点样式属性
 export type CommonStyle = {
-  fill?: string,
-  stroke?: string,
-  strokeWidth?: number,
-  fillOpacity?: number,
-  strokeOpacity?: number,
-  opacity?: number,
-  outlineColor?: string,
-  outlineStrokeDashArray?: string,
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  fillOpacity?: number;
+  strokeOpacity?: number;
+  opacity?: number;
+  outlineColor?: string;
+  outlineStrokeDashArray?: string;
 };
 export type RectStyle = CommonStyle & {
-  width?: number,
-  height?: number,
-  radius?: number,
+  width?: number;
+  height?: number;
+  radius?: number;
 };
 export type CircleStyle = CommonStyle & {
-  r?: number,
+  r?: number;
 };
 export type EllipseStyle = CommonStyle & {
-  rx?: number,
-  ry?: number,
+  rx?: number;
+  ry?: number;
 };
 export type DiamondStyle = CommonStyle;
 export type PolygonStyle = CommonStyle;
 export type AnchorStyle = CommonStyle & {
-  stroke?: string,
-  strokeWidth?: number,
-  r?: number,
+  stroke?: string;
+  strokeWidth?: number;
+  r?: number;
 };
 export type AnchorLineStyle = {
-  stroke?: string,
-  strokeWidth?: number,
-  strokeDasharray?: string,
+  stroke?: string;
+  strokeWidth?: number;
+  strokeDasharray?: string;
 };
 export type AnchorHoverStyle = {
-  fill?: string,
-  fillOpacity?: number,
-  stroke?: string,
-  strokeWidth?: number,
-  r?: number,
+  fill?: string;
+  fillOpacity?: number;
+  stroke?: string;
+  strokeWidth?: number;
+  r?: number;
 };
 export type EdgeStyle = {
-  stroke?: string,
-  strokeWidth?: number,
-  strokeDashArray?: string,
-  hoverStroke?: string,
-  selectedStroke?: string,
-  outlineColor?: string,
-  outlineStrokeDashArray?: string,
+  stroke?: string;
+  strokeWidth?: number;
+  strokeDashArray?: string;
+  hoverStroke?: string;
+  selectedStroke?: string;
+  outlineColor?: string;
+  outlineStrokeDashArray?: string;
 };
 
 export type LineStyle = EdgeStyle;
 export type PolylineStyle = EdgeStyle & {
-  offset?: number,
+  offset?: number;
 };
 export type BezierStyle = EdgeStyle & {
-  offset?: number,
-  adjustLineColor?: string,
-  adjustAnchorStroke?: string,
-  adjustAnchorFill?: string,
-  adjustAnchorFillOpacity?: number,
+  offset?: number;
+  adjustLineColor?: string;
+  adjustAnchorStroke?: string;
+  adjustAnchorFill?: string;
+  adjustAnchorFillOpacity?: number;
 };
 export type TextStyle = {
-  color?: string,
-  fontSize?: number,
-  fontWeight?: string,
-  fontFamily?: string,
+  color?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  fontFamily?: string;
 };
 export type NodeTextStyle = TextStyle & {
-  lineHeight?: number,
-  wrapPadding?: string,
-
+  lineHeight?: number;
+  wrapPadding?: string;
 };
 export type EdgeTextStyle = TextStyle & EdgeTextTheme;
 export type ArrowStyle = {
-  offset?: number, // 箭头长度
-  verticalLength?: number, // 箭头垂直于边的距离
+  offset?: number; // 箭头长度
+  verticalLength?: number; // 箭头垂直于边的距离
 };
 
 export type EdgeAdjustStyle = {
   r: number;
-  fill?: string,
-  stroke?: string,
+  fill?: string;
+  stroke?: string;
 };
 
 // export type Style = {
@@ -302,8 +311,8 @@ export type EventArgs = Record<string, number | object | string | boolean>;
 export type FocusOnArgs = {
   id?: string;
   coordinate?: {
-    x: number,
-    y: number,
+    x: number;
+    y: number;
   };
 };
 
@@ -319,19 +328,19 @@ export interface Extension {
 export type Direction = 'vertical' | 'horizontal';
 
 export type AppendInfo = {
-  start: Point,
-  end: Point,
-  startIndex?: number,
-  endIndex?: number,
-  direction?: string,
-  dragAble?: boolean,
+  start: Point;
+  end: Point;
+  startIndex?: number;
+  endIndex?: number;
+  direction?: string;
+  dragAble?: boolean;
 };
 
 export type ArrowInfo = {
-  start: Point,
-  end: Point,
-  hover: Boolean,
-  isSelected: Boolean,
+  start: Point;
+  end: Point;
+  hover: Boolean;
+  isSelected: Boolean;
 };
 
 export type IEdgeState = {
@@ -339,22 +348,22 @@ export type IEdgeState = {
 };
 
 export interface ModelContractor {
-  new(data, graphModel): unknown; // todo: 这里应该怎么写？
+  new (data, graphModel): unknown; // todo: 这里应该怎么写？
 }
 
 export interface LogicFlowConstructor {
-  new(option: Options.Definition): LogicFlow;
+  new (option: Options.Definition): LogicFlow;
 }
 
 export type ExtensionOptions = {
-  lf: LogicFlow,
-  LogicFlow: LogicFlowConstructor,
-  options: Record<string, any>
+  lf: LogicFlow;
+  LogicFlow: LogicFlowConstructor;
+  options: Record<string, any>;
 };
 
 export interface ExtensionConstructor {
   pluginName: string;
-  new(ExtensionOptions: ExtensionOptions): Extension;
+  new (ExtensionOptions: ExtensionOptions): Extension;
   render?: Function;
 }
 
@@ -430,57 +439,57 @@ export type NodeMoveRule = (
 export type ZoomParam = boolean | number;
 
 export type NodeAttributes = {
-  id: string,
-  properties: Record<string, any>,
-  type: string,
-  x: number,
-  y: number,
-  isSelected: boolean,
-  isHovered: boolean,
-  width: number,
-  height: number,
+  id: string;
+  properties: Record<string, any>;
+  type: string;
+  x: number;
+  y: number;
+  isSelected: boolean;
+  isHovered: boolean;
+  width: number;
+  height: number;
   text: {
-    x: number,
-    y: number,
+    x: number;
+    y: number;
     value: string;
     [key: string]: any;
-  },
+  };
   [key: string]: any;
 };
 
 export type DiamondAttributes = {
-  points: PointTuple[]
+  points: PointTuple[];
 } & NodeAttributes;
 
 export type ShapeStyleAttribute = CommonTheme;
 
 export type VirtualRectSize = {
-  virtualRectWidth: number,
-  virtualRectHeight: number,
-  virtualRectCenterPositionX: number,
-  virtualRectCenterPositionY: number,
+  virtualRectWidth: number;
+  virtualRectHeight: number;
+  virtualRectCenterPositionX: number;
+  virtualRectCenterPositionY: number;
 };
 
 export type ArrowPath = {
-  d: string,
-  stroke?: string,
-  fill?: string,
-  transform?: string,
-  [key: string]: any,
+  d: string;
+  stroke?: string;
+  fill?: string;
+  transform?: string;
+  [key: string]: any;
 };
 
 export type ArrowMarker = {
-  id: string,
-  refX?: string | number,
-  refY?: string | number,
-  overflow?: string,
-  orient?: string,
-  markerUnits?: string,
-  viewBox?: string,
-  markerWidth?: number,
-  markerHeight?: number,
-  path: ArrowPath,
-  [key: string]: any,
+  id: string;
+  refX?: string | number;
+  refY?: string | number;
+  overflow?: string;
+  orient?: string;
+  markerUnits?: string;
+  viewBox?: string;
+  markerWidth?: number;
+  markerHeight?: number;
+  path: ArrowPath;
+  [key: string]: any;
 };
 
 export type ArrowMarkerList = ArrowMarker[];
