@@ -1,7 +1,5 @@
-import {
-  observable, action, toJS, isObservable, computed,
-} from 'mobx';
 import { assign, cloneDeep, isNil } from 'lodash-es';
+import { observable, action, toJS, isObservable, computed } from '../../util/mobx';
 import { createUuid } from '../../util/uuid';
 import { OutlineTheme } from '../../constant/DefaultTheme';
 import {

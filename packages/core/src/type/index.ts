@@ -1,4 +1,3 @@
-// import mobx from 'mobx';
 import { h } from 'preact';
 import LogicFlow from '../LogicFlow';
 import BaseEdge from '../view/edge/BaseEdge';

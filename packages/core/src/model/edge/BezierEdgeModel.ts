@@ -1,5 +1,5 @@
-import { action, observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { action, observable } from '../../util/mobx';
 import BaseEdgeModel from './BaseEdgeModel';
 import { Point } from '../../type';
 import { ModelType } from '../../constant/constant';

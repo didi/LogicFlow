@@ -1,5 +1,5 @@
-import { observable, action } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { observable, action } from '../../util/mobx';
 import { ModelType, SegmentDirection } from '../../constant/constant';
 import { Point } from '../../type';
 // import { defaultTheme } from '../../constant/DefaultTheme';
