@@ -84,7 +84,7 @@ function toXmlJson(json) {
   }
   Object.entries(json).forEach(([key, value]) => {
     if (typeof value !== 'object') {
-      if (key.indexOf('-') === 0 || ['#text', '#cdata'].includes(key)) {
+      if (key.indexOf('-') === 0 || ['#text', '#cdata-section'].includes(key)) {
         xmlJson[key] = value;
       } else {
         xmlJson[`-${key}`] = value;
