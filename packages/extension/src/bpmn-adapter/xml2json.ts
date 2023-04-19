@@ -110,7 +110,9 @@ XML.ObjTree.prototype.parseDOM = function (root) {
 };
 
 //  method: parseElement( element )  
-
+/**
+ * @reference node type reference https://www.w3schools.com/xml/dom_nodetype.asp
+ */
 XML.ObjTree.prototype.parseElement = function (elem) {
   //  PROCESSING_INSTRUCTION_NODE  
   if (elem.nodeType == 7) {
