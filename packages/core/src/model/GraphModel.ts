@@ -522,7 +522,7 @@ class GraphModel {
       return '';
     }
     if (!this.nodesMap[oldId]) {
-      console.warn(`当前流程图找不到节点${newId}, 修改失败`);
+      console.warn(`当前流程图找不到节点${oldId}, 修改失败`);
       return '';
     }
     this.edges.forEach((edge) => {
@@ -534,6 +534,7 @@ class GraphModel {
       }
     });
     this.nodesMap[oldId].model.id = newId;
+    this.nodesMap[newId] = this.nodesMap[oldId];
     return newId;
   }
   /**
