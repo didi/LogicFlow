@@ -59,18 +59,32 @@ enum BpmnElements {
   FLOW = 'bpmn:sequenceFlow',
 }
 
-const defaultAttrs = ['-name', '-id', 'bpmn:incoming', 'bpmn:outgoing', '-sourceRef', '-targetRef'];
+const defaultAttrs = [
+  '-name',
+  '-id',
+  'bpmn:incoming',
+  'bpmn:outgoing',
+  '-sourceRef',
+  '-targetRef',
+];
 
 /**
  * 将普通json转换为xmlJson
  * xmlJson中property会以“-”开头
  * 如果没有“-”表示为子节点
+ * fix issue https://github.com/didi/LogicFlow/issues/718, contain the process of #text/#cdata and array
  */
 function toXmlJson(json) {
   const xmlJson = {};
+  if (typeof json === 'string') {
+    return json;
+  }
+  if (Array.isArray(json)) {
+    return json.map(j => toXmlJson(j));
+  }
   Object.entries(json).forEach(([key, value]) => {
     if (typeof value !== 'object') {
-      if (key.indexOf('-') === 0) { // 如果本来就是“-”开头的了，那就不处理了。
+      if (key.indexOf('-') === 0 || ['#text', '#cdata'].includes(key)) {
         xmlJson[key] = value;
       } else {
         xmlJson[`-${key}`] = value;
@@ -85,17 +99,20 @@ function toXmlJson(json) {
 /**
  * 将xmlJson转换为普通的json，在内部使用。
  */
-function toNormalJson(xmlJson) {
+function toNormalJson(xmlJson: Object) {
   const json = {};
   Object.entries(xmlJson).forEach(([key, value]) => {
     if (typeof value === 'string') {
-      if (key.indexOf('-') === 0) { // 如果本来就是“-”开头的了，那就不处理了。
-        json[key.substr(1)] = value;
+      if (key.indexOf('-') === 0) {
+        json[key.substring(1)] = value;
       } else {
         json[key] = value;
       }
-    } else if (typeof value === 'object') {
+    } else if (Object.prototype.toString.call(value) === '[object Object]') {
       json[key] = toNormalJson(value);
+    } else if (Array.isArray(value)) {
+      // contain the process of array
+      json[key] = value.map((v) => toNormalJson(v));
     } else {
       json[key] = value;
     }
@@ -128,13 +145,12 @@ function convertLf2ProcessData(bpmnProcessData, data) {
 
     if (!bpmnProcessData[node.type]) {
       bpmnProcessData[node.type] = processNode; // 如果只有一个子元素，json中表示为正常属性
-    } else if (Array.isArray(bpmnProcessData[node.type])) { // 如果是多个子元素，json中使用数组存储
+    } else if (Array.isArray(bpmnProcessData[node.type])) {
+      // 如果是多个子元素，json中使用数组存储
       bpmnProcessData[node.type].push(processNode);
-    } else { // 如果是多个子元素，json中使用数组存储
-      bpmnProcessData[node.type] = [
-        bpmnProcessData[node.type],
-        processNode,
-      ];
+    } else {
+      // 如果是多个子元素，json中使用数组存储
+      bpmnProcessData[node.type] = [bpmnProcessData[node.type], processNode];
     }
   });
   const sequenceFlow = data.edges.map((edge: EdgeConfig) => {
@@ -144,10 +160,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
     } else if (Array.isArray(targetNode['bpmn:incoming'])) {
       targetNode['bpmn:incoming'].push(edge.id);
     } else {
-      targetNode['bpmn:incoming'] = [
-        targetNode['bpmn:incoming'],
-        edge.id,
-      ];
+      targetNode['bpmn:incoming'] = [targetNode['bpmn:incoming'], edge.id];
     }
     const edgeConfig = {
       '-id': edge.id,
@@ -171,11 +184,9 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       sourceNode['bpmn:outgoing'] = edge.id;
     } else if (Array.isArray(sourceNode['bpmn:outgoing'])) {
       sourceNode['bpmn:outgoing'].push(edge.id);
-    } else { // 字符串转数组
-      sourceNode['bpmn:outgoing'] = [
-        sourceNode['bpmn:outgoing'],
-        edge.id,
-      ];
+    } else {
+      // 字符串转数组
+      sourceNode['bpmn:outgoing'] = [sourceNode['bpmn:outgoing'], edge.id];
     }
   });
   bpmnProcessData[BpmnElements.FLOW] = sequenceFlow;
@@ -185,9 +196,12 @@ function convertLf2ProcessData(bpmnProcessData, data) {
  * adapterOut 设置bpmn diagram信息
  */
 function convertLf2DiagramData(bpmnDiagramData, data) {
-  bpmnDiagramData['bpmndi:BPMNEdge'] = data.edges.map(edge => {
+  bpmnDiagramData['bpmndi:BPMNEdge'] = data.edges.map((edge) => {
     const edgeId = edge.id;
-    const pointsList = edge.pointsList.map(({ x, y }) => ({ '-x': x, '-y': y }));
+    const pointsList = edge.pointsList.map(({ x, y }) => ({
+      '-x': x,
+      '-y': y,
+    }));
     const diagramData = {
       '-id': `${edgeId}_di`,
       '-bpmnElement': edgeId,
@@ -205,7 +219,7 @@ function convertLf2DiagramData(bpmnDiagramData, data) {
     }
     return diagramData;
   });
-  bpmnDiagramData['bpmndi:BPMNShape'] = data.nodes.map(node => {
+  bpmnDiagramData['bpmndi:BPMNShape'] = data.nodes.map((node) => {
     const nodeId = node.id;
     let width = 100;
     let height = 80;
@@ -272,11 +286,14 @@ function convertBpmn2LfData(bpmnData) {
 
 function getLfNodes(value, shapes, key) {
   const nodes = [];
-  if (Array.isArray(value)) { // 数组
-    value.forEach(val => {
+  if (Array.isArray(value)) {
+    // 数组
+    value.forEach((val) => {
       let shapeValue;
       if (Array.isArray(shapes)) {
-        shapeValue = shapes.find(shape => shape['-bpmnElement'] === val['-id']);
+        shapeValue = shapes.find(
+          (shape) => shape['-bpmnElement'] === val['-id'],
+        );
       } else {
         shapeValue = shapes;
       }
@@ -286,7 +303,9 @@ function getLfNodes(value, shapes, key) {
   } else {
     let shapeValue;
     if (Array.isArray(shapes)) {
-      shapeValue = shapes.find(shape => shape['-bpmnElement'] === value['-id']);
+      shapeValue = shapes.find(
+        (shape) => shape['-bpmnElement'] === value['-id'],
+      );
     } else {
       shapeValue = shapes;
     }
@@ -324,7 +343,10 @@ function getNodeConfig(shapeValue, type, processValue) {
       value: name,
     };
     // 自定义文本位置
-    if (shapeValue['bpmndi:BPMNLabel'] && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']) {
+    if (
+      shapeValue['bpmndi:BPMNLabel']
+      && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
+    ) {
       const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds'];
       text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2;
       text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2;
@@ -346,10 +368,12 @@ function getNodeConfig(shapeValue, type, processValue) {
 function getLfEdges(value, bpmnEdges) {
   const edges = [];
   if (Array.isArray(value)) {
-    value.forEach(val => {
+    value.forEach((val) => {
       let edgeValue;
       if (Array.isArray(bpmnEdges)) {
-        edgeValue = bpmnEdges.find(edge => edge['-bpmnElement'] === val['-id']);
+        edgeValue = bpmnEdges.find(
+          (edge) => edge['-bpmnElement'] === val['-id'],
+        );
       } else {
         edgeValue = bpmnEdges;
       }
@@ -358,7 +382,9 @@ function getLfEdges(value, bpmnEdges) {
   } else {
     let edgeValue;
     if (Array.isArray(bpmnEdges)) {
-      edgeValue = bpmnEdges.find(edge => edge['-bpmnElement'] === value['-id']);
+      edgeValue = bpmnEdges.find(
+        (edge) => edge['-bpmnElement'] === value['-id'],
+      );
     } else {
       edgeValue = bpmnEdges;
     }
@@ -374,7 +400,7 @@ function getEdgeConfig(edgeValue, processValue) {
     const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds'];
     // 如果边文本换行，则其偏移量应该是最长一行的位置
     let textLength = 0;
-    textVal.split('\n').forEach(textSpan => {
+    textVal.split('\n').forEach((textSpan) => {
       if (textLength < textSpan.length) {
         textLength = textSpan.length;
       }
@@ -418,8 +444,8 @@ class BpmnAdapter {
   static pluginName = 'bpmn-adapter';
   static shapeConfigMap = new Map();
   processAttributes: {
-    ['-isExecutable']: string
-    ['-id']: string
+    ['-isExecutable']: string;
+    ['-id']: string;
   };
   definitionAttributes: {
     ['-id']: string;
@@ -520,9 +546,6 @@ class BpmnXmlAdapter extends BpmnAdapter {
   };
 }
 
-export {
-  BpmnAdapter,
-  BpmnXmlAdapter,
-};
+export { BpmnAdapter, BpmnXmlAdapter, toXmlJson, toNormalJson };
 
 export default BpmnAdapter;

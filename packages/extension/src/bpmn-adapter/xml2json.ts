@@ -124,7 +124,7 @@ XML.ObjTree.prototype.parseElement = function (elem) {
     return elem.nodeValue;
   }
 
-  var retVal;
+  var retVal = null;
   var cnt = {};
 
   //  parse attributes  
@@ -168,6 +168,11 @@ XML.ObjTree.prototype.parseElement = function (elem) {
         this.addNode(retVal, key, cnt[key], val);
       }
     }
+  }else{
+    // @see issue https://github.com/didi/LogicFlow/issues/1068
+    // if retVal is null, that means the elem doesn't have any attributes and children, 
+    // the elem would be like: <a /> or <a></a>, so set retVal to empty object {}
+    retVal === null && (retVal = {})
   }
   return retVal;
 };

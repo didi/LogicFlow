@@ -1,62 +1,53 @@
-/**
- * This work is licensed under Creative Commons GNU LGPL License.
- * License: 
- * Version: 0.9
- * Author:  Stefan Goessner/2006
- * Web:     http://goessner.net/ 
- */
-function addIndSpace (ind, deep) {
-   for (let i = 0; i < deep; i++) {
-      ind += '  ';
-   }
-   return ind;
+function type(obj: any) {
+  return Object.prototype.toString.call(obj);
 }
 
-function toXml(v, name, ind, deep) {
-   let xml = "";
-   if (v instanceof Array) {
-      for (let i=0, n=v.length; i<n; i++) {
-         xml += addIndSpace(ind, deep) + toXml(v[i], name, ind, deep + 1);
-      }
-   }
-   else if (typeof(v) == "object") {
-      let hasChild = false;
-      xml += addIndSpace(ind, deep) + "<" + name;
-      for (let m in v) {
-         if (m.charAt(0) == "-")
-            xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
-         else
-            hasChild = true;
-      }
-      xml += hasChild ? ">" : " />";
-      if (hasChild) {
-         for (let m in v) {
-            if (m == "#text")
-               xml += v[m];
-            else if (m == "#cdata")
-               xml += "<![CDATA[" + v[m] + "]]>";
-            else if (m.charAt(0) != "-")
-               xml += toXml(v[m], m, ind, deep + 1);
-         }
-         xml += addIndSpace(ind, deep) + "</" + name + ">";
-      } else {
-         // xml += addIndSpace(ind, deep);
-      }
-   }
-   else {
-      xml += addIndSpace(ind, deep) + "<" + name + ">" + v.toString() +  "</" + name + ">";
-   }
-   return xml;
-};
-
-function lfJson2Xml(o) {
-   let xmlStr= "";
-   for (var m in o) {
-      xmlStr += toXml(o[m], m, "\t\n", 0);
-   }
-   return xmlStr;
+function addSpace(depth: number) {
+  return '  '.repeat(depth);
 }
 
-export {
-   lfJson2Xml
-};
+const tn = '\t\n';
+
+// @see issue https://github.com/didi/LogicFlow/issues/718, refactoring of function toXml
+function toXml(obj: string | any[] | Object, name: string, depth: number) {
+  const frontSpace = addSpace(depth);
+  if (name === '#text') {
+    return tn + frontSpace + obj;
+  } else if (name === '#cdata') {
+    return tn + frontSpace + '<![CDATA[' + obj + ']]>';
+  } else if (`${name}`.charAt(0) === '-') {
+    return ' ' + name.substring(1) + '="' + obj.toString() + '"';
+  }
+  let str = '';
+  if (Array.isArray(obj)) {
+    obj.forEach((item) => {
+      str += toXml(item, name, depth + 1);
+    });
+  } else if (type(obj) === '[object Object]') {
+    const keys = Object.keys(obj);
+    let attributes = '';
+    let children = '';
+    str += (depth === 0 ? '' : tn + frontSpace) + '<' + name;
+    keys.forEach((k) => {
+      k.charAt(0) === '-'
+        ? (attributes += toXml(obj[k], k, depth + 1))
+        : (children += toXml(obj[k], k, depth + 1));
+    });
+    str +=
+      attributes +
+      (children !== '' ? `>${children}${tn + frontSpace}</${name}>` : ' />');
+  } else {
+    str += tn + frontSpace + `<$${name}>${obj.toString()}</${name}>`;
+  }
+  return str;
+}
+
+function lfJson2Xml(o: Object) {
+  let xmlStr = '';
+  for (var m in o) {
+    xmlStr += toXml(o[m], m, 0);
+  }
+  return xmlStr;
+}
+
+export { lfJson2Xml };
