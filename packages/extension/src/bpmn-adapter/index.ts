@@ -87,7 +87,7 @@ function toXmlJson(json: string | any[] | Object) {
   Object.entries(json).forEach(([key, value]) => {
     if (typeof value !== 'object') {
       // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
-      if (key.indexOf('-') === 0 || ['#text', '#cdata-section', '#comment']) {
+      if (key.indexOf('-') === 0 || ['#text', '#cdata-section', '#comment'].includes(key)) {
         xmlJson[key] = value;
       } else {
         xmlJson[`-${key}`] = value;
