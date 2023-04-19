@@ -73,8 +73,10 @@ const defaultAttrs = [
  * xmlJson中property会以“-”开头
  * 如果没有“-”表示为子节点
  * fix issue https://github.com/didi/LogicFlow/issues/718, contain the process of #text/#cdata and array
+ * @reference node type reference https://www.w3schools.com/xml/dom_nodetype.asp
  */
-function toXmlJson(json) {
+
+function toXmlJson(json: string | any[] | Object) {
   const xmlJson = {};
   if (typeof json === 'string') {
     return json;
@@ -84,7 +86,8 @@ function toXmlJson(json) {
   }
   Object.entries(json).forEach(([key, value]) => {
     if (typeof value !== 'object') {
-      if (key.indexOf('-') === 0 || ['#text', '#cdata-section'].includes(key)) {
+      // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
+      if (key.indexOf('-') === 0 || ['#text', '#cdata-section', '#comment']) {
         xmlJson[key] = value;
       } else {
         xmlJson[`-${key}`] = value;

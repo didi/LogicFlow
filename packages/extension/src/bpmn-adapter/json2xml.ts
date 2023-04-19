@@ -15,6 +15,8 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
     return tn + frontSpace + obj;
   } else if (name === '#cdata-section') {
     return tn + frontSpace + '<![CDATA[' + obj + ']]>';
+  } else if (name === '#comment') {
+    return tn + frontSpace + '<!--' + obj + '-->';
   } else if (`${name}`.charAt(0) === '-') {
     return ' ' + name.substring(1) + '="' + obj.toString() + '"';
   }
