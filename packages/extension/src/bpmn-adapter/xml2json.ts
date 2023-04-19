@@ -110,15 +110,17 @@ XML.ObjTree.prototype.parseDOM = function (root) {
 };
 
 //  method: parseElement( element )  
-
+/**
+ * @reference node type reference https://www.w3schools.com/xml/dom_nodetype.asp
+ */
 XML.ObjTree.prototype.parseElement = function (elem) {
-  //  COMMENT_NODE  
+  //  PROCESSING_INSTRUCTION_NODE  
   if (elem.nodeType == 7) {
     return;
   }
 
-  //  TEXT_NODE CDATA_SECTION_NODE  
-  if (elem.nodeType == 3 || elem.nodeType == 4) {
+  //  TEXT_NODE CDATA_SECTION_NODE COMMENT_NODE
+  if (elem.nodeType == 3 || elem.nodeType == 4 || elem.nodeType == 8) {
     var bool = elem.nodeValue.match(/[^\x00-\x20]/);
     if (bool == null) return;     // ignore white spaces  
     return elem.nodeValue;
@@ -148,7 +150,7 @@ XML.ObjTree.prototype.parseElement = function (elem) {
     if (retVal) textOnly = false;        // some attributes exists  
     for (var i = 0; i < elem.childNodes.length && textOnly; i++) {
       var nType = elem.childNodes[i].nodeType;
-      if (nType == 3 || nType == 4) continue;
+      if (nType == 3 || nType == 4 || nType == 8) continue;
       textOnly = false;
     }
     if (textOnly) {
