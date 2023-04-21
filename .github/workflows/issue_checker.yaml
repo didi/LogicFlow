@@ -2,7 +2,7 @@ name: issue checker
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, labeled]
 
 jobs:
   check-permission:
@@ -35,3 +35,14 @@ jobs:
       - uses: actions-cool/issues-helper@v3
         with:
           actions: open-issue
+
+  check-labeled:
+    if: github.event.issue.state == 'open' && ( contains(github.event.issue.labels.*.name, 'bug') || github.event.label.name == 'bug') && contains(github.event.issue.body, 'https://github.com') == false && contains(github.event.issue.body, 'https://codesandbox.io') == false && contains(github.event.issue.body, 'https://codepen.io') == false && contains(github.event.issue.body, 'https://stackblitz.com') == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-cool/maintain-one-comment@v3
+        with:
+          body: 该 issue 作为 Bug Report 所提供信息的不充分，被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)来重启 issue。
+      - uses: actions-cool/issues-helper@v3
+        with:
+          actions: close-issue

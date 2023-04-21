@@ -1,9 +1,9 @@
 ---
-name: Feature request in english
+name: Feature request in English
 about: Suggest an idea for this project
-title: "[Feature Request]"
-labels: ""
-assignees: ""
+title: '[Feature Request]'
+labels: ''
+assignees: ''
 ---
 
 ## Background
