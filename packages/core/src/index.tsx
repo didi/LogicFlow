@@ -20,4 +20,6 @@ export * from './keyboard';
 export * from './options';
 export { ElementState, ModelType, ElementType, EventType } from './constant/constant';
 
+export { formateAnchorConnectValidateData } from './util/node';
+
 export default LogicFlow;

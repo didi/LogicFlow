@@ -1,4 +1,5 @@
-import LogicFlow, { PolylineEdgeModel, EventType } from '@logicflow/core';
+import LogicFlow, { PolylineEdgeModel, EventType, formateAnchorConnectValidateData } from '@logicflow/core';
+import type { ConnectRuleResult } from '@logicflow/core/types';
 import { cloneDeep } from 'lodash-es';
 import { isNodeInSegment } from './edge';
 
@@ -51,26 +52,40 @@ class InsertNodeInPolyline {
    * @param nodeData
    */
   // fix: https://github.com/didi/LogicFlow/issues/1078
-  checkRuleBeforeInsetNode(sourceNodeId, targetNodeId, sourceAnchorId, targetAnchorId, nodeData) {
+  checkRuleBeforeInsetNode(
+    sourceNodeId,
+    targetNodeId,
+    sourceAnchorId,
+    targetAnchorId,
+    nodeData,
+  ) {
     const sourceNodeModel = this._lf.getNodeModelById(sourceNodeId);
     const targetNodeModel = this._lf.getNodeModelById(targetNodeId);
 
     const sourceAnchorInfo = sourceNodeModel.getAnchorInfo(sourceAnchorId);
     const targetAnchorInfo = targetNodeModel.getAnchorInfo(targetAnchorId);
 
-    const sourceRuleResultData = sourceNodeModel.isAllowConnectedAsSource(
+    const sourceRuleResultData:
+    Boolean | ConnectRuleResult = sourceNodeModel.isAllowConnectedAsSource(
       nodeData,
       sourceAnchorInfo,
       targetAnchorInfo,
     );
-    const targetRuleResultData = targetNodeModel.isAllowConnectedAsTarget(
+    const targetRuleResultData:
+    Boolean | ConnectRuleResult = targetNodeModel.isAllowConnectedAsTarget(
       nodeData,
       sourceAnchorInfo,
       targetAnchorInfo,
     );
 
-    const { isAllPass: isSourcePass, msg: sourceMsg } = sourceRuleResultData;
-    const { isAllPass: isTargetPass, msg: targetMsg } = targetRuleResultData;
+    const {
+      isAllPass: isSourcePass,
+      msg: sourceMsg,
+    } = formateAnchorConnectValidateData(sourceRuleResultData);
+    const {
+      isAllPass: isTargetPass,
+      msg: targetMsg,
+    } = formateAnchorConnectValidateData(targetRuleResultData);
 
     return {
       isPass: isSourcePass && isTargetPass,
@@ -135,10 +150,13 @@ class InsertNodeInPolyline {
           this._lf.deleteEdge(id);
           break;
         } else {
-          this._lf.graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
-            data: nodeData,
-            msg: checkResult.targetMsg || checkResult.sourceMsg,
-          });
+          this._lf.graphModel.eventCenter.emit(
+            EventType.CONNECTION_NOT_ALLOWED,
+            {
+              data: nodeData,
+              msg: checkResult.targetMsg || checkResult.sourceMsg,
+            },
+          );
           break;
         }
       }
