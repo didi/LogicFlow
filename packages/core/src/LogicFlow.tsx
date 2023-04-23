@@ -484,7 +484,7 @@ export default class LogicFlow {
    * @param nodeId 节点
    */
   getNodeDataById(nodeId: string): NodeConfig {
-    return this.graphModel.getNodeModelById(nodeId).getData();
+    return this.graphModel.getNodeModelById(nodeId)?.getData();
   }
   /**
    * 给两个节点之间添加一条边
