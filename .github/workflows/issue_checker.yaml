@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions-cool/maintain-one-comment@v3
         with:
-          body: 由于所提供信息的不充分，该 issue 被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)来重启 issue。
+          body: 由于所提供信息的不充分，该 issue 被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)(可以通过以下方式：1. 在任意在线编码平台如 codesanbox 编写示例。将其保存到自己空间，然后贴上链接。2. 在自己 github 中创建一个最简单的示例，然后贴上 github 链接。3. 删除项目中的 node_modules 部分，打包项目，并拖拽到 issue 输入框中上传（或提供远程可下载地址）)来重启 issue。
       - uses: actions-cool/issues-helper@v3
         with:
           actions: close-issue
@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions-cool/maintain-one-comment@v3
         with:
-          body: 该 issue 作为 Bug Report 所提供信息的不充分，被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)来重启 issue。
+          body: 该 issue 作为 Bug Report 所提供信息的不充分，被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)(可以通过以下方式：1. 在任意在线编码平台如 codesanbox 编写示例。将其保存到自己空间，然后贴上链接。2. 在自己 github 中创建一个最简单的示例，然后贴上 github 链接。3. 删除项目中的 node_modules 部分，打包项目，并拖拽到 issue 输入框中上传（或提供远程可下载地址）)来重启 issue。
       - uses: actions-cool/issues-helper@v3
         with:
           actions: close-issue
