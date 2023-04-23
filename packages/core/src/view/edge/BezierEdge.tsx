@@ -28,12 +28,10 @@ export default class BezierEdge extends BaseEdge {
     return (
       <Path
         d={path}
-        {
-          ...style
-        }
+        {...style}
         {...arrowConfig}
-        {
-          ...isAnimation ? {
+        {...(isAnimation
+          ? {
             strokeDasharray,
             stroke,
             style: {
@@ -44,8 +42,8 @@ export default class BezierEdge extends BaseEdge {
               animationTimingFunction,
               animationDirection,
             },
-          } : {}
-        }
+          }
+          : {})}
       />
     );
   }
@@ -53,17 +51,8 @@ export default class BezierEdge extends BaseEdge {
    * @overridable 可重写，在完全自定义边的时候，可以重写此方法，来自定义边的选区。
    */
   getAppendWidth() {
-    const {
-      path,
-    } = this.props.model;
-    return (
-      <Path
-        d={path}
-        strokeWidth={10}
-        stroke="transparent"
-        fill="none"
-      />
-    );
+    const { path } = this.props.model;
+    return <Path d={path} strokeWidth={10} stroke="transparent" fill="none" />;
   }
   /**
    * @deprecated
@@ -80,5 +69,11 @@ export default class BezierEdge extends BaseEdge {
       isSelected,
     };
     return arrowInfo;
+  }
+
+  getLastTwoPoints(): any[] {
+    const { model } = this.props;
+    const { path } = model as BezierEdgeModel;
+    return getEndTangent(path);
   }
 }

@@ -1,0 +1,48 @@
+name: issue checker
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+jobs:
+  check-permission:
+    runs-on: ubuntu-latest
+    outputs:
+      require-result: ${{ steps.checkUser.outputs.require-result }}
+    steps:
+      - uses: actions-cool/check-user-permission@v2
+        id: checkUser
+        with:
+          require: 'write'
+
+  check-open:
+    runs-on: ubuntu-latest
+    needs: check-permission
+    if: needs.check-permission.outputs.require-result == 'false' && github.event.issue.state == 'open' && contains(github.event.issue.title, '[Bug report]') == true && contains(github.event.issue.body, 'https://github.com') == false && contains(github.event.issue.body, 'https://codesandbox.io') == false && contains(github.event.issue.body, 'https://codepen.io') == false && contains(github.event.issue.body, 'https://stackblitz.com') == false
+    steps:
+      - uses: actions-cool/maintain-one-comment@v3
+        with:
+          body: 由于所提供信息的不充分，该 issue 被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)(可以通过以下方式：1. 在任意在线编码平台如 codesanbox 编写示例。将其保存到自己空间，然后贴上链接。2. 在自己 github 中创建一个最简单的示例，然后贴上 github 链接。3. 删除项目中的 node_modules 部分，打包项目，并拖拽到 issue 输入框中上传（或提供远程可下载地址）)来重启 issue。
+      - uses: actions-cool/issues-helper@v3
+        with:
+          actions: close-issue
+
+  check-close:
+    runs-on: ubuntu-latest
+    needs: check-permission
+    if: needs.check-permission.outputs.require-result == 'false' && github.event.issue.state == 'closed' && (contains(github.event.issue.body, 'https://github.com') == true || contains(github.event.issue.body, 'https://codesandbox.io') == true) ||  contains(github.event.issue.body, 'https://codepen.io') == true || contains(github.event.issue.body, 'https://stackblitz.com') == true
+    steps:
+      - uses: actions-cool/issues-helper@v3
+        with:
+          actions: open-issue
+
+  check-labeled:
+    if: github.event.issue.state == 'open' && ( contains(github.event.issue.labels.*.name, 'bug') || github.event.label.name == 'bug') && contains(github.event.issue.body, 'https://github.com') == false && contains(github.event.issue.body, 'https://codesandbox.io') == false && contains(github.event.issue.body, 'https://codepen.io') == false && contains(github.event.issue.body, 'https://stackblitz.com') == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-cool/maintain-one-comment@v3
+        with:
+          body: 该 issue 作为 Bug Report 所提供信息的不充分，被暂时关闭了。请修改 issue 以提供[最小可复现示例](https://stackoverflow.com/help/minimal-reproducible-example)(可以通过以下方式：1. 在任意在线编码平台如 codesanbox 编写示例。将其保存到自己空间，然后贴上链接。2. 在自己 github 中创建一个最简单的示例，然后贴上 github 链接。3. 删除项目中的 node_modules 部分，打包项目，并拖拽到 issue 输入框中上传（或提供远程可下载地址）)来重启 issue。
+      - uses: actions-cool/issues-helper@v3
+        with:
+          actions: close-issue

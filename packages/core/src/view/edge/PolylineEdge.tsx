@@ -10,11 +10,11 @@ import { StepDrag } from '../../util/drag';
 import PolylineEdgeModel from '../../model/edge/PolylineEdgeModel';
 
 type AppendAttributesType = {
-  d: string,
-  fill: string,
-  stroke: string,
-  strokeWidth: number,
-  strokeDasharray: string,
+  d: string;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  strokeDasharray: string;
 };
 
 export default class PolylineEdge extends BaseEdge {
@@ -54,19 +54,25 @@ export default class PolylineEdge extends BaseEdge {
     // 2、如果允许调整所有线段调用dragAppend
     const { adjustEdgeMiddle } = editConfigModel;
     if (adjustEdgeMiddle) {
-      this.appendInfo = polylineModel.dragAppendSimple(
-        this.appendInfo,
-        { x: curDeltaX, y: curDeltaY },
-      );
+      this.appendInfo = polylineModel.dragAppendSimple(this.appendInfo, {
+        x: curDeltaX,
+        y: curDeltaY,
+      });
     } else {
-      this.appendInfo = polylineModel.dragAppend(this.appendInfo, { x: curDeltaX, y: curDeltaY });
+      this.appendInfo = polylineModel.dragAppend(this.appendInfo, {
+        x: curDeltaX,
+        y: curDeltaY,
+      });
     }
   };
   /**
    * 不支持重写
    */
   onDragEnd = () => {
-    const { model, graphModel: { eventCenter } } = this.props;
+    const {
+      model,
+      graphModel: { eventCenter },
+    } = this.props;
     const polylineModel = model as PolylineEdgeModel;
     polylineModel.dragAppendEnd();
     this.isDragging = false;
@@ -74,10 +80,7 @@ export default class PolylineEdge extends BaseEdge {
     // 情况当前拖拽的线段信息
     this.appendInfo = undefined;
     // 向外抛出事件
-    eventCenter.emit(
-      EventType.EDGE_ADJUST,
-      { data: polylineModel.getData() },
-    );
+    eventCenter.emit(EventType.EDGE_ADJUST, { data: polylineModel.getData() });
   };
   /**
    * 不支持重写
@@ -112,12 +115,10 @@ export default class PolylineEdge extends BaseEdge {
     return (
       <Polyline
         points={points}
-        {
-          ...style
-        }
+        {...style}
         {...arrowConfig}
-        {
-          ...isAnimation ? {
+        {...(isAnimation
+          ? {
             strokeDasharray,
             stroke,
             style: {
@@ -128,8 +129,8 @@ export default class PolylineEdge extends BaseEdge {
               animationTimingFunction,
               animationDirection,
             },
-          } : {}
-        }
+          }
+          : {})}
       />
     );
   }
@@ -154,6 +155,25 @@ export default class PolylineEdge extends BaseEdge {
     }
     return arrowInfo;
   }
+
+  getLastTwoPoints(): any[] {
+    const { model } = this.props;
+    const { points } = model;
+    const arrowInfo = {
+      start: null,
+      end: null,
+    };
+    const currentPositionList = points2PointsList(points);
+    // 两点重合时不计算起终点
+    if (currentPositionList.length >= 2) {
+      return [
+        currentPositionList[currentPositionList.length - 2],
+        currentPositionList[currentPositionList.length - 1],
+      ];
+    }
+    return [null, null];
+  }
+
   private getAppendAttributes(appendInfo: AppendInfo): AppendAttributesType {
     const { start, end } = appendInfo;
     let d;
@@ -167,7 +187,10 @@ export default class PolylineEdge extends BaseEdge {
         offset: 10,
         verticalLength: 5,
       };
-      const startPosition = getVerticalPointOfLine({ ...config, type: 'start' });
+      const startPosition = getVerticalPointOfLine({
+        ...config,
+        type: 'start',
+      });
       const endPosition = getVerticalPointOfLine({ ...config, type: 'end' });
       d = `M${startPosition.leftX} ${startPosition.leftY} 
       L${startPosition.rightX} ${startPosition.rightY} 
@@ -183,9 +206,7 @@ export default class PolylineEdge extends BaseEdge {
     };
   }
   private getAppendShape(appendInfo: AppendInfo) {
-    const {
-      d, strokeWidth, fill, strokeDasharray, stroke,
-    } = this.getAppendAttributes(appendInfo);
+    const { d, strokeWidth, fill, strokeDasharray, stroke } = this.getAppendAttributes(appendInfo);
     return (
       <Path
         d={d}
@@ -221,11 +242,7 @@ export default class PolylineEdge extends BaseEdge {
         dragAble: true,
       };
       let append = (
-        <g
-          className={className}
-        >
-          {this.getAppendShape(appendInfo)}
-        </g>
+        <g className={className}>{this.getAppendShape(appendInfo)}</g>
       );
       const { editConfigModel } = graphModel;
       const { adjustEdge, adjustEdgeMiddle } = editConfigModel;
@@ -252,11 +269,7 @@ export default class PolylineEdge extends BaseEdge {
             className={this.isDragging ? 'lf-dragging' : 'lf-drag-able'}
             onMouseDown={(e) => this.beforeDragStart(e, appendInfo)}
           >
-            <g
-              className={className}
-            >
-              {this.getAppendShape(appendInfo)}
-            </g>
+            <g className={className}>{this.getAppendShape(appendInfo)}</g>
           </g>
         );
       }

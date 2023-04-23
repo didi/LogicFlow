@@ -3,19 +3,24 @@ import { ArrowStyle } from './Arrow';
 import BaseEdgeModel from '../../model/edge/BaseEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import LineText from '../text/LineText';
-import { ElementState, EventType, ModelType, OverlapMode } from '../../constant/constant';
+import {
+  ElementState,
+  EventType,
+  ModelType,
+  OverlapMode,
+} from '../../constant/constant';
 import { ArrowInfo, IEdgeState } from '../../type/index';
 import { PolylineEdgeModel } from '../..';
 import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
 import { isMultipleSelect } from '../../util/graph';
 import Circle from '../basic-shape/Circle';
+import { degrees, getTangentOfVector } from '../../util/sampling';
 
 type IProps = {
   model: BaseEdgeModel;
   graphModel: GraphModel;
 };
-
 export default class BaseEdge extends Component<IProps> {
   startTime: number;
   contextMenuTime: number;
@@ -25,17 +30,12 @@ export default class BaseEdge extends Component<IProps> {
    * 不支持重写，请使用getEdge
    */
   getShape() {
-    return (
-      <g>
-        {this.getEdge()}
-      </g>
-    );
+    return <g>{this.getEdge()}</g>;
   }
   /**
    * @deprecated 请使用model.getTextStyle
    */
-  getTextStyle() {
-  }
+  getTextStyle() { }
   /**
    * @overridable 可重写，自定义边文本DOM
    */
@@ -65,9 +65,7 @@ export default class BaseEdge extends Component<IProps> {
    */
   getArrowInfo(): ArrowInfo {
     const { model } = this.props;
-    const {
-      startPoint, endPoint, isSelected,
-    } = model;
+    const { startPoint, endPoint, isSelected } = model;
     const { hover } = this.state as IEdgeState;
     return {
       start: startPoint,
@@ -76,11 +74,18 @@ export default class BaseEdge extends Component<IProps> {
       isSelected,
     };
   }
+  getLastTwoPoints(): any[] {
+    const { model } = this.props;
+    const { startPoint, endPoint } = model;
+    return [startPoint, endPoint];
+  }
   /**
    * @deprecated 请使用model.getArrowStyle
    */
   getArrowStyle() {
-    console.error('getArrowStyle is deprecated in 1.2.0, please use model.getArrowStyle');
+    console.error(
+      'getArrowStyle is deprecated in 1.2.0, please use model.getArrowStyle',
+    );
     return null;
   }
   /**
@@ -90,13 +95,39 @@ export default class BaseEdge extends Component<IProps> {
     const { model } = this.props;
     const { id } = model;
     const { refY = 0, refX = 2 } = model.getArrowStyle();
+    const [start, end] = this.getLastTwoPoints();
+    let theta: string | number = 'auto';
+    if (start !== null && end !== null) {
+      theta = degrees(
+        getTangentOfVector({
+          x: end.x - start.x,
+          y: end.y - start.y,
+          z: 0,
+        }),
+      );
+    }
     return (
       <g>
         <defs>
-          <marker id={`marker-start-${id}`} refX={-refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
+          <marker
+            id={`marker-start-${id}`}
+            refX={-refX}
+            refY={refY}
+            overflow="visible"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
             {this.getStartArrow()}
           </marker>
-          <marker id={`marker-end-${id}`} refX={refX} refY={refY} overflow="visible" orient="auto" markerUnits="userSpaceOnUse">
+          <marker
+            id={`marker-end-${id}`}
+            refX={refX}
+            refY={refY}
+            overflow="visible"
+            orient={theta}
+            markerUnits="userSpaceOnUse"
+          // transform={`rotate(${degrees(theta)})`}
+          >
             {this.getEndArrow()}
           </marker>
         </defs>
@@ -119,7 +150,14 @@ export default class BaseEdge extends Component<IProps> {
   getStartArrow(): h.JSX.Element | null {
     const { model } = this.props;
     const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
-    return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
+    return (
+      <path
+        stroke={stroke}
+        fill={stroke}
+        strokeWidth={strokeWidth}
+        d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`}
+      />
+    );
   }
   /**
    * @overridable 可重写，自定义边终点箭头形状。
@@ -137,7 +175,15 @@ export default class BaseEdge extends Component<IProps> {
   getEndArrow(): h.JSX.Element | null {
     const { model } = this.props;
     const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
-    return <path stroke={stroke} fill={stroke} strokeWidth={strokeWidth} transform="rotate(180)" d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`} />;
+    return (
+      <path
+        stroke={stroke}
+        fill={stroke}
+        strokeWidth={strokeWidth}
+        transform="rotate(180)"
+        d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`}
+      />
+    );
   }
   /**
    * @overridable 可重写，自定义调整边连接节点形状。在开启了adjustEdgeStartAndEnd的时候，会显示调整点。
@@ -158,13 +204,7 @@ export default class BaseEdge extends Component<IProps> {
    */
   getAdjustPointShape(x, y, model): h.JSX.Element | null {
     const style = model.getAdjustPointStyle();
-    return (
-      <Circle
-        className="lf-edge-adjust-point"
-        {...style}
-        {...{ x, y }}
-      />
-    );
+    return <Circle className="lf-edge-adjust-point" {...style} {...{ x, y }} />;
   }
   /**
    * 不支持重写。请使用getAdjustPointShape
@@ -196,7 +236,9 @@ export default class BaseEdge extends Component<IProps> {
    * @deprecated
    */
   getAnimation() {
-    console.error('getAnimation is deprecated in 1.2.0, please use model.getEdgeAnimationStyle');
+    console.error(
+      'getAnimation is deprecated in 1.2.0, please use model.getEdgeAnimationStyle',
+    );
   }
   /**
    * @overridable 可重写，在完全自定义边的时候，可以重写此方法，来自定义边的选区。
@@ -209,21 +251,20 @@ export default class BaseEdge extends Component<IProps> {
    * 如果需要自定义边选区，请使用getAppendWidth。
    */
   getAppend() {
-    return (
-      <g
-        className="lf-edge-append"
-      >
-        {this.getAppendWidth()}
-      </g>
-    );
+    return <g className="lf-edge-append">{this.getAppendWidth()}</g>;
   }
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
   handleHover = (hovered, ev) => {
-    const { model, graphModel: { eventCenter } } = this.props;
+    const {
+      model,
+      graphModel: { eventCenter },
+    } = this.props;
     model.setHovered(hovered);
-    const eventName = hovered ? EventType.EDGE_MOUSEENTER : EventType.EDGE_MOUSELEAVE;
+    const eventName = hovered
+      ? EventType.EDGE_MOUSEENTER
+      : EventType.EDGE_MOUSELEAVE;
     const nodeData = model.getData();
     eventCenter.emit(eventName, {
       data: nodeData,
@@ -235,7 +276,9 @@ export default class BaseEdge extends Component<IProps> {
    */
   setHoverON = (ev) => {
     // ! hover多次触发, onMouseOver + onMouseEnter
-    const { model: { isHovered } } = this.props;
+    const {
+      model: { isHovered },
+    } = this.props;
     if (isHovered) return;
     this.textRef && this.textRef.current.setHoverON();
     this.handleHover(true, ev);
@@ -244,7 +287,9 @@ export default class BaseEdge extends Component<IProps> {
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
   setHoverOFF = (ev) => {
-    const { model: { isHovered } } = this.props;
+    const {
+      model: { isHovered },
+    } = this.props;
     if (!isHovered) return;
     this.textRef && this.textRef.current.setHoverOFF();
     this.handleHover(false, ev);
@@ -256,13 +301,19 @@ export default class BaseEdge extends Component<IProps> {
     ev.preventDefault();
     // 节点右击也会触发时间，区分右击和点击(mouseup)
     this.contextMenuTime = new Date().getTime();
-    if (this.clickTimer) { clearTimeout(this.clickTimer); }
+    if (this.clickTimer) {
+      clearTimeout(this.clickTimer);
+    }
     const { model, graphModel } = this.props;
     const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
     });
-    graphModel.setElementStateById(model.id, ElementState.SHOW_MENU, position.domOverlayPosition);
+    graphModel.setElementStateById(
+      model.id,
+      ElementState.SHOW_MENU,
+      position.domOverlayPosition,
+    );
     this.toFront();
     if (!model.isSelected) {
       graphModel.selectEdgeById(model.id);
@@ -311,8 +362,13 @@ export default class BaseEdge extends Component<IProps> {
       }
       if (model.modelType === ModelType.POLYLINE_EDGE) {
         const polylineEdgeModel = model as PolylineEdgeModel;
-        const { canvasOverlayPosition: { x, y } } = graphModel.getPointByClient({ x: e.x, y: e.y });
-        const crossPoint = getClosestPointOfPolyline({ x, y }, polylineEdgeModel.points);
+        const {
+          canvasOverlayPosition: { x, y },
+        } = graphModel.getPointByClient({ x: e.x, y: e.y });
+        const crossPoint = getClosestPointOfPolyline(
+          { x, y },
+          polylineEdgeModel.points,
+        );
         polylineEdgeModel.dbClickPosition = crossPoint;
       }
       graphModel.eventCenter.emit(EventType.EDGE_DBCLICK, {
@@ -320,7 +376,8 @@ export default class BaseEdge extends Component<IProps> {
         e,
         position,
       });
-    } else { // 单击
+    } else {
+      // 单击
       // 边右击也会触发mouseup事件，判断是否有右击，如果有右击则取消点击事件触发
       // 边数据
       graphModel.eventCenter.emit(EventType.ELEMENT_CLICK, {
@@ -359,7 +416,10 @@ export default class BaseEdge extends Component<IProps> {
    * 不建议重写，如果要自定义边的形状，请重写getEdge方法。
    */
   render() {
-    const { model: { isSelected, isHitable, isShowAdjustPoint }, graphModel } = this.props;
+    const {
+      model: { isSelected, isHitable, isShowAdjustPoint },
+      graphModel,
+    } = this.props;
     const { animation } = graphModel;
     return (
       <g>
@@ -368,7 +428,9 @@ export default class BaseEdge extends Component<IProps> {
             'lf-edge',
             !isHitable && 'pointer-none',
             isSelected && 'lf-edge-selected',
-          ].filter(Boolean).join(' ')}
+          ]
+            .filter(Boolean)
+            .join(' ')}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onContextMenu={this.handleContextMenu}
@@ -381,7 +443,7 @@ export default class BaseEdge extends Component<IProps> {
           {this.getText()}
           {this.getArrow()}
         </g>
-        {(isShowAdjustPoint && isSelected) ? this.getAdjustPoints() : ''}
+        {isShowAdjustPoint && isSelected ? this.getAdjustPoints() : ''}
       </g>
     );
   }

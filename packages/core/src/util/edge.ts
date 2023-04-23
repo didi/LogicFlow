@@ -5,10 +5,9 @@ import BaseNode from '../model/node/BaseNodeModel';
 import { Point, Direction, EdgeConfig } from '../type/index';
 import { getCrossPointOfLine, isInSegment } from '../algorithm/edge';
 import { SegmentDirection } from '../constant/constant';
-import {
-  getNodeBBox, isInNode, distance,
-} from './node';
+import { getNodeBBox, isInNode, distance } from './node';
 import { getVerticalPointOfLine } from '../algorithm';
+import { sampleCubic } from './sampling';
 
 /* 手动创建边时edge->edgeModel */
 export const setupEdgeModel = (edge, graphModel) => {
@@ -53,33 +52,31 @@ type PBBox = Partial<{
 }>;
 
 /* 判断两个Bbox是否重合 */
-export const isBboxOverLapping = (b1: PBBox, b2: PBBox): boolean => (
-  Math.abs(b1.centerX - b2.centerX) * 2 < b1.width + b2.width
-  && Math.abs(b1.centerY - b2.centerY) * 2 < b1.height + b2.height
-);
+export const isBboxOverLapping = (b1: PBBox, b2: PBBox): boolean => Math.abs(b1.centerX
+  - b2.centerX) * 2 < b1.width + b2.width
+    && Math.abs(b1.centerY - b2.centerY) * 2 < b1.height + b2.height;
 
 /* 连接点去重，去掉x,y位置重复的点 */
 export const filterRepeatPoints = (points: PolyPoint[]): PolyPoint[] => {
   const result: PolyPoint[] = [];
   const pointsMap: Record<string, PolyPoint> = {};
-  points.forEach(p => {
+  points.forEach((p) => {
     const id = `${p.x}-${p.y}`;
     p.id = id;
     pointsMap[id] = p;
   });
-  Object.keys(pointsMap).forEach(p => {
+  Object.keys(pointsMap).forEach((p) => {
     result.push(pointsMap[p]);
   });
   return result;
 };
 
 /* 获取简单边:边之间除了起始点，只有1个中间点 */
-export const getSimplePolyline = (sPoint: PolyPoint, tPoint: PolyPoint): PolyPoint[] => {
-  const points = [
-    sPoint,
-    { x: sPoint.x, y: tPoint.y },
-    tPoint,
-  ];
+export const getSimplePolyline = (
+  sPoint: PolyPoint,
+  tPoint: PolyPoint,
+): PolyPoint[] => {
+  const points = [sPoint, { x: sPoint.x, y: tPoint.y }, tPoint];
   return filterRepeatPoints(points);
 };
 
@@ -110,7 +107,10 @@ export const pointDirection = (point: PolyPoint, bbox: PBBox): Direction => {
 };
 
 /* 获取扩展图形上的点，即起始终点相邻的点，上一个或者下一个节点 */
-export const getExpandedBBoxPoint = (bbox: PBBox, point: PolyPoint): PolyPoint => {
+export const getExpandedBBoxPoint = (
+  bbox: PBBox,
+  point: PolyPoint,
+): PolyPoint => {
   const direction = pointDirection(point, bbox);
   if (direction === SegmentDirection.HORIZONTAL) {
     return {
@@ -143,14 +143,17 @@ export const mergeBBox = (b1: PBBox, b2: PBBox): PBBox => {
 };
 
 /* 获取多个点的外层bbox
-* 这个函数的用处
-* 1、获取起始终点相邻点(expendBboxPoint)的bbox
-* 2、polylineEdge, bezierEdge，获取outline边框，这种情况传入offset
-*/
-export const getBBoxOfPoints = (points: PolyPoint[] = [], offset?: number): PBBox => {
+ * 这个函数的用处
+ * 1、获取起始终点相邻点(expendBboxPoint)的bbox
+ * 2、polylineEdge, bezierEdge，获取outline边框，这种情况传入offset
+ */
+export const getBBoxOfPoints = (
+  points: PolyPoint[] = [],
+  offset?: number,
+): PBBox => {
   const xList: number[] = [];
   const yList: number[] = [];
-  points.forEach(p => {
+  points.forEach((p) => {
     xList.push(p.x);
     yList.push(p.y);
   });
@@ -179,12 +182,7 @@ export const getBBoxOfPoints = (points: PolyPoint[] = [], offset?: number): PBBo
 };
 /* 获取box四个角上的点 */
 export const getPointsFromBBox = (bbox: PBBox): PolyPoint[] => {
-  const {
-    minX,
-    minY,
-    maxX,
-    maxY,
-  } = bbox;
+  const { minX, minY, maxX, maxY } = bbox;
   return [
     {
       x: minX,
@@ -245,20 +243,20 @@ export const getBBoxYCrossPoints = (bbox: PBBox, y: number): PolyPoint[] => {
 };
 
 /* 获取点的x,y方向上与box的交点 */
-export const getBBoxCrossPointsByPoint = (bbox: PBBox, point: PolyPoint): PolyPoint[] => (
-  getBBoxXCrossPoints(bbox, point.x).concat(getBBoxYCrossPoints(bbox, point.y))
-);
+export const getBBoxCrossPointsByPoint = (
+  bbox: PBBox,
+  point: PolyPoint,
+): PolyPoint[] => getBBoxXCrossPoints(bbox, point.x).concat(getBBoxYCrossPoints(bbox, point.y));
 
 /* 计算两点之间的预测距离(非直线距离) */
-export const estimateDistance = (p1: PolyPoint, p2: PolyPoint): number => (
-  Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
-);
+export const estimateDistance = (p1: PolyPoint, p2: PolyPoint): number => Math.abs(p1.x - p2.x)
+  + Math.abs(p1.y - p2.y);
 
 /* 减少点别重复计算进距离的误差 */
 export const costByPoints = (p: PolyPoint, points: PolyPoint[]): number => {
   const offset = -2;
   let result = 0;
-  points.forEach(point => {
+  points.forEach((point) => {
     if (point) {
       if (p.x === point.x) {
         result += offset;
@@ -294,13 +292,26 @@ export const rebuildPath = (
     iterator = 0;
   }
   pathPoints.unshift(pointById[currentId]);
-  if (cameFrom[currentId] && cameFrom[currentId] !== currentId && iterator <= 100) {
-    rebuildPath(pathPoints, pointById, cameFrom, cameFrom[currentId], iterator + 1);
+  if (
+    cameFrom[currentId]
+    && cameFrom[currentId] !== currentId
+    && iterator <= 100
+  ) {
+    rebuildPath(
+      pathPoints,
+      pointById,
+      cameFrom,
+      cameFrom[currentId],
+      iterator + 1,
+    );
   }
 };
 
 /* 把计算完毕的点从开放列表中删除 */
-export const removeClosePointFromOpenList = (arr: PolyPoint[], item: PolyPoint): void => {
+export const removeClosePointFromOpenList = (
+  arr: PolyPoint[],
+  item: PolyPoint,
+): void => {
   const index = arr.indexOf(item);
   if (index > -1) {
     arr.splice(index, 1);
@@ -326,7 +337,11 @@ export const isSegmentsIntersected = (
 };
 
 /* 判断线段与bbox是否是相交的，保证节点之间的边不会穿过节点自身 */
-export const isSegmentCrossingBBox = (p1: PolyPoint, p2: PolyPoint, bbox: PBBox): boolean => {
+export const isSegmentCrossingBBox = (
+  p1: PolyPoint,
+  p2: PolyPoint,
+  bbox: PBBox,
+): boolean => {
   if (bbox.width === 0 && bbox.height === 0) {
     return false;
   }
@@ -347,10 +362,13 @@ export const getNextNeighborPoints = (
   bbox2: PBBox,
 ): PolyPoint[] => {
   const neighbors: Point[] = [];
-  points.forEach(p => {
+  points.forEach((p) => {
     if (p !== point) {
       if (p.x === point.x || p.y === point.y) {
-        if (!isSegmentCrossingBBox(p, point, bbox1) && !isSegmentCrossingBBox(p, point, bbox2)) {
+        if (
+          !isSegmentCrossingBBox(p, point, bbox1)
+          && !isSegmentCrossingBBox(p, point, bbox2)
+        ) {
           neighbors.push(p);
         }
       }
@@ -360,9 +378,9 @@ export const getNextNeighborPoints = (
 };
 
 /* 路径查找,Astart查找+曼哈顿距离
-* 算法wiki:https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
-* 方法无法复用，且调用了很多polyline相关的方法，暂不抽离到src/algorithm中
-*/
+ * 算法wiki:https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
+ * 方法无法复用，且调用了很多polyline相关的方法，暂不抽离到src/algorithm中
+ */
 export const pathFinder = (
   points: PolyPoint[],
   start: PolyPoint,
@@ -392,7 +410,7 @@ export const pathFinder = (
 
   const pointById: PolyPointMap = {};
 
-  points.forEach(p => {
+  points.forEach((p) => {
     pointById[p.id] = p;
   });
 
@@ -415,7 +433,7 @@ export const pathFinder = (
     removeClosePointFromOpenList(openSet, current);
     closedSet.push(current);
 
-    getNextNeighborPoints(points, current, sBBox, tBBox).forEach(neighbor => {
+    getNextNeighborPoints(points, current, sBBox, tBBox).forEach((neighbor) => {
       if (closedSet.indexOf(neighbor) !== -1) {
         return;
       }
@@ -425,10 +443,7 @@ export const pathFinder = (
       }
 
       const tentativeGScore = fScore[current.id] + estimateDistance(current, neighbor);
-      if (
-        gScore[neighbor.id]
-        && tentativeGScore >= gScore[neighbor.id]
-      ) {
+      if (gScore[neighbor.id] && tentativeGScore >= gScore[neighbor.id]) {
         return;
       }
 
@@ -452,8 +467,10 @@ export const pointFilter = (points: PolyPoint[]): PolyPoint[] => {
     const pre = points[i - 1];
     const current = points[i];
     const next = points[i + 1];
-    if ((pre.x === current.x && current.x === next.x)
-      || (pre.y === current.y && current.y === next.y)) {
+    if (
+      (pre.x === current.x && current.x === next.x)
+      || (pre.y === current.y && current.y === next.y)
+    ) {
       points.splice(i, 1);
     } else {
       i++;
@@ -485,12 +502,8 @@ export const getPolylinePoints = (
   const sMixBBox = mergeBBox(sxBBox, lineBBox);
   const tMixBBox = mergeBBox(txBBox, lineBBox);
   let connectPoints: PolyPoint[] = [];
-  connectPoints = connectPoints.concat(
-    getPointsFromBBox(sMixBBox),
-  );
-  connectPoints = connectPoints.concat(
-    getPointsFromBBox(tMixBBox),
-  );
+  connectPoints = connectPoints.concat(getPointsFromBBox(sMixBBox));
+  connectPoints = connectPoints.concat(getPointsFromBBox(tMixBBox));
   // 中心点
   const centerPoint = {
     x: (start.x + end.x) / 2,
@@ -500,7 +513,7 @@ export const getPolylinePoints = (
   [lineBBox, sMixBBox, tMixBBox].forEach((bbox: PBBox) => {
     connectPoints = connectPoints.concat(
       getBBoxCrossPointsByPoint(bbox, centerPoint).filter(
-        p => isPointOutsideBBox(p, sxBBox) && isPointOutsideBBox(p, txBBox),
+        (p) => isPointOutsideBBox(p, sxBBox) && isPointOutsideBBox(p, txBBox),
       ),
     );
   });
@@ -514,11 +527,8 @@ export const getPolylinePoints = (
       x: tPoint.x,
       y: sPoint.y,
     },
-  ].forEach(p => {
-    if (
-      isPointOutsideBBox(p, sxBBox)
-      && isPointOutsideBBox(p, txBBox)
-    ) {
+  ].forEach((p) => {
+    if (isPointOutsideBBox(p, sxBBox) && isPointOutsideBBox(p, txBBox)) {
       connectPoints.push(p);
     }
   });
@@ -526,7 +536,15 @@ export const getPolylinePoints = (
   connectPoints.push(tPoint);
   connectPoints = filterRepeatPoints(connectPoints);
   // 路径查找-最关键的步骤
-  let pathPoints = pathFinder(connectPoints, sPoint, tPoint, sBBox, tBBox, start, end);
+  let pathPoints = pathFinder(
+    connectPoints,
+    sPoint,
+    tPoint,
+    sBBox,
+    tBBox,
+    start,
+    end,
+  );
   pathPoints.unshift(start);
   pathPoints.push(end);
   // 删除一条直线上的多余节点
@@ -540,7 +558,9 @@ export const getPolylinePoints = (
  * 获取折线中最长的一个线
  * @param pointsList 多个点组成的数组
  */
-export const getLongestEdge = (pointsList: PolyPoint[]): [PolyPoint, PolyPoint] => {
+export const getLongestEdge = (
+  pointsList: PolyPoint[],
+): [PolyPoint, PolyPoint] => {
   let points;
   if (pointsList.length === 1) {
     points = [pointsList[0], pointsList[0]];
@@ -551,7 +571,12 @@ export const getLongestEdge = (pointsList: PolyPoint[]): [PolyPoint, PolyPoint] 
     for (let i = 1; i < pointsList.length - 1; i++) {
       const newPoint1 = pointsList[i];
       const newPoint2 = pointsList[i + 1];
-      const newEdgeLength = distance(newPoint1.x, newPoint1.y, newPoint2.x, newPoint2.y);
+      const newEdgeLength = distance(
+        newPoint1.x,
+        newPoint1.y,
+        newPoint2.x,
+        newPoint2.y,
+      );
       if (newEdgeLength > edgeLength) {
         edgeLength = newEdgeLength;
         point1 = newPoint1;
@@ -564,14 +589,22 @@ export const getLongestEdge = (pointsList: PolyPoint[]): [PolyPoint, PolyPoint] 
 };
 
 /* 线段是否在节点内部， 被包含了 */
-export const isSegmentsInNode = (start: Point, end: Point, node: BaseNode): boolean => {
+export const isSegmentsInNode = (
+  start: Point,
+  end: Point,
+  node: BaseNode,
+): boolean => {
   const startInNode = isInNode(start, node);
   const endInNode = isInNode(end, node);
   return startInNode && endInNode;
 };
 
 /* 线段是否与节点相交 */
-export const isSegmentsCrossNode = (start: Point, end: Point, node: BaseNode): boolean => {
+export const isSegmentsCrossNode = (
+  start: Point,
+  end: Point,
+  node: BaseNode,
+): boolean => {
   const startInNode = isInNode(start, node);
   const endInNode = isInNode(end, node);
   // bothInNode，线段两个端点都在节点内
@@ -583,14 +616,23 @@ export const isSegmentsCrossNode = (start: Point, end: Point, node: BaseNode): b
 };
 
 /* 获取线段在矩形内部的交点
-*/
-export const getCrossPointInRect = (start: Point, end: Point, node: BaseNode): Point => {
+ */
+export const getCrossPointInRect = (
+  start: Point,
+  end: Point,
+  node: BaseNode,
+): Point => {
   let point;
   let crossSegments;
   const nodeBox = getNodeBBox(node);
   const points = getPointsFromBBox(nodeBox);
   for (let i = 0; i < points.length; i++) {
-    const isCross = isSegmentsIntersected(start, end, points[i], points[(i + 1) % points.length]);
+    const isCross = isSegmentsIntersected(
+      start,
+      end,
+      points[i],
+      points[(i + 1) % points.length],
+    );
     if (isCross) {
       crossSegments = [points[i], points[(i + 1) % points.length]];
     }
@@ -614,10 +656,11 @@ export const segmentDirection = (start: Point, end: Point): Direction => {
 export const points2PointsList = (points: string): PolyPoint[] => {
   const currentPositionList = points.split(' ');
   const pointsList = [];
-  currentPositionList && currentPositionList.forEach(item => {
-    const [x, y] = item.split(',');
-    pointsList.push({ x: Number(x), y: Number(y) });
-  });
+  currentPositionList
+    && currentPositionList.forEach((item) => {
+      const [x, y] = item.split(',');
+      pointsList.push({ x: Number(x), y: Number(y) });
+    });
   return pointsList;
 };
 
@@ -676,7 +719,7 @@ export const getBytesLength = (word: string): number => {
   let totalLength = 0;
   for (let i = 0; i < word.length; i++) {
     const c = word.charCodeAt(i);
-    if ((word.match(/[A-Z]/))) {
+    if (word.match(/[A-Z]/)) {
       totalLength += 1.5;
     } else if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
       totalLength += 1;
@@ -707,14 +750,14 @@ export const getTextWidth = (text, font) => {
 };
 
 type AppendAttributesType = {
-  d: string,
-  fill: string,
-  stroke: string,
-  strokeWidth: number,
-  strokeDasharray: string,
+  d: string;
+  fill: string;
+  stroke: string;
+  strokeWidth: number;
+  strokeDasharray: string;
 };
 // 扩大边可点区域，获取边append的信息
-export const getAppendAttributes = (appendInfo) : AppendAttributesType => {
+export const getAppendAttributes = (appendInfo): AppendAttributesType => {
   const { start, end } = appendInfo;
   let d;
   if (start.x === end.x && start.y === end.y) {
@@ -743,8 +786,8 @@ export const getAppendAttributes = (appendInfo) : AppendAttributesType => {
   };
 };
 export type IBezierControls = {
-  sNext: Point,
-  ePre: Point
+  sNext: Point;
+  ePre: Point;
 };
 
 // bezier曲线
@@ -765,10 +808,10 @@ export const getBezierControlPoints = ({
 };
 
 export type IBezierPoints = {
-  start: Point,
-  sNext: Point,
-  ePre: Point,
-  end: Point,
+  start: Point;
+  sNext: Point;
+  ePre: Point;
+  end: Point;
 };
 // 根据bezier曲线path求出Points
 export const getBezierPoints = (path: string): Point[] => {
@@ -790,7 +833,9 @@ const getBezierPoint = (positionStr: string): Point => {
 // 根据bezier曲线path求出结束切线的两点坐标
 export const getEndTangent = (path: string): Point[] => {
   const bezierPoints = getBezierPoints(path);
-  return [bezierPoints[2], bezierPoints[3]];
+  const [p1, cp1, cp2, p2] = bezierPoints;
+  const start = sampleCubic(p1, cp1, cp2, p2);
+  return [start, bezierPoints[3]];
 };
 
 /**
@@ -798,7 +843,10 @@ export const getEndTangent = (path: string): Point[] => {
  * @param point 边上文本的位置
  * @param points 边的各个拐点
  */
-export const getClosestPointOfPolyline = (point: Point, points: string): Point => {
+export const getClosestPointOfPolyline = (
+  point: Point,
+  points: string,
+): Point => {
   const { x, y } = point;
   const pointsPosition = points2PointsList(points);
   let minDistance = Number.MAX_SAFE_INTEGER;
@@ -810,7 +858,7 @@ export const getClosestPointOfPolyline = (point: Point, points: string): Point =
       end: pointsPosition[(i + 1) % pointsPosition.length],
     });
   }
-  segments.forEach(item => {
+  segments.forEach((item) => {
     const { start, end } = item;
     // 若线段垂直，则crossPoint的横坐标与线段一致
     if (start.x === end.x) {
@@ -892,8 +940,12 @@ export const twoPointDistance = (source: Position, target: Position) => {
  */
 export function createEdgeGenerator(graphModel: any, generator?: Function) {
   if (typeof generator !== 'function') {
-    return (sourceNode: any, targetNode: any, currentEdge?: any) => Object.assign({
-      type: graphModel.edgeType }, currentEdge);
+    return (sourceNode: any, targetNode: any, currentEdge?: any) => Object.assign(
+      {
+        type: graphModel.edgeType,
+      },
+      currentEdge,
+    );
   }
   return (sourceNode: any, targetNode: any, currentEdge?: any) => {
     const result = generator(sourceNode, targetNode, currentEdge);

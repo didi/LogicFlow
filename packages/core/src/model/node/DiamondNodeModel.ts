@@ -1,5 +1,5 @@
-import { computed, observable } from 'mobx';
 import { cloneDeep } from 'lodash-es';
+import { computed, observable } from '../../util/mobx';
 import { Point, PointTuple } from '../../type';
 import BaseNodeModel from './BaseNodeModel';
 import { ModelType } from '../../constant/constant';
