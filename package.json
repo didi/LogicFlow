@@ -24,7 +24,8 @@
     "docs:build": "vuepress build docs",
     "watch": "lerna watch -- lerna run build --since --ignore examples",
     "watch:core": "lerna watch --scope @logicflow/core -- lerna run build --scope @logicflow/core",
-    "watch:extension": "lerna watch --scope @logicflow/extension -- lerna run build --scope @logicflow/extension"
+    "watch:extension": "lerna watch --scope @logicflow/extension -- lerna run build --scope @logicflow/extension",
+    "test": "jest"
   },
   "dependencies": {},
   "devDependencies": {

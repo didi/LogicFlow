@@ -1,5 +1,5 @@
 import { getBpmnId } from './bpmnIds';
-import { lfJson2Xml } from './json2xml';
+import { handleAttributes, lfJson2Xml } from './json2xml';
 import { lfXml2Json } from './xml2json';
 
 import {
@@ -73,44 +73,55 @@ const defaultAttrs = [
  * xmlJson中property会以“-”开头
  * 如果没有“-”表示为子节点
  * fix issue https://github.com/didi/LogicFlow/issues/718, contain the process of #text/#cdata and array
+ * @param retainedFields retainedField会和默认的defaultRetainedFields:
+ * ["properties", "startPoint", "endPoint", "pointsList"]合并
+ * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性
  * @reference node type reference https://www.w3schools.com/xml/dom_nodetype.asp
  */
+const defaultRetainedFields = ['properties', 'startPoint', 'endPoint', 'pointsList'];
 
-function toXmlJson(json: string | any[] | Object) {
-  const xmlJson = {};
-  if (typeof json === 'string') {
-    return json;
-  }
-  if (Array.isArray(json)) {
-    return json.map(j => toXmlJson(j));
-  }
-  Object.entries(json).forEach(([key, value]) => {
-    if (typeof value !== 'object') {
-      // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
-      if (key.indexOf('-') === 0 || ['#text', '#cdata-section', '#comment'].includes(key)) {
-        xmlJson[key] = value;
-      } else {
-        xmlJson[`-${key}`] = value;
+function toXmlJson(retainedFields: string[]) {
+  return (json: string | any[] | Object) => {
+    function ToXmlJson(obj: string | any[] | Object) {
+      const xmlJson = {};
+      if (typeof obj === 'string') {
+        return obj;
       }
-    } else {
-      xmlJson[key] = toXmlJson(value);
+      if (Array.isArray(obj)) {
+        return obj.map((j) => ToXmlJson(j));
+      }
+      Object.entries(obj).forEach(([key, value]) => {
+        if (typeof value !== 'object') {
+          // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
+          if (
+            key.indexOf('-') === 0
+            || ['#text', '#cdata-section', '#comment'].includes(key)
+          ) {
+            xmlJson[key] = value;
+          } else {
+            xmlJson[`-${key}`] = value;
+          }
+        } else if (defaultRetainedFields.concat(retainedFields).includes(key)) {
+          xmlJson[`-${key}`] = ToXmlJson(value);
+        } else {
+          xmlJson[key] = ToXmlJson(value);
+        }
+      });
+      return xmlJson;
     }
-  });
-  return xmlJson;
+    return ToXmlJson(json);
+  };
 }
-
 /**
  * 将xmlJson转换为普通的json，在内部使用。
  */
-function toNormalJson(xmlJson: Object) {
+function toNormalJson(xmlJson) {
   const json = {};
   Object.entries(xmlJson).forEach(([key, value]) => {
-    if (typeof value === 'string') {
-      if (key.indexOf('-') === 0) {
-        json[key.substring(1)] = value;
-      } else {
-        json[key] = value;
-      }
+    if (key.indexOf('-') === 0) {
+      json[key.substring(1)] = handleAttributes(value);
+    } else if (typeof value === 'string') {
+      json[key] = value;
     } else if (Object.prototype.toString.call(value) === '[object Object]') {
       json[key] = toNormalJson(value);
     } else if (Array.isArray(value)) {
