@@ -137,9 +137,8 @@ XML.ObjTree.prototype.parseElement = function (elem) {
       var val = elem.attributes[i].nodeValue;
       try {
         val = JSON.parse(elem.attributes[i].nodeValue.replace(/'/g, '"'));
-        console.log(val);
       } catch (error) {
-        var val = elem.attributes[i].nodeValue;
+        val = elem.attributes[i].nodeValue;
       }
       if (!val) continue;
       key = this.attr_prefix + key;
