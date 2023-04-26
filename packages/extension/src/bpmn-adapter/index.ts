@@ -80,7 +80,9 @@ const defaultAttrs = [
  */
 const defaultRetainedFields = ['properties', 'startPoint', 'endPoint', 'pointsList'];
 
-function toXmlJson(retainedFields: string[]) {
+function toXmlJson(retainedFields?: string[]) {
+  const fields = retainedFields
+    ? defaultRetainedFields.concat(retainedFields) : defaultRetainedFields;
   return (json: string | any[] | Object) => {
     function ToXmlJson(obj: string | any[] | Object) {
       const xmlJson = {};
@@ -101,7 +103,7 @@ function toXmlJson(retainedFields: string[]) {
           } else {
             xmlJson[`-${key}`] = value;
           }
-        } else if (defaultRetainedFields.concat(retainedFields).includes(key)) {
+        } else if (fields.includes(key)) {
           xmlJson[`-${key}`] = ToXmlJson(value);
         } else {
           xmlJson[key] = ToXmlJson(value);
@@ -152,7 +154,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       processNode['-name'] = node.text.value;
     }
     if (node.properties) {
-      const properties = toXmlJson(node.properties);
+      const properties = toXmlJson()(node.properties);
       Object.assign(processNode, properties);
     }
     nodeMap.set(node.id, processNode);
@@ -185,7 +187,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       edgeConfig['-name'] = edge.text?.value;
     }
     if (edge.properties) {
-      const properties = toXmlJson(edge.properties);
+      const properties = toXmlJson()(edge.properties);
       Object.assign(edgeConfig, properties);
     }
     return edgeConfig;
