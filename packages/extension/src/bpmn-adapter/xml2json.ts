@@ -106,7 +106,7 @@ XML.ObjTree.prototype.parseDOM = function (root) {
     tmp[root.nodeName] = json;          // root nodeName  
     json = tmp;
   }
-  return json;
+  return json["LogicFlow"];
 };
 
 //  method: parseElement( element )  
@@ -129,16 +129,20 @@ XML.ObjTree.prototype.parseElement = function (elem) {
   var retVal = null;
   var cnt = {};
 
-  //  parse attributes  
   if (elem.attributes && elem.attributes.length) {
     retVal = {};
     for (var i = 0; i < elem.attributes.length; i++) {
       var key = elem.attributes[i].nodeName;
-      if (typeof (key) != "string") continue;
+      if (typeof key != "string") continue;
       var val = elem.attributes[i].nodeValue;
+      try {
+        val = JSON.parse(elem.attributes[i].nodeValue.replace(/'/g, '"'));
+      } catch (error) {
+        val = elem.attributes[i].nodeValue;
+      }
       if (!val) continue;
       key = this.attr_prefix + key;
-      if (typeof (cnt[key]) == "undefined") cnt[key] = 0;
+      if (typeof cnt[key] == "undefined") cnt[key] = 0;
       cnt[key]++;
       this.addNode(retVal, key, cnt[key], val);
     }
