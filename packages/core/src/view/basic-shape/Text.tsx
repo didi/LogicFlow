@@ -97,7 +97,9 @@ function renderHtmlText(props) {
     foreignObjectHeight = textHeight;
   }
   const isEllipsis = overflowMode === 'ellipsis';
-
+  if (isEllipsis) {
+    foreignObjectHeight = fontSize + 2;
+  }
   return (
     <g>
       <foreignObject

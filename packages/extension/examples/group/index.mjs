@@ -10,7 +10,14 @@ const lf = new LogicFlow({
   plugins: [Group, Control, DndPanel, SelectionSelect],
   height: 800
 })
-
+lf.setTheme({
+  nodeText: {
+    color: "#000000",
+    overflowMode: "ellipsis",
+    // lineHeight: 1.2,
+    fontSize: 12,
+  },
+});
 lf.extension.control.addItem({
   iconClass: "custom-minimap",
   title: "",
@@ -35,6 +42,20 @@ class MyGroupModel extends GroupNode.model {
     style.stroke = "#AEAFAE";
     style.strokeWidth = 1;
     return style;
+  }
+  foldGroup(isFolded) {
+    super.isFolded(isFolded)
+    if (isFolded) {
+      this.text = { ...this.foldedText };
+      if (!this.text.value) {
+        this.text.value = "已折叠分组";
+      }
+      this.text.x = this.x + 10;
+      this.text.y = this.y;
+    } else {
+      this.foldedText = { ...this.text };
+      this.text = {};
+    }
   }
   // isAllowAppendIn(nodeData) {
   //   if (nodeData.type === 'rect') {
@@ -77,6 +98,20 @@ class MyGroupModel1 extends GroupNode.model {
     }
     return style;
   }
+  foldGroup(isFolded) {
+    super.foldGroup(isFolded)
+    if (isFolded) {
+      this.text = { ...this.foldedText };
+      if (!this.text.value) {
+        this.text.value = "已折叠分组已折叠分组已折叠分组";
+      }
+      this.text.x = this.x + 10;
+      this.text.y = this.y;
+    } else {
+      this.foldedText = { ...this.text };
+      this.text = {};
+    }
+  }
   // isAllowAppendIn(nodeData) {
   //   return false
   // }
@@ -118,50 +153,53 @@ lf.register({
 
 lf.render({
   nodes: [
-    {
-      type: "my-group",
-      x: 400,
-      y: 400,
-      children: ["rect_2"]
-    },
-    {
-      id: "rect_2",
-      type: "circle",
-      x: 400,
-      y: 400
-    },
-    {
-      id: "rect_3",
-      type: "rect",
-      x: 200,
-      y: 100
-    },
-    {
-      id: "circle_4",
-      type: "circle",
-      x: 800,
-      y: 140
-    },
+    // {
+    //   type: "my-group",
+    //   x: 400,
+    //   y: 400,
+    //   text: 'asdasddas',
+    //   children: ["rect_2"]
+    // },
+    // {
+    //   id: "rect_2",
+    //   type: "circle",
+    //   x: 400,
+    //   y: 400
+    // },
+    // {
+    //   id: "rect_3",
+    //   type: "rect",
+    //   x: 200,
+    //   y: 100
+    // },
+    // {
+    //   id: "circle_4",
+    //   type: "circle",
+    //   x: 800,
+    //   y: 140
+    // },
     {
       id: "group_2",
       type: "sub-process",
       x: 300,
       y: 120,
-      children: ["rect_3"],
+      // children: ["rect_3"],
+      text: 'asdasddas',
       properties: {
         isFolded: true
       }
     },
-    {
-      id: "group_4",
-      type: "sub-process",
-      x: 800,
-      y: 120,
-      children: ["circle_4"],
-      properties: {
-        isFolded: true
-      }
-    }
+    // {
+    //   id: "group_4",
+    //   type: "sub-process",
+    //   x: 800,
+    //   y: 120,
+    //   children: ["circle_4"],
+    //   text: 'asdasddas',
+    //   properties: {
+    //     isFolded: true
+    //   }
+    // }
   ]
 });
 
