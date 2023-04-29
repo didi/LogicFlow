@@ -1,8 +1,9 @@
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const baseWebpackConfig = require('./webpack.config.base.js');
 const TerserJSPlugin = require('terser-webpack-plugin');
+const baseWebpackConfig = require('./webpack.config.base');
+
 const { analyse } = process.env;
 const plugins = [new CaseSensitivePathsPlugin()];
 if (analyse) {
@@ -27,7 +28,7 @@ module.exports = [
       minimize: true,
       minimizer: [
         new TerserJSPlugin({
-          include: /\.min\.js$/,
+          include: /\.js$/, // FIXME: SOURCEMAP会包含本地路径, dev版本先废弃
           extractComments: false,
           terserOptions: {
             compress: {

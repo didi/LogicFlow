@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const baseWebpackConfig = require('./webpack.config.base.js');
+const baseWebpackConfig = require('./webpack.config.base');
 
 // 先不用webpack merge
 module.exports = [
@@ -17,7 +17,7 @@ module.exports = [
       host: '127.0.0.1',
       watchOptions: {
         poll: true,
-      }
+      },
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -29,7 +29,7 @@ module.exports = [
       new ESLintPlugin({
         context: path.resolve(__dirname, '../src'),
         extensions: ['ts', 'tsx'],
-      })
+      }),
     ],
   },
 ];
