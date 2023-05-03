@@ -240,6 +240,15 @@ class GraphModel {
     });
     return elements;
   }
+  @computed get selectNodes() {
+    const nodes = [];
+    this.nodes.forEach(node => {
+      if (node.isSelected) {
+        nodes.push(node);
+      }
+    });
+    return nodes;
+  }
   /**
    * 获取指定区域内的所有元素
    * @param leftTopPoint 表示区域左上角的点
