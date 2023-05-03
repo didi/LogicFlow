@@ -113,7 +113,7 @@ export default class LogicFlow {
   constructor(options: Options.Definition) {
     options = Options.get(options);
     this.options = options;
-    this.container = options.container;
+    this.container = this.initContainer(options.container);
     this.plugins = options.plugins;
     // model 初始化
     this.graphModel = new GraphModel({
@@ -976,6 +976,15 @@ export default class LogicFlow {
     const preExtension = this.extensions.get(pluginName);
     preExtension && preExtension.destroy && preExtension.destroy();
     this.extensions.set(pluginName, extension);
+  }
+  private initContainer(container) {
+    const lfContainer = document.createElement('div');
+    lfContainer.style.position = 'relative';
+    lfContainer.style.width = '100%';
+    lfContainer.style.height = '100%';
+    container.innerHTML = '';
+    container.appendChild(lfContainer);
+    return lfContainer;
   }
   private installPlugins(disabledPlugins = []) {
     // 安装插件，优先使用个性插件
