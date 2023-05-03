@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.3...@logicflow/extension@1.2.5) (2023-05-03)
+
+
+### Bug Fixes
+
+* add xml node type reference, support #comment parsing ([78b04b3](https://github.com/didi/LogicFlow/commit/78b04b38db46f2fd86d383668396c88555bed1b4))
+* add xml node type reference, support #comment parsing ([b2ff0d4](https://github.com/didi/LogicFlow/commit/b2ff0d495c0e7062bd83f8b7cf33eb260e154efa))
+* downgrade jest version to fix the compiling error of yargs types ([cda318d](https://github.com/didi/LogicFlow/commit/cda318d79199bd50b2a5cb2c744cfdb7a81d1fa8))
+* edge insertion node checking rules ([#1078](https://github.com/didi/LogicFlow/issues/1078)) ([e40df4d](https://github.com/didi/LogicFlow/commit/e40df4d7d73e7826fd8fb640b6d20baa02c2f45e))
+* fix a mistake ([aa8eb09](https://github.com/didi/LogicFlow/commit/aa8eb0986537eb424c6a8430bb32d314461299d8))
+* fix bug 571 ([90ba0cf](https://github.com/didi/LogicFlow/commit/90ba0cf5b84d1c15be503ba26ccae23e1a4e1d50))
+* fix bugs in code review ([f0ade3c](https://github.com/didi/LogicFlow/commit/f0ade3c40e8ef773237ef1158a2284538e0440e9))
+* fix bugs in extension/src/bpmn-adapter/index.ts ([b96c882](https://github.com/didi/LogicFlow/commit/b96c882399394d08d0b92403ae521d2300b596c9))
+* fix execution bug in xml ⇄ json ([4551d99](https://github.com/didi/LogicFlow/commit/4551d992e933434cc72aaac7d646a7340f32b11f))
+* fix the bug of cdata-transformation in extension: bpmn-adapter ([d690412](https://github.com/didi/LogicFlow/commit/d6904129489f5ef82321483b4f76b2706c445a54))
+* fix the transformation of xml⇋json in extension: bpmn-adapter ([f7a9421](https://github.com/didi/LogicFlow/commit/f7a9421cf3ddd6c2d4046407e47ee25f581aa540))
+* fix ts's type bug ([93146ae](https://github.com/didi/LogicFlow/commit/93146aeb976ad4a5e849957c971dfefbcf17c44e))
+* folded icon not working when overflowMode is set to ellipsis([#1099](https://github.com/didi/LogicFlow/issues/1099)) ([cc82b6d](https://github.com/didi/LogicFlow/commit/cc82b6d6762e377ba15293e9a59bc50bc584cdf4))
+* observable object cannot appear twice([#837](https://github.com/didi/LogicFlow/issues/837)) ([16f338f](https://github.com/didi/LogicFlow/commit/16f338fe8df7a1cce546f5f5fa07b90864b902f4))
+
+
+
+
+
 ## [1.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.3...@logicflow/extension@1.2.4) (2023-04-10)
 
 

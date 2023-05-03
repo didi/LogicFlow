@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.3...@logicflow/core@1.2.5) (2023-05-03)
+
+
+### Bug Fixes
+
+* add new id to nodesMap in changeNodeId api ([8c4fee6](https://github.com/didi/LogicFlow/commit/8c4fee6751cc9113a27497aeaddc8400cc560c89))
+* can not edit text when delete all text([#1067](https://github.com/didi/LogicFlow/issues/1067)) ([b01e4b9](https://github.com/didi/LogicFlow/commit/b01e4b92d8fd0d8f252c6dd81ca2d590821d591a))
+* destory keyboard events while destoty LogicFlow.([#1110](https://github.com/didi/LogicFlow/issues/1110)) ([98e749c](https://github.com/didi/LogicFlow/commit/98e749c9c7849ea3f046705ac4fcb4b60d251629))
+* fix ts's type bug ([93146ae](https://github.com/didi/LogicFlow/commit/93146aeb976ad4a5e849957c971dfefbcf17c44e))
+* folded icon not working when overflowMode is set to ellipsis([#1099](https://github.com/didi/LogicFlow/issues/1099)) ([cc82b6d](https://github.com/didi/LogicFlow/commit/cc82b6d6762e377ba15293e9a59bc50bc584cdf4))
+* getNodeDataById error handing for incorrect nodeId parameter ([8d74393](https://github.com/didi/LogicFlow/commit/8d74393f6c39bc23c4df29a8d6e69c33afdba26f))
+* isolate mobx ([ff6c24f](https://github.com/didi/LogicFlow/commit/ff6c24ff838bafa5196e9d1046049984d9c120a7))
+* observable object cannot appear twice([#837](https://github.com/didi/LogicFlow/issues/837)) ([16f338f](https://github.com/didi/LogicFlow/commit/16f338fe8df7a1cce546f5f5fa07b90864b902f4))
+* set orient to auto while start point and end point is null ([3d55703](https://github.com/didi/LogicFlow/commit/3d55703ec46e7986e9a9968e65a50849d51d1ff0))
+
+
+### Features
+
+* optimize the local development process ([1e188be](https://github.com/didi/LogicFlow/commit/1e188be57f59bb35ee90740ae5b0a835e29e7d0a))
+* support move selected nodes when disabled multipleSelect.([#894](https://github.com/didi/LogicFlow/issues/894)) ([5a97bcc](https://github.com/didi/LogicFlow/commit/5a97bcc098a15a472b0d63d62c6396cd3f8b05dd))
+* the end marker of cubic bezier curve with light deflection ([cca4040](https://github.com/didi/LogicFlow/commit/cca4040d47b9fd7434308101b7533f428aeb1150))
+* use deepclone instead of json parse([#304](https://github.com/didi/LogicFlow/issues/304)) ([502abde](https://github.com/didi/LogicFlow/commit/502abde9155c692f95e0de9c8e9171806de29701))
+
+
+
+
+
 ## [1.2.4](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.3...@logicflow/core@1.2.4) (2023-04-10)
 
 
