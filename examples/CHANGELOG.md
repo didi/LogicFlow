@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/didi/LogicFlow/compare/examples@1.2.3...examples@1.2.5) (2023-05-03)
+
+
+### Bug Fixes
+
+* edge insertion node checking rules ([#1078](https://github.com/didi/LogicFlow/issues/1078)) ([e40df4d](https://github.com/didi/LogicFlow/commit/e40df4d7d73e7826fd8fb640b6d20baa02c2f45e))
+
+
+### Features
+
+* optimize the local development process ([1e188be](https://github.com/didi/LogicFlow/commit/1e188be57f59bb35ee90740ae5b0a835e29e7d0a))
+
+
+
+
+
 ## [1.2.4](https://github.com/didi/LogicFlow/compare/examples@1.2.3...examples@1.2.4) (2023-04-10)
 
 

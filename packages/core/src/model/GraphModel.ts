@@ -240,6 +240,15 @@ class GraphModel {
     });
     return elements;
   }
+  @computed get selectNodes() {
+    const nodes = [];
+    this.nodes.forEach(node => {
+      if (node.isSelected) {
+        nodes.push(node);
+      }
+    });
+    return nodes;
+  }
   /**
    * 获取指定区域内的所有元素
    * @param leftTopPoint 表示区域左上角的点
@@ -359,30 +368,43 @@ class GraphModel {
     if (!this.width || !this.height) {
       this.resize();
     }
-    this.nodes = map(graphData.nodes, node => {
-      const Model = this.getModel(node.type);
-      if (!Model) {
-        throw new Error(`找不到${node.type}对应的节点。`);
-      }
-      const { x: nodeX, y: nodeY } = node;
-      // 根据 grid 修正节点的 x, y
-      if (nodeX && nodeY) {
-        node.x = snapToGrid(nodeX, this.gridSize);
-        node.y = snapToGrid(nodeY, this.gridSize);
-        if (typeof node.text === 'object') {
-          node.text.x -= getGridOffset(nodeX, this.gridSize);
-          node.text.y -= getGridOffset(nodeY, this.gridSize);
+    if (!graphData) {
+      this.nodes = [];
+      this.edges = [];
+      return;
+    }
+    if (graphData.nodes) {
+      this.nodes = map(graphData.nodes, node => {
+        const Model = this.getModel(node.type);
+        if (!Model) {
+          throw new Error(`找不到${node.type}对应的节点。`);
         }
-      }
-      return new Model(node, this);
-    });
-    this.edges = map(graphData.edges, edge => {
-      const Model = this.getModel(edge.type);
-      if (!Model) {
-        throw new Error(`找不到${edge.type}对应的边。`);
-      }
-      return new Model(edge, this);
-    });
+        const { x: nodeX, y: nodeY } = node;
+        // 根据 grid 修正节点的 x, y
+        if (nodeX && nodeY) {
+          node.x = snapToGrid(nodeX, this.gridSize);
+          node.y = snapToGrid(nodeY, this.gridSize);
+          if (typeof node.text === 'object') {
+            node.text.x -= getGridOffset(nodeX, this.gridSize);
+            node.text.y -= getGridOffset(nodeY, this.gridSize);
+          }
+        }
+        return new Model(node, this);
+      });
+    } else {
+      this.nodes = [];
+    }
+    if (graphData.edges) {
+      this.edges = map(graphData.edges, edge => {
+        const Model = this.getModel(edge.type);
+        if (!Model) {
+          throw new Error(`找不到${edge.type}对应的边。`);
+        }
+        return new Model(edge, this);
+      });
+    } else {
+      this.edges = [];
+    }
   }
   /**
    * 获取画布数据

@@ -147,6 +147,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         autoExpand,
       },
       transformModel,
+      selectNodes,
       width,
       height,
       gridSize,
@@ -200,20 +201,21 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
+    let moveNodes = selectNodes.map(node => node.id);
+    // 未被选中的节点也可以拖动
+    if (moveNodes.indexOf(model.id) === -1) {
+      moveNodes = [model.id];
+    }
     if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary;
         transformModel.translate(translateX, translateY);
-        graphModel.moveNode(
-          model.id, -translateX / transformModel.SCALE_X, -translateY / transformModel.SCALE_X,
-        );
+        const deltaX = -translateX / transformModel.SCALE_X;
+        const deltaY = -translateY / transformModel.SCALE_X;
+        graphModel.moveNodes(moveNodes, deltaX, deltaY);
       });
     } else {
-      graphModel.moveNode2Coordinate(
-        model.id,
-        x,
-        y,
-      );
+      graphModel.moveNodes(moveNodes, x - model.x, y - model.y);
     }
   };
   onDragEnd = () => {
