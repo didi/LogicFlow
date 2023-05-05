@@ -480,7 +480,7 @@ class BpmnAdapter {
   };
   constructor({ lf }) {
     lf.adapterIn = (data) => this.adapterIn(data);
-    lf.adapterOut = (data) => this.adapterOut(data);
+    lf.adapterOut = (data, retainedFields?: string[]) => this.adapterOut(data, retainedFields);
     this.processAttributes = {
       '-isExecutable': 'true',
       '-id': `Process_${getBpmnId()}`,
@@ -559,8 +559,8 @@ class BpmnXmlAdapter extends BpmnAdapter {
     const json = lfXml2Json(bpmnData);
     return this.adapterIn(json);
   };
-  adapterXmlOut = (data) => {
-    const outData = this.adapterOut(data);
+  adapterXmlOut = (data, retainedFields?: string[]) => {
+    const outData = this.adapterOut(data, retainedFields);
     return lfJson2Xml(outData);
   };
 }
