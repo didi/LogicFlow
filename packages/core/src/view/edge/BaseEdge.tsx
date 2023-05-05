@@ -15,7 +15,7 @@ import { getClosestPointOfPolyline } from '../../util/edge';
 import AdjustPoint from './AdjustPoint';
 import { isMultipleSelect } from '../../util/graph';
 import Circle from '../basic-shape/Circle';
-import { degrees, getTangentOfVector } from '../../util/sampling';
+import { degrees, getThetaOfVector } from '../../util/sampling';
 
 type IProps = {
   model: BaseEdgeModel;
@@ -99,7 +99,7 @@ export default class BaseEdge extends Component<IProps> {
     let theta: string | number = 'auto';
     if (start !== null && end !== null) {
       theta = degrees(
-        getTangentOfVector({
+        getThetaOfVector({
           x: end.x - start.x,
           y: end.y - start.y,
           z: 0,

@@ -105,7 +105,7 @@ export default class LogicFlow {
    * 详情请参考adapter
    * @see todo
    */
-  adapterOut: (data: GraphConfigData) => unknown;
+  adapterOut: (data: GraphConfigData, ...rest: any) => unknown;
   /**
    * 支持插件在logicflow实例上增加自定义方法
    */
@@ -756,10 +756,10 @@ export default class LogicFlow {
    * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
    * 如果实现通用插件，请使用getGraphRawData
    */
-  getGraphData(): GraphConfigData | any {
+  getGraphData(...params: any): GraphConfigData | any {
     const data = this.graphModel.modelToGraphData();
     if (this.adapterOut) {
-      return this.adapterOut(data as GraphConfigData);
+      return this.adapterOut(data as GraphConfigData, ...params);
     }
     return data;
   }
