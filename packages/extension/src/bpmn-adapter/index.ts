@@ -143,8 +143,11 @@ function toNormalJson(xmlJson) {
  * 1) 如果是xml的属性，json中属性用'-'开头
  * 2）如果只有一个子元素，json中表示为正常属性
  * 3）如果是多个子元素，json中使用数组存储
+ * @param retainedFields?: string[] (可选)属性保留字段，retainedField会和默认的defaultRetainedFields:
+ * ["properties", "startPoint", "endPoint", "pointsList"]合并，
+ * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性。
  */
-function convertLf2ProcessData(bpmnProcessData, data) {
+function convertLf2ProcessData(bpmnProcessData, data, retainedFields?: string[]) {
   const nodeMap = new Map();
   data.nodes.forEach((node: NodeConfig) => {
     const processNode = {
@@ -154,7 +157,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       processNode['-name'] = node.text.value;
     }
     if (node.properties) {
-      const properties = toXmlJson()(node.properties);
+      const properties = toXmlJson(retainedFields)(node.properties);
       Object.assign(processNode, properties);
     }
     nodeMap.set(node.id, processNode);
@@ -187,7 +190,7 @@ function convertLf2ProcessData(bpmnProcessData, data) {
       edgeConfig['-name'] = edge.text?.value;
     }
     if (edge.properties) {
-      const properties = toXmlJson()(edge.properties);
+      const properties = toXmlJson(retainedFields)(edge.properties);
       Object.assign(edgeConfig, properties);
     }
     return edgeConfig;
@@ -497,9 +500,9 @@ class BpmnAdapter {
   setCustomShape(key, val) {
     BpmnAdapter.shapeConfigMap.set(key, val);
   }
-  adapterOut = (data) => {
+  adapterOut = (data, retainedFields?: string[]) => {
     const bpmnProcessData = { ...this.processAttributes };
-    convertLf2ProcessData(bpmnProcessData, data);
+    convertLf2ProcessData(bpmnProcessData, data, retainedFields);
     const bpmnDiagramData = {
       '-id': 'BPMNPlane_1',
       '-bpmnElement': bpmnProcessData['-id'],

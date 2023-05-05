@@ -55,7 +55,7 @@ function normalize(v: Vector): Vector {
   };
 }
 
-export function getTangentOfVector(v: Vector) {
+export function getThetaOfVector(v: Vector) {
   return angle(normal, v);
 }
 
