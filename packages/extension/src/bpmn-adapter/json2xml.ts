@@ -73,7 +73,7 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
         attributes +
         (children !== "" ? `>${children}${tn + frontSpace}</${name}>` : " />");
     } else {
-      str += tn + frontSpace + `<$${name}>${obj.toString()}</${name}>`;
+      str += tn + frontSpace + `<${name}>${obj.toString()}</${name}>`;
     }
   }
 
