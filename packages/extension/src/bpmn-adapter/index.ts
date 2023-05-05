@@ -143,9 +143,6 @@ function toNormalJson(xmlJson) {
  * 1) 如果是xml的属性，json中属性用'-'开头
  * 2）如果只有一个子元素，json中表示为正常属性
  * 3）如果是多个子元素，json中使用数组存储
- * @param retainedFields?: string[] (可选)属性保留字段，retainedField会和默认的defaultRetainedFields:
- * ["properties", "startPoint", "endPoint", "pointsList"]合并，
- * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性。
  */
 function convertLf2ProcessData(bpmnProcessData, data, retainedFields?: string[]) {
   const nodeMap = new Map();
@@ -500,6 +497,11 @@ class BpmnAdapter {
   setCustomShape(key, val) {
     BpmnAdapter.shapeConfigMap.set(key, val);
   }
+  /**
+   * @param retainedFields?: string[] (可选)属性保留字段，retainedField会和默认的defaultRetainedFields:
+   * ["properties", "startPoint", "endPoint", "pointsList"]合并，
+   * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性。
+   */
   adapterOut = (data, retainedFields?: string[]) => {
     const bpmnProcessData = { ...this.processAttributes };
     convertLf2ProcessData(bpmnProcessData, data, retainedFields);
