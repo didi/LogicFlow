@@ -114,6 +114,10 @@ class InsertNodeInPolyline {
           sourceAnchorId,
           targetAnchorId,
         } = edges[i];
+          // fix https://github.com/didi/LogicFlow/issues/996
+        const startPoint = cloneDeep(pointsList[0]);
+        const endPoint = cloneDeep(crossPoints.startCrossPoint);
+        this._lf.deleteEdge(id);
         const checkResult = this.checkRuleBeforeInsetNode(
           sourceNodeId,
           targetNodeId,
@@ -121,35 +125,29 @@ class InsertNodeInPolyline {
           targetAnchorId,
           nodeData,
         );
-        if (checkResult.isPass) {
-          // fix https://github.com/didi/LogicFlow/issues/996
-          const startPoint = cloneDeep(pointsList[0]);
-          const endPoint = cloneDeep(crossPoints.startCrossPoint);
-          this._lf.addEdge({
-            type,
-            sourceNodeId,
-            targetNodeId: nodeData.id,
-            startPoint,
-            endPoint,
-            pointsList: [
-              ...pointsList.slice(0, crossIndex),
-              crossPoints.startCrossPoint,
-            ],
-          });
-          this._lf.addEdge({
-            type,
-            sourceNodeId: nodeData.id,
-            targetNodeId,
-            startPoint: cloneDeep(crossPoints.endCrossPoint),
-            endPoint: cloneDeep(pointsList[pointsList.length - 1]),
-            pointsList: [
-              crossPoints.endCrossPoint,
-              ...pointsList.slice(crossIndex),
-            ],
-          });
-          this._lf.deleteEdge(id);
-          break;
-        } else {
+        this._lf.addEdge({
+          type,
+          sourceNodeId,
+          targetNodeId: nodeData.id,
+          startPoint,
+          endPoint,
+          pointsList: [
+            ...pointsList.slice(0, crossIndex),
+            crossPoints.startCrossPoint,
+          ],
+        });
+        this._lf.addEdge({
+          type,
+          sourceNodeId: nodeData.id,
+          targetNodeId,
+          startPoint: cloneDeep(crossPoints.endCrossPoint),
+          endPoint: cloneDeep(pointsList[pointsList.length - 1]),
+          pointsList: [
+            crossPoints.endCrossPoint,
+            ...pointsList.slice(crossIndex),
+          ],
+        });
+        if (!checkResult.isPass) {
           this._lf.graphModel.eventCenter.emit(
             EventType.CONNECTION_NOT_ALLOWED,
             {
@@ -157,6 +155,12 @@ class InsertNodeInPolyline {
               msg: checkResult.targetMsg || checkResult.sourceMsg,
             },
           );
+          const timer = setTimeout(() => {
+            this._lf.undo();
+            clearTimeout(timer);
+          }, 200);
+          break;
+        } else {
           break;
         }
       }

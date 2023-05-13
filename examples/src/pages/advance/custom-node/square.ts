@@ -17,14 +17,35 @@ class Model extends RectNodeModel {
       },
     };
 
+    const edgeRuleAsTarget = {
+      message: '节点上只能一个边',
+      validate: (sourceNode: any, targetNode: any) => {
+        const { graphModel } = targetNode;
+        const edges = graphModel.getNodeEdges(targetNode.id);
+        console.log(edges, 'edges');
+
+        return edges.length < 1;
+      }
+    }
+
+    const edgeRuleAsSource = {
+      message: '节点上只能一个边',
+      validate: (sourceNode: any, targetNode: any) => {
+        const { graphModel } = sourceNode;
+        const edges = graphModel.getNodeEdges(sourceNode.id);
+        console.log(edges, 'edges');
+        return edges.length < 1;
+      }
+    }
+
     this.width = size;
     this.height = size;
     this.anchorsOffset = [
       [size / 2, 0],
       [-size / 2, 0],
     ];
-    this.sourceRules.push(circleOnlyAsTarget);
-    this.targetRules.push(circleOnlyAsSource);
+    this.sourceRules.push(circleOnlyAsTarget, edgeRuleAsSource);
+    this.targetRules.push(circleOnlyAsSource, edgeRuleAsTarget);
 
   }
 }
