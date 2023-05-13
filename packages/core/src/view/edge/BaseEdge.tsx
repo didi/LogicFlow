@@ -280,7 +280,7 @@ export default class BaseEdge extends Component<IProps> {
       model: { isHovered },
     } = this.props;
     if (isHovered) return;
-    this.textRef && this.textRef.current.setHoverON();
+    this.textRef && this.textRef.current && this.textRef.current.setHoverON();
     this.handleHover(true, ev);
   };
   /**
@@ -291,7 +291,7 @@ export default class BaseEdge extends Component<IProps> {
       model: { isHovered },
     } = this.props;
     if (!isHovered) return;
-    this.textRef && this.textRef.current.setHoverOFF();
+    this.textRef && this.textRef.current && this.textRef.current.setHoverOFF();
     this.handleHover(false, ev);
   };
   /**

@@ -155,9 +155,9 @@ class InsertNodeInPolyline {
               msg: checkResult.targetMsg || checkResult.sourceMsg,
             },
           );
-          const timer = setTimeout(() => {
+          // FIXME:在关闭了历史记录的情况下，撤销操作会不生效。
+          setTimeout(() => {
             this._lf.undo();
-            clearTimeout(timer);
           }, 200);
           break;
         } else {
