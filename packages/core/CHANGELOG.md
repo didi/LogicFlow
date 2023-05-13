@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.5...@logicflow/core@1.2.6) (2023-05-13)
+
+
+### Bug Fixes
+
+* add input of convertLf2ProcessData ([a13ef07](https://github.com/didi/LogicFlow/commit/a13ef07023d7dc72f901193596de1a0e6332f376))
+* add optional input of adpaterOut in class LogicFlow ([ff0f23e](https://github.com/didi/LogicFlow/commit/ff0f23edeef5436bad1e16cceb2c7c0698be3e06))
+* keep use JSON.parse format input data.([#1153](https://github.com/didi/LogicFlow/issues/1153)) ([684a581](https://github.com/didi/LogicFlow/commit/684a5812eddc0c108a2f5c88ea971889f9371e22))
+* 处理没有文本鼠标hover报错的问题 ([7b174f8](https://github.com/didi/LogicFlow/commit/7b174f8d717ff6077572e3527cb50348bed1f93d))
+
+
+### Features
+
+* support undefined as render param ([3577a15](https://github.com/didi/LogicFlow/commit/3577a15c109f4637dd2c8d4b6a35a155dc092fea))
+
+
+
+
+
 ## [1.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.3...@logicflow/core@1.2.5) (2023-05-03)
 
 

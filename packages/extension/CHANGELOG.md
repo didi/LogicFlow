@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.5...@logicflow/extension@1.2.6) (2023-05-13)
+
+
+### Bug Fixes
+
+* add input of convertLf2ProcessData ([a13ef07](https://github.com/didi/LogicFlow/commit/a13ef07023d7dc72f901193596de1a0e6332f376))
+* add optional input in BpmnAdapter ([d88d290](https://github.com/didi/LogicFlow/commit/d88d290a5ac79dfc89401554a23ef46d82cc77a0))
+* add optional input of adpaterOut in class LogicFlow ([ff0f23e](https://github.com/didi/LogicFlow/commit/ff0f23edeef5436bad1e16cceb2c7c0698be3e06))
+* remove extra $ in json2xml.ts ([9c04d85](https://github.com/didi/LogicFlow/commit/9c04d85869c4861e7c3171e0ccce7301bd435c24))
+* 修复边上插入节点的规则问题 ([a7e577e](https://github.com/didi/LogicFlow/commit/a7e577e0ba25a68c1b1987440af4545576eb2183))
+* 处理没有文本鼠标hover报错的问题 ([7b174f8](https://github.com/didi/LogicFlow/commit/7b174f8d717ff6077572e3527cb50348bed1f93d))
+
+
+
+
+
 ## [1.2.5](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.3...@logicflow/extension@1.2.5) (2023-05-03)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/didi/LogicFlow/compare/examples@1.2.5...examples@1.2.6) (2023-05-13)
+
+
+### Bug Fixes
+
+* 修复边上插入节点的规则问题 ([a7e577e](https://github.com/didi/LogicFlow/commit/a7e577e0ba25a68c1b1987440af4545576eb2183))
+
+
+
+
+
 ## [1.2.5](https://github.com/didi/LogicFlow/compare/examples@1.2.3...examples@1.2.5) (2023-05-03)
 
 
