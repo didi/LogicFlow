@@ -81,11 +81,11 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
 }
 
 function lfJson2Xml(o: Object) {
-  let xmlStr = "<LogicFlow>\t\n";
+  let xmlStr = "";
   for (var m in o) {
     xmlStr += toXml(o[m], m, 0);
   }
-  return xmlStr + "\t\n</LogicFlow>";
+  return xmlStr;
 }
 
 export { lfJson2Xml, handleAttributes };
