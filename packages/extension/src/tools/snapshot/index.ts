@@ -153,13 +153,13 @@ class Snapshot {
       .getBoundingClientRect();
     const offsetX = bbox.x - layout.x;
     const offsetY = bbox.y - layout.y;
-    // offset值加10，保证图形不会紧贴着下载图片的左边和上边
-    (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${
-      -offsetX + 10
-    }, ${-offsetY + 10})`;
     const { graphModel } = this.lf;
     const { transformModel } = graphModel;
-    const { SCALE_X, SCALE_Y } = transformModel;
+    const { SCALE_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } = transformModel;
+    // offset值加10，保证图形不会紧贴着下载图片的左边和上边
+    (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${
+      -offsetX + 10 + TRANSLATE_X
+    }, ${-offsetY + 10 + TRANSLATE_Y})`;
     const bboxWidth = Math.ceil(bbox.width / SCALE_X);
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y);
     // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边
