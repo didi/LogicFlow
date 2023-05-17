@@ -133,8 +133,6 @@ class MiniMap {
     miniMapWrap.style.width = `${this.width + 4}px`;
     miniMapWrap.style.height = `${this.height}px`;
     this.lfMap = new this.LogicFlow({
-      width: this.lf.graphModel.width,
-      height: (this.lf.graphModel.width * this.height) / this.width,
       container: miniMapWrap,
       isSilentMode: true,
       stopZoomGraph: true,
