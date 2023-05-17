@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.7](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.6...@logicflow/extension@1.2.7) (2023-05-17)
+
+
+### Bug Fixes
+
+* add dragging translation to offset while getting snapshot ([e2fe1fe](https://github.com/didi/LogicFlow/commit/e2fe1fe91fa70ae676389a3d137963c9b129e9d7))
+* fix bad case about bezier line in snapshot output.didi[#1147](https://github.com/didi/LogicFlow/issues/1147) ([7923619](https://github.com/didi/LogicFlow/commit/792361993ea954635895c4879edece7d90d86f8f))
+* remove extra content in bpmnAdapter output ([865a1c6](https://github.com/didi/LogicFlow/commit/865a1c62da10586280b0165410d833f4bf154c3a))
+* remove extra content in bpmnAdapter output(didi[#1155](https://github.com/didi/LogicFlow/issues/1155)) ([57a6750](https://github.com/didi/LogicFlow/commit/57a67500219e95c95b0a662edff277df347f1c6e))
+* remove extra content in bpmnAdapter output(issue[#1155](https://github.com/didi/LogicFlow/issues/1155)) ([f76064e](https://github.com/didi/LogicFlow/commit/f76064e079a10904ca7aeeb860e19df96a34021f))
+* resolve issue with incomplete display of minimap ([08a2c51](https://github.com/didi/LogicFlow/commit/08a2c51f8a08df6d767fa78a9fbba044dd1179ca))
+
+
+
+
+
 ## [1.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.5...@logicflow/extension@1.2.6) (2023-05-13)
 
 
