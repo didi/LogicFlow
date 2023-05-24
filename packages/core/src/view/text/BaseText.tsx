@@ -26,7 +26,6 @@ export default class BaseText extends Component<IProps, IState> {
     this.stepDrag = new StepDrag({
       onDragging: this.onDragging,
       step: 1,
-      model,
       isStopPropagation: draggable,
     });
   }
@@ -74,11 +73,13 @@ export default class BaseText extends Component<IProps, IState> {
   mouseDownHandle = (ev: MouseEvent) => {
     const {
       draggable,
+      model,
       graphModel: {
         editConfigModel: { nodeTextDraggable },
       },
     } = this.props;
     if (draggable || nodeTextDraggable) {
+      this.stepDrag.model = model;
       this.stepDrag.handleMouseDown(ev);
     }
   };
