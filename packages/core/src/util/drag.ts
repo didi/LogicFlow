@@ -1,8 +1,9 @@
 import { noop } from 'lodash-es';
 import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
-import BaseEdgeModel from '../model/edge/BaseEdgeModel';
-import BaseNodeModel from '../model/node/BaseNodeModel';
+import { IBaseModel } from '../model';
+// import BaseEdgeModel from '../model/edge/BaseEdgeModel';
+// import BaseNodeModel from '../model/node/BaseNodeModel';
 // import { snapToGrid } from './geometry';
 
 const DOC = window.document;
@@ -82,7 +83,7 @@ class StepDrag {
   sumDeltaY = 0;
   eventType: string;
   eventCenter: EventEmitter | null;
-  model?: BaseNodeModel | BaseEdgeModel;
+  model?: IBaseModel;
   data?: object;
   startTime?: number;
   constructor({

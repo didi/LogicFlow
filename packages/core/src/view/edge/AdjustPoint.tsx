@@ -221,13 +221,14 @@ export default class AdjustPoint extends Component<IProps, IState> {
       if (!needRecoveryEdge) {
         // 为了保证id不变必须要先删除老边，再创建新边，创建新边是会判断是否有重复的id
         // 删除老边
+        const oldEdgeData = edgeModel.getData();
         graphModel.deleteEdgeById(edgeModel.id);
         // 创建新边
         const edge = graphModel.addEdge({ ...createEdgeInfo });
         // 向外抛出事件
         graphModel.eventCenter.emit(
           EventType.EDGE_EXCHANGE_NODE,
-          { data: { newEdge: edge.getData(), oldEdge: edgeModel.getData() } },
+          { data: { newEdge: edge.getData(), oldEdge: oldEdgeData } },
         );
       } else {
         // 如果没有找到目标节点或者没有通过校验，还原边

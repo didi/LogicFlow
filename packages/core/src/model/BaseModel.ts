@@ -104,6 +104,7 @@ interface IBaseModel {
   updateAttributes(attributes: Object): void;
 
   getTextStyle(): Record<string, any>;
+  getData(): Record<string, any>;
 }
 
 export {
