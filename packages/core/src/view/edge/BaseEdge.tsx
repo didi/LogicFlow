@@ -151,12 +151,7 @@ export default class BaseEdge extends Component<IProps> {
     const { model } = this.props;
     const { stroke, strokeWidth, offset, verticalLength } = model.getArrowStyle();
     return (
-      <path
-        stroke={stroke}
-        fill={stroke}
-        strokeWidth={strokeWidth}
-        d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`}
-      />
+      <path />
     );
   }
   /**

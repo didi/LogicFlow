@@ -12,9 +12,7 @@ import {
   EdgeConfig,
   ShapeStyleAttribute,
 } from '../../type/index';
-import {
-  ModelType, ElementType, OverlapMode,
-} from '../../constant/constant';
+import { ModelType, ElementType, OverlapMode } from '../../constant/constant';
 import { ArrowTheme, OutlineTheme } from '../../constant/DefaultTheme';
 import { defaultAnimationData } from '../../constant/DefaultAnimation';
 import { formatData } from '../../util/compatible';
@@ -59,11 +57,11 @@ class BaseEdgeModel implements IBaseModel {
   targetAnchorId = '';
   menu?: MenuConfig[];
   customTextPosition = false; // 是否自定义边文本位置
-  @observable style: ShapeStyleAttribute = { }; // 每条边自己的样式，动态修改
+  @observable style: ShapeStyleAttribute = {}; // 每条边自己的样式，动态修改
   // TODO: 每个边独立生成一个marker没必要
   @observable arrowConfig = {
     markerEnd: `url(#marker-end-${this.id})`,
-    markerStart: '',
+    markerStart: `url(#marker-start-${this.id})`,
   }; // 箭头属性
   [propName: string]: any; // 支持自定义
 
@@ -92,7 +90,10 @@ class BaseEdgeModel implements IBaseModel {
       data.id = nodeId || globalId || createUuid();
     }
     this.arrowConfig.markerEnd = `url(#marker-end-${data.id})`;
-    const { editConfigModel: { adjustEdgeStartAndEnd } } = this.graphModel;
+    this.arrowConfig.markerStart = `url(#marker-start-${data.id})`;
+    const {
+      editConfigModel: { adjustEdgeStartAndEnd },
+    } = this.graphModel;
     this.isShowAdjustPoint = adjustEdgeStartAndEnd;
     assign(this, pickEdgeConfig(data));
     const { overlapMode } = this.graphModel;
@@ -112,7 +113,7 @@ class BaseEdgeModel implements IBaseModel {
    * @overridable 支持重写
    * 每次properties发生变化会触发
    */
-  setAttributes() { }
+  setAttributes() {}
   createId(): string {
     return null;
   }
@@ -181,7 +182,9 @@ class BaseEdgeModel implements IBaseModel {
     const edgeStyle = this.getEdgeStyle();
     const edgeAnimationStyle = this.getEdgeAnimationStyle();
     const { arrow } = this.graphModel.theme;
-    const stroke = this.isAnimation ? edgeAnimationStyle.stroke : edgeStyle.stroke;
+    const stroke = this.isAnimation
+      ? edgeAnimationStyle.stroke
+      : edgeStyle.stroke;
     return {
       ...edgeStyle,
       fill: stroke,
@@ -437,13 +440,7 @@ class BaseEdgeModel implements IBaseModel {
    */
   @action moveText(deltaX: number, deltaY: number): void {
     if (this.text) {
-      const {
-        x,
-        y,
-        value,
-        draggable,
-        editable,
-      } = this.text;
+      const { x, y, value, draggable, editable } = this.text;
       this.text = {
         value,
         draggable,
