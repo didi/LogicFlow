@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.6...@logicflow/core@1.2.8) (2023-05-30)
+
+
+### Bug Fixes
+
+* adjust edge cause text error when delete connected node ([9e0ac91](https://github.com/didi/LogicFlow/commit/9e0ac916ff0e932d7a03b3ca165a76c49453926a))
+* fix the issue of getStartArrow not working.(didi[#1167](https://github.com/didi/LogicFlow/issues/1167)) ([691ed40](https://github.com/didi/LogicFlow/commit/691ed40465d3e3a0dfedc06064dd8df6f7c03e06))
+* node:dnd-add event throwing parameter add mouse:event([#1170](https://github.com/didi/LogicFlow/issues/1170)) ([0b9f22d](https://github.com/didi/LogicFlow/commit/0b9f22d67a43eb396bb7a2ce0e0d04d2a44cb05f))
+* remove unnecessary code ([e819c62](https://github.com/didi/LogicFlow/commit/e819c62628d361ed8be13f28755ce5122d2f7d3d))
+
+
+
+
+
 ## [1.2.6](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.5...@logicflow/core@1.2.6) (2023-05-13)
 
 
