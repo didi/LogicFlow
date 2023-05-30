@@ -779,12 +779,12 @@
         lf.on('anchor:dragend',(data) => {
           console.log('anchor:dragend', data)
         })
-        // lf.on('node:mousemove',()=> {
-        //   // console.log('nodemove')
-        // })
-        // lf.on('node:mousedown', () => {
-        //   console.log('nodemousedown')
-        // })
+        lf.on('node:dnd-add',(data)=> {
+          console.log('node:dnd-add', data)
+        })
+        lf.on('node:add', (data) => {
+          console.log('node:add', data)
+        })
         // lf.on('node:mouseenter', () => {
         //   console.log('node:mouseenter')
         // })

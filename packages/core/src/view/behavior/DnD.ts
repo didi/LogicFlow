@@ -64,14 +64,14 @@ export default class Dnd {
       this.fakerNode = null;
     }
   };
-  onDrop = (e) => {
+  onDrop = (e: MouseEvent) => {
     if (!this.lf.graphModel || !e || !this.nodeConfig) {
       return;
     }
     this.lf.addNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({ x: e.clientX, y: e.clientY }),
-    }, EventType.NODE_DND_ADD);
+    }, EventType.NODE_DND_ADD, e);
     e.preventDefault();
     e.stopPropagation();
     this.nodeConfig = null;

@@ -666,10 +666,10 @@ class GraphModel {
   /**
    * 添加节点
    * @param nodeConfig 节点配置
-   * @param eventType 新增节点事件类型，默认EventType.NODE_ADD
+   * @param eventType 新增节点事件类型，默认EventType.NODE_ADD, 在Dnd拖拽时，会传入EventType.NODE_DND_ADD
    */
   @action
-  addNode(nodeConfig: NodeConfig, eventType: EventType = EventType.NODE_ADD) {
+  addNode(nodeConfig: NodeConfig, eventType: EventType = EventType.NODE_ADD, event?: MouseEvent) {
     const nodeOriginData = formatData(nodeConfig);
     // 添加节点的时候，如果这个节点Id已经存在，则采用新的id
     if (nodeOriginData.id && this.nodesMap[nodeConfig.id]) {
@@ -684,7 +684,11 @@ class GraphModel {
     const nodeModel = new Model(nodeOriginData, this);
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();
-    this.eventCenter.emit(eventType, { data: nodeData });
+    const eventData: Record<string, any> = { data: nodeData };
+    if (event) {
+      eventData.e = event;
+    }
+    this.eventCenter.emit(eventType, eventData);
     return nodeModel;
   }
 
