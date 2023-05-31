@@ -26,6 +26,7 @@ import { formatData } from '../../util/compatible';
 import { getClosestAnchor, pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 import { BaseEdgeModel } from '../edge';
+import { AdjustType } from '../../view/edge/AdjustPoint';
 
 export type ConnectRule = {
   message: string;
@@ -437,7 +438,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
    * @overridable 子类重写此方法获取手动连接边到节点时，需要连接的锚点
    * 手动连接边到节点时，需要连接的锚点
    */
-  public getTargetAnchor(position: Point): AnchorInfo {
+  public getTargetAnchor(position: Point, type: AdjustType): AnchorInfo {
     return getClosestAnchor(position, this);
   }
 
