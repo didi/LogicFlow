@@ -17,7 +17,7 @@ export default class LineText extends BaseText {
   getBackground() {
     const model = this.props.model as BaseEdgeModel;
     const style = model.getTextStyle();
-    const { text } = model;
+    const {text, width: modelWidth} = model;
     let backgroundStyle = style.background || {};
     const { isHovered } = this.state;
     if (isHovered && style.hover && style.hover.background) {
@@ -61,6 +61,18 @@ export default class LineText extends BaseText {
         // 背景框宽度，最长一行字节数/2 * fontsize + 2
         // 背景框宽度， 行数 * fontsize + 2
         let { width, height } = getSvgTextWidthHeight({ rows, fontSize, rowsLength });
+
+        if (overflowMode === "ellipsis") {
+          // https://github.com/didi/LogicFlow/issues/1151
+          // 边上的文字过长（使用"ellipsis"模式）出现省略号，背景也需要进行宽度的重新计算
+
+          // 跟Text.tsx保持同样的计算逻辑(overflowMode === 'ellipsis')
+          // Text.tsx使用textRealWidth=textWidth || width
+          // Text.tsx使用foreignObjectHeight = fontSize + 2;
+          width = textWidth || modelWidth;
+          height = fontSize + 2;
+        }
+
         // 根据设置的padding调整width, height, x, y的值
         if (typeof backgroundStyle.wrapPadding === 'string') {
           let paddings = backgroundStyle.wrapPadding.split(',')
