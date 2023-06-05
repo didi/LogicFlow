@@ -147,7 +147,10 @@ export default class EditConfigModel {
       assign(conf, this.defaultConfig);
     }
     // 如果不传，默认undefined表示非静默模式
-    if (isSilentMode === true) {
+    if (isSilentMode === true && isSilentMode !== this.isSilentMode) {
+      // https://github.com/didi/LogicFlow/issues/1180
+      // 如果重复调用isSilentMode=true多次，会导致this.defaultConfig状态保存错误：保存为修改之后的Config
+      // 因此需要阻止重复赋值为true，使用config.isSilentMode !== this.isSilentMode
       const silentConfig = pick(SilentConfig, keys);
       // 在修改之前，
       this.defaultConfig = {
