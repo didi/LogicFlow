@@ -108,19 +108,25 @@ export const pointDirection = (point: PolyPoint, bbox: PBBox): Direction => {
 
 /* 获取扩展图形上的点，即起始终点相邻的点，上一个或者下一个节点 */
 export const getExpandedBBoxPoint = (
+  expendBBox: PBBox,
   bbox: PBBox,
   point: PolyPoint,
 ): PolyPoint => {
+  // https://github.com/didi/LogicFlow/issues/817
+  // 没有修复前传入的参数bbox实际是expendBBox
+  // 由于pointDirection使用的是dx / bbox.width > dy / bbox.height判定方向
+  // 此时的bbox.width是增加了offset后的宽度，bbox.height同理
+  // 这导致了部分极端情况(宽度很大或者高度很小)，计算出来的方向错误
   const direction = pointDirection(point, bbox);
   if (direction === SegmentDirection.HORIZONTAL) {
     return {
-      x: point.x > bbox.centerX ? bbox.maxX : bbox.minX,
+      x: point.x > expendBBox.centerX ? expendBBox.maxX : expendBBox.minX,
       y: point.y,
     };
   }
   return {
     x: point.x,
-    y: point.y > bbox.centerY ? bbox.maxY : bbox.minY,
+    y: point.y > expendBBox.centerY ? expendBBox.maxY : expendBBox.minY,
   };
 };
 
@@ -491,8 +497,8 @@ export const getPolylinePoints = (
   const tBBox = getBoxByOriginNode(tNode);
   const sxBBox = getExpandedBBox(sBBox, offset);
   const txBBox = getExpandedBBox(tBBox, offset);
-  const sPoint = getExpandedBBoxPoint(sxBBox, start);
-  const tPoint = getExpandedBBoxPoint(txBBox, end);
+  const sPoint = getExpandedBBoxPoint(sxBBox, sBBox, start);
+  const tPoint = getExpandedBBoxPoint(txBBox, tBBox, end);
   // 当加上offset后的bbox有重合，直接简单计算节点
   if (isBboxOverLapping(sxBBox, txBBox)) {
     const points = getSimplePoints(start, end, sPoint, tPoint);
@@ -802,8 +808,8 @@ export const getBezierControlPoints = ({
   const tBBox = getNodeBBox(targetNode);
   const sExpendBBox = getExpandedBBox(sBBox, offset);
   const tExpendBBox = getExpandedBBox(tBBox, offset);
-  const sNext = getExpandedBBoxPoint(sExpendBBox, start);
-  const ePre = getExpandedBBoxPoint(tExpendBBox, end);
+  const sNext = getExpandedBBoxPoint(sExpendBBox, sBBox, start);
+  const ePre = getExpandedBBoxPoint(tExpendBBox, tBBox, end);
   return { sNext, ePre };
 };
 
