@@ -158,8 +158,8 @@ class Snapshot {
     const { SCALE_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } = transformModel;
     // offset值加10，保证图形不会紧贴着下载图片的左边和上边
     (copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${
-      -offsetX + 10 + TRANSLATE_X
-    }, ${-offsetY + 10 + TRANSLATE_Y})`;
+      (-offsetX + TRANSLATE_X) * (1 / SCALE_X) + 10
+    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) + 10})`;
     const bboxWidth = Math.ceil(bbox.width / SCALE_X);
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y);
     // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边
