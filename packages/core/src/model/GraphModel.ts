@@ -809,19 +809,30 @@ class GraphModel {
       // 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新边距离最短距离的点
       // 最大程度保持节点位置不变且在边上
       if (nodeAsSource || nodeAsTarget) {
-        // todo: 找到更好的边位置移动处理方式
-        // 如果是自定义边文本位置，则移动节点的时候重新计算其位置
-        if (edgeModel.customTextPosition === true) {
-          edgeModel.resetTextPosition();
-        } else if (edgeModel.modelType === ModelType.POLYLINE_EDGE && edgeModel.text?.value) {
-          const textPosition = edgeModel.text;
-          const newPoint = getClosestPointOfPolyline(textPosition, edgeModel.points);
-          edgeModel.moveText(newPoint.x - textPosition.x, newPoint.y - textPosition.y);
-        } else {
-          const { x: x1, y: y1 } = edgeModel.textPosition;
-          edgeModel.moveText(x1 - x, y1 - y);
-        }
+        this.handleEdgeTextMove(edgeModel, x, y);
       }
+    }
+  }
+
+  /**
+   * 如果有文案了，当节点移动引起文案位置修改时，找出当前文案位置与最新边距离最短距离的点
+   * 最大程度保持节点位置不变且在边上
+   * @param edgeModel 边的数据管理类
+   * @param x X轴移动距离
+   * @param y Y轴移动距离
+   */
+  handleEdgeTextMove(edgeModel: BaseEdgeModel, x: number, y: number) {
+    // todo: 找到更好的边位置移动处理方式
+    // 如果是自定义边文本位置，则移动节点的时候重新计算其位置
+    if (edgeModel.customTextPosition === true) {
+      edgeModel.resetTextPosition();
+    } else if (edgeModel.modelType === ModelType.POLYLINE_EDGE && edgeModel.text?.value) {
+      const textPosition = edgeModel.text;
+      const newPoint = getClosestPointOfPolyline(textPosition, edgeModel.points);
+      edgeModel.moveText(newPoint.x - textPosition.x, newPoint.y - textPosition.y);
+    } else {
+      const { x: x1, y: y1 } = edgeModel.textPosition;
+      edgeModel.moveText(x1 - x, y1 - y);
     }
   }
   /**
@@ -994,6 +1005,7 @@ class GraphModel {
     }, {});
     for (let i = 0; i < this.edges.length; i++) {
       const edgeModel = this.edges[i];
+      const { x, y } = edgeModel.textPosition;
       const sourceMoveDistance = nodeIdMap[edgeModel.sourceNodeId];
       let textDistanceX;
       let textDistanceY;
@@ -1007,7 +1019,11 @@ class GraphModel {
         edgeModel.moveEndPoint(textDistanceX, textDistanceY);
       }
       if (sourceMoveDistance || targetMoveDistance) {
-        edgeModel.moveText(textDistanceX, textDistanceY);
+        // https://github.com/didi/LogicFlow/issues/1191
+        // moveNode()跟moveNodes()没有统一处理方式，moveNodes()缺失了下面的逻辑
+        // moveNode()：当节点移动引起文案位置修改时，找出当前文案位置与最新边距离最短距离的点，最大程度保持节点位置不变且在边上
+        // 因此将moveNode()处理边文字的逻辑抽离出来，统一moveNode()跟moveNodes()的处理逻辑
+        this.handleEdgeTextMove(edgeModel, x, y);
       }
     }
   }
