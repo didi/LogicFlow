@@ -37,6 +37,10 @@ class GroupNodeModel extends RectResize.model {
   isFolded: boolean;
   unfoldedWidth = defaultWidth;
   unfoldedHight = defaultHeight;
+  /**
+   * children元素上一次折叠的状态缓存
+   */
+  childrenLastFoldStatus: Record<string, boolean> = {};
   initNodeData(data): void {
     super.initNodeData(data);
     let children = [];
@@ -80,6 +84,11 @@ class GroupNodeModel extends RectResize.model {
    * 3. 处理连线
    */
   foldGroup(isFolded) {
+    if (isFolded === this.isFolded) {
+      // 防止多次调用同样的状态设置
+      // 如果this.isFolded=false，同时触发foldGroup(false)，会导致下面的childrenLastFoldStatus状态错乱
+      return;
+    }
     this.setProperty('isFolded', isFolded);
     this.isFolded = isFolded;
     // step 1
@@ -100,10 +109,27 @@ class GroupNodeModel extends RectResize.model {
     let allEdges = this.incoming.edges.concat(this.outgoing.edges);
     this.children.forEach((elementId) => {
       const nodeModel = this.graphModel.getElement(elementId);
+      const foldStatus = nodeModel.isFolded;
       // FIX: https://github.com/didi/LogicFlow/issues/1007
       if (nodeModel.isGroup && !nodeModel.isFolded) {
+        // 正常情况下，parent折叠后，children应该折叠
+        // 因此当parent准备展开时，children的值目前肯定是折叠状态，也就是nodeModel.isFolded=true，这个代码块不会触发
+        // 只有当parent准备折叠时，children目前状态才有可能是展开，即nodeModel.isFolded=false，这个代码块触发，此时isFolded=true，触发children也进行折叠
         nodeModel.foldGroup(isFolded);
       }
+
+      if (nodeModel.isGroup && !isFolded) {
+        // 当parent准备展开时，children的值应该恢复到折叠前的状态
+        const lastFoldStatus = this.childrenLastFoldStatus[elementId];
+        if (lastFoldStatus !== undefined && lastFoldStatus !== nodeModel.isFolded) {
+          // https://github.com/didi/LogicFlow/issues/1145
+          // 当parent准备展开时，children的值肯定是折叠，也就是nodeModel.isFolded=true
+          // 当parent准备展开时，如果children之前的状态是展开，则恢复展开状态
+          nodeModel.foldGroup(lastFoldStatus);
+        }
+      }
+      // 存储parent触发children改变折叠状态前的状态
+      this.childrenLastFoldStatus[elementId] = foldStatus;
       nodeModel.visible = !isFolded;
       allEdges = allEdges.concat(nodeModel.incoming.edges.concat(nodeModel.outgoing.edges));
     });
