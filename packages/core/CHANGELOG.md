@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.8...@logicflow/core@1.2.9) (2023-06-21)
+
+
+### Bug Fixes
+
+* **core:** compute the first point direction of the rectangular polyline using the original width and height([#817](https://github.com/didi/LogicFlow/issues/817)) ([7a0a8ee](https://github.com/didi/LogicFlow/commit/7a0a8eedd24bc0aabb742c54c8e9671ccfd270a6))
+* **core:** fix the background width of the text on the side is not displayed correctly in ellipsis mode([#1151](https://github.com/didi/LogicFlow/issues/1151)) ([b1e0380](https://github.com/didi/LogicFlow/commit/b1e03806b5d3d4156ac601a6c318639141768d9f))
+* **core:** moveNodes() add the logic of the moveNode function to calculate the moving distance of the side text ([a89b630](https://github.com/didi/LogicFlow/commit/a89b6301a2355f7ced957d446721a697259b68c0))
+* **core:** prevent isSilentMode=true from calling repeatedly([#1180](https://github.com/didi/LogicFlow/issues/1180)) ([d8a8f5a](https://github.com/didi/LogicFlow/commit/d8a8f5a18b237d994256dc6acc09daef281ca595))
+
+
+
+
+
 ## [1.2.8](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.6...@logicflow/core@1.2.8) (2023-05-30)
 
 

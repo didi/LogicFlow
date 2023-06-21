@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.8...@logicflow/extension@1.2.9) (2023-06-21)
+
+
+### Bug Fixes
+
+* **extension:** store the state of the children before folding, and restore the state when the parent is expanded([#1145](https://github.com/didi/LogicFlow/issues/1145)) ([9ca39a6](https://github.com/didi/LogicFlow/commit/9ca39a617eda51544641c6eadec4e101ea30d923))
+* fix the bug of getting error snapshot after scaling the graph ([bad2c59](https://github.com/didi/LogicFlow/commit/bad2c594796692321d6184f71ad49c8875d5fe6f))
+
+
+
+
+
 ## [1.2.8](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.7...@logicflow/extension@1.2.8) (2023-05-30)
 
 **Note:** Version bump only for package @logicflow/extension
