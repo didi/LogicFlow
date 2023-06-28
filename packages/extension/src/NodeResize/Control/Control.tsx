@@ -160,6 +160,35 @@ class Control extends Component<IProps> {
     }
     return resize;
   };
+  updateEdgePointByAnchors = () => {
+    // https://github.com/didi/LogicFlow/issues/807
+    // https://github.com/didi/LogicFlow/issues/875
+    // 之前的做法，比如Rect是使用getRectResizeEdgePoint()计算边的point缩放后的位置
+    // getRectResizeEdgePoint()考虑了瞄点在四条边以及在4个圆角的情况
+    // 使用的是一种等比例缩放的模式，比如：
+    // const pct = (y - beforeNode.y) / (beforeNode.height / 2 - radius)
+    // afterPoint.y = afterNode.y + (afterNode.height / 2 - radius) * pct
+    // 但是用户自定义的getDefaultAnchor()不一定是按照比例编写的
+    // 它可能是 x: x + 20：每次缩放都会保持在x右边20的位置，因此用户自定义瞄点时，然后产生无法跟随的问题
+    // 现在的做法是：直接获取用户自定义瞄点的位置，然后用这个位置作为边的新的起点，而不是自己进行计算
+    const { id, anchors } = this.nodeModel;
+    const edges = this.getNodeEdges(id);
+    // 更新边
+    edges.sourceEdges.forEach(item => {
+      const anchorItem = anchors.find(anchor => anchor.id === item.sourceAnchorId);
+      item.updateStartPoint({
+        x: anchorItem.x,
+        y: anchorItem.y,
+      });
+    });
+    edges.targetEdges.forEach(item => {
+      const anchorItem = anchors.find(anchor => anchor.id === item.targetAnchorId);
+      item.updateEndPoint({
+        x: anchorItem.x,
+        y: anchorItem.y,
+      });
+    });
+  };
   // 矩形更新
   updateRect = ({ deltaX, deltaY }) => {
     const { id, x, y, width, height, radius, PCTResizeInfo } = this.nodeModel as RectNodeModel;
@@ -216,23 +245,8 @@ class Control extends Component<IProps> {
       height: this.nodeModel.height,
       radius,
     };
-    const params = {
-      point: '',
-      beforeNode,
-      afterNode,
-    };
     // 更新边
-    let afterPoint;
-    edges.sourceEdges.forEach(item => {
-      params.point = item.startPoint;
-      afterPoint = getRectResizeEdgePoint(params);
-      item.updateStartPoint(afterPoint);
-    });
-    edges.targetEdges.forEach(item => {
-      params.point = item.endPoint;
-      afterPoint = getRectResizeEdgePoint(params);
-      item.updateEndPoint(afterPoint);
-    });
+    this.updateEdgePointByAnchors();
     this.eventEmit({ beforeNode, afterNode });
   };
   // 椭圆更新
@@ -287,23 +301,8 @@ class Control extends Component<IProps> {
       x: this.nodeModel.x,
       y: this.nodeModel.y,
     };
-    const params = {
-      point: {},
-      beforeNode,
-      afterNode,
-    };
     // 更新边
-    let afterPoint;
-    edges.sourceEdges.forEach(item => {
-      params.point = item.startPoint;
-      afterPoint = getEllipseResizeEdgePoint(params);
-      item.updateStartPoint(afterPoint);
-    });
-    edges.targetEdges.forEach(item => {
-      params.point = item.endPoint;
-      afterPoint = getEllipseResizeEdgePoint(params);
-      item.updateEndPoint(afterPoint);
-    });
+    this.updateEdgePointByAnchors();
     this.eventEmit({ beforeNode: { ...beforeNode, rx, ry }, afterNode });
   };
   // 菱形更新
@@ -357,24 +356,8 @@ class Control extends Component<IProps> {
       x: this.nodeModel.x,
       y: this.nodeModel.y,
     };
-    const params = {
-      point: {},
-      beforeNode,
-      afterNode,
-    };
     // 更新边
-    let afterPoint;
-    const edges = this.getNodeEdges(id);
-    edges.sourceEdges.forEach(item => {
-      params.point = item.startPoint;
-      afterPoint = getDiamondResizeEdgePoint(params);
-      item.updateStartPoint(afterPoint);
-    });
-    edges.targetEdges.forEach(item => {
-      params.point = item.endPoint;
-      afterPoint = getDiamondResizeEdgePoint(params);
-      item.updateEndPoint(afterPoint);
-    });
+    this.updateEdgePointByAnchors();
     this.eventEmit({ beforeNode, afterNode });
   };
   eventEmit = ({ beforeNode, afterNode }) => {
@@ -401,6 +384,10 @@ class Control extends Component<IProps> {
    * 由于将拖拽放大缩小改成丝滑模式，这个时候需要在拖拽结束的时候，将节点的位置更新到grid上.
    */
   onDragEnd = () => {
+    // 先触发onDragging()->更新边->再触发用户自定义的getDefaultAnchor()，所以onDragging()拿到的anchors是滞后的
+    // 为了正确设置最终的位置，应该在拖拽结束的时候，再设置一次边的Point位置，此时拿到的anchors是最新的
+    this.updateEdgePointByAnchors();
+
     const { gridSize = 1 } = this.graphModel;
     const x = gridSize * Math.round(this.nodeModel.x / gridSize);
     const y = gridSize * Math.round(this.nodeModel.y / gridSize);
