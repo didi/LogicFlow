@@ -126,7 +126,7 @@ class Menu {
       }
     }, true);
     // 通过事件控制菜单的显示和隐藏
-    this.lf.on('node:contextmenu', ({ data, position }) => {
+    this.lf.on('node:contextmenu', ({ data, position, e }) => {
       const { domOverlayPosition: { x, y } } = position;
       const { id } = data;
       const model = this.lf.graphModel.getNodeModelById(id);
@@ -141,9 +141,14 @@ class Menu {
         menuList = this.menuTypeMap.get(DefaultNodeMenuKey);
       }
       this.__currentData = data;
-      this.showMenu(x, y, menuList);
+      this.showMenu(x, y, menuList, {
+        width: model.width,
+        height: model.height,
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
     });
-    this.lf.on('edge:contextmenu', ({ data, position }) => {
+    this.lf.on('edge:contextmenu', ({ data, position, e }) => {
       const { domOverlayPosition: { x, y } } = position;
       const { id } = data;
       const model = this.lf.graphModel.getEdgeModelById(id);
@@ -158,7 +163,12 @@ class Menu {
         menuList = this.menuTypeMap.get(DefaultEdgeMenuKey);
       }
       this.__currentData = data;
-      this.showMenu(x, y, menuList);
+      this.showMenu(x, y, menuList, {
+        width: model.width,
+        height: model.height,
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
     });
     this.lf.on('blank:contextmenu', ({ position }) => {
       const menuList = this.menuTypeMap.get(DefaultGraphMenuKey);
@@ -185,7 +195,7 @@ class Menu {
     this?.__container?.removeChild(this.__menuDOM);
     this.__menuDOM = null;
   }
-  private showMenu(x, y, menuList) {
+  private showMenu(x, y, menuList, options?) {
     if (!menuList || !menuList.length) return;
     const { __menuDOM: menu } = this;
     // 菜单容器不变，需要先清空内部的菜单项
@@ -194,8 +204,68 @@ class Menu {
     // 菜单中没有项，不显示
     if (!menu.children.length) return;
     menu.style.display = 'block';
-    menu.style.top = `${y}px`;
-    menu.style.left = `${x}px`;
+    if (!options) {
+      menu.style.top = `${y}px`;
+      menu.style.left = `${x}px`;
+      return;
+    }
+
+    // https://github.com/didi/LogicFlow/issues/1019
+    // 根据边界判断菜单的left 和 top
+    const { width, height, clientX, clientY } = options;
+    const { graphModel } = this.lf;
+
+    const menuWidth = menu.offsetWidth;
+    let menuIsRightShow = true;
+    // ======先进行可视屏幕范围的判断=======
+    // 浏览器窗口可视区域兼容性写法
+    // eslint-disable-next-line max-len
+    const windowMaxX = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    let rightDistance = windowMaxX - clientX;
+    // ======先进行可视屏幕范围的判断=======
+    // ========再进行画布范围的判断========
+    const graphRect = graphModel.rootEl.getBoundingClientRect();
+    const graphMaxX = graphRect.left + graphRect.width;
+    if (graphMaxX < windowMaxX) {
+      // 画布右边小于可视屏幕范围的最右边，取画布右边作为极限值，计算出当前触摸点距离右边极限值的距离
+      rightDistance = graphMaxX - clientX;
+    }
+    // ========再进行画布范围的判断========
+    // 根据当前触摸点距离右边的距离 跟 menuWidth进行比较
+    if (rightDistance < menuWidth) {
+      // 空间不足够，显示在左边
+      menuIsRightShow = false;
+    }
+    if (menuIsRightShow) {
+      menu.style.left = `${x}px`;
+    } else {
+      menu.style.left = `${(x - width)}px`;
+    }
+
+    const menuHeight = menu.offsetHeight;
+    let menuIsBottomShow = true;
+    // ======先进行可视屏幕范围的判断=======
+    // 浏览器窗口可视区域兼容性写法
+    // eslint-disable-next-line max-len
+    const windowMaxY = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    let bottomDistance = windowMaxY - clientY;
+    // ======先进行可视屏幕范围的判断=======
+    // ========再进行画布范围的判断========
+    const graphMaxY = graphRect.top + graphRect.height;
+    if (graphMaxY < windowMaxY) {
+      // 画布底部小于可视屏幕范围的最底边，取画布底部作为极限值，计算出当前触摸点距离底部极限值的距离
+      bottomDistance = graphMaxY - clientY;
+    }
+    // ========再进行画布范围的判断========
+    if (bottomDistance < menuHeight) {
+      // 如果下边距离太小，无法显示menu，则向上显示
+      menuIsBottomShow = false;
+    }
+    if (menuIsBottomShow) {
+      menu.style.top = `${y}px`;
+    } else {
+      menu.style.top = `${(y - height)}px`;
+    }
   }
   /**
    * 设置指定类型元素的菜单
