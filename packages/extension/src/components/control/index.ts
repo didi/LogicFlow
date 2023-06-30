@@ -82,7 +82,7 @@ class Control {
   }
   removeItem(key) {
     const index = this.controlItems.findIndex((item) => item.key === key);
-    return this.controlItems.splice(index, 1)[0];
+    return index == -1 ? null : this.controlItems.splice(index, 1)[0];
   }
   private getControlTool(): HTMLElement {
     const NORMAL = 'lf-control-item';
