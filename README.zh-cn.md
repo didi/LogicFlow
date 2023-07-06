@@ -135,6 +135,14 @@ lf.render(data);
 
 基于上述拓展的能力，前端研发能够根据实际业务场景的需求，灵活的开发出所需的节点、组件等。下面有两个基于 LogicFlow 拓展能力做出的流程图：
 
+### 流程编排器demo
+
+demo link：https://docs.logic-flow.cn/demo/dist/organizer/
+
+code link：https://github.com/Logic-Flow/docs/tree/master/demo/organizer
+
+![图片:organizer](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/organizer.gif)
+
 ### BPMN应用demo
 
 示例地址：http://logic-flow.org/examples/#/extension/bpmn

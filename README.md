@@ -132,6 +132,14 @@ When basic capabilities cannot meet business needs, it needs to be expanded base
 
 Based on the above expanded capabilities, front-end R&D can flexibly develop required nodes, components, etc. according to the needs of actual business scenarios. Below are two flow charts based on LogicFlow's expansion capabilities:
 
+### Flow Organizer Demo
+
+demo link：https://docs.logic-flow.cn/demo/dist/organizer/
+
+code link：https://github.com/Logic-Flow/docs/tree/master/demo/organizer
+
+![图片:organizer](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/organizer.gif)
+
 ### BPMN Application Demo
 
 demo link：http://logic-flow.org/examples/#/extension/bpmn
