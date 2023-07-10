@@ -30,8 +30,9 @@ export default class Engine {
   /**
    * 加载流程图数据
    */
-  load({ graphData }) {
+  load({ graphData, startNodeType = 'StartNode' }) {
     this.flowModel = new FlowModel(this.modelMap);
+    this.flowModel.setStartNodeType(startNodeType);
     this.flowModel.load(graphData);
     return this.flowModel;
   }

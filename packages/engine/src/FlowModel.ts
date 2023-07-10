@@ -1,18 +1,22 @@
 // import type { GraphConfigData } from '@logicflow/core';
-import type { BaseNodeInterface } from './nodes/BaseNode';
+import type BaseNode from './nodes/BaseNode';
+import type { NodeConfig, NodeConstructor } from './nodes/BaseNode';
 import {
   ErrorCode,
   getErrorMsg,
   getWarningMsg,
   WarningCode,
 } from './constant/LogCode';
+import {
+  EVENT_INSTANCE_COMPLETE,
+} from './constant/constant';
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
 import NodeManager from './NodeManager';
 
 export type TaskUnit = {
   executionId: string;
-  taskId: string;
+  taskId?: string;
   nodeId: string;
 };
 
@@ -31,65 +35,110 @@ export type ExecParams = {
 } & TaskParams;
 
 export default class FlowModel {
-  nodeModelMap: Map<string, any>;
+  /**
+   * 流程支持的节点类型
+   */
+  nodeModelMap: Map<string, NodeConstructor>;
+  /**
+   * 每一次执行流程都会生成一个唯一的executionId。
+   */
   executionId: string;
+  /**
+   * 调度器，用于调度节点的执行。
+   */
   scheduler: Scheduler;
   NodeManager: NodeManager;
+  /**
+   * 待执行的队列，当流程正在执行时，如果再次触发执行。那么会将执行参数放入到队列中，等待上一次执行完成后再执行。
+   */
   executeQueue: ExecParams[];
-  executingMap: Map<string, ExecParams>;
+  /**
+   * 当前正在执行。当监听到调度器执行完成时，出触发执行参数中的回调，告知外部执行完成。
+   */
+  executingInstance: ExecParams;
+  /**
+   * 当前流程模型中的所有节点，边会被转换成节点的incoming和outgoing属性。
+   */
+  nodeMap: Map<string, NodeConfig>;
+  /**
+   * 当流程正在执行时，如果再次触发执行。那么会将执行参数放入到队列中，等待上一次执行完成后再执行。
+   */
   isRunning: boolean;
-  constructor(nodeModelMap) {
+  /**
+   * 开始节点类型，在执行流程时，会从这些节点开始执行。
+   */
+  startNodeType: string;
+  /**
+   * 当前流程中开始节点组成的数组。
+   */
+  startNodes: NodeConfig[] = [];
+  constructor(nodeModelMap: Map<string, NodeConstructor>) {
     // 流程包含的节点类型
     this.nodeModelMap = nodeModelMap;
     // 需要执行的队列
     this.executeQueue = [];
     // 执行中的任务
-    this.executingMap = new Map();
+    this.executingInstance = null;
+    this.nodeMap = new Map();
     this.isRunning = false;
     this.NodeManager = new NodeManager();
     this.scheduler = new Scheduler({
-      NodeManager: this.NodeManager,
+      flowModel: this,
     });
-    this.scheduler.on('taskFinished', (result) => {
+    this.scheduler.on(EVENT_INSTANCE_COMPLETE, (result) => {
       this.onTaskFinished(result);
     });
-
   }
   onTaskFinished(result) {
-    const { executionId, taskId, nodeId } = result;
-    const execParams = this.executingMap.get(executionId);
-    if (!execParams) {
+    const { executionId } = result;
+    if (executionId !== this.executionId) {
       return;
     }
-    const { callback } = execParams;
+    const { callback } = this.executingInstance;
     if (callback) {
       callback(result);
     }
-    this.executingMap.delete(executionId);
+    this.executingInstance = null;
+    if (this.executeQueue.length) {
+      this.createExecuteInstance();
+    } else {
+      this.isRunning = false;
+    }
+  }
+  setStartNodeType(startNodeType) {
+    this.startNodeType = startNodeType;
   }
   load(graphData) {
     const { nodes = [], edges = [] } = graphData;
     nodes.forEach((node) => {
-      const Task = this.getNodeModel(node.type);
-      if (Task) {
-        const task = new Task(node);
-        this.NodeManager.addTask(task);
+      if (this.nodeModelMap.has(node.type)) {
+        const nodeConfig = {
+          id: node.id,
+          type: node.type,
+          properties: node.properties,
+          incoming: [],
+          outgoing: [],
+        };
+        this.nodeMap.set(node.id, nodeConfig);
+        if (node.type === this.startNodeType) {
+          this.startNodes.push(nodeConfig);
+        }
       } else {
         console.warn(`未识别的节点类型: ${node.type}`);
       }
     });
     edges.forEach((edge) => {
-      const sourceTask = this.NodeManager.getTask(edge.sourceNodeId);
-      const targetTask = this.NodeManager.getTask(edge.targetNodeId);
-      if (sourceTask) {
-        sourceTask.outgoing.push({
+      const sourceNode = this.nodeMap.get(edge.sourceNodeId);
+      const targetNode = this.nodeMap.get(edge.targetNodeId);
+      if (sourceNode) {
+        sourceNode.outgoing.push({
           id: edge.id,
           condition: edge.properties,
           target: edge.targetNodeId,
         });
       }
-      if (targetTask && targetTask.baseType !== 'start') {
-        targetTask.incoming.push({
+      if (targetNode && targetNode.type !== this.startNodeType) {
+        targetNode.incoming.push({
           id: edge.id,
           condition: edge.properties,
           source: edge.sourceNodeId,
@@ -118,19 +167,14 @@ export default class FlowModel {
   async createExecuteInstance() {
     const execParams = this.executeQueue.shift();
     this.executionId = createExecId();
-    console.log('createExecuteInstance', execParams);
-    const startNodes = this.NodeManager.getStartTasks();
-    startNodes.forEach((startNode) => {
+    this.executingInstance = execParams;
+    this.startNodes.forEach((startNode) => {
       this.scheduler.addTask({
         executionId: this.executionId,
-        taskId: startNode.taskId,
-        nodeId: startNode.nodeId,
+        nodeId: startNode.id,
       });
-      this.scheduler.run({
-        executionId: this.executionId,
-        taskId: startNode.taskId,
-        nodeId: startNode.nodeId,
-      });
+      // 所有的开始节点都执行
+      this.scheduler.run(this.executionId);
     });
   }
   /**
@@ -151,7 +195,11 @@ export default class FlowModel {
   //   });
   //   return result;
   // }
-  getNodeModel(type) {
-    return this.nodeModelMap.get(type);
+
+  createTask(nodeId: string) {
+    const nodeConfig = this.nodeMap.get(nodeId);
+    const NodeModel = this.nodeModelMap.get(nodeConfig.type);
+    const model = new NodeModel(nodeConfig);
+    return model;
   }
 }

@@ -5,5 +5,6 @@ export default class StartNode extends BaseNode {
   readonly baseType = 'start';
   async action() {
     console.log('StartNode run');
+    return true;
   }
 }

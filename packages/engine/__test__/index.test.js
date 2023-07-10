@@ -48,8 +48,5 @@ describe('流程引擎', () => {
     engine.load(flowData);
     const result = await engine.execute();
     expect(result).toHaveProperty('executionId');
-    expect(result).toHaveProperty('taskId');
-    expect(result).toHaveProperty('nodeId');
-    expect(result.nodeId).toBe('node2');
   })
 });
