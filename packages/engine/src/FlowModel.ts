@@ -2,12 +2,12 @@ import type {
   NodeConfig,
   NodeConstructor,
 } from './nodes/BaseNode';
+import type Recorder from './recorder';
 import {
   EVENT_INSTANCE_COMPLETE,
 } from './constant/constant';
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
-import NodeManager from './NodeManager';
 
 export type TaskUnit = {
   executionId: string;
@@ -42,7 +42,6 @@ export default class FlowModel {
    * 调度器，用于调度节点的执行。
    */
   scheduler: Scheduler;
-  NodeManager: NodeManager;
   /**
    * 待执行的队列，当流程正在执行时，如果再次触发执行。那么会将执行参数放入到队列中，等待上一次执行完成后再执行。
    */
@@ -54,7 +53,7 @@ export default class FlowModel {
   /**
    * 当前流程模型中的所有节点，边会被转换成节点的incoming和outgoing属性。
    */
-  nodeConfigMap: Map<string, NodeConfig>;
+  nodeConfigMap: Map<string, NodeConfig> = new Map();
   /**
    * 当流程正在执行时，如果再次触发执行。那么会将执行参数放入到队列中，等待上一次执行完成后再执行。
    */
@@ -67,12 +66,34 @@ export default class FlowModel {
    * 当前流程中开始节点组成的数组。
    */
   startNodes: NodeConfig[] = [];
+  /**
+   * 用于存储全局数据，可以在流程中共享。
+   */
+  globalData: Record<string, any> = {};
+  /**
+   * 外部传入的上下文，最终会传递给每个节点
+   * 例如：
+   * const context = {
+   *  request: {
+   *   get: (url) => {
+   *    return fetch(url);
+   *  }
+   * }
+   * 在节点内部可以通过 this.context.request.get(url) 来调用。
+   */
+  context: Record<string, any>;
   constructor({
     nodeModelMap,
     recorder,
+    context = {},
+    globalData = {},
+    startNodeType = 'StartNode',
   }: {
     nodeModelMap: Map<string, NodeConstructor>;
-    recorder?: any;
+    recorder: Recorder;
+    context?: Record<string, any>;
+    globalData?: Record<string, any>;
+    startNodeType?: string;
   }) {
     // 流程包含的节点类型
     this.nodeModelMap = nodeModelMap;
@@ -80,9 +101,13 @@ export default class FlowModel {
     this.executeQueue = [];
     // 执行中的任务
     this.executingInstance = null;
-    this.nodeConfigMap = new Map();
+    // 外部传入的上下文，最终会传递给每个节点
+    this.context = context;
+    // 用于存储全局数据，可以在流程中共享。
+    this.globalData = globalData;
+    // 开始节点类型，在执行流程时，会从这些节点开始执行。
+    this.startNodeType = startNodeType;
     this.isRunning = false;
-    this.NodeManager = new NodeManager();
     this.scheduler = new Scheduler({
       flowModel: this,
       recorder,
@@ -91,26 +116,10 @@ export default class FlowModel {
       this.onTaskFinished(result);
     });
   }
-  onTaskFinished(result) {
-    const { executionId } = result;
-    if (executionId !== this.executionId) {
-      return;
-    }
-    const { callback } = this.executingInstance;
-    if (callback) {
-      callback(result);
-    }
-    this.executingInstance = null;
-    if (this.executeQueue.length) {
-      this.createExecuteInstance();
-    } else {
-      this.isRunning = false;
-    }
-  }
-  setStartNodeType(startNodeType) {
+  public setStartNodeType(startNodeType) {
     this.startNodeType = startNodeType;
   }
-  load(graphData) {
+  public load(graphData) {
     const { nodes = [], edges = [] } = graphData;
     nodes.forEach((node) => {
       if (this.nodeModelMap.has(node.type)) {
@@ -135,14 +144,14 @@ export default class FlowModel {
       if (sourceNode) {
         sourceNode.outgoing.push({
           id: edge.id,
-          condition: edge.properties,
+          properties: edge.properties,
           target: edge.targetNodeId,
         });
       }
       if (targetNode && targetNode.type !== this.startNodeType) {
         targetNode.incoming.push({
           id: edge.id,
-          condition: edge.properties,
+          properties: edge.properties,
           source: edge.sourceNodeId,
         });
       }
@@ -158,7 +167,7 @@ export default class FlowModel {
    * 外部分别触发了A和B的执行，那么A和B的执行是串行的（也就是需要A执行完成后再执行B），但是D和E的执行是并行的。
    * 如果希望A和B的执行是并行的，就不能使用同一个流程模型执行，应该初始化两个。
    */
-  async execute(params ?: ExecParams) {
+  public async execute(params ?: ExecParams) {
     this.executeQueue.push(params);
     if (this.isRunning) {
       return;
@@ -166,7 +175,47 @@ export default class FlowModel {
     this.isRunning = true;
     this.createExecuteInstance();
   }
-  async createExecuteInstance() {
+  /**
+   * 创建节点实例
+   * @param nodeId 节点Id
+   * @returns 节点示例
+   */
+  public createTask(nodeId: string) {
+    const nodeConfig = this.nodeConfigMap.get(nodeId);
+    const NodeModel = this.nodeModelMap.get(nodeConfig.type);
+    const task = new NodeModel({
+      nodeConfig,
+      globalData: this.globalData,
+      context: this.context,
+    });
+    return task;
+  }
+  /**
+   * 更新流程全局数据
+   */
+  public updateGlobalData(data) {
+    this.globalData = {
+      ...this.globalData,
+      ...data,
+    };
+  }
+  private onTaskFinished(result) {
+    const { executionId } = result;
+    if (executionId !== this.executionId) {
+      return;
+    }
+    const { callback } = this.executingInstance;
+    if (callback) {
+      callback(result);
+    }
+    this.executingInstance = null;
+    if (this.executeQueue.length > 0) {
+      this.createExecuteInstance();
+    } else {
+      this.isRunning = false;
+    }
+  }
+  private async createExecuteInstance() {
     const execParams = this.executeQueue.shift();
     this.executionId = createExecId();
     this.executingInstance = execParams;
@@ -178,16 +227,5 @@ export default class FlowModel {
       // 所有的开始节点都执行
       this.scheduler.run(this.executionId);
     });
-  }
-  /**
-   * 创建节点实例
-   * @param nodeId 节点Id
-   * @returns 节点示例
-   */
-  createTask(nodeId: string) {
-    const nodeConfig = this.nodeConfigMap.get(nodeId);
-    const NodeModel = this.nodeModelMap.get(nodeConfig.type);
-    const task = new NodeModel(nodeConfig);
-    return task;
   }
 }

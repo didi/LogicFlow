@@ -13,7 +13,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "tsc --module esnext --target es5 --outDir ./es -d -w",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
     "types": "tsc -d --declarationDir ./types --outDir temp && rimraf -R temp",
     "build:esm": "tsc --module esnext --target es5 --outDir ./es -d",
     "build:cjs": "tsc --module commonjs --target es5 --outDir ./cjs",

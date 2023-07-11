@@ -1,7 +1,7 @@
 /**
  * 存储执行记录
  */
-import globalScope from './global';
+import { globalScope } from './global';
 
 if (!globalScope.sessionStorage) {
   const storage = {

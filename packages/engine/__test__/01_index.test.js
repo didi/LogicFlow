@@ -43,7 +43,8 @@ describe('流程引擎', () => {
           }
         ]
       },
-      global: {},
+      context: {},
+      globalData: {},
     }
     engine.load(flowData);
     const result = await engine.execute();

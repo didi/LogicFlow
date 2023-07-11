@@ -47,12 +47,19 @@ export default class Engine {
   /**
    * 加载流程图数据
    */
-  load({ graphData, startNodeType = 'StartNode' }) {
+  load({
+    graphData,
+    startNodeType = 'StartNode',
+    globalData = {},
+    context = {},
+  }) {
     this.flowModel = new FlowModel({
       nodeModelMap: this.nodeModelMap,
       recorder: this.recorder,
+      context,
+      globalData,
+      startNodeType,
     });
-    this.flowModel.setStartNodeType(startNodeType);
     this.flowModel.load(graphData);
     return this.flowModel;
   }
@@ -83,7 +90,12 @@ export default class Engine {
 }
 
 export {
+  Engine,
+};
+
+export const EngineNode = {
   StartNode,
+  TaskNode,
 };
 
 export type {

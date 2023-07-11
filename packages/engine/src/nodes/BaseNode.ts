@@ -1,29 +1,32 @@
-import { createTaskId } from '../util/ID';
+import { getExpressionResult } from '../expression';
 
 export interface BaseNodeInterface {
   outgoing: Record<string, any>[];
   incoming: Record<string, any>[];
   nodeId: string;
-  taskId: string;
   type: string;
   readonly baseType: string;
   execute(taskUnit): Promise<boolean>;
 }
 
 export type NodeConstructor = {
-  new (config: NodeConfig): BaseNode;
+  new (config: {
+    nodeConfig: NodeConfig;
+    context: Record<string, any>;
+    globalData: Record<string, any>;
+  }): BaseNode;
 };
 
 export type IncomingConfig = {
   id: string;
-  condition?: Record<string, any>;
+  properties?: Record<string, any>;
   source: string;
 };
 
 export type OutgoingConfig = {
   id: string;
-  condition?: Record<string, any>;
   target: string;
+  properties?: Record<string, any>;
 };
 
 export type NodeConfig = {
@@ -52,19 +55,38 @@ export type ExecParams = {
 
 export default class BaseNode implements BaseNodeInterface {
   static nodeTypeName = 'BaseNode';
+  /**
+   * 节点的出边
+   */
   outgoing: OutgoingConfig[];
+  /**
+   * 节点的入边
+   */
   incoming: IncomingConfig[];
+  /**
+   * 节点的属性
+   */
   properties?: Record<string, any>;
   nodeId: string;
-  taskId: string;
   type: string;
+  /**
+   * 节点的上下文，是调用流程时传入的上下文
+   */
+  context: Record<string, any>;
+  /**
+   * 节点的全局数据，是调用流程时传入的全局数据。
+   * 在计算表达式时，即基于全局数据进行计算。
+   */
+  globalData: Record<string, any>;
   readonly baseType: string;
-  constructor(nodeConfig: NodeConfig) {
+  constructor({ nodeConfig, context, globalData }) {
     this.outgoing = nodeConfig.outgoing;
     this.incoming = nodeConfig.incoming;
     this.nodeId = nodeConfig.id;
     this.type = nodeConfig.type;
     this.properties = nodeConfig.properties;
+    this.context = context;
+    this.globalData = globalData;
     this.baseType = 'base';
   }
   /**
@@ -84,7 +106,32 @@ export default class BaseNode implements BaseNodeInterface {
     return r;
   }
   async getOutgoing() {
-    return this.outgoing;
+    const outgoing = [];
+    const expressions = [];
+    for (const item of this.outgoing) {
+      const { id, target, properties } = item;
+      expressions.push(this.isPass(properties));
+    }
+    const result = await Promise.all(expressions);
+    result.forEach((item, index) => {
+      if (item) {
+        outgoing.push(this.outgoing[index]);
+      }
+    });
+    return outgoing;
+  }
+  async isPass(properties) {
+    if (!properties) return true;
+    const { conditionExpression } = properties;
+    if (!conditionExpression) return true;
+    try {
+      const result = await getExpressionResult(`result${this.nodeId} = (${conditionExpression})`, {
+        ...this.globalData,
+      });
+      return result[`result${this.nodeId}`];
+    } catch (e) {
+      return false;
+    }
   }
   /**
    * 节点的执行逻辑
