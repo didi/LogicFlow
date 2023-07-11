@@ -7,7 +7,7 @@ export interface BaseNodeInterface {
   taskId: string;
   type: string;
   readonly baseType: string;
-  execute(taskUnit): Promise<void>;
+  execute(taskUnit): Promise<boolean>;
 }
 
 export type NodeConstructor = {
@@ -38,7 +38,9 @@ export type NextTaskUnit = {
   executionId: string;
   nodeId: string;
   taskId: string;
+  nodeType: string;
   outgoing: OutgoingConfig[];
+  properties?: Record<string, any>;
 };
 
 export type ExecParams = {
@@ -68,21 +70,26 @@ export default class BaseNode implements BaseNodeInterface {
   /**
    * 节点的每一次执行都会生成一个唯一的taskId
    */
-  async execute(params: ExecParams) {
+  async execute(params: ExecParams): Promise<boolean> {
     const r = await this.action();
     const outgoing = await this.getOutgoing();
     r && params.next({
       executionId: params.executionId,
       taskId: params.taskId,
       nodeId: this.nodeId,
+      nodeType: this.type,
+      properties: this.properties,
       outgoing,
     });
-    // return r;
+    return r;
   }
   async getOutgoing() {
     return this.outgoing;
   }
-
+  /**
+   * 节点的执行逻辑
+   * @returns {boolean} 返回true表示执行成功，返回false表示执行失败,中断流程执行
+   */
   async action() {
     return true;
   }

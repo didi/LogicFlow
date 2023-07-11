@@ -4,6 +4,7 @@ import type FlowModel from './FlowModel';
 import { EVENT_INSTANCE_COMPLETE, FlowStatus } from './constant/constant';
 import type { NextTaskUnit } from './nodes/BaseNode';
 import { createTaskId } from './util/ID';
+import type Recorder from './recorder';
 
 type TaskUnitMap = Map<string, TaskUnit>;
 
@@ -15,12 +16,14 @@ export default class Scheduler extends EventEmitter {
   taskQueueMap: Map<string, TaskUnit[]>;
   taskRunningMap: Map<string, TaskUnitMap>;
   flowModel: FlowModel;
+  recorder: Recorder;
   currentTask: TaskUnit | null;
   constructor(config) {
     super();
     this.taskQueueMap = new Map();
     this.taskRunningMap = new Map();
     this.flowModel = config.flowModel;
+    this.recorder = config.recorder;
     this.currentTask = null;
   }
   run(executionId) {
@@ -65,14 +68,17 @@ export default class Scheduler extends EventEmitter {
   }
   async exec(taskUnit: TaskUnit) {
     const model = this.flowModel.createTask(taskUnit.nodeId);
-    model.execute({
+    const r = await model.execute({
       executionId: taskUnit.executionId,
       taskId: taskUnit.taskId,
       nodeId: taskUnit.nodeId,
       next: this.next.bind(this),
     });
+    if (!r) this.cancel(taskUnit);
   }
-
+  cancel(taskUnit: TaskUnit) {
+    // TODO: 流程执行异常中断
+  }
   async next(data: NextTaskUnit) {
     if (data.outgoing && data.outgoing.length > 0) {
       data.outgoing.forEach((item) => {
@@ -82,8 +88,19 @@ export default class Scheduler extends EventEmitter {
         });
       });
     }
+    this.saveTaskResult(data);
     this.removeRunningTask(data);
     this.run(data.executionId);
+  }
+  saveTaskResult(data: NextTaskUnit) {
+    this.recorder.addTask({
+      executionId: data.executionId,
+      taskId: data.taskId,
+      nodeId: data.nodeId,
+      nodeType: data.nodeType,
+      timestamp: Date.now(),
+      properties: data.properties,
+    });
   }
   getNextTask(executionId) {
     const currentTaskQueue = this.taskQueueMap.get(executionId);
