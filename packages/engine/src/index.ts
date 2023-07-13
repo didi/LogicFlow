@@ -67,7 +67,7 @@ export default class Engine {
    * 执行流程，允许多次调用。
    */
   async execute(execParam?: TaskParams) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (!execParam) {
         execParam = {};
       }
@@ -75,6 +75,9 @@ export default class Engine {
         ...execParam,
         callback: (result) => {
           resolve(result);
+        },
+        onError: (error) => {
+          reject(error);
         },
       });
     });

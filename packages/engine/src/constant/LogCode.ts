@@ -1,6 +1,7 @@
 export enum ErrorCode {
   // 模型数据错误
   NONE_START_NODE = 1000,
+  NONE_NODE_ID = 1001,
   // 表达式错误
   NO_DOCUMENT_BODY = 2001,
 }
@@ -14,6 +15,7 @@ export enum WarningCode {
 
 const errorMsgMapCn = {
   [ErrorCode.NONE_START_NODE]: '未找到入度为0的节点',
+  [ErrorCode.NONE_NODE_ID]: '流程数据中存在没有此节点',
   [ErrorCode.NO_DOCUMENT_BODY]: '找不到document.body, 请在DOM加载完成后再执行',
 };
 

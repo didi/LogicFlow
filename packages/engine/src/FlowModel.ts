@@ -8,6 +8,7 @@ import {
 } from './constant/constant';
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
+import { ErrorCode, getErrorMsg } from './constant/LogCode';
 
 export type TaskUnit = {
   executionId: string;
@@ -27,6 +28,7 @@ export type TaskParams = {
 
 export type ExecParams = {
   callback?: (result: FlowResult) => void;
+  onError?: (error: Error) => void;
 } & TaskParams;
 
 export default class FlowModel {
@@ -215,9 +217,21 @@ export default class FlowModel {
       this.isRunning = false;
     }
   }
-  private async createExecuteInstance() {
+  private createExecuteInstance() {
     const execParams = this.executeQueue.shift();
-    this.executionId = createExecId();
+    if (execParams.executionId) {
+      this.executionId = execParams.executionId;
+    } else {
+      this.executionId = createExecId();
+    }
+    if (execParams.nodeId) {
+      const nodeConfig = this.nodeConfigMap.get(execParams.nodeId);
+      if (!nodeConfig) {
+        execParams.onError(new Error(`${getErrorMsg(ErrorCode.NONE_NODE_ID)}(${execParams.nodeId})`));
+        return;
+      }
+      this.startNodes = [nodeConfig];
+    }
     this.executingInstance = execParams;
     this.startNodes.forEach((startNode) => {
       this.scheduler.addTask({
@@ -225,7 +239,7 @@ export default class FlowModel {
         nodeId: startNode.id,
       });
       // 所有的开始节点都执行
-      this.scheduler.run(this.executionId);
     });
+    this.scheduler.run(this.executionId);
   }
 }

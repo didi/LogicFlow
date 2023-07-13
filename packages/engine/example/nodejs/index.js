@@ -10,18 +10,27 @@ async function test() {
           id: 'node1',
           type: 'StartNode',
           properties: {
-          },
+          }
         },
         {
           id: 'node2',
           type: 'TaskNode',
-          properties: {},
+          properties: {}
         },
         {
           id: 'node3',
-          type: 'TaskNode',
-          properties: {},
+          type: 'StartNode',
+          properties: {}
         },
+        {
+          id: 'node4',
+          type: 'TaskNode',
+          properties: {}
+        },
+        {
+          id: 'node5',
+          type: 'StartNode',
+        }
       ],
       edges: [
         {
@@ -29,21 +38,18 @@ async function test() {
           sourceNodeId: 'node1',
           targetNodeId: 'node2',
           properties: {
-            conditionExpression: 'false',
-          },
+          }
         },
         {
           id: 'edge2',
-          sourceNodeId: 'node1',
-          targetNodeId: 'node3',
+          sourceNodeId: 'node3',
+          targetNodeId: 'node4',
           properties: {
-            conditionExpression: 'true',
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
-    global: {},
-  };
+  }
   engine.load(flowData);
   const result = await engine.execute();
   const execution = await engine.getExecutionRecord(result.executionId);

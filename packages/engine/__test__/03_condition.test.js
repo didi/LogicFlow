@@ -1,7 +1,7 @@
 import Engine from '../src/index';
 
-describe('流程引擎条件计算', () => {
-  test('边edge1的条件不满足, 边edge2的条件满足', async () => {
+describe('@logicflow/engine condition', () => {
+  test('Condition of Edge edge1 not satisfied, condition of Edge edge2 satisfied.', async () => {
     const engine = new Engine();
     const flowData = {
       graphData: {

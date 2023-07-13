@@ -1,7 +1,7 @@
 import Engine from '../src/index';
 
-describe('流程引擎执行记录器', () => {
-  test('获取流程执行记录', async () => {
+describe('@logicflow/engine Recorder', () => {
+  test('Retrieve Execution Process Records.', async () => {
     const engine = new Engine();
     const flowData = {
       graphData: {
