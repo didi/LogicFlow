@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@logicflow/core": "^1.2.9",
-    "ids": "^1.0.0",
+    "ids": "1.0.3",
     "jest": "27.5.1",
     "lodash-es": "^4.17.21",
     "preact": "^10.4.8"
