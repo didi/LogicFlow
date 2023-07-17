@@ -20,15 +20,11 @@ export default class Recorder implements RecorderInterface {
   */
   async addTask(task: RecorderData) {
     const { executionId, taskId } = task;
-    let instanceData = await this.getExecutionTasks(executionId);
+    const instanceData = await this.getExecutionTasks(executionId);
     if (!instanceData) {
-      instanceData = [];
-      const instance = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
-      instance.push(executionId);
-      storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instance);
+      this.pushExecution(executionId);
     }
-    instanceData.push(taskId);
-    storage.setItem(executionId, instanceData);
+    this.pushTaskToExecution(executionId, taskId);
     storage.setItem(taskId, task);
   }
   async getTask(taskId: string): Promise<RecorderData> {
@@ -47,5 +43,15 @@ export default class Recorder implements RecorderInterface {
       });
     });
     storage.removeItem(LOGICFLOW_ENGINE_INSTANCES);
+  }
+  private pushExecution(executionId) {
+    const instance = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    instance.push(executionId);
+    storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instance);
+  }
+  private pushTaskToExecution(executionId, taskId) {
+    const tasks = storage.getItem(executionId) || [];
+    tasks.push(taskId);
+    storage.setItem(executionId, tasks);
   }
 }

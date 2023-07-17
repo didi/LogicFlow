@@ -10,6 +10,7 @@ import type {
   TaskParam,
   NodeParam,
   ResumeParam,
+  NodeExecResult,
 } from './types.d';
 import type FlowModel from './FlowModel';
 import type { NextTaskParam } from './nodes/BaseNode';
@@ -63,20 +64,23 @@ export default class Scheduler extends EventEmitter {
     nodeId?: string;
     taskId?: string;
   }) {
-    const { executionId } = runParams;
-    const currentNode = this.getNextNode(executionId);
-    if (currentNode) {
-      const taskId = createTaskId();
-      const taskParam = {
-        ...currentNode,
-        taskId,
-      };
-      this.pushTaskToRunningMap(taskParam);
-      this.exec(taskParam);
-    } else if (!this.hasRunningTask(executionId)) {
+    const nodeQueue = this.nodeQueueMap.get(runParams.executionId);
+    if (nodeQueue.length > 0) {
+      this.nodeQueueMap.set(runParams.executionId, []);
+      for (let i = 0; i < nodeQueue.length; i++) {
+        const currentNode = nodeQueue[i];
+        const taskId = createTaskId();
+        const taskParam = {
+          ...currentNode,
+          taskId,
+        };
+        this.pushTaskToRunningMap(taskParam);
+        this.exec(taskParam);
+      }
+    } else if (!this.hasRunningTask(runParams.executionId)) {
       // 当一个流程在nodeQueueMap和taskRunningMap中都不存在执行的节点时，说明这个流程已经执行完成。
       this.emit(EVENT_INSTANCE_COMPLETE, {
-        executionId,
+        executionId: runParams.executionId,
         nodeId: runParams.nodeId,
         taskId: runParams.taskId,
         status: FlowStatus.COMPLETED,
@@ -158,7 +162,7 @@ export default class Scheduler extends EventEmitter {
   private interrupted({
     execResult,
     taskParam,
-  } : { execResult: ActionResult, taskParam: TaskParam}) {
+  } : { execResult: NodeExecResult, taskParam: TaskParam}) {
     this.emit(EVENT_INSTANCE_INTERRUPTED, {
       executionId: taskParam.executionId,
       status: FlowStatus.INTERRUPTED,
@@ -166,9 +170,6 @@ export default class Scheduler extends EventEmitter {
       taskId: taskParam.taskId,
       detail: execResult.detail,
     });
-  }
-  private cancel(taskParam: TaskParam) {
-    // TODO: 流程执行异常中断
   }
   private async next(data: NextTaskParam) {
     if (data.outgoing && data.outgoing.length > 0) {
@@ -179,7 +180,7 @@ export default class Scheduler extends EventEmitter {
         });
       });
     }
-    this.saveTaskResult(data);
+    await this.saveTaskResult(data);
     this.removeTaskFromRunningMap(data);
     this.run({
       executionId: data.executionId,
@@ -187,8 +188,11 @@ export default class Scheduler extends EventEmitter {
       taskId: data.taskId,
     });
   }
-  private saveTaskResult(data: TaskResult) {
-    this.recorder.addTask({
+  /**
+   * 为了防止多次添加导致
+   */
+  private async saveTaskResult(data: TaskResult) {
+    await this.recorder.addTask({
       executionId: data.executionId,
       taskId: data.taskId,
       nodeId: data.nodeId,
@@ -196,13 +200,5 @@ export default class Scheduler extends EventEmitter {
       timestamp: Date.now(),
       properties: data.properties,
     });
-  }
-  private getNextNode(executionId): NodeParam | null {
-    const currentTaskQueue = this.nodeQueueMap.get(executionId);
-    if (!currentTaskQueue || currentTaskQueue.length === 0) {
-      return null;
-    }
-    const currentTask = currentTaskQueue.shift();
-    return currentTask;
   }
 }

@@ -37,8 +37,10 @@ export interface RecorderInterface {
   clear: () => void;
 };
 
-export type ActionResult = void | {
-  status: TaskStatus;
+export type TaskStatus = 'success' | 'error' | 'interrupted' | '';
+
+export type ActionResult = {
+  status?: TaskStatus;
   detail?: Record<string, any>;
 };
 
