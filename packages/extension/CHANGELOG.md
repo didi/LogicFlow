@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.9...@logicflow/extension@1.2.10) (2023-07-17)
+
+
+### Bug Fixes
+
+* calculate the pos of the menu considering the bounds([#1019](https://github.com/didi/LogicFlow/issues/1019)) ([43961a6](https://github.com/didi/LogicFlow/commit/43961a61190c7efc22f088f320d34ca60b9a5f4f))
+* use anchors to adjust the pos of edges during dragging([#807](https://github.com/didi/LogicFlow/issues/807)[#875](https://github.com/didi/LogicFlow/issues/875)) ([83c7385](https://github.com/didi/LogicFlow/commit/83c7385f43ed24cd9b13cce60e0218b2bba561b2))
+* 修正Control移除item不正确的问题 ([560a007](https://github.com/didi/LogicFlow/commit/560a0076212cab6b014e614c8f0b3f0e06157299))
+
+
+
+
+
 ## [1.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.8...@logicflow/extension@1.2.9) (2023-06-21)
 
 

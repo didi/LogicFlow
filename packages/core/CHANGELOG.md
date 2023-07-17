@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.9...@logicflow/core@1.2.10) (2023-07-17)
+
+**Note:** Version bump only for package @logicflow/core
+
+
+
+
+
 ## [1.2.9](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.8...@logicflow/core@1.2.9) (2023-06-21)
 
 
