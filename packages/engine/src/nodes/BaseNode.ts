@@ -1,4 +1,11 @@
+import { TaskStatus } from '../constant/constant';
 import { getExpressionResult } from '../expression';
+import type {
+  ActionResult,
+  NodeExecResult,
+  ExecResumeParams,
+  ExecParams,
+} from '../types.d';
 
 export interface BaseNodeInterface {
   outgoing: Record<string, any>[];
@@ -6,7 +13,7 @@ export interface BaseNodeInterface {
   nodeId: string;
   type: string;
   readonly baseType: string;
-  execute(taskUnit): Promise<boolean>;
+  execute(taskParam): Promise<NodeExecResult>;
 }
 
 export type NodeConstructor = {
@@ -37,20 +44,13 @@ export type NodeConfig = {
   outgoing: OutgoingConfig[];
 };
 
-export type NextTaskUnit = {
+export type NextTaskParam = {
   executionId: string;
   nodeId: string;
   taskId: string;
   nodeType: string;
   outgoing: OutgoingConfig[];
   properties?: Record<string, any>;
-};
-
-export type ExecParams = {
-  executionId: string;
-  taskId: string;
-  nodeId: string;
-  next: (data: NextTaskUnit) => void;
 };
 
 export default class BaseNode implements BaseNodeInterface {
@@ -92,10 +92,46 @@ export default class BaseNode implements BaseNodeInterface {
   /**
    * 节点的每一次执行都会生成一个唯一的taskId
    */
-  async execute(params: ExecParams): Promise<boolean> {
-    const r = await this.action();
+  public async execute(params: ExecParams): Promise<NodeExecResult> {
+    const r = await this.action({
+      executionId: params.executionId,
+      taskId: params.taskId,
+      nodeId: this.nodeId,
+    });
+    if (!r || r.status === TaskStatus.SUCCESS) {
+      const outgoing = await this.getOutgoing();
+      params.next({
+        executionId: params.executionId,
+        taskId: params.taskId,
+        nodeId: this.nodeId,
+        nodeType: this.type,
+        properties: this.properties,
+        outgoing,
+      });
+    }
+    return {
+      status: r && r.status,
+      detail: r && r.detail,
+      executionId: params.executionId,
+      taskId: params.taskId,
+      nodeId: this.nodeId,
+      nodeType: this.type,
+      properties: this.properties,
+    };
+  }
+  /**
+   * 节点在执行中断后，可以通过resume方法恢复执行。
+   * 自定义节点时不建议重写此方法
+   */
+  public async resume(params: ExecResumeParams): Promise<undefined> {
     const outgoing = await this.getOutgoing();
-    r && params.next({
+    await this.onResume({
+      executionId: params.executionId,
+      nodeId: params.nodeId,
+      taskId: params.taskId,
+      data: params.data,
+    });
+    params.next({
       executionId: params.executionId,
       taskId: params.taskId,
       nodeId: this.nodeId,
@@ -103,13 +139,13 @@ export default class BaseNode implements BaseNodeInterface {
       properties: this.properties,
       outgoing,
     });
-    return r;
+    return undefined;
   }
-  async getOutgoing() {
+  private async getOutgoing(): Promise<OutgoingConfig[]> {
     const outgoing = [];
     const expressions = [];
     for (const item of this.outgoing) {
-      const { id, target, properties } = item;
+      const { properties } = item;
       expressions.push(this.isPass(properties));
     }
     const result = await Promise.all(expressions);
@@ -120,7 +156,7 @@ export default class BaseNode implements BaseNodeInterface {
     });
     return outgoing;
   }
-  async isPass(properties) {
+  private async isPass(properties) {
     if (!properties) return true;
     const { conditionExpression } = properties;
     if (!conditionExpression) return true;
@@ -135,9 +171,31 @@ export default class BaseNode implements BaseNodeInterface {
   }
   /**
    * 节点的执行逻辑
-   * @returns {boolean} 返回true表示执行成功，返回false表示执行失败,中断流程执行
+   * @overridable 可以自定义节点重写此方法。
+   * @param params.executionId 流程执行记录ID
+   * @param params.taskId 此节点执行记录ID
+   * @param params.nodeId 节点ID
    */
-  async action() {
-    return true;
+  public async action(params: {
+    executionId: string;
+    taskId: string;
+    nodeId: string;
+  }): Promise<ActionResult> {
+    return undefined;
+  }
+  /**
+   * 节点的重新恢复执行逻辑
+   * @overridable 可以自定义节点重写此方法。
+   * @param params.executionId 流程执行记录ID
+   * @param params.taskId 此节点执行记录ID
+   * @param params.nodeId 节点ID
+   */
+  public async onResume(params: {
+    executionId: string,
+    taskId: string,
+    nodeId: string,
+    data?: Record<string, any>,
+  }): Promise<void> {
+    return undefined;
   }
 }

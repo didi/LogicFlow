@@ -1,4 +1,5 @@
 import type { GraphConfigData } from '@logicflow/core';
+import type { ResumeParams } from './types.d';
 import FlowModel, { TaskParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';
@@ -82,6 +83,19 @@ export default class Engine {
       });
     });
   }
+  async resume(resumeParam: ResumeParams) {
+    return new Promise((resolve, reject) => {
+      this.flowModel.resume({
+        ...resumeParam,
+        callback: (result) => {
+          resolve(result);
+        },
+        onError: (error) => {
+          reject(error);
+        },
+      });
+    });
+  }
   async getExecutionRecord(executionId) {
     const tasks = await this.recorder.getExecutionTasks(executionId);
     const records = [];
@@ -94,11 +108,8 @@ export default class Engine {
 
 export {
   Engine,
-};
-
-export const EngineNode = {
-  StartNode,
   TaskNode,
+  StartNode,
 };
 
 export type {

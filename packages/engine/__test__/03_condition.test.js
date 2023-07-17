@@ -1,7 +1,7 @@
 import Engine from '../src/index';
 
 describe('@logicflow/engine condition', () => {
-  test('Condition of Edge edge1 not satisfied, condition of Edge edge2 satisfied.', async () => {
+  test('The process will not continue its execution if the condition expression evaluates to false.', async () => {
     const engine = new Engine();
     const flowData = {
       graphData: {

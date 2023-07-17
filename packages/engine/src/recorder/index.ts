@@ -1,17 +1,12 @@
+import type {
+  RecorderData,
+  RecorderInterface,
+} from '../types.d';
 import storage from '../util/storage';
 
 const LOGICFLOW_ENGINE_INSTANCES = 'LOGICFLOW_ENGINE_INSTANCES';
 
-export type RecorderData = {
-  taskId: string;
-  nodeId: string;
-  executionId: string;
-  nodeType: string;
-  timestamp: number;
-  properties?: Record<string, any>;
-};
-
-export default class Recorder {
+export default class Recorder implements RecorderInterface {
   /*
   * @param {Object} task
   * {
@@ -36,7 +31,7 @@ export default class Recorder {
     storage.setItem(executionId, instanceData);
     storage.setItem(taskId, task);
   }
-  async getTask(taskId) {
+  async getTask(taskId: string): Promise<RecorderData> {
     return storage.getItem(taskId);
   }
   async getExecutionTasks(executionId) {

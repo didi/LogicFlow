@@ -31,5 +31,7 @@ describe('@logicflow/engine', () => {
     expect(engine).toBeInstanceOf(Engine);
     expect(flowModel.nodeConfigMap.size).toBe(flowData.graphData.nodes.length);
     expect(result).toHaveProperty('executionId');
+    expect(result.status).toBe('completed');
+    expect(result.nodeId).toEqual('node2');
   });
 });

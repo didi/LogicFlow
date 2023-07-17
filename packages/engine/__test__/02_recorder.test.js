@@ -1,7 +1,7 @@
 import Engine from '../src/index';
 
 describe('@logicflow/engine Recorder', () => {
-  test('Retrieve Execution Process Records.', async () => {
+  test('Using the getExecutionRecord API, receive the complete execution record of the process.', async () => {
     const engine = new Engine();
     const flowData = {
       graphData: {

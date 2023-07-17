@@ -42,7 +42,9 @@ async function test() {
         },
       ],
     },
-    globalData: {},
+    globalData: {
+      a: 2,
+    },
   };
   engine.load(flowData);
   const result = await engine.execute();

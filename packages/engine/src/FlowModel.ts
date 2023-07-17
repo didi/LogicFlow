@@ -4,26 +4,22 @@ import type {
 } from './nodes/BaseNode';
 import type Recorder from './recorder';
 import {
-  EVENT_INSTANCE_COMPLETE,
+  EVENT_INSTANCE_COMPLETE, EVENT_INSTANCE_INTERRUPTED,
 } from './constant/constant';
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
 import { ErrorCode, getErrorMsg } from './constant/LogCode';
-
-export type TaskUnit = {
-  executionId: string;
-  taskId?: string;
-  nodeId: string;
-};
+import type { TaskParam } from './types.d';
 
 export type FlowResult = {
   result?: Record<string, any>;
-} & TaskUnit;
+} & TaskParam;
 
 export type TaskParams = {
   executionId?: string;
   taskId?: string;
   nodeId?: string;
+  data?: Record<string, any>;
 };
 
 export type ExecParams = {
@@ -117,6 +113,9 @@ export default class FlowModel {
     this.scheduler.on(EVENT_INSTANCE_COMPLETE, (result) => {
       this.onTaskFinished(result);
     });
+    this.scheduler.on(EVENT_INSTANCE_INTERRUPTED, (result) => {
+      this.onTaskFinished(result);
+    });
   }
   public setStartNodeType(startNodeType) {
     this.startNodeType = startNodeType;
@@ -169,13 +168,21 @@ export default class FlowModel {
    * 外部分别触发了A和B的执行，那么A和B的执行是串行的（也就是需要A执行完成后再执行B），但是D和E的执行是并行的。
    * 如果希望A和B的执行是并行的，就不能使用同一个流程模型执行，应该初始化两个。
    */
-  public async execute(params ?: ExecParams) {
+  public async execute(params: ExecParams) {
     this.executeQueue.push(params);
     if (this.isRunning) {
       return;
     }
     this.isRunning = true;
-    this.createExecuteInstance();
+    this.createExecution();
+  }
+  public async resume(params: ExecParams) {
+    this.executeQueue.push(params);
+    if (this.isRunning) {
+      return;
+    }
+    this.isRunning = true;
+    this.createExecution();
   }
   /**
    * 创建节点实例
@@ -212,17 +219,28 @@ export default class FlowModel {
     }
     this.executingInstance = null;
     if (this.executeQueue.length > 0) {
-      this.createExecuteInstance();
+      this.createExecution();
     } else {
       this.isRunning = false;
     }
   }
-  private createExecuteInstance() {
+  private createExecution() {
     const execParams = this.executeQueue.shift();
+    this.executingInstance = execParams;
     if (execParams.executionId) {
       this.executionId = execParams.executionId;
     } else {
       this.executionId = createExecId();
+    }
+    // 如果有taskId，那么表示恢复执行
+    if (execParams.taskId) {
+      this.scheduler.resume({
+        executionId: this.executionId,
+        taskId: execParams.taskId,
+        nodeId: execParams.nodeId,
+        data: execParams.data,
+      });
+      return;
     }
     if (execParams.nodeId) {
       const nodeConfig = this.nodeConfigMap.get(execParams.nodeId);
@@ -232,7 +250,6 @@ export default class FlowModel {
       }
       this.startNodes = [nodeConfig];
     }
-    this.executingInstance = execParams;
     this.startNodes.forEach((startNode) => {
       this.scheduler.addTask({
         executionId: this.executionId,
@@ -240,6 +257,8 @@ export default class FlowModel {
       });
       // 所有的开始节点都执行
     });
-    this.scheduler.run(this.executionId);
+    this.scheduler.run({
+      executionId: this.executionId,
+    });
   }
 }
