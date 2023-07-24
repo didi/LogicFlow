@@ -837,11 +837,11 @@ const getBezierPoint = (positionStr: string): Point => {
   };
 };
 // 根据bezier曲线path求出结束切线的两点坐标
-export const getEndTangent = (path: string): Point[] => {
-  const bezierPoints = getBezierPoints(path);
-  const [p1, cp1, cp2, p2] = bezierPoints;
-  const start = sampleCubic(p1, cp1, cp2, p2);
-  return [start, bezierPoints[3]];
+export const getEndTangent = (pointsList, offset): Point[] => {
+  // const bezierPoints = getBezierPoints(path);
+  const [p1, cp1, cp2, p2] = pointsList;
+  const start = sampleCubic(p1, cp1, cp2, p2, offset);
+  return [start, pointsList[3]];
 };
 
 /**

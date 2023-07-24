@@ -60,8 +60,12 @@ export default class BezierEdge extends BaseEdge {
   getArrowInfo(): ArrowInfo {
     const { model } = this.props;
     const { hover } = this.state as IEdgeState;
-    const { path, isSelected } = model as BezierEdgeModel;
-    const [ePre, end] = getEndTangent(path);
+    const { isSelected } = model as BezierEdgeModel;
+    const { offset } = model.getArrowStyle();
+    const points = model.pointsList.map((point) => (
+      { x: point.x, y: point.y }
+    ));
+    const [ePre, end] = getEndTangent(points, offset);
     const arrowInfo = {
       start: ePre,
       end,
@@ -73,7 +77,10 @@ export default class BezierEdge extends BaseEdge {
 
   getLastTwoPoints(): any[] {
     const { model } = this.props;
-    const { path } = model as BezierEdgeModel;
-    return getEndTangent(path);
+    const { offset } = model.getArrowStyle();
+    const points = model.pointsList.map((point) => (
+      { x: point.x, y: point.y }
+    ));
+    return getEndTangent(points, offset);
   }
 }
