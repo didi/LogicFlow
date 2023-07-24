@@ -501,14 +501,14 @@
           },
           grid: true,
           edgeTextDraggable: true,
-          // edgeType: 'bezier',
+          edgeType: 'bezier',
           // 全局自定义id
-          edgeGenerator: (sourceNode, targetNode, currentEdge) => {
-            // 起始节点类型 rect 时使用 自定义的边 custom-edge
-            if (sourceNode.type === 'rect') return 'bezier'
-            if (currentEdge) return currentEdge.type
-            return 'polyline'
-          },
+          // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
+          //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
+          //   if (sourceNode.type === 'rect') return 'bezier'
+          //   if (currentEdge) return currentEdge.type
+          //   return 'polyline'
+          // },
           idGenerator(type) {
             return type + '_' + Math.random()
           }
@@ -572,14 +572,14 @@
             rect: {
               width: 200,
               height: 40,
+            },
+            arrow: {
+              offset: 4, // 箭头长度
+              verticalLength: 2, // 箭头垂直于边的距离
             }
-            // arrow: {
-            //   offset: 4, // 箭头长度
-            //   verticalLength: 2, // 箭头垂直于边的距离
-            // }
           }
         );
-        lf.setDefaultEdgeType('polyline');
+        // lf.setDefaultEdgeType('polyline');
       }
     </script>
 

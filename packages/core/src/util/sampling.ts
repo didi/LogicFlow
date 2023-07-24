@@ -1,4 +1,5 @@
 import { Point, Vector } from '../type/index';
+import { distance } from './node';
 
 const SAMPLING_FREQUENCY = 100;
 const normal: Vector = {
@@ -8,7 +9,7 @@ const normal: Vector = {
 };
 
 // 采样三次贝塞尔曲线上的点, 假设采样频率为SAMPLING_FREQUENCY, 取倒数第1-6/SAMPLING_FREQUENCY个点即t=1-6/SAMPLING_FREQUENCY
-export function sampleCubic(p1: Point, cp1: Point, cp2: Point, p2: Point) {
+export function sampleCubic(p1: Point, cp1: Point, cp2: Point, p2: Point, offset: number) {
   const program = (t: number) => {
     if (t < 0 || t > 1) {
       throw new RangeError('The value range of parameter "t" is [0,1]');
@@ -26,8 +27,19 @@ export function sampleCubic(p1: Point, cp1: Point, cp2: Point, p2: Point) {
         + p2.y * (t ** 3),
     };
   };
-
-  return program(1 - 5 / SAMPLING_FREQUENCY);
+  // fix: https://github.com/didi/LogicFlow/issues/951
+  // 计算贝塞尔曲线上与终点距离为offset的点，作为箭头的的垂点。
+  let arrowDistance = 0;
+  let t = 2;
+  const { x: x1, y: y1 } = p2;
+  let point = p2;
+  while (arrowDistance < offset && t < 50) {
+    point = program(1 - t / SAMPLING_FREQUENCY);
+    const { x: x2, y: y2 } = point;
+    arrowDistance = distance(x1, y1, x2, y2);
+    t++;
+  }
+  return point;
 }
 
 function crossByZ(v: Vector, v1: Vector) {
