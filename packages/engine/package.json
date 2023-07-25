@@ -32,7 +32,6 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^1.2.9",
     "uuid": "^8.2.0"
   },
   "standard-version": {

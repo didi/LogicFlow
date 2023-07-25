@@ -1,5 +1,4 @@
-import type { GraphConfigData } from '@logicflow/core';
-import type { ResumeParams } from './types.d';
+import type { ResumeParams, GraphConfigData } from './types.d';
 import FlowModel, { TaskParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';

@@ -58,3 +58,55 @@ export type ResumeParams = {
   nodeId: string;
   data?: Record<string, any>;
 }
+
+export declare type Point = {
+  id?: string;
+  x: number;
+  y: number;
+  [key: string]: unknown;
+};
+
+export declare type TextConfig = {
+  value: string;
+} & Point;
+export declare type GraphConfigData = {
+  nodes: NodeConfig[];
+  edges: EdgeConfig[];
+};
+export declare type NodeConfig = {
+  id?: string;
+  type: string;
+  x: number;
+  y: number;
+  text?: TextConfig | string;
+  zIndex?: number;
+  properties?: Record<string, unknown>;
+};
+export declare type EdgeConfig = {
+  id?: string;
+  /**
+   * 边的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
+   * LogicFlow内部默认为polyline
+   */
+  type?: string;
+  sourceNodeId: string;
+  sourceAnchorId?: string;
+  targetNodeId: string;
+  targetAnchorId?: string;
+  startPoint?: {
+      x: number;
+      y: number;
+  };
+  endPoint?: {
+      x: number;
+      y: number;
+  };
+  text?: {
+      x: number;
+      y: number;
+      value: string;
+  } | string;
+  pointsList?: Point[];
+  zIndex?: number;
+  properties?: Record<string, unknown>;
+};
