@@ -21,6 +21,8 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
+    "**/*.test.js",
+    ".eslintrc.js",
     "**/*.d.ts",
     "packages/core/types"
   ]

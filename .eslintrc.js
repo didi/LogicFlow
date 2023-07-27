@@ -27,7 +27,7 @@ module.exports = {
       pragma: 'h',
     },
   },
-  ignorePatterns: ["**/*.mjs"],
+  ignorePatterns: ["**/*.mjs", "**/*.test.js"],
   rules: {
     'indent': ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
