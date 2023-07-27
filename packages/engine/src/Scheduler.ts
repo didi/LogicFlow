@@ -22,23 +22,38 @@ type TaskResult = {
   extraInfo?: Record<string, any>;
 } & NextTaskParam;
 
+type ExecutionId = string;
+
 /**
  * 调度器
  * 通过一个队列维护需要执行的节点，一个集合维护正在执行的节点
  */
 export default class Scheduler extends EventEmitter {
-  nodeQueueMap: Map<string, NodeParam[]>;
-  taskRunningMap: Map<string, TaskParamMap>;
+  /**
+   * 当前需要执行的节点队列
+   */
+  nodeQueueMap: Map<ExecutionId, NodeParam[]>;
+  /**
+   * 当前正在执行的节点集合
+   * 在每个节点执行完成后，会从集合中删除。
+   * 同时会判断此集合中是否还存在和此节点相同的executionId，如果不存在，说明此流程已经执行完成。
+   */
+  taskRunningMap: Map<ExecutionId, TaskParamMap>;
+  /**
+   * 流程模型，用于创建节点模型。
+   */
   flowModel: FlowModel;
+  /**
+   * 执行记录存储器
+   * 用于存储节点执行的结果。
+   */
   recorder: Recorder;
-  currentTask: TaskParam | null;
   constructor(config) {
     super();
     this.nodeQueueMap = new Map();
     this.taskRunningMap = new Map();
     this.flowModel = config.flowModel;
     this.recorder = config.recorder;
-    this.currentTask = null;
   }
   /**
    * 添加一个任务到队列中。
@@ -102,10 +117,6 @@ export default class Scheduler extends EventEmitter {
       ...resumeParam,
       next: this.next.bind(this),
     });
-  }
-  // 流程执行过程中出错，停止执行
-  stop(data) {
-    console.log('stop', data);
   }
   private pushTaskToRunningMap(taskParam) {
     const { executionId, taskId } = taskParam;
@@ -171,7 +182,7 @@ export default class Scheduler extends EventEmitter {
       detail: execResult.detail,
     });
   }
-  private async next(data: NextTaskParam) {
+  private next(data: NextTaskParam) {
     if (data.outgoing && data.outgoing.length > 0) {
       data.outgoing.forEach((item) => {
         this.addTask({
@@ -180,7 +191,7 @@ export default class Scheduler extends EventEmitter {
         });
       });
     }
-    await this.saveTaskResult(data);
+    this.saveTaskResult(data);
     this.removeTaskFromRunningMap(data);
     this.run({
       executionId: data.executionId,
@@ -188,11 +199,8 @@ export default class Scheduler extends EventEmitter {
       taskId: data.taskId,
     });
   }
-  /**
-   * 为了防止多次添加导致
-   */
-  private async saveTaskResult(data: TaskResult) {
-    await this.recorder.addTask({
+  private saveTaskResult(data: TaskResult) {
+    this.recorder.addTask({
       executionId: data.executionId,
       taskId: data.taskId,
       nodeId: data.nodeId,

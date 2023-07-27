@@ -20,7 +20,7 @@ export default class Recorder implements RecorderInterface {
   */
   async addTask(task: RecorderData) {
     const { executionId, taskId } = task;
-    const instanceData = await this.getExecutionTasks(executionId);
+    const instanceData = this.getExecutionTasks(executionId);
     if (!instanceData) {
       this.pushExecution(executionId);
     }
