@@ -4,19 +4,7 @@
 
 ## 使用方式
 
-```js
-import LogicFlowEngine from '@logicflow/engine';
-
-const flowModel = new LogicFlowEngine({
-  graphData: {
-    nodes: [],
-    edges: [],
-  },
-  global: {
-    // 全局数据
-  }
-});
-
-flowModel.execute();
-
+```shell
+npm test
 ```
+
