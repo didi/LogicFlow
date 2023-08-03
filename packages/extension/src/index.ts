@@ -1,7 +1,9 @@
 export * from './bpmn';
+export * from './bpmn-adapter';
+export * from './bpmn-elements';
+export * from './bpmn-elements-adapter';
 // export * from './~mindmap';
 export * from './tools/snapshot';
-export * from './bpmn-adapter';
 export * from './turbo-adapter';
 export * from './insert-node-in-polyline';
 export * from './components/control';
