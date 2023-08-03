@@ -690,7 +690,7 @@ function convertBpmn2LfData(bpmnData: any, other?: ExtraPropsType) {
               } else {
                 func(obj[key]);
               }
-              let keys: (string | symbol)[];
+              let keys: any[];
               if ((keys = Reflect.ownKeys(props)).length > 0) {
                 keys.forEach((key) => {
                   Reflect.set(obj, key, props[key]);
