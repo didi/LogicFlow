@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { h } from '@logicflow/core';
-import { GroupNode } from '@logicflow/extension';
+import { GroupNode } from '../../../materials/group/index';
 
 export function SubProcessFactory(): {
   type: string,
