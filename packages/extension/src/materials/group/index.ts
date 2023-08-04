@@ -90,6 +90,22 @@ class Group {
     const nodeModel = this.lf.getNodeModelById(data.id);
     const bounds = nodeModel.getBounds();
     const group = this.getGroup(bounds, data);
+    // https://github.com/didi/LogicFlow/issues/1261
+    // 当使用SelectionSelect框选后触发lf.addNode(Group)
+    // 会触发appendNodeToGroup()的执行
+    // 由于this.getGroup()会判断node.id !== nodeData.id
+    // 因此当addNode是Group类型时，this.getGroup()会一直返回空
+    // 导致了下面这段代码无法执行，也就是无法将当前添加的Group添加到this.nodeGroupMap中
+    // 这导致了折叠分组时触发的foldEdge()无法正确通过getNodeGroup()拿到正确的groupId
+    // 从而导致折叠分组时一直都会创建一个虚拟边
+    // 而初始化分组时由于正确设置了nodeGroupMap的数据，因此不会产生虚拟边的错误情况
+    if (nodeModel.isGroup) {
+      // 如果这个节点是分组，那么将其子节点也记录下来
+      data.children.forEach((nodeId) => {
+        this.nodeGroupMap.set(nodeId, data.id);
+      });
+      this.nodeSelected({ data, isSelected: false, isMultiple: false });
+    }
     if (!group) return;
     const isAllowAppendIn = group.isAllowAppendIn(data);
     if (!isAllowAppendIn) {
@@ -102,13 +118,6 @@ class Group {
     group.addChild(data.id);
     this.nodeGroupMap.set(data.id, group.id);
     group.setAllowAppendChild(false);
-    // 如果这个节点是分组，那么将其子节点也记录下来
-    if (nodeModel.isGroup) {
-      data.children.forEach((nodeId) => {
-        this.nodeGroupMap.set(nodeId, data.id);
-      });
-      this.nodeSelected({ data, isSelected: false, isMultiple: false });
-    }
   };
   deleteGroupChild = ({ data }) => {
     // 如果删除的是分组节点，则同时删除分组的子节点
