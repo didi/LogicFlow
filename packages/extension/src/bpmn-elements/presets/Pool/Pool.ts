@@ -3,7 +3,7 @@
  * 泳道节点
  */
 import { h } from '@logicflow/core';
-import { GroupNode } from '@logicflow/extension';
+import { GroupNode } from '../../../materials/group/index';
 import { poolToJSON } from '.';
 
 const laneMinSize = {
