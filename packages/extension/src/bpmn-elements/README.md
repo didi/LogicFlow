@@ -217,3 +217,7 @@ const complexGateway = GatewayNodeFactory('bpmn:complexGateway', complexIcon)
 ### 流
 
 流的扩展和自定义边的定义方法完全相同，参考 <https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge>
+
+### 其他节点
+
+其他类型的节点大家可以根据自己的需要通过自定义节点的方式进行扩展
