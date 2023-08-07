@@ -1,19 +1,22 @@
 import type { ResumeParams, GraphConfigData } from './types.d';
-import FlowModel, { TaskParams } from './FlowModel';
+import FlowModel, { ActionParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';
 import Recorder from './recorder';
+import { createEngineId } from './util/ID';
+import { NodeConstructor } from './nodes/BaseNode';
 
 export default class Engine {
   global: Record<string, any>;
   graphData: GraphConfigData;
-  nodeModelMap: Map<string, any>;
+  nodeModelMap: Map<string, NodeConstructor>;
   flowModel: FlowModel;
+  id: string;
   recorder: Recorder;
   constructor() {
     this.nodeModelMap = new Map();
     this.recorder = new Recorder();
-    // register node
+    this.id = createEngineId();
     this.register({
       type: StartNode.nodeTypeName,
       model: StartNode,
@@ -25,7 +28,7 @@ export default class Engine {
   }
   /**
    * 注册节点
-   * @param nodeConfig { type: 'custom-node', model: Class }
+   * @param nodeConfig { type: 'custom-node', model: NodeClass }
    */
   register(nodeConfig) {
     this.nodeModelMap.set(nodeConfig.type, nodeConfig.model);
@@ -35,8 +38,8 @@ export default class Engine {
    * 注意：由于执行记录不会主动删除，所以需要自行清理。
    * nodejs环境建议自定义为持久化存储。
    * engine.setCustomRecorder({
-   *   async addTask(task) {}
-   *   async getTask(taskId) {}
+   *   async addActionRecord(task) {}
+   *   async getTask(actionId) {}
    *   async getExecutionTasks(executionId) {}
    *   clear() {}
    * });
@@ -66,7 +69,7 @@ export default class Engine {
   /**
    * 执行流程，允许多次调用。
    */
-  async execute(execParam?: TaskParams) {
+  async execute(execParam?: ActionParams) {
     return new Promise((resolve, reject) => {
       if (!execParam) {
         execParam = {};
@@ -96,10 +99,10 @@ export default class Engine {
     });
   }
   async getExecutionRecord(executionId) {
-    const tasks = await this.recorder.getExecutionTasks(executionId);
+    const tasks = await this.recorder.getExecutionActions(executionId);
     const records = [];
     for (let i = 0; i < tasks.length; i++) {
-      records.push(this.recorder.getTask(tasks[i]));
+      records.push(this.recorder.getActionRecord(tasks[i]));
     }
     return Promise.all(records);
   }
@@ -112,5 +115,5 @@ export {
 };
 
 export type {
-  TaskParams,
+  ActionParams,
 };

@@ -9,23 +9,22 @@ import {
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
 import { ErrorCode, getErrorMsg } from './constant/LogCode';
-import type { TaskParam } from './types.d';
+import type { ActionParam } from './types.d';
 
 export type FlowResult = {
   result?: Record<string, any>;
-} & TaskParam;
+} & ActionParam;
 
-export type TaskParams = {
+export type ActionParams = {
   executionId?: string;
-  taskId?: string;
+  actionId?: string;
   nodeId?: string;
-  data?: Record<string, any>;
 };
 
 export type ExecParams = {
   callback?: (result: FlowResult) => void;
   onError?: (error: Error) => void;
-} & TaskParams;
+} & ActionParams;
 
 export default class FlowModel {
   /**
@@ -39,7 +38,7 @@ export default class FlowModel {
   /**
    * 待执行的队列，当流程正在执行时，如果再次触发执行。那么会将执行参数放入到队列中，等待上一次执行完成后再执行。
    */
-  executeQueue: ExecParams[];
+  executeList: ExecParams[];
   /**
    * 当前正在执行。当监听到调度器执行完成时，出触发执行参数中的回调，告知外部执行完成。
    */
@@ -92,7 +91,7 @@ export default class FlowModel {
     // 流程包含的节点类型
     this.nodeModelMap = nodeModelMap;
     // 需要执行的队列
-    this.executeQueue = [];
+    this.executeList = [];
     // 执行中的任务
     this.executingInstance = null;
     // 外部传入的上下文，最终会传递给每个节点
@@ -107,10 +106,10 @@ export default class FlowModel {
       recorder,
     });
     this.scheduler.on(EVENT_INSTANCE_COMPLETE, (result) => {
-      this.onTaskFinished(result);
+      this.onExecuteFinished(result);
     });
     this.scheduler.on(EVENT_INSTANCE_INTERRUPTED, (result) => {
-      this.onTaskFinished(result);
+      this.onExecuteFinished(result);
     });
   }
   public setStartNodeType(startNodeType) {
@@ -197,38 +196,29 @@ export default class FlowModel {
    * 一个流程存在着两个开始节点，A和B，A和B的下一个节点都是C，C的下两个节点是D和E。
    * 外部分别触发了A和B的执行，那么A和B的执行是串行的（也就是需要A执行完成后再执行B），但是D和E的执行是并行的。
    * 如果希望A和B的执行是并行的，就不能使用同一个流程模型执行，应该初始化两个。
+   * TODO: 去掉此处的对列，直接使用调度器的队列。
    */
   public async execute(params: ExecParams) {
-    this.executeQueue.push(params);
-    if (this.isRunning) {
-      return;
-    }
-    this.isRunning = true;
-    this.createExecution();
+    this.createExecution(params);
   }
   public async resume(params: ExecParams) {
-    this.executeQueue.push(params);
-    if (this.isRunning) {
-      return;
-    }
-    this.isRunning = true;
-    this.createExecution();
+    this.createExecution(params);
   }
   /**
-   * 创建节点实例, 每个节点实例都会有一个唯一的taskId。
-   * 通过executionId、nodeId、taskId可以唯一确定一个节点的某一次执行。
+   * 创建节点实例, 每个节点实例都会有一个唯一的actionId。
+   * 通过executionId、nodeId、actionId可以唯一确定一个节点的某一次执行。
    * @param nodeId 节点Id
    * @returns 节点示例
    */
-  public createTask(nodeId: string) {
+  public createAction(nodeId: string) {
     const nodeConfig = this.nodeConfigMap.get(nodeId);
     const NodeModel = this.nodeModelMap.get(nodeConfig.type);
-    const task = new NodeModel({
+    const action = new NodeModel({
       nodeConfig,
       globalData: this.globalData,
       context: this.context,
     });
-    return task;
+    return action;
   }
   /**
    * 更新流程全局数据
@@ -243,16 +233,12 @@ export default class FlowModel {
    * 在执行完成后，通知外部此次执行完成。
    * 如果还存在待执行的任务，那么继续执行。
    */
-  private onTaskFinished(result) {
-    const { callback } = this.executingInstance;
-    if (callback) {
-      callback(result);
-    }
-    this.executingInstance = null;
-    if (this.executeQueue.length > 0) {
-      this.createExecution();
-    } else {
-      this.isRunning = false;
+  private onExecuteFinished(result) {
+    const index = this.executeList.findIndex(i => i.executionId === result.executionId);
+    if (index !== -1) {
+      const { callback } = this.executeList[index];
+      this.executeList.splice(index, 1);
+      callback && callback(result);
     }
   }
   /**
@@ -262,20 +248,20 @@ export default class FlowModel {
    * 若存在nodeId，那么表示从指定节点开始执行。
    * 若都不存在，那么新建一个executionId，从开始节点开始执行。
    */
-  private createExecution() {
-    const execParams = this.executeQueue.shift();
-    this.executingInstance = execParams;
+  private createExecution(execParams) {
+    this.executeList.push(execParams);
     // 如果有taskId，那么表示恢复执行
-    if (execParams.taskId && execParams.executionId && execParams.nodeId) {
+    if (execParams.actionId && execParams.executionId && execParams.nodeId) {
       this.scheduler.resume({
         executionId: execParams.executionId,
-        taskId: execParams.taskId,
+        actionId: execParams.actionId,
         nodeId: execParams.nodeId,
         data: execParams.data,
       });
       return;
     }
-    const executionId = execParams.executionId || createExecId();
+    const executionId = createExecId();
+    execParams.executionId = executionId;
     if (execParams.nodeId) {
       const nodeConfig = this.nodeConfigMap.get(execParams.nodeId);
       if (!nodeConfig) {
@@ -285,7 +271,7 @@ export default class FlowModel {
       this.startNodes = [nodeConfig];
     }
     this.startNodes.forEach((startNode) => {
-      this.scheduler.addTask({
+      this.scheduler.addAction({
         executionId,
         nodeId: startNode.id,
       });

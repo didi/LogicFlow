@@ -10,6 +10,9 @@ describe('@logicflow/engine Customize Node', () => {
         }
       };
     }
+    async onResume({ data }) {
+      this.globalData.formId = data.formId;
+    }
   }
   const engine = new Engine();
   engine.register({
@@ -67,7 +70,7 @@ describe('@logicflow/engine Customize Node', () => {
     const result2 = await engine.resume({
       executionId: result.executionId,
       nodeId: result.nodeId,
-      taskId: result.taskId,
+      actionId: result.actionId,
       data: {
         formId: 'form_2'
       }

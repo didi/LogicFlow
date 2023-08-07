@@ -8,9 +8,9 @@ const LOGICFLOW_ENGINE_INSTANCES = 'LOGICFLOW_ENGINE_INSTANCES';
 
 export default class Recorder implements RecorderInterface {
   /*
-  * @param {Object} task
+  * @param {Object} action
   * {
-  *   taskId: '',
+  *   actionId: '',
   *   nodeId: '',
   *   executionId: '',
   *   nodeType: '',
@@ -18,19 +18,19 @@ export default class Recorder implements RecorderInterface {
   *   properties: {},
   * }
   */
-  async addTask(task: RecorderData) {
-    const { executionId, taskId } = task;
-    const instanceData = this.getExecutionTasks(executionId);
+  async addActionRecord(action: RecorderData) {
+    const { executionId, actionId } = action;
+    const instanceData = this.getExecutionActions(executionId);
     if (!instanceData) {
       this.pushExecution(executionId);
     }
-    this.pushTaskToExecution(executionId, taskId);
-    storage.setItem(taskId, task);
+    this.pushActionToExecution(executionId, actionId);
+    storage.setItem(actionId, action);
   }
-  async getTask(taskId: string): Promise<RecorderData> {
-    return storage.getItem(taskId);
+  async getActionRecord(actionId: string): Promise<RecorderData> {
+    return storage.getItem(actionId);
   }
-  async getExecutionTasks(executionId) {
+  async getExecutionActions(executionId) {
     return storage.getItem(executionId);
   }
   clear() {
@@ -38,8 +38,8 @@ export default class Recorder implements RecorderInterface {
     instance.forEach((executionId) => {
       storage.removeItem(executionId);
       const instanceData = storage.getItem(executionId) || [];
-      instanceData.forEach((taskId) => {
-        storage.removeItem(taskId);
+      instanceData.forEach((actionId) => {
+        storage.removeItem(actionId);
       });
     });
     storage.removeItem(LOGICFLOW_ENGINE_INSTANCES);
@@ -49,9 +49,9 @@ export default class Recorder implements RecorderInterface {
     instance.push(executionId);
     storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instance);
   }
-  private pushTaskToExecution(executionId, taskId) {
-    const tasks = storage.getItem(executionId) || [];
-    tasks.push(taskId);
-    storage.setItem(executionId, tasks);
+  private pushActionToExecution(executionId, actionId) {
+    const actions = storage.getItem(executionId) || [];
+    actions.push(actionId);
+    storage.setItem(executionId, actions);
   }
 }

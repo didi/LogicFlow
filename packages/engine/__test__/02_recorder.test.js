@@ -33,18 +33,19 @@ describe('@logicflow/engine Recorder', () => {
     /**
      * [
      *   {
-     *     taskId: '',
-     *     nodeId: '',
-     *     instanceId: '',
+     *     actionId: '', // 某一个节点在某一次执行时生成的Id
+     *     nodeId: '', // 流程图节点Id
+     *     executionId: '', // 某一次执行的Id
      *     nodeType: '',
      *     timestamp: '',
      *     properties: {},
      *   }
      * ]
      */
+    // TODO: 给个例子自定义执行记录
     const execution = await engine.getExecutionRecord(executionId);
     expect(execution.length).toBe(2);
-    expect(execution[1]).toHaveProperty('taskId');
+    expect(execution[1]).toHaveProperty('actionId');
     expect(execution[1]).toHaveProperty('nodeId');
     expect(execution[1]).toHaveProperty('executionId');
     expect(execution[1]).toHaveProperty('nodeType');
