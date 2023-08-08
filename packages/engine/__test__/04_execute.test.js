@@ -4,6 +4,10 @@ describe('@logicflow/engine Execute', () => {
   test('When there are multiple start nodes in a process, all of them are executed by default.', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       * node3 |--> node4
+       */
       graphData: {
         nodes: [
           {
@@ -59,6 +63,10 @@ describe('@logicflow/engine Execute', () => {
   test('When there are multiple start nodes in a process, you can specify which start node to execute.', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       * node3 |--> node4
+       */
       graphData: {
         nodes: [
           {
@@ -118,6 +126,10 @@ describe('@logicflow/engine Execute', () => {
   test('When attempting to execute a non-existent start node in a process, an execution exception is raised.', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       * node3 |--> node4
+       */
       graphData: {
         nodes: [
           {
@@ -177,6 +189,10 @@ describe('@logicflow/engine Execute', () => {
   test('When there are multiple start nodes in a process, parallel execution is supported, and each start node generates a unique execution ID', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       * node3 |--> node4
+       */
       graphData: {
         nodes: [
           {

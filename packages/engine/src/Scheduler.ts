@@ -79,20 +79,19 @@ export default class Scheduler extends EventEmitter {
     actionId?: string;
   }) {
     const nodeQueue = this.nodeQueueMap.get(runParams.executionId);
-    if (nodeQueue.length > 0) {
-      this.nodeQueueMap.set(runParams.executionId, []);
-      // TODO: 并发执行，考虑用对列来实现一样的效果，可能会更好理解。
-      for (let i = 0; i < nodeQueue.length; i++) {
-        const currentNode = nodeQueue[i];
-        const actionId = createActionId();
-        const actionParam = {
-          ...currentNode,
-          actionId,
-        };
-        this.pushActionToRunningMap(actionParam);
-        this.exec(actionParam);
-      }
-    } else if (!this.hasRunningAction(runParams.executionId)) {
+    // 将同一个executionId当前待执行的节点一起执行
+    // 避免出现某一个节点执行时间过长，导致其他节点等待时间过长。
+    while (nodeQueue.length) {
+      const currentNode = nodeQueue.pop();
+      const actionId = createActionId();
+      const actionParam = {
+        ...currentNode,
+        actionId,
+      };
+      this.pushActionToRunningMap(actionParam);
+      this.exec(actionParam);
+    }
+    if (!this.hasRunningAction(runParams.executionId)) {
       // 当一个流程在nodeQueueMap和actionRunningMap中都不存在执行的节点时，说明这个流程已经执行完成。
       this.emit(EVENT_INSTANCE_COMPLETE, {
         executionId: runParams.executionId,

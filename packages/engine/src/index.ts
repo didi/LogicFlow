@@ -1,4 +1,4 @@
-import type { ResumeParams, GraphConfigData } from './types.d';
+import type { ResumeParams, GraphConfigData, EngineConstructorOptions } from './types.d';
 import FlowModel, { ActionParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';
@@ -7,16 +7,17 @@ import { createEngineId } from './util/ID';
 import { NodeConstructor } from './nodes/BaseNode';
 
 export default class Engine {
+  id: string;
   global: Record<string, any>;
   graphData: GraphConfigData;
   nodeModelMap: Map<string, NodeConstructor>;
   flowModel: FlowModel;
-  id: string;
   recorder: Recorder;
-  constructor() {
+  context: Record<string, any>;
+  constructor(options?: EngineConstructorOptions) {
     this.nodeModelMap = new Map();
-    this.recorder = new Recorder();
     this.id = createEngineId();
+    this.recorder = new Recorder();
     this.register({
       type: StartNode.nodeTypeName,
       model: StartNode,
@@ -25,6 +26,7 @@ export default class Engine {
       type: TaskNode.nodeTypeName,
       model: TaskNode,
     });
+    this.context = options?.context || {};
   }
   /**
    * 注册节点
@@ -54,12 +56,11 @@ export default class Engine {
     graphData,
     startNodeType = 'StartNode',
     globalData = {},
-    context = {},
   }) {
     this.flowModel = new FlowModel({
       nodeModelMap: this.nodeModelMap,
       recorder: this.recorder,
-      context,
+      context: this.context,
       globalData,
       startNodeType,
     });
@@ -85,6 +86,12 @@ export default class Engine {
       });
     });
   }
+  /**
+   * 恢复执行
+   * 注意此方法只能恢复节点后面的执行，不能恢复流程其他分支的执行。
+   * 同理，中断执行也只能中断节点后面的执行，不会中断其他分支的执行。
+   * 在实际项目中，如果存在中断节点，建议流程所有的节点都是排他网关，这样可以保证执行的过程不存在分支。
+   */
   async resume(resumeParam: ResumeParams) {
     return new Promise((resolve, reject) => {
       this.flowModel.resume({
@@ -100,11 +107,27 @@ export default class Engine {
   }
   async getExecutionRecord(executionId) {
     const tasks = await this.recorder.getExecutionActions(executionId);
+    if (!tasks) {
+      return null;
+    }
     const records = [];
     for (let i = 0; i < tasks.length; i++) {
       records.push(this.recorder.getActionRecord(tasks[i]));
     }
     return Promise.all(records);
+  }
+  getGlobalData() {
+    return this.flowModel?.globalData;
+  }
+  setGlobalData(data) {
+    if (this.flowModel) {
+      this.flowModel.globalData = data;
+    }
+  }
+  updateGlobalData(data) {
+    if (this.flowModel) {
+      Object.assign(this.flowModel.globalData, data);
+    }
   }
 }
 

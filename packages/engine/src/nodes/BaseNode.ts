@@ -95,7 +95,7 @@ export default class BaseNode implements BaseNodeInterface {
     this.incoming = nodeConfig.incoming;
     this.nodeId = nodeConfig.id;
     this.type = nodeConfig.type;
-    this.properties = nodeConfig.properties;
+    this.properties = nodeConfig.properties || {};
     this.context = context;
     this.globalData = globalData;
     this.baseType = 'base';

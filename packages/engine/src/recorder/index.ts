@@ -5,8 +5,15 @@ import type {
 import storage from '../util/storage';
 
 const LOGICFLOW_ENGINE_INSTANCES = 'LOGICFLOW_ENGINE_INSTANCES';
-
+const MAX_RECORDER = 100;
 export default class Recorder implements RecorderInterface {
+  maxRecorder: number;
+  constructor() {
+    this.maxRecorder = MAX_RECORDER;
+  }
+  setMaxRecorderNumber(maxRecorder: number) {
+    this.maxRecorder = maxRecorder;
+  }
   /*
   * @param {Object} action
   * {
@@ -20,7 +27,7 @@ export default class Recorder implements RecorderInterface {
   */
   async addActionRecord(action: RecorderData) {
     const { executionId, actionId } = action;
-    const instanceData = this.getExecutionActions(executionId);
+    const instanceData = await this.getExecutionActions(executionId);
     if (!instanceData) {
       this.pushExecution(executionId);
     }
@@ -46,8 +53,19 @@ export default class Recorder implements RecorderInterface {
   }
   private pushExecution(executionId) {
     const instance = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    if (instance.length >= this.maxRecorder) {
+      const removeItem = instance.shift();
+      this.popExecution(removeItem);
+    }
     instance.push(executionId);
     storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instance);
+  }
+  private popExecution(executionId) {
+    const instanceData = storage.getItem(executionId) || [];
+    instanceData.forEach((actionId) => {
+      storage.removeItem(actionId);
+    });
+    storage.removeItem(executionId);
   }
   private pushActionToExecution(executionId, actionId) {
     const actions = storage.getItem(executionId) || [];

@@ -19,6 +19,10 @@ describe('@logicflow/engine parallel execution', () => {
     model: FetchNode,
   })
   const flowData = {
+    /**
+     * node1 |--> node2(FetchTask)
+     *       |--> node3 |--> node4
+     */
     graphData: {
       nodes: [
         {
@@ -78,4 +82,3 @@ describe('@logicflow/engine parallel execution', () => {
     expect(execution[3].nodeId).toEqual('node2')
   });
 })
-// TODO: 增加某个节点出现异常和interrupt 后，控制其他分支节点是否要继续执行的测试用例。

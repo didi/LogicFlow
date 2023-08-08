@@ -110,3 +110,7 @@ export declare type EdgeConfig = {
   zIndex?: number;
   properties?: Record<string, unknown>;
 };
+
+export declare type EngineConstructorOptions = {
+  context?: Record<string, any>;
+}

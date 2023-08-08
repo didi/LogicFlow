@@ -4,6 +4,9 @@ describe('@logicflow/engine Recorder', () => {
   test('Using the getExecutionRecord API, receive the complete execution record of the process.', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       */
       graphData: {
         nodes: [
           {
@@ -54,4 +57,41 @@ describe('@logicflow/engine Recorder', () => {
     expect(execution[1].nodeId).toBe('node2');
     expect(execution[1].nodeType).toBe('TaskNode');
   });
+  test('The execution record cannot be obtained when the number of executions exceeds the maximum number of executions.', async () => {
+    const engine = new Engine();
+    const flowData = {
+      /**
+       * node1 |--> node2
+       */
+      graphData: {
+        nodes: [
+          {
+            id: 'node1',
+            type: 'StartNode',
+            properties: {}
+          },
+          {
+            id: 'node2',
+            type: 'TaskNode',
+            properties: {}
+          }
+        ],
+        edges: [
+          {
+            id: 'edge1',
+            sourceNodeId: 'node1',
+            targetNodeId: 'node2',
+          }
+        ]
+      },
+      global: {},
+    }
+    engine.load(flowData);
+    engine.recorder.setMaxRecorderNumber(2);
+    const result = await engine.execute();
+    await engine.execute();
+    await engine.execute();
+    const execution = await engine.getExecutionRecord(result.executionId);
+    expect(execution).toBe(null);
+  })
 });
