@@ -1,22 +1,51 @@
 import Engine, { TaskNode } from '../src/index';
 
 describe('@logicflow/engine Customize Node', () => {
-  class UserTask extends TaskNode {
+  class DataNode extends TaskNode {
     async action() {
-      return {
-        status: 'interrupted',
-        detail: {
-          formId: 'form_1'
-        }
-      };
+      this.globalData['dataSource'] = {
+        time: this.context.getTime(),
+      }
     }
   }
-  const engine = new Engine();
+  class Mod2Node extends TaskNode {
+    async action() {
+      const dataSource = this.globalData['dataSource'];
+      if (dataSource && dataSource.time) {
+        dataSource.time % 2 === 0 ? this.globalData['output'] = 'even' : this.globalData['output'] = 'odd';
+      }
+    }
+  }
+  class OutputNode extends TaskNode {
+    async action() {
+      const output = this.globalData['output'];
+      this.properties['output'] = output;
+    }
+  }
+  const engine = new Engine({
+    context: {
+      getTime() {
+        return new Date().getTime();
+      }
+    }
+  });
   engine.register({
-    type: 'UserTask',
-    model: UserTask,
+    type: 'DataNode',
+    model: DataNode,
   })
+  engine.register({
+    type: 'Mod2Node',
+    model: Mod2Node,
+  })
+  engine.register({
+    type: 'OutputNode',
+    model: OutputNode,
+  })
+
   const flowData = {
+    /**
+     *  node1 |--> node2(DataNode) |--> node3(Mod2Node) |--> node4(OutputNode)
+     */
     graphData: {
       nodes: [
         {
@@ -27,14 +56,19 @@ describe('@logicflow/engine Customize Node', () => {
         },
         {
           id: 'node2',
-          type: 'UserTask',
+          type: 'DataNode',
           properties: {}
         },
         {
           id: 'node3',
-          type: 'TaskNode',
+          type: 'Mod2Node',
           properties: {}
-        }
+        },
+        {
+          id: 'node4',
+          type: 'OutputNode',
+          properties: {}
+        },
       ],
       edges: [
         {
@@ -50,29 +84,23 @@ describe('@logicflow/engine Customize Node', () => {
           targetNodeId: 'node3',
           properties: {
           }
-        }
+        },
+        {
+          id: 'edge3',
+          sourceNodeId: 'node3',
+          targetNodeId: 'node4',
+          properties: {
+          }
+        },
       ]
     },
     globalData: {
     },
   }
   engine.load(flowData);
-  test('After executing the process, receive the flow status as "interrupted" and include detailed information returned by the custom node.', async () => {
+  test('When the process is completed, the output field in the properties attribute of the last node is odd or even.', async () => {
     const result = await engine.execute();
-    expect(result.status).toBe('interrupted');
-    expect(result.detail.formId).toEqual('form_1');
-  });
-  test('After a process is interrupted, you can resume its execution using the API.', async () => {
-    const result = await engine.execute();
-    const result2 = await engine.resume({
-      executionId: result.executionId,
-      nodeId: result.nodeId,
-      taskId: result.taskId,
-      data: {
-        formId: 'form_2'
-      }
-    })
-    expect(result2.status).toBe('completed')
-    expect(result2.nodeId).toEqual('node3')
+    const execution = await engine.getExecutionRecord(result.executionId);
+    expect(['odd', 'even'].indexOf(execution[execution.length - 1].properties.output) !== -1).toBe(true);
   });
 });

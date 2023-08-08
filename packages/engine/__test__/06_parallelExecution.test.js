@@ -1,6 +1,6 @@
 import Engine, { TaskNode } from '../src/index';
 
-describe('@logicflow/engine parallel and serial', () => {
+describe('@logicflow/engine parallel execution', () => {
   class FetchNode extends TaskNode {
     async action() {
       await this.fetch()
@@ -19,6 +19,10 @@ describe('@logicflow/engine parallel and serial', () => {
     model: FetchNode,
   })
   const flowData = {
+    /**
+     * node1 |--> node2(FetchTask)
+     *       |--> node3 |--> node4
+     */
     graphData: {
       nodes: [
         {
@@ -76,13 +80,5 @@ describe('@logicflow/engine parallel and serial', () => {
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(execution.length).toBe(4);
     expect(execution[3].nodeId).toEqual('node2')
-  });
-  test('When the process is executed twice, the second execution will start only after the first execution is completed.', async () => {
-    const r = engine.execute();
-    const r2 = engine.execute();
-    const result = await Promise.all([r, r2]);
-    const execution1 = await engine.getExecutionRecord(result[0].executionId);
-    const execution2 = await engine.getExecutionRecord(result[1].executionId);
-    expect(execution2[0].timestamp >= execution1[3].timestamp).toBe(true)
   });
 })

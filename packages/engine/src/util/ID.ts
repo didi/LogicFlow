@@ -5,7 +5,12 @@ export const createExecId = (): string => {
   return `exec-${uuid}`;
 };
 
-export const createTaskId = (): string => {
+export const createActionId = (): string => {
   const uuid = uuidv4();
-  return `task-${uuid}`;
+  return `action-${uuid}`;
+};
+
+export const createEngineId = (): string => {
+  const uuid = uuidv4();
+  return `engine-${uuid}`;
 };

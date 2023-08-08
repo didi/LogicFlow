@@ -1,4 +1,4 @@
-import { TaskStatus } from '../constant/constant';
+import { ActionStatus } from '../constant/constant';
 import { getExpressionResult } from '../expression';
 import type {
   ActionResult,
@@ -13,7 +13,7 @@ export interface BaseNodeInterface {
   nodeId: string;
   type: string;
   readonly baseType: string;
-  execute(taskParam): Promise<NodeExecResult>;
+  execute(actionParam): Promise<NodeExecResult>;
 }
 
 export type NodeConstructor = {
@@ -22,6 +22,17 @@ export type NodeConstructor = {
     context: Record<string, any>;
     globalData: Record<string, any>;
   }): BaseNode;
+  action(params: {
+    executionId: string;
+    actionId: string;
+    nodeId: string;
+  }): Promise<ActionResult>;
+  onResume(params: {
+    executionId: string;
+    actionId: string;
+    nodeId: string;
+    data?: Record<string, any>;
+  }): Promise<void>;
 };
 
 export type IncomingConfig = {
@@ -44,10 +55,10 @@ export type NodeConfig = {
   outgoing: OutgoingConfig[];
 };
 
-export type NextTaskParam = {
+export type NextActionParam = {
   executionId: string;
   nodeId: string;
-  taskId: string;
+  actionId: string;
   nodeType: string;
   outgoing: OutgoingConfig[];
   properties?: Record<string, any>;
@@ -84,25 +95,25 @@ export default class BaseNode implements BaseNodeInterface {
     this.incoming = nodeConfig.incoming;
     this.nodeId = nodeConfig.id;
     this.type = nodeConfig.type;
-    this.properties = nodeConfig.properties;
+    this.properties = nodeConfig.properties || {};
     this.context = context;
     this.globalData = globalData;
     this.baseType = 'base';
   }
   /**
-   * 节点的每一次执行都会生成一个唯一的taskId
+   * 节点的每一次执行都会生成一个唯一的actionId
    */
   public async execute(params: ExecParams): Promise<NodeExecResult> {
     const r = await this.action({
       executionId: params.executionId,
-      taskId: params.taskId,
+      actionId: params.actionId,
       nodeId: this.nodeId,
     });
-    if (!r || r.status === TaskStatus.SUCCESS) {
+    if (!r || r.status === ActionStatus.SUCCESS) {
       const outgoing = await this.getOutgoing();
       params.next({
         executionId: params.executionId,
-        taskId: params.taskId,
+        actionId: params.actionId,
         nodeId: this.nodeId,
         nodeType: this.type,
         properties: this.properties,
@@ -113,7 +124,7 @@ export default class BaseNode implements BaseNodeInterface {
       status: r && r.status,
       detail: r && r.detail,
       executionId: params.executionId,
-      taskId: params.taskId,
+      actionId: params.actionId,
       nodeId: this.nodeId,
       nodeType: this.type,
       properties: this.properties,
@@ -128,12 +139,12 @@ export default class BaseNode implements BaseNodeInterface {
     await this.onResume({
       executionId: params.executionId,
       nodeId: params.nodeId,
-      taskId: params.taskId,
+      actionId: params.actionId,
       data: params.data,
     });
     params.next({
       executionId: params.executionId,
-      taskId: params.taskId,
+      actionId: params.actionId,
       nodeId: this.nodeId,
       nodeType: this.type,
       properties: this.properties,
@@ -173,12 +184,12 @@ export default class BaseNode implements BaseNodeInterface {
    * 节点的执行逻辑
    * @overridable 可以自定义节点重写此方法。
    * @param params.executionId 流程执行记录ID
-   * @param params.taskId 此节点执行记录ID
+   * @param params.actionId 此节点执行记录ID
    * @param params.nodeId 节点ID
    */
   public async action(params: {
     executionId: string;
-    taskId: string;
+    actionId: string;
     nodeId: string;
   }): Promise<ActionResult> {
     return undefined;
@@ -187,12 +198,12 @@ export default class BaseNode implements BaseNodeInterface {
    * 节点的重新恢复执行逻辑
    * @overridable 可以自定义节点重写此方法。
    * @param params.executionId 流程执行记录ID
-   * @param params.taskId 此节点执行记录ID
+   * @param params.actionId 此节点执行记录ID
    * @param params.nodeId 节点ID
    */
   public async onResume(params: {
     executionId: string,
-    taskId: string,
+    actionId: string,
     nodeId: string,
     data?: Record<string, any>,
   }): Promise<void> {

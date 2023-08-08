@@ -13,8 +13,8 @@ export enum FlowStatus {
   ERROR = 'error',
 }
 
-// task status
-export enum TaskStatus {
+// action status
+export enum ActionStatus {
   SUCCESS = 'success',
   ERROR = 'error',
   INTERRUPTED = 'interrupted',

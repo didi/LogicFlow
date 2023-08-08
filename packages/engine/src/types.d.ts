@@ -8,45 +8,45 @@ export type NodeParam = {
 /**
  * 执行节点的参数
  */
-export type TaskParam = {
-  taskId: string;
+export type ActionParam = {
+  actionId: string;
 } & NodeParam;
 
 export type ExecParams = {
-  next: (data: NextTaskParam) => void;
-} & TaskParam;
+  next: (data: NextActionParam) => void;
+} & ActionParam;
 
 export type ResumeParam = {
   data: Record<string, any>;
-} & TaskParam;
+} & ActionParam;
 
 export type ExecResumeParams = {
-  next: (data: NextTaskParam) => void;
+  next: (data: NextActionParam) => void;
 } & ResumeParam;
 
 export type RecorderData = {
   nodeType: string;
   timestamp: number;
   properties?: Record<string, any>;
-} & TaskParam;
+} & ActionParam;
 
 export interface RecorderInterface {
-  addTask: (task: RecorderData) => Promise<void>;
-  getTask: (taskId: string) => Promise<RecorderData>;
-  getExecutionTasks: (executionId: string) => Promise<string[]>;
+  addActionRecord: (task: RecorderData) => Promise<void>;
+  getActionRecord: (actionId: string) => Promise<RecorderData>;
+  getExecutionActions: (executionId: string) => Promise<string[]>;
   clear: () => void;
 };
 
-export type TaskStatus = 'success' | 'error' | 'interrupted' | '';
+export type ActionStatus = 'success' | 'error' | 'interrupted' | '';
 
 export type ActionResult = {
-  status?: TaskStatus;
+  status?: ActionStatus;
   detail?: Record<string, any>;
 };
 
 export type NodeExecResult = {
   executionId: string,
-  taskId: string,
+  actionId: string,
   nodeId: string,
   nodeType: string,
   properties?: Record<string, any>,
@@ -54,7 +54,7 @@ export type NodeExecResult = {
 
 export type ResumeParams = {
   executionId: string;
-  taskId: string;
+  actionId: string;
   nodeId: string;
   data?: Record<string, any>;
 }
@@ -110,3 +110,7 @@ export declare type EdgeConfig = {
   zIndex?: number;
   properties?: Record<string, unknown>;
 };
+
+export declare type EngineConstructorOptions = {
+  context?: Record<string, any>;
+}

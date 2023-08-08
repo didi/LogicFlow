@@ -4,6 +4,10 @@ describe('@logicflow/engine condition', () => {
   test('The process will not continue its execution if the condition expression evaluates to false.', async () => {
     const engine = new Engine();
     const flowData = {
+      /**
+       * node1 |--> node2
+       *       |--> node3
+       */ 
       graphData: {
         nodes: [
           {

@@ -2,8 +2,14 @@ import Engine from '../src/index';
 
 describe('@logicflow/engine', () => {
   test('Execution Process Completed, Returning Data Containing executionId', async () => {
-    const engine = new Engine();
+    // TODO: context在初始化engine时传入
+    const engine = new Engine({
+      context: {},
+    });
     const flowData = {
+      /**
+       * node1 |--> node2
+       */
       graphData: {
         nodes: [
           {
@@ -23,7 +29,6 @@ describe('@logicflow/engine', () => {
           }
         ]
       },
-      context: {},
       globalData: {},
     }
     const flowModel = engine.load(flowData);
