@@ -11,15 +11,17 @@ const runInBrowserContext = async (code: string, globalData: any = {}) => {
   if (!document || !document.body) {
     console.error(getErrorMsg(ErrorCode.NO_DOCUMENT_BODY));
   }
-  document.body.appendChild(iframe);
-  const iframeWindow = iframe.contentWindow as any;
-  const iframeEval = iframeWindow.eval;
-  Object.keys(globalData).forEach((key) => {
-    iframeWindow[key] = globalData[key];
-  });
   let res = null;
   try {
-    res = iframeEval.call(iframeWindow, code);
+    document.body.appendChild(iframe);
+    const iframeWindow = iframe.contentWindow as any;
+    iframeWindow.parent = null;
+    const iframeEval = iframeWindow.eval;
+    Object.keys(globalData).forEach((key) => {
+      iframeWindow[key] = globalData[key];
+    });
+    iframeEval.call(iframeWindow, code);
+    res = iframeWindow;
   } catch (e) {
     console.warn(getWarningMsg(WarningCode.EXPRESSION_EXEC_ERROR), { code, globalData, e });
   }
