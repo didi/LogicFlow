@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.10...@logicflow/extension@1.2.11) (2023-08-10)
+
+
+### Bug Fixes
+
+* **extension:** fix types error when run build:types ([f3aaf91](https://github.com/didi/LogicFlow/commit/f3aaf9169df7039527f28cfe2c9be5eb575e8933))
+* **extension:** nodeGroupMap was not set correctly when adding a group ([8874af5](https://github.com/didi/LogicFlow/commit/8874af562fd2dca17f285ef1c4cb91ba75626852))
+* **extension:** wrong GroupNode import lead to the failed deployment ([01442a4](https://github.com/didi/LogicFlow/commit/01442a44a1ee816bc3860c4bf8b5f0f8d6877ec2))
+
+
+### Features
+
+* create logicflow eninge ([c7d80f4](https://github.com/didi/LogicFlow/commit/c7d80f4b4c19cf82af9be49dd8fd44433327db58))
+* **extension:** new bpmn plugin ([bd3e76a](https://github.com/didi/LogicFlow/commit/bd3e76ad76bdab13ea8e2f8e22fb7a248fea1a86))
+* **extension:** perfecting readme.md in extension/bpmn-elements ([492a277](https://github.com/didi/LogicFlow/commit/492a2770c7380cde284fba5de995fb77308f97f7))
+
+
+
+
+
 ## [1.2.10](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.9...@logicflow/extension@1.2.10) (2023-07-17)
 
 

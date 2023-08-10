@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.10...@logicflow/core@1.2.11) (2023-08-10)
+
+
+### Bug Fixes
+
+* **core:** improve the appearance of Bezier curve arrows.([#951](https://github.com/didi/LogicFlow/issues/951)) ([d631e74](https://github.com/didi/LogicFlow/commit/d631e74bd06bbe4d6e749e2563ef5de2bb760a8b))
+
+
+### Features
+
+* create logicflow eninge ([c7d80f4](https://github.com/didi/LogicFlow/commit/c7d80f4b4c19cf82af9be49dd8fd44433327db58))
+
+
+
+
+
 ## [1.2.10](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.9...@logicflow/core@1.2.10) (2023-07-17)
 
 **Note:** Version bump only for package @logicflow/core
