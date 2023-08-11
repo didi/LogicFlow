@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { registerEventNodes } from './presets/Event';
 import { registerGatewayNodes } from './presets/Gateway';
@@ -80,20 +81,26 @@ export class BPMNElements {
   constructor({ lf }: any) {
     lf.definition = {};
     lf.useDefinition = useDefinition(lf.definition);
-    const [definition, setDefinition] = lf.useDefinition();
+    const [_definition, setDefinition] = lf.useDefinition();
     setDefinition(definitionConfig);
-
-    // event: startEvent, endEvent, intermediateCatchEvent, intermediateThrowEvent, boundaryEvent
 
     registerEventNodes(lf);
     registerGatewayNodes(lf);
     registerFlows(lf);
     registerTaskNodes(lf);
-    // registerPoolNodes(lf);
 
     lf.setDefaultEdgeType('bpmn:sequenceFlow');
   }
 }
 
+export * from './presets/Event/EndEventFactory';
+export * from './presets/Event/IntermediateCatchEvent';
+export * from './presets/Event/StartEventFactory';
+export * from './presets/Event/boundaryEventFactory';
+export * from './presets/Event/IntermediateThrowEvent';
+export * from './presets/Flow/sequenceFlow';
 export * from './presets/Task/task';
+export * from './presets/Task/subProcess';
 export * from './presets/Gateway/gateway';
+export * as icons from './presets/icons';
+export * as bpmnUtils from './utils';

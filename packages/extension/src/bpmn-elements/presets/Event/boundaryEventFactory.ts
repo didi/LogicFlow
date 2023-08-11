@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   CircleNode,
@@ -6,7 +7,6 @@ import {
   NodeConfig,
   h,
 } from '@logicflow/core';
-import _ from 'lodash-es';
 import { genBpmnId, groupRule } from '../../utils';
 
 export function BoundaryEventFactory(lf: any): {
@@ -78,7 +78,7 @@ export function BoundaryEventFactory(lf: any): {
           y: data.y + 40,
         };
       }
-      const { properties } = definition.boundaryEvent?.get(data.properties?.definitionType) || {};
+      const { properties = {} } = definition.boundaryEvent?.get(data.properties?.definitionType) || {};
 
       data.properties = {
         attachedToRef: '',
@@ -86,9 +86,7 @@ export function BoundaryEventFactory(lf: any): {
         ...properties,
         ...data.properties,
       };
-      data.properties?.definitionType && (data.properties!.definitionId = `${
-          data.properties?.definitionType
-      }EventDefinition_${genBpmnId()}`);
+      data.properties?.definitionType && (data.properties!.definitionId = `Definition_${genBpmnId()}`);
       super(data, graphModel);
       groupRule.call(this);
     }

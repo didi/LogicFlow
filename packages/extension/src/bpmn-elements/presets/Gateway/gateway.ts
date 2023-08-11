@@ -81,7 +81,7 @@ export function GatewayNodeFactory(type: string, icon: string | object, props?: 
         };
       }
       data.properties = {
-        ...props,
+        ...(props || {}),
         ...data.properties,
       };
       super(data, graphModel);

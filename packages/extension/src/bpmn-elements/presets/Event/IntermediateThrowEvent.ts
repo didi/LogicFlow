@@ -77,7 +77,7 @@ export function IntermediateThrowEventFactory(lf: any): {
           y: data.y + 40,
         };
       }
-      const { properties } = definition.intermediateThrowEvent?.get(
+      const { properties = {} } = definition.intermediateThrowEvent?.get(
           data.properties?.definitionType
         ) || {};
       data.properties = {
@@ -85,9 +85,7 @@ export function IntermediateThrowEventFactory(lf: any): {
         ...data.properties,
       };
       data.properties?.definitionType
-        && (data.properties!.definitionId = `${
-          data.properties?.definitionType
-        }EventDefinition_${genBpmnId()}`);
+        && (data.properties!.definitionId = `Definition_${genBpmnId()}`);
       super(data, graphModel);
       groupRule.call(this);
     }

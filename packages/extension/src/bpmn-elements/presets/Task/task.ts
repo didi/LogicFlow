@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
-  BaseEdge,
-  BaseEdgeModel,
-  BaseNode,
-  BaseNodeModel,
   GraphModel,
   NodeConfig,
   RectNode,
@@ -106,37 +102,32 @@ export function TaskNodeFactory(type: string, icon: string | any[], props?: any)
         data.id = `Activity_${genBpmnId()}`;
       }
       const properties: TaskType = {
-        ...props,
+        ...(props || {}),
         ...data.properties,
         // multiInstanceType: '',
         // panels: ['multiInstance'],
       };
       data.properties = properties;
       super(data, graphModel);
-        properties?.boundaryEvents?.forEach((id: string) => {
-          this.addBoundaryEvent(id);
-        });
-        this.deleteProperty('boundaryEvents');
-        groupRule.call(this);
+      properties?.boundaryEvents?.forEach((id: string) => {
+        this.addBoundaryEvent(id);
+      });
+      this.deleteProperty('boundaryEvents');
+      groupRule.call(this);
     }
     initNodeData(data: any) {
       super.initNodeData(data);
-      // this.width = 100;
-      // this.height = 60;
       this.isTaskNode = true; // 标识此节点是任务节点，可以被附件边界事件
       this.boundaryEvents = []; // 记录自己附加的边界事件
     }
     getNodeStyle() {
       const style = super.getNodeStyle();
-      // isCloseToBoundary属性用于标识拖动边界节点是否靠近此节点
+      // isBoundaryEventTouchingTask属性用于标识拖动边界节点是否靠近此节点
       // 如果靠近，则高亮提示
-      const { isCloseToBoundary } = this.properties;
       // style.fill = 'rgb(255, 230, 204)';
-      if (isCloseToBoundary) {
+      const { isBoundaryEventTouchingTask } = this.properties;
+      if (isBoundaryEventTouchingTask) {
         style.stroke = '#00acff';
-        style.strokeWidth = 2;
-      }
-      if (this.isSelected) {
         style.strokeWidth = 2;
       }
       return style;
@@ -151,22 +142,23 @@ export function TaskNodeFactory(type: string, icon: string | any[], props?: any)
     /**
        * 提供方法给插件在判断此节点被拖动边界事件节点靠近时调用，从而触发高亮
        */
-    setIsCloseToBoundary(flag: boolean) {
-      this.setProperty('isCloseToBoundary', flag);
+    setTouching(flag: boolean) {
+      this.setProperty('isBoundaryEventTouchingTask', flag);
     }
     /**
        * 附加后记录被附加的边界事件节点Id
        */
     addBoundaryEvent(nodeId: string) {
+      this.setTouching(false);
       if (this.boundaryEvents.find((item: string) => item === nodeId)) {
         return false;
       }
       const boundaryEvent = this.graphModel.getNodeModelById(nodeId);
-        boundaryEvent?.setProperties({
-          attachedToRef: this.id,
-        });
-        this.boundaryEvents.push(nodeId);
-        return true;
+      boundaryEvent?.setProperties({
+        attachedToRef: this.id,
+      });
+      this.boundaryEvents.push(nodeId);
+      return true;
     }
     /**
        * 被附加的边界事件节点被删除时，移除记录

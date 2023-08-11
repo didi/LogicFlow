@@ -122,7 +122,16 @@ const defaultRetainedProperties = [
 
 const defaultExcludeFields = {
   in: [],
-  out: ['properties.panels'],
+  out: [
+    'properties.panels',
+    'properties.nodeSize',
+    'properties.definitionId',
+    'properties.timerValue',
+    'properties.timerType',
+    'properties.definitionType',
+    'properties.parent',
+    'properties.isBoundaryEventTouchingTask',
+  ],
 };
 
 const mergeInNOutObject = (target: any, source: any): TransformerType => {
@@ -179,10 +188,7 @@ let defaultTransformer: TransformerType = {
       if (condition) {
         if (expressionType === 'cdata') {
           return {
-            json:
-              `<bpmn:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[\${${
-                condition
-              }}]]></bpmn:conditionExpression>`,
+            json: `<bpmn:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[\${${condition}}]]></bpmn:conditionExpression>`,
           };
         }
         return {
@@ -192,7 +198,6 @@ let defaultTransformer: TransformerType = {
       return {
         json: '',
       };
-
     },
   },
   // 'bpmn:subProcess': undefined,
@@ -206,11 +211,11 @@ let defaultTransformer: TransformerType = {
       const typeFunc = () => `<bpmn:${timerType} xsi:type="bpmn:tFormalExpression">${timerValue}</bpmn:${timerType}>`;
 
       return {
-        json:
-          `<bpmn:timerEventDefinition id="${definitionId}"${
-            timerType && timerValue
-              ? `>${typeFunc()}</bpmn:timerEventDefinition>`
-              : '/>'}`,
+        json: `<bpmn:timerEventDefinition id="${definitionId}"${
+          timerType && timerValue
+            ? `>${typeFunc()}</bpmn:timerEventDefinition>`
+            : '/>'
+        }`,
       };
     },
     in(key: string, data: any) {
@@ -274,6 +279,7 @@ function convertNormalToXml(other?: ExtraPropsType) {
     in: new Set([...defaultExcludeFields.in, ...(excludeFields?.in || [])]),
     out: new Set([...defaultExcludeFields.out, ...(excludeFields?.out || [])]),
   };
+
   defaultTransformer = mergeInNOutObject(defaultTransformer, transformer);
 
   return (object: { nodes: any; edges: any }) => {
@@ -311,10 +317,12 @@ function convertNormalToXml(other?: ExtraPropsType) {
       }
 
       if (Array.isArray(obj)) {
-        return obj
-          .map((item) => ToXmlJson(item, ''))
-          // eslint-disable-next-line eqeqeq
-          .filter((item) => item != undefined);
+        return (
+          obj
+            .map((item) => ToXmlJson(item, ''))
+            // eslint-disable-next-line eqeqeq
+            .filter((item) => item != undefined)
+        );
       }
 
       for (const [key, value] of Object.entries(obj)) {
@@ -322,8 +330,9 @@ function convertNormalToXml(other?: ExtraPropsType) {
           return;
         }
         const newPath = [path, key].filter((item) => item).join('.');
-
-        if (typeof value !== 'object') {
+        if (excludeFieldsSet.out.has(newPath)) {
+          continue;
+        } else if (typeof value !== 'object') {
           // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
           if (
             key.indexOf('-') === 0
@@ -333,8 +342,6 @@ function convertNormalToXml(other?: ExtraPropsType) {
           } else {
             xmlJson[`-${key}`] = value;
           }
-        } else if (excludeFieldsSet.out.has(newPath)) {
-          continue;
         } else if (retainedAttrsSet.has(newPath)) {
           xmlJson[`-${key}`] = ToXmlJson(value, newPath);
         } else {
@@ -685,12 +692,15 @@ function convertBpmn2LfData(bpmnData: any, other?: ExtraPropsType) {
             if (key.includes('bpmn:')) {
               let props: any = {};
               if (defaultTransformer[key] && defaultTransformer[key].in) {
-                props = defaultTransformer[key].in?.(key, _.cloneDeep(obj[key]));
+                props = defaultTransformer[key].in?.(
+                  key,
+                  _.cloneDeep(obj[key]),
+                );
                 delete obj[key];
               } else {
                 func(obj[key]);
               }
-              let keys: any[];
+              let keys: (string | number | symbol)[];
               if ((keys = Reflect.ownKeys(props)).length > 0) {
                 keys.forEach((key) => {
                   Reflect.set(obj, key, props[key]);
@@ -855,8 +865,7 @@ function getNodeConfig(shapeValue: any, type: any, processValue: any) {
     };
     // 自定义文本位置
     if (
-      shapeValue['bpmndi:BPMNLabel']
-      && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
+      shapeValue['bpmndi:BPMNLabel'] && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
     ) {
       const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds'];
       text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2;
@@ -1019,18 +1028,22 @@ class BPMNBaseAdapter {
     if (other?.mapping?.out) {
       const mapping = other?.mapping?.out;
 
-      const nameMapping = (obj: Object | any[]) => {
+      const nameMapping = (obj: Object | any[]): any => {
         if (Array.isArray(obj)) {
-          return obj.map(item => nameMapping(item));
+          obj.forEach((item) => nameMapping(item));
         }
-        const keys = Object.keys(obj);
-        keys.forEach((key: string) => {
-          let mappingName: string;
-          if (mappingName = mapping[key]) {
-            obj[mappingName] = _.cloneDeep(obj[key]);
-            delete obj[key];
-          }
-        });
+        if (typeof obj === 'object') {
+          Object.keys(obj).forEach((key: string) => {
+            let mappingName: string;
+            if (mappingName = mapping[key]) {
+              obj[mappingName] = _.cloneDeep(obj[key]);
+              delete obj[key];
+              nameMapping(obj[mappingName]);
+            } else {
+              nameMapping(obj[key]);
+            }
+          });
+        }
       };
       nameMapping(bpmnData);
     }
@@ -1090,23 +1103,25 @@ BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.SUBPROCESS, {
 });
 
 class BPMNAdapter extends BPMNBaseAdapter {
-  static pluginName = 'bpmnXmlAdapterV2';
+  static pluginName = 'BPMNAdapter';
+  private props: ExtraPropsType;
   constructor(data: any) {
     super(data);
-    const { lf } = data;
+    const { lf, props } = data;
     lf.adapterIn = this.adapterXmlIn;
     lf.adapterOut = this.adapterXmlOut;
+    this.props = props;
   }
-  adapterXmlIn = (bpmnData: any, other?: ExtraPropsType) => {
+  adapterXmlIn = (bpmnData: any) => {
     const json = lfXml2Json(bpmnData);
-    return this.adapterIn(json, other);
+    return this.adapterIn(json, this.props);
   };
-  adapterXmlOut = (data: any, other?: ExtraPropsType) => {
-    const outData = this.adapterOut(data, other);
+  adapterXmlOut = (data: any) => {
+    const outData = this.adapterOut(data, this.props);
     return lfJson2Xml(outData);
   };
 }
 
 export { BPMNBaseAdapter, BPMNAdapter, convertNormalToXml, convertXmlToNormal };
 
-export default BPMNBaseAdapter;
+export default BPMNAdapter;
