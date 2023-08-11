@@ -25,10 +25,10 @@ export function sequenceFlowFactory(props?: any): {
         data.id = `Flow_${genBpmnId()}`;
       }
       const properties: SequenceFlowType = {
+        ...(props || {}),
         ...data.properties,
-        ...props,
         // panels: ['condition'],
-        // isDefaultFlow: false,
+        isDefaultFlow: false,
       };
       data.properties = properties;
 

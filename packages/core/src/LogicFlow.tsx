@@ -86,7 +86,7 @@ export default class LogicFlow {
   /**
    * 全局配置的插件，所有的LogicFlow示例都会使用
    */
-  static extensions: Map<string, Extension> = new Map();
+  static extensions: Map<string, { extension: Extension, props?: any }> = new Map();
   /**
    * 插件扩展方法
    * @example
@@ -969,15 +969,19 @@ export default class LogicFlow {
    * 重复添加插件的时候，把上一次添加的插件的销毁。
    * @param plugin 插件
    */
-  static use(extension: Extension) {
+  static use(extension: Extension, props?: any): void {
     let { pluginName } = extension;
     if (!pluginName) {
       console.warn(`请给插件${extension.name || extension.constructor.name}指定pluginName!`);
       pluginName = extension.name; // 兼容以前name的情况，1.0版本去掉。
     }
-    const preExtension = this.extensions.get(pluginName);
+    const preExtension = this.extensions.get(pluginName)?.extension;
     preExtension && preExtension.destroy && preExtension.destroy();
-    this.extensions.set(pluginName, extension);
+    this.extensions.set(pluginName,
+      {
+        extension,
+        props,
+      });
   }
   private initContainer(container) {
     const lfContainer = document.createElement('div');
@@ -991,17 +995,17 @@ export default class LogicFlow {
   private installPlugins(disabledPlugins = []) {
     // 安装插件，优先使用个性插件
     const extensions = this.plugins ?? LogicFlow.extensions;
-    extensions.forEach((extension) => {
+    extensions.forEach(({ extension, props }: any) => {
       const pluginName = extension.pluginName || extension.name;
       if (disabledPlugins.indexOf(pluginName) === -1) {
-        this.installPlugin(extension);
+        this.installPlugin(extension, props);
       }
     });
   }
   /**
    * 加载插件-内部方法
    */
-  private installPlugin(extension) {
+  private installPlugin(extension: Extension, props: any) {
     if (typeof extension === 'object') {
       const { install, render: renderComponent } = extension;
       install && install.call(extension, this, LogicFlow);
@@ -1014,6 +1018,7 @@ export default class LogicFlow {
       lf: this,
       LogicFlow,
       options: this.options.pluginsOptions,
+      props,
     });
     extensionInstance.render && this.components.push(
       extensionInstance.render.bind(extensionInstance),

@@ -71,15 +71,13 @@ export function EndEventFactory(lf: any): {
           y: data.y + 40,
         };
       }
-      const { properties } = definition.endEvent?.get(data.properties?.definitionType) || {};
+      const { properties = {} } = definition.endEvent?.get(data.properties?.definitionType) || {};
       data.properties = {
         ...properties,
         ...data.properties,
       };
       data.properties?.definitionType
-        && (data.properties!.definitionId = `${
-          data.properties?.definitionType
-        }EventDefinition_${genBpmnId()}`);
+        && (data.properties!.definitionId = `Definition_${genBpmnId()}`);
       super(data, graphModel);
       groupRule.call(this);
     }
@@ -90,7 +88,7 @@ export function EndEventFactory(lf: any): {
       const rules = super.getConnectedSourceRules();
       const notAsSource = {
         message: '结束节点不能作为边的起点',
-        validate: (source, target) => {
+        validate: (source: any, _target: any) => {
           if (source === this) {
             return false;
           }

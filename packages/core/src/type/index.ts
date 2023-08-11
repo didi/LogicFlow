@@ -358,6 +358,7 @@ export type ExtensionOptions = {
   lf: LogicFlow;
   LogicFlow: LogicFlowConstructor;
   options: Record<string, any>;
+  props?: any;
 };
 
 export interface ExtensionConstructor {

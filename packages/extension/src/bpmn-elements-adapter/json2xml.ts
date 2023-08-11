@@ -81,7 +81,7 @@ function toXml(obj: any, name: string, depth: number) {
 }
 
 function lfJson2Xml(obj: any) {
-  let xmlStr = '    ';
+  let xmlStr = '';
   for (const key in obj) {
     xmlStr += toXml(obj[key], key, 0);
   }
