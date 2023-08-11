@@ -36,11 +36,13 @@ import { snaplineTool } from './tool/SnaplineTool';
 import { EditConfigInterface } from './model/EditConfigModel';
 import { Theme } from './constant/DefaultTheme';
 import { ElementType, EventType } from './constant/constant';
-import { createUuid } from './util';
 
 if (process.env.NODE_ENV === 'development') {
   require('preact/debug');// eslint-disable-line global-require
 }
+
+const pluginFlag = Symbol('plugin register by Logicflow.use');
+type ExtensionMapValueType = { extension: Extension, props?: any, [pluginFlag]: symbol};
 
 type GraphConfigModel = {
   nodes: _Model.BaseNodeModel[];
@@ -86,7 +88,7 @@ export default class LogicFlow {
   /**
    * 全局配置的插件，所有的LogicFlow示例都会使用
    */
-  static extensions: Map<string, { extension: Extension, props?: any }> = new Map();
+  static extensions: Map<string, ExtensionMapValueType> = new Map();
   /**
    * 插件扩展方法
    * @example
@@ -979,6 +981,7 @@ export default class LogicFlow {
     preExtension && preExtension.destroy && preExtension.destroy();
     this.extensions.set(pluginName,
       {
+        [pluginFlag]: pluginFlag,
         extension,
         props,
       });
@@ -995,7 +998,15 @@ export default class LogicFlow {
   private installPlugins(disabledPlugins = []) {
     // 安装插件，优先使用个性插件
     const extensions = this.plugins ?? LogicFlow.extensions;
-    extensions.forEach(({ extension, props }: any) => {
+    extensions.forEach((ext: any) => {
+      let extension = null;
+      let props = null;
+      if (ext[pluginFlag]) {
+        extension = ext.extension;
+        props = ext.props;
+      } else {
+        extension = ext;
+      }
       const pluginName = extension.pluginName || extension.name;
       if (disabledPlugins.indexOf(pluginName) === -1) {
         this.installPlugin(extension, props);
