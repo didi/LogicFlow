@@ -500,7 +500,7 @@ lf.addEdge({
 基于边id删除边
 
 ```js
-removeEdge(id): void
+deleteEdge(id): void
 ```
 
 参数：
@@ -532,16 +532,16 @@ deleteEdgeByNodeId(config: EdgeFilter): void
 示例：
 
 ```js
-lf.removeEdge({
+lf.deleteEdgeByNodeId({
   sourceNodeId:'id1',
   targetNodeId: 'id2'
 });
 
-lf.removeEdge({
+lf.deleteEdgeByNodeId({
   sourceNodeId:'id1',
 });
 
-lf.removeEdge({
+lf.deleteEdgeByNodeId({
   targetNodeId: 'id2'
 });
 ```
