@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.11...@logicflow/core@1.2.12) (2023-08-16)
+
+
+### Bug Fixes
+
+* add a symbol to distinguish plugin registration method ([1e0a40a](https://github.com/didi/LogicFlow/commit/1e0a40a94f4f6ebeb584445c48dd10b13ee7504f))
+
+
+### Features
+
+* optimize BPMNAdapter; add input props when register plugin ([4e9a90e](https://github.com/didi/LogicFlow/commit/4e9a90ea2abedee1456119edf0f0c9164e8cc116))
+
+
+
+
+
 ## [1.2.11](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.10...@logicflow/core@1.2.11) (2023-08-10)
 
 

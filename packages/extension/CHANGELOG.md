@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.11...@logicflow/extension@1.2.12) (2023-08-16)
+
+
+### Bug Fixes
+
+* **extension:** change default value of cancelActivity ([0fb5f35](https://github.com/didi/LogicFlow/commit/0fb5f35d4da2e133b6c15f55e7f5da15c4f5d68b))
+* **extension:** ensure dpr>=1 when exporting images([#1222](https://github.com/didi/LogicFlow/issues/1222)) ([ac3a774](https://github.com/didi/LogicFlow/commit/ac3a7742a04f4b322c0b0505434a2f0324fa241b))
+* **extension:** remove package ids from extension ([a3fb1a8](https://github.com/didi/LogicFlow/commit/a3fb1a8d2a1cf87c2c6ea34d28ebebf9a064afd1))
+
+
+### Features
+
+* optimize BPMNAdapter; add input props when register plugin ([4e9a90e](https://github.com/didi/LogicFlow/commit/4e9a90ea2abedee1456119edf0f0c9164e8cc116))
+
+
+
+
+
 ## [1.2.11](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.10...@logicflow/extension@1.2.11) (2023-08-10)
 
 
