@@ -6,6 +6,8 @@ import { registerTaskNodes } from './presets/Task';
 // import { registerPoolNodes } from './presets/Pool';
 import { registerFlows } from './presets/Flow';
 import { timerIcon, messageIcon } from './presets/icons';
+import * as icons from './presets/icons';
+import * as bpmnUtils from './utils';
 
 type DefinitionConfigType = {
   nodes: string[];
@@ -102,5 +104,4 @@ export * from './presets/Flow/sequenceFlow';
 export * from './presets/Task/task';
 export * from './presets/Task/subProcess';
 export * from './presets/Gateway/gateway';
-export * as icons from './presets/icons';
-export * as bpmnUtils from './utils';
+export { icons, bpmnUtils };
