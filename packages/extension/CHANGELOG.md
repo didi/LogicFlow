@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.12...@logicflow/extension@1.2.13) (2023-08-16)
+
+
+### Bug Fixes
+
+* **extension:** change the way export icons and bpmnUtils ([434b167](https://github.com/didi/LogicFlow/commit/434b1679427f1a3492c9ce5f3d7712c006953db2))
+* **extension:** modify the content in bpmn-elements/README.md ([1b37586](https://github.com/didi/LogicFlow/commit/1b37586cb498feb6398b0a36410882d0c710cf3e))
+
+
+
+
+
 ## [1.2.12](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.11...@logicflow/extension@1.2.12) (2023-08-16)
 
 
