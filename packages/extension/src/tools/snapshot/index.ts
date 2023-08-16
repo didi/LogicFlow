@@ -139,7 +139,21 @@ class Snapshot {
         }
       }
     }
-    const dpr = window.devicePixelRatio || 1;
+    let dpr = window.devicePixelRatio || 1;
+    if (dpr < 1) {
+      // https://github.com/didi/LogicFlow/issues/1222
+      // canvas.width = bboxWidth * dpr配合ctx.scale(dpr, dpr)是为了解决绘制模糊
+      // 比如dpr=2，先让canvas.width放大到等同于屏幕的物理像素宽高，然后自适应缩放适配canvas.style.width
+      // 由于所有元素都缩放了一半，因此需要ctx.scale(dpr, dpr)放大2倍整体绘制的内容
+      // 当用户缩放浏览器时，window.devicePixelRatio会随着变小
+      // 当window.devicePixelRatio变小到一定程度，会导致canvas.width<canvas.style.width
+      // 由于导出图片的svg的大小是canvas.style.width+canvas.style.height
+      // 因此会导致导出的svg图片无法完整绘制到canvas（因为canvas.width小于svg的宽）
+      // 从而导致canvas导出图片是缺失的svg
+      // 而dpr>=1就能保证canvas.width>=canvas.style.width
+      // 当dpr小于1的时候，我们强制转化为1，并不会产生绘制模糊等问题
+      dpr = 1;
+    }
     const canvas = document.createElement('canvas');
     /*
     为了计算真实宽高需要取图的真实dom
