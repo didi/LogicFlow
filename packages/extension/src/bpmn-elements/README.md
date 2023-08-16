@@ -10,8 +10,8 @@
 
 **边界事件 (bpmn:boundaryEvent)**
 
-- 中断边界事件 (属性`cancelActivity = 'false'`)
-- 非中断边界事件 (属性`cancelActivity = 'true'`)
+- 中断边界事件 (属性`cancelActivity = 'true'`)
+- 非中断边界事件 (属性`cancelActivity = 'false'`)
 
 **中间事件**
 
