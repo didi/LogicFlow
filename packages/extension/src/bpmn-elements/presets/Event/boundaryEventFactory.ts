@@ -48,7 +48,7 @@ export function BoundaryEventFactory(lf: any): {
           cx: x,
           cy: y,
           r,
-          strokeDasharray: cancelActivity ? '5,5' : '',
+          strokeDasharray: cancelActivity ? '' : '5,5',
           strokeWidth: 1.5,
         }),
         h('circle', {
@@ -56,7 +56,7 @@ export function BoundaryEventFactory(lf: any): {
           cx: x,
           cy: y,
           r: r - 3,
-          strokeDasharray: cancelActivity ? '5,5' : '',
+          strokeDasharray: cancelActivity ? '' : '5,5',
           strokeWidth: 1.5,
         }),
         i,
@@ -82,7 +82,7 @@ export function BoundaryEventFactory(lf: any): {
 
       data.properties = {
         attachedToRef: '',
-        cancelActivity: false,
+        cancelActivity: true,
         ...properties,
         ...data.properties,
       };
