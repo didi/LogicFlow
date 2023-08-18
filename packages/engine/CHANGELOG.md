@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.3](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.2...@logicflow/engine@0.0.3) (2023-08-18)
+
+
+### Bug Fixes
+
+* **engine:** build error when use es-module ([3fbd88a](https://github.com/didi/LogicFlow/commit/3fbd88a8279602b907ab6f3e3a6353a46f64ee8c))
+* **engine:** support es module umd and commonJs ([bb17159](https://github.com/didi/LogicFlow/commit/bb171597725b78b28cc2ad74350ab7728e580158))
+
+
+
+
+
 ## 0.0.2 (2023-08-10)
 
 
