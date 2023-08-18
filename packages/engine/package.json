@@ -11,6 +11,9 @@
     "url": "https://github.com/didi/LogicFlow",
     "directory": "packages/engine"
   },
+  "browser": {
+    "vm": "./es/expression/browserVm.js"
+  },
   "license": "Apache-2.0",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level warning --config scripts/webpack.config.dev.js",
