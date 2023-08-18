@@ -138,7 +138,7 @@ demo link：https://docs.logic-flow.cn/demo/dist/organizer/
 
 code link：https://github.com/Logic-Flow/docs/tree/master/demo/organizer
 
-![图片:organizer](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/organizer.gif)
+![图片:organizer](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/organizer-iii.gif)
 
 ### BPMN Application Demo
 
