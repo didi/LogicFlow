@@ -40,9 +40,13 @@ export default class Recorder implements RecorderInterface {
   async getExecutionActions(executionId) {
     return storage.getItem(executionId);
   }
+  async getExecutionList() {
+    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    return instances;
+  }
   clear() {
-    const instance = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
-    instance.forEach((executionId) => {
+    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    instances.forEach((executionId) => {
       storage.removeItem(executionId);
       const instanceData = storage.getItem(executionId) || [];
       instanceData.forEach((actionId) => {

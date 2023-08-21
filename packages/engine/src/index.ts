@@ -105,6 +105,10 @@ export default class Engine {
       });
     });
   }
+  async getExecutionList() {
+    const executionIds = await this.recorder.getExecutionList();
+    return executionIds;
+  }
   async getExecutionRecord(executionId) {
     const tasks = await this.recorder.getExecutionActions(executionId);
     if (!tasks) {

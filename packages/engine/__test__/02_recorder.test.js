@@ -56,6 +56,8 @@ describe('@logicflow/engine Recorder', () => {
     expect(execution[1]).toHaveProperty('properties');
     expect(execution[1].nodeId).toBe('node2');
     expect(execution[1].nodeType).toBe('TaskNode');
+    const executionIds = await engine.getExecutionList();
+    expect(executionIds.length).toBe(1);
   });
   test('The execution record cannot be obtained when the number of executions exceeds the maximum number of executions.', async () => {
     const engine = new Engine();
