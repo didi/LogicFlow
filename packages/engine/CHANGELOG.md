@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.3...@logicflow/engine@0.0.4) (2023-08-21)
+
+
+### Bug Fixes
+
+* **engine:** expression can not return right value in browser ([9ef9f2e](https://github.com/didi/LogicFlow/commit/9ef9f2e1080dcfa05002ab0bc25b18c39d2efffd))
+
+
+### Features
+
+* **engine:** add getExecutionList api ([a907c87](https://github.com/didi/LogicFlow/commit/a907c877512f5c1c62c232f8b2b5e462a9a3ac07))
+
+
+
+
+
 ## [0.0.3](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.2...@logicflow/engine@0.0.3) (2023-08-18)
 
 
