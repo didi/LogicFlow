@@ -12,6 +12,28 @@ export type ActionParam = {
   actionId: string;
 } & NodeParam;
 
+export type ActionStatus = 'success' | 'error' | 'interrupted' | '';
+
+export type OutgoingConfig = {
+  id: string;
+  target: string;
+  properties?: Record<string, any>;
+  result?: string;
+};
+
+export type NextActionParam = {
+  executionId: string;
+  nodeId: string;
+  actionId: string;
+  nodeType: string;
+  outgoing: OutgoingConfig[];
+  properties?: Record<string, any>;
+  detail?: Record<string, any>;
+  status?: ActionStatus;
+};
+
+type ActionResult =  NextActionParam;
+
 export type ExecParams = {
   next: (data: NextActionParam) => void;
 } & ActionParam;
@@ -25,10 +47,8 @@ export type ExecResumeParams = {
 } & ResumeParam;
 
 export type RecorderData = {
-  nodeType: string;
   timestamp: number;
-  properties?: Record<string, any>;
-} & ActionParam;
+} & NextActionParam;
 
 export interface RecorderInterface {
   addActionRecord: (task: RecorderData) => Promise<void>;
@@ -36,21 +56,6 @@ export interface RecorderInterface {
   getExecutionActions: (executionId: string) => Promise<string[]>;
   clear: () => void;
 };
-
-export type ActionStatus = 'success' | 'error' | 'interrupted' | '';
-
-export type ActionResult = {
-  status?: ActionStatus;
-  detail?: Record<string, any>;
-};
-
-export type NodeExecResult = {
-  executionId: string,
-  actionId: string,
-  nodeId: string,
-  nodeType: string,
-  properties?: Record<string, any>,
-} & ActionResult;
 
 export type ResumeParams = {
   executionId: string;

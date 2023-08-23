@@ -9,17 +9,12 @@ import type {
   ActionParam,
   NodeParam,
   ResumeParam,
-  NodeExecResult,
+  NextActionParam,
 } from './types.d';
 import type FlowModel from './FlowModel';
-import type { NextActionParam } from './nodes/BaseNode';
 import type Recorder from './recorder';
 
 type ActionParamMap = Map<string, ActionParam>;
-
-type ActionResult = {
-  extraInfo?: Record<string, any>;
-} & NextActionParam;
 
 type ExecutionId = string;
 
@@ -160,11 +155,9 @@ export default class Scheduler extends EventEmitter {
         actionId: actionParam.actionId,
         nodeType: execResult.nodeType,
         properties: execResult.properties,
-        outgoing: [],
-        extraInfo: {
-          status: execResult.status,
-          detail: execResult.detail,
-        },
+        outgoing: execResult.outgoing,
+        status: execResult.status,
+        detail: execResult.detail,
       });
       this.removeActionFromRunningMap(actionParam);
     }
@@ -173,7 +166,7 @@ export default class Scheduler extends EventEmitter {
   private interrupted({
     execResult,
     actionParam,
-  } : { execResult: NodeExecResult, actionParam: ActionParam}) {
+  } : { execResult: NextActionParam, actionParam: ActionParam}) {
     this.emit(EVENT_INSTANCE_INTERRUPTED, {
       executionId: actionParam.executionId,
       status: FlowStatus.INTERRUPTED,
@@ -185,10 +178,12 @@ export default class Scheduler extends EventEmitter {
   private next(data: NextActionParam) {
     if (data.outgoing && data.outgoing.length > 0) {
       data.outgoing.forEach((item) => {
-        this.addAction({
-          executionId: data.executionId,
-          nodeId: item.target,
-        });
+        if (item.result) {
+          this.addAction({
+            executionId: data.executionId,
+            nodeId: item.target,
+          });
+        }
       });
     }
     this.saveActionResult(data);
@@ -199,7 +194,7 @@ export default class Scheduler extends EventEmitter {
       actionId: data.actionId,
     });
   }
-  private saveActionResult(data: ActionResult) {
+  private saveActionResult(data: NextActionParam) {
     this.recorder.addActionRecord({
       executionId: data.executionId,
       actionId: data.actionId,
@@ -207,6 +202,9 @@ export default class Scheduler extends EventEmitter {
       nodeType: data.nodeType,
       timestamp: Date.now(),
       properties: data.properties,
+      outgoing: data.outgoing,
+      detail: data.detail,
+      status: data.status,
     });
   }
 }

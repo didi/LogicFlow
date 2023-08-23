@@ -1,10 +1,10 @@
 import { ActionStatus } from '../constant/constant';
 import { getExpressionResult } from '../expression';
 import type {
-  ActionResult,
-  NodeExecResult,
+  NextActionParam,
   ExecResumeParams,
   ExecParams,
+  OutgoingConfig,
 } from '../types.d';
 
 export interface BaseNodeInterface {
@@ -13,7 +13,7 @@ export interface BaseNodeInterface {
   nodeId: string;
   type: string;
   readonly baseType: string;
-  execute(actionParam): Promise<NodeExecResult>;
+  execute(actionParam): Promise<NextActionParam>;
 }
 
 export type NodeConstructor = {
@@ -26,7 +26,7 @@ export type NodeConstructor = {
     executionId: string;
     actionId: string;
     nodeId: string;
-  }): Promise<ActionResult>;
+  }): Promise<NextActionParam>;
   onResume(params: {
     executionId: string;
     actionId: string;
@@ -41,27 +41,12 @@ export type IncomingConfig = {
   source: string;
 };
 
-export type OutgoingConfig = {
-  id: string;
-  target: string;
-  properties?: Record<string, any>;
-};
-
 export type NodeConfig = {
   id: string;
   type: string;
   properties?: Record<string, any>;
   incoming: IncomingConfig[];
   outgoing: OutgoingConfig[];
-};
-
-export type NextActionParam = {
-  executionId: string;
-  nodeId: string;
-  actionId: string;
-  nodeType: string;
-  outgoing: OutgoingConfig[];
-  properties?: Record<string, any>;
 };
 
 export default class BaseNode implements BaseNodeInterface {
@@ -103,7 +88,7 @@ export default class BaseNode implements BaseNodeInterface {
   /**
    * 节点的每一次执行都会生成一个唯一的actionId
    */
-  public async execute(params: ExecParams): Promise<NodeExecResult> {
+  public async execute(params: ExecParams): Promise<NextActionParam> {
     const r = await this.action({
       executionId: params.executionId,
       actionId: params.actionId,
@@ -111,7 +96,10 @@ export default class BaseNode implements BaseNodeInterface {
     });
     if (!r || r.status === ActionStatus.SUCCESS) {
       const outgoing = await this.getOutgoing();
+      const detail = r ? r.detail : {};
       params.next({
+        status: ActionStatus.SUCCESS,
+        detail,
         executionId: params.executionId,
         actionId: params.actionId,
         nodeId: this.nodeId,
@@ -128,6 +116,7 @@ export default class BaseNode implements BaseNodeInterface {
       nodeId: this.nodeId,
       nodeType: this.type,
       properties: this.properties,
+      outgoing: [],
     };
   }
   /**
@@ -153,7 +142,7 @@ export default class BaseNode implements BaseNodeInterface {
     return undefined;
   }
   private async getOutgoing(): Promise<OutgoingConfig[]> {
-    const outgoing = [];
+    const outgoing: OutgoingConfig[] = [];
     const expressions = [];
     for (const item of this.outgoing) {
       const { properties } = item;
@@ -161,9 +150,9 @@ export default class BaseNode implements BaseNodeInterface {
     }
     const result = await Promise.all(expressions);
     result.forEach((item, index) => {
-      if (item) {
-        outgoing.push(this.outgoing[index]);
-      }
+      const out = this.outgoing[index];
+      out.result = item;
+      outgoing.push(out);
     });
     return outgoing;
   }
@@ -191,7 +180,7 @@ export default class BaseNode implements BaseNodeInterface {
     executionId: string;
     actionId: string;
     nodeId: string;
-  }): Promise<ActionResult> {
+  }): Promise<NextActionParam> {
     return undefined;
   }
   /**
