@@ -7,7 +7,7 @@ import { createEngineId } from './util/ID';
 import { NodeConstructor } from './nodes/BaseNode';
 
 export default class Engine {
-  id: string;
+  instanceId: string;
   global: Record<string, any>;
   graphData: GraphConfigData;
   nodeModelMap: Map<string, NodeConstructor>;
@@ -16,8 +16,10 @@ export default class Engine {
   context: Record<string, any>;
   constructor(options?: EngineConstructorOptions) {
     this.nodeModelMap = new Map();
-    this.id = createEngineId();
-    this.recorder = new Recorder();
+    this.instanceId = createEngineId();
+    this.recorder = new Recorder({
+      instanceId: this.instanceId,
+    });
     this.register({
       type: StartNode.nodeTypeName,
       model: StartNode,
@@ -43,7 +45,7 @@ export default class Engine {
    *   async addActionRecord(task) {}
    *   async getTask(actionId) {}
    *   async getExecutionTasks(executionId) {}
-   *   clear() {}
+   *   clear(instanceId) {}
    * });
    */
   setCustomRecorder(recorder: Recorder) {
@@ -120,6 +122,9 @@ export default class Engine {
     }
     return Promise.all(records);
   }
+  destroy() {
+    this.recorder.clear();
+  }
   getGlobalData() {
     return this.flowModel?.globalData;
   }
@@ -139,6 +144,7 @@ export {
   Engine,
   TaskNode,
   StartNode,
+  Recorder,
 };
 
 export type {

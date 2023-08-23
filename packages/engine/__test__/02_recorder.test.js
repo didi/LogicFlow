@@ -1,4 +1,4 @@
-import Engine from '../src/index';
+import Engine, { Recorder } from '../src/index';
 
 describe('@logicflow/engine Recorder', () => {
   test('Using the getExecutionRecord API, receive the complete execution record of the process.', async () => {
@@ -95,5 +95,51 @@ describe('@logicflow/engine Recorder', () => {
     await engine.execute();
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(execution).toBe(null);
+  })
+  test('the number of execution records obtained by the getExecutionList api is correct.', async () => {
+    const flowData = {
+      /**
+       * node1 |--> node2
+       */
+      graphData: {
+        nodes: [
+          {
+            id: 'node1',
+            type: 'StartNode',
+            properties: {}
+          },
+          {
+            id: 'node2',
+            type: 'TaskNode',
+            properties: {}
+          }
+        ],
+        edges: [
+          {
+            id: 'edge1',
+            sourceNodeId: 'node1',
+            targetNodeId: 'node2',
+          }
+        ]
+      },
+      global: {},
+    }
+    const engine = new Engine();
+    engine.load(flowData);
+    await engine.execute();
+    await engine.execute();
+    const engine1 = new Engine();
+    engine1.load(JSON.parse(JSON.stringify(flowData)));
+    await engine1.execute();
+
+    const execution = await engine.getExecutionList();
+    const execution1 = await engine1.getExecutionList();
+    expect(execution.length).toEqual(2);
+    expect(execution1.length).toEqual(1);
+    const recorder = new Recorder({
+      instanceId: engine1.instanceId
+    })
+    const execution2 = await recorder.getExecutionList();
+    expect(execution2.length).toEqual(1);
   })
 });

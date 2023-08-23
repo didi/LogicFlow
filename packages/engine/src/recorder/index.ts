@@ -6,10 +6,22 @@ import storage from '../util/storage';
 
 const LOGICFLOW_ENGINE_INSTANCES = 'LOGICFLOW_ENGINE_INSTANCES';
 const MAX_RECORDER = 100;
+const MAX_INSTANCE = 100;
 export default class Recorder implements RecorderInterface {
   maxRecorder: number;
-  constructor() {
+  instanceId: number;
+  constructor({ instanceId }) {
     this.maxRecorder = MAX_RECORDER;
+    this.instanceId = instanceId;
+    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    if (instances.indexOf(instanceId) === -1) {
+      instances.push(instanceId);
+    }
+    if (instances.length > MAX_INSTANCE) {
+      const clearInstance = instances.shift();
+      this.clearInstance(clearInstance);
+    }
+    storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instances);
   }
   setMaxRecorderNumber(maxRecorder: number) {
     this.maxRecorder = maxRecorder;
@@ -41,28 +53,31 @@ export default class Recorder implements RecorderInterface {
     return storage.getItem(executionId);
   }
   async getExecutionList() {
-    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    const instances = storage.getItem(this.instanceId) || [];
     return instances;
   }
   clear() {
-    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
-    instances.forEach((executionId) => {
+    this.clearInstance(this.instanceId);
+  }
+  clearInstance(instanceId) {
+    const instanceExecutions = storage.getItem(instanceId) || [];
+    instanceExecutions.forEach((executionId) => {
       storage.removeItem(executionId);
       const instanceData = storage.getItem(executionId) || [];
       instanceData.forEach((actionId) => {
         storage.removeItem(actionId);
       });
     });
-    storage.removeItem(LOGICFLOW_ENGINE_INSTANCES);
+    storage.removeItem(instanceId);
   }
   private pushExecution(executionId) {
-    const instance = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
-    if (instance.length >= this.maxRecorder) {
-      const removeItem = instance.shift();
+    const instanceExecutions = storage.getItem(this.instanceId) || [];
+    if (instanceExecutions.length >= this.maxRecorder) {
+      const removeItem = instanceExecutions.shift();
       this.popExecution(removeItem);
     }
-    instance.push(executionId);
-    storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instance);
+    instanceExecutions.push(executionId);
+    storage.setItem(this.instanceId, instanceExecutions);
   }
   private popExecution(executionId) {
     const instanceData = storage.getItem(executionId) || [];
