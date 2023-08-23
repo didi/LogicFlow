@@ -6,6 +6,12 @@ describe('@logicflow/engine Customize Node', () => {
       this.globalData['dataSource'] = {
         time: this.context.getTime(),
       }
+      return {
+        status: 'success',
+        detail: {
+          customData: '2'
+        }
+      }
     }
   }
   class Mod2Node extends TaskNode {
@@ -103,4 +109,9 @@ describe('@logicflow/engine Customize Node', () => {
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(['odd', 'even'].indexOf(execution[execution.length - 1].properties.output) !== -1).toBe(true);
   });
+  test('Execution records will contain return detail', async () => {
+    const result = await engine.execute();
+    const execution = await engine.getExecutionRecord(result.executionId);
+    expect(execution[1].detail.customData).toBe('2')
+  })
 });
