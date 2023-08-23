@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.5](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.4...@logicflow/engine@0.0.5) (2023-08-23)
+
+
+### Features
+
+* **engine:** recorder getExecutionList only return instance data ([684a2ba](https://github.com/didi/LogicFlow/commit/684a2ba90c8b94a0cce48200b69119270a3b31b7))
+
+
+
+
+
 ## [0.0.4](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.3...@logicflow/engine@0.0.4) (2023-08-21)
 
 
