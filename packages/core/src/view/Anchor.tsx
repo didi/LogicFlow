@@ -10,6 +10,7 @@ import GraphModel from '../model/GraphModel';
 import { AnchorConfig } from '../type';
 import { BaseNode } from './node';
 import { cancelRaf, createRaf } from '../util/raf';
+import { BaseEdgeModel } from '../model';
 
 type TargetNodeId = string;
 
@@ -174,7 +175,7 @@ class Anchor extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    this.checkEnd(event);
+    const edgeModel = this.checkEnd(event);
     this.setState({
       startX: 0,
       startY: 0,
@@ -188,14 +189,19 @@ class Anchor extends Component<IProps, IState> {
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;
-    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
+
+    const emittedData = {
       data: anchorData,
       e: event,
       nodeModel,
-    });
+    };
+    if (edgeModel) {
+      Object.assign(emittedData, { edgeModel });
+    }
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, emittedData);
   };
 
-  checkEnd = (event) => {
+  checkEnd: (event: string) => BaseEdgeModel | null = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
     } = this.props;
@@ -244,13 +250,14 @@ class Anchor extends Component<IProps, IState> {
           nodeModel,
           edgeModel,
         });
-      } else {
-        const nodeData = targetNode.getData();
-        graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
-          data: nodeData,
-          msg: targetMsg || sourceMsg,
-        });
+        return edgeModel;
       }
+
+      const nodeData = targetNode.getData();
+      graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
+        data: nodeData,
+        msg: targetMsg || sourceMsg,
+      });
     }
   };
   moveAnchorEnd(endX: number, endY: number) {
