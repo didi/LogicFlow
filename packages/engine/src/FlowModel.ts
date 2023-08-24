@@ -4,16 +4,18 @@ import type {
 } from './nodes/BaseNode';
 import type Recorder from './recorder';
 import {
-  EVENT_INSTANCE_COMPLETE, EVENT_INSTANCE_INTERRUPTED,
+  EVENT_INSTANCE_COMPLETE,
+  EVENT_INSTANCE_INTERRUPTED,
+  EVENT_INSTANCE_ERROR,
 } from './constant/constant';
 import { createExecId } from './util/ID';
 import Scheduler from './Scheduler';
 import { ErrorCode, getErrorMsg } from './constant/LogCode';
-import type { ActionParam } from './types.d';
+import type { ActionParam, NextActionParam } from './types.d';
 
 export type FlowResult = {
   result?: Record<string, any>;
-} & ActionParam;
+} & ActionParam | NextActionParam;
 
 export type ActionParams = {
   executionId?: string;
@@ -22,7 +24,7 @@ export type ActionParams = {
 };
 
 export type ExecParams = {
-  callback?: (result: FlowResult) => void;
+  callback?: (result: NextActionParam) => void;
   onError?: (error: Error) => void;
 } & ActionParams;
 
@@ -109,6 +111,9 @@ export default class FlowModel {
       this.onExecuteFinished(result);
     });
     this.scheduler.on(EVENT_INSTANCE_INTERRUPTED, (result) => {
+      this.onExecuteFinished(result);
+    });
+    this.scheduler.on(EVENT_INSTANCE_ERROR, (result) => {
       this.onExecuteFinished(result);
     });
   }

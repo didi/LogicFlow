@@ -1,4 +1,9 @@
-import type { ResumeParams, GraphConfigData, EngineConstructorOptions } from './types.d';
+import type {
+  ResumeParams,
+  GraphConfigData,
+  EngineConstructorOptions,
+  NextActionParam,
+} from './types.d';
 import FlowModel, { ActionParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';
@@ -72,7 +77,7 @@ export default class Engine {
   /**
    * 执行流程，允许多次调用。
    */
-  async execute(execParam?: ActionParams) {
+  async execute(execParam?: ActionParams): Promise<NextActionParam> {
     return new Promise((resolve, reject) => {
       if (!execParam) {
         execParam = {};
