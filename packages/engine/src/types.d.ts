@@ -12,7 +12,7 @@ export type ActionParam = {
   actionId: string;
 } & NodeParam;
 
-export type ActionStatus = 'success' | 'error' | 'interrupted' | '';
+export type ActionStatus = 'success' | 'error' | 'interrupted' | 'pending';
 
 export type OutgoingConfig = {
   id: string;
@@ -20,6 +20,11 @@ export type OutgoingConfig = {
   properties?: Record<string, any>;
   result?: string;
 };
+
+export type ActionResult =  {
+  status: ActionStatus;
+  detail?: Record<string, any>;
+} | void;
 
 export type NextActionParam = {
   executionId: string;
@@ -29,10 +34,8 @@ export type NextActionParam = {
   outgoing: OutgoingConfig[];
   properties?: Record<string, any>;
   detail?: Record<string, any>;
-  status?: ActionStatus;
-};
-
-type ActionResult =  NextActionParam;
+  status: ActionStatus;
+}
 
 export type ExecParams = {
   next: (data: NextActionParam) => void;

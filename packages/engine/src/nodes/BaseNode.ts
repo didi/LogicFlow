@@ -2,6 +2,7 @@ import { ActionStatus } from '../constant/constant';
 import { getExpressionResult } from '../expression';
 import type {
   NextActionParam,
+  ActionResult,
   ExecResumeParams,
   ExecParams,
   OutgoingConfig,
@@ -94,7 +95,8 @@ export default class BaseNode implements BaseNodeInterface {
       actionId: params.actionId,
       nodeId: this.nodeId,
     });
-    if (!r || r.status === ActionStatus.SUCCESS) {
+    const status = r ? r.status : 'success';
+    if (status === ActionStatus.SUCCESS) {
       const outgoing = await this.getOutgoing();
       const detail = r ? r.detail : {};
       params.next({
@@ -109,7 +111,7 @@ export default class BaseNode implements BaseNodeInterface {
       });
     }
     return {
-      status: r && r.status,
+      status,
       detail: r && r.detail,
       executionId: params.executionId,
       actionId: params.actionId,
@@ -138,6 +140,7 @@ export default class BaseNode implements BaseNodeInterface {
       nodeType: this.type,
       properties: this.properties,
       outgoing,
+      status: ActionStatus.SUCCESS,
     });
     return undefined;
   }
@@ -175,13 +178,16 @@ export default class BaseNode implements BaseNodeInterface {
    * @param params.executionId 流程执行记录ID
    * @param params.actionId 此节点执行记录ID
    * @param params.nodeId 节点ID
+   * @returns 返回下一步的执行参数
+   * 当不返回时，表示此节点执行成功，流程会继续执行下一步。
+   * 当返回时，返回格式
    */
   public async action(params: {
     executionId: string;
     actionId: string;
     nodeId: string;
-  }): Promise<NextActionParam> {
-    return undefined;
+  }): Promise<ActionResult> {
+    return null;
   }
   /**
    * 节点的重新恢复执行逻辑
