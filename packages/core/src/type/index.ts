@@ -461,6 +461,12 @@ export type DiamondAttributes = {
   points: PointTuple[];
 } & NodeAttributes;
 
+// DOM 节点属性
+export type DomAttributes = {
+  className?: string;
+  [key: string]: string;
+};
+
 export type ShapeStyleAttribute = CommonTheme;
 
 export type VirtualRectSize = {

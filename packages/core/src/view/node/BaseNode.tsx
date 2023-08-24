@@ -356,6 +356,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       isHitable,
       draggable,
     } = model;
+    const { className = '', ...restAttributes } = model.getOuterGAttributes();
     const nodeShapeInner = (
       <g className="lf-node-content">
         {this.getShape()}
@@ -368,7 +369,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     let nodeShape;
     if (!isHitable) {
       nodeShape = (
-        <g className={this.getStateClassName()}>
+        <g className={`${this.getStateClassName()} ${className}`} {...restAttributes}>
           { nodeShapeInner }
         </g>
       );
@@ -378,7 +379,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       }
       nodeShape = (
         <g
-          className={this.getStateClassName()}
+          className={`${this.getStateClassName()} ${className}}`}
           onMouseDown={this.handleMouseDown}
           onClick={this.handleClick}
           onMouseEnter={this.setHoverON}
@@ -386,6 +387,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
           onMouseLeave={this.setHoverOFF}
           onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
+          {...restAttributes}
         >
           { nodeShapeInner }
         </g>

@@ -19,6 +19,7 @@ import {
   IsAllowMove,
   Point,
   AnchorInfo,
+  DomAttributes,
 } from '../../type';
 import GraphModel from '../GraphModel';
 import { IBaseModel } from '../BaseModel';
@@ -243,6 +244,16 @@ export default class BaseNodeModel implements IBaseNodeModel {
    */
   getProperties() {
     return toJS(this.properties);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点最外层g标签Attributes, 例如className
+   * @returns 自定义节点样式
+   */
+  getOuterGAttributes(): DomAttributes {
+    return {
+      className: '',
+    };
   }
   /**
    * @overridable 支持重写
