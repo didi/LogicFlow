@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/engine",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a process engine for javascript",
   "main": "cjs/index.js",
   "module": "es/index.js",

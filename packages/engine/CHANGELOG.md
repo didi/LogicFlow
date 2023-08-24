@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.6](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.5...@logicflow/engine@0.0.6) (2023-08-24)
+
+
+### Features
+
+* **engine:** execution record data contain outgoing and detail ([d24533c](https://github.com/didi/LogicFlow/commit/d24533ca4a6d259a3d1921c010056dd9b4db3d3c))
+* **engine:** support node return error ([7373bf2](https://github.com/didi/LogicFlow/commit/7373bf2da4a90b2b7610a267259b33daa77fd9de))
+
+
+
+
+
 ## [0.0.5](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.4...@logicflow/engine@0.0.5) (2023-08-23)
 
 
