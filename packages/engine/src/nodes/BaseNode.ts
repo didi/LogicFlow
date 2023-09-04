@@ -164,10 +164,13 @@ export default class BaseNode implements BaseNodeInterface {
     const { conditionExpression } = properties;
     if (!conditionExpression) return true;
     try {
-      const result = await getExpressionResult(`result${this.nodeId} = (${conditionExpression})`, {
+      // bug：uuid 创建的 NodeId 为 xxxx-xxxx-xxxx-zzzz 格式，eval 执行时会将 - 识别为数学减号，导致执行报错
+      // 解决方案：将 nodeId 中的 '-' 移除
+      const tempNodeId = this.nodeId.split('-').join('');
+      const result = await getExpressionResult(`result${tempNodeId} = (${conditionExpression})`, {
         ...this.globalData,
       });
-      return result[`result${this.nodeId}`];
+      return result[`result${tempNodeId}`];
     } catch (e) {
       return false;
     }
