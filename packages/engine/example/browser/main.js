@@ -37,7 +37,7 @@ async function test() {
           sourceNodeId: 'node1',
           targetNodeId: 'node3',
           properties: {
-            conditionExpression: 'true',
+            conditionExpression: 'a === 2',
           },
         },
       ],
@@ -51,4 +51,4 @@ async function test() {
   const execution = await engine.getExecutionRecord(result.executionId);
   console.log(execution);
 }
-test();
+// test();
