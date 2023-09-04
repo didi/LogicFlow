@@ -165,12 +165,11 @@ export default class BaseNode implements BaseNodeInterface {
     if (!conditionExpression) return true;
     try {
       // bug：uuid 创建的 NodeId 为 xxxx-xxxx-xxxx-zzzz 格式，eval 执行时会将 - 识别为数学减号，导致执行报错
-      // 解决方案：将 nodeId 中的 '-' 移除
-      const tempNodeId = this.nodeId.split('-').join('');
-      const result = await getExpressionResult(`result${tempNodeId} = (${conditionExpression})`, {
+      // 解决方案： 赋值变量直接命名为 isPassResult, 因为每次执行 getExpressionResult 时，都会重新射程一个 context
+      const result = await getExpressionResult(`isPassResult = (${conditionExpression})`, {
         ...this.globalData,
       });
-      return result[`result${tempNodeId}`];
+      return result.isPassResult;
     } catch (e) {
       return false;
     }
