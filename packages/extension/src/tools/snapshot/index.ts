@@ -57,6 +57,19 @@ class Snapshot {
       }
     }
   }
+  removeRotateControl(element) {
+    const { childNodes } = element;
+    let childLength = element.childNodes && element.childNodes.length;
+    for (let i = 0; i < childLength; i++) {
+      const child = childNodes[i] as SVGGraphicsElement;
+      const classList = (child.classList && Array.from(child.classList)) || [];
+      if (classList.indexOf('lf-rotate-control') > -1) {
+        element.removeChild(element.childNodes[i]);
+        childLength--;
+        i--;
+      }
+    }
+  }
   /* 下载图片 */
   getSnapshot(fileName: string, backgroundColor: string) {
     this.fileName = fileName || `logic-flow.${Date.now()}.png`;

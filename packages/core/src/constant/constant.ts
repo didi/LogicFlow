@@ -51,6 +51,7 @@ export enum EventType {
   NODE_MOUSEENTER = 'node:mouseenter',
   NODE_MOUSELEAVE = 'node:mouseleave',
   NODE_CONTEXTMENU = 'node:contextmenu',
+  NODE_ROTATE = 'node:rotate',
   EDGE_DELETE = 'edge:delete',
   EDGE_ADD = 'edge:add',
   EDGE_CLICK = 'edge:click',

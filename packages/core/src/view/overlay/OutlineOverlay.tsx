@@ -46,6 +46,7 @@ export default class OutlineOverlay extends Component<IProps> {
           }
           nodeOutline.push(
             <Rect
+              transform={element.gMatrix}
               className="lf-outline-node"
               {...{
                 x, y, width: width + 10, height: height + 10,
