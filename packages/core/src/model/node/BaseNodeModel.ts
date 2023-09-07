@@ -27,6 +27,7 @@ import { formatData } from '../../util/compatible';
 import { getClosestAnchor, pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 import { BaseEdgeModel } from '../edge';
+import { Matrix, TranslateMatrix, RotateMatrix } from '../../util';
 
 export type ConnectRule = {
   message: string;
@@ -90,6 +91,7 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable isHitable = true; // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true;
   @observable visible = true;
+  @observable enableRotate = true;
   virtual = false;
   // 其它属性
   graphModel: GraphModel;
@@ -97,6 +99,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable state = 1;
   @observable autoToFront = true; // 节点选中时是否自动置顶，默认为true.
   @observable style: ShapeStyleAttribute = { }; // 每个节点自己的样式，动态修改
+  @observable gMatrix: string; // 节点的transform属性
+  @observable rotate = 0;
+
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
   additionStateData: AdditionData;
@@ -219,6 +224,9 @@ export default class BaseNodeModel implements IBaseNodeModel {
       y: this.y,
       properties,
     };
+    if (this.rotate) {
+      data.rotate = this.rotate;
+    }
     if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
       data.zIndex = this.zIndex;
     }
@@ -274,6 +282,14 @@ export default class BaseNodeModel implements IBaseNodeModel {
     // 透传 nodeText
     const { nodeText } = this.graphModel.theme;
     return cloneDeep(nodeText);
+  }
+  /**
+   * @overridable 支持重写
+   * 获取当前节点旋转控制点的样式
+   */
+  getRotateControlStyle() {
+    const { rotateControl } = this.graphModel.theme;
+    return cloneDeep(rotateControl);
   }
   /**
    * @overridable 支持重写
@@ -465,7 +481,17 @@ export default class BaseNodeModel implements IBaseNodeModel {
   }
 
   get anchors(): PointAnchor[] {
-    return this.getAnchorsByOffset();
+    const anchors = this.getAnchorsByOffset();
+    anchors.forEach((anchor) => {
+      const { x: anchorX, y: anchorY } = anchor;
+      const [e, f] = new Matrix([anchorX, anchorY, 1])
+        .cross(new TranslateMatrix(-this.x, -this.y))
+        .cross(new RotateMatrix(this.rotate))
+        .cross(new TranslateMatrix(this.x, this.y))[0];
+      anchor.x = e;
+      anchor.y = f;
+    });
+    return anchors;
   }
 
   getAnchorInfo(anchorId: string) {
@@ -600,6 +626,11 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @action
   setIsShowAnchor(flag = true): void {
     this.isShowAnchor = flag;
+  }
+
+  @action
+  setEnableRotate(flag = true): void {
+    this.enableRotate = flag;
   }
 
   @action
