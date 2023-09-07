@@ -3,7 +3,7 @@ import { Component, h } from 'preact';
 import { map, reduce } from 'lodash';
 import Circle from './basic-shape/Circle';
 import { GraphModel, BaseNodeModel } from '../model';
-import { RotateMatrix, StepDrag, TranslateMatrix, Vector } from '../util';
+import { StepDrag, TranslateMatrix, Vector } from '../util';
 import EventEmitter from '../event/eventEmitter';
 import { CommonTheme } from '../constant/DefaultTheme';
 import { EventType } from '../constant/constant';
@@ -42,7 +42,7 @@ class RotateControlPoint extends Component<IProps> {
     });
     const v = new Vector(cx - x, cy - y);
     const angle = this.normal?.angle(v) - this.defaultAngle;
-    const matrix = new TranslateMatrix(-x, -y).cross(new RotateMatrix(angle)).cross(new TranslateMatrix(x, y)).toString();
+    const matrix = new TranslateMatrix(-x, -y).rotate(angle).translate(x, y).toString();
     nodeModel.gMatrix = matrix;
     nodeModel.rotate = angle;
 

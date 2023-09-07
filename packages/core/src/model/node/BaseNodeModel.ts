@@ -27,7 +27,7 @@ import { formatData } from '../../util/compatible';
 import { getClosestAnchor, pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 import { BaseEdgeModel } from '../edge';
-import { Matrix, TranslateMatrix, RotateMatrix } from '../../util';
+import { Matrix } from '../../util';
 
 export type ConnectRule = {
   message: string;
@@ -482,12 +482,13 @@ export default class BaseNodeModel implements IBaseNodeModel {
 
   get anchors(): PointAnchor[] {
     const anchors = this.getAnchorsByOffset();
+    const { x, y, rotate } = this;
     anchors.forEach((anchor) => {
       const { x: anchorX, y: anchorY } = anchor;
       const [e, f] = new Matrix([anchorX, anchorY, 1])
-        .cross(new TranslateMatrix(-this.x, -this.y))
-        .cross(new RotateMatrix(this.rotate))
-        .cross(new TranslateMatrix(this.x, this.y))[0];
+        .translate(-x, -y)
+        .rotate(rotate)
+        .translate(x, y)[0];
       anchor.x = e;
       anchor.y = f;
     });

@@ -218,9 +218,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
-    const matrix = new TranslateMatrix(-x, -y)
-      .cross(new RotateMatrix(model.rotate))
-      .cross(new TranslateMatrix(x, y)).toString();
+    const matrix = new TranslateMatrix(-x, -y).rotate(model.rotate).translate(x, y).toString();
     model.gMatrix = matrix;
     let moveNodes = selectNodes.map(node => node.id);
     // 未被选中的节点也可以拖动
