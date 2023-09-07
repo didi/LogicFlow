@@ -28,7 +28,7 @@ interface OldEdge {
   pointsList: Point[];
 }
 
-enum AdjustType {
+export enum AdjustType {
   SOURCE = 'SOURCE',
   TARGET = 'TARGET',
 }
@@ -105,7 +105,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
     });
     // 调整过程中实时更新路径
     const { edgeModel } = this.props;
-    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel, type);
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
     if (info && info.node && this.isAllowAdjust(info).pass) {
       let params;
@@ -149,7 +149,7 @@ export default class AdjustPoint extends Component<IProps, IState> {
       // 拖拽AdjustPoint时不修改edgeModel.isHitable，避免偶尔会出现边不能点击问题(https://github.com/didi/LogicFlow/issues/974)
       // edgeModel.isHitable = true;
       const { endX, endY, dragging } = this.state;
-      const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
+      const info = targetNodeInfo({ x: endX, y: endY }, graphModel, type);
       // 没有dragging就结束边
       if (!dragging) return;
       // 如果找到目标节点，删除老边，创建新边

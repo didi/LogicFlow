@@ -10,6 +10,7 @@ import GraphModel from '../model/GraphModel';
 import { AnchorConfig } from '../type';
 import { BaseNode } from './node';
 import { cancelRaf, createRaf } from '../util/raf';
+import { AdjustType } from './edge/AdjustPoint';
 
 type TargetNodeId = string;
 
@@ -203,7 +204,7 @@ class Anchor extends Component<IProps, IState> {
     /* 创建边 */
     const { edgeType } = graphModel;
     const { endX, endY, dragging } = this.state;
-    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel, AdjustType.TARGET);
     // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
     if (this.preTargetNode && this.preTargetNode.state !== ElementState.DEFAULT) {
       this.preTargetNode.setElementState(ElementState.DEFAULT);
@@ -255,7 +256,7 @@ class Anchor extends Component<IProps, IState> {
   };
   moveAnchorEnd(endX: number, endY: number) {
     const { graphModel, nodeModel, anchorData } = this.props;
-    const info = targetNodeInfo({ x: endX, y: endY }, graphModel);
+    const info = targetNodeInfo({ x: endX, y: endY }, graphModel, AdjustType.TARGET);
     if (info) {
       const targetNode = info.node;
       const anchorId = info.anchor.id;
