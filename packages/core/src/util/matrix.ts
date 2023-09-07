@@ -59,6 +59,15 @@ export class Matrix extends Array {
     const [e, f] = this[2];
     return `matrix(${a} ${b} ${c} ${d} ${e} ${f})`;
   }
+  translate(tx: number, ty: number): Matrix {
+    return this.cross(new TranslateMatrix(tx, ty));
+  }
+  rotate(angle: number): Matrix {
+    return this.cross(new RotateMatrix(angle));
+  }
+  scale(sx: number, sy: number): Matrix {
+    return this.cross(new ScaleMatrix(sx, sy));
+  }
 }
 
 export class RotateMatrix extends Matrix {
