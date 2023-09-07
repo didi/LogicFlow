@@ -148,6 +148,7 @@ class Snapshot {
             lfBase.childNodes.forEach((item) => {
               const element = item as SVGGraphicsElement;
               this.removeAnchor(element.firstChild);
+              this.removeRotateControl(element.firstChild);
             });
         }
       }
