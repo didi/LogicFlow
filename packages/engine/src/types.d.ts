@@ -121,4 +121,5 @@ export declare type EdgeConfig = {
 
 export declare type EngineConstructorOptions = {
   context?: Record<string, any>;
+  debug?: boolean;
 }

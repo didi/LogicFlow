@@ -13,7 +13,7 @@ export default class Recorder implements RecorderInterface {
   constructor({ instanceId }) {
     this.maxRecorder = MAX_RECORDER;
     this.instanceId = instanceId;
-    const instances = storage.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
+    const instances = this.getItem(LOGICFLOW_ENGINE_INSTANCES) || [];
     if (instances.indexOf(instanceId) === -1) {
       instances.push(instanceId);
     }
@@ -21,10 +21,25 @@ export default class Recorder implements RecorderInterface {
       const clearInstance = instances.shift();
       this.clearInstance(clearInstance);
     }
-    storage.setItem(LOGICFLOW_ENGINE_INSTANCES, instances);
+    this.setItem(LOGICFLOW_ENGINE_INSTANCES, instances);
   }
   setMaxRecorderNumber(maxRecorder: number) {
     this.maxRecorder = maxRecorder;
+  }
+
+  // 将存储 storage 的方法收敛到此处，并在此处做异常处理 - setItem
+  setItem(key: string | number, value: unknown) {
+    try {
+      storage.setItem(key, value);
+    } catch (error) {
+      console.log('Ops, something wrong with storage.setItem');
+      storage.clear();
+      storage.setItem(key, value);
+    }
+  }
+  // getItem 方法
+  getItem(key: string | number) {
+    return storage.getItem(key);
   }
   /*
   * @param {Object} action
@@ -44,26 +59,26 @@ export default class Recorder implements RecorderInterface {
       this.pushExecution(executionId);
     }
     this.pushActionToExecution(executionId, actionId);
-    storage.setItem(actionId, action);
+    this.setItem(actionId, action);
   }
   async getActionRecord(actionId: string): Promise<RecorderData> {
-    return storage.getItem(actionId);
+    return this.getItem(actionId);
   }
   async getExecutionActions(executionId) {
-    return storage.getItem(executionId);
+    return this.getItem(executionId);
   }
   async getExecutionList() {
-    const instances = storage.getItem(this.instanceId) || [];
+    const instances = this.getItem(this.instanceId) || [];
     return instances;
   }
   clear() {
     this.clearInstance(this.instanceId);
   }
   clearInstance(instanceId) {
-    const instanceExecutions = storage.getItem(instanceId) || [];
+    const instanceExecutions = this.getItem(instanceId) || [];
     instanceExecutions.forEach((executionId) => {
       storage.removeItem(executionId);
-      const instanceData = storage.getItem(executionId) || [];
+      const instanceData = this.getItem(executionId) || [];
       instanceData.forEach((actionId) => {
         storage.removeItem(actionId);
       });
@@ -71,24 +86,24 @@ export default class Recorder implements RecorderInterface {
     storage.removeItem(instanceId);
   }
   private pushExecution(executionId) {
-    const instanceExecutions = storage.getItem(this.instanceId) || [];
+    const instanceExecutions = this.getItem(this.instanceId) || [];
     if (instanceExecutions.length >= this.maxRecorder) {
       const removeItem = instanceExecutions.shift();
       this.popExecution(removeItem);
     }
     instanceExecutions.push(executionId);
-    storage.setItem(this.instanceId, instanceExecutions);
+    this.setItem(this.instanceId, instanceExecutions);
   }
   private popExecution(executionId) {
-    const instanceData = storage.getItem(executionId) || [];
+    const instanceData = this.getItem(executionId) || [];
     instanceData.forEach((actionId) => {
       storage.removeItem(actionId);
     });
     storage.removeItem(executionId);
   }
   private pushActionToExecution(executionId, actionId) {
-    const actions = storage.getItem(executionId) || [];
+    const actions = this.getItem(executionId) || [];
     actions.push(actionId);
-    storage.setItem(executionId, actions);
+    this.setItem(executionId, actions);
   }
 }

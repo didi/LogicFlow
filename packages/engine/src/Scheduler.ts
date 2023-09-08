@@ -194,7 +194,7 @@ export default class Scheduler extends EventEmitter {
     this.run(data);
   }
   private saveActionResult(data: NextActionParam) {
-    this.recorder.addActionRecord({
+    this.recorder?.addActionRecord({
       executionId: data.executionId,
       actionId: data.actionId,
       nodeId: data.nodeId,
