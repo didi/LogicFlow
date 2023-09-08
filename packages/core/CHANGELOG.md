@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.12...@logicflow/core@1.2.13) (2023-09-08)
+
+
+### Features
+
+* **core:** add a new function to set outer g attributes.([#880](https://github.com/didi/LogicFlow/issues/880)) ([90aaccd](https://github.com/didi/LogicFlow/commit/90aaccdb87309b4cdad2691ed425cb16732d746c))
+* **core:** export egde utils and sampling utils ([9a83d4a](https://github.com/didi/LogicFlow/commit/9a83d4a360c8a113bce46370aecac8e0a2ffb6ea))
+
+
+
+
+
 ## [1.2.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.11...@logicflow/core@1.2.12) (2023-08-16)
 
 

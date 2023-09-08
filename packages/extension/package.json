@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/extension",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "LogicFlow extension",
   "main": "cjs/index.js",
   "module": "es/index.js",
@@ -32,7 +32,7 @@
     "readme.md"
   ],
   "dependencies": {
-    "@logicflow/core": "^1.2.12",
+    "@logicflow/core": "^1.2.13",
     "jest": "27.5.1",
     "lodash-es": "^4.17.21",
     "preact": "^10.4.8"
