@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.14](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.13...@logicflow/core@1.2.14) (2023-09-11)
+
+
+### Features
+
+* **core:** enable node rotation ([267ebc8](https://github.com/didi/LogicFlow/commit/267ebc8ff65f461c831fc631b89028ca98305858))
+* **core:** optimize the using of matrix ([d13fc5c](https://github.com/didi/LogicFlow/commit/d13fc5c50dcc25727ca8646ea1afe9a250d444d5))
+* **core:** trigger edge:adjust when adjusting bezier([#947](https://github.com/didi/LogicFlow/issues/947)) ([ad993c4](https://github.com/didi/LogicFlow/commit/ad993c448c004623e32f9534b3971cdf9d8e47bd))
+
+
+
+
+
 ## [1.2.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.12...@logicflow/core@1.2.13) (2023-09-08)
 
 

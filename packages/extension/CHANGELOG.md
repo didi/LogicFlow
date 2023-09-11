@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.14...@logicflow/extension@1.2.15) (2023-09-11)
+
+
+### Features
+
+* **core:** enable node rotation ([267ebc8](https://github.com/didi/LogicFlow/commit/267ebc8ff65f461c831fc631b89028ca98305858))
+* **extension:** remove lf-rotate when using snapshot to export canvas ([8aa6053](https://github.com/didi/LogicFlow/commit/8aa60532b1ab7d1f5b52305e7e87aaff3774252e))
+
+
+
+
+
 ## [1.2.14](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.13...@logicflow/extension@1.2.14) (2023-09-08)
 
 **Note:** Version bump only for package @logicflow/extension

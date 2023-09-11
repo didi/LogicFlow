@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.9](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.8...@logicflow/engine@0.0.9) (2023-09-11)
+
+
+### Bug Fixes
+
+* fix bug -> options?.debug, setup with debug mode via options.debug ([1ed7d2a](https://github.com/didi/LogicFlow/commit/1ed7d2ab6f770c64c23432e2578fd0c7debad019))
+
+
+
+
+
 ## [0.0.8](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.6...@logicflow/engine@0.0.8) (2023-09-08)
 
 
