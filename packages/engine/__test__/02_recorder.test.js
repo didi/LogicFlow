@@ -1,9 +1,9 @@
 import Engine, { Recorder } from '../src/index';
 
 describe('@logicflow/engine Recorder', () => {
-  Text('When init Engine with debug mode, getExecutionRecord will get null', async () => {
+  test('When init Engine with debug mode, getExecutionRecord will get null', async () => {
     const engine = new Engine({
-      debug: true
+      debug: false
     });
     const flowData = {
       /**
@@ -52,7 +52,9 @@ describe('@logicflow/engine Recorder', () => {
     expect(execution).toBe(null)
   });
   test('Using the getExecutionRecord API, receive the complete execution record of the process.', async () => {
-    const engine = new Engine();
+    const engine = new Engine({
+      debug: true,
+    });
     const flowData = {
       /**
        * node1 |--> node2
@@ -110,7 +112,9 @@ describe('@logicflow/engine Recorder', () => {
     expect(executionIds.length).toBe(1);
   });
   test('The execution record cannot be obtained when the number of executions exceeds the maximum number of executions.', async () => {
-    const engine = new Engine();
+    const engine = new Engine({
+      debug: true,
+    });
     const flowData = {
       /**
        * node1 |--> node2
@@ -174,11 +178,15 @@ describe('@logicflow/engine Recorder', () => {
       },
       global: {},
     }
-    const engine = new Engine();
+    const engine = new Engine({
+      debug: true,
+    });
     engine.load(flowData);
     await engine.execute();
     await engine.execute();
-    const engine1 = new Engine();
+    const engine1 = new Engine({
+      debug: true,
+    });
     engine1.load(JSON.parse(JSON.stringify(flowData)));
     await engine1.execute();
 

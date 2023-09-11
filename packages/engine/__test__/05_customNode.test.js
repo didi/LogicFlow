@@ -33,7 +33,8 @@ describe('@logicflow/engine Customize Node', () => {
       getTime() {
         return new Date().getTime();
       }
-    }
+    },
+    debug: true,
   });
   engine.register({
     type: 'DataNode',
@@ -105,12 +106,16 @@ describe('@logicflow/engine Customize Node', () => {
   }
   engine.load(flowData);
   test('When the process is completed, the output field in the properties attribute of the last node is odd or even.', async () => {
-    const result = await engine.execute();
+    const result = await engine.execute({
+      debug: true,
+    });
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(['odd', 'even'].indexOf(execution[execution.length - 1].properties.output) !== -1).toBe(true);
   });
   test('Execution records will contain return detail', async () => {
-    const result = await engine.execute();
+    const result = await engine.execute({
+      debug: true,
+    });
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(execution[1].detail.customData).toBe('2')
   })
