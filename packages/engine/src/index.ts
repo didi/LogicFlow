@@ -22,7 +22,7 @@ export default class Engine {
   constructor(options?: EngineConstructorOptions) {
     this.nodeModelMap = new Map();
     this.instanceId = createEngineId();
-    if (!options?.debug) {
+    if (options?.debug) {
       this.recorder = new Recorder({
         instanceId: this.instanceId,
       });

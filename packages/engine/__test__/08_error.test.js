@@ -19,7 +19,8 @@ describe('@logicflow/engine error', () => {
       getTime() {
         return new Date().getTime();
       }
-    }
+    },
+    debug: true,
   });
   engine.register({
     type: 'DataNode',

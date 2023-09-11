@@ -13,7 +13,9 @@ describe('@logicflow/engine parallel execution', () => {
       })
     }
   }
-  const engine = new Engine();
+  const engine = new Engine({
+    debug: true,
+  });
   engine.register({
     type: 'FetchTask',
     model: FetchNode,
@@ -76,7 +78,9 @@ describe('@logicflow/engine parallel execution', () => {
   }
   engine.load(flowData);
   test('When the process is executed, the asynchronous node will not block the execution of other branch nodes.', async () => {
-    const result = await engine.execute();
+    const result = await engine.execute({
+      debug: true,
+    });
     const execution = await engine.getExecutionRecord(result.executionId);
     expect(execution.length).toBe(4);
     expect(execution[3].nodeId).toEqual('node2')

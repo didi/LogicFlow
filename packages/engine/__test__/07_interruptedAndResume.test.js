@@ -27,7 +27,9 @@ describe('@logicflow/engine interrupted and resume', () => {
       })
     }
   }
-  const engine = new Engine();
+  const engine = new Engine({
+    debug: true,
+  });
   engine.register({
     type: 'UserTask',
     model: UserTask,
@@ -107,7 +109,9 @@ describe('@logicflow/engine interrupted and resume', () => {
   }
   engine.load(flowData);
   test('After executing the process, receive the flow status as "interrupted" and include detailed information returned by the custom node.', async () => {
-    const result = await engine.execute();
+    const result = await engine.execute({
+      debug: true,
+    });
     expect(result.status).toBe('interrupted');
     expect(result.detail.formId).toEqual('form_1');
   });
