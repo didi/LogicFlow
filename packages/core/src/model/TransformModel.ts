@@ -174,12 +174,14 @@ export default class TransformModel implements TransformInterface {
 
   @action
   translate(x: number, y: number) {
-    this.TRANSLATE_X + x <= this.translateLimitMaxX
-      && this.TRANSLATE_X + x >= this.translateLimitMinX
-      && (this.TRANSLATE_X += x);
-    this.TRANSLATE_Y + y <= this.translateLimitMaxY
-      && this.TRANSLATE_Y + y >= this.translateLimitMinY
-      && (this.TRANSLATE_Y += y);
+    if (this.TRANSLATE_X + x <= this.translateLimitMaxX
+      && this.TRANSLATE_X + x >= this.translateLimitMinX) {
+      this.TRANSLATE_X += x;
+    }
+    if (this.TRANSLATE_Y + y <= this.translateLimitMaxY
+      && this.TRANSLATE_Y + y >= this.translateLimitMinY) {
+      this.TRANSLATE_Y += y;
+    }
     this.emitGraphTransform('translate');
   }
 
@@ -202,20 +204,14 @@ export default class TransformModel implements TransformInterface {
    * 更新画布可以移动范围
    */
   updateTranslateLimits(limit: boolean | 'vertical' | 'horizontal' | [number, number, number, number]) {
-    if (Array.isArray(limit) && limit.length === 4) {
-      [
-        this.translateLimitMinX,
-        this.translateLimitMinY,
-        this.translateLimitMaxX,
-        this.translateLimitMaxY,
-      ] = limit;
-    } else {
-      [
-        this.translateLimitMinX,
-        this.translateLimitMinY,
-        this.translateLimitMaxX,
-        this.translateLimitMaxY,
-      ] = translateLimitsMap[limit.toString()];
-    }
+    const boundary = Array.isArray(limit) && limit.length === 4
+      ? limit
+      : translateLimitsMap[limit.toString()];
+    [
+      this.translateLimitMinX,
+      this.translateLimitMinY,
+      this.translateLimitMaxX,
+      this.translateLimitMaxY,
+    ] = boundary;
   }
 }
