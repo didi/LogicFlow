@@ -155,7 +155,7 @@ class GraphModel {
     this.rootEl = container;
     this.editConfigModel = new EditConfigModel(options);
     this.eventCenter = new EventEmitter();
-    this.transformModel = new TransformModel(this.eventCenter);
+    this.transformModel = new TransformModel(this.eventCenter, options);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
     this.width = options.width;

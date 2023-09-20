@@ -53,7 +53,7 @@ class CanvasOverlay extends Component<IProps, IState> {
         editConfigModel,
       },
     } = this.props;
-    if (editConfigModel.stopMoveGraph) {
+    if (editConfigModel.stopMoveGraph === true) {
       return;
     }
     transformModel.translate(deltaX, deltaY);
@@ -135,7 +135,7 @@ class CanvasOverlay extends Component<IProps, IState> {
     const target = ev.target as HTMLElement;
     const isFrozenElement = !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition;
     if (target.getAttribute('name') === 'canvas-overlay' || isFrozenElement) {
-      if (!editConfigModel.stopMoveGraph) {
+      if (editConfigModel.stopMoveGraph !== true) {
         this.stepDrag.setStep(gridSize * SCALE_X);
         this.stepDrag.handleMouseDown(ev);
       } else {
