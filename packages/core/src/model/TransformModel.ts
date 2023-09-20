@@ -27,8 +27,8 @@ export interface TransformInterface {
 const translateLimitsMap = {
   false: [-Infinity, -Infinity, Infinity, Infinity],
   true: [0, 0, 0, 0],
-  vertical: [Infinity, 0, -Infinity, 0],
-  horizontal: [0, Infinity, 0, -Infinity],
+  vertical: [-Infinity, 0, Infinity, 0],
+  horizontal: [0, -Infinity, 0, Infinity],
 };
 
 export default class TransformModel implements TransformInterface {
