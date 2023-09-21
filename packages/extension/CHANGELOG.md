@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.15...@logicflow/extension@1.2.16) (2023-09-21)
+
+
+### Bug Fixes
+
+* **extension:** add group:remove-node and group:add-node event([#800](https://github.com/didi/LogicFlow/issues/800)) ([58b78a0](https://github.com/didi/LogicFlow/commit/58b78a06d07128d858ee9dfa54602e2a71e82e23))
+
+
+### Features
+
+* **core:** add draggable range for graph([#1337](https://github.com/didi/LogicFlow/issues/1337)) ([ecc59bc](https://github.com/didi/LogicFlow/commit/ecc59bccb07e23fbe11986d5b38f5a5e99f4b4f1))
+
+
+
+
+
 ## [1.2.15](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.14...@logicflow/extension@1.2.15) (2023-09-11)
 
 
