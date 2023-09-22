@@ -43,7 +43,7 @@ class RotateControlPoint extends Component<IProps> {
     const v = new Vector(cx - x, cy - y);
     const angle = this.normal?.angle(v) - this.defaultAngle;
     const matrix = new TranslateMatrix(-x, -y).rotate(angle).translate(x, y).toString();
-    nodeModel.gMatrix = matrix;
+    nodeModel.transform = matrix;
     nodeModel.rotate = angle;
 
     let nodeIds = map(selectNodes, (node) => node.id);
