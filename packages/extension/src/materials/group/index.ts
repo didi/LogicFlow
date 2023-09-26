@@ -1,4 +1,5 @@
-import LogicFlow, { BaseNodeModel } from '@logicflow/core';
+/* eslint-disable no-shadow */
+import LogicFlow, { BaseEdgeModel, BaseNodeModel, GraphConfigData } from '@logicflow/core';
 import GroupNode from './GroupNode';
 
 type BaseNodeId = string;
@@ -48,6 +49,61 @@ class Group {
     lf.on('node:dnd-drag,node:drag', this.setActiveGroup);
     lf.on('node:click', this.nodeSelected);
     lf.on('graph:rendered', this.graphRendered);
+    lf.addElements = function addElements({ nodes, edges }: GraphConfigData): {
+      nodes: BaseNodeModel[];
+      edges: BaseEdgeModel[];
+    } {
+      const nodeIdMap: any = {};
+      const elements: any = {
+        nodes: [],
+        edges: [],
+      };
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        const preId = node.id;
+        const { children, ...rest } = node;
+        const nodeModel = lf.addNode(rest);
+        const fn = (children: Set<string>, current: BaseNodeModel) => {
+          children?.forEach((childId: string) => {
+            const childNodeModel = lf.getNodeModelById(childId);
+            const { x, y, properties, type, text, rotate, children } = childNodeModel;
+            const newChildModel = lf.addNode({
+              x: x + 40,
+              y: y + 40,
+              properties,
+              type,
+              text: {
+                ...text,
+                x: text.x + 40,
+                y: text.y + 40,
+              },
+              rotate,
+            });
+            current.addChild(newChildModel.id);
+            if (children instanceof Set) {
+              fn(children, newChildModel);
+            }
+          });
+        };
+        fn(children, nodeModel);
+        if (!nodeModel) return { nodes: [], edges: [] };
+        if (preId) nodeIdMap[preId] = nodeModel.id;
+        elements.nodes.push(nodeModel);
+      }
+      edges.forEach((edge) => {
+        let sourceId = edge.sourceNodeId;
+        let targetId = edge.targetNodeId;
+        if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId];
+        if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId];
+        const edgeModel = lf.graphModel.addEdge({
+          ...edge,
+          sourceNodeId: sourceId,
+          targetNodeId: targetId,
+        });
+        elements.edges.push(edgeModel);
+      });
+      return elements;
+    };
   }
   /**
    * 获取一个节点内部所有的子节点，包裹分组的子节点
