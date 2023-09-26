@@ -91,6 +91,10 @@ class GraphModel {
    */
   nodeMoveRules: NodeMoveRule[] = [];
   /**
+   * 获取自定义连线轨迹
+   */
+  getAnchorLine: Definition['getAnchorLine'];
+  /**
    * 在图上操作创建边时，默认使用的边类型.
    */
   @observable edgeType: string;
@@ -147,6 +151,7 @@ class GraphModel {
       idGenerator,
       edgeGenerator,
       animation,
+      getAnchorLine,
     } = options;
     this.background = background;
     if (typeof grid === 'object') {
@@ -164,6 +169,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.getAnchorLine = getAnchorLine;
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
