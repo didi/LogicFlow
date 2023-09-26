@@ -202,7 +202,7 @@ class Anchor extends Component<IProps, IState> {
     return customTrajectory;
   }
 
-  checkEnd: (event: string) => BaseEdgeModel | null = (event) => {
+  checkEnd: (event: MouseEvent) => BaseEdgeModel | null = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
     } = this.props;
