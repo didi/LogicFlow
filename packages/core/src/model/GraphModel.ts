@@ -93,7 +93,7 @@ class GraphModel {
   /**
    * 获取自定义连线轨迹
    */
-  getTrajectory: Definition['getTrajectory'];
+  customTrajectory: Definition['customTrajectory'];
   /**
    * 在图上操作创建边时，默认使用的边类型.
    */
@@ -151,7 +151,7 @@ class GraphModel {
       idGenerator,
       edgeGenerator,
       animation,
-      getTrajectory,
+      customTrajectory,
     } = options;
     this.background = background;
     if (typeof grid === 'object') {
@@ -169,7 +169,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
-    this.getTrajectory = getTrajectory;
+    this.customTrajectory = customTrajectory;
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;
