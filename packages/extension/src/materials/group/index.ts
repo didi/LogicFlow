@@ -91,14 +91,13 @@ class Group {
         elements.nodes.push(nodeModel);
       }
       edges.forEach((edge) => {
-        let sourceId = edge.sourceNodeId;
-        let targetId = edge.targetNodeId;
-        if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId];
-        if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId];
+        let { sourceNodeId, targetNodeId } = edge;
+        if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId];
+        if (nodeIdMap[targetNodeId]) targetNodeId = nodeIdMap[targetNodeId];
         const edgeModel = lf.graphModel.addEdge({
           ...edge,
-          sourceNodeId: sourceId,
-          targetNodeId: targetId,
+          sourceNodeId,
+          targetNodeId,
         });
         elements.edges.push(edgeModel);
       });
