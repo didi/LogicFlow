@@ -49,6 +49,7 @@ const lf = new LogicFlow(options: Options)
 |plugins|Array| -|-|当前LogicFlow实例加载的插件，不传则采用全局插件。|
 |autoExpand|boolean| -|-|节点拖动靠近画布边缘时是否自动扩充画布, 默认true。 注意，如果出现拖动节点到某个位置画布就不停滚动的问题，是因为初始化画布的时候宽高有问题。如果画布宽高不定，建议关闭autoExpand。|
 |overlapMode|number|-|-|元素重合的堆叠模式，默认为连线在下、节点在上，选中元素在最上面。可以设置为1，表示自增模式（作图工具场景常用）。|
+|getAnchorLine|function|-|-|自定义锚点拖出连接线的路径|
 
 ### `background`
 
@@ -145,6 +146,36 @@ const lf = new LogicFlow({
 
 - 在编辑模式下，默认开启对齐线，将snapline设置为false，关闭对齐线。
 - 在不可编辑模式下，对齐线关闭。
+
+### `getAnchorLine`
+
+将连线过程的路径设置为横向控制点的贝塞尔曲线
+
+```js
+import { h } from '@logicflow/core'
+
+const lf = new LogicFlow({
+  getAnchorLine({ sourcePoint, targetPoint, ...props }) {
+    const d = getBezierPath([sourcePoint, targetPoint]);
+    return h('path', {
+      fill: 'transparent',
+      d,
+      ...props,
+    });
+  }
+})
+
+/* 根据起点和终点获取贝塞尔曲线的path */
+function getBezierPath(points, offset=100) {
+  const [start, end] = points;
+  const sNext = { x: start.x + offset, y: start.y };
+  const ePre = { x: end.x - offset, y: end.y };
+  return `M ${start.x} ${start.y}
+    C ${sNext.x} ${sNext.y},
+    ${ePre.x} ${ePre.y},
+    ${end.x} ${end.y}`;
+}
+```
 
 ## register
 
