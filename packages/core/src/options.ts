@@ -7,6 +7,7 @@ import {
   EdgeData,
   Extension,
   GraphConfigData,
+  Point
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
@@ -128,8 +129,8 @@ export type Definition = {
 } & EditConfigInterface;
 
 export interface CustomAnchorLineProps {
-  sourcePoint: { x:number, y:number };
-  targetPoint: { x:number, y:number };
+  sourcePoint: Point;
+  targetPoint: Point;
   [key: string]: any;
 }
 
