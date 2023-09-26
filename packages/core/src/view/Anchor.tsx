@@ -195,9 +195,9 @@ class Anchor extends Component<IProps, IState> {
     });
   };
 
-  get getAnchorLine() {
-    const { graphModel: { getAnchorLine } } = this.props;
-    return getAnchorLine;
+  get customTrajectory() {
+    const { graphModel: { customTrajectory } } = this.props;
+    return customTrajectory;
   }
 
   checkEnd = (event) => {
@@ -343,8 +343,8 @@ class Anchor extends Component<IProps, IState> {
           {this.getAnchorShape()}
         </g>
         {this.isShowLine()
-        && (this.getAnchorLine
-          ? this.getAnchorLine(
+        && (this.customTrajectory
+          ? this.customTrajectory(
             { sourcePoint: { x: startX, y: startY },
               targetPoint: {
                 x: endX, y: endY,
