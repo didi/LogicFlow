@@ -219,7 +219,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       cancelRaf(this.t);
     }
     const matrix = new TranslateMatrix(-x, -y).rotate(model.rotate).translate(x, y).toString();
-    model.gMatrix = matrix;
+    model.transform = matrix;
     let moveNodes = selectNodes.map(node => node.id);
     // 未被选中的节点也可以拖动
     if (moveNodes.indexOf(model.id) === -1) {
@@ -374,7 +374,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     const {
       isHitable,
       draggable,
-      gMatrix,
+      transform,
     } = model;
     const { className = '', ...restAttributes } = model.getOuterGAttributes();
     const nodeShapeInner = (
@@ -382,7 +382,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         className="lf-node-content"
       >
         <g
-          {...(gMatrix && { transform: gMatrix })}
+          transform={transform}
         >
           {this.getShape()}
           {this.getText()}
@@ -408,7 +408,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       }
       nodeShape = (
         <g
-          className={`${this.getStateClassName()} ${className}}`}
+          className={`${this.getStateClassName()} ${className}`}
           onMouseDown={this.handleMouseDown}
           onClick={this.handleClick}
           onMouseEnter={this.setHoverON}

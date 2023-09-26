@@ -27,7 +27,7 @@ import { formatData } from '../../util/compatible';
 import { getClosestAnchor, pickNodeConfig } from '../../util/node';
 import { getZIndex } from '../../util/zIndex';
 import { BaseEdgeModel } from '../edge';
-import { Matrix } from '../../util';
+import { Matrix, TranslateMatrix } from '../../util';
 
 export type ConnectRule = {
   message: string;
@@ -99,8 +99,16 @@ export default class BaseNodeModel implements IBaseNodeModel {
   @observable state = 1;
   @observable autoToFront = true; // 节点选中时是否自动置顶，默认为true.
   @observable style: ShapeStyleAttribute = { }; // 每个节点自己的样式，动态修改
-  @observable gMatrix: string; // 节点的transform属性
-  @observable rotate = 0;
+  @observable transform: string; // 节点的transform属性
+  @observable private _rotate = 0;
+  set rotate(value: number) {
+    this._rotate = value;
+    const { x = 0, y = 0 } = this;
+    this.transform = new TranslateMatrix(-x, -y).rotate(value).translate(x, y).toString();
+  }
+  get rotate() {
+    return this._rotate;
+  }
 
   readonly BaseType = ElementType.NODE;
   modelType = ModelType.NODE;
