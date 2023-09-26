@@ -94,6 +94,7 @@ export type NodeConfig = {
   zIndex?: number;
   rotate?: number;
   properties?: Record<string, unknown>;
+  [key: string]: any;
 };
 // 节点数据
 export type NodeData = {
