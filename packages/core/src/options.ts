@@ -124,7 +124,7 @@ export type Definition = {
    *        any: 自定义边及其他数据
    */
   edgeGenerator?: (sourceNode: any, targetNode: any, currentEdge?: any) => string | any | undefined;
-  getAnchorLine?: (props: CustomAnchorLineProps) => VNode;
+  customTrajectory?: (props: CustomAnchorLineProps) => VNode;
   [key: string]: any;
 } & EditConfigInterface;
 
