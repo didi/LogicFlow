@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://docs.logic-flow.cn" target="_blank">
+  <a href="https://site.logic-flow.cn" target="_blank">
     <img
-      src="https://docs.logic-flow.cn/docs/_images/logo.png"
+      src="https://site.logic-flow.cn/docs/_images/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
@@ -96,10 +96,10 @@ lf.render(data);
 
 ## 文档
 
-[官方文档](https://docs.logic-flow.cn)
+[官方文档](https://site.logic-flow.cn)
 
-- [快速上手](https://docs.logic-flow.cn/docs/#/zh/guide/start)
-- [示例](https://docs.logic-flow.cn/examples/#/gallery)
+- [快速上手](https://site.logic-flow.cn/docs/#/zh/guide/start)
+- [示例](https://site.logic-flow.cn/examples/#/gallery)
 
 非官方
 
@@ -137,7 +137,7 @@ lf.render(data);
 
 ### 流程编排器demo
 
-demo link：https://docs.logic-flow.cn/demo/dist/organizer/
+demo link：https://site.logic-flow.cn/demo/dist/organizer/
 
 code link：https://github.com/Logic-Flow/docs/tree/master/demo/organizer
 
