@@ -195,6 +195,11 @@ class Anchor extends Component<IProps, IState> {
     });
   };
 
+  get getAnchorLine() {
+    const { graphModel: { getAnchorLine } } = this.props;
+    return getAnchorLine;
+  }
+
   checkEnd = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
@@ -335,18 +340,28 @@ class Anchor extends Component<IProps, IState> {
             }
           }}
         >
-          { this.getAnchorShape() }
+          {this.getAnchorShape()}
         </g>
-        {this.isShowLine() && (
-          <Line
-            x1={startX}
-            y1={startY}
-            x2={endX}
-            y2={endY}
-            {...edgeStyle}
-            pointer-events="none"
-          />
-        )}
+        {this.isShowLine()
+        && (this.getAnchorLine
+          ? this.getAnchorLine(
+            { sourcePoint: { x: startX, y: startY },
+              targetPoint: {
+                x: endX, y: endY,
+              },
+              ...edgeStyle,
+            },
+          )
+          : (
+            <Line
+              x1={startX}
+              y1={startY}
+              x2={endX}
+              y2={endY}
+              {...edgeStyle}
+              pointer-events="none"
+            />
+          ))}
       </g>
     );
   }
