@@ -189,16 +189,12 @@ class Anchor extends Component<IProps, IState> {
     const {
       graphModel, nodeModel, anchorData,
     } = this.props;
-
-    const emittedData = {
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
       data: anchorData,
       e: event,
       nodeModel,
-    };
-    if (edgeModel) {
-      Object.assign(emittedData, { edgeModel });
-    }
-    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, emittedData);
+      edgeModel,
+    });
   };
 
   get customTrajectory() {
@@ -257,12 +253,12 @@ class Anchor extends Component<IProps, IState> {
         });
         return edgeModel;
       }
-
       const nodeData = targetNode.getData();
       graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
         data: nodeData,
         msg: targetMsg || sourceMsg,
       });
+      return null;
     }
   };
   moveAnchorEnd(endX: number, endY: number) {
