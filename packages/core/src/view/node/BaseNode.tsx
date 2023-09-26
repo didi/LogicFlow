@@ -12,6 +12,8 @@ import { isMultipleSelect } from '../../util/graph';
 import { CommonTheme } from '../../constant/DefaultTheme';
 import { cancelRaf, createRaf } from '../../util/raf';
 import { EventArgs } from '../../type';
+import RotateControlPoint from '../Rotate';
+import { TranslateMatrix, RotateMatrix } from '../../util';
 
 type IProps = {
   model: BaseNodeModel;
@@ -80,6 +82,21 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         });
     }
     return [];
+  }
+  getRotateControl() {
+    const { model, graphModel } = this.props;
+    const { isSelected, isHitable, enableRotate, isHovered } = model;
+    const { style } = model.getRotateControlStyle();
+    if (isHitable && (isSelected || isHovered) && enableRotate) {
+      return (
+        <RotateControlPoint
+          graphModel={graphModel}
+          nodeModel={model}
+          eventCenter={graphModel.eventCenter}
+          style={style}
+        />
+      );
+    }
   }
   getText() {
     const { model, graphModel } = this.props;
@@ -201,6 +218,8 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t);
     }
+    const matrix = new TranslateMatrix(-x, -y).rotate(model.rotate).translate(x, y).toString();
+    model.transform = matrix;
     let moveNodes = selectNodes.map(node => node.id);
     // 未被选中的节点也可以拖动
     if (moveNodes.indexOf(model.id) === -1) {
@@ -348,27 +367,38 @@ export default abstract class BaseNode extends Component<IProps, IState> {
   render() {
     const { model, graphModel } = this.props;
     const {
-      editConfigModel: { hideAnchors, adjustNodePosition },
+      editConfigModel: { hideAnchors, adjustNodePosition, allowRotation },
       gridSize,
       transformModel: { SCALE_X },
     } = graphModel;
     const {
       isHitable,
       draggable,
+      transform,
     } = model;
+    const { className = '', ...restAttributes } = model.getOuterGAttributes();
     const nodeShapeInner = (
-      <g className="lf-node-content">
-        {this.getShape()}
-        {this.getText()}
+      <g
+        className="lf-node-content"
+      >
+        <g
+          transform={transform}
+        >
+          {this.getShape()}
+          {this.getText()}
+          {
+            allowRotation && this.getRotateControl()
+          }
+        </g>
         {
-          hideAnchors ? null : this.getAnchors()
+          !hideAnchors && this.getAnchors()
         }
       </g>
     );
     let nodeShape;
     if (!isHitable) {
       nodeShape = (
-        <g className={this.getStateClassName()}>
+        <g className={`${this.getStateClassName()} ${className}`} {...restAttributes}>
           { nodeShapeInner }
         </g>
       );
@@ -378,7 +408,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
       }
       nodeShape = (
         <g
-          className={this.getStateClassName()}
+          className={`${this.getStateClassName()} ${className}`}
           onMouseDown={this.handleMouseDown}
           onClick={this.handleClick}
           onMouseEnter={this.setHoverON}
@@ -386,6 +416,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
           onMouseLeave={this.setHoverOFF}
           onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
+          {...restAttributes}
         >
           { nodeShapeInner }
         </g>

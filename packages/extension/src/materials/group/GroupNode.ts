@@ -114,7 +114,8 @@ class GroupNodeModel extends RectResize.model {
       if (nodeModel.isGroup && !nodeModel.isFolded) {
         // 正常情况下，parent折叠后，children应该折叠
         // 因此当parent准备展开时，children的值目前肯定是折叠状态，也就是nodeModel.isFolded=true，这个代码块不会触发
-        // 只有当parent准备折叠时，children目前状态才有可能是展开，即nodeModel.isFolded=false，这个代码块触发，此时isFolded=true，触发children也进行折叠
+        // 只有当parent准备折叠时，children目前状态才有可能是展开,
+        // 即nodeModel.isFolded=false，这个代码块触发，此时isFolded=true，触发children也进行折叠
         nodeModel.foldGroup(isFolded);
       }
 
@@ -258,6 +259,7 @@ class GroupNodeModel extends RectResize.model {
    */
   addChild(id) {
     this.children.add(id);
+    this.graphModel.eventCenter.emit('group:add-node', { data: this.getData() });
   }
   /**
    * 删除分组子节点
@@ -265,6 +267,7 @@ class GroupNodeModel extends RectResize.model {
    */
   removeChild(id) {
     this.children.delete(id);
+    this.graphModel.eventCenter.emit('group:remove-node', { data: this.getData() });
   }
   getAddableOutlineStyle() {
     return {

@@ -28,19 +28,23 @@ class Menu {
   private __currentData: any;
   static pluginName = 'menu';
   constructor({ lf }) {
-    this.__menuDOM = document.createElement('ul');
     this.lf = lf;
-    this.menuTypeMap = new Map();
-    this.init();
-    this.lf.setMenuConfig = (config) => {
-      this.setMenuConfig(config);
-    };
-    this.lf.addMenuConfig = (config) => {
-      this.addMenuConfig(config);
-    };
-    this.lf.setMenuByType = (config) => {
-      this.setMenuByType(config);
-    };
+    const { options: { isSilentMode } } = lf;
+    if (!isSilentMode) {
+      this.__menuDOM = document.createElement('ul');
+
+      this.menuTypeMap = new Map();
+      this.init();
+      this.lf.setMenuConfig = (config) => {
+        this.setMenuConfig(config);
+      };
+      this.lf.addMenuConfig = (config) => {
+        this.addMenuConfig(config);
+      };
+      this.lf.setMenuByType = (config) => {
+        this.setMenuByType(config);
+      };
+    }
   }
   /**
    * 初始化设置默认内置菜单栏

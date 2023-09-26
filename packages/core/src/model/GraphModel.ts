@@ -91,6 +91,10 @@ class GraphModel {
    */
   nodeMoveRules: NodeMoveRule[] = [];
   /**
+   * 获取自定义连线轨迹
+   */
+  customTrajectory: Definition['customTrajectory'];
+  /**
    * 在图上操作创建边时，默认使用的边类型.
    */
   @observable edgeType: string;
@@ -147,6 +151,7 @@ class GraphModel {
       idGenerator,
       edgeGenerator,
       animation,
+      customTrajectory,
     } = options;
     this.background = background;
     if (typeof grid === 'object') {
@@ -155,7 +160,7 @@ class GraphModel {
     this.rootEl = container;
     this.editConfigModel = new EditConfigModel(options);
     this.eventCenter = new EventEmitter();
-    this.transformModel = new TransformModel(this.eventCenter);
+    this.transformModel = new TransformModel(this.eventCenter, options);
     this.theme = updateTheme(options.style);
     this.edgeType = options.edgeType || 'polyline';
     this.width = options.width;
@@ -164,6 +169,7 @@ class GraphModel {
     this.partial = options.partial;
     this.overlapMode = options.overlapMode || 0;
     this.idGenerator = idGenerator;
+    this.customTrajectory = customTrajectory;
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator);
     this.width = options.width || this.rootEl.getBoundingClientRect().width;
     this.height = options.height || this.rootEl.getBoundingClientRect().height;

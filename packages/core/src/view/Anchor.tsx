@@ -201,6 +201,11 @@ class Anchor extends Component<IProps, IState> {
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, emittedData);
   };
 
+  get customTrajectory() {
+    const { graphModel: { customTrajectory } } = this.props;
+    return customTrajectory;
+  }
+
   checkEnd: (event: string) => BaseEdgeModel | null = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
@@ -342,18 +347,28 @@ class Anchor extends Component<IProps, IState> {
             }
           }}
         >
-          { this.getAnchorShape() }
+          {this.getAnchorShape()}
         </g>
-        {this.isShowLine() && (
-          <Line
-            x1={startX}
-            y1={startY}
-            x2={endX}
-            y2={endY}
-            {...edgeStyle}
-            pointer-events="none"
-          />
-        )}
+        {this.isShowLine()
+        && (this.customTrajectory
+          ? this.customTrajectory(
+            { sourcePoint: { x: startX, y: startY },
+              targetPoint: {
+                x: endX, y: endY,
+              },
+              ...edgeStyle,
+            },
+          )
+          : (
+            <Line
+              x1={startX}
+              y1={startY}
+              x2={endX}
+              y2={endY}
+              {...edgeStyle}
+              pointer-events="none"
+            />
+          ))}
       </g>
     );
   }

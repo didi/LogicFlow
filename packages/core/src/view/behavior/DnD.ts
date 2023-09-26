@@ -32,8 +32,10 @@ export default class Dnd {
   }
 
   startDrag(nodeConfig: NewNodeConfig) {
-    this.nodeConfig = nodeConfig;
-    window.document.addEventListener('mouseup', this.stopDrag);
+    if (!this.lf.options.isSilentMode) {
+      this.nodeConfig = nodeConfig;
+      window.document.addEventListener('mouseup', this.stopDrag);
+    }
   }
   stopDrag = () => {
     this.nodeConfig = null;

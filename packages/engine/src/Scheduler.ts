@@ -2,6 +2,7 @@ import EventEmitter from './EventEmitter';
 import {
   EVENT_INSTANCE_COMPLETE,
   EVENT_INSTANCE_INTERRUPTED,
+  EVENT_INSTANCE_ERROR,
   FlowStatus,
 } from './constant/constant';
 import { createActionId } from './util/ID';
@@ -9,17 +10,12 @@ import type {
   ActionParam,
   NodeParam,
   ResumeParam,
-  NodeExecResult,
+  NextActionParam,
 } from './types.d';
 import type FlowModel from './FlowModel';
-import type { NextActionParam } from './nodes/BaseNode';
 import type Recorder from './recorder';
 
 type ActionParamMap = Map<string, ActionParam>;
-
-type ActionResult = {
-  extraInfo?: Record<string, any>;
-} & NextActionParam;
 
 type ExecutionId = string;
 
@@ -75,8 +71,7 @@ export default class Scheduler extends EventEmitter {
    */
   public run(runParams: {
     executionId: string;
-    nodeId?: string;
-    actionId?: string;
+    [key: string]: any;
   }) {
     const nodeQueue = this.nodeQueueMap.get(runParams.executionId);
     // 将同一个executionId当前待执行的节点一起执行
@@ -94,9 +89,7 @@ export default class Scheduler extends EventEmitter {
     if (!this.hasRunningAction(runParams.executionId)) {
       // 当一个流程在nodeQueueMap和actionRunningMap中都不存在执行的节点时，说明这个流程已经执行完成。
       this.emit(EVENT_INSTANCE_COMPLETE, {
-        executionId: runParams.executionId,
-        nodeId: runParams.nodeId,
-        actionId: runParams.actionId,
+        ...runParams,
         status: FlowStatus.COMPLETED,
       });
     }
@@ -150,63 +143,67 @@ export default class Scheduler extends EventEmitter {
       next: this.next.bind(this),
     });
     if (execResult && execResult.status === FlowStatus.INTERRUPTED) {
-      this.interrupted({
-        execResult,
-        actionParam,
-      });
+      this.interrupted(execResult);
       this.saveActionResult({
         executionId: actionParam.executionId,
         nodeId: actionParam.nodeId,
         actionId: actionParam.actionId,
         nodeType: execResult.nodeType,
         properties: execResult.properties,
-        outgoing: [],
-        extraInfo: {
-          status: execResult.status,
-          detail: execResult.detail,
-        },
+        outgoing: execResult.outgoing,
+        status: execResult.status,
+        detail: execResult.detail,
+      });
+      this.removeActionFromRunningMap(actionParam);
+    }
+    if (execResult && execResult.status === FlowStatus.ERROR) {
+      this.error(execResult);
+      this.saveActionResult({
+        executionId: actionParam.executionId,
+        nodeId: actionParam.nodeId,
+        actionId: actionParam.actionId,
+        nodeType: execResult.nodeType,
+        properties: execResult.properties,
+        outgoing: execResult.outgoing,
+        status: execResult.status,
+        detail: execResult.detail,
       });
       this.removeActionFromRunningMap(actionParam);
     }
     // TODO: 考虑停下所有的任务
   }
-  private interrupted({
-    execResult,
-    actionParam,
-  } : { execResult: NodeExecResult, actionParam: ActionParam}) {
-    this.emit(EVENT_INSTANCE_INTERRUPTED, {
-      executionId: actionParam.executionId,
-      status: FlowStatus.INTERRUPTED,
-      nodeId: actionParam.nodeId,
-      actionId: actionParam.actionId,
-      detail: execResult.detail,
-    });
+  private interrupted(execResult: NextActionParam) {
+    this.emit(EVENT_INSTANCE_INTERRUPTED, execResult);
+  }
+  private error(execResult : NextActionParam) {
+    this.emit(EVENT_INSTANCE_ERROR, execResult);
   }
   private next(data: NextActionParam) {
     if (data.outgoing && data.outgoing.length > 0) {
       data.outgoing.forEach((item) => {
-        this.addAction({
-          executionId: data.executionId,
-          nodeId: item.target,
-        });
+        if (item.result) {
+          this.addAction({
+            executionId: data.executionId,
+            nodeId: item.target,
+          });
+        }
       });
     }
     this.saveActionResult(data);
     this.removeActionFromRunningMap(data);
-    this.run({
-      executionId: data.executionId,
-      nodeId: data.nodeId,
-      actionId: data.actionId,
-    });
+    this.run(data);
   }
-  private saveActionResult(data: ActionResult) {
-    this.recorder.addActionRecord({
+  private saveActionResult(data: NextActionParam) {
+    this.recorder?.addActionRecord({
       executionId: data.executionId,
       actionId: data.actionId,
       nodeId: data.nodeId,
       nodeType: data.nodeType,
       timestamp: Date.now(),
       properties: data.properties,
+      outgoing: data.outgoing,
+      detail: data.detail,
+      status: data.status,
     });
   }
 }

@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import { ModelType } from '../../constant/constant';
+import { EventType, ModelType } from '../../constant/constant';
 import BezierEdgeModel from '../../model/edge/BezierEdgeModel';
 import GraphModel from '../../model/GraphModel';
 import { Point } from '../../type';
@@ -44,6 +44,9 @@ class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
       y: event.clientY,
     });
     bezierModel.updateAdjustAnchor({ x, y }, type);
+    graphModel.eventCenter.emit(EventType.EDGE_ADJUST, {
+      data: bezierModel.getData(),
+    });
   };
   onDragEnd = (() => {
     const { bezierModel } = this.props;

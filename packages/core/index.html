@@ -473,6 +473,7 @@
           // stopMoveGraph: true,
           adjustEdgeStartAndEnd: true,
           // adjustEdge: false,
+          allowRotation: true,
           edgeTextEdit: true,
           keyboard: {
             enabled: true,
@@ -585,10 +586,22 @@
 
     <!-- 元素相关方法 -->
     <script>
+      const data = {
+        nodes: [
+          {
+            id: "rect_0.04549269606577355",
+            rotate: 1.1722738811284763,
+            text: {x: 600, y: 200, value: 'xxxxx'},
+            type: "rect",
+            x: 600,
+            y: 200
+          }
+        ]
+      }
       function InitElementFunction() {
         window.showCanvas = function () {
           document.querySelector('#app').style.display = 'block'
-          lf.render();
+          lf.render(data);
         }
         window.mouseDownRect = function mouseDownCircle() {
           lf.dnd.startDrag({

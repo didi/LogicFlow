@@ -15,9 +15,13 @@ export interface EditConfigInterface {
    */
   stopScrollGraph?: boolean;
   /**
-   * 禁止拖动画布
+   * 禁止拖动画布，默认为false
+   * true：完全禁止移动
+   * vertical： 禁止垂直方向拖动
+   * horizontal：禁止水平方向拖动
+   * [number, number, number, number]：[minX, minY, maxX, maxY] 画布可拖动范围
    */
-  stopMoveGraph?: boolean;
+  stopMoveGraph?: boolean | 'vertical' | 'horizontal' | [number, number, number, number];
   /**
    * 允许调整边
    */
@@ -34,6 +38,10 @@ export interface EditConfigInterface {
    * 隐藏节点所有锚点
    */
   hideAnchors?: boolean;
+  /**
+   * 是否允许节点旋转（旋转点的显隐）
+   */
+  allowRotation?: boolean;
   /**
    * 显示节点悬浮时的外框
    */
@@ -81,6 +89,7 @@ const SilentConfig = {
   adjustEdgeStartAndEnd: false,
   adjustNodePosition: false,
   hideAnchors: true,
+  allowRotation: false,
   nodeSelectedOutline: true,
   nodeTextEdit: false,
   edgeTextEdit: false,
@@ -98,6 +107,7 @@ const keys = [
   'adjustEdgeStartAndEnd',
   'adjustNodePosition',
   'hideAnchors',
+  'allowRotation',
   'hoverOutline',
   'nodeSelectedOutline',
   'edgeSelectedOutline',
@@ -121,6 +131,7 @@ export default class EditConfigModel {
   @observable adjustEdgeStartAndEnd = false;
   @observable adjustNodePosition = true;
   @observable hideAnchors = false;
+  @observable allowRotation = false;
   @observable hoverOutline = true;
   @observable nodeSelectedOutline = true;
   @observable edgeSelectedOutline = true;
@@ -162,6 +173,7 @@ export default class EditConfigModel {
         adjustEdgeStartAndEnd: this.adjustEdgeStartAndEnd,
         adjustNodePosition: this.adjustNodePosition,
         hideAnchors: this.hideAnchors,
+        allowRotation: this.allowRotation,
         hoverOutline: this.hoverOutline,
         nodeSelectedOutline: this.nodeSelectedOutline,
         edgeSelectedOutline: this.edgeSelectedOutline,

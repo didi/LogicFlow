@@ -131,11 +131,13 @@ export default class LogicFlow {
       this.snaplineModel = new SnaplineModel(this.graphModel);
       snaplineTool(this.graphModel.eventCenter, this.snaplineModel);
     }
-    // 先初始化默认内置快捷键
-    initDefaultShortcut(this, this.graphModel);
-    // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键.
-    // 插件最后初始化。方便插件强制覆盖内置快捷键
-    this.keyboard.initShortcuts();
+    if (!this.options.isSilentMode) {
+      // 先初始化默认内置快捷键
+      initDefaultShortcut(this, this.graphModel);
+      // 然后再初始化自定义快捷键，自定义快捷键可以覆盖默认快捷键.
+      // 插件最后初始化。方便插件强制覆盖内置快捷键
+      this.keyboard.initShortcuts();
+    }
     // init 放到最后
     this.defaultRegister();
     this.installPlugins(options.disabledPlugins);

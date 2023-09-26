@@ -1,4 +1,5 @@
 import { assign } from 'lodash-es';
+import { VNode } from 'preact';
 import { GridOptions } from './view/overlay/Grid';
 import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
 import {
@@ -6,6 +7,7 @@ import {
   EdgeData,
   Extension,
   GraphConfigData,
+  Point
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
@@ -122,8 +124,15 @@ export type Definition = {
    *        any: 自定义边及其他数据
    */
   edgeGenerator?: (sourceNode: any, targetNode: any, currentEdge?: any) => string | any | undefined;
+  customTrajectory?: (props: CustomAnchorLineProps) => VNode;
   [key: string]: any;
 } & EditConfigInterface;
+
+export interface CustomAnchorLineProps {
+  sourcePoint: Point;
+  targetPoint: Point;
+  [key: string]: any;
+}
 
 export interface GuardsTypes {
   beforeClone?: (data: NodeData | GraphConfigData) => boolean;

@@ -16,9 +16,20 @@ export interface TransformInterface {
   zoom: (isZoomOut: ZoomParam) => string;
   HtmlPointToCanvasPoint: (point: PointTuple) => PointTuple;
   CanvasPointToHtmlPoint: (point: PointTuple) => PointTuple;
-  moveCanvasPointByHtml: (point: PointTuple, x: number, y: number) => PointTuple;
+  moveCanvasPointByHtml: (
+    point: PointTuple,
+    x: number,
+    y: number,
+  ) => PointTuple;
   getTransformStyle: () => { transform: string };
 }
+
+const translateLimitsMap = {
+  false: [-Infinity, -Infinity, Infinity, Infinity],
+  true: [0, 0, 0, 0],
+  vertical: [-Infinity, 0, Infinity, 0],
+  horizontal: [0, -Infinity, 0, Infinity],
+};
 
 export default class TransformModel implements TransformInterface {
   MINI_SCALE_SIZE = 0.2;
@@ -31,8 +42,14 @@ export default class TransformModel implements TransformInterface {
   @observable TRANSLATE_Y = 0;
   @observable ZOOM_SIZE = 0.04;
   eventCenter: EventEmitter;
-  constructor(eventCenter) {
+  translateLimitMinX: number;
+  translateLimitMinY: number;
+  translateLimitMaxX: number;
+  translateLimitMaxY: number;
+  constructor(eventCenter, options) {
     this.eventCenter = eventCenter;
+    const { stopMoveGraph = false } = options;
+    this.updateTranslateLimits(stopMoveGraph);
   }
   setZoomMiniSize(size: number): void {
     this.MINI_SCALE_SIZE = size;
@@ -47,7 +64,10 @@ export default class TransformModel implements TransformInterface {
    * @param param0 HTML点
    */
   HtmlPointToCanvasPoint([x, y]: PointTuple): PointTuple {
-    return [(x - this.TRANSLATE_X) / this.SCALE_X, (y - this.TRANSLATE_Y) / this.SCALE_Y];
+    return [
+      (x - this.TRANSLATE_X) / this.SCALE_X,
+      (y - this.TRANSLATE_Y) / this.SCALE_Y,
+    ];
   }
 
   /**
@@ -55,7 +75,10 @@ export default class TransformModel implements TransformInterface {
    * @param param0 HTML点
    */
   CanvasPointToHtmlPoint([x, y]: PointTuple): PointTuple {
-    return [x * this.SCALE_X + this.TRANSLATE_X, y * this.SCALE_Y + this.TRANSLATE_Y];
+    return [
+      x * this.SCALE_X + this.TRANSLATE_X,
+      y * this.SCALE_Y + this.TRANSLATE_Y,
+    ];
   }
 
   /**
@@ -65,7 +88,11 @@ export default class TransformModel implements TransformInterface {
    * @param directionX x轴距离
    * @param directionY y轴距离
    */
-  moveCanvasPointByHtml([x, y]: PointTuple, directionX: number, directionY: number): PointTuple {
+  moveCanvasPointByHtml(
+    [x, y]: PointTuple,
+    directionX: number,
+    directionY: number,
+  ): PointTuple {
     return [x + directionX / this.SCALE_X, y + directionY / this.SCALE_Y];
   }
 
@@ -81,7 +108,14 @@ export default class TransformModel implements TransformInterface {
    * 基于当前的缩放，获取画布渲染样式transform值
    */
   getTransformStyle() {
-    const matrixString = [this.SCALE_X, this.SKEW_Y, this.SKEW_X, this.SCALE_Y, this.TRANSLATE_X, this.TRANSLATE_Y].join(',');
+    const matrixString = [
+      this.SCALE_X,
+      this.SKEW_Y,
+      this.SKEW_X,
+      this.SCALE_Y,
+      this.TRANSLATE_X,
+      this.TRANSLATE_Y,
+    ].join(',');
     return {
       transform: `matrix(${matrixString})`,
     };
@@ -132,7 +166,7 @@ export default class TransformModel implements TransformInterface {
     });
   }
   @action
-  resetZoom() : void {
+  resetZoom(): void {
     this.SCALE_X = 1;
     this.SCALE_Y = 1;
     this.emitGraphTransform('resetZoom');
@@ -140,8 +174,14 @@ export default class TransformModel implements TransformInterface {
 
   @action
   translate(x: number, y: number) {
-    this.TRANSLATE_X += x;
-    this.TRANSLATE_Y += y;
+    if (this.TRANSLATE_X + x <= this.translateLimitMaxX
+      && this.TRANSLATE_X + x >= this.translateLimitMinX) {
+      this.TRANSLATE_X += x;
+    }
+    if (this.TRANSLATE_Y + y <= this.translateLimitMaxY
+      && this.TRANSLATE_Y + y >= this.translateLimitMinY) {
+      this.TRANSLATE_Y += y;
+    }
     this.emitGraphTransform('translate');
   }
 
@@ -159,5 +199,19 @@ export default class TransformModel implements TransformInterface {
     this.TRANSLATE_X += deltaX;
     this.TRANSLATE_Y += deltaY;
     this.emitGraphTransform('focusOn');
+  }
+  /**
+   * 更新画布可以移动范围
+   */
+  updateTranslateLimits(limit: boolean | 'vertical' | 'horizontal' | [number, number, number, number]) {
+    const boundary = Array.isArray(limit) && limit.length === 4
+      ? limit
+      : translateLimitsMap[limit.toString()];
+    [
+      this.translateLimitMinX,
+      this.translateLimitMinY,
+      this.translateLimitMaxX,
+      this.translateLimitMaxY,
+    ] = boundary;
   }
 }

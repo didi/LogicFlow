@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.14...@logicflow/core@1.2.15) (2023-09-21)
+
+
+### Bug Fixes
+
+* **core:** wrong extreme value of draggable range ([46c3ce9](https://github.com/didi/LogicFlow/commit/46c3ce9e238cc849025792dcd9083431fcf61a81))
+
+
+### Features
+
+* **core:** add draggable range for graph([#1337](https://github.com/didi/LogicFlow/issues/1337)) ([ecc59bc](https://github.com/didi/LogicFlow/commit/ecc59bccb07e23fbe11986d5b38f5a5e99f4b4f1))
+
+
+
+
+
+## [1.2.14](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.13...@logicflow/core@1.2.14) (2023-09-11)
+
+
+### Features
+
+* **core:** enable node rotation ([267ebc8](https://github.com/didi/LogicFlow/commit/267ebc8ff65f461c831fc631b89028ca98305858))
+* **core:** optimize the using of matrix ([d13fc5c](https://github.com/didi/LogicFlow/commit/d13fc5c50dcc25727ca8646ea1afe9a250d444d5))
+* **core:** trigger edge:adjust when adjusting bezier([#947](https://github.com/didi/LogicFlow/issues/947)) ([ad993c4](https://github.com/didi/LogicFlow/commit/ad993c448c004623e32f9534b3971cdf9d8e47bd))
+
+
+
+
+
+## [1.2.13](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.12...@logicflow/core@1.2.13) (2023-09-08)
+
+
+### Features
+
+* **core:** add a new function to set outer g attributes.([#880](https://github.com/didi/LogicFlow/issues/880)) ([90aaccd](https://github.com/didi/LogicFlow/commit/90aaccdb87309b4cdad2691ed425cb16732d746c))
+* **core:** export egde utils and sampling utils ([9a83d4a](https://github.com/didi/LogicFlow/commit/9a83d4a360c8a113bce46370aecac8e0a2ffb6ea))
+
+
+
+
+
 ## [1.2.12](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.11...@logicflow/core@1.2.12) (2023-08-16)
 
 

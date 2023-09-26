@@ -92,6 +92,7 @@ export type NodeConfig = {
   y: number;
   text?: TextConfig | string;
   zIndex?: number;
+  rotate?: number;
   properties?: Record<string, unknown>;
 };
 // 节点数据
@@ -103,6 +104,7 @@ export type NodeData = {
   text?: TextConfig;
   properties: Record<string, unknown>;
   zIndex?: number;
+  rotate?: number;
   [key: string]: any;
 };
 // 修改节点数据的参数
@@ -460,6 +462,12 @@ export type NodeAttributes = {
 export type DiamondAttributes = {
   points: PointTuple[];
 } & NodeAttributes;
+
+// DOM 节点属性
+export type DomAttributes = {
+  className?: string;
+  [key: string]: string;
+};
 
 export type ShapeStyleAttribute = CommonTheme;
 

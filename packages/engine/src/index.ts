@@ -1,4 +1,9 @@
-import type { ResumeParams, GraphConfigData, EngineConstructorOptions } from './types.d';
+import type {
+  ResumeParams,
+  GraphConfigData,
+  EngineConstructorOptions,
+  NextActionParam,
+} from './types.d';
 import FlowModel, { ActionParams } from './FlowModel';
 import StartNode from './nodes/StartNode';
 import TaskNode from './nodes/TaskNode';
@@ -12,14 +17,16 @@ export default class Engine {
   graphData: GraphConfigData;
   nodeModelMap: Map<string, NodeConstructor>;
   flowModel: FlowModel;
-  recorder: Recorder;
+  recorder?: Recorder;
   context: Record<string, any>;
   constructor(options?: EngineConstructorOptions) {
     this.nodeModelMap = new Map();
     this.instanceId = createEngineId();
-    this.recorder = new Recorder({
-      instanceId: this.instanceId,
-    });
+    if (options?.debug) {
+      this.recorder = new Recorder({
+        instanceId: this.instanceId,
+      });
+    }
     this.register({
       type: StartNode.nodeTypeName,
       model: StartNode,
@@ -72,7 +79,7 @@ export default class Engine {
   /**
    * 执行流程，允许多次调用。
    */
-  async execute(execParam?: ActionParams) {
+  async execute(execParam?: ActionParams): Promise<NextActionParam> {
     return new Promise((resolve, reject) => {
       if (!execParam) {
         execParam = {};
@@ -108,22 +115,22 @@ export default class Engine {
     });
   }
   async getExecutionList() {
-    const executionIds = await this.recorder.getExecutionList();
+    const executionIds = await this.recorder?.getExecutionList();
     return executionIds;
   }
   async getExecutionRecord(executionId) {
-    const tasks = await this.recorder.getExecutionActions(executionId);
+    const tasks = await this.recorder?.getExecutionActions(executionId);
     if (!tasks) {
       return null;
     }
     const records = [];
     for (let i = 0; i < tasks.length; i++) {
-      records.push(this.recorder.getActionRecord(tasks[i]));
+      records.push(this.recorder?.getActionRecord(tasks[i]));
     }
     return Promise.all(records);
   }
   destroy() {
-    this.recorder.clear();
+    this.recorder?.clear();
   }
   getGlobalData() {
     return this.flowModel?.globalData;

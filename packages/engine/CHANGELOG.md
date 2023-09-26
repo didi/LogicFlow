@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.9](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.8...@logicflow/engine@0.0.9) (2023-09-11)
+
+
+### Bug Fixes
+
+* fix bug -> options?.debug, setup with debug mode via options.debug ([1ed7d2a](https://github.com/didi/LogicFlow/commit/1ed7d2ab6f770c64c23432e2578fd0c7debad019))
+
+
+
+
+
+## [0.0.8](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.6...@logicflow/engine@0.0.8) (2023-09-08)
+
+
+### Bug Fixes
+
+* 修复 uuid 生成的 id 以 '-' 分隔，在 eval 执行时会报错的 bug ([444e44a](https://github.com/didi/LogicFlow/commit/444e44ae5672e68b7e20d4a8307affb0ac6244fd))
+* 修复以 uuid 生成 nodeId 时，isPass 方法会触发 js 错误，导致执行失败 ([3eb4127](https://github.com/didi/LogicFlow/commit/3eb412744395aae64a57656f5fcd7a1e581078d9))
+* 添加 debug 参数控制是否实例化 Recorder；修复 sessionStorage 存储超过 5MB 后写入报错的 bug ([03cd521](https://github.com/didi/LogicFlow/commit/03cd521b58c8a5a2be729015844bd97bb560e65f))
+
+
+
+
+
+## [0.0.6](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.5...@logicflow/engine@0.0.6) (2023-08-24)
+
+
+### Features
+
+* **engine:** execution record data contain outgoing and detail ([d24533c](https://github.com/didi/LogicFlow/commit/d24533ca4a6d259a3d1921c010056dd9b4db3d3c))
+* **engine:** support node return error ([7373bf2](https://github.com/didi/LogicFlow/commit/7373bf2da4a90b2b7610a267259b33daa77fd9de))
+
+
+
+
+
 ## [0.0.5](https://github.com/didi/LogicFlow/compare/@logicflow/engine@0.0.4...@logicflow/engine@0.0.5) (2023-08-23)
 
 

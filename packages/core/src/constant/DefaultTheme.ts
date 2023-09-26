@@ -278,6 +278,10 @@ export type Theme = {
    * 边动画样式
    */
   edgeAnimation?: EdgeAnimation,
+  /**
+   * 节点旋转控制点样式
+   */
+  rotateControl?: CommonTheme
 };
 
 export const defaultTheme: Theme = {
@@ -378,5 +382,10 @@ export const defaultTheme: Theme = {
     animationIterationCount: 'infinite',
     animationTimingFunction: 'linear',
     animationDirection: 'normal',
+  },
+  rotateControl: {
+    stroke: '#000',
+    fill: '#fff',
+    strokeWidth: 1.5,
   },
 };

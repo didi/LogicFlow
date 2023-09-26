@@ -8,6 +8,7 @@ type EdgeTypeUn = EdgeType | 'curved-edge';
 const config = {
   stopScrollGraph: true,
   stopZoomGraph: true,
+  allowRotation: true,
 };
 
 const data = {
