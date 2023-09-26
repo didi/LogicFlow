@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://docs.logic-flow.cn" target="_blank">
+  <a href="https://site.logic-flow.cn" target="_blank">
     <img
-      src="https://docs.logic-flow.cn/docs/_images/logo.png"
+      src="https://site.logic-flow.cn/docs/_images/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
@@ -96,10 +96,10 @@ lf.render(data);
 
 ## Document
 
-[Our Document Address](https://docs.logic-flow.cn)
+[Our Document Address](https://site.logic-flow.cn)
 
-- [Get Started](https://docs.logic-flow.cn/docs/#/en/guide/start)
-- [Demo](https://docs.logic-flow.cn/examples/#/gallery)
+- [Get Started](https://site.logic-flow.cn/docs/#/en/guide/start)
+- [Demo](https://site.logic-flow.cn/examples/#/gallery)
 
 ## Core Capability
 
@@ -134,7 +134,7 @@ Based on the above expanded capabilities, front-end R&D can flexibly develop req
 
 ### Flow Organizer Demo
 
-demo link：https://docs.logic-flow.cn/demo/dist/organizer/
+demo link：https://site.logic-flow.cn/demo/dist/organizer/
 
 code link：https://github.com/Logic-Flow/docs/tree/master/demo/organizer
 
