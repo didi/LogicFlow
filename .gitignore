@@ -16,3 +16,4 @@ logic-flow-docs.tar.gz
 */.eslintcache
 .eslintcache
 ~*
+.yarn

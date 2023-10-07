@@ -18,6 +18,8 @@ const config = {
   style: themeApprove,
 }
 
+const sideBarWidth = 300; // 示例中左侧导航的宽度
+
 export default function ApproveExample() {
   const [nodeData, setNodeData] = useState();
   const [isShowHoverPanel, setIsShowHoverPanel] = useState(Boolean);
@@ -37,7 +39,7 @@ export default function ApproveExample() {
     lf.on('node:mouseenter', ({e, data}) => {
       setNodeData(data);
       setIsShowHoverPanel(true);
-      data.id ? setHoverStyle({ top: e.clientY, left: e.clientX}) : setHoverStyle({ display: 'none' });
+      data.id ? setHoverStyle({ top: e.clientY, left: e.clientX - sideBarWidth}) : setHoverStyle({ display: 'none' });
     });
     lf.on('node:mouseleave', () => {
       setNodeData(undefined);
