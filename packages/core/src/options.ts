@@ -7,7 +7,7 @@ import {
   EdgeData,
   Extension,
   GraphConfigData,
-  Point
+  Point,
 } from './type';
 import { KeyboardDef } from './keyboard';
 import { EditConfigInterface } from './model/EditConfigModel';
