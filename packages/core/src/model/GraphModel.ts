@@ -1214,8 +1214,12 @@ class GraphModel {
     nodes.forEach((node) => {
       const { x, y, width, height } = node;
       const { strokeWidth = 0 } = node.getNodeStyle();
-      nodesX = nodesX.concat([x + width / 2 + strokeWidth, x - width / 2 - strokeWidth]);
-      nodesY = nodesY.concat([y + height / 2 + strokeWidth, y - height / 2 - strokeWidth]);
+      const maxX = x + width / 2 + strokeWidth;
+      const minX = x - width / 2 - strokeWidth;
+      const maxY = y + height / 2 + strokeWidth;
+      const minY = y - height / 2 - strokeWidth;
+      nodesX = nodesX.concat([maxX, minX].filter(num => !Number.isNaN(num)));
+      nodesY = nodesY.concat([maxY, minY].filter(num => !Number.isNaN(num)));
     });
 
     const minX = Math.min(...nodesX);
