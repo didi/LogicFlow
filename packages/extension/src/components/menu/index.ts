@@ -103,6 +103,7 @@ class Menu {
     this.menuTypeMap.set(DefaultSelectionMenuKey, DefaultSelectionMenu);
   }
   render(lf, container) {
+    if (lf.options.isSilentMode) return;
     this.__container = container;
     this.__currentData = null; // 当前展示的菜单所属元素的model数据
     this.__menuDOM.className = 'lf-menu';
