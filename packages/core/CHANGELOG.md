@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.15...@logicflow/core@1.2.16) (2023-10-19)
+
+
+### Bug Fixes
+
+* add edge copying when copying a group([#1346](https://github.com/didi/LogicFlow/issues/1346)) ([f53ec7f](https://github.com/didi/LogicFlow/commit/f53ec7f8eea1b9e1357e3dc21d509695e857bb3b))
+* **core:** filter NaN cases in getVirtualRectSize ([045e80b](https://github.com/didi/LogicFlow/commit/045e80beba32d14efae4c32ae215b5eb1fde096c))
+* **core:** restore rotation ([2748c17](https://github.com/didi/LogicFlow/commit/2748c177660e9b0849631750a1a68af50dd96781))
+* **extension:** bug of menu initialization ([#1359](https://github.com/didi/LogicFlow/issues/1359)) ([fabd8d7](https://github.com/didi/LogicFlow/commit/fabd8d74cf998e6118499d3ddc49841ad5411480))
+
+
+### Features
+
+* anchor dragend事件参数增加edgeModel ([7b8a0ab](https://github.com/didi/LogicFlow/commit/7b8a0ab8045457ec212322a1d0e1dc265fb87954))
+* **core:** implement custom path for connecting ([492a412](https://github.com/didi/LogicFlow/commit/492a41201faaaee84b3b0ae734763b4d5e4a2a37))
+* **extension:** override addElements to support group-node copy([#1346](https://github.com/didi/LogicFlow/issues/1346)) ([e9d0139](https://github.com/didi/LogicFlow/commit/e9d0139da4446ec4451ba7c2516a1e440a951fec))
+
+
+
+
+
 ## [1.2.15](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.14...@logicflow/core@1.2.15) (2023-09-21)
 
 

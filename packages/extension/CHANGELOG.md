@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.17](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.16...@logicflow/extension@1.2.17) (2023-10-19)
+
+
+### Bug Fixes
+
+* add edge copying when copying a group([#1346](https://github.com/didi/LogicFlow/issues/1346)) ([f53ec7f](https://github.com/didi/LogicFlow/commit/f53ec7f8eea1b9e1357e3dc21d509695e857bb3b))
+* **extension:** bug of menu initialization ([#1359](https://github.com/didi/LogicFlow/issues/1359)) ([fabd8d7](https://github.com/didi/LogicFlow/commit/fabd8d74cf998e6118499d3ddc49841ad5411480))
+
+
+### Features
+
+* **extension:** add test for curved-edge ([c2a92dc](https://github.com/didi/LogicFlow/commit/c2a92dc1b7eba19fc3e2a68d91c17da7ba5759e4))
+* **extension:** override addElements to support group-node copy([#1346](https://github.com/didi/LogicFlow/issues/1346)) ([e9d0139](https://github.com/didi/LogicFlow/commit/e9d0139da4446ec4451ba7c2516a1e440a951fec))
+
+
+
+
+
 ## [1.2.16](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.15...@logicflow/extension@1.2.16) (2023-09-21)
 
 
