@@ -1,5 +1,11 @@
 /* eslint-disable no-shadow */
-import LogicFlow, { BaseEdgeModel, BaseNodeModel, GraphConfigData } from '@logicflow/core';
+import LogicFlow, {
+  BaseEdgeModel,
+  BaseNodeModel,
+  GraphConfigData,
+  EdgeConfig,
+  EventType,
+} from '@logicflow/core';
 import GroupNode from './GroupNode';
 
 type BaseNodeId = string;
@@ -24,13 +30,15 @@ class Group {
     lf.register(GroupNode);
     this.lf = lf;
     lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
-      if (model.isGroup) { // 如果移动的是分组，那么分组的子节点也跟着移动。
+      if (model.isGroup) {
+        // 如果移动的是分组，那么分组的子节点也跟着移动。
         const nodeIds = this.getNodeAllChild(model);
         lf.graphModel.moveNodes(nodeIds, deltaX, deltaY, true);
         return true;
       }
       const groupModel = lf.getNodeModelById(this.nodeGroupMap.get(model.id));
-      if (groupModel && groupModel.isRestrict) { // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
+      if (groupModel && groupModel.isRestrict) {
+        // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
         const { x1, y1, x2, y2 } = model.getBounds();
         const r = groupModel.isAllowMoveTo({
           x1: x1 + deltaX,
@@ -49,61 +57,200 @@ class Group {
     lf.on('node:dnd-drag,node:drag', this.setActiveGroup);
     lf.on('node:click', this.nodeSelected);
     lf.on('graph:rendered', this.graphRendered);
-    lf.addElements = function addElements({ nodes, edges }: GraphConfigData): {
+    // https://github.com/didi/LogicFlow/issues/1346
+    // 重写addElements()方法，在addElements()原有基础上增加对group内部所有nodes和edges的复制功能
+    lf.addElements = (
+      { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
+      distance: number,
+    ): {
       nodes: BaseNodeModel[];
       edges: BaseEdgeModel[];
-    } {
-      const nodeIdMap: any = {};
+    } => {
+      // ============== 变量初始化 ==============
+      const nodeIdMap: Record<string, string> = {};
       const elements: any = {
         nodes: [],
         edges: [],
       };
-      for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
+      const groupInnerEdges: EdgeConfig[] = [];
+      // ============== 变量初始化 ==============
+
+      for (let i = 0; i < selectedNodes.length; i++) {
+        const node = selectedNodes[i];
         const preId = node.id;
+        // @ts-ignore
         const { children, ...rest } = node;
         const nodeModel = lf.addNode(rest);
-        const fn = (children: Set<string>, current: BaseNodeModel) => {
-          children?.forEach((childId: string) => {
-            const childNodeModel = lf.getNodeModelById(childId);
-            const { x, y, properties, type, text, rotate, children } = childNodeModel;
-            const newChildModel = lf.addNode({
-              x: x + 40,
-              y: y + 40,
-              properties,
-              type,
-              text: {
-                ...text,
-                x: text.x + 40,
-                y: text.y + 40,
-              },
-              rotate,
-            });
-            current.addChild(newChildModel.id);
-            if (children instanceof Set) {
-              fn(children, newChildModel);
-            }
-          });
-        };
-        fn(children, nodeModel);
         if (!nodeModel) return { nodes: [], edges: [] };
         if (preId) nodeIdMap[preId] = nodeModel.id;
-        elements.nodes.push(nodeModel);
+        elements.nodes.push(nodeModel); // group的nodeModel
+
+        // 递归创建group的nodeModel的children
+        const { edgesArray } = this.createAllChildNodes(
+          nodeIdMap,
+          children,
+          nodeModel,
+          distance,
+        );
+        groupInnerEdges.push(...edgesArray);
       }
-      edges.forEach((edge) => {
-        let { sourceNodeId, targetNodeId } = edge;
-        if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId];
-        if (nodeIdMap[targetNodeId]) targetNodeId = nodeIdMap[targetNodeId];
-        const edgeModel = lf.graphModel.addEdge({
-          ...edge,
-          sourceNodeId,
-          targetNodeId,
-        });
+      groupInnerEdges.forEach((edge) => {
+        this.createEdgeModel(
+          edge,
+          nodeIdMap,
+          distance,
+        );
+      });
+      // 构建的时候直接偏移，这里不需要再进行再度偏移
+      // groupInnerChildren.nodes.forEach(node => this.translationNodeData(node, distance));
+      // groupInnerChildren.edges.forEach(edge => this.translationEdgeData(edge, distance));
+
+      // 最外层的edges继续执行创建edgeModel的流程
+      selectedEdges.forEach((edge) => {
+        const edgeModel = this.createEdgeModel(
+          edge,
+          nodeIdMap,
+          distance,
+        );
         elements.edges.push(edgeModel);
       });
+
+      // 返回elements进行选中效果，即触发element.selectElementById()
+      // shortcut.ts也会对最外层的nodes和edges进行偏移，即translationNodeData()
       return elements;
     };
   }
+
+  /**
+   * 创建一个Group类型节点内部的所有子节点的副本
+   * 并且在遍历所有nodes的过程中顺便拿到所有edges（只在Group范围的edges）
+   */
+  createAllChildNodes(
+    nodeIdMap: Record<string, string>,
+    children: Set<string>,
+    current: BaseNodeModel,
+    distance: number,
+  ) {
+    const { lf } = this;
+    const edgesDataArray: EdgeConfig[] = [];
+    const edgesNodeModelArray: BaseEdgeModel[] = [];
+    const nodesArray: BaseNodeModel[] = [];
+    children?.forEach((childId: string) => {
+      const childNodeModel = lf.getNodeModelById(childId);
+      const {
+        x,
+        y,
+        properties,
+        type,
+        text,
+        rotate,
+        children,
+        incoming,
+        outgoing,
+      } = childNodeModel;
+      // @ts-ignore
+      const eventType = EventType.NODE_GROUP_COPY || ('node:group-copy-add' as EventType);
+      const newChildModel = lf.addNode(
+        {
+          x: x + distance,
+          y: y + distance,
+          properties,
+          type,
+          text: {
+            ...text,
+            x: text.x + distance,
+            y: text.y + distance,
+          },
+          rotate,
+          // 如果不传递type，会自动触发NODE_ADD
+          // 有概率触发appendToGroup
+        },
+        eventType,
+      );
+      current.addChild(newChildModel.id);
+      nodeIdMap[childId] = newChildModel.id;
+      nodesArray.push(newChildModel);
+      // 存储children内部节点相关的输入边
+      childNodeModel.incoming.edges.forEach((edge) => {
+        edgesNodeModelArray.push(edge);
+      });
+      // 存储children内部节点相关的输出边
+      childNodeModel.outgoing.edges.forEach((edge) => {
+        edgesNodeModelArray.push(edge);
+      });
+
+      if (children instanceof Set) {
+        const { nodesArray: childNodes, edgesArray: childEdges } = this.createAllChildNodes(
+          nodeIdMap,
+          children,
+          newChildModel,
+          distance,
+        );
+        nodesArray.push(...childNodes);
+        edgesDataArray.push(...childEdges);
+      }
+    });
+    // 1. 判断每一条边的开始节点和目标节点是否在Group中
+    const filterEdgesArray: BaseEdgeModel[] = edgesNodeModelArray.filter(
+      (edge: BaseEdgeModel) => nodeIdMap[edge.sourceNodeId] && nodeIdMap[edge.targetNodeId],
+    );
+    // 2. 为每一条group的内部边构建出EdgeData数据
+    // 从GraphModel.ts的getSelectElements()可以知道EdgeConfig就是EdgeData
+    const filterEdgesDataArray: EdgeConfig[] = filterEdgesArray.map((item) => item.getData());
+    return {
+      nodesArray,
+      edgesArray: edgesDataArray.concat(filterEdgesDataArray),
+    };
+  }
+
+  createEdgeModel(
+    edge: EdgeConfig,
+    nodeIdMap: Record<string, string>,
+    distance: number,
+  ) {
+    const { lf } = this;
+    let sourceId = edge.sourceNodeId;
+    let targetId = edge.targetNodeId;
+    if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId];
+    if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId];
+    const { type, startPoint, endPoint, pointsList, text, ...rest } = edge;
+    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
+    const newStartPoint = {
+      x: startPoint.x + distance,
+      y: startPoint.y + distance,
+    };
+    const newEndPoint = {
+      x: endPoint.x + distance,
+      y: endPoint.y + distance,
+    };
+    let newPointsList = [];
+    if (pointsList && pointsList.length > 0) {
+      newPointsList = pointsList.map((point) => {
+        point.x += distance;
+        point.y += distance;
+        return point;
+      });
+    }
+    const newText = text;
+    if (text && typeof text !== 'string') {
+      (newText as { x: number, y: number, value: string }).x = text.x + distance;
+      (newText as { x: number, y: number, value: string }).y = text.y + distance;
+    }
+    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
+
+    // 简化复制时的参数传入，防止创建出两个edge属于同个group这种情况
+    const edgeModel: BaseEdgeModel = lf.graphModel.addEdge({
+      type,
+      startPoint: newStartPoint,
+      endPoint: newEndPoint,
+      sourceNodeId: sourceId,
+      targetNodeId: targetId,
+      pointsList: newPointsList,
+      text: newText,
+    });
+    return edgeModel;
+  }
+
   /**
    * 获取一个节点内部所有的子节点，包裹分组的子节点
    */

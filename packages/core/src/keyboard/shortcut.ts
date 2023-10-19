@@ -36,6 +36,7 @@ function translationEdgeData(edgeData, distance) {
 }
 
 const TRANSLATION_DISTANCE = 40;
+let CHILDREN_TRANSLATION_DISTANCE = 40;
 
 export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
   const { keyboard } = lf;
@@ -43,6 +44,7 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
 
   // 复制
   keyboard.on(['cmd + c', 'ctrl + c'], () => {
+    CHILDREN_TRANSLATION_DISTANCE = TRANSLATION_DISTANCE;
     if (!keyboardOptions.enabled) return true;
     if (graph.textEditElement) return true;
     const { guards } = lf.options;
@@ -63,12 +65,13 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     if (graph.textEditElement) return true;
     if (selected && (selected.nodes || selected.edges)) {
       lf.clearSelectElements();
-      const addElements = lf.addElements(selected);
+      const addElements = lf.addElements(selected, CHILDREN_TRANSLATION_DISTANCE);
       if (!addElements) return true;
       addElements.nodes.forEach(node => lf.selectElementById(node.id, true));
       addElements.edges.forEach(edge => lf.selectElementById(edge.id, true));
       selected.nodes.forEach(node => translationNodeData(node, TRANSLATION_DISTANCE));
       selected.edges.forEach(edge => translationEdgeData(edge, TRANSLATION_DISTANCE));
+      CHILDREN_TRANSLATION_DISTANCE = CHILDREN_TRANSLATION_DISTANCE + TRANSLATION_DISTANCE;
     }
     return false;
   });

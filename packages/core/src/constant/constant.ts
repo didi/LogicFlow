@@ -40,6 +40,7 @@ export enum EventType {
   NODE_DBCLICK = 'node:dbclick',
   NODE_DELETE = 'node:delete',
   NODE_ADD = 'node:add',
+  NODE_GROUP_COPY = 'node:group-copy-add',
   NODE_DND_ADD = 'node:dnd-add',
   NODE_DND_DRAG = 'node:dnd-drag',
   NODE_MOUSEDOWN = 'node:mousedown',

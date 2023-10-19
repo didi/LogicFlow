@@ -693,7 +693,7 @@ export default class LogicFlow {
   /**
    * 添加多个元素, 包括边和节点。
    */
-  addElements({ nodes, edges }: GraphConfigData): GraphConfigModel {
+  addElements({ nodes, edges }: GraphConfigData, distance = 40): GraphConfigModel {
     const nodeIdMap = {};
     const elements = {
       nodes: [],
