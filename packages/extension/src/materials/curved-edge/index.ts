@@ -1,95 +1,185 @@
-import { PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
-import searchMiddleIndex from './searchMiddleIndex';
+import {
+  PointTuple,
+  PolylineEdge,
+  PolylineEdgeModel,
+  h,
+} from '@logicflow/core';
+
+type DirectionType = 't' | 'b' | 'l' | 'r' | '';
+type ArcPositionType = 'tl' | 'tr' | 'bl' | 'br' | '-';
+
+const directionMap: any = {
+  tr: 'tl',
+  lb: 'tl',
+  tl: 'tr',
+  rb: 'tr',
+  br: 'bl',
+  lt: 'bl',
+  bl: 'br',
+  rt: 'br',
+};
+
+function pointFilter(points: number[][]) {
+  const all = points;
+  let i = 1;
+  while (i < all.length - 1) {
+    const [x, y] = all[i - 1];
+    const [x1, y1] = all[i];
+    const [x2, y2] = all[i + 1];
+    if ((x === x1 && x1 === x2) || (y === y1 && y1 === y2)) {
+      all.splice(i, 1);
+    } else {
+      i++;
+    }
+  }
+  return all;
+}
+
+function getMidPoints(
+  cur: PointTuple,
+  key: string,
+  orientation: ArcPositionType,
+  radius: number,
+) {
+  const mid1 = [cur[0], cur[1]];
+  const mid2 = [cur[0], cur[1]];
+  switch (orientation) {
+    case 'tl': {
+      if (key === 'tr') {
+        mid1[1] += radius;
+        mid2[0] += radius;
+      } else if (key === 'lb') {
+        mid1[0] += radius;
+        mid2[1] += radius;
+      }
+      return [mid1, mid2];
+    }
+    case 'tr': {
+      if (key === 'tl') {
+        mid1[1] += radius;
+        mid2[0] -= radius;
+      } else if (key === 'rb') {
+        mid1[0] -= radius;
+        mid2[1] += radius;
+      }
+      return [mid1, mid2];
+    }
+    case 'bl': {
+      if (key === 'br') {
+        mid1[1] -= radius;
+        mid2[0] += radius;
+      } else if (key === 'lt') {
+        mid1[0] += radius;
+        mid2[1] -= radius;
+      }
+      return [mid1, mid2];
+    }
+    case 'br': {
+      if (key === 'bl') {
+        mid1[1] -= radius;
+        mid2[0] -= radius;
+      } else if (key === 'rt') {
+        mid1[0] -= radius;
+        mid2[1] -= radius;
+      }
+      return [mid1, mid2];
+    }
+    default:
+      return null;
+  }
+}
+
+function getPath(
+  prev: PointTuple,
+  cur: PointTuple,
+  next: PointTuple,
+  radius: number,
+): string {
+  let dir1: DirectionType = '';
+  let dir2: DirectionType = '';
+  let realRadius = radius;
+
+  if (prev[0] === cur[0]) {
+    dir1 = prev[1] > cur[1] ? 't' : 'b';
+    realRadius = Math.min(Math.abs(prev[0] - cur[0]), radius);
+  } else if (prev[1] === cur[1]) {
+    dir1 = prev[0] > cur[0] ? 'l' : 'r';
+    realRadius = Math.min(Math.abs(prev[1] - cur[1]), radius);
+  }
+  if (cur[0] === next[0]) {
+    dir2 = cur[1] > next[1] ? 't' : 'b';
+    realRadius = Math.min(Math.abs(prev[0] - cur[0]), radius);
+  } else if (cur[1] === next[1]) {
+    dir2 = cur[0] > next[0] ? 'l' : 'r';
+    realRadius = Math.min(Math.abs(prev[1] - cur[1]), radius);
+  }
+
+  const key = `${dir1}${dir2}`;
+  const orientation: ArcPositionType = directionMap[key] || '-';
+  let path = `L ${prev[0]} ${prev[1]}`;
+  if (orientation === '-') {
+    path += `L ${cur[0]} ${cur[1]} L ${next[0]} ${next[1]}`;
+  } else {
+    const [mid1, mid2] = getMidPoints(cur, key, orientation, (realRadius)) || [];
+    if (mid1 && mid2) {
+      path += `L ${mid1[0]} ${mid1[1]} Q ${cur[0]} ${cur[1]} ${mid2[0]} ${mid2[1]}`;
+      [cur[0], cur[1]] = mid2;
+    }
+  }
+  return path;
+}
 
 class CurvedEdge extends PolylineEdge {
-  pointFilter(points) {
-    const allPoints = points;
-    let i = 1;
-    while (i < allPoints.length - 1) {
-      const [x, y] = allPoints[i - 1];
-      const [x1, y1] = allPoints[i];
-      const [x2, y2] = allPoints[i + 1];
-      if ((x === x1 && x1 === x2)
-        || (y === y1 && y1 === y2)) {
-        allPoints.splice(i, 1);
-      } else {
-        i++;
-      }
-    }
-    return allPoints;
-  }
   getEdge() {
     const { model } = this.props;
-    const { points, isAnimation, arrowConfig, radius = 5 } = model;
+    const { points: pointsStr, isAnimation, arrowConfig, radius = 5 } = model;
     const style = model.getEdgeStyle();
     const animationStyle = model.getEdgeAnimationStyle();
-    const points2 = this.pointFilter(points.split(' ').map((p) => p.split(',').map(a => Number(a))));
-    const res = searchMiddleIndex(points2);
-    if (res) {
-      const [first, last] = res;
-      const firstPoint = points2[first];
-      const lastPoint = points2[last];
-      const flag = firstPoint.some((num, index) => num === lastPoint[index]);
-      if (!flag) {
-        const diff = (lastPoint[1] - firstPoint[1]) / 2;
-        const firstNextPoint = [lastPoint[0], lastPoint[1] - diff];
-        const lastPrePoint = [firstPoint[0], firstPoint[1] + diff];
-        points2.splice(first + 1, 0, lastPrePoint, firstNextPoint);
+    const points = pointFilter(
+      pointsStr.split(' ').map((p) => p.split(',').map((a) => +a)),
+    );
+    let i = 0;
+    let d = '';
+    if (points.length === 2) {
+      d += `M${points[i][0]} ${points[i++][1]} L ${points[i][0]} ${
+        points[i][1]
+      }`;
+    } else {
+      d += `M${points[i][0]} ${points[i++][1]}`;
+      for (; i + 1 < points.length;) {
+        const prev = points[i - 1] as PointTuple;
+        const cur = points[i] as PointTuple;
+        const next = points[i++ + 1] as PointTuple;
+        d += getPath(prev, cur, next, radius as number);
       }
+      d += `L ${points[i][0]} ${points[i][1]}`;
     }
-    const [startX, startY] = points2[0];
-    let d = `M${startX} ${startY}`;
-    // 1) 如果一个点不为开始和结束，则在这个点的前后增加弧度开始和结束点。
-    // 2) 判断这个点与前一个点的坐标
-    //    如果x相同则前一个点的x也不变，
-    //    y为（这个点的y 大于前一个点的y, 则 为 这个点的y - 5；小于前一个点的y, 则为这个点的y+5）
-    //    同理，判断这个点与后一个点的x,y是否相同，如果x相同，则y进行加减，如果y相同，则x进行加减
-    for (let i = 1; i < points2.length - 1; i++) {
-      const [preX, preY] = points2[i - 1];
-      const [currentX, currentY] = points2[i];
-      const [nextX, nextY] = points2[i + 1];
-      if (currentX === preX && currentY !== preY) {
-        const y = currentY > preY ? currentY - radius : currentY + radius;
-        d = `${d} L ${currentX} ${y}`;
-      }
-      if (currentY === preY && currentX !== preX) {
-        const x = currentX > preX ? currentX - radius : currentX + radius;
-        d = `${d} L ${x} ${currentY}`;
-      }
-      d = `${d} Q ${currentX} ${currentY}`;
-      if (currentX === nextX && currentY !== nextY) {
-        const y = currentY > nextY ? currentY - radius : currentY + radius;
-        d = `${d} ${currentX} ${y}`;
-      }
-      if (currentY === nextY && currentX !== nextX) {
-        const x = currentX > nextX ? currentX - radius : currentX + radius;
-        d = `${d} ${x} ${currentY}`;
-      }
-    }
-    const [endX, endY] = points2[points2.length - 1];
-    d = `${d} L ${endX} ${endY}`;
+
     const attrs = {
-      d,
       style: isAnimation ? animationStyle : {},
       ...style,
       ...arrowConfig,
       fill: 'none',
     };
-    return h(
-      'path',
-      {
-        d,
-        ...attrs,
-      },
-    );
+    console.log(d);
+    return h('path', {
+      d,
+      ...attrs,
+    });
   }
 }
 
-class CurvedEdgeModel extends PolylineEdgeModel {
-}
+class CurvedEdgeModel extends PolylineEdgeModel {}
+
+const defaultCurvedEdge = {
+  type: 'curved-edge',
+  view: CurvedEdge,
+  model: CurvedEdgeModel,
+};
+
+export default defaultCurvedEdge;
 
 export {
   CurvedEdge,
-  // CurvedEdgeView,
   CurvedEdgeModel,
 };
