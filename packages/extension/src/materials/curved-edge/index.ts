@@ -6,9 +6,11 @@ import {
 } from '@logicflow/core';
 
 type DirectionType = 't' | 'b' | 'l' | 'r' | '';
-type ArcPositionType = 'tl' | 'tr' | 'bl' | 'br' | '-';
+type ArcQuadrantType = 'tl' | 'tr' | 'bl' | 'br' | '-';
 
-const directionMap: any = {
+const directionMap: {
+  [key: string]: ArcQuadrantType;
+} = {
   tr: 'tl',
   lb: 'tl',
   tl: 'tr',
@@ -38,7 +40,7 @@ function pointFilter(points: number[][]) {
 function getMidPoints(
   cur: PointTuple,
   key: string,
-  orientation: ArcPositionType,
+  orientation: ArcQuadrantType,
   radius: number,
 ) {
   const mid1 = [cur[0], cur[1]];
@@ -85,7 +87,7 @@ function getMidPoints(
       return [mid1, mid2];
     }
     default:
-      return null;
+      return [];
   }
 }
 
@@ -97,30 +99,33 @@ function getPartialPath(
 ): string {
   let dir1: DirectionType = '';
   let dir2: DirectionType = '';
-  let realRadius = radius;
 
   if (prev[0] === cur[0]) {
     dir1 = prev[1] > cur[1] ? 't' : 'b';
-    realRadius = Math.min(Math.abs(prev[0] - cur[0]), radius);
   } else if (prev[1] === cur[1]) {
     dir1 = prev[0] > cur[0] ? 'l' : 'r';
-    realRadius = Math.min(Math.abs(prev[1] - cur[1]), radius);
-  }
-  if (cur[0] === next[0]) {
-    dir2 = cur[1] > next[1] ? 't' : 'b';
-    realRadius = Math.min(Math.abs(prev[0] - cur[0]), radius);
-  } else if (cur[1] === next[1]) {
-    dir2 = cur[0] > next[0] ? 'l' : 'r';
-    realRadius = Math.min(Math.abs(prev[1] - cur[1]), radius);
   }
 
+  if (cur[0] === next[0]) {
+    dir2 = cur[1] > next[1] ? 't' : 'b';
+  } else if (cur[1] === next[1]) {
+    dir2 = cur[0] > next[0] ? 'l' : 'r';
+  }
+
+  const r = Math.min(
+    Math.hypot(cur[0] - prev[0], cur[1] - prev[1]) / 2,
+    Math.hypot(next[0] - cur[0], next[1] - cur[1]) / 2,
+    radius,
+  ) || (1 / 5) * radius;
+
   const key = `${dir1}${dir2}`;
-  const orientation: ArcPositionType = directionMap[key] || '-';
+  const orientation: ArcQuadrantType = directionMap[key] || '-';
   let path = `L ${prev[0]} ${prev[1]}`;
+
   if (orientation === '-') {
     path += `L ${cur[0]} ${cur[1]} L ${next[0]} ${next[1]}`;
   } else {
-    const [mid1, mid2] = getMidPoints(cur, key, orientation, realRadius) || [];
+    const [mid1, mid2] = getMidPoints(cur, key, orientation, r);
     if (mid1 && mid2) {
       path += `L ${mid1[0]} ${mid1[1]} Q ${cur[0]} ${cur[1]} ${mid2[0]} ${mid2[1]}`;
       [cur[0], cur[1]] = mid2;
@@ -163,11 +168,6 @@ class CurvedEdge extends PolylineEdge {
       ...arrowConfig,
       fill: 'none',
     };
-    console.log(
-      pointsStr,
-      pointsStr.split(' ').map((p) => p.split(',').map((a) => +a)),
-      d,
-    );
     return h('path', {
       d,
       ...attrs,
