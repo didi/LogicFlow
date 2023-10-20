@@ -106,11 +106,12 @@ class Group {
       // groupInnerChildren.edges.forEach(edge => this.translationEdgeData(edge, distance));
 
       // 最外层的edges继续执行创建edgeModel的流程
+      // 由于最外层会调用translationEdgeData()，因此这里不用传入distance进行偏移
       selectedEdges.forEach((edge) => {
         const edgeModel = this.createEdgeModel(
           edge,
           nodeIdMap,
-          distance,
+          0,
         );
         elements.edges.push(edgeModel);
       });
