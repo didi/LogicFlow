@@ -110,6 +110,9 @@ class StepDrag {
   setStep(step: number) {
     this.step = step;
   }
+  setModel(model: IBaseModel) {
+    this.model = model;
+  }
   handleMouseDown = (e: MouseEvent) => {
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return;
     if (this.isStopPropagation) e.stopPropagation();
