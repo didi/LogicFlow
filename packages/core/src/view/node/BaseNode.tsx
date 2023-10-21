@@ -324,6 +324,13 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     this.startTime = new Date().getTime();
     const { editConfigModel } = graphModel;
     if (editConfigModel.adjustNodePosition && model.draggable) {
+      // https://github.com/didi/LogicFlow/issues/1370
+      // 当使用撤销功能：LogicFlow.undo()时，会重新初始化所有model数据，即LogicFlow.undo()时会新构建一个model对象
+      // 但是this.stepDrag并不会重新创建
+      // 导致this.stepDrag持有的model并没有重新赋值，因为之前的做法是构造函数中传入一个model对象
+      // 在StepDrag.ts中只有handleMouseDown、handleMouseMove、handleMouseUp使用到this.model
+      // 因此在handleMouseDown()进行setModel重新将this.props.model的值设置进去，刷新this.model.getData()
+      this.stepDrag && this.stepDrag.setModel(model);
       this.stepDrag && this.stepDrag.handleMouseDown(ev);
     }
   };
