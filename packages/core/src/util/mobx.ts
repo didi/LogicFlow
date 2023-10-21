@@ -1,4 +1,4 @@
-import { action, observable, computed, toJS, isObservable, configure } from 'mobx';
+import { action, observable, computed, toJS, isObservable, configure, reaction, IReactionDisposer } from 'mobx';
 
 configure({ isolateGlobalState: true });
 
@@ -9,4 +9,6 @@ export {
   isObservable,
   toJS,
   configure,
+  reaction,
+  IReactionDisposer,
 };
