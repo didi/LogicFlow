@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.17](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.16...@logicflow/core@1.2.17) (2023-10-25)
+
+
+### Bug Fixes
+
+* **core:** refresh the value of model when mouse down([#1370](https://github.com/didi/LogicFlow/issues/1370)) ([1cb45dd](https://github.com/didi/LogicFlow/commit/1cb45ddbbfdc0a0c8fd9e427d9a8dad0ad51eda9))
+* **core:** use mobx reaction to track the value of stepDrag.model([#1370](https://github.com/didi/LogicFlow/issues/1370)) ([a1e3bc3](https://github.com/didi/LogicFlow/commit/a1e3bc3294b49edea4f1ac41886db6f3e1f3b45b))
+
+
+
+
+
 ## [1.2.16](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.15...@logicflow/core@1.2.16) (2023-10-19)
 
 

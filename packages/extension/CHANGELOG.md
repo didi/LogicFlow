@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.18](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.17...@logicflow/extension@1.2.18) (2023-10-25)
+
+
+### Bug Fixes
+
+* **extension:** optimize radius and variable name ([b0810b4](https://github.com/didi/LogicFlow/commit/b0810b47f3aaf1b1b1576861f46f687ca002d13e))
+* **extension:** the outermost edges translate 0 when copy a group([#1379](https://github.com/didi/LogicFlow/issues/1379)) ([8368622](https://github.com/didi/LogicFlow/commit/836862282032838f65e8f66d4a70fa4acce5b466))
+
+
+
+
+
 ## [1.2.17](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.16...@logicflow/extension@1.2.17) (2023-10-19)
 
 
