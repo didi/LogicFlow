@@ -25,6 +25,10 @@ class HorizontalLaneModel extends GroupNode.model {
     this.zIndex = 1;
     this.text.editable = true;
     this.toJSON = poolToJSON;
+    // Fix:因为宽高保存在properties中，复现泳道时获取到的是基础宽高而不是properties的宽高，所以异步修改左侧标题的x轴坐标。
+    setTimeout(() => {
+      this.text.x = this.x - this.width / 2 + 11;
+    }, 0);
   }
 
   setAttributes() {
