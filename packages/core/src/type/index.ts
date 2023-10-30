@@ -138,6 +138,7 @@ export type EdgeData = {
   properties: Record<string, unknown>;
   zIndex?: number;
   pointsList?: Point[]; // 折线、曲线会输出pointsList
+  [key: string]: unknown;
 };
 // 边属性
 export type EdgeAttribute = {

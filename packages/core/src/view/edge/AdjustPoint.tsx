@@ -158,12 +158,12 @@ export default class AdjustPoint extends Component<IProps, IState> {
       if (info && info.node) {
         const { pass, msg, newTargetNode } = this.isAllowAdjust(info);
         if (pass) {
-          const edgeData = edgeModel.getData();
+          const { text, sourceAnchorId = '', targetAnchorId = '', ...rest } = edgeModel.getData();
           createEdgeInfo = {
-            ...edgeData,
-            sourceAnchorId: '',
-            targetAnchorId: '',
-            text: edgeData?.text?.value || '',
+            sourceAnchorId,
+            targetAnchorId,
+            ...rest,
+            text: text?.value || '',
           };
           // 根据调整点是边的起点或重点，计算创建边需要的参数
           if (type === AdjustType.SOURCE) {
