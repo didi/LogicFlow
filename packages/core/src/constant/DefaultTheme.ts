@@ -282,7 +282,7 @@ export type Theme = {
    * 节点旋转控制点样式
    */
   rotateControl?: CommonTheme,
-  textInput?: CommonTheme,
+  inputText?: CommonTheme,
 };
 
 export const defaultTheme: Theme = {
