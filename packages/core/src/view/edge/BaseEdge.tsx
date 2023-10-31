@@ -402,10 +402,7 @@ export default class BaseEdge extends Component<IProps> {
    */
   toFront() {
     const { graphModel, model } = this.props;
-    const { overlapMode } = graphModel;
-    if (overlapMode !== OverlapMode.INCREASE) {
-      graphModel.toFront(model.id);
-    }
+    graphModel.toFront(model.id);
   }
   /**
    * 不建议重写，如果要自定义边的形状，请重写getEdge方法。
