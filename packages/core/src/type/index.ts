@@ -269,6 +269,7 @@ export type TextStyle = {
   fontSize?: number;
   fontWeight?: string;
   fontFamily?: string;
+  [key: string]: any;
 };
 export type NodeTextStyle = TextStyle & {
   lineHeight?: number;

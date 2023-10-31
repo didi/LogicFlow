@@ -47,6 +47,7 @@ export default class TextEdit extends Component<IProps, IState> {
   static getDerivedStateFromProps(props) {
     const { graphModel } = props;
     const { transformModel, theme } = graphModel;
+    const { textInput } = theme;
     let { textEditElement } = graphModel;
     let autoStyle;
     if (textEditElement) {
@@ -106,6 +107,7 @@ export default class TextEdit extends Component<IProps, IState> {
           left,
           top,
           ...autoStyle,
+          ...textInput,
         },
       };
     }
