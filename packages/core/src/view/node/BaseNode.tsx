@@ -372,12 +372,11 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     }
   };
   /**
-   * 节点置顶，可以被某些不需要置顶的节点重写，如group节点。
+   *  @overridable 支持重写, 节点置顶，可以被某些不需要置顶的节点重写，如group节点。
    */
   toFront() {
     const { model, graphModel } = this.props;
-    const { overlapMode } = graphModel;
-    if (overlapMode !== OverlapMode.INCREASE && model.autoToFront) {
+    if (model.autoToFront) {
       graphModel.toFront(model.id);
     }
   }
@@ -416,7 +415,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     if (!isHitable) {
       nodeShape = (
         <g className={`${this.getStateClassName()} ${className}`} {...restAttributes}>
-          { nodeShapeInner }
+          {nodeShapeInner}
         </g>
       );
     } else {
@@ -435,7 +434,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
           onContextMenu={this.handleContextMenu}
           {...restAttributes}
         >
-          { nodeShapeInner }
+          {nodeShapeInner}
         </g>
       );
     }

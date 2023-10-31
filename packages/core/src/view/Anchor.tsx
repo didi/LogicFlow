@@ -94,9 +94,8 @@ class Anchor extends Component<IProps, IState> {
       anchorData, nodeModel, graphModel,
     } = this.props;
     const { overlapMode } = graphModel;
-    // nodeModel.setSelected(true);
     graphModel.selectNodeById(nodeModel.id);
-    if (overlapMode !== OverlapMode.INCREASE && nodeModel.autoToFront) {
+    if (nodeModel.autoToFront) {
       graphModel.toFront(nodeModel.id);
     }
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGSTART, {
@@ -346,25 +345,26 @@ class Anchor extends Component<IProps, IState> {
           {this.getAnchorShape()}
         </g>
         {this.isShowLine()
-        && (this.customTrajectory
-          ? this.customTrajectory(
-            { sourcePoint: { x: startX, y: startY },
-              targetPoint: {
-                x: endX, y: endY,
+          && (this.customTrajectory
+            ? this.customTrajectory(
+              {
+                sourcePoint: { x: startX, y: startY },
+                targetPoint: {
+                  x: endX, y: endY,
+                },
+                ...edgeStyle,
               },
-              ...edgeStyle,
-            },
-          )
-          : (
-            <Line
-              x1={startX}
-              y1={startY}
-              x2={endX}
-              y2={endY}
-              {...edgeStyle}
-              pointer-events="none"
-            />
-          ))}
+            )
+            : (
+              <Line
+                x1={startX}
+                y1={startY}
+                x2={endX}
+                y2={endY}
+                {...edgeStyle}
+                pointer-events="none"
+              />
+            ))}
       </g>
     );
   }
