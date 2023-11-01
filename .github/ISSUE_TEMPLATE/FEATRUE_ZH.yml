@@ -1,0 +1,16 @@
+name: Feature ZH
+description: 新的需求和提议
+title: "[Feature]: "
+labels: ["new feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的Feature提交
+  - type: textarea
+    id: background
+    attributes:
+      label: 背景&目的
+      description: 描述需求和提议的背景和目的
+    validations:
+      required: true
