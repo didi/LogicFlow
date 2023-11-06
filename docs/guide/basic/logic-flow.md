@@ -74,7 +74,7 @@ const graphData = {
 :::
 
 ::: tip properties是用来做什么的？
-properties的LogicFlow保留给具体业务场景使用的数据。
+properties是LogicFlow保留给具体业务场景使用的数据。
 
 例如：在审批流场景，我们定义某个节点，这个节点通过了，节点为绿色，不通过节点为红色。那么节点的数据描述可以为:
 ```js
