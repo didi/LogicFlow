@@ -97,6 +97,20 @@ class InsertNodeInPolyline {
   insetNode(nodeData): void {
     const { edges } = this._lf.graphModel;
     const nodeModel = this._lf.getNodeModelById(nodeData.id);
+
+    // fix: https://github.com/didi/LogicFlow/issues/1077
+    // 参照https://github.com/didi/LogicFlow/issues/454=>当getDefaultAnchor(){return []}表示：不显示锚点，也不允许其他节点连接到此节点
+    // 当getDefaultAnchor=[]，直接阻止下面进行edges的截断插入node相关逻辑
+    const anchorArray = nodeModel.getDefaultAnchor();
+    const isNotAllowConnect = !anchorArray || anchorArray.length === 0;
+    if (isNotAllowConnect) {
+      this._lf.graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
+        data: nodeData,
+        msg: '自定义类型节点不显示锚点，也不允许其他节点连接到此节点',
+      });
+      return;
+    }
+
     for (let i = 0; i < edges.length; i++) {
       // eslint-disable-next-line max-len
       const { crossIndex, crossPoints } = isNodeInSegment(

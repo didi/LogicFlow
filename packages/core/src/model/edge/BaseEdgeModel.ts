@@ -240,8 +240,10 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 内部方法，计算两个节点相连是起点位置
    */
-  getBeginAnchor(sourceNode, targetNode): Point {
-    let position;
+  getBeginAnchor(sourceNode, targetNode): Point | undefined {
+    // https://github.com/didi/LogicFlow/issues/1077
+    // 可能拿到的sourceAnchors为空数组，因此position可能返回为undefined
+    let position: Point | undefined;
     let minDistance;
     const sourceAnchors = getAnchors(sourceNode);
     sourceAnchors.forEach((anchor) => {
@@ -260,8 +262,10 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 内部方法，计算两个节点相连是终点位置
    */
-  getEndAnchor(targetNode): Point {
-    let position;
+  getEndAnchor(targetNode): Point | undefined {
+    // https://github.com/didi/LogicFlow/issues/1077
+    // 可能拿到的targetAnchors为空数组，因此position可能返回为undefined
+    let position: Point | undefined;
     let minDistance;
     const targetAnchors = getAnchors(targetNode);
     targetAnchors.forEach((anchor) => {
@@ -474,6 +478,14 @@ class BaseEdgeModel implements IBaseModel {
   setAnchors(): void {
     if (!this.sourceAnchorId || !this.startPoint) {
       const anchor = this.getBeginAnchor(this.sourceNode, this.targetNode);
+      if (!anchor && (!this.startPoint || !this.sourceAnchorId)) {
+        // https://github.com/didi/LogicFlow/issues/1077
+        // 当用户自定义getDefaultAnchor(){return []}时，表示：不显示锚点，也不允许其他节点连接到此节点
+        // 此时拿到的anchor=undefined，下面会直接报错
+        throw new Error(
+          '无法获取beginAnchor，请检查anchors相关逻辑，anchors不能为空',
+        );
+      }
       if (!this.startPoint) {
         this.startPoint = {
           x: anchor.x,
@@ -486,6 +498,14 @@ class BaseEdgeModel implements IBaseModel {
     }
     if (!this.targetAnchorId || !this.endPoint) {
       const anchor = this.getEndAnchor(this.targetNode);
+      if (!anchor && (!this.endPoint || !this.targetAnchorId)) {
+        // https://github.com/didi/LogicFlow/issues/1077
+        // 当用户自定义getDefaultAnchor(){return []}时，表示：不显示锚点，也不允许其他节点连接到此节点
+        // 此时拿到的anchor=undefined，下面会直接报错
+        throw new Error(
+          '无法获取endAnchor，请检查anchors相关逻辑，anchors不能为空',
+        );
+      }
       if (!this.endPoint) {
         this.endPoint = {
           x: anchor.x,
