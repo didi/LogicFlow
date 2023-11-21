@@ -202,3 +202,8 @@ please add wechat "logic-flow" to join the user group
 ### How to Contribute  
 
 LogicFlow is open to the outside, whether it is just fixing docment typo or a major reconstruction of the overall function of LogicFlow, we welcome it. For each of your PRs, we will carefully review, reply, and merge them. Details can see [LogicFlow Contribution Guides](https://github.com/didi/LogicFlow/blob/master/CONTRIBUTING.md).
+
+## Recommended Books
+LogicFlow supports the generation of structured data applicable to various process engines. If you are using Activiti process engine in your project, we recommend combining it with Mr. Hebo's book [《深入Activiti流程引擎：核心原理与高阶实战》](https://item.m.jd.com/product/13928958.html?gx=RnAomTM2bmCImZxDqYAkVCoIHuIYVqc), This book is very helpful for systematic learning and in-depth mastery of Activiti/Flowable usage.
+
+<image src="https://github.com/didi/LogicFlow/assets/8553969/f4492e40-d812-453e-a170-38fb4253338f" alt="《深入Activiti流程引擎：核心原理与高阶实战》" width="300"/>
