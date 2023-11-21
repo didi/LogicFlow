@@ -304,6 +304,7 @@ class MiniMap {
     // 5. 取比例最小的值，将渲染的画布缩小对应比例。
     const innerStyle = this.miniMapWrap.firstChild.style;
     const scale = Math.min(realWidthScale, realHeightScale);
+    innerStyle.pointerEvents = 'none';
     innerStyle.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`;
     innerStyle.transformOrigin = 'left top';
     innerStyle.height = `${bottom - Math.min(top, 0)}px`;
