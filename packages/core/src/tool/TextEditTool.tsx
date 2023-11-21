@@ -87,19 +87,23 @@ export default class TextEdit extends Component<IProps, IState> {
       } else if (textEditElement.BaseType === ElementType.NODE) {
         // 如果节点文案自动换行, 设置编辑框宽度
         const { nodeText: { overflowMode, lineHeight, wrapPadding, textWidth } } = theme;
-        const { width, modelType } = textEditElement;
+        const { width, modelType, textWidth: nodeTextWidth } = textEditElement;
+
+        const finalTextWidth = nodeTextWidth || textWidth || width;
         // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
         if ((modelType !== ModelType.TEXT_NODE && overflowMode === 'autoWrap')
         || (modelType === ModelType.TEXT_NODE && textWidth)) {
           autoStyle = {
             ...commonAutoStyle,
-            width: textWidth || width,
-            minWidth: textWidth || width,
+            width: finalTextWidth,
+            minWidth: finalTextWidth,
             lineHeight,
             padding: wrapPadding,
           };
         }
       }
+
+      console.log('autoStyle --->>>', autoStyle);
       const { x, y } = textEditElement.text;
       const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y]);
       return {
