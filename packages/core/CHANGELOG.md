@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.18](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.17...@logicflow/core@1.2.18) (2023-11-22)
+
+
+### Bug Fixes
+
+* **core:** anchorId missed after point adjusting([#1365](https://github.com/didi/LogicFlow/issues/1365)) ([d7778cc](https://github.com/didi/LogicFlow/commit/d7778cc7632b3cd60afadc18a47c4df60b23a587))
+* **core:** fix Cannot read property 'document' of undefined bug([#1433](https://github.com/didi/LogicFlow/issues/1433)) ([9e1a2c9](https://github.com/didi/LogicFlow/commit/9e1a2c957adb01610544da3ff09eef607d7c51f2))
+* **core:** rename textInput ([1681484](https://github.com/didi/LogicFlow/commit/1681484bcef0ae8a7fb5d54e6cefcc45d6020f8e))
+* **core:** zIndex problem in overlapMode([#1395](https://github.com/didi/LogicFlow/issues/1395)) ([ae41283](https://github.com/didi/LogicFlow/commit/ae412831c16b7c07e502852b0c00baa2b6d685db))
+* **core:** 修复 overflowMode 为 autoWrap 时，节点设置 textWidth 无效的 bug([#1432](https://github.com/didi/LogicFlow/issues/1432)) ([fa1cbc7](https://github.com/didi/LogicFlow/commit/fa1cbc7a4e2a4bb12b8c34997aaedd6f9bc552be))
+* prevent node without anchors using InsertNodeInPolyline([#1077](https://github.com/didi/LogicFlow/issues/1077)) ([6e10d3a](https://github.com/didi/LogicFlow/commit/6e10d3ad6e5b26daa6cad865bbca0eb326dfd54b))
+
+
+### Features
+
+* **core:** enable lf-text-input style setting([#1390](https://github.com/didi/LogicFlow/issues/1390)) ([8a8a0f9](https://github.com/didi/LogicFlow/commit/8a8a0f937e4428c0a811b4cc8102c03fec568653))
+
+
+
+
+
 ## [1.2.17](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.16...@logicflow/core@1.2.17) (2023-10-25)
 
 
