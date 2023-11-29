@@ -47,6 +47,12 @@ export const getCrossPointOfLine = (a: Point, b: Point, c: Point, d: Point) => {
 */
 export const isInSegment = (point, start, end) => {
   const { x, y } = point;
-  return (x - start.x) * (x - end.x) <= 0
-    && (y - start.y) * (y - end.y) <= 0;
+  const { x: startX, y: startY } = start;
+  const { x: endX, y: endY } = end;
+  const k = (endY - startY) / (endX - startX);
+  const b = startY - k * startX;
+  return x >= startX
+  && x <= endX
+  && y >= startY && y <= endY
+  && Math.abs(y - k * x + b) < Number.EPSILON;
 };

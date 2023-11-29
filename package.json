@@ -27,13 +27,16 @@
     "watch:extension": "lerna watch --scope @logicflow/extension -- lerna run build --scope @logicflow/extension",
     "test": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "babel-plugin-jsx-pragmatic": "^1.0.2"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.2.0",
     "@vuepress-reco/vuepress-plugin-back-to-top": "^1.6.0",
+    "babel-jest": "^29.7.0",
     "commitizen": "^4.2.4",
     "cz-lerna-changelog": "^2.0.3",
     "eslint": "^7.0.0",

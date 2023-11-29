@@ -3,6 +3,14 @@
   "include": [
     "src/**/*"
   ],
+  "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "experimentalDecorators": true,
+    "outDir": "es",
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "baseUrl": "./",
+  },
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
