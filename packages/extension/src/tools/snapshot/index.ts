@@ -34,7 +34,7 @@ class Snapshot {
   }
   triggerDownload(imgURI: string) {
     const evt = new MouseEvent('click', {
-      view: window,
+      view: document.defaultView,
       bubbles: false,
       cancelable: true,
     });
