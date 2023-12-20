@@ -87,7 +87,7 @@ function boundaryEvent(lf: any) {
       minX: bbox.minX + offset,
       maxX: bbox.maxX - offset,
       minY: bbox.minY + offset,
-      maxY: bbox.maxX - offset,
+      maxY: bbox.maxY - offset,
     };
     if (bx > outerBBox.minX && bx < outerBBox.maxX && by > outerBBox.minY && by < outerBBox.maxY) {
       if (!(bx > innerBBox.minX && bx < innerBBox.maxX && by > innerBBox.minY && by < innerBBox.maxY)) {
