@@ -1,0 +1,21 @@
+# Ignore artifacts:
+*.sh
+*.yml
+*.yaml
+*.svg
+*.gif
+*.log
+*.md
+
+.next
+.DS_Store
+CNAME
+AUTHORS
+LICENSE
+LICENSE
+
+node_modules
+es/
+lib/
+dist/
+public/

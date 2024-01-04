@@ -1,12 +1,9 @@
 {
-  "npmClient": "yarn",
+  "npmClient": "pnpm",
   "npmClientArgs": ["--no-package-lock", "--no-ci"],
   "version": "independent",
   "useWorkspaces": true,
-  "packages": [
-    "packages/core",
-    "packages/extension"
-  ],
+  "packages": ["packages/core", "packages/extension", "packages/engine"],
   "command": {
     "version": {
       "conventionalCommits": true

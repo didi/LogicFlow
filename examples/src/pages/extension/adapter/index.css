@@ -1,9 +1,0 @@
-.adpter-shape .lf-dnd-shape  {
-  display: inline-table;
-  width: 36px;
-  height: 36px;
-  border: 2px solid black;
-}
-.adpter-circle .lf-dnd-shape {
-  border-radius: 18px;
-}
