@@ -1,29 +1,38 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "allowJs": false,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
-    "noImplicitAny": false,
-    "module": "es2020",
-    "moduleResolution": "node",
+    "declaration": true,
+    "esModuleInterop": true,
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
-    "target": "es5",
-    "maxNodeModuleJsDepth": 5,
+    "target": "ES5",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+    // see more from: https://preactjs.com/guide/v10/typescript
+    // "jsx": "preserve",
+    // "jsxFactory": "h",
+    // "jsxFragmentFactory": "Fragment",
+    // "lib": ["DOM", "DOM.Iterable", "ESNext"]
+
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@/*": ["*"],
+    //   "@logicflow/core": ["./packages/core"]
+    // }
   },
-  "include": [
-    "packages/*",
-    "packages/**/*",
-    "examples"
-  ],
   "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.js",
-    ".eslintrc.js",
-    "**/*.d.ts",
-    "packages/core/types"
+    "**/node_modules",
+    "**/examples",
+    "**/*.test.ts",
+    "**/*.e2e.ts",
+    "**/es",
+    "**/lib"
   ]
 }
