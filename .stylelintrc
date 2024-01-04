@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-rational-order",
+    "stylelint-config-prettier"
+  ],
+  "plugins": ["stylelint-order"],
+  "customSyntax": "postcss-less",
+  "rules": {
+    "block-no-empty": null,
+    "function-name-case": "lower",
+    "comment-empty-line-before": null,
+    "no-invalid-double-slash-comments": null,
+    "no-descending-specificity": null,
+    "declaration-empty-line-before": null,
+    "no-duplicate-selectors": null,
+    "value-no-vendor-prefix": null,
+    "selector-pseudo-class-no-unknown": null,
+    "selector-class-pattern": null,
+    "keyframes-name-pattern": null,
+    "number-max-precision": null
+  }
+}
