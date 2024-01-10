@@ -1,6 +1,5 @@
-import { Component, h } from 'preact';
+import { Component } from 'preact';
 import { map } from 'lodash-es';
-// import { inject } from 'mobx-react';
 import GraphModel from '../model/GraphModel';
 import CanvasOverlay from './overlay/CanvasOverlay';
 import ToolOverlay from './overlay/ToolOverlay';
