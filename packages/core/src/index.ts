@@ -1,5 +1,5 @@
 // 统一对外导出
-import { observer as mobxObserver } from 'mobx-react'
+import { observer as mobxObserver } from 'mobx-preact'
 import { h } from 'preact'
 import LogicFlow from './LogicFlow'
 
@@ -9,9 +9,7 @@ export function observer<P>(props: P) {
   return mobxObserver(props as any)
 }
 
-export { LogicFlow, h }
-
-export { LogicFlowUtil }
+export { LogicFlow, h, LogicFlowUtil }
 
 export * from './type/index'
 export * from './view'
