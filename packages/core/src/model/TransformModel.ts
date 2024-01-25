@@ -2,6 +2,7 @@ import { observable, action } from '../util/mobx';
 import { EventType } from '../constant/constant';
 import EventEmitter from '../event/eventEmitter';
 import { PointTuple, ZoomParam } from '../type';
+import { EditConfigInterface } from './EditConfigModel';
 
 export interface TransformInterface {
   SCALE_X: number;
@@ -42,14 +43,15 @@ export default class TransformModel implements TransformInterface {
   @observable TRANSLATE_Y = 0;
   @observable ZOOM_SIZE = 0.04;
   eventCenter: EventEmitter;
+  editConfigModel: EditConfigInterface;
   translateLimitMinX: number;
   translateLimitMinY: number;
   translateLimitMaxX: number;
   translateLimitMaxY: number;
-  constructor(eventCenter, options) {
+  constructor(eventCenter, editConfigModel) {
     this.eventCenter = eventCenter;
-    const { stopMoveGraph = false } = options;
-    this.updateTranslateLimits(stopMoveGraph);
+    this.editConfigModel = editConfigModel;
+    this.updateTranslateLimits();
   }
   setZoomMiniSize(size: number): void {
     this.MINI_SCALE_SIZE = size;
@@ -203,7 +205,8 @@ export default class TransformModel implements TransformInterface {
   /**
    * 更新画布可以移动范围
    */
-  updateTranslateLimits(limit: boolean | 'vertical' | 'horizontal' | [number, number, number, number]) {
+  updateTranslateLimits() {
+    const limit = this.editConfigModel.stopMoveGraph ?? false;
     const boundary = Array.isArray(limit) && limit.length === 4
       ? limit
       : translateLimitsMap[limit.toString()];

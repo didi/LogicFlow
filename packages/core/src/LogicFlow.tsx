@@ -789,6 +789,7 @@ export default class LogicFlow {
    */
   updateEditConfig(config: EditConfigInterface) {
     this.graphModel.editConfigModel.updateEditConfig(config);
+    this.graphModel.transformModel.updateTranslateLimits();
   }
   /**
    * 获取流程图当前编辑相关设置
