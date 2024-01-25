@@ -789,6 +789,9 @@ export default class LogicFlow {
    */
   updateEditConfig(config: EditConfigInterface) {
     this.graphModel.editConfigModel.updateEditConfig(config);
+    if (config.stopMoveGraph !== undefined) {
+      this.graphModel.transformModel.updateTranslateLimits(config.stopMoveGraph);
+    }
   }
   /**
    * 获取流程图当前编辑相关设置
