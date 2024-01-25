@@ -367,7 +367,7 @@ graphModel.graphDataToModel(graphData)
 返回值： GraphConfigData
 
 ```js
-cosnt graphData = graphModel.modelToGraphData();
+const graphData = graphModel.modelToGraphData();
 console.log(graphData)
 ```
 
@@ -387,7 +387,7 @@ console.log(graphData)
 [EdgeModel](/api/baseEdgeModelApi.html)
 
 ```js
-cosnt edgeModel = graphModel.getEdgeModelById('edge_id');
+const edgeModel = graphModel.getEdgeModelById('edge_id');
 console.log(edgeModel)
 ```
 
@@ -408,7 +408,7 @@ console.log(edgeModel)
 
 
 ```js
-cosnt edgeModel = graphModel.getElement('edge_id');
+const edgeModel = graphModel.getElement('edge_id');
 console.log(edgeModel)
 ```
 
@@ -428,7 +428,7 @@ console.log(edgeModel)
 [EdgeModel](/api/baseEdgeModelApi.html) 
 
 ```js
-cosnt edgeModels = graphModel.getNodeEdges('node_id_1');
+const edgeModels = graphModel.getNodeEdges('node_id_1');
 console.log(edgeModels)
 ```
 
@@ -444,7 +444,7 @@ console.log(edgeModels)
 |isIgnoreCheck|boolean|true| 是否包括sourceNode和targetNode没有被选中的边,默认包括。 复制的时候不能包括此类边, 因为复制的时候不允许悬空的边|
 
 ```js
-cosnt elements = graphModel.getSelectElements(true);
+const elements = graphModel.getSelectElements(true);
 console.log(elements)
 ```
 
