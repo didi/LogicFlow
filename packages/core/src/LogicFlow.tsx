@@ -788,8 +788,9 @@ export default class LogicFlow {
    * @see todo docs link
    */
   updateEditConfig(config: EditConfigInterface) {
-    this.graphModel.editConfigModel.updateEditConfig(config);
-    this.graphModel.transformModel.updateTranslateLimits();
+    const { editConfigModel, transformModel } = this.graphModel;
+    editConfigModel.updateEditConfig(config);
+    transformModel.updateTranslateLimits();
   }
   /**
    * 获取流程图当前编辑相关设置
