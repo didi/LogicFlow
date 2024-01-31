@@ -791,6 +791,7 @@ export default class LogicFlow {
     if (config?.stopMoveGraph !== undefined) {
       transformModel.updateTranslateLimits(config.stopMoveGraph);
     }
+
     // 静默模式切换时，修改快捷键的启用状态
     config?.isSilentMode ? this.keyboard.disable() : this.keyboard.enable(true);
   }
