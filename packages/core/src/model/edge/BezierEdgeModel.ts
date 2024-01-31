@@ -108,13 +108,13 @@ export default class BezierEdgeModel extends BaseEdgeModel {
   }
   @action
   updateStartPoint(anchor) {
-    this.startPoint = anchor;
+    this.startPoint = Object.assign({}, anchor);
     this.updatePoints();
   }
 
   @action
   updateEndPoint(anchor) {
-    this.endPoint = anchor;
+    this.endPoint = Object.assign({}, anchor);
     this.updatePoints();
   }
   @action

@@ -1154,6 +1154,30 @@ class GraphModel {
     return edges;
   }
   /**
+   * 获取所有以此锚点为终点的边
+   */
+  @action getAnchorIncomingEdge(anchorId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.targetAnchorId === anchorId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
+   * 获取所有以此锚点为起点的边
+   */
+  @action getAnchorOutcomingEdge(anchorId) {
+    const edges = [];
+    this.edges.forEach(edge => {
+      if (edge.sourceAnchorId === anchorId) {
+        edges.push(edge);
+      }
+    });
+    return edges;
+  }
+  /**
    * 获取节点连接到的所有起始节点
    */
   @action getNodeIncomingNode(nodeId) {

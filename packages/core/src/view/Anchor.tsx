@@ -201,6 +201,17 @@ class Anchor extends Component<IProps, IState> {
     return customTrajectory;
   }
 
+  get relateEdges() {
+    const {
+      graphModel: { getAnchorIncomingEdge, getAnchorOutcomingEdge },
+      anchorData: { id },
+    } = this.props;
+    return {
+      incomingEdgeList: getAnchorIncomingEdge(id),
+      outcomingEdgeList: getAnchorOutcomingEdge(id),
+    };
+  }
+
   checkEnd: (event: MouseEvent) => BaseEdgeModel | null = (event) => {
     const {
       graphModel, nodeModel, anchorData: { x, y, id },
