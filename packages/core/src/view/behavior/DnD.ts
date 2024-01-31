@@ -32,7 +32,8 @@ export default class Dnd {
   }
 
   startDrag(nodeConfig: NewNodeConfig) {
-    if (!this.lf.options.isSilentMode) {
+    const { editConfigModel } = this.lf.graphModel;
+    if (!editConfigModel?.isSilentMode) {
       this.nodeConfig = nodeConfig;
       window.document.addEventListener('mouseup', this.stopDrag);
     }
