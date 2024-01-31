@@ -30,7 +30,8 @@ class Keyboard {
     const { lf } = options;
     this.target = lf.container;
     this.mousetrap = new Mousetrap(this.target);
-    if (options.keyboard.enabled) {
+    // 默认开启快捷键，且不是静默模式时enable
+    if (options.keyboard.enabled && !lf.options.isSilentMode) {
       this.enable(true);
     }
   }
