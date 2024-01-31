@@ -238,7 +238,7 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   /**
-   * 内部方法，计算两个节点相连是起点位置
+   * 内部方法，计算两个节点相连时的起点位置
    */
   getBeginAnchor(sourceNode, targetNode): Point | undefined {
     // https://github.com/didi/LogicFlow/issues/1077
@@ -260,7 +260,7 @@ class BaseEdgeModel implements IBaseModel {
   }
 
   /**
-   * 内部方法，计算两个节点相连是终点位置
+   * 内部方法，计算两个节点相连时的终点位置
    */
   getEndAnchor(targetNode): Point | undefined {
     // https://github.com/didi/LogicFlow/issues/1077
@@ -478,7 +478,7 @@ class BaseEdgeModel implements IBaseModel {
   setAnchors(): void {
     if (!this.sourceAnchorId || !this.startPoint) {
       const anchor = this.getBeginAnchor(this.sourceNode, this.targetNode);
-      if (!anchor && (!this.startPoint || !this.sourceAnchorId)) {
+      if (!anchor) {
         // https://github.com/didi/LogicFlow/issues/1077
         // 当用户自定义getDefaultAnchor(){return []}时，表示：不显示锚点，也不允许其他节点连接到此节点
         // 此时拿到的anchor=undefined，下面会直接报错
@@ -498,7 +498,7 @@ class BaseEdgeModel implements IBaseModel {
     }
     if (!this.targetAnchorId || !this.endPoint) {
       const anchor = this.getEndAnchor(this.targetNode);
-      if (!anchor && (!this.endPoint || !this.targetAnchorId)) {
+      if (!anchor) {
         // https://github.com/didi/LogicFlow/issues/1077
         // 当用户自定义getDefaultAnchor(){return []}时，表示：不显示锚点，也不允许其他节点连接到此节点
         // 此时拿到的anchor=undefined，下面会直接报错

@@ -272,7 +272,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   @action
   updateStartPoint(anchor) {
-    this.startPoint = anchor;
+    this.startPoint = Object.assign({}, anchor);
     this.updatePoints();
   }
 
@@ -286,7 +286,7 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
 
   @action
   updateEndPoint(anchor) {
-    this.endPoint = anchor;
+    this.endPoint = Object.assign({}, anchor);
     this.updatePoints();
   }
 
