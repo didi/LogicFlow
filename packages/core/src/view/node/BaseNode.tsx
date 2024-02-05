@@ -35,6 +35,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
   }
   stepDrag: StepDrag;
   contextMenuTime: number;
+  mouseUpDrag: boolean;
   startTime: number;
   clickTimer: number;
   modelDisposer: IReactionDisposer;
@@ -261,13 +262,17 @@ export default abstract class BaseNode extends Component<IProps, IState> {
     const { model } = this.props;
     model.isDragging = false;
   };
+  handleMouseUp = () => {
+    const { model } = this.props;
+    this.mouseUpDrag = model.isDragging;
+  };
   handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
+    const isDragging = this.mouseUpDrag === false;
     if (!this.startTime) return;
-    const time = new Date().getTime() - this.startTime;
-    if (time > 200) return; // 事件大于200ms，认为是拖拽, 不触发click事件。
     const { model, graphModel } = this.props;
+    if (!isDragging) return; // 如果是拖拽, 不触发click事件。
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData();
     const position = graphModel.getPointByClient({
@@ -426,6 +431,7 @@ export default abstract class BaseNode extends Component<IProps, IState> {
         <g
           className={`${this.getStateClassName()} ${className}`}
           onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
           onClick={this.handleClick}
           onMouseEnter={this.setHoverON}
           onMouseOver={this.setHoverON}
