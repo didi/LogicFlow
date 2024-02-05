@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.20](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.19...@logicflow/extension@1.2.20) (2024-02-05)
+
+
+### Bug Fixes
+
+* **extension:** 修复task判定附加边界事件时的坐标判定问题 ([5ffdffd](https://github.com/didi/LogicFlow/commit/5ffdffd37e70c076bae9a52f0fc685375e64022e))
+
+
+
+
+
 ## [1.2.19](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.18...@logicflow/extension@1.2.19) (2023-11-22)
 
 

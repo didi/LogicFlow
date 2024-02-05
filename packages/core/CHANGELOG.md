@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.19](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.18...@logicflow/core@1.2.19) (2024-02-05)
+
+
+### Bug Fixes
+
+* **core:** types build error ([fb4bb27](https://github.com/didi/LogicFlow/commit/fb4bb27602ca4cb9bd0f085a7421dbfa6049e18e))
+* 修复stopMoveGraph从true置为false后画布仍无法移动问题 ([37b5c4a](https://github.com/didi/LogicFlow/commit/37b5c4aced4cfb66040f563316c4206b5d26716f))
+* 修复静默模式切换后快捷键和拖拽节点状态不更新问题 ([#1491](https://github.com/didi/LogicFlow/issues/1491)) ([926f33e](https://github.com/didi/LogicFlow/commit/926f33e3f79ca148c00723c627d209f21f38fc25))
+
+
+### Features
+
+* **core:** add test for core ([6780155](https://github.com/didi/LogicFlow/commit/67801556fc104a3e77c70f7016a56dbe17f52185))
+
+
+
+
+
 ## [1.2.18](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.17...@logicflow/core@1.2.18) (2023-11-22)
 
 
