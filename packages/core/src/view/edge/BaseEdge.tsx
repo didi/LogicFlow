@@ -23,6 +23,7 @@ type IProps = {
 };
 export default class BaseEdge extends Component<IProps> {
   startTime: number;
+  mouseUpDrag: boolean;
   contextMenuTime: number;
   clickTimer: number;
   textRef = createRef();
@@ -324,17 +325,23 @@ export default class BaseEdge extends Component<IProps> {
   /**
    * 不支持重写
    */
-  handleMouseDown = (e) => {
+  handleMouseDown = (e: MouseEvent) => {
     e.stopPropagation();
     this.startTime = new Date().getTime();
   };
   /**
    * 不支持重写
    */
-  handleMouseUp = (e: MouseEvent) => {
+  handleMouseUp = () => {
+    const { model } = this.props;
+    this.mouseUpDrag = model.isDragging;
+  };
+  /**
+   * 不支持重写
+   */
+  handleClick = (e: MouseEvent) => {
     if (!this.startTime) return;
-    const time = new Date().getTime() - this.startTime;
-    if (time > 200) return; // 事件大于200ms，认为是拖拽。
+    if (this.mouseUpDrag) return; // 如果是拖拽，不触发click事件。
     const isRightClick = e.button === 2;
     if (isRightClick) return;
     // 这里 IE 11不能正确显示
@@ -425,6 +432,7 @@ export default class BaseEdge extends Component<IProps> {
             .join(' ')}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
+          onClick={this.handleClick}
           onContextMenu={this.handleContextMenu}
           onMouseOver={this.setHoverON}
           onMouseEnter={this.setHoverON}
