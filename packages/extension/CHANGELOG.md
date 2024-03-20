@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.22](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.20...@logicflow/extension@1.2.22) (2024-02-05)
+
+
+### Features
+
+* update @logicflow/core @logicflow/extension version to 1.2.21 ([55b865b](https://github.com/didi/LogicFlow/commit/55b865b381354a75b04d339fec2f10b34cd12738))
+
+
+
+
+
 ## [1.2.20](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.19...@logicflow/extension@1.2.20) (2024-02-05)
 
 
