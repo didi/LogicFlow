@@ -176,8 +176,7 @@ class Snapshot {
     */
     const base = this.lf.graphModel.rootEl.querySelector('.lf-base');
     const bbox = (base as Element).getBoundingClientRect();
-    const layout = document
-      .querySelector('.lf-canvas-overlay')
+    const layout = this.lf.container.querySelector('.lf-canvas-overlay')
       .getBoundingClientRect();
     const offsetX = bbox.x - layout.x;
     const offsetY = bbox.y - layout.y;
