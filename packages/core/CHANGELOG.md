@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.23](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.22...@logicflow/core@1.2.23) (2024-03-20)
+
+
+### Bug Fixes
+
+* 优化代码 ([10d311d](https://github.com/didi/LogicFlow/commit/10d311db4a816784bafe4266737d5af656716b6b))
+* 增加获取锚点关联边的能力&修复边的起终点移动时报错问题 ([543fff7](https://github.com/didi/LogicFlow/commit/543fff7c0a14ebe5b3b5ebf1c5df773c7e6a0dc5))
+
+
+### Features
+
+* 自定义连线支持指定锚点 ([d344d38](https://github.com/didi/LogicFlow/commit/d344d3801cbb0bcbcf699c0bf91e661c55d67890))
+
+
+
+
+
 ## [1.2.22](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.19...@logicflow/core@1.2.22) (2024-02-05)
 
 

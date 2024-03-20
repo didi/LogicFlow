@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.23](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.22...@logicflow/extension@1.2.23) (2024-03-20)
+
+
+### Bug Fixes
+
+* 修复多实例时非首个实例导出不正确问题 ([27148c0](https://github.com/didi/LogicFlow/commit/27148c0e9c9db64daa09b279cb2e3b1578fccc93))
+
+
+
+
+
 ## [1.2.22](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.20...@logicflow/extension@1.2.22) (2024-02-05)
 
 
