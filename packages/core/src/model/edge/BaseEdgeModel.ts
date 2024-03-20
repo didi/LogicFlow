@@ -1,4 +1,4 @@
-import { assign, cloneDeep } from 'lodash-es';
+import { assign, cloneDeep, find } from 'lodash-es';
 import { action, observable, computed, toJS } from '../../util/mobx';
 import { createUuid } from '../../util/uuid';
 import { getAnchors } from '../../util/node';
@@ -247,7 +247,7 @@ class BaseEdgeModel implements IBaseModel {
     let minDistance;
     const sourceAnchors = getAnchors(sourceNode);
     if (sourceAnchorId) {
-      position = sourceAnchors.find((anchor) => anchor.id === sourceAnchorId);
+      position = find(sourceAnchors, (anchor) => anchor.id === sourceAnchorId);
       // 如果指定了起始锚点，且指定锚点是节点拥有的锚点时，就把该点设置为起点
       if (position) {
         return position;
@@ -270,19 +270,19 @@ class BaseEdgeModel implements IBaseModel {
   /**
    * 内部方法，计算两个节点相连时的终点位置
    */
-  getEndAnchor(targetNode, targetNodeId): Point | undefined {
+  getEndAnchor(targetNode, targetAnchorId): Point | undefined {
     // https://github.com/didi/LogicFlow/issues/1077
     // 可能拿到的targetAnchors为空数组，因此position可能返回为undefined
     let position: Point | undefined;
     let minDistance;
     const targetAnchors = getAnchors(targetNode);
-    if (targetNodeId) {
-      position = targetAnchors.find((anchor) => anchor.id === targetNodeId);
+    if (targetAnchorId) {
+      position = find(targetAnchors, (anchor) => anchor.id === targetAnchorId);
       // 如果指定了终点锚点，且指定锚点是节点拥有的锚点时，就把该点设置为终点
       if (position) {
         return position;
       }
-      console.warn(`未在节点上找到指定的终点锚点${targetNodeId}，已使用默认锚点作为重点`);
+      console.warn(`未在节点上找到指定的终点锚点${targetAnchorId}，已使用默认锚点作为终点`);
     }
     targetAnchors.forEach((anchor) => {
       const distance = twoPointDistance(anchor, this.startPoint);
