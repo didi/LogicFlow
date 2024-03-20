@@ -6,6 +6,7 @@ type ShapeItem = {
   icon?: string;
   label?: string;
   className?: string;
+  disabled?: boolean;
   properties?: Record<string, any>;
   callback?: (lf: LogicFlow, container: HTMLElement) => void;
 };
@@ -66,6 +67,16 @@ class DndPanel {
       text.innerText = shapeItem.label;
       text.className = 'lf-dnd-text';
       el.appendChild(text);
+    }
+    if (shapeItem.disabled) {
+      el.classList.add('disabled');
+      // 保留callback的执行，可用于界面提示当前shapeItem的禁用状态
+      el.onmousedown = () => {
+        if (shapeItem.callback) {
+          shapeItem.callback(this.lf, this.domContainer);
+        }
+      };
+      return el;
     }
     el.onmousedown = () => {
       if (shapeItem.type) {

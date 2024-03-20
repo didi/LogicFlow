@@ -27,6 +27,7 @@ PatternItem：
 | 名称 | 类型 | 必选 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
 |type|string|非必须|无|指定用户鼠标可以拖入的节点类型，包括自定义节点类型， 不传则不会创建节点，只会触发callback|
+|disabled|boolean|非必须|无|节点是否为禁用状态|
 |text|string|非必须|无|创建节点的文本|
 |properties|object|非必须|无|创建节点的properties|
 |label|string|非必须|无|拖拽面板节点文本描述|
