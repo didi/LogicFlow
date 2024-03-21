@@ -58,6 +58,7 @@ class SelectionSelect {
       this.wrapper = wrapper;
       document.addEventListener('mousemove', this.__draw);
       document.addEventListener('mouseup', this.__drawOff);
+      document.addEventListener('wheel', this.__zoom, { passive: false });
     });
   }
   /**
@@ -141,6 +142,17 @@ class SelectionSelect {
       }
     });
     this.lf.emit('selection:selected', elements);
+  };
+  __zoom = (ev: WheelEvent) => {
+    ev.preventDefault();
+    const newEvent = new WheelEvent('wheel', {
+      deltaX: ev.deltaX,
+      deltaY: ev.deltaY,
+      clientX: ev.clientX,
+      clientY: ev.clientY,
+      ctrlKey: ev.ctrlKey,
+    });
+    this.lf.container?.querySelector('.lf-canvas-overlay[name="canvas-overlay"]')?.dispatchEvent(newEvent);
   };
   open() {
     this.__disabled = false;
