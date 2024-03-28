@@ -298,6 +298,15 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
+  updatePointsList(deltaX, deltaY): void {
+    this.pointsList.forEach(item => {
+      item.x += deltaX;
+      item.y += deltaY;
+    });
+    this.initPoints();
+  }
+
+  @action
   dragAppendStart() {
     // mobx observer 对象被iterator处理会有问题
     this.draggingPointList = this.pointsList.map(i => i);
