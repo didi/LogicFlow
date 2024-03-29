@@ -1013,16 +1013,24 @@ class GraphModel {
       const edgeModel = this.edges[i];
       const { x, y } = edgeModel.textPosition;
       const sourceMoveDistance = nodeIdMap[edgeModel.sourceNodeId];
+      const targetMoveDistance = nodeIdMap[edgeModel.targetNodeId];
       let textDistanceX;
       let textDistanceY;
-      if (sourceMoveDistance) {
+      if (sourceMoveDistance
+        && targetMoveDistance
+        && edgeModel.modelType === ModelType.POLYLINE_EDGE) {
+        // 移动框选区时，如果边polyline在框选范围内，则边的轨迹pointsList也要整体移动
         [textDistanceX, textDistanceY] = sourceMoveDistance;
-        edgeModel.moveStartPoint(textDistanceX, textDistanceY);
-      }
-      const targetMoveDistance = nodeIdMap[edgeModel.targetNodeId];
-      if (targetMoveDistance) {
-        [textDistanceX, textDistanceY] = targetMoveDistance;
-        edgeModel.moveEndPoint(textDistanceX, textDistanceY);
+        edgeModel.updatePointsList(textDistanceX, textDistanceY);
+      } else {
+        if (sourceMoveDistance) {
+          [textDistanceX, textDistanceY] = sourceMoveDistance;
+          edgeModel.moveStartPoint(textDistanceX, textDistanceY);
+        }
+        if (targetMoveDistance) {
+          [textDistanceX, textDistanceY] = targetMoveDistance;
+          edgeModel.moveEndPoint(textDistanceX, textDistanceY);
+        }
       }
       if (sourceMoveDistance || targetMoveDistance) {
         // https://github.com/didi/LogicFlow/issues/1191
