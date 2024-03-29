@@ -189,7 +189,6 @@
   border: 2px dashed rgba(24, 125, 255, 0.8);
   box-shadow: 0px 0px 3px 0px rgba(24, 125, 255, 0.5);
   cursor: move;
-  pointer-events: none;
 }
 .lf-edge-adjust-point {
   cursor: move;
