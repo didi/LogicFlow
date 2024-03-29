@@ -1016,7 +1016,9 @@ class GraphModel {
       const targetMoveDistance = nodeIdMap[edgeModel.targetNodeId];
       let textDistanceX;
       let textDistanceY;
-      if (sourceMoveDistance && targetMoveDistance && edgeModel.type === 'polyline') {
+      if (sourceMoveDistance
+        && targetMoveDistance
+        && edgeModel.modelType === ModelType.POLYLINE_EDGE) {
         // 移动框选区时，如果边polyline在框选范围内，则边的轨迹pointsList也要整体移动
         [textDistanceX, textDistanceY] = sourceMoveDistance;
         edgeModel.updatePointsList(textDistanceX, textDistanceY);
