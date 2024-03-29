@@ -1,1 +1,3 @@
-export const isIe = window.navigator.userAgent.match(/MSIE|Trident/) !== null;
+import { get } from 'lodash-es';
+
+export const isIe = get(window, 'navigator.userAgent', '').match(/MSIE|Trident/) !== null;
