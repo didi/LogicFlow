@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LOGIC FLOW</title>
+  <link rel="stylesheet" href="/core/dist/style/index.css">
+  <!-- <link rel="stylesheet" href="http://0.0.0.0:9099/src/style/index.css"> -->
+  <link rel="stylesheet" href="/extension/src/style/index.css">
+  <style>
+    html,body {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color: #FFF;
+    }
+    #app {
+      width: 1400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <button id="setDisabled">禁用面板circle</button>
+  <button id="setUsable">启用面板circle</button>
+  <div class="rules-graph">
+    <div id="app"></div>
+  </div>
+  <!-- <script src="/core/dist/logic-flow.js"></script> -->
+  <script src="http://localhost:9093/logic-flow.js"></script>
+  <script src="/DndPanel.js"></script>
+  <script type="module" src="./index.mjs"></script>
+  
+</body>
+</html>
