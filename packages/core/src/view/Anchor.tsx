@@ -266,7 +266,7 @@ class Anchor extends Component<IProps, IState> {
       const nodeData = targetNode.getData();
       graphModel.eventCenter.emit(EventType.CONNECTION_NOT_ALLOWED, {
         data: nodeData,
-        msg: targetMsg || sourceMsg,
+        msg: targetMsg || sourceMsg || '不允许添加连线',
       });
       return null;
     }
