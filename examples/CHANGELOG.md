@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/DymoneLewis/LogicFlow/compare/examples@1.2.10...examples@1.2.11) (2024-04-03)
+
+
+### Features
+
+* **core:** enable node rotation ([267ebc8](https://github.com/DymoneLewis/LogicFlow/commit/267ebc8ff65f461c831fc631b89028ca98305858))
+
+
+
+
+
 ## [1.2.10](https://github.com/didi/LogicFlow/compare/examples@1.2.9...examples@1.2.10) (2023-07-17)
 
 **Note:** Version bump only for package examples

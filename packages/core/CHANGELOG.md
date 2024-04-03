@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.24](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.23...@logicflow/core@1.2.24) (2024-04-03)
+
+
+### Bug Fixes
+
+* 修复nuxt使用报错 ([f8f7da9](https://github.com/didi/LogicFlow/commit/f8f7da9f87a0239eea7913a7c979a54940d6bd91))
+* 修复选区插件无法触发鼠标事件的问题，同时兼容 Ctrl + 滚轮事件 ([129f101](https://github.com/didi/LogicFlow/commit/129f101faf2c3aae3d25917eb68ccabadbb93ec3))
+* 锚点连线失败增加默认错误提示 ([05ed811](https://github.com/didi/LogicFlow/commit/05ed811591bee08951a404c70b44acd0f0a39643))
+
+
+
+
+
 ## [1.2.23](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.22...@logicflow/core@1.2.23) (2024-03-20)
 
 

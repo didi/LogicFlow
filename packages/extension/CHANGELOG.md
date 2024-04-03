@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.24](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.23...@logicflow/extension@1.2.24) (2024-04-03)
+
+
+### Bug Fixes
+
+* 修复选区插件无法触发鼠标事件的问题，同时兼容 Ctrl + 滚轮事件 ([129f101](https://github.com/didi/LogicFlow/commit/129f101faf2c3aae3d25917eb68ccabadbb93ec3))
+
+
+
+
+
 ## [1.2.23](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.22...@logicflow/extension@1.2.23) (2024-03-20)
 
 
