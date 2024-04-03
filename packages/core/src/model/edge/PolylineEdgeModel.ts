@@ -303,6 +303,10 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       item.x += deltaX;
       item.y += deltaY;
     });
+    const startPoint = this.pointsList[0];
+    this.startPoint = Object.assign({}, startPoint);
+    const endPoint = this.pointsList[this.pointsList.length - 1];
+    this.endPoint = Object.assign({}, endPoint);
     this.initPoints();
   }
 
