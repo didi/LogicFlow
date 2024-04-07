@@ -357,19 +357,26 @@ class Group {
     // 当外部直接设置多个BaseNode.zIndex=1时
     // 当点击某一个node时，由于这个this.topGroupZIndex是从-10000开始计算的，this.topGroupZIndex+1也就是-9999
     // 这就造成当前点击的node的zIndex远远比其它node的zIndex小，因此造成zIndex错乱问题
-    if (nodeZIndex > DEFAULT_TOP_Z_INDEX) {
-      // 说明this.topGroupZIndex已经失去意义，代表不了目前最高zIndex的group，需要重新校准
-      const allGroupNodes = this.lf.graphModel.nodes
-        .filter((node: BaseNodeModel) => node.isGroup);
-      let max = this.topGroupZIndex;
-      for (let i = 0; i < allGroupNodes.length; i++) {
-        const groupNode = allGroupNodes[i];
-        if (groupNode.zIndex > max) {
-          max = groupNode.zIndex;
-        }
+    // if (nodeZIndex > DEFAULT_TOP_Z_INDEX) {
+
+    // 如果此时this.topGroupZIndex=-10000
+    // 然后此时一个node.zIndex=1，一个node.zIndex=-10000，一个node.zIndex=-9999
+    // 当点击node.zIndex=-10000时，此时node会变为node.zIndex=-9999
+    // 但是它还是比其它两个节点的zIndex小，也就是点击这个node还是无法让它zIndex最高
+    // 因此无法使用nodeZIndex > DEFAULT_TOP_Z_INDEX
+    // 或者 nodeZIndex > DEFAULT_BOTTOM_Z_INDEX
+    // 或者 nodeZIndex > this.topGroupZIndex
+    const allGroupNodes = this.lf.graphModel.nodes
+      .filter((node: BaseNodeModel) => node.isGroup);
+    let max = this.topGroupZIndex;
+    for (let i = 0; i < allGroupNodes.length; i++) {
+      const groupNode = allGroupNodes[i];
+      if (groupNode.zIndex > max) {
+        max = groupNode.zIndex;
       }
-      this.topGroupZIndex = max;
     }
+    this.topGroupZIndex = max;
+    // }
   };
   /**
    * 1. 分组节点默认在普通节点下面。
