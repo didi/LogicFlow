@@ -352,6 +352,25 @@ class Group {
     this.activeGroup = newGroup;
     this.activeGroup.setAllowAppendChild(true);
   };
+  checkAndCorrectTopGroupZIndex = (nodeZIndex: number) => {
+    // https://github.com/didi/LogicFlow/issues/1535
+    // 当外部直接设置多个BaseNode.zIndex=1时
+    // 当点击某一个node时，由于这个this.topGroupZIndex是从-10000开始计算的，this.topGroupZIndex+1也就是-9999
+    // 这就造成当前点击的node的zIndex远远比其它node的zIndex小，因此造成zIndex错乱问题
+    if (nodeZIndex > DEFAULT_TOP_Z_INDEX) {
+      // 说明this.topGroupZIndex已经失去意义，代表不了目前最高zIndex的group，需要重新校准
+      const allGroupNodes = this.lf.graphModel.nodes
+        .filter((node: BaseNodeModel) => node.isGroup);
+      let max = this.topGroupZIndex;
+      for (let i = 0; i < allGroupNodes.length; i++) {
+        const groupNode = allGroupNodes[i];
+        if (groupNode.zIndex > max) {
+          max = groupNode.zIndex;
+        }
+      }
+      this.topGroupZIndex = max;
+    }
+  };
   /**
    * 1. 分组节点默认在普通节点下面。
    * 2. 分组节点被选中后，会将分组节点以及其内部的其他分组节点放到其余分组节点的上面。
@@ -360,6 +379,7 @@ class Group {
    */
   nodeSelected = ({ data, isMultiple, isSelected }) => {
     const nodeModel = this.lf.getNodeModelById(data.id);
+    this.checkAndCorrectTopGroupZIndex(nodeModel.zIndex);
     this.toFrontGroup(nodeModel);
     // 重置所有的group zIndex,防止group节点zIndex增长为正。
     if (this.topGroupZIndex > DEFAULT_TOP_Z_INDEX) {
