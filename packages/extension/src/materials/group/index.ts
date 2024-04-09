@@ -5,6 +5,7 @@ import LogicFlow, {
   GraphConfigData,
   EdgeConfig,
   EventType,
+  NodeData,
 } from '@logicflow/core';
 import GroupNode from './GroupNode';
 
@@ -278,6 +279,9 @@ class Group {
           });
         }
       });
+
+      // 初始化nodes时进行this.topGroupZIndex的校准更新
+      this.checkAndCorrectTopGroupZIndex(data.nodes);
     }
   };
   appendNodeToGroup = ({ data }) => {
@@ -307,6 +311,8 @@ class Group {
       data.children.forEach((nodeId) => {
         this.nodeGroupMap.set(nodeId, data.id);
       });
+      // 新增node时进行this.topGroupZIndex的校准更新
+      this.checkAndCorrectTopGroupZIndex([data]);
       this.nodeSelected({ data, isSelected: false, isMultiple: false });
     }
     if (!group) return;
@@ -351,6 +357,61 @@ class Group {
     }
     this.activeGroup = newGroup;
     this.activeGroup.setAllowAppendChild(true);
+  };
+  findNodeAndChildMaxZIndex = (nodeModel: BaseNodeModel) => {
+    let maxZIndex = DEFAULT_BOTTOM_Z_INDEX;
+    if (nodeModel.isGroup) {
+      maxZIndex = nodeModel.zIndex > maxZIndex ? nodeModel.zIndex : maxZIndex;
+    }
+    if (nodeModel.children) {
+      nodeModel.children.forEach((nodeId: string) => {
+        if (typeof nodeId === 'object') {
+          // 正常情况下, GroupNodeModel.children是一个id数组，这里只是做个兼容
+          // @ts-ignore
+          nodeId = nodeId.id;
+        }
+        const child = this.lf.getNodeModelById(nodeId);
+        if (child.isGroup) {
+          const childMaxZIndex = this.findNodeAndChildMaxZIndex(child);
+          maxZIndex = childMaxZIndex > maxZIndex ? childMaxZIndex : maxZIndex;
+        }
+      });
+    }
+    return maxZIndex;
+  };
+  checkAndCorrectTopGroupZIndex = (nodes: NodeData[]) => {
+    // 初始化时/增加新节点时，找出新增nodes的最大zIndex
+    let maxZIndex = DEFAULT_BOTTOM_Z_INDEX;
+    nodes.forEach((node: NodeData) => {
+      const nodeModel = this.lf.getNodeModelById(node.id);
+      const currentNodeMaxZIndex = this.findNodeAndChildMaxZIndex(nodeModel);
+      if (currentNodeMaxZIndex > maxZIndex) {
+        maxZIndex = currentNodeMaxZIndex;
+      }
+    });
+
+    if (this.topGroupZIndex >= maxZIndex) {
+      // 一般是初始化时/增加新节点时发生，因为外部强行设置了一个很大的zIndex
+      // 删除节点不会影响目前最高zIndex的赋值
+      return;
+    }
+    // 新增nodes中如果存在zIndex比this.topGroupZIndex大
+    // 说明this.topGroupZIndex已经失去意义，代表不了目前最高zIndex的group，需要重新校准
+
+    // https://github.com/didi/LogicFlow/issues/1535
+    // 当外部直接设置多个BaseNode.zIndex=1时
+    // 当点击某一个node时，由于这个this.topGroupZIndex是从-10000开始计算的，this.topGroupZIndex+1也就是-9999
+    // 这就造成当前点击的node的zIndex远远比其它node的zIndex小，因此造成zIndex错乱问题
+    const allGroupNodes = this.lf.graphModel.nodes
+      .filter((node: BaseNodeModel) => node.isGroup);
+    let max = this.topGroupZIndex;
+    for (let i = 0; i < allGroupNodes.length; i++) {
+      const groupNode = allGroupNodes[i];
+      if (groupNode.zIndex > max) {
+        max = groupNode.zIndex;
+      }
+    }
+    this.topGroupZIndex = max;
   };
   /**
    * 1. 分组节点默认在普通节点下面。
