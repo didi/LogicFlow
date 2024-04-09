@@ -384,14 +384,14 @@ class Control extends Component<IProps> {
    * 由于将拖拽放大缩小改成丝滑模式，这个时候需要在拖拽结束的时候，将节点的位置更新到grid上.
    */
   onDragEnd = () => {
-    // 先触发onDragging()->更新边->再触发用户自定义的getDefaultAnchor()，所以onDragging()拿到的anchors是滞后的
-    // 为了正确设置最终的位置，应该在拖拽结束的时候，再设置一次边的Point位置，此时拿到的anchors是最新的
-    this.updateEdgePointByAnchors();
-
     const { gridSize = 1 } = this.graphModel;
     const x = gridSize * Math.round(this.nodeModel.x / gridSize);
     const y = gridSize * Math.round(this.nodeModel.y / gridSize);
     this.nodeModel.moveTo(x, y);
+
+    // 先触发onDragging()->更新边->再触发用户自定义的getDefaultAnchor()，所以onDragging()拿到的anchors是滞后的
+    // 为了正确设置最终的位置，应该在拖拽结束的时候，再设置一次边的Point位置，此时拿到的anchors是最新的
+    this.updateEdgePointByAnchors();
   };
   render() {
     const {
