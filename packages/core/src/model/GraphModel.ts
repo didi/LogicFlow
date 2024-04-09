@@ -380,23 +380,7 @@ class GraphModel {
       return;
     }
     if (graphData.nodes) {
-      this.nodes = map(graphData.nodes, node => {
-        const Model = this.getModel(node.type);
-        if (!Model) {
-          throw new Error(`找不到${node.type}对应的节点。`);
-        }
-        const { x: nodeX, y: nodeY } = node;
-        // 根据 grid 修正节点的 x, y
-        if (nodeX && nodeY) {
-          node.x = snapToGrid(nodeX, this.gridSize);
-          node.y = snapToGrid(nodeY, this.gridSize);
-          if (typeof node.text === 'object') {
-            node.text.x -= getGridOffset(nodeX, this.gridSize);
-            node.text.y -= getGridOffset(nodeY, this.gridSize);
-          }
-        }
-        return new Model(node, this);
-      });
+      this.nodes = map(graphData.nodes, (node: NodeConfig) => this.getModelAfterSnapToGrid(node));
     } else {
       this.nodes = [];
     }
@@ -681,13 +665,7 @@ class GraphModel {
     if (nodeOriginData.id && this.nodesMap[nodeConfig.id]) {
       delete nodeOriginData.id;
     }
-    const Model = this.getModel(nodeOriginData.type);
-    if (!Model) {
-      throw new Error(`找不到${nodeOriginData.type}对应的节点，请确认是否已注册此类型节点。`);
-    }
-    nodeOriginData.x = snapToGrid(nodeOriginData.x, this.gridSize);
-    nodeOriginData.y = snapToGrid(nodeOriginData.y, this.gridSize);
-    const nodeModel = new Model(nodeOriginData, this);
+    const nodeModel = this.getModelAfterSnapToGrid(nodeOriginData);
     this.nodes.push(nodeModel);
     const nodeData = nodeModel.getData();
     const eventData: Record<string, any> = { data: nodeData };
@@ -697,7 +675,35 @@ class GraphModel {
     this.eventCenter.emit(eventType, eventData);
     return nodeModel;
   }
-
+  /**
+   * 将node节点位置进行grid修正
+   * 同时处理node内文字的偏移量
+   * 返回一个位置修正过的复制节点NodeModel
+   * @param node
+   */
+  getModelAfterSnapToGrid(node: NodeConfig) {
+    const Model = this.getModel(node.type);
+    if (!Model) {
+      throw new Error(`找不到${node.type}对应的节点，请确认是否已注册此类型节点。`);
+    }
+    const { x: nodeX, y: nodeY } = node;
+    // 根据 grid 修正节点的 x, y
+    if (nodeX && nodeY) {
+      node.x = snapToGrid(nodeX, this.gridSize);
+      node.y = snapToGrid(nodeY, this.gridSize);
+      if (typeof node.text === 'object') {
+        // 原来的处理是：node.text.x -= getGridOffset(nodeX, this.gridSize);
+        // 由于snapToGrid()使用了Math.round()四舍五入的做法，因此无法判断需要执行
+        // node.text.x = node.text.x + getGridOffset()
+        // 还是
+        // node.text.x = node.text.x - getGridOffset()
+        // 直接改为node.x - nodeX就可以满足上面的要求
+        node.text.x += (node.x - nodeX);
+        node.text.y += (node.y - nodeY);
+      }
+    }
+    return new Model(node, this);
+  }
   /**
   * 克隆节点
   * @param nodeId 节点Id
