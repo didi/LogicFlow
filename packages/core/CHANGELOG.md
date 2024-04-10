@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.25](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.24...@logicflow/core@1.2.25) (2024-04-03)
+
+
+### Bug Fixes
+
+* 框选拖动折线时更新起终点位置 ([ad3afe1](https://github.com/didi/LogicFlow/commit/ad3afe1b3de4c30e9acd5d19ea49d0cb7f04cfd1))
+
+
+
+
+
 ## [1.2.24](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.23...@logicflow/core@1.2.24) (2024-04-03)
 
 
