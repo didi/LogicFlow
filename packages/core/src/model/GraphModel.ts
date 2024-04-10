@@ -1,4 +1,4 @@
-import { map } from 'lodash-es';
+import { map, merge } from 'lodash-es';
 import { action, observable, computed } from '../util/mobx';
 import BaseNodeModel from './node/BaseNodeModel';
 import BaseEdgeModel from './edge/BaseEdgeModel';
@@ -1220,7 +1220,7 @@ class GraphModel {
    * todo docs link
    */
   @action setTheme(style: Theme) {
-    this.theme = updateTheme({ ...this.theme, ...style });
+    this.theme = merge(this.theme, style);
   }
   /**
    * 重新设置画布的宽高
