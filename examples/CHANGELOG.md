@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/didi/LogicFlow/compare/examples@1.2.10...examples@1.2.13) (2024-04-10)
+
+
+### Bug Fixes
+
+* 更新readme logo & publish 1.2.25 ([4da3db7](https://github.com/didi/LogicFlow/commit/4da3db7aebc892e685269340ca38a0b9a4f68c56))
+
+
+### Features
+
+* **core:** enable node rotation ([267ebc8](https://github.com/didi/LogicFlow/commit/267ebc8ff65f461c831fc631b89028ca98305858))
+
+
+
+
+
 ## [1.2.12](https://github.com/DymoneLewis/LogicFlow/compare/examples@1.2.11...examples@1.2.12) (2024-04-03)
 
 **Note:** Version bump only for package examples
