@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.26](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.24...@logicflow/core@1.2.26) (2024-04-10)
+
+
+### Bug Fixes
+
+* **core:** snap the text pos of cloneNode to grid([#1545](https://github.com/didi/LogicFlow/issues/1545)) ([dc661bd](https://github.com/didi/LogicFlow/commit/dc661bd1a01c740eb886da8a98142d02dacced2d))
+* 更新readme logo & publish 1.2.25 ([4da3db7](https://github.com/didi/LogicFlow/commit/4da3db7aebc892e685269340ca38a0b9a4f68c56))
+* 框选拖动折线时更新起终点位置 ([27ca25b](https://github.com/didi/LogicFlow/commit/27ca25b02014e9b8f742702b70c0389687a6f4d5))
+
+
+
+
+
 ## [1.2.25](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.24...@logicflow/core@1.2.25) (2024-04-03)
 
 
