@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://site.logic-flow.cn" target="_blank">
     <img
-      src="https://site.logic-flow.cn/docs/_images/logo.png"
+      src="https://site.logic-flow.cn/logo.png"
       alt="LogicFlow logo"
       width="250"
     />
