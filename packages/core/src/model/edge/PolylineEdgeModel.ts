@@ -209,7 +209,10 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       default:
         break;
     }
-    list[0] = startCrossPoint;
+    // 如果线段和形状没有交点时startCrossPoint会为undefined导致后续计算报错
+    if (startCrossPoint) {
+      list[0] = startCrossPoint;
+    }
     const endPointDirection = segmentDirection(pre, end);
     let endCrossPoint = list[list.length - 1];
     switch (targetModelType) {
@@ -236,7 +239,10 @@ export default class PolylineEdgeModel extends BaseEdgeModel {
       default:
         break;
     }
-    list[list.length - 1] = endCrossPoint;
+    // 如果线段和形状没有交点时startCrossPoint会为undefined导致后续计算报错
+    if (endCrossPoint) {
+      list[list.length - 1] = endCrossPoint;
+    }
     return list;
   }
 
