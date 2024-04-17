@@ -72,7 +72,17 @@ class Control extends Component<IProps> {
     this.nodeModel.moveText(deltaX / 2, deltaY / 2);
   };
   // 计算control拖动后，节点的宽高
-  getResize = ({ index, deltaX, deltaY, width, height, PCTResizeInfo, pct = 1 }) => {
+  getResize = ({
+    index,
+    deltaX,
+    deltaY,
+    width,
+    height,
+    PCTResizeInfo,
+    pct = 1,
+    freezeWidth = false,
+    freezeHeight = false,
+  }) => {
     const resize = { width, height, deltaX, deltaY };
     if (PCTResizeInfo) {
       const sensitivity = 4; // 越低越灵敏
@@ -138,22 +148,23 @@ class Control extends Component<IProps> {
       resize.deltaY = deltaY / pct;
       return resize;
     }
+    // 如果限制了宽/高不变，对应的width/height保持一致
     switch (index) {
       case 0:
-        resize.width = width - deltaX * pct;
-        resize.height = height - deltaY * pct;
+        resize.width = freezeWidth ? width : width - deltaX * pct;
+        resize.height = freezeHeight ? height : height - deltaY * pct;
         break;
       case 1:
-        resize.width = width + deltaX * pct;
-        resize.height = height - deltaY * pct;
+        resize.width = freezeWidth ? width : width + deltaX * pct;
+        resize.height = freezeHeight ? height : height - deltaY * pct;
         break;
       case 2:
-        resize.width = width + deltaX * pct;
-        resize.height = height + deltaY * pct;
+        resize.width = freezeWidth ? width : width + deltaX * pct;
+        resize.height = freezeHeight ? height : height + deltaY * pct;
         break;
       case 3:
-        resize.width = width - deltaX * pct;
-        resize.height = height + deltaY * pct;
+        resize.width = freezeWidth ? width : width - deltaX * pct;
+        resize.height = freezeHeight ? height : height + deltaY * pct;
         break;
       default:
         break;
@@ -191,9 +202,25 @@ class Control extends Component<IProps> {
   };
   // 矩形更新
   updateRect = ({ deltaX, deltaY }) => {
-    const { id, x, y, width, height, radius, PCTResizeInfo } = this.nodeModel as RectNodeModel;
+    const {
+      id,
+      x,
+      y,
+      width,
+      height,
+      radius,
+      PCTResizeInfo,
+    } = this.nodeModel as RectNodeModel;
+    const {
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.nodeModel;
     // 更新中心点位置，更新文案位置
     const { index } = this;
+    const freezeWidth = (minWidth === maxWidth);
+    const freezeHeight = (minHeight === maxHeight);
     const size = this.getResize({
       index,
       deltaX,
@@ -202,14 +229,10 @@ class Control extends Component<IProps> {
       height,
       PCTResizeInfo,
       pct: 1,
+      freezeWidth,
+      freezeHeight,
     });
     // 限制放大缩小的最大最小范围
-    const {
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-    } = this.nodeModel;
     if (size.width < minWidth
       || size.width > maxWidth
       || size.height < minHeight
@@ -219,7 +242,11 @@ class Control extends Component<IProps> {
       this.dragHandler.cancelDrag();
       return;
     }
-    this.updatePosition({ deltaX: size.deltaX, deltaY: size.deltaY });
+    // 如果限制了宽/高不变，对应的x/y不产生位移
+    this.updatePosition({
+      deltaX: freezeWidth ? 0 : size.deltaX,
+      deltaY: freezeHeight ? 0 : size.deltaY,
+    });
     // 更新宽高
     this.nodeModel.width = size.width;
     this.nodeModel.height = size.height;
@@ -253,6 +280,14 @@ class Control extends Component<IProps> {
   updateEllipse = ({ deltaX, deltaY }) => {
     const { id, rx, ry, x, y, PCTResizeInfo } = this.nodeModel as EllipseNodeModel;
     const { index } = this;
+    const {
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.nodeModel;
+    const freezeWidth = (minWidth === maxWidth);
+    const freezeHeight = (minHeight === maxHeight);
     const width = rx;
     const height = ry;
     const size = this.getResize({
@@ -263,14 +298,10 @@ class Control extends Component<IProps> {
       height,
       PCTResizeInfo,
       pct: 1 / 2,
+      freezeWidth,
+      freezeHeight,
     });
     // 限制放大缩小的最大最小范围
-    const {
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-    } = this.nodeModel;
     if (size.width < (minWidth / 2)
       || size.width > (maxWidth / 2)
       || size.height < (minHeight / 2)
@@ -280,7 +311,11 @@ class Control extends Component<IProps> {
       return;
     }
     // 更新中心点位置，更新文案位置
-    this.updatePosition({ deltaX: size.deltaX, deltaY: size.deltaY });
+    // 如果限制了宽/高不变，对应的x/y不产生位移
+    this.updatePosition({
+      deltaX: freezeWidth ? 0 : size.deltaX,
+      deltaY: freezeHeight ? 0 : size.deltaY,
+    });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
     this.nodeModel.rx = size.width;
@@ -309,6 +344,14 @@ class Control extends Component<IProps> {
   updateDiamond = ({ deltaX, deltaY }) => {
     const { id, rx, ry, x, y, PCTResizeInfo } = this.nodeModel as DiamondNodeModel;
     const { index } = this;
+    const {
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.nodeModel;
+    const freezeWidth = (minWidth === maxWidth);
+    const freezeHeight = (minHeight === maxHeight);
     const width = rx;
     const height = ry;
     const size = this.getResize({
@@ -319,14 +362,10 @@ class Control extends Component<IProps> {
       height,
       PCTResizeInfo,
       pct: 1 / 2,
+      freezeWidth,
+      freezeHeight,
     });
     // 限制放大缩小的最大最小范围
-    const {
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-    } = this.nodeModel;
     if (size.width < (minWidth / 2)
       || size.width > (maxWidth / 2)
       || size.height < (minHeight / 2)
@@ -336,7 +375,11 @@ class Control extends Component<IProps> {
       return;
     }
     // 更新中心点位置，更新文案位置
-    this.updatePosition({ deltaX: size.deltaX, deltaY: size.deltaY });
+    // 如果限制了宽/高不变，对应的x/y不产生位移
+    this.updatePosition({
+      deltaX: freezeWidth ? 0 : size.deltaX,
+      deltaY: freezeHeight ? 0 : size.deltaY,
+    });
     // 更新rx ry,宽高为计算属性自动更新
     // @ts-ignore
     this.nodeModel.rx = size.width;
