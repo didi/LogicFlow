@@ -1,4 +1,4 @@
-import { assign } from 'lodash-es';
+import { merge } from 'lodash-es';
 import { VNode } from 'preact';
 import { GridOptions } from './view/overlay/Grid';
 import { BackgroundConfig } from './view/overlay/BackgroundOverlay';
@@ -149,7 +149,7 @@ export function get(options: Definition) {
     throw new Error('width或height不支持传入字符串，请传数字');
   }
   if (grid) {
-    options.grid = assign({
+    options.grid = merge({
       size: 20,
       type: 'dot',
       visible: true,
@@ -159,7 +159,7 @@ export function get(options: Definition) {
       },
     }, grid);
   }
-  return assign({}, defaults, options);
+  return merge({}, defaults, options);
 }
 
 // 默认 options
