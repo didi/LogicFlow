@@ -100,6 +100,12 @@ window.onload = function () {
         type: 'resizable-diamond',
         x: 500,
         y: 100,
+        properties: {
+          nodeSize: {
+            rx: 50,
+            ry: 30,
+          },
+        },
       },
       {
         id: 'diamond_33',
