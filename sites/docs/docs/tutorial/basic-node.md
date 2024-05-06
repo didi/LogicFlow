@@ -9,7 +9,7 @@ order: 1
 
 # 节点 Node
 
-LogicFlow 的内置了一些基础节点，开发者在实际应用场景中，可以基于这些基础节点，定义符合自己业务逻辑的节点。
+LogicFlow 内置了一些基础节点，开发者在实际应用场景中，可以基于这些基础节点，定义符合自己业务逻辑的节点。
 
 ## 认识基础节点
 
@@ -18,10 +18,10 @@ LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连�
 1. 矩形 --- [rect](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect)
 1. 圆形 --- [circle](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle)
 1. 椭圆 --- [ellipse](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse)
-1. 多边形 - [polygon](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon)
-1. 菱形 -- `diamond`
+1. 多边形 --- [polygon](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon)
+1. 菱形 --- `diamond`
 1. 文本 --- [text](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text)
-1. HTML -- `html`
+1. HTML --- `html`
 
 <code id="node-shapes" src="../../src/tutorial/basic/node/shapes"></code>
 

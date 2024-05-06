@@ -1,6 +1,7 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/es/index.css';
+// import '@logicflow/core/es/index.css';
+import '@logicflow/core/dist/style/index.css';
 import './index.less';
 
 import StepNode from './node/stepNode';
@@ -95,7 +96,7 @@ const data = {
       targetNodeId: '2',
       type: 'polyline',
       startPoint: {
-        x: 140,
+        x: 135,
         y: 200,
       },
       endPoint: {
@@ -125,7 +126,7 @@ const data = {
       targetNodeId: '5',
       type: 'polyline',
       startPoint: {
-        x: 540,
+        x: 535,
         y: 100,
       },
       endPoint: {
@@ -141,7 +142,7 @@ const data = {
       type: 'polyline',
       startPoint: {
         x: 280,
-        y: 225,
+        y: 220,
       },
       endPoint: {
         x: 420,
@@ -155,7 +156,7 @@ const data = {
       targetNodeId: '6',
       type: 'polyline',
       startPoint: {
-        x: 540,
+        x: 535,
         y: 300,
       },
       endPoint: {
@@ -164,7 +165,7 @@ const data = {
       },
       pointsList: [
         {
-          x: 540,
+          x: 535,
           y: 300,
         },
         {
@@ -211,7 +212,7 @@ const data = {
       targetNodeId: '7',
       type: 'polyline',
       startPoint: {
-        x: 540,
+        x: 535,
         y: 300,
       },
       endPoint: {
@@ -220,7 +221,7 @@ const data = {
       },
       pointsList: [
         {
-          x: 540,
+          x: 535,
           y: 300,
         },
         {
@@ -246,7 +247,6 @@ const data = {
       ],
       properties: { level: 3 },
     },
-
     {
       id: 'edges-8',
       sourceNodeId: '7',
@@ -254,11 +254,11 @@ const data = {
       type: 'polyline',
       startPoint: {
         x: 720,
-        y: 365,
+        y: 360,
       },
       endPoint: {
         x: 940,
-        y: 365,
+        y: 360,
       },
       properties: {
         level: 4,
@@ -268,11 +268,12 @@ const data = {
 };
 const SilentConfig = {
   isSilentMode: true,
-  stopScrollGraph: true,
-  // stopMoveGraph: true,
+  // stopScrollGraph: true,
+  stopMoveGraph: 'vertical',
   stopZoomGraph: true,
   adjustNodePosition: true,
   allowRotation: false,
+  hoverOutline: false,
 };
 const styleConfig: Partial<LogicFlow.Options> = {
   style: {
@@ -289,7 +290,12 @@ const styleConfig: Partial<LogicFlow.Options> = {
       stroke: '#3487fc',
     },
     polyline: {
-      stroke: '#d2d2d2',
+      stroke: '#A7AEBC',
+    },
+    outline: {
+      hover: {
+        stroke: 'none',
+      },
     },
   },
 };
@@ -297,7 +303,12 @@ const styleConfig: Partial<LogicFlow.Options> = {
 export default class Example extends React.Component {
   private container!: HTMLDivElement;
   lf!: LogicFlow;
-  timer: NodeJS.Timer | undefined;
+  state = {
+    start: false,
+    isActiveLeft: false,
+    isActiveRight: false,
+  };
+  isEnglish = window.location.href.includes('en');
 
   componentDidMount() {
     const lf = new LogicFlow({
@@ -305,7 +316,7 @@ export default class Example extends React.Component {
       grid: true,
       ...SilentConfig,
       ...styleConfig,
-    });
+    } as any);
 
     this.lf = lf;
     lf.register(StepNode);
@@ -408,6 +419,30 @@ export default class Example extends React.Component {
     });
   };
 
+  handleAnimation = (type: string) => {
+    if (this.state.start) return;
+    if (type === '1') {
+      this.setState({ isActiveLeft: true });
+      this.setState({ isActiveRight: false });
+      this.edgeAnimation();
+      setTimeout(() => {
+        this.setState({ start: false });
+        this.setState({ isActiveLeft: false });
+        this.setState({ isActiveRight: false });
+      }, 2000);
+    } else {
+      this.setState({ isActiveLeft: false });
+      this.setState({ isActiveRight: true });
+      this.edgeAnimationSingle();
+      setTimeout(() => {
+        this.setState({ start: false });
+        this.setState({ isActiveLeft: false });
+        this.setState({ isActiveRight: false });
+      }, 5500);
+    }
+    this.setState({ start: true });
+  };
+
   stopEdgeAnimation = () => {
     const lf = this.lf;
     const { edges, nodes } = lf.getGraphRawData();
@@ -426,20 +461,31 @@ export default class Example extends React.Component {
     this.container = container;
   };
 
-  componentWillUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = undefined;
-    }
-  }
+  componentWillUnmount() {}
 
   render() {
     return (
       <div className="helloworld-app demo">
         <div className="app-content" ref={this.refContainer} />
         <div className="run-btn">
-          <span onClick={this.edgeAnimation}>Run Multiple</span>
-          <span onClick={this.edgeAnimationSingle}>Run Single</span>
+          <button
+            disabled={this.state.start}
+            className={`${this.state.start ? 'is-disabled' : ''} ${
+              this.state.isActiveLeft ? 'active' : ''
+            }`}
+            onClick={() => this.handleAnimation('1')}
+          >
+            {this.isEnglish ? 'parallel' : '并行'}
+          </button>
+          <button
+            disabled={this.state.start}
+            className={`${this.state.start ? 'is-disabled' : ''} ${
+              this.state.isActiveRight ? 'active' : ''
+            }`}
+            onClick={() => this.handleAnimation('2')}
+          >
+            {this.isEnglish ? 'serial' : '串行'}
+          </button>
           {/* <span onClick={this.stopEdgeAnimation}>stop</span> */}
         </div>
       </div>

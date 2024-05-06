@@ -35,6 +35,6 @@ If you have any questions, suggestions, feedback, or willingness to communicate,
 ### Bugs
 If you're having trouble with something, start by checking out [issues](https://github.com/didi/LogicFlow/issues) to see if there are any similar bugs or suggestions. Before you report a bug, make sure you've searched for existing issues and read our [FAQ](https://github.com/didi/LogicFlow/discussions).
 
-### Code of Conduct
+<!-- ### Code of Conduct
 
-### Join the community
+### Join the community -->

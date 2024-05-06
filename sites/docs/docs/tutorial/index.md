@@ -36,6 +36,6 @@ LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、�
 
 如果您在使用的过程中碰到问题，可以先通过 [issues](https://github.com/didi/LogicFlow/issues) 看看有没有类似的 bug 或者建议。在你报告一个 bug 之前，请先确保已经搜索过已有的 issue 和阅读了我们的[常见问题](https://github.com/didi/LogicFlow/discussions)。
 
-### 行为准则
+<!-- ### 行为准则
 
-### 加入社区
+### 加入社区 -->

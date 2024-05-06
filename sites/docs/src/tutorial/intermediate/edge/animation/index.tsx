@@ -1,6 +1,7 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/es/index.css';
+// import '@logicflow/core/es/index.css';
+import '@logicflow/core/dist/style/index.css';
 import customEdge from './customEdge';
 
 import data from './data';
@@ -21,7 +22,7 @@ export default class Example extends React.Component {
       container: this.container,
       grid: true,
       ...SilentConfig,
-      adjustEdgeStartAndEnd: true, // 开启两端的调整连线功能
+      // adjustEdgeStartAndEnd: true, // 开启两端的调整连线功能
       edgeGenerator: (sourceNode) => {
         if (sourceNode.type === 'circle') {
           return 'line';

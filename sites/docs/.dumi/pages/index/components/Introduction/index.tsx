@@ -32,8 +32,8 @@ export default function Introduction() {
   return (
     <div className="intro-container">
       <div className="title-part">
-        <h1>设计语言与研发框架</h1>
-        <div>配套生态，让你快速搭建网站应用</div>
+        <h1>设计流程与执行引擎</h1>
+        <div>配套社区，让你快速完成流程搭建</div>
       </div>
       {/* TODO: 增加 Star 数、weekly Installs 以及 License，参考 [ReactFlow](https://reactflow.dev/) 官网样式 */}
 

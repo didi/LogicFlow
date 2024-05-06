@@ -1,8 +1,16 @@
 ---
 nav: API
 title: 主题
+toc: content
 order: 2
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 # 主题
 
 主题可以对 LogicFlow 基础图形的外观进行统一设置。其属性与[svg 属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)保持一致。
