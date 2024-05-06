@@ -24,3 +24,6 @@ yarn-error.log
 /.github_account
 
 logic-flow-docs.tar.gz
+
+sites/docs/.dumi/tmp
+sites/docs/g.dumi/tmp-production
