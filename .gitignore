@@ -25,5 +25,5 @@ yarn-error.log
 
 logic-flow-docs.tar.gz
 
-sites/docs/.dumi/tmp
-sites/docs/g.dumi/tmp-production
+tmp
+tmp-production
