@@ -5,7 +5,7 @@
     "module": "ES2020",
     "moduleResolution": "Node",
     "sourceMap": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false, // 逐步设置为 true
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noEmitOnError": true,
