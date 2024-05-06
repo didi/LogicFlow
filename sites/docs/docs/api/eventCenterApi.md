@@ -1,8 +1,15 @@
 ---
 nav: API
 title: 事件
+toc: content
 order: 1
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
 
 # 事件
 

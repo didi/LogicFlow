@@ -16,8 +16,8 @@
     "react-dom": ">=16.8"
   },
   "devDependencies": {
-    "@logicflow/core": "workspace:*",
-    "@logicflow/extension": "workspace:*",
+    "@logicflow/core": "1.2.18",
+    "@logicflow/extension": "1.2.19",
     "@types/react": "^18.2.17",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "dumi": "2.2.13",

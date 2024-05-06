@@ -7,6 +7,12 @@ title: Menu
 order: 1
 ---
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 # Menu
 
 > Menu refers to the right-click menu

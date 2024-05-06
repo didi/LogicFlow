@@ -8,6 +8,8 @@ const historyVersion = {
 };
 
 const HeaderExtra: FC = () => {
+  const isVersionPage = window.location.href.includes('release');
+  const version = isVersionPage ? historyVersion.ONE : process.env.DUMI_VERSION;
   const isEnglish = window.location.href.includes('en-US');
   const changeVersion = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === historyVersion.ZERO) {
@@ -20,15 +22,12 @@ const HeaderExtra: FC = () => {
         : '/release/one-point-two';
       return;
     }
-    window.location.href = isEnglish ? '/en-US/tutoria' : '/tutorial';
+    window.location.href = isEnglish ? '/en-US/tutorial' : '/tutorial';
   };
 
   return (
     <div className="dumi-default-lang-select dumi-version-select">
-      <select
-        value={process.env.DUMI_VERSION}
-        onChange={(e) => changeVersion(e)}
-      >
+      <select value={version} onChange={(e) => changeVersion(e)}>
         <option value={process.env.DUMI_VERSION}>
           {process.env.DUMI_VERSION}
         </option>

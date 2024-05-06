@@ -115,8 +115,8 @@ lf.getGraphData();
 
 ### Example of conversion results
 
-TODO
-<a href="https://site.logic-flow.cn/demo/dist/examples/#/extension/adapter?from=doc" target="_blank"> Go to CodeSandbox for examples </a>
+<!-- TODO -->
+<a href="https://examples.logic-flow.cn/demo/dist/examples/#/extension/adapter?from=doc" target="_blank"> Go to CodeSandbox for examples </a>
 
 ## New BPMNAdapter
 ### what's the difference?
