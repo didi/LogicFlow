@@ -1,12 +1,12 @@
 // baseType
-export const BASE_START_NODE = 'start';
+export const BASE_START_NODE = 'start'
 
-// event name
-export const EVENT_INSTANCE_COMPLETE = 'instance:complete';
-export const EVENT_INSTANCE_INTERRUPTED = 'instance:interrupted';
-export const EVENT_INSTANCE_ERROR = 'instance:error';
+// eventType
+export const EVENT_INSTANCE_COMPLETE = 'instance:complete'
+export const EVENT_INSTANCE_INTERRUPTED = 'instance:interrupted'
+export const EVENT_INSTANCE_ERROR = 'instance:error'
 
-// flow status
+// flowStatus
 export enum FlowStatus {
   COMPLETED = 'completed',
   INTERRUPTED = 'interrupted',
@@ -15,7 +15,7 @@ export enum FlowStatus {
   ERROR = 'error',
 }
 
-// action status
+// actionStatus
 export enum ActionStatus {
   SUCCESS = 'success',
   ERROR = 'error',

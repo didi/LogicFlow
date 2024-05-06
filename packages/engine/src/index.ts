@@ -1,63 +1,62 @@
-import type {
-  ResumeParams,
-  GraphConfigData,
-  EngineConstructorOptions,
-  NextActionParam,
-} from './types.d';
-import FlowModel, { ActionParams } from './FlowModel';
-import StartNode from './nodes/StartNode';
-import TaskNode from './nodes/TaskNode';
-import Recorder from './recorder';
-import { createEngineId } from './util/ID';
-import { NodeConstructor } from './nodes/BaseNode';
+// import { LogicFlow } from '@logicflow/core';
+import { BaseNode, StartNode, TaskNode } from './nodes'
+import { FlowModel } from './FlowModel'
+import { Recorder } from './recorder'
+import { createEngineId } from './utils'
 
-export default class Engine {
-  instanceId: string;
-  global: Record<string, any>;
-  graphData: GraphConfigData;
-  nodeModelMap: Map<string, NodeConstructor>;
-  flowModel: FlowModel;
-  recorder?: Recorder;
-  context: Record<string, any>;
-  constructor(options?: EngineConstructorOptions) {
-    this.nodeModelMap = new Map();
-    this.instanceId = createEngineId();
+export class Engine {
+  readonly instanceId: string
+  graphData?: Engine.GraphConfigData
+
+  flowModel?: FlowModel
+  recorder?: Recorder
+  context?: Record<string, unknown>
+  nodeModelMap: Map<string, BaseNode.NodeConstructor>
+
+  constructor(options?: Engine.Options) {
+    this.nodeModelMap = new Map()
+    this.instanceId = createEngineId()
     if (options?.debug) {
       this.recorder = new Recorder({
         instanceId: this.instanceId,
-      });
+      })
     }
+    // 默认注册节点 register default nodes
     this.register({
       type: StartNode.nodeTypeName,
       model: StartNode,
-    });
+    })
     this.register({
       type: TaskNode.nodeTypeName,
       model: TaskNode,
-    });
-    this.context = options?.context || {};
+    })
+    this.context = options?.context || {}
   }
+
   /**
    * 注册节点
    * @param nodeConfig { type: 'custom-node', model: NodeClass }
    */
-  register(nodeConfig) {
-    this.nodeModelMap.set(nodeConfig.type, nodeConfig.model);
+  register(nodeConfig: Engine.NodeConfig) {
+    this.nodeModelMap.set(nodeConfig.type, nodeConfig.model)
   }
+
   /**
-   * 自定义执行记录的存储，默认浏览器使用 sessionStorage，nodejs 使用内存存储。
-   * 注意：由于执行记录不会主动删除，所以需要自行清理。
-   * nodejs环境建议自定义为持久化存储。
-   * engine.setCustomRecorder({
+   * 自定义执行记录的存储，默认浏览器使用 sessionStorage, nodejs 使用内存存储
+   * 注意：由于执行记录不全会主动删除，所以需要自行清理。
+   * nodejs 环境建议自定义为持久化存储。
+   * engine.setCustomRecorder({{
    *   async addActionRecord(task) {}
    *   async getTask(actionId) {}
    *   async getExecutionTasks(executionId) {}
    *   clear(instanceId) {}
-   * });
+   * }}
+   * @param recorder
    */
   setCustomRecorder(recorder: Recorder) {
-    this.recorder = recorder;
+    this.recorder = recorder
   }
+
   /**
    * 加载流程图数据
    */
@@ -65,95 +64,237 @@ export default class Engine {
     graphData,
     startNodeType = 'StartNode',
     globalData = {},
-  }) {
-    this.flowModel = new FlowModel({
+  }: Engine.LoadGraphParam): FlowModel {
+    this.graphData = graphData
+    const flowModel = new FlowModel({
       nodeModelMap: this.nodeModelMap,
       recorder: this.recorder,
       context: this.context,
       globalData,
       startNodeType,
-    });
-    this.flowModel.load(graphData);
-    return this.flowModel;
+    })
+
+    flowModel.load(graphData)
+    this.flowModel = flowModel
+    return flowModel
   }
+
   /**
-   * 执行流程，允许多次调用。
+   * 执行流程，允许多次调用
    */
-  async execute(execParam?: ActionParams): Promise<NextActionParam> {
+  async execute(
+    param?: Partial<Engine.ActionParam>,
+  ): Promise<Engine.NextActionParam> {
     return new Promise((resolve, reject) => {
-      if (!execParam) {
-        execParam = {};
+      let execParam = param
+      if (!param) {
+        execParam = {}
       }
-      this.flowModel.execute({
+
+      this.flowModel?.execute({
         ...execParam,
         callback: (result) => {
-          resolve(result);
+          resolve(result)
         },
         onError: (error) => {
-          reject(error);
+          reject(error)
         },
-      });
-    });
+      })
+    })
   }
+
   /**
-   * 恢复执行
-   * 注意此方法只能恢复节点后面的执行，不能恢复流程其他分支的执行。
-   * 同理，中断执行也只能中断节点后面的执行，不会中断其他分支的执行。
-   * 在实际项目中，如果存在中断节点，建议流程所有的节点都是排他网关，这样可以保证执行的过程不存在分支。
+   * 中断流程恢复
+   * @param resumeParam
+   * @returns
    */
-  async resume(resumeParam: ResumeParams) {
+  async resume(
+    resumeParam: Engine.ResumeParam,
+  ): Promise<Engine.NextActionParam | undefined> {
     return new Promise((resolve, reject) => {
-      this.flowModel.resume({
+      this.flowModel?.resume({
         ...resumeParam,
         callback: (result) => {
-          resolve(result);
+          resolve(result)
         },
         onError: (error) => {
-          reject(error);
+          reject(error)
         },
-      });
-    });
+      })
+    })
   }
+
   async getExecutionList() {
-    const executionIds = await this.recorder?.getExecutionList();
-    return executionIds;
+    return await this.recorder?.getExecutionList()
   }
-  async getExecutionRecord(executionId) {
-    const tasks = await this.recorder?.getExecutionActions(executionId);
-    if (!tasks) {
-      return null;
+
+  /**
+   * 获取执行任务记录
+   * @param executionId
+   * @returns
+   */
+  async getExecutionRecord(
+    executionId: Engine.Key,
+  ): Promise<Recorder.Info[] | null> {
+    const actions = await this.recorder?.getExecutionActions(executionId)
+
+    if (!actions) {
+      return null
     }
-    const records = [];
-    for (let i = 0; i < tasks.length; i++) {
-      records.push(this.recorder?.getActionRecord(tasks[i]));
+
+    // DONE: 确认 records 的类型
+    const records: Promise<Recorder.Info>[] = []
+    for (let i = 0; i < actions?.length; i++) {
+      const action = actions[i]
+      if (this.recorder) {
+        records.push(this.recorder?.getActionRecord(action))
+      }
     }
-    return Promise.all(records);
+
+    return Promise.all(records)
   }
+
   destroy() {
-    this.recorder?.clear();
+    this.recorder?.clear()
   }
+
   getGlobalData() {
-    return this.flowModel?.globalData;
+    return this.flowModel?.globalData
   }
-  setGlobalData(data) {
+
+  setGlobalData(data: Record<string, unknown>) {
     if (this.flowModel) {
-      this.flowModel.globalData = data;
+      this.flowModel.globalData = data
     }
   }
-  updateGlobalData(data) {
+
+  updateGlobalData(data: Record<string, unknown>) {
     if (this.flowModel) {
-      Object.assign(this.flowModel.globalData, data);
+      Object.assign(this.flowModel.globalData, data)
     }
   }
 }
 
-export {
-  Engine,
-  TaskNode,
-  StartNode,
-  Recorder,
-};
+export namespace Engine {
+  export type Point = {
+    id?: string
+    x: number
+    y: number
+    [key: string]: unknown
+  }
 
-export type {
-  ActionParams,
-};
+  export type TextConfig = {
+    value: string
+  } & Point
+
+  export type NodeData = {
+    id: string
+    type: string
+    x?: number
+    y?: number
+    text?: TextConfig | string
+    zIndex?: number
+    properties?: Record<string, unknown>
+  }
+
+  export type EdgeData = {
+    id: string
+    /**
+     * 边的类型，不传默认为lf.setDefaultEdgeType(type)传入的类型。
+     * LogicFlow内部默认为polyline
+     */
+    type?: string
+    sourceNodeId: string
+    sourceAnchorId?: string
+    targetNodeId: string
+    targetAnchorId?: string
+    startPoint?: {
+      x: number
+      y: number
+    }
+    endPoint?: {
+      x: number
+      y: number
+    }
+    text?:
+      | {
+          x: number
+          y: number
+          value: string
+        }
+      | string
+    pointsList?: Point[]
+    zIndex?: number
+    properties?: Record<string, unknown>
+  }
+
+  export type GraphConfigData = {
+    nodes: NodeData[]
+    edges: EdgeData[]
+  }
+
+  export type LoadGraphParam = {
+    graphData: GraphConfigData
+    startNodeType?: string
+    globalData?: Record<string, unknown>
+  }
+
+  export type Options = {
+    context?: Record<string, unknown>
+    debug?: boolean
+  }
+  export type Key = string | number
+  export type NodeConfig = {
+    type: string
+    model: any // TODO: NodeModel 可能有多个，类型该如何定义呢？？？
+  }
+
+  export type NodeParam = {
+    executionId: Key
+    nodeId: Key
+  }
+
+  export type CommonActionInfo = {
+    actionId: Key
+  } & NodeParam
+
+  export type ActionParam = CommonActionInfo
+
+  export type ResumeParam = {
+    data?: Record<string, unknown>
+  } & CommonActionInfo
+
+  export type ExecParam = {
+    next: (data: NextActionParam) => void
+  } & ActionParam
+
+  export type ExecResumeParam = {
+    next: (data: NextActionParam) => void
+  } & ResumeParam
+
+  export type ActionStatus = 'success' | 'error' | 'interrupted' | '' // ??? Question: '' 状态是什么状态
+
+  export type NextActionParam = {
+    executionId: Key
+    nodeId: Key
+    actionId: Key
+    nodeType: string
+    outgoing: BaseNode.OutgoingConfig[]
+    properties?: Record<string, unknown>
+    detail?: Record<string, unknown>
+    status?: ActionStatus
+  }
+
+  export type ActionResult = NextActionParam
+
+  export type NodeExecResult = {
+    nodeType: string
+    properties?: Record<string, unknown>
+  } & CommonActionInfo &
+    ActionResult
+}
+
+export * from './constant'
+export { BaseNode, StartNode, TaskNode, Recorder }
+
+export default Engine
