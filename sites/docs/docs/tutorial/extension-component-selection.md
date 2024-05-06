@@ -7,6 +7,12 @@ title: 框选 SelectionSelect
 order: 5
 ---
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 # 框选 SelectionSelect
 
 ```jsx | purex | pure

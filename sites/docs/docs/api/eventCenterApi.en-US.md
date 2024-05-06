@@ -1,8 +1,15 @@
 ---
 nav: API
 title: Event
+toc: content
 order: 1
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
 
 # Event
 

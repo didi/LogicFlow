@@ -7,6 +7,13 @@ title: 菜单 Menu
 order: 1
 ---
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
+
 # 菜单 Menu
 
 > 菜单指的是右键菜单

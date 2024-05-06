@@ -1,6 +1,7 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/es/index.css';
+// import '@logicflow/core/es/index.css';
+import '@logicflow/core/dist/style/index.css';
 import './index.less';
 
 import ColorNode from './node/colorNode';
@@ -123,8 +124,6 @@ export default class Example extends React.Component {
     lf.render(data);
     this.edgeAnimation();
     this.handleAnimation();
-
-    lf.translateCenter();
 
     lf.on(
       'color:color-change,level:level-change,type:type-change',

@@ -4,8 +4,15 @@ group:
   title: model
   order: 3
 title: nodeModel
+toc: content
 order: 1
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
 
 # nodeModel
 

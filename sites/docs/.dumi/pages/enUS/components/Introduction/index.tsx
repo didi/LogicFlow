@@ -24,10 +24,8 @@ export default function Introduction() {
   return (
     <div className="intro-container">
       <div className="title-part">
-        <h1>Design language and development framework</h1>
-        <div>
-          upporting ecology that allows you to quickly build web applications
-        </div>
+        <h1>Design Process and Execution Engine</h1>
+        <div>Supporting community to get your process built quickly</div>
       </div>
       <div className="dumi-default-features intro-inner" data-cols="3">
         {inner.map((domItem, domIdx) => {

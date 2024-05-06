@@ -1,4 +1,10 @@
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 ## register
 
 Register nodes, edges.

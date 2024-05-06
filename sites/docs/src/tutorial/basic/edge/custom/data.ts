@@ -63,12 +63,12 @@ const data = {
       targetNodeId: '4',
       type: 'line',
     },
-    // Todo
-    // {
-    //   sourceNodeId: "3",
-    //   targetNodeId: "5",
-    //   type: "bezier"
-    // }
+    // TODO
+    {
+      sourceNodeId: '3',
+      targetNodeId: '5',
+      type: 'bezier',
+    },
   ],
 };
 

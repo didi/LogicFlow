@@ -4,8 +4,16 @@ group:
   title: model
   order: 3
 title: graphModel
+toc: content
 order: 0
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 
 # graphModel
 
@@ -289,7 +297,7 @@ graphModel.graphDataToModel(graphData);
 return: `GraphConfigData`
 
 ```jsx | pure
-cosnt graphData = graphModel.modelToGraphData();
+const graphData = graphModel.modelToGraphData();
 console.log(graphData)
 ```
 
@@ -298,7 +306,7 @@ console.log(graphData)
 return：false | HistoryData
 
 ```jsx | pure
-cosnt historyData = graphModel.modelToHistoryData();
+const historyData = graphModel.modelToHistoryData();
 console.log(historyData)
 ```
 
@@ -313,7 +321,7 @@ Parameters:
 return: [EdgeModel](/en-US/api/edge-model-api)
 
 ```jsx | pure
-cosnt edgeModel = graphModel.getEdgeModelById('edge_id');
+const edgeModel = graphModel.getEdgeModelById('edge_id');
 console.log(edgeModel)
 ```
 
@@ -330,7 +338,7 @@ Parameters:
 return: [EdgeModel](/en-US/api/edge-model-api) or [NodeModel](/en-US/api/node-model-api)
 
 ```jsx | pure
-cosnt edgeModel = graphModel.getElement('edge_id');
+const edgeModel = graphModel.getElement('edge_id');
 console.log(edgeModel)
 ```
 
@@ -345,7 +353,7 @@ Parameters:
 return: [EdgeModel](/en-US/api/edge-model-api)
 
 ```jsx | pure
-cosnt edgeModels = graphModel.getNodeEdges('node_id_1');
+const edgeModels = graphModel.getNodeEdges('node_id_1');
 console.log(edgeModels)
 ```
 
@@ -358,7 +366,7 @@ Parameters:
 | isIgnoreCheck | boolean | true   | Include or exclude edges where sourceNode and targetNode are not selected, by default. Such edges cannot be included when copying, because copying does not allow dangling edges. |
 
 ```jsx | pure
-cosnt elements = graphModel.getSelectElements(true);
+const elements = graphModel.getSelectElements(true);
 console.log(elements)
 ```
 
