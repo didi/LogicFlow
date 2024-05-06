@@ -945,7 +945,7 @@ graphModel.setDefaultEdgeType('bezier');
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| id | string | true | 无 | 节点 |
+| id | string | true | 无 | 节点id |
 | type | string | true | 无 | 节点类型 |
 
 ```js
@@ -956,13 +956,13 @@ graphModel.changeNodeType('node_1', 'circle');
 
 `方法`
 
-修改指定节点的类型
+修改指定边的类型
 
 参数
 
 | 名称 | 类型 | 必传 | 默认值 | 描述 |
 | :- | :- | :- | :- | :- |
-| id | string | true | 无 | 节点 |
+| id | string | true | 无 | 边id |
 | type | string | true | 无 | 边类型 |
 
 ```js
