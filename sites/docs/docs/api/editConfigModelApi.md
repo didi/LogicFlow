@@ -4,8 +4,15 @@ group:
   title: model
   order: 3
 title: editConfigModel
+toc: content
 order: 4
 ---
+
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
 
 # editConfigModel
 

@@ -49,11 +49,11 @@ const data = {
       type: 'line',
     },
     // TODO
-    // {
-    //   sourceNodeId: '2',
-    //   targetNodeId: '4',
-    //   type: 'bezier',
-    // },
+    {
+      sourceNodeId: '2',
+      targetNodeId: '4',
+      type: 'bezier',
+    },
   ],
 };
 

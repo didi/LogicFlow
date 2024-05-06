@@ -34,7 +34,7 @@ $ yarn add @logicflow/core
 
   Since LogicFlow itself will have some preset styles, you need to bring in js, but also css.
 
-  TODO - 需要核对路径
+  <!-- TODO - 需要核对路径 -->
 
 ```html
 <!-- Introducing the core package -->
@@ -178,5 +178,5 @@ lf.adapterOut = function (logicFlowData) {
 
 The custom data conversion tool essentially takes the data passed in by the user and converts it to a format that LogicFlow recognizes via an `lf.adapterIn` method. Then when generating the data, the `lf.adapterOut` method converts the data from LogicFlow to the data passed in by the user. So to customize the data conversion tool we just need to override these two methods again.
 
-That's it for our demo demo, to continue learning about some of X6's capabilities,
+That's it for our demo demo, to continue learning about some of Logicflow's capabilities,
 you can start reading from [Basic Tutorial](basic-class).

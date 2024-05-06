@@ -7,6 +7,12 @@ title: SelectionSelect
 order: 5
 ---
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 # SelectionSelect
 
 ```jsx | purex | pure

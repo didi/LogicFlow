@@ -23,7 +23,7 @@ class CustomEdgeModel2 extends BezierEdgeModel {
    * 给边自定义方案，使其支持基于锚点的位置更新边的路径
    */
   updatePathByAnchor() {
-    // Todo
+    // TODO
     const sourceNodeModel = this.graphModel.getNodeModelById(this.sourceNodeId);
     const sourceAnchor = sourceNodeModel
       .getDefaultAnchor()

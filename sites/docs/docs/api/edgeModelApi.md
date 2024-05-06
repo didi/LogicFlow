@@ -4,6 +4,7 @@ group:
   title: model
   order: 3
 title: edgeModel
+toc: content
 order: 2
 ---
 

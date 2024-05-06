@@ -1,6 +1,7 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/es/index.css';
+// import '@logicflow/core/es/index.css';
+import '@logicflow/core/dist/style/index.css';
 
 import data from './shapesData';
 import '../../../index.less';
