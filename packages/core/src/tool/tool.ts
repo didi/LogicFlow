@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import TextEdit from './TextEditTool'
 import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'

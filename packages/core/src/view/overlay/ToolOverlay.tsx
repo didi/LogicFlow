@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { createElement as h, Component } from 'preact/compat'
 import { OutlineOverlay } from '.'
 import { observer } from '../..'
 import LogicFlow from '../../LogicFlow'

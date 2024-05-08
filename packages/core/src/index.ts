@@ -1,6 +1,6 @@
 // 统一对外导出
 import { observer as mobxObserver } from 'mobx-preact'
-import { h } from 'preact'
+import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 
 import * as LogicFlowUtil from './util'

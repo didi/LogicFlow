@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 
 /**
  * 背景配置, 支持css属性配置
