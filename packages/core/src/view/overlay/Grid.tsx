@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import { observer } from '../..'
 import { GraphModel } from '../../model'
 import { createUuid } from '../../util'

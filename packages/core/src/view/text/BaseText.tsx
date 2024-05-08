@@ -1,4 +1,4 @@
-import { Component, h } from 'preact'
+import { Component, createElement as h } from 'preact/compat'
 import { Text } from '../shape'
 import { StepDrag } from '../../util'
 import { ElementState } from '../../constant'

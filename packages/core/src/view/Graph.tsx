@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import { map } from 'lodash-es'
 import {
   CanvasOverlay,

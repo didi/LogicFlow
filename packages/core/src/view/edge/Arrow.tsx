@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import { Path } from '../shape'
 import LogicFlow from '../../LogicFlow'
 import { getVerticalPointOfLine } from '../../algorithm'
