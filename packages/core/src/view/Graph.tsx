@@ -1,26 +1,30 @@
 import { Component } from 'preact'
 import { map } from 'lodash-es'
-import GraphModel from '../model/GraphModel'
-import CanvasOverlay from './overlay/CanvasOverlay'
-import ToolOverlay from './overlay/ToolOverlay'
-import BackgroundOverlay from './overlay/BackgroundOverlay'
-import Grid from './overlay/Grid'
-import Tool from '../tool'
-import * as Options from '../options'
+import {
+  CanvasOverlay,
+  ToolOverlay,
+  BackgroundOverlay,
+  Grid,
+  SnaplineOverlay,
+  OutlineOverlay,
+  BezierAdjustOverlay,
+  ModificationOverlay,
+} from './overlay'
 import DnD from './behavior/DnD'
-import BaseEdgeModel from '../model/edge/BaseEdgeModel'
-import BaseNodeModel from '../model/node/BaseNodeModel'
-import SnaplineOverlay from './overlay/SnaplineOverlay'
-import SnaplineModel from '../model/SnaplineModel'
-import OutlineOverlay from './overlay/OutlineOverlay'
-import BezierAdjustOverlay from './overlay/BezierAdjustOverlay'
 import { observer } from '..'
-import ModificationOverlay from './overlay/ModificationOverlay'
+import { Options as LFOptions } from '../options'
+import Tool from '../tool/tool'
+import {
+  GraphModel,
+  BaseEdgeModel,
+  BaseNodeModel,
+  SnaplineModel,
+} from '../model'
 
 type IProps = {
-  getView: (type: string) => typeof Component
+  getView: (type: string) => Component | null
   tool: Tool
-  options: Options.Definition
+  options: LFOptions.Definition
   dnd: DnD
   snaplineModel?: SnaplineModel
   graphModel: GraphModel
@@ -49,6 +53,7 @@ class Graph extends Component<IProps> {
       />
     )
   }
+
   render() {
     const { graphModel, tool, options, dnd, snaplineModel } = this.props
     const style: ContainerStyle = {}

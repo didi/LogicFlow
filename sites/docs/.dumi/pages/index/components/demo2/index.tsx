@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import './index.less';
 
 import ColorNode from './node/colorNode';
@@ -105,7 +104,7 @@ const styleConfig: Partial<LogicFlow.Options> = {
 export default class Example extends React.Component {
   private container!: HTMLDivElement;
   lf!: LogicFlow;
-  timer: NodeJS.Timer | undefined;
+  timer: ReturnType<typeof setInterval> | undefined;
 
   componentDidMount() {
     const lf = new LogicFlow({

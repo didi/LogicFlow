@@ -1,13 +1,12 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import { data, SilentConfig, styleConfig } from './reactData';
 import CustomEdge from './customEdge';
 import '../index.less';
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
+  private container!: HTMLDivElement;
 
   componentDidMount() {
     const lf = new LogicFlow({

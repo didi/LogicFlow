@@ -1,5 +1,5 @@
 import { LogicFlow, RectNode, RectNodeModel } from '@logicflow/core'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 
 export type CustomProperties = {
   // 形状属性

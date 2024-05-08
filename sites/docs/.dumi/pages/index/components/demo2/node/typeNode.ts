@@ -54,7 +54,7 @@ class TypeNodeModel extends HtmlNodeModel {
     this.width = 150;
     this.height = 105;
     this.properties.type = 'circle'; // 初始样式
-    this.text = '';
+    this.text.value = '';
   }
 }
 

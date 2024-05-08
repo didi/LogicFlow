@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import './index.less';
 
 import StepNode from './node/stepNode';

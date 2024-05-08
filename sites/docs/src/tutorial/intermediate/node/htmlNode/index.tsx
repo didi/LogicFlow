@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import customNode from './htmlNode';
 
 import data from './htmlData';
@@ -15,7 +14,7 @@ const SilentConfig = {
 };
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
+  private container!: HTMLDivElement;
 
   componentDidMount() {
     const lf = new LogicFlow({
@@ -29,7 +28,7 @@ export default class Example extends React.Component {
     lf.render(data);
     lf.translateCenter();
 
-    lf.on('custom:button-click', (model) => {
+    lf.on('custom:button-click', (model: any) => {
       lf.setProperties(model.id, {
         body: 'LogicFlow',
       });

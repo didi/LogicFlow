@@ -9,7 +9,14 @@ const Indexpage: React.FC = () => {
   return (
     <Suspense
       fallback={
-        <div style={{ marginTop: '30vh', textAlign: 'center' }}>Loading...</div>
+        <div
+          style={{
+            marginTop: '30vh',
+            textAlign: 'center',
+          }}
+        >
+          Loading...
+        </div>
       }
     >
       <Inner />
