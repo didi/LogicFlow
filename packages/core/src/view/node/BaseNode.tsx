@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
 import { map } from 'lodash-es'
 import Anchor from '../Anchor'

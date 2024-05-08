@@ -121,7 +121,7 @@ export default function BasicNode() {
           console.log(lfRef.current!.getGraphRawData())
         }}
       >
-        1231231231
+        lf.getGraphRawData
       </div>
     </>
   )

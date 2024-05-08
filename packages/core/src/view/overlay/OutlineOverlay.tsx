@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import { Rect } from '../shape'
 import { observer } from '../..'
 import { ModelType } from '../../constant'
