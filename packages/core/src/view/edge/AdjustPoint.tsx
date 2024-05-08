@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { createElement as h, Component } from 'preact/compat'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, BaseEdgeModel } from '../../model'
 import {

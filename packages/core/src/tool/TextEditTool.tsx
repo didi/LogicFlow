@@ -1,4 +1,4 @@
-import { createRef, Component } from 'preact'
+import { createRef, Component } from 'preact/compat'
 import { observer } from '..'
 import LogicFlow from '../LogicFlow'
 import { GraphModel } from '../model'

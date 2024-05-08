@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { createElement as h } from 'preact/compat'
 import BaseEdge, { IEdgeState } from './BaseEdge'
 import { Polyline, Path } from '../shape'
 import LogicFlow from '../../LogicFlow'

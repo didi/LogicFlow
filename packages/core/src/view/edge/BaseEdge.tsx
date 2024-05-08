@@ -1,4 +1,4 @@
-import { h, Component, createRef } from 'preact'
+import { createElement as h, Component, createRef } from 'preact/compat'
 import { Circle } from '../shape'
 import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'

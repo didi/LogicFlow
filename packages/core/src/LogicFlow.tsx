@@ -1,4 +1,4 @@
-import { h, render, Component } from 'preact'
+import { createElement as h, render, Component } from 'preact/compat'
 import { observer } from 'mobx-preact'
 import { Options as LFOptions } from './options'
 import {

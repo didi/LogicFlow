@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import { Circle, Line } from './shape'
 import { BaseNode } from './node'
 import LogicFlow from '../LogicFlow'

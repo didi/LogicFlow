@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component } from 'preact/compat'
 import SnaplineModel from '../../model/SnaplineModel'
 import Line from '../shape/Line'
 import { observer } from '../..'
