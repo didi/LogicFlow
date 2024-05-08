@@ -1,7 +1,7 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
+
 import customEdge from './customEdge';
 
 import data from './data';
@@ -14,8 +14,8 @@ const SilentConfig = {
 };
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
-  private lf;
+  private container!: HTMLDivElement;
+  private lf?: LogicFlow;
 
   componentDidMount() {
     const lf = new LogicFlow({
@@ -44,9 +44,9 @@ export default class Example extends React.Component {
 
   edgeAnimation = () => {
     const lf = this.lf;
-    const { edges } = lf.getGraphRawData();
-    edges.forEach(({ id }) => {
-      lf.openEdgeAnimation(id);
+    const { edges } = lf?.getGraphRawData() ?? {};
+    edges?.forEach(({ id }) => {
+      lf?.openEdgeAnimation(id);
     });
   };
 

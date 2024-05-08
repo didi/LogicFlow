@@ -1,7 +1,9 @@
-import { BaseNodeModel } from '@logicflow/core';
+// import { BaseNodeModel } from '@logicflow/core';
 
-type PointTuple = [number, number];
+type PointTuple = [number, number]
+
+export interface BaseNodeModel {}
 
 export type ExclusiveGatewayAttribute = BaseNodeModel & {
-  points?: PointTuple[] & string;
-};
+  points?: PointTuple[] & string
+}
