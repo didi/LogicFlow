@@ -1,24 +1,17 @@
-import { h } from 'preact';
-import BaseNode from './BaseNode';
-import { RectNodeModel } from '../../model';
-import GraphModel from '../../model/GraphModel';
-import EventEmitter from '../../event/eventEmitter';
+import BaseNode from './BaseNode'
 
-type IProps = {
-  model: RectNodeModel;
-  graphModel: GraphModel;
-};
-
-export default class HtmlNode extends BaseNode {
-  ref: HTMLElement;
-  currentProperties: string;
-  preProperties: string;
+export class HtmlNode extends BaseNode {
+  ref?: HTMLElement
+  currentProperties?: string
+  preProperties?: string
   setRef = (dom): void => {
-    this.ref = dom;
-  };
-  get rootEl() {
-    return this.ref;
+    this.ref = dom
   }
+
+  get rootEl() {
+    return this.ref
+  }
+
   /**
    * @overridable 支持重写
    * 自定义HTML节点内容
@@ -32,8 +25,9 @@ export default class HtmlNode extends BaseNode {
    * }
    */
   setHtml(rootEl: HTMLElement) {
-    rootEl.appendChild(document.createElement('div'));
+    rootEl.appendChild(document.createElement('div'))
   }
+
   /**
    * @overridable 支持重写
    * 和react的shouldComponentUpdate类似，都是为了避免出发不必要的render.
@@ -41,25 +35,29 @@ export default class HtmlNode extends BaseNode {
    * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.
    */
   shouldUpdate() {
-    if (this.preProperties && this.preProperties === this.currentProperties) return;
-    this.preProperties = this.currentProperties;
-    return true;
+    if (this.preProperties && this.preProperties === this.currentProperties)
+      return
+    this.preProperties = this.currentProperties
+    return true
   }
+
   componentDidMount() {
-    if (this.shouldUpdate()) {
-      this.setHtml(this.rootEl);
+    if (this.shouldUpdate() && this.rootEl) {
+      this.setHtml(this.rootEl)
     }
   }
+
   componentDidUpdate() {
-    if (this.shouldUpdate()) {
-      this.setHtml(this.rootEl);
+    if (this.shouldUpdate() && this.rootEl) {
+      this.setHtml(this.rootEl)
     }
   }
+
   getShape() {
-    const { model } = this.props;
-    const { x, y, height, width } = model;
-    const style = model.getNodeStyle();
-    this.currentProperties = JSON.stringify(model.properties);
+    const { model } = this.props
+    const { x, y, height, width } = model
+    const style = model.getNodeStyle()
+    this.currentProperties = JSON.stringify(model.properties)
     return (
       <foreignObject
         {...style}
@@ -69,6 +67,8 @@ export default class HtmlNode extends BaseNode {
         height={height}
         ref={this.setRef}
       />
-    );
+    )
   }
 }
+
+export default HtmlNode

@@ -1,12 +1,12 @@
 export const getById = (id, data) => {
-  let result;
+  let result
   for (let i = 0; i < data.length; i++) {
     if (data[i].id === id) {
-      result = data[i];
+      result = data[i]
     }
   }
-  return result;
-};
+  return result
+}
 
 /**
  * 判断一个点是否在指定区域
@@ -15,31 +15,34 @@ export const getById = (id, data) => {
  * @param rightBottomPoint 区域的右下角点
  */
 export const isPointInArea = (
-  [x, y], [leftTopX, leftTopY], [rightBottomX, rightBottomY],
-): boolean => (x > leftTopX && x < rightBottomX && y > leftTopY && y < rightBottomY);
+  [x, y],
+  [leftTopX, leftTopY],
+  [rightBottomX, rightBottomY],
+): boolean =>
+  x > leftTopX && x < rightBottomX && y > leftTopY && y < rightBottomY
 
 /**
  * 判断鼠标点击选中元素的时候，是否为多选
  */
 export const isMultipleSelect = (e: MouseEvent, editConfigModel): boolean => {
-  const { multipleSelectKey } = editConfigModel;
-  let isMultiple = false;
+  const { multipleSelectKey } = editConfigModel
+  let isMultiple = false
   switch (multipleSelectKey) {
     case 'meta':
-      isMultiple = e.metaKey;
-      break;
+      isMultiple = e.metaKey
+      break
     case 'alt':
-      isMultiple = e.altKey;
-      break;
+      isMultiple = e.altKey
+      break
     case 'shift':
-      isMultiple = e.shiftKey;
-      break;
+      isMultiple = e.shiftKey
+      break
     case 'ctrl':
-      isMultiple = e.ctrlKey; // Mac上ctrl + 点击节点会触发上下文菜单，所以ctrl尽量用在非Mac系统
-      break;
+      isMultiple = e.ctrlKey // Mac上ctrl + 点击节点会触发上下文菜单，所以ctrl尽量用在非Mac系统
+      break
     default:
-      isMultiple = false;
-      break;
+      isMultiple = false
+      break
   }
-  return isMultiple;
-};
+  return isMultiple
+}

@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import sequence from './sequence';
 
 import data from './data';
@@ -14,7 +13,7 @@ const SilentConfig = {
 };
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
+  private container!: HTMLDivElement;
 
   componentDidMount() {
     const lf = new LogicFlow({

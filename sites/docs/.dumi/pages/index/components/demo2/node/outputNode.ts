@@ -44,7 +44,7 @@ class OutputNodeModel extends HtmlNodeModel {
   setAttributes() {
     this.width = 300;
     this.height = 260;
-    this.text = '';
+    this.text.value = '';
   }
 }
 

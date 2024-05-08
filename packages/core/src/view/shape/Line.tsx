@@ -1,6 +1,4 @@
-import { h } from 'preact';
-
-function Line(props) {
+export function Line(props) {
   const attrs = {
     // default
     x1: 10,
@@ -9,20 +7,18 @@ function Line(props) {
     y2: 20,
     stroke: 'black',
     // ...props,
-  };
+  }
   Object.entries(props).forEach(([k, v]) => {
     if (k === 'style') {
-      attrs[k] = v;
+      attrs[k] = v
     } else {
-      const valueType = typeof v;
+      const valueType = typeof v
       if (valueType !== 'object') {
-        attrs[k] = v;
+        attrs[k] = v
       }
     }
-  });
-  return (
-    <line {...attrs} />
-  );
+  })
+  return <line {...attrs} />
 }
 
-export default Line;
+export default Line

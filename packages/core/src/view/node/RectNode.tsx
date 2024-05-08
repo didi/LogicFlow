@@ -1,18 +1,10 @@
-import { h } from 'preact';
-import Rect from '../basic-shape/Rect';
-import BaseNode from './BaseNode';
-import { RectNodeModel } from '../../model';
-import GraphModel from '../../model/GraphModel';
+import BaseNode from './BaseNode'
+import { Rect } from '../shape'
 
-type IProps = {
-  model: RectNodeModel;
-  graphModel: GraphModel;
-};
-
-export default class RectNode extends BaseNode {
+export class RectNode extends BaseNode {
   getShape() {
-    const { model } = this.props;
-    const style = model.getNodeStyle();
+    const { model } = this.props
+    const style = model.getNodeStyle()
     return (
       <Rect
         {...style}
@@ -22,6 +14,8 @@ export default class RectNode extends BaseNode {
         height={model.height}
         radius={model.radius}
       />
-    );
+    )
   }
 }
+
+export default RectNode

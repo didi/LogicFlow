@@ -49,7 +49,7 @@ class LevelNodeModel extends HtmlNodeModel {
     this.width = 150;
     this.height = 85;
     this.properties.level = 0.9; // 初始level
-    this.text = '';
+    this.text.value = '';
   }
 }
 

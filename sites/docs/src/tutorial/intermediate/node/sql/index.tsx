@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 import sqlNode from './sqlNode';
 import sqlEdge from './sqlEdge';
 
@@ -15,7 +14,7 @@ const SilentConfig = {
 };
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
+  private container!: HTMLDivElement;
 
   componentDidMount() {
     const lf = new LogicFlow({
@@ -39,10 +38,11 @@ export default class Example extends React.Component {
     lf.translateCenter();
 
     // 1.1.28新增，可以自定义锚点显示时机了
-    lf.on('anchor:dragstart', ({ data, nodeModel }) => {
+    lf.on('anchor:dragstart', ({ data, nodeModel }: any) => {
       console.log('dragstart', data);
       if (nodeModel.type === 'sql-node') {
         lf.graphModel.nodes.forEach((node) => {
+          // @ts-ignore
           if (node.type === 'sql-node' && nodeModel.id !== node.id) {
             node.isShowAnchor = true;
             node.setProperties({
@@ -52,10 +52,11 @@ export default class Example extends React.Component {
         });
       }
     });
-    lf.on('anchor:dragend', ({ data, nodeModel }) => {
+    lf.on('anchor:dragend', ({ data, nodeModel }: any) => {
       console.log('dragend', data);
       if (nodeModel.type === 'sql-node') {
         lf.graphModel.nodes.forEach((node) => {
+          // @ts-ignore
           if (node.type === 'sql-node' && nodeModel.id !== node.id) {
             node.isShowAnchor = false;
             lf.deleteProperty(node.id, 'isConnection');
@@ -64,13 +65,17 @@ export default class Example extends React.Component {
       }
     });
 
+    // @ts-ignore
     document.querySelector('#js_add-field').addEventListener('click', () => {
-      lf.getNodeModelById('node_id_1').addField({
-        key: Math.random().toString(36).substring(2, 7),
-        type: ['integer', 'long', 'string', 'boolean'][
-          Math.floor(Math.random() * 4)
-        ],
-      });
+      const nodeModel = lf.getNodeModelById('node_id_1');
+      if (typeof nodeModel?.addField === 'function') {
+        nodeModel.addField({
+          key: Math.random().toString(36).substring(2, 7),
+          type: ['integer', 'long', 'string', 'boolean'][
+            Math.floor(Math.random() * 4)
+          ],
+        });
+      }
     });
   }
 

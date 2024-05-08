@@ -11,17 +11,11 @@ export function observer<P>(props: P) {
 
 export { LogicFlow, h, LogicFlowUtil }
 
-export * from './type/index'
 export * from './view'
 export * from './model'
-export * from './keyboard'
 export * from './options'
-export {
-  ElementState,
-  ModelType,
-  ElementType,
-  EventType,
-} from './constant/constant'
+export * from './keyboard'
+export { ElementState, ModelType, ElementType, EventType } from './constant'
 
 export { formateAnchorConnectValidateData } from './util/node'
 
