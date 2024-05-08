@@ -10,6 +10,7 @@ class CustomEdgeModel2 extends BezierEdgeModel {
     style.stroke = '#ababac';
     return style;
   }
+
   /**
    * 重写此方法，使保存数据是能带上锚点数据。
    */
@@ -19,6 +20,7 @@ class CustomEdgeModel2 extends BezierEdgeModel {
     data.targetAnchorId = this.targetAnchorId;
     return data;
   }
+
   /**
    * 给边自定义方案，使其支持基于锚点的位置更新边的路径
    */
@@ -26,20 +28,20 @@ class CustomEdgeModel2 extends BezierEdgeModel {
     // TODO
     const sourceNodeModel = this.graphModel.getNodeModelById(this.sourceNodeId);
     const sourceAnchor = sourceNodeModel
-      .getDefaultAnchor()
+      ?.getDefaultAnchor()
       .find((anchor) => anchor.id === this.sourceAnchorId);
     const targetNodeModel = this.graphModel.getNodeModelById(this.targetNodeId);
     const targetAnchor = targetNodeModel
-      .getDefaultAnchor()
+      ?.getDefaultAnchor()
       .find((anchor) => anchor.id === this.targetAnchorId);
     const startPoint = {
-      x: sourceAnchor.x,
-      y: sourceAnchor.y,
+      x: sourceAnchor?.x,
+      y: sourceAnchor?.y,
     };
     this.updateStartPoint(startPoint);
     const endPoint = {
-      x: targetAnchor.x,
-      y: targetAnchor.y,
+      x: targetAnchor?.x,
+      y: targetAnchor?.y,
     };
     this.updateEndPoint(endPoint);
     // 这里需要将原有的pointsList设置为空，才能触发bezier的自动计算control点。

@@ -1,15 +1,19 @@
-import { h, Component, ComponentType } from 'preact';
-import { GraphTransform } from '../../type';
-import GraphModel from '../../model/GraphModel';
+import { Component, ComponentType } from 'preact'
+import GraphModel from '../../model/GraphModel'
 
 type IProps = {
-  graphModel: GraphModel,
-};
+  graphModel: GraphModel
+}
 
-export default function getTransform<P>(WrappedComponent: ComponentType<P>) {
+export type GraphTransform = {
+  transform: string
+  transformOrigin: string
+}
+
+export function getTransform<P>(WrappedComponent: ComponentType<P>) {
   return class extends Component<IProps & P> {
     getMatrixString(): GraphTransform {
-      const { graphModel } = this.props;
+      const { graphModel } = this.props
       const {
         transformModel: {
           SCALE_X,
@@ -19,15 +23,28 @@ export default function getTransform<P>(WrappedComponent: ComponentType<P>) {
           TRANSLATE_X,
           TRANSLATE_Y,
         },
-      } = graphModel;
-      const matrixString = [SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y].join(',');
+      } = graphModel
+      const matrixString = [
+        SCALE_X,
+        SKEW_Y,
+        SKEW_X,
+        SCALE_Y,
+        TRANSLATE_X,
+        TRANSLATE_Y,
+      ].join(',')
       return {
         transform: `matrix(${matrixString})`,
         transformOrigin: 'left top',
-      };
+      }
     }
+
     render() {
-      return <WrappedComponent {...this.props as P} transformStyle={this.getMatrixString()} />;
+      return (
+        <WrappedComponent
+          {...(this.props as P)}
+          transformStyle={this.getMatrixString()}
+        />
+      )
     }
-  };
+  }
 }

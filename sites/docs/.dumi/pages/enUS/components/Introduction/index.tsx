@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import '../../../index/components/Introduction/style.less';
 
 const locales = [

@@ -39,7 +39,7 @@ class ColorNodeModel extends HtmlNodeModel {
     this.width = 150;
     this.height = 85;
     this.properties.color = '#2f75ff'; // 初始颜色
-    this.text = '';
+    this.text.value = '';
   }
 }
 

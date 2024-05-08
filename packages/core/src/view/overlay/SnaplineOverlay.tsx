@@ -1,14 +1,15 @@
 import { Component } from 'preact'
 import SnaplineModel from '../../model/SnaplineModel'
-import Line from '../basic-shape/Line'
+import Line from '../shape/Line'
 import { observer } from '../..'
+import OutlineOverlay from './OutlineOverlay'
 
 type IProps = {
   snaplineModel?: SnaplineModel
 }
 
 @observer
-export default class SnaplineOverlay extends Component<IProps> {
+export class SnaplineOverlay extends Component<IProps> {
   render() {
     const { snaplineModel } = this.props
     const { position, isShowHorizontal, isShowVertical } = snaplineModel ?? {}
@@ -39,3 +40,5 @@ export default class SnaplineOverlay extends Component<IProps> {
     )
   }
 }
+
+export default OutlineOverlay

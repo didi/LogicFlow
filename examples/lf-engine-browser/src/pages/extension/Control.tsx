@@ -1,10 +1,10 @@
 import LogicFlow from '@logicflow/core'
-import { Menu } from '@logicflow/extension'
+import { Control } from '@logicflow/extension'
 
 import { useEffect, useRef } from 'react'
 
 import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+// import '@logicflow/extension/es/index.css'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -93,11 +93,11 @@ const data = {
   ],
 }
 
-export default function MenuExtension() {
+export default function ControlExtension() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    console.log('Menu --->>>', Menu)
+    console.log('Control --->>>', Control.pluginName)
 
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -107,7 +107,7 @@ export default function MenuExtension() {
         grid: {
           size: 10,
         },
-        plugins: [Menu],
+        plugins: [Control],
       })
 
       lf.render(data)
@@ -117,7 +117,7 @@ export default function MenuExtension() {
 
   return (
     <>
-      <div>Extension - Menu</div>
+      <div>Extension - Control</div>
       <div ref={containerRef} id="graph" className="viewport"></div>
     </>
   )

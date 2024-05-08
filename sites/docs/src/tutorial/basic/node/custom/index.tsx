@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
-// import '@logicflow/core/es/index.css';
-import '@logicflow/core/dist/style/index.css';
+import '@logicflow/core/es/index.css';
 
 import CustomCircle from './customCircle';
 import CustomEllipse from './customEllipse';
@@ -21,11 +20,11 @@ const SilentConfig = {
 };
 
 export default class Example extends React.Component {
-  private container: HTMLDivElement;
+  private container?: HTMLDivElement;
 
   componentDidMount() {
     const lf = new LogicFlow({
-      container: this.container,
+      container: this.container!,
       grid: true,
       ...SilentConfig,
     });
