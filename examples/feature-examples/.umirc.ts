@@ -49,6 +49,28 @@ export default defineConfig({
         },
       ],
     },
+    {
+      name: 'official extensions',
+      path: '/extension',
+      routes: [
+        { path: 'extension', redirect: 'extension/control' },
+        {
+          path: '/extension/control',
+          name: 'Control 插件',
+          component: './extensions/Control',
+        },
+        {
+          path: '/extension/menu',
+          name: 'Menu 插件',
+          component: './extensions/Menu',
+        },
+        {
+          path: '/extension/dnd-panel',
+          name: 'DndPanel 插件',
+          component: './extensions/DndPanel',
+        },
+      ],
+    },
   ],
   npmClient: 'pnpm',
 })
