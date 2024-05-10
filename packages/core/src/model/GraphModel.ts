@@ -105,7 +105,10 @@ export class GraphModel {
   // 控制流程图编辑相关配置项 Model
   @observable editConfigModel: EditConfigModel
   // 控制是否开启局部渲染
-  @observable partial: boolean = false
+  @observable partial: boolean = false;
+
+  // 用户自定义属性
+  [propName: string]: any
 
   constructor(options: LFOptions.Common) {
     const {

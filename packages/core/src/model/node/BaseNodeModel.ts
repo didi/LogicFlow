@@ -1,6 +1,6 @@
 import { observable, action, toJS, isObservable, computed } from 'mobx'
 import { assign, cloneDeep, isNil } from 'lodash-es'
-import { GraphModel, Model, BaseEdgeModel } from '..'
+import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
@@ -17,6 +17,9 @@ import {
   OverlapMode,
   ElementState,
 } from '../../constant'
+
+import AnchorConfig = Model.AnchorConfig
+import GraphElements = LogicFlow.GraphElements
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -123,7 +126,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   /**
    * 获取进入当前节点的边和节点
    */
-  @computed get incoming(): { nodes: BaseNodeModel[]; edges: BaseEdgeModel[] } {
+  @computed get incoming(): GraphElements {
     return {
       nodes: this.graphModel.getNodeIncomingNode(this.id),
       edges: this.graphModel.getNodeIncomingEdge(this.id),
@@ -133,7 +136,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   /*
    * 获取离开当前节点的边和节点
    */
-  @computed get outgoing(): { nodes: BaseNodeModel[]; edges: BaseEdgeModel[] } {
+  @computed get outgoing(): GraphElements {
     return {
       nodes: this.graphModel.getNodeOutgoingNode(this.id),
       edges: this.graphModel.getNodeOutgoingEdge(this.id),
@@ -350,8 +353,8 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsSource(
     target: BaseNodeModel,
-    sourceAnchor: Model.AnchorConfig,
-    targetAnchor: Model.AnchorConfig,
+    sourceAnchor?: Model.AnchorConfig,
+    targetAnchor?: Model.AnchorConfig,
     edgeId?: string,
   ): Model.ConnectRuleResult {
     const rules = !this.hasSetSourceRules
@@ -400,8 +403,8 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   isAllowConnectedAsTarget(
     source: BaseNodeModel,
-    sourceAnchor: Model.AnchorConfig,
-    targetAnchor: Model.AnchorConfig,
+    sourceAnchor?: Model.AnchorConfig,
+    targetAnchor?: Model.AnchorConfig,
     edgeId?: string,
   ): Model.ConnectRuleResult {
     const rules = !this.hasSetTargetRules
@@ -536,7 +539,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     return anchors
   }
 
-  getAnchorInfo(anchorId: string | undefined): LogicFlow.Point | undefined {
+  getAnchorInfo(anchorId: string | undefined): AnchorConfig | undefined {
     if (isNil(anchorId)) return undefined
 
     for (let i = 0; i < this.anchors.length; i++) {
