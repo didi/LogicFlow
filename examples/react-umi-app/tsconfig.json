@@ -1,5 +1,0 @@
-{
-  "extends": "./src/.umi/tsconfig.json",
-  "jsx": "react-jsx",
-  "jsxImportSource": "react"
-}
