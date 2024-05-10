@@ -192,6 +192,7 @@ export class BaseEdge extends Component<IProps> {
    * @overridable 可重写，自定义调整边连接节点形状。在开启了adjustEdgeStartAndEnd的时候，会显示调整点。
    * @param x 调整点x坐标
    * @param y 调整点y坐标
+   * @param model
    * @example
    * getAdjustPointShape(x, y) {
    *  const { model } = this.props;
@@ -205,7 +206,7 @@ export class BaseEdge extends Component<IProps> {
    *  )
    * }
    */
-  getAdjustPointShape(x, y, model): h.JSX.Element | null {
+  getAdjustPointShape(x, y, model: BaseEdgeModel): h.JSX.Element | null {
     const style = model.getAdjustPointStyle()
     return (
       <Circle
