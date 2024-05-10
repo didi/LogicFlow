@@ -102,6 +102,7 @@ export namespace Options {
     edgeGenerator?: EdgeGeneratorType
 
     customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
+    [key: string]: unknown
   }
 
   export interface ManualBooleans {}

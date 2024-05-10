@@ -609,7 +609,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
 
   @action
   setElementState(
-    state: number,
+    state: ElementState,
     additionStateData?: Model.AdditionStateDataType,
   ): void {
     this.state = state
