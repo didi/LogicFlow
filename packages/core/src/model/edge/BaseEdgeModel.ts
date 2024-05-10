@@ -67,7 +67,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   @observable pointsList: Point[] = []
 
   // 状态属性
-  readonly virtual = false
+  virtual = false
   @observable isSelected = false
   @observable isHovered = false
   @observable isHitable = true // 细粒度控制边是否对用户操作进行反应
