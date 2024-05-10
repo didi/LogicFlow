@@ -28,6 +28,8 @@
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "@logicflow/core": "workspace:*"
+    "@antv/hierarchy": "^0.6.11",
+    "@logicflow/core": "workspace:*",
+    "preact": "^10.17.1"
   }
 }

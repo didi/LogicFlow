@@ -6,6 +6,7 @@
     "outDir": "es",
     "skipLibCheck": true,
     "downlevelIteration": true,
+    "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
       "react": ["./node_modules/preact/compat/"],
