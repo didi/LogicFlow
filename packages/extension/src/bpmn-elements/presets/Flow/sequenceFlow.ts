@@ -1,57 +1,59 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import {
-  EdgeConfig,
+import LogicFlow, {
+  h,
+  GraphModel,
   PolylineEdge,
   PolylineEdgeModel,
-  GraphModel,
-  h,
-} from '@logicflow/core';
-import { JSX } from 'preact';
-import { genBpmnId } from '../../utils';
+} from '@logicflow/core'
+import { genBpmnId } from '../../utils'
+
+import EdgeConfig = LogicFlow.EdgeConfig
 
 type SequenceFlowType = {
-  panels: string[];
-  [key: string]: any;
-};
+  panels: string[]
+  [key: string]: any
+}
 
 export function sequenceFlowFactory(props?: any): {
-  type: string,
-  model: any,
-  view: any } {
+  type: string
+  model: any
+  view: any
+} {
   class model extends PolylineEdgeModel {
-    static extendKey = 'SequenceFlowModel';
+    static extendKey = 'SequenceFlowModel'
+
     constructor(data: EdgeConfig, graphModel: GraphModel) {
       if (!data.id) {
-        data.id = `Flow_${genBpmnId()}`;
+        data.id = `Flow_${genBpmnId()}`
       }
       const properties: SequenceFlowType = {
         ...(props || {}),
         ...data.properties,
         // panels: ['condition'],
         isDefaultFlow: false,
-      };
-      data.properties = properties;
+      }
+      data.properties = properties
 
-      super(data, graphModel);
+      super(data, graphModel)
     }
   }
 
   class view extends PolylineEdge {
-    static extendKey = 'SequenceFlowEdge';
-    getStartArrow(): JSX.Element | null {
+    static extendKey = 'SequenceFlowEdge'
+
+    getStartArrow(): h.JSX.Element | null {
       // eslint-disable-next-line no-shadow
-      const { model } = this.props;
-      const { isDefaultFlow } = model.properties;
+      const { model } = this.props
+      const { isDefaultFlow } = model.properties
       return isDefaultFlow
         ? h('path', {
-          refX: 15,
-          stroke: '#000000',
-          strokeWidth: 2,
-          d: 'M 20 5 10 -5 z',
-        })
+            refX: 15,
+            stroke: '#000000',
+            strokeWidth: 2,
+            d: 'M 20 5 10 -5 z',
+          })
         : h('path', {
-          d: '',
-        });
+            d: '',
+          })
     }
   }
 
@@ -59,5 +61,5 @@ export function sequenceFlowFactory(props?: any): {
     type: 'bpmn:sequenceFlow',
     view,
     model,
-  };
+  }
 }

@@ -1,4 +1,4 @@
-import { h } from '@logicflow/core';
+import { h } from '@logicflow/core'
 
 export default function Polygon({
   fillOpacity = 1,
@@ -8,7 +8,7 @@ export default function Polygon({
   stroke = '#000',
   points,
   className = 'lf-basic-shape',
-}) {
+}: any): h.JSX.Element {
   const attrs = {
     fill,
     fillOpacity,
@@ -17,10 +17,8 @@ export default function Polygon({
     strokeOpacity,
     points: '',
     className,
-  };
-  attrs.points = points.map(point => point.join(',')).join(' ');
+  }
+  attrs.points = points.map((point: any) => point.join(',')).join(' ')
 
-  return (
-    <polygon {...attrs} />
-  );
+  return <polygon {...attrs} />
 }

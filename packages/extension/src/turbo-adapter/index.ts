@@ -190,15 +190,18 @@ export function toLogicflowData(data) {
 
 class TurboAdapter {
   static pluginName = 'turboAdapter'
+
   constructor({ lf }) {
     lf.adapterIn = this.adapterIn
     lf.adapterOut = this.adapterOut
   }
+
   adapterOut(logicflowData) {
     if (logicflowData) {
       return toTurboData(logicflowData)
     }
   }
+
   adapterIn(turboData) {
     if (turboData) {
       return toLogicflowData(turboData)
