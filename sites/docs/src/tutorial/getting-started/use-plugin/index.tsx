@@ -2,8 +2,8 @@ import React from 'react';
 import LogicFlow from '@logicflow/core';
 import { Control } from '@logicflow/extension';
 import '@logicflow/core/es/index.css';
-// import '@logicflow/core/dist/style/index.css';
-// import '@logicflow/extension/es/index.css';
+// import '@logicflow/core/dist/style/index.less';
+// import '@logicflow/extension/es/index.less';
 import '@logicflow/extension/lib/style/index.css';
 
 import { data, SilentConfig, styleConfig } from './pluginData';
