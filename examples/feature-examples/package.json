@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "@logicflow/feature-examples",
+  "author": "boyongjiong <boyongjiong@didiglobal.com>",
+  "scripts": {
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "setup": "umi setup",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "@ant-design/pro-layout": "^7.19.0",
+    "@logicflow/core": "workspace:latest",
+    "@logicflow/engine": "workspace:latest",
+    "@logicflow/extension": "workspace:latest",
+    "antd": "^5.4.0",
+    "umi": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "typescript": "^5.0.3"
+  }
+}
