@@ -1,5 +1,5 @@
 import { assign } from 'lodash-es'
-import { VNode } from 'preact'
+import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 import { GraphModel } from './model'
 import { KeyboardDef } from './keyboard'
@@ -101,7 +101,7 @@ export namespace Options {
     idGenerator?: (type?: string) => string
     edgeGenerator?: EdgeGeneratorType
 
-    customTrajectory?: (props: CustomAnchorLineProps) => VNode
+    customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
   }
 
   export interface ManualBooleans {}

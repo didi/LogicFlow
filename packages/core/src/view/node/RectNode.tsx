@@ -1,8 +1,9 @@
+import { createElement as h } from 'preact/compat'
 import BaseNode from './BaseNode'
 import { Rect } from '../shape'
 
 export class RectNode extends BaseNode {
-  getShape() {
+  getShape(): h.JSX.Element | null {
     const { model } = this.props
     const style = model.getNodeStyle()
     return (

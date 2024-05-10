@@ -1274,6 +1274,10 @@ export namespace LogicFlow {
   export type AttributesType = Record<string, unknown>
   export type EventArgsType = Record<string, unknown>
 
+  export type VectorData = {
+    deltaX: number
+    deltaY: number
+  }
   export type OffsetData = {
     dx: number
     dy: number
