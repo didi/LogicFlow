@@ -117,9 +117,11 @@ function toXmlJson(retainedFields?: string[]) {
       })
       return xmlJson
     }
+
     return ToXmlJson(json)
   }
 }
+
 /**
  * 将xmlJson转换为普通的json，在内部使用。
  */
@@ -491,6 +493,7 @@ class BpmnAdapter {
     ['-exporterVersion']: string
     [key: string]: any
   }
+
   constructor({ lf }) {
     lf.adapterIn = (data) => this.adapterIn(data)
     lf.adapterOut = (data, retainedFields?: string[]) =>
@@ -511,9 +514,11 @@ class BpmnAdapter {
       '-exporterVersion': '1.2.0',
     }
   }
+
   setCustomShape(key, val) {
     BpmnAdapter.shapeConfigMap.set(key, val)
   }
+
   /**
    * @param retainedFields?: string[] (可选)属性保留字段，retainedField会和默认的defaultRetainedFields:
    * ["properties", "startPoint", "endPoint", "pointsList"]合并，
@@ -568,12 +573,14 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
 
 class BpmnXmlAdapter extends BpmnAdapter {
   static pluginName = 'bpmnXmlAdapter'
+
   constructor(data) {
     super(data)
     const { lf } = data
     lf.adapterIn = this.adapterXmlIn
     lf.adapterOut = this.adapterXmlOut
   }
+
   adapterXmlIn = (bpmnData) => {
     const json = lfXml2Json(bpmnData)
     return this.adapterIn(json)
