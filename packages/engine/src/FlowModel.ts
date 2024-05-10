@@ -7,8 +7,9 @@ import {
   EVENT_INSTANCE_COMPLETE,
   EVENT_INSTANCE_INTERRUPTED,
   EVENT_INSTANCE_ERROR,
+  ErrorCode,
+  getErrorMsg,
 } from './constant'
-import { ErrorCode, getErrorMsg } from './constant/logCode'
 
 export class FlowModel {
   /**
@@ -99,6 +100,7 @@ export class FlowModel {
       this.onExecuteFinished(result)
     })
   }
+
   /**
    * 解析LogicFlow图数据，将nodes和edges转换成节点格式。
    * 例如：
