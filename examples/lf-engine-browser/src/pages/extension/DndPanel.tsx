@@ -4,7 +4,7 @@ import { DndPanel } from '@logicflow/extension'
 import { useEffect, useRef } from 'react'
 
 import '@logicflow/core/es/index.css'
-// import '@logicflow/extension/es/index.css'
+// import '@logicflow/extension/es/index.less'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
