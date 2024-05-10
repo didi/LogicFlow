@@ -1,6 +1,6 @@
 // 统一对外导出
 import { observer as mobxObserver } from 'mobx-preact'
-import { createElement as h } from 'preact/compat'
+import { createElement as h, Component } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 
 import * as LogicFlowUtil from './util'
@@ -9,7 +9,7 @@ export function observer<P>(props: P) {
   return mobxObserver(props as any)
 }
 
-export { LogicFlow, h, LogicFlowUtil }
+export { LogicFlow, h, Component, LogicFlowUtil }
 
 export * from './view'
 export * from './model'
