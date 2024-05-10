@@ -8,4 +8,4 @@ export const theme = {
     strokeWidth: 1,
     stroke: '#a4a5a6',
   },
-};
+}
