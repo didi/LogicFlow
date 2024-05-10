@@ -4,7 +4,7 @@ import LogicFlow, {
   RectNodeModel,
   GraphModel,
 } from '@logicflow/core'
-import ControlGroup from '../control/ControlGroup'
+import ControlGroup from '../Control/ControlGroup'
 
 import NodeConfig = LogicFlow.NodeConfig
 

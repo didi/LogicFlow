@@ -1,9 +1,9 @@
 import LogicFlow from '@logicflow/core'
 
-import RectResize from './node/RectResize'
-import EllipseResize from './node/EllipseResize'
-import DiamondResize from './node/DiamondResize'
-import HtmlResize from './node/HtmlResize'
+import RectResize from './Node/RectResize'
+import EllipseResize from './Node/EllipseResize'
+import DiamondResize from './Node/DiamondResize'
+import HtmlResize from './Node/HtmlResize'
 
 const NodeResize = {
   pluginName: 'nodeResize',
