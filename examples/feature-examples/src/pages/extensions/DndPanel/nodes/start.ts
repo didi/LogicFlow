@@ -7,8 +7,17 @@ class StartNode extends CustomImage.view {
   }
 }
 
+export class StartNodeModel extends CustomImage.model {
+  setAttributes() {
+    this.width = 50
+    this.height = 50
+    this.radius = 5
+    this.text.value = ''
+  }
+}
+
 export default {
   type: 'start',
   view: StartNode,
-  model: CustomImage.model,
+  model: StartNodeModel,
 }
