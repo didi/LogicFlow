@@ -68,7 +68,7 @@ export const content = `.lf-control {
   position: absolute;
   z-index: 999;
   display: none;
-  width: 200px;
+  width: 150px;
   margin: 0 0 0 10px;
   padding: 10px 0;
   background: #fff;
