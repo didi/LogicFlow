@@ -7,8 +7,17 @@ class EndNode extends CustomImage.view {
   }
 }
 
+export class EndNodeModel extends CustomImage.model {
+  setAttributes() {
+    this.width = 50
+    this.height = 50
+    this.radius = 5
+    this.text.value = ''
+  }
+}
+
 export default {
   type: 'end',
   view: EndNode,
-  model: CustomImage.model,
+  model: EndNodeModel,
 }

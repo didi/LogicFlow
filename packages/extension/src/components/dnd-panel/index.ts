@@ -70,6 +70,7 @@ export class DndPanel {
     // if (typeof shapeItem.icon === 'string') {
     if (shapeItem.icon) {
       shape.style.backgroundImage = `url(${shapeItem.icon})`
+      shape.style.backgroundSize = 'contain'
       // } else {
       //   shape.appendChild(shapeItem.icon);
     }
