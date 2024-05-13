@@ -5,7 +5,7 @@ import LogicFlow, {
   DiamondNodeModel,
 } from '@logicflow/core'
 import { PCTResizeParams } from './RectResize'
-import ControlGroup from '../Control/ControlGroup'
+import ControlGroup from '../control/ControlGroup'
 
 import NodeConfig = LogicFlow.NodeConfig
 
