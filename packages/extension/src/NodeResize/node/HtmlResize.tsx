@@ -1,6 +1,6 @@
 import { GraphModel, HtmlNode, HtmlNodeModel } from '@logicflow/core'
 import { PCTResizeParams, ResizeNodeConfig } from './RectResize'
-import ControlGroup from '../Control/ControlGroup'
+import ControlGroup from '../control/ControlGroup'
 
 export class HtmlResizeModel extends HtmlNodeModel {
   private PCTResizeInfo?: PCTResizeParams

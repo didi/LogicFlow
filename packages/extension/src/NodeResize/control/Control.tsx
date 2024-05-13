@@ -11,7 +11,7 @@ import LogicFlow, {
   Rect,
   LogicFlowUtil,
 } from '@logicflow/core'
-import { RectResizeModel } from '../Node'
+import { RectResizeModel } from '../node'
 
 import VectorData = LogicFlow.VectorData
 
