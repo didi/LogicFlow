@@ -1697,7 +1697,7 @@ export namespace LogicFlow {
   export interface Extension {
     readonly pluginName?: string // 插件名称，只用用于插件覆盖和细粒度控制加载哪些插件
     install?: (lf: LogicFlow, logicFlow: LogicFlowConstructor) => void
-    render: ExtensionRender
+    render?: ExtensionRender
     destroy?: () => void
   }
 }
