@@ -1,5 +1,5 @@
 import { createRef, Component } from 'preact/compat'
-import { observer } from '..'
+import { ElementState, observer } from '..'
 import LogicFlow from '../LogicFlow'
 import { GraphModel } from '../model'
 import { ElementType, EventType, ModelType } from '../constant'
@@ -137,7 +137,7 @@ export class TextEditTool extends Component<IProps, IState> {
     } = this.props
     // 按下alt+enter表示输入完成
     if (ev.key === 'Enter' && ev.altKey) {
-      textEditElement?.setElementState(0)
+      textEditElement?.setElementState(ElementState.DEFAULT)
     }
   }
   inputHandler = (ev) => {

@@ -69,6 +69,11 @@ export default defineConfig({
           name: 'DndPanel 插件',
           component: './extensions/DndPanel',
         },
+        {
+          path: '/extension/bpmn',
+          name: 'BPMN 插件',
+          component: './extensions/BPMN',
+        },
       ],
     },
   ],

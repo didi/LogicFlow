@@ -1,6 +1,6 @@
 import LogicFlow from '@logicflow/core'
 
-type ShapeItem = {
+export type ShapeItem = {
   type?: string
   text?: string
   icon?: string
@@ -9,6 +9,7 @@ type ShapeItem = {
   disabled?: boolean
   properties?: Record<string, unknown>
   callback?: (lf: LogicFlow, container?: HTMLElement) => void
+  [key: string]: unknown
 }
 
 export class DndPanel {
@@ -70,7 +71,7 @@ export class DndPanel {
     // if (typeof shapeItem.icon === 'string') {
     if (shapeItem.icon) {
       shape.style.backgroundImage = `url(${shapeItem.icon})`
-      shape.style.backgroundSize = 'contain'
+      // shape.style.backgroundSize = 'contain'
       // } else {
       //   shape.appendChild(shapeItem.icon);
     }
