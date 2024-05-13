@@ -23,29 +23,10 @@ export default function Root() {
         </div>
         <nav>
           <ul>
-            <div className="nav-title">Basic</div>
-            <li>
-              <a href={`/core/basic-node`}>Basic Node</a>
-            </li>
-            <li>
-              <a href={`/core/rect-node`}>Rect Node</a>
-            </li>
-            <li>
-              <a href={`/core/basic-edge`}>Basic Edge</a>
-            </li>
-            <li>
-              <a href={`/core/layout`}>Layout</a>
-            </li>
             <div className="nav-title">Engine</div>
             <li>
               <a href={`/engine/get-started`}>Start Engine</a>
               <a href={`/engine/recorder`}>Recorder</a>
-            </li>
-            <div className="nav-title">Extension</div>
-            <li>
-              <a href={`/extension/control`}>Control</a>
-              <a href={`/extension/dnd-panel`}>DndPanel</a>
-              <a href={`/extension/menu`}>Menu</a>
             </li>
           </ul>
         </nav>

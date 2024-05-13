@@ -6,15 +6,8 @@ import Root from './routes/root'
 import ErrorPage from './pages/ErrorPage'
 
 // 页面组件
-import BasicNode from './pages/core/BasicNode'
-import RectNode from './pages/core/RectNode'
-
 import GetStarted from './pages/engine/GetStarted'
 import Recorder from './pages/engine/Recorder'
-
-import Control from './pages/extension/Control'
-import DndPanel from './pages/extension/DndPanel'
-import Menu from './pages/extension/Menu'
 
 import './index.css'
 
@@ -25,19 +18,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/core',
-        children: [
-          {
-            path: '/core/basic-node',
-            element: <BasicNode />,
-          },
-          {
-            path: '/core/rect-node',
-            element: <RectNode />,
-          },
-        ],
-      },
-      {
         path: '/engine',
         children: [
           {
@@ -47,23 +27,6 @@ const router = createBrowserRouter([
           {
             path: '/engine/recorder',
             element: <Recorder />,
-          },
-        ],
-      },
-      {
-        path: '/extension',
-        children: [
-          {
-            path: '/extension/control',
-            element: <Control />,
-          },
-          {
-            path: '/extension/dnd-panel',
-            element: <DndPanel />,
-          },
-          {
-            path: '/extension/menu',
-            element: <Menu />,
           },
         ],
       },
