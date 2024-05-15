@@ -18,22 +18,12 @@ import {
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 
-import {
-  startEventIcon,
-  endEventIcon,
-  userTaskIcon,
-  serviceTaskIcon,
-  exclusiveGatewayIcon,
-  groupIcon,
-  selectionIcon,
-  deleteMenuIcon,
-} from './svgIcons'
-
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 import styles from './index.less'
 import NodeData = LogicFlow.NodeData
 import GraphConfigData = LogicFlow.GraphConfigData
+import { download } from '@/pages/extensions/BPMN/util'
 
 const config: Partial<LogicFlow.Options> = {
   edgeTextDraggable: true,
@@ -98,28 +88,17 @@ const menuConfig: Record<string, any> = {
   ],
 }
 
-// @ts-ignore
-const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
-  {
-    label: '选区',
-    icon: selectionIcon,
-    callback: () => {
-      lf.openSelectionSelect()
-      lf.once('selection:selected', () => {
-        lf.closeSelectionSelect()
-      })
-    },
-  },
+const defaultIconConfig: ShapeItem[] = [
   {
     type: 'bpmn:startEvent',
-    text: '开始',
     label: '开始',
-    icon: startEventIcon,
+    text: '开始',
+    icon: require('@/assets/bpmn/start-event-none.png'),
   },
   {
     type: 'bpmn:userTask',
     label: '用户任务',
-    icon: userTaskIcon,
+    icon: require('@/assets/bpmn/user-task.png'),
     properties: {
       actived: true,
     },
@@ -127,31 +106,45 @@ const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
   {
     type: 'bpmn:serviceTask',
     label: '系统任务',
-    icon: serviceTaskIcon,
+    icon: require('@/assets/bpmn/service-task.png'),
     cls: 'import_icon',
   },
   {
     type: 'bpmn:exclusiveGateway',
     label: '条件判断',
-    icon: exclusiveGatewayIcon,
+    icon: require('@/assets/bpmn/gateway-xor.png'),
   },
   {
     type: 'bpmn:endEvent',
     label: '结束',
-    icon: endEventIcon,
+    icon: require('@/assets/bpmn/end-event-none.png'),
   },
   {
     type: 'group',
     label: '分组',
-    icon: groupIcon,
+    icon: require('@/assets/bpmn/task-none.png'),
   },
+]
+
+const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
+  {
+    label: '选区',
+    icon: require('@/assets/bpmn/select.png'),
+    callback: () => {
+      lf.openSelectionSelect()
+      lf.once('selection:selected', () => {
+        lf.closeSelectionSelect()
+      })
+    },
+  },
+  ...defaultIconConfig,
 ]
 
 export default function BPMNExtension() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const renderXml = (xml: GraphConfigData) => {
+  const renderXml = (xml: any) => {
     const lf = lfRef.current
     if (!lf) {
       return
@@ -169,21 +162,16 @@ export default function BPMNExtension() {
       lf.setMenuConfig(menuConfig)
 
       const commonMenuConfig = {
-        icon: deleteMenuIcon,
+        icon: require('@/assets/bpmn/delete.png'),
         callback: (data: NodeData) => {
           lf.deleteElement(data.id)
           lf.hideContextMenu()
         },
       }
-      lf.setContextMenuItems(commonMenuConfig)
+      lf.setContextMenuItems([commonMenuConfig])
+      lf.setContextMenuByType('bpmn:userTask', defaultIconConfig)
       // TODO: 待确认具体功能
-      // lf.setContextMenuByType('bpmn:serviceTask', [
-      //   userConfig,
-      //   serviceConfig,
-      //   exclusiveGatewayConfig,
-      //   endConfig,
-      //   groupConfig,
-      // ]);
+      // lf.setContextMenuByType('bpmn:serviceTask', defaultIconConfig);
 
       const dndPanelConfig = getDndPanelConfig(lf)
       lf.setPatternItems(dndPanelConfig)
@@ -241,6 +229,56 @@ export default function BPMNExtension() {
     }
   }, [])
 
+  const handleDownloadData = () => {
+    const data = lfRef.current?.getGraphData()
+    const dataString = JSON.stringify(data)
+    download('logicflow.xml', dataString)
+    window.sessionStorage.setItem('lf-data', dataString)
+  }
+
+  const handleUploadData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const xml = event.target?.result
+
+      renderXml(xml)
+    }
+    reader.onerror = (error) => console.log(error)
+
+    file && reader.readAsText(file) // you could also read images and other binaries
+  }
+
+  const getPath = () => {
+    const lf = lfRef.current
+    if (lf) {
+      lf.setStartNodeType('bpmn:startEvent')
+      const paths = lf.getPathes()
+      console.log('paths', paths)
+      window.sessionStorage.setItem('lf-paths', JSON.stringify(paths))
+      // console.log(JSON.parse(window.sessionStorage.getItem('lf-pathes') ?? ''))
+    }
+  }
+
+  const autoLayout = () => {
+    const nextData = lfRef.current?.layout('bpmn:startEvent')
+    console.log('after layout:', nextData)
+  }
+
+  const getSelectElements = () => {
+    const data = lfRef.current?.getSelectElements(true)
+    console.log('selected elements: ', data)
+  }
+
+  const showContextMenu = () => {
+    const lf = lfRef.current
+    if (lf) {
+      const { nodes } = lf.getSelectElements()
+      console.log(nodes[0])
+      lf.showContextMenu(nodes[0])
+    }
+  }
+
   return (
     <Card title="LogicFlow Extension - DndPanel">
       <p>兼容BPMN官方DEMO，此处仅实现了bpmn中的一部分节点</p>
@@ -253,42 +291,62 @@ export default function BPMNExtension() {
         即可使用。
       </p>
       <Flex wrap="wrap" gap="small">
-        <Button type="primary" key="getPath">
+        <Button type="primary" key="getPath" onClick={getPath}>
           获取路径
         </Button>
-        <Button type="primary" key="showPath">
+        <Button
+          type="primary"
+          key="showPath"
+          onClick={() => {
+            const rawPath = lfRef.current?.getRawPathes()
+            console.log('showPath', rawPath)
+          }}
+        >
           原始路径
         </Button>
-        <Button type="primary" key="autoLayout">
+        <Button type="primary" key="autoLayout" onClick={autoLayout}>
           自动布局
         </Button>
-        <Button type="primary" key="getData">
+        <Button
+          type="primary"
+          key="getSelectElements"
+          onClick={getSelectElements}
+        >
           获取数据
         </Button>
-        <Button type="primary" key="rerender">
-          重新渲染
-        </Button>
-        <Button type="primary" key="showMenu">
+        <Button type="primary" key="showMenu" onClick={showContextMenu}>
           显示菜单
         </Button>
-        <Button type="primary" key="resize">
+        <Button
+          type="primary"
+          key="resize"
+          onClick={() => lfRef.current?.resize(1200, 400)}
+        >
           重设宽高
         </Button>
       </Flex>
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
       <div className="graph-io">
-        <a>
+        <a onClick={handleDownloadData}>
           <img
             src={require('@/assets/bpmn/export.png')}
-            alt="Export LogicFlow Data"
+            alt="Download GraphData"
+          />
+        </a>
+        <a onClick={() => lfRef.current?.getSnapshot()}>
+          <img
+            src={require('@/assets/bpmn/image.png')}
+            alt="Download Graph Image"
           />
         </a>
         <a>
-          <img src={require('@/assets/bpmn/image.png')} alt="LogicFlow Image" />
-        </a>
-        <a>
-          <input type="file" className="upload" id="upload" />
+          <input
+            type="file"
+            className="upload"
+            id="upload"
+            onChange={handleUploadData}
+          />
           <img src={require('@/assets/bpmn/upload.png')} alt="Upload Data" />
         </a>
       </div>

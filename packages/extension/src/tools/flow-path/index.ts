@@ -34,25 +34,25 @@ export class FlowPath {
     this.lf = lf
     this.paths = []
     // 给lf添加方法
-    lf.getPaths = () => {
+    lf.getPathes = () => {
       if (!this.startNodeType) {
         throw new Error('需要预先指定开始节点类型')
       }
-      return this.getPaths()
+      return this.getPathes()
     }
 
     lf.setRawPaths = (paths: Path[]) => {
-      this.setPaths(paths)
+      this.setPathes(paths)
     }
 
-    lf.getRawPaths = () => this.paths
+    lf.getRawPathes = () => this.paths
 
     lf.setStartNodeType = (type: string) => {
       this.startNodeType = type
     }
   }
 
-  setPaths(paths) {
+  setPathes(paths) {
     this.paths = paths.map(({ routeId, name, elements, type }) => ({
       routeId,
       name,
@@ -63,7 +63,7 @@ export class FlowPath {
     }))
   }
 
-  getPaths() {
+  getPathes() {
     const graphData = this.lf.getGraphRawData()
     const nodesMap: Map<string, PathNodeData> = new Map()
     const startNodeIds: string[] = []
@@ -81,7 +81,7 @@ export class FlowPath {
       const node = nodesMap.get(edge.sourceNodeId)
       node?.nextNodes.push(edge.targetNodeId)
     })
-    let pathElements: string[] = []
+    let pathElements: string[][] = []
     startNodeIds.forEach((id) => {
       const node = nodesMap.get(id)
       if (node) {
@@ -101,7 +101,7 @@ export class FlowPath {
     const newPaths: string[] = [...elements]
     newPaths.push(node.id)
     if (node.nextNodes.length === 0) {
-      return newPaths
+      return [newPaths]
     }
     let subPath = []
     for (let i = 0; i < node.nextNodes.length; i++) {
@@ -136,6 +136,7 @@ export class FlowPath {
     // 由于循环路径不包括开始，所以存在重复的情况，此处去重。
     const LoopSet = new Set()
     pathElements.forEach((elements) => {
+      console.log('elements', elements)
       const routeId = this.getNewId('path')
       const name = this.getNewId('路径')
       const isLoop = this.isLoopPath(elements)
@@ -190,7 +191,7 @@ export class FlowPath {
       delete newPath.weight
     })
 
-    this.setPaths(paths)
+    this.setPathes(paths)
     return paths
   }
 

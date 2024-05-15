@@ -2,6 +2,7 @@ import { defineConfig } from 'dumi';
 import { repository, version } from './package.json';
 
 export default defineConfig({
+  mfsu: false,
   define: {
     'process.env.DUMI_VERSION': version,
   },

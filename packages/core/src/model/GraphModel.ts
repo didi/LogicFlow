@@ -17,7 +17,7 @@ import {
   ModelType,
   OverlapMode,
 } from '../constant'
-import { LogicFlow } from '../LogicFlow'
+import LogicFlow from '../LogicFlow'
 import { Options as LFOptions } from '../options'
 import {
   createEdgeGenerator,
@@ -430,7 +430,7 @@ export class GraphModel {
   /**
    * 获取画布数据
    */
-  modelToGraphData(): LogicFlow.GraphConfigData {
+  modelToGraphData(): LogicFlow.GraphData {
     const edges: LogicFlow.EdgeData[] = []
     this.edges.forEach((edge) => {
       const data = edge.getData()
@@ -520,9 +520,9 @@ export class GraphModel {
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
    * 复制的时候不能包括此类边, 因为复制的时候不允许悬空的边
    */
-  getSelectElements(isIgnoreCheck = true): LogicFlow.GraphConfigData {
+  getSelectElements(isIgnoreCheck = true): LogicFlow.GraphData {
     const elements = this.selectElements
-    const graphData: LogicFlow.GraphConfigData = {
+    const graphData: LogicFlow.GraphData = {
       nodes: [],
       edges: [],
     }

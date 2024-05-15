@@ -26,7 +26,7 @@ class CircleNodeModel extends HtmlNodeModel {
     this.height = 80;
     if (this.text) {
       this.properties.text = this.text;
-      this.text = '';
+      this.text.value = '';
     }
   }
 }
