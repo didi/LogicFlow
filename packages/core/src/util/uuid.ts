@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import LogicFlow from '../LogicFlow'
 
-import GraphConfigData = LogicFlow.GraphConfigData
+import GraphData = LogicFlow.GraphData
 
 export const createUuid = (): string => uuidV4()
 
@@ -9,9 +9,9 @@ export const createUuid = (): string => uuidV4()
  * 重新刷新流程图的所有id
  */
 export const refreshGraphId = (
-  graphData: GraphConfigData,
+  graphData: GraphData,
   prefix = '',
-): GraphConfigData => {
+): GraphData => {
   const nodeIdMap = graphData.nodes.reduce((nMap, node) => {
     nMap[node.id] = prefix + uuidV4()
     node.id = nMap[node.id]

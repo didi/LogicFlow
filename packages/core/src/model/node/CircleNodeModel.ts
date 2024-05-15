@@ -1,7 +1,11 @@
 import { cloneDeep } from 'lodash-es'
 import { computed, observable } from 'mobx'
 import BaseNodeModel from './BaseNodeModel'
+import GraphModel from '../GraphModel'
+import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
+
+import NodeConfig = LogicFlow.NodeConfig
 
 export class CircleNodeModel extends BaseNodeModel {
   modelType = ModelType.CIRCLE_NODE
@@ -13,6 +17,12 @@ export class CircleNodeModel extends BaseNodeModel {
   @computed get height(): number {
     return this.r * 2
   }
+
+  constructor(data: NodeConfig, graphModel: GraphModel) {
+    super(data, graphModel)
+    this.setAttributes()
+  }
+
   getNodeStyle() {
     const style = super.getNodeStyle()
     const {

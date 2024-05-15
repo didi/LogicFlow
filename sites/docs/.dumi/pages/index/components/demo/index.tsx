@@ -5,8 +5,9 @@ import './index.less';
 
 import StepNode from './node/stepNode';
 import CircleNode from './node/circleNode';
+import GraphConfigData = LogicFlow.GraphConfigData;
 
-const data = {
+const data: GraphConfigData = {
   nodes: [
     {
       id: '1',

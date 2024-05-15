@@ -6,7 +6,7 @@ import { StepDrag } from '../util'
 import { ElementType, EventType } from '../constant'
 import { getNodeOutline, getEdgeOutline } from '../algorithm/outline'
 
-import GraphConfigData = LogicFlow.GraphConfigData
+import GraphData = LogicFlow.GraphData
 
 type IProps = {
   graphModel: GraphModel
@@ -52,7 +52,7 @@ export default class MultipleSelect extends Component<IProps> {
       x: ev.clientX,
       y: ev.clientY,
     })
-    const selectGraphData: GraphConfigData = {
+    const selectGraphData: GraphData = {
       nodes: [],
       edges: [],
     }
