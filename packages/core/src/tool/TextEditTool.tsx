@@ -131,7 +131,7 @@ export class TextEditTool extends Component<IProps, IState> {
     }
   }
 
-  keyupHandler = (ev) => {
+  keyupHandler = (ev: KeyboardEvent) => {
     const {
       graphModel: { textEditElement },
     } = this.props
@@ -140,7 +140,7 @@ export class TextEditTool extends Component<IProps, IState> {
       textEditElement?.setElementState(ElementState.DEFAULT)
     }
   }
-  inputHandler = (ev) => {
+  inputHandler = (ev: any) => {
     const { innerText: value } = ev.target as HTMLElement
     const {
       graphModel: { textEditElement },
@@ -154,11 +154,11 @@ export class TextEditTool extends Component<IProps, IState> {
     }
   }
   // fix: #587 #760
-  keydownHandler = (ev) => {
+  keydownHandler = (ev: any) => {
     ev.stopPropagation()
   }
 
-  placeCaretAtEnd(el) {
+  placeCaretAtEnd(el: any) {
     if (
       window.getSelection !== undefined &&
       document.createRange !== undefined

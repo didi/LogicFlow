@@ -18,7 +18,7 @@ class LevelNodeView extends HtmlNode {
       <div>
         <div class="color-head">Zoom Level</div>
         <div class="color-body">
-          <input type="range" id="cowbell" name="cowbell" min="0.1" max="1.9" value="${properties.level}" step="0.2" />
+          <input id="cowbell" name="cowbell" min="0.1" max="1.9" value="${properties.level}" step="0.2" />
         </div>
       </div>
     `;

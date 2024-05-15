@@ -6,6 +6,7 @@ import Root from './routes/root'
 import ErrorPage from './pages/ErrorPage'
 
 // 页面组件
+import Graph from './pages/graph'
 import GetStarted from './pages/engine/GetStarted'
 import Recorder from './pages/engine/Recorder'
 
@@ -17,6 +18,15 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: '/graph',
+        children: [
+          {
+            path: '/graph/get-started',
+            element: <Graph />,
+          },
+        ],
+      },
       {
         path: '/engine',
         children: [

@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "module": "ES2020",
     "moduleResolution": "Node",
+    "experimentalDecorators": true,
     "sourceMap": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,

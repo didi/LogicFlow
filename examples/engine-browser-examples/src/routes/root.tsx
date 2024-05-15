@@ -4,8 +4,9 @@ export default function Root() {
   return (
     <>
       <div id="sidebar">
-        <h1>LogicFLow Engine Demos</h1>
+        <h1>LogicFlow & Engine Demos</h1>
         <div>
+          {/* TODO: 完成路由检索功能 */}
           <form id="search-form" role="search">
             <input
               id="q"
@@ -23,6 +24,10 @@ export default function Root() {
         </div>
         <nav>
           <ul>
+            <div className="nav-title">Graph</div>
+            <li>
+              <a href={`/graph/get-started`}>Get Started</a>
+            </li>
             <div className="nav-title">Engine</div>
             <li>
               <a href={`/engine/get-started`}>Start Engine</a>
