@@ -4,7 +4,7 @@
   "description": "LogicFlow, help you quickly create flowcharts",
   "main": "dist/index.js",
   "module": "es/index.js",
-  "types": "es/index.d.ts",
+  "types": "lib/index.d.ts",
   "unpkg": "dist/index.js",
   "jsdelivr": "dist/index.js",
   "homepage": "https://site.logic-flow.cn",

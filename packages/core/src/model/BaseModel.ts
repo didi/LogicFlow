@@ -36,7 +36,7 @@ export namespace Model {
        * 详见：https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306
        */
       edgeID?: string,
-    ) => boolean
+    ) => boolean | undefined
   }
   export type ConnectRuleResult = {
     isAllPass: boolean

@@ -7,9 +7,9 @@ import { OverlapMode } from './constant'
 
 export namespace Options {
   import NodeData = LogicFlow.NodeData
-  import GraphConfigData = LogicFlow.GraphConfigData
   import EdgeData = LogicFlow.EdgeData
   import ExtensionConstructor = LogicFlow.ExtensionConstructor
+  import GraphData = LogicFlow.GraphData
   export type EdgeType = 'line' | 'polyline' | 'bezier' | string
   export type BackgroundConfig = {
     // 背景图片地址
@@ -58,7 +58,7 @@ export namespace Options {
   }
 
   export interface GuardsConfig {
-    beforeClone?: (data: NodeData | GraphConfigData) => boolean
+    beforeClone?: (data: NodeData | GraphData) => boolean
     beforeDelete?: (data: NodeData | EdgeData) => boolean
   }
 

@@ -1,6 +1,10 @@
 import { defineConfig } from 'umi'
 
 export default defineConfig({
+  // mfsu: {
+  //   exclude: ['@logicflow/extension']
+  // },
+  mfsu: false,
   routes: [
     {
       path: '/',
@@ -16,7 +20,10 @@ export default defineConfig({
       path: '/custom-nodes',
       name: 'custom nodes',
       routes: [
-        { path: 'custom-nodes', redirect: 'custom-nodes/rect' },
+        {
+          path: 'custom-nodes',
+          redirect: 'custom-nodes/rect',
+        },
         {
           path: '/custom-nodes/rect',
           name: '矩形节点',
@@ -53,7 +60,10 @@ export default defineConfig({
       name: 'official extensions',
       path: '/extension',
       routes: [
-        { path: 'extension', redirect: 'extension/control' },
+        {
+          path: 'extension',
+          redirect: 'extension/control',
+        },
         {
           path: '/extension/control',
           name: 'Control 插件',

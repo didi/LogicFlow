@@ -97,8 +97,8 @@ export class SnaplineModel {
         const itemData = getNodeBBox(item)
         // 如果节点的最大最小Y轴坐标与节点的最大最小Y轴坐标相等，展示水平线
         if (
-          itemData.minY === draggingData.minY ||
-          itemData.maxY === draggingData.minY
+          itemData.minY === draggingData?.minY ||
+          itemData.maxY === draggingData?.minY
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowHorizontal = true
@@ -106,8 +106,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minY === draggingData.maxY ||
-          itemData.maxY === draggingData.maxY
+          itemData.minY === draggingData?.maxY ||
+          itemData.maxY === draggingData?.maxY
         ) {
           isShowHorizontal = true
           horizontalY = draggingData.maxY
@@ -152,8 +152,8 @@ export class SnaplineModel {
         const itemData = getNodeBBox(item)
         // 如果节点的最大最小X轴坐标与节点的最大最小X轴坐标相等，展示垂直线
         if (
-          itemData.minX === draggingData.minX ||
-          itemData.maxX === draggingData.minX
+          itemData.minX === draggingData?.minX ||
+          itemData.maxX === draggingData?.minX
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowVertical = true
@@ -161,8 +161,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minX === draggingData.maxX ||
-          itemData.maxX === draggingData.maxX
+          itemData.minX === draggingData?.maxX ||
+          itemData.maxX === draggingData?.maxX
         ) {
           isShowVertical = true
           verticalX = draggingData.maxX

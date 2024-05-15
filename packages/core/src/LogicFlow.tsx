@@ -29,11 +29,13 @@ import Extension = LogicFlow.Extension
 import RegisteredExtension = LogicFlow.RegisteredExtension
 import ExtensionConstructor = LogicFlow.ExtensionConstructor
 import GraphConfigData = LogicFlow.GraphConfigData
-import RegisterConfig = LogicFlow.RegisterConfig
-import RegisterParam = LogicFlow.RegisterParam
 import NodeConfig = LogicFlow.NodeConfig
 import EdgeConfig = LogicFlow.EdgeConfig
+import GraphData = LogicFlow.GraphData
+import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
+import RegisterConfig = LogicFlow.RegisterConfig
+import RegisterParam = LogicFlow.RegisterParam
 import GraphElements = LogicFlow.GraphElements
 import PointTuple = LogicFlow.PointTuple
 import ExtensionRender = LogicFlow.ExtensionRender
@@ -77,8 +79,8 @@ export class LogicFlow {
    * 详情请参考 adapter docs
    * 包括 adapterIn 和 adapterOut 两个方法
    */
-  private adapterIn?: (data: unknown) => GraphConfigData
-  private adapterOut?: (data: GraphConfigData, ...rest: any) => unknown;
+  private adapterIn?: (data: unknown) => GraphData
+  private adapterOut?: (data: GraphData, ...rest: any) => unknown;
 
   // 支持插件在 LogicFlow 实例上增加自定义方法
   [propName: string]: any
@@ -220,7 +222,7 @@ export class LogicFlow {
     }
   }
 
-  private registerElement(config) {
+  private registerElement(config: RegisterConfig) {
     let vClass = config.view
     if (config.isObserverView !== false && !vClass.isObervered) {
       vClass.isObervered = true
@@ -372,7 +374,7 @@ export class LogicFlow {
    * 删除元素，在不确定当前id是节点还是边时使用
    * @param id 元素id
    */
-  deleteElement(id): boolean {
+  deleteElement(id: string): boolean {
     const model = this.getModelById(id)
     if (!model) return false
     const callback = {
@@ -423,7 +425,7 @@ export class LogicFlow {
    * @param nodeId 节点ID
    * @returns model数组
    */
-  getNodeEdges(nodeId): BaseEdgeModel[] {
+  getNodeEdges(nodeId: string): BaseEdgeModel[] {
     return this.graphModel.getNodeEdges(nodeId)
   }
 
@@ -647,28 +649,28 @@ export class LogicFlow {
   /**
    * 获取所有以此节点为终点的边
    */
-  getNodeIncomingEdge(nodeId) {
+  getNodeIncomingEdge(nodeId: string) {
     return this.graphModel.getNodeIncomingEdge(nodeId)
   }
 
   /**
    * 获取所有以此节点为起点的边
    */
-  getNodeOutgoingEdge(nodeId) {
+  getNodeOutgoingEdge(nodeId: string) {
     return this.graphModel.getNodeOutgoingEdge(nodeId)
   }
 
   /**
    * 获取节点连接到的所有起始节点
    */
-  getNodeIncomingNode(nodeId) {
+  getNodeIncomingNode(nodeId: string) {
     return this.graphModel.getNodeIncomingNode(nodeId)
   }
 
   /**
    * 获取节点连接到的所有目标节点
    */
-  getNodeOutgoingNode(nodeId) {
+  getNodeOutgoingNode(nodeId: string) {
     return this.graphModel.getNodeOutgoingNode(nodeId)
   }
 
@@ -710,7 +712,7 @@ export class LogicFlow {
    * @see todo link 堆叠模式
    * @param id 元素Id
    */
-  toFront(id) {
+  toFront(id: string) {
     this.graphModel.toFront(id)
   }
 
@@ -734,7 +736,7 @@ export class LogicFlow {
     distance = 40,
   ): GraphElements | undefined {
     this._distance = distance // TODO: 移除该行代码，只为解决 ts 问题
-    const nodeIdMap = {}
+    const nodeIdMap: Record<string, string> = {}
     const elements: GraphElements = {
       nodes: [],
       edges: [],
@@ -795,7 +797,7 @@ export class LogicFlow {
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
    * 注意：复制的时候不能包括此类边, 因为复制的时候不允许悬空的边。
    */
-  getSelectElements(isIgnoreCheck = true): GraphConfigData {
+  getSelectElements(isIgnoreCheck = true): GraphData {
     return this.graphModel.getSelectElements(isIgnoreCheck)
   }
 
@@ -811,10 +813,10 @@ export class LogicFlow {
    * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
    * 如果实现通用插件，请使用getGraphRawData
    */
-  getGraphData(...params: any): GraphConfigData | any {
+  getGraphData(...params: any): GraphData | any {
     const data = this.graphModel.modelToGraphData()
     if (this.adapterOut) {
-      return this.adapterOut(data as GraphConfigData, ...params)
+      return this.adapterOut(data as GraphData, ...params)
     }
     return data
   }
@@ -823,7 +825,7 @@ export class LogicFlow {
    * 获取流程绘图原始数据
    * 在存在adapter时，可以使用getGraphRawData获取图原始数据
    */
-  getGraphRawData(): GraphConfigData {
+  getGraphRawData(): GraphData {
     return this.graphModel.modelToGraphData()
   }
 
@@ -1070,7 +1072,7 @@ export class LogicFlow {
     })
   }
 
-  private initContainer(container) {
+  private initContainer(container: HTMLElement) {
     const lfContainer = document.createElement('div')
     lfContainer.style.position = 'relative'
     lfContainer.style.width = '100%'
@@ -1140,7 +1142,7 @@ export class LogicFlow {
    * 内部保留方法
    * 创建一个fakerNode，用于dnd插件拖动节点进画布的时候使用。
    */
-  createFakerNode(nodeConfig) {
+  createFakerNode(nodeConfig: NodeConfig) {
     const Model = this.graphModel.modelMap.get(nodeConfig.type)
     if (!Model) {
       console.warn(`不存在为${nodeConfig.type}类型的节点`)
@@ -1172,7 +1174,7 @@ export class LogicFlow {
    * 内部保留方法
    * 用于fakerNode显示对齐线
    */
-  setNodeSnapLine(data) {
+  setNodeSnapLine(data: NodeData) {
     if (this.snaplineModel) {
       this.snaplineModel.setNodeSnapLine(data)
     }
@@ -1192,11 +1194,11 @@ export class LogicFlow {
    * 内部保留方法
    * 用于fakerNode移除对齐线
    */
-  setView(type: string, component) {
+  setView(type: string, component: Component) {
     this.viewMap.set(type, component)
   }
 
-  renderRawData(graphRawData) {
+  renderRawData(graphRawData: GraphConfigData) {
     this.graphModel.graphDataToModel(formatData(graphRawData))
     if (this.options.history !== false) {
       this.history.watch(this.graphModel)
@@ -1243,7 +1245,7 @@ export class LogicFlow {
    * })
    * @param graphData 图数据
    */
-  render(graphData = {}) {
+  render(graphData: GraphConfigData) {
     if (this.adapterIn) {
       graphData = this.adapterIn(graphData)
     }
@@ -1260,11 +1262,6 @@ export class LogicFlow {
 // Option
 export namespace LogicFlow {
   export interface Options extends LFOptions.Common {}
-
-  export interface GraphConfigData {
-    nodes: NodeData[]
-    edges: EdgeData[]
-  }
 
   export type DomAttributes = {
     className?: string
@@ -1339,6 +1336,16 @@ export namespace LogicFlow {
     end: Point
     hover: boolean
     isSelected: boolean
+  }
+
+  export interface GraphConfigData {
+    nodes: NodeConfig[]
+    edges: EdgeConfig[]
+  }
+
+  export interface GraphData {
+    nodes: NodeData[]
+    edges: EdgeData[]
   }
 
   export interface FakeNodeConfig {
