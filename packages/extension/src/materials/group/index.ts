@@ -11,6 +11,7 @@ import EdgeConfig = LogicFlow.EdgeConfig
 import Point = LogicFlow.Point
 import BoxBoundsPoint = Model.BoxBoundsPoint
 import NodeData = LogicFlow.NodeData
+import { forEach } from 'lodash-es'
 
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
@@ -52,8 +53,9 @@ export class Group {
     lf.on('node:dnd-drag,node:drag', this.setActiveGroup)
     lf.on('node:click', this.nodeSelected)
     lf.on('graph:rendered', this.graphRendered)
+
     // https://github.com/didi/LogicFlow/issues/1346
-    // 重写addElements()方法，在addElements()原有基础上增加对group内部所有nodes和edges的复制功能
+    // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
     lf.addElements = (
       { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
       distance: number,
@@ -70,8 +72,7 @@ export class Group {
       const groupInnerEdges: EdgeConfig[] = []
       // ============== 变量初始化 ==============
 
-      for (let i = 0; i < selectedNodes.length; i++) {
-        const node = selectedNodes[i]
+      forEach(selectedNodes, (node) => {
         const preId = node.id
         const { children, ...rest } = node
         const nodeModel = lf.addNode(rest)
@@ -92,7 +93,8 @@ export class Group {
           distance,
         )
         groupInnerEdges.push(...edgesArray)
-      }
+      })
+
       groupInnerEdges.forEach((edge) => {
         this.createEdgeModel(edge, nodeIdMap, distance)
       })
@@ -102,7 +104,7 @@ export class Group {
 
       // 最外层的edges继续执行创建edgeModel的流程
       // 由于最外层会调用translationEdgeData()，因此这里不用传入distance进行偏移
-      selectedEdges.forEach((edge) => {
+      forEach(selectedEdges, (edge) => {
         const edgeModel = this.createEdgeModel(edge, nodeIdMap, 0)
         elements.edges.push(edgeModel)
       })

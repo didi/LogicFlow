@@ -29,7 +29,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@antv/hierarchy": "^0.6.11",
-    "@logicflow/core": "workspace:*",
+    "@logicflow/core": "workspace:latest",
     "preact": "^10.17.1"
   }
 }

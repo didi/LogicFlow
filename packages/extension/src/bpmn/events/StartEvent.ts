@@ -42,7 +42,7 @@ class StartEventView extends CircleNode {
   static extendKey = 'StartEventNode'
 }
 
-const StartEvent = {
+export const StartEvent = {
   type: 'bpmn:startEvent',
   view: StartEventView,
   model: StartEventModel,

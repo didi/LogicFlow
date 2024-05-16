@@ -139,10 +139,10 @@ export class DiamondResizeView extends DiamondNode {
   }
 }
 
-const EllipseResize = {
+export const DiamondResize = {
   type: 'diamond',
   view: DiamondResizeView,
   model: DiamondResizeModel,
 }
 
-export default EllipseResize
+export default DiamondResize

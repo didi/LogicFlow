@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 class IDS {
   private _ids: Set<string>
 
