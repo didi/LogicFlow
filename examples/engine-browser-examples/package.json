@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
-    "@logicflow/core": "workspace:*",
-    "@logicflow/engine": "workspace:*",
-    "@logicflow/extension": "1.2.19",
+    "@logicflow/core": "workspace:latest",
+    "@logicflow/engine": "workspace:latest",
+    "@logicflow/extension": "workspace:latest",
     "antd": "^5.4.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
