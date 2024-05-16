@@ -1,3 +1,5 @@
+import LogicFlow from '@logicflow/core'
+
 export const StartEventConfig = {
   width: 40,
   height: 40,
@@ -23,7 +25,7 @@ export const UserTaskConfig = {
   height: 80,
 }
 
-export const theme = {
+export const theme: LogicFlow.CommonTheme = {
   rect: {
     radius: 5,
     stroke: 'rgb(24, 125, 255)',

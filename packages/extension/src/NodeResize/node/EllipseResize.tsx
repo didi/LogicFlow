@@ -130,7 +130,7 @@ export class EllipseResizeView extends EllipseNode {
   }
 }
 
-const EllipseResize = {
+export const EllipseResize = {
   type: 'ellipse',
   view: EllipseResizeView,
   model: EllipseResizeModel,

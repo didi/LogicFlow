@@ -140,7 +140,7 @@ export class RectResizeView extends RectNode {
   }
 }
 
-const RectResize = {
+export const RectResize = {
   type: 'rect',
   view: RectResizeView,
   model: RectResizeModel,
