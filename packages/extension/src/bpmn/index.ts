@@ -1,23 +1,26 @@
-// import LogicFlow from '@logicflow/core';
-import StartEvent, {
-  StartEventModel,
+import { theme } from './constant'
+import {
+  StartEvent,
   StartEventView,
-} from './events/StartEvent'
-import EndEvent, { EndEventView, EndEventModel } from './events/EndEvent'
-import ExclusiveGateway, {
+  StartEventModel,
+  EndEvent,
+  EndEventView,
+  EndEventModel,
+} from './events'
+import { SequenceFlow, SequenceFlowView, SequenceFlowModel } from './flow'
+import {
+  ExclusiveGateway,
   ExclusiveGatewayView,
   ExclusiveGatewayModel,
-} from './gateways/ExclusiveGateway'
-import UserTask, { UserTaskView, UserTaskModel } from './tasks/UserTask'
-import ServiceTask, {
+} from './gateways'
+import {
+  UserTask,
+  UserTaskView,
+  UserTaskModel,
+  ServiceTask,
   ServiceTaskView,
   ServiceTaskModel,
-} from './tasks/ServiceTask'
-import SequenceFlow, {
-  SequenceFlowView,
-  SequenceFlowModel,
-} from './flow/SequenceFlow'
-import { theme } from './constant'
+} from './tasks'
 
 class BpmnElement {
   static pluginName = 'bpmnElement'

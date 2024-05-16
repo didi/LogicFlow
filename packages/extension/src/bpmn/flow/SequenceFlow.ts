@@ -1,7 +1,7 @@
 import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
 import { getBpmnId } from '../getBpmnId'
 
-class SequenceFlowModel extends PolylineEdgeModel {
+export class SequenceFlowModel extends PolylineEdgeModel {
   static extendKey = 'SequenceFlowModel'
 
   constructor(data, graphModel) {
@@ -12,15 +12,14 @@ class SequenceFlowModel extends PolylineEdgeModel {
   }
 }
 
-class SequenceFlowView extends PolylineEdge {
+export class SequenceFlowView extends PolylineEdge {
   static extendKey = 'SequenceFlowEdge'
 }
 
-const SequenceFlow = {
+export const SequenceFlow = {
   type: 'bpmn:sequenceFlow',
   view: SequenceFlowView,
   model: SequenceFlowModel,
 }
 
-export { SequenceFlowView, SequenceFlowModel }
 export default SequenceFlow

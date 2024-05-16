@@ -1,7 +1,7 @@
 import { h, RectNode, RectNodeModel } from '@logicflow/core'
 import { getBpmnId } from '../getBpmnId'
 
-class UserTaskModel extends RectNodeModel {
+export class UserTaskModel extends RectNodeModel {
   static extendKey = 'UserTaskModel'
 
   constructor(data, graphModel) {
@@ -12,7 +12,7 @@ class UserTaskModel extends RectNodeModel {
   }
 }
 
-class UserTaskView extends RectNode {
+export class UserTaskView extends RectNode {
   static extendKey = 'UserTaskNode'
 
   getLabelShape(): h.JSX.Element {
@@ -55,11 +55,10 @@ class UserTaskView extends RectNode {
   }
 }
 
-const UserTask = {
+export const UserTask = {
   type: 'bpmn:userTask',
   view: UserTaskView,
   model: UserTaskModel,
 }
 
-export { UserTaskView, UserTaskModel }
 export default UserTask
