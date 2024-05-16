@@ -1,5 +1,6 @@
 import { createElement as h, render, Component } from 'preact/compat'
 import { observer } from 'mobx-preact'
+import { cloneDeep, forEach } from 'lodash-es'
 import { Options as LFOptions } from './options'
 import {
   BaseNodeModel,
@@ -741,15 +742,15 @@ export class LogicFlow {
       nodes: [],
       edges: [],
     }
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i]
+    forEach(nodes, (node) => {
       const preId = node.id
       const nodeModel = this.addNode(node)
       if (!nodeModel) return
       if (preId) nodeIdMap[preId] = nodeModel.id
       elements.nodes.push(nodeModel)
-    }
-    edges.forEach((edge) => {
+    })
+
+    forEach(edges, (edge) => {
       let sourceId = edge.sourceNodeId
       let targetId = edge.targetNodeId
       if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId]
@@ -1246,10 +1247,11 @@ export class LogicFlow {
    * @param graphData 图数据
    */
   render(graphData: GraphConfigData) {
+    let graphRawData = cloneDeep(graphData)
     if (this.adapterIn) {
-      graphData = this.adapterIn(graphData)
+      graphRawData = this.adapterIn(graphRawData)
     }
-    this.renderRawData(graphData)
+    this.renderRawData(graphRawData)
   }
 
   /**
@@ -1339,8 +1341,8 @@ export namespace LogicFlow {
   }
 
   export interface GraphConfigData {
-    nodes: NodeConfig[]
-    edges: EdgeConfig[]
+    nodes?: NodeConfig[]
+    edges?: EdgeConfig[]
   }
 
   export interface GraphData {
@@ -1383,7 +1385,7 @@ export namespace LogicFlow {
 
   export interface EdgeConfig {
     id?: string
-    type: string // TODO: 将所有类型选项列出来；LogicFlow 内部默认为 polyline
+    type?: string // TODO: 将所有类型选项列出来；LogicFlow 内部默认为 polyline
 
     sourceNodeId: string
     sourceAnchorId?: string
@@ -1404,6 +1406,8 @@ export namespace LogicFlow {
     type: string
     text?: TextConfig
 
+    startPoint: Point
+    endPoint: Point
     [key: string]: unknown
   }
 

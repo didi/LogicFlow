@@ -52,8 +52,8 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   @observable type = ''
   @observable sourceNodeId = ''
   @observable targetNodeId = ''
-  @observable startPoint: Point = { x: 0, y: 0 }
-  @observable endPoint: Point = { x: 0, y: 0 }
+  @observable startPoint!: Point
+  @observable endPoint!: Point
 
   @observable text = {
     value: '',
@@ -325,6 +325,8 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       )
     }
     targetAnchors.forEach((anchor) => {
+      if (!this.startPoint) return // 如果此时 this.startPoint 为 undefined，直接返回
+
       const distance = twoPointDistance(anchor, this.startPoint)
       if (minDistance === undefined) {
         minDistance = distance
@@ -623,8 +625,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
 
   @action
   moveStartPoint(deltaX, deltaY): void {
-    this.startPoint.x += deltaX
-    this.startPoint.y += deltaY
+    if (this.startPoint) {
+      this.startPoint.x += deltaX
+      this.startPoint.y += deltaY
+    }
   }
 
   @action
@@ -634,8 +638,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
 
   @action
   moveEndPoint(deltaX, deltaY): void {
-    this.endPoint.x += deltaX
-    this.endPoint.y += deltaY
+    if (this.endPoint) {
+      this.endPoint.x += deltaX
+      this.endPoint.y += deltaY
+    }
   }
 
   @action
