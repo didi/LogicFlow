@@ -59,7 +59,10 @@ export default function DndPanelExtension() {
         plugins: [DndPanel],
       })
 
-      lf.render([])
+      lf.render({
+        nodes: [],
+        edges: [],
+      })
 
       lf.register(StartNode)
       lf.register(EndNode)

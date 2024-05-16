@@ -17,13 +17,13 @@ import {
 
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
+import { download } from './util'
 
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 import styles from './index.less'
 import NodeData = LogicFlow.NodeData
 import GraphConfigData = LogicFlow.GraphConfigData
-import { download } from '@/pages/extensions/BPMN/util'
 
 const config: Partial<LogicFlow.Options> = {
   edgeTextDraggable: true,

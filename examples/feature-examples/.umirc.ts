@@ -1,10 +1,8 @@
 import { defineConfig } from 'umi'
 
 export default defineConfig({
-  // mfsu: {
-  //   exclude: ['@logicflow/extension']
-  // },
-  mfsu: false,
+  npmClient: 'pnpm',
+  mfsu: false, // 关闭 mfsu，以解决开发时 monorepo package 更新不及时的问题
   routes: [
     {
       path: '/',
@@ -27,32 +25,32 @@ export default defineConfig({
         {
           path: '/custom-nodes/rect',
           name: '矩形节点',
-          component: './nodes/custom/Rect',
+          component: './nodes/custom/rect',
         },
         {
           path: '/custom-nodes/ellipse',
           name: '椭圆节点',
-          component: './nodes/custom/Ellipse',
+          component: './nodes/custom/ellipse',
         },
         {
           path: '/custom-nodes/icon',
           name: '图标节点',
-          component: './nodes/custom/Icon',
+          component: './nodes/custom/icon',
         },
         {
           path: '/custom-nodes/image',
           name: '图像节点',
-          component: './nodes/custom/Image',
+          component: './nodes/custom/image',
         },
         {
           path: '/custom-nodes/html',
           name: 'HTML节点',
-          component: './nodes/custom/Html',
+          component: './nodes/custom/html',
         },
         {
           path: '/custom-nodes/theme',
           name: '自定义主题',
-          component: './nodes/custom/Theme',
+          component: './nodes/custom/theme',
         },
       ],
     },
@@ -67,25 +65,24 @@ export default defineConfig({
         {
           path: '/extension/control',
           name: 'Control 插件',
-          component: './extensions/Control',
+          component: './extensions/control',
         },
         {
           path: '/extension/menu',
           name: 'Menu 插件',
-          component: './extensions/Menu',
+          component: './extensions/menu',
         },
         {
           path: '/extension/dnd-panel',
           name: 'DndPanel 插件',
-          component: './extensions/DndPanel',
+          component: './extensions/dnd-panel',
         },
         {
           path: '/extension/bpmn',
           name: 'BPMN 插件',
-          component: './extensions/BPMN',
+          component: './extensions/bpmn',
         },
       ],
     },
   ],
-  npmClient: 'pnpm',
 })
