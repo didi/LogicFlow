@@ -8,7 +8,7 @@ import { getBpmnId } from '../getBpmnId'
 
 import NodeConfig = LogicFlow.NodeConfig
 
-class ExclusiveGatewayModel extends PolygonNodeModel {
+export class ExclusiveGatewayModel extends PolygonNodeModel {
   static extendKey = 'ExclusiveGatewayModel'
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
@@ -35,7 +35,7 @@ class ExclusiveGatewayModel extends PolygonNodeModel {
   }
 }
 
-class ExclusiveGatewayView extends PolygonNode {
+export class ExclusiveGatewayView extends PolygonNode {
   static extendKey = 'ExclusiveGatewayNode'
 
   getShape(): h.JSX.Element {
@@ -62,11 +62,10 @@ class ExclusiveGatewayView extends PolygonNode {
   }
 }
 
-const ExclusiveGateway = {
+export const ExclusiveGateway = {
   type: 'bpmn:exclusiveGateway',
   view: ExclusiveGatewayView,
   model: ExclusiveGatewayModel,
 }
 
-export { ExclusiveGatewayView, ExclusiveGatewayModel }
 export default ExclusiveGateway

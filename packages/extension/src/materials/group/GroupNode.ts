@@ -1,5 +1,5 @@
 import LogicFlow, { h } from '@logicflow/core'
-import { RectResize } from '../../NodeResize'
+import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
 import GraphElements = LogicFlow.GraphElements
 import NodeData = LogicFlow.NodeData
@@ -8,7 +8,7 @@ const defaultWidth = 500
 const defaultHeight = 300
 const DEFAULT_BOTTOM_Z_INDEX = -10000
 
-export class GroupNodeModel extends RectResize.model {
+export class GroupNodeModel extends RectResizeModel {
   readonly isGroup = true
   /**
    * 此分组的子节点Id
@@ -362,7 +362,7 @@ export class GroupNodeModel extends RectResize.model {
   }
 }
 
-export class GroupNode extends RectResize.view {
+export class GroupNode extends RectResizeView {
   getControlGroup(): h.JSX.Element | null {
     const { resizable, properties } = this.props.model
     return resizable && !properties.isFolded ? super.getControlGroup() : null

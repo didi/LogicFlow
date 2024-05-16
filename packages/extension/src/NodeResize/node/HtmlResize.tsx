@@ -115,7 +115,7 @@ export class HtmlResizeView extends HtmlNode {
   }
 }
 
-const HtmlResize = {
+export const HtmlResize = {
   type: 'html',
   view: HtmlResizeView,
   model: HtmlResizeModel,
