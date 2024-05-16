@@ -28,6 +28,10 @@ export default function Root() {
             <li>
               <a href={`/graph/get-started`}>Get Started</a>
             </li>
+            <div className="nav-title">Extension</div>
+            <li>
+              <a href={`/extension/bpmn`}>BPMN</a>
+            </li>
             <div className="nav-title">Engine</div>
             <li>
               <a href={`/engine/get-started`}>Start Engine</a>
