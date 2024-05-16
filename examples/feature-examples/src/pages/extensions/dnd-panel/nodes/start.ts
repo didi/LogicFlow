@@ -1,4 +1,4 @@
-import { CustomImage } from '@/components/nodes/CustomHtml'
+import { CustomImage } from '@/components/nodes/custom-html'
 
 // 云形状的图片节点
 class StartNode extends CustomImage.view {

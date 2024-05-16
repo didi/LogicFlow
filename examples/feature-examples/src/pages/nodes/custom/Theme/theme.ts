@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core/es'
+import LogicFlow from '@logicflow/core'
 
 const theme: Partial<LogicFlow.Theme> = {
   baseNode: {
