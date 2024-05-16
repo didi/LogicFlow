@@ -1,4 +1,4 @@
-import CustomRect from '@/components/nodes/CustomRect'
+import CustomRect from '@/components/nodes/custom-rect'
 import LogicFlow from '@logicflow/core'
 import { Card } from 'antd'
 import { useEffect, useRef } from 'react'
