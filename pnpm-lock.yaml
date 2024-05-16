@@ -178,14 +178,14 @@ importers:
         specifier: ^5.0.1
         version: 5.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@logicflow/core':
-        specifier: workspace:*
+        specifier: workspace:latest
         version: link:../../packages/core
       '@logicflow/engine':
-        specifier: workspace:*
+        specifier: workspace:latest
         version: link:../../packages/engine
       '@logicflow/extension':
-        specifier: 1.2.19
-        version: 1.2.19(ts-node@10.9.2(@swc/core@1.3.72(@swc/helpers@0.5.1))(@types/node@20.10.6)(typescript@5.3.3))
+        specifier: workspace:latest
+        version: link:../../packages/extension
       antd:
         specifier: ^5.4.0
         version: 5.12.7(date-fns@2.30.0)(moment@2.30.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -456,7 +456,7 @@ importers:
         specifier: ^0.6.11
         version: 0.6.11
       '@logicflow/core':
-        specifier: workspace:*
+        specifier: workspace:latest
         version: link:../core
       preact:
         specifier: ^10.17.1
@@ -2123,12 +2123,6 @@ packages:
     engines: {node: '>=8'}
     peerDependencies:
       react: '>=16.3.0'
-
-  '@logicflow/core@1.2.18':
-    resolution: {integrity: sha512-TjN+gPfoSBmdgTE7FL5k5jgzkNTM0EyEuZOuLfSrBeglnT+Wm2g1GOdxcXtV7zzvtAnLV5wXf5k505i9XhyxyA==}
-
-  '@logicflow/extension@1.2.19':
-    resolution: {integrity: sha512-7cP5RRCyCoiy7cJThugS/z6vQzezcZdEClmb0FNjlAt9v4xyQZtuanRakGfJ/oojbO7tl5voRTzuYhmVGSmBfg==}
 
   '@makotot/ghostui@2.0.0':
     resolution: {integrity: sha512-LD6OeMv+yGjpYZNjh34yDTCIE1NegqOtJq5gm4wX6op3QL7K5psTVzMjkWzseBoYj0XOD4g+UJVIZTprfoOPGg==}
@@ -14246,26 +14240,6 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
       react-is: 16.13.1
-
-  '@logicflow/core@1.2.18':
-    dependencies:
-      '@types/mousetrap': 1.6.15
-      mousetrap: 1.6.5
-      preact: 10.19.3
-
-  '@logicflow/extension@1.2.19(ts-node@10.9.2(@swc/core@1.3.72(@swc/helpers@0.5.1))(@types/node@20.10.6)(typescript@5.3.3))':
-    dependencies:
-      '@logicflow/core': 1.2.18
-      jest: 27.5.1(ts-node@10.9.2(@swc/core@1.3.72(@swc/helpers@0.5.1))(@types/node@20.10.6)(typescript@5.3.3))
-      lodash-es: 4.17.21
-      preact: 10.19.3
-    transitivePeerDependencies:
-      - bufferutil
-      - canvas
-      - node-notifier
-      - supports-color
-      - ts-node
-      - utf-8-validate
 
   '@makotot/ghostui@2.0.0(react@18.2.0)':
     dependencies:
