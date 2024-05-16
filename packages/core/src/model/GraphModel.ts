@@ -275,7 +275,7 @@ export class GraphModel {
         wholeEdge,
         wholeNode,
       )
-      if (!ignoreHideElement || (element.visible && isElementInArea)) {
+      if ((!ignoreHideElement || element.visible) && isElementInArea) {
         areaElements.push(element)
       }
     })
@@ -396,7 +396,7 @@ export class GraphModel {
    * 注意：将会清除画布上所有已有的节点和边
    * @param { object } graphData 图数据
    */
-  graphDataToModel(graphData: LogicFlow.GraphConfigData) {
+  graphDataToModel(graphData: Partial<LogicFlow.GraphConfigData>) {
     if (!this.width || !this.height) {
       this.resize()
     }
@@ -414,7 +414,7 @@ export class GraphModel {
     }
     if (graphData.edges) {
       this.edges = map(graphData.edges, (edge) => {
-        const Model = this.getModel(edge.type)
+        const Model = this.getModel(edge.type ?? '')
         if (!Model) {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
@@ -875,6 +875,8 @@ export class GraphModel {
       },
       this,
     )
+    console.log('edgeModel', edgeModel)
+
     const edgeData = edgeModel.getData()
     this.edges.push(edgeModel)
     this.eventCenter.emit(EventType.EDGE_ADD, { data: edgeData })
