@@ -1,4 +1,4 @@
-import { CustomHtml } from '@/components/nodes/CustomHtml'
+import { CustomHtml } from '@/components/nodes/custom-html'
 import LogicFlow from '@logicflow/core'
 import '@logicflow/core/es/index.css'
 

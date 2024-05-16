@@ -1,4 +1,4 @@
-import CustomEllipse from '@/components/nodes/CustomEllipse'
+import CustomEllipse from '@/components/nodes/custom-ellipse'
 import LogicFlow from '@logicflow/core'
 import { Button, Card } from 'antd'
 import { useEffect, useRef } from 'react'
