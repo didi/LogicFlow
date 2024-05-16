@@ -260,12 +260,7 @@ i {
   width: 100%;
   min-height: 100vh;
   padding: 2rem 4rem;
-}
-
-#detail .viewport {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 #detail.loading {
