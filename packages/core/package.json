@@ -4,7 +4,7 @@
   "description": "LogicFlow, help you quickly create flowcharts",
   "main": "dist/index.js",
   "module": "es/index.js",
-  "types": "lib/index.d.ts",
+  "types": "es/index.d.ts",
   "scripts": {
     "clean:turbo": "rss",
     "clean:build": "rss",
