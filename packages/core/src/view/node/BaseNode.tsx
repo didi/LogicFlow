@@ -141,7 +141,9 @@ export abstract class BaseNode extends Component<IProps, IState> {
       }
       return (
         <BaseText
-          editable={editConfigModel.nodeTextEdit && model.text.editable}
+          editable={
+            editConfigModel.nodeTextEdit && (model.text.editable ?? true)
+          }
           model={model}
           graphModel={graphModel}
           draggable={draggable}

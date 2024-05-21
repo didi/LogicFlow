@@ -82,6 +82,11 @@ export default defineConfig({
           name: 'BPMN 插件',
           component: './extensions/bpmn',
         },
+        {
+          path: '/extension/group',
+          name: 'Group 插件',
+          component: './extensions/group',
+        },
       ],
     },
   ],

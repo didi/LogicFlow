@@ -1,4 +1,4 @@
-import { map } from 'lodash-es'
+import { forEach, map } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
 import '@logicflow/core/es/index.css'
 
@@ -274,7 +274,7 @@ export default function BasicNode() {
   const handleTurnAnimationOn = () => {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
-      edges.forEach((edge) => {
+      forEach(edges, (edge) => {
         lfRef.current?.openEdgeAnimation(edge.id)
       })
     }
@@ -282,7 +282,7 @@ export default function BasicNode() {
   const handleTurnAnimationOff = () => {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
-      edges.forEach((edge) => {
+      forEach(edges, (edge) => {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })
     }

@@ -1,3 +1,4 @@
+import { forEach } from 'lodash-es'
 import LogicFlow, {
   BaseEdgeModel,
   BaseNodeModel,
@@ -8,16 +9,16 @@ import GroupNode, { GroupNodeModel } from './GroupNode'
 
 import GraphConfigData = LogicFlow.GraphConfigData
 import EdgeConfig = LogicFlow.EdgeConfig
+import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import BoxBoundsPoint = Model.BoxBoundsPoint
-import NodeData = LogicFlow.NodeData
-import { forEach } from 'lodash-es'
 
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
 
 export class Group {
   static pluginName = 'group'
+
   lf: LogicFlow
   topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX
   activeGroup: any
@@ -26,6 +27,7 @@ export class Group {
   constructor({ lf }) {
     lf.register(GroupNode)
     this.lf = lf
+
     lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
       if (model.isGroup) {
         // 如果移动的是分组，那么分组的子节点也跟着移动。
@@ -47,6 +49,7 @@ export class Group {
 
       return true
     })
+
     lf.graphModel.group = this
     lf.on('node:add,node:drop,node:dnd-add', this.appendNodeToGroup)
     lf.on('node:delete', this.deleteGroupChild)
@@ -520,6 +523,9 @@ export class Group {
       return this.lf.getNodeModelById(groupId)
     }
   }
+
+  render() {}
+  destroy() {}
 }
 
 export * from './GroupNode'
