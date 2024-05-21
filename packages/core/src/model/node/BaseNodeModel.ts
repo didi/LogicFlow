@@ -20,6 +20,7 @@ import {
 
 import AnchorConfig = Model.AnchorConfig
 import GraphElements = LogicFlow.GraphElements
+import TextConfig = LogicFlow.TextConfig
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -44,7 +45,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable readonly type = ''
   @observable x = 0
   @observable y = 0
-  @observable text = {
+  @observable text: TextConfig = {
     value: '',
     x: 0,
     y: 0,

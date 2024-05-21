@@ -37,7 +37,7 @@ export class GroupNodeModel extends RectResizeModel {
   /**
    * 分组折叠状态
    */
-  isFolded?: boolean
+  isFolded: boolean = false
   unfoldedWidth = defaultWidth
   unfoldedHeight = defaultHeight
   /**
@@ -350,7 +350,7 @@ export class GroupNodeModel extends RectResizeModel {
    * 是否允许此节点添加到此分组中
    */
   isAllowAppendIn(_nodeData: NodeData) {
-    console.log('_nodeData', _nodeData)
+    console.info('_nodeData', _nodeData)
     return true
   }
 
@@ -369,18 +369,10 @@ export class GroupNode extends RectResizeView {
   }
 
   getAddableShape(): h.JSX.Element | null {
-    const {
-      width,
-      height,
-      x,
-      y,
-      radius,
-      properties,
-      getNodeStyle,
-      getAddableOutlineStyle,
-    } = this.props.model as GroupNodeModel
+    const { width, height, x, y, radius, properties, getAddableOutlineStyle } =
+      this.props.model as GroupNodeModel
     if (!properties.groupAddable) return null
-    const { strokeWidth = 0 } = getNodeStyle()
+    const { strokeWidth = 0 } = this.props.model.getNodeStyle()
 
     const style: Record<string, any> = getAddableOutlineStyle()
     const newWidth = width + strokeWidth + 8
