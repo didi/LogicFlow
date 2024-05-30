@@ -87,6 +87,11 @@ export default defineConfig({
           name: 'Group 插件',
           component: './extensions/group',
         },
+        {
+          path: '/extension/selection-select',
+          name: 'SelectionSelect 插件',
+          component: './extensions/selection-select',
+        },
       ],
     },
   ],
