@@ -29,8 +29,8 @@ export interface IBaseEdgeModel extends Model.BaseModel {
   sourceNodeId: string
   targetNodeId: string
 
-  startPoint: Point
-  endPoint: Point
+  startPoint?: Point
+  endPoint?: Point
   points: string
   pointsList: Point[]
 

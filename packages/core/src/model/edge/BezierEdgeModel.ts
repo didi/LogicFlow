@@ -6,10 +6,19 @@ import { ModelType } from '../../constant'
 import { getBezierControlPoints, IBezierControls } from '../../util'
 
 import Point = LogicFlow.Point
+import GraphModel from '../GraphModel'
 
 export class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE
   @observable path = ''
+
+  constructor(data: LogicFlow.EdgeConfig, graphModel: GraphModel) {
+    super(data, graphModel)
+
+    this.initEdgeData(data)
+    this.setAttributes()
+  }
+
   initEdgeData(data): void {
     this.offset = 100
     super.initEdgeData(data)

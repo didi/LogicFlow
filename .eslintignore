@@ -15,4 +15,6 @@ packages/core/types
 packages/extension/src/bpmn-adapter/xml2json.ts
 packages/extension/src/bpmn-adapter/json2xml.ts
 
+examples/vue3-memory-leak
+
 **/*.d.ts
