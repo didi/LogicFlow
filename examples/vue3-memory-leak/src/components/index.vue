@@ -19,7 +19,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import FlowChart from './FlowChart'
+import FlowChart from './FlowChart.vue'
 
 const flag = ref(true)
 </script>
