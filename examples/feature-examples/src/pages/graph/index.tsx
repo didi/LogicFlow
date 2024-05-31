@@ -111,7 +111,7 @@ export default function BasicNode() {
   const registerEvents = (lf: LogicFlow) => {
     lf.on('history:change', () => {
       const data = lf.getGraphData()
-      console.log(data)
+      console.log('history:change', data)
     })
   }
 
@@ -248,8 +248,9 @@ export default function BasicNode() {
     const lf = lfRef.current
     if (lf) {
       const data = lf.getGraphData()
-      console.log(data)
+      console.log('current graph data', data)
       const refreshData = LogicFlowUtil.refreshGraphId(data)
+      console.log('after refresh graphId', data)
       lf.render(refreshData)
     }
   }
