@@ -194,8 +194,8 @@ export class LogicFlow {
       type,
     }
     // 为了能让后来注册的可以继承前面注册的
-    // 例如我注册一个”开始节点“
-    // 然后我再想注册一个”立即开始节点“
+    // 例如我注册一个“开始节点”
+    // 然后我再想注册一个“立即开始节点”
     // 注册传递参数改为动态。
     this.viewMap.forEach((component) => {
       const key = (component as any).extendKey
@@ -689,7 +689,7 @@ export class LogicFlow {
    * @param id 元素的id
    * @param properties 自定义属性
    */
-  setProperties(id: string, properties: Record<string, unknown>): void {
+  setProperties(id: string, properties: LogicFlow.PropertiesType): void {
     this.graphModel.getElement(id)?.setProperties(formatData(properties))
   }
 
@@ -702,7 +702,7 @@ export class LogicFlow {
    * @param id 元素的id
    * @returns 自定义属性
    */
-  getProperties(id: string): Record<string, unknown> | undefined {
+  getProperties(id: string): Record<string, any> | undefined {
     return this.graphModel.getElement(id)?.getProperties()
   }
 
@@ -1270,6 +1270,7 @@ export namespace LogicFlow {
     [key: string]: string | undefined
   }
 
+  export type PropertiesType = Record<string, any>
   export type AttributesType = Record<string, unknown>
   export type EventArgsType = Record<string, unknown>
 
@@ -1353,7 +1354,7 @@ export namespace LogicFlow {
   export interface FakeNodeConfig {
     type: string
     text?: TextConfig | string
-    properties?: Record<string, unknown>
+    properties?: PropertiesType
 
     [key: string]: unknown
   }
@@ -1365,7 +1366,7 @@ export namespace LogicFlow {
     y: number
     text?: TextConfig | string
     zIndex?: number
-    properties?: Record<string, unknown>
+    properties?: PropertiesType
     virtual?: boolean // 是否虚拟节点
     rotate?: number
 
@@ -1397,7 +1398,7 @@ export namespace LogicFlow {
     text?: TextConfig | string
     pointsList?: Point[]
     zIndex?: number
-    properties?: Record<string, unknown>
+    properties?: PropertiesType
   }
 
   // TODO: 确认这种类型该如何定义（必需和非必需动态调整，优雅的处理方式）

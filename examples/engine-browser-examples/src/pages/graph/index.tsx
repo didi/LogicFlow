@@ -1,10 +1,10 @@
-import { map } from 'lodash-es'
+import { forEach, map } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
 import '@logicflow/core/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
-import { combine, square, star, uml, user } from './nodes'
+import { combine, square, star, uml, user, reactNode } from './nodes'
 import { animation, connection } from './edges'
 
 import GraphConfigData = LogicFlow.GraphConfigData
@@ -84,6 +84,17 @@ const data: GraphConfigData = {
       x: 600,
       y: 200,
     },
+    {
+      id: 'custom-react-node-1',
+      text: {
+        x: 200,
+        y: 500,
+        value: 'custom-react-node',
+      },
+      type: 'custom-react-node',
+      x: 200,
+      y: 500,
+    },
   ],
   edges: [],
 }
@@ -103,6 +114,7 @@ export default function BasicNode() {
       star,
       uml,
       user,
+      reactNode,
     ]
 
     map(elements, (customElement) => {
@@ -112,7 +124,7 @@ export default function BasicNode() {
   const registerEvents = (lf: LogicFlow) => {
     lf.on('history:change', () => {
       const data = lf.getGraphData()
-      console.log(data)
+      console.log('history:change', data)
     })
   }
 
@@ -123,7 +135,7 @@ export default function BasicNode() {
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
         // width: 1200,
-        height: 400,
+        // height: 400,
         // adjustNodePosition: false,
         // isSilentMode: true,
         // overlapMode: 1,
@@ -249,8 +261,9 @@ export default function BasicNode() {
     const lf = lfRef.current
     if (lf) {
       const data = lf.getGraphData()
-      console.log(data)
+      console.log('current graph data', data)
       const refreshData = LogicFlowUtil.refreshGraphId(data)
+      console.log('after refresh graphId', data)
       lf.render(refreshData)
     }
   }
@@ -275,7 +288,7 @@ export default function BasicNode() {
   const handleTurnAnimationOn = () => {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
-      edges.forEach((edge) => {
+      forEach(edges, (edge) => {
         lfRef.current?.openEdgeAnimation(edge.id)
       })
     }
@@ -283,7 +296,7 @@ export default function BasicNode() {
   const handleTurnAnimationOff = () => {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
-      edges.forEach((edge) => {
+      forEach(edges, (edge) => {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })
     }
@@ -444,9 +457,6 @@ export default function BasicNode() {
         节点面板
       </Divider>
       <Flex wrap="wrap" gap="small" justify="center" align="center">
-        {/* <Button key="rect" type="primary">节点 1</Button> */}
-        {/* <Button key="circle" type="primary">节点 2</Button> */}
-        {/* <Button key="text" type="text">文本</Button> */}
         <div className="rect" onMouseDown={handleDragRect} />
         <div className="circle" onMouseDown={handleDragCircle} />
         <div className="text" onMouseDown={handleDragText}>
