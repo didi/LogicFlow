@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.8",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-transform-class-properties": "7.24.6",
     "@babel/plugin-proposal-decorators": "^7.22.10",
     "@babel/plugin-transform-react-jsx": "^7.22.5",
     "@babel/preset-env": "^7.22.7",
@@ -111,7 +111,7 @@
     "postcss-less": "^6.0.0",
     "prettier": "^3.0.2",
     "pretty-quick": "^3.1.3",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.7",
     "rollup": "^3.7.4",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-polyfill-node": "^0.12.0",
