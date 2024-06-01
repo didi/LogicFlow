@@ -32,6 +32,21 @@ export default class MultipleSelect extends Component<IProps> {
   handleMouseDown = (ev: MouseEvent) => {
     this.stepDrag.handleMouseDown(ev);
   };
+  handleWheelEvent = (ev: WheelEvent) => {
+    ev.preventDefault();
+    const { deltaX, deltaY, clientX, clientY, ctrlKey } = ev;
+    const newEvent = new WheelEvent('wheel', {
+      deltaX,
+      deltaY,
+      clientX,
+      clientY,
+      ctrlKey,
+    });
+    const { logicFlow } = this.props;
+    logicFlow.container
+      ?.querySelector('.lf-canvas-overlay[name="canvas-overlay"]')
+      ?.dispatchEvent(newEvent);
+  };
   onDragging = ({ deltaX, deltaY }) => {
     const { graphModel } = this.props;
     const selectElements = graphModel.getSelectElements(true);
@@ -98,6 +113,7 @@ export default class MultipleSelect extends Component<IProps> {
         style={style}
         onMouseDown={this.handleMouseDown}
         onContextMenu={this.handleContextMenu}
+        onWheel={this.handleWheelEvent}
       />
     );
   }
