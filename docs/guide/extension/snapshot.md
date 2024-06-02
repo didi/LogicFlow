@@ -69,6 +69,39 @@ const xml = lfJson2Xml(lf.getGraphData())
     }
   `
 ```
+
+### 支持导出节点中的网络图片
+
+支持导出的图片有标签 \<img>, \<image> 和样式属性 background, background-image
+写在 css 中的样式不能被正确导出, 需要以内联的方式设置样式。background 和 \<img> 示例如下：
+
+```js
+class UmlNode extends HtmlNode {
+  setHtml(rootEl) {
+    const { properties } = this.props.model;
+    const el = document.createElement('div');
+    el.className = 'uml-wrapper';
+    const html = `
+          <div>
+          <div class="uml-head">Head</div>
+          <div class="uml-body" style="width: 100px;height: 100px;background: url(https://cdn.jsdelivr.net/gh/towersxu/cdn@master/material/funny/%E6%88%90%E7%86%9F.jpg);background-size: cover;">
+          <div>+ ${properties.name}</div>
+          <div>+ ${properties.body}</div>
+          </div>
+          <div class="uml-footer demo1">
+          <div>+ setHead(Head $head)</div>
+          <div>+ setBody(Body $body)</div>
+          </div>
+          <img src="https://cdn.jsdelivr.net/gh/towersxu/cdn@master/material/funny/%E6%88%90%E7%86%9F.jpg" style="width: 50px;height: 50px;" />
+        </div>
+      `;
+    el.innerHTML = html;
+    rootEl.innerHTML = '';
+    rootEl.appendChild(el);
+  }
+  }
+```
+
 ### 示例
 
 <iframe src="https://codesandbox.io/embed/logicflow-base21-o3vqi?fontsize=14&hidenavigation=1&theme=dark&view=preview"
