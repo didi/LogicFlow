@@ -104,8 +104,6 @@ export class BaseEdge extends Component<IProps> {
     const { id } = model
     const { refY = 0, refX = 2 } = model.getArrowStyle()
     const [start, end] = this.getLastTwoPoints()
-    console.log('start', start)
-    console.log('end', end)
     let theta: string | number = 'auto'
     if (start !== null && end !== null) {
       theta = degrees(
@@ -116,7 +114,6 @@ export class BaseEdge extends Component<IProps> {
         }),
       )
     }
-    console.log('theta', theta)
     return (
       <g>
         <defs>

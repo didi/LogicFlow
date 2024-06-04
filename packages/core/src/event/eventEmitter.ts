@@ -2,9 +2,9 @@ export interface EventType {
   readonly callback: (params?: unknown) => unknown
   readonly once: boolean
 }
-export type EventArgs = Record<string, unknown>
-export type EventsType = Record<string, EventType[]>
-export type CallbackType = (...args: unknown[]) => void
+export type EventArgs = { [key: string]: any }
+export type EventsType = { [key: string]: EventType[] }
+export type CallbackType = (...args: any[]) => void
 
 const WILDCARD = '*'
 

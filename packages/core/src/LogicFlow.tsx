@@ -1,6 +1,6 @@
 import { createElement as h, render, Component } from 'preact/compat'
-import { observer } from 'mobx-preact'
 import { cloneDeep, forEach } from 'lodash-es'
+import { observer } from '.'
 import { Options as LFOptions } from './options'
 import {
   BaseNodeModel,
