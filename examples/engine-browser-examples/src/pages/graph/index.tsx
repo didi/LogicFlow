@@ -181,6 +181,7 @@ export default function BasicNode() {
         style: {
           inputText: {
             background: 'black',
+            color: 'white',
           },
         },
         // 全局自定义id

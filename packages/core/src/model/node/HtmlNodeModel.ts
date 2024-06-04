@@ -1,9 +1,12 @@
 import BaseNodeModel from './BaseNodeModel'
+import { Model } from '../BaseModel'
 import { ModelType } from '../../constant'
+
+import AnchorConfig = Model.AnchorConfig
 
 export class HtmlNodeModel extends BaseNodeModel {
   modelType = ModelType.HTML_NODE
-  getDefaultAnchor() {
+  getDefaultAnchor(): AnchorConfig[] {
     const { x, y, width, height } = this
     return [
       { x, y: y - height / 2, id: `${this.id}_0` },

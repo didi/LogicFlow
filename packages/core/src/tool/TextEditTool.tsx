@@ -1,12 +1,13 @@
-import { createRef, Component } from 'preact/compat'
-import { ElementState, observer } from '..'
+import { createRef, Component } from 'preact'
+import { BaseEdgeModel, BaseNodeModel, ElementState, observer } from '..'
 import LogicFlow from '../LogicFlow'
 import { GraphModel } from '../model'
 import { ElementType, EventType, ModelType } from '../constant'
 
 type IProps = {
-  logicFlow: LogicFlow
+  textEditElement?: BaseNodeModel | BaseEdgeModel
   graphModel: GraphModel
+  logicFlow: LogicFlow
 }
 
 type IState = {
@@ -37,8 +38,8 @@ export class TextEditTool extends Component<IProps, IState> {
   }
 
   static getDerivedStateFromProps(props: IProps): IState | null {
-    const { graphModel } = props
-    const { textEditElement, transformModel, theme } = graphModel
+    const { textEditElement, graphModel } = props
+    const { transformModel, theme } = graphModel
     const { inputText } = theme
 
     let autoStyle
@@ -99,7 +100,6 @@ export class TextEditTool extends Component<IProps, IState> {
         }
       }
 
-      console.log('autoStyle --->>>', autoStyle)
       const { x, y } = textEditElement.text
       const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y])
       return {
