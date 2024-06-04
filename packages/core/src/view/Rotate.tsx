@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { Component } from 'preact/compat'
 import { map, reduce } from 'lodash-es'
 import Circle from './shape/Circle'

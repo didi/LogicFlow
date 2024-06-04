@@ -168,6 +168,7 @@ export default function BasicNode() {
         style: {
           inputText: {
             background: 'black',
+            color: 'white',
           },
         },
         // 全局自定义id
@@ -190,6 +191,7 @@ export default function BasicNode() {
 
       lf.render(data)
       lfRef.current = lf
+      ;(window as any).lf = lf
     }
   }, [])
 

@@ -875,7 +875,6 @@ export class GraphModel {
       },
       this,
     )
-    console.log('edgeModel', edgeModel)
 
     const edgeData = edgeModel.getData()
     this.edges.push(edgeModel)

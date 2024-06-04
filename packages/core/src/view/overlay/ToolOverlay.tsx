@@ -28,9 +28,11 @@ export class ToolOverlay extends Component<IProps> {
    */
   getTools() {
     const { tool, graphModel } = this.props
+    const { textEditElement } = graphModel
     const tools = tool.getTools()
-    const components = tools.map((item) =>
-      h(item, {
+    const components = tools.map((t) =>
+      h(t, {
+        textEditElement,
         graphModel,
         logicFlow: tool.instance,
       }),
