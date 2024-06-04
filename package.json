@@ -35,7 +35,7 @@
     "build:cjs": "tsc --module commonjs --target es6 --outDir ./lib",
     "build:umd": "pnpm run --if-present build:less && rollup -c ../../rollup.config.js --bundleConfigAsCjs",
     "build:dev": "pnpm run --if-present build:less && run-p -s build:cjs build:esm",
-    "build:watch": "run-p -s build:less build:watch:esm",
+    "build:watch": "run-p -s build:less build:watch:esm build:watch:cjs",
     "build:watch:esm": "run-s -s 'build:esm -w'",
     "build:watch:cjs": "run-s -s 'build:cjs -w'",
     "build": "run-p -s build:dev build:umd",
@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.8",
-    "@babel/plugin-transform-class-properties": "7.24.6",
+    "@babel/plugin-transform-class-properties": "^7.24.6",
     "@babel/plugin-proposal-decorators": "^7.22.10",
     "@babel/plugin-transform-react-jsx": "^7.22.5",
     "@babel/preset-env": "^7.22.7",
