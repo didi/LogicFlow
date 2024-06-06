@@ -92,6 +92,11 @@ export default defineConfig({
           name: 'SelectionSelect 插件',
           component: './extensions/selection-select',
         },
+        {
+          path: '/extension/mini-map',
+          name: 'MiniMap 插件',
+          component: './extensions/mini-map',
+        },
       ],
     },
   ],
