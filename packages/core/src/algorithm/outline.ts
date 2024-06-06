@@ -1,16 +1,28 @@
 import { ModelType } from '../constant'
-import { Model, PolylineEdgeModel, BezierEdgeModel } from '../model'
+import {
+  Model,
+  PolylineEdgeModel,
+  BezierEdgeModel,
+  BaseNodeModel,
+  BaseEdgeModel,
+  LineEdgeModel,
+} from '../model'
 import { points2PointsList, getBBoxOfPoints, getBezierPoints } from '../util'
 
-// 获取节点的out
-export const getNodeOutline = ({ x, y, width, height }): Model.OutlineInfo => ({
-  x: x - width / 2,
-  y: y - height / 2,
-  x1: x + width / 2,
-  y1: y + height / 2,
-})
+import OutlineInfo = Model.OutlineInfo
 
-export const getLineOutline = (edge): Model.OutlineInfo => {
+// 获取节点的out
+export const getNodeOutline = (node: BaseNodeModel): OutlineInfo => {
+  const { x, y, width, height } = node
+  return {
+    x: x - width / 2,
+    y: y - height / 2,
+    x1: x + width / 2,
+    y1: y + height / 2,
+  }
+}
+
+export const getLineOutline = (edge: LineEdgeModel): OutlineInfo => {
   const { startPoint, endPoint } = edge
   const x = (startPoint.x + endPoint.x) / 2
   const y = (startPoint.y + endPoint.y) / 2
@@ -24,7 +36,7 @@ export const getLineOutline = (edge): Model.OutlineInfo => {
   }
 }
 
-export const getPolylineOutline = (edge): Model.OutlineInfo => {
+export const getPolylineOutline = (edge: PolylineEdgeModel): OutlineInfo => {
   const { points } = edge
   const pointsList = points2PointsList(points)
   const bbox = getBBoxOfPoints(pointsList, 8)
@@ -37,7 +49,7 @@ export const getPolylineOutline = (edge): Model.OutlineInfo => {
   }
 }
 
-export const getBezierOutline = (edge): Model.OutlineInfo => {
+export const getBezierOutline = (edge: BezierEdgeModel): OutlineInfo => {
   const { path } = edge
   const pointsList = getBezierPoints(path)
   const bbox = getBBoxOfPoints(pointsList, 8)
@@ -50,7 +62,9 @@ export const getBezierOutline = (edge): Model.OutlineInfo => {
   }
 }
 
-export const getEdgeOutline = (edge): Model.OutlineInfo | undefined => {
+export const getEdgeOutline = (
+  edge: BaseEdgeModel,
+): OutlineInfo | undefined => {
   if (edge.modelType === ModelType.LINE_EDGE) {
     return getLineOutline(edge)
   }

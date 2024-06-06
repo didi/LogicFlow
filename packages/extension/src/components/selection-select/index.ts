@@ -4,22 +4,23 @@ import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 
 export class SelectionSelect {
-  __domContainer?: HTMLElement
-  wrapper?: HTMLElement
-  lf: LogicFlow
-  startPoint?: Position
-  endPoint?: Position
-  __disabled = false
-  isDefaultStopMoveGraph = false
-  isWholeNode = true
-  isWholeEdge = true
   static pluginName = 'selectionSelect'
+  private container?: HTMLElement
+  private wrapper?: HTMLElement
+  private lf: LogicFlow
+  private startPoint?: Position
+  private endPoint?: Position
+  private disabled = false
+  private isDefaultStopMoveGraph = false
+  private isWholeNode = true
+  private isWholeEdge = true
 
-  constructor({ lf }) {
+  constructor({ lf }: LogicFlow.ExtensionProps) {
     this.lf = lf
     // 初始化isDefaultStopMoveGraph取值
     const { stopMoveGraph } = lf.getEditConfig()
-    this.isDefaultStopMoveGraph = stopMoveGraph
+    this.isDefaultStopMoveGraph = stopMoveGraph!
+    // TODO: 有没有既能将方法挂载到lf上，又能提供类型提示的方法？
     lf.openSelectionSelect = () => {
       this.openSelectionSelect()
     }
@@ -28,12 +29,12 @@ export class SelectionSelect {
     }
   }
 
-  render(lf, domContainer) {
-    this.__domContainer = domContainer
-    lf.on('blank:mousedown', ({ e }) => {
+  render(lf: LogicFlow, domContainer: HTMLElement) {
+    this.container = domContainer
+    lf.on('blank:mousedown', ({ e }: { e: MouseEvent }) => {
       const config = lf.getEditConfig()
       // 鼠标控制滚动移动画布的时候，不能选区。
-      if (!config.stopMoveGraph || this.__disabled) {
+      if (!config.stopMoveGraph || this.disabled) {
         return
       }
       // 禁用右键框选，修复可能导致画布出现多个框选框不消失的问题，见https://github.com/didi/LogicFlow/issues/985
@@ -61,9 +62,8 @@ export class SelectionSelect {
       wrapper.style.left = `${this.startPoint.x}px`
       domContainer.appendChild(wrapper)
       this.wrapper = wrapper
-      document.addEventListener('mousemove', this.__draw)
-      document.addEventListener('mouseup', this.__drawOff)
-      document.addEventListener('wheel', this.__zoom, { passive: false })
+      document.addEventListener('mousemove', this.draw)
+      document.addEventListener('mouseup', this.drawOff)
     })
   }
 
@@ -103,7 +103,7 @@ export class SelectionSelect {
     this.close()
   }
 
-  __draw = (ev) => {
+  private draw = (ev: MouseEvent) => {
     const {
       domOverlayPosition: { x: x1, y: y1 },
     } = this.lf.getPointByClient(ev.clientX, ev.clientY)
@@ -133,22 +133,27 @@ export class SelectionSelect {
       }
     }
   }
-  __drawOff = () => {
-    document.removeEventListener('mousemove', this.__draw)
-    document.removeEventListener('mouseup', this.__drawOff)
+  private drawOff = () => {
+    document.removeEventListener('mousemove', this.draw)
+    document.removeEventListener('mouseup', this.drawOff)
     if (this.wrapper) {
       this.wrapper.oncontextmenu = null
-      this.__domContainer?.removeChild(this.wrapper)
+      this.container?.removeChild(this.wrapper)
     }
     if (this.startPoint && this.endPoint) {
       const { x, y } = this.startPoint
       const { x: x1, y: y1 } = this.endPoint
+      // 返回框选范围，左上角和右下角的坐标
+      const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)]
+      const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)]
+      this.lf.emit('selection:selected-area', {
+        topLeft: lt,
+        bottomRight: rt,
+      })
       // 选区太小的情况就忽略
       if (Math.abs(x1 - x) < 10 && Math.abs(y1 - y) < 10) {
         return
       }
-      const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)]
-      const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)]
       const elements = this.lf.graphModel.getAreaElement(
         lt,
         rt,
@@ -166,26 +171,13 @@ export class SelectionSelect {
       this.lf.emit('selection:selected', elements)
     }
   }
-  __zoom = (ev: WheelEvent) => {
-    ev.preventDefault()
-    const newEvent = new WheelEvent('wheel', {
-      deltaX: ev.deltaX,
-      deltaY: ev.deltaY,
-      clientX: ev.clientX,
-      clientY: ev.clientY,
-      ctrlKey: ev.ctrlKey,
-    })
-    this.lf.container
-      ?.querySelector('.lf-canvas-overlay[name="canvas-overlay"]')
-      ?.dispatchEvent(newEvent)
+
+  private open() {
+    this.disabled = false
   }
 
-  open() {
-    this.__disabled = false
-  }
-
-  close() {
-    this.__disabled = true
+  private close() {
+    this.disabled = true
   }
 }
 
