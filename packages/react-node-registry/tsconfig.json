@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "target": "es6",
+    "lib": ["DOM", "ES2020"]
+  },
+  "include": ["src/**/*", "**/*.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "es", "lib", "dist"]
+}

@@ -1,15 +1,13 @@
+import { createRef } from 'preact/compat'
 import BaseNode from './BaseNode'
 
 export class HtmlNode extends BaseNode {
-  ref?: HTMLElement
+  ref = createRef()
   currentProperties?: string
   preProperties?: string
-  setRef = (dom): void => {
-    this.ref = dom
-  }
 
   get rootEl() {
-    return this.ref
+    return this.ref.current
   }
 
   /**
@@ -24,8 +22,13 @@ export class HtmlNode extends BaseNode {
    *   }
    * }
    */
-  setHtml(rootEl: HTMLElement) {
+  setHtml(rootEl: SVGForeignObjectElement) {
     rootEl.appendChild(document.createElement('div'))
+  }
+
+  // TODO: 1. 应该在什么时机进行更新呢？2. 如何精细化控制
+  confirmUpdate(rootEl: SVGForeignObjectElement) {
+    this.setHtml(rootEl)
   }
 
   /**
@@ -35,22 +38,31 @@ export class HtmlNode extends BaseNode {
    * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.
    */
   shouldUpdate() {
-    if (this.preProperties && this.preProperties === this.currentProperties)
-      return
+    if (this.preProperties && this.preProperties === this.currentProperties) {
+      return false
+    }
     this.preProperties = this.currentProperties
     return true
   }
 
   componentDidMount() {
+    console.log('HtmlNode --->>> componentDidMount - 初始化内容')
     if (this.shouldUpdate() && this.rootEl) {
       this.setHtml(this.rootEl)
     }
   }
 
   componentDidUpdate() {
+    console.log('HtmlNode --->>> componentDidUpdate - 更新节点内容')
+    // DONE: 将 componentDidMount 和 componentDidUpdate 区分开，如果写在一次，渲染 React 组件会重复初始化，消耗过多资源
+    // 为了保证历史兼容性，先将默认 HTML 节点的 setHtml 和 confirmUpdate 保持一直，用户可通过自定义的方式重新定义
     if (this.shouldUpdate() && this.rootEl) {
-      this.setHtml(this.rootEl)
+      this.confirmUpdate(this.rootEl)
     }
+  }
+
+  componentWillUnmount() {
+    this.rootEl.innerHTML = ''
   }
 
   getShape() {
@@ -65,7 +77,7 @@ export class HtmlNode extends BaseNode {
         y={y - height / 2}
         width={width}
         height={height}
-        ref={this.setRef}
+        ref={this.ref}
       />
     )
   }
