@@ -15,6 +15,7 @@
     "@logicflow/core": "workspace:latest",
     "@logicflow/engine": "workspace:latest",
     "@logicflow/extension": "workspace:latest",
+    "@logicflow/react-node-registry": "workspace:latest",
     "antd": "^5.4.0",
     "umi": "^4.2.1"
   },

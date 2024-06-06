@@ -1,5 +1,5 @@
 import { observable, action, toJS, isObservable, computed } from 'mobx'
-import { assign, cloneDeep, isNil } from 'lodash-es'
+import { assign, cloneDeep, has, isNil, mapKeys } from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -16,6 +16,7 @@ import {
   ElementType,
   OverlapMode,
   ElementState,
+  EventType,
 } from '../../constant'
 
 import AnchorConfig = Model.AnchorConfig
@@ -316,8 +317,8 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点锚点样式
    * @returns 自定义样式
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAnchorStyle(_anchorInfo?: LogicFlow.Point): LogicFlow.AnchorTheme {
-    console.log('getAnchorStyle param -> _anchorInfo', _anchorInfo)
     const { anchor } = this.graphModel.theme
     // 防止被重写覆盖主题。
     return cloneDeep(anchor)
@@ -328,8 +329,8 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点锚点拖出连线样式
    * @returns 自定义锚点拖出样式
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAnchorLineStyle(_anchorInfo?: LogicFlow.Point): LogicFlow.AnchorLineTheme {
-    console.log('getAnchorLineStyle param -> _anchorInfo', _anchorInfo)
     const { anchorLine } = this.graphModel.theme
     return cloneDeep(anchorLine)
   }
@@ -698,22 +699,54 @@ export class BaseNodeModel implements IBaseNodeModel {
     this.additionStateData = additionStateData
   }
 
+  // TODO: 处理重复代码，setProperty 和 setProperties  -> 公用代码提到 updateProperties 中？
   @action
   setProperty(key, val): void {
-    this.properties = {
-      ...toJS(this.properties),
+    const preProperties = toJS(this.properties)
+    const nextProperties = {
+      ...preProperties,
       [key]: formatData(val),
     }
+    this.properties = nextProperties
     this.setAttributes()
+
+    // 触发更新节点 properties:change 的事件
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
+      id: this.id,
+      keys: [key],
+      preProperties,
+      properties: nextProperties,
+    })
   }
 
   @action
   setProperties(properties): void {
-    this.properties = {
-      ...toJS(this.properties),
+    const preProperties = toJS(this.properties)
+    const nextProperties = {
+      ...preProperties,
       ...formatData(properties),
     }
+    this.properties = nextProperties
     this.setAttributes()
+
+    const updateKeys: string[] = []
+    mapKeys(properties, (val, key) => {
+      // key 存在于上一个 properties 并且与传入的值不相等 或者 key 不存在于上一个 properties
+      if (
+        (has(preProperties, key) && preProperties[key] !== val) ||
+        !has(preProperties, key)
+      ) {
+        updateKeys.push(key)
+      }
+    })
+
+    // 触发更新节点 properties:change 的事件
+    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
+      id: this.id,
+      keys: updateKeys,
+      preProperties,
+      properties: nextProperties,
+    })
   }
 
   @action
