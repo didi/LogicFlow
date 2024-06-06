@@ -55,6 +55,26 @@ export default defineConfig({
       ],
     },
     {
+      path: '/react',
+      name: 'react node registry',
+      routes: [
+        {
+          path: 'react',
+          redirect: 'react/custom',
+        },
+        {
+          path: '/react/custom',
+          name: '自定义 React 节点',
+          component: './react',
+        },
+        {
+          path: '/react/portal',
+          name: 'React Portal节点',
+          component: './react/Portal',
+        },
+      ],
+    },
+    {
       name: 'official extensions',
       path: '/extension',
       routes: [

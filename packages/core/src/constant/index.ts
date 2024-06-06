@@ -23,6 +23,7 @@ export enum ModelType {
   ELLIPSE_NODE = 'ellipse-node',
   DIAMOND_NODE = 'diamond-node',
   HTML_NODE = 'html-node',
+  CUSTOM_HTML_NODE = 'custom-html-node',
   EDGE = 'edge',
   LINE_EDGE = 'line-edge',
   POLYLINE_EDGE = 'polyline-edge',
@@ -52,6 +53,10 @@ export enum EventType {
   NODE_MOUSELEAVE = 'node:mouseleave',
   NODE_CONTEXTMENU = 'node:contextmenu',
   NODE_ROTATE = 'node:rotate',
+
+  // 节点 properties 变化事件
+  NODE_PROPERTIES_CHANGE = 'node:properties-change',
+  NODE_PROPERTIES_DELETE = 'node:properties-delete',
 
   // Edge events
   EDGE_ADD = 'edge:add',
