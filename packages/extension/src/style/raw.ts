@@ -128,9 +128,10 @@ export const content = `.lf-control {
 /* 缩略图 */
 .lf-mini-map {
   position: absolute;
-  padding-top: 20px;
+  padding: 8px;
+  padding-top: 28px;
   overflow: hidden;
-  background: #ffffff;
+  background: #eaedf2;
   border: 1px solid #93a3b4;
 }
 .lf-mini-map-graph {
@@ -141,7 +142,7 @@ export const content = `.lf-control {
   position: absolute;
   top: 0;
   left: 0;
-  border: 2px solid #187dff;
+  background-color: rgba(48, 48, 48, 0.2);
   cursor: grab;
 }
 .lf-mini-map-header {
@@ -170,7 +171,7 @@ export const content = `.lf-control {
   cursor: pointer;
 }
 .lf-mini-map-no-header {
-  padding-top: 0;
+  padding-top: 8px;
 }
 .lf-mini-map-no-header .lf-mini-map-header {
   display: none;
