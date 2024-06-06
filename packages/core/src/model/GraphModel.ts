@@ -226,7 +226,7 @@ export class GraphModel {
    * 当前画布所有被选中的元素
    */
   @computed get selectElements() {
-    const elements = new Map()
+    const elements = new Map<string, BaseNodeModel | BaseEdgeModel>()
     this.nodes.forEach((node) => {
       if (node.isSelected) {
         elements.set(node.id, node)

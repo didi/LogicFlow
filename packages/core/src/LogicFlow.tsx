@@ -1693,8 +1693,8 @@ export namespace LogicFlow {
 
   export type ExtensionProps = {
     lf: LogicFlow
-    LogicFlow?: LogicFlowConstructor
-    options?: Record<string, unknown>
+    LogicFlow: LogicFlowConstructor
+    options: Record<string, unknown>
     props?: Record<string, unknown>
   }
 
