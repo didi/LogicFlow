@@ -51,7 +51,7 @@ export class Dnd {
     this.nodeConfig = null
     window.document.removeEventListener('mouseup', this.stopDrag)
   }
-  dragEnter = (e) => {
+  dragEnter = (e: MouseEvent) => {
     if (!this.nodeConfig || this.fakerNode) return
     this.fakerNode = this.lf.createFakerNode({
       ...this.nodeConfig,
@@ -61,7 +61,7 @@ export class Dnd {
       }),
     })
   }
-  onDragOver = (e) => {
+  onDragOver = (e: MouseEvent) => {
     e.preventDefault()
     if (this.fakerNode) {
       const { x, y } = this.clientToLocalPoint({
