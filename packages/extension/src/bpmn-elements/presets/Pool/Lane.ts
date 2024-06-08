@@ -63,7 +63,9 @@ class LaneView extends GroupNode {
           if (groupId) {
             const groupModel = this.props.graphModel.getNodeModelById(groupId)
             if (groupModel) {
-              ;(groupModel as HorizontalLaneModel).addChildAbove({
+              ;(
+                groupModel as GroupNodeModel as HorizontalLaneModel
+              ).addChildAbove({
                 x,
                 y,
                 width,
@@ -108,7 +110,9 @@ class LaneView extends GroupNode {
           if (groupId) {
             const groupModel = this.props.graphModel.getNodeModelById(groupId)
             if (groupModel) {
-              ;(groupModel as HorizontalLaneModel).addChildBelow({
+              ;(
+                groupModel as GroupNodeModel as HorizontalLaneModel
+              ).addChildBelow({
                 x,
                 y,
                 width,
@@ -152,7 +156,9 @@ class LaneView extends GroupNode {
           const groupId = this.props.graphModel.group.nodeGroupMap.get(id)
           if (groupId) {
             const groupModel = this.props.graphModel.getNodeModelById(groupId)
-            ;(groupModel as HorizontalLaneModel).deleteChild(id)
+            ;(groupModel as GroupNodeModel as HorizontalLaneModel).deleteChild(
+              id,
+            )
           }
         },
       },

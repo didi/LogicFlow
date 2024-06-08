@@ -1,6 +1,6 @@
 import { assign, cloneDeep, find } from 'lodash-es'
 import { action, computed, observable, toJS } from 'mobx'
-import { GraphModel, Model } from '..'
+import { BaseNodeModel, GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
@@ -19,6 +19,7 @@ import {
 
 import Point = LogicFlow.Point
 import EdgeData = LogicFlow.EdgeData
+import EdgeConfig = LogicFlow.EdgeConfig
 
 export interface IBaseEdgeModel extends Model.BaseModel {
   /**
@@ -101,7 +102,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   };
   [propName: string]: unknown // 支持自定义
 
-  constructor(data: LogicFlow.EdgeConfig, graphModel: GraphModel) {
+  constructor(data: EdgeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel
     this.initEdgeData(data)
     this.setAttributes()
@@ -113,7 +114,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
    * setAttributes除了初始化调用外，还会在properties发生变化后调用。
    */
-  initEdgeData(data) {
+  initEdgeData(data: EdgeConfig) {
     if (!data.properties) {
       data.properties = {}
     }
@@ -276,11 +277,15 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 内部方法，计算两个节点相连时的起点位置
    */
-  getBeginAnchor(sourceNode, targetNode, sourceAnchorId): Point | undefined {
+  getBeginAnchor(
+    sourceNode: BaseNodeModel,
+    targetNode: BaseNodeModel,
+    sourceAnchorId?: string,
+  ): Point | undefined {
     // https://github.com/didi/LogicFlow/issues/1077
     // 可能拿到的sourceAnchors为空数组，因此position可能返回为undefined
     let position: Point | undefined
-    let minDistance
+    let minDistance: number | undefined
     const sourceAnchors = getAnchors(sourceNode)
     if (sourceAnchorId) {
       position = find(sourceAnchors, (anchor) => anchor.id === sourceAnchorId)
@@ -308,11 +313,14 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 内部方法，计算两个节点相连时的终点位置
    */
-  getEndAnchor(targetNode, targetAnchorId): Point | undefined {
+  getEndAnchor(
+    targetNode: BaseNodeModel,
+    targetAnchorId?: string,
+  ): Point | undefined {
     // https://github.com/didi/LogicFlow/issues/1077
     // 可能拿到的targetAnchors为空数组，因此position可能返回为undefined
     let position: Point | undefined
-    let minDistance
+    let minDistance: number | undefined
     const targetAnchors = getAnchors(targetNode)
     if (targetAnchorId) {
       position = find(targetAnchors, (anchor) => anchor.id === targetAnchorId)
@@ -389,7 +397,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @param val 属性值
    */
   @action
-  setProperty(key, val): void {
+  setProperty(key: string, val: unknown): void {
     this.properties[key] = formatData(val)
     this.setAttributes()
   }
@@ -408,7 +416,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @param val 属性值
    */
   @action
-  setProperties(properties): void {
+  setProperties(properties: Record<string, unknown>): void {
     this.properties = {
       ...toJS(this.properties),
       ...formatData(properties),
@@ -465,7 +473,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 内部方法，处理初始化文本格式
    */
-  @action formatText(data) {
+  @action formatText(data: EdgeConfig) {
     // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition
     if (!data.text || typeof data.text === 'string') {

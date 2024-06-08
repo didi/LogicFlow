@@ -22,6 +22,10 @@ import {
 import AnchorConfig = Model.AnchorConfig
 import GraphElements = LogicFlow.GraphElements
 import TextConfig = LogicFlow.TextConfig
+import NodeConfig = LogicFlow.NodeConfig
+import NodeData = LogicFlow.NodeData
+import Point = LogicFlow.Point
+import CommonTheme = LogicFlow.CommonTheme
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -31,7 +35,7 @@ export interface IBaseNodeModel extends Model.BaseModel {
 
   isDragging: boolean
   isShowAnchor: boolean
-  getNodeStyle: () => LogicFlow.CommonTheme
+  getNodeStyle: () => CommonTheme
   getTextStyle: () => LogicFlow.TextNodeTheme
 
   setIsShowAnchor: (isShowAnchor: boolean) => void
@@ -91,7 +95,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable zIndex = 1
   @observable state = ElementState.DEFAULT
   @observable autoToFront = true // 节点选中时是否自动置顶，默认为true.
-  @observable style: LogicFlow.CommonTheme = {} // 每个节点自己的样式，动态修改
+  @observable style: CommonTheme = {} // 每个节点自己的样式，动态修改
 
   // TODO: 利用向量计算实现 平移、旋转、缩放 等操作，利用 svg 的 transform 属性
   @observable transform!: string // 节点的transform属性
@@ -119,7 +123,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: unknown // 支持用户自定义属性
 
-  constructor(data: LogicFlow.NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel
     this.initNodeData(data)
     this.setAttributes()
@@ -152,7 +156,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
    * setAttributes除了初始化调用外，还会在properties发生变化了调用。
    */
-  public initNodeData(data) {
+  public initNodeData(data: NodeConfig) {
     if (!data.properties) {
       data.properties = {}
     }
@@ -198,7 +202,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   /**
    * 初始化文本属性
    */
-  private formatText(data): void {
+  private formatText(data: NodeConfig): void {
     if (!data.text) {
       data.text = {
         value: '',
@@ -207,17 +211,18 @@ export class BaseNodeModel implements IBaseNodeModel {
         draggable: false,
         editable: true,
       }
-    }
-    if (data.text && typeof data.text === 'string') {
-      data.text = {
-        value: data.text,
-        x: data.x,
-        y: data.y,
-        draggable: false,
-        editable: true,
+    } else {
+      if (typeof data.text === 'string') {
+        data.text = {
+          value: data.text,
+          x: data.x,
+          y: data.y,
+          draggable: false,
+          editable: true,
+        }
+      } else {
+        data.text.editable = data.text.editable ?? true
       }
-    } else if (data.text && data.text.editable === undefined) {
-      data.text.editable = true
     }
   }
 
@@ -225,13 +230,13 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 获取被保存时返回的数据
    * @overridable 支持重写
    */
-  getData(): LogicFlow.NodeData {
+  getData(): NodeData {
     const { x, y, value } = this.text
     let { properties } = this
     if (isObservable(properties)) {
       properties = toJS(properties)
     }
-    const data: LogicFlow.NodeData = {
+    const data: NodeData = {
       id: this.id,
       type: this.type,
       x: this.x,
@@ -259,7 +264,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 在某些情况下，如果希望某个属性变化不引起history的变化，
    * 可以重写此方法。
    */
-  getHistoryData(): LogicFlow.NodeData {
+  getHistoryData(): NodeData {
     return this.getData()
   }
 
@@ -286,7 +291,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 获取当前节点样式
    * @returns 自定义节点样式
    */
-  getNodeStyle(): LogicFlow.CommonTheme {
+  getNodeStyle(): CommonTheme {
     return {
       ...this.graphModel.theme.baseNode,
       ...this.style,
@@ -307,7 +312,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 支持重写
    * 获取当前节点旋转控制点的样式
    */
-  getRotateControlStyle(): LogicFlow.CommonTheme {
+  getRotateControlStyle(): CommonTheme {
     const { rotateControl } = this.graphModel.theme
     return cloneDeep(rotateControl)
   }
@@ -318,7 +323,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @returns 自定义样式
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAnchorStyle(_anchorInfo?: LogicFlow.Point): LogicFlow.AnchorTheme {
+  getAnchorStyle(_anchorInfo?: Point): LogicFlow.AnchorTheme {
     const { anchor } = this.graphModel.theme
     // 防止被重写覆盖主题。
     return cloneDeep(anchor)
@@ -330,7 +335,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @returns 自定义锚点拖出样式
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAnchorLineStyle(_anchorInfo?: LogicFlow.Point): LogicFlow.AnchorLineTheme {
+  getAnchorLineStyle(_anchorInfo?: Point): LogicFlow.AnchorLineTheme {
     const { anchorLine } = this.graphModel.theme
     return cloneDeep(anchorLine)
   }
@@ -442,7 +447,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 内部方法
    * 是否允许移动节点到新的位置
    */
-  isAllowMoveNode(deltaX, deltaY): boolean | Model.IsAllowMove {
+  isAllowMoveNode(deltaX: number, deltaY: number): boolean | Model.IsAllowMove {
     let isAllowMoveX = true
     let isAllowMoveY = true
     const rules = this.moveRules.concat(this.graphModel.nodeMoveRules)
@@ -510,7 +515,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 子类重写此方法获取手动连接边到节点时，需要连接的锚点
    * 手动连接边到节点时，需要连接的锚点
    */
-  public getTargetAnchor(position: LogicFlow.Point): Model.AnchorInfo {
+  public getTargetAnchor(position: Point): Model.AnchorInfo {
     return getClosestAnchor(position, this)
   }
 
@@ -560,7 +565,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  move(deltaX, deltaY, isIgnoreRule = false): boolean {
+  move(deltaX: number, deltaY: number, isIgnoreRule = false): boolean {
     let isAllowMoveX = false
     let isAllowMoveY = false
     if (isIgnoreRule) {
@@ -628,7 +633,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  moveTo(x, y, isIgnoreRule = false): boolean {
+  moveTo(x: number, y: number, isIgnoreRule = false): boolean {
     const deltaX = x - this.x
     const deltaY = y - this.y
     if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false
@@ -641,7 +646,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  moveText(deltaX, deltaY): void {
+  moveText(deltaX: number, deltaY: number): void {
     const { x, y, value, draggable, editable } = this.text
     this.text = {
       value,
@@ -701,7 +706,7 @@ export class BaseNodeModel implements IBaseNodeModel {
 
   // TODO: 处理重复代码，setProperty 和 setProperties  -> 公用代码提到 updateProperties 中？
   @action
-  setProperty(key, val): void {
+  setProperty(key: string, val: any): void {
     const preProperties = toJS(this.properties)
     const nextProperties = {
       ...preProperties,
@@ -720,7 +725,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setProperties(properties): void {
+  setProperties(properties: Record<string, any>): void {
     const preProperties = toJS(this.properties)
     const nextProperties = {
       ...preProperties,
@@ -756,7 +761,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setStyle(key, val): void {
+  setStyle(key: string, val: any): void {
     this.style = {
       ...this.style,
       [key]: formatData(val),
@@ -764,7 +769,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  setStyles(styles): void {
+  setStyles(styles: Record<string, any>): void {
     this.style = {
       ...this.style,
       ...formatData(styles),
@@ -772,7 +777,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  updateStyles(styles): void {
+  updateStyles(styles: Record<string, any>): void {
     this.style = {
       ...formatData(styles),
     }
@@ -784,14 +789,14 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  updateAttributes(attributes) {
+  updateAttributes(attributes: any) {
     assign(this, attributes)
   }
 }
 
 export namespace BaseNodeModel {
   export type PointTuple = [number, number]
-  export type AnchorsOffsetItem = PointTuple | LogicFlow.Point
+  export type AnchorsOffsetItem = PointTuple | Point
 }
 
 export default BaseNodeModel
