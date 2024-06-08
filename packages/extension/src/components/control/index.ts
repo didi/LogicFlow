@@ -11,8 +11,9 @@ type ControlItem = {
 }
 
 export class Control {
-  private readonly lf: LogicFlow
   static pluginName = 'control'
+
+  private readonly lf: LogicFlow
   private controlItems: ControlItem[] = [
     {
       key: 'zoom-out',
@@ -63,11 +64,11 @@ export class Control {
   private domContainer?: HTMLElement
   private toolEl?: HTMLElement
 
-  constructor({ lf }) {
+  constructor({ lf }: LogicFlow.ExtensionProps) {
     this.lf = lf
   }
 
-  render(_lf: LogicFlow, domContainer) {
+  render(_: LogicFlow, domContainer: HTMLElement) {
     this.destroy()
     const toolEl = this.getControlTool()
     this.toolEl = toolEl
@@ -85,11 +86,11 @@ export class Control {
     }
   }
 
-  addItem(item) {
+  addItem(item: ControlItem) {
     this.controlItems.push(item)
   }
 
-  removeItem(key) {
+  removeItem(key: string) {
     const index = this.controlItems.findIndex((item) => item.key === key)
     return index == -1 ? null : this.controlItems.splice(index, 1)[0]
   }
