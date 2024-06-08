@@ -197,18 +197,19 @@ export class LogicFlow {
     // 例如我注册一个“开始节点”
     // 然后我再想注册一个“立即开始节点”
     // 注册传递参数改为动态。
-    this.viewMap.forEach((component) => {
-      const key = (component as any).extendKey
-      if (key) {
-        registerParam[key] = component
-      }
-    })
-    this.graphModel.modelMap.forEach((component) => {
-      const key = component.extendKey
-      if (key) {
-        registerParam[key as string] = component
-      }
-    })
+    // TODO: 这 extendKey 有什么用？
+    // this.viewMap.forEach((component) => {
+    //   const key = (component as any).extendKey
+    //   if (key) {
+    //     registerParam[key] = component
+    //   }
+    // })
+    // this.graphModel.modelMap.forEach((component) => {
+    //   const key = component.extendKey
+    //   if (key) {
+    //     registerParam[key as string] = component
+    //   }
+    // })
     if (fn) {
       // TODO: 确认 fn 是否必传，如果必传，可以去掉这个判断
       const { view: ViewClass, model: ModelClass } = fn(registerParam)
@@ -467,7 +468,7 @@ export class LogicFlow {
    * 克隆节点
    * @param nodeId 节点Id
    */
-  cloneNode(nodeId: string): BaseNodeModel | undefined {
+  cloneNode(nodeId: string): NodeData | undefined {
     const Model = this.graphModel.getNodeModelById(nodeId)
     const data = Model?.getData()
     if (!data) return
@@ -1144,10 +1145,12 @@ export class LogicFlow {
    * 创建一个fakerNode，用于dnd插件拖动节点进画布的时候使用。
    */
   createFakerNode(nodeConfig: NodeConfig) {
-    const Model = this.graphModel.modelMap.get(nodeConfig.type)
+    const Model = this.graphModel.modelMap.get(
+      nodeConfig.type,
+    ) as typeof BaseNodeModel
     if (!Model) {
       console.warn(`不存在为${nodeConfig.type}类型的节点`)
-      return
+      return null
     }
     // * initNodeData区分是否为虚拟节点
     // TODO: 确认此处该如何处理，ts 类型。此处类型肯定是 BaseNodeModel，下面的 config 可以保证 new 成功

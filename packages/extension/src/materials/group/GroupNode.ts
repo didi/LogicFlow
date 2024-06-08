@@ -1,8 +1,10 @@
-import LogicFlow, { h } from '@logicflow/core'
+import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
 import GraphElements = LogicFlow.GraphElements
 import NodeData = LogicFlow.NodeData
+import Point = LogicFlow.Point
+import EdgeConfig = LogicFlow.EdgeConfig
 
 const defaultWidth = 500
 const defaultHeight = 300
@@ -153,7 +155,7 @@ export class GroupNodeModel extends RectResizeModel {
     this.foldEdge(isFolded, allEdges)
   }
 
-  getAnchorStyle(anchorInfo) {
+  getAnchorStyle(anchorInfo?: Point) {
     const style = super.getAnchorStyle(anchorInfo)
     style.stroke = 'transparent'
     style.fill = 'transparent'
@@ -177,7 +179,7 @@ export class GroupNodeModel extends RectResizeModel {
    *   - 如果目外部点是收起的分组，则创建虚拟边；
    *   - 如果外部节点是普通节点，则显示真实边；
    */
-  foldEdge(isFolded, allEdges) {
+  foldEdge(isFolded: boolean, allEdges: BaseEdgeModel[]) {
     allEdges.forEach((edgeModel, index) => {
       const {
         id,
@@ -189,7 +191,7 @@ export class GroupNodeModel extends RectResizeModel {
         text,
       } = edgeModel
       const properties = edgeModel.getProperties()
-      const data = {
+      const data: EdgeConfig = {
         id: `${id}__${index}`,
         sourceNodeId,
         targetNodeId,
@@ -292,7 +294,7 @@ export class GroupNodeModel extends RectResizeModel {
    * 添加分组子节点
    * @param id 节点id
    */
-  addChild(id) {
+  addChild(id: string) {
     this.children.add(id)
     this.graphModel.eventCenter.emit('group:add-node', { data: this.getData() })
   }
@@ -301,7 +303,7 @@ export class GroupNodeModel extends RectResizeModel {
    * 删除分组子节点
    * @param id 节点id
    */
-  removeChild(id) {
+  removeChild(id: string) {
     this.children.delete(id)
     this.graphModel.eventCenter.emit('group:remove-node', {
       data: this.getData(),

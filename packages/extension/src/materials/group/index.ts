@@ -19,12 +19,12 @@ const DEFAULT_BOTTOM_Z_INDEX = -10000
 export class Group {
   static pluginName = 'group'
 
-  lf: LogicFlow
+  private lf: LogicFlow
   topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX
   activeGroup: any
   nodeGroupMap: Map<string, string> = new Map()
 
-  constructor({ lf }) {
+  constructor({ lf }: LogicFlow.ExtensionProps) {
     lf.register(GroupNode)
     this.lf = lf
 
@@ -35,7 +35,9 @@ export class Group {
         lf.graphModel.moveNodes(nodeIds, deltaX, deltaY, true)
         return true
       }
-      const groupModel = lf.getNodeModelById(this.nodeGroupMap.get(model.id))
+      const groupModel = lf.getNodeModelById(
+        this.nodeGroupMap.get(model.id)!,
+      ) as GroupNodeModel
       if (groupModel && groupModel.isRestrict) {
         // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
         const { x1, y1, x2, y2 } = model.getBounds()
@@ -259,7 +261,7 @@ export class Group {
   /**
    * 获取一个节点内部所有的子节点，包裹分组的子节点
    */
-  getNodeAllChild(model) {
+  getNodeAllChild(model: GroupNodeModel | BaseNodeModel) {
     let nodeIds: string[] = []
     if (model.children) {
       ;(model as GroupNodeModel).children.forEach((nodeId) => {
@@ -273,12 +275,12 @@ export class Group {
     return nodeIds
   }
 
-  graphRendered = (data) => {
+  graphRendered = (data: LogicFlow.GraphData) => {
     // 如果节点
     if (data && data.nodes) {
       data.nodes.forEach((node) => {
         if (node.children) {
-          node.children.forEach((nodeId) => {
+          ;(node.children as string[]).forEach((nodeId) => {
             this.nodeGroupMap.set(nodeId, node.id)
           })
         }
@@ -288,14 +290,14 @@ export class Group {
       this.checkAndCorrectTopGroupZIndex(data.nodes)
     }
   }
-  appendNodeToGroup = ({ data }) => {
+  appendNodeToGroup = ({ data }: { data: NodeData }) => {
     // 如果这个节点之前已经在group中了，则将其从之前的group中移除
     const preGroupId = this.nodeGroupMap.get(data.id)
     if (preGroupId) {
-      const preGroup = this.lf.getNodeModelById(preGroupId)
-      ;(preGroup as GroupNodeModel).removeChild(data.id)
+      const preGroup = this.lf.getNodeModelById(preGroupId) as GroupNodeModel
+      preGroup.removeChild(data.id)
       this.nodeGroupMap.delete(data.id)
-      ;(preGroup as GroupNodeModel).setAllowAppendChild(false)
+      preGroup.setAllowAppendChild(false)
     }
 
     // 然后再判断这个节点是否在某个group中，如果在，则将其添加到对应的group中
@@ -315,7 +317,7 @@ export class Group {
       // 而初始化分组时由于正确设置了nodeGroupMap的数据，因此不会产生虚拟边的错误情况
       if (nodeModel.isGroup) {
         // 如果这个节点是分组，那么将其子节点也记录下来
-        data.children.forEach((nodeId) => {
+        ;(data.children as Set<string>).forEach((nodeId) => {
           this.nodeGroupMap.set(nodeId, data.id)
         })
         // 新增node时进行this.topGroupZIndex的校准更新
@@ -340,22 +342,22 @@ export class Group {
       group.setAllowAppendChild(false)
     }
   }
-  deleteGroupChild = ({ data }) => {
+  deleteGroupChild = ({ data }: { data: NodeData }) => {
     // 如果删除的是分组节点，则同时删除分组的子节点
     if (data.children) {
-      data.children.forEach((nodeId) => {
+      ;(data.children as Set<string>).forEach((nodeId) => {
         this.nodeGroupMap.delete(nodeId)
         this.lf.deleteNode(nodeId)
       })
     }
     const groupId = this.nodeGroupMap.get(data.id)
     if (groupId) {
-      const group = this.lf.getNodeModelById(groupId)
-      ;(group as GroupNodeModel).removeChild(data.id)
+      const group = this.lf.getNodeModelById(groupId) as GroupNodeModel
+      group.removeChild(data.id)
       this.nodeGroupMap.delete(data.id)
     }
   }
-  setActiveGroup = ({ data }) => {
+  setActiveGroup = ({ data }: { data: NodeData }) => {
     const nodeModel = this.lf.getNodeModelById(data.id)
     const bounds = nodeModel?.getBounds()
     if (nodeModel && bounds) {
@@ -375,10 +377,10 @@ export class Group {
   findNodeAndChildMaxZIndex = (nodeModel: BaseNodeModel) => {
     let maxZIndex = DEFAULT_BOTTOM_Z_INDEX
     if (nodeModel.isGroup) {
-      maxZIndex = nodeModel.zIndex > maxZIndex ? nodeModel.zIndex : maxZIndex
+      maxZIndex = Math.max(maxZIndex, nodeModel.zIndex)
     }
     if (nodeModel.children) {
-      ;(nodeModel as GroupNodeModel).children.forEach((nodeId: string) => {
+      ;(nodeModel as GroupNodeModel).children.forEach((nodeId) => {
         if (typeof nodeId === 'object') {
           // 正常情况下, GroupNodeModel.children是一个id数组，这里只是做个兼容
           // @ts-ignore
@@ -387,7 +389,7 @@ export class Group {
         const child = this.lf.getNodeModelById(nodeId)
         if (child?.isGroup) {
           const childMaxZIndex = this.findNodeAndChildMaxZIndex(child)
-          maxZIndex = childMaxZIndex > maxZIndex ? childMaxZIndex : maxZIndex
+          maxZIndex = Math.max(childMaxZIndex, maxZIndex)
         }
       })
     }
@@ -436,7 +438,15 @@ export class Group {
    * 3. 分组节点取消选中后，不会将分组节点重置为原来的高度。
    * 4. 由于LogicFlow核心目标是支持用户手动绘制流程图，所以不考虑一张流程图超过1000个分组节点的情况。
    */
-  nodeSelected = ({ data, isMultiple, isSelected }) => {
+  nodeSelected = ({
+    data,
+    isMultiple,
+    isSelected,
+  }: {
+    data: NodeData
+    isMultiple: boolean
+    isSelected: boolean
+  }) => {
     const nodeModel = this.lf.getNodeModelById(data.id)
     this.toFrontGroup(nodeModel)
     // 重置所有的group zIndex,防止group节点zIndex增长为正。
@@ -474,14 +484,14 @@ export class Group {
       }
     }
   }
-  toFrontGroup = (model) => {
+  toFrontGroup = (model?: BaseNodeModel) => {
     if (!model || !model.isGroup) {
       return
     }
     this.topGroupZIndex++
     model.setZIndex(this.topGroupZIndex)
     if (model.children) {
-      model.children.forEach((nodeId) => {
+      ;(model as GroupNodeModel).children.forEach((nodeId) => {
         const node = this.lf.getNodeModelById(nodeId)
         this.toFrontGroup(node)
       })
@@ -494,7 +504,7 @@ export class Group {
    */
   getGroup(
     bounds: BoxBoundsPoint,
-    nodeData: BaseNodeModel,
+    nodeData: NodeData,
   ): BaseNodeModel | undefined {
     const { nodes } = this.lf.graphModel
     const groups = nodes.filter(
@@ -517,7 +527,7 @@ export class Group {
   /**
    * 获取某个节点所属的groupModel
    */
-  getNodeGroup(nodeId) {
+  getNodeGroup(nodeId: string) {
     const groupId = this.nodeGroupMap.get(nodeId)
     if (groupId) {
       return this.lf.getNodeModelById(groupId)
