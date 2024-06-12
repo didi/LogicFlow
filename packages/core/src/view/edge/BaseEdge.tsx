@@ -1,6 +1,6 @@
 import { createElement as h, Component, createRef } from 'preact/compat'
+import { isArray } from 'lodash-es'
 import { Circle } from '../shape'
-import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseEdgeModel, PolylineEdgeModel } from '../../model'
 import { ElementState, EventType, ModelType } from '../../constant'
@@ -50,31 +50,6 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    * @deprecated 请使用model.getTextStyle
    */
   getTextStyle() {}
-
-  /**
-   * @overridable 可重写，自定义边文本DOM
-   */
-  getText(): h.JSX.Element | null {
-    const { model, graphModel } = this.props
-    // 文本被编辑的时候，显示编辑框，不显示文本。
-    if (model.state === ElementState.TEXT_EDIT) {
-      return null
-    }
-    let draggable = false
-    const { editConfigModel } = graphModel
-    if (model.text.draggable || editConfigModel.edgeTextDraggable) {
-      draggable = true
-    }
-    return (
-      <LineText
-        ref={this.textRef}
-        editable={editConfigModel.edgeTextEdit && model.text.editable}
-        model={model}
-        graphModel={graphModel}
-        draggable={draggable}
-      />
-    )
-  }
 
   /**
    * @deprecated
@@ -385,15 +360,21 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     })
     if (isDoubleClick) {
       const { editConfigModel, textEditElement } = graphModel
+      const { id, text, modelType } = model
       // 当前边正在编辑，需要先重置状态才能变更文本框位置
-      if (textEditElement && textEditElement.id === model.id) {
-        graphModel.setElementStateById(model.id, ElementState.DEFAULT)
+      if (textEditElement && textEditElement.id === id) {
+        graphModel.setElementStateById(id, ElementState.DEFAULT)
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (editConfigModel.edgeTextEdit && model.text.editable) {
-        graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
+      console.log('edgeTextEdit', editConfigModel.edgeTextEdit)
+      if (
+        editConfigModel.edgeTextEdit &&
+        (isArray(text) || (!isArray(text) && text.editable))
+      ) {
+        graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
+        model.addText(position.canvasOverlayPosition)
       }
-      if (model.modelType === ModelType.POLYLINE_EDGE) {
+      if (modelType === ModelType.POLYLINE_EDGE) {
         const polylineEdgeModel = model as PolylineEdgeModel
         const {
           canvasOverlayPosition: { x, y },
@@ -477,7 +458,6 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         >
           {this.getShape()}
           {this.getAppend()}
-          {this.getText()}
           {this.getArrow()}
         </g>
         {isShowAdjustPoint && isSelected ? this.getAdjustPoints() : ''}

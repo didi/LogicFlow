@@ -1,8 +1,7 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map } from 'lodash-es'
+import { map, isArray, cloneDeep } from 'lodash-es'
 import Anchor from '../Anchor'
-import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
 import { ElementState, EventType } from '../../constant'
@@ -130,47 +129,31 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     }
   }
 
-  getResizeControl(): h.JSX.Element | null {
-    const { model, graphModel } = this.props
-    const { isSelected, isHitable, enableResize, isHovered } = model
-    const style = model.getResizeControlStyle()
-    if (isHitable && (isSelected || isHovered) && enableResize) {
-      return (
-        <ResizeControlGroup
-          style={style}
-          model={model}
-          graphModel={graphModel}
-        />
-      )
-    }
-    return null
-  }
-
-  getText(): h.JSX.Element | null {
-    const { model, graphModel } = this.props
-    // 文本被编辑的时候，显示编辑框，不显示文本。
-    if (model.state === ElementState.TEXT_EDIT) {
-      return null
-    }
-    if (model.text) {
-      const { editConfigModel } = graphModel
-      let draggable = false
-      if (model.text.draggable || editConfigModel.nodeTextDraggable) {
-        draggable = true
-      }
-      return (
-        <BaseText
-          editable={
-            editConfigModel.nodeTextEdit && (model.text.editable ?? true)
-          }
-          model={model}
-          graphModel={graphModel}
-          draggable={draggable}
-        />
-      )
-    }
-    return null
-  }
+  // getText(): h.JSX.Element | null {
+  //   const { model, graphModel } = this.props
+  //   // 文本被编辑的时候，显示编辑框，不显示文本。
+  //   // if (model.state === ElementState.TEXT_EDIT) {
+  //   //   return null
+  //   // }
+  //   if (model.text) {
+  //     const { editConfigModel } = graphModel
+  //     let draggable = false
+  //     if (model.text.draggable || editConfigModel.nodeTextDraggable) {
+  //       draggable = true
+  //     }
+  //     return (
+  //       <BaseText
+  //         editable={
+  //           editConfigModel.nodeTextEdit && (model.text.editable ?? true)
+  //         }
+  //         model={model}
+  //         graphModel={graphModel}
+  //         draggable={draggable}
+  //       />
+  //     )
+  //   }
+  //   return null
+  // }
 
   getStateClassName() {
     const {
@@ -241,6 +224,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     y = snapToGrid(y, gridSize)
     if (!width || !height) {
       graphModel.moveNode2Coordinate(model.id, x, y)
+      //
       return
     }
     const isOutCanvas = x1 < 0 || y1 < 0 || x1 > width || y1 > height
@@ -350,9 +334,17 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
-      if (editConfigModel.nodeTextEdit && model.text.editable) {
-        model.setSelected(false)
-        graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
+      if (editConfigModel.nodeTextEdit) {
+        if (isArray(model.text)) {
+          model.setSelected(false)
+          graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
+          model.addText(position.canvasOverlayPosition)
+        } else if (model.text.editable) {
+          model.setSelected(false)
+          graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
+          console.log('isDoubleClick', cloneDeep(model.text))
+          model.addText(position.canvasOverlayPosition)
+        }
       }
       graphModel.eventCenter.emit(EventType.NODE_DBCLICK, eventOptions)
     } else {
@@ -449,7 +441,6 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       <g className="lf-node-content">
         <g transform={transform}>
           {this.getShape()}
-          {this.getText()}
           {allowRotate && this.getRotateControl()}
           {allowResize && this.getResizeControl()}
         </g>

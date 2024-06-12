@@ -1,7 +1,8 @@
-import { createRef, Component } from 'preact'
+import { createRef, Component } from 'preact/compat'
+// import { isObject } from 'lodash-es'
 import { ElementState, observer } from '..'
-import { ElementType, EventType, ModelType } from '../constant'
 import { IToolProps } from './tool'
+// import { ElementType, EventType, ModelType } from '../constant'
 
 type IState = {
   style: {
@@ -30,83 +31,84 @@ export class TextEditTool extends Component<IToolProps, IState> {
     }
   }
 
-  static getDerivedStateFromProps(props: IToolProps): IState | null {
-    const { textEditElement, graphModel } = props
-    const { transformModel, theme } = graphModel
-    const { inputText } = theme
+  // static getDerivedStateFromProps(props: IProps): IState | null {
+  //   const { graphModel } = props
+  //   const { textEditElement, transformModel, theme } = graphModel
+  //   const { inputText } = theme
 
-    let autoStyle
-    if (textEditElement) {
-      // 由于边上的文本是依据显示的时候动态计算出来的
-      // 所以不能在边创建的时候就初始化文本位置。
-      // 而是在边上新建文本的时候创建。
-      if (!textEditElement.text?.value) {
-        if (textEditElement.BaseType === ElementType.EDGE) {
-          // textEditElement = textEditElement as BaseEdgeModel
-          const textConfig = textEditElement.text
-          const { x, y } = textEditElement.textPosition
-          textConfig.x = x
-          textConfig.y = y
-          textEditElement.setText(textConfig)
-        }
-      }
-      // 自动换行节点边通用样式
-      const commonAutoStyle = {
-        resize: 'auto',
-        whiteSpace: 'normal',
-        wordBreak: 'break-all',
-      }
-      if (textEditElement.BaseType === ElementType.EDGE) {
-        // 如果边文案自动换行, 设置编辑框宽度
-        const {
-          edgeText: { overflowMode, lineHeight, wrapPadding, textWidth },
-        } = theme
-        if (textWidth && overflowMode === 'autoWrap') {
-          autoStyle = {
-            ...commonAutoStyle,
-            width: textWidth,
-            minWidth: textWidth,
-            lineHeight,
-            padding: wrapPadding,
-          }
-        }
-      } else if (textEditElement.BaseType === ElementType.NODE) {
-        // 如果节点文案自动换行, 设置编辑框宽度
-        const {
-          nodeText: { overflowMode, lineHeight, wrapPadding, textWidth },
-        } = theme
-        const { width, modelType, textWidth: nodeTextWidth } = textEditElement
+  //   let autoStyle
+  //   if (textEditElement) {
+  //     // 由于边上的文本是依据显示的时候动态计算出来的
+  //     // 所以不能在边创建的时候就初始化文本位置。
+  //     // 而是在边上新建文本的时候创建。
+  //     if (!textEditElement.text?.value) {
+  //       if (textEditElement.BaseType === ElementType.EDGE) {
+  //         // textEditElement = textEditElement as BaseEdgeModel
+  //         const textConfig = textEditElement.text
+  //         const { x, y } = textEditElement.textPosition
+  //         textConfig.x = x
+  //         textConfig.y = y
+  //         textEditElement.setText(textConfig)
+  //       }
+  //     }
+  // // 自动换行节点边通用样式
+  // const commonAutoStyle = {
+  //   resize: 'auto',
+  //   whiteSpace: 'normal',
+  //   wordBreak: 'break-all',
+  // }
+  //     if (textEditElement.BaseType === ElementType.EDGE) {
+  //       // 如果边文案自动换行, 设置编辑框宽度
+  //       const {
+  //         edgeText: { overflowMode, lineHeight, wrapPadding, textWidth },
+  //       } = theme
+  //       if (textWidth && overflowMode === 'autoWrap') {
+  //         autoStyle = {
+  //           ...commonAutoStyle,
+  //           width: textWidth,
+  //           minWidth: textWidth,
+  //           lineHeight,
+  //           padding: wrapPadding,
+  //         }
+  //       }
+  //     } else if (textEditElement.BaseType === ElementType.NODE) {
+  //       // 如果节点文案自动换行, 设置编辑框宽度
+  //       const {
+  //         nodeText: { overflowMode, lineHeight, wrapPadding, textWidth },
+  //       } = theme
+  //       const { width, modelType, textWidth: nodeTextWidth } = textEditElement
 
-        const finalTextWidth = nodeTextWidth || textWidth || width
-        // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
-        if (
-          (modelType !== ModelType.TEXT_NODE && overflowMode === 'autoWrap') ||
-          (modelType === ModelType.TEXT_NODE && textWidth)
-        ) {
-          autoStyle = {
-            ...commonAutoStyle,
-            width: finalTextWidth,
-            minWidth: finalTextWidth,
-            lineHeight,
-            padding: wrapPadding,
-          }
-        }
-      }
+  //       const finalTextWidth = nodeTextWidth || textWidth || width
+  //       // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
+  //       if (
+  //         (modelType !== ModelType.TEXT_NODE && overflowMode === 'autoWrap') ||
+  //         (modelType === ModelType.TEXT_NODE && textWidth)
+  //       ) {
+  //         autoStyle = {
+  //           ...commonAutoStyle,
+  //           width: finalTextWidth,
+  //           minWidth: finalTextWidth,
+  //           lineHeight,
+  //           padding: wrapPadding,
+  //         }
+  //       }
+  //     }
 
-      const { x, y } = textEditElement.text
-      const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y])
-      return {
-        style: {
-          left,
-          top,
-          ...autoStyle,
-          ...inputText,
-        },
-      }
-    }
+  //     console.log('autoStyle --->>>', autoStyle)
+  //     const { x, y } = textEditElement.text
+  //     const [left, top] = transformModel.CanvasPointToHtmlPoint([x, y])
+  //     return {
+  //       style: {
+  //         left,
+  //         top,
+  //         ...autoStyle,
+  //         ...inputText,
+  //       },
+  //     }
+  //   }
 
-    return null
-  }
+  //   return null
+  // }
 
   componentDidUpdate() {
     const { graphModel } = this.props
@@ -117,9 +119,7 @@ export class TextEditTool extends Component<IToolProps, IState> {
     if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText
       graphModel.updateText(id, text)
-      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, {
-        data: { ...this.__prevText },
-      })
+      // graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { ...this.__prevText })
       this.__prevText.id = ''
       this.__prevText.text = ''
       this.__prevText.type = ''
@@ -168,25 +168,26 @@ export class TextEditTool extends Component<IToolProps, IState> {
   }
 
   render() {
-    const {
-      graphModel: { textEditElement },
-    } = this.props
-    const { style } = this.state
-    return textEditElement ? (
-      <div
-        contentEditable
-        className="lf-text-input"
-        style={style}
-        ref={this.ref}
-        key={textEditElement.id}
-        onKeyUp={this.keyupHandler}
-        onKeyDown={this.keydownHandler}
-        onKeyPress={this.keydownHandler}
-        onInput={this.inputHandler}
-      >
-        {textEditElement.text?.value}
-      </div>
-    ) : null
+    // const {
+    //   graphModel: { textEditElement },
+    // } = this.props
+    // const { style } = this.state
+    // return textEditElement ? (
+    //   <div
+    //     contentEditable
+    //     className="lf-text-input"
+    //     style={style}
+    //     ref={this.ref}
+    //     key={textEditElement.id}
+    //     onKeyUp={this.keyupHandler}
+    //     onKeyDown={this.keydownHandler}
+    //     onKeyPress={this.keydownHandler}
+    //     onInput={this.inputHandler}
+    //   >
+    //     {textEditElement.text?.value}
+    //   </div>
+    // ) : null
+    return null
   }
 }
 

@@ -1,4 +1,4 @@
-import { find, forEach, map } from 'lodash-es'
+import { forEach, map, isObject, isArray } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -42,6 +42,7 @@ import GraphData = LogicFlow.GraphData
 import NodeConfig = LogicFlow.NodeConfig
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
+import LabelType = LogicFlow.LabelType
 
 export interface Constructable<T> {
   new (...args: any): T
@@ -219,9 +220,9 @@ export class GraphModel {
    * 当前编辑的元素，低频操作，先循环找。
    */
   @computed get textEditElement() {
-    const textEditNode = this.nodes.find(
-      (node) => node.state === ElementState.TEXT_EDIT,
-    )
+    const textEditNode = this.nodes.find((node) => {
+      return node.state === ElementState.TEXT_EDIT
+    })
     const textEditEdge = this.edges.find(
       (edge) => edge.state === ElementState.TEXT_EDIT,
     )
@@ -752,15 +753,22 @@ export class GraphModel {
     if (nodeX && nodeY) {
       node.x = snapToGrid(nodeX, this.gridSize)
       node.y = snapToGrid(nodeY, this.gridSize)
-      if (typeof node.text === 'object') {
+      if (isArray(node.text)) {
+        node.text.forEach((item) => {
+          if (isObject(item)) {
+            ;(item as LabelType).x += node.x - nodeX
+            ;(item as LabelType).y += node.y - nodeY
+          }
+        })
+      } else if (isObject(node.text)) {
         // 原来的处理是：node.text.x -= getGridOffset(nodeX, this.gridSize)
         // 由于snapToGrid()使用了Math.round()四舍五入的做法，因此无法判断需要执行
         // node.text.x = node.text.x + getGridOffset()
         // 还是
         // node.text.x = node.text.x - getGridOffset()
         // 直接改为node.x - nodeX就可以满足上面的要求
-        node.text.x += node.x - nodeX
-        node.text.y += node.y - nodeY
+        ;(node.text as LabelType).x += node.x - nodeX
+        ;(node.text as LabelType).y += node.y - nodeY
       }
     }
     return new Model(node, this)
@@ -775,13 +783,26 @@ export class GraphModel {
     const targetNode = this.getNodeModelById(nodeId)
     const data = targetNode?.getData()
     if (data) {
+      if (data.text) {
+        if (isArray(data.text)) {
+          data.text = (data.text as LabelType[]).map((textItem) => {
+            const { x, y } = textItem
+            // 多个文本的情况下，每个文本的移动距离 = 当前位置 + 当前文本位置与节点中心位置的差 + 固定偏移量
+            const newText = {
+              ...textItem,
+              x: x + (x - data.x) + 30,
+              y: y + (y - data.y) + 30,
+            }
+            return newText
+          })
+        } else if (isObject(data.text)) {
+          ;(data.text as LabelType).x = data.x
+          ;(data.text as LabelType).y = data.y
+        }
+      }
       data.x += 30
       data.y += 30
       data.id = ''
-      if (data.text) {
-        data.text.x += 30
-        data.text.y += 30
-      }
       const nodeModel = this.addNode(data)
       nodeModel.setSelected(true)
       targetNode?.setSelected(false)
@@ -921,20 +942,38 @@ export class GraphModel {
     // 如果是自定义边文本位置，则移动节点的时候重新计算其位置
     if (edgeModel.customTextPosition) {
       edgeModel.resetTextPosition()
-    } else if (
-      edgeModel.modelType === ModelType.POLYLINE_EDGE &&
-      edgeModel.text?.value
-    ) {
-      const textPosition = edgeModel.text
-      const newPoint = getClosestPointOfPolyline(textPosition, edgeModel.points)
-      edgeModel.moveText(
-        newPoint.x - textPosition.x,
-        newPoint.y - textPosition.y,
-      )
-    } else {
-      const { x: x1, y: y1 } = edgeModel.textPosition
-      edgeModel.moveText(x1 - x, y1 - y)
+      return
     }
+    if (edgeModel.modelType === ModelType.POLYLINE_EDGE) {
+      if (!isArray(edgeModel.text) && edgeModel.text?.value) {
+        const textPosition = edgeModel.text
+        const newPoint = getClosestPointOfPolyline(
+          textPosition,
+          edgeModel.points,
+        )
+        edgeModel.moveText(
+          newPoint.x - textPosition.x,
+          newPoint.y - textPosition.y,
+        )
+        return
+      }
+      if (isArray(edgeModel.text)) {
+        edgeModel.text.forEach((item) => {
+          const textPosition = item
+          const newPoint = getClosestPointOfPolyline(
+            textPosition,
+            edgeModel.points,
+          )
+          edgeModel.moveText(
+            newPoint.x - textPosition.x,
+            newPoint.y - textPosition.y,
+          )
+        })
+      }
+      return
+    }
+    const { x: x1, y: y1 } = edgeModel.textPosition
+    edgeModel.moveText(x1 - x, y1 - y)
   }
 
   /**

@@ -3,11 +3,13 @@ import { action, observable } from 'mobx'
 import BaseEdgeModel from './BaseEdgeModel'
 import { BaseNodeModel } from '../node'
 import LogicFlow from '../../LogicFlow'
+import GraphModel from '../GraphModel'
 import { ModelType } from '../../constant'
 import { getBezierControlPoints, IBezierControls } from '../../util'
-import GraphModel from '../GraphModel'
 
 import Point = LogicFlow.Point
+import EdgeConfig = LogicFlow.EdgeConfig
+import LabelType = LogicFlow.LabelType
 import EdgeConfig = LogicFlow.EdgeConfig
 
 export class BezierEdgeModel extends BaseEdgeModel {
@@ -15,14 +17,11 @@ export class BezierEdgeModel extends BaseEdgeModel {
 
   offset!: number
   @observable path = ''
-
   constructor(data: EdgeConfig, graphModel: GraphModel) {
     super(data, graphModel)
-
     this.initEdgeData(data)
     this.setAttributes()
   }
-
   initEdgeData(data: EdgeConfig): void {
     this.offset = 100
     super.initEdgeData(data)
@@ -155,7 +154,7 @@ export class BezierEdgeModel extends BaseEdgeModel {
       this.pointsList[2] = anchor
     }
     this.path = this.getPath(this.pointsList)
-    this.setText(Object.assign({}, this.text, this.textPosition))
+    this.setText(Object.assign({}, this.text, this.textPosition) as LabelType)
   }
   // 获取边调整的起点
   @action

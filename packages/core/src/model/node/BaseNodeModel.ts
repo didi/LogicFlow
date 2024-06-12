@@ -1,5 +1,17 @@
-import { action, computed, isObservable, observable, toJS } from 'mobx'
-import { assign, cloneDeep, has, isNil, mapKeys } from 'lodash-es'
+import { observable, action, toJS, isObservable, computed } from 'mobx'
+import {
+  assign,
+  merge,
+  cloneDeep,
+  has,
+  isNil,
+  findIndex,
+  isObject,
+  isArray,
+  slice,
+  isEqual,
+  mapKeys,
+} from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -21,7 +33,6 @@ import {
 import { ResizeControl } from '../../view/Control'
 import AnchorConfig = Model.AnchorConfig
 import GraphElements = LogicFlow.GraphElements
-import TextConfig = LogicFlow.TextConfig
 import NodeConfig = LogicFlow.NodeConfig
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
@@ -30,6 +41,8 @@ import CommonTheme = LogicFlow.CommonTheme
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
 import PCTResizeParams = ResizeControl.PCTResizeParams
+import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -41,7 +54,6 @@ export interface IBaseNodeModel extends Model.BaseModel {
   isShowAnchor: boolean
   getNodeStyle: () => CommonTheme
   getTextStyle: () => LogicFlow.TextNodeTheme
-
   setIsShowAnchor: (isShowAnchor: boolean) => void
 }
 
@@ -54,14 +66,21 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable readonly type = ''
   @observable x = 0
   @observable y = 0
-  @observable text: TextConfig = {
+  @observable text: LabelType | LabelType[] = {
     value: '',
     x: 0,
     y: 0,
     draggable: false,
     editable: true,
+    content: '',
   }
-  @observable properties: Record<string, unknown> = {}
+  @observable properties: Record<string, unknown> = {
+    labelConfig: {
+      multiple: false,
+      verticle: false,
+      max: 1,
+    },
+  }
   // 形状属性
   @observable private _width = 100
   public get width() {
@@ -102,6 +121,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable visible = true
   @observable enableRotate = true
   @observable enableResize = true
+  @observable multiText = false
 
   // 其它属性
   graphModel: GraphModel
@@ -184,7 +204,15 @@ export class BaseNodeModel implements IBaseNodeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-
+    if (!data.properties.labelConfig) {
+      const {
+        editConfigModel: { multipleNodeText, nodeTextVerticle },
+      } = this.graphModel
+      data.properties.labelConfig = {
+        verticle: nodeTextVerticle,
+        multiple: multipleNodeText,
+      }
+    }
     this.formatText(data)
     assign(this, pickNodeConfig(data)) // TODO: 确认 constructor 中赋值 properties 是否必要
     const { overlapMode } = this.graphModel
@@ -218,27 +246,104 @@ export class BaseNodeModel implements IBaseNodeModel {
   /**
    * 始化文本属性
    */
-  private formatText(data: NodeConfig): void {
+  private formatText(data): void {
+    const { labelConfig } = data.properties
+    const defaultPosition = (index = 0) => ({
+      x: data.x - 10, // 视图层div默认宽高是20
+      y: data.y - 10 + 20 * index, //如果初始化了多个文本，则在y轴位置上累加
+    })
     if (!data.text) {
-      data.text = {
-        value: '',
-        x: data.x,
-        y: data.y,
+      // 单文本情况下，没有就初始化一个
+      // 多文本情况下，没有就是没有
+      data.text = labelConfig.multiple
+        ? []
+        : {
+            id: createUuid(),
+            relateId: data.id,
+            value: '',
+            content: '',
+            verticle: labelConfig.virtical,
+            draggable: false,
+            editable: true,
+            isFocus: false,
+            ...defaultPosition(),
+          }
+      return
+    }
+    // 如果初始化传入的是字符串，转成对象再根据是否multiple决定是作为数组赋值还是对象复杂
+    if (typeof data.text === 'string') {
+      const text = {
+        id: createUuid(),
+        relateId: data.id,
+        value: data.text,
+        content: data.text,
+        verticle: labelConfig.virtical,
         draggable: false,
         editable: true,
+        isFocus: false,
+        ...defaultPosition(),
       }
-    } else {
-      if (typeof data.text === 'string') {
-        data.text = {
-          value: data.text,
-          x: data.x,
-          y: data.y,
+      data.text = labelConfig.multiple ? [text] : text
+      return
+    }
+    // multiple时，判断是否有max，有的话超出max的数据就不存入，没有max就不限制
+    // 非multiple时只取第一个作为对象给data.text
+    if (isArray(data.text)) {
+      const textList = data.text.map((item, index) => {
+        const defaultText = {
+          id: createUuid(),
+          relateId: data.id,
+          verticle: labelConfig.virtical,
           draggable: false,
           editable: true,
+          isFocus: false,
+          ...defaultPosition(index),
         }
-      } else {
-        data.text.editable = data.text.editable ?? true
+        if (typeof item === 'string') {
+          return {
+            ...defaultText,
+            value: item,
+            content: item,
+          }
+        }
+        console.log('object text', item, {
+          ...defaultText,
+          ...item,
+          content: item.content || item.value,
+        })
+        return {
+          ...defaultText,
+          ...item,
+          content: item.content || item.value,
+        }
+      })
+      console.log('textList', textList)
+      if (!isNil(labelConfig.max) && labelConfig.max < textList.length) {
+        console.warn('【注意】传入文案数量超出所设置最大值，展示文案将被裁剪')
       }
+      data.text = labelConfig.multiple
+        ? slice(
+            textList,
+            0,
+            isNil(labelConfig.max) || labelConfig.max > textList.length
+              ? textList.length
+              : labelConfig.max,
+          )
+        : textList[0]
+      return
+    }
+    // 如果初始化传入的是对象，判断是否multiple
+    // 非multiple时文本位置固定在节点中间
+    // multiple时不限制文本位置，作为数组赋值给data.text
+    if (isObject(data.text)) {
+      const formatedText = {
+        id: createUuid(),
+        isFocus: false,
+        ...data.text,
+        content: data.text.value && data.text.value,
+        ...defaultPosition(),
+      }
+      data.text = labelConfig?.multiple ? [formatedText] : formatedText
     }
   }
 
@@ -268,13 +373,9 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 获取被保存时返回的数据
    * @overridable 支持重写
    */
-  getData(): NodeData {
-    const { x, y, value } = this.text
+  getData(): LogicFlow.NodeData {
     let { properties } = this
-    if (isObservable(properties)) {
-      properties = toJS(properties)
-    }
-    const data: NodeData = {
+    const data: LogicFlow.NodeData = {
       id: this.id,
       type: this.type,
       x: this.x,
@@ -287,11 +388,28 @@ export class BaseNodeModel implements IBaseNodeModel {
     if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
       data.zIndex = this.zIndex
     }
-    if (value) {
-      data.text = {
-        x,
-        y,
-        value,
+    if (isObservable(properties)) {
+      properties = toJS(properties)
+    }
+    if (isArray(this.text)) {
+      data.text = (this.text as LabelType[]).map((textItem) => {
+        const { x, y, value, content } = textItem
+        return {
+          x,
+          y,
+          value,
+          content,
+        }
+      })
+    } else if (isObject(this.text)) {
+      const { x, y, value, content } = this.text as LabelType
+      if (value) {
+        data.text = {
+          x,
+          y,
+          value,
+          content,
+        }
       }
     }
     return data
@@ -334,6 +452,14 @@ export class BaseNodeModel implements IBaseNodeModel {
       ...this.graphModel.theme.baseNode,
       ...this.style,
     }
+  }
+
+  /**
+   * @overridable 支持重写
+   * 获取当前节点文本内容
+   */
+  getTextShape() {
+    return null
   }
 
   /**
@@ -683,36 +809,114 @@ export class BaseNodeModel implements IBaseNodeModel {
   @action moveTo(x: number, y: number, isIgnoreRule = false): boolean {
     const deltaX = x - this.x
     const deltaY = y - this.y
-    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) {
-      return false
-    }
-    if (this.text) {
-      this.text && this.moveText(deltaX, deltaY)
-    }
+    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false
+    this.text && this.moveText(deltaX, deltaY)
     this.x = x
     this.y = y
     return true
   }
 
-  @action moveText(deltaX: number, deltaY: number): void {
-    const { x, y, value, draggable, editable } = this.text
-    this.text = {
-      value,
-      editable,
-      draggable,
-      x: x + deltaX,
-      y: y + deltaY,
+  @action
+  moveText(deltaX, deltaY): void {
+    const { labelConfig } = this.properties
+    if (!(labelConfig as LabelConfig)?.multiple && isObject(this.text)) {
+      const { x, y } = this.text as LabelType
+      this.text = {
+        ...this.text,
+        x: x + deltaX,
+        y: y + deltaY,
+      }
+      return
+    }
+    if ((labelConfig as LabelConfig)?.multiple && isArray(this.text)) {
+      this.text = (this.text as LabelType[]).map((item: LabelType) => ({
+        ...item,
+        x: item.x + deltaX,
+        y: item.y + deltaY,
+      }))
     }
   }
 
-  @action updateText(value: string): void {
+  @action
+  updateText(
+    value:
+      | string
+      | {
+          content?: string
+          value?: string
+          x?: number
+          y?: number
+          isFocus?: boolean
+        },
+    id?: string,
+  ): void {
+    const { labelConfig = {} } = this.properties
+    if (
+      !(labelConfig as LabelConfig).multiple &&
+      isEqual((this.text as LabelType).id, id)
+    ) {
+      this.text =
+        typeof value === 'string'
+          ? merge(this.text, { value, content: value, isFocus: false })
+          : merge(this.text, value)
+      console.log(cloneDeep(this.text), cloneDeep(value))
+      return
+    }
+    if (isArray(this.text)) {
+      const textIndex = findIndex(this.text, (item) => item.id === id)
+      if (textIndex < 0) return
+      assign(this.text[textIndex], value)
+      return
+    }
+  }
+
+  @action
+  addText(labelConf: LabelType | { x: number; y: number }): void {
+    const { labelConfig } = this.properties
+    const { multiple = false, max } = labelConfig as LabelConfig
+    // 当前文本数量已到最大值时不允许新增文本
+    if (multiple && !isNil(max) && this.text.length >= max) return
+    const newText = {
+      id: createUuid(),
+      relateId: this.id,
+      value: '',
+      content: '',
+      draggable: false,
+      editable: true,
+      x: (labelConfig as LabelConfig)?.multiple ? labelConf.x : this.x - 10,
+      y: (labelConfig as LabelConfig)?.multiple ? labelConf.y : this.y - 10,
+      isFocus: true,
+    }
+    if ((labelConfig as LabelConfig)?.multiple) {
+      this.text.push(newText)
+      return
+    }
     this.text = {
       ...toJS(this.text),
-      value,
+      isFocus: true,
     }
   }
 
-  @action setSelected(flag = true): void {
+  @action
+  deleteText(textInfo: { index?: number; id?: string }): void {
+    if (isArray(this.text)) {
+      if (textInfo.index && isArray()) {
+        this.text.splice(textInfo.index, 1)
+        return
+      }
+      const textIndex = findIndex(this.text, (item) => item.id === textInfo.id)
+      if (textIndex < 0) return
+      this.text.splice(textIndex, 1)
+      return
+    }
+    assign(this.text, {
+      value: '',
+      content: '',
+    })
+  }
+
+  @action
+  setSelected(flag = true): void {
     this.isSelected = flag
   }
 
