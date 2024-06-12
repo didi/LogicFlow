@@ -9,6 +9,7 @@ export type ReactNodeProps = {
 }
 
 export type ReactNodeConfig = {
+  type: string
   component: React.ComponentType<ReactNodeProps>
   effect?: (keyof LogicFlow.PropertiesType)[]
 } & Partial<RegisterConfig>
