@@ -10,7 +10,7 @@ export class SelectionSelect {
   private lf: LogicFlow
   private startPoint?: Position
   private endPoint?: Position
-  private disabled = false
+  private disabled = true
   private isDefaultStopMoveGraph = false
   private isWholeNode = true
   private isWholeEdge = true

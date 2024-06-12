@@ -1,7 +1,7 @@
 import LogicFlow from '@logicflow/core'
 import { Control } from '@logicflow/extension'
 
-import { Button, Card } from 'antd'
+import { Button, Card, Divider } from 'antd'
 import { useEffect, useRef } from 'react'
 import styles from './index.less'
 
@@ -126,6 +126,7 @@ export default function ControlExtension() {
       >
         清空 history
       </Button>
+      <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
   )
