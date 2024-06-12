@@ -1,18 +1,18 @@
-# @logicflow/lf-react-shape
+# @logicflow/react-node-registry
 
 LogicFlow Shape for rendering React components.
 
 ## Installation
 ```shell
-npm install @logicflow/lf-react-shape
+npm install @logicflow/react-node-registry
 ```
 or
 ```shell
-yarn add @logicflow/lf-react-shape
+yarn add @logicflow/react-node-registry
 ```
 or
 ```shell
-pnpm add @logicflow/lf-react-shape
+pnpm add @logicflow/react-node-registry
 ```
 
 ## Usage
