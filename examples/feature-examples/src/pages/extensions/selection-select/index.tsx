@@ -12,6 +12,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: false,
   stopZoomGraph: false,
+  stopMoveGraph: true,
   style: {
     rect: {
       rx: 5,
