@@ -63,6 +63,33 @@ export class ReactNodeView extends HtmlNode {
   unmount() {
     this.unmountReactComponent()
   }
+
+  // TODO: 确认是否需要重写 onMouseDown 方法
+  // handleMouseDown(ev: MouseEvent, x: number, y: number) {
+  //   const target = ev.target as Element
+  //   const tagName = target.tagName.toLowerCase()
+  //   if (tagName === 'input') {
+  //     const type = target.getAttribute('type')
+  //     if (
+  //       type == null ||
+  //       [
+  //         'text',
+  //         'password',
+  //         'number',
+  //         'email',
+  //         'search',
+  //         'tel',
+  //         'url',
+  //       ].includes(type)
+  //     ) {
+  //       return
+  //     }
+  //   }
+  //
+  //   console.log('pointer position, x:', x, 'y: ', y)
+  //   // TODO
+  //   // super.handleMouseDown(ev)
+  // }
 }
 
 export default ReactNodeView
