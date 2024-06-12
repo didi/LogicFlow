@@ -5,7 +5,7 @@ import {
   ReactNodeProps,
   Portal,
 } from '@logicflow/react-node-registry'
-import { Button, Card } from 'antd'
+import { Button, Card, Divider } from 'antd'
 
 import styles from './index.less'
 
@@ -112,6 +112,7 @@ export default class Example extends React.Component {
         <Button onClick={this.changeTheme}>
           {this.state.theme === 'light' ? '切换到暗色' : '切换到亮色'}
         </Button>
+        <Divider />
         <div
           ref={this.refContainer}
           id="graph"
