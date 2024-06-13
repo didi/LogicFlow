@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-undef */
-import LogicFlow from '@logicflow/core';
-import { BPMNElements } from '../index';
+import LogicFlow from '@logicflow/core'
+import { BPMNElements } from '../index'
 
-const registerEventNodes = new (jest.fn())();
-const registerGatewayNodes = new (jest.fn())();
-const registerFlows = new (jest.fn())();
-const registerTaskNodes = new (jest.fn())();
+// const registerEventNodes = new (jest.fn())();
+// const registerGatewayNodes = new (jest.fn())();
+// const registerFlows = new (jest.fn())();
+// const registerTaskNodes = new (jest.fn())();
 
 /** */
 describe('Test bpmn elements: definitionConfig', () => {
-  LogicFlow.use(BPMNElements);
-  const div = document.createElement('div');
-  document.body.appendChild(div);
+  LogicFlow.use(BPMNElements)
+  const div = document.createElement('div')
+  document.body.appendChild(div)
   const lf = new LogicFlow({
     container: div,
-  });
-  const [definition, setDefinition] = lf.useDefinition();
+  })
+  const [definition, setDefinition] = lf.useDefinition()
 
   //   默认definition配置
   //   const definitionConfig: DefinitionConfigType[] = [
@@ -41,15 +41,13 @@ describe('Test bpmn elements: definitionConfig', () => {
       'boundaryEvent',
       'intermediateCatchEvent',
       'startEvent',
-    ]);
-    expect(definition.startEvent.has('bpmn:timerEventDefinition')).toBe(true);
-    expect(definition.boundaryEvent.has('bpmn:timerEventDefinition')).toBe(
-      true,
-    );
+    ])
+    expect(definition.startEvent.has('bpmn:timerEventDefinition')).toBe(true)
+    expect(definition.boundaryEvent.has('bpmn:timerEventDefinition')).toBe(true)
     expect(
       definition.intermediateCatchEvent.has('bpmn:timerEventDefinition'),
-    ).toBe(true);
-  });
+    ).toBe(true)
+  })
 
   test('after setting new definition by setDefinition for startEvent, startEvent should contain two definition: bpmn:timerEventDefinition, bpmn:messageEventDefinition', () => {
     setDefinition([
@@ -66,9 +64,9 @@ describe('Test bpmn elements: definitionConfig', () => {
           },
         ],
       },
-    ]);
+    ])
 
-    expect(Array.from(definition.startEvent.keys()).length).toBe(2);
-    expect(definition.startEvent.has('bpmn:messageEventDefinition')).toBe(true);
-  });
-});
+    expect(Array.from(definition.startEvent.keys()).length).toBe(2)
+    expect(definition.startEvent.has('bpmn:messageEventDefinition')).toBe(true)
+  })
+})
