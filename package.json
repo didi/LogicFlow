@@ -1,6 +1,6 @@
 {
   "name": "logicflow",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "A highly scalable, execution-oriented, professional flowchart editing library.",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -128,6 +128,6 @@
   },
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": ">=8.0.0"
+    "pnpm": ">=9.0.0"
   }
 }

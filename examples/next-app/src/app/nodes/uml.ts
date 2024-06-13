@@ -32,11 +32,11 @@ export class UmlModel extends HtmlNodeModel {
   }
 }
 export class UmlNode extends HtmlNode {
-  setHtml(rootEl: HTMLElement) {
+  setHtml(rootEl: SVGForeignObjectElement) {
     const { properties } = this.props.model
     const el = document.createElement('div')
     el.className = 'uml-wrapper'
-    const html = `
+    el.innerHTML = `
             <div>
               <div class="uml-head">Head</div>
               <div class="uml-body">
@@ -49,7 +49,6 @@ export class UmlNode extends HtmlNode {
               </div>
             </div>
           `
-    el.innerHTML = html
     rootEl.innerHTML = ''
     rootEl.appendChild(el)
   }
