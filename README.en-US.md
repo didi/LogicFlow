@@ -20,6 +20,7 @@
   </a>
 </p>
 
-简体中文 | [English](/README.en-US.md)
 
-LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、编辑所必需的功能和简单灵活的节点自定义、插件等拓展机制，方便我们快速在业务系统内满足类流程图的需求。
+[简体中文](/README.md) | English
+
+LogicFlow is a flowchart editing framework , providing a series of functions necessary for flowchart interaction and editing, as well as simple and flexible node customization, plug-in and other expansion mechanisms, so that we can quickly meet the needs of class flowcharts in business systems.
