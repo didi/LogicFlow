@@ -64,18 +64,18 @@ class RotateControlPoint extends Component<IProps> {
     nodeIds.forEach((nodeId) => {
       const edges = graphModel.getNodeEdges(nodeId)
       edges.forEach((edge) => {
-        if (nodeIdMap[edge.sourceNodeId as string]) {
+        if (nodeIdMap[edge.sourceNodeId]) {
           const model = graphModel.getNodeModelById(edge.sourceNodeId)
-          const anchor = (model as BaseNodeModel).anchors.find(
+          const anchor = model!.anchors.find(
             (item) => item.id === edge.sourceAnchorId,
-          )
+          )!
           edge.updateStartPoint(anchor)
         }
-        if (nodeIdMap[edge.targetNodeId as string]) {
+        if (nodeIdMap[edge.targetNodeId]) {
           const model = graphModel.getNodeModelById(edge.targetNodeId)
-          const anchor = (model as BaseNodeModel).anchors.find(
+          const anchor = model!.anchors.find(
             (item) => item.id === edge.targetAnchorId,
-          )
+          )!
           edge.updateEndPoint(anchor)
         }
       })
