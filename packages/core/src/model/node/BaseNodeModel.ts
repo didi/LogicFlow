@@ -789,7 +789,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  updateAttributes(attributes: any) {
+  updateAttributes(attributes) {
     assign(this, attributes)
   }
 }

@@ -50,7 +50,7 @@ export class AdjustPoint extends Component<IProps, IState> {
   targetRuleResults: Map<any, any>
   sourceRuleResults: Map<any, any>
 
-  constructor(props) {
+  constructor(props: IProps) {
     super()
     this.state = {
       dragging: false,
@@ -63,7 +63,7 @@ export class AdjustPoint extends Component<IProps, IState> {
     const { eventCenter } = graphModel
     this.stepDragData = {
       type,
-      edgeData: (edgeModel as BaseEdgeModel).getData(),
+      edgeData: edgeModel.getData(),
     }
     this.stepDrag = new StepDrag({
       onDragStart: this.onDragStart,
@@ -193,7 +193,7 @@ export class AdjustPoint extends Component<IProps, IState> {
       if (!dragging) return
       // 如果找到目标节点，删除老边，创建新边
       let needRecoveryEdge = false
-      let createEdgeInfo
+      let createEdgeInfo: LogicFlow.EdgeConfig
       if (info && info.node) {
         const { pass, msg, newTargetNode } = this.isAllowAdjust(info)
         if (pass) {
@@ -286,7 +286,7 @@ export class AdjustPoint extends Component<IProps, IState> {
         const oldEdgeData = edgeModel.getData()
         graphModel.deleteEdgeById(edgeModel.id)
         // 创建新边
-        const edge = graphModel.addEdge({ ...createEdgeInfo })
+        const edge = graphModel.addEdge({ ...createEdgeInfo! })
         // 向外抛出事件
         graphModel.eventCenter.emit(EventType.EDGE_EXCHANGE_NODE, {
           data: {
@@ -310,7 +310,7 @@ export class AdjustPoint extends Component<IProps, IState> {
   // 还原边
   recoveryEdge = () => {
     const { edgeModel } = this.props
-    const { startPoint, endPoint, pointsList } = this.oldEdge ?? {}
+    const { startPoint, endPoint, pointsList } = this.oldEdge!
     edgeModel.updateStartPoint(startPoint)
     edgeModel.updateEndPoint(endPoint)
     // 折线和曲线还需要更新其pointsList
