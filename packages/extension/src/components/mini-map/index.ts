@@ -1,16 +1,63 @@
 import LogicFlow from '@logicflow/core'
-import Position = LogicFlow.Position
 
-interface MiniMapStaticOption {
-  width?: number
-  height?: number
-  isShowHeader?: boolean
-  isShowCloseIcon?: boolean
-  leftPosition?: number
-  rightPosition?: number
-  topPosition?: number
-  bottomPosition?: number
-  headerTitle?: string
+import Position = LogicFlow.Position
+import MiniMapOption = MiniMap.MiniMapOption
+import MiniMapPosition = MiniMap.MiniMapPosition
+
+export namespace MiniMap {
+  export type MiniMapOption = Partial<{
+    /**
+     * 小地图中画布的宽度
+     */
+    width: number
+    /**
+     * 小地图中画布的高度
+     */
+    height: number
+    /**
+     * 在小地图的画布中是否渲染边
+     */
+    showEdge: boolean
+    /**
+     * 是否显示小地图的标题栏
+     */
+    isShowHeader: boolean
+    /**
+     * 是否显示关闭按钮
+     */
+    isShowCloseIcon: boolean
+    /**
+     * 小地图标题栏的文本内容
+     */
+    headerTitle: string
+    /**
+     * 小地图与画布左边界的左边距，优先级高于`rightPosition`
+     */
+    leftPosition: number
+    /**
+     * 小地图与画布右边界的右边距，优先级低于`leftPosition`
+     */
+    rightPosition: number
+    /**
+     * 小地图与画布上边界的上边距，优先级高于`bottomPosition`
+     */
+    topPosition: number
+    /**
+     * 小地图与画布下边界的下边距，优先级低于`topPosition`
+     */
+    bottomPosition: number
+  }>
+
+  export type AbsolutePosition = Partial<
+    Record<'left' | 'right' | 'top' | 'bottom', number>
+  >
+
+  export type MiniMapPosition =
+    | 'left-top'
+    | 'right-top'
+    | 'left-bottom'
+    | 'right-bottom'
+    | AbsolutePosition
 }
 
 type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
@@ -18,41 +65,123 @@ type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
 export class MiniMap {
   static pluginName = 'miniMap'
 
+  /**
+   * 主画布的LogicFlow实例
+   */
   private lf: LogicFlow
+  /**
+   * LogicFlow构造函数
+   */
   private LFCtor: LogicFlow.LogicFlowConstructor
-  private container?: HTMLElement
-  private miniMapWrap!: HTMLDivElement
-  private miniMapContainer?: HTMLDivElement
+  /**
+   * 小地图中画布的LogicFlow实例
+   */
   private lfMap!: LogicFlow
+
+  /**
+   * lf的工具层容器，用于挂载小地图
+   */
+  private container?: HTMLElement
+  /**
+   * 小地图的容器
+   */
+  private miniMapContainer?: HTMLDivElement
+  /**
+   * 小地图的画布容器
+   */
+  private miniMapWrap!: HTMLDivElement
+  /**
+   * 小地图的预览视窗
+   */
   private viewport!: HTMLDivElement
+
+  /**
+   * 小地图中画布容器的宽度
+   */
   private width = 200
+  /**
+   * 小地图中画布容器的高度
+   */
   private height = 150
+  /**
+   * 小地图中画布的缩放比例
+   */
   private scale = 1
+  /**
+   * 小地图中画布的水平位移
+   */
   private translateX = 0
+  /**
+   * 小地图中画布的垂直位移
+   */
   private translateY = 0
+  /**
+   * 在小地图的画布中是否渲染边
+   */
+  private showEdge = false
+
+  /**
+   * 小地图中画布的区域范围
+   */
   private bounds: Bounds
+  /**
+   * 所有元素占领的区域范围
+   */
   private elementAreaBounds: Bounds
+  /**
+   * 主画布视口的区域范围
+   */
   private viewPortBounds: Bounds
+
+  // 小地图相对画布的绝对定位
   private leftPosition?: number
   private topPosition?: number
   private rightPosition?: number
   private bottomPosition?: number
+
+  /**
+   * 预览视窗左上角在主画布的y坐标
+   */
   private viewPortTop = 0
+  /**
+   * 预览视窗左上角在主画布的x坐标
+   */
   private viewPortLeft = 0
-  private startPosition?: Position
+  // 预览视窗的宽高
   private viewPortWidth = 150
   private viewPortHeight = 75
+
+  /**
+   * 拖拽预览视窗时，记录起始点的位置
+   */
+  private startPosition!: Position
+
+  /**
+   * 是否显示小地图
+   */
   private isShow = false
+  /**
+   * 是否显示小地图的标题栏
+   */
   private isShowHeader = false
+  /**
+   * 是否显示关闭按钮
+   */
   private isShowCloseIcon = false
+  /**
+   * 小地图标题栏的文本内容
+   */
   private headerTitle = '导航'
+  /**
+   * 小地图的logicFlow实例需要禁用的插件
+   */
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect']
 
   constructor({ lf, LogicFlow, options }: LogicFlow.ExtensionProps) {
     this.lf = lf
     this.LFCtor = LogicFlow
     if (options && options.MiniMap) {
-      this.setOption(options)
+      this.setOption(options.MiniMap as MiniMapOption)
     }
     this.viewPortWidth = lf.graphModel.width
     this.viewPortHeight = lf.graphModel.height
@@ -83,17 +212,19 @@ export class MiniMap {
   }
 
   /**
-   * 显示mini map
+   * 显示小地图
+   * @param left 相对画布的左边距
+   * @param top 相对画布的上边距
    */
-  show = (leftPosition?: number, topPosition?: number) => {
+  show = (left?: number, top?: number) => {
     if (!this.isShow) {
-      this.createMiniMap(leftPosition, topPosition)
+      this.createMiniMap(left, top)
       this.setView()
     }
     this.isShow = true
   }
   /**
-   * 隐藏mini map
+   * 隐藏小地图
    */
   hide = () => {
     if (this.isShow) {
@@ -102,33 +233,93 @@ export class MiniMap {
     this.isShow = false
   }
   /**
-   * 重置画布的缩放和平移
+   * 更新小地图在画布中的位置
+   * @param {MiniMapPosition} position
+   */
+  updatePosition(position: MiniMapPosition) {
+    if (typeof position === 'object') {
+      if (position.left !== undefined || position.right !== undefined) {
+        this.leftPosition = position.left
+        this.rightPosition = position.right
+      }
+      if (position.top !== undefined || position.bottom !== undefined) {
+        this.topPosition = position.top
+        this.bottomPosition = position.bottom
+      }
+    } else {
+      switch (position) {
+        case 'left-top':
+          this.leftPosition = 0
+          this.rightPosition = undefined
+          this.topPosition = 0
+          this.bottomPosition = undefined
+          break
+        case 'right-top':
+          this.leftPosition = undefined
+          this.rightPosition = 0
+          this.topPosition = 0
+          this.bottomPosition = undefined
+          break
+        case 'left-bottom':
+          this.leftPosition = 0
+          this.rightPosition = undefined
+          this.topPosition = undefined
+          this.bottomPosition = 0
+          break
+        case 'right-bottom':
+          this.leftPosition = undefined
+          this.rightPosition = 0
+          this.topPosition = undefined
+          this.bottomPosition = 0
+          break
+      }
+    }
+    this.updateMiniMapPosition()
+  }
+  /**
+   * 重置主画布的缩放和平移
    */
   reset = () => {
     this.lf.resetTranslate()
     this.lf.resetZoom()
   }
+  /**
+   * 设置小地图的画布中是否绘制边
+   * @param {boolean} showEdge
+   */
+  setShowEdge(showEdge: boolean) {
+    if (this.showEdge !== showEdge) {
+      this.showEdge = showEdge
+      this.setView()
+    }
+  }
 
-  private setOption(options: Record<string, unknown>) {
+  /**
+   * 初始化小地图的配置
+   * @param options
+   */
+  private setOption(options: MiniMapOption) {
     const {
       width = 150,
       height = 220,
+      showEdge = false,
       isShowHeader = false,
       isShowCloseIcon = false,
-      leftPosition = 0,
-      topPosition = 0,
-      rightPosition,
-      bottomPosition,
+      leftPosition,
+      topPosition,
+      rightPosition = 0,
+      bottomPosition = 0,
       headerTitle = '导航',
-    } = options.MiniMap as MiniMapStaticOption
+    } = options
     this.width = width
     this.height = height
+    this.showEdge = showEdge
     this.isShowHeader = isShowHeader
     this.isShowCloseIcon = isShowCloseIcon
     this.leftPosition = leftPosition
+    this.rightPosition = leftPosition !== undefined ? undefined : rightPosition
     this.topPosition = topPosition
-    this.rightPosition = rightPosition
-    this.bottomPosition = bottomPosition
+    this.bottomPosition = topPosition !== undefined ? undefined : bottomPosition
     this.headerTitle = headerTitle
   }
 
@@ -143,6 +334,7 @@ export class MiniMap {
       isSilentMode: true,
       stopZoomGraph: true,
       stopScrollGraph: true,
+      // 禁用画布移动会导致 transformModel.translate 无效，所以这里不禁用
       stopMoveGraph: false,
       history: false,
       snapline: false,
@@ -158,23 +350,18 @@ export class MiniMap {
 
   private createMiniMap(left?: number, top?: number) {
     const miniMapContainer = document.createElement('div')
+    this.miniMapContainer = miniMapContainer
     miniMapContainer.appendChild(this.miniMapWrap)
-    if (typeof left !== 'undefined' || typeof top !== 'undefined') {
-      miniMapContainer.style.left = `${left || 0}px`
-      miniMapContainer.style.top = `${top || 0}px`
-    } else {
-      if (typeof this.rightPosition !== 'undefined') {
-        miniMapContainer.style.right = `${this.rightPosition}px`
-      } else if (typeof this.leftPosition !== 'undefined') {
-        miniMapContainer.style.left = `${this.leftPosition}px`
-      }
-      if (typeof this.bottomPosition !== 'undefined') {
-        miniMapContainer.style.bottom = `${this.bottomPosition}px`
-      } else if (typeof this.topPosition !== 'undefined') {
-        miniMapContainer.style.top = `${this.topPosition}px`
-      }
-    }
+
     miniMapContainer.style.position = 'absolute'
+    if (left !== undefined || top !== undefined) {
+      this.leftPosition = left || 0
+      this.topPosition = top || 0
+      this.rightPosition = undefined
+      this.bottomPosition = undefined
+    }
+    this.updateMiniMapPosition()
+
     miniMapContainer.className = 'lf-mini-map'
     if (!this.isShowCloseIcon) {
       miniMapContainer.classList.add('lf-mini-map-no-close-icon')
@@ -194,7 +381,28 @@ export class MiniMap {
     close.className = 'lf-mini-map-close'
     close.addEventListener('click', this.hide)
     miniMapContainer.appendChild(close)
-    this.miniMapContainer = miniMapContainer
+  }
+
+  private updateMiniMapPosition() {
+    if (this.miniMapContainer) {
+      const { style } = this.miniMapContainer
+
+      if (this.rightPosition !== undefined) {
+        style.right = `${this.rightPosition}px`
+        style.left = ''
+      } else {
+        style.left = `${this.leftPosition}px`
+        style.right = ''
+      }
+
+      if (this.bottomPosition !== undefined) {
+        style.bottom = `${this.bottomPosition}px`
+        style.top = ''
+      } else {
+        style.top = `${this.topPosition}px`
+        style.bottom = ''
+      }
+    }
   }
 
   private removeMiniMap() {
@@ -204,7 +412,7 @@ export class MiniMap {
   }
 
   /**
-   * 获取小地图的边界范围
+   * 更新小地图的区域范围
    * @param data
    */
   private updateBounds(data?: LogicFlow.GraphData) {
@@ -278,16 +486,22 @@ export class MiniMap {
   /**
    * 删除部分内容以简化渲染，包括边与节点文本
    */
-  private resetData(data: LogicFlow.GraphData) {
-    const { nodes } = data
+  private resetData(data: LogicFlow.GraphData): LogicFlow.GraphData {
+    const { nodes, edges } = data
     nodes.forEach((node) => {
       // 删除节点文本
       node.text = undefined
     })
+    if (this.showEdge) {
+      edges.forEach((edge) => {
+        // 删除边上的文本
+        edge.text = undefined
+      })
+    }
     return {
       nodes,
-      // 不渲染边
-      edges: [],
+      // 是否渲染边
+      edges: this.showEdge ? edges : [],
     }
   }
 
@@ -295,6 +509,7 @@ export class MiniMap {
    * MiniMap视图重绘
    * @param reRender 是否重新渲染画布元素
    */
+  // TODO: 确定 render 函数是否为增量渲染，如果是则不需要 reRender 参数做限制
   private setView(reRender: boolean = true) {
     if (reRender) {
       // 1. 获取到图中所有的节点中的位置
@@ -313,16 +528,16 @@ export class MiniMap {
         }
       }
 
-      // 2. 将数据渲染到minimap画布上
+      // 2. 将数据渲染到小地图的画布上
       this.lfMap.render(data)
 
-      // 3. 计算出所有节点与当前视口构成的边界。
+      // 3. 更新所有节点与当前视口构成的区域范围
       this.updateBounds(data)
     } else {
       this.updateBounds()
     }
 
-    // 4. 计算minimap画布相对minimap面板的缩放比例，并移动minimap的视图保证元素全部可见且整体居中。
+    // 4. 计算小地图画布相对小地图容器的缩放比例，并移动小地图的视图保证元素全部可见且整体居中。
     const { left, top, right, bottom } = this.bounds
     const realWidth = right - left
     const realHeight = bottom - top
@@ -340,7 +555,7 @@ export class MiniMap {
     this.translateX = translateX
     this.translateY = translateY
 
-    // 5. 取比例最小的值，将渲染的画布缩小对应比例。
+    // 5. 将小地图的画布缩放对应的比例。
     if (this.miniMapWrap.firstChild) {
       const innerStyle = (this.miniMapWrap.firstChild as HTMLElement).style
       innerStyle.pointerEvents = 'none'
@@ -353,7 +568,7 @@ export class MiniMap {
   }
 
   /**
-   * 更新预览视窗位置
+   * 更新预览视窗的位置
    */
   private updateViewPort() {
     const viewStyle = this.viewport.style
@@ -372,11 +587,16 @@ export class MiniMap {
     viewStyle.top = `${(this.viewPortTop - this.translateY) * this.scale}px`
   }
 
-  // 创建预览视窗元素
+  /**
+   * 创建预览视窗元素
+   */
   private createViewPort() {
     const div = document.createElement('div')
     div.className = 'lf-minimap-viewport'
+
+    // 拖拽预览视窗，主画布视口跟随移动
     div.addEventListener('mousedown', this.startDrag)
+
     // 禁止预览视窗的点击事件冒泡
     div.addEventListener('click', (e: MouseEvent) => {
       e.stopPropagation()
@@ -390,28 +610,21 @@ export class MiniMap {
     const { x, y } = e
     this.startPosition = { x, y }
   }
+
   /**
-   * 移动预览视窗
-   * @param top 画布视口左上角的坐标 y
-   * @param left 画布视口左上角的坐标 x
+   * 拖拽预览视窗过程中，更新主画布视口
    */
-  private moveViewport = (top: number, left: number) => {
-    const viewStyle = this.viewport.style
-    this.viewPortTop = top
-    this.viewPortLeft = left
-    viewStyle.top = `${(this.viewPortTop - this.translateY) * this.scale}px`
-    viewStyle.left = `${(this.viewPortLeft - this.translateX) * this.scale}px`
-  }
   private drag = (e: MouseEvent) => {
     const { x, y } = e
-    const translateX = (x - (this.startPosition?.x ?? 0)) / this.scale
-    const translateY = (y - (this.startPosition?.y ?? 0)) / this.scale
-    const left = this.viewPortLeft + translateX
-    const top = this.viewPortTop + translateY
-    this.moveViewport(top, left)
+    // 每移动一次预览视窗都需要更新拖拽的起始点
     this.startPosition = { x, y }
-    const centerX = this.viewPortLeft + this.viewPortWidth / this.scale / 2
-    const centerY = this.viewPortTop + this.viewPortHeight / this.scale / 2
+    const translateX = (x - this.startPosition.x) / this.scale
+    const translateY = (y - this.startPosition.y) / this.scale
+    const centerX =
+      this.viewPortLeft + translateX + this.viewPortWidth / this.scale / 2
+    const centerY =
+      this.viewPortTop + translateY + this.viewPortHeight / this.scale / 2
+
     this.lf.focusOn({
       coordinate: {
         x: centerX,
@@ -419,10 +632,18 @@ export class MiniMap {
       },
     })
   }
+
+  /**
+   * 拖拽预览视窗结束，移除拖拽事件
+   */
   private drop = () => {
     document.removeEventListener('mousemove', this.drag)
     document.removeEventListener('mouseup', this.drop)
   }
+
+  /**
+   * 点击小地图中非预览视窗的区域时，移动主画布视口聚焦于点击位置
+   */
   private mapClick = (e: MouseEvent) => {
     const { offsetX, offsetY } = e
     const centerX = this.translateX + offsetX / this.scale
