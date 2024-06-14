@@ -397,7 +397,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @param val 属性值
    */
   @action
-  setProperty(key: string, val: unknown): void {
+  setProperty(key: string, val: any): void {
     this.properties[key] = formatData(val)
     this.setAttributes()
   }
@@ -416,7 +416,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @param val 属性值
    */
   @action
-  setProperties(properties: Record<string, unknown>): void {
+  setProperties(properties: Record<string, any>): void {
     this.properties = {
       ...toJS(this.properties),
       ...formatData(properties),
@@ -523,7 +523,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 设置文本位置和值
    */
-  @action setText(textConfig): void {
+  @action setText(textConfig: LogicFlow.TextConfig): void {
     if (textConfig) {
       assign(this.text, textConfig)
     }
@@ -627,12 +627,12 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   }
 
   @action
-  updateStartPoint(anchor): void {
+  updateStartPoint(anchor: Point): void {
     this.startPoint = anchor
   }
 
   @action
-  moveStartPoint(deltaX, deltaY): void {
+  moveStartPoint(deltaX: number, deltaY: number): void {
     if (this.startPoint) {
       this.startPoint.x += deltaX
       this.startPoint.y += deltaY
@@ -640,12 +640,12 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   }
 
   @action
-  updateEndPoint(anchor): void {
+  updateEndPoint(anchor: Point): void {
     this.endPoint = anchor
   }
 
   @action
-  moveEndPoint(deltaX, deltaY): void {
+  moveEndPoint(deltaX: number, deltaY: number): void {
     if (this.endPoint) {
       this.endPoint.x += deltaX
       this.endPoint.y += deltaY
@@ -676,7 +676,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   }
   // 起终点拖拽调整过程中，进行直线路径更新
   @action
-  updateAfterAdjustStartAndEnd({ startPoint, endPoint }) {
+  updateAfterAdjustStartAndEnd({
+    startPoint,
+    endPoint,
+  }: Record<'startPoint' | 'endPoint', Point>) {
     this.updateStartPoint({ x: startPoint.x, y: startPoint.y })
     this.updateEndPoint({ x: endPoint.x, y: endPoint.y })
   }

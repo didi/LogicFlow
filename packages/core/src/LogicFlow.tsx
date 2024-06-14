@@ -20,7 +20,7 @@ import Tool from './tool/tool'
 import { snapline } from './tool'
 import Keyboard from './keyboard'
 import History from './history/History'
-import { CallbackType } from './event/eventEmitter'
+import { CallbackType, EventArgs } from './event/eventEmitter'
 
 import { EditConfigInterface } from './model'
 import { ElementType, EventType } from './constant'
@@ -42,6 +42,7 @@ import PointTuple = LogicFlow.PointTuple
 import ExtensionRender = LogicFlow.ExtensionRender
 import RegisterElementFunc = LogicFlow.RegisterElementFunc
 import FocusOnParams = LogicFlow.FocusOnParams
+import PropertiesType = LogicFlow.PropertiesType
 
 const pluginFlag = Symbol('plugin registered by Logicflow.use')
 
@@ -197,19 +198,19 @@ export class LogicFlow {
     // 例如我注册一个“开始节点”
     // 然后我再想注册一个“立即开始节点”
     // 注册传递参数改为动态。
-    // TODO: 这 extendKey 有什么用？
-    // this.viewMap.forEach((component) => {
-    //   const key = (component as any).extendKey
-    //   if (key) {
-    //     registerParam[key] = component
-    //   }
-    // })
-    // this.graphModel.modelMap.forEach((component) => {
-    //   const key = component.extendKey
-    //   if (key) {
-    //     registerParam[key as string] = component
-    //   }
-    // })
+    // TODO: 确定 extendKey 的作用
+    this.viewMap.forEach((component) => {
+      const key = (component as any).extendKey
+      if (key) {
+        registerParam[key] = component
+      }
+    })
+    this.graphModel.modelMap.forEach((component) => {
+      const key = (component as any).extendKey
+      if (key) {
+        registerParam[key as string] = component
+      }
+    })
     if (fn) {
       // TODO: 确认 fn 是否必传，如果必传，可以去掉这个判断
       const { view: ViewClass, model: ModelClass } = fn(registerParam)
@@ -238,7 +239,7 @@ export class LogicFlow {
    * 批量注册
    * @param elements 注册的元素
    */
-  batchRegister(elements = []) {
+  batchRegister(elements: RegisterConfig[] = []) {
     elements.forEach((element) => {
       this.registerElement(element)
     })
@@ -400,7 +401,7 @@ export class LogicFlow {
    * 获取节点或边的数据
    * @param id id
    */
-  getDataById(id: string): NodeConfig | EdgeConfig | undefined {
+  getDataById(id: string): NodeData | EdgeData | undefined {
     return this.graphModel.getElement(id)?.getData()
   }
 
@@ -503,7 +504,7 @@ export class LogicFlow {
    * 获取节点数据
    * @param nodeId 节点
    */
-  getNodeDataById(nodeId: string): NodeConfig | undefined {
+  getNodeDataById(nodeId: string): NodeData | undefined {
     return this.graphModel.getNodeModelById(nodeId)?.getData()
   }
 
@@ -574,7 +575,7 @@ export class LogicFlow {
    * @param edgeId 边的Id
    * @return model
    */
-  getEdgeModelById(edgeId: string): BaseEdgeModel {
+  getEdgeModelById(edgeId: string): BaseEdgeModel | undefined {
     const { edgesMap } = this.graphModel
     return edgesMap[edgeId]?.model
   }
@@ -644,7 +645,7 @@ export class LogicFlow {
    * @param edgeId 边Id
    * @returns EdgeData
    */
-  getEdgeDataById(edgeId: string): EdgeData {
+  getEdgeDataById(edgeId: string): EdgeData | undefined {
     return this.getEdgeModelById(edgeId)?.getData()
   }
 
@@ -690,7 +691,7 @@ export class LogicFlow {
    * @param id 元素的id
    * @param properties 自定义属性
    */
-  setProperties(id: string, properties: LogicFlow.PropertiesType): void {
+  setProperties(id: string, properties: PropertiesType): void {
     this.graphModel.getElement(id)?.setProperties(formatData(properties))
   }
 
@@ -703,7 +704,7 @@ export class LogicFlow {
    * @param id 元素的id
    * @returns 自定义属性
    */
-  getProperties(id: string): Record<string, any> | undefined {
+  getProperties(id: string): PropertiesType | undefined {
     return this.graphModel.getElement(id)?.getProperties()
   }
 
@@ -791,7 +792,7 @@ export class LogicFlow {
         wholeNode,
         ignoreHideElement,
       )
-      .map((element: any) => element.getData()) // 确认 element 类型
+      .map((element) => element.getData())
   }
 
   /**
@@ -994,17 +995,17 @@ export class LogicFlow {
 
   /**
    * 开启边的动画
-   * @param edgeId any
+   * @param edgeId string
    */
-  openEdgeAnimation(edgeId: any): void {
+  openEdgeAnimation(edgeId: string): void {
     this.graphModel.openEdgeAnimation(edgeId)
   }
 
   /**
    * 关闭边的动画
-   * @param edgeId any
+   * @param edgeId string
    */
-  closeEdgeAnimation(edgeId: any): void {
+  closeEdgeAnimation(edgeId: string): void {
     this.graphModel.closeEdgeAnimation(edgeId)
   }
 
@@ -1038,7 +1039,7 @@ export class LogicFlow {
   /**
    * 触发监听事件
    */
-  emit(evt: string, arg: any) {
+  emit(evt: string, arg: EventArgs) {
     this.graphModel.eventCenter.emit(evt, arg)
   }
 
@@ -1153,8 +1154,6 @@ export class LogicFlow {
       return null
     }
     // * initNodeData区分是否为虚拟节点
-    // TODO: 确认此处该如何处理，ts 类型。此处类型肯定是 BaseNodeModel，下面的 config 可以保证 new 成功
-    // @ts-ignore
     const fakerNodeModel = new Model(
       {
         ...nodeConfig,
