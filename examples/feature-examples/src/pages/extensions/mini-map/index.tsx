@@ -1,7 +1,7 @@
 import LogicFlow from '@logicflow/core'
 import { Control, MiniMap } from '@logicflow/extension'
 
-import { Button, Card, Flex, Divider } from 'antd'
+import { Button, Card, Flex, Divider, Select, Form, Space } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import styles from './index.less'
 
@@ -10,29 +10,13 @@ import '@logicflow/extension/es/index.css'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
-  stopScrollGraph: true,
-  stopZoomGraph: true,
+  stopScrollGraph: false,
+  stopZoomGraph: false,
   style: {
     rect: {
       rx: 5,
       ry: 5,
       strokeWidth: 2,
-    },
-    circle: {
-      fill: '#f5f5f5',
-      stroke: '#666',
-    },
-    ellipse: {
-      fill: '#dae8fc',
-      stroke: '#6c8ebf',
-    },
-    polygon: {
-      fill: '#d5e8d4',
-      stroke: '#82b366',
-    },
-    diamond: {
-      fill: '#ffe6cc',
-      stroke: '#d79b00',
     },
     text: {
       color: '#b85450',
@@ -77,10 +61,20 @@ const data: LogicFlow.GraphConfigData = {
   edges,
 }
 
+const miniMapOptions: MiniMap.MiniMapOption = {
+  isShowHeader: false,
+  isShowCloseIcon: true,
+  headerTitle: 'MiniMap',
+  width: 200,
+  height: 120,
+}
+
 export default function MiniMapExtension() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const [showEdge, setShowEdge] = useState(true)
+  const [position, setPosition] = useState('right-bottom')
 
   useEffect(() => {
     if (!lfRef.current) {
@@ -93,11 +87,8 @@ export default function MiniMapExtension() {
         plugins: [Control, MiniMap],
         pluginsOptions: {
           MiniMap: {
-            isShowHeader: false,
-            isShowCloseIcon: true,
-            headerTitle: 'MiniMap',
-            width: 200,
-            height: 120,
+            ...miniMapOptions,
+            showEdge,
           },
         },
       })
@@ -113,9 +104,17 @@ export default function MiniMapExtension() {
       if (visible) {
         miniMap.hide()
       } else {
-        miniMap.show(0, 0)
+        miniMap.show()
       }
       setVisible(!visible)
+    }
+  }
+
+  const toggleShowEdge = () => {
+    if (lfRef.current) {
+      const miniMap = lfRef.current.extension.miniMap as MiniMap
+      miniMap.setShowEdge(!showEdge)
+      setShowEdge(!showEdge)
     }
   }
 
@@ -125,13 +124,66 @@ export default function MiniMapExtension() {
     }
   }
 
+  const updatePosition = (position: any) => {
+    if (lfRef.current) {
+      const miniMap = lfRef.current.extension.miniMap as MiniMap
+      miniMap.updatePosition(position)
+      setPosition(position)
+    }
+  }
+
+  const updatePositionWithObject1 = () => {
+    ;(lfRef.current?.extension.miniMap as MiniMap).updatePosition({
+      left: 100,
+      top: 100,
+    })
+  }
+
+  const updatePositionWithObject2 = () => {
+    ;(lfRef.current?.extension.miniMap as MiniMap).updatePosition({
+      right: 100,
+      bottom: 100,
+    })
+  }
+
   return (
     <Card title="LogicFlow Extension - MiniMap">
-      <Flex wrap="wrap" gap="small">
-        <Button onClick={toggleVisible}>
-          {visible ? '隐藏' : '显示'}小地图
-        </Button>
-        {visible && <Button onClick={handleReset}>重置</Button>}
+      <Flex wrap="wrap" gap="middle" align="center" justify="space-between">
+        <Space>
+          <Button onClick={toggleVisible}>
+            {visible ? '隐藏' : '显示'}小地图
+          </Button>
+          {visible && (
+            <Button onClick={handleReset}>重置主画布（缩放&位移）</Button>
+          )}
+        </Space>
+        {visible && (
+          <Form layout="inline">
+            <Form.Item label="小地图中显示连线">
+              <Button onClick={toggleShowEdge}>
+                {showEdge ? '隐藏' : '显示'}
+              </Button>
+            </Form.Item>
+            <Form.Item label="小地图位置">
+              <Select
+                value={position}
+                onChange={updatePosition}
+                style={{ width: 80 }}
+              >
+                <Select.Option value="left-top">左上</Select.Option>
+                <Select.Option value="left-bottom">左下</Select.Option>
+                <Select.Option value="right-top">右上</Select.Option>
+                <Select.Option value="right-bottom">右下</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item tooltip="left: 100; top: 100" label="小地图位置">
+              <Button onClick={updatePositionWithObject1}>设置</Button>
+            </Form.Item>
+            <Form.Item tooltip="right: 100; bottom: 100" label="小地图位置">
+              <Button onClick={updatePositionWithObject2}>设置</Button>
+            </Form.Item>
+          </Form>
+        )}
       </Flex>
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
