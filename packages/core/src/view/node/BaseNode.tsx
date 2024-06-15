@@ -44,7 +44,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   startTime?: number
   modelDisposer: IReactionDisposer
 
-  constructor(props) {
+  constructor(props: IProps) {
     super()
     const {
       graphModel: { gridSize, eventCenter },
@@ -205,7 +205,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       }
     }
   }
-  onDragging = ({ event }) => {
+  onDragging = ({ event }: IDragParams) => {
     const { model, graphModel } = this.props
     // const { isDragging } = model;
     const {
@@ -217,7 +217,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       gridSize,
     } = graphModel
     model.isDragging = true
-    const { clientX, clientY } = event
+    const { clientX, clientY } = event!
     let {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
@@ -389,7 +389,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   }
   // 为什么将hover状态放到model中？
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
-  setHoverON = (ev) => {
+  setHoverON = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     if (model.isHovered) return
     const nodeData = model.getData()
@@ -399,7 +399,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       e: ev,
     })
   }
-  setHoverOFF = (ev) => {
+  setHoverOFF = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     const nodeData = model.getData()
     if (!model.isHovered) return
@@ -409,7 +409,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       e: ev,
     })
   }
-  onMouseOut = (ev) => {
+  onMouseOut = (ev: MouseEvent) => {
     if (isIe) {
       this.setHoverOFF(ev)
     }
@@ -444,7 +444,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
         {!hideAnchors && this.getAnchors()}
       </g>
     )
-    let nodeShape
+    let nodeShape: h.JSX.Element
     if (!isHitable) {
       nodeShape = (
         <g

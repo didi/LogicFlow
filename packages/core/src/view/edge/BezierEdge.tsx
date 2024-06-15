@@ -4,6 +4,8 @@ import LogicFlow from '../../LogicFlow'
 import { getEndTangent } from '../../util'
 import { BezierEdgeModel, GraphModel } from '../../model'
 
+import Point = LogicFlow.Point
+
 import ArrowInfo = LogicFlow.ArrowInfo
 
 export type IBezierEdgeProps = {
@@ -85,7 +87,7 @@ export class BezierEdge extends BaseEdge<IBezierEdgeProps> {
     return arrowInfo
   }
 
-  getLastTwoPoints(): any[] {
+  getLastTwoPoints(): [Point, Point] {
     const { model } = this.props
     const { offset } = model.getArrowStyle()
     const points = model.pointsList.map((point) => ({

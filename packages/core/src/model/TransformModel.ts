@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx'
 import LogicFlow from '../LogicFlow'
 import { EventType } from '../constant'
+import { Options as LFOptions } from '../options'
 import EventEmitter from '../event/eventEmitter'
 
 import PointTuple = LogicFlow.PointTuple
@@ -55,7 +56,7 @@ export class TransformModel implements TransformInterface {
   translateLimitMaxX: number = Infinity
   translateLimitMaxY: number = Infinity
 
-  constructor(eventCenter, options) {
+  constructor(eventCenter: EventEmitter, options: LFOptions.Common) {
     this.eventCenter = eventCenter
     const { stopMoveGraph = false } = options
     this.updateTranslateLimits(stopMoveGraph)
@@ -71,9 +72,10 @@ export class TransformModel implements TransformInterface {
 
   /**
    * 将最外层graph上的点基于缩放转换为canvasOverlay层上的点。
-   * @param param0 HTML点
+   * @param point HTML点
    */
-  HtmlPointToCanvasPoint([x, y]: PointTuple): PointTuple {
+  HtmlPointToCanvasPoint(point: PointTuple): PointTuple {
+    const [x, y] = point
     return [
       (x - this.TRANSLATE_X) / this.SCALE_X,
       (y - this.TRANSLATE_Y) / this.SCALE_Y,
@@ -82,9 +84,10 @@ export class TransformModel implements TransformInterface {
 
   /**
    * 将最外层canvasOverlay层上的点基于缩放转换为graph上的点。
-   * @param param0 HTML点
+   * @param point HTML点
    */
-  CanvasPointToHtmlPoint([x, y]: PointTuple): PointTuple {
+  CanvasPointToHtmlPoint(point: PointTuple): PointTuple {
+    const [x, y] = point
     return [
       x * this.SCALE_X + this.TRANSLATE_X,
       y * this.SCALE_Y + this.TRANSLATE_Y,
@@ -99,10 +102,11 @@ export class TransformModel implements TransformInterface {
    * @param directionY y轴距离
    */
   moveCanvasPointByHtml(
-    [x, y]: PointTuple,
+    point: PointTuple,
     directionX: number,
     directionY: number,
   ): PointTuple {
+    const [x, y] = point
     return [x + directionX / this.SCALE_X, y + directionY / this.SCALE_Y]
   }
 
@@ -168,7 +172,7 @@ export class TransformModel implements TransformInterface {
     return `${this.SCALE_X * 100}%`
   }
 
-  private emitGraphTransform(type) {
+  private emitGraphTransform(type: string) {
     this.eventCenter.emit(EventType.GRAPH_TRANSFORM, {
       type,
       transform: {

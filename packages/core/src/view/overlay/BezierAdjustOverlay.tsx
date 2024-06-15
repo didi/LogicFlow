@@ -3,7 +3,7 @@ import { Circle, Line } from '../shape'
 import { observer } from '../..'
 import LogicFlow from '../../LogicFlow'
 import { EventType, ModelType } from '../../constant'
-import { StepDrag, getBezierPoints } from '../../util'
+import { StepDrag, getBezierPoints, IDragParams } from '../../util'
 import { GraphModel, BezierEdgeModel } from '../../model'
 
 import Point = LogicFlow.Point
@@ -36,13 +36,13 @@ export class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     })
   }
 
-  onDragging = ({ event }) => {
+  onDragging = ({ event }: IDragParams) => {
     const { graphModel, bezierModel, type } = this.props
     const {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
-      x: event.clientX,
-      y: event.clientY,
+      x: event!.clientX,
+      y: event!.clientY,
     })
     bezierModel.updateAdjustAnchor(
       {
