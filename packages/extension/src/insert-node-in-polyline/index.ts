@@ -1,10 +1,13 @@
 import LogicFlow, {
+  BaseNodeModel,
   PolylineEdgeModel,
   EventType,
   formateAnchorConnectValidateData,
 } from '@logicflow/core'
 import { cloneDeep } from 'lodash-es'
 import { isNodeInSegment } from './edge'
+
+import NodeData = LogicFlow.NodeData
 
 export class InsertNodeInPolyline {
   static pluginName = 'insertNodeInPolyline'
@@ -24,12 +27,12 @@ export class InsertNodeInPolyline {
   eventHandler() {
     // 监听事件
     if (this.dndAdd) {
-      this._lf.on('node:dnd-add', ({ data }: any) => {
+      this._lf.on('node:dnd-add', ({ data }: { data: NodeData }) => {
         this.insetNode(data)
       })
     }
     if (this.dropAdd) {
-      this._lf.on('node:drop', ({ data }: any) => {
+      this._lf.on('node:drop', ({ data }: { data: NodeData }) => {
         const { edges } = this._lf.graphModel
         const { id } = data
         // 只有游离节点才能插入到连线上
@@ -57,26 +60,26 @@ export class InsertNodeInPolyline {
    */
   // fix: https://github.com/didi/LogicFlow/issues/1078
   checkRuleBeforeInsetNode(
-    sourceNodeId,
-    targetNodeId,
-    sourceAnchorId,
-    targetAnchorId,
-    nodeData,
+    sourceNodeId: string,
+    targetNodeId: string,
+    sourceAnchorId: string,
+    targetAnchorId: string,
+    nodeData: NodeData,
   ) {
-    const sourceNodeModel = this._lf.getNodeModelById(sourceNodeId)
-    const targetNodeModel = this._lf.getNodeModelById(targetNodeId)
+    const sourceNodeModel = this._lf.getNodeModelById(sourceNodeId)!
+    const targetNodeModel = this._lf.getNodeModelById(targetNodeId)!
 
-    const sourceAnchorInfo = sourceNodeModel?.getAnchorInfo(sourceAnchorId)
-    const targetAnchorInfo = targetNodeModel?.getAnchorInfo(targetAnchorId)
+    const sourceAnchorInfo = sourceNodeModel.getAnchorInfo(sourceAnchorId)!
+    const targetAnchorInfo = targetNodeModel.getAnchorInfo(targetAnchorId)!
 
-    // TODO: 这啥玩意儿？？？
-    const sourceRuleResultData = sourceNodeModel?.isAllowConnectedAsSource(
-      nodeData,
+    // TODO: nodeData 与 isAllowConnectedAsSource 方法需要的类型 BaseNodeModel 不一致，少了 target 属性等，需要验证是否可用。
+    const sourceRuleResultData = sourceNodeModel.isAllowConnectedAsSource(
+      nodeData as BaseNodeModel,
       sourceAnchorInfo,
       targetAnchorInfo,
     )
-    const targetRuleResultData = targetNodeModel?.isAllowConnectedAsTarget(
-      nodeData,
+    const targetRuleResultData = targetNodeModel.isAllowConnectedAsTarget(
+      nodeData as BaseNodeModel,
       sourceAnchorInfo,
       targetAnchorInfo,
     )
@@ -93,7 +96,7 @@ export class InsertNodeInPolyline {
     }
   }
 
-  insetNode(nodeData): void {
+  insetNode(nodeData: NodeData): void {
     const { edges } = this._lf.graphModel
     const nodeModel = this._lf.getNodeModelById(nodeData.id)
 
@@ -134,8 +137,8 @@ export class InsertNodeInPolyline {
         const checkResult = this.checkRuleBeforeInsetNode(
           sourceNodeId,
           targetNodeId,
-          sourceAnchorId,
-          targetAnchorId,
+          sourceAnchorId!,
+          targetAnchorId!,
           nodeData,
         )
         this._lf.addEdge({
