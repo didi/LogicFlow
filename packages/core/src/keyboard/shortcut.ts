@@ -1,9 +1,12 @@
 import LogicFlow from '../LogicFlow'
 import GraphModel from '../model/GraphModel'
 
-let selected: any = null
+import NodeData = LogicFlow.NodeData
+import EdgeData = LogicFlow.EdgeData
 
-function translationNodeData(nodeData, distance) {
+let selected: LogicFlow.GraphData | null = null
+
+function translationNodeData(nodeData: NodeData, distance: number) {
   nodeData.x += distance
   nodeData.y += distance
   if (nodeData.text) {
@@ -13,7 +16,7 @@ function translationNodeData(nodeData, distance) {
   return nodeData
 }
 
-function translationEdgeData(edgeData, distance) {
+function translationEdgeData(edgeData: EdgeData, distance: number) {
   if (edgeData.startPoint) {
     edgeData.startPoint.x += distance
     edgeData.startPoint.y += distance

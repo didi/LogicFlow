@@ -1113,7 +1113,7 @@ export class LogicFlow {
   undo() {
     if (!this.history.undoAble()) return
     // formatData兼容vue数据
-    const graphData = formatData(this.history.undo())
+    const graphData = formatData(this.history.undo()!)
     this.clearSelectElements()
     this.graphModel.graphDataToModel(graphData)
   }
@@ -1125,7 +1125,7 @@ export class LogicFlow {
   redo() {
     if (!this.history.redoAble()) return
     // formatData兼容vue数据
-    const graphData = formatData(this.history.redo())
+    const graphData = formatData(this.history.redo()!)
     this.clearSelectElements()
     this.graphModel.graphDataToModel(graphData)
   }

@@ -16,10 +16,10 @@ export interface EditConfigInterface {
   stopScrollGraph?: boolean
   /**
    * 禁止拖动画布，默认为false
-   * true：完全禁止移动
-   * vertical： 禁止垂直方向拖动
-   * horizontal：禁止水平方向拖动
-   * [number, number, number, number]：[minX, minY, maxX, maxY] 画布可拖动范围
+   * - true：完全禁止移动
+   * - vertical： 禁止垂直方向拖动
+   * - horizontal：禁止水平方向拖动
+   * - [number, number, number, number]：[minX, minY, maxX, maxY] 画布可拖动范围
    */
   stopMoveGraph?:
     | boolean

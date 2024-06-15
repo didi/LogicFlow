@@ -1,17 +1,13 @@
 import { Component } from 'preact/compat'
 import { Model, observer } from '..'
 import LogicFlow from '../LogicFlow'
-import { GraphModel } from '../model'
 import { StepDrag, type IDragParams } from '../util'
 import { ElementType, EventType } from '../constant'
 import { getNodeOutline, getEdgeOutline } from '../algorithm/outline'
+import type { IProps } from './tool'
 
 import GraphData = LogicFlow.GraphData
 
-type IProps = {
-  graphModel: GraphModel
-  logicFlow: LogicFlow
-}
 @observer
 export default class MultipleSelect extends Component<IProps> {
   static toolName = 'multipleSelect'
