@@ -5,6 +5,7 @@ import { snapToGrid } from '../../util'
 import { EventType } from '../../constant'
 
 import TextConfig = LogicFlow.TextConfig
+import Position = LogicFlow.Position
 
 export type NewNodeConfig = {
   type: string
@@ -18,12 +19,12 @@ export class Dnd {
   lf: LogicFlow
   fakeNode: BaseNodeModel | null = null
 
-  constructor(params) {
+  constructor(params: { lf: LogicFlow }) {
     const { lf } = params
     this.lf = lf
   }
 
-  clientToLocalPoint({ x, y }) {
+  clientToLocalPoint({ x, y }: Position): Position {
     const gridSize = get(this.lf.options, ['grid', 'size'])
     // 处理 container 的 offset 等
     const position = this.lf.graphModel.getPointByClient({

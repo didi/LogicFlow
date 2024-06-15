@@ -453,7 +453,7 @@ export class GraphModel {
   }
 
   // 用户history记录的数据，忽略拖拽过程中的数据变更
-  modelToHistoryData() {
+  modelToHistoryData(): GraphData | false {
     let nodeDragging = false
     const nodes: LogicFlow.NodeData[] = []
     // 如果有节点在拖拽中，不更新history

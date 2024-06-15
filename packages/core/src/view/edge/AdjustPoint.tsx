@@ -1,15 +1,17 @@
 import { createElement as h, Component } from 'preact/compat'
 import LogicFlow from '../../LogicFlow'
-import { GraphModel, BaseNodeModel, BaseEdgeModel } from '../../model'
+import { GraphModel, BaseNodeModel, BaseEdgeModel, Model } from '../../model'
 import {
   IDragParams,
   StepDrag,
   formateAnchorConnectValidateData,
   targetNodeInfo,
+  NodeContaint,
 } from '../../util'
 import { ElementState, EventType, ModelType } from '../../constant'
 import Point = LogicFlow.Point
 import NodeData = LogicFlow.NodeData
+import AnchorConfig = Model.AnchorConfig
 
 interface IProps {
   x: number
@@ -98,7 +100,7 @@ export class AdjustPoint extends Component<IProps, IState> {
     // 拖拽AdjustPoint时不修改edgeModel.isHitable，避免偶尔会出现边不能点击问题(https://github.com/didi/LogicFlow/issues/974)
     // edgeModel.isHitable = false;
   }
-  onDragging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }: IDragParams) => {
     const { endX, endY } = this.state
     const { graphModel, type } = this.props
     const { transformModel, editConfigModel } = graphModel
@@ -123,7 +125,12 @@ export class AdjustPoint extends Component<IProps, IState> {
     )
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
     if (info && info.node && this.isAllowAdjust(info).pass) {
-      let params
+      let params: {
+        startPoint: Point
+        endPoint: Point
+        sourceNode: BaseNodeModel
+        targetNode: BaseNodeModel
+      }
       const { startPoint, endPoint, sourceNode, targetNode } = edgeModel
       if (type === AdjustType.SOURCE) {
         params = {
@@ -152,7 +159,7 @@ export class AdjustPoint extends Component<IProps, IState> {
           targetNode: info.node,
         }
       }
-      edgeModel.updateAfterAdjustStartAndEnd(params)
+      edgeModel.updateAfterAdjustStartAndEnd(params!)
     } else if (type === AdjustType.SOURCE) {
       // 如果没有找到目标节点，更显起终点为当前坐标
       edgeModel.updateStartPoint({
@@ -330,7 +337,7 @@ export class AdjustPoint extends Component<IProps, IState> {
     return edgeAdjust
   }
 
-  isAllowAdjust(info): {
+  isAllowAdjust(info: NodeContaint): {
     pass: boolean
     msg?: string
     newTargetNode: BaseNodeModel
@@ -342,20 +349,20 @@ export class AdjustPoint extends Component<IProps, IState> {
     // const newTargetNode = info.node;
     let newSourceNode: BaseNodeModel
     let newTargetNode: BaseNodeModel
-    let newSourceAnchor
-    let newTargetAnchor
+    let newSourceAnchor: AnchorConfig
+    let newTargetAnchor: AnchorConfig
 
     // 如果调整的是连线起点
     if (type === AdjustType.SOURCE) {
       newSourceNode = info.node
       newTargetNode = targetNode
       newSourceAnchor = info.anchor
-      newTargetAnchor = targetNode.getAnchorInfo(targetAnchorId)
+      newTargetAnchor = targetNode.getAnchorInfo(targetAnchorId)!
     } else {
       newSourceNode = sourceNode
       newTargetNode = info.node
       newTargetAnchor = info.anchor
-      newSourceAnchor = sourceNode.getAnchorInfo(sourceAnchorId)
+      newSourceAnchor = sourceNode.getAnchorInfo(sourceAnchorId)!
     }
     // 如果前一个接触的节点和此时接触的节点不相等，则将前一个节点状态重新设置为默认状态。
     if (this.preTargetNode && this.preTargetNode !== info.node) {

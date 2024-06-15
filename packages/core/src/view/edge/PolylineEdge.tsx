@@ -9,6 +9,7 @@ import { getVerticalPointOfLine } from '../../algorithm'
 
 import ArrowInfo = LogicFlow.ArrowInfo
 import AppendConfig = LogicFlow.AppendConfig
+import Point = LogicFlow.Point
 
 type AppendAttributesType = {
   d: string
@@ -24,7 +25,7 @@ export type IPolylineEdgeProps = {
 }
 
 export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
-  drag
+  drag: StepDrag
   isDragging?: boolean
   isShowAdjustPointTemp?: boolean
   appendInfo?: AppendConfig
@@ -62,12 +63,12 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
     // 2、如果允许调整所有线段调用dragAppend
     const { adjustEdgeMiddle } = editConfigModel
     if (adjustEdgeMiddle) {
-      this.appendInfo = polylineModel.dragAppendSimple(this.appendInfo, {
+      this.appendInfo = polylineModel.dragAppendSimple(this.appendInfo!, {
         x: curDeltaX,
         y: curDeltaY,
       })
     } else {
-      this.appendInfo = polylineModel.dragAppend(this.appendInfo, {
+      this.appendInfo = polylineModel.dragAppend(this.appendInfo!, {
         x: curDeltaX,
         y: curDeltaY,
       })
@@ -169,7 +170,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
     }
   }
 
-  getLastTwoPoints(): LogicFlow.Point[] {
+  getLastTwoPoints(): [Point, Point] {
     const { model } = this.props
     const { points } = model
     const currentPositionList = points2PointsList(points)
@@ -204,8 +205,8 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
         ...config,
         type: 'end',
       })
-      d = `M${startPosition.leftX} ${startPosition.leftY} 
-      L${startPosition.rightX} ${startPosition.rightY} 
+      d = `M${startPosition.leftX} ${startPosition.leftY}
+      L${startPosition.rightX} ${startPosition.rightY}
       L${endPosition.rightX} ${endPosition.rightY}
       L${endPosition.leftX} ${endPosition.leftY} z`
     }

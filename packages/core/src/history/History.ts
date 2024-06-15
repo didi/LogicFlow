@@ -2,24 +2,28 @@ import { debounce, isEqual, last, cloneDeep } from 'lodash-es'
 import { deepObserve, IDisposer } from 'mobx-utils'
 import { EventType } from '../constant'
 import EventEmitter from '../event/eventEmitter'
+import { GraphModel } from '../model'
+import LogicFlow from '..'
+
+import GraphData = LogicFlow.GraphData
 
 export class History {
-  undos: any = []
-  redos: any = []
+  undos: GraphData[] = []
+  redos: GraphData[] = []
   callbacks = []
   stopWatch: IDisposer | null = null
-  curData = null
+  curData: GraphData | null = null
   maxSize = 50
   // 发生数据变化后，最多再等500ms，把距离上次的数据变更存储起来。
   // 所以waitTime值越小，History对数据变化越敏感，存的undos就越细。
   waitTime = 100
   eventCenter: EventEmitter
 
-  constructor(eventCenter) {
+  constructor(eventCenter: EventEmitter) {
     this.eventCenter = eventCenter
   }
 
-  add(data) {
+  add(data: GraphData) {
     if (isEqual(last(this.undos), data)) return
     this.undos.push(data)
     // 因为undo的时候，会触发add.
@@ -32,8 +36,8 @@ export class History {
       data: {
         undos: this.undos,
         redos: this.redos,
-        undoAble: this.undos.length > 1,
-        redoAble: this.redos.length > 0,
+        undoAble: this.undoAble(),
+        redoAble: this.redoAble(),
       },
     })
     if (this.undos.length > this.maxSize) {
@@ -52,9 +56,9 @@ export class History {
   // 4) watch触发add
   undo() {
     if (!this.undoAble()) return
-    const preData = this.undos.pop()
+    const preData = this.undos.pop()!
     this.redos.push(preData)
-    const curData = this.undos.pop()
+    const curData = this.undos.pop()!
     this.curData = cloneDeep(curData)
     return curData
   }
@@ -65,12 +69,12 @@ export class History {
 
   redo() {
     if (!this.redoAble()) return
-    const curData = this.redos.pop()
+    const curData = this.redos.pop()!
     this.curData = cloneDeep(curData)
     return curData
   }
 
-  watch(model) {
+  watch(model: GraphModel) {
     this.stopWatch && this.stopWatch()
 
     // 把当前watch的model转换一下数据存起来，无需清空redos。

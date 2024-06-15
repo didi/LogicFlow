@@ -3,10 +3,11 @@ import { OutlineOverlay } from '.'
 import { observer } from '../..'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel } from '../../model'
+import { Tool } from '../../tool'
 
 type IProps = {
   graphModel: GraphModel
-  tool
+  tool: Tool
 }
 
 @observer

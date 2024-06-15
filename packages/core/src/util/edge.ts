@@ -8,6 +8,7 @@ import { getCrossPointOfLine, isInSegment } from '../algorithm/edge'
 import {
   Model,
   BaseNodeModel,
+  BaseEdgeModel,
   LineEdgeModel,
   PolylineEdgeModel,
   GraphModel,
@@ -25,8 +26,8 @@ type PolyPointMap = Record<string, Point>
 type PolyPointLink = Record<string, string>
 
 /* 手动创建边时 edge -> edgeModel */
-export const setupEdgeModel = (edge, graphModel) => {
-  let model
+export const setupEdgeModel = (edge: EdgeConfig, graphModel: GraphModel) => {
+  let model: BaseEdgeModel
   switch (edge.type) {
     case 'line':
       model = new LineEdgeModel(edge, graphModel)
@@ -155,7 +156,7 @@ export const mergeBBox = (b1: BoxBounds, b2: BoxBounds): BoxBounds => {
 export const getBBoxOfPoints = (
   points: Point[] = [],
   offset?: number,
-): Model.BoxBounds => {
+): BoxBounds => {
   const xList: number[] = []
   const yList: number[] = []
   points.forEach((p) => {
@@ -186,7 +187,9 @@ export const getBBoxOfPoints = (
   }
 }
 /* 获取box四个角上的点 */
-export const getPointsFromBBox = (bbox: BoxBounds): Point[] => {
+export const getPointsFromBBox = (
+  bbox: BoxBounds,
+): [Point, Point, Point, Point] => {
   const { minX, minY, maxX, maxY } = bbox
   return [
     {
@@ -214,7 +217,10 @@ export const isPointOutsideBBox = (point: Point, bbox: BoxBounds): boolean => {
 }
 
 /* 获取点的x方向上与box的交点 */
-export const getBBoxXCrossPoints = (bbox: BoxBounds, x: number): Point[] => {
+export const getBBoxXCrossPoints = (
+  bbox: BoxBounds,
+  x: number,
+): [Point, Point] | [] => {
   if (x < bbox.minX || x > bbox.maxX) {
     return []
   }
@@ -231,7 +237,10 @@ export const getBBoxXCrossPoints = (bbox: BoxBounds, x: number): Point[] => {
 }
 
 /* 获取点的y方向上与box的交点 */
-export const getBBoxYCrossPoints = (bbox: BoxBounds, y: number): Point[] => {
+export const getBBoxYCrossPoints = (
+  bbox: BoxBounds,
+  y: number,
+): [Point, Point] | [] => {
   if (y < bbox.minY || y > bbox.maxY) {
     return []
   }
@@ -251,8 +260,10 @@ export const getBBoxYCrossPoints = (bbox: BoxBounds, y: number): Point[] => {
 export const getBBoxCrossPointsByPoint = (
   bbox: BoxBounds,
   point: Point,
-): Point[] =>
-  getBBoxXCrossPoints(bbox, point.x).concat(getBBoxYCrossPoints(bbox, point.y))
+): [Point, Point, Point, Point] | [Point, Point] | [] => [
+  ...getBBoxXCrossPoints(bbox, point.x),
+  ...getBBoxYCrossPoints(bbox, point.y),
+]
 
 /* 计算两点之间的预测距离(非直线距离) */
 export const estimateDistance = (p1: Point, p2: Point): number =>
@@ -606,7 +617,7 @@ export const getLongestEdge = (pointsList: Point[]): [Point, Point] => {
   return points
 }
 
-/* 线段是否在节点内部， 被包含了 */
+/* 线段是否在节点内部，被包含了 */
 export const isSegmentsInNode = (
   start: Point,
   end: Point,
@@ -641,7 +652,7 @@ export const getCrossPointInRect = (
   node: BaseNodeModel,
 ): Point => {
   let point
-  let crossSegments
+  let crossSegments: [Point, Point] | undefined = undefined
   const nodeBox = getNodeBBox(node)
   const points = getPointsFromBBox(nodeBox)
   for (let i = 0; i < points.length; i++) {
@@ -661,8 +672,11 @@ export const getCrossPointInRect = (
   return point
 }
 /* 判断线段的方向 */
-export const segmentDirection = (start: Point, end: Point): Direction => {
-  let direction
+export const segmentDirection = (
+  start: Point,
+  end: Point,
+): Direction | undefined => {
+  let direction: Direction | undefined = undefined
   if (start.x === end.x) {
     direction = SegmentDirection.VERTICAL
   } else if (start.y === end.y) {
@@ -685,12 +699,17 @@ export const points2PointsList = (points: string): Point[] => {
   return pointsList
 }
 
-export const getSimplePoints = (start, end, sPoint, tPoint): Point[] => {
+export const getSimplePoints = (
+  start: Point,
+  end: Point,
+  sPoint: Point,
+  tPoint: Point,
+): Point[] => {
   const points: LogicFlow.Position[] = []
   // start,sPoint的方向，水平或者垂直，即路径第一条线段的方向
-  const startDirection = segmentDirection(start, sPoint)
+  const startDirection = segmentDirection(start, sPoint)!
   // end,tPoint的方向，水平或者垂直，即路径最后一条条线段的方向
-  const endDirection = segmentDirection(end, tPoint)
+  const endDirection = segmentDirection(end, tPoint)!
   // 根据两条线段的方向作了计算，调整线段经验所得，非严格最优计算，能保证不出现折线
   // 方向相同，添加两个点，两条平行线垂直距离一半的两个端点
   if (startDirection === endDirection) {
@@ -741,7 +760,7 @@ export const getSimplePoints = (start, end, sPoint, tPoint): Point[] => {
   return points
 }
 
-const isOnLine = (point, start, end) =>
+const isOnLine = (point: Point, start: Point, end: Point) =>
   (point.x === start.x && point.x === end.x) ||
   (point.y === start.y && point.y === end.y)
 
@@ -772,14 +791,14 @@ export const getBytesLength = (word: string): number => {
  * that text is to be rendered with (e.g. "bold 14px verdana").
  * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
  */
-let canvas: any = null
-export const getTextWidth = (text, font) => {
+let canvas: HTMLCanvasElement | undefined = undefined
+export const getTextWidth = (text: string, font: string) => {
   if (!canvas) {
     canvas = document.createElement('canvas')
   }
   const context = canvas.getContext('2d')
-  context.font = font
-  const metrics = context.measureText(text)
+  context!.font = font
+  const metrics = context!.measureText(text)
   return metrics.width
 }
 
@@ -791,9 +810,11 @@ type AppendAttributesType = {
   strokeDasharray: string
 }
 // 扩大边可点区域，获取边append的信息
-export const getAppendAttributes = (appendInfo): AppendAttributesType => {
+export const getAppendAttributes = (
+  appendInfo: Record<'start' | 'end', Point>,
+): AppendAttributesType => {
   const { start, end } = appendInfo
-  let d
+  let d: string
   if (start.x === end.x && start.y === end.y) {
     // 拖拽过程中会出现起终点重合的情况，这时候append无法计算
     d = ''
@@ -812,8 +833,8 @@ export const getAppendAttributes = (appendInfo): AppendAttributesType => {
       ...config,
       type: 'end',
     })
-    d = `M${startPosition.leftX} ${startPosition.leftY} 
-    L${startPosition.rightX} ${startPosition.rightY} 
+    d = `M${startPosition.leftX} ${startPosition.leftY}
+    L${startPosition.rightX} ${startPosition.rightY}
     L${endPosition.rightX} ${endPosition.rightY}
     L${endPosition.leftX} ${endPosition.leftY} z`
   }
@@ -837,6 +858,12 @@ export const getBezierControlPoints = ({
   sourceNode,
   targetNode,
   offset,
+}: {
+  start: Point
+  end: Point
+  sourceNode: BaseNodeModel
+  targetNode: BaseNodeModel
+  offset: number
 }): IBezierControls => {
   const sBBox = getNodeBBox(sourceNode)
   const tBBox = getNodeBBox(targetNode)
@@ -857,7 +884,7 @@ export type IBezierPoints = {
   end: Point
 }
 // 根据bezier曲线path求出Points
-export const getBezierPoints = (path: string): Point[] => {
+export const getBezierPoints = (path: string): [Point, Point, Point, Point] => {
   const list = path.replace(/M/g, '').replace(/C/g, ',').split(',')
   const start = getBezierPoint(list[0])
   const sNext = getBezierPoint(list[1])
@@ -874,7 +901,10 @@ const getBezierPoint = (positionStr: string): Point => {
   }
 }
 // 根据bezier曲线path求出结束切线的两点坐标
-export const getEndTangent = (pointsList, offset): Point[] => {
+export const getEndTangent = (
+  pointsList: Point[],
+  offset: number,
+): [Point, Point] => {
   // const bezierPoints = getBezierPoints(path)
   const [p1, cp1, cp2, p2] = pointsList
   const start = sampleCubic(p1, cp1, cp2, p2, offset)
@@ -893,7 +923,7 @@ export const getClosestPointOfPolyline = (
   const { x, y } = point
   const pointsPosition = points2PointsList(points)
   let minDistance = Number.MAX_SAFE_INTEGER
-  let crossPoint
+  let crossPoint: Point
   const segments: LineSegment[] = []
   for (let i = 0; i < pointsPosition.length; i++) {
     segments.push({
@@ -933,7 +963,7 @@ export const getClosestPointOfPolyline = (
     }
   })
   // 边界：只有一条线段时，沿线段移动节点，当文本超出边后，文本没有可供参考的线段
-  if (!crossPoint) {
+  if (!crossPoint!) {
     const { start, end } = segments[0]
     crossPoint = {
       x: start.x + (end.x - start.x) / 2,
@@ -944,7 +974,7 @@ export const getClosestPointOfPolyline = (
 }
 
 // 规范边初始化数据
-export const pickEdgeConfig = (data): EdgeConfig =>
+export const pickEdgeConfig = (data: EdgeConfig): EdgeConfig =>
   pick(data, [
     'id',
     'type',
@@ -958,7 +988,6 @@ export const pickEdgeConfig = (data): EdgeConfig =>
     'properties',
   ])
 
-// eslint-disable-next-line arrow-body-style
 export const twoPointDistance = (source: Position, target: Position) => {
   // fix: 修复坐标存在负值时计算错误的问题。
   // const source = {
@@ -989,7 +1018,11 @@ export function createEdgeGenerator(
       currentEdge?: EdgeConfig,
     ) => Object.assign({ type: graphModel.edgeType }, currentEdge)
   }
-  return (sourceNode: any, targetNode: any, currentEdge?: any) => {
+  return (
+    sourceNode: NodeData,
+    targetNode: NodeData,
+    currentEdge?: EdgeConfig,
+  ) => {
     const result = generator(sourceNode, targetNode, currentEdge)
     // 无结果使用默认类型
     if (!result) return { type: graphModel.edgeType }
