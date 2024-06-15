@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { BaseEdgeModel } from '.'
-import { RectNodeModel } from '..'
+import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import { ModelType, SegmentDirection } from '../../constant'
 import {
@@ -23,6 +23,9 @@ import {
 } from '../../util'
 
 import Point = LogicFlow.Point
+import Position = LogicFlow.Position
+import AppendConfig = LogicFlow.AppendConfig
+import ArchorConfig = Model.AnchorConfig
 
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
@@ -30,7 +33,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   offset?: number
   @observable dbClickPosition?: Point
 
-  initEdgeData(data): void {
+  initEdgeData(data: LogicFlow.EdgeConfig): void {
     this.offset = 30
     super.initEdgeData(data)
   }
@@ -63,27 +66,31 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   // 获取下一个锚点
-  getAfterAnchor(direction, position, anchorList) {
-    let anchor
-    let minDistance
+  getAfterAnchor(
+    direction: SegmentDirection,
+    position: Position,
+    anchorList: ArchorConfig[],
+  ) {
+    let anchor: ArchorConfig
+    let minDistance: number
     anchorList.forEach((item) => {
-      let distanceX
+      let distanceX: number
       if (direction === SegmentDirection.HORIZONTAL) {
         distanceX = Math.abs(position.y - item.y)
       } else if (direction === SegmentDirection.VERTICAL) {
         distanceX = Math.abs(position.x - item.x)
       }
-      if (!minDistance || minDistance > distanceX) {
-        minDistance = distanceX
+      if (!minDistance || minDistance > distanceX!) {
+        minDistance = distanceX!
         anchor = item
       }
     })
-    return anchor
+    return anchor!
   }
 
   /* 获取拖拽过程中产生的交点 */
-  getCrossPoint(direction, start, end) {
-    let position
+  getCrossPoint(direction: SegmentDirection, start: Position, end: Position) {
+    let position: Point
     if (direction === SegmentDirection.HORIZONTAL) {
       position = {
         x: end.x,
@@ -95,11 +102,11 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         y: end.y,
       }
     }
-    return position
+    return position!
   }
 
   // 删除在图形内的过个交点
-  removeCrossPoints(startIndex, endIndex, pointList) {
+  removeCrossPoints(startIndex: number, endIndex: number, pointList: Point[]) {
     const list = pointList.map((i) => i)
     if (startIndex === 1) {
       const start = list[startIndex]
@@ -176,11 +183,11 @@ export class PolylineEdgeModel extends BaseEdgeModel {
 
   // 获取在拖拽过程中可能产生的点
   getDraggingPoints(
-    direction,
-    positionType,
-    position,
-    anchorList,
-    draggingPointList,
+    direction: SegmentDirection,
+    positionType: string,
+    position: Position,
+    anchorList: ArchorConfig[],
+    draggingPointList: Point[],
   ) {
     const pointList = draggingPointList.map((i) => i)
     const anchor = this.getAfterAnchor(direction, position, anchorList)
@@ -196,7 +203,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   // 更新相交点[起点，终点]，更加贴近图形, 未修改observable不作为action
-  updateCrossPoints(pointList) {
+  updateCrossPoints(pointList: Point[]) {
     const list = pointList.map((i) => i)
     const start = pointList[0]
     const next = pointList[1]
@@ -205,7 +212,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     const { sourceNode, targetNode } = this
     const sourceModelType = sourceNode.modelType
     const targetModelType = targetNode.modelType
-    const startPointDirection = segmentDirection(start, next)
+    const startPointDirection = segmentDirection(start, next)!
     let startCrossPoint = list[0]
     switch (sourceModelType) {
       case ModelType.RECT_NODE:
@@ -224,7 +231,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         startCrossPoint = getCrossPointWithCircle(
           start,
           startPointDirection,
-          sourceNode,
+          sourceNode as CircleNodeModel,
         )
         break
       case ModelType.ELLIPSE_NODE:
@@ -255,7 +262,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     if (startCrossPoint) {
       list[0] = startCrossPoint
     }
-    const endPointDirection = segmentDirection(pre, end)
+    const endPointDirection = segmentDirection(pre, end)!
     let endCrossPoint = list[list.length - 1]
     switch (targetModelType) {
       case ModelType.RECT_NODE:
@@ -274,7 +281,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         endCrossPoint = getCrossPointWithCircle(
           end,
           endPointDirection,
-          targetNode,
+          targetNode as CircleNodeModel,
         )
         break
       case ModelType.ELLIPSE_NODE:
@@ -350,13 +357,13 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
-  updateStartPoint(anchor) {
+  updateStartPoint(anchor: Point) {
     this.startPoint = Object.assign({}, anchor)
     this.updatePoints()
   }
 
   @action
-  moveStartPoint(deltaX, deltaY): void {
+  moveStartPoint(deltaX: number, deltaY: number): void {
     this.startPoint.x += deltaX
     this.startPoint.y += deltaY
     this.updatePoints()
@@ -364,20 +371,20 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
-  updateEndPoint(anchor) {
+  updateEndPoint(anchor: Point) {
     this.endPoint = Object.assign({}, anchor)
     this.updatePoints()
   }
 
   @action
-  moveEndPoint(deltaX, deltaY): void {
+  moveEndPoint(deltaX: number, deltaY: number): void {
     this.endPoint.x += deltaX
     this.endPoint.y += deltaY
     this.updatePoints()
   }
 
   @action
-  updatePointsList(deltaX, deltaY): void {
+  updatePointsList(deltaX: number, deltaY: number): void {
     this.pointsList.forEach((item) => {
       item.x += deltaX
       item.y += deltaY
@@ -396,7 +403,10 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
-  dragAppendSimple(appendInfo, dragInfo) {
+  dragAppendSimple(
+    appendInfo: AppendConfig,
+    dragInfo: Record<'x' | 'y', number>,
+  ) {
     // 因为drag事件是mouseDown事件触发的，因此当真实拖拽之后再设置isDragging
     // 避免因为点击事件造成，在dragStart触发之后，没有触发dragEnd错误设置了isDragging状态，对history计算造成错误
     this.isDragging = true
@@ -439,7 +449,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   @action
-  dragAppend(appendInfo, dragInfo) {
+  dragAppend(appendInfo: AppendConfig, dragInfo: Record<'x' | 'y', number>) {
     this.isDragging = true
     const { start, end, startIndex, endIndex, direction } = appendInfo
     const { pointsList } = this
@@ -476,7 +486,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
           // 如果不在节点内部，更换起点为线段与节点的交点
           const anchorList = this.sourceNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction,
+            direction as SegmentDirection,
             'start',
             startPosition,
             anchorList,
@@ -495,7 +505,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
           // 如果不在节点内部，更换终点为线段与节点的交点
           const anchorList = this.targetNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction,
+            direction as SegmentDirection,
             'end',
             endPosition,
             anchorList,
@@ -533,7 +543,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           const anchorList = this.sourceNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction,
+            direction as SegmentDirection,
             'start',
             startPosition,
             anchorList,
@@ -550,7 +560,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           const anchorList = this.targetNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction,
+            direction as SegmentDirection,
             'end',
             endPosition,
             anchorList,
@@ -593,7 +603,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
      在拖拽结束后再进行pointsList的更新
   */
   @action
-  updatePointsAfterDrag(pointsList) {
+  updatePointsAfterDrag(pointsList: Point[]) {
     // 找到准确的连接点后,更新points, 更新边，同时更新依赖points的箭头
     const list = this.updateCrossPoints(pointsList)
     this.points = list.map((point) => `${point.x},${point.y}`).join(' ')
@@ -619,6 +629,11 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     endPoint,
     sourceNode,
     targetNode,
+  }: {
+    startPoint: Point
+    endPoint: Point
+    sourceNode: BaseNodeModel
+    targetNode: BaseNodeModel
   }) {
     this.pointsList = getPolylinePoints(
       {

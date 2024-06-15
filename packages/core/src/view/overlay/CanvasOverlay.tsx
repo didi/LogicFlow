@@ -2,7 +2,7 @@ import { Component } from 'preact/compat'
 import { observer } from '../..'
 import GraphModel from '../../model/GraphModel'
 import { EventType } from '../../constant'
-import { StepDrag } from '../../util'
+import { StepDrag, IDragParams } from '../../util'
 import Dnd from '../behavior/DnD'
 
 type IProps = {
@@ -40,7 +40,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
-  onDragging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }: IDragParams) => {
     this.setState({
       isDragging: true,
     })

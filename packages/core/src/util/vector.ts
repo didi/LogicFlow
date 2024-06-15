@@ -2,7 +2,7 @@ function isVector(a1: any, a2: any): boolean {
   return !!(a1 instanceof Vector && a2 instanceof Vector)
 }
 
-class Base extends Array {
+class Base extends Array<number> {
   x: number
   y: number
   z: number

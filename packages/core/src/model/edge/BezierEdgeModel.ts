@@ -1,25 +1,29 @@
 import { cloneDeep } from 'lodash-es'
 import { action, observable } from 'mobx'
 import BaseEdgeModel from './BaseEdgeModel'
+import { BaseNodeModel } from '../node'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
 import { getBezierControlPoints, IBezierControls } from '../../util'
+import GraphModel from '../GraphModel'
 
 import Point = LogicFlow.Point
-import GraphModel from '../GraphModel'
+import EdgeConfig = LogicFlow.EdgeConfig
 
 export class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE
+
+  offset!: number
   @observable path = ''
 
-  constructor(data: LogicFlow.EdgeConfig, graphModel: GraphModel) {
+  constructor(data: EdgeConfig, graphModel: GraphModel) {
     super(data, graphModel)
 
     this.initEdgeData(data)
     this.setAttributes()
   }
 
-  initEdgeData(data): void {
+  initEdgeData(data: EdgeConfig): void {
     this.offset = 100
     super.initEdgeData(data)
   }
@@ -93,7 +97,7 @@ export class BezierEdgeModel extends BaseEdgeModel {
     const { sNext, ePre } = this.getControls()
     this.updatePath(sNext, ePre)
   }
-  updatePath(sNext, ePre) {
+  updatePath(sNext: Point, ePre: Point) {
     sNext = cloneDeep(sNext)
     ePre = cloneDeep(ePre)
     const start = {
@@ -113,18 +117,18 @@ export class BezierEdgeModel extends BaseEdgeModel {
     this.path = this.getPath(this.pointsList)
   }
   @action
-  updateStartPoint(anchor) {
+  updateStartPoint(anchor: Point) {
     this.startPoint = Object.assign({}, anchor)
     this.updatePoints()
   }
 
   @action
-  updateEndPoint(anchor) {
+  updateEndPoint(anchor: Point) {
     this.endPoint = Object.assign({}, anchor)
     this.updatePoints()
   }
   @action
-  moveStartPoint(deltaX, deltaY): void {
+  moveStartPoint(deltaX: number, deltaY: number): void {
     this.startPoint.x += deltaX
     this.startPoint.y += deltaY
     const [, sNext, ePre] = this.pointsList
@@ -134,7 +138,7 @@ export class BezierEdgeModel extends BaseEdgeModel {
     this.updatePath(sNext, ePre)
   }
   @action
-  moveEndPoint(deltaX, deltaY): void {
+  moveEndPoint(deltaX: number, deltaY: number): void {
     this.endPoint.x += deltaX
     this.endPoint.y += deltaY
     const [, sNext, ePre] = this.pointsList
@@ -171,6 +175,11 @@ export class BezierEdgeModel extends BaseEdgeModel {
     endPoint,
     sourceNode,
     targetNode,
+  }: {
+    startPoint: Point
+    endPoint: Point
+    sourceNode: BaseNodeModel
+    targetNode: BaseNodeModel
   }) {
     const { sNext, ePre } = getBezierControlPoints({
       start: startPoint,
