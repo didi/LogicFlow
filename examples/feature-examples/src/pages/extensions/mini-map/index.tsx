@@ -93,6 +93,10 @@ export default function MiniMapExtension() {
         },
       })
 
+      ;(lf.extension.miniMap as MiniMap).setCloseCallback(() => {
+        setVisible(false)
+      })
+
       lf.render(data)
       lfRef.current = lf
     }

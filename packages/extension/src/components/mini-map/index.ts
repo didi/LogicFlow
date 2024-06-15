@@ -61,6 +61,7 @@ export namespace MiniMap {
 }
 
 type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
+type CallbackFunction = () => any
 
 export class MiniMap {
   static pluginName = 'miniMap'
@@ -173,6 +174,10 @@ export class MiniMap {
    */
   private headerTitle = '导航'
   /**
+   * 关闭按钮的回调
+   */
+  private closeCallBack?: CallbackFunction
+  /**
    * 小地图的logicFlow实例需要禁用的插件
    */
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect']
@@ -197,7 +202,7 @@ export class MiniMap {
     this.initMiniMap()
   }
 
-  render(_: LogicFlow, container: HTMLElement) {
+  render = (_: LogicFlow, container: HTMLElement) => {
     this.container = container
     this.lf.on('history:change', () => {
       if (this.isShow) {
@@ -216,7 +221,7 @@ export class MiniMap {
    * @param left 相对画布的左边距
    * @param top 相对画布的上边距
    */
-  show = (left?: number, top?: number) => {
+  public show = (left?: number, top?: number) => {
     if (!this.isShow) {
       this.createMiniMap(left, top)
       this.setView()
@@ -226,9 +231,12 @@ export class MiniMap {
   /**
    * 隐藏小地图
    */
-  hide = () => {
+  public hide = () => {
     if (this.isShow) {
       this.removeMiniMap()
+      if (this.closeCallBack) {
+        this.closeCallBack()
+      }
     }
     this.isShow = false
   }
@@ -236,7 +244,7 @@ export class MiniMap {
    * 更新小地图在画布中的位置
    * @param {MiniMapPosition} position
    */
-  updatePosition(position: MiniMapPosition) {
+  public updatePosition = (position: MiniMapPosition) => {
     if (typeof position === 'object') {
       if (position.left !== undefined || position.right !== undefined) {
         this.leftPosition = position.left
@@ -279,7 +287,7 @@ export class MiniMap {
   /**
    * 重置主画布的缩放和平移
    */
-  reset = () => {
+  public reset = () => {
     this.lf.resetTranslate()
     this.lf.resetZoom()
   }
@@ -287,11 +295,18 @@ export class MiniMap {
    * 设置小地图的画布中是否绘制边
    * @param {boolean} showEdge
    */
-  setShowEdge(showEdge: boolean) {
+  public setShowEdge = (showEdge: boolean) => {
     if (this.showEdge !== showEdge) {
       this.showEdge = showEdge
       this.setView()
     }
+  }
+  /**
+   * 设置关闭小地图时的回调函数，使用 `hide` 方法或通过 CloseIcon 关闭小地图时均会触发该回调函数
+   * @param callback 回调函数
+   */
+  public setCloseCallback = (callback: CallbackFunction) => {
+    this.closeCallBack = callback
   }
 
   /**
@@ -323,6 +338,9 @@ export class MiniMap {
     this.headerTitle = headerTitle
   }
 
+  /**
+   * 初始化小地图的 LogicFlow 实例
+   */
   private initMiniMap() {
     const miniMapWrap = document.createElement('div')
     miniMapWrap.className = 'lf-mini-map-graph'
