@@ -52,7 +52,7 @@ export const getCrossPointOfLine = (a: Point, b: Point, c: Point, d: Point) => {
 入参点：point, 线段起终点，start,end,
 返回值： 在线段中true，否则false
 */
-export const isInSegment = (point, start, end) => {
+export const isInSegment = (point: Point, start: Point, end: Point) => {
   const { x, y } = point
   const { x: startX, y: startY } = start
   const { x: endX, y: endY } = end

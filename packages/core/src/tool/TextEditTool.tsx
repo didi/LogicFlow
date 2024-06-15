@@ -1,14 +1,7 @@
 import { createRef, Component } from 'preact'
-import { BaseEdgeModel, BaseNodeModel, ElementState, observer } from '..'
-import LogicFlow from '../LogicFlow'
-import { GraphModel } from '../model'
+import { ElementState, observer } from '..'
 import { ElementType, EventType, ModelType } from '../constant'
-
-type IProps = {
-  textEditElement?: BaseNodeModel | BaseEdgeModel
-  graphModel: GraphModel
-  logicFlow: LogicFlow
-}
+import type { IProps } from './tool'
 
 type IState = {
   style: {

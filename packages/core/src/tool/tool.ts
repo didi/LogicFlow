@@ -1,13 +1,23 @@
 import { Component } from 'preact/compat'
+import { VNode } from 'preact'
 import TextEdit from './TextEditTool'
 import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'
+import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 import { ElementState, EventType } from '../constant'
+
+export type IProps = {
+  textEditElement?: BaseNodeModel | BaseEdgeModel
+  graphModel: GraphModel
+  logicFlow: LogicFlow
+}
+
+type ToolConstructor = new (props: IProps) => Component<IProps>
 
 export class Tool {
   tools?: Component[]
-  components?: Component[]
-  toolMap = new Map()
+  components?: VNode<IProps>[]
+  toolMap = new Map<string, ToolConstructor>()
   instance: LogicFlow
 
   constructor(instance: LogicFlow) {
@@ -40,7 +50,7 @@ export class Tool {
     return this.instance.options.disabledTools?.indexOf(toolName) !== -1
   }
 
-  registerTool(name, component) {
+  registerTool(name: string, component: ToolConstructor) {
     this.toolMap.set(name, component)
   }
 

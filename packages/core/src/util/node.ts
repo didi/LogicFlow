@@ -5,7 +5,7 @@ import {
   GraphModel,
   Model,
   BaseNodeModel,
-  CircleNodeModel,
+  // CircleNodeModel,
   RectNodeModel,
   EllipseNodeModel,
   PolygonNodeModel,
@@ -17,14 +17,15 @@ import Point = LogicFlow.Point
 import Direction = LogicFlow.Direction
 import NodeConfig = LogicFlow.NodeConfig
 import LineSegment = LogicFlow.LineSegment
+import AnchorInfo = Model.AnchorInfo
 
 /* 获取所有锚点 */
-export const getAnchors = (data): Point[] => {
+export const getAnchors = (data: BaseNodeModel) => {
   const { anchors } = data
   return anchors
 }
 
-type NodeContaint = {
+export type NodeContaint = {
   node: BaseNodeModel
   anchorIndex: number
   anchor: Model.AnchorConfig
@@ -36,7 +37,7 @@ export const targetNodeInfo = (
   graphModel: GraphModel,
 ): NodeContaint => {
   const { nodes } = graphModel
-  let nodeInfo
+  let nodeInfo: NodeContaint
   for (let i = nodes.length - 1; i >= 0; i--) {
     const targetNode = nodes[i]
     const inNode = isInNodeBbox(position, targetNode)
@@ -50,18 +51,22 @@ export const targetNodeInfo = (
           anchor: anchorInfo.anchor,
         }
         // fix: 489 多个节点重合时，连线连接上面的那一个。
-        if (!nodeInfo || isNodeHigher(targetNode, nodeInfo.node, graphModel)) {
+        if (!nodeInfo! || isNodeHigher(targetNode, nodeInfo.node, graphModel)) {
           nodeInfo = currentNodeInfo
         }
       }
     }
   }
-  return nodeInfo
+  return nodeInfo!
 }
 /**
  * 比较两个节点
  */
-const isNodeHigher = (node1, node2, graphModel) => {
+const isNodeHigher = (
+  node1: BaseNodeModel,
+  node2: BaseNodeModel,
+  graphModel: GraphModel,
+) => {
   if (node1.zIndex > node2.zIndex) {
     return true
   }
@@ -74,9 +79,9 @@ const isNodeHigher = (node1, node2, graphModel) => {
 export const getClosestAnchor = (
   position: Point,
   node: BaseNodeModel,
-): Model.AnchorInfo => {
+): AnchorInfo => {
   const anchors = getAnchors(node)
-  let closest
+  let closest: AnchorInfo
   let minDistance = Number.MAX_SAFE_INTEGER
   for (let i = 0; i < anchors.length; i++) {
     const len = distance(position.x, position.y, anchors[i].x, anchors[i].y)
@@ -93,7 +98,7 @@ export const getClosestAnchor = (
       }
     }
   }
-  return closest
+  return closest!
 }
 
 /* 两点之间距离 */
@@ -119,7 +124,7 @@ export const isInNode = (position: Point, node: BaseNodeModel): boolean => {
   }
   return inNode
 }
-export const isInNodeBbox = (position: Point, node): boolean => {
+export const isInNodeBbox = (position: Point, node: BaseNodeModel): boolean => {
   let inNode = false
   const offset = 5
   const bBox = getNodeBBox(node)
@@ -168,7 +173,9 @@ type RadiusCircle = {
   y: number
   r: number
 }
-export const getRectRadiusCircle = (node: BaseNodeModel): RadiusCircle[] => {
+export const getRectRadiusCircle = (
+  node: BaseNodeModel,
+): [RadiusCircle, RadiusCircle, RadiusCircle, RadiusCircle] => {
   const { x, y, width, height, radius } = node as RectNodeModel
   return [
     {
@@ -199,8 +206,8 @@ export const getClosestRadiusCenter = (
   direction: Direction,
   node: BaseNodeModel,
 ): Point => {
-  const radiusCenter = getRectRadiusCircle(node as RectNodeModel)
-  let closestRadiusPoint
+  const radiusCenter = getRectRadiusCircle(node)
+  let closestRadiusPoint: RadiusCircle
   let minDistance = Number.MAX_SAFE_INTEGER
   radiusCenter.forEach((item) => {
     const radiusDistance = distance(point.x, point.y, item.x, item.y)
@@ -209,16 +216,16 @@ export const getClosestRadiusCenter = (
       closestRadiusPoint = item
     }
   })
-  return getCrossPointWithCircle(point, direction, closestRadiusPoint)
+  return getCrossPointWithCircle(point, direction, closestRadiusPoint!)
 }
 /* 求点在垂直或者水平方向上与圆形的交点 */
 export const getCrossPointWithCircle = (
   point: Point,
   direction: Direction,
-  node: BaseNodeModel,
+  node: RadiusCircle,
 ): Point => {
-  let crossPoint
-  const { x, y, r } = node as CircleNodeModel
+  let crossPoint: Point
+  const { x, y, r } = node
   if (direction === SegmentDirection.HORIZONTAL) {
     // 水平，x轴
     const crossLeft = x - Math.sqrt(r * r - (point.y - y) * (point.y - y))
@@ -244,7 +251,7 @@ export const getCrossPointWithCircle = (
       y: crossY,
     }
   }
-  return crossPoint
+  return crossPoint!
 }
 
 /* 判断点所在边的方向 */
@@ -266,13 +273,13 @@ export const inStraightLineOfRect = (
 ): boolean => {
   const rect = node as RectNodeModel
   let isInStraight = false
+  const { x, y, width, height, radius } = rect
   const rectBox = {
-    minX: rect.x - rect.width / 2 + rect.radius,
-    maxX: rect.x + rect.width / 2 - rect.radius,
-    minY: rect.y - rect.height / 2 + rect.radius,
-    maxY: rect.y + rect.height / 2 - rect.radius,
+    minX: x - width / 2 + radius,
+    maxX: x + width / 2 - radius,
+    minY: y - height / 2 + radius,
+    maxY: y + height / 2 - radius,
   }
-  const { x, y, width, height } = rect
   if (point.y === y + height / 2 || point.y === y - height / 2) {
     isInStraight = point.x > rectBox.minX && point.x < rectBox.maxX
   } else if (point.x === x + width / 2 || point.x === x - width / 2) {
@@ -286,8 +293,8 @@ export const getCrossPointWithEllipse = (
   point: Point,
   direction: Direction,
   node: BaseNodeModel,
-) => {
-  let crossPoint
+): Point => {
+  let crossPoint: Point
   const { x, y, rx, ry } = node as EllipseNodeModel
   if (direction === SegmentDirection.HORIZONTAL) {
     // 水平
@@ -322,7 +329,7 @@ export const getCrossPointWithEllipse = (
       y: crossY,
     }
   }
-  return crossPoint
+  return crossPoint!
 }
 
 /* 求点在垂直或者水平方向上与多边形的交点 */
@@ -333,7 +340,7 @@ export const getCrossPointWithPolygon = (
 ): Point => {
   const { pointsPosition } = node as PolygonNodeModel
   let minDistance = Number.MAX_SAFE_INTEGER
-  let crossPoint
+  let crossPoint: Point
   const segments: LineSegment[] = []
   for (let i = 0; i < pointsPosition.length; i++) {
     segments.push({
@@ -393,11 +400,11 @@ export const getCrossPointWithPolygon = (
       }
     }
   })
-  return crossPoint
+  return crossPoint!
 }
 
 // 规范节点初始化数据
-export const pickNodeConfig = (data): NodeConfig => {
+export const pickNodeConfig = (data: NodeConfig): NodeConfig => {
   const nodeData = pick(data, [
     'id',
     'type',
@@ -414,7 +421,12 @@ export const pickNodeConfig = (data): NodeConfig => {
 /**
  * 基于节点的边，重新获取新的节点
  */
-export const getNodeAnchorPosition = (center, point, width, height) => {
+export const getNodeAnchorPosition = (
+  center: BaseNodeModel,
+  point: Point,
+  width: number,
+  height: number,
+) => {
   let { x, y } = center
   if (point.x > center.x) {
     x = center.x + width / 2
@@ -433,7 +445,17 @@ export const getNodeAnchorPosition = (center, point, width, height) => {
 }
 
 // 获取文案高度，自动换行，利用dom计算高度
-export const getHtmlTextHeight = ({ rows, style, rowsLength, className }) => {
+export const getHtmlTextHeight = ({
+  rows,
+  style,
+  rowsLength,
+  className,
+}: {
+  rows: string[]
+  style: any // TODO: 完善类型
+  rowsLength: number
+  className: string
+}) => {
   const dom = document.createElement('div')
   dom.style.fontSize = style.fontSize
   dom.style.width = style.width
@@ -450,7 +472,7 @@ export const getHtmlTextHeight = ({ rows, style, rowsLength, className }) => {
       dom.appendChild(rowDom)
     })
   } else {
-    dom.textContent = rows
+    dom.textContent = rows[0]
   }
   document.body.appendChild(dom)
   const height = dom.clientHeight
@@ -458,7 +480,15 @@ export const getHtmlTextHeight = ({ rows, style, rowsLength, className }) => {
   return height
 }
 // 获取文案高度，自动换行，利用dom计算高度
-export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
+export const getSvgTextWidthHeight = ({
+  rows,
+  rowsLength,
+  fontSize,
+}: {
+  rows: string[]
+  rowsLength: number
+  fontSize: number
+}) => {
   let longestBytes = 0
   rows &&
     rows.forEach((item) => {
@@ -476,7 +506,9 @@ export const getSvgTextWidthHeight = ({ rows, rowsLength, fontSize }) => {
 /**
  * @description 格式化边校验信息
  */
-export const formateAnchorConnectValidateData = (data) => {
+export const formateAnchorConnectValidateData = (
+  data: Model.ConnectRuleResult,
+) => {
   if (typeof data !== 'object') {
     return {
       isAllPass: !!data,

@@ -2,7 +2,7 @@ import { createUuid } from './uuid'
 
 const rafIdMap = new Map()
 
-export const createRaf = (callback) => {
+export const createRaf = (callback: () => void) => {
   const rafId = createUuid()
 
   function run() {
@@ -19,7 +19,7 @@ export const createRaf = (callback) => {
   return rafId
 }
 
-export const cancelRaf = (rafId) => {
+export const cancelRaf = (rafId: string) => {
   const eId = rafIdMap.get(rafId)
   if (eId) {
     window.cancelAnimationFrame(eId)

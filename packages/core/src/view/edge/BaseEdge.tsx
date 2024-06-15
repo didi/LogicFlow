@@ -13,6 +13,7 @@ import {
 import AdjustPoint, { AdjustType } from './AdjustPoint'
 
 import ArrowInfo = LogicFlow.ArrowInfo
+import Point = LogicFlow.Point
 
 type IProps = {
   model: BaseEdgeModel
@@ -90,7 +91,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     }
   }
 
-  getLastTwoPoints(): any[] {
+  getLastTwoPoints(): [Point, Point] {
     const { model } = this.props
     const { startPoint, endPoint } = model
     return [startPoint, endPoint]
@@ -216,7 +217,11 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    *  )
    * }
    */
-  getAdjustPointShape(x, y, model: BaseEdgeModel): h.JSX.Element | null {
+  getAdjustPointShape(
+    x: number,
+    y: number,
+    model: BaseEdgeModel,
+  ): h.JSX.Element | null {
     const style = model.getAdjustPointStyle()
     return (
       <Circle
@@ -284,7 +289,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
-  handleHover = (hovered, ev) => {
+  handleHover = (hovered: boolean, ev: MouseEvent) => {
     const {
       model,
       graphModel: { eventCenter },
@@ -302,7 +307,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
-  setHoverON = (ev) => {
+  setHoverON = (ev: MouseEvent) => {
     // ! hover多次触发, onMouseOver + onMouseEnter
     const {
       model: { isHovered },
@@ -314,7 +319,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
-  setHoverOFF = (ev) => {
+  setHoverOFF = (ev: MouseEvent) => {
     const {
       model: { isHovered },
     } = this.props
@@ -357,7 +362,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写
    */
-  handleMouseDown = (e) => {
+  handleMouseDown = (e: MouseEvent) => {
     e.stopPropagation()
     this.startTime = new Date().getTime()
   }
