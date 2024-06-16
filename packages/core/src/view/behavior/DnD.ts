@@ -16,7 +16,7 @@ export type NewNodeConfig = {
 export class Dnd {
   nodeConfig: NewNodeConfig | null = null
   lf: LogicFlow
-  fakerNode: BaseNodeModel | null = null
+  fakeNode: BaseNodeModel | null = null
 
   constructor(params) {
     const { lf } = params
@@ -52,8 +52,8 @@ export class Dnd {
     window.document.removeEventListener('mouseup', this.stopDrag)
   }
   dragEnter = (e: MouseEvent) => {
-    if (!this.nodeConfig || this.fakerNode) return
-    this.fakerNode = this.lf.createFakerNode({
+    if (!this.nodeConfig || this.fakeNode) return
+    this.fakeNode = this.lf.createFakeNode({
       ...this.nodeConfig,
       ...this.clientToLocalPoint({
         x: e.clientX,
@@ -63,13 +63,13 @@ export class Dnd {
   }
   onDragOver = (e: MouseEvent) => {
     e.preventDefault()
-    if (this.fakerNode) {
+    if (this.fakeNode) {
       const { x, y } = this.clientToLocalPoint({
         x: e.clientX,
         y: e.clientY,
       })
-      this.fakerNode.moveTo(x, y)
-      const nodeData = this.fakerNode.getData()
+      this.fakeNode.moveTo(x, y)
+      const nodeData = this.fakeNode.getData()
       this.lf.setNodeSnapLine(nodeData)
       this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_DRAG, {
         data: nodeData,
@@ -78,10 +78,10 @@ export class Dnd {
     return false
   }
   onDragLeave = () => {
-    if (this.fakerNode) {
+    if (this.fakeNode) {
       this.lf.removeNodeSnapLine()
-      this.lf.graphModel.removeFakerNode()
-      this.fakerNode = null
+      this.lf.graphModel.removeFakeNode()
+      this.fakeNode = null
     }
   }
   onDrop = (e: MouseEvent) => {
@@ -103,8 +103,8 @@ export class Dnd {
     e.stopPropagation()
     this.nodeConfig = null
     this.lf.removeNodeSnapLine()
-    this.lf.graphModel.removeFakerNode()
-    this.fakerNode = null
+    this.lf.graphModel.removeFakeNode()
+    this.fakeNode = null
   }
 
   eventMap() {

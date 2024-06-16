@@ -1,4 +1,4 @@
-import { Component } from 'preact/compat'
+import { Component, ComponentType } from 'preact/compat'
 import { map } from 'lodash-es'
 import {
   CanvasOverlay,
@@ -21,8 +21,8 @@ import {
   SnaplineModel,
 } from '../model'
 
-type IProps = {
-  getView: (type: string) => Component | null
+type IGraphProps = {
+  getView: (type: string) => ComponentType<any> | undefined
   tool: Tool
   options: LFOptions.Definition
   dnd: DnD
@@ -36,22 +36,26 @@ type ContainerStyle = {
 }
 
 @observer
-class Graph extends Component<IProps> {
+class Graph extends Component<IGraphProps> {
   getComponent(
     model: BaseEdgeModel | BaseNodeModel,
     graphModel: GraphModel,
     overlay = 'canvas-overlay',
   ) {
     const { getView } = this.props
-    const View: any = getView(model.type)
-    return (
-      <View
-        key={model.id}
-        model={model}
-        graphModel={graphModel}
-        overlay={overlay}
-      />
-    )
+    // https://juejin.cn/post/7046639346656493582 - 几种方式来声明React Component的类型
+    const View = getView(model.type)
+    if (View) {
+      return (
+        <View
+          key={model.id}
+          model={model}
+          graphModel={graphModel}
+          overlay={overlay}
+        />
+      )
+    }
+    return null
   }
 
   render() {
@@ -65,7 +69,7 @@ class Graph extends Component<IProps> {
       style.height = `${graphModel.height}px`
     }
     const grid = options.grid as any // TODO: fix type
-    const { fakerNode, editConfigModel } = graphModel
+    const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
 
     return (
@@ -76,7 +80,7 @@ class Graph extends Component<IProps> {
               this.getComponent(nodeModel, graphModel),
             )}
           </g>
-          {fakerNode ? this.getComponent(fakerNode, graphModel) : ''}
+          {fakeNode ? this.getComponent(fakeNode, graphModel) : ''}
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>
           <OutlineOverlay graphModel={graphModel} />
