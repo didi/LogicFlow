@@ -1,7 +1,13 @@
 import BaseNode from './BaseNode'
 import Ellipse from '../shape/Ellipse'
+import { GraphModel, EllipseNodeModel } from '../../model'
 
-export class EllipseNode extends BaseNode {
+export type IEllipseNodeProps = {
+  model: EllipseNodeModel
+  graphModel: GraphModel
+}
+
+export class EllipseNode extends BaseNode<IEllipseNodeProps> {
   getShape() {
     const { model } = this.props
     const style = model.getNodeStyle()

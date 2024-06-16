@@ -22,11 +22,21 @@ export type IEdgeState = {
   hover: boolean
 }
 
-export class BaseEdge extends Component<IProps> {
+export abstract class BaseEdge<P extends IProps> extends Component<
+  P,
+  IEdgeState
+> {
+  static isObserved: boolean = false
+  static extendsKey?: string
+
   startTime?: number
   contextMenuTime?: number
   clickTimer?: number
   textRef = createRef()
+
+  constructor() {
+    super()
+  }
 
   /**
    * 不支持重写，请使用getEdge
