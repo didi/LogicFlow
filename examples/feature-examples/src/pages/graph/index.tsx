@@ -92,7 +92,7 @@ export default function BasicNode() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const registerElements = (lf: LogicFlow) => {
-    const elements = [
+    const elements: LogicFlow.RegisterConfig[] = [
       // edges
       animation,
       connection,
@@ -105,7 +105,7 @@ export default function BasicNode() {
     ]
 
     map(elements, (customElement) => {
-      lf.register(customElement)
+      lf.register(customElement as LogicFlow.RegisterConfig)
     })
   }
   const registerEvents = (lf: LogicFlow) => {

@@ -2,11 +2,16 @@ import BaseEdge, { IEdgeState } from './BaseEdge'
 import { Path } from '../shape'
 import LogicFlow from '../../LogicFlow'
 import { getEndTangent } from '../../util'
-import { BezierEdgeModel } from '../../model'
+import { BezierEdgeModel, GraphModel } from '../../model'
 
 import ArrowInfo = LogicFlow.ArrowInfo
 
-export class BezierEdge extends BaseEdge {
+export type IBezierEdgeProps = {
+  model: BezierEdgeModel
+  graphModel: GraphModel
+}
+
+export class BezierEdge extends BaseEdge<IBezierEdgeProps> {
   /**
    * @overridable 支持重写, 此方法为获取边的形状，如果需要自定义边的形状，请重写此方法。
    * @example https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge?id=%e5%9f%ba%e4%ba%8e-react-%e7%bb%84%e4%bb%b6%e8%87%aa%e5%ae%9a%e4%b9%89%e8%be%b9

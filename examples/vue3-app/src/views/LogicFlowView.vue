@@ -5,9 +5,9 @@ import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
 import { register, getTeleport } from '@logicflow/vue-node-registry'
 import '@logicflow/core/es/index.css'
 
+import ProgressNode from '@/components/LFElements/ProgressNode.vue'
 import { combine, square, star, uml, user } from '../components/LFElements/nodes'
 import { animation, connection } from '../components/LFElements/edges'
-import ProgressNode from '@/components/LFElements/ProgressNode.vue'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,

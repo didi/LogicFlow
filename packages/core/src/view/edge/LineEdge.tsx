@@ -1,8 +1,14 @@
 import BaseEdge from './BaseEdge'
 import { Line, Path } from '../shape'
 import { getAppendAttributes } from '../../util'
+import { GraphModel, LineEdgeModel } from '../../model'
 
-export class LineEdge extends BaseEdge {
+export type ILineEdgeProps = {
+  model: LineEdgeModel
+  graphModel: GraphModel
+}
+
+export class LineEdge extends BaseEdge<ILineEdgeProps> {
   /**
    * @overridable 支持重写, 此方法为获取边的形状，如果需要自定义边的形状，请重写此方法。
    * @example https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge?id=%e5%9f%ba%e4%ba%8e-react-%e7%bb%84%e4%bb%b6%e8%87%aa%e5%ae%9a%e4%b9%89%e8%be%b9

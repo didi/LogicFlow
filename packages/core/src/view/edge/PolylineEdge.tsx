@@ -2,7 +2,7 @@ import { createElement as h } from 'preact/compat'
 import BaseEdge, { IEdgeState } from './BaseEdge'
 import { Polyline, Path } from '../shape'
 import LogicFlow from '../../LogicFlow'
-import { PolylineEdgeModel } from '../../model'
+import { GraphModel, PolylineEdgeModel } from '../../model'
 import { EventType, SegmentDirection } from '../../constant'
 import { StepDrag, points2PointsList } from '../../util'
 import { getVerticalPointOfLine } from '../../algorithm'
@@ -18,7 +18,12 @@ type AppendAttributesType = {
   strokeDasharray: string
 }
 
-export class PolylineEdge extends BaseEdge {
+export type IPolylineEdgeProps = {
+  model: PolylineEdgeModel
+  graphModel: GraphModel
+}
+
+export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
   drag
   isDragging?: boolean
   isShowAdjustPointTemp?: boolean

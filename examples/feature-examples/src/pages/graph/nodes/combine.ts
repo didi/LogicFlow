@@ -1,6 +1,11 @@
-import { h, BaseNode, BaseNodeModel } from '@logicflow/core'
+import { h, BaseNode, BaseNodeModel, GraphModel } from '@logicflow/core'
 
-export class CombineNode extends BaseNode {
+export type ICombineNodeProps = {
+  model: CombineModel
+  graphModel: GraphModel
+}
+
+export class CombineNode extends BaseNode<ICombineNodeProps> {
   getShape() {
     const { x, y } = this.props.model
     const { fill } = this.props.model.getNodeStyle()

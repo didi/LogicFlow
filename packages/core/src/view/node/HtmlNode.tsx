@@ -1,7 +1,13 @@
 import { createRef } from 'preact/compat'
 import BaseNode from './BaseNode'
+import { GraphModel, HtmlNodeModel } from '../../model'
 
-export class HtmlNode extends BaseNode {
+export type IHtmlNodeProps = {
+  model: HtmlNodeModel
+  graphModel: GraphModel
+}
+
+export class HtmlNode extends BaseNode<IHtmlNodeProps> {
   ref = createRef()
   currentProperties?: string
   preProperties?: string
