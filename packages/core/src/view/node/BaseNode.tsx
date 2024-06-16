@@ -29,13 +29,15 @@ type IState = {
   isDragging?: boolean
 }
 
-export abstract class BaseNode extends Component<IProps, IState> {
+export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   t: any
   moveOffset?: LogicFlow.OffsetData
 
   static getModel(defaultModel) {
     return defaultModel
   }
+  static isObserved: boolean = false
+  static extendsKey?: string
 
   stepDrag: StepDrag
   mouseUpDrag?: boolean
