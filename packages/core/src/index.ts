@@ -1,4 +1,3 @@
-// 统一对外导出
 import { observer as mobxObserver } from 'mobx-preact'
 import { createElement as h, createRef, Component } from 'preact/compat'
 import LogicFlow from './LogicFlow'

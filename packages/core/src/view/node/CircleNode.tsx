@@ -1,7 +1,13 @@
 import Circle from '../shape/Circle'
 import BaseNode from './BaseNode'
+import { GraphModel, CircleNodeModel } from '../../model'
 
-export class CircleNode extends BaseNode {
+export type ICircleNodeProps = {
+  model: CircleNodeModel
+  graphModel: GraphModel
+}
+
+export class CircleNode extends BaseNode<ICircleNodeProps> {
   getShape() {
     const { model } = this.props
     const { x, y, r } = model

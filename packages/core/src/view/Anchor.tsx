@@ -22,7 +22,7 @@ interface IProps {
   // y: number;
   // id?: string;
   anchorData: AnchorConfig
-  node: BaseNode
+  node: BaseNode<any>
   style?: Record<string, any>
   hoverStyle?: Record<string, any>
   edgeStyle?: Record<string, any>

@@ -1,8 +1,13 @@
 import BaseNode from './BaseNode'
 import { Polygon } from '../shape'
-import { PolygonNodeModel } from '../../model'
+import { GraphModel, PolygonNodeModel } from '../../model'
 
-export class PolygonNode extends BaseNode {
+export type IPolygonNodeProps = {
+  model: PolygonNodeModel
+  graphModel: GraphModel
+}
+
+export class PolygonNode extends BaseNode<IPolygonNodeProps> {
   getShape() {
     const { model } = this.props
     const { x, y, width, height, points } = model as PolygonNodeModel

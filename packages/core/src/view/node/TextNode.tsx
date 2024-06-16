@@ -1,7 +1,13 @@
 import Rect from '../shape/Rect'
 import BaseNode from './BaseNode'
+import { GraphModel, TextNodeModel } from '../../model'
 
-export class TextNode extends BaseNode {
+export type ITextNodeProps = {
+  model: TextNodeModel
+  graphModel: GraphModel
+}
+
+export class TextNode extends BaseNode<ITextNodeProps> {
   getBackground() {
     const { model } = this.props
     const style = model.getTextStyle()
