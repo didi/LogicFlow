@@ -32,13 +32,13 @@ export class Tips {
     // TODO: 解决 lf 事件监听 callback 函数的类型定义问题（是否需要统一，比如 {data: NodeData | EdgeData | undefined, ev: MouseEvent | xxxDOMEvent}）
     this.lf.on('node:mouseenter', ({ data }: any) => {
       const model = this.lf.graphModel.getNodeModelById(data.id)
-      // 没有model可以认为是fakernode, 也就是正在外部拖入的节点。
+      // 没有model可以认为是 fakenode, 也就是正在外部拖入的节点。
       if (!model) return
       this.showTip(data)
     })
     this.lf.on('node:mouseleave', ({ data }: any) => {
       const model = this.lf.graphModel.getNodeModelById(data.id)
-      // 没有model可以认为是fakernode, 也就是正在外部拖入的节点。
+      // 没有model可以认为是 fakenode, 也就是正在外部拖入的节点。
       if (!model) return
       this.isCurrentLeaveId = data.id
       setTimeout(() => {

@@ -80,9 +80,9 @@ export class SnaplineModel {
     const { id } = draggingNode
     let draggingData
     if (id) {
-      const { fakerNode } = this.graphModel
-      if (fakerNode && fakerNode.id === id) {
-        draggingData = getNodeBBox(fakerNode)
+      const { fakeNode } = this.graphModel
+      if (fakeNode && fakeNode.id === id) {
+        draggingData = getNodeBBox(fakeNode)
       } else {
         const nodeModel = this.graphModel.getNodeModelById(id)
         if (nodeModel) {
@@ -135,9 +135,9 @@ export class SnaplineModel {
     const { id } = draggingNode
     let draggingData
     if (id) {
-      const { fakerNode } = this.graphModel
-      if (fakerNode && fakerNode.id === id) {
-        draggingData = getNodeBBox(fakerNode)
+      const { fakeNode } = this.graphModel
+      if (fakeNode && fakeNode.id === id) {
+        draggingData = getNodeBBox(fakeNode)
       } else {
         const nodeModel = this.graphModel.getNodeModelById(id)
         if (nodeModel) {

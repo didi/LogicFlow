@@ -1,4 +1,4 @@
-import { forEach, map } from 'lodash-es'
+import { find, forEach, map } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -40,6 +40,8 @@ import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
 import NodeConfig = LogicFlow.NodeConfig
+import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
+import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
 
 export interface Constructable<T> {
   new (...args: any): T
@@ -60,8 +62,7 @@ export class GraphModel {
   // 事件中心
   readonly eventCenter: EventEmitter
   // 维护所有节点和边类型对应的 model
-  readonly modelMap: Map<string, typeof BaseNodeModel | typeof BaseEdgeModel> =
-    new Map()
+  readonly modelMap: Map<string, LogicFlow.GraphElementCtor> = new Map()
   /**
    * 位于当前画布顶部的元素
    * 此元素只在堆叠模式为默认模式下存在
@@ -94,7 +95,6 @@ export class GraphModel {
   @observable edges: BaseEdgeModel[] = []
   // 外部拖动节点进入画布的过程中，用fakeNode来和画布上正是的节点区分开
   @observable fakeNode?: BaseNodeModel | null
-  @observable fakerNode?: BaseNodeModel | null // TODO: REMIND 命名错误，应该是 fakeNode
 
   /**
    * 元素重合时堆叠模式：
@@ -299,8 +299,8 @@ export class GraphModel {
    * 基于Id获取节点的model
    */
   getNodeModelById(nodeId: string): BaseNodeModel | undefined {
-    if (this.fakerNode && nodeId === this.fakerNode.id) {
-      return this.fakerNode
+    if (this.fakeNode && nodeId === this.fakeNode.id) {
+      return this.fakeNode
     }
     return this.nodesMap[nodeId]?.model
   }
@@ -310,7 +310,10 @@ export class GraphModel {
    * 当内部事件需要获取触发事件时，其相对于画布左上角的位置
    * 需要事件触发位置减去画布相对于client的位置
    */
-  getPointByClient({ x: x1, y: y1 }: LogicFlow.Point) {
+  getPointByClient({
+    x: x1,
+    y: y1,
+  }: LogicFlow.Point): LogicFlow.ClientPosition {
     const bbox = this.rootEl.getBoundingClientRect()
     const domOverlayPosition: Position = {
       x: x1 - bbox.left,
@@ -418,7 +421,7 @@ export class GraphModel {
     }
     if (graphData.edges) {
       this.edges = map(graphData.edges, (edge) => {
-        const Model = this.getModel(edge.type ?? '') as typeof BaseEdgeModel
+        const Model = this.getModel(edge.type ?? '') as BaseEdgeModelCtor
         if (!Model) {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
@@ -621,26 +624,23 @@ export class GraphModel {
    * 内部保留方法，请勿直接使用
    */
   @action
-  setFakerNode(nodeModel: BaseNodeModel) {
-    this.fakerNode = nodeModel
+  setFakeNode(nodeModel: BaseNodeModel) {
+    this.fakeNode = nodeModel
   }
 
   /**
    * 内部保留方法，请勿直接使用
    */
   @action
-  removeFakerNode() {
-    this.fakerNode = null
+  removeFakeNode() {
+    this.fakeNode = null
   }
 
   /**
    * 设置指定类型的Model,请勿直接使用
    */
   @action
-  setModel(
-    type: string,
-    ModelClass: typeof BaseNodeModel | typeof BaseEdgeModel,
-  ) {
+  setModel(type: string, ModelClass: LogicFlow.GraphElementCtor) {
     return this.modelMap.set(type, ModelClass)
   }
 
@@ -680,10 +680,13 @@ export class GraphModel {
       let index: number
       if (typeof zIndex === 'number') {
         index = zIndex
-      } else if (zIndex === 'top') {
-        index = getZIndex()
-      } else if (zIndex === 'bottom') {
-        index = getMinIndex()
+      } else {
+        if (zIndex === 'top') {
+          index = getZIndex()
+        }
+        if (zIndex === 'bottom') {
+          index = getMinIndex()
+        }
       }
       element.setZIndex(index!)
     }
@@ -738,7 +741,7 @@ export class GraphModel {
    * @param node
    */
   getModelAfterSnapToGrid(node: NodeConfig) {
-    const Model = this.getModel(node.type) as typeof BaseNodeModel
+    const Model = this.getModel(node.type) as BaseNodeModelCtor
     if (!Model) {
       throw new Error(
         `找不到${node.type}对应的节点，请确认是否已注册此类型节点。`,
@@ -863,7 +866,7 @@ export class GraphModel {
     if (edgeOriginData.id && this.edgesMap[edgeOriginData.id]) {
       delete edgeOriginData.id
     }
-    const Model = this.getModel(type) as typeof BaseEdgeModel
+    const Model = this.getModel(type) as BaseEdgeModelCtor
     if (!Model) {
       throw new Error(`找不到${type}对应的边，请确认是否已注册此类型边。`)
     }
@@ -1033,16 +1036,11 @@ export class GraphModel {
    */
   @action
   updateText(id: string, value: string) {
-    this.nodes.forEach((node) => {
-      if (node.id === id) {
-        node.updateText(value)
-      }
-    })
-    this.edges.forEach((edge) => {
-      if (edge.id === id) {
-        edge.updateText(value)
-      }
-    })
+    const element = find(
+      [...this.nodes, ...this.edges],
+      (item) => item.id === id,
+    )
+    element?.updateText(value)
   }
 
   /**
@@ -1184,10 +1182,10 @@ export class GraphModel {
   /**
    * 设置默认的边类型
    * 也就是设置在节点直接有用户手动绘制的连线类型。
-   * @param type Options.EdgeType
+   * @param type LFOptions.EdgeType
    */
   @action
-  setDefaultEdgeType(type: string): void {
+  setDefaultEdgeType(type: LFOptions.EdgeType): void {
     this.edgeType = type
   }
 
@@ -1205,7 +1203,7 @@ export class GraphModel {
     }
     const data = nodeModel.getData()
     data.type = type
-    const Model = this.getModel(type) as typeof BaseNodeModel
+    const Model = this.getModel(type) as BaseNodeModelCtor
     if (!Model) {
       throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`)
     }
@@ -1240,7 +1238,7 @@ export class GraphModel {
    * @param id 边Id
    * @param type 边类型
    */
-  @action changeEdgeType(id: string, type: string) {
+  @action changeEdgeType(id: string, type: LFOptions.EdgeType) {
     const edgeModel = this.getEdgeModelById(id)
     if (!edgeModel) {
       console.warn(`找不到id为${id}的边`)
@@ -1251,7 +1249,7 @@ export class GraphModel {
     }
     const data = edgeModel.getData()
     data.type = type
-    const Model = this.getModel(type) as typeof BaseEdgeModel
+    const Model = this.getModel(type) as BaseEdgeModelCtor
     if (!Model) {
       throw new Error(`找不到${type}对应的节点，请确认是否已注册此类型节点。`)
     }
