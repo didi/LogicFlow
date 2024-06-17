@@ -1,0 +1,24 @@
+name: 🤝 Update Contributeors
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  push:
+    branches:
+      - master
+      - next
+      - next-major
+      - alpha
+      - beta
+jobs:
+  contributors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wow-actions/use-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: wow-actions/contributors-list@v1
+        with:
+          GITHUB_TOKEN: ${{ env.BOT_TOKEN }}
+          excludeUsers: semantic-release-bot ImgBotApp
