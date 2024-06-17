@@ -4,6 +4,7 @@
 import { h } from '@logicflow/core'
 import { poolToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
+import LogicFlow from '@logicflow/core'
 
 const laneMinSize = {
   width: 312,
@@ -11,11 +12,9 @@ const laneMinSize = {
 }
 
 export class HorizontalLaneModel extends GroupNodeModel {
-  initNodeData(data: {
-    width: number
-    height: number
-    properties: Record<string, any>
-  }) {
+  initNodeData(
+    data: LogicFlow.NodeConfig & Record<'width' | 'height', number>,
+  ) {
     super.initNodeData(data)
     this.height = 260
     // this.foldable = true
