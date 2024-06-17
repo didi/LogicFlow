@@ -1744,7 +1744,7 @@ export namespace LogicFlow {
   export type RegisterConfig = {
     type: string
     // TODO: 确认 View 类型中 props 类型该如何动态获取真实组件的 props
-    view: ComponentType<unknown> & {
+    view: ComponentType<any> & {
       isObserved?: boolean
     }
     model: GraphElementCtor // TODO: 确认 model 的类型

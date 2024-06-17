@@ -534,15 +534,17 @@ export class MiniMap {
       const graphData = this.lf.getGraphRawData()
       const data = this.resetData(graphData)
       // 由于随时都会有新节点注册进来，需要同步将注册的
-      const { viewMap }: { viewMap: Map<string, any> } = this.lf
-      const { modelMap }: { modelMap: Map<string, any> } = this.lf.graphModel
-      const { viewMap: minimapViewMap }: { viewMap: Map<string, any> } =
-        this.lfMap
+      const { viewMap } = this.lf
+      const { modelMap } = this.lf.graphModel
+      const { viewMap: minimapViewMap } = this.lfMap
 
       for (const key of viewMap.keys()) {
         if (!minimapViewMap.has(key)) {
-          this.lfMap.setView(key, viewMap.get(key))
-          this.lfMap.graphModel.modelMap.set(key, modelMap.get(key))
+          this.lfMap.register({
+            type: key,
+            view: viewMap.get(key)!,
+            model: modelMap.get(key)!,
+          })
         }
       }
 

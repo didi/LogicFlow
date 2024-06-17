@@ -2,14 +2,13 @@ import { h } from '@logicflow/core'
 import { laneToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
 import { HorizontalLaneModel } from './Pool'
+import LogicFlow from '@logicflow/core'
 
 // 泳道
 class LaneModel extends GroupNodeModel {
-  initNodeData(data: {
-    width: number
-    height: number
-    properties: Record<string, any>
-  }) {
+  initNodeData(
+    data: LogicFlow.NodeConfig & Record<'width' | 'height', number>,
+  ) {
     data.properties = {
       ...data.properties,
       processRef: '',
