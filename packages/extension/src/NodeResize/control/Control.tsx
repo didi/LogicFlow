@@ -1,4 +1,4 @@
-import LogicFlow, {
+import {
   h,
   Component,
   GraphModel,
@@ -13,7 +13,7 @@ import LogicFlow, {
 } from '@logicflow/core'
 import { RectResizeModel } from '../node'
 
-import VectorData = LogicFlow.VectorData
+type VectorData = Record<'deltaX' | 'deltaY', number>
 
 const { StepDrag } = LogicFlowUtil
 

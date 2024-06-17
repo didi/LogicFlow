@@ -29,7 +29,10 @@ type IState = {
   isDragging?: boolean
 }
 
-export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
+export abstract class BaseNode<P extends IProps = IProps> extends Component<
+  P,
+  IState
+> {
   t: any
   moveOffset?: LogicFlow.OffsetData
 
