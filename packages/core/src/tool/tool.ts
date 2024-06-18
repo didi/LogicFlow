@@ -6,17 +6,17 @@ import LogicFlow from '../LogicFlow'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 import { ElementState, EventType } from '../constant'
 
-export type IProps = {
+export type IToolProps = {
   textEditElement?: BaseNodeModel | BaseEdgeModel
   graphModel: GraphModel
   logicFlow: LogicFlow
 }
 
-type ToolConstructor = new (props: IProps) => Component<IProps>
+type ToolConstructor = new (props: IToolProps) => Component<IToolProps>
 
 export class Tool {
   tools?: Component[]
-  components?: VNode<IProps>[]
+  components?: VNode<IToolProps>[]
   toolMap = new Map<string, ToolConstructor>()
   instance: LogicFlow
 

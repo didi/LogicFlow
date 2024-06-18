@@ -1,10 +1,9 @@
 /**
  * 泳道节点
  */
-import { h } from '@logicflow/core'
+import LogicFlow, { h } from '@logicflow/core'
 import { poolToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
-import LogicFlow from '@logicflow/core'
 
 const laneMinSize = {
   width: 312,

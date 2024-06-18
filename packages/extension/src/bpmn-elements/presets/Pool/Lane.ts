@@ -1,8 +1,7 @@
-import { h } from '@logicflow/core'
+import LogicFlow, { h } from '@logicflow/core'
 import { laneToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
 import { HorizontalLaneModel } from './Pool'
-import LogicFlow from '@logicflow/core'
 
 // 泳道
 class LaneModel extends GroupNodeModel {
