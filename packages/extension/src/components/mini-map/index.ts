@@ -61,7 +61,6 @@ export namespace MiniMap {
 }
 
 type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
-type CallbackFunction = () => any
 
 export class MiniMap {
   static pluginName = 'miniMap'
@@ -174,10 +173,6 @@ export class MiniMap {
    */
   private headerTitle = '导航'
   /**
-   * 关闭按钮的回调
-   */
-  private closeCallBack?: CallbackFunction
-  /**
    * 小地图的logicFlow实例需要禁用的插件
    */
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect']
@@ -234,9 +229,7 @@ export class MiniMap {
   public hide = () => {
     if (this.isShow) {
       this.removeMiniMap()
-      if (this.closeCallBack) {
-        this.closeCallBack()
-      }
+      this.lf.emit('miniMap:close', {})
     }
     this.isShow = false
   }
@@ -300,13 +293,6 @@ export class MiniMap {
       this.showEdge = showEdge
       this.setView()
     }
-  }
-  /**
-   * 设置关闭小地图时的回调函数，使用 `hide` 方法或通过 CloseIcon 关闭小地图时均会触发该回调函数
-   * @param callback 回调函数
-   */
-  public setCloseCallback = (callback: CallbackFunction) => {
-    this.closeCallBack = callback
   }
 
   /**
