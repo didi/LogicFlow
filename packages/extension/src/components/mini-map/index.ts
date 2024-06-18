@@ -636,8 +636,6 @@ export class MiniMap {
    */
   private drag = (e: MouseEvent) => {
     const { x, y } = e
-    // 每移动一次预览视窗都需要更新拖拽的起始点
-    this.startPosition = { x, y }
     const translateX = (x - this.startPosition.x) / this.scale
     const translateY = (y - this.startPosition.y) / this.scale
     const centerX =
@@ -645,6 +643,8 @@ export class MiniMap {
     const centerY =
       this.viewPortTop + translateY + this.viewPortHeight / this.scale / 2
 
+    // 每移动一次预览视窗都需要更新拖拽的起始点
+    this.startPosition = { x, y }
     this.lf.focusOn({
       coordinate: {
         x: centerX,
