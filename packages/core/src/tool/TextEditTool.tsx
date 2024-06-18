@@ -1,7 +1,7 @@
 import { createRef, Component } from 'preact'
 import { ElementState, observer } from '..'
 import { ElementType, EventType, ModelType } from '../constant'
-import type { IProps } from './tool'
+import { IToolProps } from './tool'
 
 type IState = {
   style: {
@@ -11,7 +11,7 @@ type IState = {
 }
 
 @observer
-export class TextEditTool extends Component<IProps, IState> {
+export class TextEditTool extends Component<IToolProps, IState> {
   static toolName = 'textEdit'
   ref = createRef()
   __prevText = {
@@ -20,7 +20,7 @@ export class TextEditTool extends Component<IProps, IState> {
     id: '',
   }
 
-  constructor(props: IProps) {
+  constructor(props: IToolProps) {
     super(props)
     this.state = {
       style: {
@@ -30,7 +30,7 @@ export class TextEditTool extends Component<IProps, IState> {
     }
   }
 
-  static getDerivedStateFromProps(props: IProps): IState | null {
+  static getDerivedStateFromProps(props: IToolProps): IState | null {
     const { textEditElement, graphModel } = props
     const { transformModel, theme } = graphModel
     const { inputText } = theme

@@ -1,19 +1,19 @@
 import { Component } from 'preact/compat'
 import { Model, observer } from '..'
 import LogicFlow from '../LogicFlow'
-import { StepDrag, type IDragParams } from '../util'
+import { StepDrag, IDragParams } from '../util'
 import { ElementType, EventType } from '../constant'
 import { getNodeOutline, getEdgeOutline } from '../algorithm/outline'
-import type { IProps } from './tool'
+import { IToolProps } from './tool'
 
 import GraphData = LogicFlow.GraphData
 
 @observer
-export default class MultipleSelect extends Component<IProps> {
+export default class MultipleSelect extends Component<IToolProps> {
   static toolName = 'multipleSelect'
   stepDrag: StepDrag
 
-  constructor(props: IProps) {
+  constructor(props: IToolProps) {
     super(props)
     const {
       graphModel: { gridSize, eventCenter },
