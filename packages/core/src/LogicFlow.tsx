@@ -22,7 +22,7 @@ import { snapline } from './tool'
 import Keyboard from './keyboard'
 import History from './history/History'
 import { CallbackType, EventArgs } from './event/eventEmitter'
-import { ElementType, EventType } from './constant'
+import { ElementType, EventType, SegmentDirection } from './constant'
 import { initDefaultShortcut } from './keyboard/shortcut'
 import Extension = LogicFlow.Extension
 import RegisteredExtension = LogicFlow.RegisteredExtension
@@ -1385,7 +1385,7 @@ export namespace LogicFlow {
     end: Point
   }
 
-  export type Direction = 'vertical' | 'horizontal'
+  export type Direction = SegmentDirection
   export type RadiusCircleInfo = {
     r: number
   } & Position
