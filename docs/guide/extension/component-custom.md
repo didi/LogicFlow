@@ -5,7 +5,7 @@ LogicFlow提供了很多的插件，但是这些插件都是一些具有普适�
 
 ```js
 class PluginCls {
-  static pluginName = 'pluginName',
+  static pluginName = 'pluginName'
   constructor({ lf, LogicFlow }) {
     // do anything
   }
