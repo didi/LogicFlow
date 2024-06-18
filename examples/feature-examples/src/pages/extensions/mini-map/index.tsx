@@ -93,7 +93,7 @@ export default function MiniMapExtension() {
         },
       })
 
-      ;(lf.extension.miniMap as MiniMap).setCloseCallback(() => {
+      lf.on('miniMap:close', () => {
         setVisible(false)
       })
 
