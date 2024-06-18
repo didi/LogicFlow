@@ -486,7 +486,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
           // 如果不在节点内部，更换起点为线段与节点的交点
           const anchorList = this.sourceNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction as SegmentDirection,
+            direction,
             'start',
             startPosition,
             anchorList,
@@ -505,7 +505,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
           // 如果不在节点内部，更换终点为线段与节点的交点
           const anchorList = this.targetNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction as SegmentDirection,
+            direction,
             'end',
             endPosition,
             anchorList,
@@ -543,7 +543,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           const anchorList = this.sourceNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction as SegmentDirection,
+            direction,
             'start',
             startPosition,
             anchorList,
@@ -560,7 +560,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         if (!inNode) {
           const anchorList = this.targetNode.anchors
           draggingPointList = this.getDraggingPoints(
-            direction as SegmentDirection,
+            direction,
             'end',
             endPosition,
             anchorList,

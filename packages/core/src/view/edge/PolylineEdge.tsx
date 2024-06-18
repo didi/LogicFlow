@@ -254,7 +254,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
         },
         startIndex: i,
         endIndex: i + 1,
-        direction: 'horizontal',
+        direction: SegmentDirection.HORIZONTAL,
         draggable: true,
       }
       let append: h.JSX.Element = (

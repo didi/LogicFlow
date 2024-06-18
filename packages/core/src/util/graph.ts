@@ -1,4 +1,7 @@
+import LogicFlow from '..'
 import { EditConfigModel } from 'src/model'
+
+import PointTuple = LogicFlow.PointTuple
 
 /**
  * 判断一个点是否在指定区域
@@ -7,9 +10,9 @@ import { EditConfigModel } from 'src/model'
  * @param rightBottomPoint 区域的右下角点
  */
 export const isPointInArea = (
-  [x, y]: [number, number],
-  [leftTopX, leftTopY]: [number, number],
-  [rightBottomX, rightBottomY]: [number, number],
+  [x, y]: PointTuple,
+  [leftTopX, leftTopY]: PointTuple,
+  [rightBottomX, rightBottomY]: PointTuple,
 ): boolean =>
   x > leftTopX && x < rightBottomX && y > leftTopY && y < rightBottomY
 
