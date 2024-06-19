@@ -1,4 +1,4 @@
-name: 🤝 Update Contributeors
+name: 🤝 Update Contributors
 on:
   schedule:
     - cron: '0 1 * * *'
@@ -12,13 +12,9 @@ on:
 jobs:
   contributors:
     runs-on: ubuntu-latest
+    name: A job to automate contributors in readme
     steps:
-      - uses: wow-actions/use-app-token@v2
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - uses: wow-actions/contributors-list@v1
-        with:
-          GITHUB_TOKEN: ${{ env.BOT_TOKEN }}
-          excludeUsers: semantic-release-bot ImgBotApp
+      - name: Generate Contributors List
+        uses: akhilmhdh/contributors-readme-action@v2.3.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.CONTRIBUTORS_TOKEN }}
