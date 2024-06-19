@@ -11,11 +11,13 @@ export default (api: IApi) => {
       const language = en ? "en" : "zh";
       const userAgent = window.navigator.userAgent;
       const platform = window.navigator.platform;
-      Omega.trackEvent('tech_user_info', 'tech_urser_info', {
+      console.log('window.navigator', window.navigator);
+      Omega.trackEvent('tech_user_info', 'tech_user_info', {
         language,
         userAgent,
         platform,
         loadingTime,
+        referrer: document.referrer,
       })
       console.warn('I', language, userAgent, platform, loadingTime)
     }
