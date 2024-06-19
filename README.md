@@ -161,19 +161,19 @@ pnpm run start
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/MvCraK">
-                    <img src="https://avatars.githubusercontent.com/u/20339028?v=4" width="100;" alt="MvCraK"/>
+                <a href="https://github.com/boyongjiong">
+                    <img src="https://avatars.githubusercontent.com/u/8553969?v=4" width="100;" alt="boyongjiong"/>
                     <br />
-                    <sub><b>CraK</b></sub>
+                    <sub><b>你说呢？</b></sub>
                 </a>
             </td>
 		</tr>
 		<tr>
             <td align="center">
-                <a href="https://github.com/boyongjiong">
-                    <img src="https://avatars.githubusercontent.com/u/8553969?v=4" width="100;" alt="boyongjiong"/>
+                <a href="https://github.com/MvCraK">
+                    <img src="https://avatars.githubusercontent.com/u/20339028?v=4" width="100;" alt="MvCraK"/>
                     <br />
-                    <sub><b>你说呢？</b></sub>
+                    <sub><b>CraK</b></sub>
                 </a>
             </td>
             <td align="center">
