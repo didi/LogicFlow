@@ -100,6 +100,104 @@ order: 5
 
 ![23-edge-code](https://github.com/didi/LogicFlow/assets/27529822/499ad962-599c-48e9-8059-cd1bee596dd2)
 
+```JavaScript
+// vue3 版本参考
+import { PolylineEdge, PolylineEdgeModel, h } from '@logicflow/core';
+import LineNode from '../comp/LineNode.vue';
+import { createApp, h as hvue } from 'vue';
+
+class EdgeCustom extends PolylineEdge {
+    constructor(props) {
+        super(props);
+        this.isMounted = false;
+        this.comp = hvue(LineNode, {
+            model: props.model,
+            graphModel: props.graphModel,
+            properties: props.model.getProperties(), // 假设 getProperties 是 model 的一个方法
+            isSelected: props.model.isSelected,
+            isHovered: props.model.isHovered
+        });
+        this.vm = createApp({
+            render: () => this.comp
+        });
+    }
+    shouldUpdate() {
+        const data = {
+            ...this.props.model.properties,
+            isSelected: this.props.model.isSelected,
+            isHovered: this.props.model.isHovered
+        };
+        if (this.preProperties && this.preProperties === JSON.stringify(data)) return;
+        this.preProperties = JSON.stringify(data);
+        return true;
+    }
+    getText() {
+        // 几种情况的处理：1.一个节点连出多条边 2.一个节点的入口连入多条边 3.线的回连
+        const { graphModel } = this.props;
+        const { pointsList, text, sourceNodeId, targetNodeId } = this.props.model;
+        if (!pointsList || pointsList.length === 0) return null;
+        let width = 10;
+        let height = 10;
+        const positionData = {};
+        const targetInlines = graphModel.getNodeIncomingEdge(targetNodeId);
+
+        // 如果后一个节点入口有多条线
+        if (targetInlines.length && targetInlines.length > 1) {
+            let lastPoint = null,
+                lastPrePoint = null;
+            if (pointsList.length >= 4) {
+                lastPoint = pointsList[1];
+                lastPrePoint = pointsList[pointsList.length - 2];
+            } else {
+                lastPoint = pointsList[0];
+                lastPrePoint = pointsList[0];
+            }
+            width = Math.abs(lastPoint.x - lastPrePoint.x);
+            height = Math.abs(lastPoint.y - lastPrePoint.y);
+            positionData.x = (lastPoint.x + lastPrePoint.x) / 2;
+            positionData.y = (lastPoint.y + lastPrePoint.y) / 2;
+        } else {
+            let lastPoint = pointsList[1];
+            let lastPrePoint = pointsList[pointsList.length - 2];
+            width = Math.abs(lastPoint.x - lastPrePoint.x);
+            height = Math.abs(lastPoint.y - lastPrePoint.y);
+            positionData.x = (lastPoint.x + lastPrePoint.x) / 2;
+            positionData.y = (lastPoint.y + lastPrePoint.y) / 2 - 30;
+        }
+
+        const { model } = this.props;
+        // const positionData = { x: model.textPosition.x, y: model.textPosition.y - 34 };
+        const id = model.id;
+        setTimeout(() => {
+            if (!this.isMounted) {
+                this.isMounted = true;
+                const addContainer = document.querySelector('#' + 'line_' + id).querySelector('.add-container');
+                this.vm.mount(addContainer);
+            }
+        }, 0);
+        return h(
+            'foreignObject',
+            {
+                ...positionData,
+                id: 'line_' + id,
+                style: `z-index: 20; width: ${width < 30 ? 30 : width}px; height: 30px`
+            },
+            [
+                h(
+                    'div',
+                    {
+                        className: 'add-container',
+                        style: `width: 100%;`
+                    },
+                    [h('div', { className: 'add-wrapper' })]
+                )
+            ]
+        );
+    }
+}
+
+```
+
 默认情况下，LogicFlow 的文本是 svg 元素，所以当我们需要在这上面提供更多的 html 内容是，可以利用 LogicFlow 的基于**继承重写的自定义机制**，重新实现文本。上面的代码示例就是通过重写 getText 方法，利用在 svg 中插入 **foreignObject** 的方式，实现 svg 内部嵌套 html 内容。
 
 ### 执行器
