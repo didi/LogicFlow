@@ -207,3 +207,10 @@ LogicFlow is open to the outside, whether it is just fixing docment typo or a ma
 LogicFlow supports the generation of structured data applicable to various process engines. If you are using Activiti process engine in your project, we recommend combining it with Mr. Hebo's book [《深入Activiti流程引擎：核心原理与高阶实战》](https://item.m.jd.com/product/13928958.html?gx=RnAomTM2bmCImZxDqYAkVCoIHuIYVqc), This book is very helpful for systematic learning and in-depth mastery of Activiti/Flowable usage.
 
 <image src="https://github.com/didi/LogicFlow/assets/8553969/f4492e40-d812-453e-a170-38fb4253338f" alt="《深入Activiti流程引擎：核心原理与高阶实战》" width="300"/>
+
+## Contributing
+To become a contributor, please follow our [contributing guide](/CONTRUBUTING.md). If you are an active contributor, you can apply to be a outside collaborator.
+
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
+
