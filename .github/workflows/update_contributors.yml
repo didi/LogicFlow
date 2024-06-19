@@ -13,6 +13,8 @@ jobs:
   contrib-readme-job:
     runs-on: ubuntu-latest
     name: A job to automate contributors in readme
+    # Only run workflow if the repository is not a fork
+    if: ${{ !github.event.repository.fork }}
     permissions:
       contents: write
       pull-requests: write
