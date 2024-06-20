@@ -256,7 +256,10 @@ export class BaseNodeModel implements IBaseNodeModel {
 
     this.width = resizeInfo.width
     this.height = resizeInfo.height
-    this.setProperties({ width, height })
+    this.setProperties({
+      width,
+      height,
+    })
 
     return this.getData()
   }
@@ -362,6 +365,11 @@ export class BaseNodeModel implements IBaseNodeModel {
   getResizeControlStyle() {
     const { resizeControl } = this.graphModel.theme
     return cloneDeep(resizeControl)
+  }
+
+  getResizeOutlineStyle() {
+    const { resizeOutline } = this.graphModel.theme
+    return cloneDeep(resizeOutline)
   }
 
   /**
@@ -604,15 +612,13 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action
-  addNodeMoveRules(fn: Model.NodeMoveRule) {
+  @action addNodeMoveRules(fn: Model.NodeMoveRule) {
     if (!this.moveRules.includes(fn)) {
       this.moveRules.push(fn)
     }
   }
 
-  @action
-  move(deltaX: number, deltaY: number, isIgnoreRule = false): boolean {
+  @action move(deltaX: number, deltaY: number, isIgnoreRule = false): boolean {
     let isAllowMoveX = false
     let isAllowMoveY = false
     if (isIgnoreRule) {
@@ -641,8 +647,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     return isAllowMoveX || isAllowMoveY
   }
 
-  @action
-  getMoveDistance(
+  @action getMoveDistance(
     deltaX: number,
     deltaY: number,
     isIgnoreRule = false,
@@ -679,11 +684,12 @@ export class BaseNodeModel implements IBaseNodeModel {
     return [moveX, moveY]
   }
 
-  @action
-  moveTo(x: number, y: number, isIgnoreRule = false): boolean {
+  @action moveTo(x: number, y: number, isIgnoreRule = false): boolean {
     const deltaX = x - this.x
     const deltaY = y - this.y
-    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false
+    if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) {
+      return false
+    }
     if (this.text) {
       this.text && this.moveText(deltaX, deltaY)
     }
@@ -692,8 +698,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     return true
   }
 
-  @action
-  moveText(deltaX: number, deltaY: number): void {
+  @action moveText(deltaX: number, deltaY: number): void {
     const { x, y, value, draggable, editable } = this.text
     this.text = {
       value,
@@ -704,47 +709,39 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action
-  updateText(value: string): void {
+  @action updateText(value: string): void {
     this.text = {
       ...toJS(this.text),
       value,
     }
   }
 
-  @action
-  setSelected(flag = true): void {
+  @action setSelected(flag = true): void {
     this.isSelected = flag
   }
 
-  @action
-  setHovered(flag = true): void {
+  @action setHovered(flag = true): void {
     this.isHovered = flag
     this.setIsShowAnchor(flag)
   }
 
-  @action
-  setIsShowAnchor(flag = true): void {
+  @action setIsShowAnchor(flag = true): void {
     this.isShowAnchor = flag
   }
 
-  @action
-  setEnableRotate(flag = true): void {
+  @action setEnableRotate(flag = true): void {
     this.enableRotate = flag
   }
 
-  @action
-  setHitable(flag = true): void {
+  @action setHitable(flag = true): void {
     this.isHitable = flag
   }
 
-  @action
-  setHittable(flag = true): void {
+  @action setHittable(flag = true): void {
     this.isHittable = flag
   }
 
-  @action
-  setElementState(
+  @action setElementState(
     state: number,
     additionStateData?: Model.AdditionStateDataType,
   ): void {
@@ -753,8 +750,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   // TODO: 处理重复代码，setProperty 和 setProperties  -> 公用代码提到 updateProperties 中？
-  @action
-  setProperty(key: string, val: any): void {
+  @action setProperty(key: string, val: any): void {
     const preProperties = toJS(this.properties)
     const nextProperties = {
       ...preProperties,
@@ -772,8 +768,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     })
   }
 
-  @action
-  setProperties(properties: Record<string, any>): void {
+  @action setProperties(properties: Record<string, any>): void {
     const preProperties = toJS(this.properties)
     const nextProperties = {
       ...preProperties,
@@ -802,42 +797,36 @@ export class BaseNodeModel implements IBaseNodeModel {
     })
   }
 
-  @action
-  deleteProperty(key: string): void {
+  @action deleteProperty(key: string): void {
     delete this.properties[key]
     this.setAttributes()
   }
 
-  @action
-  setStyle(key: string, val: any): void {
+  @action setStyle(key: string, val: any): void {
     this.style = {
       ...this.style,
       [key]: formatData(val),
     }
   }
 
-  @action
-  setStyles(styles: Record<string, any>): void {
+  @action setStyles(styles: Record<string, any>): void {
     this.style = {
       ...this.style,
       ...formatData(styles),
     }
   }
 
-  @action
-  updateStyles(styles: Record<string, any>): void {
+  @action updateStyles(styles: Record<string, any>): void {
     this.style = {
       ...formatData(styles),
     }
   }
 
-  @action
-  setZIndex(zIndex = 1): void {
+  @action setZIndex(zIndex = 1): void {
     this.zIndex = zIndex
   }
 
-  @action
-  updateAttributes(attributes) {
+  @action updateAttributes(attributes) {
     assign(this, attributes)
   }
 }
