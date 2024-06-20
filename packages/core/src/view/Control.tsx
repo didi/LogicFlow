@@ -1,8 +1,8 @@
 import { createElement as h, Component } from 'preact/compat'
-import { cloneDeep, find, forEach } from 'lodash-es'
+import { cloneDeep, find, forEach, map } from 'lodash-es'
 import { Rect } from './shape'
 import LogicFlow from '../LogicFlow'
-import { IDragParams, StepDrag } from '../util'
+import { getNodeBBox, IDragParams, StepDrag } from '../util'
 import { BaseNodeModel, GraphModel } from '../model'
 
 import NodeData = LogicFlow.NodeData
@@ -10,6 +10,7 @@ import VectorData = LogicFlow.VectorData
 import { EventType } from '../constant'
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
+import ControlItemProps = ResizeControl.ControlItemProps
 
 export enum ResizeControlIndex {
   LEFT_TOP = 0,
@@ -333,12 +334,67 @@ export class ResizeControl extends Component<
   }
 }
 
-// interface IResizeControlGroupProps {
-// }
+interface IResizeControlGroupProps {
+  style: LogicFlow.CommonTheme
+  model: BaseNodeModel
+  graphModel: GraphModel
+}
 
-// export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
-//
-// }
+export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
+  constructor() {
+    super()
+  }
+
+  getResizeControl(): h.JSX.Element[] {
+    const { model, graphModel } = this.props
+    const { minX, minY, maxX, maxY } = getNodeBBox(model)
+    const controlList: ControlItemProps[] = [
+      // 左上角
+      {
+        index: ResizeControlIndex.LEFT_TOP,
+        x: minX,
+        y: minY,
+      },
+      // 右上角
+      {
+        index: ResizeControlIndex.RIGHT_TOP,
+        x: maxX,
+        y: minY,
+      },
+      // 右下角
+      {
+        index: ResizeControlIndex.RIGHT_BOTTOM,
+        x: maxX,
+        y: maxY,
+      },
+      // 左下角
+      {
+        index: ResizeControlIndex.LEFT_BOTTOM,
+        x: minX,
+        y: maxY,
+      },
+    ]
+    return map(controlList, (control) => (
+      <ResizeControl {...control} model={model} graphModel={graphModel} />
+    ))
+  }
+
+  getResizeOutline() {
+    const { model } = this.props
+    const { x, y, width, height } = model
+    const style = model.getResizeOutlineStyle()
+    return <Rect {...style} x={x} y={y} width={width} height={height} />
+  }
+
+  render(): h.JSX.Element {
+    return (
+      <g className="lf-resize-control">
+        {this.getResizeOutline()}
+        {this.getResizeControl()}
+      </g>
+    )
+  }
+}
 
 export namespace ResizeControl {
   export type RectShapeResizeProps = {
@@ -361,6 +417,12 @@ export namespace ResizeControl {
   }
   export type ResizeNodeData = NodeData & Partial<ResizeProps>
 
+  export type ControlItemProps = {
+    index: ResizeControlIndex
+    x: number
+    y: number
+  }
+
   export type PCTResizeParams = {
     ResizePCT: { widthPCT: number; heightPCT: number }
     ResizeBasis: { basisWidth: number; basisHeight: number }
@@ -368,4 +430,4 @@ export namespace ResizeControl {
   }
 }
 
-export default ResizeControl
+export default ResizeControlGroup
