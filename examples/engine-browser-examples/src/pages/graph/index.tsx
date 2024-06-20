@@ -149,7 +149,7 @@ export default function BasicNode() {
         // stopMoveGraph: true,
         adjustEdgeStartAndEnd: true,
         // adjustEdge: false,
-        allowRotation: true,
+        allowRotate: true,
         edgeTextEdit: true,
         keyboard: {
           enabled: true,

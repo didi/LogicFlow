@@ -75,7 +75,10 @@ export namespace Options {
     style?: Partial<LogicFlow.Theme> // 主题配置
     edgeType?: EdgeType
     adjustEdge?: boolean
-    allowRotation?: boolean
+
+    allowRotate?: boolean // 允许节点旋转
+    allowResize?: boolean // 是否允许缩放
+
     isSilentMode?: boolean
     stopScrollGraph?: boolean
     stopZoomGraph?: boolean
