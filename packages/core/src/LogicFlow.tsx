@@ -1359,9 +1359,17 @@ export namespace LogicFlow {
     [key: string]: string | undefined
   }
 
-  export type PropertiesType = Record<string, any>
+  export type PropertiesType = {
+    width?: number
+    height?: number
+    rx?: number
+    ry?: number
+  } & Record<string, any>
   export type AttributesType = Record<string, any>
-
+  export type VectorData = {
+    deltaX: number
+    deltaY: number
+  }
   export type OffsetData = {
     dx: number
     dy: number
@@ -1713,6 +1721,7 @@ export namespace LogicFlow {
     arrow: ArrowTheme // 边上箭头的样式
     snapline: EdgeTheme // 对齐线样式
     rotateControl: CommonTheme // 节点旋转控制点样式
+    resizeControl: CommonTheme // 节点旋转控制点样式
 
     /**
      * REMIND: 当开启了跳转边的起点和终点(adjustEdgeStartAndEnd:true)后

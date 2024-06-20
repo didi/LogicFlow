@@ -45,7 +45,7 @@ export interface EditConfigInterface {
   /**
    * 是否允许节点旋转（旋转点的显隐）
    */
-  allowRotation?: boolean
+  allowRotate?: boolean
   /**
    * 显示节点悬浮时的外框
    */
@@ -93,7 +93,7 @@ const SilentConfig = {
   adjustEdgeStartAndEnd: false,
   adjustNodePosition: false,
   hideAnchors: true,
-  allowRotation: false,
+  allowRotate: false,
   nodeSelectedOutline: true,
   nodeTextEdit: false,
   edgeTextEdit: false,
@@ -111,7 +111,7 @@ const keys = [
   'adjustEdgeStartAndEnd',
   'adjustNodePosition',
   'hideAnchors',
-  'allowRotation',
+  'allowRotate',
   'hoverOutline',
   'nodeSelectedOutline',
   'edgeSelectedOutline',
@@ -135,7 +135,7 @@ export class EditConfigModel {
   @observable adjustEdgeStartAndEnd = false
   @observable adjustNodePosition = true
   @observable hideAnchors = false
-  @observable allowRotation = false
+  @observable allowRotate = false
   @observable hoverOutline = true
   @observable nodeSelectedOutline = true
   @observable edgeSelectedOutline = true
@@ -177,7 +177,7 @@ export class EditConfigModel {
         adjustEdgeStartAndEnd: this.adjustEdgeStartAndEnd,
         adjustNodePosition: this.adjustNodePosition,
         hideAnchors: this.hideAnchors,
-        allowRotation: this.allowRotation,
+        allowRotate: this.allowRotate,
         hoverOutline: this.hoverOutline,
         nodeSelectedOutline: this.nodeSelectedOutline,
         edgeSelectedOutline: this.edgeSelectedOutline,
