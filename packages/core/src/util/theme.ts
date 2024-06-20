@@ -120,6 +120,13 @@ export const defaultTheme: LogicFlow.Theme = {
     fill: '#fff',
     strokeWidth: 1.5,
   },
+
+  resizeControl: {
+    width: 7,
+    height: 7,
+    fill: '#fff',
+    stroke: '#000',
+  },
 }
 
 /* 主题（全局样式）相关工具方法 */

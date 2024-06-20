@@ -16,6 +16,7 @@ export type ResizeNodeConfig = NodeConfig & {
     }
   } & Record<string, unknown>
 }
+
 export type PCTResizeParams = {
   ResizePCT: { widthPCT: number; heightPCT: number }
   ResizeBasis: { basisWidth: number; basisHeight: number }
@@ -23,7 +24,7 @@ export type PCTResizeParams = {
 }
 
 export class RectResizeModel extends RectNodeModel {
-  private PCTResizeInfo?: PCTResizeParams
+  PCTResizeInfo?: PCTResizeParams
   minWidth!: number
   minHeight!: number
   maxWidth!: number
@@ -75,10 +76,6 @@ export class RectResizeModel extends RectNodeModel {
       fill: '#FFFFFF',
       stroke: '#000000',
     }
-  }
-
-  resize(deltaX: number, deltaY: number) {
-    console.log(deltaX, deltaY)
   }
 
   // 该方法需要在重设宽高和最大、最小限制后被调用，不建议在 initNodeData() 方法中使用

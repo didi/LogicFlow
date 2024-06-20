@@ -18,6 +18,7 @@ import {
   ElementState,
   EventType,
 } from '../../constant'
+import { ResizeControl } from '../../view/Control'
 
 import AnchorConfig = Model.AnchorConfig
 import GraphElements = LogicFlow.GraphElements
@@ -26,6 +27,10 @@ import NodeConfig = LogicFlow.NodeConfig
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import CommonTheme = LogicFlow.CommonTheme
+
+import ResizeInfo = ResizeControl.ResizeInfo
+import ResizeNodeData = ResizeControl.ResizeNodeData
+import PCTResizeParams = ResizeControl.PCTResizeParams
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -63,6 +68,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   public get width() {
     return this._width
   }
+
   public set width(value: number) {
     this._width = value
   }
@@ -71,9 +77,16 @@ export class BaseNodeModel implements IBaseNodeModel {
   public get height() {
     return this._height
   }
+
   public set height(value: number) {
     this._height = value
   }
+
+  minWidth: number = 30
+  minHeight: number = 30
+  maxWidth: number = 2000
+  maxHeight: number = 2000
+  PCTResizeInfo?: PCTResizeParams
 
   // 根据与 (x, y) 的偏移量计算 anchors 的坐标
   @observable anchorsOffset: BaseNodeModel.AnchorsOffsetItem[] = []
@@ -103,6 +116,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   get rotate() {
     return this._rotate
   }
+
   set rotate(value: number) {
     this._rotate = value
     const { x = 0, y = 0 } = this
@@ -121,7 +135,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   moveRules: Model.NodeMoveRule[] = [] // 节点移动之前的hook
   hasSetTargetRules = false // 用来限制rules的重复值
   hasSetSourceRules = false; // 用来限制rules的重复值
-  [propName: string]: unknown // 支持用户自定义属性
+  [propName: string]: any // 支持用户自定义属性
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel
@@ -160,6 +174,10 @@ export class BaseNodeModel implements IBaseNodeModel {
     if (!data.properties) {
       data.properties = {}
     }
+
+    const { width, height } = data.properties
+    if (width) this.width = width
+    if (height) this.height = height
 
     if (!data.id) {
       // 自定义节点id > 全局定义id > 内置
@@ -225,6 +243,26 @@ export class BaseNodeModel implements IBaseNodeModel {
       }
     }
   }
+
+  /**
+   * @overridable 支持重写
+   * 计算节点 resize 时
+   */
+  // TODO：重新计算宽高，还是用 svg 的
+  resize(resizeInfo: ResizeInfo): ResizeNodeData {
+    const { width, height, deltaX, deltaY } = resizeInfo
+    // 移动节点以及文本内容
+    this.move(deltaX, deltaY)
+
+    this.width = resizeInfo.width
+    this.height = resizeInfo.height
+    this.setProperties({ width, height })
+
+    return this.getData()
+  }
+
+  // TODO: 等比例缩放
+  proportionalResize() {}
 
   /**
    * 获取被保存时返回的数据
@@ -315,6 +353,15 @@ export class BaseNodeModel implements IBaseNodeModel {
   getRotateControlStyle(): CommonTheme {
     const { rotateControl } = this.graphModel.theme
     return cloneDeep(rotateControl)
+  }
+
+  /**
+   * @overrideable 支持重写
+   * 获取当前节点缩放控制节点的样式
+   */
+  getResizeControlStyle() {
+    const { resizeControl } = this.graphModel.theme
+    return cloneDeep(resizeControl)
   }
 
   /**
@@ -690,6 +737,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   setHitable(flag = true): void {
     this.isHitable = flag
   }
+
   @action
   setHittable(flag = true): void {
     this.isHittable = flag

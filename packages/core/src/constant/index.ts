@@ -53,6 +53,7 @@ export enum EventType {
   NODE_MOUSELEAVE = 'node:mouseleave',
   NODE_CONTEXTMENU = 'node:contextmenu',
   NODE_ROTATE = 'node:rotate',
+  NODE_RESIZE = 'node:resize',
 
   // 节点 properties 变化事件
   NODE_PROPERTIES_CHANGE = 'node:properties-change',
