@@ -7,20 +7,20 @@ import EventEmitter from '../event/eventEmitter'
 import { CommonTheme } from '../constant/DefaultTheme'
 import { EventType } from '../constant'
 
-interface IProps {
+interface IRotateControlProps {
   graphModel: GraphModel
   nodeModel: BaseNodeModel
   eventCenter: EventEmitter
   style: CommonTheme
 }
 
-class RotateControlPoint extends Component<IProps> {
-  private style = {}
+class RotateControlPoint extends Component<IRotateControlProps> {
+  readonly style = {}
   private defaultAngle!: number
   normal!: Vector
   stepperDrag: any
 
-  constructor(props: IProps) {
+  constructor(props: IRotateControlProps) {
     super(props)
     this.style = props.style
     this.stepperDrag = new StepDrag({

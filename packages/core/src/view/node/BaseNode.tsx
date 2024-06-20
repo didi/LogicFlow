@@ -431,7 +431,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   render() {
     const { model, graphModel } = this.props
     const {
-      editConfigModel: { hideAnchors, adjustNodePosition, allowRotation },
+      editConfigModel: { hideAnchors, adjustNodePosition, allowRotate },
       gridSize,
       transformModel: { SCALE_X },
     } = graphModel
@@ -442,7 +442,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         <g transform={transform}>
           {this.getShape()}
           {this.getText()}
-          {allowRotation && this.getRotateControl()}
+          {allowRotate && this.getRotateControl()}
         </g>
         {!hideAnchors && this.getAnchors()}
       </g>

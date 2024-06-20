@@ -1,4 +1,4 @@
-name: issue checker
+name: Issue Checker
 
 on:
   issues:
