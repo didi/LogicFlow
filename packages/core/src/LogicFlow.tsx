@@ -1722,6 +1722,7 @@ export namespace LogicFlow {
     snapline: EdgeTheme // 对齐线样式
     rotateControl: CommonTheme // 节点旋转控制点样式
     resizeControl: CommonTheme // 节点旋转控制点样式
+    resizeOutline: CommonTheme // 节点调整大小时的外框样式
 
     /**
      * REMIND: 当开启了跳转边的起点和终点(adjustEdgeStartAndEnd:true)后

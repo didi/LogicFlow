@@ -19,6 +19,7 @@ import {
   // RotateMatrix,
 } from '../../util'
 import RotateControlPoint from '../Rotate'
+import ResizeControlGroup from '../Control'
 
 type IProps = {
   model: BaseNodeModel
@@ -33,14 +34,11 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   P,
   IState
 > {
-  t: any
-  moveOffset?: LogicFlow.OffsetData
-
-  static getModel(defaultModel) {
-    return defaultModel
-  }
   static isObserved: boolean = false
   static extendsKey?: string
+
+  t: any
+  moveOffset?: LogicFlow.OffsetData
 
   stepDrag: StepDrag
   mouseUpDrag?: boolean
@@ -94,7 +92,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     console.log('componentDidUpdate --->>>')
   }
 
-  abstract getShape()
+  abstract getShape(): h.JSX.Element
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAnchorShape(_anchorData?: Model.AnchorConfig): h.JSX.Element | null {
@@ -136,6 +134,21 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           nodeModel={model}
           eventCenter={graphModel.eventCenter}
           style={style}
+        />
+      )
+    }
+  }
+
+  getResizeControl() {
+    const { model, graphModel } = this.props
+    const { isSelected, isHitable, enableRotate, isHovered } = model
+    const style = model.getResizeControlStyle()
+    if (isHitable && (isSelected || isHovered) && enableRotate) {
+      return (
+        <ResizeControlGroup
+          style={style}
+          model={model}
+          graphModel={graphModel}
         />
       )
     }
@@ -442,6 +455,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         <g transform={transform}>
           {this.getShape()}
           {this.getText()}
+          {this.getResizeControl()}
           {allowRotate && this.getRotateControl()}
         </g>
         {!hideAnchors && this.getAnchors()}

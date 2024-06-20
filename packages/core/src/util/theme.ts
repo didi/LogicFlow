@@ -127,12 +127,19 @@ export const defaultTheme: LogicFlow.Theme = {
     fill: '#fff',
     stroke: '#000',
   },
+
+  resizeOutline: {
+    fill: 'none',
+    stroke: 'transparent', // 矩形默认不显示调整边框
+    strokeWidth: 1,
+    strokeDasharray: '3,3',
+  },
 }
 
 /* 主题（全局样式）相关工具方法 */
-export const setupTheme: (
+export const setupTheme = (
   customTheme?: Partial<LogicFlow.Theme>,
-) => LogicFlow.Theme = function (customTheme) {
+): LogicFlow.Theme => {
   let theme = cloneDeep(defaultTheme)
 
   if (customTheme) {
