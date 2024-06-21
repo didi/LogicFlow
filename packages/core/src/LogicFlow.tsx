@@ -1022,8 +1022,8 @@ export class LogicFlow {
    * 注意: getGraphData返回的数据受到adapter影响，所以其数据格式不一定是logicflow内部图数据格式。
    * 如果实现通用插件，请使用getGraphRawData
    */
-  getGraphData(...params: any): GraphData | any {
-    const data = this.graphModel.modelToGraphData()
+  getGraphData(...params: any): GraphData | unknown {
+    const data = this.getGraphRawData()
     if (this.adapterOut) {
       return this.adapterOut(data, ...params)
     }
@@ -1459,6 +1459,14 @@ export namespace LogicFlow {
     properties?: PropertiesType
 
     [key: string]: unknown
+  }
+
+  // DnD 拖拽插件使用的 NodeConfig
+  export type OnDragNodeConfig = {
+    type: string
+    text?: TextConfig | string
+    properties?: Record<string, unknown>
+    [key: string]: any
   }
 
   export interface NodeConfig {
