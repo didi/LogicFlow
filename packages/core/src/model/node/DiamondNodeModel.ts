@@ -1,16 +1,21 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, forEach, map } from 'lodash-es'
 import { computed, observable } from 'mobx'
 import BaseNodeModel from './BaseNodeModel'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
-
 import PointTuple = LogicFlow.PointTuple
 import Point = LogicFlow.Point
+import { ResizeControl } from '../../view/Control'
+
+import ResizeInfo = ResizeControl.ResizeInfo
+import ResizeNodeData = ResizeControl.ResizeNodeData
 
 export class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE
   @observable rx = 30
   @observable ry = 50
+  @observable properties: any = {}
+
   getNodeStyle() {
     const style = super.getNodeStyle()
     const {
@@ -23,6 +28,7 @@ export class DiamondNodeModel extends BaseNodeModel {
       ...cloneDeep(diamond),
     }
   }
+
   @computed get points(): PointTuple[] {
     const { x, y, rx, ry } = this
     return [
@@ -34,17 +40,13 @@ export class DiamondNodeModel extends BaseNodeModel {
   }
 
   @computed get pointsPosition(): Point[] {
-    const pointsPosition = this.points.map((item) => ({
-      x: item[0],
-      y: item[1],
-    }))
-    return pointsPosition
+    return map(this.points, ([x, y]) => ({ x, y }))
   }
 
   @computed get width(): number {
     let min = Number.MAX_SAFE_INTEGER
     let max = Number.MIN_SAFE_INTEGER
-    this.points.forEach(([x]) => {
+    forEach(this.points, ([x]) => {
       if (x < min) {
         min = x
       }
@@ -58,7 +60,7 @@ export class DiamondNodeModel extends BaseNodeModel {
   @computed get height(): number {
     let min = Number.MAX_SAFE_INTEGER
     let max = Number.MIN_SAFE_INTEGER
-    this.points.forEach(([, y]) => {
+    forEach(this.points, ([, y]) => {
       if (y < min) {
         min = y
       }
@@ -70,11 +72,26 @@ export class DiamondNodeModel extends BaseNodeModel {
   }
 
   getDefaultAnchor() {
-    return this.points.map(([x1, y1], idx) => ({
-      x: x1,
-      y: y1,
+    return map(this.points, ([x, y], idx) => ({
+      x,
+      y,
       id: `${this.id}_${idx}`,
     }))
+  }
+
+  resize(resizeInfo: ResizeInfo): ResizeNodeData {
+    const { width, height, deltaX, deltaY } = resizeInfo
+    // 移动节点以及文本内容
+    this.move(deltaX / 2, deltaY / 2)
+
+    this.rx = width
+    this.ry = height
+    // this.setProperties({
+    //   rx,
+    //   ry,
+    // })
+
+    return this.getData()
   }
 }
 
