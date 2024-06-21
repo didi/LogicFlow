@@ -4,18 +4,11 @@ import { BaseNodeModel } from '../../model'
 import { snapToGrid } from '../../util'
 import { EventType } from '../../constant'
 
-import TextConfig = LogicFlow.TextConfig
 import Position = LogicFlow.Position
-
-export type NewNodeConfig = {
-  type: string
-  text?: TextConfig | string
-  properties?: Record<string, unknown>
-  [key: string]: any
-}
+import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 export class Dnd {
-  nodeConfig: NewNodeConfig | null = null
+  nodeConfig: OnDragNodeConfig | null = null
   lf: LogicFlow
   fakeNode: BaseNodeModel | null = null
 
@@ -40,7 +33,7 @@ export class Dnd {
     }
   }
 
-  startDrag(nodeConfig: NewNodeConfig) {
+  startDrag(nodeConfig: OnDragNodeConfig) {
     const { editConfigModel } = this.lf.graphModel
     if (!editConfigModel?.isSilentMode) {
       this.nodeConfig = nodeConfig

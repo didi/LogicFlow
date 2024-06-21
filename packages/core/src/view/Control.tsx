@@ -19,15 +19,12 @@ export enum ResizeControlIndex {
   LEFT_BOTTOM = 3,
 }
 
-export interface IResizeControlProps {
-  index: ResizeControlIndex
-  x: number
-  y: number
+export type IResizeControlProps = {
   model: BaseNodeModel
   graphModel: GraphModel
-}
+} & ControlItemProps
 
-export interface IResizeControlState {
+export type IResizeControlState = {
   startX: number
   startY: number
   endX: number
@@ -39,7 +36,7 @@ export class ResizeControl extends Component<
   IResizeControlProps,
   IResizeControlState
 > {
-  readonly index: number
+  readonly index: ResizeControlIndex
   readonly nodeModel: BaseNodeModel
   readonly graphModel: GraphModel
   readonly dragHandler: StepDrag
@@ -48,6 +45,7 @@ export class ResizeControl extends Component<
     super()
     const { index, model, graphModel } = props
     this.index = index
+    console.log('this.index', index)
     this.nodeModel = model
     this.graphModel = graphModel
 
@@ -122,7 +120,7 @@ export class ResizeControl extends Component<
    * @param freezeWidth
    * @param freezeHeight
    */
-  reCalcResizeInfo = (
+  recalcResizeInfo = (
     index: ResizeControlIndex,
     resizeInfo: ResizeInfo,
     pct = 1,
@@ -130,8 +128,8 @@ export class ResizeControl extends Component<
     freezeHeight = false,
   ): ResizeInfo => {
     const nextResizeInfo = cloneDeep(resizeInfo)
-    let { deltaX, deltaY } = resizeInfo
-    const { width, height, PCTResizeInfo } = resizeInfo
+    let { deltaX, deltaY } = nextResizeInfo
+    const { width, height, PCTResizeInfo } = nextResizeInfo
     if (PCTResizeInfo) {
       const sensitivity = 4 // 越低越灵敏
       let deltaScale = 0
@@ -174,6 +172,7 @@ export class ResizeControl extends Component<
         ),
         PCTResizeInfo.ScaleLimit.minScaleLimit,
       )
+
       const spcWidth = Math.round(
         (PCTResizeInfo.ResizePCT.widthPCT *
           PCTResizeInfo.ResizeBasis.basisWidth) /
@@ -207,6 +206,7 @@ export class ResizeControl extends Component<
       }
       return nextResizeInfo
     }
+
     // 如果限制了宽/高不变，对应的 width/height 保持一致
     switch (index) {
       case ResizeControlIndex.LEFT_TOP:
@@ -228,6 +228,7 @@ export class ResizeControl extends Component<
       default:
         break
     }
+
     return nextResizeInfo
   }
 
@@ -257,33 +258,27 @@ export class ResizeControl extends Component<
       PCTResizeInfo,
     }
 
-    const nextSize = this.reCalcResizeInfo(
+    const nextSize = this.recalcResizeInfo(
       this.index,
       resizeInfo,
       1,
       isFreezeWidth,
       isFreezeHeight,
     )
-    const {
-      width: nextWidth,
-      height: nextHeight,
-      deltaX: nextDeltaX,
-      deltaY: nextDeltaY,
-    } = nextSize
 
     // 限制放大缩小的最大最小范围
     if (
-      nextWidth < minWidth ||
-      nextWidth > maxWidth ||
-      nextHeight < minHeight ||
-      nextHeight > maxHeight
+      nextSize.width < minWidth ||
+      nextSize.width > maxWidth ||
+      nextSize.height < minHeight ||
+      nextSize.height > maxHeight
     ) {
       this.dragHandler.cancelDrag()
       return
     }
     // 如果限制了宽高不变，对应的 x/y 不产生位移
-    nextSize.deltaX = isFreezeWidth ? 0 : nextDeltaX
-    nextSize.deltaY = isFreezeWidth ? 0 : nextDeltaY
+    nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
+    nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
 
     const preNodeData = this.nodeModel.getData()
     const nextNodeData = this.nodeModel.resize(nextSize)
@@ -318,12 +313,12 @@ export class ResizeControl extends Component<
   }
 
   render(): h.JSX.Element {
-    const { x, y, index, model } = this.props
+    const { x, y, direction, model } = this.props
     const style = model.getResizeControlStyle()
     return (
-      <g className={`lf-resize-control-${index}`}>
+      <g className={`lf-resize-control lf-resize-control-${direction}`}>
         <Rect
-          className="lf-node-control"
+          className="lf-resize-control-content"
           x={x}
           y={y}
           {...style}
@@ -349,30 +344,30 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
     const { model, graphModel } = this.props
     const { minX, minY, maxX, maxY } = getNodeBBox(model)
     const controlList: ControlItemProps[] = [
-      // 左上角
       {
         index: ResizeControlIndex.LEFT_TOP,
+        direction: 'nw',
         x: minX,
         y: minY,
-      },
-      // 右上角
+      }, // 左上角
       {
         index: ResizeControlIndex.RIGHT_TOP,
+        direction: 'ne',
         x: maxX,
         y: minY,
-      },
-      // 右下角
+      }, // 右上角
       {
         index: ResizeControlIndex.RIGHT_BOTTOM,
+        direction: 'se',
         x: maxX,
         y: maxY,
-      },
-      // 左下角
+      }, // 右下角
       {
         index: ResizeControlIndex.LEFT_BOTTOM,
+        direction: 'sw',
         x: minX,
         y: maxY,
-      },
+      }, // 左下角
     ]
     return map(controlList, (control) => (
       <ResizeControl {...control} model={model} graphModel={graphModel} />
@@ -417,16 +412,27 @@ export namespace ResizeControl {
   }
   export type ResizeNodeData = NodeData & Partial<ResizeProps>
 
+  export type Direction = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w'
   export type ControlItemProps = {
     index: ResizeControlIndex
+    direction: Direction
     x: number
     y: number
   }
 
   export type PCTResizeParams = {
-    ResizePCT: { widthPCT: number; heightPCT: number }
-    ResizeBasis: { basisWidth: number; basisHeight: number }
-    ScaleLimit: { maxScaleLimit: number; minScaleLimit: number }
+    ResizePCT: {
+      widthPCT: number
+      heightPCT: number
+    }
+    ResizeBasis: {
+      basisWidth: number
+      basisHeight: number
+    }
+    ScaleLimit: {
+      maxScaleLimit: number
+      minScaleLimit: number
+    }
   }
 }
 

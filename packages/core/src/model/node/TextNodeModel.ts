@@ -6,6 +6,7 @@ import { getSvgTextWidthHeight } from '../../util'
 
 export class TextNodeModel extends BaseNodeModel {
   modelType = ModelType.TEXT_NODE
+
   getTextStyle() {
     const style = super.getTextStyle()
     const { text } = this.graphModel.theme
@@ -24,6 +25,7 @@ export class TextNodeModel extends BaseNodeModel {
     })
     return width
   }
+
   @computed get height(): number {
     const rows = String(this.text.value).split(/[\r\n]/g)
     const { fontSize } = this.getTextStyle()
