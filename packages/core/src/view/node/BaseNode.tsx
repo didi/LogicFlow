@@ -30,10 +30,7 @@ type IState = {
   isDragging?: boolean
 }
 
-export abstract class BaseNode<P extends IProps = IProps> extends Component<
-  P,
-  IState
-> {
+export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   static isObserved: boolean = false
   static extendsKey?: string
 
@@ -78,21 +75,16 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount --->>>')
     if (this.modelDisposer) {
       this.modelDisposer()
     }
   }
 
-  componentDidMount() {
-    console.log('componentDidMount --->>>')
-  }
+  componentDidMount() {}
 
-  componentDidUpdate() {
-    console.log('componentDidUpdate --->>>')
-  }
+  componentDidUpdate() {}
 
-  abstract getShape(): h.JSX.Element
+  abstract getShape(): h.JSX.Element | null
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAnchorShape(_anchorData?: Model.AnchorConfig): h.JSX.Element | null {
@@ -139,11 +131,11 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  getResizeControl() {
+  getResizeControl(): h.JSX.Element | null {
     const { model, graphModel } = this.props
-    const { isSelected, isHitable, enableRotate, isHovered } = model
+    const { isSelected, isHitable, enableResize, isHovered } = model
     const style = model.getResizeControlStyle()
-    if (isHitable && (isSelected || isHovered) && enableRotate) {
+    if (isHitable && (isSelected || isHovered) && enableResize) {
       return (
         <ResizeControlGroup
           style={style}
@@ -152,12 +144,12 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         />
       )
     }
+    return null
   }
 
   getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props
     // 文本被编辑的时候，显示编辑框，不显示文本。
-    console.log('model.state --->>>', model.state)
     if (model.state === ElementState.TEXT_EDIT) {
       return null
     }
@@ -340,8 +332,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     // 这里 IE 11不能正确显示
     const isDoubleClick = e.detail === 2
 
-    console.log('isDoubleClick --->>>', isDoubleClick)
-
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return
 
@@ -444,7 +434,12 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   render() {
     const { model, graphModel } = this.props
     const {
-      editConfigModel: { hideAnchors, adjustNodePosition, allowRotate },
+      editConfigModel: {
+        hideAnchors,
+        adjustNodePosition,
+        allowRotate,
+        allowResize,
+      },
       gridSize,
       transformModel: { SCALE_X },
     } = graphModel
@@ -455,8 +450,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         <g transform={transform}>
           {this.getShape()}
           {this.getText()}
-          {this.getResizeControl()}
           {allowRotate && this.getRotateControl()}
+          {allowResize && this.getResizeControl()}
         </g>
         {!hideAnchors && this.getAnchors()}
       </g>
@@ -481,9 +476,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onClick={this.handleClick}
-          onDblClick={() => {
-            console.log('onDblClick --->>>')
-          }}
           onMouseEnter={this.setHoverON}
           onMouseOver={this.setHoverON}
           onMouseLeave={this.setHoverOFF}

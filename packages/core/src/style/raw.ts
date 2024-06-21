@@ -190,4 +190,28 @@ export const content = `.lf-graph {
 .lf-rotate {
   cursor: grabbing;
 }
+.lf-resize-control-nw {
+  cursor: nw-resize;
+}
+.lf-resize-control-n {
+  cursor: n-resize;
+}
+.lf-resize-control-ne {
+  cursor: ne-resize;
+}
+.lf-resize-control-e {
+  cursor: e-resize;
+}
+.lf-resize-control-se {
+  cursor: se-resize;
+}
+.lf-resize-control-s {
+  cursor: s-resize;
+}
+.lf-resize-control-sw {
+  cursor: sw-resize;
+}
+.lf-resize-control-w {
+  cursor: w-resize;
+}
 `
