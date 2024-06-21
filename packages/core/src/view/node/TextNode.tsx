@@ -25,6 +25,10 @@ export class TextNode extends BaseNode<ITextNodeProps> {
     return <Rect {...rectAttr} />
   }
 
+  getResizeControl() {
+    return null
+  }
+
   getShape() {
     return <g>{this.getBackground()}</g>
   }

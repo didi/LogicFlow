@@ -1,25 +1,24 @@
-import { observable, action, toJS, isObservable, computed } from 'mobx'
+import { action, computed, isObservable, observable, toJS } from 'mobx'
 import { assign, cloneDeep, has, isNil, mapKeys } from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
+  formatData,
+  getClosestAnchor,
   getZIndex,
   Matrix,
-  TranslateMatrix,
-  getClosestAnchor,
   pickNodeConfig,
-  formatData,
+  TranslateMatrix,
 } from '../../util'
 import {
-  ModelType,
-  ElementType,
-  OverlapMode,
   ElementState,
+  ElementType,
   EventType,
+  ModelType,
+  OverlapMode,
 } from '../../constant'
 import { ResizeControl } from '../../view/Control'
-
 import AnchorConfig = Model.AnchorConfig
 import GraphElements = LogicFlow.GraphElements
 import TextConfig = LogicFlow.TextConfig
@@ -102,6 +101,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable draggable = true
   @observable visible = true
   @observable enableRotate = true
+  @observable enableResize = true
 
   // 其它属性
   graphModel: GraphModel
@@ -218,7 +218,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   /**
-   * 初始化文本属性
+   * 始化文本属性
    */
   private formatText(data: NodeConfig): void {
     if (!data.text) {
@@ -248,14 +248,13 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 支持重写
    * 计算节点 resize 时
    */
-  // TODO：重新计算宽高，还是用 svg 的
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
     const { width, height, deltaX, deltaY } = resizeInfo
     // 移动节点以及文本内容
-    this.move(deltaX, deltaY)
+    this.move(deltaX / 2, deltaY / 2)
 
-    this.width = resizeInfo.width
-    this.height = resizeInfo.height
+    this.width = width
+    this.height = height
     this.setProperties({
       width,
       height,
@@ -618,9 +617,9 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action move(deltaX: number, deltaY: number, isIgnoreRule = false): boolean {
-    let isAllowMoveX = false
-    let isAllowMoveY = false
+  isAllowMoveByXORY(deltaX: number, deltaY: number, isIgnoreRule: boolean) {
+    let isAllowMoveX: boolean
+    let isAllowMoveY: boolean
     if (isIgnoreRule) {
       isAllowMoveX = true
       isAllowMoveY = true
@@ -634,14 +633,24 @@ export class BaseNodeModel implements IBaseNodeModel {
         isAllowMoveY = r.y
       }
     }
+    return {
+      isAllowMoveX,
+      isAllowMoveY,
+    }
+  }
+
+  @action move(deltaX: number, deltaY: number, isIgnoreRule = false): boolean {
+    const { isAllowMoveX, isAllowMoveY } = this.isAllowMoveByXORY(
+      deltaX,
+      deltaY,
+      isIgnoreRule,
+    )
     if (isAllowMoveX) {
-      const targetX = this.x + deltaX
-      this.x = targetX
+      this.x = this.x + deltaX
       this.text && this.moveText(deltaX, 0)
     }
     if (isAllowMoveY) {
-      const targetY = this.y + deltaY
-      this.y = targetY
+      this.y = this.y + deltaY
       this.text && this.moveText(0, deltaY)
     }
     return isAllowMoveX || isAllowMoveY
@@ -652,32 +661,21 @@ export class BaseNodeModel implements IBaseNodeModel {
     deltaY: number,
     isIgnoreRule = false,
   ): [number, number] {
-    let isAllowMoveX = false
-    let isAllowMoveY = false
+    const { isAllowMoveX, isAllowMoveY } = this.isAllowMoveByXORY(
+      deltaX,
+      deltaY,
+      isIgnoreRule,
+    )
     let moveX = 0
     let moveY = 0
-    if (isIgnoreRule) {
-      isAllowMoveX = true
-      isAllowMoveY = true
-    } else {
-      const r = this.isAllowMoveNode(deltaX, deltaY)
-      if (typeof r === 'boolean') {
-        isAllowMoveX = r
-        isAllowMoveY = r
-      } else {
-        isAllowMoveX = r.x
-        isAllowMoveY = r.y
-      }
-    }
+
     if (isAllowMoveX && deltaX) {
-      const targetX = this.x + deltaX
-      this.x = targetX
+      this.x = this.x + deltaX
       this.text && this.moveText(deltaX, 0)
       moveX = deltaX
     }
     if (isAllowMoveY && deltaY) {
-      const targetY = this.y + deltaY
-      this.y = targetY
+      this.y = this.y + deltaY
       this.text && this.moveText(0, deltaY)
       moveY = deltaY
     }
@@ -731,6 +729,10 @@ export class BaseNodeModel implements IBaseNodeModel {
 
   @action setEnableRotate(flag = true): void {
     this.enableRotate = flag
+  }
+
+  @action setEnableResize(flag = true): void {
+    this.enableResize = flag
   }
 
   @action setHitable(flag = true): void {
@@ -826,7 +828,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     this.zIndex = zIndex
   }
 
-  @action updateAttributes(attributes) {
+  @action updateAttributes(attributes: any) {
     assign(this, attributes)
   }
 }
