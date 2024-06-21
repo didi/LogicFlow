@@ -7,8 +7,10 @@ import { useEffect, useRef } from 'react'
 import { combine, square, star, uml, user } from './nodes'
 import { animation, connection } from './edges'
 
+import GraphData = LogicFlow.GraphData
 import styles from './index.less'
-import GraphConfigData = LogicFlow.GraphConfigData
+
+import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -78,10 +80,22 @@ const data = {
       text: {
         x: 600,
         y: 200,
-        value: 'xxxxx',
+        value: 'node-1',
       },
       type: 'rect',
       x: 600,
+      y: 200,
+    },
+
+    {
+      id: 'custom-node-2',
+      text: {
+        x: 200,
+        y: 200,
+        value: 'node-2',
+      },
+      type: 'rect',
+      x: 200,
       y: 200,
     },
   ],
@@ -122,7 +136,7 @@ export default function BasicNode() {
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
         // width: 1200,
-        height: 400,
+        // height: 400,
         // adjustNodePosition: false,
         // isSilentMode: true,
         // overlapMode: 1,
@@ -137,6 +151,7 @@ export default function BasicNode() {
         adjustEdgeStartAndEnd: true,
         // adjustEdge: false,
         allowRotate: true,
+        allowResize: true,
         edgeTextEdit: true,
         keyboard: {
           enabled: true,
@@ -249,7 +264,7 @@ export default function BasicNode() {
   const handleRefreshGraph = () => {
     const lf = lfRef.current
     if (lf) {
-      const data = lf.getGraphData()
+      const data = lf.getGraphRawData()
       console.log('current graph data', data)
       const refreshData = LogicFlowUtil.refreshGraphId(data)
       console.log('after refresh graphId', data)
@@ -276,7 +291,7 @@ export default function BasicNode() {
 
   const handleTurnAnimationOn = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphConfigData
+      const { edges } = lfRef.current.getGraphData() as GraphData
       forEach(edges, (edge) => {
         lfRef.current?.openEdgeAnimation(edge.id)
       })
@@ -284,30 +299,15 @@ export default function BasicNode() {
   }
   const handleTurnAnimationOff = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphConfigData
+      const { edges } = lfRef.current.getGraphData() as GraphData
       forEach(edges, (edge) => {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })
     }
   }
 
-  const handleDragRect = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'rect',
-      text: 'xxxxx',
-    })
-  }
-  const handleDragCircle = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'circle',
-      r: 25,
-    })
-  }
-  const handleDragText = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'text',
-      text: '文本',
-    })
+  const handleDragItem = (node: OnDragNodeConfig) => {
+    lfRef?.current?.dnd.startDrag(node)
   }
 
   return (
@@ -446,12 +446,81 @@ export default function BasicNode() {
         节点面板
       </Divider>
       <Flex wrap="wrap" gap="small" justify="center" align="center">
-        {/* <Button key="rect" type="primary">节点 1</Button> */}
-        {/* <Button key="circle" type="primary">节点 2</Button> */}
-        {/* <Button key="text" type="text">文本</Button> */}
-        <div className="rect" onMouseDown={handleDragRect} />
-        <div className="circle" onMouseDown={handleDragCircle} />
-        <div className="text" onMouseDown={handleDragText}>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() =>
+            handleDragItem({
+              type: 'rect',
+              text: 'rect',
+            })
+          }
+        >
+          rect
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'circle',
+              text: 'circle',
+            })
+          }}
+        >
+          circle
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'diamond',
+              text: 'diamond',
+            })
+          }}
+        >
+          diamond
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'ellipse',
+              text: 'ellipse',
+            })
+          }}
+        >
+          ellipse
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'html',
+              text: 'html',
+            })
+          }}
+        >
+          html
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'polygon',
+              text: 'polygon',
+            })
+          }}
+        >
+          polygon
+        </div>
+        <div
+          className="dnd-item text"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'text',
+              text: '文本',
+            })
+          }}
+        >
           文本
         </div>
       </Flex>
