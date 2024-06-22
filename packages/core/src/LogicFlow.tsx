@@ -21,7 +21,7 @@ import Tool from './tool/tool'
 import { snapline } from './tool'
 import Keyboard from './keyboard'
 import History from './history/History'
-import { CallbackType, EventArgs } from './event/eventEmitter'
+import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
 import { initDefaultShortcut } from './keyboard/shortcut'
 import Extension = LogicFlow.Extension
@@ -1064,7 +1064,9 @@ export class LogicFlow {
       />,
       this.container,
     )
-    this.emit(EventType.GRAPH_RENDERED, this.graphModel.modelToGraphData())
+    this.emit(EventType.GRAPH_RENDERED, {
+      data: this.graphModel.modelToGraphData(),
+    })
   }
 
   /**
@@ -1247,27 +1249,35 @@ export class LogicFlow {
    * lf.on('node:click,node:contextmenu', (data) => {
    * });
    */
-  on(evt: string, callback: CallbackType) {
+  on<T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): void
+  on<T extends string>(evt: T, callback: EventCallback<T>): void
+  on(evt: string, callback: EventCallback) {
     this.graphModel.eventCenter.on(evt, callback)
   }
 
   /**
    * 撤销监听事件
    */
-  off(evt: string, callback: CallbackType) {
+  off<T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): void
+  off<T extends string>(evt: T, callback: EventCallback<T>): void
+  off(evt: string, callback: EventCallback) {
     this.graphModel.eventCenter.off(evt, callback)
   }
 
   /**
    * 监听事件，只监听一次
    */
-  once(evt: string, callback: CallbackType) {
+  once<T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): void
+  once<T extends string>(evt: T, callback: EventCallback<T>): void
+  once(evt: string, callback: EventCallback) {
     this.graphModel.eventCenter.once(evt, callback)
   }
 
   /**
    * 触发监听事件
    */
+  emit<T extends keyof EventArgs>(evts: T, eventArgs: CallbackArgs<T>): void
+  emit<T extends string>(evts: T, eventArgs: CallbackArgs<T>): void
   emit(evt: string, arg: EventArgs) {
     this.graphModel.eventCenter.emit(evt, arg)
   }
