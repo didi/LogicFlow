@@ -139,6 +139,8 @@ export class BaseNodeModel implements IBaseNodeModel {
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
     this.graphModel = graphModel
+    this.properties = data.properties || {}
+
     this.initNodeData(data)
     this.setAttributes()
   }
