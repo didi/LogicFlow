@@ -4,7 +4,7 @@ import Circle from './shape/Circle'
 import { GraphModel, BaseNodeModel } from '../model'
 import { StepDrag, TranslateMatrix, Vector } from '../util'
 import EventEmitter from '../event/eventEmitter'
-import { CommonTheme } from '../constant/DefaultTheme'
+import { CommonTheme } from '../constant/defaultTheme'
 import { EventType } from '../constant'
 
 interface IRotateControlProps {

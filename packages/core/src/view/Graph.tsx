@@ -10,7 +10,7 @@ import {
   BezierAdjustOverlay,
   ModificationOverlay,
 } from './overlay'
-import DnD from './behavior/DnD'
+import DnD from './behavior/dnd'
 import { observer } from '..'
 import { Options as LFOptions } from '../options'
 import Tool from '../tool/tool'
