@@ -314,6 +314,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       y: e.clientY,
     })
 
+    // TODO: 这里加入了 isSelected 与 isMultiple，主要是为 group 插件做的加强，有种被插件夺舍的感觉
     const eventOptions = {
       data: nodeData,
       e,
