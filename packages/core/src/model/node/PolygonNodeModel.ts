@@ -3,7 +3,6 @@ import { computed, observable } from 'mobx'
 import BaseNodeModel from './BaseNodeModel'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
-
 import PointTuple = LogicFlow.PointTuple
 import Point = LogicFlow.Point
 
@@ -15,6 +14,7 @@ export class PolygonNodeModel extends BaseNodeModel {
     [50, 100],
     [0, 50],
   ]
+
   getNodeStyle() {
     const style = super.getNodeStyle()
     const {
@@ -27,6 +27,7 @@ export class PolygonNodeModel extends BaseNodeModel {
       ...cloneDeep(polygon),
     }
   }
+
   /**
    * 由于大多数情况下，我们初始化拿到的多边形坐标都是基于原点的（例如绘图工具到处的svg）。
    * 在logicflow中对多边形进行移动，我们不需要去更新points，
@@ -34,12 +35,12 @@ export class PolygonNodeModel extends BaseNodeModel {
    */
   @computed get pointsPosition(): Point[] {
     const { x, y, width, height } = this
-    const pointsPosition = this.points.map((item) => ({
+    return this.points.map((item) => ({
       x: item[0] + x - width / 2,
       y: item[1] + y - height / 2,
     }))
-    return pointsPosition
   }
+
   @computed get width(): number {
     let min = Number.MAX_SAFE_INTEGER
     let max = Number.MIN_SAFE_INTEGER
@@ -53,6 +54,7 @@ export class PolygonNodeModel extends BaseNodeModel {
     })
     return max - min
   }
+
   @computed get height(): number {
     let min = Number.MAX_SAFE_INTEGER
     let max = Number.MIN_SAFE_INTEGER

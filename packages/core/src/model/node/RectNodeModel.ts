@@ -6,6 +6,7 @@ import { ModelType } from '../../constant'
 export class RectNodeModel extends BaseNodeModel {
   modelType = ModelType.RECT_NODE
   @observable radius = 0
+
   getDefaultAnchor() {
     const { x, y, width, height } = this
     return [
@@ -15,6 +16,7 @@ export class RectNodeModel extends BaseNodeModel {
       { x: x - width / 2, y, id: `${this.id}_3` },
     ]
   }
+
   getNodeStyle() {
     const style = super.getNodeStyle()
     const { rect } = this.graphModel.theme
