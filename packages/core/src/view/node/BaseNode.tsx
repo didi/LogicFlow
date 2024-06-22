@@ -6,7 +6,6 @@ import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
 import { ElementState, EventType } from '../../constant'
-import { EventArgs } from '../../event/eventEmitter'
 import {
   StepDrag,
   snapToGrid,
@@ -315,7 +314,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       y: e.clientY,
     })
 
-    const eventOptions: EventArgs = {
+    const eventOptions = {
       data: nodeData,
       e,
       position,
