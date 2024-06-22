@@ -18,6 +18,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
   stepDrag: StepDrag
   stepScrollX = 0
   stepScrollY = 0
+
   constructor(props: IProps) {
     super()
     const {
@@ -37,6 +38,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       isDragging: false,
     }
   }
+
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
@@ -144,6 +146,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       this.clickHandler(ev)
     }
   }
+
   render() {
     const {
       graphModel: { transformModel },

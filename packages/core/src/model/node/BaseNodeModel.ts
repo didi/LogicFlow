@@ -177,10 +177,6 @@ export class BaseNodeModel implements IBaseNodeModel {
       data.properties = {}
     }
 
-    const { width, height } = data.properties
-    if (width) this.width = width
-    if (height) this.height = height
-
     if (!data.id) {
       // 自定义节点id > 全局定义id > 内置
       const { idGenerator } = this.graphModel

@@ -85,14 +85,17 @@ const data = {
       type: 'rect',
       x: 600,
       y: 200,
+      properties: {
+        width: 80,
+        height: 120,
+      },
     },
-
     {
       id: 'custom-node-2',
       text: 'node-2',
       type: 'polygon',
-      x: 0,
-      y: 0,
+      x: 90,
+      y: 94,
     },
   ],
 }
@@ -174,6 +177,9 @@ export default function BasicNode() {
           color: '#FFFFFF',
         },
         grid: true,
+        // grid: {
+        //   size: 1,
+        // },
         edgeTextDraggable: true,
         edgeType: 'bezier',
         style: {
@@ -481,6 +487,10 @@ export default function BasicNode() {
             handleDragItem({
               type: 'ellipse',
               text: 'ellipse',
+              properties: {
+                rx: 40,
+                ry: 80,
+              },
             })
           }}
         >
@@ -504,6 +514,8 @@ export default function BasicNode() {
               type: 'polygon',
               text: 'polygon',
               properties: {
+                width: 110,
+                height: 100,
                 style: {
                   fill: '#ffd591',
                   stroke: '#ffa940',
