@@ -45,7 +45,6 @@ export class ResizeControl extends Component<
     super()
     const { index, model, graphModel } = props
     this.index = index
-    console.log('this.index', index)
     this.nodeModel = model
     this.graphModel = graphModel
 
@@ -236,10 +235,10 @@ export class ResizeControl extends Component<
     // TODO: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
     // 1. 计算当前 Control 的一些信息，
     const {
-      r,
-      rx,
+      r, // circle
+      rx, // ellipse/diamond
       ry,
-      width,
+      width, // rect/html
       height,
       PCTResizeInfo,
 
@@ -252,14 +251,14 @@ export class ResizeControl extends Component<
     const isFreezeHeight = minHeight === maxHeight
 
     const resizeInfo = {
-      width: width || rx || r,
-      height: height || ry || r,
+      width: r || rx || width,
+      height: r || ry || height,
       deltaX,
       deltaY,
       PCTResizeInfo,
     }
 
-    const pct = width ? 1 : 1 / 2
+    const pct = r || (rx && ry) ? 1 / 2 : 1
     const nextSize = this.recalcResizeInfo(
       this.index,
       resizeInfo,
@@ -284,6 +283,8 @@ export class ResizeControl extends Component<
 
     const preNodeData = this.nodeModel.getData()
     const nextNodeData = this.nodeModel.resize(nextSize)
+
+    console.log('nextNodeData ===>>>', nextNodeData)
 
     // 更新边
     this.updateEdgePointByAnchors()
@@ -316,6 +317,7 @@ export class ResizeControl extends Component<
 
   render(): h.JSX.Element {
     const { x, y, direction, model } = this.props
+    console.log('polygon index', this.index, 'x', x, 'y', y)
     const style = model.getResizeControlStyle()
     return (
       <g className={`lf-resize-control lf-resize-control-${direction}`}>
@@ -344,7 +346,9 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
 
   getResizeControl(): h.JSX.Element[] {
     const { model, graphModel } = this.props
+    console.log('polygon node', model.x, model.y, model.width, model.height)
     const { minX, minY, maxX, maxY } = getNodeBBox(model)
+
     const controlList: ControlItemProps[] = [
       {
         index: ResizeControlIndex.LEFT_TOP,
@@ -371,6 +375,8 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
         y: maxY,
       }, // 左下角
     ]
+
+    console.log('controlList --->>>', controlList)
     return map(controlList, (control) => (
       <ResizeControl {...control} model={model} graphModel={graphModel} />
     ))
