@@ -236,6 +236,7 @@ export class ResizeControl extends Component<
     // TODO: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
     // 1. 计算当前 Control 的一些信息，
     const {
+      r,
       rx,
       ry,
       width,
@@ -251,17 +252,18 @@ export class ResizeControl extends Component<
     const isFreezeHeight = minHeight === maxHeight
 
     const resizeInfo = {
-      width: width || rx,
-      height: height || ry,
+      width: width || rx || r,
+      height: height || ry || r,
       deltaX,
       deltaY,
       PCTResizeInfo,
     }
 
+    const pct = width ? 1 : 1 / 2
     const nextSize = this.recalcResizeInfo(
       this.index,
       resizeInfo,
-      1,
+      pct,
       isFreezeWidth,
       isFreezeHeight,
     )
@@ -383,7 +385,7 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
 
   render(): h.JSX.Element {
     return (
-      <g className="lf-resize-control">
+      <g className="lf-resize-control-group">
         {this.getResizeOutline()}
         {this.getResizeControl()}
       </g>
