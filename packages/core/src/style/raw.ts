@@ -187,7 +187,7 @@ export const content = `.lf-graph {
 .lf-edge-adjust-point {
   cursor: move;
 }
-.lf-rotate {
+.lf-rotate-control {
   cursor: grabbing;
 }
 .lf-resize-control-nw {
