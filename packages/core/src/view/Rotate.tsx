@@ -1,17 +1,17 @@
 import { Component } from 'preact/compat'
 import { map, reduce } from 'lodash-es'
 import Circle from './shape/Circle'
+import LogicFlow from '../LogicFlow'
+import { EventType } from '../constant'
+import EventEmitter from '../event/eventEmitter'
 import { GraphModel, BaseNodeModel } from '../model'
 import { StepDrag, TranslateMatrix, Vector } from '../util'
-import EventEmitter from '../event/eventEmitter'
-import { CommonTheme } from '../constant/defaultTheme'
-import { EventType } from '../constant'
 
 interface IRotateControlProps {
   graphModel: GraphModel
   nodeModel: BaseNodeModel
   eventCenter: EventEmitter
-  style: CommonTheme
+  style: LogicFlow.CommonTheme
 }
 
 class RotateControlPoint extends Component<IRotateControlProps> {

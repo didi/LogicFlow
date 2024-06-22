@@ -376,7 +376,6 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
       }, // 左下角
     ]
 
-    console.log('controlList --->>>', controlList)
     return map(controlList, (control) => (
       <ResizeControl {...control} model={model} graphModel={graphModel} />
     ))
