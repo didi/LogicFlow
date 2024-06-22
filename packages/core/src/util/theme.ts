@@ -130,7 +130,8 @@ export const defaultTheme: LogicFlow.Theme = {
 
   resizeOutline: {
     fill: 'none',
-    stroke: 'transparent', // 矩形默认不显示调整边框
+    // stroke: 'transparent', // 矩形默认不显示调整边框
+    stroke: 'red', // 矩形默认不显示调整边框
     strokeWidth: 1,
     strokeDasharray: '3,3',
   },
