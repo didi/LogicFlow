@@ -117,7 +117,9 @@ export class TextEditTool extends Component<IToolProps, IState> {
     if (this.__prevText.id !== '') {
       const { text, id } = this.__prevText
       graphModel.updateText(id, text)
-      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, { ...this.__prevText })
+      graphModel.eventCenter.emit(EventType.TEXT_UPDATE, {
+        data: { ...this.__prevText },
+      })
       this.__prevText.id = ''
       this.__prevText.text = ''
       this.__prevText.type = ''

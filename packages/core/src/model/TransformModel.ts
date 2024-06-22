@@ -8,6 +8,13 @@ import PointTuple = LogicFlow.PointTuple
 
 export type ZoomParamType = boolean | number
 
+export type TransformData = Record<
+  'SCALE_X' | 'SCALE_Y' | 'SKEW_Y' | 'SKEW_X' | 'TRANSLATE_X' | 'TRANSLATE_Y',
+  number
+>
+
+export type TransformType = 'zoom' | 'resetZoom' | 'translate' | 'focusOn'
+
 export interface TransformInterface {
   SCALE_X: number
   SCALE_Y: number
@@ -172,7 +179,7 @@ export class TransformModel implements TransformInterface {
     return `${this.SCALE_X * 100}%`
   }
 
-  private emitGraphTransform(type: string) {
+  private emitGraphTransform(type: TransformType) {
     this.eventCenter.emit(EventType.GRAPH_TRANSFORM, {
       type,
       transform: {
