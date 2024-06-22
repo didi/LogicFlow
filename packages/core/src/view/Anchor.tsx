@@ -97,6 +97,7 @@ class Anchor extends Component<IProps, IState> {
     )
   }
 
+  // TODO: 确定 event 是否会有 null 和 undefined 的情况，事件类型做相应的适配
   onDragStart = ({ event }: Partial<IDragParams>) => {
     const { anchorData, nodeModel, graphModel } = this.props
     graphModel.selectNodeById(nodeModel.id)
@@ -105,7 +106,7 @@ class Anchor extends Component<IProps, IState> {
     }
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGSTART, {
       data: anchorData,
-      e: event,
+      e: event!,
       nodeModel,
     })
     this.setState({
@@ -174,7 +175,6 @@ class Anchor extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t)
     }
-    const edgeModel = this.checkEnd(event)
     this.setState({
       startX: 0,
       startY: 0,
@@ -188,9 +188,8 @@ class Anchor extends Component<IProps, IState> {
     const { graphModel, nodeModel, anchorData } = this.props
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
       data: anchorData,
-      e: event,
+      e: event!,
       nodeModel,
-      edgeModel,
     })
   }
 
@@ -270,7 +269,7 @@ class Anchor extends Component<IProps, IState> {
         const { anchorData } = this.props
         graphModel.eventCenter.emit(EventType.ANCHOR_DROP, {
           data: anchorData,
-          e: event,
+          e: event!,
           nodeModel,
           edgeModel,
         })
