@@ -4,7 +4,6 @@ import { observer } from '../..'
 import { ModelType } from '../../constant'
 import {
   GraphModel,
-  BaseNodeModel,
   LineEdgeModel,
   BezierEdgeModel,
   PolylineEdgeModel,
@@ -28,11 +27,18 @@ export class OutlineOverlay extends Component<IProps> {
     nodes.forEach((element) => {
       if (element.isHovered || element.isSelected) {
         const { isHovered, isSelected, x, y, width, height } = element
+        console.log(
+          'gogo element',
+          element.x,
+          element.y,
+          element.width,
+          element.height,
+        )
         if (
           (nodeSelectedOutline && isSelected) ||
           (hoverOutline && isHovered)
         ) {
-          const style = (element as BaseNodeModel).getOutlineStyle()
+          const style = element.getOutlineStyle()
           let attributes = {}
           Object.keys(style).forEach((key) => {
             if (key !== 'hover') {
@@ -53,6 +59,8 @@ export class OutlineOverlay extends Component<IProps> {
               {...{
                 x,
                 y,
+                // width: width + 10,
+                // height: height + 10,
                 width: width + 10,
                 height: height + 10,
               }}

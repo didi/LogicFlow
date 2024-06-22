@@ -89,14 +89,10 @@ const data = {
 
     {
       id: 'custom-node-2',
-      text: {
-        x: 200,
-        y: 200,
-        value: 'node-2',
-      },
-      type: 'rect',
-      x: 200,
-      y: 200,
+      text: 'node-2',
+      type: 'polygon',
+      x: 0,
+      y: 0,
     },
   ],
 }
@@ -507,6 +503,14 @@ export default function BasicNode() {
             handleDragItem({
               type: 'polygon',
               text: 'polygon',
+              properties: {
+                style: {
+                  fill: '#ffd591',
+                  stroke: '#ffa940',
+                  strokeWidth: 2,
+                  fillRule: 'evenodd',
+                },
+              },
             })
           }}
         >

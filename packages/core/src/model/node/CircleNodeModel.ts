@@ -33,6 +33,8 @@ export class CircleNodeModel extends BaseNodeModel {
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
     super(data, graphModel)
+    this.properties = data.properties || {}
+
     this.setAttributes()
   }
 
