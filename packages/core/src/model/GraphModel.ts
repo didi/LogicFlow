@@ -10,7 +10,7 @@ import {
 } from '.'
 import {
   DEFAULT_VISIBLE_SPACE,
-  ElementMaxZIndex,
+  ELEMENT_MAX_Z_INDEX,
   ElementState,
   ElementType,
   EventType,
@@ -657,7 +657,7 @@ export class GraphModel {
     if (element) {
       if (this.overlapMode === OverlapMode.DEFAULT) {
         this.topElement?.setZIndex()
-        element.setZIndex(ElementMaxZIndex)
+        element.setZIndex(ELEMENT_MAX_Z_INDEX)
         this.topElement = element
       }
       if (this.overlapMode === OverlapMode.INCREASE) {

@@ -1,4 +1,5 @@
 export const DEFAULT_VISIBLE_SPACE = 200
+export const ELEMENT_MAX_Z_INDEX = 9999
 
 export enum ElementState {
   DEFAULT = 1, // 默认显示
@@ -122,5 +123,3 @@ export enum SegmentDirection {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical',
 }
-
-export const ElementMaxZIndex = 9999

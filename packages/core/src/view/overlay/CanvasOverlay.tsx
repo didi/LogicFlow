@@ -1,9 +1,9 @@
 import { Component } from 'preact/compat'
+import Dnd from '../behavior/dnd'
 import { observer } from '../..'
 import GraphModel from '../../model/GraphModel'
 import { EventType } from '../../constant'
 import { StepDrag, IDragParams } from '../../util'
-import Dnd from '../behavior/DnD'
 
 type IProps = {
   graphModel: GraphModel
