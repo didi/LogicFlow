@@ -11,7 +11,9 @@ export type EventsType<T extends string = string> = {
 
 export type CallbackArgs<T extends string = string> = T extends keyof EventArgs
   ? EventArgs[T]
-  : Record<string, any>
+  : // 如果不是内部定义的事件类型，那么允许用户抛出任何类型的参数
+    // 这部分的类型定义由用户自己来保证
+    any
 
 export type EventCallback<T extends string = string> = (
   args: CallbackArgs<T>,
