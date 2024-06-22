@@ -10,9 +10,12 @@ import PointTuple = LogicFlow.PointTuple
 import NodeConfig = LogicFlow.NodeConfig
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
+import { normalizePolygon } from '../../util'
 
 export type IPolygonNodeProperties = {
   points?: PointTuple[]
+  width?: number
+  height?: number
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
@@ -29,6 +32,11 @@ export class PolygonNodeModel extends BaseNodeModel {
     [190, 78],
     [10, 78],
     [160, 198], // 五角星
+    // [90, 0],
+    // [30, 188],
+    // [180, 68],
+    // [0, 68],
+    // [150, 188], // 五角星
   ]
   @observable properties: IPolygonNodeProperties = {}
 
@@ -42,10 +50,15 @@ export class PolygonNodeModel extends BaseNodeModel {
   setAttributes() {
     super.setAttributes()
 
-    const { points } = this.properties
-    if (points) {
-      this.points = points
-    }
+    const { points, width, height } = this.properties
+    // DONE: 如果设置了 points，又设置了节点的宽高，则需要做如下操作
+    // 1. 将 points 的位置置零，即将图形向原点移动（找到 points 中 x,y 的最小值，所有坐标值减掉该值）
+    // 2. 按宽高的比例重新计算最新的 points
+    // if (points) {
+    //   this.points = points
+    // }
+    const nextPoints = points || this.points
+    this.points = normalizePolygon(nextPoints, width, height)
   }
 
   getNodeStyle() {

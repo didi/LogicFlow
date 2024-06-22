@@ -1,4 +1,13 @@
-export function Polygon(props) {
+import LogicFlow from '../../LogicFlow'
+
+// TODO: 定义基础图形的类型
+export type IPolygonProps = {
+  points: LogicFlow.PointTuple[]
+  className?: string
+  [key: string]: any
+}
+
+export function Polygon(props: IPolygonProps) {
   const { points, className } = props
   const attrs: Record<string, any> = {
     fill: 'transparent',
