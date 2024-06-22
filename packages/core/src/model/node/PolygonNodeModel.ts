@@ -1,19 +1,52 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, map } from 'lodash-es'
 import { computed, observable } from 'mobx'
 import BaseNodeModel from './BaseNodeModel'
+import GraphModel from '../GraphModel'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
-import PointTuple = LogicFlow.PointTuple
+import { ResizeControl } from '../../view/Control'
 import Point = LogicFlow.Point
+import PointTuple = LogicFlow.PointTuple
+import NodeConfig = LogicFlow.NodeConfig
+import ResizeInfo = ResizeControl.ResizeInfo
+import ResizeNodeData = ResizeControl.ResizeNodeData
+
+export type IPolygonNodeProperties = {
+  points?: PointTuple[]
+  style?: LogicFlow.CommonTheme
+  textStyle?: LogicFlow.CommonTheme
+
+  [key: string]: any
+}
 
 export class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE
   @observable points: PointTuple[] = [
-    [50, 0],
-    [100, 50],
-    [50, 100],
-    [0, 50],
+    // [50, 0], [100, 50], [50, 100], [0, 50] // 菱形
+    // [0,100], [50,25], [50,75], [100,0] // 闪电
+    [100, 10],
+    [40, 198],
+    [190, 78],
+    [10, 78],
+    [160, 198], // 五角星
   ]
+  @observable properties: IPolygonNodeProperties = {}
+
+  constructor(data: NodeConfig, graphModel: GraphModel) {
+    super(data, graphModel)
+    this.properties = data.properties || {}
+
+    this.setAttributes()
+  }
+
+  setAttributes() {
+    super.setAttributes()
+
+    const { points } = this.properties
+    if (points) {
+      this.points = points
+    }
+  }
 
   getNodeStyle() {
     const style = super.getNodeStyle()
@@ -22,9 +55,11 @@ export class PolygonNodeModel extends BaseNodeModel {
         theme: { polygon },
       },
     } = this
+    const { style: customStyle } = this.properties
     return {
       ...style,
       ...cloneDeep(polygon),
+      ...(cloneDeep(customStyle) || {}),
     }
   }
 
@@ -76,6 +111,27 @@ export class PolygonNodeModel extends BaseNodeModel {
       y: y + y1 - height / 2,
       id: `${this.id}_${idx}`,
     }))
+  }
+
+  resize(resizeInfo: ResizeInfo): ResizeNodeData {
+    const { width, height, deltaX, deltaY } = resizeInfo
+    // 移动节点以及文本内容
+    this.move(deltaX / 2, deltaY / 2)
+
+    const nextPoints: PointTuple[] = map(this.points, ([x, y]) => [
+      (x * width) / this.width,
+      (y * height) / this.height,
+    ])
+    this.points = nextPoints
+    console.log('nextPoints', nextPoints)
+    console.log('gogo this', this.x, this.y, this.width, this.height)
+
+    this.properties.points = nextPoints
+    // this.setProperties({
+    //   points: toJS(nextPoints),
+    // })
+
+    return this.getData()
   }
 }
 

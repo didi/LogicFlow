@@ -1,11 +1,14 @@
 import { cloneDeep } from 'lodash-es'
 import { computed, observable } from 'mobx'
-import GraphModel from '../GraphModel'
 import BaseNodeModel from './BaseNodeModel'
+import GraphModel from '../GraphModel'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
+import { ResizeControl } from '../../view/Control'
 
 import NodeConfig = LogicFlow.NodeConfig
+import ResizeInfo = ResizeControl.ResizeInfo
+import ResizeNodeData = ResizeControl.ResizeNodeData
 
 export type IEllipseNodeProperties = {
   rx?: number
@@ -24,6 +27,8 @@ export class EllipseNodeModel extends BaseNodeModel {
 
   constructor(data: NodeConfig, graphModel: GraphModel) {
     super(data, graphModel)
+    this.properties = data.properties || {}
+
     this.setAttributes()
   }
 
@@ -68,6 +73,21 @@ export class EllipseNodeModel extends BaseNodeModel {
       { x, y: y + ry, id: `${this.id}_2` },
       { x: x - rx, y, id: `${this.id}_3` },
     ]
+  }
+
+  resize(resizeInfo: ResizeInfo): ResizeNodeData {
+    const { width, height, deltaX, deltaY } = resizeInfo
+    // 移动节点以及文本内容
+    this.move(deltaX / 2, deltaY / 2)
+
+    this.rx = width
+    this.ry = height
+    this.setProperties({
+      rx: width,
+      ry: height,
+    })
+
+    return this.getData()
   }
 }
 
