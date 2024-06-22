@@ -13,6 +13,17 @@ import GraphData = LogicFlow.GraphData
 import AnchorConfig = Model.AnchorConfig
 import ClientPosition = LogicFlow.ClientPosition
 
+type ClickEventArgs = {
+  /**
+   * 点击后节点是否处于选中状态
+   */
+  isSelected: boolean
+  /**
+   * 是否为多选状态
+   */
+  isMultiple: boolean
+}
+
 type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
   {
     /**
@@ -38,7 +49,7 @@ interface NodeEventArgs {
   /**
    * 单击节点
    */
-  'node:click': NodeEventArgsPick<'data' | 'e' | 'position'>
+  'node:click': NodeEventArgsPick<'data' | 'e' | 'position'> & ClickEventArgs
   /**
    * 双击节点
    */
