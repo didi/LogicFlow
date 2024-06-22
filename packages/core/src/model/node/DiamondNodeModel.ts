@@ -1,20 +1,48 @@
 import { cloneDeep, forEach, map } from 'lodash-es'
 import { computed, observable } from 'mobx'
+import GraphModel from '../GraphModel'
 import BaseNodeModel from './BaseNodeModel'
 import LogicFlow from '../../LogicFlow'
 import { ModelType } from '../../constant'
-import PointTuple = LogicFlow.PointTuple
-import Point = LogicFlow.Point
 import { ResizeControl } from '../../view/Control'
 
+import Point = LogicFlow.Point
+import PointTuple = LogicFlow.PointTuple
+import NodeConfig = LogicFlow.NodeConfig
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
+
+export type IDiamondNodeProperties = {
+  rx?: number
+  ry?: number
+  style?: LogicFlow.CommonTheme
+  textStyle?: LogicFlow.CommonTheme
+
+  [key: string]: any
+}
 
 export class DiamondNodeModel extends BaseNodeModel {
   modelType = ModelType.DIAMOND_NODE
   @observable rx = 30
   @observable ry = 50
-  @observable properties: any = {}
+  @observable properties: IDiamondNodeProperties = {}
+
+  constructor(data: NodeConfig, graphModel: GraphModel) {
+    super(data, graphModel)
+    this.setAttributes()
+  }
+
+  setAttributes() {
+    super.setAttributes()
+
+    const { rx, ry } = this.properties
+    if (rx) {
+      this.rx = rx
+    }
+    if (ry) {
+      this.ry = ry
+    }
+  }
 
   getNodeStyle() {
     const style = super.getNodeStyle()
@@ -86,10 +114,10 @@ export class DiamondNodeModel extends BaseNodeModel {
 
     this.rx = width
     this.ry = height
-    // this.setProperties({
-    //   rx,
-    //   ry,
-    // })
+    this.setProperties({
+      rx: width,
+      ry: height,
+    })
 
     return this.getData()
   }
