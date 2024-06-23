@@ -27,13 +27,6 @@ export class OutlineOverlay extends Component<IProps> {
     nodes.forEach((element) => {
       if (element.isHovered || element.isSelected) {
         const { isHovered, isSelected, x, y, width, height } = element
-        console.log(
-          'gogo element',
-          element.x,
-          element.y,
-          element.width,
-          element.height,
-        )
         if (
           (nodeSelectedOutline && isSelected) ||
           (hoverOutline && isHovered)
