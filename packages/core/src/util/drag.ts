@@ -102,6 +102,7 @@ export class StepDrag {
     })
     this.startTime = new Date().getTime()
   }
+
   handleMouseMove = (e: MouseEvent) => {
     if (this.isStopPropagation) e.stopPropagation()
     if (!this.isStartDragging) return
@@ -150,6 +151,7 @@ export class StepDrag {
       })
     }
   }
+
   handleMouseUp = (e: MouseEvent) => {
     const DOC = window.document
 
