@@ -52,7 +52,7 @@ export class ResizeControl extends Component<
     this.dragHandler = new StepDrag({
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
-      step: 1,
+      step: graphModel.gridSize,
     })
   }
 
@@ -304,9 +304,11 @@ export class ResizeControl extends Component<
 
   // 由于将拖拽放大缩小改成丝滑模式，这个时候需要再拖拽结束的时候，将节点的位置更新到 grid 上。
   onDragEnd = () => {
-    const { gridSize = 1 } = this.graphModel
-    const x = gridSize * Math.round(this.nodeModel.x / gridSize)
-    const y = gridSize * Math.round(this.nodeModel.y / gridSize)
+    // const { gridSize = 1 } = this.graphModel
+    // const x = gridSize * Math.round(this.nodeModel.x / gridSize)
+    // const y = gridSize * Math.round(this.nodeModel.y / gridSize)
+    const x = this.nodeModel.x
+    const y = this.nodeModel.y
     this.nodeModel.moveTo(x, y)
 
     // 先触发 onDragging() -> 更新边 -> 再触发用户自定义的 getDefaultAnchor()，所以 onDragging()
@@ -317,7 +319,6 @@ export class ResizeControl extends Component<
 
   render(): h.JSX.Element {
     const { x, y, direction, model } = this.props
-    console.log('polygon index', this.index, 'x', x, 'y', y)
     const style = model.getResizeControlStyle()
     return (
       <g className={`lf-resize-control lf-resize-control-${direction}`}>
@@ -346,7 +347,6 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
 
   getResizeControl(): h.JSX.Element[] {
     const { model, graphModel } = this.props
-    console.log('polygon node', model.x, model.y, model.width, model.height)
     const { minX, minY, maxX, maxY } = getNodeBBox(model)
 
     const controlList: ControlItemProps[] = [
