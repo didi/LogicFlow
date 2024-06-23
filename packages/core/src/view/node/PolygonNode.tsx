@@ -14,7 +14,6 @@ export class PolygonNode extends BaseNode<IPolygonNodeProps> {
 
   getShape() {
     const { model } = this.props
-    console.log('polygon model', model)
     const { x, y, width, height, points } = model as PolygonNodeModel
     const style = model.getNodeStyle()
     const attr = {
