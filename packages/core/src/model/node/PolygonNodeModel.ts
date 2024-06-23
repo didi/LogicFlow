@@ -136,8 +136,6 @@ export class PolygonNodeModel extends BaseNodeModel {
       (y * height) / this.height,
     ])
     this.points = nextPoints
-    console.log('nextPoints', nextPoints)
-    console.log('gogo this', this.x, this.y, this.width, this.height)
 
     this.properties.points = nextPoints
     // this.setProperties({
