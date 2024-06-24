@@ -275,7 +275,7 @@ export class Group {
     return nodeIds
   }
 
-  graphRendered = (data: LogicFlow.GraphData) => {
+  graphRendered = ({ data }: { data: LogicFlow.GraphData }) => {
     // 如果节点
     if (data && data.nodes) {
       data.nodes.forEach((node) => {

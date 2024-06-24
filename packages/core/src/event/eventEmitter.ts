@@ -1,14 +1,26 @@
-export interface EventType {
-  readonly callback: (params?: unknown) => unknown
+import { EventArgs } from './eventArgs'
+
+export interface EventType<T extends string = string> {
+  readonly callback: EventCallback<T>
   readonly once: boolean
 }
-export type EventArgs = { [key: string]: any }
-export type EventsType = { [key: string]: EventType[] }
-export type CallbackType = (...args: any[]) => void
+
+export type EventsType<T extends string = string> = {
+  [k in T]?: EventType<k>[]
+}
+
+export type CallbackArgs<T extends string = string> = T extends keyof EventArgs
+  ? EventArgs[T]
+  : // 如果不是内部定义的事件类型，那么允许用户抛出任何类型的参数
+    // 这部分的类型定义由用户自己来保证
+    any
+
+export type EventCallback<T extends string = string> = (
+  args: CallbackArgs<T>,
+) => void
 
 const WILDCARD = '*'
 
-export { EventEmitter }
 /* event-emitter */
 export default class EventEmitter {
   private _events: EventsType = {}
@@ -16,32 +28,42 @@ export default class EventEmitter {
   /**
    * 监听一个事件
    * @param evt 事件名称
-   * @param callback
-   * @param once
+   * @param callback 回调函数
+   * @param once 是否只监听一次
    */
-  on(evt: string, callback: CallbackType, once?: boolean) {
+  on<T extends keyof EventArgs>(
+    evt: T,
+    callback: EventCallback<T>,
+    once?: boolean,
+  ): void
+  on<T extends string>(evt: T, callback: EventCallback<T>, once?: boolean): void
+  on(evt: string, callback: EventCallback, once?: boolean) {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       if (!this._events[evKey]) {
         this._events[evKey] = []
       }
-      this._events[evKey].push({
+      this._events[evKey]!.push({
         callback,
         once: !!once,
       })
     })
-    return this
   }
 
   /**
    * 监听一个事件一次
-   * @param evt
-   * @param callback
+   * @param evt 事件名称
+   * @param callback 回调函数
    */
-  once(evt: string, callback: CallbackType) {
+  once<T extends keyof EventArgs>(
+    evt: T,
+    callback: (args: EventArgs[T]) => void,
+  ): void
+  once<T extends string>(evt: T, callback: EventCallback<T>): void
+  once(evt: string, callback: EventCallback) {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
-      return this.on(evKey, callback, true)
+      this.on(evKey, callback, true)
     })
   }
 
@@ -50,9 +72,12 @@ export default class EventEmitter {
    * @param evts
    * @param eventArgs
    */
-  emit(evts: string, eventArgs: EventArgs) {
+  emit<T extends keyof EventArgs>(evts: T, eventArgs: CallbackArgs<T>): void
+  emit<T extends string>(evts: T, eventArgs: CallbackArgs<T>): void
+  emit(evts: string, eventArgs: EventCallback) {
     evts?.split(',').forEach((evt) => {
       const events = this._events[evt] || []
+      // TODO: 这是什么？？？
       const wildcardEvents = this._events[WILDCARD] || []
       // 实际的处理 emit 方法
       const doEmit = (es: EventType[]) => {
@@ -79,11 +104,20 @@ export default class EventEmitter {
   }
 
   /**
-   * 取消监听一个事件，或者一个channel
-   * @param evts
-   * @param callback
+   * 取消事件监听
+   * @param evts 事件名称
+   * @param callback 回调函数
+   *
+   * - evts 为空时，清除所有事件的监听器
+   * - evts 非空，callback 为空时，清除指定事件的所有监听器
+   * - evts 非空，callback 非空，进行对象比较，清除指定事件的指定监听器
    */
-  off(evts: string, callback?: CallbackType) {
+  off<T extends keyof EventArgs>(
+    evts: T,
+    callback?: (args: EventArgs[T]) => void,
+  ): void
+  off<T extends string>(evts: T, callback?: EventCallback<T>): void
+  off(evts: string, callback?: EventCallback) {
     if (!evts) {
       // evt 为空全部清除
       this._events = {}
@@ -108,7 +142,6 @@ export default class EventEmitter {
         }
       }
     })
-    return this
   }
 
   /* 当前所有的事件 */
@@ -116,3 +149,5 @@ export default class EventEmitter {
     return this._events
   }
 }
+
+export { EventEmitter, EventArgs }

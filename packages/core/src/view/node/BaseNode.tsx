@@ -6,7 +6,6 @@ import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
 import { ElementState, EventType } from '../../constant'
-import { EventArgs } from '../../event/eventEmitter'
 import {
   StepDrag,
   snapToGrid,
@@ -320,7 +319,8 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       y: e.clientY,
     })
 
-    const eventOptions: EventArgs = {
+    // TODO: 这里加入了 isSelected 与 isMultiple，主要是为 group 插件做的加强，有种被插件夺舍的感觉
+    const eventOptions = {
       data: nodeData,
       e,
       position,
