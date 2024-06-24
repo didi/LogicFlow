@@ -1,7 +1,8 @@
 import { Component } from 'preact/compat'
 import { observer } from '../..'
-import { GraphModel } from '../../model'
 import { createUuid } from '../../util'
+import { GraphModel } from '../../model'
+import { DEFAULT_GRID_SIZE } from '../../constant'
 
 export type GridOptions = {
   /**
@@ -37,7 +38,7 @@ export class Grid extends Component<IProps> {
 
     const { color, thickness = 2 } = config ?? {}
 
-    const length = Math.min(Math.max(2, thickness), size / 2) // 2 < length < size /2
+    const length = Math.min(Math.max(1.5, thickness), size / 2) // 2 < length < size /2
     let opacity = 1
     if (!visible) {
       opacity = 0
@@ -122,7 +123,7 @@ export class Grid extends Component<IProps> {
 }
 
 Grid.defaultProps = {
-  size: 20,
+  size: DEFAULT_GRID_SIZE,
   visible: true,
   type: 'dot',
   config: {
