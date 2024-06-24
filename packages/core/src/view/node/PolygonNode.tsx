@@ -8,10 +8,6 @@ export type IPolygonNodeProps = {
 }
 
 export class PolygonNode extends BaseNode<IPolygonNodeProps> {
-  getText() {
-    return null
-  }
-
   getShape() {
     const { model } = this.props
     const { x, y, width, height, points } = model as PolygonNodeModel
