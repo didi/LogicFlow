@@ -1,15 +1,20 @@
 import { HtmlNode, HtmlNodeModel, h } from '@logicflow/core';
 
 class StepNodeView extends HtmlNode {
-  setHtml(rootEl: HTMLElement) {
-    const { properties } = this.props.model;
-    const text: any = properties.text;
-    const innerText = text.value;
-    const isAnimation = properties.isAnimation;
+  getText() {
+    return null;
+  }
+
+  setHtml(rootEl: SVGForeignObjectElement) {
+    const { model } = this.props;
+    const {
+      properties: { isAnimation },
+    } = model;
+    const nodeData = model.getData();
 
     const el = document.createElement('div');
     el.className = `step-wrapper spin ${isAnimation ? 'is-animate' : ''}`;
-    const html = `<div class='text'>${innerText}</div>`;
+    const html = `<div class='text'>${nodeData.text?.value}</div>`;
     const animationDom = `<div class='border-div border-animate'><div>`;
     // 需要先把之前渲染的子节点清除掉。
     el.innerHTML = isAnimation ? html + animationDom : html;
@@ -22,10 +27,12 @@ class StepNodeModel extends HtmlNodeModel {
   setAttributes() {
     this.width = 120;
     this.height = 50;
-    if (this.text) {
-      this.properties.text = this.text;
-      this.text.value = '';
-    }
+
+    // 错误之源 -> 这种错误写法，应该写入教科书
+    // if (this.text) {
+    //   this.properties.text = this.text;
+    //   this.text.value = '';
+    // }
   }
 }
 
