@@ -3,7 +3,7 @@ import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 import { GraphModel } from './model'
 import { KeyboardDef } from './keyboard'
-import { OverlapMode } from './constant'
+import { DEFAULT_GRID_SIZE, OverlapMode } from './constant'
 
 export namespace Options {
   import NodeData = LogicFlow.NodeData
@@ -135,7 +135,7 @@ export namespace Options {
     const result = assign({}, defaults, others) as Options.Definition
 
     const defaultGrid: GridOptions = {
-      size: 20,
+      size: DEFAULT_GRID_SIZE,
       type: 'dot',
       visible: true,
       config: {
