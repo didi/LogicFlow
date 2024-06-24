@@ -81,13 +81,28 @@ export class History {
     this.undos.push(model.modelToGraphData())
 
     this.stopWatch = deepObserve(
+      // TODO：避免用户触发「The same observable object cannot appear twice in the same tree」 错误
+      // 例如：在自定义节点的 setAttributes 方法中，将 nodeModel 属性赋值给另一个 observable 属性
+      // eg:
+      // setAttributes() {
+      //   this.width = 120
+      //   this.height = 50
+      //
+      //   if (this.text) {
+      //     this.properties.text = this.text;
+      //     this.text.value = '';
+      //   }
+      // }
+      // 解决方案：使用 cloneDeep 方法，将 observable 对象克隆一份。需要测试下面操作是否会造成其它问题
+      // https://stackoverflow.com/questions/55328504/a-node-cannot-exists-twice-in-the-state-tree-mobx-state-tree
+      // cloneDeep(model),
       model,
       debounce(() => {
-        // 数据变更后，把最新的当前model数据存起来，并清空redos。
-        // 因为这个回调函数的触发，一般是用户交互而引起的，所以按正常逻辑需要清空redos。
+        // 数据变更后，把最新的当前model数据存起来，并清空 redos。
+        // 因为这个回调函数的触发，一般是用户交互而引起的，所以按正常逻辑需要清空 redos。
         const data = model.modelToHistoryData()
         if (data) {
-          this.add(data)
+          this.add({ ...data })
         }
       }, this.waitTime),
     )

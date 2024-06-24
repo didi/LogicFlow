@@ -1,6 +1,6 @@
 {
-  "private": true,
   "name": "@logicflow/feature-examples",
+  "private": true,
   "author": "boyongjiong <boyongjiong@didiglobal.com>",
   "scripts": {
     "dev": "umi dev",
