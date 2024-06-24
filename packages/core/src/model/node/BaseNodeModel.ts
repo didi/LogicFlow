@@ -186,7 +186,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
 
     this.formatText(data)
-    assign(this, pickNodeConfig(data))
+    assign(this, pickNodeConfig(data)) // TODO: 确认 constructor 中赋值 properties 是否必要
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex()
