@@ -8,6 +8,6 @@ fi
 pnpm install
 pnpm build
 
-cd sites/logicflow-docs
+cd sites/docs
 rm -rf ./dist
 pnpm build
