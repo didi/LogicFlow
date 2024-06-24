@@ -5,7 +5,7 @@ import {
   Model,
   TransformData,
   TransformType,
-} from 'src'
+} from '..'
 
 import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
