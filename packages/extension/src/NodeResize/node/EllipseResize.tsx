@@ -18,7 +18,7 @@ export type ResizeEllipseNodeConfig = NodeConfig & {
 }
 
 export class EllipseResizeModel extends EllipseNodeModel {
-  private PCTResizeInfo?: PCTResizeParams
+  PCTResizeInfo?: PCTResizeParams
   minWidth!: number
   minHeight!: number
   maxWidth!: number

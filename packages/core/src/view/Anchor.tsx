@@ -175,6 +175,7 @@ class Anchor extends Component<IProps, IState> {
     if (this.t) {
       cancelRaf(this.t)
     }
+    const edgeModel = this.checkEnd(event)
     this.setState({
       startX: 0,
       startY: 0,
@@ -186,11 +187,14 @@ class Anchor extends Component<IProps, IState> {
     this.sourceRuleResults.clear()
     this.targetRuleResults.clear()
     const { graphModel, nodeModel, anchorData } = this.props
-    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
-      data: anchorData,
-      e: event!,
-      nodeModel,
-    })
+    if (edgeModel) {
+      graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
+        data: anchorData,
+        e: event!,
+        nodeModel,
+        edgeModel,
+      })
+    }
   }
 
   get customTrajectory() {
