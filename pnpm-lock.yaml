@@ -181,13 +181,13 @@ importers:
         specifier: ^5.0.1
         version: 5.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/engine':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/engine
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       antd:
         specifier: ^5.4.0
@@ -260,16 +260,16 @@ importers:
         specifier: ^7.19.0
         version: 7.19.0(antd@5.12.7(date-fns@2.30.0)(moment@2.30.1)(react-dom@18.1.0(react@18.1.0))(react@18.1.0))(react-dom@18.1.0(react@18.1.0))(react@18.1.0)
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/engine':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/engine
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       '@logicflow/react-node-registry':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/react-node-registry
       antd:
         specifier: ^5.4.0
@@ -418,13 +418,13 @@ importers:
         specifier: ^5.0.1
         version: 5.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/engine':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/engine
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       antd:
         specifier: ^5.4.0
@@ -470,16 +470,16 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(vue@3.4.27(typescript@5.4.5))
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/engine':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/engine
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       '@logicflow/vue-node-registry':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/vue-node-registry
       element-plus:
         specifier: ^2.0.4
@@ -552,10 +552,10 @@ importers:
   examples/vue3-memory-leak:
     dependencies:
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       element-plus:
         specifier: ^2.0.4
@@ -627,7 +627,7 @@ importers:
         specifier: ^0.6.11
         version: 0.6.11
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../core
       preact:
         specifier: ^10.17.1
@@ -636,7 +636,7 @@ importers:
   packages/react-node-registry:
     dependencies:
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../core
       '@types/react':
         specifier: ^18.0.25
@@ -661,7 +661,7 @@ importers:
         version: 0.14.8(@vue/composition-api@1.7.2(vue@3.4.27(typescript@5.4.5)))(vue@3.4.27(typescript@5.4.5))
     devDependencies:
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../core
       vue:
         specifier: ^3.0.0
@@ -680,10 +680,10 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       '@logicflow/core':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/extension':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/extension
       '@types/react':
         specifier: ^18.2.17

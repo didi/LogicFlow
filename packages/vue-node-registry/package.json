@@ -33,7 +33,7 @@
     "vue-demi": "latest"
   },
   "peerDependencies": {
-    "@logicflow/core": "workspace:latest",
+    "@logicflow/core": "workspace:*",
     "@vue/composition-api": "^1.0.0-rc.1",
     "vue": "^2.0.0 || >=3.0.0"
   },
@@ -43,7 +43,7 @@
     }
   },
   "devDependencies": {
-    "@logicflow/core": "workspace:latest",
+    "@logicflow/core": "workspace:*",
     "vue": "^3.0.0"
   },
   "author": {
