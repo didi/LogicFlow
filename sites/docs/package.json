@@ -1,6 +1,6 @@
 {
-  "name": "logicflow-sites",
-  "version": "1.2.x",
+  "name": "logicflow-docs",
+  "version": "2.0.0-beta.0",
   "description": "LogicFlow sites deployed on gh-pages",
   "scripts": {
     "start": "npm run dev",
