@@ -4,9 +4,9 @@ class MarkRootModel extends RectNodeModel {
   static extendKey = 'MarkRootModel'
 }
 
-class MarkRootView extends BaseNode {
+class MarkRootView extends BaseNode<any> {
   getShape() {
-    return ''
+    return null
   }
 }
 

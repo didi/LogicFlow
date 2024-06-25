@@ -25,18 +25,16 @@ export type IPolygonNodeProperties = {
 export class PolygonNodeModel extends BaseNodeModel {
   modelType = ModelType.POLYGON_NODE
   @observable points: PointTuple[] = [
-    // [50, 0], [100, 50], [50, 100], [0, 50] // 菱形
+    [50, 0],
+    [100, 50],
+    [50, 100],
+    [0, 50], // 菱形
     // [0,100], [50,25], [50,75], [100,0] // 闪电
-    [100, 10],
-    [40, 198],
-    [190, 78],
-    [10, 78],
-    [160, 198], // 五角星
-    // [90, 0],
-    // [30, 188],
-    // [180, 68],
-    // [0, 68],
-    // [150, 188], // 五角星
+    // [100, 10],
+    // [40, 198],
+    // [190, 78],
+    // [10, 78],
+    // [160, 198], // 五角星
   ]
   @observable properties: IPolygonNodeProperties = {}
 
