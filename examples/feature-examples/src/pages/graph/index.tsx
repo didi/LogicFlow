@@ -150,7 +150,7 @@ export default function BasicNode() {
         adjustEdgeStartAndEnd: true,
         // adjustEdge: false,
         allowRotate: true,
-        allowResize: true,
+        // allowResize: true,
         edgeTextEdit: true,
         keyboard: {
           enabled: true,
