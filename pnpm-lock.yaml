@@ -235,6 +235,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.4.3
         version: 0.4.5(eslint@8.56.0)
+      medium-editor:
+        specifier: ^5.23.3
+        version: 5.23.3
       typescript:
         specifier: ^5.0.2
         version: 5.3.3
@@ -579,6 +582,9 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.5.1
+      medium-editor:
+        specifier: ^5.23.3
+        version: 5.23.3
       mobx:
         specifier: ^5.15.7
         version: 5.15.7
@@ -9073,6 +9079,9 @@ packages:
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
+
+  medium-editor@5.23.3:
+    resolution: {integrity: sha512-he9/TdjX8f8MGdXGfCs8AllrYnqXJJvjNkDKmPg3aPW/uoIrlRqtkFthrwvmd+u4QyzEiadhCCM0EwTiRdUCJw==}
 
   memfs@3.5.3:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
@@ -24903,6 +24912,8 @@ snapshots:
   mdn-data@2.0.4: {}
 
   media-typer@0.3.0: {}
+
+  medium-editor@5.23.3: {}
 
   memfs@3.5.3:
     dependencies:
