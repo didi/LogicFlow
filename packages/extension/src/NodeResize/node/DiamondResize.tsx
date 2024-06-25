@@ -19,7 +19,7 @@ export type ResizeDiamondNodeConfig = NodeConfig & {
 }
 
 export class DiamondResizeModel extends DiamondNodeModel {
-  private PCTResizeInfo?: PCTResizeParams
+  PCTResizeInfo?: PCTResizeParams
   minWidth!: number
   minHeight!: number
   maxWidth!: number

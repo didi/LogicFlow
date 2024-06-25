@@ -327,7 +327,9 @@ interface AnchorEventArgs {
   /**
    * 拖拽锚点结束，不管是否成功添加边都会触发
    */
-  'anchor:dragend': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
+  'anchor:dragend': AnchorEventArgsPick<
+    'data' | 'e' | 'nodeModel' | 'edgeModel'
+  >
 }
 
 type BlankEventArgsPick<T extends 'e' | 'position'> = Pick<

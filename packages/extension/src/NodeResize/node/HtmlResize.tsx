@@ -3,7 +3,7 @@ import { PCTResizeParams, ResizeNodeConfig } from './RectResize'
 import ControlGroup from '../control/ControlGroup'
 
 export class HtmlResizeModel extends HtmlNodeModel {
-  private PCTResizeInfo?: PCTResizeParams
+  PCTResizeInfo?: PCTResizeParams
   minWidth!: number
   minHeight!: number
   maxWidth!: number
