@@ -22,6 +22,7 @@ import {
 import {
   ElementState,
   ElementType,
+  EventType,
   ModelType,
   OverlapMode,
 } from '../../constant'
@@ -677,6 +678,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     id?: string,
   ): void {
     const { labelConfig } = this.properties
+    const { eventCenter } = this.graphModel
     if (!(labelConfig as LabelConfig)?.multiple) {
       this.text =
         typeof value === 'string'
@@ -687,22 +689,30 @@ export class BaseEdgeModel implements IBaseEdgeModel {
               isFocus: false,
             }
           : assign(this.text, value)
-      return
-    }
-    if (isArray(this.text) && id) {
+    } else if (isArray(this.text) && id) {
       const textIndex = findIndex(this.text, (item) => item.id === id)
       if (textIndex < 0) return
       this.text[textIndex] = assign(this.text[textIndex], value)
-      return
     }
+    eventCenter.emit(EventType.TEXT_UPDATE, {
+      data: this.text,
+      model: this,
+    })
   }
 
   @action
   addText(labelConf: LabelType | { x: number; y: number }): void {
     const { labelConfig } = this.properties
+    const { eventCenter } = this.graphModel
     const { multiple = false, max } = labelConfig as LabelConfig
     // 当前文本数量已到最大值时不允许新增文本
-    if (multiple && !isNil(max) && this.text.length >= max) return
+    if (multiple && !isNil(max) && this.text.length >= max) {
+      eventCenter.emit(EventType.TEXT_NOT_ALLOWED_ADD, {
+        data: this.text,
+        model: this,
+      })
+      return
+    }
     const newText = {
       id: createUuid(),
       relateId: this.id,
@@ -720,20 +730,29 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     }
     if ((labelConfig as LabelConfig)?.multiple) {
       this.text.push(newText)
-      return
+    } else {
+      this.text = {
+        ...toJS(this.text),
+        isFocus: true,
+      }
     }
-    this.text = {
-      ...toJS(this.text),
-      isFocus: true,
-    }
+    eventCenter.emit(EventType.TEXT_ADD, {
+      data: this.text,
+      model: this,
+    })
   }
 
   @action
   deleteText(labelInfo: { index?: number; id?: string }): void {
+    const { eventCenter } = this.graphModel
     if (!isArray(this.text) && labelInfo?.id === this.text.id) {
       assign(this.text, {
         value: '',
         content: '',
+      })
+      eventCenter.emit(EventType.TEXT_CLEAR, {
+        data: this.text,
+        model: this,
       })
       return
     }
@@ -747,6 +766,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     )
     if (labelIndex < 0) return
     this.text.splice(labelIndex, 1)
+    eventCenter.emit(EventType.TEXT_DELETE, {
+      data: this.text,
+      model: this,
+    })
   }
   /**
    * 内部方法，计算边的起点和终点和其对于的锚点Id

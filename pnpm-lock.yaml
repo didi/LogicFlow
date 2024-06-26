@@ -582,9 +582,6 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.5.1
-      medium-editor:
-        specifier: ^5.23.3
-        version: 5.23.3
       mobx:
         specifier: ^5.15.7
         version: 5.15.7
@@ -632,6 +629,9 @@ importers:
       '@logicflow/core':
         specifier: workspace:latest
         version: link:../core
+      medium-editor:
+        specifier: ^5.23.3
+        version: 5.23.3
       preact:
         specifier: ^10.17.1
         version: 10.22.0

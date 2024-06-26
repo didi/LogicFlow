@@ -1,8 +1,7 @@
 import { Component } from 'preact/compat'
-import { trim, get } from 'lodash-es'
-import MediumEditor from 'medium-editor'
+import { get } from 'lodash-es'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
-import { ElementState, ElementType, ModelType } from '../constant'
+import { ElementState, ElementType, ModelType, EventType } from '../constant'
 import { StepDrag } from '../util'
 import LogicFlow from '../LogicFlow'
 import { observer } from '..'
@@ -16,7 +15,6 @@ type IProps = {
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
   labelState: LabelType // 当前标签的配置数据
-  editor: MediumEditor | null
 }
 
 // type IState = {}
@@ -41,7 +39,6 @@ export class Label extends Component<IProps, IState> {
   isHovered: boolean = false
   stepDrag: StepDrag
   textElememt: HTMLElement | null = null
-  editor: MediumEditor | null = null
   constructor(props) {
     super()
     const {
@@ -51,37 +48,59 @@ export class Label extends Component<IProps, IState> {
       },
     } = props
     this.stepDrag = new StepDrag({
+      eventType: 'TEXT',
       onDragging: this.onDragging,
       step: 1,
       isStopPropagation: draggable,
     })
     this.id = id
   }
-
   // 拖拽事件
-  onDrageStart() {}
-  onDragging = ({ deltaX, deltaY }) => {
+  onDragging = (e) => {
     const {
       model,
-      graphModel: { transformModel },
+      labelState,
+      graphModel: { transformModel, eventCenter },
     } = this.props
+    const { deltaX, deltaY } = e
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
     model.moveText(curDeltaX, curDeltaY)
+    eventCenter.emit(EventType.TEXT_DRAG, {
+      data: labelState,
+      e,
+      model,
+    })
   }
-  onDragEnd() {}
-  onDbClick = () => {
-    this.props.model.setElementState(ElementState.TEXT_EDIT)
+  onDbClick = (e) => {
+    const {
+      labelState,
+      model,
+      editable,
+      graphModel: { eventCenter },
+    } = this.props
+    model.setElementState(ElementState.TEXT_EDIT)
     if (
-      this.props.editable &&
+      editable &&
       this.textElememt &&
       this.textElememt.contentEditable !== 'true'
     ) {
       this.autoFocus()
     }
+    eventCenter.emit(EventType.TEXT_DRAG, {
+      data: labelState,
+      e,
+      model,
+    })
   }
-  onBlur = () => {
+  onBlur = (e) => {
+    const {
+      labelState,
+      model,
+      editable,
+      graphModel: { eventCenter },
+    } = this.props
     if (
-      this.props.editable &&
+      editable &&
       this.textElememt &&
       this.textElememt.contentEditable !== 'false'
     ) {
@@ -91,13 +110,19 @@ export class Label extends Component<IProps, IState> {
         value: this.textElememt.innerText,
         isFocus: false,
       }
-      if (!trim(this.textElememt.innerText)) {
-        this.props.editor.removeElements(this.textElememt)
-        this.props.model.deleteText({ id: this.id })
-        return
-      }
-      this.props.model.updateText(label, this.id)
-      this.props.model.setElementState(ElementState.DEFAULT)
+      // if (!trim(this.textElememt.innerText)) {
+      //   this.props.editor.removeElements(this.textElememt)
+      //   this.props.model.deleteText({ id: this.id })
+      //   return
+      // }
+      model.updateText(label, this.id)
+      model.setElementState(ElementState.DEFAULT)
+      eventCenter.emit(EventType.TEXT_BLUR, {
+        data: labelState,
+        e,
+        element: this.textElememt,
+        model,
+      })
     }
   }
   onMouseDown = (ev: MouseEvent) => {
@@ -114,9 +139,17 @@ export class Label extends Component<IProps, IState> {
     }
   }
   autoFocus() {
+    const {
+      labelState,
+      graphModel: { eventCenter },
+    } = this.props
     if (!this.textElememt) return
     this.textElememt.contentEditable = 'true'
     this.textElememt.focus()
+    eventCenter.emit(EventType.TEXT_FOCUS, {
+      data: labelState,
+      element: this.textElememt,
+    })
   }
 
   setHoverON = () => {
@@ -232,8 +265,8 @@ export class Label extends Component<IProps, IState> {
     this.textElememt = document.getElementById(
       `editor-container-${labelState.id}`,
     )
-    this.props.editor.on(this.textElememt, 'dblclick', this.onDbClick)
-    this.props.editor.on(this.textElememt, 'blur', this.onBlur)
+    // this.props.editor.on(this.textElememt, 'dblclick', this.onDbClick)
+    // this.props.editor.on(this.textElememt, 'blur', this.onBlur)
     if (this.textElememt) {
       this.textElememt.innerHTML = get(labelState, 'content', '')
     }
@@ -268,10 +301,14 @@ export class Label extends Component<IProps, IState> {
         id={`element-container-${labelState.id}`}
         class={this.elementContainerClass()}
         onMouseDown={this.onMouseDown}
+        onDblClick={this.onDbClick}
+        onBlur={this.onBlur}
         style={{
           width: '20px',
           height: '20px',
-          transform: `rotate(${(labelConfig as LabelConfig)?.verticle ? '-0.25turn' : 0})`,
+          transform: `rotate(${
+            (labelConfig as LabelConfig)?.verticle ? '-0.25turn' : 0
+          })`,
           top: `${labelState.y}px`,
           left: `${labelState.x}px`,
           pointerEvents: labelState.content ? 'all' : 'none',
