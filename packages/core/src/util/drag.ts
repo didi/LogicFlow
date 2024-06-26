@@ -23,7 +23,7 @@ export type ICreateDragParams = {
 }
 
 export type IStepperDragProps = {
-  eventType?: 'NODE' | 'BLANK' | 'SELECTION' | 'ADJUST_POINT' | ''
+  eventType?: 'NODE' | 'BLANK' | 'SELECTION' | 'ADJUST_POINT' | 'TEXT' | ''
   eventCenter?: EventEmitter
   model?: Model.BaseModel | null
   data?: Record<string, unknown>
@@ -39,7 +39,7 @@ export class StepDrag {
 
   step: number
   isStopPropagation: boolean
-  eventType: 'NODE' | 'BLANK' | 'SELECTION' | 'ADJUST_POINT' | ''
+  eventType: 'NODE' | 'BLANK' | 'SELECTION' | 'ADJUST_POINT' | 'TEXT' | ''
   eventCenter?: EventEmitter
   model?: Model.BaseModel | null
   data?: Record<string, unknown>

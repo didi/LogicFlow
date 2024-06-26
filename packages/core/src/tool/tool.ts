@@ -1,6 +1,5 @@
 import { Component } from 'preact/compat'
 import { VNode } from 'preact'
-import TextEdit from './TextEditTool'
 import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
@@ -22,9 +21,6 @@ export class Tool {
 
   constructor(instance: LogicFlow) {
     this.instance = instance
-    if (!this.isDisabledTool(TextEdit.toolName)) {
-      this.registerTool(TextEdit.toolName, TextEdit)
-    }
     if (!this.isDisabledTool(MultipleSelect.toolName)) {
       this.registerTool(MultipleSelect.toolName, MultipleSelect)
     }

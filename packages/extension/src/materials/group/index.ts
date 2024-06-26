@@ -5,6 +5,7 @@ import LogicFlow, {
   EventType,
   Model,
 } from '@logicflow/core'
+import { isArray } from 'lodash-es'
 import GroupNode, { GroupNodeModel } from './GroupNode'
 
 import GraphConfigData = LogicFlow.GraphConfigData
@@ -12,6 +13,8 @@ import EdgeConfig = LogicFlow.EdgeConfig
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import BoxBoundsPoint = Model.BoxBoundsPoint
+import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
@@ -148,7 +151,21 @@ export class Group {
           // incoming,
           // outgoing,
         } = childNodeModel
-
+        let newText: LabelType | LabelType[]
+        const { labelConfig } = properties
+        if ((labelConfig as LabelConfig)?.multiple && isArray(text)) {
+          newText = text.map((item) => ({
+            ...item,
+            x: item.x + distance,
+            y: item.y + distance,
+          }))
+        } else {
+          newText = {
+            ...text,
+            x: (text as LabelType).x + distance,
+            y: (text as LabelType).y + distance,
+          }
+        }
         const eventType =
           EventType.NODE_GROUP_COPY || ('node:group-copy-add' as EventType)
         const newChildModel = lf.addNode(
@@ -157,11 +174,7 @@ export class Group {
             y: y + distance,
             properties,
             type,
-            text: {
-              ...text,
-              x: text.x + distance,
-              y: text.y + distance,
-            },
+            text: newText,
             rotate,
             // 如果不传递type，会自动触发NODE_ADD
             // 有概率触发appendToGroup
@@ -237,12 +250,18 @@ export class Group {
         return point
       })
     }
-    const newText = text
-    if (text && typeof text !== 'string') {
+    let newText = text
+    if (isArray(text)) {
+      newText = text.map((item) => {
+        item.x += distance
+        item.y += distance
+        return item
+      })
+    } else if (typeof text !== 'string') {
       ;(newText as { x: number; y: number; value: string }).x =
-        text.x + distance
+        (text as LabelType).x + distance
       ;(newText as { x: number; y: number; value: string }).y =
-        text.y + distance
+        (text as LabelType).y + distance
     }
     // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
 

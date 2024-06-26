@@ -1,5 +1,6 @@
 import { forEach, map } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+import { SelectionSelect } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
@@ -14,6 +15,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
+  stopMoveGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -41,6 +43,7 @@ const config: Partial<LogicFlow.Options> = {
       fontSize: 12,
     },
   },
+  plugins: [SelectionSelect],
 }
 
 const customTheme: Partial<LogicFlow.Theme> = {
@@ -74,15 +77,97 @@ const data: GraphConfigData = {
   nodes: [
     {
       id: 'custom-node-1',
-      rotate: 1.1722738811284763,
+      // rotate: 1.1722738811284763,
       text: {
         x: 600,
-        y: 200,
-        value: 'xxxxx',
+        y: 140,
+        value: '11111',
+        verticle: true,
+        draggable: true,
+        editable: true,
       },
       type: 'rect',
       x: 600,
-      y: 200,
+      y: 140,
+      properties: {
+        labelConfig: {
+          verticle: true,
+          multiple: true,
+          max: 1,
+        },
+      },
+    },
+    {
+      id: 'custom-node-2',
+      type: 'rect',
+      x: 600,
+      y: 300,
+      text: ['22221', '22222', '22223'],
+      properties: {
+        labelConfig: {
+          multiple: true,
+        },
+      },
+    },
+    {
+      id: 'custom-node-3',
+      // rotate: 1.1722738811284763,
+      text: [
+        {
+          value: '333331',
+          x: 800,
+          y: 50,
+        },
+        {
+          value: '333332',
+          x: 800,
+          y: 150,
+        },
+      ],
+      type: 'rect',
+      x: 800,
+      y: 100,
+    },
+    {
+      id: 'custom-node-4',
+      type: 'rect',
+      x: 800,
+      y: 300,
+    },
+  ],
+  edges: [
+    {
+      sourceNodeId: 'custom-node-1',
+      targetNodeId: 'custom-node-2',
+      type: 'polyline',
+      properties: {
+        labelConfig: {
+          multiple: true,
+          max: 3,
+        },
+      },
+      text: [
+        {
+          value: 'polyline1',
+          draggable: true,
+          editable: true,
+          x: 600,
+          y: 190,
+        },
+        {
+          value: 'polyline2',
+          draggable: true,
+          editable: true,
+          x: 600,
+          y: 210,
+        },
+      ],
+    },
+    {
+      sourceNodeId: 'custom-node-2',
+      targetNodeId: 'custom-node-3',
+      type: 'bezier',
+      text: 'bezier',
     },
     {
       id: 'custom-react-node-1',
@@ -96,13 +181,11 @@ const data: GraphConfigData = {
       y: 500,
     },
   ],
-  edges: [],
 }
 
 export default function BasicNode() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
-
   const registerElements = (lf: LogicFlow) => {
     const elements = [
       // edges
@@ -151,6 +234,7 @@ export default function BasicNode() {
         // adjustEdge: false,
         allowRotate: true,
         edgeTextEdit: true,
+        nodeTextVerticle: true,
         keyboard: {
           enabled: true,
           // shortcuts: [
@@ -175,7 +259,7 @@ export default function BasicNode() {
         background: {
           color: '#FFFFFF',
         },
-        grid: true,
+        // grid: false,
         edgeTextDraggable: true,
         edgeType: 'bezier',
         style: {
@@ -201,7 +285,7 @@ export default function BasicNode() {
       registerElements(lf)
       // 注册事件
       registerEvents(lf)
-
+      // lf.extension.selectionSelect.__disabled = true;
       lf.render(data)
       lfRef.current = lf
     }

@@ -214,4 +214,30 @@ export const content = `.lf-graph {
 .lf-resize-control-w {
   cursor: w-resize;
 }
+.lf-label-overlay {
+  overflow: visible;
+}
+.lf-label-overlay .lf-label-editor {
+  background: #fff;
+}
+.lf-label-overlay .lf-label-editor-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  text-align: center;
+}
+.lf-label-overlay .lf-label-editor-container p {
+  margin: 0;
+}
+.lf-label-overlay .lf-label-editor-tool {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200px;
+  overflow: scroll;
+  background: #fafafa;
+}
 `

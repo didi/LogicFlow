@@ -5,6 +5,7 @@ import {
   ToolOverlay,
   BackgroundOverlay,
   Grid,
+  LabelOverlay,
   SnaplineOverlay,
   OutlineOverlay,
   BezierAdjustOverlay,
@@ -81,6 +82,7 @@ class Graph extends Component<IGraphProps> {
             )}
           </g>
           {fakeNode ? this.getComponent(fakeNode, graphModel) : ''}
+          <LabelOverlay graphModel={graphModel} />
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>
           <OutlineOverlay graphModel={graphModel} />

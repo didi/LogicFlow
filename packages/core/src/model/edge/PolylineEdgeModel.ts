@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, isArray } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { BaseEdgeModel } from '.'
 import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
@@ -26,6 +26,7 @@ import Point = LogicFlow.Point
 import Position = LogicFlow.Position
 import AppendConfig = LogicFlow.AppendConfig
 import ArchorConfig = Model.AnchorConfig
+import LabelType = LogicFlow.LabelType
 
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
@@ -48,15 +49,21 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   getTextPosition() {
-    // 在文案为空的情况下，文案位置为双击位置
-    const textValue = this.text?.value
-    if (this.dbClickPosition && !textValue) {
+    const textValue = isArray(this.text)
+      ? this.text[0]?.value
+      : this.text?.value
+    // 在文本为空的情况下，文本位置为双击位置
+    if (
+      this.dbClickPosition &&
+      (isArray(this.text) || (!isArray(this.text) && !textValue))
+    ) {
       const { x, y } = this.dbClickPosition
       return {
         x,
         y,
       }
     }
+    // 文本不为空或者没有双击位置时，取最长边的中点作为文本位置
     const currentPositionList = points2PointsList(this.points)
     const [p1, p2] = getLongestEdge(currentPositionList)
     return {
@@ -438,7 +445,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     }
     this.updatePointsAfterDrag(draggingPointList)
     this.draggingPointList = draggingPointList
-    this.setText(Object.assign({}, this.text, this.textPosition))
+    this.setText(Object.assign({}, this.text, this.textPosition) as LabelType)
     return {
       start: Object.assign({}, pointsList[startIndex]),
       end: Object.assign({}, pointsList[endIndex]),
@@ -571,7 +578,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.updatePointsAfterDrag(draggingPointList)
       this.draggingPointList = draggingPointList
     }
-    this.setText(Object.assign({}, this.text, this.textPosition))
+    this.setText(Object.assign({}, this.text, this.textPosition) as LabelType)
     return {
       start: Object.assign({}, pointsList[startIndex]),
       end: Object.assign({}, pointsList[endIndex]),

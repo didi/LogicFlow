@@ -1,3 +1,4 @@
+import { isArray, isObject } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
 import GraphModel from '../model/GraphModel'
 
@@ -9,7 +10,12 @@ let selected: LogicFlow.GraphData | null = null
 function translationNodeData(nodeData: NodeData, distance: number) {
   nodeData.x += distance
   nodeData.y += distance
-  if (nodeData.text) {
+  if (isArray(nodeData.text)) {
+    nodeData.text.forEach((item) => {
+      item.x += distance
+      item.y += distance
+    })
+  } else if (isObject(nodeData.text)) {
     nodeData.text.x += distance
     nodeData.text.y += distance
   }
@@ -32,8 +38,15 @@ function translationEdgeData(edgeData: EdgeData, distance: number) {
     })
   }
   if (edgeData.text) {
-    edgeData.text.x += distance
-    edgeData.text.y += distance
+    if (isArray(edgeData.text)) {
+      edgeData.text.forEach((item) => {
+        item.x += distance
+        item.y += distance
+      })
+    } else {
+      edgeData.text.x += distance
+      edgeData.text.y += distance
+    }
   }
   return edgeData
 }

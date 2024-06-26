@@ -151,6 +151,10 @@ export class EditConfigModel {
   @observable nodeTextDraggable = false
   @observable edgeTextDraggable = false
   @observable autoExpand = false
+  @observable multipleNodeText = false // 是否支持多个节点文本
+  @observable multipleEdgeText = false // 是否支持多个边文本
+  @observable nodeTextVerticle = false // 节点文本朝向是否是纵向
+  @observable edgeTextVerticle = false // 边文本朝向是否是纵向
   multipleSelectKey = ''
   defaultConfig = {} // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
@@ -194,6 +198,10 @@ export class EditConfigModel {
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
         autoExpand: this.autoExpand,
+        multipleNodeText: this.multipleNodeText,
+        multipleEdgeText: this.multipleEdgeText,
+        nodeTextVerticle: this.nodeTextVerticle,
+        edgeTextVerticle: this.edgeTextVerticle,
       }
       assign(conf, silentConfig)
     }

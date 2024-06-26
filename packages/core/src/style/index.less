@@ -254,3 +254,33 @@
 .lf-resize-control-w {
   cursor: w-resize;
 }
+.lf-label-overlay {
+  overflow: visible;
+
+  .lf-label-editor {
+    background: #fff;
+
+    &-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      text-align: center;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    &-tool {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 200px;
+      overflow: scroll;
+      background: #fafafa;
+    }
+  }
+}
