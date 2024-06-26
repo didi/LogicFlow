@@ -8,7 +8,6 @@ import { ModelType } from '../../constant'
 import { getBezierControlPoints, IBezierControls } from '../../util'
 
 import Point = LogicFlow.Point
-import EdgeConfig = LogicFlow.EdgeConfig
 import LabelType = LogicFlow.LabelType
 import EdgeConfig = LogicFlow.EdgeConfig
 

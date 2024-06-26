@@ -38,8 +38,15 @@ function translationEdgeData(edgeData: EdgeData, distance: number) {
     })
   }
   if (edgeData.text) {
-    edgeData.text.x += distance
-    edgeData.text.y += distance
+    if (isArray(edgeData.text)) {
+      edgeData.text.forEach((item) => {
+        item.x += distance
+        item.y += distance
+      })
+    } else {
+      edgeData.text.x += distance
+      edgeData.text.y += distance
+    }
   }
   return edgeData
 }

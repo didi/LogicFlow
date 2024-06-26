@@ -51,6 +51,7 @@ export class TextNodeModel extends BaseNodeModel {
     if (isObject(this.text)) {
       return this.getWidthByText(this.text)
     }
+    return 0
   }
 
   @computed get height(): number {
@@ -67,6 +68,7 @@ export class TextNodeModel extends BaseNodeModel {
     if (isObject(this.text)) {
       return this.getHeightByText(this.text)
     }
+    return 0
   }
 }
 

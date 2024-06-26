@@ -1,5 +1,5 @@
 import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
-import { isArray, isObject } from 'lodash-es'
+import { isArray, isObject, cloneDeep } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
 import GraphElements = LogicFlow.GraphElements
@@ -209,7 +209,7 @@ export class GroupNodeModel extends RectResizeModel {
         endPoint,
         type,
         properties,
-        text: text?.value,
+        text: isArray(text) ? cloneDeep(text) : text?.value,
       }
       if (edgeModel.virtual) {
         this.graphModel.deleteEdgeById(edgeModel.id)

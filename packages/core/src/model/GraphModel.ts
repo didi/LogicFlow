@@ -1,4 +1,4 @@
-import { forEach, map, isObject, isArray } from 'lodash-es'
+import { find, forEach, map, isObject, isArray } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,

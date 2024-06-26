@@ -129,31 +129,21 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     }
   }
 
-  // getText(): h.JSX.Element | null {
-  //   const { model, graphModel } = this.props
-  //   // 文本被编辑的时候，显示编辑框，不显示文本。
-  //   // if (model.state === ElementState.TEXT_EDIT) {
-  //   //   return null
-  //   // }
-  //   if (model.text) {
-  //     const { editConfigModel } = graphModel
-  //     let draggable = false
-  //     if (model.text.draggable || editConfigModel.nodeTextDraggable) {
-  //       draggable = true
-  //     }
-  //     return (
-  //       <BaseText
-  //         editable={
-  //           editConfigModel.nodeTextEdit && (model.text.editable ?? true)
-  //         }
-  //         model={model}
-  //         graphModel={graphModel}
-  //         draggable={draggable}
-  //       />
-  //     )
-  //   }
-  //   return null
-  // }
+  getResizeControl(): h.JSX.Element | null {
+    const { model, graphModel } = this.props
+    const { isSelected, isHitable, enableResize, isHovered } = model
+    const style = model.getResizeControlStyle()
+    if (isHitable && (isSelected || isHovered) && enableResize) {
+      return (
+        <ResizeControlGroup
+          style={style}
+          model={model}
+          graphModel={graphModel}
+        />
+      )
+    }
+    return null
+  }
 
   getStateClassName() {
     const {
