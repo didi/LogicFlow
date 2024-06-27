@@ -21,14 +21,15 @@ export class Grid extends Component<IProps> {
 
     const { color, thickness = 2 } = config ?? {}
 
-    const length = Math.min(Math.max(1.5, thickness), size / 2) // 2 < length < size /2
+    // 对于点状网格，点的半径不能大于网格大小的四分之一
+    const radius = Math.min(Math.max(2, thickness), size / 4)
     const opacity = visible ? 1 : 0
     return (
       <g fill={color} opacity={opacity}>
-        <circle cx={0} cy={0} r={length / 2} />
-        <circle cx={0} cy={size} r={length / 2} />
-        <circle cx={size} cy={0} r={length / 2} />
-        <circle cx={size} cy={size} r={length / 2} />
+        <circle cx={0} cy={0} r={radius / 2} />
+        <circle cx={0} cy={size} r={radius / 2} />
+        <circle cx={size} cy={0} r={radius / 2} />
+        <circle cx={size} cy={size} r={radius / 2} />
       </g>
     )
   }
@@ -38,7 +39,9 @@ export class Grid extends Component<IProps> {
   renderMesh() {
     const { config, size = 1, visible } = this.props
     const { color, thickness = 1 } = config ?? {}
-    const strokeWidth = Math.min(Math.max(1, thickness), size / 2) // 1 < strokeWidth < size /2
+
+    // 对于交叉线网格，线的宽度不能大于网格大小的一半
+    const strokeWidth = Math.min(Math.max(1, thickness), size / 2)
     const d = `M 0 0 H ${size} V ${size} H 0 Z`
     const opacity = visible ? 1 : 0
     return (
