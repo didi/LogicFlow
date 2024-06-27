@@ -21,12 +21,14 @@ import {
   BaseNodeModel,
   SnaplineModel,
 } from '../model'
+import LogicFlow from '../LogicFlow'
 
 type IGraphProps = {
   getView: (type: string) => ComponentType<any> | undefined
   tool: Tool
   options: LFOptions.Definition
   dnd: DnD
+  extension: Record<string, LogicFlow.Extension>
   snaplineModel?: SnaplineModel
   graphModel: GraphModel
 }
@@ -60,7 +62,8 @@ class Graph extends Component<IGraphProps> {
   }
 
   render() {
-    const { graphModel, tool, options, dnd, snaplineModel } = this.props
+    const { graphModel, tool, options, dnd, snaplineModel, extension } =
+      this.props
     const style: ContainerStyle = {}
     // 如果初始化的时候，不传宽高，则默认为父容器宽高。
     if (options.width) {
@@ -82,7 +85,10 @@ class Graph extends Component<IGraphProps> {
             )}
           </g>
           {fakeNode ? this.getComponent(fakeNode, graphModel) : ''}
-          <LabelOverlay graphModel={graphModel} />
+          <LabelOverlay
+            graphModel={graphModel}
+            richTextEditor={extension.richTextEditor}
+          />
         </CanvasOverlay>
         <ModificationOverlay graphModel={graphModel}>
           <OutlineOverlay graphModel={graphModel} />

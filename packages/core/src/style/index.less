@@ -254,6 +254,7 @@
 .lf-resize-control-w {
   cursor: w-resize;
 }
+
 .lf-label-overlay {
   overflow: visible;
 
@@ -281,6 +282,35 @@
       width: 200px;
       overflow: scroll;
       background: #fafafa;
+    }
+  }
+
+  .medium-editor-toolbar {
+    min-width: 200px;
+    height: 50px;
+
+    .medium-editor-toolbar-actions {
+      display: flex !important;
+      flex-wrap: nowrap;
+      place-content: center flex-start;
+      height: 30px;
+      padding-left: 0;
+      list-style: none;
+      border-radius: 6px;
+      box-shadow: 0 0 1px #fafafa;
+
+      li {
+        button {
+          box-shadow: none;
+        }
+
+        .medium-editor-action {
+          line-height: 1;
+          border: 0;
+          border-radius: 0;
+          box-shadow: 0;
+        }
+      }
     }
   }
 }

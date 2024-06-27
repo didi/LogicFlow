@@ -6,20 +6,24 @@ import { BaseEdgeModel, BaseNodeModel, GraphModel } from '../../model'
 import { ElementType, observer } from '../..'
 
 import LabelType = LogicFlow.LabelType
+// import Extension = LogicFlow.Extension
 // import LabelConfig = LogicFlow.LabelConfig
 
 type IProps = {
   graphModel: GraphModel
+  richTextEditor: any
 }
 
 type IState = {
   ref: HTMLElement
   labelStates: LabelType[]
+  haveEditor: boolean
 }
 
 type LabelCompontentConfig = {
   labelIndex: number
   editable: boolean
+  editor: any
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
   labelState: LabelType // 当前标签的配置数据
@@ -34,8 +38,10 @@ export class LabelOverlay extends Component<IProps, IState> {
     // 创建一个Label组件，入参从labelState中取，暂存在fragment中，最后塞到foreignObject上
     // const labelDomContainer = new DocumentFragment()
     const {
+      richTextEditor,
       graphModel: {
         editConfigModel: { edgeTextEdit, nodeTextEdit },
+
         nodes,
         edges,
       },
@@ -51,6 +57,7 @@ export class LabelOverlay extends Component<IProps, IState> {
           return {
             key: `${element.id}-${label.id}`,
             editable,
+            editor: richTextEditor?.editor,
             model: element,
             graphModel: this.props.graphModel,
             labelState: label,
@@ -64,6 +71,7 @@ export class LabelOverlay extends Component<IProps, IState> {
             key: `${element.id}-${(text as LabelType).id}`,
             editable,
             model: element,
+            editor: richTextEditor?.editor,
             graphModel: this.props.graphModel,
             labelState: text,
           },
@@ -76,9 +84,24 @@ export class LabelOverlay extends Component<IProps, IState> {
     )
   }
 
+  componentDidMount(): void {
+    const { richTextEditor, graphModel } = this.props
+    if (richTextEditor && richTextEditor.enable) {
+      richTextEditor.init()
+      this.setState({ haveEditor: true })
+    }
+    const toolDom = document.getElementById('medium-editor-toolbar-1')
+    console.log('toolDom', toolDom)
+    if (isEmpty(graphModel.textEditElement) && toolDom) {
+      toolDom.style.display = 'none'
+    }
+  }
+
   render() {
     return (
-      <foreignObject class="lf-label-overlay">{this.setLabels()}</foreignObject>
+      <foreignObject id="lf-label-overlay" class="lf-label-overlay">
+        {this.setLabels()}
+      </foreignObject>
     )
   }
 }

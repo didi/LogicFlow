@@ -240,4 +240,28 @@ export const content = `.lf-graph {
   overflow: scroll;
   background: #fafafa;
 }
+.lf-label-overlay .medium-editor-toolbar {
+  min-width: 200px;
+  height: 50px;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions {
+  list-style: none;
+  display: flex !important;
+  align-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  border-radius: 6px;
+  box-shadow: 0 0 1px #fafafa;
+  padding-left: 0;
+  height: 30px;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li button {
+  box-shadow: none;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li .medium-editor-action {
+  border: 0;
+  box-shadow: 0;
+  border-radius: 0;
+  line-height: 1;
+}
 `

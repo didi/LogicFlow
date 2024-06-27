@@ -1,5 +1,5 @@
 import { Component } from 'preact/compat'
-import { get } from 'lodash-es'
+import { get, isEmpty } from 'lodash-es'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 import { ElementState, ElementType, ModelType, EventType } from '../constant'
 import { StepDrag } from '../util'
@@ -12,6 +12,7 @@ import LabelConfig = LogicFlow.LabelConfig
 type IProps = {
   labelIndex: number
   editable: boolean
+  editor: any
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
   labelState: LabelType // 当前标签的配置数据
@@ -34,11 +35,12 @@ type IState = {
 @observer
 export class Label extends Component<IProps, IState> {
   id: string
+  editor: any = null
   draggable: boolean = false
   editable: boolean = false
   isHovered: boolean = false
   stepDrag: StepDrag
-  textElememt: HTMLElement | null = null
+  textElement: HTMLElement | null = null
   constructor(props) {
     super()
     const {
@@ -79,10 +81,11 @@ export class Label extends Component<IProps, IState> {
       graphModel: { eventCenter },
     } = this.props
     model.setElementState(ElementState.TEXT_EDIT)
+    labelState.isFocus = true
     if (
       editable &&
-      this.textElememt &&
-      this.textElememt.contentEditable !== 'true'
+      this.textElement &&
+      this.textElement.contentEditable !== 'true'
     ) {
       this.autoFocus()
     }
@@ -93,6 +96,7 @@ export class Label extends Component<IProps, IState> {
     })
   }
   onBlur = (e) => {
+    console.log('on dom blur')
     const {
       labelState,
       model,
@@ -101,29 +105,31 @@ export class Label extends Component<IProps, IState> {
     } = this.props
     if (
       editable &&
-      this.textElememt &&
-      this.textElememt.contentEditable !== 'false'
+      this.textElement &&
+      this.textElement.contentEditable !== 'false'
     ) {
-      this.textElememt.contentEditable = 'false'
+      this.textElement.contentEditable = 'false'
       const label = {
-        content: this.textElememt.innerHTML,
-        value: this.textElememt.innerText,
+        content: this.textElement.innerHTML,
+        value: this.textElement.innerText,
         isFocus: false,
       }
-      // if (!trim(this.textElememt.innerText)) {
-      //   this.props.editor.removeElements(this.textElememt)
+      // if (!trim(this.textElement.innerText)) {
+      //   this.props.editor.removeElements(this.textElement)
       //   this.props.model.deleteText({ id: this.id })
       //   return
       // }
       model.updateText(label, this.id)
       model.setElementState(ElementState.DEFAULT)
+      labelState.isFocus = false
       eventCenter.emit(EventType.TEXT_BLUR, {
         data: labelState,
         e,
-        element: this.textElememt,
+        element: this.textElement,
         model,
       })
     }
+    this.hideToolBar()
   }
   onMouseDown = (ev: MouseEvent) => {
     const {
@@ -138,18 +144,49 @@ export class Label extends Component<IProps, IState> {
       this.stepDrag.handleMouseDown(ev)
     }
   }
-  autoFocus() {
+  onMouseUp = () => {
+    const selection = window.getSelection()
+    if (selection) {
+      this.showToolBar()
+    }
+  }
+  autoFocus = () => {
     const {
       labelState,
       graphModel: { eventCenter },
     } = this.props
-    if (!this.textElememt) return
-    this.textElememt.contentEditable = 'true'
-    this.textElememt.focus()
+    if (!this.textElement) return
+    this.textElement.contentEditable = 'true'
+    this.textElement.focus()
     eventCenter.emit(EventType.TEXT_FOCUS, {
       data: labelState,
-      element: this.textElememt,
+      element: this.textElement,
     })
+  }
+
+  showToolBar = () => {
+    console.log('showToolBar')
+    const { editor, labelState } = this.props
+    if (!isEmpty(editor)) {
+      const toolDom = document.getElementById('medium-editor-toolbar-1')
+      if (!toolDom) return
+      toolDom.style.display = 'block'
+      toolDom.style.position = 'absolute'
+      toolDom.style.top = `${labelState.y - 60}px`
+      toolDom.style.left = `${labelState.x - 20}px`
+    }
+  }
+
+  hideToolBar = () => {
+    const { editor } = this.props
+    if (!isEmpty(editor)) {
+      const toolDom = document.getElementById('medium-editor-toolbar-1')
+      if (!toolDom) return
+      toolDom.style.display = 'none'
+      toolDom.style.position = 'absolute'
+      toolDom.style.top = '0px'
+      toolDom.style.left = '0px'
+    }
   }
 
   setHoverON = () => {
@@ -262,13 +299,12 @@ export class Label extends Component<IProps, IState> {
 
   componentDidMount(): void {
     const { labelState } = this.props
-    this.textElememt = document.getElementById(
+    this.textElement = document.getElementById(
       `editor-container-${labelState.id}`,
     )
-    // this.props.editor.on(this.textElememt, 'dblclick', this.onDbClick)
-    // this.props.editor.on(this.textElememt, 'blur', this.onBlur)
-    if (this.textElememt) {
-      this.textElememt.innerHTML = get(labelState, 'content', '')
+
+    if (this.textElement) {
+      this.textElement.innerHTML = get(labelState, 'content', '')
     }
     if (labelState.isFocus) {
       this.autoFocus()
@@ -279,7 +315,15 @@ export class Label extends Component<IProps, IState> {
     const {
       model: { state },
       labelState: { isFocus = false },
+      editor,
     } = this.props
+    if (editor && !this.editor) {
+      this.editor = editor
+      this.editor.on(this.textElement, 'dblclick', this.onDbClick)
+      this.editor.on(this.textElement, 'mouseup', this.onMouseUp)
+      // this.editor.on(editorContainer, 'blur', this.onBlur)
+      this.editor.subscribe('blur', this.onBlur)
+    }
     if (state === ElementState.TEXT_EDIT && isFocus) {
       this.autoFocus()
     }
@@ -287,6 +331,7 @@ export class Label extends Component<IProps, IState> {
 
   render() {
     const {
+      editor,
       labelState,
       model: {
         properties: { labelConfig },
@@ -301,8 +346,8 @@ export class Label extends Component<IProps, IState> {
         id={`element-container-${labelState.id}`}
         class={this.elementContainerClass()}
         onMouseDown={this.onMouseDown}
-        onDblClick={this.onDbClick}
-        onBlur={this.onBlur}
+        onDblClick={(!editor && this.onDbClick) || undefined}
+        onBlur={(!editor && this.onBlur) || undefined}
         style={{
           width: '20px',
           height: '20px',

@@ -1,6 +1,6 @@
 import { forEach, map } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
-import { SelectionSelect } from '@logicflow/extension'
+import { SelectionSelect, RichTextEditor } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
@@ -43,7 +43,7 @@ const config: Partial<LogicFlow.Options> = {
       fontSize: 12,
     },
   },
-  plugins: [SelectionSelect],
+  plugins: [SelectionSelect, RichTextEditor],
 }
 
 const customTheme: Partial<LogicFlow.Theme> = {
