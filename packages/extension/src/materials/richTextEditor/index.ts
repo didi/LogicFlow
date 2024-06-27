@@ -3,6 +3,7 @@ import Picker from 'vanilla-picker'
 import rangy from 'rangy'
 import { merge } from 'lodash-es'
 
+rangy.init()
 const ColorPickerButton = MediumEditor.extensions.button.extend({
   name: 'colorpicker',
   tagNames: ['mark'],
@@ -64,24 +65,24 @@ class RichTextEditor {
         buttons: [
           'bold',
           'colorpicker',
-          // 'italic',
-          // 'underline',
-          // 'strikethrough',
-          // 'quote',
-          // 'justifyLeft',
-          // 'justifyCenter',
-          // 'justifyRight',
-          // 'justifyFull',
-          // 'superscript',
-          // 'subscript',
-          // 'orderedlist',
-          // 'unorderedlist',
-          // 'pre',
-          // 'removeFormat',
-          // 'outdent',
-          // 'indent',
-          // 'h2',
-          // 'h3',
+          'italic',
+          'underline',
+          'strikethrough',
+          'quote',
+          'justifyLeft',
+          'justifyCenter',
+          'justifyRight',
+          'justifyFull',
+          'superscript',
+          'subscript',
+          'orderedlist',
+          'unorderedlist',
+          'pre',
+          'removeFormat',
+          'outdent',
+          'indent',
+          'h2',
+          'h3',
         ],
         diffLeft: 100,
         diffTop: 0,
@@ -96,7 +97,6 @@ class RichTextEditor {
       disableEditing: true,
     }
     this.editorOptions = merge(defaultOption, lf.richTextConfig)
-    rangy.init()
   }
 
   init() {
