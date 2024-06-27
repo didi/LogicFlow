@@ -5,34 +5,7 @@ import { createUuid } from '../../util'
 import { GraphModel } from '../../model'
 import { DEFAULT_GRID_SIZE } from '../../constant'
 
-export type GridOptions = {
-  /**
-   * 网格格子间距
-   */
-  size?: number
-  /**
-   * 网格是否可见
-   */
-  visible?: boolean
-  /**
-   * 网格类型
-   * - `dot` 点状网格
-   * - `mesh` 交叉线网格
-   */
-  type?: 'dot' | 'mesh'
-  config?: {
-    /**
-     * 网格的颜色
-     */
-    color: string
-    /**
-     * 网格的宽度
-     * - 对于 `dot` 点状网格，表示点的大小
-     * - 对于 `mesh` 交叉线网格，表示线的宽度
-     */
-    thickness?: number
-  }
-}
+import GridOptions = Grid.GridOptions
 
 type IProps = GridOptions & {
   graphModel: GraphModel
@@ -41,27 +14,6 @@ type IProps = GridOptions & {
 @observer
 export class Grid extends Component<IProps> {
   readonly id = createUuid()
-
-  static readonly defaultProps: GridOptions = {
-    size: DEFAULT_GRID_SIZE,
-    visible: true,
-    type: 'dot',
-    config: {
-      color: '#ababab',
-      thickness: 1,
-    },
-  }
-
-  static getGridOptions(options: number | boolean | GridOptions) {
-    const defaultOptions = cloneDeep(Grid.defaultProps)
-    if (typeof options === 'number') {
-      return assign(defaultOptions, { size: options })
-    } else if (typeof options === 'boolean') {
-      return assign(defaultOptions, { visible: options })
-    } else {
-      return assign(defaultOptions, options)
-    }
-  }
 
   // 网格类型为点状
   renderDot() {
@@ -149,4 +101,54 @@ export class Grid extends Component<IProps> {
   }
 }
 
-export default Grid
+export namespace Grid {
+  export type GridOptions = {
+    /**
+     * 网格格子间距
+     */
+    size?: number
+    /**
+     * 网格是否可见
+     */
+    visible?: boolean
+    /**
+     * 网格类型
+     * - `dot` 点状网格
+     * - `mesh` 交叉线网格
+     */
+    type?: 'dot' | 'mesh'
+    config?: {
+      /**
+       * 网格的颜色
+       */
+      color: string
+      /**
+       * 网格的宽度
+       * - 对于 `dot` 点状网格，表示点的大小
+       * - 对于 `mesh` 交叉线网格，表示线的宽度
+       */
+      thickness?: number
+    }
+  }
+
+  export const defaultProps: GridOptions = {
+    size: DEFAULT_GRID_SIZE,
+    visible: true,
+    type: 'dot',
+    config: {
+      color: '#ababab',
+      thickness: 1,
+    },
+  }
+
+  export function getGridOptions(options: number | boolean | GridOptions) {
+    const defaultOptions = cloneDeep(Grid.defaultProps)
+    if (typeof options === 'number') {
+      return assign(defaultOptions, { size: options })
+    } else if (typeof options === 'boolean') {
+      return assign(defaultOptions, { visible: options })
+    } else {
+      return assign(defaultOptions, options)
+    }
+  }
+}
