@@ -3,7 +3,9 @@ import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 import { KeyboardDef } from './keyboard'
 import { OverlapMode } from './constant'
-import { GridOptions } from './view/overlay'
+import { Grid } from './view/overlay'
+
+import GridOptions = Grid.GridOptions
 
 export namespace Options {
   import NodeData = LogicFlow.NodeData
