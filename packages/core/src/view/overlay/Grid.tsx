@@ -1,4 +1,5 @@
 import { Component } from 'preact/compat'
+import { cloneDeep, assign } from 'lodash-es'
 import { observer } from '../..'
 import { createUuid } from '../../util'
 import { GraphModel } from '../../model'
@@ -13,24 +14,54 @@ export type GridOptions = {
    * 网格是否可见
    */
   visible?: boolean
-
-  graphModel: GraphModel
   /**
    * 网格类型
-   * 'dot' || 'mesh'
+   * - `dot` 点状网格
+   * - `mesh` 交叉线网格
    */
-  type?: string
+  type?: 'dot' | 'mesh'
   config?: {
+    /**
+     * 网格的颜色
+     */
     color: string
+    /**
+     * 网格的宽度
+     * - 对于 `dot` 点状网格，表示点的大小
+     * - 对于 `mesh` 交叉线网格，表示线的宽度
+     */
     thickness?: number
   }
 }
 
-type IProps = GridOptions
+type IProps = GridOptions & {
+  graphModel: GraphModel
+}
 
 @observer
 export class Grid extends Component<IProps> {
   readonly id = createUuid()
+
+  static readonly defaultProps: GridOptions = {
+    size: DEFAULT_GRID_SIZE,
+    visible: true,
+    type: 'dot',
+    config: {
+      color: '#ababab',
+      thickness: 1,
+    },
+  }
+
+  static getGridOptions(options: number | boolean | GridOptions) {
+    const defaultOptions = cloneDeep(Grid.defaultProps)
+    if (typeof options === 'number') {
+      return assign(defaultOptions, { size: options })
+    } else if (typeof options === 'boolean') {
+      return assign(defaultOptions, { visible: options })
+    } else {
+      return assign(defaultOptions, options)
+    }
+  }
 
   // 网格类型为点状
   renderDot() {
@@ -39,20 +70,14 @@ export class Grid extends Component<IProps> {
     const { color, thickness = 2 } = config ?? {}
 
     const length = Math.min(Math.max(1.5, thickness), size / 2) // 2 < length < size /2
-    let opacity = 1
-    if (!visible) {
-      opacity = 0
-    }
-    /* eslint-disable-next-line */
+    const opacity = visible ? 1 : 0
     return (
-      <rect
-        width={length}
-        height={length}
-        rx={length / 2}
-        ry={length / 2}
-        fill={color}
-        opacity={opacity}
-      />
+      <g fill={color} opacity={opacity}>
+        <circle cx={0} cy={0} r={length / 2} />
+        <circle cx={0} cy={size} r={length / 2} />
+        <circle cx={size} cy={0} r={length / 2} />
+        <circle cx={size} cy={size} r={length / 2} />
+      </g>
     )
   }
 
@@ -62,21 +87,23 @@ export class Grid extends Component<IProps> {
     const { config, size = 1, visible } = this.props
     const { color, thickness = 1 } = config ?? {}
     const strokeWidth = Math.min(Math.max(1, thickness), size / 2) // 1 < strokeWidth < size /2
-    const d = `M ${size} 0 H0 M0 0 V0 ${size}`
-    let opacity = 1
-    if (!visible) {
-      opacity = 0
-    }
+    const d = `M 0 0 H ${size} V ${size} H 0 Z`
+    const opacity = visible ? 1 : 0
     return (
-      <path d={d} stroke={color} strokeWidth={strokeWidth} opacity={opacity} />
+      <path
+        d={d}
+        stroke={color}
+        strokeWidth={strokeWidth}
+        opacity={opacity}
+        fill="transparent"
+      />
     )
   }
 
   render() {
-    // TODO 生成网格️️️✔、网格支持 options（size）✔
     const {
       type,
-      size,
+      size = 1,
       graphModel: { transformModel },
     } = this.props
     const { SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } =
@@ -120,16 +147,6 @@ export class Grid extends Component<IProps> {
       </div>
     )
   }
-}
-
-Grid.defaultProps = {
-  size: DEFAULT_GRID_SIZE,
-  visible: true,
-  type: 'dot',
-  config: {
-    color: '#ababab',
-    thickness: 1,
-  },
 }
 
 export default Grid
