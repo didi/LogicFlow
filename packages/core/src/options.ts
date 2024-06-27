@@ -1,9 +1,9 @@
 import { assign } from 'lodash-es'
 import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
-import { GraphModel } from './model'
 import { KeyboardDef } from './keyboard'
-import { DEFAULT_GRID_SIZE, OverlapMode } from './constant'
+import { OverlapMode } from './constant'
+import { GridOptions } from './view/overlay'
 
 export namespace Options {
   import NodeData = LogicFlow.NodeData
@@ -24,19 +24,6 @@ export namespace Options {
       | 'inherit'
     // TODO: 根据具体情况添加各种自定义样式
     [key: string]: any
-  }
-  export type GridOptions = {
-    // 网格格子间距
-    size?: number
-    // 网格是否可见
-    visible?: boolean
-    graphModel?: GraphModel
-    // 网格类型
-    type?: 'dot' | 'mesh'
-    config?: {
-      color: string
-      thickness?: number
-    }
   }
 
   export type AnimationConfig = {
@@ -68,6 +55,9 @@ export namespace Options {
     width?: number
     height?: number
     background?: false | BackgroundConfig
+    /**
+     * Grid 网格配置
+     */
     grid?: number | boolean | GridOptions
 
     partial?: boolean
@@ -117,7 +107,7 @@ export namespace Options {
 
 export namespace Options {
   export function get(options: Partial<Manual>) {
-    const { grid, ...others } = options
+    const { ...others } = options
     const container = options.container
     if (container != null) {
       if (options.width == null) {
@@ -133,29 +123,6 @@ export namespace Options {
     }
 
     const result = assign({}, defaults, others) as Options.Definition
-
-    const defaultGrid: GridOptions = {
-      size: DEFAULT_GRID_SIZE,
-      type: 'dot',
-      visible: true,
-      config: {
-        color: '#ababab',
-        thickness: 1,
-      },
-    }
-    if (typeof grid === 'number') {
-      result.grid = {
-        ...defaultGrid,
-        size: grid,
-      }
-    } else if (typeof grid === 'boolean') {
-      result.grid = {
-        ...defaultGrid,
-        visible: grid,
-      }
-    } else {
-      result.grid = { ...defaultGrid, ...grid }
-    }
 
     return result
   }
