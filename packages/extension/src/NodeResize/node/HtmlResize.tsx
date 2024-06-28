@@ -41,7 +41,7 @@ export class HtmlResizeModel extends HtmlNodeModel {
 
   getResizeOutlineStyle() {
     return {
-      fill: 'transparent',
+      fill: 'none',
       stroke: 'transparent',
       strokeWidth: 1,
       strokeDasharray: '3,3',
