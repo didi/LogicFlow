@@ -62,7 +62,7 @@ export class RectResizeModel extends RectNodeModel {
 
   getResizeOutlineStyle() {
     return {
-      fill: 'none',
+      fill: 'transparent',
       stroke: 'transparent', // 矩形默认不显示调整边框
       strokeWidth: 1,
       strokeDasharray: '3,3',
