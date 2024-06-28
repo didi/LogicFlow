@@ -56,7 +56,8 @@ export class EllipseResizeModel extends EllipseNodeModel {
 
   getResizeOutlineStyle() {
     return {
-      stroke: '#000000',
+      fill: 'none',
+      stroke: 'transparent',
       strokeWidth: 1,
       strokeDasharray: '3,3',
     }
