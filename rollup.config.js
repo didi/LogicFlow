@@ -55,8 +55,9 @@ export function rollupConfig(config = {}) {
   arr.forEach((item) => {
     outputs.push({
       format: 'umd',
-      file: 'dist/index.js',
+      file: 'dist/index.min.js',
       sourcemap: true,
+      exports: 'named',
       ...item,
     })
 
@@ -76,6 +77,12 @@ export function rollupConfig(config = {}) {
     plugins: [
       babel({ babelHelpers: 'bundled' }),
       typescript({ declaration: false }),
+      resolve(),
+      commonjs(),
+      replace({
+        preventAssignment: true,
+        'process.env.NODE_ENV': JSON.stringify('production'),
+      }),
       alias({
         entries: [
           { find: 'react', replacement: 'preact/compact' },
@@ -85,13 +92,7 @@ export function rollupConfig(config = {}) {
         ],
       }),
       nodePolyfills(),
-      resolve(),
-      commonjs(),
-      replace({
-        preventAssignment: true,
-        'process.env.NODE_ENV': JSON.stringify('production'),
-      }),
-      terser(),
+      terser({ sourceMap: true }),
       fileSize({
         reporter: [
           async (options, bundle, result) => {
