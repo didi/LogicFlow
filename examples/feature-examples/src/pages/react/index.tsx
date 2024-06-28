@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import LogicFlow from '@logicflow/core'
 import { register, ReactNodeProps } from '@logicflow/react-node-registry'
 import { Card } from 'antd'
+import '@logicflow/core/es/index.css'
 
 import styles from './index.less'
 
