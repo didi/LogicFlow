@@ -15,10 +15,10 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "@logicflow/core": "workspace:latest",
-    "@logicflow/engine": "workspace:latest",
-    "@logicflow/extension": "workspace:latest",
-    "@logicflow/vue-node-registry": "workspace:latest",
+    "@logicflow/core": "workspace:*",
+    "@logicflow/engine": "workspace:*",
+    "@logicflow/extension": "workspace:*",
+    "@logicflow/vue-node-registry": "workspace:*",
     "element-plus": "^2.0.4",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"

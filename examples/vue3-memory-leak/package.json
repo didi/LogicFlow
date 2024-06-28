@@ -1,15 +1,15 @@
 {
   "name": "vue3-memory-leak",
-  "private": true,
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@logicflow/core": "workspace:latest",
-    "@logicflow/extension": "workspace:latest",
+    "@logicflow/core": "workspace:*",
+    "@logicflow/extension": "workspace:*",
     "element-plus": "^2.0.4",
     "vue": "^3.2.25"
   },
