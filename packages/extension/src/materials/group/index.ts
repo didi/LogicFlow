@@ -24,7 +24,7 @@ export class Group {
   activeGroup: any
   nodeGroupMap: Map<string, string> = new Map()
 
-  constructor({ lf }: LogicFlow.ExtensionProps) {
+  constructor({ lf }: LogicFlow.IExtensionProps) {
     lf.register(GroupNode)
     this.lf = lf
 

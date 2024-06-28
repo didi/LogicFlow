@@ -77,6 +77,7 @@ export default function MiniMapExtension() {
   const [position, setPosition] = useState('right-bottom')
 
   useEffect(() => {
+    LogicFlow.use(MiniMap)
     if (!lfRef.current) {
       const lf = new LogicFlow({
         ...config,
@@ -84,7 +85,8 @@ export default function MiniMapExtension() {
         grid: {
           size: 20,
         },
-        plugins: [Control, MiniMap],
+        // plugins: [Control, MiniMap],
+        plugins: [Control],
         pluginsOptions: {
           MiniMap: {
             ...miniMapOptions,

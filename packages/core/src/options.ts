@@ -10,8 +10,8 @@ import GridOptions = Grid.GridOptions
 export namespace Options {
   import NodeData = LogicFlow.NodeData
   import EdgeData = LogicFlow.EdgeData
-  import ExtensionConstructor = LogicFlow.ExtensionConstructor
   import GraphData = LogicFlow.GraphData
+  import ExtensionType = LogicFlow.ExtensionType
   export type EdgeType = 'line' | 'polyline' | 'bezier' | string
   export type BackgroundConfig = {
     // 背景图片地址
@@ -88,7 +88,7 @@ export namespace Options {
     guards?: GuardsConfig
     overlapMode?: OverlapMode
 
-    plugins?: ExtensionConstructor[]
+    plugins?: ExtensionType[]
     pluginsOptions?: Record<string, any>
     disabledPlugins?: string[]
     disabledTools?: string[]
