@@ -1,3 +1,4 @@
+import LogicFlow from '@logicflow/core'
 import { theme } from './constant'
 import {
   StartEvent,
@@ -22,10 +23,12 @@ import {
   ServiceTaskModel,
 } from './tasks'
 
-class BpmnElement {
-  static pluginName = 'bpmnElement'
+import ExtensionDefinition = LogicFlow.ExtensionDefinition
 
-  constructor({ lf }) {
+const BpmnElement: ExtensionDefinition = {
+  pluginName: 'bpmnElement',
+
+  install(lf) {
     lf.setTheme(theme)
     lf.register(StartEvent)
     lf.register(EndEvent)
@@ -37,7 +40,7 @@ class BpmnElement {
       lf.register(SequenceFlow)
       lf.setDefaultEdgeType('bpmn:sequenceFlow')
     }
-  }
+  },
 }
 
 export {

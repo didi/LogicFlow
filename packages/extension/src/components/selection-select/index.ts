@@ -15,7 +15,7 @@ export class SelectionSelect {
   private isWholeNode = true
   private isWholeEdge = true
 
-  constructor({ lf }: LogicFlow.ExtensionProps) {
+  constructor({ lf }: LogicFlow.IExtensionProps) {
     this.lf = lf
     // 初始化isDefaultStopMoveGraph取值
     const { stopMoveGraph } = lf.getEditConfig()

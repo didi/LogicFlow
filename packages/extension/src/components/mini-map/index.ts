@@ -177,7 +177,7 @@ export class MiniMap {
    */
   private disabledPlugins = ['miniMap', 'control', 'selectionSelect']
 
-  constructor({ lf, LogicFlow, options }: LogicFlow.ExtensionProps) {
+  constructor({ lf, LogicFlow, options }: LogicFlow.IExtensionProps) {
     this.lf = lf
     this.LFCtor = LogicFlow
     if (options && options.MiniMap) {
