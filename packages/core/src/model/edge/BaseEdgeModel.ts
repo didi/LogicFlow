@@ -107,6 +107,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     this.initEdgeData(data)
     this.setAttributes()
   }
+
   /**
    * 初始化边数据
    * @overridable 支持重写
@@ -145,15 +146,18 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     // 文本位置依赖于边上的所有拐点
     this.formatText(data)
   }
+
   /**
    * 设置model属性
    * @overridable 支持重写
    * 每次properties发生变化会触发
    */
   setAttributes() {}
+
   createId(): string | null {
     return null
   }
+
   /**
    * 自定义边样式
    *
@@ -166,6 +170,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       ...this.style,
     }
   }
+
   /**
    * 自定义边调整点样式
    *
@@ -177,6 +182,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       ...this.graphModel.theme.edgeAdjust,
     }
   }
+
   /**
    * 自定义边文本样式
    *
@@ -187,6 +193,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     const { edgeText } = this.graphModel.theme
     return cloneDeep(edgeText)
   }
+
   /**
    * 自定义边动画样式
    *
@@ -204,6 +211,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     const { edgeAnimation } = this.graphModel.theme
     return cloneDeep(edgeAnimation)
   }
+
   /**
    * 自定义边箭头样式
    *
@@ -229,6 +237,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       ...arrow,
     }
   }
+
   /**
    * 自定义边被选中时展示其范围的矩形框样式
    *
@@ -247,6 +256,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     const { outline } = graphModel.theme
     return cloneDeep(outline)
   }
+
   /**
    * 重新自定义文本位置
    *
@@ -258,18 +268,21 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       y: 0,
     }
   }
+
   /**
    * 边的前一个节点
    */
   @computed get sourceNode() {
     return this.graphModel?.nodesMap[this.sourceNodeId]?.model
   }
+
   /**
    * 边的后一个节点
    */
   @computed get targetNode() {
     return this.graphModel?.nodesMap[this.targetNodeId]?.model
   }
+
   @computed get textPosition(): Point {
     return this.getTextPosition()
   }
@@ -346,12 +359,14 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     })
     return position
   }
+
   /**
    * 获取当前边的properties
    */
   getProperties() {
     return toJS(this.properties)
   }
+
   /**
    * 获取被保存时返回的数据
    *
@@ -380,6 +395,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     }
     return data
   }
+
   /**
    * 获取边的数据
    *
@@ -391,6 +407,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   getHistoryData(): EdgeData {
     return this.getData()
   }
+
   /**
    * 设置边的属性，会触发重新渲染
    * @param key 属性名
@@ -401,6 +418,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     this.properties[key] = formatData(val)
     this.setAttributes()
   }
+
   /**
    * 删除边的属性，会触发重新渲染
    * @param key 属性名
@@ -410,6 +428,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     delete this.properties[key]
     this.setAttributes()
   }
+
   /**
    * 设置边的属性，会触发重新渲染
    * @param key 属性名
@@ -423,6 +442,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     }
     this.setAttributes()
   }
+
   /**
    * 修改边的id
    */
@@ -437,6 +457,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     }
     this.id = id
   }
+
   /**
    * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
    * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
@@ -448,6 +469,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       [key]: formatData(val),
     }
   }
+
   /**
    * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
    * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
@@ -459,6 +481,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       ...formatData(styles),
     }
   }
+
   /**
    * 设置边样式，用于插件开发时跳过自定义边的渲染。大多数情况下，不需要使用此方法。
    * 如果需要设置边的样式，请使用 getEdgeStyle 方法自定义边样式。
@@ -497,6 +520,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       }
     }
   }
+
   /**
    * 重置文本位置
    */
@@ -505,6 +529,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     this.text.x = x
     this.text.y = y
   }
+
   /**
    * 移动边上的文本
    */
@@ -520,6 +545,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       }
     }
   }
+
   /**
    * 设置文本位置和值
    */
@@ -528,6 +554,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       assign(this.text, textConfig)
     }
   }
+
   /**
    * 更新文本的值
    */
@@ -537,6 +564,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       value,
     }
   }
+
   /**
    * 内部方法，计算边的起点和终点和其对于的锚点Id
    */
@@ -602,6 +630,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   setHitable(flag = true): void {
     this.isHitable = flag
   }
+
   @action
   setHittable(flag = true): void {
     this.isHittable = flag
@@ -664,16 +693,19 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   updateAttributes(attributes) {
     assign(this, attributes)
   }
+
   // 获取边调整的起点
   @action
   getAdjustStart() {
     return this.startPoint
   }
+
   // 获取边调整的终点
   @action
   getAdjustEnd() {
     return this.endPoint
   }
+
   // 起终点拖拽调整过程中，进行直线路径更新
   @action
   updateAfterAdjustStartAndEnd({
