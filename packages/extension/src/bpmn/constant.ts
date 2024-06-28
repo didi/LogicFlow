@@ -25,7 +25,7 @@ export const UserTaskConfig = {
   height: 80,
 }
 
-export const theme: LogicFlow.CommonTheme = {
+export const theme: Partial<LogicFlow.Theme> = {
   rect: {
     radius: 5,
     stroke: 'rgb(24, 125, 255)',
@@ -43,6 +43,9 @@ export const theme: LogicFlow.CommonTheme = {
     selectedStroke: 'rgb(24, 125, 255)',
   },
   edgeText: {
+    textWidth: 100,
+    overflowMode: 'default',
+    fontSize: 12,
     background: {
       fill: 'white',
       height: 14,

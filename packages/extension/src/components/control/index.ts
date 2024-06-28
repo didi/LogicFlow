@@ -5,9 +5,9 @@ type ControlItem = {
   iconClass: string
   title: string
   text: string
-  onClick?: (lf: LogicFlow) => void
-  onMouseEnter?: (lf: LogicFlow) => void
-  onMouseLeave?: (lf: LogicFlow) => void
+  onClick?: (lf: LogicFlow, e: MouseEvent) => void
+  onMouseEnter?: (lf: LogicFlow, e: MouseEvent) => void
+  onMouseLeave?: (lf: LogicFlow, e: MouseEvent) => void
 }
 
 export class Control {
@@ -64,7 +64,7 @@ export class Control {
   private domContainer?: HTMLElement
   private toolEl?: HTMLElement
 
-  constructor({ lf }: LogicFlow.ExtensionProps) {
+  constructor({ lf }: LogicFlow.IExtensionProps) {
     this.lf = lf
   }
 

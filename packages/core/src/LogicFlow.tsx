@@ -1,5 +1,5 @@
 import { ComponentType, createElement as h, render } from 'preact/compat'
-import { cloneDeep, forEach } from 'lodash-es'
+import { cloneDeep, forEach, indexOf } from 'lodash-es'
 import { observer } from '.'
 import { Options as LFOptions } from './options'
 import * as _Model from './model'
@@ -24,8 +24,9 @@ import History from './history'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
 import { initDefaultShortcut } from './keyboard/shortcut'
+
 import Extension = LogicFlow.Extension
-import RegisteredExtension = LogicFlow.RegisteredExtension
+import ExtensionConfig = LogicFlow.ExtensionConfig
 import ExtensionConstructor = LogicFlow.ExtensionConstructor
 import GraphConfigData = LogicFlow.GraphConfigData
 import NodeConfig = LogicFlow.NodeConfig
@@ -38,11 +39,13 @@ import RegisterParam = LogicFlow.RegisterParam
 import GraphElements = LogicFlow.GraphElements
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
-import ExtensionRender = LogicFlow.ExtensionRender
+import ExtensionRenderFunc = LogicFlow.ExtensionRenderFunc
 import RegisterElementFunc = LogicFlow.RegisterElementFunc
 import PropertiesType = LogicFlow.PropertiesType
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import ClientPosition = LogicFlow.ClientPosition
+import ExtensionDefinition = LogicFlow.ExtensionDefinition
+import ExtensionType = LogicFlow.ExtensionType
 
 const pluginFlag = Symbol('plugin registered by Logicflow.use')
 
@@ -61,13 +64,13 @@ export class LogicFlow {
   tool: Tool
   snaplineModel?: SnaplineModel
 
-  components: ExtensionRender[] = []
+  components: ExtensionRenderFunc[] = []
   // 个性配置的插件，覆盖全局配置的插件
-  readonly plugins: ExtensionConstructor[]
+  readonly plugins: ExtensionType[]
   // 全局配置的插件，所有的LogicFlow示例都会使用
-  static extensions: Map<string, RegisteredExtension> = new Map()
+  static extensions: Map<string, ExtensionConfig> = new Map()
   // 插件扩展方法
-  extension: Record<string, Extension> = {}
+  extension: Record<string, Extension | ExtensionDefinition> = {}
 
   readonly width?: number // 只读：画布宽度
   readonly height?: number // 只读：画布高度
@@ -1292,19 +1295,14 @@ export class LogicFlow {
    * @param props
    */
   static use(
-    extension: ExtensionConstructor,
+    extension: ExtensionConstructor | ExtensionDefinition,
     props?: Record<string, unknown>,
   ): void {
-    let { pluginName } = extension
+    const { pluginName } = extension
     if (!pluginName) {
-      console.warn(
-        `请给插件${
-          extension.name || extension.constructor.name
-        }指定pluginName!`,
-      )
-      pluginName = extension.name // 兼容以前name的情况，1.0版本去掉。
+      throw new Error(`请给插件指定 pluginName!`)
     }
-    // TODO: 应该在何时进行插件的销毁
+    // TODO: 应该在何时进行插件的销毁？？？
     // const preExtension = this.extensions.get(pluginName)?.extension
     // preExtension?.destroy?.() // 该代码应该有问题，因为 preExtension 直接用的是 Constructor，没有实例化。无法访问实例方法 destroy
 
@@ -1316,19 +1314,26 @@ export class LogicFlow {
   }
 
   private installPlugins(disabledPlugins: string[] = []) {
+    const extensionsAddByUse = Array.from(
+      LogicFlow.extensions,
+      ([, extension]) => extension,
+    )
     // 安装插件，优先使用个性插件
-    const extensions = this.plugins ?? LogicFlow.extensions
-    extensions.forEach((ext: any) => {
-      let extension: any
-      let props = null
-      if (ext[pluginFlag]) {
+    const extensions = [...this.plugins, ...extensionsAddByUse]
+    forEach(extensions, (ext) => {
+      let extension: ExtensionConstructor | ExtensionDefinition
+      let props: Record<string, any> | undefined
+
+      if (pluginFlag in ext) {
         extension = ext.extension
         props = ext.props
       } else {
         extension = ext
       }
-      const pluginName = extension?.pluginName || extension?.name
-      if (disabledPlugins.indexOf(pluginName) === -1) {
+
+      const pluginName = extension?.pluginName
+
+      if (indexOf(disabledPlugins, pluginName) === -1) {
         this.installPlugin(extension, props)
       }
     })
@@ -1337,31 +1342,38 @@ export class LogicFlow {
   /**
    * 加载插件-内部方法
    */
-  private installPlugin(extension: Extension, props: any) {
-    if (typeof extension === 'object') {
-      const { pluginName, install, render: renderComponent } = extension
+  private installPlugin(
+    extension: ExtensionConstructor | ExtensionDefinition,
+    props?: Record<string, any>,
+  ) {
+    if ('pluginName' in extension && 'install' in extension) {
+      const { pluginName, install, render } = extension
       if (pluginName) {
         install && install.call(extension, this, LogicFlow)
-        renderComponent && this.components.push(renderComponent.bind(extension))
+        render && this.components.push(render.bind(extension))
         this.extension[pluginName] = extension
       }
       return
     }
-    const ExtensionCls = extension as ExtensionConstructor
-    const extensionInstance = new ExtensionCls({
+
+    const ExtensionCtor = extension as ExtensionConstructor
+    const extensionIns = new ExtensionCtor({
       lf: this,
       LogicFlow,
-      options: this.options.pluginsOptions ?? {},
       props,
+      options: this.options.pluginsOptions ?? {},
     })
-    extensionInstance.render &&
-      this.components.push(extensionInstance.render.bind(extensionInstance))
-    this.extension[ExtensionCls.pluginName] = extensionInstance
+    extensionIns.render &&
+      this.components.push(extensionIns.render.bind(extensionIns))
+    this.extension[ExtensionCtor.pluginName] = extensionIns
   }
 }
 
 // Option
 export namespace LogicFlow {
+  /**
+   * LogicFlow init Options
+   */
   export interface Options extends LFOptions.Common {}
 
   export type DomAttributes = {
@@ -1376,6 +1388,7 @@ export namespace LogicFlow {
     ry?: number
   } & Record<string, any>
   export type AttributesType = Record<string, any>
+
   export type VectorData = {
     deltaX: number
     deltaY: number
@@ -1755,8 +1768,14 @@ export namespace LogicFlow {
 
 // Render or Functions
 export namespace LogicFlow {
-  type FocusOnById = { id: string; coordinate?: never }
-  type FocusOnByCoordinate = { id?: string; coordinate: Position }
+  type FocusOnById = {
+    id: string
+    coordinate?: never
+  }
+  type FocusOnByCoordinate = {
+    id?: string
+    coordinate: Position
+  }
   export type FocusOnArgsType = FocusOnById | FocusOnByCoordinate
 
   export type BaseNodeModelCtor = typeof BaseNodeModel
@@ -1794,32 +1813,43 @@ export namespace LogicFlow {
     new (options: LFOptions.Definition): LogicFlow
   }
 
-  export type RegisteredExtension = {
+  /**
+   * Extension 插件类型
+   */
+  export type ExtensionType = ExtensionConstructor | ExtensionDefinition
+  export type ExtensionConfig = {
     [pluginFlag]: symbol
-    extension: ExtensionConstructor
-    props?: Record<string, unknown>
+    extension: ExtensionType
+    props?: Record<string, any> // TODO: 看这类型是否可以更精确
   }
 
-  export type ExtensionProps = {
+  export type IExtensionProps = {
     lf: LogicFlow
     LogicFlow: LogicFlowConstructor
-    options: Record<string, unknown>
     props?: Record<string, unknown>
+    options: Record<string, unknown>
   }
 
   export interface ExtensionConstructor {
     pluginName: string
-
-    new (props: ExtensionProps): Extension
+    new (props: IExtensionProps): Extension
   }
 
-  export type ExtensionRender = (lf: LogicFlow, container: HTMLElement) => void
+  export type ExtensionRenderFunc = (
+    lf: LogicFlow,
+    container: HTMLElement,
+  ) => void
+
+  // 对象形式定义的插件
+  export type ExtensionDefinition = {
+    pluginName: string
+    install?: (lf: LogicFlow, LFCtor: LogicFlowConstructor) => void
+    render?: ExtensionRenderFunc
+  }
 
   export interface Extension {
-    readonly pluginName?: string // 插件名称，只用用于插件覆盖和细粒度控制加载哪些插件
-    install?: (lf: LogicFlow, logicFlow: LogicFlowConstructor) => void
-    render?: ExtensionRender
-    destroy?: () => void
+    render: ExtensionRenderFunc
+    destroy?: () => void // TODO: 确认插件销毁函数参数类型
   }
 }
 
