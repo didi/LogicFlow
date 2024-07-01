@@ -517,3 +517,23 @@ export const formateAnchorConnectValidateData = (
   }
   return data
 }
+/**
+ * 根据文本坐标获取文本偏移百分比，用于节点缩放和移动时，文本新坐标的计算
+ */
+export const getNodeTextDeltaPerent = (
+  point: Point,
+  nodePoint: Point,
+  width: number,
+  height: number,
+) => {
+  const { x, y } = point
+  const { x: nodeX, y: nodeY } = nodePoint
+  const startX = nodeX - width / 2
+  const startY = nodeY - height / 2
+  const endX = nodeX + width / 2
+  const endY = nodeY + height / 2
+  return {
+    xDeltaPercent: startX === endX ? 0.5 : (x - startX) / (endX - startX),
+    yDeltaPercent: startY === endY ? 0.5 : (y - startY) / (endY - startY),
+  }
+}

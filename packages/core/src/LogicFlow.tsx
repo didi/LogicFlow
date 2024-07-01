@@ -700,11 +700,10 @@ export class LogicFlow {
     forEach(nodes, (node) => {
       const nodeId = node.id
       const nodeModel = this.addNode(node)
-
+      console.log('nodeModel', node, nodeModel)
       if (nodeId) nodeIdMap[nodeId] = nodeModel.id
       elements.nodes.push(nodeModel)
     })
-
     forEach(edges, (edge) => {
       let { sourceNodeId, targetNodeId } = edge
       if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId]
@@ -1436,8 +1435,11 @@ export namespace LogicFlow {
     style?: object
     virtical?: boolean
     isFocus?: boolean
+    isHovered?: boolean
     x?: number
     y?: number
+    xDeltaPercent?: number
+    yDeltaPercent?: number
   } & TextConfig
 
   export type LabelConfig = {

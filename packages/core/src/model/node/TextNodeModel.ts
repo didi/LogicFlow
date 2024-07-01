@@ -25,6 +25,7 @@ export class TextNodeModel extends BaseNodeModel {
       fontSize,
       rowsLength: rows.length,
     })
+    console.log('text width', width)
     return width
   }
   getHeightByText(textValue: LabelType) {
@@ -49,7 +50,7 @@ export class TextNodeModel extends BaseNodeModel {
       )
     }
     if (isObject(this.text)) {
-      return this.getWidthByText(this.text)
+      return this.getWidthByText(this.text) + 20
     }
     return 0
   }
@@ -66,7 +67,7 @@ export class TextNodeModel extends BaseNodeModel {
       )
     }
     if (isObject(this.text)) {
-      return this.getHeightByText(this.text)
+      return this.getHeightByText(this.text) + 20
     }
     return 0
   }

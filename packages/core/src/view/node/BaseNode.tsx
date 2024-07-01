@@ -1,6 +1,6 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map, isArray, cloneDeep } from 'lodash-es'
+import { map, isArray, cloneDeep, reduce } from 'lodash-es'
 import Anchor from '../Anchor'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
@@ -18,6 +18,8 @@ import {
 } from '../../util'
 import RotateControlPoint from '../Rotate'
 import ResizeControlGroup from '../Control'
+
+import LabelType = LogicFlow.LabelType
 
 type IProps = {
   model: BaseNodeModel
@@ -390,8 +392,21 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   setHoverOFF = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     const nodeData = model.getData()
+    // 文本focus时，关联的元素也需要高亮，所以元素失焦时还要判断下是否有文本处于focus状态
     if (!model.isHovered) return
-    model.setHovered(false)
+    let textIsFocus = false
+    if (isArray(model.text)) {
+      textIsFocus = reduce(
+        model.text as LabelType[],
+        (result, value) => {
+          return result || !!value.isHovered
+        },
+        false,
+      )
+    } else {
+      textIsFocus = !!model.text.isHovered
+    }
+    model.setHovered(false && !textIsFocus)
     graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
       e: ev,

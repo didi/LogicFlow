@@ -1,4 +1,4 @@
-import { pick } from 'lodash-es'
+import { pick, head, last } from 'lodash-es'
 import { getNodeBBox, isInNode, distance, sampleCubic } from '.'
 import LogicFlow from '../LogicFlow'
 import { Options } from '../options'
@@ -971,6 +971,63 @@ export const getClosestPointOfPolyline = (
     }
   }
   return crossPoint
+}
+
+/**
+ * 边移动后获取文本位置
+ * @param point 边上文本位置
+ * @params points 边拐点位置
+ */
+export const getTextPositionOfPolyline = (
+  textInfo: {
+    x: number
+    y: number
+    xDeltaPercent: number
+    yDeltaPercent: number
+  },
+  points: string,
+): Point => {
+  // 两种情况：
+  // 1. 如果文本位置在以起点为左上角，终点为右下角的矩形内，则
+  const { xDeltaPercent, yDeltaPercent } = textInfo
+  const pointsPosition = points2PointsList(points)
+  const { x: startX = 0, y: startY = 0 } = head(pointsPosition) as Point
+  const { x: endX = 0, y: endY = 0 } = last(pointsPosition) as Point
+  const deltaX =
+    startX > endX
+      ? (startX - endX) * xDeltaPercent
+      : (endX - startX) * xDeltaPercent
+  const deltaY =
+    startY > endY
+      ? (startY - endY) * yDeltaPercent
+      : (endY - startY) * yDeltaPercent
+  return {
+    x: startX > endX ? endX + deltaX : startX + deltaX,
+    y: startX > endX ? endY + deltaY : startY + deltaY,
+  }
+}
+
+/**
+ *
+ * @param point 文本坐标
+ * @param startPoint 边起点坐标
+ * @param endPoint 边终点坐标
+ * @returns 文本在x轴和y轴上的偏移百分比
+ */
+export const getEdgeTextDeltaPerent = (
+  point: Point,
+  startPoint: Point,
+  endPoint: Point,
+) => {
+  const { x, y } = point
+  const { x: startX, y: startY } = startPoint
+  const { x: endX, y: endY } = endPoint
+  const deltaPercent = {
+    xDeltaPercent: startX === endX ? 0.5 : (x - startX) / (endX - startX),
+    yDeltaPercent: startY === endY ? 0.5 : (y - startY) / (endY - startY),
+  }
+  console.log('deltaPercent', deltaPercent)
+  return deltaPercent
 }
 
 // 规范边初始化数据

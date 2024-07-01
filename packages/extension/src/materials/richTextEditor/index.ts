@@ -1,9 +1,9 @@
 import MediumEditor from 'medium-editor'
 import Picker from 'vanilla-picker'
 import rangy from 'rangy'
+import 'rangy/lib/rangy-classapplier'
 import { merge } from 'lodash-es'
 
-rangy.init()
 const ColorPickerButton = MediumEditor.extensions.button.extend({
   name: 'colorpicker',
   tagNames: ['mark'],
@@ -11,12 +11,15 @@ const ColorPickerButton = MediumEditor.extensions.button.extend({
   aria: 'Color Picker',
   action: 'colorPicker',
   init: function () {
+    rangy.init()
     MediumEditor.extensions.button.prototype.init.call(this)
     this.colorPicker = new Picker({
       parent: this.button,
       color: '#000',
       onDone: (res) => {
-        console.log('res', res)
+        if (this.coloredText && this.coloredText.isAppliedToSelection()) {
+          this.coloredText.undoToSelection()
+        }
         this.coloredText = rangy.createClassApplier('colored', {
           elementTagName: 'span',
           elementProperties: {
@@ -27,6 +30,7 @@ const ColorPickerButton = MediumEditor.extensions.button.extend({
           normalize: true,
         })
         this.coloredText.toggleSelection()
+        this.base.checkContentChanged()
         this.setInactive()
       },
     })
@@ -125,6 +129,7 @@ class RichTextEditor {
       | HTMLCollection,
   ) {
     this.editor.addElements(elements)
+    console.log('this.editor', this.editor)
   }
 
   removeElements(
@@ -137,6 +142,19 @@ class RichTextEditor {
       | HTMLCollection,
   ) {
     this.editor.removeElements(elements)
+  }
+
+  updateElements(
+    elements:
+      | string
+      | HTMLElement
+      | string[]
+      | HTMLElement[]
+      | NodeList
+      | HTMLCollection,
+  ) {
+    this.removeElements(elements)
+    this.addElements(elements)
   }
 
   destory() {

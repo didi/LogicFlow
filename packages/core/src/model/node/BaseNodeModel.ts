@@ -22,6 +22,7 @@ import {
   Matrix,
   pickNodeConfig,
   TranslateMatrix,
+  getNodeTextDeltaPerent,
 } from '../../util'
 import {
   ElementState,
@@ -267,6 +268,12 @@ export class BaseNodeModel implements IBaseNodeModel {
             editable: true,
             isFocus: false,
             ...defaultPosition(),
+            ...getNodeTextDeltaPerent(
+              defaultPosition(),
+              { x: this.x, y: this.y },
+              this.width,
+              this.height,
+            ),
           }
       return
     }
@@ -282,6 +289,12 @@ export class BaseNodeModel implements IBaseNodeModel {
         editable: true,
         isFocus: false,
         ...defaultPosition(),
+        ...getNodeTextDeltaPerent(
+          defaultPosition(),
+          { x: this.x, y: this.y },
+          this.width,
+          this.height,
+        ),
       }
       data.text = labelConfig.multiple ? [text] : text
       return
@@ -298,6 +311,12 @@ export class BaseNodeModel implements IBaseNodeModel {
           editable: true,
           isFocus: false,
           ...defaultPosition(index),
+          ...getNodeTextDeltaPerent(
+            defaultPosition(index),
+            { x: this.x, y: this.y },
+            this.width,
+            this.height,
+          ),
         }
         if (typeof item === 'string') {
           return {
@@ -306,18 +325,18 @@ export class BaseNodeModel implements IBaseNodeModel {
             content: item,
           }
         }
-        console.log('object text', item, {
-          ...defaultText,
-          ...item,
-          content: item.content || item.value,
-        })
         return {
           ...defaultText,
           ...item,
           content: item.content || item.value,
+          ...getNodeTextDeltaPerent(
+            item,
+            { x: this.x, y: this.y },
+            this.width,
+            this.height,
+          ),
         }
       })
-      console.log('textList', textList)
       if (!isNil(labelConfig.max) && labelConfig.max < textList.length) {
         console.warn('【注意】传入文案数量超出所设置最大值，展示文案将被裁剪')
       }
@@ -339,9 +358,9 @@ export class BaseNodeModel implements IBaseNodeModel {
       const formatedText = {
         id: createUuid(),
         isFocus: false,
-        ...data.text,
-        content: data.text.value && data.text.value,
         ...defaultPosition(),
+        ...data.text,
+        content: data.text.content || data.text.value,
       }
       data.text = labelConfig?.multiple ? [formatedText] : formatedText
     }
@@ -817,23 +836,28 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  moveText(deltaX, deltaY): void {
+  moveText(deltaX, deltaY, textId?: string): void {
     const { labelConfig } = this.properties
+    console.log('moveText', labelConfig, this.text)
+    if ((labelConfig as LabelConfig)?.multiple && isArray(this.text)) {
+      this.text = (this.text as LabelType[]).map((item: LabelType) => {
+        if (textId && item.id !== textId) return item
+        return {
+          ...item,
+          x: item.x + deltaX,
+          y: item.y + deltaY,
+        }
+      })
+      return
+    }
     if (!(labelConfig as LabelConfig)?.multiple && isObject(this.text)) {
-      const { x, y } = this.text as LabelType
+      const { x, y, id } = this.text as LabelType
+      if (textId && id !== textId) return
       this.text = {
         ...this.text,
         x: x + deltaX,
         y: y + deltaY,
       }
-      return
-    }
-    if ((labelConfig as LabelConfig)?.multiple && isArray(this.text)) {
-      this.text = (this.text as LabelType[]).map((item: LabelType) => ({
-        ...item,
-        x: item.x + deltaX,
-        y: item.y + deltaY,
-      }))
     }
   }
 
@@ -873,28 +897,41 @@ export class BaseNodeModel implements IBaseNodeModel {
   @action
   addText(labelConf: LabelType | { x: number; y: number }): void {
     const { labelConfig } = this.properties
+    const { eventCenter } = this.graphModel
     const { multiple = false, max } = labelConfig as LabelConfig
     // 当前文本数量已到最大值时不允许新增文本
-    if (multiple && !isNil(max) && this.text.length >= max) return
-    const newText = {
-      id: createUuid(),
-      relateId: this.id,
-      value: '',
-      content: '',
-      draggable: false,
-      editable: true,
-      x: (labelConfig as LabelConfig)?.multiple ? labelConf.x : this.x - 10,
-      y: (labelConfig as LabelConfig)?.multiple ? labelConf.y : this.y - 10,
-      isFocus: true,
-    }
-    if ((labelConfig as LabelConfig)?.multiple) {
-      this.text.push(newText)
+    if (multiple && !isNil(max) && this.text.length >= max) {
+      eventCenter.emit(EventType.TEXT_NOT_ALLOWED_ADD, {
+        data: this.text,
+        model: this,
+      })
+      console.warn('该元素可添加文本已达上限')
       return
     }
-    this.text = {
-      ...toJS(this.text),
-      isFocus: true,
+    if ((labelConfig as LabelConfig)?.multiple) {
+      const newText = {
+        id: createUuid(),
+        relateId: this.id,
+        value: '',
+        content: '',
+        draggable: false,
+        editable: true,
+        x: (labelConfig as LabelConfig)?.multiple ? labelConf.x : this.x - 10,
+        y: (labelConfig as LabelConfig)?.multiple ? labelConf.y : this.y - 10,
+        isFocus: true,
+      }
+      this.text.push(newText)
+    } else {
+      this.text = {
+        ...toJS(this.text),
+        isFocus: true,
+      }
     }
+    console.log('this.text', this.text)
+    eventCenter.emit(EventType.TEXT_ADD, {
+      data: this.text,
+      model: this,
+    })
   }
 
   @action

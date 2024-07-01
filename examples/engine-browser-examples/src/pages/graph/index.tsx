@@ -52,8 +52,9 @@ const customTheme: Partial<LogicFlow.Theme> = {
   },
   nodeText: {
     overflowMode: 'ellipsis',
-    lineHeight: 1.5,
+    lineHeight: 1,
     fontSize: 13,
+    textWidth: 60,
   },
   edgeText: {
     overflowMode: 'ellipsis',
@@ -79,8 +80,8 @@ const data: GraphConfigData = {
       id: 'custom-node-1',
       // rotate: 1.1722738811284763,
       text: {
-        x: 600,
-        y: 140,
+        x: 590,
+        y: 130,
         value: '11111',
         verticle: true,
         draggable: true,
@@ -168,17 +169,6 @@ const data: GraphConfigData = {
       targetNodeId: 'custom-node-3',
       type: 'bezier',
       text: 'bezier',
-    },
-    {
-      id: 'custom-react-node-1',
-      text: {
-        x: 200,
-        y: 500,
-        value: 'custom-react-node',
-      },
-      type: 'custom-react-node',
-      x: 200,
-      y: 500,
     },
   ],
 }

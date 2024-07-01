@@ -18,6 +18,7 @@ import {
   getZIndex,
   pickEdgeConfig,
   twoPointDistance,
+  getEdgeTextDeltaPerent,
 } from '../../util'
 import {
   ElementState,
@@ -529,6 +530,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       x: x - 10, // 视图层div默认宽高是20
       y: y - 10 + 20 * index, //如果初始化了多个文本，则在y轴位置上累加
     })
+    console.log('data', data, this.startPoint, this.endPoint)
     if (!data.text) {
       // 单文本情况下，没有就初始化一个
       // 多文本情况下，没有就是没有
@@ -544,6 +546,11 @@ export class BaseEdgeModel implements IBaseEdgeModel {
             editable: true,
             isFocus: false,
             ...defaultPosition(),
+            ...getEdgeTextDeltaPerent(
+              defaultPosition(),
+              this.startPoint,
+              this.endPoint,
+            ),
           }
     }
     // 如果初始化传入的是字符串，转成对象再根据是否multiple决定是作为数组赋值还是对象复杂
@@ -558,6 +565,11 @@ export class BaseEdgeModel implements IBaseEdgeModel {
         editable: true,
         isFocus: false,
         ...defaultPosition(),
+        ...getEdgeTextDeltaPerent(
+          defaultPosition(),
+          this.startPoint,
+          this.endPoint,
+        ),
       }
       this.text = labelConfig.multiple ? [text] : text
     }
@@ -569,8 +581,13 @@ export class BaseEdgeModel implements IBaseEdgeModel {
         id: createUuid(),
         isFocus: false,
         ...data.text,
-        content: `<p>${data.text.value}</p>`,
+        content: data.text.content || data.text.value,
         ...defaultPosition(),
+        ...getEdgeTextDeltaPerent(
+          defaultPosition(),
+          this.startPoint,
+          this.endPoint,
+        ),
       }
       this.text = labelConfig.multiple ? [formatedText] : formatedText
     }
@@ -589,13 +606,18 @@ export class BaseEdgeModel implements IBaseEdgeModel {
             editable: true,
             isFocus: false,
             ...defaultPosition(index),
+            ...getEdgeTextDeltaPerent(
+              defaultPosition(index),
+              this.startPoint,
+              this.endPoint,
+            ),
           }
         }
         return {
           id: createUuid(),
-          ...defaultPosition(index),
           ...item,
           content: item.content || item.value,
+          ...getEdgeTextDeltaPerent(item, this.startPoint, this.endPoint),
         }
       })
       this.text = labelConfig.multiple
@@ -623,17 +645,22 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 移动边上的文本
    */
-  @action moveText(deltaX, deltaY): void {
-    if (isArray(this.text)) {
-      this.text = (this.text as LabelType[]).map((item: LabelType) => ({
-        ...item,
-        x: item.x + deltaX,
-        y: item.y + deltaY,
-      }))
+  @action moveText(deltaX, deltaY, textId?: string): void {
+    const { labelConfig } = this.properties
+    if ((labelConfig as LabelConfig)?.multiple && isArray(this.text)) {
+      this.text = (this.text as LabelType[]).map((item: LabelType) => {
+        if (textId && item.id !== textId) return item
+        return {
+          ...item,
+          x: item.x + deltaX,
+          y: item.y + deltaY,
+        }
+      })
       return
     }
-    if (isObject(this.text)) {
-      const { x, y } = this.text as LabelType
+    if (!(labelConfig as LabelConfig)?.multiple && isObject(this.text)) {
+      const { x, y, id } = this.text as LabelType
+      if (textId && id !== textId) return
       this.text = {
         ...this.text,
         x: x + deltaX,
@@ -711,24 +738,25 @@ export class BaseEdgeModel implements IBaseEdgeModel {
         data: this.text,
         model: this,
       })
+      console.warn('该元素可添加文本已达上限')
       return
     }
-    const newText = {
-      id: createUuid(),
-      relateId: this.id,
-      value: '',
-      content: '',
-      draggable: false,
-      editable: true,
-      x: (labelConfig as LabelConfig)?.multiple
-        ? labelConf.x
-        : this.textPosition.x - 10,
-      y: (labelConfig as LabelConfig)?.multiple
-        ? labelConf.y
-        : this.textPosition.y - 10,
-      isFocus: true,
-    }
     if ((labelConfig as LabelConfig)?.multiple) {
+      const newText = {
+        id: createUuid(),
+        relateId: this.id,
+        value: 'new Text',
+        content: 'new Text',
+        draggable: false,
+        editable: true,
+        x: (labelConfig as LabelConfig)?.multiple
+          ? labelConf.x
+          : this.textPosition.x - 10,
+        y: (labelConfig as LabelConfig)?.multiple
+          ? labelConf.y
+          : this.textPosition.y - 10,
+        isFocus: true,
+      }
       this.text.push(newText)
     } else {
       this.text = {
@@ -736,6 +764,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
         isFocus: true,
       }
     }
+    console.log('this.text', this.text)
     eventCenter.emit(EventType.TEXT_ADD, {
       data: this.text,
       model: this,

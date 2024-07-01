@@ -219,6 +219,10 @@ export const content = `.lf-graph {
 }
 .lf-label-overlay .lf-label-editor {
   background: #fff;
+  padding: 4px;
+}
+.lf-label-overlay .lf-label-editor:hover {
+  border: 2px dashed #acacac;
 }
 .lf-label-overlay .lf-label-editor-container {
   position: absolute;
@@ -245,23 +249,22 @@ export const content = `.lf-graph {
   height: 50px;
 }
 .lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions {
-  list-style: none;
   display: flex !important;
-  align-content: center;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  place-content: center flex-start;
+  height: 30px;
+  padding-left: 0;
+  list-style: none;
   border-radius: 6px;
   box-shadow: 0 0 1px #fafafa;
-  padding-left: 0;
-  height: 30px;
 }
 .lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li button {
   box-shadow: none;
 }
 .lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li .medium-editor-action {
-  border: 0;
-  box-shadow: 0;
-  border-radius: 0;
   line-height: 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0;
 }
 `

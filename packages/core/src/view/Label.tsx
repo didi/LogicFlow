@@ -10,44 +10,27 @@ import LabelType = LogicFlow.LabelType
 import LabelConfig = LogicFlow.LabelConfig
 
 type IProps = {
-  labelIndex: number
   editable: boolean
   editor: any
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
-  labelState: LabelType // 当前标签的配置数据
+  labelInfo: LabelType // 当前标签的配置数据
+  haveEditor: boolean
 }
 
-// type IState = {}
-type IState = {
-  ref: HTMLElement
-  status: number
-  draggable: boolean
-  editable: boolean
-  content: string
-  x: number
-  y: number
-  width: number
-  height: number
-  style: object
-  isHovered: boolean
-}
 @observer
-export class Label extends Component<IProps, IState> {
+export class Label extends Component<IProps> {
   id: string
   editor: any = null
+  isHovered: boolean = false
   draggable: boolean = false
   editable: boolean = false
-  isHovered: boolean = false
   stepDrag: StepDrag
-  textElement: HTMLElement | null = null
+  textRef: HTMLElement | null = null
   constructor(props) {
     super()
     const {
-      labelState: { id },
-      model: {
-        text: { draggable = false },
-      },
+      labelInfo: { id, draggable },
     } = props
     this.stepDrag = new StepDrag({
       eventType: 'TEXT',
@@ -55,91 +38,96 @@ export class Label extends Component<IProps, IState> {
       step: 1,
       isStopPropagation: draggable,
     })
+    this.draggable = draggable
     this.id = id
+  }
+  setRef = (dom) => {
+    this.textRef = dom
+  }
+  setHoverOn = () => {
+    const { labelInfo, model } = this.props
+    labelInfo.isHovered = true
+    model.setHovered(true)
+    if (this.textRef) {
+      this.textRef.style.zIndex = `${model.zIndex + 1}`
+    }
+  }
+  setHoverOff = () => {
+    const { labelInfo, model } = this.props
+    labelInfo.isHovered = false
+    model.setHovered(false)
+    if (this.textRef) {
+      this.textRef.style.zIndex = `${model.zIndex}`
+    }
   }
   // 拖拽事件
   onDragging = (e) => {
-    const {
-      model,
-      labelState,
-      graphModel: { transformModel, eventCenter },
-    } = this.props
+    const { model, labelInfo, graphModel } = this.props
+    const { transformModel, eventCenter } = graphModel
     const { deltaX, deltaY } = e
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
-    model.moveText(curDeltaX, curDeltaY)
+    model.moveText(curDeltaX, curDeltaY, labelInfo.id)
     eventCenter.emit(EventType.TEXT_DRAG, {
-      data: labelState,
+      data: labelInfo,
       e,
       model,
     })
   }
   onDbClick = (e) => {
     const {
-      labelState,
+      labelInfo,
       model,
       editable,
       graphModel: { eventCenter },
     } = this.props
+    this.draggable = false
     model.setElementState(ElementState.TEXT_EDIT)
-    labelState.isFocus = true
-    if (
-      editable &&
-      this.textElement &&
-      this.textElement.contentEditable !== 'true'
-    ) {
+    labelInfo.isFocus = true
+    if (editable && this.textRef && this.textRef.contentEditable !== 'true') {
       this.autoFocus()
     }
-    eventCenter.emit(EventType.TEXT_DRAG, {
-      data: labelState,
+    eventCenter.emit(EventType.TEXT_DBCLICK, {
+      data: labelInfo,
       e,
       model,
     })
   }
   onBlur = (e) => {
-    console.log('on dom blur')
     const {
-      labelState,
+      labelInfo,
       model,
       editable,
       graphModel: { eventCenter },
     } = this.props
-    if (
-      editable &&
-      this.textElement &&
-      this.textElement.contentEditable !== 'false'
-    ) {
-      this.textElement.contentEditable = 'false'
+    if (editable && this.textRef && this.textRef.contentEditable !== 'false') {
+      this.textRef.contentEditable = 'false'
       const label = {
-        content: this.textElement.innerHTML,
-        value: this.textElement.innerText,
+        content: this.textRef.innerHTML,
+        value: this.textRef.innerText,
         isFocus: false,
       }
-      // if (!trim(this.textElement.innerText)) {
-      //   this.props.editor.removeElements(this.textElement)
-      //   this.props.model.deleteText({ id: this.id })
-      //   return
-      // }
       model.updateText(label, this.id)
       model.setElementState(ElementState.DEFAULT)
-      labelState.isFocus = false
+      labelInfo.isFocus = false
+      this.draggable = !!labelInfo.draggable
       eventCenter.emit(EventType.TEXT_BLUR, {
-        data: labelState,
+        data: labelInfo,
         e,
-        element: this.textElement,
+        element: this.textRef,
         model,
       })
     }
     this.hideToolBar()
+    this.setHoverOff()
   }
   onMouseDown = (ev: MouseEvent) => {
     const {
-      labelState: { draggable },
       model,
       graphModel: {
         editConfigModel: { nodeTextDraggable },
       },
     } = this.props
-    if (draggable || nodeTextDraggable) {
+    if (this.draggable || nodeTextDraggable) {
       this.stepDrag.model = model
       this.stepDrag.handleMouseDown(ev)
     }
@@ -152,28 +140,34 @@ export class Label extends Component<IProps, IState> {
   }
   autoFocus = () => {
     const {
-      labelState,
+      labelInfo,
       graphModel: { eventCenter },
     } = this.props
-    if (!this.textElement) return
-    this.textElement.contentEditable = 'true'
-    this.textElement.focus()
+    if (!this.textRef) return
+    this.textRef.contentEditable = 'true'
+    this.textRef.focus()
+    const range = document.createRange()
+    const selection = window.getSelection()
+    range.selectNodeContents(this.textRef)
+    range.collapse(false)
+    selection?.removeAllRanges()
+    selection?.addRange(range)
     eventCenter.emit(EventType.TEXT_FOCUS, {
-      data: labelState,
-      element: this.textElement,
+      data: labelInfo,
+      element: this.textRef,
     })
   }
 
   showToolBar = () => {
     console.log('showToolBar')
-    const { editor, labelState } = this.props
+    const { editor, labelInfo } = this.props
     if (!isEmpty(editor)) {
       const toolDom = document.getElementById('medium-editor-toolbar-1')
       if (!toolDom) return
       toolDom.style.display = 'block'
       toolDom.style.position = 'absolute'
-      toolDom.style.top = `${labelState.y - 60}px`
-      toolDom.style.left = `${labelState.x - 20}px`
+      toolDom.style.top = `${labelInfo.y - 60}px`
+      toolDom.style.left = `${labelInfo.x - 20}px`
     }
   }
 
@@ -189,19 +183,11 @@ export class Label extends Component<IProps, IState> {
     }
   }
 
-  setHoverON = () => {
-    this.setState({ isHovered: true })
-  }
-
-  setHoverOFF = () => {
-    this.setState({ isHovered: false })
-  }
-
-  textElementStyle = () => {
+  textRefStyle = () => {
     const {
       model,
       graphModel: { theme },
-      labelState,
+      labelInfo,
     } = this.props
     const {
       width,
@@ -209,25 +195,25 @@ export class Label extends Component<IProps, IState> {
       BaseType,
       properties: { labelConfig },
     } = model
-    // const { inputText } = theme
-    let elementStyle
     // 自动换行节点边通用样式
     const commonAutoStyle = {
-      minWidth: '1em',
+      // minWidth: '1em',
       minHeight: '1em',
       resize: 'auto',
       whiteSpace: 'normal',
-      wordBreak: 'break-all',
     }
+    let elementStyle
     // 首先判断渲染传入的数据里是否设置了最大宽高，是的话就用传入的
     // 其次判断是节点还是边，如果是节点最大宽高取节点的宽高；如果是边则不做限制
     // 最后判断文本朝向，如果是纵向文本，最大宽高===节点的高宽；如果是横向文本，最大宽高===节点宽高
-    let maxWidth = labelState.maxWidth
-    let maxHeight = labelState.maxHeight
+    let maxWidth = labelInfo.maxWidth
+    let maxHeight = labelInfo.maxHeight
     if (BaseType === 'node') {
+      console.log('node text width', width, height)
       maxWidth = `${(labelConfig as LabelConfig)?.verticle ? height : width}px`
       maxHeight = `${(labelConfig as LabelConfig)?.verticle ? width : height}px`
     }
+
     // 如果边文案自动换行, 设置编辑框宽度
     if (BaseType === ElementType.EDGE) {
       const {
@@ -250,6 +236,7 @@ export class Label extends Component<IProps, IState> {
         nodeText: { overflowMode, lineHeight, wrapPadding, textWidth },
       } = theme
       const { width, modelType, textWidth: nodeTextWidth } = model
+      console.log('finalTextWidth', nodeTextWidth, textWidth, width)
       const finalTextWidth =
         nodeTextWidth ||
         textWidth ||
@@ -261,13 +248,16 @@ export class Label extends Component<IProps, IState> {
       ) {
         elementStyle = {
           ...commonAutoStyle,
-          width: finalTextWidth,
-          minWidth: finalTextWidth,
+          // width: finalTextWidth - 2,
+          minWidth:
+            modelType === ModelType.TEXT_NODE ? undefined : finalTextWidth - 2,
           lineHeight,
           padding: wrapPadding,
-          maxWidth,
-          maxHeight,
-          background: 'transparent',
+          wordBreak:
+            modelType === ModelType.TEXT_NODE ? 'keep-all' : 'break-all',
+          maxWidth: modelType === ModelType.TEXT_NODE ? undefined : maxWidth,
+          maxHeight: modelType === ModelType.TEXT_NODE ? undefined : maxHeight,
+          // background: 'transparent',
         }
       }
     }
@@ -280,17 +270,15 @@ export class Label extends Component<IProps, IState> {
   elementContainerClass = () => {
     const classNames = ['lf-label-editor-container']
     const {
-      labelState,
       graphModel,
       model: { BaseType },
     } = this.props
     const {
       editConfigModel: { nodeTextDraggable, edgeTextDraggable },
     } = graphModel
-    const { draggable } = labelState
     if (
-      (BaseType === ElementType.NODE && nodeTextDraggable && draggable) ||
-      (BaseType === ElementType.EDGE && edgeTextDraggable && draggable)
+      (BaseType === ElementType.NODE && nodeTextDraggable && this.draggable) ||
+      (BaseType === ElementType.EDGE && edgeTextDraggable && this.draggable)
     ) {
       classNames.push('lf-text-draggable')
     }
@@ -298,30 +286,40 @@ export class Label extends Component<IProps, IState> {
   }
 
   componentDidMount(): void {
-    const { labelState } = this.props
-    this.textElement = document.getElementById(
-      `editor-container-${labelState.id}`,
-    )
-
-    if (this.textElement) {
-      this.textElement.innerHTML = get(labelState, 'content', '')
+    const { labelInfo, haveEditor, editor } = this.props
+    if (this.textRef) {
+      this.textRef.innerHTML = get(labelInfo, 'content', '')
     }
-    if (labelState.isFocus) {
+    if (labelInfo.isFocus) {
       this.autoFocus()
+    }
+    // 画布初始化时富文本插件还没有初始化，所以需要在update的时候加上监听事件
+    // 画布初始化后的文本节点则在mounted时加上监听事件
+    if (haveEditor && editor && !this.editor) {
+      this.editor = editor
+      this.editor.on(this.textRef, 'dblclick', this.onDbClick)
+      this.editor.on(this.textRef, 'mouseup', this.onMouseUp)
+      this.editor.on(this.textRef, 'mouseenter', this.setHoverOn)
+      this.editor.on(this.textRef, 'mouseover', this.setHoverOn)
+      this.editor.on(this.textRef, 'mouseleave', this.setHoverOff)
+      this.editor.subscribe('blur', this.onBlur)
     }
   }
 
   componentDidUpdate(): void {
     const {
       model: { state },
-      labelState: { isFocus = false },
+      labelInfo: { isFocus = false },
       editor,
     } = this.props
+    // 画布初始化时富文本插件还没有初始化，所以需要在update的时候加上监听事件
     if (editor && !this.editor) {
       this.editor = editor
-      this.editor.on(this.textElement, 'dblclick', this.onDbClick)
-      this.editor.on(this.textElement, 'mouseup', this.onMouseUp)
-      // this.editor.on(editorContainer, 'blur', this.onBlur)
+      this.editor.on(this.textRef, 'dblclick', this.onDbClick)
+      this.editor.on(this.textRef, 'mouseup', this.onMouseUp)
+      this.editor.on(this.textRef, 'mouseenter', this.setHoverOn)
+      this.editor.on(this.textRef, 'mouseover', this.setHoverOn)
+      this.editor.on(this.textRef, 'mouseleave', this.setHoverOff)
       this.editor.subscribe('blur', this.onBlur)
     }
     if (state === ElementState.TEXT_EDIT && isFocus) {
@@ -332,7 +330,7 @@ export class Label extends Component<IProps, IState> {
   render() {
     const {
       editor,
-      labelState,
+      labelInfo,
       model: {
         properties: { labelConfig },
         getTextShape,
@@ -343,25 +341,29 @@ export class Label extends Component<IProps, IState> {
     }
     return (
       <div
-        id={`element-container-${labelState.id}`}
+        id={`element-container-${labelInfo.id}`}
         class={this.elementContainerClass()}
         onMouseDown={this.onMouseDown}
         onDblClick={(!editor && this.onDbClick) || undefined}
         onBlur={(!editor && this.onBlur) || undefined}
+        onMouseEnter={(!editor && this.setHoverOn) || undefined}
+        onMouseOver={(!editor && this.setHoverOn) || undefined}
+        onMouseLeave={(!editor && this.setHoverOff) || undefined}
         style={{
           width: '20px',
           height: '20px',
           transform: `rotate(${
             (labelConfig as LabelConfig)?.verticle ? '-0.25turn' : 0
           })`,
-          top: `${labelState.y}px`,
-          left: `${labelState.x}px`,
-          pointerEvents: labelState.content ? 'all' : 'none',
+          top: `${labelInfo.y}px`,
+          left: `${labelInfo.x}px`,
+          pointerEvents: labelInfo.content ? 'all' : 'none',
         }}
       >
         <div
-          id={`editor-container-${labelState.id}`}
-          style={this.textElementStyle()}
+          id={`editor-container-${labelInfo.id}`}
+          ref={this.setRef}
+          style={this.textRefStyle()}
           class="lf-label-editor"
         />
       </div>

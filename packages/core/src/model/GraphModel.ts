@@ -23,7 +23,8 @@ import {
   createEdgeGenerator,
   createUuid,
   formatData,
-  getClosestPointOfPolyline,
+  // getClosestPointOfPolyline,
+  getTextPositionOfPolyline,
   getMinIndex,
   getNodeAnchorPosition,
   getNodeBBox,
@@ -784,6 +785,7 @@ export class GraphModel {
     const data = targetNode?.getData()
     if (data) {
       if (data.text) {
+        console.log('data.text', data.text)
         if (isArray(data.text)) {
           data.text = (data.text as LabelType[]).map((textItem) => {
             const { x, y } = textItem
@@ -796,8 +798,9 @@ export class GraphModel {
             return newText
           })
         } else if (isObject(data.text)) {
-          ;(data.text as LabelType).x = data.x
-          ;(data.text as LabelType).y = data.y
+          const { x, y } = data.text
+          ;(data.text as LabelType).x = x + (x - data.x) + 30
+          ;(data.text as LabelType).y = y + (y - data.y) + 30
         }
       }
       data.x += 30
@@ -946,28 +949,41 @@ export class GraphModel {
     }
     if (edgeModel.modelType === ModelType.POLYLINE_EDGE) {
       if (!isArray(edgeModel.text) && edgeModel.text?.value) {
-        const textPosition = edgeModel.text
-        const newPoint = getClosestPointOfPolyline(
-          textPosition,
+        const {
+          x,
+          y,
+          xDeltaPercent = 0.5,
+          yDeltaPercent = 0.5,
+        } = edgeModel.text
+        const newPoint = getTextPositionOfPolyline(
+          { x, y, xDeltaPercent, yDeltaPercent },
           edgeModel.points,
         )
-        edgeModel.moveText(
-          newPoint.x - textPosition.x,
-          newPoint.y - textPosition.y,
-        )
+        edgeModel.moveText(newPoint.x - x, newPoint.y - y)
         return
       }
       if (isArray(edgeModel.text)) {
         edgeModel.text.forEach((item) => {
-          const textPosition = item
-          const newPoint = getClosestPointOfPolyline(
-            textPosition,
+          const { x, y, xDeltaPercent = 0.5, yDeltaPercent = 0.5 } = item
+          const newPoint = getTextPositionOfPolyline(
+            { x, y, xDeltaPercent, yDeltaPercent },
             edgeModel.points,
           )
-          edgeModel.moveText(
-            newPoint.x - textPosition.x,
-            newPoint.y - textPosition.y,
+          console.log(
+            'handleEdgeTextMove',
+            '\npoints',
+            edgeModel.points,
+            '\nnewPoint x,y',
+            newPoint.x,
+            newPoint.y,
+            '\ntext x,y',
+            x,
+            y,
+            '\ndelta',
+            newPoint.x - x,
+            newPoint.y - y,
           )
+          edgeModel.moveText(newPoint.x - x, newPoint.y - y)
         })
       }
       return
@@ -1162,6 +1178,7 @@ export class GraphModel {
     )
     for (let i = 0; i < this.edges.length; i++) {
       const edgeModel = this.edges[i]
+      console.log('edgeModel', edgeModel, edgeModel.textPosition)
       const { x, y } = edgeModel.textPosition
       const sourceMoveDistance = nodeIdMap[edgeModel.sourceNodeId]
       const targetMoveDistance = nodeIdMap[edgeModel.targetNodeId]
