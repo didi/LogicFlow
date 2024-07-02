@@ -63,7 +63,7 @@ export class LogicFlow {
 
   components: ExtensionRender[] = []
   // 个性配置的插件，覆盖全局配置的插件
-  readonly plugins: ExtensionConstructor[]
+  readonly plugins: (ExtensionConstructor | Extension)[]
   // 全局配置的插件，所有的LogicFlow示例都会使用
   static extensions: Map<string, RegisteredExtension> = new Map()
   // 插件扩展方法
@@ -690,8 +690,8 @@ export class LogicFlow {
     distance = 40,
   ): GraphElements | undefined {
     // TODO: 1. 解决下面方法中 distance 传参缺未使用的问题；该方法在快捷键中有调用
-    console.log('addElements', nodes, edges, distance)
     // TODO: 2. review 一下本函数代码逻辑，确认 nodeIdMap 的作用，看是否有优化的空间
+    console.log('distance', distance)
     const nodeIdMap: Record<string, string> = {}
     const elements: GraphElements = {
       nodes: [],
@@ -700,11 +700,9 @@ export class LogicFlow {
     forEach(nodes, (node) => {
       const nodeId = node.id
       const nodeModel = this.addNode(node)
-
       if (nodeId) nodeIdMap[nodeId] = nodeModel.id
       elements.nodes.push(nodeModel)
     })
-
     forEach(edges, (edge) => {
       let { sourceNodeId, targetNodeId } = edge
       if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId]
@@ -1424,6 +1422,32 @@ export namespace LogicFlow {
     draggable?: boolean
   } & Point
 
+  export type LabelType = {
+    type?: string
+    relateId?: string
+    minWidth?: string | null
+    maxWidth?: string | null
+    minHeight?: string | null
+    maxHeight?: string | null
+    style?: object
+    virtical?: boolean
+    isFocus?: boolean
+    isHovered?: boolean
+    x?: number
+    y?: number
+    xDeltaPercent?: number
+    yDeltaPercent?: number
+    yDeltaDistance?: number
+    xDeltaDistance?: number
+    content?: string
+  } & TextConfig
+
+  export type LabelConfig = {
+    verticle: boolean
+    multiple: boolean
+    max?: number
+  }
+
   export type AppendConfig = {
     startIndex: number
     endIndex: number
@@ -1456,6 +1480,7 @@ export namespace LogicFlow {
   export interface FakeNodeConfig {
     type: string
     text?: TextConfig | string
+    label?: LabelType[] | LabelType | string
     properties?: PropertiesType
 
     [key: string]: unknown
@@ -1475,10 +1500,12 @@ export namespace LogicFlow {
     x: number
     y: number
     text?: TextConfig | string
+    label?: LabelType[] | string[]
     zIndex?: number
     properties?: PropertiesType
     virtual?: boolean // 是否虚拟节点
     rotate?: number
+    textMode?: string
 
     [key: string]: any
   }
@@ -1486,7 +1513,7 @@ export namespace LogicFlow {
   export interface NodeData extends NodeConfig {
     id: string
     text?: TextConfig
-
+    label?: LabelType[]
     [key: string]: unknown
   }
 
@@ -1498,10 +1525,11 @@ export namespace LogicFlow {
     sourceAnchorId?: string
     targetNodeId: string
     targetAnchorId?: string
-
+    textMode?: string
     startPoint?: Point
     endPoint?: Point
     text?: TextConfig | string
+    label?: LabelType[] | string[]
     pointsList?: Point[]
     zIndex?: number
     properties?: PropertiesType
@@ -1511,6 +1539,7 @@ export namespace LogicFlow {
     id: string
     type: string
     text?: TextConfig
+    label?: LabelType[]
     startPoint: Point
     endPoint: Point
 

@@ -3,12 +3,13 @@ import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 import { GraphModel } from './model'
 import { KeyboardDef } from './keyboard'
-import { DEFAULT_GRID_SIZE, OverlapMode } from './constant'
+import { DEFAULT_GRID_SIZE, OverlapMode, TextMode } from './constant'
 
 export namespace Options {
   import NodeData = LogicFlow.NodeData
   import EdgeData = LogicFlow.EdgeData
   import ExtensionConstructor = LogicFlow.ExtensionConstructor
+  import Extension = LogicFlow.Extension
   import GraphData = LogicFlow.GraphData
   export type EdgeType = 'line' | 'polyline' | 'bezier' | string
   export type BackgroundConfig = {
@@ -74,6 +75,8 @@ export namespace Options {
     keyboard?: KeyboardDef
     style?: Partial<LogicFlow.Theme> // 主题配置
     edgeType?: EdgeType
+    edgeTextMode?: TextMode
+    nodeTextMode?: TextMode
     adjustEdge?: boolean
 
     allowRotate?: boolean // 允许节点旋转
@@ -96,7 +99,7 @@ export namespace Options {
     guards?: GuardsConfig
     overlapMode?: OverlapMode
 
-    plugins?: ExtensionConstructor[]
+    plugins?: (ExtensionConstructor | Extension)[]
     pluginsOptions?: Record<string, any>
     disabledPlugins?: string[]
     disabledTools?: string[]

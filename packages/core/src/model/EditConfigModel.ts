@@ -1,5 +1,6 @@
 import { assign, pick } from 'lodash-es'
 import { observable, action } from '../util/mobx'
+import { TextMode } from '../constant'
 
 export interface EditConfigInterface {
   /**
@@ -87,6 +88,10 @@ export interface EditConfigInterface {
    * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string
+  // 节点文本类型
+  nodeTextMode?: string
+  // 边文本类型
+  edgeTextMode?: string
 }
 
 const SilentConfig = {
@@ -127,6 +132,8 @@ const keys = [
   'edgeTextDraggable',
   'multipleSelectKey',
   'autoExpand',
+  'nodeTextMode',
+  'edgeTextMode',
 ]
 /**
  * 页面编辑配置
@@ -151,6 +158,12 @@ export class EditConfigModel {
   @observable nodeTextDraggable = false
   @observable edgeTextDraggable = false
   @observable autoExpand = false
+  @observable multipleNodeText = false // 是否支持多个节点文本
+  @observable multipleEdgeText = false // 是否支持多个边文本
+  @observable nodeTextVerticle = false // 节点文本朝向是否是纵向
+  @observable edgeTextVerticle = false // 边文本朝向是否是纵向
+  @observable nodeTextMode = TextMode.TEXT // 节点文本模式
+  @observable edgeTextMode = TextMode.TEXT // 边文本模式
   multipleSelectKey = ''
   defaultConfig = {} // 设置为静默模式之前的配置，在取消静默模式后恢复
   constructor(config: EditConfigInterface) {
@@ -194,6 +207,10 @@ export class EditConfigModel {
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
         autoExpand: this.autoExpand,
+        multipleNodeText: this.multipleNodeText,
+        multipleEdgeText: this.multipleEdgeText,
+        nodeTextVerticle: this.nodeTextVerticle,
+        edgeTextVerticle: this.edgeTextVerticle,
       }
       assign(conf, silentConfig)
     }

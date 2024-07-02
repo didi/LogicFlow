@@ -1,4 +1,4 @@
-import { forEach } from 'lodash-es'
+import { forEach, isEmpty, isObject } from 'lodash-es'
 import LogicFlow, {
   BaseEdgeModel,
   BaseNodeModel,
@@ -12,6 +12,7 @@ import EdgeConfig = LogicFlow.EdgeConfig
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import BoxBoundsPoint = Model.BoxBoundsPoint
+import NodeConfig = LogicFlow.NodeConfig
 
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
@@ -143,31 +144,38 @@ export class Group {
           properties,
           type,
           text,
+          label,
           rotate,
           children,
+          textMode,
           // incoming,
           // outgoing,
         } = childNodeModel
-
+        const nodeConfig: NodeConfig = {
+          x: x + distance,
+          y: y + distance,
+          properties,
+          type,
+          rotate,
+          // 如果不传递type，会自动触发NODE_ADD
+          // 有概率触发appendToGroup
+        }
+        if (textMode === 'label') {
+          nodeConfig.label = label.map((item) => ({
+            ...item,
+            x: item.x + distance,
+            y: item.y + distance,
+          }))
+        } else if (isObject(text) && !isEmpty(text)) {
+          nodeConfig.text = {
+            ...text,
+            x: text.x + distance,
+            y: text.y + distance,
+          }
+        }
         const eventType =
           EventType.NODE_GROUP_COPY || ('node:group-copy-add' as EventType)
-        const newChildModel = lf.addNode(
-          {
-            x: x + distance,
-            y: y + distance,
-            properties,
-            type,
-            text: {
-              ...text,
-              x: text.x + distance,
-              y: text.y + distance,
-            },
-            rotate,
-            // 如果不传递type，会自动触发NODE_ADD
-            // 有概率触发appendToGroup
-          },
-          eventType,
-        )
+        const newChildModel = lf.addNode(nodeConfig, eventType)
         ;(current as GroupNodeModel).addChild(newChildModel.id)
         nodeIdMap[childId] = newChildModel.id
         nodesArray.push(newChildModel)
@@ -219,7 +227,8 @@ export class Group {
     let targetId = edge.targetNodeId
     if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId]
     if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId]
-    const { type, startPoint, endPoint, pointsList, text } = edge
+    const { type, startPoint, endPoint, pointsList, textMode, text, label } =
+      edge
     // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
     const newStartPoint = {
       x: (startPoint?.x || 0) + distance,
@@ -237,25 +246,31 @@ export class Group {
         return point
       })
     }
-    const newText = text
-    if (text && typeof text !== 'string') {
-      ;(newText as { x: number; y: number; value: string }).x =
-        text.x + distance
-      ;(newText as { x: number; y: number; value: string }).y =
-        text.y + distance
-    }
-    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
-
-    // 简化复制时的参数传入，防止创建出两个edge属于同个group这种情况
-    return lf.graphModel.addEdge({
+    const edgeConfig: EdgeConfig = {
       type,
       startPoint: newStartPoint,
       endPoint: newEndPoint,
       sourceNodeId: sourceId,
       targetNodeId: targetId,
       pointsList: newPointsList,
-      text: newText,
-    })
+    }
+    if (textMode === 'label') {
+      edgeConfig.label = label?.map((item) => {
+        item.x += distance
+        item.y += distance
+        return item
+      })
+    } else if (isObject(text) && !isEmpty(text)) {
+      edgeConfig.text = {
+        ...text,
+        x: text?.x + distance,
+        y: text?.y + distance,
+      }
+    }
+    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
+
+    // 简化复制时的参数传入，防止创建出两个edge属于同个group这种情况
+    return lf.graphModel.addEdge(edgeConfig)
   }
 
   /**

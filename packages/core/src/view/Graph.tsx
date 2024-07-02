@@ -5,6 +5,7 @@ import {
   ToolOverlay,
   BackgroundOverlay,
   Grid,
+  // LabelOverlay,
   SnaplineOverlay,
   OutlineOverlay,
   BezierAdjustOverlay,
@@ -71,7 +72,6 @@ class Graph extends Component<IGraphProps> {
     const grid = options.grid as any // TODO: fix type
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
-
     return (
       <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>
