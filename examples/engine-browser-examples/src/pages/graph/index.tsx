@@ -118,7 +118,7 @@ export default function BasicNode() {
     ]
 
     map(elements, (customElement) => {
-      lf.register(customElement)
+      lf.register(customElement as LogicFlow.RegisterConfig)
     })
   }
   const registerEvents = (lf: LogicFlow) => {
@@ -261,7 +261,7 @@ export default function BasicNode() {
   const handleRefreshGraph = () => {
     const lf = lfRef.current
     if (lf) {
-      const data = lf.getGraphData()
+      const data = lf.getGraphRawData()
       console.log('current graph data', data)
       const refreshData = LogicFlowUtil.refreshGraphId(data)
       console.log('after refresh graphId', data)
@@ -288,7 +288,7 @@ export default function BasicNode() {
 
   const handleTurnAnimationOn = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphConfigData
+      const { edges } = lfRef.current.getGraphRawData()
       forEach(edges, (edge) => {
         lfRef.current?.openEdgeAnimation(edge.id)
       })
@@ -296,7 +296,7 @@ export default function BasicNode() {
   }
   const handleTurnAnimationOff = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphConfigData
+      const { edges } = lfRef.current.getGraphRawData()
       forEach(edges, (edge) => {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })

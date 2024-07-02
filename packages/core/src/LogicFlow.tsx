@@ -1403,7 +1403,7 @@ export namespace LogicFlow {
   }
   export type Point = {
     id?: string
-    [key: string]: any
+    [key: string]: any // TODO: 确认这个属性是干什么的呢？是有可以移除
   } & Position
   export type PointTuple = [number, number]
   export type ClientPosition = {
@@ -1435,7 +1435,7 @@ export namespace LogicFlow {
     value: string
     editable?: boolean
     draggable?: boolean
-  } & Point
+  } & Position
 
   export type AppendConfig = {
     startIndex: number
