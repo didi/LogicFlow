@@ -3,7 +3,7 @@ import { Circle } from '../shape'
 import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseEdgeModel, PolylineEdgeModel } from '../../model'
-import { ElementState, EventType, ModelType } from '../../constant'
+import { ElementState, EventType, ModelType, TextMode } from '../../constant'
 import {
   isMultipleSelect,
   getClosestPointOfPolyline,
@@ -68,7 +68,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     return (
       <LineText
         ref={this.textRef}
-        editable={editConfigModel.edgeTextEdit && model.text.editable}
+        editable={(editConfigModel.edgeTextEdit && model.text.editable) || true}
         model={model}
         graphModel={graphModel}
         draggable={draggable}
@@ -385,15 +385,22 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     })
     if (isDoubleClick) {
       const { editConfigModel, textEditElement } = graphModel
+      const { id, text, modelType, textMode } = model
       // 当前边正在编辑，需要先重置状态才能变更文本框位置
-      if (textEditElement && textEditElement.id === model.id) {
-        graphModel.setElementStateById(model.id, ElementState.DEFAULT)
+      if (textEditElement && textEditElement.id === id) {
+        graphModel.setElementStateById(id, ElementState.DEFAULT)
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (editConfigModel.edgeTextEdit && model.text.editable) {
-        graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
+      if (
+        (editConfigModel.edgeTextEdit && textMode === TextMode.LABEL) ||
+        (textMode === TextMode.TEXT && text.editable)
+      ) {
+        model.setSelected(false)
+        graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
+        textMode === TextMode.LABEL &&
+          model.addLabel(position.canvasOverlayPosition)
       }
-      if (model.modelType === ModelType.POLYLINE_EDGE) {
+      if (modelType === ModelType.POLYLINE_EDGE) {
         const polylineEdgeModel = model as PolylineEdgeModel
         const {
           canvasOverlayPosition: { x, y },
@@ -456,7 +463,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    */
   render() {
     const {
-      model: { isSelected, isHitable, isShowAdjustPoint },
+      model: { textMode, isSelected, isHitable, isShowAdjustPoint },
     } = this.props
     return (
       <g>
@@ -477,7 +484,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         >
           {this.getShape()}
           {this.getAppend()}
-          {this.getText()}
+          {textMode === TextMode.TEXT && this.getText()}
           {this.getArrow()}
         </g>
         {isShowAdjustPoint && isSelected ? this.getAdjustPoints() : ''}

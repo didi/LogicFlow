@@ -1,5 +1,7 @@
+import { isObject } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
 import GraphModel from '../model/GraphModel'
+import { TextMode } from '../constant'
 
 import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
@@ -9,7 +11,13 @@ let selected: LogicFlow.GraphData | null = null
 function translationNodeData(nodeData: NodeData, distance: number) {
   nodeData.x += distance
   nodeData.y += distance
-  if (nodeData.text) {
+  if (nodeData.textMode === TextMode.LABEL && nodeData.label) {
+    nodeData.label.forEach((item) => {
+      item.x += distance
+      item.y += distance
+    })
+  }
+  if (nodeData.textMode === TextMode.TEXT && isObject(nodeData.text)) {
     nodeData.text.x += distance
     nodeData.text.y += distance
   }
@@ -31,7 +39,13 @@ function translationEdgeData(edgeData: EdgeData, distance: number) {
       point.y += distance
     })
   }
-  if (edgeData.text) {
+  if (edgeData.textMode === TextMode.LABEL && edgeData.label) {
+    edgeData.label.forEach((item) => {
+      item.x += distance
+      item.y += distance
+    })
+  }
+  if (edgeData.textMode === TextMode.TEXT && edgeData.text) {
     edgeData.text.x += distance
     edgeData.text.y += distance
   }

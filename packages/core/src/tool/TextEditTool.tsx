@@ -1,6 +1,6 @@
 import { createRef, Component } from 'preact'
 import { ElementState, observer } from '..'
-import { ElementType, EventType, ModelType } from '../constant'
+import { ElementType, EventType, ModelType, TextMode } from '../constant'
 import { IToolProps } from './tool'
 
 type IState = {
@@ -172,7 +172,7 @@ export class TextEditTool extends Component<IToolProps, IState> {
       graphModel: { textEditElement },
     } = this.props
     const { style } = this.state
-    return textEditElement ? (
+    return textEditElement && textEditElement.textMode === TextMode.TEXT ? (
       <div
         contentEditable
         className="lf-text-input"

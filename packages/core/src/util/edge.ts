@@ -1,10 +1,18 @@
-import { forEach, pick } from 'lodash-es'
+import { get, head, last, pick, isEmpty, forEach } from 'lodash-es'
 import { getNodeBBox, isInNode, distance, sampleCubic } from '.'
 import LogicFlow from '../LogicFlow'
 import { Options } from '../options'
-import { SegmentDirection } from '../constant'
+import { ModelType, SegmentDirection } from '../constant'
 import { getVerticalPointOfLine } from '../algorithm'
-import { getCrossPointOfLine, isInSegment } from '../algorithm/edge'
+import {
+  getCrossPointOfLine,
+  getEdgeBboxInfo,
+  isInSegment,
+  getDistanceToSegment,
+  labelIsInSegments,
+  pointOnBezier,
+  getDistance,
+} from '../algorithm/edge'
 import {
   Model,
   BaseNodeModel,
@@ -21,6 +29,7 @@ import NodeData = LogicFlow.NodeData
 import EdgeConfig = LogicFlow.EdgeConfig
 import Position = LogicFlow.Position
 import BoxBounds = Model.BoxBounds
+import LabelType = LogicFlow.LabelType
 
 type PolyPointMap = Record<string, Point>
 type PolyPointLink = Record<string, string>
@@ -915,6 +924,7 @@ export const getEndTangent = (
  * 获取移动边后，文本位置距离边上的最近的一点
  * @param point 边上文本的位置
  * @param points 边的各个拐点
+ * TODO: Label实验没问题后统一改成新的计算方式，把这个方法废弃
  */
 export const getClosestPointOfPolyline = (
   point: Point,
@@ -986,6 +996,7 @@ export const pickEdgeConfig = (data: EdgeConfig): EdgeConfig =>
     'startPoint',
     'endPoint',
     'properties',
+    'textMode',
   ])
 
 export const twoPointDistance = (source: Position, target: Position) => {
@@ -1055,5 +1066,277 @@ export const getSvgTextSize = ({
   return {
     width: Math.ceil(longestBytes / 2) * fontSize + fontSize / 4,
     height: rowsLength * (fontSize + 2) + fontSize / 4,
+  }
+}
+/**
+ * 边移动后获取文本位置
+ * @param point 边上文本位置
+ * @params points 边拐点位置
+ */
+export const getTextPositionOfPolyline = (
+  label: LabelType,
+  points: string,
+): Point => {
+  const {
+    x,
+    y,
+    xDeltaPercent,
+    yDeltaPercent,
+    yDeltaDistance,
+    xDeltaDistance,
+    isInLine,
+  } = label
+  const pointsPosition = points2PointsList(points)
+  const startPoint = head(pointsPosition)
+  const endPoint = last(pointsPosition)
+  // 分别取路径中 x轴和y轴上的最大最小坐标值组合成一个矩形
+  const bBoxInfo = getEdgeBboxInfo(pointsPosition)
+  const { minX, minY, maxX, maxY } = bBoxInfo as any
+  if (!startPoint || !endPoint) return { x, y }
+  /**
+   * 两种情况：
+   * 1. 如果点在凸包（bBoxInfo）内部，就先计算出文本按照偏移比例计算后的位置positByPercent
+   * 1.1 如果文本初始化时就在边上，计算positByPercent距离折线边最近的点，该点即为文本新坐标
+   * 1.2 如果文本初始化不在边上，positByPercent就是文本新坐标
+   * 2. 如果点在凸包外，就用新坐标加文本到凸包的绝对位置得出新坐标
+   * tip：初始化文本时会计算文本是否在边框矩阵内，如果不在的话DeltaPercent会为undefined
+   */
+  if (xDeltaPercent && yDeltaPercent) {
+    const positByPercent = {
+      x: minX + (maxX - minX) * xDeltaPercent,
+      y: minY + (maxY - minY) * yDeltaPercent,
+    }
+    return isInLine
+      ? getClosestPointOnPolyline(positByPercent, pointsPosition)
+      : positByPercent
+  }
+  // 如果文本在凸包的上方或者下方
+  if (xDeltaPercent && yDeltaDistance) {
+    return {
+      x: minX + (maxX - minX) * xDeltaPercent,
+      y: yDeltaDistance < 0 ? minY + yDeltaDistance : maxY + yDeltaDistance,
+    }
+  }
+  // 如果文本在凸包的左边或者右边
+  if (yDeltaPercent && xDeltaDistance) {
+    return {
+      x: xDeltaDistance < 0 ? minX + xDeltaDistance : maxX + xDeltaDistance,
+      y: minY + (maxY - minY) * yDeltaPercent,
+    }
+  }
+  // 如果文本在凸包左上/左下/右上/右下
+  if (xDeltaPercent && yDeltaPercent) {
+    return {
+      x: minX + (maxX - minX) * xDeltaPercent,
+      y: minY + (maxY - minY) * yDeltaPercent,
+    }
+  }
+  // 兜底
+  return { x, y }
+}
+
+/**
+ *
+ * @param point 文本坐标
+ * @param pointList 折线拐点坐标list
+ * @returns 距离边最近的点的坐标
+ */
+export const getClosestPointOnPolyline = (point: Point, pointList: Point[]) => {
+  let minDistance = Infinity
+  let closestPoint
+  const { x, y } = point
+  pointList.forEach((item, index) => {
+    const segmentStart = item
+    const segmentEnd = pointList[index + 1]
+    if (!segmentStart || !segmentEnd) return
+    const { x: startX, y: startY } = segmentStart
+    const { x: endX, y: endY } = segmentEnd
+
+    const xDistance = endX - startX // 线段起终点在x轴上的方向向量
+    const yDistance = endY - startY // 线段起终点在y轴上的方向向量
+    const distance = getDistanceToSegment(point, segmentStart, segmentEnd)
+    if (distance < minDistance) {
+      minDistance = distance
+      // 计算边外点在线段上的投影点
+      const t =
+        ((x - startX) * xDistance + (y - startY) * yDistance) /
+        (Math.pow(xDistance, 2) + Math.pow(yDistance, 2))
+      // 为什么-10？
+      // 因为start + t * Distance 计算出来的坐标是相对label左上角的，为了能让label在中间，所以需要减去label容器一半宽高
+      // label宽高设置逻辑在extension/src/Label/LabelElement中
+      closestPoint = {
+        x: startX + t * xDistance - 10,
+        y: startY + t * yDistance - 10,
+      }
+    }
+  })
+  return closestPoint
+}
+
+/**
+ *
+ * @param point 文本坐标
+ * @param startPoint 边起点坐标
+ * @param endPoint 边终点坐标
+ * @returns 文本在x轴和y轴上的偏移百分比
+ */
+export const getEdgeLabelDeltaOfBbox = (point: Point, pointList: Point[]) => {
+  const bBoxInfo = getEdgeBboxInfo(pointList)
+  const { x, y } = point
+  const { minX, minY, maxX, maxY } = bBoxInfo as any
+  let xDeltaPercent
+  let yDeltaPercent
+  let xDeltaDistance
+  let yDeltaDistance
+  /**
+   * 文本在由路径点组成的凸包内，就记录偏移比例
+   * 文本在凸包外，记录绝对距离
+   * 用于边路径变化时计算文本新位置
+   */
+  if (minX <= x && x <= maxX) {
+    xDeltaPercent = minX && maxX ? (x - minX) / (maxX - minX) : 0.5
+  } else if (x < minX) {
+    xDeltaDistance = x - minX
+  } else {
+    xDeltaDistance = x - maxX
+  }
+  if (minY <= y && y <= maxY) {
+    yDeltaPercent = minY && maxY ? (y - minY) / (maxY - minY) : 0.5
+  } else if (y < minY) {
+    yDeltaDistance = y - minY
+  } else {
+    yDeltaDistance = y - maxY
+  }
+  return {
+    xDeltaPercent,
+    yDeltaPercent,
+    xDeltaDistance,
+    yDeltaDistance,
+  }
+}
+
+/**
+ * 判断label是否在折线边上
+ * @param point label坐标
+ * @param pointList 折线边拐点坐标list
+ * @returns boolean 是否在边上
+ */
+export const isPointInPolyline = (
+  point: Point,
+  pointList: Point[],
+  tolerance: number = 20,
+) => {
+  return labelIsInSegments(point, pointList, tolerance)
+}
+
+/**
+ *
+ * @param point 文本坐标
+ * @param points 贝塞尔曲线点坐标
+ * @param steps
+ * @returns
+ */
+export const getClosestPointOnBezier = (
+  point: Point,
+  pointsList: Point[],
+  steps: number = 5,
+) => {
+  let minDistance = Infinity
+  let closestPoint
+  if (isEmpty(pointsList)) return point
+  const [start, sNext, ePre, end] = pointsList
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps
+    const bezierPoint = pointOnBezier(t, start, sNext, ePre, end)
+    const distance = getDistance(point, bezierPoint)
+    if (distance < minDistance) {
+      minDistance = distance
+      closestPoint = bezierPoint
+    }
+  }
+
+  return closestPoint
+}
+
+/**
+ * 判断一个点是否在贝塞尔曲线上
+ * @param point 点坐标
+ * @param pointList 曲线调整点坐标数组
+ * @param tolerance 容错范围
+ * @param steps 循环次数，值越大获取的点在曲线上的投影的坐标越准确
+ * @returns
+ */
+export const isPointInBezier = (
+  point: Point,
+  pointList: Point[],
+  tolerance: number = 1,
+  steps: number = 5,
+) => {
+  const [start, sNext, ePre, end] = pointList
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps
+    const bezierPoint = pointOnBezier(t, start, sNext, ePre, end)
+    const distance = getDistance(point, bezierPoint)
+
+    if (distance < tolerance) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export const defaultPositionOfLine = (
+  index: number = 0,
+  modelType: string,
+  point: Point,
+  pointList: Point[],
+) => {
+  const { x, y } = point
+  if (modelType === ModelType.POLYLINE_EDGE) {
+    /**
+     * 折线label的默认位置排列:
+     * 中心 -> 边上每个拐点 -> 中间按y轴堆积
+     */
+    if (!index) {
+      return {
+        x: x - 10, // 视图层div默认宽高是20
+        y: y + 20 * index - 10, //如果初始化了多个文本，则在y轴位置上累加
+      }
+    }
+    if (index < pointList.length) {
+      const { x: pointX, y: pointY } = pointList[index]
+      return {
+        x: pointX - 10,
+        y: pointY - 10,
+      }
+    }
+    return {
+      x: x - 10,
+      y: y + 20 * (index - pointList.length) - 10,
+    }
+  }
+  /**
+   * 其他线条label的默认位置排列：
+   * 中心 -> 起终点 -> 中心按y轴堆积
+   */
+  const start = head(pointList)
+  const end = last(pointList)
+  switch (index) {
+    case 1:
+      return {
+        x: get(start, 'x', x) - 10,
+        y: get(start, 'y', y) - 10,
+      }
+    case 2:
+      return {
+        x: get(end, 'y', y) - 10,
+        y: get(end, 'y', y) - 10,
+      }
+    default:
+      return {
+        x: x - 10, // 视图层div默认宽高是20
+        y: y + 20 * index - 10, //如果初始化了多个文本，则在y轴位置上累加
+      }
   }
 }
