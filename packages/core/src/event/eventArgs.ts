@@ -12,6 +12,7 @@ import EdgeData = LogicFlow.EdgeData
 import GraphData = LogicFlow.GraphData
 import AnchorConfig = Model.AnchorConfig
 import ClientPosition = LogicFlow.ClientPosition
+import LabelType = LogicFlow.LabelType
 
 type ClickEventArgs = {
   /**
@@ -38,6 +39,20 @@ type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
      * 鼠标触发点相对于画布左上角的坐标
      */
     position: ClientPosition
+  },
+  T
+>
+
+type TextEventArgsPick<T extends 'data' | 'e' | 'model' | 'element'> = Pick<
+  {
+    // 节点数据
+    data: LabelType | LabelType[] | { text: string; id?: string; type?: string }
+    // 原生鼠标事件对象
+    e?: MouseEvent
+    // 文本所在元素model
+    model?: NodeData | EdgeData
+    // 文本dom
+    element?: HTMLElement
   },
   T
 >
@@ -180,6 +195,42 @@ interface EdgeEventArgs {
 }
 
 /**
+ * 文本事件
+ */
+interface TextEventArgs {
+  // 鼠标按下文本
+  'text:mousedown': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 开始拖拽文本
+  'text:dragstart': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本拖拽
+  'text:drag': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本拖拽结束
+  'text:drop': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本单击
+  'text:click': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本双击
+  'text:dbclick': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本失焦
+  'text:blur': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  // 鼠标移动文本
+  'text:mousemove': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 鼠标抬起
+  'text:mouseup': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本获焦
+  'text:focus': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  // 文本新增
+  'text:add': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本更新
+  'text:update': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本清空
+  'text:clear': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本删除
+  'text:delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 不允许增加文本
+  'text:not-allowed-add': TextEventArgsPick<'data' | 'e' | 'model'>
+}
+
+/**
  * 连线事件
  */
 interface ConnectionEventArgs {
@@ -238,26 +289,6 @@ interface CommonEventArgs {
        * 改变后的 properties
        */
       properties: Record<string, any>
-    }
-  }
-  /**
-   * 节点/边的文本更新
-   */
-  // TODO: 更新文本事件抛出的对象是否需要更详细？
-  'text:update': {
-    data: {
-      /**
-       * 更新的文本
-       */
-      text: string
-      /**
-       * 节点/边的 id
-       */
-      id: string
-      /**
-       * 节点/边的类型
-       */
-      type: string
     }
   }
   /**
@@ -473,4 +504,5 @@ export interface EventArgs
     AnchorEventArgs,
     BlankEventArgs,
     HistoryEventArgs,
-    SelectionEventArgs {}
+    SelectionEventArgs,
+    TextEventArgs {}
