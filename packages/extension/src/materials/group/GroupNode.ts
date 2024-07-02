@@ -1,10 +1,14 @@
 import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
+import { isArray } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
 import GraphElements = LogicFlow.GraphElements
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import EdgeConfig = LogicFlow.EdgeConfig
+import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
+import TextConfig = LogicFlow.TextConfig
 
 const defaultWidth = 500
 const defaultHeight = 300
@@ -50,7 +54,7 @@ export class GroupNodeModel extends RectResizeModel {
   initNodeData(data: any): void {
     super.initNodeData(data)
     let children: any = []
-    if (Array.isArray(data.children)) {
+    if (isArray(data.children)) {
       children = data.children
     }
     // 初始化组的子节点
@@ -61,8 +65,15 @@ export class GroupNodeModel extends RectResizeModel {
     this.foldedHeight = 60
     this.zIndex = DEFAULT_BOTTOM_Z_INDEX
     this.radius = 0
-    this.text.editable = false
-    this.text.draggable = false
+    if (data.textMode === 'label' && isArray(data.label)) {
+      this.label.forEach((item) => {
+        item.editable = false
+        item.draggable = false
+      })
+    } else if (data.textMode === 'text') {
+      ;(this.text as TextConfig).editable = false
+      ;(this.text as TextConfig).draggable = false
+    }
     this.isRestrict = false
     this.resizable = false
     this.autoToFront = false
@@ -189,6 +200,7 @@ export class GroupNodeModel extends RectResizeModel {
         endPoint,
         type,
         text,
+        label,
       } = edgeModel
       const properties = edgeModel.getProperties()
       const data: EdgeConfig = {
@@ -200,6 +212,7 @@ export class GroupNodeModel extends RectResizeModel {
         type,
         properties,
         text: text?.value,
+        label,
       }
       if (edgeModel.virtual) {
         this.graphModel.deleteEdgeById(edgeModel.id)
@@ -266,7 +279,14 @@ export class GroupNodeModel extends RectResizeModel {
     model.virtual = true
     // 强制不保存group连线数据
     // model.getData = () => null;
-    model.text.editable = false
+    const { labelConfig } = model.properties
+    if ((labelConfig as LabelConfig)?.multiple && isArray(model.text)) {
+      model.text.forEach((item) => {
+        item.editable = false
+      })
+    } else {
+      ;(model.text as LabelType).editable = false
+    }
     model.isFoldedEdge = true
   }
 

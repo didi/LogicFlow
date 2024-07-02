@@ -136,7 +136,6 @@ export class FlowPath {
     // 由于循环路径不包括开始，所以存在重复的情况，此处去重。
     const LoopSet = new Set()
     pathElements.forEach((elements) => {
-      console.log('elements', elements)
       const routeId = this.getNewId('path')
       const name = this.getNewId('路径')
       const isLoop = this.isLoopPath(elements)

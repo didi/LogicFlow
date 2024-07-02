@@ -2,8 +2,11 @@
  * 泳道节点
  */
 import LogicFlow, { h } from '@logicflow/core'
+import { isArray } from 'lodash-es'
 import { poolToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
+
+import TextConfig = LogicFlow.TextConfig
 
 const laneMinSize = {
   width: 312,
@@ -20,14 +23,31 @@ export class HorizontalLaneModel extends GroupNodeModel {
     this.foldedWidth = 42
     this.resizable = true
     this.zIndex = 1
-    this.text.editable = true
+    if (this.textMode === 'label' && isArray(this.label)) {
+      this.label.forEach((item) => {
+        item.editable = true
+      })
+    } else {
+      ;(this.text as TextConfig).editable = true
+    }
     this.toJSON = poolToJSON
   }
 
   setAttributes() {
+    if (this.textMode === 'label' && isArray(this.label)) {
+      this.label = this.label.map((item) => {
+        return {
+          ...item,
+          value: item.value || '泳池示例',
+          x: this.x - this.width / 2 + 11,
+          y: this.y,
+        }
+      })
+      return
+    }
     this.text = {
       ...this.text,
-      value: this.text.value || '泳池示例',
+      value: (this.text as TextConfig).value || '泳池示例',
       x: this.x - this.width / 2 + 11,
       y: this.y,
     }
