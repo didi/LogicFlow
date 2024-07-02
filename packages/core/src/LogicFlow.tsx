@@ -1319,7 +1319,7 @@ export class LogicFlow {
       ([, extension]) => extension,
     )
     // 安装插件，优先使用个性插件
-    const extensions = [...this.plugins, ...extensionsAddByUse]
+    const extensions = [...extensionsAddByUse, ...this.plugins]
     forEach(extensions, (ext) => {
       let extension: ExtensionConstructor | ExtensionDefinition
       let props: Record<string, any> | undefined
