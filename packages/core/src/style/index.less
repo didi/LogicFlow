@@ -75,6 +75,10 @@
   cursor: default;
 }
 
+.lf-bezier-adjust {
+  z-index: 100;
+}
+
 .lf-bezier-adjust-anchor {
   cursor: pointer;
 }
@@ -253,4 +257,70 @@
 
 .lf-resize-control-w {
   cursor: w-resize;
+}
+
+.lf-label-overlay {
+  overflow: visible;
+
+  .lf-label-editor {
+    box-sizing: content-box;
+    padding: 4px;
+    background: #fff;
+
+    &:hover {
+      border: 2px dashed #acacac;
+    }
+
+    &-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      text-align: center;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    &-tool {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 200px;
+      overflow: scroll;
+      background: #fafafa;
+    }
+  }
+
+  .medium-editor-toolbar {
+    min-width: 200px;
+    height: 50px;
+
+    .medium-editor-toolbar-actions {
+      display: flex !important;
+      flex-wrap: nowrap;
+      place-content: center flex-start;
+      height: 30px;
+      padding-left: 0;
+      list-style: none;
+      border-radius: 6px;
+      box-shadow: 0 0 1px #fafafa;
+
+      li {
+        button {
+          box-shadow: none;
+        }
+
+        .medium-editor-action {
+          line-height: 1;
+          border: 0;
+          border-radius: 0;
+          box-shadow: 0;
+        }
+      }
+    }
+  }
 }
