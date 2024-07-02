@@ -16,6 +16,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
+  allowResize: true,
   style: {
     rect: {
       rx: 5,
@@ -76,7 +77,7 @@ const data = {
   nodes: [
     {
       id: 'custom-node-1',
-      rotate: 1.1722738811284763,
+      rotate: Math.PI / 6,
       text: {
         x: 600,
         y: 200,

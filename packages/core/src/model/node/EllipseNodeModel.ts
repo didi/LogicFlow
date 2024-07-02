@@ -76,9 +76,7 @@ export class EllipseNodeModel extends BaseNodeModel {
   }
 
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
-    const { width, height, deltaX, deltaY } = resizeInfo
-    // 移动节点以及文本内容
-    this.move(deltaX / 2, deltaY / 2)
+    const { width, height } = resizeInfo
 
     this.rx = width
     this.ry = height

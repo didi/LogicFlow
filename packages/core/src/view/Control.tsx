@@ -60,13 +60,13 @@ export class ResizeControl extends Component<
     // https://github.com/didi/LogicFlow/issues/807
     // https://github.com/didi/LogicFlow/issues/875
     // 之前的做法，比如Rect是使用getRectResizeEdgePoint()计算边的point缩放后的位置
-    // getRectResizeEdgePoint()考虑了瞄点在四条边以及在4个圆角的情况
+    // getRectResizeEdgePoint()考虑了锚点在四条边以及在4个圆角的情况
     // 使用的是一种等比例缩放的模式，比如：
     // const pct = (y - beforeNode.y) / (beforeNode.height / 2 - radius)
     // afterPoint.y = afterNode.y + (afterNode.height / 2 - radius) * pct
     // 但是用户自定义的getDefaultAnchor()不一定是按照比例编写的
-    // 它可能是 x: x + 20：每次缩放都会保持在x右边20的位置，因此用户自定义瞄点时，然后产生无法跟随的问题
-    // 现在的做法是：直接获取用户自定义瞄点的位置，然后用这个位置作为边的新的起点，而不是自己进行计算
+    // 它可能是 x: x + 20：每次缩放都会保持在x右边20的位置，因此用户自定义锚点时，然后产生无法跟随的问题
+    // 现在的做法是：直接获取用户自定义锚点的位置，然后用这个位置作为边的新的起点，而不是自己进行计算
     const { id, anchors } = this.nodeModel
     const edges = this.graphModel.getNodeEdges(id)
     // 更新边
@@ -294,11 +294,17 @@ export class ResizeControl extends Component<
 
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
     const { transformModel } = this.graphModel
+    const {
+      model: { rotate = 0 },
+    } = this.props
     const [dx, dy] = transformModel.fixDeltaXY(deltaX, deltaY)
 
+    const tDx = dx * Math.cos(rotate) + dy * Math.sin(rotate)
+    const tDy = -dx * Math.sin(rotate) + dy * Math.cos(rotate)
+
     this.resizeNode({
-      deltaX: dx,
-      deltaY: dy,
+      deltaX: tDx,
+      deltaY: tDy,
     })
   }
 

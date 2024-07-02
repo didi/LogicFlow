@@ -73,9 +73,7 @@ export class CircleNodeModel extends BaseNodeModel {
   }
 
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
-    const { width, deltaX, deltaY } = resizeInfo
-    // 移动节点以及文本内容
-    this.move(deltaX / 2, deltaY / 2)
+    const { width } = resizeInfo
 
     this.r = width
     this.setProperties({

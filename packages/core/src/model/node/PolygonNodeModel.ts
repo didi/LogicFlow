@@ -125,9 +125,7 @@ export class PolygonNodeModel extends BaseNodeModel {
   }
 
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
-    const { width, height, deltaX, deltaY } = resizeInfo
-    // 移动节点以及文本内容
-    this.move(deltaX / 2, deltaY / 2)
+    const { width, height } = resizeInfo
 
     const nextPoints: PointTuple[] = map(this.points, ([x, y]) => [
       (x * width) / this.width,
