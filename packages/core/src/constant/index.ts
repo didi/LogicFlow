@@ -109,9 +109,25 @@ export enum EventType {
   SELECTION_CONTEXTMENU = 'selection:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
 
+  // Text events
+  TEXT_MOUSEDOWN = 'text:mousedown',
+  TEXT_DRAGSTART = 'text:dragstart',
+  TEXT_DRAG = 'text:drag',
+  TEXT_DROP = 'text:drop',
+  TEXT_CLICK = 'text:click',
+  TEXT_DBCLICK = 'text:dbclick',
+  TEXT_BLUR = 'text:blur',
+  TEXT_MOUSEMOVE = 'text:mousemove',
+  TEXT_MOUSEUP = 'text:mouseup',
+  TEXT_FOCUS = 'text:focus',
+  TEXT_ADD = 'text:add',
+  TEXT_UPDATE = 'text:update',
+  TEXT_CLEAR = 'text:clear',
+  TEXT_DELETE = 'text:delete',
+  TEXT_NOT_ALLOWED_ADD = 'text:not-allowed-add',
+
   // Other events
   HISTORY_CHANGE = 'history:change',
-  TEXT_UPDATE = 'text:update',
   GRAPH_TRANSFORM = 'graph:transform',
   GRAPH_RENDERED = 'graph:rendered',
   GRAPH_UPDATED = 'graph:updated',
@@ -125,4 +141,9 @@ export enum OverlapMode {
 export enum SegmentDirection {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical',
+}
+
+export enum TextMode {
+  TEXT = 'text',
+  LABEL = 'label',
 }

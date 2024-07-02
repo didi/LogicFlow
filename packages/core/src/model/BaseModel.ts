@@ -139,10 +139,11 @@ export namespace Model {
     /**
      * 元素上的文本
      *
-     * LogicFlow 中存在梁总文本：1. 脱离边和节点单独存在的问题；2. 必须和边、节点关联的文本
+     * LogicFlow 中存在两种文本：1. 脱离边和节点单独存在的问题；2. 必须和边、节点关联的文本
      * 此属性控制的是第二种。节点和边在删除、调整的同时，其关联的文本也会对应删除、调整。
      */
     text: LogicFlow.TextConfig
+    label?: LogicFlow.LabelType[]
     properties: Record<string, unknown>
 
     isSelected: boolean // 元素是否被选中
@@ -206,6 +207,7 @@ export namespace Model {
 
     getData: () => Record<string, unknown>
     getProperties: () => PropertyType
+    getTextShape: () => HTMLElement | null
     setProperty: (key: string, val: unknown) => void
     setProperties: (properties: PropertyType) => void
     deleteProperty: (key: string) => void
