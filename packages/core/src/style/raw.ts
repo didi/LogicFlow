@@ -64,6 +64,9 @@ export const content = `.lf-graph {
 .lf-draggable {
   cursor: default;
 }
+.lf-bezier-adjust {
+  z-index: 100;
+}
 .lf-bezier-adjust-anchor {
   cursor: pointer;
 }
@@ -213,5 +216,59 @@ export const content = `.lf-graph {
 }
 .lf-resize-control-w {
   cursor: w-resize;
+}
+.lf-label-overlay {
+  overflow: visible;
+}
+.lf-label-overlay .lf-label-editor {
+  box-sizing: content-box;
+  padding: 4px;
+  background: #fff;
+}
+.lf-label-overlay .lf-label-editor:hover {
+  border: 2px dashed #acacac;
+}
+.lf-label-overlay .lf-label-editor-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  text-align: center;
+}
+.lf-label-overlay .lf-label-editor-container p {
+  margin: 0;
+}
+.lf-label-overlay .lf-label-editor-tool {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200px;
+  overflow: scroll;
+  background: #fafafa;
+}
+.lf-label-overlay .medium-editor-toolbar {
+  min-width: 200px;
+  height: 50px;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions {
+  display: flex !important;
+  flex-wrap: nowrap;
+  place-content: center flex-start;
+  height: 30px;
+  padding-left: 0;
+  list-style: none;
+  border-radius: 6px;
+  box-shadow: 0 0 1px #fafafa;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li button {
+  box-shadow: none;
+}
+.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li .medium-editor-action {
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0;
 }
 `
