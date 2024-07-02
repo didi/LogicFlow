@@ -32,7 +32,7 @@ export class UmlModel extends HtmlNodeModel {
   }
 }
 export class UmlNode extends HtmlNode {
-  setHtml(rootEl: HTMLElement) {
+  setHtml(rootEl: SVGForeignObjectElement) {
     const { properties } = this.props.model
     const el = document.createElement('div')
     el.className = 'uml-wrapper'
