@@ -115,14 +115,14 @@ form[action$='destroy'] button {
 #sidebar {
   display: flex;
   flex-direction: column;
-  width: 22rem;
+  width: 16rem;
   background-color: #f7f7f7;
   border-right: solid 1px #e3e3e3;
 }
 
 #sidebar > * {
-  padding-right: 2rem;
-  padding-left: 2rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 #sidebar h1 {
@@ -233,7 +233,7 @@ i {
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.2rem;
   overflow: hidden;
   color: inherit;
 
