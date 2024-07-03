@@ -1,18 +1,21 @@
-type IProps = {
+import { createElement as h } from 'preact/compat'
+import { forEach, toPairs } from 'lodash-es'
+
+export type IPathProps = {
   d: string
   [key: string]: any
 }
 
-export function Path(props: IProps) {
-  const attrs = {
+export function Path(props: IPathProps): h.JSX.Element {
+  const attrs: Record<string, any> = {
     d: '',
   }
-  Object.entries(props).forEach(([k, v]) => {
-    const valueType = typeof v
-    if (k === 'style' || valueType !== 'object') {
+  forEach(toPairs(props), ([k, v]: [key: string, v: any]) => {
+    if (k === 'style' || typeof v !== 'object') {
       attrs[k] = v
     }
   })
+
   return <path {...attrs} />
 }
 

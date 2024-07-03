@@ -1566,6 +1566,8 @@ export namespace LogicFlow {
     radius?: number
     rx?: number
     ry?: number
+    width?: number
+    height?: number
     path?: string
     [key: string]: unknown
   }

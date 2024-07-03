@@ -307,24 +307,24 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
-  setHoverON = (ev: MouseEvent) => {
+  setHoverOn = (ev: MouseEvent) => {
     // ! hover多次触发, onMouseOver + onMouseEnter
     const {
       model: { isHovered },
     } = this.props
     if (isHovered) return
-    this.textRef && this.textRef.current && this.textRef.current.setHoverON()
+    this.textRef && this.textRef.current && this.textRef.current.setHoverOn()
     this.handleHover(true, ev)
   }
   /**
    * 不支持重写，如果想要基于hover状态设置不同的样式，请在model中使用isHovered属性。
    */
-  setHoverOFF = (ev: MouseEvent) => {
+  setHoverOff = (ev: MouseEvent) => {
     const {
       model: { isHovered },
     } = this.props
     if (!isHovered) return
-    this.textRef && this.textRef.current && this.textRef.current.setHoverOFF()
+    this.textRef && this.textRef.current && this.textRef.current.setHoverOff()
     this.handleHover(false, ev)
   }
   /**
@@ -471,9 +471,9 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onContextMenu={this.handleContextMenu}
-          onMouseOver={this.setHoverON}
-          onMouseEnter={this.setHoverON}
-          onMouseLeave={this.setHoverOFF}
+          onMouseOver={this.setHoverOn}
+          onMouseEnter={this.setHoverOn}
+          onMouseLeave={this.setHoverOff}
         >
           {this.getShape()}
           {this.getAppend()}

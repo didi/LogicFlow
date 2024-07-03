@@ -2,7 +2,7 @@ import LogicFlow, {
   BaseNodeModel,
   PolylineEdgeModel,
   EventType,
-  formateAnchorConnectValidateData,
+  formatAnchorConnectValidateData,
 } from '@logicflow/core'
 import { cloneDeep } from 'lodash-es'
 import { isNodeInSegment } from './edge'
@@ -85,9 +85,9 @@ export class InsertNodeInPolyline {
     )
 
     const { isAllPass: isSourcePass, msg: sourceMsg } =
-      formateAnchorConnectValidateData(sourceRuleResultData)
+      formatAnchorConnectValidateData(sourceRuleResultData)
     const { isAllPass: isTargetPass, msg: targetMsg } =
-      formateAnchorConnectValidateData(targetRuleResultData)
+      formatAnchorConnectValidateData(targetRuleResultData)
 
     return {
       isPass: isSourcePass && isTargetPass,

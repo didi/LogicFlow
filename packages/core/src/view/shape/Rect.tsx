@@ -1,23 +1,26 @@
-import LogicFlow from '../../LogicFlow'
+import { createElement as h } from 'preact/compat'
+import { forEach, toPairs } from 'lodash-es'
+import LogicFlow from '../..'
 
-import Point = LogicFlow.Point
-import RectSize = LogicFlow.RectSize
-
-type IRectProps = {
+export type IRectProps = {
+  x: number
+  y: number
+  width: number
+  height: number
   className?: string
-  radius?: number
-} & Point &
-  RectSize
+  radius?: LogicFlow.NumberOrPercent
+  [key: string]: any
+}
 
-export function Rect(props: IRectProps) {
-  const { x, y, width, height, className, radius } = props
+export function Rect(props: IRectProps): h.JSX.Element {
+  const { x, y, width, height, className, strokeWidth, radius = 0 } = props
 
   const leftTopX = x - width / 2
   const leftTopY = y - height / 2
   const attrs: Record<string, any> = {}
-  Object.entries(props).forEach(([k, v]) => {
-    const valueType = typeof v
-    if (valueType !== 'object') {
+  attrs['stroke-width'] = strokeWidth
+  forEach(toPairs(props), ([k, v]: [k: string, v: any]) => {
+    if (typeof v !== 'object') {
       attrs[k] = v
     }
   })
@@ -25,20 +28,17 @@ export function Rect(props: IRectProps) {
   if (className) {
     attrs.className = `lf-basic-shape ${className}`
   } else {
-    attrs.className = 'lf-shape'
+    attrs.className = 'lf-basic-shape'
   }
+
   if (radius) {
     attrs.rx = radius
     attrs.ry = radius
   }
   attrs.x = leftTopX
   attrs.y = leftTopY
-  return <rect {...attrs} />
-}
 
-Rect.defaultProps = {
-  className: '',
-  radius: '',
+  return <rect {...attrs} />
 }
 
 export default Rect

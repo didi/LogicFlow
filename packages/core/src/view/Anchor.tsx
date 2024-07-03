@@ -6,7 +6,7 @@ import { ElementState, EventType } from '../constant'
 import { GraphModel, BaseNodeModel, Model } from '../model'
 import {
   StepDrag,
-  formateAnchorConnectValidateData,
+  formatAnchorConnectValidateData,
   targetNodeInfo,
   distance,
   cancelRaf,
@@ -29,7 +29,7 @@ interface IProps {
   anchorIndex: number
   graphModel: GraphModel
   nodeModel: BaseNodeModel
-  setHoverOFF: (e: MouseEvent) => void
+  setHoverOff: (e: MouseEvent) => void
 }
 
 interface IState {
@@ -326,11 +326,11 @@ class Anchor extends Component<IProps, IState> {
         )
         this.sourceRuleResults.set(
           targetInfoId,
-          formateAnchorConnectValidateData(sourceRuleResult),
+          formatAnchorConnectValidateData(sourceRuleResult),
         )
         this.targetRuleResults.set(
           targetInfoId,
-          formateAnchorConnectValidateData(targetRuleResult),
+          formatAnchorConnectValidateData(targetRuleResult),
         )
       }
       const { isAllPass: isSourcePass } =

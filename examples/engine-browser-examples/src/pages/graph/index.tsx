@@ -10,7 +10,7 @@ import { animation, connection } from './edges'
 import GraphConfigData = LogicFlow.GraphConfigData
 import './index.less'
 
-const config: Partial<LogicFlow.Options> = {
+const defaultConfig: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
@@ -38,7 +38,7 @@ const config: Partial<LogicFlow.Options> = {
     },
     text: {
       color: '#b85450',
-      fontSize: 12,
+      fontSize: 14,
     },
   },
 }
@@ -131,7 +131,7 @@ export default function BasicNode() {
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
-        ...config,
+        ...defaultConfig,
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
         // width: 1200,
@@ -175,15 +175,18 @@ export default function BasicNode() {
         background: {
           color: '#FFFFFF',
         },
-        grid: true,
+        // grid: true,
+        grid: {
+          size: 20,
+        },
         edgeTextDraggable: true,
         edgeType: 'bezier',
-        style: {
-          inputText: {
-            background: 'black',
-            color: 'white',
-          },
-        },
+        // style: {
+        //   inputText: {
+        //     background: 'black',
+        //     color: 'white',
+        //   },
+        // },
         // 全局自定义id
         // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
         //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
@@ -306,19 +309,19 @@ export default function BasicNode() {
   const handleDragRect = () => {
     lfRef?.current?.dnd.startDrag({
       type: 'rect',
-      text: 'xxxxx',
+      text: 'rect',
     })
   }
   const handleDragCircle = () => {
     lfRef?.current?.dnd.startDrag({
       type: 'circle',
-      r: 25,
+      text: 'circle',
     })
   }
   const handleDragText = () => {
     lfRef?.current?.dnd.startDrag({
       type: 'text',
-      text: '文本',
+      text: '文本节点',
     })
   }
 
@@ -458,9 +461,9 @@ export default function BasicNode() {
         节点面板
       </Divider>
       <Flex wrap="wrap" gap="small" justify="center" align="center">
-        <div className="rect" onMouseDown={handleDragRect} />
-        <div className="circle" onMouseDown={handleDragCircle} />
-        <div className="text" onMouseDown={handleDragText}>
+        <div className="rect dnd-item" onMouseDown={handleDragRect} />
+        <div className="circle dnd-item" onMouseDown={handleDragCircle} />
+        <div className="text dnd-item" onMouseDown={handleDragText}>
           文本
         </div>
       </Flex>
