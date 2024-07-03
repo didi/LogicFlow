@@ -18,7 +18,7 @@ export class TextNode extends BaseNode<ITextNodeProps> {
     const rectAttr = {
       ...style.background,
       x,
-      y: y - 1,
+      y,
       width,
       height,
     }

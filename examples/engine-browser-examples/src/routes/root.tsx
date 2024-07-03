@@ -4,14 +4,14 @@ export default function Root() {
   return (
     <>
       <div id="sidebar">
-        <h1>LogicFlow & Engine Demos</h1>
+        <h1>LogicFlow Demos</h1>
         <div>
           {/* TODO: 完成路由检索功能 */}
           <form id="search-form" role="search">
             <input
               id="q"
               aria-label="Search contacts"
-              placeholder="Press Enter for Search"
+              placeholder="Press Enter to Search"
               type="search"
               name="q"
             />
@@ -21,9 +21,9 @@ export default function Root() {
         </div>
         <nav>
           <ul>
-            <div className="nav-title">Graph</div>
+            <div className="nav-title">LogicFlow</div>
             <li>
-              <a href={`/graph/get-started`}>Get Started</a>
+              <a href={`/graph/get-started`}>Graph</a>
             </li>
             <div className="nav-title">Extension</div>
             <li>
@@ -31,7 +31,7 @@ export default function Root() {
             </li>
             <div className="nav-title">Engine</div>
             <li>
-              <a href={`/engine/get-started`}>Start Engine</a>
+              <a href={`/engine/get-started`}>Get Started</a>
               <a href={`/engine/recorder`}>Recorder</a>
             </li>
           </ul>

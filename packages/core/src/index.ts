@@ -16,6 +16,6 @@ export * from './options'
 export * from './keyboard'
 export { ElementState, ModelType, ElementType, EventType } from './constant'
 
-export { formateAnchorConnectValidateData } from './util/node'
+export { formatAnchorConnectValidateData } from './util/node'
 
 export default LogicFlow
