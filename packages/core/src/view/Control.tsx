@@ -304,6 +304,7 @@ export class ResizeControl extends Component<
 
   // 由于将拖拽放大缩小改成丝滑模式，这个时候需要再拖拽结束的时候，将节点的位置更新到 grid 上。
   onDragEnd = () => {
+    // TODO: 确认下面该代码是否还需要（应该是默认让节点拖拽以 gridSize 为步长移动）
     // const { gridSize = 1 } = this.graphModel
     // const x = gridSize * Math.round(this.nodeModel.x / gridSize)
     // const y = gridSize * Math.round(this.nodeModel.y / gridSize)
@@ -319,14 +320,16 @@ export class ResizeControl extends Component<
 
   render(): h.JSX.Element {
     const { x, y, direction, model } = this.props
-    const style = model.getResizeControlStyle()
+    const { width, height, ...restStyle } = model.getResizeControlStyle()
     return (
       <g className={`lf-resize-control lf-resize-control-${direction}`}>
         <Rect
           className="lf-resize-control-content"
           x={x}
           y={y}
-          {...style}
+          width={width ?? 7}
+          height={height ?? 7}
+          {...restStyle}
           onMouseDown={this.dragHandler.handleMouseDown}
         />
       </g>

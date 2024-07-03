@@ -1,4 +1,4 @@
-import { pick } from 'lodash-es'
+import { forEach, pick } from 'lodash-es'
 import { getNodeBBox, isInNode, distance, sampleCubic } from '.'
 import LogicFlow from '../LogicFlow'
 import { Options } from '../options'
@@ -1030,5 +1030,30 @@ export function createEdgeGenerator(
       return Object.assign({}, currentEdge, { type: result })
     }
     return Object.assign({ type: result }, currentEdge)
+  }
+}
+
+// 获取 Svg 标签文案高度，自动换行
+export type IGetSvgTextSizeParams = {
+  rows: string[]
+  rowsLength: number
+  fontSize: number
+}
+export const getSvgTextSize = ({
+  rows,
+  rowsLength,
+  fontSize,
+}: IGetSvgTextSizeParams): LogicFlow.RectSize => {
+  let longestBytes = 0
+  forEach(rows, (row) => {
+    const rowBytesLength = getBytesLength(row)
+    longestBytes = rowBytesLength > longestBytes ? rowBytesLength : longestBytes
+  })
+
+  // 背景框宽度，最长一行字节数/2 * fontsize + 2
+  // 背景框宽度， 行数 * fontsize + 2
+  return {
+    width: Math.ceil(longestBytes / 2) * fontSize + fontSize / 4,
+    height: rowsLength * (fontSize + 2) + fontSize / 4,
   }
 }

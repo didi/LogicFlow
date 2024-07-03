@@ -1,14 +1,16 @@
-import LogicFlow from '../../LogicFlow'
+import { createElement as h } from 'preact/compat'
+import { forEach, toPairs } from 'lodash-es'
+import { LogicFlow } from '../..'
 
-// TODO: 定义基础图形的类型
 export type IPolygonProps = {
   points: LogicFlow.PointTuple[]
+  x?: number
+  y?: number
   className?: string
-  [key: string]: any
 }
 
-export function Polygon(props: IPolygonProps) {
-  const { points, className } = props
+export function Polygon(props: IPolygonProps): h.JSX.Element {
+  const { points = [], className } = props
   const attrs: Record<string, any> = {
     fill: 'transparent',
     fillOpacity: 1,
@@ -17,16 +19,17 @@ export function Polygon(props: IPolygonProps) {
     strokeOpacity: 1,
     points: '',
   }
-  Object.entries(props).forEach(([k, v]) => {
-    const valueType = typeof v
-    if (valueType !== 'object') {
+
+  forEach(toPairs(props), ([k, v]: [k: string, v: any]) => {
+    if (typeof v !== 'object') {
       attrs[k] = v
     }
   })
+
   if (className) {
-    attrs.className = `lf-basic-shape ${className}`
+    attrs.classNmae = `lf-basic-shape ${className}`
   } else {
-    attrs.className = 'lf-shape'
+    attrs.className = 'lf-basic-shape'
   }
   attrs.points = points.map((point) => point.join(',')).join(' ')
 

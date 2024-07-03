@@ -1,4 +1,5 @@
 import { pick } from 'lodash-es'
+import { createElement as h } from 'preact/compat'
 import { getBytesLength } from './edge'
 import LogicFlow from '../LogicFlow'
 import {
@@ -444,7 +445,26 @@ export const getNodeAnchorPosition = (
   }
 }
 
-// 获取文案高度，自动换行，利用dom计算高度
+/*********************************************************
+ * Text 节点文本相关工具函数
+ ********************************************************/
+// Text 相关节点工具函数
+// TODO: 获取文案高度，设置自动换行，利用 dom 计算高度
+// function getTextHeight(text: string, font: string): number {
+//   const span = document.createElement('span');
+//   span.textContent = text;
+//   span.style.font = font;
+
+//   const range = document.createRange();
+//   range.selectNodeContents(span);
+
+//   const rect = range.getBoundingClientRect();
+//   const height = rect.height;
+
+//   return height;
+// }
+
+// 获取文案高度，自动换行，利用 dom 计算高度
 export const getHtmlTextHeight = ({
   rows,
   style,
@@ -452,18 +472,18 @@ export const getHtmlTextHeight = ({
   className,
 }: {
   rows: string[]
-  style: any // TODO: 完善类型
+  style: h.JSX.CSSProperties
   rowsLength: number
   className: string
 }) => {
   const dom = document.createElement('div')
-  dom.style.fontSize = style.fontSize
-  dom.style.width = style.width
   dom.className = className
-  dom.style.lineHeight = style.lineHeight
-  dom.style.padding = style.padding
+  dom.style.fontSize = `${style.fontSize}`
+  dom.style.width = `${style.width}`
+  dom.style.lineHeight = `${style.lineHeight}`
+  dom.style.padding = `${style.padding}`
   if (style.fontFamily) {
-    dom.style.fontFamily = style.fontFamily
+    dom.style.fontFamily = `${style.fontFamily}`
   }
   if (rowsLength > 1) {
     rows.forEach((row) => {
@@ -472,13 +492,14 @@ export const getHtmlTextHeight = ({
       dom.appendChild(rowDom)
     })
   } else {
-    dom.textContent = rows[0]
+    dom.textContent = `${rows[0]}`
   }
   document.body.appendChild(dom)
   const height = dom.clientHeight
   document.body.removeChild(dom)
   return height
 }
+
 // 获取文案高度，自动换行，利用dom计算高度
 export const getSvgTextWidthHeight = ({
   rows,
@@ -506,7 +527,7 @@ export const getSvgTextWidthHeight = ({
 /**
  * @description 格式化边校验信息
  */
-export const formateAnchorConnectValidateData = (
+export const formatAnchorConnectValidateData = (
   data: Model.ConnectRuleResult,
 ) => {
   if (typeof data !== 'object') {

@@ -4,7 +4,7 @@ import { GraphModel, BaseNodeModel, BaseEdgeModel, Model } from '../../model'
 import {
   IDragParams,
   StepDrag,
-  formateAnchorConnectValidateData,
+  formatAnchorConnectValidateData,
   targetNodeInfo,
   NodeContaint,
 } from '../../util'
@@ -394,11 +394,11 @@ export class AdjustPoint extends Component<IProps, IState> {
       )
       this.sourceRuleResults.set(
         targetInfoId,
-        formateAnchorConnectValidateData(sourceRuleResult),
+        formatAnchorConnectValidateData(sourceRuleResult),
       )
       this.targetRuleResults.set(
         targetInfoId,
-        formateAnchorConnectValidateData(targetRuleResult),
+        formatAnchorConnectValidateData(targetRuleResult),
       )
     }
     const { isAllPass: isSourcePass, msg: sourceMsg } =

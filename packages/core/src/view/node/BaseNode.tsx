@@ -106,7 +106,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
             anchorIndex={index}
             nodeModel={model}
             graphModel={graphModel}
-            setHoverOFF={this.setHoverOFF}
+            setHoverOff={this.setHoverOff}
           />
         )
       })
@@ -395,7 +395,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   }
   // 为什么将hover状态放到model中？
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
-  setHoverON = (ev: MouseEvent) => {
+  setHoverOn = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     if (model.isHovered) return
     const nodeData = model.getData()
@@ -405,7 +405,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       e: ev,
     })
   }
-  setHoverOFF = (ev: MouseEvent) => {
+  setHoverOff = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     const nodeData = model.getData()
     if (!model.isHovered) return
@@ -417,7 +417,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   }
   onMouseOut = (ev: MouseEvent) => {
     if (isIe) {
-      this.setHoverOFF(ev)
+      this.setHoverOff(ev)
     }
   }
 
@@ -476,9 +476,9 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
           onClick={this.handleClick}
-          onMouseEnter={this.setHoverON}
-          onMouseOver={this.setHoverON}
-          onMouseLeave={this.setHoverOFF}
+          onMouseEnter={this.setHoverOn}
+          onMouseOver={this.setHoverOn}
+          onMouseLeave={this.setHoverOff}
           onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
           {...restAttributes}

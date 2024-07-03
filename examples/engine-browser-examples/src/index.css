@@ -173,6 +173,7 @@ form[action$='destroy'] button {
 
 #sidebar .nav-title {
   font-weight: bold;
+  padding: 0 0.5rem;
 }
 
 #search-spinner {
@@ -233,7 +234,7 @@ i {
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0 0.5rem 0.2rem;
+  padding: 0.5rem;
   overflow: hidden;
   color: inherit;
 

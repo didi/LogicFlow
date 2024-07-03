@@ -1,37 +1,63 @@
-import { getHtmlTextHeight } from '../../util'
+import { createElement as h } from 'preact/compat'
+import { BaseNodeModel, BaseEdgeModel } from '../../model'
 import { ElementType, ModelType } from '../../constant'
+import { getHtmlTextHeight } from '../../util'
+import { forEach, toPairs } from 'lodash-es'
 
-export function Text(props) {
+export type ITextProps = {
+  x: number
+  y: number
+  value: string
+  fontSize?: number
+  fill?: string
+  overflowMode?: string | 'default' | 'ellipsis'
+  textWidth?: number
+  lineHeight?: number
+  fontFamily?: string | null
+  wrapPadding?: string | number | null
+  model: BaseNodeModel | BaseEdgeModel
+  [key: string]: any
+}
+export type ForeignObjectPropsType =
+  'string | number | SignalLike<string | number | undefined> | undefined'
+
+export function Text(props: ITextProps): h.JSX.Element | null {
   const {
     x = 0,
     y = 0,
     value,
-    fontSize,
+    fontSize = 12,
     fill = 'currentColor',
     overflowMode = 'default',
-    textWidth = '',
+    // TODO: 确认该 textWidth 为 '' 时跟设置什么值一致
+    textWidth = undefined,
     model,
   } = props
-  const attrs = {
-    textAnchor: 'middle',
-    'dominant-baseline': 'middle',
+
+  const attrs: Record<string, any> = {
     x,
     y,
     fill,
+    fontSize,
+    textAnchor: 'middle',
+    dominantBaseline: 'central',
     // ...props,
   }
-  Object.entries(props).forEach(([k, v]) => {
-    const valueType = typeof v
-    if (valueType !== 'object') {
+
+  forEach(toPairs(props), ([k, v]: [k: string, v: any]) => {
+    if (typeof v !== 'object') {
       attrs[k] = v
     }
   })
+
   if (value) {
-    // String(value),兼容纯数字的文案
+    // String(value)，兼容纯数字的文案
+    // TODO: 将 value 转为纯文本，移除其中 \n \r 等特殊字符，看是否应该丰富该功能
     const rows = String(value).split(/[\r\n]/g)
     const rowsLength = rows.length
+
     if (overflowMode !== 'default') {
-      // 非文本节点设置了自动换行，或边设置了自动换行并且设置了textWidth
+      // 非文本节点设置了自动换行，或者边设置了自动换行并且设置了 textWidth
       const { BaseType, modelType } = model
       if (
         (BaseType === ElementType.NODE && modelType !== ModelType.TEXT_NODE) ||
@@ -40,11 +66,12 @@ export function Text(props) {
         return renderHtmlText(props)
       }
     }
+
     if (rowsLength > 1) {
       const tSpans = rows.map((row, i) => {
-        // 保证文字居中，文字Y轴偏移为当前行数对应中心行数的偏移行 * 行高
-        const tspanLineHeight = fontSize + 2
-        const offsetY = (i - (rowsLength - 1) / 2) * tspanLineHeight
+        // 保证文字居中，文字 Y 轴偏移为当前行数对应中心行数的偏移行 * 行高
+        const tSpanLineHeight = fontSize + 2
+        const offsetY = (i - (rowsLength - 1) / 2) * tSpanLineHeight
         return (
           <tspan className="lf-text-tspan" x={x} y={y + offsetY}>
             {row}
@@ -55,24 +82,26 @@ export function Text(props) {
     }
     return <text {...attrs}>{value}</text>
   }
-
   return null
 }
 
-function renderHtmlText(props) {
+export function renderHtmlText(props: ITextProps): h.JSX.Element {
   const {
-    value,
-    fontSize,
-    model,
-    fontFamily = '',
-    lineHeight,
-    wrapPadding = '0, 0',
-    overflowMode,
     x,
     y,
+    value,
+    model,
+    textWidth,
+    fontSize = 12,
+    lineHeight,
+    fontFamily = '',
+    wrapPadding = '0, 0',
+    overflowMode,
   } = props
-  const { width, textHeight } = model
-  const textRealWidth = props.textWidth || width
+
+  const { width, height, textHeight } = model
+  // TODO: 设置文本宽度为 textWidth 或 节点的宽度
+  const textRealWidth: number = textWidth || (width as number)
   const rows = String(value).split(/[\r\n]/g)
   const rowsLength = rows.length
   const textRealHeight = getHtmlTextHeight({
@@ -87,17 +116,20 @@ function renderHtmlText(props) {
     rowsLength,
     className: 'lf-get-text-height',
   })
+
   // 当文字超过边框时，取文字高度的实际值，也就是文字可以超过边框
-  let foreignObjectHeight =
-    model.height > textRealHeight ? model.height : textRealHeight
-  // 如果设置了文字高度，取设置的高度
+  let foreignObjectHeight: number =
+    (height as number) > textRealHeight ? (height as number) : textRealHeight
+  // 如果设置了文本高度，取设置的高度
   if (textHeight) {
-    foreignObjectHeight = textHeight
+    foreignObjectHeight = textHeight as number
   }
+
   const isEllipsis = overflowMode === 'ellipsis'
   if (isEllipsis) {
     foreignObjectHeight = fontSize + 2
   }
+
   return (
     <g>
       <foreignObject
@@ -121,12 +153,10 @@ function renderHtmlText(props) {
                 : 'lf-node-text-auto-wrap-content'
             }
             title={isEllipsis ? rows.join('') : ''}
-            style={{
-              ...props,
-            }}
+            style={{ ...(props as h.JSX.CSSProperties) }}
           >
-            {rows.map((item) => (
-              <div className="lf-node-text--auto-wrap-inner">{item}</div>
+            {rows.map((row) => (
+              <div className="lf-node-text--auto-wrap-inner">{row}</div>
             ))}
           </div>
         </div>
