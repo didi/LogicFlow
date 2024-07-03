@@ -5,48 +5,48 @@ table td:first-of-type {
 }
 </style>
 
-## register
+## Register Related
 
-Register nodes, edges.
+### register
+
+Register custom nodes, edges.
 
 ```jsx | pure
-lf.register(config):void
+lf.register(config: RegisterConfig):void
 ```
 
 Parameters:
 
-| Parameter Name | Type   | Required | Default | Description      |
+| Name | Type   | Required | Default | Description      |
 | :------------- | :----- | :------- | :------ | :------------------------------------- |
-| config.type    | String | ✅       | -       | Customize the names of nodes and edges |
+| config.type    | String | ✅       | -       | Customize the types of nodes and edges |
 | config.model   | Model  | ✅       | -       | Model of nodes and edges    |
 | config.view    | View   | ✅       | -       | View of nodes and edges     |
 
 Example:
 
 ```jsx | pure
-import { RectNode, RectNodeModel, h } from "@logicflow/core";
+import { RectNode, RectNodeModel } from "@logicflow/core";
 // provide nodes
-class UserNode extends RectNode {}
+class CustomRectNode extends RectNode {}
 // provide the attributes of the node
-class UserModel extends RectNodeModel {
-  constructor(data) {
-    super(data);
-    const { size } = data.properties;
-    this.width = size * 40;
-    this.height = size * 40;
-    this.fill = "green";
+class CustomRectModel extends RectNodeModel {
+  setAttributes() {
+    this.width = 200;
+    this.height = 80;
+    this.radius = 50;
   }
 }
 lf.register({
-  type: "user",
-  view: UserNode,
-  model: UserModel,
+  type: "Custom-rect",
+  view: CustomRectNode,
+  model: CustomRectModel,
 });
 ```
 
-## batchRegister
+### batchRegister
 
-Batch register
+Batch register.
 
 ```jsx | pure
 lf.batchRegister([
@@ -63,73 +63,9 @@ lf.batchRegister([
 );
 ```
 
-## render
+## Node Related
 
-Render graph data
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.render(graphData)
-```
-
-## renderRawData
-
-Rendering of the raw graph data. The difference with `render` is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.renderRawData({
-  nodes: [],
-  edges: []
-})
-```
-
-## setTheme
-
-Set the theme, see [Theme](theme-api) for details
-
-## changeNodeType
-
-Modify node type
-
-```jsx | pure
-changeNodeType(id: string, type: string): void
-```
-
-| Name | Type   | Required | Default | Description |
-| :--- | :----- | :------- | :------ | :---------- |
-| id   | String | ✅       |         | Node id     |
-| type | String | ✅       |         | New type    |
-
-Example:
-
-```jsx | pure
-lf.changeNodeType("node_id", "rect");
-```
-
-## getNodeEdges
-
-Get the model of all edges connected by the node.
-
-```jsx | pure
-getNodeEdges(id: string): BaseEdgeModel[]
-```
-
-| Parameter | Type   | Required | Default | Description |
-| :-------- | :----- | :------- | :------ | :---------- |
-| id        | String | ✅       |         | Node id     |
-
-Example：
-
-```jsx | pure
-const edgeModels = lf.getNodeEdges("node_id");
-```
-
-## addNode
+### addNode
 
 Add nodes to the graph.
 
@@ -167,7 +103,7 @@ lf.addNode({
 });
 ```
 
-## deleteNode
+### deleteNode
 
 Deletes a node on the graph, and if there is a line attached to this node, then also deletes the line.
 
@@ -187,7 +123,9 @@ Example：
 lf.deleteNode("id");
 ```
 
-## cloneNode
+### cloneNode
+
+Clone a node.
 
 ```jsx | pure
 cloneNode(nodeId: string): BaseNodeModel
@@ -205,7 +143,7 @@ Example：
 lf.cloneNode("id");
 ```
 
-## changeNodeId
+### changeNodeId
 
 Modify the id of the node, if no new id is passed, one will be created internally automatically.
 
@@ -215,9 +153,28 @@ Example：
 lf.changeNodeId("oldId", "newId");
 ```
 
-## getNodeModelById
+### changeNodeType
 
-Get the `model` of the node
+Modify node type.
+
+```jsx | pure
+changeNodeType(id: string, type: string): void
+```
+
+| Name | Type   | Required | Default | Description |
+| :--- | :----- | :------- | :------ | :---------- |
+| id   | String | ✅       |         | Node id     |
+| type | String | ✅       |         | New type    |
+
+Example:
+
+```jsx | pure
+lf.changeNodeType("node_id", "rect");
+```
+
+### getNodeModelById
+
+Get the `model` of the node.
 
 ```jsx | pure
 getNodeModelById(nodeId: string): BaseNodeModel
@@ -235,9 +192,9 @@ Example：
 lf.getNodeModelById("id");
 ```
 
-## getNodeDataById
+### getNodeDataById
 
-Get the `model` data of the node
+Get the `model` data of the node.
 
 ```jsx | pure
 getNodeDataById(nodeId: string): NodeConfig
@@ -255,9 +212,9 @@ Example：
 lf.getNodeDataById("id");
 ```
 
-## getNodeIncomingNode
+### getNodeIncomingNode
 
-Get all parent nodes of the node
+Get all parent nodes of the node.
 
 ```jsx | pure
 getNodeIncomingNode(nodeId: string): BaseNodeModel[]
@@ -269,9 +226,9 @@ Parameters:
 | :----- | :----- | :--- | :----- | :------ |
 | nodeId | String | ✅   | -      | Node id |
 
-## getNodeOutgoingNode
+### getNodeOutgoingNode
 
-Get all the next-level nodes of the node
+Get all the next-level nodes of the node.
 
 ```jsx | pure
 getNodeOutgoingNode(nodeId: string): BaseNodeModel[]
@@ -283,9 +240,9 @@ Parameters:
 | :----- | :----- | :--- | :----- | :------ |
 | nodeId | String | ✅   | -      | Node id |
 
-## getNodeIncomingEdge
+### getNodeIncomingEdge
 
-Get all the edges that end at this node
+Get all the edges that `end` at this node.
 
 ```jsx | pure
 getNodeIncomingEdge(nodeId: string): BaseEdgeModel[]
@@ -297,9 +254,9 @@ Parameters:
 | :----- | :----- | :--- | :----- | :------ |
 | nodeId | String | ✅   | -      | Node id |
 
-## getNodeOutgoingEdge
+### getNodeOutgoingEdge
 
-Get all the edges that start at this node
+Get all the edges that `start` at this node.
 
 ```jsx | pure
 getNodeOutgoingEdge(nodeId: string): BaseEdgeModel[]
@@ -311,9 +268,29 @@ Parameters:
 | :----- | :----- | :--- | :----- | :------ |
 | nodeId | String | ✅   | -      | Node id |
 
-## addEdge
+## Edge Related
 
-Create an edge connecting two nodes
+### setDefaultEdgeType
+
+Set the type of edge, i.e. set the type of linkage drawn directly by the user at the node.
+
+```jsx | pure
+setDefaultEdgeType(type: EdgeType): void
+```
+
+| Name       | Type   | Required | Default | Description             |
+| :--- | :----- | :--- | :--------- | :---------------------------------- |
+| type | String | ✅   | 'polyline' | Set the type of edge, built-in support for edge types are line (straight line), polyline (line), bezier (Bezier curve). The default is a line, and users can customize the type name to switch to the user-defined edge |
+
+Example：
+
+```jsx | pure
+lf.setDefaultEdgeType("line");
+```
+
+### addEdge
+
+Create an edge connecting two nodes.
 
 ```jsx | pure
 addEdge(edgeConfig: EdgeConifg): void
@@ -349,126 +326,9 @@ lf.addEdge({
 });
 ```
 
-## deleteEdge
+### getEdgeDataById
 
-Delete an edge based on its id
-
-```jsx | pure
-deleteEdge(id): void
-```
-
-Parameters:
-
-| Name       | Type   | Required | Default | Description        |
-| :--- | :----- | :--- | :----- | :------ |
-| id   | String |      | -      | Edge id |
-
-Example：
-
-```jsx | pure
-lf.deleteEdge("edge_1");
-```
-
-## deleteEdgeByNodeId
-
-Deletes an edge of the specified type, based on the start and end points of the edge, and can pass only one of them.
-
-```jsx | pure
-deleteEdgeByNodeId(config: EdgeFilter): void
-```
-
-Parameters:
-
-| Name       | Type   | Required | Default | Description           |
-| :----------- | :----- | :--- | :----- | :-------------- |
-| sourceNodeId | String |          | -       | id of the starting node of the edge |
-| targetNodeId | String |          | -       | id of the ending node of the edge   |
-
-Example：
-
-```jsx | pure
-
-lf.deleteEdgeByNodeId({
-  sourceNodeId: "id1",
-  targetNodeId: "id2",
-});
-
-lf.deleteEdgeByNodeId({
-  sourceNodeId: "id1",
-});
-
-lf.deleteEdgeByNodeId({
-  targetNodeId: "id2",
-});
-```
-
-## getEdgeModelById
-
-Get the `model` of the edge based on the its id
-
-```jsx | pure
-getEdgeModelById(edgeId: string): BaseEdgeModel
-```
-
-Parameters:
-
-| Name | Type | Mandatory | Default | Description    |
-| :----- | :----- | :--- | :----- | :------ |
-| edgeId | String | ✅   | -      | Node id |
-
-Example：
-
-```jsx | pure
-lf.getEdgeModelById("id");
-```
-
-## getEdgeModels
-
-Get the model of the edge that satisfies the condition
-
-| Name       | Type   | Required | Default | Description        |
-| :--------- | :----- | :--- | :----- | :------- |
-| edgeFilter | Object | ✅   | -      | Filtering conditions |
-
-```jsx | pure
-// get all the mods of the edges whose starting point is node A
-lf.getEdgeModels({
-  sourceNodeId: "nodeA_id",
-});
-// get all the mods of the edges whose ending point is node B
-lf.getEdgeModels({
-  targetNodeId: "nodeB_id",
-});
-// Get the edge whose starting point is node A and ending point is node B
-lf.getEdgeModels({
-  sourceNodeId: "nodeA_id",
-  targetNodeId: "nodeB_id",
-});
-```
-
-## changeEdgeId
-
-Modify the edge id. If a new id is not passed, one will be created internally automatically.
-
-Example：
-
-```jsx | pure
-lf.changeEdgeId("oldId", "newId");
-```
-
-## changeEdgeType
-
-Switch type of edge
-
-Example：
-
-```jsx | pure
-lf.changeEdgeType("edgeId", "bezier");
-```
-
-## getEdgeDataById
-
-Get edge data by `id`
+Get edge data by `id`.
 
 ```jsx | pure
 getEdgeDataById(edgeId: string): EdgeConfig
@@ -508,245 +368,146 @@ Example：
 lf.getEdgeDataById("id");
 ```
 
-## setDefaultEdgeType
+### getEdgeModelById
 
-Set the type of edge, i.e. set the type of linkage drawn directly by the user at the node.
-
-```jsx | pure
-setDefaultEdgeType(type: EdgeType): void
-```
-
-| Name       | Type   | Required | Default | Description             |
-| :--- | :----- | :--- | :--------- | :---------------------------------- |
-| type | String | ✅   | 'polyline' | Set the type of edge, built-in support for edge types are line (straight line), polyline (line), bezier (Bezier curve). The default is a line, and users can customize the type name to switch to the user-defined edge |
-
-Example：
+Get the `model` of the edge based on the its id.
 
 ```jsx | pure
-lf.setDefaultEdgeType("line");
+getEdgeModelById(edgeId: string): BaseEdgeModel
 ```
-
-## editText
-
-same as [graphModel.editText](graph-model-api#edittext)
-
-## updateText
-
-Update the node or edge text
-
-```jsx | pure
-updateText(id: string, value: string): void
-```
-
-| Name       | Type   | Required | Default | Description              |
-| :---- | :----- | :--- | :----- | :------------- |
-| id    | String | ✅   |        | Node or Edge id  |
-| value | String | ✅   |        | Updated text values |
-
-Example：
-
-```jsx | pure
-lf.updateText("id", "value");
-```
-
-## deleteElement
-
-```jsx | pure
-deleteElement(id: string): boolean
-```
-
-| Name       | Type   | Required | Default | Description              |
-| :--- | :----- | :--- | :----- | :------------ |
-| id   | String | ✅   |        | Node or Edge id |
-
-Example：
-
-```jsx | pure
-lf.deleteElement("node_id");
-```
-
-## selectElementById
-
-Select the graph
 
 Parameters:
 
-| Name       | Type   | Required | Default | Description                                                  |
-| :------- | :------ | :--- | :----- | :----------------------- |
-| id       | string  | ✅   | -      | Node or edge id                                    |
-| multiple | boolean |      | false  | If or not is multi-selected, if true, the last selected element will not be reset. |
-| toFront  | boolean |      | true   | If or not the selected element will be topped, default is true.   |
+| Name | Type | Mandatory | Default | Description    |
+| :----- | :----- | :--- | :----- | :------ |
+| edgeId | String | ✅   | -      | Node id |
 
 Example：
 
 ```jsx | pure
-lf.selectElementById(id: string, multiple = false, toFront = true)
+lf.getEdgeModelById("id");
 ```
 
-## getGraphData
+### getEdgeModels
 
-Get flow graphing data
+Get the model of the edge that satisfies the condition.
 
-```jsx | pure
-// Return value. If the adapter plugin is applied and the setting is adapterOut, the return is the converted data format, otherwise it is the default format.
-// Starting from version 1.2.5, new input parameters have been added for the execution of certain adapterOut that require input parameters.
-// For example, the built-in BpmnAdapter may require an array of attribute reserve fields to be passed in to ensure that certain node attributes in the exported data are properly processed.
-// The input parameters here should be consistent with the other parameters of the adapterOut method from the imported adapter, except for the data parameter.
-getGraphData(...params: any): GraphConfigData | unknown
-```
-
-LogicFlow default data format
+| Name       | Type   | Required | Default | Description        |
+| :--------- | :----- | :--- | :----- | :------- |
+| edgeFilter | Object | ✅   | -      | Filtering conditions |
 
 ```jsx | pure
-type GraphConfigData = {
-  nodes: {
-    id?: string;
-    type: string;
-    x: number;
-    y: number;
-    text?: TextConfig;
-    properties?: Record<string, unknown>;
-    zIndex?: number;
-  }[];
-  edges: {
-    id: string;
-    type: string;
-    sourceNodeId: string;
-    targetNodeId: string;
-    startPoint: any;
-    endPoint: any;
-    text: {
-      x: number;
-      y: number;
-      value: string;
-    };
-    properties: {};
-    zIndex?: number;
-    pointsList?: Point[]; // Folding lines and curves will output pointsList.
-  }[];
-};
-```
-
-Example：
-
-```jsx | pure
-lf.getGraphData();
-```
-
-## getGraphRawData
-
-Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the adapter.
-
-```jsx | pure
-getGraphRawData(): GraphConfigData
-```
-
-Example：
-
-```jsx | pure
-lf.getGraphRawData();
-```
-
-## setProperties
-
-Set custom properties of nodes or edges
-
-```jsx | pure
-setProperties(id: string, properties: Object): void
-```
-
-Example：
-
-```jsx | pure
-lf.setProperties("aF2Md2P23moN2gasd", {
-  isRollbackNode: true,
+// get all the mods of the edges whose starting point is node A
+lf.getEdgeModels({
+  sourceNodeId: "nodeA_id",
+});
+// get all the mods of the edges whose ending point is node B
+lf.getEdgeModels({
+  targetNodeId: "nodeB_id",
+});
+// Get the edge whose starting point is node A and ending point is node B
+lf.getEdgeModels({
+  sourceNodeId: "nodeA_id",
+  targetNodeId: "nodeB_id",
 });
 ```
 
-## deleteProperty
+### changeEdgeId
 
-Delete node attributes
-
-```jsx | pure
-deleteProperty(id: string, key: string): void
-```
+Modify the edge id. If a new id is not passed, one will be created internally automatically.
 
 Example：
 
 ```jsx | pure
-lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
+lf.changeEdgeId("oldId", "newId");
 ```
 
-## getProperties
+### changeEdgeType
 
-Get the custom properties of a node or an edge
-
-```jsx | pure
-getProperties(id: string): Object
-```
+Switch type of the edge.
 
 Example：
 
 ```jsx | pure
-lf.getProperties("id");
+lf.changeEdgeType("edgeId", "bezier");
 ```
 
-## updateAttributes
+### deleteEdge
 
-Modifies an attribute in the corresponding element model, which is called [graphModel](graph-model-api#updateattributes) inside the method.
-
-:::warning
-This method is used with caution unless you know enough about logicflow internals.<br>
-In most cases, please use setProperties, updateText, changeNodeId, and so on.<br>
-For example, if you use this method to change the id of a Node, the sourceNodeId of the Edge connected to the Node will not be found.
-:::
-```jsx | pure
-updateAttributes(id: string, attributes: object): void
-```
-Example：
+Delete an edge based on its id.
 
 ```jsx | pure
-lf.updateAttributes("node_id_1", { radius: 4 });
+deleteEdge(id): void
 ```
-
-## toFront
-
-Places an element to the top.
-
-If the stacking mode is the default, the original top element is restored to its original level.
-
-If the stacking mode is incremental, the zIndex of the element to be specified is set to the current maximum zIndex + 1.
-
-Example：
-
-```jsx | pure
-lf.toFront("id");
-```
-
-## setElementZIndex
-
-Set the zIndex of the element.
-
-Note: This method is not recommended for the default stacking mode.
 
 Parameters:
 
-| Name | Type | Mandatory | Default | Description |
-| :----- | :-------------- | :--- | :----- | :---|
-| id     | String          | ✅   | - |  Node or edge id          |
-| zIndex | String\| Number | ✅       | -       | Passing numbers, also supports passing `top` and `bottom` |
+| Name       | Type   | Required | Default | Description        |
+| :--- | :----- | :--- | :----- | :------ |
+| id   | String |      | -      | Edge id |
 
 Example：
 
 ```jsx | pure
-lf.setElementZIndex("element_id", "top");
-lf.setElementZIndex("element_id", "bottom");
-lf.setElementZIndex("element_id", 2000);
+lf.deleteEdge("edge_1");
 ```
 
-## addElements
+### deleteEdgeByNodeId
 
-Batch add nodes and edges
+Deletes an edge of the specified type, based on the start and end points of the edge, and can pass only one of them.
+
+```jsx | pure
+deleteEdgeByNodeId(config: EdgeFilter): void
+```
+
+Parameters:
+
+| Name       | Type   | Required | Default | Description           |
+| :----------- | :----- | :--- | :----- | :-------------- |
+| sourceNodeId | String |          | -       | id of the starting node of the edge |
+| targetNodeId | String |          | -       | id of the ending node of the edge   |
+
+Example：
+
+```jsx | pure
+
+lf.deleteEdgeByNodeId({
+  sourceNodeId: "id1",
+  targetNodeId: "id2",
+});
+
+lf.deleteEdgeByNodeId({
+  sourceNodeId: "id1",
+});
+
+lf.deleteEdgeByNodeId({
+  targetNodeId: "id2",
+});
+```
+
+### getNodeEdges
+
+Get the model of all edges connected by the node.
+
+```jsx | pure
+getNodeEdges(id: string): BaseEdgeModel[]
+```
+
+| Parameter | Type   | Required | Default | Description |
+| :-------- | :----- | :------- | :------ | :---------- |
+| id        | String | ✅       |         | Node id     |
+
+Example：
+
+```jsx | pure
+const edgeModels = lf.getNodeEdges("node_id");
+```
+
+## Element Related
+
+### addElements
+
+Batch add nodes and edges.
 
 Example：
 
@@ -778,7 +539,106 @@ lf.addElements({
 });
 ```
 
-## getAreaElement
+### selectElementById
+
+Select the graph.
+
+Parameters:
+
+| Name       | Type   | Required | Default | Description                                                  |
+| :------- | :------ | :--- | :----- | :----------------------- |
+| id       | string  | ✅   | -      | Node or edge id                                    |
+| multiple | boolean |      | false  | If or not is multi-selected, if true, the last selected element will not be reset. |
+| toFront  | boolean |      | true   | If or not the selected element will be topped, default is true.   |
+
+Example：
+
+```jsx | pure
+lf.selectElementById(id: string, multiple = false, toFront = true)
+```
+
+### getSelectElements
+
+Get all elements selected.
+
+```jsx | pure
+getSelectElements(isIgnoreCheck: boolean): GraphConfigData
+```
+
+| Name          | Type    | Required | Default | Description         |
+| :------------ | :------ | :--- | :----- | :----------------------------------------------------------- |
+| isIgnoreCheck | boolean | ✅   | true   |  Whether to include edges where sourceNode and targetNode are not selected, default is include. |
+
+```jsx | pure
+lf.getSelectElements(false);
+```
+
+### clearSelectElements
+
+Uncheck all elements.
+
+```jsx | pure
+lf.clearSelectElements();
+```
+
+### getModelById
+
+Get the `model` of a node or edge based on its `id`.
+
+```jsx | pure
+lf.getModelById("node_id");
+lf.getModelById("edge_id");
+```
+
+### getDataById
+
+Get the `data` of a node or edge based on its `id`.
+
+```jsx | pure
+lf.getDataById("node_id");
+lf.getDataById("edge_id");
+```
+
+### deleteElement
+
+Delete the element by id.
+
+```jsx | pure
+deleteElement(id: string): boolean
+```
+
+| Name       | Type   | Required | Default | Description              |
+| :--- | :----- | :--- | :----- | :------------ |
+| id   | String | ✅   |        | Node or Edge id |
+
+Example：
+
+```jsx | pure
+lf.deleteElement("node_id");
+```
+
+### setElementZIndex
+
+Set the zIndex of the element.
+
+Note: This method is not recommended for the default stacking mode.
+
+Parameters:
+
+| Name | Type | Mandatory | Default | Description |
+| :----- | :-------------- | :--- | :----- | :---|
+| id     | String          | ✅   | - |  Node or edge id          |
+| zIndex | String\| Number | ✅       | -       | Passing numbers, also supports passing `top` and `bottom` |
+
+Example：
+
+```jsx | pure
+lf.setElementZIndex("element_id", "top");
+lf.setElementZIndex("element_id", "bottom");
+lf.setElementZIndex("element_id", 2000);
+```
+
+### getAreaElement
 
 Gets all the elements in the specified region, which must be a DOM layer.
 
@@ -798,57 +658,93 @@ Parameters:
 lf.getAreaElement([100, 100], [500, 500]);
 ```
 
-## getSelectElements
+### setProperties
 
-Get all elements selected
-
-```jsx | pure
-getSelectElements(isIgnoreCheck: boolean): GraphConfigData
-```
-
-| Name          | Type    | Required | Default | Description         |
-| :------------ | :------ | :--- | :----- | :----------------------------------------------------------- |
-| isIgnoreCheck | boolean | ✅   | true   |  Whether to include edges where sourceNode and targetNode are not selected, default is include. |
+Set the custom properties of nodes or edges.
 
 ```jsx | pure
-lf.getSelectElements(false);
+setProperties(id: string, properties: Object): void
 ```
 
-## clearSelectElements
-
-Uncheck all elements
+Example：
 
 ```jsx | pure
-lf.clearSelectElements();
+lf.setProperties("aF2Md2P23moN2gasd", {
+  isRollbackNode: true,
+});
 ```
 
-## getModelById
+### getProperties
 
-Get the model of a node or edge based on its id
+Get the custom properties of a node or an edge.
 
 ```jsx | pure
-lf.getModelById("node_id");
-lf.getModelById("edge_id");
+getProperties(id: string): Object
 ```
 
-## getDataById
-
-Get data of a node or edge based on its id
+Example：
 
 ```jsx | pure
-lf.getDataById("node_id");
-lf.getDataById("edge_id");
+lf.getProperties("id");
 ```
 
-## clearData
+### deleteProperty
 
-Clear the canvas
+Delete node attributes.
 
 ```jsx | pure
-lf.clearData();
+deleteProperty(id: string, key: string): void
 ```
 
-## updateEditConfig
+Example：
+
+```jsx | pure
+lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
+```
+
+### updateAttributes
+
+Modifies an attribute in the corresponding element model, which is called [graphModel](graph-model-api#updateattributes) inside the method.
+
+:::warning
+This method is used with caution unless you know enough about logicflow internals.<br>
+In most cases, please use setProperties, updateText, changeNodeId, and so on.<br>
+For example, if you use this method to change the id of a Node, the sourceNodeId of the Edge connected to the Node will not be found.
+:::
+```jsx | pure
+updateAttributes(id: string, attributes: object): void
+```
+Example：
+
+```jsx | pure
+lf.updateAttributes("node_id_1", { radius: 4 });
+```
+## Text Related
+
+### editText
+
+same as [graphModel.editText](graph-model-api#edittext)
+
+### updateText
+
+Update the node or edge text.
+
+```jsx | pure
+updateText(id: string, value: string): void
+```
+
+| Name       | Type   | Required | Default | Description              |
+| :---- | :----- | :--- | :----- | :------------- |
+| id    | String | ✅   |        | Node or Edge id  |
+| value | String | ✅   |        | Updated text values |
+
+Example：
+
+```jsx | pure
+lf.updateText("id", "value");
+```
+
+### updateEditConfig
 
 Update the basic configuration of the flow editor.
 
@@ -860,7 +756,7 @@ lf.updateEditConfig({
 });
 ```
 
-## getEditConfig
+### getEditConfig
 
 Get the basic configuration of the flow editor.
 
@@ -870,9 +766,70 @@ See [editConfig](edit-config-model-api) for detailed parameters
 lf.getEditConfig();
 ```
 
-## getPointByClient
+## Graph Related
 
-Get the coordinates of the event location relative to the top left corner of the canvas
+### setTheme
+
+Set the theme, see [Theme](theme-api) for details.
+
+### focusOn
+
+Position to the center of the canvas viewport.
+
+Parameters:
+
+| Name        | Type   | Required | Default | Description       |
+| :---------- | :----- | :--- | :----- | :----------- |
+| focusOnArgs | object | ✅   | -      | Required parameters for positioning |
+
+Example：
+
+```jsx | pure
+//  position the center of the canvas viewport to the position of the node_1 element
+lf.focusOn({
+  id: "node_1",
+});
+// position the center of the canvas viewport to the coordinates [1000, 1000]
+lf.focusOn({
+  coordinate: {
+    x: 1000,
+    y: 1000,
+  },
+});
+```
+
+### resize
+
+Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.
+
+Parameters:
+
+| Name | Type | Mandatory | Default | Description     |
+| :----- | :----- | :--- | :----- | :------- |
+| width  | Number |      | -      | Width of the canvas  |
+| height | Number | ✅   | -      | Height of the canvas |
+
+```jsx | pure
+lf.resize(1200, 600);
+```
+
+### toFront
+
+Places an element to the top.
+
+If the stacking mode is the default, the original top element is restored to its original level.
+
+If the stacking mode is incremental, the zIndex of the element to be specified is set to the current maximum zIndex + 1.
+
+Example：
+
+```jsx | pure
+lf.toFront("id");
+```
+
+### getPointByClient
+
+Get the coordinates of the event location relative to the top left corner of the canvas.
 
 The location of the canvas can be anywhere on the page. The coordinates returned by the native event are relative to the top-left corner of the page, and this method provides the exact location with the top-left corner of the canvas as the origin.
 
@@ -910,50 +867,130 @@ Example：
 lf.getPointByClient(event.x, event.y);
 ```
 
-## focusOn
+### getGraphData
 
-Position to the center of the canvas viewport
+Get flow graphing data.
 
-Parameters:
+```jsx | pure
+// Return value. If the adapter plugin is applied and the setting is adapterOut, the return is the converted data format, otherwise it is the default format.
+// Starting from version 1.2.5, new input parameters have been added for the execution of certain adapterOut that require input parameters.
+// For example, the built-in BpmnAdapter may require an array of attribute reserve fields to be passed in to ensure that certain node attributes in the exported data are properly processed.
+// The input parameters here should be consistent with the other parameters of the adapterOut method from the imported adapter, except for the data parameter.
+getGraphData(...params: any): GraphConfigData | unknown
+```
 
-| Name        | Type   | Required | Default | Description       |
-| :---------- | :----- | :--- | :----- | :----------- |
-| focusOnArgs | object | ✅   | -      | Required parameters for positioning |
+LogicFlow default data format.
+
+```jsx | pure
+type GraphConfigData = {
+  nodes: {
+    id?: string;
+    type: string;
+    x: number;
+    y: number;
+    text?: TextConfig;
+    properties?: Record<string, unknown>;
+    zIndex?: number;
+  }[];
+  edges: {
+    id: string;
+    type: string;
+    sourceNodeId: string;
+    targetNodeId: string;
+    startPoint: any;
+    endPoint: any;
+    text: {
+      x: number;
+      y: number;
+      value: string;
+    };
+    properties: {};
+    zIndex?: number;
+    pointsList?: Point[]; // Folding lines and curves will output pointsList.
+  }[];
+};
+```
 
 Example：
 
 ```jsx | pure
-//  position the center of the canvas viewport to the position of the node_1 element
-lf.focusOn({
-  id: "node_1",
-});
-// position the center of the canvas viewport to the coordinates [1000, 1000]
-lf.focusOn({
-  coordinate: {
-    x: 1000,
-    y: 1000,
-  },
-});
+lf.getGraphData();
 ```
 
-## resize
+### getGraphRawData
 
-Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.
-
-Parameters:
-
-| Name | Type | Mandatory | Default | Description     |
-| :----- | :----- | :--- | :----- | :------- |
-| width  | Number |      | -      | Width of the canvas  |
-| height | Number | ✅   | -      | Height of the canvas |
+Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the adapter.
 
 ```jsx | pure
-lf.resize(1200, 600);
+getGraphRawData(): GraphConfigData
 ```
 
-## zoom
+Example：
 
-Zoom in and out of the canvas
+```jsx | pure
+lf.getGraphRawData();
+```
+
+### clearData
+
+Clear the canvas.
+
+```jsx | pure
+lf.clearData();
+```
+
+### renderRawData
+
+Rendering of the raw graph data. The difference with `render` is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.renderRawData({
+  nodes: [],
+  edges: []
+})
+```
+
+### render
+
+Render graph data.
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.render(graphData)
+```
+
+## History Related
+
+### undo
+
+History Operation - Back to previous step.
+
+Example：
+
+```jsx | pure
+lf.undo();
+```
+
+### redo
+
+History Operation - Resume next.
+
+Example：
+
+```jsx | pure
+lf.redo();
+```
+
+## Resize Related
+
+### zoom
+
+Zoom in or out of the canvas.
 
 Parameters:
 
@@ -975,9 +1012,9 @@ lf.zoom(2);
 lf.zoom(2, [100, 100]);
 ```
 
-## resetZoom
+### resetZoom
 
-Resets the zoom scale of the graph to default
+Reset the zoom ratio of the drawing to the default, which is 1.
 
 Example：
 
@@ -985,7 +1022,7 @@ Example：
 lf.resetZoom();
 ```
 
-## setZoomMiniSize
+### setZoomMiniSize
 
 Sets the minimum number of times the graph can be scaled when it is reduced. The parameter takes values from 0 to 1. Default 0.2
 
@@ -1005,9 +1042,9 @@ Example：
 lf.setZoomMiniSize(0.3);
 ```
 
-## setZoomMaxSize
+### setZoomMaxSize
 
-Set the maximum magnification
+Set the maximum zoom scale when zooming in; default is 16.
 
 ```jsx | pure
 setZoomMaxSize(size: number): void
@@ -1025,18 +1062,18 @@ Example：
 lf.setZoomMaxSize(20);
 ```
 
-## getTransform
+### getTransform
 
-Get the zoom in/out value of the current canvas
+Get the zoom in/out value of the current canvas.
 
 ```jsx | pure
 const transform = lf.getTransform();
 console.log(transform);
 ```
 
-## translate
+### translate
 
-Panning graph
+Panning graph.
 
 Parameters
 
@@ -1049,25 +1086,25 @@ Parameters
 lf.translate(100, 100);
 ```
 
-## translateCenter
+### resetTranslate
 
-Graphics canvas centering
-
-```jsx | pure
-lf.translateCenter();
-```
-
-## resetTranslate
-
-Restore the graph to its original position
+Restore the graph to its original position.
 
 ```jsx | pure
 lf.resetTranslate();
 ```
 
-## fitView
+### translateCenter
 
-Reduce the entire flowchart to a size where the entire canvas can be displayed
+Graphics canvas centering.
+
+```jsx | pure
+lf.translateCenter();
+```
+
+### fitView
+
+Reduce the entire flowchart to a size where the entire canvas can be displayed.
 
 Parameters:
 
@@ -1080,21 +1117,27 @@ Parameters:
 lf.fitView(deltaX, deltaY);
 ```
 
-## openEdgeAnimation
+### openEdgeAnimation
+
+Enable edge animations.
 
 ```jsx | pure
 lf.openEdgeAnimation(edgeId: string):void;
 ```
 
-## closeEdgeAnimation
+### closeEdgeAnimation
+
+Disable edge animations.
 
 ```jsx | pure
 lf.closeEdgeAnimation(edgeId: string):void;
 ```
 
-## on
+## Event System Related
 
-Listening events of the graph，see [event](event-center-api)
+### on
+
+Event listener for the graph, see [event](event-center-api).
 
 ```jsx | pure
 on(evt: string, callback: Function): this
@@ -1125,9 +1168,9 @@ lf.on("element:click", (args) => {
 });
 ```
 
-## off
+### off
 
-Remove event listener
+Remove event listener.
 
 ```jsx | pure
 off(evt: string, callback: Function): this
@@ -1151,9 +1194,9 @@ lf.off("element:click", () => {
 });
 ```
 
-## once
+### once
 
-Event Listening Once
+Event listener that triggers only once.
 
 ```jsx | pure
 once(evt: string, callback: Function): this
@@ -1174,9 +1217,9 @@ lf.once("node:click", () => {
 });
 ```
 
-## emit
+### emit
 
-Trigger events
+Trigger an event.
 
 ```jsx | pure
 emit(evt: string, ...args): this
@@ -1193,24 +1236,4 @@ Example：
 
 ```jsx | pure
 lf.emit("custom:button-click", model);
-```
-
-## undo
-
-History Operation - Back to previous step
-
-Example：
-
-```jsx | pure
-lf.undo();
-```
-
-## redo
-
-History Operation - Resume Next
-
-Example：
-
-```jsx | pure
-lf.redo();
 ```
