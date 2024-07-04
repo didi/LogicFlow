@@ -4,179 +4,176 @@ group:
   title: Introduce
 title: Getting Started
 order: 1
+toc: content
 ---
 
 # Getting Started
 
-## Introduction
-
-LogicFlow is divided into:
-
-- `core` package - Core packages
-
-- `extension` package - Plug-in package (no need to bring in plugins if you don't use them)
-
-- `engine` package - Execution engines
-
 ## Installation
 
-- Command installation: by using npm or yarn.
+- Command installation: Install by using npm, yarn, or pnpm.
 
-```shell
-# npm
-$ npm install @logicflow/core --save
+:::code-group
 
-# yarn
-$ yarn add @logicflow/core
+```bash [npm]
+npm install @logicflow/core --save
 ```
 
-- Introducing directly with `<script>`
+```bash [yarn]
+yarn add @logicflow/core
+```
 
-  Since LogicFlow itself will have some preset styles, you need to bring in js, but also css.
+```bash [pnpm]
+pnpm install @logicflow/core
+```
 
-  <!-- TODO - 需要核对路径 -->
+:::
+
+- Directly import with `<script>`
+
+  Since LogicFlow itself has some preset styles, in addition to importing js, you also need to `import css`.
 
 ```html
-<!-- Introducing the core package -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
+<!-- Import the core package. -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
 
-<!-- Introducing extension package styl -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
-
-<!-- Plugins support individual introductions, here's an example of a menu plugin -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/Menu.js"></script>
 ```
-
-Addresses of all LogicFlow plugins: [https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/](https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/)
+  The current latest version is 2.0.0-beta.2. For other versions, please check: https://www.jsdelivr.com/package/npm/@logicflow/core
 
 ## Getting Started
 
-### 1. Initialize canvas
+### 1. Direct `<script>` Usage
 
-Create a canvas container in the page, and then initialize the canvas object, you can set the style of the canvas through the configuration.
+```html
+<!-- Import the core package -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
 
-```jsx | pure
+<!-- Create canvas container -->
 <div id="container"></div>
 
-import LogicFlow from '@logicflow/core'
-import "@logicflow/core/dist/index.css";
+<script>
+// Prepare graph data
+const data = {
+  // Nodes
+  nodes: [
+    {
+      id: '21',
+      type: 'rect',
+      x: 100,
+      y: 200,
+      text: 'rect node',
+    },
+    {
+      id: '50',
+      type: 'circle',
+      x: 300,
+      y: 400,
+      text: 'circle node',
+    },
+  ],
+  // Edges
+  edges: [
+    {
+      type: 'polyline',
+      sourceNodeId: '50',
+      targetNodeId: '21',
+    },
+  ],
+}
+// Create instance of LogicFlow
+const lf = new Core.default({
+  container: document.querySelector('#container'),
+  width: 700,
+  height: 500,
+  grid: true,
+})
 
-const lf = new LogicFlow({
-  container: document.querySelector("#container")
-});
-
+// Render canvas instance
+lf.render(data)
+</script>
 ```
 
-### 2. Rendering nodes and edges
+### 2. Usage in React Framework
 
-LogicFlow supports data in JSON format, where `nodes` represent node data and `edges` represent edge data. Now look at a simple example 👇.
+LogicFlow itself is packaged as pure JS with UMD, making it compatible with both Vue and React frameworks. One key point to note is that when initializing a LogicFlow instance, the container parameter must refer to an existing DOM node to avoid errors.
 
-<code id="helloworld" src="../../src/tutorial/getting-started/helloworld"></code>
+```jsx
+import LogicFlow from "@logicflow/core";
+import "@logicflow/core/dist/index.css";
+import { useEffect, useRef } from "react";
 
-LogicFlow itself is packaged in umd as a pure JS package, so it can be used in both vue and react. One thing to note here is that when you initialize a LogicFlow instance, the container parameter you pass in must be present on the dom, otherwise you will get an error checking if the container parameter is valid.
-
-:::warning
-LogicFlow supports initialization without passing the container width and height parameter, the default width and height of the container will be used. Please make sure that the container's width already exists when you initialize LogicFlow.
-:::
-
-### 3. Using the Front-End Framework Node
-
-Implemented with React
-
-<code id="use-react-node" src="../../src/tutorial/getting-started/use-react"></code>
-
-Implemented with Vue
-
-<details> <summary>code expansion</summary>
-
-```jsx | pure
-import { HtmlNode, HtmlNodeModel } from "@logicflow/core";
-import { createApp, ref, h } from 'vue';
-import VueNode from './VueNode.vue';
-
-class VueHtmlNode extends HtmlNode {
-  constructor (props) {
-    super(props)
-    this.isMounted = false
-    this.r = h(VueNode, {
-      properties: props.model.getProperties(),
-      text: props.model.inputData,
-    })
-    this.app = createApp({
-      render: () => this.r
-    })
+export default function App() {
+  const refContainer = useRef();
+  const data = {
+    // Nodes
+    nodes: [
+      {
+        id: '21',
+        type: 'rect',
+        x: 300,
+        y: 100,
+        text: 'rect node',
+      },
+      {
+        id: '50',
+        type: 'circle',
+        x: 500,
+        y: 100,
+        text: 'circle node',
+      },
+    ],
+    // Edges
+    edges: [
+      {
+        type: 'polyline',
+        sourceNodeId: '50',
+        targetNodeId: '21',
+      },
+    ],
   }
-  setHtml(rootEl) {
-    if (!this.isMounted) {
-      this.isMounted = true
-      const node = document.createElement('div')
-      rootEl.appendChild(node)
-      this.app.mount(node)
-    } else {
-      this.r.component.props.properties = this.props.model.getProperties()
-    }
-  }
+  useEffect(() => {
+    const logicflow = new LogicFlow({
+      container: refContainer.current,
+      grid: true,
+      height: 200
+    });
+    logicflow.render(data);
+  }, []);
+  return <div className="App" ref={refContainer}></div>;
 }
+```
+### 3. Usage in Vue Framework
 
-class VueHtmlNodeModel extends HtmlNodeModel {
-  setAttributes() {
-    this.width = 300;
-    this.height = 100;
-    this.text.editable = false;
-    this.inputData = this.text.value
-  }
-  getOutlineStyle() {
-    const style = super.getOutlineStyle();
-    style.stroke = 'none';
-    style.hover.stroke = 'none';
-    return style;
-  }
-}
+```vue
+<template>
+  <div class="container" ref="container"></div>
+</template>
+
+<script>
+import LogicFlow from "@logicflow/core";
+import "@logicflow/core/dist/style/index.css";
 
 export default {
-  type: 'vue-html',
-  model: VueHtmlNodeModel,
-  view: VueHtmlNode
+  mounted() {
+    this.lf = new LogicFlow({
+      container: this.$refs.container,
+      grid: true,
+    });
+    this.lf.render();
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  width: 1000px;
+  height: 500px;
 }
+</style>
 ```
 
-</details>
-
-### 4. Using Plug-ins
-
-The original goal of LogicFlow was to support an extensible process mapping tool that could be used to meet a variety of business needs. In order to make LogicFlow extensible enough, LogicFlow develops all non-core functionality using plugins, and then puts these plugins into the `@logicflow/extension` package.
-
-#### >> start
-
-```js
-import LogicFlow from "@logicflow/core";
-import { Control } from "@logicflow/extension";
-
-LogicFlow.use(Control);
-```
-
-#### >> example
-
-<code id="use-plugin" src="../../src/tutorial/getting-started/use-plugin"></code>
-
-### 5. Data Conversion
-
-In some cases, the data format generated by LogicFlow may not meet the business requirements. For example, if the backend requires data in the format generated by bpmn-js, you can use the data conversion tool to convert the data generated by LogicFlow to the data generated by bpmn-js.
-
-```jsx | pure
-lf.adapterIn = function (userData) {
-  ...
-  return logicFlowData;
-}
-
-lf.adapterOut = function (logicFlowData) {
-  ...
-  return userData;
-}
-```
-
-The custom data conversion tool essentially takes the data passed in by the user and converts it to a format that LogicFlow recognizes via an `lf.adapterIn` method. Then when generating the data, the `lf.adapterOut` method converts the data from LogicFlow to the data passed in by the user. So to customize the data conversion tool we just need to override these two methods again.
-
-That's it for our demo demo, to continue learning about some of Logicflow's capabilities,
-you can start reading from [Basic Tutorial](basic-class).
+:::warning{title=warning}
+LogicFlow supports initializing without specifying container width and height parameters, in which case it will default to the width and height of the container. Ensure that the container has its dimensions set when initializing LogicFlow.
+:::

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { BaseEdgeModel, LineEdge, h } from '@logicflow/core';
 
 const DEFAULT_WIDTH = 48;
@@ -45,7 +45,9 @@ class CustomEdgeView extends LineEdge {
     };
 
     setTimeout(() => {
-      ReactDOM.render(<CustomLine />, document.querySelector('#' + id));
+      ReactDOM.createRoot(document.querySelector('#' + id)).render(
+        <CustomLine />,
+      );
     }, 0);
     return h('g', {}, [
       h('line', { ...lineData, ...edgeStyle, ...arrowConfig }),

@@ -1,6 +1,6 @@
 import { HtmlNodeModel, HtmlNode } from '@logicflow/core';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.less';
 
 function Hello(props) {
@@ -34,9 +34,8 @@ class BoxxModel extends HtmlNodeModel {
 class BoxxNode extends HtmlNode {
   setHtml(rootEl: HTMLElement) {
     const { properties } = this.props.model;
-    ReactDOM.render(
+    ReactDOM.createRoot(rootEl).render(
       <Hello name={properties.name} body={properties.body} />,
-      rootEl,
     );
   }
 }

@@ -1,3 +1,5 @@
+import LogicFlow from '@logicflow/core';
+
 const data = {
   nodes: [
     {
