@@ -1,3 +1,8 @@
+---
+title: constructor
+toc: content
+order: 0
+---
 > 流程图上所有的节点实例操作以及事件，行为监听都在 `LogicFlow` 实例上进行。
 
 ## 配置

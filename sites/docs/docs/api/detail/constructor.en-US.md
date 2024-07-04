@@ -1,3 +1,8 @@
+---
+title: constructor
+toc: content
+order: 0
+---
 > All node instance operations on the flowchart, as well as events and behavior listening, are performed on the `LogicFlow` instance.
 
 ## configure
