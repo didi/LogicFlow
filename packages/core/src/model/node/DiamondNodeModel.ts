@@ -31,7 +31,7 @@ export class DiamondNodeModel extends BaseNodeModel {
     super(data, graphModel)
     this.properties = data.properties || {}
 
-    this.setAttributes()
+    // this.setAttributes()
   }
 
   setAttributes() {

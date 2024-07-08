@@ -52,7 +52,12 @@ const data = {
       type: 'circle',
       x: 350,
       y: 100,
-      text: '圆形',
+      properties: {},
+      text: {
+        x: 350,
+        y: 100,
+        value: '圆形射门来问\n撒发啊乐趣\n撒旦法捡垃圾二楼飒飒饭店\n阿萨德刚撒',
+      },
     },
     {
       id: '3',
@@ -108,6 +113,7 @@ export default function BasicNode() {
 
       lf.render(data)
       lfRef.current = lf
+      ;(window as any).lf = lf
     }
   }, [])
 

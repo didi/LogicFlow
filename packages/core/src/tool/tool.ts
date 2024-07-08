@@ -3,8 +3,8 @@ import { VNode } from 'preact'
 import TextEdit from './TextEditTool'
 import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'
-import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 import { ElementState, EventType } from '../constant'
+import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 
 export type IToolProps = {
   textEditElement?: BaseNodeModel | BaseEdgeModel
