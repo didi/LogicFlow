@@ -27,10 +27,12 @@ export default class Example extends React.Component {
     lf.render(data);
     lf.translateCenter();
 
+    // node 点击事件
     lf.on('node:click', ({ data }: any) => {
       lf.setProperties(data.id, {
-        disabled: !data.properties.disabled,
-        scale: 1.5,
+        // 改变业务属性
+        clicked: !data.properties.clicked,
+        scale: 0.8, // 缩小
       });
     });
   }

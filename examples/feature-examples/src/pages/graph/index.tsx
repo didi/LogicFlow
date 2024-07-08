@@ -88,6 +88,9 @@ const data = {
       properties: {
         width: 80,
         height: 120,
+        style: {
+          radius: 20,
+        },
       },
     },
     {

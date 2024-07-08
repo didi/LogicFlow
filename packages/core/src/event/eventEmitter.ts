@@ -77,7 +77,7 @@ export default class EventEmitter {
   emit(evts: string, eventArgs: EventCallback) {
     evts?.split(',').forEach((evt) => {
       const events = this._events[evt] || []
-      // TODO: 这是什么？？？
+      // TODO: 这是什么？？？ +1
       const wildcardEvents = this._events[WILDCARD] || []
       // 实际的处理 emit 方法
       const doEmit = (es: EventType[]) => {
