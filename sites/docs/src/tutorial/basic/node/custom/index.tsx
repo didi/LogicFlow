@@ -2,8 +2,8 @@ import React from 'react';
 import LogicFlow from '@logicflow/core';
 import '@logicflow/core/es/index.css';
 
-import CustomCircle from './customCircle';
 import CustomEllipse from './customEllipse';
+import CustomCircle from './customCircle';
 import CustomPolygon from './customPolygon';
 import CustomDiamond from './customDiamond';
 import CustomRect from './customRect';
@@ -29,8 +29,8 @@ export default class Example extends React.Component {
       ...SilentConfig,
     });
 
-    lf.register(CustomCircle);
     lf.register(CustomEllipse);
+    lf.register(CustomCircle);
     lf.register(CustomPolygon);
     lf.register(CustomDiamond);
     lf.register(CustomRect);

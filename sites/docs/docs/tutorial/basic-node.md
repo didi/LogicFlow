@@ -5,6 +5,7 @@ group:
   order: 1
 title: 节点 Node
 order: 1
+toc: content
 ---
 
 # 节点 Node
@@ -15,12 +16,12 @@ LogicFlow 内置了一些基础节点，开发者在实际应用场景中，可�
 
 LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连线都是svg基本形状，对LogicFlow节点样式的修改，也就是对svg基本形状的修改。LogicFlow内部存在7种基础节点，分别为：
 
-1. 矩形 --- [rect](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect)
-1. 圆形 --- [circle](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle)
-1. 椭圆 --- [ellipse](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse)
-1. 多边形 --- [polygon](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon)
+1. 矩形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect" target="_blank">rect</a>
+1. 圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">circle</a>
+1. 椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">ellipse</a>
+1. 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon"    target="_blank">polygon</a>
 1. 菱形 --- `diamond`
-1. 文本 --- [text](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text)
+1. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">text</a>
 1. HTML --- `html`
 
 <code id="node-shapes" src="../../src/tutorial/basic/node/shapes"></code>
@@ -29,7 +30,7 @@ LogicFlow的基础节点是比较简单的，但是在业务中对节点外观�
 
 ## 自定义节点
 
-LogicFlow是基于继承来实现自定义节点、边。开发者可以继承LogicFlow内置的节点，然后利用面向对象的[重写](https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin)机制。重写节点样式相关的方法，来达到自定义节点样式的效果。
+LogicFlow是基于继承来实现自定义节点、边。开发者可以继承LogicFlow内置的节点，然后利用面向对象的机制<a href="https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin" target="_blank">重写</a>
 
 ![logicflow-1.0-2.png](../../public/logicflow-8-7.jpg)
 
@@ -39,11 +40,17 @@ LogicFlow推荐在实际应用场景中，所有的节点都使用自定义节�
 
 ### 节点`model`和`view`
 
-在自定义一个节点的时候，我们需要定义节点的`model`和`view`。这是因为LogicFlow基于MVVM模式，需要通过重写定义`model`上获取样式相关的方法和重写`view`上的`getShape`来定义更复杂的节点外观。
+`model`: 数据层，包含节点各种样式（边框、颜色）、形状（宽高、顶点位置）、业务属性等。
 
-这是一个基于内置节点的自定义节点例子👇，节点自定义采用了不同的方式实现😊
+`view`: 视图层，控制节点的最终渲染效果，通过改变`model`就可以满足自定义节点，同时可以在`view`上定制更加复杂的`svg`元素。
+
+在自定义一个节点的时候，我们可以重新定义节点的`model`和`view`，通过重写定义在`model`上获取样式相关的方法和重写`view`上的`getShape`来定义复杂的节点外观。
+
+这是一个基于继承内置节点并重写`model`的自定义节点例子👇，节点自定义采用了不同的方式实现😊。
 
 <code id="node-custom" src="../../src/tutorial/basic/node/custom"></code>
+
+[lf.register](../api/detail/index.md#register): 注册自定义节点，注册后才能使用自定义节点。
 
 :::info{title=提示}
 
@@ -81,7 +88,7 @@ class UserTaskModel extends RectNodeModel {
 
 2. #### 形状属性
 
-在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`radius`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
+在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`rx`、`ry`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
 
 LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/node-model-api#形状属性)。
 
@@ -107,39 +114,25 @@ class customRectModel extends RectNodeModel {
 
 3. #### 基于properties属性自定义节点样式
 
-在上一节LogicFlow的实例中的`图数据`里提到，不论是节点还是边，LogicFlow都保留了properties字段，用于给开发者存放自己的业务属性。所以在自定义节点样式的时候，可以基于`properties`中的属性来控制节点显示不同的样式。
+在上一节LogicFlow的实例中的`图数据`里提到，不论是节点还是边，LogicFlow都保留了properties字段，不仅可以修改元素的`样式`、`形状`属性，可以用于给开发者存放自己的`业务`属性。所以在自定义节点样式的时候，可以基于[properties](/api/node-model-api#数据属性)中的属性来控制节点显示不同的样式。
 
-```jsx | pure
-class UserTaskModel extends RectNodeModel {
-  getNodeStyle() {
-    const style = super.getNodeStyle();
-    const properties = this.properties;
-    if (properties.statu === 'pass') { // 业务属性statu为‘pass’时展示边框为green
-      style.stroke = "green";
-    } else if (properties.statu === 'reject') { // 业务属性statu为‘reject’时展示边框为red
-      style.stroke = "red";
-    } else {
-      style.stroke = "rgb(24, 125, 255)";
-    }
-    return style;
-  }
-}
-```
+<code id="custom-rect" src="../../src/tutorial/basic/node/properties"></code>
+
 :::info{title=提示}
 
-如果不了解为什么`this.properties`打印出来是一个Proxy对象, 无法看到属性。请查看[issue](https://github.com/didi/LogicFlow/issues/530)
+如果不了解为什么`this.properties`打印出来是一个Proxy对象, 无法看到属性。请查看[issue](https://github.com/didi/LogicFlow/issues/530), 可以使用`{ ...this.properties }`打印Proxy对象。
 
 :::
 
 ### 自定义节点`view`
 
-LogicFlow在自定义节点的`model`时,可以定义节点的基础形状、样式等属性。但是当开发者需要一个更加复杂的节点时，可以使用LogicFlow提供的自定义节点`view`的方式。
+LogicFlow在自定义节点的`model`时,可以定义节点的基础形状、样式等属性。但是当开发者需要一个更加复杂的节点时，可以使用LogicFlow提供的自定义节点`view`的方式：重写`getShape`方法。
 
 下面这个例子就是关于节点`view`的设置，多次点击`节点1`试试呢～
 
 <code id="node-custom-view" src="../../src/tutorial/basic/node/custom-view"></code>
 
-这里对于`Shape`的返回用到了`h函数`，`h`方法是LogicFlow对外暴露的渲染函数，其用法与`react`、`vue`的[createElement](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0)一致。但是这里我们需要创建的是`svg`标签，所以需要有一定的svg基础知识。
+这里对于`getShape`的方法返回用到了`h函数`，`h`函数是LogicFlow对外暴露的渲染函数，其用法与`react`、`vue`的[createElement](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0)一致。但是这里我们需要创建的是`svg`标签，所以需要有一定的svg基础知识。
 
 举几个简单的例子:
 
@@ -168,22 +161,22 @@ h('g',{}, [
 
 LogicFlow定义一个节点的外观有三种方式，分别为**主题**、**自定义节点model**、**自定义节点view**。这三种方式优先级为`主题 < 自定义节点model < 自定义节点view`。他们的差异是：
 - 主题：定义所有此基础类型节点的通用样式，例如定义所有`rect`节点的边框颜色、宽度等。
-- 自定义节点model：定义此注册类型节点的样式。
-- 自定义节点view: 定义此注册类型节点svg dom。
+- 自定义节点model：定义此注册类型节点的数据，存储和管理该节点样式、形状、业务等数据属性信息。
+- 自定义节点view: 定义此注册类型节点`svg dom`，基于 `model` 的属性可视化呈现，将 `model` 中的数据渲染成用户可以看到的图形化形式。
 
 :::warning{title=注意}
 虽然`自定义节点view`优先级最高，功能也最完善，理论上我们可以完全通过`自定义节点view`实现任何我们想要的效果，但是此方式还是存在一些限制。<br>
 1. `自定义节点view`最终生成的图形的形状属性必须和`model`中形状属性的一致，因为节点的锚点、外边框都是基于节点model中的`width`和`height`生成。<br>
-2. `自定义节点view`最终生成的图形整体轮廓必须和继承的基础图形一致，不能继承的`rect`而在getShape的时候返回的最终图形轮廓变成了圆形。因为LogicFlow对于节点上的连线调整、锚点生成等会基于基础图形进行计算。
+2. `自定义节点view`最终生成的图形整体轮廓必须和继承的基础图形一致，不能继承`rect`而在getShape的时候返回的最终图形轮廓变成了`circle`。因为LogicFlow对于节点上的连线调整、锚点生成等会基于基础图形进行计算。
 :::
 
 #### 一些思考🤔️
 
 1. ##### 为什么`rect`的`x`,`y`不是直接从`model`中获取的`x`, `y`?
 
-在LogicFlow所有的基础节点中，`model`里面的`x`,`y`都是统一表示中心点。但是`getShape`方法给我们提供直接生成svg dom的方式，在svg中, 对图形位置的控制则存在差异：
+在LogicFlow所有的基础节点中，`model`里面的`x`,`y`都是统一表示元素中心点坐标。`getShape`方法给我们提供直接生成svg dom的方式，但在svg中, 不同元素类型`x`,`y`表示的坐标位置不同：
 
-- `rect`: 通过`x`, `y`表示图形的位置，但是表示是图形左上角坐标。 所以一般通过中心点，然后减去节点的宽高的一半计算出左上角坐标。
+- `rect`: 通过`x`, `y`表示图形的位置，但是表示的是图形左上角坐标。 所以一般通过中心点，然后减去节点的宽高的一半计算出左上角坐标。
 
 ```jsx | pure
 const { x, y, width, height, radius } = this.props.model;
@@ -192,14 +185,14 @@ h("rect", {
   ...style,
   x: x - width / 2,
   y: y - height / 2,
-  rx: radius, // 注意这里是rx而不是radius
+  rx: radius, // 注意这里是rx属性而不是radius
   ry: radius,
   width,
   height
 }),
 ```
 
-- `circle`和`ellipse`: 通过`cx`, `cy`表示图形的位置，含义为中心点的坐标。
+- `circle`和`ellipse`: 通过`cx`, `cy`表示图形的位置，含义为中心点的坐标，这里就不需要改变。
 
 ```jsx | pure
 const { x, y, r } = this.props.model;
@@ -223,7 +216,7 @@ h("ellipse", {
 })
 ```
 
-- `polygon`: 所有的顶点坐标已包含位置
+- `polygon`: 所有的顶点坐标已包含位置。
 
 ```jsx | pure
 const { x, y, points } = this.props.model;

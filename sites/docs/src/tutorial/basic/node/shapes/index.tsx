@@ -6,11 +6,11 @@ import data from './shapesData';
 import '../../../index.less';
 
 const SilentConfig = {
-  isSilentMode: true,
-  stopScrollGraph: true,
-  stopMoveGraph: true,
-  stopZoomGraph: true,
-  adjustNodePosition: true,
+  isSilentMode: true, // 仅浏览不可编辑
+  stopScrollGraph: true, // 禁止鼠标滚动移动画布
+  stopMoveGraph: true, // 禁止拖动画布
+  stopZoomGraph: true, // 禁止缩放画布
+  adjustNodePosition: true, // 允许拖动节点
 };
 
 const styleConfig: Partial<LogicFlow.Options> = {
