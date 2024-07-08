@@ -39,8 +39,11 @@
     "@logicflow/core": "workspace:*"
   },
   "dependencies": {
+    "lodash-es": "^4.17.21",
     "@antv/hierarchy": "^0.6.11",
-    "@logicflow/core": "workspace:*",
+    "@logicflow/core": "workspace:*"
+  },
+  "devDependencies": {
     "preact": "^10.17.1"
   }
 }

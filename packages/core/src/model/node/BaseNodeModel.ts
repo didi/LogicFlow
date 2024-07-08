@@ -1,5 +1,5 @@
 import { action, computed, isObservable, observable, toJS } from 'mobx'
-import { assign, cloneDeep, has, isNil, mapKeys } from 'lodash-es'
+import { assign, cloneDeep, has, isNil, isUndefined, mapKeys } from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -186,6 +186,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
 
     this.formatText(data)
+    // 在下面又将 NodeConfig 中的数据赋值给了 this，应该会触发 setAttributes，确认是否符合预期
     assign(this, pickNodeConfig(data)) // TODO: 确认 constructor 中赋值 properties 是否必要
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
@@ -219,27 +220,34 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 始化文本属性
    */
   private formatText(data: NodeConfig): void {
-    if (!data.text) {
-      data.text = {
-        value: '',
-        x: data.x,
-        y: data.y,
-        draggable: false,
-        editable: true,
-      }
-    } else {
-      if (typeof data.text === 'string') {
-        data.text = {
-          value: data.text,
-          x: data.x,
-          y: data.y,
-          draggable: false,
-          editable: true,
-        }
+    const { x, y, text } = data
+    let textConfig: TextConfig = {
+      value: '',
+      x,
+      y,
+      draggable: false,
+      editable: true,
+    }
+    if (text) {
+      if (typeof text === 'string') {
+        textConfig.value = text
       } else {
-        data.text.editable = data.text.editable ?? true
+        textConfig = {
+          ...textConfig,
+          x: text.x ?? x,
+          y: text.y ?? y,
+          value: text.value ?? '',
+        }
+        if (!isUndefined(text.draggable)) {
+          textConfig.draggable = text.draggable
+        }
+        if (!isUndefined(text.editable)) {
+          textConfig.draggable = text.draggable
+        }
       }
     }
+
+    data.text = textConfig
   }
 
   /**

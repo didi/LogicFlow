@@ -59,7 +59,7 @@ const customTheme: Partial<LogicFlow.Theme> = {
     lineHeight: 1.5,
     fontSize: 13,
     textWidth: 100,
-  }, // 确认 textWidth 是否必传
+  }, // 确认 textWidth 是否必传 ❓
   polyline: {
     stroke: 'red',
   },

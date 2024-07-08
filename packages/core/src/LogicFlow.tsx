@@ -1433,9 +1433,12 @@ export namespace LogicFlow {
   }
   export type TextConfig = {
     value: string
+    x: number
+    y: number
     editable?: boolean
     draggable?: boolean
-  } & Position
+    // overflowMode?: 'default' | 'autoWrap' | 'ellipsis'
+  }
 
   export type AppendConfig = {
     startIndex: number
@@ -1651,6 +1654,7 @@ export namespace LogicFlow {
      * ellipsis: 超出省略
      */
     overflowMode?: 'default' | 'autoWrap' | 'ellipsis'
+    textWidth?: number
     background?: RectTheme
     /**
      * 背景区域 padding
@@ -1658,6 +1662,7 @@ export namespace LogicFlow {
      */
     wrapPadding?: string
   } & TextTheme
+
   // 边上文本样式
   export type EdgeTextTheme = {
     textWidth: number

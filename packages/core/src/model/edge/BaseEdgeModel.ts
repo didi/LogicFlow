@@ -1,4 +1,4 @@
-import { assign, cloneDeep, find } from 'lodash-es'
+import { assign, cloneDeep, find, isUndefined } from 'lodash-es'
 import { action, computed, observable, toJS } from 'mobx'
 import { BaseNodeModel, GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
@@ -20,6 +20,7 @@ import {
 import Point = LogicFlow.Point
 import EdgeData = LogicFlow.EdgeData
 import EdgeConfig = LogicFlow.EdgeConfig
+import TextConfig = LogicFlow.TextConfig
 
 export interface IBaseEdgeModel extends Model.BaseModel {
   /**
@@ -56,7 +57,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   @observable startPoint!: Point
   @observable endPoint!: Point
 
-  @observable text = {
+  @observable text: Required<TextConfig> = {
     value: '',
     x: 0,
     y: 0,
@@ -431,8 +432,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
 
   /**
    * 设置边的属性，会触发重新渲染
-   * @param key 属性名
-   * @param val 属性值
+   * @param properties 要更新的 properties，会做合并
    */
   @action
   setProperties(properties: Record<string, any>): void {
@@ -497,28 +497,38 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * 内部方法，处理初始化文本格式
    */
   @action formatText(data: EdgeConfig) {
-    // 暂时处理，只传入text的情况
     const { x, y } = this.textPosition
-    if (!data.text || typeof data.text === 'string') {
-      this.text = {
-        value: data.text || '',
-        x,
-        y,
-        draggable: this.text.draggable,
-        editable: this.text.editable,
-      }
-      return
+    const { text } = data
+    let textConfig: Required<TextConfig> = {
+      value: '',
+      x,
+      y,
+      draggable: false,
+      editable: true,
     }
 
-    if (Object.prototype.toString.call(data.text) === '[object Object]') {
-      this.text = {
-        x: data.text.x || x,
-        y: data.text.y || y,
-        value: data.text.value || '',
-        draggable: this.text.draggable,
-        editable: this.text.editable,
+    if (text) {
+      if (typeof text === 'string') {
+        textConfig = {
+          ...textConfig,
+          value: text,
+        }
+      } else {
+        textConfig = {
+          ...textConfig,
+          x: text.x ?? x,
+          y: text.y ?? y,
+          value: text.value ?? '',
+        }
+        if (!isUndefined(text.draggable)) {
+          textConfig.draggable = text.draggable
+        }
+        if (!isUndefined(text.editable)) {
+          textConfig.editable = text.editable
+        }
       }
     }
+    this.text = textConfig
   }
 
   /**

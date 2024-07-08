@@ -7,6 +7,7 @@ import {
 } from '@logicflow/react-node-registry'
 import { Button, Card, Divider } from 'antd'
 
+import '@logicflow/core/es/index.css'
 import styles from './index.less'
 
 const LFReactPortalProvider = Portal.getProvider() // 注意，一个 LogicFlow 实例只能生命一个 portal provider

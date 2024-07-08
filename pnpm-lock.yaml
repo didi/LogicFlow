@@ -582,6 +582,9 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.5.1
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       mobx:
         specifier: ^5.15.7
         version: 5.15.7
@@ -629,6 +632,10 @@ importers:
       '@logicflow/core':
         specifier: workspace:*
         version: link:../core
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
       preact:
         specifier: ^10.17.1
         version: 10.22.0
@@ -644,6 +651,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.0.9
         version: 18.2.18
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       react:
         specifier: ^18.0.0
         version: 18.2.0
@@ -656,6 +666,9 @@ importers:
       '@vue/composition-api':
         specifier: ^1.0.0-rc.1
         version: 1.7.2(vue@3.4.27(typescript@5.4.5))
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       vue-demi:
         specifier: latest
         version: 0.14.8(@vue/composition-api@1.7.2(vue@3.4.27(typescript@5.4.5)))(vue@3.4.27(typescript@5.4.5))
