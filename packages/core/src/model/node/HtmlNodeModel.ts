@@ -7,7 +7,7 @@ import { observable } from 'mobx'
 import LogicFlow from '../../LogicFlow'
 import GraphModel from '../GraphModel'
 
-export type IHtmlNodeModel = {
+export type IHtmlNodeProperties = {
   width?: number
   height?: number
   style?: LogicFlow.CommonTheme
@@ -18,7 +18,7 @@ export type IHtmlNodeModel = {
 
 export class HtmlNodeModel extends BaseNodeModel {
   modelType = ModelType.HTML_NODE
-  @observable properties: IHtmlNodeModel = {}
+  @observable properties: IHtmlNodeProperties = {}
 
   constructor(data: LogicFlow.NodeConfig, graphModel: GraphModel) {
     super(data, graphModel)

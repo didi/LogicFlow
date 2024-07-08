@@ -10,7 +10,7 @@ export type ITextProps = {
   value: string
   fontSize?: number
   fill?: string
-  overflowMode?: string | 'default' | 'ellipsis'
+  overflowMode?: 'default' | 'autoWrap' | 'ellipsis'
   textWidth?: number
   lineHeight?: number
   fontFamily?: string | null
@@ -68,10 +68,10 @@ export function Text(props: ITextProps): h.JSX.Element | null {
     }
 
     if (rowsLength > 1) {
-      const tSpans = rows.map((row, i) => {
+      const tSpans = rows.map((row, idx) => {
         // 保证文字居中，文字 Y 轴偏移为当前行数对应中心行数的偏移行 * 行高
         const tSpanLineHeight = fontSize + 2
-        const offsetY = (i - (rowsLength - 1) / 2) * tSpanLineHeight
+        const offsetY = (idx - (rowsLength - 1) / 2) * tSpanLineHeight
         return (
           <tspan className="lf-text-tspan" x={x} y={y + offsetY}>
             {row}
@@ -137,6 +137,7 @@ export function renderHtmlText(props: ITextProps): h.JSX.Element {
         height={foreignObjectHeight}
         x={x - textRealWidth / 2}
         y={y - foreignObjectHeight / 2}
+        style={{ overflow: 'visible', textAlign: 'left' }}
       >
         <div
           className="lf-node-text-auto-wrap"
