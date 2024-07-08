@@ -6,6 +6,12 @@ const data = {
       x: 100,
       y: 100,
       text: { x: 100, y: 100, value: '节点1' },
+      properties: {
+        width: 100,
+        height: 100,
+        scale: 1, // 自定义放大倍数
+        clicked: false, // 自定义是否被点击
+      },
     },
     {
       id: 'node_id_2',
@@ -13,7 +19,6 @@ const data = {
       x: 200,
       y: 300,
       text: { x: 200, y: 300, value: '节点2' },
-      properties: {},
     },
   ],
   edges: [
@@ -31,7 +36,6 @@ const data = {
         { x: 200, y: 200 },
         { x: 200, y: 250 },
       ],
-      properties: {},
     },
   ],
 };

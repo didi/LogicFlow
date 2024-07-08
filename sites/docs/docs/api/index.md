@@ -75,7 +75,6 @@ table td:first-of-type {
 | [setProperties](./detail/index.md#setproperties)             | 设置节点或者边的自定义属性。 |
 | [getProperties](./detail/index.md#getproperties)             | 获取节点或者边的自定义属性。 |
 | [deleteProperty](./detail/index.md#deleteproperty)           | 删除节点属性。      |
-| [updateAttributes](./detail/index.md#updateattributes)       | 修改对应元素 `model` 中的属性。         |
 
 ### Text 相关
 

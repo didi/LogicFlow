@@ -35,7 +35,7 @@ nodeModel 上节点属性有很多，由于用途不一样，我们对其进行�
 | x          | number     | ✅    | 节点中心 x 轴坐标 |
 | y          | number     | ✅    | 节点中心 y 轴坐标 |
 | text       | TextObject |      | 节点文本       |
-| properties | Object     |      | 节点业务自定义属性  |
+| properties | Object     |      | 包含节点样式、形状属性和业务自定义属性  |
 
 **TextObject**
 

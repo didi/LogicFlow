@@ -21,17 +21,22 @@ export class RectNodeModel extends BaseNodeModel {
 
   constructor(data: LogicFlow.NodeConfig, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
 
+    // Todo：类字段初始化会覆盖 super、setAttributes 中设置的属性
+    this.properties = data.properties || {}
     this.setAttributes()
   }
 
   setAttributes() {
     super.setAttributes()
 
-    const { width, height } = this.properties
+    const { width, height, style } = this.properties
     if (width) this.width = width
     if (height) this.height = height
+    // style 需挂载到实例上: 可以通过properties设置每个节点样式属性
+    if (style) this.style = cloneDeep(style)
+    // 矩形特有
+    if (style?.radius) this.radius = style.radius
   }
 
   getDefaultAnchor() {

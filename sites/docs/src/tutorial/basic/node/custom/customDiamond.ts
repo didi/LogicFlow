@@ -1,8 +1,13 @@
-import { DiamondNode, DiamondNodeModel } from '@logicflow/core';
+import LogicFlow, {
+  DiamondNode,
+  DiamondNodeModel,
+  GraphModel,
+} from '@logicflow/core';
 
 class CustomDiamondModel extends DiamondNodeModel {
-  constructor(data, graphModel) {
+  constructor(data: LogicFlow.NodeConfig, graphModel: GraphModel) {
     data.text = {
+      // 自定义文本坐标：向下移动40px
       value: data.text,
       x: data.x,
       y: data.y + 40,
