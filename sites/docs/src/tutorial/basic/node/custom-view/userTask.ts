@@ -57,20 +57,20 @@ class UserTaskModel extends RectNodeModel {
     this.height = height * scale;
   }
 
-  // 自定义文本样式：依赖业务属性 clicked 改变文本颜色
+  // 自定义文本样式：依赖业务属性 isClicked 改变文本颜色
   getTextStyle() {
     const style = super.getTextStyle();
     style.fontSize = 12;
-    const { clicked } = this.properties;
-    style.color = clicked ? 'red' : 'rgb(24, 125, 255)';
+    const { isClicked } = this.properties;
+    style.color = isClicked ? 'red' : 'rgb(24, 125, 255)';
     return style;
   }
 
-  // 自定义节点样式：依赖业务属性 clicked 改变边框颜色
+  // 自定义节点样式：依赖业务属性 isClicked 改变边框颜色
   getNodeStyle() {
     const style = super.getNodeStyle();
-    const { clicked } = this.properties;
-    if (clicked) {
+    const { isClicked } = this.properties;
+    if (isClicked) {
       style.stroke = 'red';
     } else {
       style.stroke = 'rgb(24, 125, 255)';
