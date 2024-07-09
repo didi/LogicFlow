@@ -5,6 +5,7 @@ group:
   order: 2
 title: 对齐线
 order: 2
+toc: content
 ---
 # 对齐线 Snapline
 

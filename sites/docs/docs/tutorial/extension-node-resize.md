@@ -5,6 +5,7 @@ group:
   order: 3
 title: 节点缩放 NodeResize
 order: 6
+toc: content
 ---
 
 # 节点缩放 NodeResize

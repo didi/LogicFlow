@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BaseEdgeModel, LineEdge, h } from '@logicflow/core';
 
-const DEFAULT_WIDTH = 48;
-const DEFAULT_HEIGHT = 32;
+const DEFAULT_WIDTH: number = 48;
+const DEFAULT_HEIGHT: number = 32;
 
 class CustomEdgeModel extends BaseEdgeModel {
   getEdgeStyle() {
@@ -22,8 +22,13 @@ const CustomLine: React.FC = () => {
 class CustomEdgeView extends LineEdge {
   getEdge() {
     const { model } = this.props;
-    const { customWidth = DEFAULT_WIDTH, customHeight = DEFAULT_HEIGHT } =
-      model.getProperties();
+    const {
+      customWidth = DEFAULT_WIDTH,
+      customHeight = DEFAULT_HEIGHT,
+    }: {
+      customWidth?: number;
+      customHeight?: number;
+    } = model.getProperties();
     const id = model.id;
     const edgeStyle = model.getEdgeStyle();
     const { startPoint, endPoint, arrowConfig } = model;
@@ -45,7 +50,7 @@ class CustomEdgeView extends LineEdge {
     };
 
     setTimeout(() => {
-      ReactDOM.createRoot(document.querySelector('#' + id)).render(
+      ReactDOM.createRoot(document.querySelector('#' + id)!).render(
         <CustomLine />,
       );
     }, 0);

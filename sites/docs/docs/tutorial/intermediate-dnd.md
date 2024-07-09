@@ -5,6 +5,7 @@ group:
   order: 2
 title: 拖拽创建节点
 order: 4
+toc: content
 ---
 # 拖拽创建节点 Dnd
 

@@ -1,6 +1,7 @@
 ---
 title: Zero Code New Ideas
 order: 5
+toc: content
 ---
 
 # didi/logicflow

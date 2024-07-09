@@ -5,6 +5,7 @@ group:
   order: 2
 title: 设置图编辑方式
 order: 5
+toc: content
 ---
 # 设置图编辑方式
 

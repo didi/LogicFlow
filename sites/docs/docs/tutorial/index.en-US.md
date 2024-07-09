@@ -25,8 +25,14 @@ For more information, see [LogicFlow article series](/en-US/article/article01)
 If you have any questions, suggestions, feedback, or willingness to communicate, please feel free to contact us as follows:
 
 - Official recommendation: [GitHub issues](https://github.com/didi/LogicFlow/issues)
-- Official WeChat: please add contact 👨 logic-flow
+- Official WeChat: please add 「contact logic-flow 👨 」
+
+<div>
+  <img data-type="dingtalk" src="https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/assets/wechat.png" width="300" />
+</div>
+
 - QQ discussion group:
+
 <div>
   <img data-type="dingtalk" src="https://github.com/didi/LogicFlow/assets/56008486/21c81c1d-e00a-45e0-a710-709d1ba89a8b" width="300" />
 </div>

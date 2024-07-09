@@ -5,6 +5,7 @@ group:
   order: 2
 title: Node
 order: 0
+toc: content
 ---
 
 ## Connection rules

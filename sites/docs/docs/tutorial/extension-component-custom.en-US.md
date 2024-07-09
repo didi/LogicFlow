@@ -5,6 +5,7 @@ group:
   order: 3
 title: CustomPlugin
 order: 13
+toc: content
 ---
 
 # CustomPlugin

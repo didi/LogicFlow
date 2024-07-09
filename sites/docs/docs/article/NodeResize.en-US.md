@@ -1,6 +1,7 @@
 ---
 title: LogicFlow Node Resize
 order: 3
+toc: content
 ---
 # LogicFlow Node Resize
 ## Introduction

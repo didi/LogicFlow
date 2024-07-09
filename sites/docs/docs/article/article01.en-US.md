@@ -1,6 +1,7 @@
 ---
 title: The design and architecture of LogicFlow
 order: 0
+toc: content
 ---
 # The design and architecture of LogicFlow
 ## Introduction to LogicFlow

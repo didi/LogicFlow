@@ -5,6 +5,7 @@ group:
   order: 1
 title: 主题 Theme
 order: 3
+toc: content
 ---
 
 # 主题 Theme

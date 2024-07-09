@@ -5,6 +5,7 @@ group:
   order: 3
 title: Plug-in Introduction
 order: 0
+toc: content
 ---
 
 # Introduction

@@ -5,6 +5,7 @@ group:
   order: 3
 title: Menu
 order: 1
+toc: content
 ---
 
 <style>

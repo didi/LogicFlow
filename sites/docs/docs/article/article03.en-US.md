@@ -1,6 +1,7 @@
 ---
 title: LogicFlow Edge Drawing and Interaction
 order: 2
+toc: content
 ---
 # LogicFlow Edge Drawing and Interaction
 ## Preface

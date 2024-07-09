@@ -5,6 +5,7 @@ group:
   order: 3
 title: Adapter
 order: 10
+toc: content
 ---
 
 # Adapter

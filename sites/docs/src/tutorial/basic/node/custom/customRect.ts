@@ -1,5 +1,20 @@
 import LogicFlow, { RectNode, RectNodeModel } from '@logicflow/core';
 
+export type CustomProperties = {
+  // 形状属性
+  width?: number;
+  height?: number;
+  radius?: number;
+
+  // 文字位置属性
+  refX?: number;
+  refY?: number;
+
+  // 样式属性
+  style?: LogicFlow.CommonTheme;
+  textStyle?: LogicFlow.TextNodeTheme;
+};
+
 class CustomRectNode extends RectNode {}
 
 class CustomRectModel extends RectNodeModel {

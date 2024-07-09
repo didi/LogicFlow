@@ -5,6 +5,7 @@ group:
   order: 2
 title: 键盘快捷键
 order: 3
+toc: content
 ---
 
 # 键盘快捷键 Keyboard

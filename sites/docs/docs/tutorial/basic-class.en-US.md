@@ -5,6 +5,7 @@ group:
   order: 1
 title: Examples
 order: 0
+toc: content
 ---
 
 ## LogicFlow Instances
@@ -33,9 +34,15 @@ When creating an instance, we need to pass configuration items that initialize t
 
 ## Graph data
 
-Inside LogicFlow, we think of a flowchart as a graph consisting of nodes and links. So we use the following data structure to represent the graph data of LogicFlow.
+Inside LogicFlow, we think of a flowchart as a graph consisting of nodes and edges. So we use the following data structure to represent the graph data of LogicFlow.
 
-```jsx | pure
+<code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
+
+`nodes`: Contains all nodes. Each node's data attributes are detailed in the <a href="../api/nodeModelApi.en-US.md#DataAttributes">nodeModel</a>.
+
+`edges`: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`. Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en-US.md#DataAttributes">EdgeModel</a>.
+
+<!-- ```jsx | pure
 const graphData = {
   nodes: [
     {
@@ -96,7 +103,7 @@ const graphData = {
 
 - What is `type`?
 
-  The `type` represents the type of the node or line, which can be not only LogicFlow's built-in base type such as `rect`, `polyline`, but also user-defined type based on the base type.
+  The `type` represents the type of the node or line, which can be not only LogicFlow's built-in base type such as `rect`, `polyline`, but also user-defined type based on the base type. -->
 
 ## Diagram Rendering
 

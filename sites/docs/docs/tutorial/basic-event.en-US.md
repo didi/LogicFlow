@@ -5,6 +5,7 @@ group:
   order: 1
 title: Event
 order: 6
+toc: content
 ---
 
 # Events

@@ -5,6 +5,7 @@ group:
   order: 3
 title: 框选 SelectionSelect
 order: 5
+toc: content
 ---
 
 <style>

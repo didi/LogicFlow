@@ -5,6 +5,7 @@ group:
   order: 3
 title: InsertNodeInPolyline
 order: 9
+toc: content
 ---
 
 # InsertNodeInPolyline

@@ -5,6 +5,7 @@ group:
   order: 3
 title: DndPanel
 order: 2
+toc: content
 ---
 
 # DndPanel

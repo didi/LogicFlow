@@ -9,63 +9,204 @@ table td:first-of-type {
 }
 </style>
 
-## Register 相关
+## Graph 相关
 
-### register
+### setTheme
 
-注册自定义节点、边。
+设置主题, 详情见[主题](theme-api)
 
-```jsx | pure
-lf.register(config: RegisterConfig):void
-```
+### focusOn
+
+定位到画布视口中心。
 
 参数：
 
-| 名称       | 类型   | 必传 | 默认值 | 描述          |
-| :----------- | :----- | :--- | :----- | :------------------- |
-| config.type  | String | ✅   | -      | 自定义节点、边的名称 |
-| config.model | Model  | ✅   | -      | 节点、边的 model     |
-| config.view  | View   | ✅   | -      | 节点、边的 view      |
+| 参数名      | 类型   | 必传 | 默认值 | 描述         |
+| :---------- | :----- | :--- | :----- | :----------- |
+| focusOnArgs | object | ✅   | -      | 定位所需参数 |
 
 示例：
 
 ```jsx | pure
-import { RectNode, RectNodeModel } from "@logicflow/core";
-// 节点View
-class CustomRectNode extends RectNode {}
-// 节点Model
-class CustomRectModel extends RectNodeModel {
-  setAttributes() {
-    this.width = 200;
-    this.height = 80;
-    this.radius = 50;
-  }
-}
-lf.register({
-  type: "Custom-rect",
-  view: CustomRectNode,
-  model: CustomRectModel,
+// 定位画布视口中心到node_1元素所处位置
+lf.focusOn({
+  id: "node_1",
+});
+// 定位画布视口中心到坐标[1000, 1000]处
+lf.focusOn({
+  coordinate: {
+    x: 1000,
+    y: 1000,
+  },
 });
 ```
 
-### batchRegister
+### resize
 
-批量注册。
+调整画布宽高, 如果 width 或者 height 不传会自动计算画布宽高。
+
+参数：
+
+| 名称   | 类型   | 必传 | 默认值 | 描述     |
+| :----- | :----- | :--- | :----- | :------- |
+| width  | Number |      | -      | 画布的宽 |
+| height | Number |      | -      | 画布的高 |
 
 ```jsx | pure
-lf.batchRegister([
-  {
-    type: 'user',
-    view: UserNode,
-    model: UserModel,
-  },
-    {
-    type: 'user1',
-    view: UserNode1,
-    model: UserModel1,
-  },
-);
+lf.resize(1200, 600);
 ```
+
+### toFront
+
+将某个元素放置到顶部。
+
+如果堆叠模式为默认模式，则将指定元素置顶 zIndex 设置为 9999，原置顶元素重新恢复原有层级 zIndex 设置为 1。
+
+如果堆叠模式为递增模式，则将需指定元素 zIndex 设置为当前最大 zIndex + 1。
+
+示例：
+
+```jsx | pure
+lf.toFront("id");
+```
+
+### getPointByClient
+
+获取事件位置相对于画布左上角的坐标。
+
+画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+
+```jsx | pure
+getPointByClient(x: number, y: number)
+```
+
+参数：
+
+| 名称 | 类型   | 必传 | 默认值 | 描述                                                   |
+| :--- | :----- | :--- | :----- | :----------------------------------------------------- |
+| x    | Number | ✅   | -      | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
+| y    | Number | ✅   | -      | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
+
+返回值：
+
+| 名称  | 类型  | 描述                       |
+| :---- | :---- | :------------------------- |
+| point | Point | 相对于画布左上角的两种坐标 |
+
+```jsx | pure
+type Position = {
+  x: number;
+  y: number;
+};
+type Point = {
+  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
+  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
+};
+```
+
+示例：
+
+```jsx | pure
+lf.getPointByClient(event.x, event.y);
+```
+
+### getGraphData
+
+获取流程绘图数据。
+
+```jsx | pure
+// 返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
+// 1.2.5版本以后新增了入参，用于某些需要入参的adapterOut的执行，例如内置的BpmnAdapter可能需要传入属性保留字段的数组来保证导出数据中的某些节点属性被正常处理。
+// 这里的入参和引入的Adapter的adapterOut方法除了data以外的其他参数保持一致。
+getGraphData(...params: any): GraphConfigData | unknown
+```
+
+LogicFlow 默认数据格式。
+
+```jsx | pure
+type GraphConfigData = {
+  nodes: {
+    id?: string;
+    type: string;
+    x: number;
+    y: number;
+    text?: TextConfig;
+    properties?: Record<string, unknown>;
+    zIndex?: number;
+  }[];
+  edges: {
+    id: string;
+    type: string;
+    sourceNodeId: string;
+    targetNodeId: string;
+    startPoint: any;
+    endPoint: any;
+    text: {
+      x: number;
+      y: number;
+      value: string;
+    };
+    properties: {};
+    zIndex?: number;
+    pointsList?: Point[]; // 折线、曲线会输出pointsList
+  }[];
+};
+```
+
+示例：
+
+```jsx | pure
+lf.getGraphData();
+```
+
+### getGraphRawData
+
+获取流程绘图原始数据， 与 getGraphData 区别是该方法获取的数据不会受到 adapter 影响。
+
+```jsx | pure
+getGraphRawData(): GraphConfigData
+```
+
+示例：
+
+```jsx | pure
+lf.getGraphRawData();
+```
+
+### clearData
+
+清空画布。
+
+```jsx | pure
+lf.clearData();
+```
+
+### renderRawData
+
+渲染图原始数据，和`render`的区别是在使用`adapter`后，如果还想渲染 logicflow 格式的数据，可以用此方法。
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.renderRawData({
+  nodes: [],
+  edges: []
+})
+```
+
+### render
+
+渲染图数据。
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.render(graphData)
+```
+
+
 
 ## Node 相关
 
@@ -276,7 +417,7 @@ getNodeOutgoingNode(nodeId: string): BaseNodeModel[]
 
 ### setDefaultEdgeType
 
-设置边的类型, 也就是设置在节点直接由用户手动绘制的连线类型。
+设置边的默认类型, 也就是设置当节点直接由用户手动连接的边类型。
 
 ```jsx | pure
 setDefaultEdgeType(type: EdgeType): void
@@ -284,7 +425,7 @@ setDefaultEdgeType(type: EdgeType): void
 
 | 名称 | 类型   | 必传 | 默认值     | 描述                                                                                                                                    |
 | :--- | :----- | :--- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| type | String | ✅   | 'polyline' | 设置边的类型，内置支持的边类型有 line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线，用户可以自定义 type 名切换到用户自定义的边 |
+| type | String | ✅   | 'polyline' | 设置边的类型，内置支持的边类型有 line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线`polyline`，用户可以自定义 type 名切换到用户自定义的边 |
 
 示例：
 
@@ -505,6 +646,64 @@ getNodeEdges(id: string): BaseEdgeModel[]
 
 ```jsx | pure
 const edgeModels = lf.getNodeEdges("node_id");
+```
+
+## Register 相关
+
+### register
+
+注册自定义节点、边。
+
+```jsx | pure
+lf.register(config: RegisterConfig):void
+```
+
+参数：
+
+| 名称       | 类型   | 必传 | 默认值 | 描述          |
+| :----------- | :----- | :--- | :----- | :------------------- |
+| config.type  | String | ✅   | -      | 自定义节点、边的名称 |
+| config.model | Model  | ✅   | -      | 节点、边的 model     |
+| config.view  | View   | ✅   | -      | 节点、边的 view      |
+
+示例：
+
+```jsx | pure
+import { RectNode, RectNodeModel } from "@logicflow/core";
+// 节点View
+class CustomRectNode extends RectNode {}
+// 节点Model
+class CustomRectModel extends RectNodeModel {
+  setAttributes() {
+    this.width = 200;
+    this.height = 80;
+    this.radius = 50;
+  }
+}
+lf.register({
+  type: "Custom-rect",
+  view: CustomRectNode,
+  model: CustomRectModel,
+});
+```
+
+### batchRegister
+
+批量注册。
+
+```jsx | pure
+lf.batchRegister([
+  {
+    type: 'user',
+    view: UserNode,
+    model: UserModel,
+  },
+    {
+    type: 'user1',
+    view: UserNode1,
+    model: UserModel1,
+  },
+);
 ```
 
 ## Element 相关
@@ -774,202 +973,6 @@ lf.updateEditConfig({
 lf.getEditConfig();
 ```
 
-## Graph 相关
-
-### setTheme
-
-设置主题, 详情见[主题](theme-api)
-
-### focusOn
-
-定位到画布视口中心。
-
-参数：
-
-| 参数名      | 类型   | 必传 | 默认值 | 描述         |
-| :---------- | :----- | :--- | :----- | :----------- |
-| focusOnArgs | object | ✅   | -      | 定位所需参数 |
-
-示例：
-
-```jsx | pure
-// 定位画布视口中心到node_1元素所处位置
-lf.focusOn({
-  id: "node_1",
-});
-// 定位画布视口中心到坐标[1000, 1000]处
-lf.focusOn({
-  coordinate: {
-    x: 1000,
-    y: 1000,
-  },
-});
-```
-
-### resize
-
-调整画布宽高, 如果 width 或者 height 不传会自动计算画布宽高。
-
-参数：
-
-| 名称   | 类型   | 必传 | 默认值 | 描述     |
-| :----- | :----- | :--- | :----- | :------- |
-| width  | Number |      | -      | 画布的宽 |
-| height | Number |      | -      | 画布的高 |
-
-```jsx | pure
-lf.resize(1200, 600);
-```
-
-### toFront
-
-将某个元素放置到顶部。
-
-如果堆叠模式为默认模式，则将指定元素置顶 zIndex 设置为 9999，原置顶元素重新恢复原有层级 zIndex 设置为 1。
-
-如果堆叠模式为递增模式，则将需指定元素 zIndex 设置为当前最大 zIndex + 1。
-
-示例：
-
-```jsx | pure
-lf.toFront("id");
-```
-
-### getPointByClient
-
-获取事件位置相对于画布左上角的坐标。
-
-画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
-
-```jsx | pure
-getPointByClient(x: number, y: number)
-```
-
-参数：
-
-| 名称 | 类型   | 必传 | 默认值 | 描述                                                   |
-| :--- | :----- | :--- | :----- | :----------------------------------------------------- |
-| x    | Number | ✅   | -      | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
-| y    | Number | ✅   | -      | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
-
-返回值：
-
-| 名称  | 类型  | 描述                       |
-| :---- | :---- | :------------------------- |
-| point | Point | 相对于画布左上角的两种坐标 |
-
-```jsx | pure
-type Position = {
-  x: number;
-  y: number;
-};
-type Point = {
-  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
-  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
-};
-```
-
-示例：
-
-```jsx | pure
-lf.getPointByClient(event.x, event.y);
-```
-
-### getGraphData
-
-获取流程绘图数据。
-
-```jsx | pure
-// 返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
-// 1.2.5版本以后新增了入参，用于某些需要入参的adapterOut的执行，例如内置的BpmnAdapter可能需要传入属性保留字段的数组来保证导出数据中的某些节点属性被正常处理。
-// 这里的入参和引入的Adapter的adapterOut方法除了data以外的其他参数保持一致。
-getGraphData(...params: any): GraphConfigData | unknown
-```
-
-LogicFlow 默认数据格式。
-
-```jsx | pure
-type GraphConfigData = {
-  nodes: {
-    id?: string;
-    type: string;
-    x: number;
-    y: number;
-    text?: TextConfig;
-    properties?: Record<string, unknown>;
-    zIndex?: number;
-  }[];
-  edges: {
-    id: string;
-    type: string;
-    sourceNodeId: string;
-    targetNodeId: string;
-    startPoint: any;
-    endPoint: any;
-    text: {
-      x: number;
-      y: number;
-      value: string;
-    };
-    properties: {};
-    zIndex?: number;
-    pointsList?: Point[]; // 折线、曲线会输出pointsList
-  }[];
-};
-```
-
-示例：
-
-```jsx | pure
-lf.getGraphData();
-```
-
-### getGraphRawData
-
-获取流程绘图原始数据， 与 getGraphData 区别是该方法获取的数据不会受到 adapter 影响。
-
-```jsx | pure
-getGraphRawData(): GraphConfigData
-```
-
-示例：
-
-```jsx | pure
-lf.getGraphRawData();
-```
-
-### clearData
-
-清空画布。
-
-```jsx | pure
-lf.clearData();
-```
-
-### renderRawData
-
-渲染图原始数据，和`render`的区别是在使用`adapter`后，如何还想渲染 logicflow 格式的数据，可以用此方法。
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.renderRawData({
-  nodes: [],
-  edges: []
-})
-```
-
-### render
-
-渲染图数据。
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.render(graphData)
-```
 
 ## History 相关
 
@@ -993,7 +996,7 @@ lf.undo();
 lf.redo();
 ```
 
-## Resize 相关
+## Transform 相关
 
 ### zoom
 

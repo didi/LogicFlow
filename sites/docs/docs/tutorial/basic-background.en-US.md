@@ -5,6 +5,7 @@ group:
   order: 1
 title: Background
 order: 5
+toc: content
 ---
 
 # Background

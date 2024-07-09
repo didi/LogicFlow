@@ -5,6 +5,7 @@ group:
   order: 3
 title: NodeResize
 order: 6
+toc: content
 ---
 
 # NodeResize
