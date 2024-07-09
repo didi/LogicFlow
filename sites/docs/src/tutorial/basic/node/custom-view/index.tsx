@@ -31,7 +31,7 @@ export default class Example extends React.Component {
     lf.on('node:click', ({ data }: any) => {
       lf.setProperties(data.id, {
         // 改变业务属性
-        clicked: !data.properties.clicked,
+        isClicked: !data.properties.isClicked,
         scale: 0.8, // 缩小
       });
     });

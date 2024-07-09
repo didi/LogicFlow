@@ -10,7 +10,7 @@ const data = {
         width: 100,
         height: 100,
         scale: 1, // 自定义放大倍数
-        clicked: false, // 自定义是否被点击
+        isClicked: false, // 自定义是否被点击
       },
     },
     {
