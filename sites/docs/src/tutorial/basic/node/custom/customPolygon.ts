@@ -1,4 +1,5 @@
-import { PolygonNode, PolygonNodeModel } from '@logicflow/core';
+import LogicFlow, { PolygonNode, PolygonNodeModel } from '@logicflow/core';
+import PointTuple = LogicFlow.PointTuple;
 
 class CustomPolygonModel extends PolygonNodeModel {
   // 默认四边形 => 八边形
@@ -18,7 +19,7 @@ class CustomPolygonModel extends PolygonNodeModel {
       [x - 0.5 * width, y + 0.205 * height],
       [x - 0.5 * width, y - 0.205 * height],
     ];
-    this.points = pointList;
+    this.points = pointList as PointTuple[];
   }
   getTextStyle() {
     const { refX = 0, refY = 0 } = this.properties;

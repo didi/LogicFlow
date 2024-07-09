@@ -5,6 +5,7 @@ group:
   order: 3
 title: 自定义插件 CustomPlugin
 order: 13
+toc: content
 ---
 
 # 自定义插件 CustomPlugin

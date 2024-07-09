@@ -24,6 +24,7 @@ export default class Example extends React.Component {
     });
 
     lf.register(sequence);
+    // 设置当节点直接由用户手动连接的默认边类型
     lf.setDefaultEdgeType('sequence');
 
     lf.render(data);

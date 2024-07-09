@@ -5,6 +5,7 @@ group:
   order: 1
 title: 边 Edge
 order: 2
+toc: content
 ---
 
 # 边 Edge
@@ -24,7 +25,7 @@ order: 2
 
 ```jsx | pure
 // 直线
-import { LineEdge, PolylineEdgeModel } from "@logicflow/core";
+import { LineEdge, LineEdgeModel } from "@logicflow/core";
 // 折线
 import { PolylineEdge, PolylineEdgeModel } from "@logicflow/core";
 // 贝塞尔曲线
@@ -38,6 +39,10 @@ import { BezierEdge, BezierEdgeModel } from "@logicflow/core";
 只需要在自定义[edgeModel](/api/edge-model-api)中样式类即可。
 
 <code id="edge-custom" src="../../src/tutorial/basic/edge/custom"></code>
+
+:::info{title=提示}
+自定义边同样需要使用`register`注册哦。
+:::
 
 ## 自定义边文本位置
 
@@ -58,7 +63,7 @@ LogicFlow 支持开发者自定义文本位置，例如文本位置永远在边�
 ```jsx | pure
 const lf = new LogicFlow({
   ...,
-  // 默认边
+  // 手动设置默认边
   edgeType: 'bezier',
   // 移动已有边时会有 currentEdge 信息, 否则为空
   edgeGenerator: (sourceNode, targetNode, currentEdge) => {
@@ -90,40 +95,7 @@ lf.setTheme({
 
 这里以通过连线属性中的 arrowType 来控制连线不同的外观为例。
 
-```jsx | pure
-class Connection extends PolylineEdge {
-  getEndArrow() {
-    const { model, graphModel } = this.props;
-    const {
-      id,
-      properties: { arrowType },
-    } = model;
-    const { stroke, strokeWidth } = this.getArrowStyle();
-    const pathAttr = {
-      stroke,
-      strokeWidth,
-    };
-    if (arrowType === "empty") {
-      // 空心箭头
-      return h("path", {
-        ...pathAttr,
-        fill: "#FFF",
-        d: "M -10 0  -20 -5 -30 0 -20 5 z",
-      });
-    } else if (arrowType === "half") {
-      // 半箭头
-      return h("path", {
-        ...pathAttr,
-        d: "M 0 0 -10 5",
-      });
-    }
-    return h("path", {
-      ...pathAttr,
-      d: "M 0 0 -10 -5 -10 5 z",
-    });
-  }
-}
-```
+<code id="custom-arrow" src="../../src/tutorial/basic/edge/arrow"></code>
 
 ### 自定义调整点样式
 

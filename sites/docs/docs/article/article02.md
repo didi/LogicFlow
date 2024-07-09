@@ -1,6 +1,7 @@
 ---
 title: 拓展机制
 order: 1
+toc: content
 ---
 # 揭秘 LogicFlow 的拓展机制
 

@@ -9,63 +9,205 @@ table td:first-of-type {
 }
 </style>
 
-## Register Related
+## Graph Related
 
-### register
+### setTheme
 
-Register custom nodes, edges.
+Set the theme, see [Theme](theme-api) for details.
+
+### focusOn
+
+Position to the center of the canvas viewport.
+
+Parameters:
+
+| Name        | Type   | Required | Default | Description       |
+| :---------- | :----- | :--- | :----- | :----------- |
+| focusOnArgs | object | ✅   | -      | Required parameters for positioning |
+
+Example：
 
 ```jsx | pure
-lf.register(config: RegisterConfig):void
+//  position the center of the canvas viewport to the position of the node_1 element
+lf.focusOn({
+  id: "node_1",
+});
+// position the center of the canvas viewport to the coordinates [1000, 1000]
+lf.focusOn({
+  coordinate: {
+    x: 1000,
+    y: 1000,
+  },
+});
+```
+
+### resize
+
+Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.
+
+Parameters:
+
+| Name | Type | Mandatory | Default | Description     |
+| :----- | :----- | :--- | :----- | :------- |
+| width  | Number |      | -      | Width of the canvas  |
+| height | Number | ✅   | -      | Height of the canvas |
+
+```jsx | pure
+lf.resize(1200, 600);
+```
+
+### toFront
+
+Places an element to the top.
+
+If the stacking mode is the default, the original top element is restored to its original level.
+
+If the stacking mode is incremental, the zIndex of the element to be specified is set to the current maximum zIndex + 1.
+
+Example：
+
+```jsx | pure
+lf.toFront("id");
+```
+
+### getPointByClient
+
+Get the coordinates of the event location relative to the top left corner of the canvas.
+
+The location of the canvas can be anywhere on the page. The coordinates returned by the native event are relative to the top-left corner of the page, and this method provides the exact location with the top-left corner of the canvas as the origin.
+
+```jsx | pure
+getPointByClient(x: number, y: number)
 ```
 
 Parameters:
 
-| Name | Type   | Required | Default | Description      |
-| :------------- | :----- | :------- | :------ | :------------------------------------- |
-| config.type    | String | ✅       | -       | Customize the types of nodes and edges |
-| config.model   | Model  | ✅       | -       | Model of nodes and edges    |
-| config.view    | View   | ✅       | -       | View of nodes and edges     |
+| Name       | Type   | Required | Default | Description                                                       |
+| :--- | :----- | :--- | :----- | :----------------------------------------------------- |
+| x    | Number | ✅   | -      | The `x` coordinate relative to the top left corner of the page, which is generally the `x` coordinate returned by the native event |
+| y    | Number | ✅       | -       | The `y` coordinate relative to the top left corner of the page, which is generally the `y` coordinate returned by the native event |
 
-Example:
+return：
 
-```jsx | pure
-import { RectNode, RectNodeModel } from "@logicflow/core";
-// provide nodes
-class CustomRectNode extends RectNode {}
-// provide the attributes of the node
-class CustomRectModel extends RectNodeModel {
-  setAttributes() {
-    this.width = 200;
-    this.height = 80;
-    this.radius = 50;
-  }
-}
-lf.register({
-  type: "Custom-rect",
-  view: CustomRectNode,
-  model: CustomRectModel,
-});
-```
-
-### batchRegister
-
-Batch register.
+| Name  | Type  | Description                       |
+| :---- | :---- | :------------------------- |
+| point | Point | Two coordinates relative to the upper left corner of the canvas |
 
 ```jsx | pure
-lf.batchRegister([
-  {
-    type: 'user',
-    view: UserNode,
-    model: UserModel,
-  },
-    {
-    type: 'user1',
-    view: UserNode1,
-    model: UserModel1,
-  },
-);
+type Position = {
+  x: number;
+  y: number;
+};
+type Point = {
+  domOverlayPosition: Position; // Coordinates on the HTML layer relative to the top-left corner of the canvas`{x, y}`
+  canvasOverlayPosition: Position; // Coordinates on the SVG layer relative to the top-left corner of the canvas`{x, y}`
+};
 ```
+
+Example：
+
+```jsx | pure
+lf.getPointByClient(event.x, event.y);
+```
+
+### getGraphData
+
+Get flow graphing data.
+
+```jsx | pure
+// Return value. If the adapter plugin is applied and the setting is adapterOut, the return is the converted data format, otherwise it is the default format.
+// Starting from version 1.2.5, new input parameters have been added for the execution of certain adapterOut that require input parameters.
+// For example, the built-in BpmnAdapter may require an array of attribute reserve fields to be passed in to ensure that certain node attributes in the exported data are properly processed.
+// The input parameters here should be consistent with the other parameters of the adapterOut method from the imported adapter, except for the data parameter.
+getGraphData(...params: any): GraphConfigData | unknown
+```
+
+LogicFlow default data format.
+
+```jsx | pure
+type GraphConfigData = {
+  nodes: {
+    id?: string;
+    type: string;
+    x: number;
+    y: number;
+    text?: TextConfig;
+    properties?: Record<string, unknown>;
+    zIndex?: number;
+  }[];
+  edges: {
+    id: string;
+    type: string;
+    sourceNodeId: string;
+    targetNodeId: string;
+    startPoint: any;
+    endPoint: any;
+    text: {
+      x: number;
+      y: number;
+      value: string;
+    };
+    properties: {};
+    zIndex?: number;
+    pointsList?: Point[]; // Folding lines and curves will output pointsList.
+  }[];
+};
+```
+
+Example：
+
+```jsx | pure
+lf.getGraphData();
+```
+
+### getGraphRawData
+
+Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the adapter.
+
+```jsx | pure
+getGraphRawData(): GraphConfigData
+```
+
+Example：
+
+```jsx | pure
+lf.getGraphRawData();
+```
+
+### clearData
+
+Clear the canvas.
+
+```jsx | pure
+lf.clearData();
+```
+
+### renderRawData
+
+Rendering of the raw graph data. The difference with `render` is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.renderRawData({
+  nodes: [],
+  edges: []
+})
+```
+
+### render
+
+Render graph data.
+
+```jsx | pure
+const lf = new LogicFlow({
+  ...
+})
+lf.render(graphData)
+```
+
+
 
 ## Node Related
 
@@ -507,6 +649,64 @@ Example：
 const edgeModels = lf.getNodeEdges("node_id");
 ```
 
+## Register Related
+
+### register
+
+Register custom nodes, edges.
+
+```jsx | pure
+lf.register(config: RegisterConfig):void
+```
+
+Parameters:
+
+| Name | Type   | Required | Default | Description      |
+| :------------- | :----- | :------- | :------ | :------------------------------------- |
+| config.type    | String | ✅       | -       | Customize the types of nodes and edges |
+| config.model   | Model  | ✅       | -       | Model of nodes and edges    |
+| config.view    | View   | ✅       | -       | View of nodes and edges     |
+
+Example:
+
+```jsx | pure
+import { RectNode, RectNodeModel } from "@logicflow/core";
+// provide nodes
+class CustomRectNode extends RectNode {}
+// provide the attributes of the node
+class CustomRectModel extends RectNodeModel {
+  setAttributes() {
+    this.width = 200;
+    this.height = 80;
+    this.radius = 50;
+  }
+}
+lf.register({
+  type: "Custom-rect",
+  view: CustomRectNode,
+  model: CustomRectModel,
+});
+```
+
+### batchRegister
+
+Batch register.
+
+```jsx | pure
+lf.batchRegister([
+  {
+    type: 'user',
+    view: UserNode,
+    model: UserModel,
+  },
+    {
+    type: 'user1',
+    view: UserNode1,
+    model: UserModel1,
+  },
+);
+```
+
 ## Element Related
 
 ### addElements
@@ -723,6 +923,7 @@ Example：
 ```jsx | pure
 lf.updateAttributes("node_id_1", { radius: 4 });
 ```
+
 ## Text Related
 
 ### editText
@@ -770,203 +971,7 @@ See [editConfig](edit-config-model-api) for detailed parameters
 lf.getEditConfig();
 ```
 
-## Graph Related
 
-### setTheme
-
-Set the theme, see [Theme](theme-api) for details.
-
-### focusOn
-
-Position to the center of the canvas viewport.
-
-Parameters:
-
-| Name        | Type   | Required | Default | Description       |
-| :---------- | :----- | :--- | :----- | :----------- |
-| focusOnArgs | object | ✅   | -      | Required parameters for positioning |
-
-Example：
-
-```jsx | pure
-//  position the center of the canvas viewport to the position of the node_1 element
-lf.focusOn({
-  id: "node_1",
-});
-// position the center of the canvas viewport to the coordinates [1000, 1000]
-lf.focusOn({
-  coordinate: {
-    x: 1000,
-    y: 1000,
-  },
-});
-```
-
-### resize
-
-Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.
-
-Parameters:
-
-| Name | Type | Mandatory | Default | Description     |
-| :----- | :----- | :--- | :----- | :------- |
-| width  | Number |      | -      | Width of the canvas  |
-| height | Number | ✅   | -      | Height of the canvas |
-
-```jsx | pure
-lf.resize(1200, 600);
-```
-
-### toFront
-
-Places an element to the top.
-
-If the stacking mode is the default, the original top element is restored to its original level.
-
-If the stacking mode is incremental, the zIndex of the element to be specified is set to the current maximum zIndex + 1.
-
-Example：
-
-```jsx | pure
-lf.toFront("id");
-```
-
-### getPointByClient
-
-Get the coordinates of the event location relative to the top left corner of the canvas.
-
-The location of the canvas can be anywhere on the page. The coordinates returned by the native event are relative to the top-left corner of the page, and this method provides the exact location with the top-left corner of the canvas as the origin.
-
-```jsx | pure
-getPointByClient(x: number, y: number)
-```
-
-Parameters:
-
-| Name       | Type   | Required | Default | Description                                                       |
-| :--- | :----- | :--- | :----- | :----------------------------------------------------- |
-| x    | Number | ✅   | -      | The `x` coordinate relative to the top left corner of the page, which is generally the `x` coordinate returned by the native event |
-| y    | Number | ✅       | -       | The `y` coordinate relative to the top left corner of the page, which is generally the `y` coordinate returned by the native event |
-
-return：
-
-| Name  | Type  | Description                       |
-| :---- | :---- | :------------------------- |
-| point | Point | Two coordinates relative to the upper left corner of the canvas |
-
-```jsx | pure
-type Position = {
-  x: number;
-  y: number;
-};
-type Point = {
-  domOverlayPosition: Position; // Coordinates on the HTML layer relative to the top-left corner of the canvas`{x, y}`
-  canvasOverlayPosition: Position; // Coordinates on the SVG layer relative to the top-left corner of the canvas`{x, y}`
-};
-```
-
-Example：
-
-```jsx | pure
-lf.getPointByClient(event.x, event.y);
-```
-
-### getGraphData
-
-Get flow graphing data.
-
-```jsx | pure
-// Return value. If the adapter plugin is applied and the setting is adapterOut, the return is the converted data format, otherwise it is the default format.
-// Starting from version 1.2.5, new input parameters have been added for the execution of certain adapterOut that require input parameters.
-// For example, the built-in BpmnAdapter may require an array of attribute reserve fields to be passed in to ensure that certain node attributes in the exported data are properly processed.
-// The input parameters here should be consistent with the other parameters of the adapterOut method from the imported adapter, except for the data parameter.
-getGraphData(...params: any): GraphConfigData | unknown
-```
-
-LogicFlow default data format.
-
-```jsx | pure
-type GraphConfigData = {
-  nodes: {
-    id?: string;
-    type: string;
-    x: number;
-    y: number;
-    text?: TextConfig;
-    properties?: Record<string, unknown>;
-    zIndex?: number;
-  }[];
-  edges: {
-    id: string;
-    type: string;
-    sourceNodeId: string;
-    targetNodeId: string;
-    startPoint: any;
-    endPoint: any;
-    text: {
-      x: number;
-      y: number;
-      value: string;
-    };
-    properties: {};
-    zIndex?: number;
-    pointsList?: Point[]; // Folding lines and curves will output pointsList.
-  }[];
-};
-```
-
-Example：
-
-```jsx | pure
-lf.getGraphData();
-```
-
-### getGraphRawData
-
-Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the adapter.
-
-```jsx | pure
-getGraphRawData(): GraphConfigData
-```
-
-Example：
-
-```jsx | pure
-lf.getGraphRawData();
-```
-
-### clearData
-
-Clear the canvas.
-
-```jsx | pure
-lf.clearData();
-```
-
-### renderRawData
-
-Rendering of the raw graph data. The difference with `render` is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.renderRawData({
-  nodes: [],
-  edges: []
-})
-```
-
-### render
-
-Render graph data.
-
-```jsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.render(graphData)
-```
 
 ## History Related
 
@@ -990,7 +995,7 @@ Example：
 lf.redo();
 ```
 
-## Resize Related
+## Transform Related
 
 ### zoom
 

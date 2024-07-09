@@ -5,6 +5,7 @@ group:
   order: 3
 title: Control
 order: 3
+toc: content
 ---
 
 # Control

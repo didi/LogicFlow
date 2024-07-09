@@ -1,34 +1,31 @@
-import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
+import { PolylineEdge, PolylineEdgeModel, LogicFlow } from '@logicflow/core';
+import EdgeTextTheme = LogicFlow.EdgeTextTheme;
 
 class SequenceModel extends PolylineEdgeModel {
-  setAttributes() {
-    this.offset = 20;
-  }
-  getAnimation() {
-    const animation = super.getAnimation();
-    animation.stroke = 'blue';
-    return animation;
-  }
+  // 设置边样式
   getEdgeStyle() {
     const style = super.getEdgeStyle();
     const { properties } = this;
-    if (properties.isActived) {
-      style.strokeDasharray = '4 4';
+    if (properties.isstrokeDashed) {
+      style.strokeDasharray = '4, 4';
     }
     style.stroke = 'orange';
     return style;
   }
+  // 设置边文本样式
   getTextStyle() {
-    const style = super.getTextStyle();
+    const style: EdgeTextTheme = super.getTextStyle();
     style.color = '#3451F1';
-    style.fontSize = 30;
-    style.background.fill = '#F2F131';
+    style.fontSize = 20;
+    style.background = Object.assign({}, style.background, {
+      fill: '#F2F131',
+    });
     return style;
   }
+  // 设置 hover 轮廓样式
   getOutlineStyle() {
     const style = super.getOutlineStyle();
-    style.stroke = 'red';
-    style.hover.stroke = 'red';
+    style.stroke = 'blue';
     return style;
   }
 }

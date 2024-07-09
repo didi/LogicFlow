@@ -5,6 +5,7 @@ group:
   order: 3
 title: 控制面板 Control
 order: 3
+toc: contents
 ---
 
 # 控制面板 Control

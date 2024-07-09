@@ -19,7 +19,7 @@ LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连�
 1. 矩形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect" target="_blank">rect</a>
 1. 圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">circle</a>
 1. 椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">ellipse</a>
-1. 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon"    target="_blank">polygon</a>
+1. 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon" target="_blank">polygon</a>
 1. 菱形 --- `diamond`
 1. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">text</a>
 1. HTML --- `html`
@@ -44,7 +44,7 @@ LogicFlow推荐在实际应用场景中，所有的节点都使用自定义节�
 
 `view`: 视图层，控制节点的最终渲染效果，通过改变`model`就可以满足自定义节点，同时可以在`view`上定制更加复杂的`svg`元素。
 
-在自定义一个节点的时候，我们可以重新定义节点的`model`和`view`，通过重写定义在`model`上获取样式相关的方法和重写`view`上的`getShape`来定义复杂的节点外观。
+LogicFlow基于MVVM模式实现的，在自定义一个节点的时候，我们可以重新定义节点的`model`和`view`，通过重写定义在`model`上获取样式相关的方法和重写`view`上的`getShape`来定义复杂的节点外观。
 
 这是一个基于继承内置节点并重写`model`的自定义节点例子👇，节点自定义采用了不同的方式实现😊。
 
@@ -88,7 +88,7 @@ class UserTaskModel extends RectNodeModel {
 
 2. #### 形状属性
 
-在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`rx`、`ry`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
+在LogicFlow中，形状属性表示节点的宽`width`、高`height`，矩形的圆角`raduis`, 圆形的半径`r`, 多边形的顶点`points`等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`方法或`initNodeData`方法中进行。
 
 LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](/api/node-model-api#形状属性)。
 

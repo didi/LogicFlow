@@ -5,6 +5,7 @@ group:
   order: 1
 title: Theme
 order: 3
+toc: content
 ---
 
 # Theme

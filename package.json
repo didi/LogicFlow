@@ -133,14 +133,5 @@
   "engines": {
     "node": ">=16.0.0",
     "pnpm": ">=9.0.0"
-  },
-  "workspaces": [
-    "examples",
-    "packages/core",
-    "packages/engine",
-    "packages/extension",
-    "packages/react-node-registry",
-    "packages/vue-node-registry",
-    "sites/docs"
-  ]
+  }
 }

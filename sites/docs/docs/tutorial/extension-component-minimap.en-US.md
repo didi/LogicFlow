@@ -5,6 +5,7 @@ group:
   order: 3
 title: MiniMap
 order: 4
+toc: content
 ---
 
 # MiniMap

@@ -41,7 +41,7 @@ const lf = new LogicFlow({
 
 `nodes`: 包含所有的节点。每个节点的数据属性参见 <a href="../api/nodeModelApi.md#数据属性">nodeModel</a> 。
 
-`edges`: 包含所有的边，通过起始` sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个节点的数据属性参见  <a href="../api/edgeModelApi.md#数据属性">EdgeModel</a>。
+`edges`: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个节点的数据属性参见  <a href="../api/edgeModelApi.md#数据属性">EdgeModel</a>。
 
 <!-- - 为什么节点文本还要有坐标，直接用节点的坐标不行吗？
 

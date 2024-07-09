@@ -5,6 +5,7 @@ group:
   order: 3
 title: Snapshot
 order: 12
+toc: content
 ---
 
 # Snapshot

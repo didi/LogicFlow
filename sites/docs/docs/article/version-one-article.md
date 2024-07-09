@@ -1,6 +1,7 @@
 ---
 title: 发布1.0版本
 order: 4
+toc: content
 ---
 
 # LogicFlow发布1.0版本

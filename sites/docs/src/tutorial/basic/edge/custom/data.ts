@@ -45,6 +45,7 @@ const data = {
   ],
   edges: [
     {
+      id: '10',
       sourceNodeId: '1',
       targetNodeId: '3',
       startPoint: {
@@ -55,19 +56,21 @@ const data = {
         x: 500,
         y: 50,
       },
-      text: '333',
+      text: 'sequence',
       type: 'sequence',
+      properties: {
+        isstrokeDashed: true, // 是否虚线
+      },
     },
     {
       sourceNodeId: '3',
       targetNodeId: '4',
       type: 'line',
     },
-    // TODO
     {
       sourceNodeId: '3',
       targetNodeId: '5',
-      type: 'bezier',
+      type: 'line',
     },
   ],
 };

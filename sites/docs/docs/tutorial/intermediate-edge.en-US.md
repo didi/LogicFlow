@@ -5,6 +5,7 @@ group:
   order: 2
 title: Edge
 order: 1
+toc: content
 ---
 
 ## React edge

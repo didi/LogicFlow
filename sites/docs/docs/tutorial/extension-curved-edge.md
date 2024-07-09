@@ -5,6 +5,7 @@ group:
   order: 3
 title: 圆角折线 CurvedEdge
 order: 8
+toc: content
 ---
 
 # 圆角折线 CurvedEdge

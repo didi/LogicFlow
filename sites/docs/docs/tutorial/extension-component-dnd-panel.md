@@ -5,6 +5,7 @@ group:
   order: 3
 title: 拖拽面板 DndPanel
 order: 2
+toc: content
 ---
 
 # 拖拽面板 DndPanel

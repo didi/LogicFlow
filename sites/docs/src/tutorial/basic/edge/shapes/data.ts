@@ -34,25 +34,29 @@ const data = {
       sourceNodeId: '1',
       targetNodeId: '2',
       startPoint: {
+        // 起始点
         x: 100,
         y: 60,
       },
       endPoint: {
+        // 结束点
         x: 500,
         y: 50,
       },
       type: 'polyline',
+      text: 'polyline',
     },
     {
       sourceNodeId: '2',
       targetNodeId: '3',
       type: 'line',
+      text: 'line',
     },
-    // TODO
     {
       sourceNodeId: '2',
       targetNodeId: '4',
       type: 'bezier',
+      text: 'bezier',
     },
   ],
 };

@@ -81,8 +81,8 @@ export class LogicFlow {
    * 包括 adapterIn 和 adapterOut 两个方法
    */
   // TODO: 如何让用户执行时定义下面方法参数和返回值的类型
-  private adapterIn?: (data: unknown) => GraphData
-  private adapterOut?: (data: GraphData, ...rest: any) => unknown;
+  adapterIn?: (data: unknown) => GraphData
+  adapterOut?: (data: GraphData, ...rest: any) => unknown;
 
   // 支持插件在 LogicFlow 实例上增加自定义方法
   [propName: string]: any

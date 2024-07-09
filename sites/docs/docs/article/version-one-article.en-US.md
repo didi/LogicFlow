@@ -1,6 +1,7 @@
 ---
 title: LogicFlow released version 1.0
 order: 4
+toc: content
 ---
 
 # LogicFlow released version 1.0

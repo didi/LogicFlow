@@ -5,6 +5,7 @@ group:
   order: 2
 title: 节点
 order: 0
+toc: content
 ---
 
 ## 连接规则

@@ -1,6 +1,7 @@
 ---
 title: Decoding LogicFlow's Extension Mechanism
 order: 1
+toc: content
 ---
 # Decoding LogicFlow's Extension Mechanism
 ## Introduction
