@@ -5,6 +5,7 @@ group:
   order: 1
 title: 事件 Event
 order: 6
+toc: content
 ---
 
 # 事件 Event

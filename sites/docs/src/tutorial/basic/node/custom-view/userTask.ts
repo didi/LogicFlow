@@ -81,12 +81,16 @@ class UserTaskModel extends RectNodeModel {
   // 自定义锚点样式属性：锚点（节点连线的点）
   getAnchorStyle() {
     const style = super.getAnchorStyle();
-    style.stroke = 'rgb(24, 125, 255)';
-    style.r = 3;
-    style.hover.r = 8;
-    style.hover.fill = 'rgb(24, 125, 255)';
-    style.hover.stroke = 'rgb(24, 125, 255)';
-    return style;
+    const newStyle = Object.assign({}, style, {
+      stroke: 'rgb(24, 125, 255)',
+      r: 3,
+      hover: {
+        r: 8,
+        fill: 'rgb(24, 125, 255)',
+        stroke: 'rgb(24, 125, 255)',
+      },
+    });
+    return newStyle;
   }
 
   // 自定义节点锚点拖出连接线的样式属性
@@ -99,9 +103,13 @@ class UserTaskModel extends RectNodeModel {
   // 自定义节点轮廓框的样式属性
   getOutlineStyle() {
     const style = super.getOutlineStyle();
-    style.stroke = 'red';
-    style.hover.stroke = 'red';
-    return style;
+    const newStyle = Object.assign({}, style, {
+      stroke: 'red',
+      hover: {
+        stroke: 'red',
+      },
+    });
+    return newStyle;
   }
 }
 

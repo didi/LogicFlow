@@ -5,6 +5,7 @@ group:
   order: 3
 title: 导出 Snapshot
 order: 12
+toc: content
 ---
 
 # 导出 Snapshot

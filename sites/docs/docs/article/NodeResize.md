@@ -1,6 +1,7 @@
 ---
 title: 节点缩放
 order: 3
+toc: content
 ---
 
 # LogicFlow 节点缩放

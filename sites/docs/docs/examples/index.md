@@ -2,6 +2,7 @@
 nav: 示例
 title: 案例
 order: 0
+toc: content
 ---
 
 <style>

@@ -39,10 +39,10 @@ const graphData = {
 };
 
 export default function App() {
-  const refContainer = useRef();
+  const refContainer = useRef(null);
   useEffect(() => {
     const lf = new LogicFlow({
-      container: refContainer.current,
+      container: refContainer.current!,
       grid: true,
       stopScrollGraph: true, // 禁止鼠标滚动画布
       stopZoomGraph: true, // 禁止缩放画布

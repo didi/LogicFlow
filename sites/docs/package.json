@@ -27,9 +27,10 @@
   },
   "dependencies": {
     "@ant-design/icons-svg": "^4.2.1",
+    "@types/react-dom": "^18.3.0",
+    "lodash-es": "4.17.21",
     "lottie-web": "^5.12.2",
-    "rc-util": "^5.43.0",
-    "lodash-es": "4.17.21"
+    "rc-util": "^5.43.0"
   },
   "repository": "https://github.com/didi/LogicFlow"
 }

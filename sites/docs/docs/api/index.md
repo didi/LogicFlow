@@ -21,12 +21,20 @@ table td:first-of-type {
 
 ## 实例方法
 
-### Register 相关
+### Graph 相关
 
 | 选项  | 描述           |
-|:--------------------|-------------------------|
-| [register](./detail/index.md#register) | 注册自定义节点、边。|
-| [batchRegister](./detail/index.md#batchregister) | 批量注册。        |
+|:---------------------|-------------------------|
+| [setTheme](api/theme-api)           | 设置主题。        |
+| [focusOn](./detail/index.md#focuson)           | 定位到画布视口中心。   |
+| [resize](./detail/index.md#resize)             | 调整画布宽高, 如果`width` 或者`height`不传会自动计算画布宽高。     |
+| [toFront](./detail/index.md#tofront)           | 将某个元素放置到顶部。  |
+| [getPointByClient](./detail/index.md#getpointbyclient)       | 获取事件位置相对于画布左上角的坐标。           |
+| [getGraphData](./detail/index.md#getgraphdata) | 获取流程绘图数据。    |
+| [getGraphRawData](./detail/index.md#getgraphrawdata)         | 获取流程绘图原始数据， 与 `getGraphData` 区别是该方法获取的数据不会受到 `adapter` 影响。 |
+| [clearData](./detail/index.md#cleardata)       | 清空画布。        |
+| [renderRawData](./detail/index.md#renderrawdata)             | 渲染图原始数据，在使用`adapter`后，还想渲染 logicflow 格式的数据。  |
+| [render](./detail/index.md#render)             | 渲染图数据。       |
 
 ### Node 相关
 
@@ -48,7 +56,7 @@ table td:first-of-type {
 
 | 选项  | 描述           |
 |:---------------------|-------------------------|
-| [setDefaultEdgeType](./detail/index.md#setdefaultedgetype)   | 设置边的类型, 也就是设置在节点直接由用户手动绘制的连线类型。|
+| [setDefaultEdgeType](./detail/index.md#setdefaultedgetype)   | 设置边的默认类型, 也就是设置当节点直接由用户手动连接的边类型。|
 | [addEdge](./detail/index.md#addedge)           | 创建连接两个节点的边。  |
 | [getEdgeDataById](./detail/index.md#getedgedatabyid)         | 通过`id`获取边的数据。|
 | [getEdgeModelById](./detail/index.md#getedgemodelbyid)       | 基于边 `id` 获取边的`model`。        |
@@ -58,6 +66,13 @@ table td:first-of-type {
 | [deleteEdge](./detail/index.md#deleteedge)     | 基于边`id`删除边。  |
 | [deleteEdgeByNodeId](./detail/index.md#deleteedgebynodeid)   | 删除与指定节点相连的边, 基于边起点和终点。       |
 | [getNodeEdges](./detail/index.md#getnodeedges) | 获取节点连接的所有边的`model`。          |
+
+### Register 相关
+
+| 选项  | 描述           |
+|:--------------------|-------------------------|
+| [register](./detail/index.md#register) | 注册自定义节点、边。|
+| [batchRegister](./detail/index.md#batchregister) | 批量注册。        |
 
 ### Element 相关
 
@@ -85,20 +100,6 @@ table td:first-of-type {
 | [updateEditConfig](./detail/index.md#updateeditconfig)       | 更新流程编辑基本配置。  |
 | [getEditConfig](./detail/index.md#geteditconfig)             | 获取流程编辑基本配置。  |
 
-### Graph 相关
-
-| 选项  | 描述           |
-|:---------------------|-------------------------|
-| [setTheme](api/theme-api)           | 设置主题。        |
-| [focusOn](./detail/index.md#focuson)           | 定位到画布视口中心。   |
-| [resize](./detail/index.md#resize)             | 调整画布宽高, 如果`width` 或者`height`不传会自动计算画布宽高。     |
-| [toFront](./detail/index.md#tofront)           | 将某个元素放置到顶部。  |
-| [getPointByClient](./detail/index.md#getpointbyclient)       | 获取事件位置相对于画布左上角的坐标。           |
-| [getGraphData](./detail/index.md#getgraphdata) | 获取流程绘图数据。    |
-| [getGraphRawData](./detail/index.md#getgraphrawdata)         | 获取流程绘图原始数据， 与 `getGraphData` 区别是该方法获取的数据不会受到 `adapter` 影响。 |
-| [clearData](./detail/index.md#cleardata)       | 清空画布。        |
-| [renderRawData](./detail/index.md#renderrawdata)             | 渲染图原始数据，在使用`adapter`后，还想渲染 logicflow 格式的数据。  |
-| [render](./detail/index.md#render)             | 渲染图数据。       |
 
 ### History 相关
 
@@ -107,7 +108,7 @@ table td:first-of-type {
 | [undo](./detail/index.md#undo) | 历史记录操作-返回上一步。|
 | [redo](./detail/index.md#redo) | 历史记录操作-恢复下一步。|
 
-### Resize 相关
+### Transfrom 相关
 
 | 选项  | 描述           |
 |:---------------------|-------------------------|

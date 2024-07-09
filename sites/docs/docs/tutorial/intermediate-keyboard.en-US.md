@@ -5,6 +5,7 @@ group:
   order: 2
 title: Keyboard
 order: 3
+toc: content
 ---
 
 # Keyboard

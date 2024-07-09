@@ -21,12 +21,20 @@ All node instance operations on the flowchart, as well as events, and behavioral
 
 ## method
 
-### Register Related
+### Graph Related
 
 | Option  | Description               |
-|:----------------------|-------------------------|
-| [register](./detail/index.en-US.md#register) | Register custom nodes, edges. |
-| [batchRegister](./detail/index.en-US.md#batchregister) | Batch register.        |
+|:-----------------------|-------------------------|
+| [setTheme](api/theme-api)           | Set the theme.        |
+| [focusOn](./detail/index.en-US.md#focuson)           | Position to the center of the canvas viewport.   |
+| [resize](./detail/index.en-US.md#resize)             | Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.     |
+| [toFront](./detail/index.en-US.md#tofront)           | Places an element to the top.  |
+| [getPointByClient](./detail/index.en-US.md#getpointbyclient)       | Get the coordinates of the event location relative to the top left corner of the canvas.           |
+| [getGraphData](./detail/index.en-US.md#getgraphdata) | Get flow graphing data.    |
+| [getGraphRawData](./detail/index.en-US.md#getgraphrawdata)         | Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the `adapter`. |
+| [clearData](./detail/index.en-US.md#cleardata)       | Clear the canvas.      |
+| [renderRawData](./detail/index.en-US.md#renderrawdata)             | Rendering of the raw graph data. The difference with render is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.  |
+| [render](./detail/index.en-US.md#render)             | Render graph data.     |
 
 ### Node Related
 
@@ -59,6 +67,13 @@ All node instance operations on the flowchart, as well as events, and behavioral
 | [deleteEdgeByNodeId](./detail/index.en-US.md#deleteedgebynodeid)   | Deletes an edge of the specified type, based on the start and end points of the edge, and can pass only one of them.       |
 | [getNodeEdges](./detail/index.en-US.md#getnodeedges) | Get the model of all edges connected by the node.          |
 
+### Register Related
+
+| Option  | Description               |
+|:----------------------|-------------------------|
+| [register](./detail/index.en-US.md#register) | Register custom nodes, edges. |
+| [batchRegister](./detail/index.en-US.md#batchregister) | Batch register.        |
+
 ### Element Related
 
 | Option  | Description               |
@@ -85,21 +100,6 @@ All node instance operations on the flowchart, as well as events, and behavioral
 | [updateEditConfig](./detail/index.en-US.md#updateeditconfig)       | Update the basic configuration of the flow editor.  |
 | [getEditConfig](./detail/index.en-US.md#geteditconfig)             | Get the basic configuration of the flow editor.  |
 
-### Graph Related
-
-| Option  | Description               |
-|:-----------------------|-------------------------|
-| [setTheme](api/theme-api)           | Set the theme.        |
-| [focusOn](./detail/index.en-US.md#focuson)           | Position to the center of the canvas viewport.   |
-| [resize](./detail/index.en-US.md#resize)             | Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.     |
-| [toFront](./detail/index.en-US.md#tofront)           | Places an element to the top.  |
-| [getPointByClient](./detail/index.en-US.md#getpointbyclient)       | Get the coordinates of the event location relative to the top left corner of the canvas.           |
-| [getGraphData](./detail/index.en-US.md#getgraphdata) | Get flow graphing data.    |
-| [getGraphRawData](./detail/index.en-US.md#getgraphrawdata)         | Get the raw data of the flow graph. The difference with getGraphData is that the data obtained by this method is not affected by the `adapter`. |
-| [clearData](./detail/index.en-US.md#cleardata)       | Clear the canvas.      |
-| [renderRawData](./detail/index.en-US.md#renderrawdata)             | Rendering of the raw graph data. The difference with render is that after using `adapter`, you can use this method if you still want to render the data in logicflow format.  |
-| [render](./detail/index.en-US.md#render)             | Render graph data.     |
-
 ### History Related
 
 | Option  | Description               |
@@ -107,7 +107,7 @@ All node instance operations on the flowchart, as well as events, and behavioral
 | [undo](./detail/index.en-US.md#undo) | History operation - Back to previous step.|
 | [redo](./detail/index.en-US.md#redo) | History operation - Resume next.|
 
-### Resize Related
+### Transform Related
 
 | Option  | Description               |
 |:-----------------------|-------------------------|

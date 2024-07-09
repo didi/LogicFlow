@@ -5,6 +5,7 @@ group:
   order: 1
 title: Node
 order: 1
+toc: content
 ---
 
 # Node
@@ -15,12 +16,12 @@ LogicFlow has built-in some basic nodes, and developers can, in practical applic
 
 LogicFlow is a flowchart editing framework based on SVG. Therefore, our nodes and connections are basic SVG shapes. Modifying the style of LogicFlow nodes is essentially modifying the SVG basic shapes. There are seven types of basic nodes built into LogicFlow, namely:
 
-1. [rect](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect)
-1. [circle](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle)
-1. [ellipse](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse)
-1. [polygon](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon)
+1. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect" target="_blank">rect</a>
+1. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle" target="_blank">circle</a>
+1. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/ellipse" target="_blank">ellipse</a>
+1. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon"    target="_blank">polygon</a>
 1. `diamond`
-1. [text](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text)
+1. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text" target="_blank">text</a>
 1. `html`
 
 <code id="node-shapes" src="../../src/tutorial/basic/node/shapes"></code>
@@ -38,11 +39,17 @@ LogicFlow recommends that in practical application scenarios, all nodes use cust
 
 ### Node `model` and `view`
 
-When customizing a node, we need to define the `model` and `view` of the node. This is because LogicFlow is based on the MVVM pattern and needs to define more complex node appearances by overriding the methods related to getting styles on the definition `model` and overriding `getShape` on `view`.
+`model`: Data layer containing various styles (such as borders, colors), shapes (dimensions, vertex positions), and business properties of nodes.
 
-Here's an example of a custom node based on a built-in node 👇 with node customization implemented in a different way 😊
+`view`: View layer controlling the final rendering effects of nodes. By modifying the `model`, custom nodes can be created, while more complex SVG elements can be customized on the `view`.
+
+LogicFlow is based on the MVVM pattern. When customizing a node, we can redefine its `model` and `view`. This involves overriding methods in the `model` to obtain style-related information and overriding `getShape` in the `view` to define complex node appearances.
+
+Here's an example of customizing a node by inheriting and overriding the `model`. Customizing nodes can be achieved using different approaches 😊.
 
 <code id="node-custom" src="../../src/tutorial/basic/node/custom"></code>
+
+[lf.register](../api/detail/index.en-US.md#register): Register custom nodes. After registration, custom nodes can be used.
 
 :::info
 
@@ -58,11 +65,11 @@ class CustomNodeModel extends RectResize.model {}
 class CustomNode extends RectResize.view {}
 ```
 
-### Customizing node `models`
+### Customizing node `model`
 
 LogicFlow categorizes custom node appearance into two ways: `custom node style attribute` and `custom node shape attribute`. For more details on how to define them, see [NodeModelApi](/en-US/api/node-model-api)。
 
-1. #### style attributes
+#### 1. style attributes
 
 In LogicFlow, the appearance attributes represent the control of the node's `border`, `color`, and other appearance-oriented attributes. These properties can be controlled directly through [theme-configuration](/en-US/api/theme-api). Customizing node styles can be seen as redefining the theme based on the current node type.
 
@@ -78,9 +85,9 @@ class UserTaskModel extends RectNodeModel {
 }
 ```
 
-2. #### Shape attributes
+#### 2. Shape attributes
 
-In LogicFlow, shape attributes represent the width and height of a node, the radius of a rectangle, the radius of a circle, the vertices of a polygon, etc. These attributes control the final shape of a node. This is because LogicFlow calculates the anchor points of a node and the start and end points of a line based on the shape attributes. To customize the shape attributes, you need to do it in the `setAttributes` method or the `initNodeData` method.
+In LogicFlow, shape properties refer to attributes that control the final appearance of nodes, such as `width` and `height` for dimensions, `radius` for rounded rectangles, `r` for circles (radius), and `points` for polygons (vertices). These properties are crucial as LogicFlow calculates anchor points for nodes and start/end points for connections based on them. Customizing shape properties requires modification within the `setAttributes` method or `initNodeData` method.
 
 LogicFlow has some shape attributes specific to each base node. See [API Shape Attributes](/en-US/api/node-model-api#shape-attributes) for details.
 
@@ -104,29 +111,15 @@ If you don't set the shape attribute in `model`, but directly define the shape a
 
 :::
 
-3. #### Customizing node styles based on properties attributes
+#### 3. Customizing node styles based on properties attributes
 
-As mentioned in `graph data` in the previous section of LogicFlow's example, LogicFlow keeps properties field for both nodes and edges, which is used for developers to store their own business properties. So when customizing the node style, you can control the node to display different styles based on the properties in `properties`.
+In the previous LogicFlow example, it was mentioned that both nodes and edges in the `graph data` retain a properties field. This field allows developers not only to modify elements' `styles` and `shapes`, but also to store their own `business` attributes. Therefore, when customizing node styles, developers can use properties from the [properties](/en-US/api/node-model-api#data-attributes) to control how nodes display different styles.
 
-```jsx | pure
-class UserTaskModel extends RectNodeModel {
-  getNodeStyle() {
-    const style = super.getNodeStyle();
-    const properties = this.properties;
-    if (properties.statu === 'pass') {
-      style.stroke = "green";
-    } else if (properties.statu === 'reject') {
-      style.stroke = "red";
-    } else {
-      style.stroke = "rgb(24, 125, 255)";
-    }
-    return style;
-  }
-}
-```
+<code id="custom-rect" src="../../src/tutorial/basic/node/properties"></code>
+
 :::info
 
-If you don't understand why `this.properties` prints out as a Proxy object, you can't see the properties. Please check the [issue](https://github.com/didi/LogicFlow/issues/530)
+If you don't understand why `this.properties` prints out as a Proxy object, you can't see the properties. Please check the [issue](https://github.com/didi/LogicFlow/issues/530), Printing a Proxy object using `{ ...this.properties }`."
 
 :::
 
@@ -167,8 +160,8 @@ This method defines the final rendered shape, and LogicFlow internally inserts i
 
 LogicFlow defines the appearance of a node in three ways, namely **theme**, **custom node model**, **custom node view**. These three approaches are prioritized as `theme < custom node mod < custom node view`.Their differences：
 - Theme: defines common styles for all nodes of this base type, e.g. defines border color, width, etc. for all `rect` nodes.
-- Custom node model: defines the style of this registered type node.
-- Custom node view: defines the svg dom of this registered type node.
+- Custom node model: Defines the data for this registered type of node, storing and managing attributes such as style, shape, and business-related information of the node.
+- Custom node view: Defines the `SVG DOM` for this registered type of node, visualizing the data from the `model` based on its attributes, rendering the information into a graphical form visible to the user.
 
 :::warning
 Although `custom node view` has the highest priority and the most complete function, theoretically we can realize any effect we want through `custom node view`, but there are still some limitations in this way.<br>

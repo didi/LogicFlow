@@ -5,6 +5,7 @@ group:
   order: 3
 title: CurvedEdge
 order: 8
+toc: content
 ---
 
 # CurvedEdge

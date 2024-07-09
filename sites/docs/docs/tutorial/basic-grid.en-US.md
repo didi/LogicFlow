@@ -5,6 +5,7 @@ group:
   order: 1
 title: Grid
 order: 4
+toc: content
 ---
 
 # Grid

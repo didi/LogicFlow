@@ -5,6 +5,7 @@ group:
   order: 3
 title: 数据转换 Adapter
 order: 10
+toc: content
 ---
 
 # 数据转换 Adapter

@@ -5,6 +5,7 @@ group:
   order: 3
 title: SelectionSelect
 order: 5
+toc: content
 ---
 
 <style>

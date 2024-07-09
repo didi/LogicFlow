@@ -1,3 +1,9 @@
+---
+nav: examples
+title: Examples
+order: 0
+toc: content
+---
 <style>
 .markdown {
   height: 1600px;

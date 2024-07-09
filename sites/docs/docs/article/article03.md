@@ -1,6 +1,7 @@
 ---
 title: 边的绘制与交互
 order: 2
+toc: content
 ---
 # LogicFlow 边的绘制与交互
 

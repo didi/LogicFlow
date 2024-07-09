@@ -5,6 +5,7 @@ group:
   order: 3
 title: 插件简介
 order: 0
+toc: content
 ---
 
 # 简介

@@ -5,6 +5,7 @@ group:
   order: 2
 title: Set the editing method of flowchart
 order: 5
+toc: content
 ---
 # Set the editing method of flowchart
 

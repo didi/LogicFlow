@@ -5,6 +5,7 @@ group:
   order: 3
 title: Group
 order: 7
+toc: content
 ---
 
 # Group

@@ -2,8 +2,6 @@ import React from 'react';
 import LogicFlow from '@logicflow/core';
 import { Control } from '@logicflow/extension';
 import '@logicflow/core/es/index.css';
-// import '@logicflow/core/dist/style/index.less';
-// import '@logicflow/extension/es/index.less';
 import '@logicflow/extension/lib/style/index.css';
 
 import { data, SilentConfig, styleConfig } from './pluginData';
@@ -18,7 +16,7 @@ export default class Example extends React.Component {
       grid: true,
       ...SilentConfig,
       ...styleConfig,
-      plugins: [Control],
+      plugins: [Control], // 局部使用 Control 插件
     });
 
     lf.render(data);

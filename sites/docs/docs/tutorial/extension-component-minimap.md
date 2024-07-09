@@ -5,6 +5,7 @@ group:
   order: 3
 title: 小地图 MiniMap
 order: 4
+toc: content
 ---
 
 # 小地图 MiniMap

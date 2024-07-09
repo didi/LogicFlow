@@ -5,6 +5,7 @@ group:
   order: 3
 title: BpmnElement
 order: 11
+toc: content
 ---
 
 # BpmnElement

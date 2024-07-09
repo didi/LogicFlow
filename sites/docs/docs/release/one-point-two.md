@@ -1,6 +1,7 @@
 ---
 title: 1.1 升级到 1.2
 order: 1
+toc: content
 ---
 # 从 1.1 升级到 1.2
 

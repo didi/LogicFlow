@@ -5,6 +5,7 @@ group:
   order: 3
 title: 分组 Group
 order: 7
+toc: content
 ---
 
 # 分组 Group
