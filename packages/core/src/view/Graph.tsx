@@ -1,5 +1,5 @@
 import { Component, ComponentType } from 'preact/compat'
-import { map } from 'lodash-es'
+import { map, throttle } from 'lodash-es'
 import {
   CanvasOverlay,
   ToolOverlay,
@@ -37,6 +37,19 @@ type ContainerStyle = {
 
 @observer
 class Graph extends Component<IGraphProps> {
+  handleResize = () => {
+    console.log('handleResize')
+    this.props.graphModel.resize()
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', throttle(this.handleResize, 200))
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', throttle(this.handleResize, 200))
+  }
+
   getComponent(
     model: BaseEdgeModel | BaseNodeModel,
     graphModel: GraphModel,
@@ -73,7 +86,7 @@ class Graph extends Component<IGraphProps> {
     const { adjustEdge } = editConfigModel
 
     return (
-      <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
+      <div className="lf-graph" flow-id={graphModel.flowId}>
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>
           <g className="lf-base">
             {map(graphModel.sortElements, (nodeModel) =>

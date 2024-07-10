@@ -4,13 +4,15 @@ import '@logicflow/core/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
-import { combine, square, star, uml, user, reactNode } from './nodes'
+import { combine, square, star, uml, user } from './nodes'
 import { animation, connection } from './edges'
 
-import GraphConfigData = LogicFlow.GraphConfigData
+import GraphData = LogicFlow.GraphData
 import './index.less'
 
-const defaultConfig: Partial<LogicFlow.Options> = {
+import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
+
+const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
@@ -38,7 +40,11 @@ const defaultConfig: Partial<LogicFlow.Options> = {
     },
     text: {
       color: '#b85450',
-      fontSize: 14,
+      fontSize: 12,
+    },
+    inputText: {
+      background: 'black',
+      color: 'white',
     },
   },
 }
@@ -57,7 +63,7 @@ const customTheme: Partial<LogicFlow.Theme> = {
     lineHeight: 1.5,
     fontSize: 13,
     textWidth: 100,
-  }, // 确认 textWidth 是否必传
+  }, // 确认 textWidth 是否必传 ❓
   polyline: {
     stroke: 'red',
   },
@@ -70,7 +76,7 @@ const customTheme: Partial<LogicFlow.Theme> = {
     verticalLength: 2, // 箭头垂直于边的距离
   },
 }
-const data: GraphConfigData = {
+const data = {
   nodes: [
     {
       id: 'custom-node-1',
@@ -78,25 +84,24 @@ const data: GraphConfigData = {
       text: {
         x: 600,
         y: 200,
-        value: 'xxxxx',
+        value: 'node-1',
       },
       type: 'rect',
       x: 600,
       y: 200,
+      properties: {
+        width: 80,
+        height: 120,
+      },
     },
     {
-      id: 'custom-react-node-1',
-      text: {
-        x: 200,
-        y: 500,
-        value: 'custom-react-node',
-      },
-      type: 'custom-react-node',
-      x: 200,
-      y: 500,
+      id: 'custom-node-2',
+      text: 'node-2',
+      type: 'polygon',
+      x: 90,
+      y: 94,
     },
   ],
-  edges: [],
 }
 
 export default function BasicNode() {
@@ -104,7 +109,7 @@ export default function BasicNode() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const registerElements = (lf: LogicFlow) => {
-    const elements = [
+    const elements: LogicFlow.RegisterConfig[] = [
       // edges
       animation,
       connection,
@@ -114,7 +119,6 @@ export default function BasicNode() {
       star,
       uml,
       user,
-      reactNode,
     ]
 
     map(elements, (customElement) => {
@@ -131,10 +135,10 @@ export default function BasicNode() {
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
-        ...defaultConfig,
+        ...config,
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
-        // width: 1200,
+        // width: 800,
         // height: 400,
         // adjustNodePosition: false,
         // isSilentMode: true,
@@ -150,6 +154,7 @@ export default function BasicNode() {
         adjustEdgeStartAndEnd: true,
         // adjustEdge: false,
         allowRotate: true,
+        // allowResize: true,
         edgeTextEdit: true,
         keyboard: {
           enabled: true,
@@ -175,18 +180,12 @@ export default function BasicNode() {
         background: {
           color: '#FFFFFF',
         },
-        // grid: true,
-        grid: {
-          size: 20,
-        },
+        grid: true,
+        // grid: {
+        //   size: 1,
+        // },
         edgeTextDraggable: true,
         edgeType: 'bezier',
-        // style: {
-        //   inputText: {
-        //     background: 'black',
-        //     color: 'white',
-        //   },
-        // },
         // 全局自定义id
         // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
         //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
@@ -291,7 +290,7 @@ export default function BasicNode() {
 
   const handleTurnAnimationOn = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphRawData()
+      const { edges } = lfRef.current.getGraphData() as GraphData
       forEach(edges, (edge) => {
         lfRef.current?.openEdgeAnimation(edge.id)
       })
@@ -299,30 +298,15 @@ export default function BasicNode() {
   }
   const handleTurnAnimationOff = () => {
     if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphRawData()
+      const { edges } = lfRef.current.getGraphData() as GraphData
       forEach(edges, (edge) => {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })
     }
   }
 
-  const handleDragRect = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'rect',
-      text: 'rect',
-    })
-  }
-  const handleDragCircle = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'circle',
-      text: 'circle',
-    })
-  }
-  const handleDragText = () => {
-    lfRef?.current?.dnd.startDrag({
-      type: 'text',
-      text: '文本节点',
-    })
+  const handleDragItem = (node: OnDragNodeConfig) => {
+    lfRef?.current?.dnd.startDrag(node)
   }
 
   return (
@@ -461,9 +445,95 @@ export default function BasicNode() {
         节点面板
       </Divider>
       <Flex wrap="wrap" gap="small" justify="center" align="center">
-        <div className="rect dnd-item" onMouseDown={handleDragRect} />
-        <div className="circle dnd-item" onMouseDown={handleDragCircle} />
-        <div className="text dnd-item" onMouseDown={handleDragText}>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() =>
+            handleDragItem({
+              type: 'rect',
+              text: 'rect',
+            })
+          }
+        >
+          rect
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'circle',
+              text: 'circle',
+            })
+          }}
+        >
+          circle
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'diamond',
+              text: 'diamond',
+            })
+          }}
+        >
+          diamond
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'ellipse',
+              text: 'ellipse',
+              properties: {
+                rx: 40,
+                ry: 80,
+              },
+            })
+          }}
+        >
+          ellipse
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'html',
+              text: 'html',
+            })
+          }}
+        >
+          html
+        </div>
+        <div
+          className="dnd-item wrapper"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'polygon',
+              text: 'polygon',
+              properties: {
+                width: 110,
+                height: 100,
+                style: {
+                  fill: '#ffd591',
+                  stroke: '#ffa940',
+                  strokeWidth: 2,
+                  fillRule: 'evenodd',
+                },
+              },
+            })
+          }}
+        >
+          polygon
+        </div>
+        <div
+          className="dnd-item text"
+          onMouseDown={() => {
+            handleDragItem({
+              type: 'text',
+              text: '文本',
+            })
+          }}
+        >
           文本
         </div>
       </Flex>

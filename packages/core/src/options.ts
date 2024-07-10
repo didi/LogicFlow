@@ -111,22 +111,13 @@ export namespace Options {
   export function get(options: Partial<Manual>) {
     const { ...others } = options
     const container = options.container
-    if (container != null) {
-      if (options.width == null) {
-        others.width = container.clientWidth
-      }
-      if (options.height == null) {
-        others.height = container.clientHeight
-      }
-    } else {
+    if (!container) {
       throw new Error(
         'Ensure the container of LogicFlow is specified and valid.',
       )
     }
 
-    const result = assign({}, defaults, others) as Options.Definition
-
-    return result
+    return assign({}, defaults, others) as Options.Definition
   }
 }
 

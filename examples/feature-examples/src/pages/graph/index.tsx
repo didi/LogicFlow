@@ -42,6 +42,11 @@ const config: Partial<LogicFlow.Options> = {
       color: '#b85450',
       fontSize: 12,
     },
+    // 下面的 style 移动到此处，不然会覆盖上面设置的各图形的主题样式
+    inputText: {
+      background: 'black',
+      color: 'white',
+    },
   },
 }
 
@@ -137,8 +142,8 @@ export default function BasicNode() {
         ...config,
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
-        // width: 1200,
-        // height: 400,
+        width: 800,
+        height: 400,
         // adjustNodePosition: false,
         // isSilentMode: true,
         // overlapMode: 1,
@@ -185,12 +190,6 @@ export default function BasicNode() {
         // },
         edgeTextDraggable: true,
         edgeType: 'bezier',
-        style: {
-          inputText: {
-            background: 'black',
-            color: 'white',
-          },
-        },
         // 全局自定义id
         // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
         //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
