@@ -1443,25 +1443,25 @@ export namespace LogicFlow {
     // overflowMode?: 'default' | 'autoWrap' | 'ellipsis'
   }
 
+  // label数据类型声明
   export type LabelType = {
-    id?: string
-    type?: string
-    relateId?: string
-    minWidth?: string | null
-    maxWidth?: string | null
-    minHeight?: string | null
-    maxHeight?: string | null
-    style?: object
-    virtical?: boolean
-    isFocus?: boolean
-    isHovered?: boolean
-    x?: number
-    y?: number
-    xDeltaPercent?: number
-    yDeltaPercent?: number
-    yDeltaDistance?: number
-    xDeltaDistance?: number
-    content?: string
+    id?: string // label唯一标识
+    relateId?: string // 关联节点/关联边的id
+    minWidth?: string | null // label最小宽度
+    maxWidth?: string | null // label最大宽度
+    minHeight?: string | null // label最小高度
+    maxHeight?: string | null // label最大高度
+    style?: object // label自定义样式
+    virtical?: boolean // 是否渲染纵向文本
+    isFocus?: boolean // label是否获焦
+    isHovered?: boolean // label是否hover
+    x?: number // label中心在x轴上的位置
+    y?: number // label中心在y轴上的位置
+    xDeltaPercent?: number // label在节点/边上相对x轴最左边的偏移比例，用于节点和边调整后更新文本坐标
+    yDeltaPercent?: number // label在节点/边上相对y轴最上面的偏移比例，用于节点和边调整后更新文本坐标
+    yDeltaDistance?: number // label在x轴上相对节点/边的偏移距离
+    xDeltaDistance?: number // label在y轴上相对节点/边的偏移距离
+    content?: string // label html的内容，PS：value是label的纯文本内容
   } & TextConfig
 
   export type LabelConfig = {
