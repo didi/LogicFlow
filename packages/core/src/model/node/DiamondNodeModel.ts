@@ -37,15 +37,13 @@ export class DiamondNodeModel extends BaseNodeModel {
   setAttributes() {
     super.setAttributes()
 
-    const { rx, ry, style } = this.properties
+    const { rx, ry } = this.properties
     if (rx) {
       this.rx = rx
     }
     if (ry) {
       this.ry = ry
     }
-    // style 需挂载到实例上: 可以通过properties设置每个节点样式属性
-    if (style) this.style = cloneDeep(style)
   }
 
   getNodeStyle() {
@@ -55,9 +53,11 @@ export class DiamondNodeModel extends BaseNodeModel {
         theme: { diamond },
       },
     } = this
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(diamond),
+      ...cloneDeep(customStyle),
     }
   }
 
