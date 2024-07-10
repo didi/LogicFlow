@@ -74,7 +74,6 @@ export class BaseNodeModel implements IBaseNodeModel {
     y: 0,
     draggable: false,
     editable: true,
-    content: '',
   }
   @observable label: LabelType[] = []
   @observable properties: Record<string, unknown> = {}

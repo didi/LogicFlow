@@ -64,9 +64,6 @@ export const content = `.lf-graph {
 .lf-draggable {
   cursor: default;
 }
-.lf-bezier-adjust {
-  z-index: 100;
-}
 .lf-bezier-adjust-anchor {
   cursor: pointer;
 }
