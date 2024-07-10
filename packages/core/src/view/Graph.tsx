@@ -5,7 +5,6 @@ import {
   ToolOverlay,
   BackgroundOverlay,
   Grid,
-  // LabelOverlay,
   SnaplineOverlay,
   OutlineOverlay,
   BezierAdjustOverlay,
