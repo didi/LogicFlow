@@ -53,6 +53,7 @@ const customTheme: Partial<LogicFlow.Theme> = {
   baseNode: {
     stroke: '#4E93F5',
   },
+  // nodeText 样式设置
   nodeText: {
     overflowMode: 'ellipsis',
     lineHeight: 1.5,
