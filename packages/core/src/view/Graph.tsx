@@ -38,7 +38,6 @@ type ContainerStyle = {
 @observer
 class Graph extends Component<IGraphProps> {
   handleResize = () => {
-    console.log('handleResize')
     this.props.graphModel.resize()
   }
 
