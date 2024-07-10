@@ -8,6 +8,7 @@ import { ModelType } from '../../constant'
 export type IRectNodeModel = {
   width?: number
   height?: number
+  radius?: number
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
@@ -30,13 +31,11 @@ export class RectNodeModel extends BaseNodeModel {
   setAttributes() {
     super.setAttributes()
 
-    const { width, height, style } = this.properties
+    const { width, height, radius } = this.properties
     if (width) this.width = width
     if (height) this.height = height
-    // style 需挂载到实例上: 可以通过properties设置每个节点样式属性
-    if (style) this.style = cloneDeep(style)
     // 矩形特有
-    if (style?.radius) this.radius = style.radius
+    if (radius) this.radius = radius
   }
 
   getDefaultAnchor() {
@@ -52,9 +51,11 @@ export class RectNodeModel extends BaseNodeModel {
   getNodeStyle() {
     const style = super.getNodeStyle()
     const { rect } = this.graphModel.theme
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(rect),
+      ...cloneDeep(customStyle),
     }
   }
 }

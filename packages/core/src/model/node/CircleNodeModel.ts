@@ -41,12 +41,10 @@ export class CircleNodeModel extends BaseNodeModel {
   setAttributes() {
     super.setAttributes()
 
-    const { r, style } = this.properties
+    const { r } = this.properties
     if (r) {
       this.r = r
     }
-    // style 需挂载到实例上: 可以通过properties设置每个节点样式属性
-    if (style) this.style = cloneDeep(style)
   }
 
   getNodeStyle() {
@@ -56,11 +54,11 @@ export class CircleNodeModel extends BaseNodeModel {
         theme: { circle },
       },
     } = this
-    const { style: customStyle } = this.properties
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
-      ...(customStyle ?? {}),
       ...cloneDeep(circle),
+      ...cloneDeep(customStyle),
     }
   }
 

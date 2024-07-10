@@ -98,11 +98,13 @@ class customRectModel extends RectNodeModel {
     super.initNodeData(data);
     this.width = 200;
     this.height = 80;
+    this.radius = 20; // 矩形特有
   }
   // or
   setAttributes() {
     this.width = 200;
     this.height = 80;
+    this.radius = 20; // 矩形特有
   }
 }
 ```
