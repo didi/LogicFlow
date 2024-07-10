@@ -25,7 +25,7 @@ export const UserTaskConfig = {
   height: 80,
 }
 
-export const theme: Partial<LogicFlow.Theme> = {
+export const theme: LogicFlow.CommonTheme = {
   rect: {
     radius: 5,
     stroke: 'rgb(24, 125, 255)',

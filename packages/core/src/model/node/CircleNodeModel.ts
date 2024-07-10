@@ -57,6 +57,7 @@ export class CircleNodeModel extends BaseNodeModel {
     const { style: customStyle = {} } = this.properties
     return {
       ...style,
+      ...(customStyle ?? {}),
       ...cloneDeep(circle),
       ...cloneDeep(customStyle),
     }

@@ -1,4 +1,5 @@
 import { createElement as h, Component } from 'preact/compat'
+import { isArray } from 'lodash-es'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, BaseEdgeModel, Model } from '../../model'
 import {
@@ -8,7 +9,7 @@ import {
   targetNodeInfo,
   NodeContaint,
 } from '../../util'
-import { ElementState, EventType, ModelType } from '../../constant'
+import { ElementState, EventType, ModelType, TextMode } from '../../constant'
 import Point = LogicFlow.Point
 import NodeData = LogicFlow.NodeData
 import AnchorConfig = Model.AnchorConfig
@@ -125,58 +126,61 @@ export class AdjustPoint extends Component<IProps, IState> {
     )
     // 如果一定的坐标能够找到目标节点，预结算当前节点与目标节点的路径进行展示
     if (info && info.node && this.isAllowAdjust(info).pass) {
-      let params: {
-        startPoint: Point
-        endPoint: Point
-        sourceNode: BaseNodeModel
-        targetNode: BaseNodeModel
-      }
       const { startPoint, endPoint, sourceNode, targetNode } = edgeModel
-      if (type === AdjustType.SOURCE) {
-        params = {
-          startPoint: {
-            x: info.anchor.x,
-            y: info.anchor.y,
-          },
-          endPoint: {
-            x: endPoint.x,
-            y: endPoint.y,
-          },
-          sourceNode: info.node,
-          targetNode,
-        }
-      } else if (type === AdjustType.TARGET) {
-        params = {
-          startPoint: {
-            x: startPoint.x,
-            y: startPoint.y,
-          },
-          endPoint: {
-            x: info.anchor.x,
-            y: info.anchor.y,
-          },
-          sourceNode,
-          targetNode: info.node,
-        }
-      }
-      edgeModel.updateAfterAdjustStartAndEnd(params!)
-    } else if (type === AdjustType.SOURCE) {
+      const params =
+        type === AdjustType.SOURCE
+          ? {
+              startPoint: {
+                x: info.anchor.x,
+                y: info.anchor.y,
+              },
+              endPoint: {
+                x: endPoint.x,
+                y: endPoint.y,
+              },
+              sourceNode: info.node,
+              targetNode,
+            }
+          : {
+              startPoint: {
+                x: startPoint.x,
+                y: startPoint.y,
+              },
+              endPoint: {
+                x: info.anchor.x,
+                y: info.anchor.y,
+              },
+              sourceNode,
+              targetNode: info.node,
+            }
+      edgeModel.updateAfterAdjustStartAndEnd(params)
+    } else {
       // 如果没有找到目标节点，更显起终点为当前坐标
-      edgeModel.updateStartPoint({
-        x,
-        y,
-      })
-    } else if (type === AdjustType.TARGET) {
-      edgeModel.updateEndPoint({
-        x,
-        y,
-      })
+      type === AdjustType.SOURCE
+        ? edgeModel.updateStartPoint({ x, y })
+        : edgeModel.updateEndPoint({ x, y })
     }
-
-    if (edgeModel.text.value && editConfigModel.adjustEdge) {
+    // 移动边文本，分为两种情况
+    // 如果textMode === TEXT
+    if (
+      edgeModel.textMode === TextMode.TEXT &&
+      edgeModel.text.value &&
+      editConfigModel.adjustEdge
+    ) {
       edgeModel.setText(
         Object.assign({}, edgeModel.text, edgeModel.textPosition),
       )
+    }
+    // 如果textMode === TEXT
+    if (
+      edgeModel.textMode === TextMode.TEXT &&
+      isArray(edgeModel.label) &&
+      editConfigModel.adjustEdge
+    ) {
+      edgeModel.label.forEach((item) => {
+        item.x += deltaX
+        item.y += deltaY
+      })
     }
   }
   onDragEnd = ({ event }: Partial<IDragParams>) => {
@@ -206,6 +210,7 @@ export class AdjustPoint extends Component<IProps, IState> {
         if (pass) {
           const {
             text,
+            label,
             sourceAnchorId = '',
             targetAnchorId = '',
             ...rest
@@ -215,6 +220,7 @@ export class AdjustPoint extends Component<IProps, IState> {
             targetAnchorId,
             ...rest,
             text: text?.value || '',
+            label,
           }
           // 根据调整点是边的起点或重点，计算创建边需要的参数
           if (type === AdjustType.SOURCE) {

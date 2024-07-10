@@ -102,7 +102,6 @@ const data: GraphConfigData = {
 export default function BasicNode() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
-
   const registerElements = (lf: LogicFlow) => {
     const elements = [
       // edges
@@ -201,7 +200,6 @@ export default function BasicNode() {
       registerElements(lf)
       // 注册事件
       registerEvents(lf)
-
       lf.render(data)
       lfRef.current = lf
     }

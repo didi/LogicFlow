@@ -21,7 +21,6 @@ toc: content
     height: 500px
   }
 </style>
-
 <div id="container"></div>
 ```
 

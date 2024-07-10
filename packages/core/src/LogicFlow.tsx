@@ -1388,7 +1388,6 @@ export namespace LogicFlow {
     ry?: number
   } & Record<string, any>
   export type AttributesType = Record<string, any>
-
   export type VectorData = {
     deltaX: number
     deltaY: number
@@ -1436,6 +1435,34 @@ export namespace LogicFlow {
     editable?: boolean
     draggable?: boolean
   } & Position
+
+  export type LabelType = {
+    id?: string
+    type?: string
+    relateId?: string
+    minWidth?: string | null
+    maxWidth?: string | null
+    minHeight?: string | null
+    maxHeight?: string | null
+    style?: object
+    virtical?: boolean
+    isFocus?: boolean
+    isHovered?: boolean
+    isInLine?: boolean
+    x?: number
+    y?: number
+    xDeltaPercent?: number
+    yDeltaPercent?: number
+    yDeltaDistance?: number
+    xDeltaDistance?: number
+    content?: string
+  } & TextConfig
+
+  export type LabelConfig = {
+    verticle: boolean
+    multiple: boolean
+    max?: number
+  }
 
   export type AppendConfig = {
     startIndex: number
@@ -1518,12 +1545,15 @@ export namespace LogicFlow {
     pointsList?: Point[]
     zIndex?: number
     properties?: PropertiesType
+    textMode?: string
+    label?: LabelType[]
   }
 
   export interface EdgeData extends EdgeConfig {
     id: string
     type: string
     text?: TextConfig
+    label?: LabelType[]
     startPoint: Point
     endPoint: Point
 

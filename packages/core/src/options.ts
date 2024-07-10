@@ -2,7 +2,7 @@ import { assign } from 'lodash-es'
 import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
 import { KeyboardDef } from './keyboard'
-import { OverlapMode } from './constant'
+import { OverlapMode, TextMode } from './constant'
 import { Grid } from './view/overlay'
 
 import GridOptions = Grid.GridOptions
@@ -66,6 +66,8 @@ export namespace Options {
     keyboard?: KeyboardDef
     style?: Partial<LogicFlow.Theme> // 主题配置
     edgeType?: EdgeType
+    edgeTextMode?: TextMode
+    nodeTextMode?: TextMode
     adjustEdge?: boolean
 
     allowRotate?: boolean // 允许节点旋转

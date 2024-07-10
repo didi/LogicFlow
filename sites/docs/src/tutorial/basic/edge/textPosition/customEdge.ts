@@ -17,7 +17,6 @@ class CustomEdgeModel extends PolylineEdgeModel {
   }
   getTextPosition() {
     const position = super.getTextPosition();
-
     const currentPositionList = this.points.split(' ');
     const pointsList = [];
     currentPositionList &&

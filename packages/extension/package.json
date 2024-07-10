@@ -40,7 +40,10 @@
   },
   "dependencies": {
     "@antv/hierarchy": "^0.6.11",
-    "@logicflow/core": "workspace:*",
-    "preact": "^10.17.1"
+    "@logicflow/core": "workspace:latest",
+    "medium-editor": "^5.23.3",
+    "preact": "^10.17.1",
+    "rangy": "^1.3.1",
+    "vanilla-picker": "^2.12.3"
   }
 }
