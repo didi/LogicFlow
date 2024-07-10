@@ -48,7 +48,7 @@ export class PolygonNodeModel extends BaseNodeModel {
   setAttributes() {
     super.setAttributes()
 
-    const { points, width, height, style } = this.properties
+    const { points, width, height } = this.properties
     // DONE: 如果设置了 points，又设置了节点的宽高，则需要做如下操作
     // 1. 将 points 的位置置零，即将图形向原点移动（找到 points 中 x,y 的最小值，所有坐标值减掉该值）
     // 2. 按宽高的比例重新计算最新的 points
@@ -57,8 +57,6 @@ export class PolygonNodeModel extends BaseNodeModel {
     // }
     const nextPoints = points || this.points
     this.points = normalizePolygon(nextPoints, width, height)
-    // style 需挂载到实例上: 可以通过properties设置每个节点样式属性
-    if (style) this.style = cloneDeep(style)
   }
 
   getNodeStyle() {
@@ -68,11 +66,11 @@ export class PolygonNodeModel extends BaseNodeModel {
         theme: { polygon },
       },
     } = this
-    const { style: customStyle } = this.properties
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(polygon),
-      ...(cloneDeep(customStyle) || {}),
+      ...cloneDeep(customStyle),
     }
   }
 

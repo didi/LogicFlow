@@ -21,9 +21,9 @@ export default {
         statu: 'pass', // 业务属性
         width: 100, // 形状属性
         height: 100,
+        radius: 20,
         style: {
           // 样式属性
-          radius: 20,
           strokeWidth: 3,
         },
       },
