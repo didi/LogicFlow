@@ -87,13 +87,17 @@ export class LogicFlow {
   // 支持插件在 LogicFlow 实例上增加自定义方法
   [propName: string]: any
 
-  private initContainer(container: HTMLElement | HTMLDivElement) {
+  private initContainer(
+    container: HTMLElement | HTMLDivElement,
+    width?: number,
+    height?: number,
+  ) {
     // TODO: 确认是否需要，后续是否只要返回 container 即可（下面方法是为了解决事件绑定问题的）
     // fix: destroy keyboard events while destroy LogicFlow.(#1110)
     const lfContainer = document.createElement('div')
     lfContainer.style.position = 'relative'
-    lfContainer.style.width = '100%'
-    lfContainer.style.height = '100%'
+    lfContainer.style.width = width ? `${width}px` : '100%'
+    lfContainer.style.height = height ? `${height}px` : '100%'
     container.innerHTML = ''
     container.appendChild(lfContainer)
     return lfContainer
@@ -105,8 +109,9 @@ export class LogicFlow {
 
   constructor(options: LFOptions.Common) {
     const initOptions = LFOptions.get(options)
+    const { container, width, height } = initOptions
     this.options = initOptions
-    this.container = this.initContainer(initOptions.container)
+    this.container = this.initContainer(container, width, height)
     this.graphModel = new GraphModel({
       ...initOptions,
       container: this.container, // TODO：测试该部分是否会有问题
