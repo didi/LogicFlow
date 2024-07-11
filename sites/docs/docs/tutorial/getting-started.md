@@ -113,51 +113,7 @@ lf.render(data)
 
 LogicFlow 本身是以 umd 打包为纯 JS 的包，所以不论是 vue 还是 react 中都可以使用。这里需要注意一个点，那就是初始化 LogicFlow 实例的时候，传入的参数 container,必须要 dom 上存在这个节点，不然会报错请检查 container 参数是否有效。
 
-```jsx
-import LogicFlow from "@logicflow/core";
-import "@logicflow/core/dist/index.css";
-import { useEffect, useRef } from "react";
-
-export default function App() {
-  const refContainer = useRef();
-  const data = {
-    // 节点
-    nodes: [
-      {
-        id: '21',
-        type: 'rect',
-        x: 300,
-        y: 100,
-        text: 'rect node',
-      },
-      {
-        id: '50',
-        type: 'circle',
-        x: 500,
-        y: 100,
-        text: 'circle node',
-      },
-    ],
-    // 边
-    edges: [
-      {
-        type: 'polyline',
-        sourceNodeId: '50',
-        targetNodeId: '21',
-      },
-    ],
-  }
-  useEffect(() => {
-    const lf = new LogicFlow({
-      container: refContainer.current,
-      grid: true,
-      height: 200
-    });
-    lf.render(data);
-  }, []);
-  return <div className="App" ref={refContainer}></div>;
-}
-```
+<code id="use-in-react" src="../../src/tutorial/getting-started/use-in-react"></code>
 
 ### 3. Vue 框架中使用
 
