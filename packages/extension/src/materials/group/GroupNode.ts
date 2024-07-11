@@ -6,8 +6,8 @@ import GraphElements = LogicFlow.GraphElements
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import EdgeConfig = LogicFlow.EdgeConfig
-import LabelType = LogicFlow.LabelType
 import LabelConfig = LogicFlow.LabelConfig
+import LabelOptions = LogicFlow.LabelOptions
 import TextConfig = LogicFlow.TextConfig
 
 const defaultWidth = 500
@@ -279,13 +279,13 @@ export class GroupNodeModel extends RectResizeModel {
     model.virtual = true
     // 强制不保存group连线数据
     // model.getData = () => null;
-    const { labelConfig } = model.properties
-    if ((labelConfig as LabelConfig)?.multiple && isArray(model.text)) {
+    const { LabelOptions } = model.properties
+    if ((LabelOptions as LabelOptions)?.multiple && isArray(model.text)) {
       model.text.forEach((item) => {
         item.editable = false
       })
     } else {
-      ;(model.text as LabelType).editable = false
+      ;(model.text as LabelConfig).editable = false
     }
     model.isFoldedEdge = true
   }

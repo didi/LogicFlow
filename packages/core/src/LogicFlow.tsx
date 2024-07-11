@@ -22,7 +22,7 @@ import { snapline } from './tool'
 import Keyboard from './keyboard'
 import History from './history'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
-import { ElementType, EventType, SegmentDirection } from './constant'
+import { ElementType, EventType, SegmentDirection, TextMode } from './constant'
 import { initDefaultShortcut } from './keyboard/shortcut'
 
 import Extension = LogicFlow.Extension
@@ -1444,27 +1444,28 @@ export namespace LogicFlow {
   }
 
   // label数据类型声明
-  export type LabelType = {
+  export type LabelConfig = {
     id?: string // label唯一标识
     relateId?: string // 关联节点/关联边的id
-    minWidth?: string | null // label最小宽度
-    maxWidth?: string | null // label最大宽度
-    minHeight?: string | null // label最小高度
-    maxHeight?: string | null // label最大高度
-    style?: object // label自定义样式
+    minWidth?: NumberOrPercent // label最小宽度
+    maxWidth?: NumberOrPercent // label最大宽度
+    minHeight?: NumberOrPercent // label最小高度
+    maxHeight?: NumberOrPercent // label最大高度
+    style?: h.JSX.CSSProperties // label自定义样式
     virtical?: boolean // 是否渲染纵向文本
     isFocus?: boolean // label是否获焦
     isHovered?: boolean // label是否hover
-    x?: number // label中心在x轴上的位置
-    y?: number // label中心在y轴上的位置
+    x: number // label中心在x轴上的位置
+    y: number // label中心在y轴上的位置
     xDeltaPercent?: number // label在节点/边上相对x轴最左边的偏移比例，用于节点和边调整后更新文本坐标
     yDeltaPercent?: number // label在节点/边上相对y轴最上面的偏移比例，用于节点和边调整后更新文本坐标
     yDeltaDistance?: number // label在x轴上相对节点/边的偏移距离
     xDeltaDistance?: number // label在y轴上相对节点/边的偏移距离
-    content?: string // label html的内容，PS：value是label的纯文本内容
-  } & TextConfig
+    content?: string // label html的内容，
+    value: string // label文本内容
+  }
 
-  export type LabelConfig = {
+  export type LabelOptions = {
     verticle: boolean
     multiple: boolean
     max?: number
@@ -1502,7 +1503,7 @@ export namespace LogicFlow {
   export interface FakeNodeConfig {
     type: string
     text?: TextConfig | string
-    label?: LabelType[] | LabelType | string
+    label?: LabelConfig[] | string[]
     properties?: PropertiesType
 
     [key: string]: unknown
@@ -1516,18 +1517,25 @@ export namespace LogicFlow {
     [key: string]: any
   }
 
+  export type BBox = {
+    minX: number
+    minY: number
+    maxX: number
+    maxY: number
+  }
+
   export interface NodeConfig {
     id?: string
     type: string
     x: number
     y: number
     text?: TextConfig | string
-    label?: LabelType[] | string[]
+    label?: LabelConfig[] | string[]
     zIndex?: number
     properties?: PropertiesType
     virtual?: boolean // 是否虚拟节点
     rotate?: number
-    textMode?: string
+    textMode?: TextMode.LABEL | TextMode.TEXT
 
     [key: string]: any
   }
@@ -1535,7 +1543,7 @@ export namespace LogicFlow {
   export interface NodeData extends NodeConfig {
     id: string
     text?: TextConfig
-    label?: LabelType[]
+    label?: LabelConfig[]
     [key: string]: unknown
   }
 
@@ -1547,11 +1555,11 @@ export namespace LogicFlow {
     sourceAnchorId?: string
     targetNodeId: string
     targetAnchorId?: string
-    textMode?: string
+    textMode?: TextMode.LABEL | TextMode.TEXT
     startPoint?: Point
     endPoint?: Point
     text?: TextConfig | string
-    label?: LabelType[] | string[]
+    label?: LabelConfig[] | string[]
     pointsList?: Point[]
     zIndex?: number
     properties?: PropertiesType
@@ -1561,7 +1569,7 @@ export namespace LogicFlow {
     id: string
     type: string
     text?: TextConfig
-    label?: LabelType[]
+    label?: LabelConfig[]
     startPoint: Point
     endPoint: Point
 
@@ -1573,6 +1581,14 @@ export namespace LogicFlow {
     className?: string
     icon?: boolean
     callback: (id: string | number) => void
+  }
+
+  export interface LabelData extends LabelConfig {
+    id: string
+    x: number
+    y: number
+    content: string
+    value: string
   }
 }
 

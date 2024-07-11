@@ -45,7 +45,7 @@ import GraphData = LogicFlow.GraphData
 import NodeConfig = LogicFlow.NodeConfig
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
-import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 
 export interface Constructable<T> {
   new (...args: any): T
@@ -769,8 +769,8 @@ export class GraphModel {
       if (node.textMode === TextMode.LABEL && isArray(node.label)) {
         node.label.forEach((item) => {
           if (isObject(item)) {
-            ;(item as LabelType).x += node.x - nodeX
-            ;(item as LabelType).y += node.y - nodeY
+            ;(item as LabelConfig).x += node.x - nodeX
+            ;(item as LabelConfig).y += node.y - nodeY
           }
         })
       }

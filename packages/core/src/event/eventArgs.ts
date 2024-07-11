@@ -12,7 +12,7 @@ import EdgeData = LogicFlow.EdgeData
 import GraphData = LogicFlow.GraphData
 import AnchorConfig = Model.AnchorConfig
 import ClientPosition = LogicFlow.ClientPosition
-import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 
 type ClickEventArgs = {
   /**
@@ -46,7 +46,10 @@ type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
 type TextEventArgsPick<T extends 'data' | 'e' | 'model' | 'element'> = Pick<
   {
     // 节点数据
-    data: LabelType | LabelType[] | { text: string; id?: string; type?: string }
+    data:
+      | LabelConfig
+      | LabelConfig[]
+      | { text: string; id?: string; type?: string }
     // 原生鼠标事件对象
     e?: MouseEvent
     // 文本所在元素model

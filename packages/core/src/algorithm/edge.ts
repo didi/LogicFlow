@@ -1,6 +1,8 @@
-import { reduce, isEmpty, assign, min, max } from 'lodash-es'
+import { reduce, min, max } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
+
 import Point = LogicFlow.Point
+import BBox = LogicFlow.BBox
 
 /**
  * 求两个线段交点入参：线段1端点: ab, 线段2端点： cd,
@@ -69,7 +71,7 @@ export const isInSegment = (point: Point, start: Point, end: Point) => {
 }
 
 /**
- * 根据边所有点信息计算边的外框坐标信息
+ * 根据边所有点信息计算凸包坐标信息
  * @param pointList 组成边的点的数组
  * @return bBoxInfo {
  *  minX: 外框在X轴上的最小坐标
@@ -78,29 +80,25 @@ export const isInSegment = (point: Point, start: Point, end: Point) => {
  *  maxY: 外框在y轴上的最大坐标
  * }
  */
-export const getEdgeBboxInfo = (pointList: Point[]) => {
+export const getEdgeBboxInfo = (pointList: Point[]): BBox => {
   return reduce(
     pointList,
-    (result, value) => {
-      if (isEmpty(result)) {
-        assign(result, {
-          minX: value.x,
-          minY: value.y,
-          maxX: value.x,
-          maxY: value.y,
-        })
-        return result
-      }
-      const { minX, minY, maxX, maxY } = result as any
+    (result: BBox, value: Point) => {
+      const { minX, minY, maxX, maxY } = result
       // 双击创建文本时不一定能精准地点在边上，所以增加10的容错空间
       return {
-        minX: min([minX, value.x]) - 10,
-        minY: min([minY, value.y]) - 10,
-        maxX: max([maxX, value.x]) + 10,
-        maxY: max([maxY, value.y]) + 10,
+        minX: min([minX, value.x]) || result.minX - 10,
+        minY: min([minY, value.y]) || result.minY - 10,
+        maxX: max([maxX, value.x]) || result.maxX + 10,
+        maxY: max([maxY, value.y]) || result.maxY + 10,
       }
     },
-    {},
+    {
+      minX: Infinity,
+      minY: Infinity,
+      maxX: -Infinity,
+      maxY: -Infinity,
+    },
   )
 }
 
