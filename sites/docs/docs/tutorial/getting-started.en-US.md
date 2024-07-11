@@ -99,51 +99,8 @@ lf.render(data)
 
 LogicFlow itself is packaged as pure JS with UMD, making it compatible with both Vue and React frameworks. One key point to note is that when initializing a LogicFlow instance, the container parameter must refer to an existing DOM node to avoid errors.
 
-```jsx
-import LogicFlow from "@logicflow/core";
-import "@logicflow/core/dist/index.css";
-import { useEffect, useRef } from "react";
+<code id="use-in-react" src="../../src/tutorial/getting-started/use-in-react"></code>
 
-export default function App() {
-  const refContainer = useRef();
-  const data = {
-    // Nodes
-    nodes: [
-      {
-        id: '21',
-        type: 'rect',
-        x: 300,
-        y: 100,
-        text: 'rect node',
-      },
-      {
-        id: '50',
-        type: 'circle',
-        x: 500,
-        y: 100,
-        text: 'circle node',
-      },
-    ],
-    // Edges
-    edges: [
-      {
-        type: 'polyline',
-        sourceNodeId: '50',
-        targetNodeId: '21',
-      },
-    ],
-  }
-  useEffect(() => {
-    const lf = new LogicFlow({
-      container: refContainer.current,
-      grid: true,
-      height: 200
-    });
-    lf.render(data);
-  }, []);
-  return <div className="App" ref={refContainer}></div>;
-}
-```
 ### 3. Usage in Vue Framework
 
 ```vue
