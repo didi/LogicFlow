@@ -100,7 +100,7 @@ const data = {
       textMode: 'label',
       label: ['22221', '22222', '22223'],
       properties: {
-        labelConfig: {
+        LabelOptions: {
           multiple: true,
         },
       },
@@ -163,7 +163,7 @@ const data = {
       textMode: 'label',
       label: ['label1', 'label2'],
       properties: {
-        labelConfig: {
+        LabelOptions: {
           multiple: true,
         },
       },
@@ -173,7 +173,7 @@ const data = {
     //   targetNodeId: 'custom-node-1',
     //   type: 'polyline',
     //   properties: {
-    //     labelConfig: {
+    //     LabelOptions: {
     //       multiple: true,
     //       max: 3,
     //     },
@@ -252,7 +252,7 @@ export default function BasicNode() {
         allowRotate: true,
         // allowResize: true,
         edgeTextEdit: true,
-        nodeTextVerticle: true,
+        nodeLabelVerticle: true,
         keyboard: {
           enabled: true,
           // shortcuts: [
@@ -300,7 +300,6 @@ export default function BasicNode() {
       registerElements(lf)
       // 注册事件
       registerEvents(lf)
-      // lf.extension.selectionSelect.__disabled = true;
       lf.render(data)
       lfRef.current = lf
     }

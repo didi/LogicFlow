@@ -392,8 +392,9 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       }
       // 边文案可编辑状态，才可以进行文案编辑
       if (
-        (editConfigModel.edgeTextEdit && textMode === TextMode.LABEL) ||
-        (textMode === TextMode.TEXT && text.editable)
+        editConfigModel.edgeTextEdit &&
+        (textMode === TextMode.LABEL ||
+          (textMode === TextMode.TEXT && text.editable))
       ) {
         model.setSelected(false)
         graphModel.setElementStateById(id, ElementState.TEXT_EDIT)

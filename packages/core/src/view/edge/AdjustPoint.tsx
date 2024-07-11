@@ -171,9 +171,9 @@ export class AdjustPoint extends Component<IProps, IState> {
         Object.assign({}, edgeModel.text, edgeModel.textPosition),
       )
     }
-    // 如果textMode === TEXT
+    // 如果textMode === LABEL
     if (
-      edgeModel.textMode === TextMode.TEXT &&
+      edgeModel.textMode === TextMode.LABEL &&
       isArray(edgeModel.label) &&
       editConfigModel.adjustEdge
     ) {
