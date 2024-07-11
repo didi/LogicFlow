@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { createElement as h, Component } from 'preact/compat'
+import { EventType } from '@logicflow/core'
 import { ElementState } from '../../constant'
 import { GraphModel, BaseNodeModel, BaseEdgeModel } from '../../model'
 import { Text } from '../shape'
@@ -30,6 +31,7 @@ export class BaseText<
       onDragging: this.onDragging,
       step: 1,
       // model,
+      eventType: 'TEXT',
       isStopPropagation: draggable,
     })
   }
@@ -98,11 +100,18 @@ export class BaseText<
 
   dbClickHandler = () => {
     // 静默模式下，双击不更改状态，不可编辑
-    const { editable } = this.props
+    const {
+      editable,
+      graphModel: { eventCenter },
+      model,
+    } = this.props
     if (editable) {
-      const { model } = this.props
       model.setElementState(ElementState.TEXT_EDIT)
     }
+    eventCenter.emit(EventType.TEXT_DBCLICK, {
+      data: model.text,
+      model,
+    })
   }
 
   render(): h.JSX.Element | undefined {
