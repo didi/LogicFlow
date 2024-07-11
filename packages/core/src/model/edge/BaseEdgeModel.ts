@@ -105,7 +105,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   @observable zIndex: number = 0
   @observable state = ElementState.DEFAULT
 
-  @observable textMode: string = TextMode.TEXT
+  @observable textMode: TextMode.LABEL | TextMode.TEXT = TextMode.TEXT
   modelType = ModelType.EDGE
   additionStateData?: Model.AdditionStateDataType
 
@@ -655,7 +655,13 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       isObject(this.text) &&
       !isEmpty(this.text)
     ) {
-      const { x, y, value, draggable, editable } = this.text
+      const {
+        x,
+        y,
+        value,
+        draggable = false,
+        editable = false,
+      } = this.text as TextConfig
       this.text = {
         value,
         x: x + deltaX,

@@ -1446,23 +1446,29 @@ export namespace LogicFlow {
   // label数据类型声明
   export type LabelConfig = {
     id?: string // label唯一标识
+    x: number // label中心在x轴上的位置
+    y: number // label中心在y轴上的位置
+    content?: string // label html的内容，
+    value: string // label文本内容
     relateId?: string // 关联节点/关联边的id
+    //样式属性
     minWidth?: NumberOrPercent // label最小宽度
     maxWidth?: NumberOrPercent // label最大宽度
     minHeight?: NumberOrPercent // label最小高度
     maxHeight?: NumberOrPercent // label最大高度
     style?: h.JSX.CSSProperties // label自定义样式
+    // 状态属性
+    editable?: boolean
+    draggable?: boolean
     virtical?: boolean // 是否渲染纵向文本
     isFocus?: boolean // label是否获焦
     isHovered?: boolean // label是否hover
-    x: number // label中心在x轴上的位置
-    y: number // label中心在y轴上的位置
+    isInLine?: boolean // label是否在边上
+    // 位置属性
     xDeltaPercent?: number // label在节点/边上相对x轴最左边的偏移比例，用于节点和边调整后更新文本坐标
     yDeltaPercent?: number // label在节点/边上相对y轴最上面的偏移比例，用于节点和边调整后更新文本坐标
     yDeltaDistance?: number // label在x轴上相对节点/边的偏移距离
     xDeltaDistance?: number // label在y轴上相对节点/边的偏移距离
-    content?: string // label html的内容，
-    value: string // label文本内容
   }
 
   export type LabelOptions = {
