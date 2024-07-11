@@ -88,10 +88,14 @@ export interface EditConfigInterface {
    * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string
+  multipleNodeText?: boolean
+  multipleEdgeText?: boolean
+  nodeLabelVerticle?: boolean
+  edgeTextVerticle?: boolean
   // 节点文本类型
-  nodeTextMode?: string
+  nodeTextMode?: TextMode.LABEL | TextMode.TEXT
   // 边文本类型
-  edgeTextMode?: string
+  edgeTextMode?: TextMode.LABEL | TextMode.TEXT
 }
 
 const SilentConfig = {
@@ -132,6 +136,10 @@ const keys = [
   'edgeTextDraggable',
   'multipleSelectKey',
   'autoExpand',
+  'multipleNodeText',
+  'multipleEdgeText',
+  'nodeLabelVerticle',
+  'edgeTextVerticle',
   'nodeTextMode',
   'edgeTextMode',
 ]
@@ -139,33 +147,46 @@ const keys = [
  * 页面编辑配置
  */
 export class EditConfigModel {
+  /*********************************************************
+   * 画布相关配置
+   ********************************************************/
   @observable isSilentMode = false
   @observable stopZoomGraph = false
   @observable stopScrollGraph = false
   @observable stopMoveGraph = false
-  @observable adjustEdge = true
-  @observable adjustEdgeMiddle = false
-  @observable adjustEdgeStartAndEnd = false
-  @observable adjustNodePosition = true
+  /*********************************************************
+   * 节点相关配置
+   ********************************************************/
   @observable hideAnchors = false
   @observable allowRotate = false
   @observable allowResize = false
   @observable hoverOutline = true
   @observable nodeSelectedOutline = true
-  @observable edgeSelectedOutline = true
   @observable nodeTextEdit = true
-  @observable edgeTextEdit = true
   @observable nodeTextDraggable = false
-  @observable edgeTextDraggable = false
   @observable autoExpand = false
   @observable multipleNodeText = false // 是否支持多个节点文本
-  @observable multipleEdgeText = false // 是否支持多个边文本
-  @observable nodeTextVerticle = false // 节点文本朝向是否是纵向
-  @observable edgeTextVerticle = false // 边文本朝向是否是纵向
+  @observable nodeLabelVerticle = false // 节点文本朝向是否是纵向
   @observable nodeTextMode = TextMode.TEXT // 节点文本模式
+  /*********************************************************
+   * 边相关配置
+   ********************************************************/
+  @observable adjustEdge = true
+  @observable adjustEdgeMiddle = false
+  @observable adjustEdgeStartAndEnd = false
+  @observable adjustNodePosition = true
+  @observable edgeSelectedOutline = true
+  @observable edgeTextEdit = true
+  @observable edgeTextDraggable = false
+  @observable multipleEdgeText = false // 是否支持多个边文本
+  @observable edgeTextVerticle = false // 边文本朝向是否是纵向
   @observable edgeTextMode = TextMode.TEXT // 边文本模式
+  /*********************************************************
+   * 其他
+   ********************************************************/
   multipleSelectKey = ''
   defaultConfig = {} // 设置为静默模式之前的配置，在取消静默模式后恢复
+
   constructor(config: EditConfigInterface) {
     assign(this, this.getConfigDetail(config))
   }
@@ -209,7 +230,7 @@ export class EditConfigModel {
         autoExpand: this.autoExpand,
         multipleNodeText: this.multipleNodeText,
         multipleEdgeText: this.multipleEdgeText,
-        nodeTextVerticle: this.nodeTextVerticle,
+        nodeLabelVerticle: this.nodeLabelVerticle,
         edgeTextVerticle: this.edgeTextVerticle,
       }
       assign(conf, silentConfig)

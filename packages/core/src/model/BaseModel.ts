@@ -143,7 +143,7 @@ export namespace Model {
      * 此属性控制的是第二种。节点和边在删除、调整的同时，其关联的文本也会对应删除、调整。
      */
     text: LogicFlow.TextConfig
-    label?: LogicFlow.LabelType[]
+    label?: LogicFlow.LabelConfig[]
     properties: Record<string, unknown>
 
     isSelected: boolean // 元素是否被选中
@@ -207,7 +207,7 @@ export namespace Model {
 
     getData: () => Record<string, unknown>
     getProperties: () => PropertyType
-    getTextShape: () => HTMLElement | null
+    getLabelShape: () => HTMLElement | null
     setProperty: (key: string, val: unknown) => void
     setProperties: (properties: PropertyType) => void
     deleteProperty: (key: string) => void
