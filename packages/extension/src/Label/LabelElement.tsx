@@ -218,8 +218,8 @@ export class Label extends Component<IProps> {
     let maxWidth = labelInfo.maxWidth
     let maxHeight = labelInfo.maxHeight
     if (BaseType === 'node') {
-      maxWidth = `${(LabelOptions as LabelOptions)?.verticle ? height : width}px`
-      maxHeight = `${(LabelOptions as LabelOptions)?.verticle ? width : height}px`
+      maxWidth = (LabelOptions as LabelOptions)?.verticle ? height : width
+      maxHeight = (LabelOptions as LabelOptions)?.verticle ? width : height
     }
 
     // 如果边文案自动换行, 设置编辑框宽度
