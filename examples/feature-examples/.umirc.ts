@@ -117,6 +117,11 @@ export default defineConfig({
           name: 'MiniMap 插件',
           component: './extensions/mini-map',
         },
+        {
+          path: '/extension/snapshot',
+          name: 'Snapshot 插件',
+          component: './extensions/snapshot',
+        },
       ],
     },
   ],
