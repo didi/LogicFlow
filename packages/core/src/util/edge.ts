@@ -29,7 +29,7 @@ import NodeData = LogicFlow.NodeData
 import EdgeConfig = LogicFlow.EdgeConfig
 import Position = LogicFlow.Position
 import BoxBounds = Model.BoxBounds
-import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 
 type PolyPointMap = Record<string, Point>
 type PolyPointLink = Record<string, string>
@@ -1074,7 +1074,7 @@ export const getSvgTextSize = ({
  * @params points 边拐点位置
  */
 export const getTextPositionOfPolyline = (
-  label: LabelType,
+  label: LabelConfig,
   points: string,
 ): Point => {
   const {
@@ -1157,7 +1157,9 @@ export const getClosestPointOnPolyline = (point: Point, pointList: Point[]) => {
     const distance = getDistanceToSegment(point, segmentStart, segmentEnd)
     if (distance < minDistance) {
       minDistance = distance
-      // 计算边外点在线段上的投影点
+      /**
+       * 计算边外点在线段上的投影点
+       */
       const t =
         ((x - startX) * xDistance + (y - startY) * yDistance) /
         (Math.pow(xDistance, 2) + Math.pow(yDistance, 2))
@@ -1269,7 +1271,7 @@ export const getClosestPointOnBezier = (
 export const isPointInBezier = (
   point: Point,
   pointList: Point[],
-  tolerance: number = 1,
+  tolerance: number = 20,
   steps: number = 5,
 ) => {
   const [start, sNext, ePre, end] = pointList
