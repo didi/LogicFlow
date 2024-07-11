@@ -38,8 +38,8 @@ import Point = LogicFlow.Point
 import EdgeData = LogicFlow.EdgeData
 import EdgeConfig = LogicFlow.EdgeConfig
 import TextConfig = LogicFlow.TextConfig
-import LabelType = LogicFlow.LabelType
 import LabelConfig = LogicFlow.LabelConfig
+import LabelOptions = LogicFlow.LabelOptions
 
 export interface IBaseEdgeModel extends Model.BaseModel {
   /**
@@ -83,14 +83,8 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     draggable: false,
     editable: true,
   }
-  @observable label: LabelType[] = []
-  @observable properties: Record<string, unknown> = {
-    labelConfig: {
-      multiple: false,
-      verticle: false,
-      max: 1,
-    },
-  }
+  @observable label: LabelConfig[] = []
+  @observable properties: Record<string, unknown> = {}
   @observable points = ''
   @observable pointsList: Point[] = []
 
@@ -155,11 +149,11 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties.labelConfig) {
+    if (!data.properties.LabelOptions) {
       const {
         editConfigModel: { multipleEdgeText, edgeTextVerticle },
       } = this.graphModel
-      data.properties.labelConfig = {
+      data.properties.LabelOptions = {
         verticle: edgeTextVerticle,
         multiple: multipleEdgeText,
       }
@@ -227,7 +221,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @overridable 支持重写
    * 获取当前节点文本内容
    */
-  getTextShape() {
+  getLabelShape() {
     return null
   }
   /**
@@ -596,7 +590,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    */
   @action formatLabel(data): void {
     if (!data.label) return
-    const { labelConfig } = data.properties
+    const { LabelOptions } = data.properties
     const labelList = data.label.map((item, index) => {
       const defaultPosition = defaultPositionOfLine(
         index,
@@ -610,7 +604,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
           relateId: data.id,
           value: item,
           content: item,
-          verticle: labelConfig.virtical,
+          verticle: LabelOptions.virtical,
           draggable: false,
           editable: true,
           isFocus: false,
@@ -618,7 +612,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
           ...getEdgeLabelDeltaOfBbox(defaultPosition, this.pointsList),
           isInLine:
             this.modelType === ModelType.BEZIER_EDGE
-              ? isPointInBezier(defaultPosition, this.pointsList, 20)
+              ? isPointInBezier(defaultPosition, this.pointsList)
               : isPointInPolyline(defaultPosition, this.pointsList),
         }
       }
@@ -633,13 +627,13 @@ export class BaseEdgeModel implements IBaseEdgeModel {
             : isPointInPolyline(item, this.pointsList),
       }
     })
-    this.label = labelConfig.multiple
+    this.label = LabelOptions.multiple
       ? slice(
           labelList,
           0,
-          isNil(labelConfig.max) || labelConfig.max > labelList.length
+          isNil(LabelOptions.max) || LabelOptions.max > labelList.length
             ? labelList.length
-            : labelConfig?.max,
+            : LabelOptions?.max,
         )
       : slice(labelList, 0, 1)
   }
@@ -676,7 +670,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * 移动边上的文本
    */
   @action moveLabel(deltaX, deltaY, labelId?: string): void {
-    this.label = this.label.map((item: LabelType) => {
+    this.label = this.label.map((item: LabelConfig) => {
       if (labelId && item.id !== labelId) return item
       return {
         ...item,
@@ -698,12 +692,12 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   /**
    * 设置文本位置和值
    */
-  @action setLabel(LabelConfig: LabelType, id: string): void {
-    if (!LabelConfig || !id) return
+  @action setLabel(LabelOptions: LabelConfig, id: string): void {
+    if (!LabelOptions || !id) return
     // 多个文本的情况下，不指定id就不修改
     const targetIndex = findIndex(this.label, (item) => item.id === id)
     if (targetIndex < 0) return
-    assign(this.label[targetIndex], LabelConfig)
+    assign(this.label[targetIndex], LabelOptions)
   }
 
   /**
@@ -744,10 +738,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   }
 
   @action
-  addLabel(labelConf: LabelType | { x: number; y: number }): void {
-    const { labelConfig } = this.properties
+  addLabel(labelConf: LabelConfig | { x: number; y: number }): void {
+    const { LabelOptions } = this.properties
     const { eventCenter } = this.graphModel
-    const { multiple = false, max } = labelConfig as LabelConfig
+    const { multiple = false, max } = LabelOptions as LabelOptions
     // 当前文本数量已到最大值时不允许新增文本
     if (multiple && !isNil(max) && this.label.length >= max) {
       eventCenter.emit(EventType.TEXT_NOT_ALLOWED_ADD, {
@@ -768,10 +762,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
         content: 'edgeText',
         draggable: false,
         editable: true,
-        x: (labelConfig as LabelConfig)?.multiple
+        x: (LabelOptions as LabelOptions)?.multiple
           ? labelConf.x
           : this.textPosition.x - 10,
-        y: (labelConfig as LabelConfig)?.multiple
+        y: (LabelOptions as LabelOptions)?.multiple
           ? labelConf.y
           : this.textPosition.y - 10,
         isFocus: true,
@@ -792,7 +786,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       return
     }
     const labelIndex = findIndex(
-      this.label as LabelType[],
+      this.label as LabelConfig[],
       (item) => item.id === labelInfo.id,
     )
     if (labelIndex < 0) return

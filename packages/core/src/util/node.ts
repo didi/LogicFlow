@@ -18,6 +18,7 @@ import Point = LogicFlow.Point
 import Direction = LogicFlow.Direction
 import NodeConfig = LogicFlow.NodeConfig
 import LineSegment = LogicFlow.LineSegment
+import BBox = LogicFlow.BBox
 import AnchorInfo = Model.AnchorInfo
 
 /* 获取所有锚点 */
@@ -145,13 +146,9 @@ export type NodeBBox = {
   y: number
   width: number
   height: number
-  minX: number
-  minY: number
-  maxX: number
-  maxY: number
   centerX: number
   centerY: number
-}
+} & BBox
 
 /* 获取节点bbox */
 export const getNodeBBox = (node: BaseNodeModel): NodeBBox => {
