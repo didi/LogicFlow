@@ -11,9 +11,9 @@ import LogicFlow, {
 import { Label } from './LabelElement'
 import RichTextEditor from '../materials/rich-text-editor'
 
-import LabelType = LogicFlow.LabelType
+import LabelConfig = LogicFlow.LabelConfig
 import Extension = LogicFlow.Extension
-// import LabelConfig = LogicFlow.LabelConfig
+// import LabelOptions = LogicFlow.LabelOptions
 
 type IProps = {
   graphModel: GraphModel
@@ -32,7 +32,7 @@ type LabelCompontentConfig = {
   editor: MediumEditor
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
-  labelInfo: LabelType // 当前标签的配置数据
+  labelInfo: LabelConfig // 当前标签的配置数据
   haveEditor: boolean // 当前是否挂载了富文本插件，用于新增文本时判断是否需要初始化文本的监听
 }
 @observer
@@ -61,7 +61,7 @@ class LabelContainer extends Component<IProps, IState> {
     this.nodes = nodes
     elements = concat(elements, edges, nodes)
 
-    const elementLabelType = elements.map((element) => {
+    const elementLabelConfig = elements.map((element) => {
       const { BaseType, label } = element
       const editable =
         BaseType === ElementType.NODE ? nodeTextEdit : edgeTextEdit
@@ -82,8 +82,8 @@ class LabelContainer extends Component<IProps, IState> {
       return []
     })
 
-    if (!elementLabelType) return null
-    return flattenDeep(elementLabelType).map((conf, index) =>
+    if (!elementLabelConfig) return null
+    return flattenDeep(elementLabelConfig).map((conf, index) =>
       h(Label, { ...conf, labelIndex: index } as LabelCompontentConfig),
     )
   }

@@ -43,8 +43,8 @@ import CommonTheme = LogicFlow.CommonTheme
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
 import PCTResizeParams = ResizeControl.PCTResizeParams
-import LabelType = LogicFlow.LabelType
 import LabelConfig = LogicFlow.LabelConfig
+import LabelOptions = LogicFlow.LabelOptions
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -75,7 +75,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     draggable: false,
     editable: true,
   }
-  @observable label: LabelType[] = []
+  @observable label: LabelConfig[] = []
   @observable properties: Record<string, unknown> = {}
   // 形状属性
   @observable private _width = 100
@@ -217,12 +217,12 @@ export class BaseNodeModel implements IBaseNodeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties.labelConfig) {
+    if (!data.properties.LabelOptions) {
       const {
-        editConfigModel: { multipleNodeText, nodeTextVerticle },
+        editConfigModel: { multipleNodeText, nodeLabelVerticle },
       } = this.graphModel
-      data.properties.labelConfig = {
-        verticle: nodeTextVerticle,
+      data.properties.LabelOptions = {
+        verticle: nodeLabelVerticle,
         multiple: multipleNodeText,
       }
     }
@@ -302,7 +302,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * 始化文本属性
    */
   private formatLabel(data): void {
-    const { labelConfig } = data.properties
+    const { LabelOptions } = data.properties
     const defaultPosition = (index = 0) => {
       /**
        * 多文本在节点中的默认位置排列:
@@ -353,7 +353,7 @@ export class BaseNodeModel implements IBaseNodeModel {
       const defaultText = {
         id: createUuid(),
         relateId: data.id,
-        verticle: labelConfig.virtical,
+        verticle: LabelOptions.virtical,
         draggable: false,
         editable: true,
         isFocus: false,
@@ -384,16 +384,16 @@ export class BaseNodeModel implements IBaseNodeModel {
         ),
       }
     })
-    if (!isNil(labelConfig.max) && labelConfig.max < labelList.length) {
+    if (!isNil(LabelOptions.max) && LabelOptions.max < labelList.length) {
       console.warn('传入文案数量超出所设置最大值')
     }
-    data.label = labelConfig.multiple
+    data.label = LabelOptions.multiple
       ? slice(
           labelList,
           0,
-          isNil(labelConfig.max) || labelConfig.max > labelList.length
+          isNil(LabelOptions.max) || LabelOptions.max > labelList.length
             ? labelList.length
-            : labelConfig.max,
+            : LabelOptions.max,
         )
       : labelList[0]
   }
@@ -514,7 +514,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 支持重写
    * 获取当前节点文本内容
    */
-  getTextShape() {
+  getLabelShape() {
     return null
   }
 
@@ -934,10 +934,10 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action
-  addLabel(labelConf: LabelType | { x: number; y: number }): void {
-    const { labelConfig } = this.properties
+  addLabel(labelConf: LabelConfig | { x: number; y: number }): void {
+    const { LabelOptions } = this.properties
     const { eventCenter } = this.graphModel
-    const { multiple = false, max } = labelConfig as LabelConfig
+    const { multiple = false, max } = LabelOptions as LabelOptions
     // 不是多选或者当前文本数量已到最大值时不允许新增文本
 
     if (!multiple && this.label.length) {

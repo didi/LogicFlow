@@ -12,8 +12,8 @@ import LogicFlow, {
   LogicFlowUtil,
 } from '@logicflow/core'
 
-import LabelType = LogicFlow.LabelType
 import LabelConfig = LogicFlow.LabelConfig
+import LabelOptions = LogicFlow.LabelOptions
 
 const { StepDrag } = LogicFlowUtil
 
@@ -22,7 +22,7 @@ type IProps = {
   editor: any
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
-  labelInfo: LabelType // 当前标签的配置数据
+  labelInfo: LabelConfig // 当前标签的配置数据
   haveEditor: boolean
 }
 
@@ -202,7 +202,7 @@ export class Label extends Component<IProps> {
       width,
       height,
       BaseType,
-      properties: { labelConfig },
+      properties: { LabelOptions },
     } = model
     // 自动换行节点边通用样式
     const commonAutoStyle = {
@@ -218,8 +218,8 @@ export class Label extends Component<IProps> {
     let maxWidth = labelInfo.maxWidth
     let maxHeight = labelInfo.maxHeight
     if (BaseType === 'node') {
-      maxWidth = `${(labelConfig as LabelConfig)?.verticle ? height : width}px`
-      maxHeight = `${(labelConfig as LabelConfig)?.verticle ? width : height}px`
+      maxWidth = `${(LabelOptions as LabelOptions)?.verticle ? height : width}px`
+      maxHeight = `${(LabelOptions as LabelOptions)?.verticle ? width : height}px`
     }
 
     // 如果边文案自动换行, 设置编辑框宽度
@@ -247,7 +247,7 @@ export class Label extends Component<IProps> {
       const finalTextWidth =
         nodeTextWidth ||
         textWidth ||
-        ((labelConfig as LabelConfig)?.verticle ? height : width)
+        ((LabelOptions as LabelOptions)?.verticle ? height : width)
       // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
       if (
         (modelType !== ModelType.TEXT_NODE && overflowMode !== 'autoWrap') ||
@@ -351,13 +351,13 @@ export class Label extends Component<IProps> {
       labelInfo,
       graphModel: { transformModel },
       model: {
-        properties: { labelConfig },
-        getTextShape,
+        properties: { LabelOptions },
+        getLabelShape,
       },
     } = this.props
     const { transform } = transformModel.getTransformStyle()
-    if (getTextShape()) {
-      return <div>{getTextShape()}</div>
+    if (getLabelShape()) {
+      return <div>{getLabelShape()}</div>
     }
     return (
       <div
@@ -373,7 +373,7 @@ export class Label extends Component<IProps> {
           width: '20px',
           height: '20px',
           transform: `${transform} rotate(${
-            (labelConfig as LabelConfig)?.verticle ? -0.25 : 0
+            (LabelOptions as LabelOptions)?.verticle ? -0.25 : 0
           }turn)`,
           top: `${labelInfo.y}px`,
           left: `${labelInfo.x}px`,
