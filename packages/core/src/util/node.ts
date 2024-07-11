@@ -492,7 +492,7 @@ export const getHtmlTextHeight = ({
       dom.appendChild(rowDom)
     })
   } else {
-    dom.textContent = `${rows[0]}`
+    dom.textContent = rows[0]
   }
   document.body.appendChild(dom)
   const height = dom.clientHeight
