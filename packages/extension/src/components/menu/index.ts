@@ -1,5 +1,9 @@
 import LogicFlow from '@logicflow/core'
 
+import GraphData = LogicFlow.GraphData
+import NodeData = LogicFlow.NodeData
+import EdgeData = LogicFlow.EdgeData
+
 type SetType = 'add' | 'reset'
 
 export type MenuItem = {
@@ -25,7 +29,7 @@ class Menu {
   private __container?: HTMLElement
   private __menuDOM?: HTMLElement
   private menuTypeMap?: Map<string, MenuItem[]>
-  private __currentData: any
+  private __currentData: EdgeData | NodeData | GraphData | null = null
   static pluginName = 'menu'
 
   constructor({ lf }) {
@@ -107,7 +111,7 @@ class Menu {
     this.menuTypeMap?.set(DefaultSelectionMenuKey, DefaultSelectionMenu)
   }
 
-  render(lf, container) {
+  render(lf: LogicFlow, container: HTMLElement) {
     if (lf.options.isSilentMode) return
     this.__container = container
     this.__currentData = null // 当前展示的菜单所属元素的model数据
@@ -147,7 +151,7 @@ class Menu {
       )
     }
     // 通过事件控制菜单的显示和隐藏
-    this.lf.on('node:contextmenu', ({ data, position, e }: any) => {
+    this.lf.on('node:contextmenu', ({ data, position, e }) => {
       const {
         domOverlayPosition: { x, y },
       } = position
@@ -175,7 +179,7 @@ class Menu {
         clientY: e.clientY,
       })
     })
-    this.lf.on('edge:contextmenu', ({ data, position, e }: any) => {
+    this.lf.on('edge:contextmenu', ({ data, position, e }) => {
       const {
         domOverlayPosition: { x, y },
       } = position
@@ -183,7 +187,7 @@ class Menu {
       const model = this.lf.graphModel.getEdgeModelById(id)
       if (!model) return
       let menuList: any = []
-      const typeMenus = this.menuTypeMap?.get(model.type) ?? []
+      const typeMenus = this.menuTypeMap?.get(model.type)
       // 如果单个节点自定义了边
       if (model && model.menu && Array.isArray(model.menu)) {
         menuList = model.menu
@@ -202,14 +206,14 @@ class Menu {
         clientY: e.clientY,
       })
     })
-    this.lf.on('blank:contextmenu', ({ position }: any) => {
+    this.lf.on('blank:contextmenu', ({ position }) => {
       const menuList = this.menuTypeMap?.get(DefaultGraphMenuKey) ?? []
       const {
         domOverlayPosition: { x, y },
       } = position
       this.showMenu(x, y, menuList)
     })
-    this.lf.on('selection:contextmenu', ({ data, position }: any) => {
+    this.lf.on('selection:contextmenu', ({ data, position }) => {
       const menuList = this.menuTypeMap?.get(DefaultSelectionMenuKey)
       const {
         domOverlayPosition: { x, y },
@@ -217,6 +221,7 @@ class Menu {
       this.__currentData = data
       this.showMenu(x, y, menuList)
     })
+
     this.lf.on('node:mousedown', () => {
       this.__menuDOM!.style.display = 'none'
     })
