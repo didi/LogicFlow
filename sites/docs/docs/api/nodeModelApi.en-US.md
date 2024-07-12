@@ -34,7 +34,7 @@ The data attributes of a node are the data that the LogicFlow diagram data is us
 | type       | String     | ✅       | Node type    |
 | x          | number     | ✅       | Node center x-axis coordinate  |
 | y          | number     | ✅       | Node center y-axis coordinates  |
-| text       | TextObject |          | Node Text          |
+| text       | TextObject/String |          | Node Text          |
 | properties | Object     |          | Node Business Custom Attributes |
 
 **TextObject**
