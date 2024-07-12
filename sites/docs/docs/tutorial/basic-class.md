@@ -39,38 +39,15 @@ const lf = new LogicFlow({
 
 <code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
 
-`nodes`: 包含所有的节点。每个节点的数据属性参见 <a href="../api/nodeModelApi.md#数据属性">nodeModel</a> 。
+`nodes`: 包含所有的节点。每个节点的数据属性详见 <a href="../api/nodeModelApi.md#数据属性">nodeModel</a> 。
 
-`edges`: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个节点的数据属性参见  <a href="../api/edgeModelApi.md#数据属性">EdgeModel</a>。
+`edges`: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个边的数据属性详见  <a href="../api/edgeModelApi.md#数据属性">edgeModel</a>。
 
-<!-- - 为什么节点文本还要有坐标，直接用节点的坐标不行吗？
+`type`: 表示节点或者边的类型，这里的类型不仅可以是`rect`,`polyline`这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。
 
-  `text`可以是节点文本，也可以是连线文本，如果是节点文本，默认自动采用节点坐标作为节点文本坐标，如果是连线文本，我们会基于不同的连线类型计算一个合适的坐标作为节点坐标。
-  
-  在有些应用场景下，我们的文本位置是可以改变的和拖动的，基于此，我们LogicFlow的文本数据提供坐标属性。
+`text`: `text`可以是节点文本，也可以是连线文本，如果是节点文本，默认自动采用节点坐标作为节点文本坐标，如果是连线文本，我们会基于不同的连线类型计算一个合适的坐标作为节点坐标。在有些应用场景下，我们的文本位置是可以改变的和拖动的，基于此，我们LogicFlow的文本数据提供坐标属性。
 
-
-- 连线`startPoint`、`endPoint`数据和`pointsList`为什么是重复的？
-
-  目前，在LogicFlow内部内置了`line`, `polyline`, `bezier`三种基础连线，这三种连线都有`startPoint`、`endPoint`数据。但是其中`line`连线是不会带上`pointsList`。对于`polyline`, `pointsList`表示折线所有的点。对于`bezier`，`pointsList`表示`['起点', '第一个控制点'，'第二个控制点', '终点']`。
-
-
-- `properties`是用来做什么的？
-
-  `properties`是LogicFlow保留给具体业务场景使用的数据。
-  例如：在审批流场景，我们定义某个节点，这个节点通过了，节点为绿色，不通过节点为红色。那么节点的数据描述可以为:
-  ```jsx | pure
-  {
-    type: 'apply',
-    properties: {
-      isPass: true
-    }
-  }
-  ```
-
-- `type`是什么？
-
-  `type`表示节点或者连线的类型，这里的类型不仅可以是`rect`,`polyline`这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。 -->
+`properties`: 每个节点和边都有properties属性，包含节点样式、形状属性和业务自定义属性（保留给具体业务场景使用的数据），比如节点自身的形状属性`width`,`height`,样式属性`style`和业务自定义属性`isPass`等。
 
 ## 图渲染
 

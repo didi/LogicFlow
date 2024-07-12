@@ -13,7 +13,14 @@ const graphData = {
       x: 50,
       y: 50,
       text: { x: 100, y: 100, value: '节点1' }, // 节点文本
-      properties: {}, // 每个节点和边都有properties属性，后续会介绍到
+      properties: {
+        width: 80,
+        height: 80,
+        style: {
+          stroke: 'blue',
+        },
+        isPass: 'true', //例如：在审批流场景，我们定义某个节点，这个节点通过了，节点为绿色，不通过节点为红色。
+      },
     },
     // 节点2
     {
@@ -21,7 +28,7 @@ const graphData = {
       type: 'circle',
       x: 200,
       y: 300,
-      text: { x: 300, y: 300, value: '节点2' }, // 节点文本
+      text: { x: 300, y: 300, value: '节点2' },
       properties: {},
     },
   ],
