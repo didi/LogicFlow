@@ -161,14 +161,14 @@ class Menu {
       if (!model) return
       let menuList: any = []
       const typeMenus = this.menuTypeMap?.get(model.type)
-      // 如果单个节点自定义了节点，以单个节点自定义为准
+      // 1.如果单个节点自定义了菜单，以单个节点自定义为准
       if (model && model.menu && Array.isArray(model.menu)) {
         menuList = model.menu
       } else if (typeMenus) {
-        // 如果定义当前节点类型的元素
+        // 2.如果当前节点类型定义了菜单，再取该配置
         menuList = typeMenus
       } else {
-        // 最后取全局默认
+        // 3.最后取全局默认
         menuList = this.menuTypeMap?.get(DefaultNodeMenuKey)
       }
       this.__currentData = data
@@ -188,14 +188,12 @@ class Menu {
       if (!model) return
       let menuList: any = []
       const typeMenus = this.menuTypeMap?.get(model.type)
-      // 如果单个节点自定义了边
+      // 菜单优先级： model.menu > typeMenus > defaultEdgeMenu，注释同上节点
       if (model && model.menu && Array.isArray(model.menu)) {
         menuList = model.menu
       } else if (typeMenus) {
-        // 如果定义当前边类型的元素
         menuList = typeMenus
       } else {
-        // 最后取全局默认
         menuList = this.menuTypeMap?.get(DefaultEdgeMenuKey) ?? []
       }
       this.__currentData = data
