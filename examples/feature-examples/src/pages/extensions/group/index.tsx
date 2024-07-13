@@ -126,7 +126,7 @@ export default function BPMNExtension() {
             // children: ["rect_3"],
             text: 'sub-process-1',
             properties: {
-              isFolded: true,
+              isFolded: false,
             },
           },
           // {
@@ -149,9 +149,31 @@ export default function BPMNExtension() {
     }
   }, [])
 
-  const getGraphData = () => {}
+  const getGraphData = () => {
+    if (lfRef.current) {
+      const graphData = lfRef.current?.getGraphRawData()
+      console.log('graphData --->>>', graphData)
+    }
+  }
 
-  const rerender = () => {}
+  const rerender = () => {
+    lfRef.current &&
+      lfRef.current.render({
+        nodes: [
+          {
+            id: 'group_1',
+            type: 'sub-process',
+            x: 300,
+            y: 120,
+            text: 'sub-process-1',
+            properties: {
+              isFolded: false,
+            },
+          },
+        ],
+        edges: [],
+      })
+  }
 
   return (
     <Card title="LogicFlow Extension - DndPanel" className="control-container">

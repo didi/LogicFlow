@@ -75,6 +75,26 @@ export default defineConfig({
       ],
     },
     {
+      path: '/custom-edges',
+      name: 'custom edges',
+      routes: [
+        {
+          path: 'custom-edges',
+          redirect: 'custom-edges/polyline',
+        },
+        {
+          path: '/custom-edges/polyline',
+          name: '折线',
+          component: './edges/custom/polyline',
+        },
+        {
+          path: '/custom-edges/curved-polyline',
+          name: '圆角折线',
+          component: './edges/custom/curved-polyline',
+        },
+      ],
+    },
+    {
       name: 'official extensions',
       path: '/extension',
       routes: [
@@ -116,6 +136,11 @@ export default defineConfig({
           path: '/extension/mini-map',
           name: 'MiniMap 插件',
           component: './extensions/mini-map',
+        },
+        {
+          path: '/extension/node-selection',
+          name: 'NodeSelection 插件',
+          component: './extensions/node-selection',
         },
         {
           path: '/extension/snapshot',
