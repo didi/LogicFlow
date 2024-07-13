@@ -82,11 +82,13 @@ getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
 | width | number | - | | 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形 |
 | height | numebr | - | | 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形 |
 | backgroundColor | string | - | | 图片背景，不设置背景默认透明 |
-| quality | number | - | | 图片质量，在指定图片格式为 jpeg 或 webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他参数会被忽略。 |
+| quality | number | - | | 图片质量，在指定图片格式为 jpeg 或 webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他不合法参数会被忽略 |
 | padding | number | 40 | | 图片内边距: 元素内容所在区之外空白空间，不设置默认有40的内边距 |
-| partialElement | boolean | false |  |开启局部渲染后，默认不会导出不在画布区域的元素，开启后，将会导出 |
+| partialElement | boolean | false |  |开启局部渲染后，默认不会导出已经移出画布区域的元素，开启后，将会导出 |
 
-注意, `svg`目前暂不支持`width`，`height`， `backgroundColor`， `padding` 属性。
+注意：
+-  `svg`目前暂不支持`width`，`height`， `backgroundColor`， `padding` 属性。
+- 自定义宽高后，可能会拉伸图形，这时候`padding`也会被拉伸导致不准确。
 
 ### lf.getSnapshotBlob(...)
 
@@ -112,7 +114,7 @@ console.log(blob)
 ```tsx | pure
 
 export type SnapshotResponse = {
-  data: Blob | string
+  data: Blob | string // Blob对象 或 Base64文本编码文本
   width: number // 图片宽度
   height: number // 图片高度
 }
@@ -121,7 +123,7 @@ export type SnapshotResponse = {
 
 ### lf.getSnapshotBase64(...)
 
-获取`Base64文本编码`对象。
+获取`Base64文本编码`文本。
 
 ```ts
 

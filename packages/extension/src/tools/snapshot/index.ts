@@ -250,7 +250,7 @@ export class Snapshot {
       partialElement,
     } = toImageOptions
     // const copy = await this.cloneSvg(svg, toImageOptions)
-    // TODO: 为什么用上面封装的cloneSvg代替下面的方式不行
+    // TODO: question1:为什么用上面封装的cloneSvg代替下面的方式不行
     const partial = this.lf.graphModel.partial
     // 如何开启局部渲染，并要导出全部元素，需要临时关闭局部渲染
     partial && partialElement && (await this.lf.graphModel.setPartial(false))
@@ -335,6 +335,7 @@ export class Snapshot {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
       }
     }
+    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
     // 设置css样式
     const img = new Image()
     const style = document.createElement('style')
@@ -350,37 +351,29 @@ export class Snapshot {
             createImageBitmap(img, {
               resizeWidth:
                 width && height
-                  ? copyCanvas(canvas, width, height, padding, dpr).width
+                  ? copyCanvas(canvas, width, height).width
                   : canvas.width,
               resizeHeight:
                 width && height
-                  ? copyCanvas(canvas, width, height, padding, dpr).height
+                  ? copyCanvas(canvas, width, height).height
                   : canvas.height,
             }).then((imageBitmap) => {
               ctx?.drawImage(imageBitmap, padding / dpr, padding / dpr)
               resolve(
-                width && height
-                  ? copyCanvas(canvas, width, height, padding, dpr)
-                  : canvas,
+                width && height ? copyCanvas(canvas, width, height) : canvas,
               )
             })
           } else {
             ctx?.drawImage(img, padding / dpr, padding / dpr)
             resolve(
-              width && height
-                ? copyCanvas(canvas, width, height, padding, dpr)
-                : canvas,
+              width && height ? copyCanvas(canvas, width, height) : canvas,
             )
           }
           // 如果局部渲染本来是开启的，继续开启
           partial && this.lf.graphModel.setPartial(true)
         } catch (e) {
           ctx?.drawImage(img, padding / dpr, padding / dpr)
-          resolve(
-            width && height
-              ? copyCanvas(canvas, width, height, padding, dpr)
-              : canvas,
-          )
+          resolve(width && height ? copyCanvas(canvas, width, height) : canvas)
         }
       }
 
