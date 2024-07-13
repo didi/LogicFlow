@@ -1,12 +1,27 @@
+import LogicFlow from '@logicflow/core'
+
 /**
  * 快照插件，生成视图
  */
+
+// 导出图片
+export type ToImageOptions = {
+  width?: number // 导出图片的宽度
+  height?: number // 导出图片的高度
+  backgroundColor?: string // 导出图片的背景色
+  quality?: number // 图片质量，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.9
+  fileType?: string // 图片类型 默认是png
+  padding?: number // 图片的 padding: 元素内容所在区之外空白空间
+  partialElement?: boolean // 开启局部渲染后，默认不会导出不在画布区域的元素，开启后，将会导出
+}
+
 export class Snapshot {
   static pluginName = 'snapshot'
   lf: any
   offsetX?: number
   offsetY?: number
-  fileName: string = 'snapshot.png'
+  fileName?: string // 默认是 logic-flow.当前时间戳
+  fileType?: string = 'png'
   customCssRules: string
   useGlobalRules: boolean
 
@@ -15,23 +30,30 @@ export class Snapshot {
     this.customCssRules = ''
     this.useGlobalRules = true
     /* 下载快照 */
-    lf.getSnapshot = (fileName: string, backgroundColor: string) => {
-      this.getSnapshot(fileName, backgroundColor)
+    lf.getSnapshot = (fileName: string, ToImageOptions: ToImageOptions) => {
+      this.getSnapshot(fileName, ToImageOptions)
     }
+
     /* 获取Blob对象，用户图片上传 */
-    lf.getSnapshotBlob = (backgroundColor: string) =>
-      this.getSnapshotBlob(backgroundColor)
+    lf.getSnapshotBlob = (
+      backgroundColor: string | undefined,
+      fileType: string | undefined,
+    ) => this.getSnapshotBlob(backgroundColor, fileType)
+
     /* 获取Base64对象，用户图片上传 */
-    lf.getSnapshotBase64 = (backgroundColor: string) =>
-      this.getSnapshotBase64(backgroundColor)
+    lf.getSnapshotBase64 = (
+      backgroundColor: string | undefined,
+      fileType: string | undefined,
+    ) => this.getSnapshotBase64(backgroundColor, fileType)
   }
 
-  /* 获取svgRoot对象 */
-  getSvgRootElement(lf) {
-    const svgRootElement = lf.container.querySelector('.lf-canvas-overlay')
+  /* 获取svgRoot对象dom: 画布元素（不包含grid背景） */
+  getSvgRootElement(lf: LogicFlow) {
+    const svgRootElement = lf.container.querySelector('.lf-canvas-overlay')!
     return svgRootElement
   }
 
+  // 通过 imgURI 下载图片
   triggerDownload(imgURI: string) {
     const evt = new MouseEvent('click', {
       view: document.defaultView,
@@ -39,7 +61,7 @@ export class Snapshot {
       cancelable: true,
     })
     const a = document.createElement('a')
-    a.setAttribute('download', this.fileName)
+    a.setAttribute('download', this.fileName!)
     a.setAttribute('href', imgURI)
     a.setAttribute('target', '_blank')
     a.dispatchEvent(evt)
@@ -74,28 +96,33 @@ export class Snapshot {
   }
 
   /* 下载图片 */
-  async getSnapshot(fileName: string, backgroundColor: string) {
-    this.fileName = fileName || `logic-flow.${Date.now()}.png`
+  async getSnapshot(fileName: string, toImageOptions: ToImageOptions) {
+    const { fileType = 'png', quality } = toImageOptions
+    this.fileName = `${fileName ?? `logic-flow.${Date.now()}`}.${fileType}`
     const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg)
-    this.getCanvasData(svg, backgroundColor).then(
+    await updateImageSource(svg as SVGElement)
+    this.getCanvasData(svg, toImageOptions).then(
       (canvas: HTMLCanvasElement) => {
+        // canvas元素 => url   image/octet-stream: 确保所有浏览器都能正常下载
         const imgURI = canvas
-          .toDataURL('image/png')
-          .replace('image/png', 'image/octet-stream')
+          .toDataURL(`image/${fileType}`, quality)
+          .replace(`image/${fileType}`, 'image/octet-stream')
         this.triggerDownload(imgURI)
       },
     )
   }
 
   /* 获取base64对象 */
-  async getSnapshotBase64(backgroundColor: string) {
+  async getSnapshotBase64(
+    backgroundColor: string | undefined,
+    fileType: string | undefined,
+  ) {
     const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg)
+    await updateImageSource(svg as SVGElement)
     return new Promise((resolve) => {
-      this.getCanvasData(svg, backgroundColor).then(
+      this.getCanvasData(svg, { backgroundColor }).then(
         (canvas: HTMLCanvasElement) => {
-          const base64 = canvas.toDataURL('image/png')
+          const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
           // 输出图片数据以及图片宽高
           resolve({
             data: base64,
@@ -108,20 +135,26 @@ export class Snapshot {
   }
 
   /* 获取Blob对象 */
-  async getSnapshotBlob(backgroundColor: string) {
+  async getSnapshotBlob(
+    backgroundColor: string | undefined,
+    fileType: string | undefined,
+  ) {
     const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg)
+    await updateImageSource(svg as SVGElement)
     return new Promise((resolve) => {
-      this.getCanvasData(svg, backgroundColor).then(
+      this.getCanvasData(svg, { backgroundColor }).then(
         (canvas: HTMLCanvasElement) => {
-          canvas.toBlob((blob) => {
-            // 输出图片数据以及图片宽高
-            resolve({
-              data: blob,
-              width: canvas.width,
-              height: canvas.height,
-            })
-          }, 'image/png')
+          canvas.toBlob(
+            (blob) => {
+              // 输出图片数据以及图片宽高
+              resolve({
+                data: blob,
+                width: canvas.width,
+                height: canvas.height,
+              })
+            },
+            `image/${fileType ?? 'png'}`,
+          )
         },
       )
     })
@@ -145,13 +178,25 @@ export class Snapshot {
   }
 
   // 获取图片生成中中间产物canvas对象，用户转换为其他需要的格式
-  getCanvasData(
-    svg: SVGGraphicsElement,
-    backgroundColor: string,
-  ): Promise<any> {
-    // TODO: 确认返回 Promise 的类型
+  async getCanvasData(
+    svg: Element,
+    toImageOptions: ToImageOptions,
+  ): Promise<HTMLCanvasElement> {
+    const {
+      width,
+      height,
+      backgroundColor,
+      padding = 0,
+      partialElement,
+    } = toImageOptions
+    const partial = this.lf.graphModel.partial
+    // 关闭局部渲染
+    // if (partialElement && partial) {
+    const res = await this.lf.graphModel.setPartial(false)
+    // }
     const copy = svg.cloneNode(true)
     const graph = copy.lastChild
+    console.log('res', res, graph, partialElement)
     let childLength = graph?.childNodes?.length
     if (childLength) {
       for (let i = 0; i < childLength; i++) {
@@ -206,27 +251,38 @@ export class Snapshot {
     const { graphModel } = this.lf
     const { transformModel } = graphModel
     const { SCALE_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } = transformModel
-    // offset值加10，保证图形不会紧贴着下载图片的左边和上边
     ;(copy.lastChild as SVGGElement).style.transform = `matrix(1, 0, 0, 1, ${
-      (-offsetX + TRANSLATE_X) * (1 / SCALE_X) + 10
-    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) + 10})`
+      (-offsetX + TRANSLATE_X) * (1 / SCALE_X)
+    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y)})`
+    // 包含所有元素的最小宽高
     const bboxWidth = Math.ceil(bbox.width / SCALE_X)
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y)
-    // width,height 值加40，保证图形不会紧贴着下载图片的右边和下边
     canvas.style.width = `${bboxWidth}px`
     canvas.style.height = `${bboxHeight}px`
-    canvas.width = bboxWidth * dpr + 80
-    canvas.height = bboxHeight * dpr + 80
+    // width,height 值默认加padding 40，保证图形不会紧贴着下载图片
+    canvas.width = bboxWidth * dpr + padding * 2
+    canvas.height = bboxHeight * dpr + padding * 2
     const ctx = canvas.getContext('2d')
     if (ctx) {
+      // 清空canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.scale(dpr, dpr)
       // 如果有背景色，设置流程图导出的背景色
       if (backgroundColor) {
         ctx.fillStyle = backgroundColor
-        ctx.fillRect(0, 0, bboxWidth * dpr + 80, bboxHeight * dpr + 80)
+        ctx.fillRect(
+          0,
+          0,
+          bboxWidth * dpr + padding * 2,
+          bboxHeight * dpr + padding * 2,
+        )
       } else {
-        ctx.clearRect(0, 0, bboxWidth, bboxHeight)
+        ctx.clearRect(
+          0,
+          0,
+          bboxWidth * dpr + padding * 2,
+          bboxHeight * dpr + padding * 2,
+        )
       }
     }
     const img = new Image()
@@ -238,28 +294,77 @@ export class Snapshot {
     return new Promise((resolve) => {
       img.onload = () => {
         const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
+        // 重新复制canvas 用于在不裁剪原canvas的基础上通过拉伸方式达到自定义宽高目的
+        const copyCanvas = (
+          originCanvas: HTMLCanvasElement,
+          targetWidth: number,
+          targetHeight: number,
+        ): HTMLCanvasElement => {
+          const newCanvas = document.createElement('canvas')
+          newCanvas.width = targetWidth
+          newCanvas.height = targetHeight
+          const newCtx = newCanvas.getContext('2d')
+          if (newCtx) {
+            newCtx.drawImage(
+              canvas,
+              0,
+              0,
+              originCanvas.width,
+              originCanvas.height,
+              0,
+              0,
+              targetWidth,
+              targetHeight,
+            )
+          }
+          return newCanvas
+        }
         try {
           if (isFirefox) {
             createImageBitmap(img, {
-              resizeWidth: canvas.width,
-              resizeHeight: canvas.height,
+              resizeWidth:
+                width && height
+                  ? copyCanvas(canvas, width, height).width
+                  : canvas.width,
+              resizeHeight:
+                width && height
+                  ? copyCanvas(canvas, width, height).height
+                  : canvas.height,
             }).then((imageBitmap) => {
               // 在回调函数中使用 drawImage() 方法绘制图像
-              ctx?.drawImage(imageBitmap, 0, 0)
-              resolve(canvas)
+              ctx?.drawImage(
+                imageBitmap,
+                padding / dpr,
+                padding / dpr,
+                canvas.height,
+                canvas.height,
+              )
+              resolve(
+                width && height ? copyCanvas(canvas, width, height) : canvas,
+              )
             })
           } else {
-            ctx?.drawImage(img, 0, 0)
-            resolve(canvas)
+            ctx?.drawImage(
+              img,
+              padding / dpr,
+              padding / dpr,
+              canvas.width,
+              canvas.height,
+            )
+            resolve(
+              width && height ? copyCanvas(canvas, width, height) : canvas,
+            )
           }
+          // 如果局部渲染本来是开启的，继续开启
+          partial && this.lf.graphModel.setPartial(true)
         } catch (e) {
-          ctx?.drawImage(img, 0, 0)
-          resolve(canvas)
+          ctx?.drawImage(img, padding / dpr, padding / dpr)
+          resolve(width && height ? copyCanvas(canvas, width, height) : canvas)
         }
       }
       /*
       因为svg中存在dom存放在foreignObject元素中
-      SVG图形转成img对象
+      svg dom => Base64编码字符串 挂载到img上
       todo: 会导致一些清晰度问题这个需要再解决
       fixme: XMLSerializer的中的css background url不会下载图片
       */
