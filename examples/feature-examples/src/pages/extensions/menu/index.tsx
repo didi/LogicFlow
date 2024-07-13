@@ -98,7 +98,7 @@ const data = {
   ],
   edges: [
     {
-      type: 'polyline',
+      // type: 'polyline',
       sourceNodeId: '1',
       targetNodeId: '2',
     },
