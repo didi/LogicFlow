@@ -73,46 +73,58 @@ const lf = new LogicFlow({
   plugins: [Menu],
 });
 // Append options to the menu (must be set before lf.render())
+// we can use `lf.addMenuConfig` to add menu options as other options
 lf.extension.menu.addMenuConfig({
   nodeMenu: [
     {
-      text: "share",
+      text: '分享',
       callback() {
-        alert("share success！");
+        alert('分享成功！')
       },
     },
     {
-      text: "properties",
-      callback(node: any) {
+      text: '属性',
+      callback(node: NodeData) {
         alert(`
-          nodeId：${node.id}
-          nodeType：${node.type}
-          nodeCoordinate：(x: ${node.x}, y: ${node.y})`);
+              节点id：${node.id}
+              节点类型：${node.type}
+              节点坐标：(x: ${node.x}, y: ${node.y})
+            `)
       },
     },
   ],
   edgeMenu: [
     {
-      text: "properties",
-      callback(edge: any) {
+      text: '属性',
+      callback(edge: EdgeData) {
+        const {
+          id,
+          type,
+          startPoint,
+          endPoint,
+          sourceNodeId,
+          targetNodeId,
+        } = edge
         alert(`
-          edgeId：${edge.id}
-          edgeType：${edge.type}
-          edgeCoordinate：(x: ${edge.x}, y: ${edge.y})
-          sourceNodeId：${edge.sourceNodeId}
-          targetNodeId：${edge.targetNodeId}`);
+              边id：${id}
+              边类型：${type}
+              边起点坐标：(startPoint: [${startPoint.x}, ${startPoint.y}])
+              边终点坐标：(endPoint: [${endPoint.x}, ${endPoint.y}])
+              源节点id：${sourceNodeId}
+              目标节点id：${targetNodeId}
+            `)
       },
     },
   ],
   graphMenu: [
     {
-      text: "share",
+      text: '分享',
       callback() {
-        alert("share success!");
+        alert('分享成功！')
       },
     },
   ],
-});
+})
 lf.render();
 ```
 
