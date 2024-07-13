@@ -135,7 +135,8 @@ export default function SnapshotExample() {
         grid: {
           size: 20,
         },
-        plugins: [Snapshot as any],
+        stopMoveGraph: false,
+        plugins: [Snapshot],
       })
       lf.register(ImageNode)
 
@@ -146,6 +147,7 @@ export default function SnapshotExample() {
         },
       )
       lf.render(data)
+      lf.fitView()
       lfRef.current = lf
     }
   }, [])
