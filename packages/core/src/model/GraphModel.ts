@@ -420,8 +420,11 @@ export class GraphModel {
       this.nodes = []
     }
     if (graphData.edges) {
+      const currEdgeType = this.edgeType
       this.edges = map(graphData.edges, (edge) => {
-        const Model = this.getModel(edge.type ?? '') as BaseEdgeModelCtor
+        const Model = this.getModel(
+          edge.type ?? currEdgeType,
+        ) as BaseEdgeModelCtor
         if (!Model) {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
