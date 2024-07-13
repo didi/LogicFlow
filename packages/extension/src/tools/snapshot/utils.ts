@@ -142,20 +142,13 @@ export function copyCanvas(
   originCanvas: HTMLCanvasElement,
   targetWidth: number,
   targetHeight: number,
-  padding: number,
-  dpr: number,
 ): HTMLCanvasElement {
   const newCanvas = document.createElement('canvas')
   newCanvas.width = targetWidth
   newCanvas.height = targetHeight
-
-  const scaleX = originCanvas.width / targetWidth
-  const scaleY = originCanvas.height / targetHeight
-  console.log(padding, dpr, scaleX, scaleY)
-
   const newCtx = newCanvas.getContext('2d')
   if (newCtx) {
-    // TODO: 自定义宽高时 padding异常
+    // 注意: 自定义宽高时，可能会拉伸图形，这时候padding也会被拉伸导致不准确
     newCtx.drawImage(
       originCanvas,
       0,
