@@ -142,6 +142,11 @@ export default defineConfig({
           name: 'NodeSelection 插件',
           component: './extensions/node-selection',
         },
+        {
+          path: '/extension/snapshot',
+          name: 'Snapshot 插件',
+          component: './extensions/snapshot',
+        },
       ],
     },
   ],

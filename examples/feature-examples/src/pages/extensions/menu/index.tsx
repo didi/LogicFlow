@@ -8,6 +8,9 @@ import styles from './index.less'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 
+import EdgeData = LogicFlow.EdgeData
+import NodeData = LogicFlow.NodeData
+
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
@@ -93,6 +96,13 @@ const data = {
       text: 'html节点',
     },
   ],
+  edges: [
+    {
+      // type: 'polyline',
+      sourceNodeId: '1',
+      targetNodeId: '2',
+    },
+  ],
 }
 
 export default function MenuExtension() {
@@ -110,6 +120,58 @@ export default function MenuExtension() {
           size: 10,
         },
         plugins: [Menu],
+      })
+
+      lf.addMenuConfig({
+        nodeMenu: [
+          {
+            text: '分享',
+            callback() {
+              alert('分享成功！')
+            },
+          },
+          {
+            text: '属性',
+            callback(node: NodeData) {
+              alert(`
+                节点id：${node.id}
+                节点类型：${node.type}
+                节点坐标：(x: ${node.x}, y: ${node.y})
+              `)
+            },
+          },
+        ],
+        edgeMenu: [
+          {
+            text: '属性',
+            callback(edge: EdgeData) {
+              const {
+                id,
+                type,
+                startPoint,
+                endPoint,
+                sourceNodeId,
+                targetNodeId,
+              } = edge
+              alert(`
+                边id：${id}
+                边类型：${type}
+                边起点坐标：(startPoint: [${startPoint.x}, ${startPoint.y}])
+                边终点坐标：(endPoint: [${endPoint.x}, ${endPoint.y}])
+                源节点id：${sourceNodeId}
+                目标节点id：${targetNodeId}
+              `)
+            },
+          },
+        ],
+        graphMenu: [
+          {
+            text: '分享',
+            callback() {
+              alert('分享成功！')
+            },
+          },
+        ],
       })
 
       lf.render(data)

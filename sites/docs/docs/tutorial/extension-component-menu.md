@@ -65,57 +65,69 @@ LogicFlow.use(Menu);
 通过`lf.extension.menu.addMenuConfig`方法可以在原有菜单的基础上追加新的选项，具体配置示例如下：
 
 ```jsx | purex | pure
-import LogicFlow from "@logicflow/core";
-import { Menu } from "@logicflow/extension";
+import LogicFlow from '@logicflow/core'
+import { Menu } from '@logicflow/extension'
 
 // 实例化 Logic Flow
 const lf = new LogicFlow({
-  container: document.getElementById("app"),
+  container: document.getElementById('app'),
   // 注册组件
   plugins: [Menu],
-});
+})
 // 为菜单追加选项（必须在 lf.render() 之前设置）
+// 或者直接通过 lf.addMenuConfig 也可以调用
 lf.extension.menu.addMenuConfig({
   nodeMenu: [
     {
-      text: "分享",
+      text: '分享',
       callback() {
-        alert("分享成功！");
+        alert('分享成功！')
       },
     },
     {
-      text: "属性",
-      callback(node: any) {
+      text: '属性',
+      callback(node: NodeData) {
         alert(`
-          节点id：${node.id}
-          节点类型：${node.type}
-          节点坐标：(x: ${node.x}, y: ${node.y})`);
+              节点id：${node.id}
+              节点类型：${node.type}
+              节点坐标：(x: ${node.x}, y: ${node.y})
+            `)
       },
     },
   ],
   edgeMenu: [
     {
-      text: "属性",
-      callback(edge: any) {
+      text: '属性',
+      callback(edge: EdgeData) {
+        const {
+          id,
+          type,
+          startPoint,
+          endPoint,
+          sourceNodeId,
+          targetNodeId,
+        } = edge
         alert(`
-          边id：${edge.id}
-          边类型：${edge.type}
-          边坐标：(x: ${edge.x}, y: ${edge.y})
-          源节点id：${edge.sourceNodeId}
-          目标节点id：${edge.targetNodeId}`);
+              边id：${id}
+              边类型：${type}
+              边起点坐标：(startPoint: [${startPoint.x}, ${startPoint.y}])
+              边终点坐标：(endPoint: [${endPoint.x}, ${endPoint.y}])
+              源节点id：${sourceNodeId}
+              目标节点id：${targetNodeId}
+            `)
       },
     },
   ],
   graphMenu: [
     {
-      text: "分享",
+      text: '分享',
       callback() {
-        alert("分享成功！");
+        alert('分享成功！')
       },
     },
   ],
-});
-lf.render();
+})
+lf.render()
 ```
 
 ## 重置菜单
