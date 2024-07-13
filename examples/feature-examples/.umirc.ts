@@ -55,26 +55,6 @@ export default defineConfig({
       ],
     },
     {
-      path: '/react',
-      name: 'react node registry',
-      routes: [
-        {
-          path: 'react',
-          redirect: 'react/custom',
-        },
-        {
-          path: '/react/custom',
-          name: '自定义 React 节点',
-          component: './react',
-        },
-        {
-          path: '/react/portal',
-          name: 'React Portal节点',
-          component: './react/Portal',
-        },
-      ],
-    },
-    {
       path: '/custom-edges',
       name: 'custom edges',
       routes: [
@@ -91,6 +71,26 @@ export default defineConfig({
           path: '/custom-edges/curved-polyline',
           name: '圆角折线',
           component: './edges/custom/curved-polyline',
+        },
+      ],
+    },
+    {
+      path: '/react',
+      name: 'react node registry',
+      routes: [
+        {
+          path: 'react',
+          redirect: 'react/custom',
+        },
+        {
+          path: '/react/custom',
+          name: '自定义 React 节点',
+          component: './react',
+        },
+        {
+          path: '/react/portal',
+          name: 'React Portal节点',
+          component: './react/Portal',
         },
       ],
     },
