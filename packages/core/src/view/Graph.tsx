@@ -83,7 +83,7 @@ class Graph extends Component<IGraphProps> {
     const grid = options.grid && Grid.getGridOptions(options.grid)
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
-
+    graphModel.eventCenter.emit('graph: partialRendered', { isRendered: true })
     return (
       <div className="lf-graph" flow-id={graphModel.flowId}>
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>

@@ -2,8 +2,8 @@ export default {
   nodes: [
     {
       type: 'uml',
-      x: 100,
-      y: 100,
+      x: 0,
+      y: 0,
       id: 'uml_1',
       properties: {
         name: 'haod',
@@ -12,36 +12,39 @@ export default {
     },
     {
       type: 'rect',
-      x: 300,
-      y: 200,
+      x: 150,
+      y: 0,
       text: {
         value: '你好',
-        x: 300,
-        y: 200,
+        x: 150,
+        y: 0,
       },
       id: 'rect_1',
     },
     {
       type: 'rect',
-      x: 500,
-      y: 300,
+      x: 400,
+      y: 100,
       text: {
         value: '你好2',
-        x: 500,
-        y: 300,
+        x: 400,
+        y: 100,
       },
       id: 'rect_2',
     },
     {
-      type: 'rect',
-      x: 700,
-      y: 300,
-      text: {
-        value: '你好3',
-        x: 700,
-        y: 300,
-      },
-      id: 'rect_3',
+      id: '3',
+      type: 'image',
+      x: 550,
+      y: 100,
+      text: '云',
+    },
+    {
+      id: '5',
+      type: 'image',
+      x: 350,
+      y: 250,
+      text: '菱形',
     },
   ],
   edges: [
@@ -50,6 +53,12 @@ export default {
       type: 'polyline',
       sourceNodeId: 'rect_1',
       targetNodeId: 'rect_2',
+    },
+    {
+      id: 'e_3',
+      type: 'polyline',
+      sourceNodeId: '4',
+      targetNodeId: '5',
     },
   ],
 }

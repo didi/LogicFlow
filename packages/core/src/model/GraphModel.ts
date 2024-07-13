@@ -1487,6 +1487,21 @@ export class GraphModel {
     const edgeModel = this.getEdgeModelById(edgeId)
     edgeModel?.closeEdgeAnimation()
   }
+
+  /**
+   * 设置是否开启局部渲染模式，返回重新渲染后promise
+   * @param partial boolean
+   * @returns Promise<boolean>
+   */
+  @action setPartial(partial: boolean): Promise<boolean> {
+    this.partial = partial
+    return new Promise((resolve, reject) => {
+      this.eventCenter.on('graph: partialRendered', ({ isRendered }) => {
+        isRendered ? resolve(isRendered) : reject(isRendered)
+        this.eventCenter.off('graph: partialRendered')
+      })
+    })
+  }
 }
 
 export namespace GraphModel {
