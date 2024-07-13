@@ -17,15 +17,11 @@ import ImageNode from './imageNode'
 import Uml from './uml'
 import data from './data'
 
-import styles from './index.less'
+import './index.less'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 
 const config: Partial<LogicFlow.Options> = {
-  isSilentMode: false,
-  stopScrollGraph: false,
-  stopZoomGraph: false,
-  stopMoveGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -58,12 +54,6 @@ const config: Partial<LogicFlow.Options> = {
   },
 }
 
-interface SnapshotResponse {
-  data: Blob
-  width: number
-  height: number
-}
-
 /**
  * 框选插件 Snapshot 示例
  */
@@ -76,6 +66,7 @@ export default function SnapshotExample() {
   const [width, setWidth] = useState<string>() // 宽度
   const [height, setHeight] = useState<string>() // 高度
   const [padding, setPaddding] = useState<string>() //padding
+  const [quality, setQuality] = useState<string>() // 图片质量
 
   const [blobData, setBlobData] = useState('')
   const [base64Data, setBase64Data] = useState('')
@@ -92,13 +83,6 @@ export default function SnapshotExample() {
       lf.register(Uml)
       lf.register(ImageNode)
 
-      lf.on(
-        'selection:selected-area',
-        ({ topLeft, bottomRight }: Record<string, LogicFlow.PointTuple>) => {
-          console.log('get selection area:', topLeft, bottomRight)
-        },
-      )
-
       lf.setPatternItems([
         {
           type: 'circle',
@@ -114,7 +98,9 @@ export default function SnapshotExample() {
         },
       ])
 
-      lf.extension.snapshot.useGlobalRules = false
+      // 默认开启css样式
+      lf.extension.snapshot.useGlobalRules = true
+      // 不会覆盖css样式，会叠加，customCssRules优先级高
       lf.extension.snapshot.customCssRules = `
           .uml-wrapper {
             line-height: 1.2;
@@ -130,17 +116,27 @@ export default function SnapshotExample() {
     }
   }, [])
 
-  const handleGetSnapshot = () => {
-    if (lfRef.current) {
-      lfRef.current.getSnapshot()
+  // 下载
+  const downLoad = () => {
+    const params = {
+      fileType,
+      backgroundColor: 'yellow',
+      partialElement: true,
+      ...(width ? { width: Number(width) } : {}),
+      ...(height ? { height: Number(height) } : {}),
+      ...(padding ? { padding: Number(padding) } : {}),
+      ...(quality ? { quality: Number(quality) } : {}),
     }
+    console.log(params, 'params')
+    lfRef.current && lfRef.current.getSnapshot(fileName, params)
   }
 
-  const handlePreviewSnapshotBlob = () => {
+  // 预览 blob
+  const previewBlob = () => {
     if (lfRef.current) {
       setBase64Data('')
       lfRef.current
-        .getSnapshotBlob('#FFFFFF')
+        .getSnapshotBlob('#FFFFFF', fileType)
         .then(
           ({
             data,
@@ -158,7 +154,8 @@ export default function SnapshotExample() {
     }
   }
 
-  const handlePreviewSnapshotBase64 = () => {
+  // 预览 base64
+  const previewBase64 = () => {
     if (lfRef.current) {
       setBlobData('')
       lfRef.current
@@ -179,123 +176,74 @@ export default function SnapshotExample() {
         )
     }
   }
-  // 下载
-  const downLoad = () => {
-    lfRef.current &&
-      lfRef.current.getSnapshot(fileName, {
-        fileType,
-        height: height,
-        padding: padding,
-        backgroundColor: 'yellow',
-        partialElement: true,
-        ...(width ? { width } : {}),
-        ...(height ? { height } : {}),
-        ...(padding ? { padding } : {}),
-      })
-  }
-
-  // 预览
-  // const preview = () => {
-  //   lfRef.current &&
-  //     lfRef.current
-  //       .getSnapshotBlob('#FFFFFF', fileType)
-  //       .then(({ data }: SnapshotResponse) => {
-  //         if (imgRef.current) {
-  //           imgRef.current.width = 500
-  //           imgRef.current.height = 400
-  //           imgRef.current.src = window.URL.createObjectURL(data)
-  //         }
-  //       })
-  // }
-
-  // 打印base64地址
-  const logBase64 = () => {
-    lfRef.current &&
-      lfRef.current
-        .getSnapshotBase64(undefined, fileType)
-        .then(({ data, width, height }: SnapshotResponse) => {
-          // document.getElementById('img').src = data
-          console.log(width, height, data)
-        })
-  }
 
   return (
     <Card title="LogicFlow Extension - Snapshot">
-      <div style={{ marginBottom: '10px' }}>
-        <Space>
-          <span>文件名：</span>
-          <Input
-            placeholder="文件名"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-          />
-          <span>文件类型(默认png)：</span>
-          <Select
-            defaultValue={fileType}
-            style={{ width: 120 }}
-            onChange={(value) => setFileType(value)}
-            options={[
-              { value: 'png', label: 'png' },
-              { value: 'jpeg', label: 'jpeg' },
-              { value: 'webp', label: 'webp' },
-              { value: 'gif', label: 'gif' },
-            ]}
-          />
-          <span>宽度</span>
-          <Input
-            placeholder="width"
-            value={width}
-            onChange={(e) => setWidth(e.target.value)}
-          />
-          <span>高度</span>
-          <Input
-            placeholder="height"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-          />
-          <span>padding</span>
-          <Input
-            placeholder="padding"
-            value={padding}
-            onChange={(e) => setPaddding(e.target.value)}
-          />
-          <Button id="download" onClick={downLoad}>
-            下载快照
-          </Button>
-        </Space>
-      </div>
-      <Divider />
       <Space>
-        {/* <Button id="preview" onClick={preview}>
-          预览
-        </Button> */}
-        <Button id="base64" onClick={logBase64}>
-          打印base64
-        </Button>
+        <Input
+          addonBefore="文件名："
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+        />
+        <span>文件类型：</span>
+        <Select
+          defaultValue={fileType}
+          style={{ width: 120 }}
+          onChange={(value) => setFileType(value)}
+          options={[
+            { value: 'png', label: 'png' },
+            { value: 'jpeg', label: 'jpeg' },
+            { value: 'webp', label: 'webp' },
+            { value: 'gif', label: 'gif' },
+            { value: 'svg', label: 'svg' },
+          ]}
+        />
+        <Input
+          addonBefore="宽度："
+          value={width}
+          onChange={(e) => setWidth(e.target.value)}
+        />
+        <Input
+          addonBefore="高度："
+          value={height}
+          onChange={(e) => setHeight(e.target.value)}
+        />
+      </Space>
+      <p></p>
+      <Space>
+        <Input
+          addonBefore="padding："
+          value={padding}
+          onChange={(e) => setPaddding(e.target.value)}
+        />
+        <Input
+          addonBefore="图片质量："
+          value={quality}
+          onChange={(e) => setQuality(e.target.value)}
+        />
       </Space>
       <Divider />
-      <Flex wrap="wrap" gap="middle" align="center" justify="space-between">
-        <Space>
-          <Button onClick={handleGetSnapshot}>下载快照</Button>
-          <Button onClick={handlePreviewSnapshotBlob}>预览(blob)</Button>
-          <Button onClick={handlePreviewSnapshotBase64}>预览(base64)</Button>
-        </Space>
+      <Space>
+        <Button onClick={downLoad}>下载快照</Button>
+        <Button onClick={previewBlob}>预览(blob)</Button>
+        <Button onClick={previewBase64}>预览(base64)</Button>
+      </Space>
+      <Divider />
+      <Flex align="center" justify="center">
+        <div ref={containerRef} className="graph"></div>
       </Flex>
       <Row>
-        <Col span={12}>
-          <div ref={containerRef} id="graph" className={styles.viewport}></div>
-        </Col>
         <Col span={12}>
           {blobData && (
             <>
               <h2>blobData</h2>
-              <img key="blob" src={blobData} className={styles.preview} />
+              <img key="blob" src={blobData} />
             </>
           )}
           {base64Data && (
             <>
               <h2>base64Data</h2>
-              <img key="base64" src={base64Data} className={styles.preview} />
+              <img key="base64" src={base64Data} />
             </>
           )}
         </Col>
