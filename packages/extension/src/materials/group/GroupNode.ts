@@ -22,10 +22,6 @@ export class GroupNodeModel extends RectResizeModel {
    */
   isRestrict?: boolean
   /**
-   * 分组节点是否允许调整大小。
-   */
-  resizable?: boolean
-  /**
    * 分组节点是否允许折叠
    */
   foldable?: boolean

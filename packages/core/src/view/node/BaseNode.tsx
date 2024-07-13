@@ -1,6 +1,6 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map } from 'lodash-es'
+import { map, merge } from 'lodash-es'
 import Anchor from '../Anchor'
 import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
@@ -116,9 +116,18 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
 
   getRotateControl() {
     const { model, graphModel } = this.props
-    const { isSelected, isHitable, enableRotate, isHovered } = model
+    const {
+      editConfigModel: { isSilentMode, allowRotate },
+    } = graphModel
+    const { isSelected, isHitable, rotatable, isHovered } = model
+
+    // 合并全局 allResize 和节点自身的 resizable 配置，以节点配置高于全局配置
+    const { canRotate } = merge(
+      { canRotate: allowRotate },
+      { canRotate: rotatable },
+    )
     const style = model.getRotateControlStyle()
-    if (isHitable && (isSelected || isHovered) && enableRotate) {
+    if (!isSilentMode && isHitable && (isSelected || isHovered) && canRotate) {
       return (
         <RotateControlPoint
           graphModel={graphModel}
@@ -132,9 +141,18 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
 
   getResizeControl(): h.JSX.Element | null {
     const { model, graphModel } = this.props
-    const { isSelected, isHitable, enableResize, isHovered } = model
+    const {
+      editConfigModel: { isSilentMode, allowResize },
+    } = graphModel
+    const { isSelected, isHitable, resizable, isHovered } = model
+
+    // 合并全局 allResize 和节点自身的 resizable 配置，以节点配置高于全局配置
+    const { canResize } = merge(
+      { canResize: allowResize },
+      { canResize: resizable },
+    )
     const style = model.getResizeControlStyle()
-    if (isHitable && (isSelected || isHovered) && enableResize) {
+    if (!isSilentMode && isHitable && (isSelected || isHovered) && canResize) {
       return (
         <ResizeControlGroup
           style={style}
@@ -305,6 +323,11 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     const { model } = this.props
     model.isDragging = false
   }
+  onMouseOut = (ev: MouseEvent) => {
+    if (isIe) {
+      this.setHoverOff(ev)
+    }
+  }
 
   handleMouseUp = () => {
     const { model } = this.props
@@ -404,7 +427,6 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     }
   }
 
-  // 为什么将hover状态放到model中？
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverOn = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
@@ -427,12 +449,6 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       data: nodeData,
       e: ev,
     })
-  }
-
-  onMouseOut = (ev: MouseEvent) => {
-    if (isIe) {
-      this.setHoverOff(ev)
-    }
   }
 
   /**
