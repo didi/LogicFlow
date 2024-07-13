@@ -39,15 +39,15 @@ const lf = new LogicFlow({
 
 <code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
 
-`nodes`: 包含所有的节点。每个节点的数据属性详见 <a href="../api/nodeModelApi.md#数据属性">nodeModel</a> 。
+**`nodes`**: 包含所有的节点。每个节点的数据属性详见 <a href="../api/nodeModelApi.md#数据属性">nodeModel</a> 。
 
-`edges`: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个边的数据属性详见  <a href="../api/edgeModelApi.md#数据属性">edgeModel</a>。
+**`edges`**: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId` 将两个节点相连。每个边的数据属性详见  <a href="../api/edgeModelApi.md#数据属性">edgeModel</a>。
 
-`type`: 表示节点或者边的类型，这里的类型不仅可以是`rect`,`polyline`这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。
+**`type`**: 表示节点或者边的类型，这里的类型不仅可以是`rect`,`polyline`这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。
 
-`text`: `text`可以是节点文本，也可以是连线文本，如果是节点文本，默认自动采用节点坐标作为节点文本坐标，如果是连线文本，我们会基于不同的连线类型计算一个合适的坐标作为节点坐标。在有些应用场景下，我们的文本位置是可以改变的和拖动的，基于此，我们LogicFlow的文本数据提供坐标属性。
+**`text`**: `text`可以是节点文本，也可以是连线文本，如果是节点文本，默认自动采用节点坐标作为节点文本坐标，如果是连线文本，我们会基于不同的连线类型计算一个合适的坐标作为节点坐标。在有些应用场景下，我们的文本位置是可以改变的和拖动的，基于此，我们LogicFlow的文本数据提供坐标属性。
 
-`properties`: 每个节点和边都有properties属性，包含节点样式、形状属性和业务自定义属性（保留给具体业务场景使用的数据），比如节点自身的形状属性`width`,`height`,样式属性`style`和业务自定义属性`isPass`等。
+**`properties`**: 每个节点和边都有properties属性，包含节点样式、形状属性和业务自定义属性（保留给具体业务场景使用的数据），比如节点自身的形状属性`width`,`height`,样式属性`style`和业务自定义属性`isPass`等。
 
 ## 图渲染
 

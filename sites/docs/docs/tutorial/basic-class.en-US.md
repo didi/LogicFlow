@@ -38,16 +38,16 @@ Inside LogicFlow, we think of a flowchart as a graph consisting of nodes and edg
 
 <code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
 
-`nodes`: Contains all nodes. Each node's data attributes are detailed in the <a href="../api/nodeModelApi.en-US.md#DataAttributes">nodeModel</a>.
+**`nodes`**: Contains all nodes. Each node's data attributes are detailed in the <a href="../api/nodeModelApi.en-US.md#DataAttributes">nodeModel</a>.
 
-`edges`: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`. Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en-US.md#DataAttributes">EdgeModel</a>.
+**`edges`**: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`. Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en-US.md#DataAttributes">EdgeModel</a>.
 
 
-`type`: Indicates the type of node or edge, which can be a basic type built into LogicFlow such as `rect` or `polyline`, or a custom type defined by users based on these basic types.
+**`type`**: Indicates the type of node or edge, which can be a basic type built into LogicFlow such as `rect` or `polyline`, or a custom type defined by users based on these basic types.
 
-`text`: `text` can represent either node text or edge text. For node text, the node coordinates are automatically used as the text coordinates. For edge text, an appropriate coordinate is computed based on the type of edge. In some scenarios, text positions can be adjusted and dragged. Therefore, our text data in LogicFlow provides coordinate attributes.
+**`text`**: `text` can represent either node text or edge text. For node text, the node coordinates are automatically used as the text coordinates. For edge text, an appropriate coordinate is computed based on the type of edge. In some scenarios, text positions can be adjusted and dragged. Therefore, our text data in LogicFlow provides coordinate attributes.
 
-`properties`: Each node and edge has properties including node style, shape attributes, and business-specific properties reserved for particular business scenarios. Examples include node shape attributes like `width` and `height`, `style` attributes, and business-specific properties like `isPass`.
+**`properties`**: Each node and edge has properties including node style, shape attributes, and business-specific properties reserved for particular business scenarios. Examples include node shape attributes like `width` and `height`, `style` attributes, and business-specific properties like `isPass`.
 
 ## Diagram Rendering
 
