@@ -101,8 +101,9 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable isHittable = true // 细粒度控制节点是否对用户操作进行反应
   @observable draggable = true
   @observable visible = true
-  @observable enableRotate = true
-  @observable enableResize = true
+
+  @observable rotatable = true
+  @observable resizable = true
 
   // 其它属性
   graphModel: GraphModel
@@ -188,8 +189,8 @@ export class BaseNodeModel implements IBaseNodeModel {
 
     this.formatText(data)
     // 在下面又将 NodeConfig 中的数据赋值给了 this，应该会触发 setAttributes，确认是否符合预期
-    assign(this, pickNodeConfig(data)) // TODO: 确认 constructor 中赋值 properties 是否必要
-
+    // TODO: 确认 constructor 中赋值 properties 是否必要，此处将 NodeConfig 中所有属性赋值给 this，包括 rotate、rotatable，resizable 等
+    assign(this, pickNodeConfig(data))
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex()
@@ -743,12 +744,12 @@ export class BaseNodeModel implements IBaseNodeModel {
     this.isShowAnchor = flag
   }
 
-  @action setEnableRotate(flag = true): void {
-    this.enableRotate = flag
+  @action setRotatable(flag = true): void {
+    this.rotatable = flag
   }
 
-  @action setEnableResize(flag = true): void {
-    this.enableResize = flag
+  @action setResizable(flag = true): void {
+    this.resizable = flag
   }
 
   @action setHitable(flag = true): void {

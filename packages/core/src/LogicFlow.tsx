@@ -1541,6 +1541,9 @@ export namespace LogicFlow {
     virtual?: boolean // 是否虚拟节点
     rotate?: number
 
+    rotatable?: boolean // 节点是否可旋转
+    resizable?: boolean // 节点是否可缩放
+
     [key: string]: any
   }
 
