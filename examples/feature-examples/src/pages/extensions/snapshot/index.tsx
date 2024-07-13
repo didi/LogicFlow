@@ -3,11 +3,11 @@ import { Snapshot } from '@logicflow/extension'
 
 import { Button, Card, Col, Divider, Flex, Row, Space } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import styles from './index.less'
+import ImageNode from './imageNode'
 
+import styles from './index.less'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
-import ImageNode from './ImageNode'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
