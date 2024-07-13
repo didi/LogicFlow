@@ -71,7 +71,7 @@ export namespace Options {
     allowRotate?: boolean // 允许节点旋转
     allowResize?: boolean // 是否允许缩放
 
-    isSilentMode?: boolean
+    isSilentMode?: boolean // 是否为静默模式：可以简单理解为“只读”模式，这种模式下，画布中的节点和边不可移动，不可进行文案修改，没有锚点。
     stopScrollGraph?: boolean
     stopZoomGraph?: boolean
     stopMoveGraph?:

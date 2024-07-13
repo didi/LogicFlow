@@ -143,6 +143,11 @@ export default defineConfig({
           component: './extensions/node-selection',
         },
         {
+          path: '/extension/highlight',
+          name: 'Highlight 插件',
+          component: './extensions/highlight',
+        },
+        {
           path: '/extension/snapshot',
           name: 'Snapshot 插件',
           component: './extensions/snapshot',
