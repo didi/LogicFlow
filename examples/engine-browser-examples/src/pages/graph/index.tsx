@@ -85,12 +85,15 @@ const data = {
     {
       id: 'custom-node-1',
       textMode: 'label',
+      type: 'rect',
       // rotate: 1.1722738811284763,
       text: {
         x: 600,
         y: 200,
         value: 'node-1',
       },
+      x: 600,
+      y: 200,
     },
     {
       id: 'custom-node-2',
@@ -98,10 +101,13 @@ const data = {
       x: 600,
       y: 300,
       textMode: 'label',
+      text: 'custom-node-2',
       label: ['22221', '22222', '22223'],
       properties: {
         LabelOptions: {
           multiple: true,
+          verticle: true,
+          // max: 4,
         },
       },
     },
@@ -144,13 +150,6 @@ const data = {
   ],
   edges: [
     {
-      id: 'custom-node-2',
-      text: 'node-2',
-      type: 'polygon',
-      x: 90,
-      y: 94,
-    },
-    {
       sourceNodeId: 'custom-node-2',
       targetNodeId: 'custom-node-3',
       type: 'bezier',
@@ -168,36 +167,40 @@ const data = {
         },
       },
     },
-    // {
-    //   sourceNodeId: 'custom-node-3',
-    //   targetNodeId: 'custom-node-1',
-    //   type: 'polyline',
-    //   properties: {
-    //     LabelOptions: {
-    //       multiple: true,
-    //       max: 3,
-    //     },
-    //   },
-    //   // text: 'polyline111',
-    //   textMode: 'label',
-    //   label: [
-    //     {
-    //       value: 'polyline3',
-    //       x: 620,
-    //       y: 90,
-    //     },
-    //     {
-    //       value: 'polyline4',
-    //       x: 520,
-    //       y: 90,
-    //     },
-    //     {
-    //       value: 'polyline5',
-    //       x: 620,
-    //       y: 50,
-    //     },
-    //   ],
-    // },
+    {
+      sourceNodeId: 'custom-node-3',
+      targetNodeId: 'custom-node-1',
+      type: 'polyline',
+      properties: {
+        LabelOptions: {
+          multiple: true,
+          max: 3,
+        },
+      },
+      // text: 'polyline111',
+      textMode: 'label',
+      label: [
+        'polyline3',
+        'polyline4',
+        // {
+        //   value: 'polyline3',
+        //   draggable: true,
+        //   editable: false,
+        //   x: 620,
+        //   y: 90,
+        // },
+        // {
+        //   value: 'polyline4',
+        //   x: 520,
+        //   y: 90,
+        // },
+        // {
+        //   value: 'polyline5',
+        //   x: 620,
+        //   y: 50,
+        // },
+      ],
+    },
   ],
 }
 
