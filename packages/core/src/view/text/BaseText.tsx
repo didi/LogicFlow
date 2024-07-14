@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { createElement as h, Component } from 'preact/compat'
-import { EventType } from '@logicflow/core'
-import { ElementState } from '../../constant'
+import { ElementState, EventType } from '../../constant'
 import { GraphModel, BaseNodeModel, BaseEdgeModel } from '../../model'
 import { Text } from '../shape'
 import { IDragParams, StepDrag } from '../../util'
