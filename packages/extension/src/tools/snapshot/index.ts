@@ -47,9 +47,8 @@ export class Snapshot {
       // 画布当前渲染模式和用户导出渲染模式不一致时，需要更新画布
       if (curPartial !== partial) {
         this.lf.graphModel.setPartial(partial)
-        this.lf.graphModel.eventCenter.on('graph:updated', async () => {
+        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
           await this.getSnapshot(fileName, toImageOptions)
-          this.lf.graphModel.eventCenter.off('graph:updated')
           // 恢复原来渲染模式
           this.lf.graphModel.setPartial(curPartial)
         })
