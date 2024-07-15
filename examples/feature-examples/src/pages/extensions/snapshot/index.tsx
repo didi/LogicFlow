@@ -71,6 +71,7 @@ export default function SnapshotExample() {
   const [fileType, setFileType] = useState<string>('png') // 下载的图片类型
   const [width, setWidth] = useState<number>() // 宽度
   const [height, setHeight] = useState<number>() // 高度
+  const [backgroundColor, setBackgroundColor] = useState<string>('white') // 背景颜色
   const [padding, setPadding] = useState<number>() //padding
   const [quality, setQuality] = useState<number>() // 图片质量
   const [partial, setPartial] = useState<boolean>(true) // 导出局部渲染
@@ -133,7 +134,7 @@ export default function SnapshotExample() {
   const downLoad = () => {
     const params: ToImageOptions = {
       fileType,
-      backgroundColor: 'yellow',
+      backgroundColor,
       partial,
       width,
       height,
@@ -149,7 +150,7 @@ export default function SnapshotExample() {
     if (lfRef.current) {
       setBase64Data('')
       lfRef.current
-        .getSnapshotBlob('#fff', fileType)
+        .getSnapshotBlob(backgroundColor, fileType)
         .then(
           ({
             data,
@@ -172,7 +173,7 @@ export default function SnapshotExample() {
     if (lfRef.current) {
       setBlobData('')
       lfRef.current
-        .getSnapshotBase64('#fff')
+        .getSnapshotBase64(backgroundColor)
         .then(
           ({
             data,
@@ -265,6 +266,11 @@ export default function SnapshotExample() {
       </Space>
       <p></p>
       <Space>
+        <Input
+          addonBefore="背景颜色"
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+        />
         <InputNumber
           addonBefore="padding："
           value={padding}

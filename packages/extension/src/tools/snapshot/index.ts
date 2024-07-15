@@ -1,19 +1,40 @@
 import LogicFlow from '@logicflow/core'
 import { updateImageSource, copyCanvas } from './utils'
 
-/**
- * 快照插件，生成视图
- */
-
 // 导出图片
 export type ToImageOptions = {
-  fileType?: string // 图片类型 默认是png 还有webp、gif、jpeg、svg
-  width?: number // 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形
-  height?: number // 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形
-  backgroundColor?: string // 图片背景，不设置背景默认透明
-  quality?: number // 图片质量，在指定图片格式为 image/jpeg 或 image/webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他参数会被忽略。
-  padding?: number // 图片内边距: 元素内容所在区之外空白空间，不设置默认有40的内边距
-  partial?: boolean // 导出时是否开启局部渲染，false：将导出画布上所有的元素，true：只导出画面区域内的可见元素
+  /**
+   * 导出图片的格式，可选值为：`png`、`webp`、`gif`、`jpeg`、`svg`，默认值为 `png`
+   */
+  fileType?: string
+  /**
+   * 导出图片的宽度，通常无需设置，设置后可能会拉伸图形
+   */
+  width?: number
+  /**
+   * 导出图片的高度，通常无需设置，设置后可能会拉伸图形
+   */
+  height?: number
+  /**
+   * 导出图片的背景色，默认为透明
+   */
+  backgroundColor?: string
+  /**
+   * 导出图片的质量。
+   *
+   * 在指定图片格式为 `jpeg` 或 `webp` 的情况下，可以从 0 到 1 的区间内选择图片的质量，如果超出取值范围，将会使用默认值 0.92。导出为其他格式的图片时，该参数会被忽略。
+   */
+  quality?: number
+  /**
+   * 导出图片的内边距，即元素内容所在区域边界与图片边界的距离，单位为像素，默认为 40
+   */
+  padding?: number
+  /**
+   * 导出图片时是否开启局部渲染
+   * - `false`：将导出画布上所有的元素
+   * - `true`：只导出画面区域内的可见元素
+   */
+  partial?: boolean
 }
 
 // Blob | base64
@@ -23,6 +44,9 @@ export type SnapshotResponse = {
   height: number
 }
 
+/**
+ * 快照插件，生成视图
+ */
 export class Snapshot {
   static pluginName = 'snapshot'
   lf: LogicFlow
@@ -99,7 +123,7 @@ export class Snapshot {
    * 删除锚点
    * @param element ChildNode
    */
-  private removeAnchor(element) {
+  private removeAnchor(element: ChildNode) {
     const { childNodes } = element
     let childLength = element.childNodes && element.childNodes.length
     for (let i = 0; i < childLength; i++) {
@@ -117,7 +141,7 @@ export class Snapshot {
    * 删除旋转按钮
    * @param element
    */
-  private removeRotateControl(element) {
+  private removeRotateControl(element: ChildNode) {
     const { childNodes } = element
     let childLength = element.childNodes && element.childNodes.length
     for (let i = 0; i < childLength; i++) {
@@ -245,7 +269,7 @@ export class Snapshot {
   }
 
   /**
-   * 获取图片生成中中间产物canvas对象，用户转换为其他需要的格式
+   * 获取图片生成中间产物canvas对象，用户转换为其他需要的格式
    * @param svg Element
    * @param toImageOptions ToImageOptions
    * @returns Promise<HTMLCanvasElement>
@@ -255,33 +279,8 @@ export class Snapshot {
     toImageOptions: ToImageOptions,
   ): Promise<HTMLCanvasElement> {
     const { width, height, backgroundColor, padding = 40 } = toImageOptions
-    // const copy = this.cloneSvg(svg)
-    // TODO: question1:为什么用上面封装的cloneSvg代替下面的方式不行
-    const copy = svg.cloneNode(true)
-    const graph = copy.lastChild
-    let childLength = graph?.childNodes?.length
-    if (childLength) {
-      for (let i = 0; i < childLength; i++) {
-        const lfLayer = graph?.childNodes[i] as SVGGraphicsElement
-        // 只保留包含节点和边的基础图层进行下载，其他图层删除
-        const layerClassList =
-          lfLayer.classList && Array.from(lfLayer.classList)
-        if (layerClassList && layerClassList.indexOf('lf-base') < 0) {
-          graph?.removeChild(graph.childNodes[i])
-          childLength--
-          i--
-        } else {
-          // 删除锚点
-          const lfBase = graph?.childNodes[i]
-          lfBase &&
-            lfBase.childNodes.forEach((item) => {
-              const element = item as SVGGraphicsElement
-              this.removeAnchor(element.firstChild)
-              this.removeRotateControl(element.firstChild)
-            })
-        }
-      }
-    }
+    const copy = this.cloneSvg(svg, false)
+
     let dpr = window.devicePixelRatio || 1
     if (dpr < 1) {
       // https://github.com/didi/LogicFlow/issues/1222
@@ -339,7 +338,7 @@ export class Snapshot {
     }
 
     const img = new Image()
-    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
+
     // 设置css样式
     const style = document.createElement('style')
     style.innerHTML = this.getClassRules()
@@ -401,7 +400,7 @@ export class Snapshot {
    * @param svg Node
    * @returns
    */
-  private cloneSvg(svg: Element): Node {
+  private cloneSvg(svg: Element, addStyle: boolean = true): Node {
     const copy = svg.cloneNode(true)
     const graph = copy.lastChild
     let childLength = graph?.childNodes?.length
@@ -421,18 +420,20 @@ export class Snapshot {
           lfBase &&
             lfBase.childNodes.forEach((item) => {
               const element = item as SVGGraphicsElement
-              this.removeAnchor(element.firstChild)
-              this.removeRotateControl(element.firstChild)
+              this.removeAnchor(element.firstChild!)
+              this.removeRotateControl(element.firstChild!)
             })
         }
       }
     }
     // 设置css样式
-    const style = document.createElement('style')
-    style.innerHTML = this.getClassRules()
-    const foreignObject = document.createElement('foreignObject')
-    foreignObject.appendChild(style)
-    copy.appendChild(foreignObject)
+    if (addStyle) {
+      const style = document.createElement('style')
+      style.innerHTML = this.getClassRules()
+      const foreignObject = document.createElement('foreignObject')
+      foreignObject.appendChild(style)
+      copy.appendChild(foreignObject)
+    }
     return copy
   }
 }
