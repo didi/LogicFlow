@@ -1,12 +1,12 @@
 export default {
   nodes: [
     {
-      type: 'uml',
+      type: 'customHtml',
       x: 0,
       y: 50,
       id: 'uml_1',
       properties: {
-        name: 'haod',
+        name: 'hello',
         body: '哈哈哈哈',
       },
     },

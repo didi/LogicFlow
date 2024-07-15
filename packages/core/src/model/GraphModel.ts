@@ -1489,18 +1489,20 @@ export class GraphModel {
   }
 
   /**
-   * 设置是否开启局部渲染模式，返回重新渲染后promise
-   * @param partial boolean
-   * @returns Promise<boolean>
+   * 获取当前局部渲染模式
+   * @returns boolean
    */
-  @action setPartial(partial: boolean): Promise<boolean> {
+  getPartial(): boolean {
+    return this.partial
+  }
+
+  /**
+   * 设置是否开启局部渲染模式
+   * @param partial boolean
+   * @returns
+   */
+  @action setPartial(partial: boolean): void {
     this.partial = partial
-    return new Promise((resolve, reject) => {
-      this.eventCenter.on('graph: partialRendered', ({ isRendered }) => {
-        isRendered ? resolve(isRendered) : reject(isRendered)
-        this.eventCenter.off('graph: partialRendered')
-      })
-    })
   }
 }
 

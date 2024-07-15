@@ -13,7 +13,7 @@ export type ToImageOptions = {
   backgroundColor?: string // 图片背景，不设置背景默认透明
   quality?: number // 图片质量，在指定图片格式为 image/jpeg 或 image/webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他参数会被忽略。
   padding?: number // 图片内边距: 元素内容所在区之外空白空间，不设置默认有40的内边距
-  partialElement?: boolean // 开启局部渲染后，默认不会导出不在画布区域的元素，开启后，将会导出
+  partial?: boolean // 导出时是否开启局部渲染，false：将导出画布上所有的元素，true：只导出画面区域内的可见元素
 }
 
 // Blob | base64
@@ -25,7 +25,7 @@ export type SnapshotResponse = {
 
 export class Snapshot {
   static pluginName = 'snapshot'
-  lf: any
+  lf: LogicFlow
   offsetX?: number
   offsetY?: number
   fileName?: string // 默认是 logic-flow.当前时间戳
@@ -42,7 +42,22 @@ export class Snapshot {
       fileName?: string,
       toImageOptions?: ToImageOptions,
     ) => {
-      await this.getSnapshot(fileName, toImageOptions)
+      const curPartial = this.lf.graphModel.getPartial()
+      const { partial = curPartial } = toImageOptions ?? {}
+      // 画布当前渲染模式和用户导出渲染模式不一致时，需要更新画布
+      if (curPartial !== partial) {
+        this.lf.graphModel.setPartial(partial)
+        this.lf.graphModel.eventCenter.on('graph:updated', async () => {
+          await this.getSnapshot(fileName, toImageOptions)
+          this.lf.graphModel.eventCenter.off('graph:updated')
+          // TODO: 这里用这种方式会报错，不太理解 - fy
+          // this.lf.off('graph:updated')
+          // 恢复原来渲染模式
+          this.lf.graphModel.setPartial(curPartial)
+        })
+      } else {
+        await this.getSnapshot(fileName, toImageOptions)
+      }
     }
 
     /* 获取Blob对象，用户图片上传 */
@@ -133,7 +148,7 @@ export class Snapshot {
     const svg = this.getSvgRootElement(this.lf)
     await updateImageSource(svg as SVGElement)
     if (fileType === 'svg') {
-      const copy = await this.cloneSvg(svg, toImageOptions!)
+      const copy = this.cloneSvg(svg)
       const svgString = new XMLSerializer().serializeToString(copy)
       const blob = new Blob([svgString], {
         type: 'image/svg+xml;charset=utf-8',
@@ -242,18 +257,9 @@ export class Snapshot {
     svg: Element,
     toImageOptions: ToImageOptions,
   ): Promise<HTMLCanvasElement> {
-    const {
-      width,
-      height,
-      backgroundColor,
-      padding = 40,
-      partialElement,
-    } = toImageOptions
-    // const copy = await this.cloneSvg(svg, toImageOptions)
+    const { width, height, backgroundColor, padding = 40 } = toImageOptions
+    // const copy = this.cloneSvg(svg)
     // TODO: question1:为什么用上面封装的cloneSvg代替下面的方式不行
-    const partial = this.lf.graphModel.partial
-    // 如何开启局部渲染，并要导出全部元素，需要临时关闭局部渲染
-    partial && partialElement && (await this.lf.graphModel.setPartial(false))
     const copy = svg.cloneNode(true)
     const graph = copy.lastChild
     let childLength = graph?.childNodes?.length
@@ -302,9 +308,8 @@ export class Snapshot {
 
     const base = this.lf.graphModel.rootEl.querySelector('.lf-base')
     const bbox = (base as Element).getBoundingClientRect()
-    const layout = this.lf.container
-      .querySelector('.lf-canvas-overlay')
-      .getBoundingClientRect()
+    const layoutCanvas = this.lf.container.querySelector('.lf-canvas-overlay')!
+    const layout = layoutCanvas.getBoundingClientRect()
     const offsetX = bbox.x - layout.x
     const offsetY = bbox.y - layout.y
     const { graphModel } = this.lf
@@ -335,14 +340,15 @@ export class Snapshot {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
       }
     }
-    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
     // 设置css样式
-    const img = new Image()
     const style = document.createElement('style')
     style.innerHTML = this.getClassRules()
     const foreignObject = document.createElement('foreignObject')
     foreignObject.appendChild(style)
     copy.appendChild(foreignObject)
+    const img = new Image()
+    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
+
     return new Promise((resolve) => {
       img.onload = () => {
         const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
@@ -370,7 +376,7 @@ export class Snapshot {
             )
           }
           // 如果局部渲染本来是开启的，继续开启
-          partial && this.lf.graphModel.setPartial(true)
+          // partial && this.lf.graphModel.setPartial(true)
         } catch (e) {
           ctx?.drawImage(img, padding / dpr, padding / dpr)
           resolve(width && height ? copyCanvas(canvas, width, height) : canvas)
@@ -396,18 +402,10 @@ export class Snapshot {
 
   /**
    * 克隆并处理画布节点
-   * @param svg Element
-   * @param toImageOptions ToImageOptions
+   * @param svg Node
    * @returns
    */
-  private async cloneSvg(
-    svg: Element,
-    toImageOptions: ToImageOptions,
-  ): Promise<Node> {
-    const { partialElement } = toImageOptions
-    const partial = this.lf.graphModel.partial
-    // 如何开启局部渲染，并要导出全部元素，需要临时关闭局部渲染
-    partial && partialElement && (await this.lf.graphModel.setPartial(false))
+  private cloneSvg(svg: Element): Node {
     const copy = svg.cloneNode(true)
     const graph = copy.lastChild
     let childLength = graph?.childNodes?.length

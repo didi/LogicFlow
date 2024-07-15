@@ -20,6 +20,7 @@ import {
   BaseNodeModel,
   SnaplineModel,
 } from '../model'
+import { EventType } from '../constant'
 
 type IGraphProps = {
   getView: (type: string) => ComponentType<any> | undefined
@@ -43,6 +44,12 @@ class Graph extends Component<IGraphProps> {
 
   componentDidMount() {
     window.addEventListener('resize', throttle(this.handleResize, 200))
+  }
+
+  componentDidUpdate() {
+    this.props.graphModel.eventCenter.emit(EventType.GRAPH_UPDATED, {
+      data: this.props.graphModel,
+    })
   }
 
   componentWillUnmount() {
@@ -83,7 +90,6 @@ class Graph extends Component<IGraphProps> {
     const grid = options.grid && Grid.getGridOptions(options.grid)
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
-    graphModel.eventCenter.emit('graph: partialRendered', { isRendered: true })
     return (
       <div className="lf-graph" flow-id={graphModel.flowId}>
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>

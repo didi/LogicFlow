@@ -84,7 +84,7 @@ getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
 | backgroundColor | string | - | | 图片背景，不设置背景默认透明 |
 | quality | number | - | | 图片质量，在指定图片格式为 jpeg 或 webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他不合法参数会被忽略 |
 | padding | number | 40 | | 图片内边距: 元素内容所在区之外空白空间，不设置默认有40的内边距 |
-| partialElement | boolean | false |  |开启局部渲染后，默认不会导出已经移出画布区域的元素，开启后，将会导出 |
+| partial | boolean | - |  | 导出时是否开启局部渲染，false：将导出画布上所有的元素，true：只导出画面区域内的可见元素，不设置默认为lf实例身上partial值 |
 
 注意：
 -  `svg`目前暂不支持`width`，`height`， `backgroundColor`， `padding` 属性。
