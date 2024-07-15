@@ -199,7 +199,7 @@ export class Group {
     )
     return {
       nodesArray,
-      edgesArray: edgesDataArray.concat(filterEdgesDataArray),
+      edgesArray: edgesDataArray.concat(filterEdgesDataArray), // ??? what's this
     }
   }
 

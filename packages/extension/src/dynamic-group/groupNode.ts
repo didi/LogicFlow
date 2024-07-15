@@ -1,5 +1,6 @@
 import LogicFlow, {
   h,
+  Model,
   GraphModel,
   RectNode,
   ElementType,
@@ -12,6 +13,7 @@ import { forEach } from 'lodash-es'
 import NodeData = LogicFlow.NodeData
 import NodeConfig = LogicFlow.NodeConfig
 import EdgeConfig = LogicFlow.EdgeConfig
+import BoxBoundsPoint = Model.BoxBoundsPoint
 
 export interface IGroupNodeProps {
   model: GroupNodeModel
@@ -509,6 +511,29 @@ export class GroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    */
   toBack() {
     this.zIndex--
+  }
+
+  /**
+   * 判断矩形是否在分组节点范围内
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   */
+  isInnerGroup({ x1, y1, x2, y2 }: BoxBoundsPoint) {
+    return (
+      x1 >= this.x - this.width / 2 &&
+      x2 <= this.x + this.width / 2 &&
+      y1 >= this.y - this.height / 2 &&
+      y2 <= this.y + this.height / 2
+    )
+  }
+
+  isAllowMoveTo({ x1, y1, x2, y2 }: BoxBoundsPoint) {
+    return {
+      x: x1 >= this.x - this.width / 2 && x2 <= this.x + this.width / 2,
+      y: y1 >= this.y - this.height / 2 && y2 <= this.y + this.height / 2,
+    }
   }
 
   /**
