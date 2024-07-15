@@ -47,9 +47,7 @@ class Graph extends Component<IGraphProps> {
   }
 
   componentDidUpdate() {
-    this.props.graphModel.eventCenter.emit(EventType.GRAPH_UPDATED, {
-      data: this.props.graphModel,
-    })
+    this.props.graphModel.eventCenter.emit(EventType.GRAPH_UPDATED, {})
   }
 
   componentWillUnmount() {

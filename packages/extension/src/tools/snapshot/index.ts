@@ -50,8 +50,6 @@ export class Snapshot {
         this.lf.graphModel.eventCenter.on('graph:updated', async () => {
           await this.getSnapshot(fileName, toImageOptions)
           this.lf.graphModel.eventCenter.off('graph:updated')
-          // TODO: 这里用这种方式会报错，不太理解 - fy
-          // this.lf.off('graph:updated')
           // 恢复原来渲染模式
           this.lf.graphModel.setPartial(curPartial)
         })
@@ -82,10 +80,10 @@ export class Snapshot {
   }
 
   /**
-   * 通过 imgURI 下载图片
-   * @param imgURI
+   * 通过 imgUrl 下载图片
+   * @param imgUrl
    */
-  triggerDownload(imgURI?: string) {
+  triggerDownload(imgUrl: string) {
     const evt = new MouseEvent('click', {
       view: document.defaultView,
       bubbles: false,
@@ -93,7 +91,7 @@ export class Snapshot {
     })
     const a = document.createElement('a')
     a.setAttribute('download', this.fileName!)
-    a.setAttribute('href', imgURI!)
+    a.setAttribute('href', imgUrl)
     a.setAttribute('target', '_blank')
     a.dispatchEvent(evt)
   }
@@ -159,10 +157,10 @@ export class Snapshot {
       this.getCanvasData(svg, toImageOptions ?? {}).then(
         (canvas: HTMLCanvasElement) => {
           // canvas元素 => url   image/octet-stream: 确保所有浏览器都能正常下载
-          const imgURI = canvas
+          const imgUrl = canvas
             .toDataURL(`image/${fileType}`, quality)
             .replace(`image/${fileType}`, 'image/octet-stream')
-          this.triggerDownload(imgURI)
+          this.triggerDownload(imgUrl)
         },
       )
     }
@@ -340,15 +338,15 @@ export class Snapshot {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
       }
     }
+
+    const img = new Image()
+    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
     // 设置css样式
     const style = document.createElement('style')
     style.innerHTML = this.getClassRules()
     const foreignObject = document.createElement('foreignObject')
     foreignObject.appendChild(style)
     copy.appendChild(foreignObject)
-    const img = new Image()
-    // TODO: question1: 初步排查是css这块上移后不生效，但不知道为什么
-
     return new Promise((resolve) => {
       img.onload = () => {
         const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
@@ -386,7 +384,6 @@ export class Snapshot {
       /*
       因为svg中存在dom存放在foreignObject元素中
       svg dom => Base64编码字符串 挂载到img上
-      TODO: 会导致一些清晰度问题这个需要再解决
       fixme: XMLSerializer的中的css background url不会下载图片
       */
       const svg2Img = `data:image/svg+xml;charset=utf-8,${new XMLSerializer().serializeToString(
