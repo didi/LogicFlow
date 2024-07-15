@@ -27,16 +27,19 @@ import NodeConfig = LogicFlow.NodeConfig
 import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
 import CommonTheme = LogicFlow.CommonTheme
+import PropertiesType = LogicFlow.PropertiesType
 
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
 import PCTResizeParams = ResizeControl.PCTResizeParams
 
-export interface IBaseNodeModel extends Model.BaseModel {
+export interface IBaseNodeModel<P extends PropertiesType>
+  extends Model.BaseModel<P> {
   /**
    * model基础类型，固定为node
    */
   readonly BaseType: ElementType.NODE
+  properties: P
 
   isDragging: boolean
   isShowAnchor: boolean
@@ -45,7 +48,9 @@ export interface IBaseNodeModel extends Model.BaseModel {
   setIsShowAnchor: (isShowAnchor: boolean) => void
 }
 
-export class BaseNodeModel implements IBaseNodeModel {
+export class BaseNodeModel<P extends PropertiesType = PropertiesType>
+  implements IBaseNodeModel<P>
+{
   readonly BaseType = ElementType.NODE
   static BaseType: ElementType = ElementType.NODE
 
@@ -62,7 +67,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     draggable: false,
     editable: true,
   }
-  @observable properties: Record<string, unknown> = {}
+  @observable properties: P
   // 形状属性
   @observable private _width = 100
   public get width() {
@@ -139,9 +144,9 @@ export class BaseNodeModel implements IBaseNodeModel {
   hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: any // 支持用户自定义属性
 
-  constructor(data: NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
     this.graphModel = graphModel
-    this.properties = data.properties || {}
+    this.properties = data.properties ?? ({} as P)
 
     this.initNodeData(data)
     this.setAttributes()

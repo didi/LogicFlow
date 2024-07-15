@@ -7,7 +7,9 @@ export type ICircleNodeProps = {
   graphModel: GraphModel
 }
 
-export class CircleNode extends BaseNode<ICircleNodeProps> {
+export class CircleNode<
+  P extends ICircleNodeProps = ICircleNodeProps,
+> extends BaseNode<P> {
   getShape() {
     const { model } = this.props
     const { x, y, r } = model

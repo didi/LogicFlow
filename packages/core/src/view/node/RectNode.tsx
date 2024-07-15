@@ -8,7 +8,9 @@ export type IRectNodeProps = {
   graphModel: GraphModel
 }
 
-export class RectNode extends BaseNode<IRectNodeProps> {
+export class RectNode<
+  P extends IRectNodeProps = IRectNodeProps,
+> extends BaseNode<P> {
   getShape(): h.JSX.Element | null {
     const { model } = this.props
     const style = model.getNodeStyle()

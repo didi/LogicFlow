@@ -19,10 +19,12 @@ export type IPolygonNodeProperties = {
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
-  [key: string]: any
+  [key: string]: unknown
 }
 
-export class PolygonNodeModel extends BaseNodeModel {
+export class PolygonNodeModel<
+  P extends IPolygonNodeProperties = IPolygonNodeProperties,
+> extends BaseNodeModel<P> {
   modelType = ModelType.POLYGON_NODE
   @observable points: PointTuple[] = [
     [50, 0],
@@ -36,11 +38,11 @@ export class PolygonNodeModel extends BaseNodeModel {
     // [10, 78],
     // [160, 198], // 五角星
   ]
-  @observable properties: IPolygonNodeProperties = {}
+  // @observable properties: IPolygonNodeProperties = {}
 
-  constructor(data: NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
+    // this.properties = data.properties || {}
 
     this.setAttributes()
   }

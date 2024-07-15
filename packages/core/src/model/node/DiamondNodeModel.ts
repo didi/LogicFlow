@@ -18,18 +18,20 @@ export type IDiamondNodeProperties = {
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
-  [key: string]: any
+  [key: string]: unknown
 }
 
-export class DiamondNodeModel extends BaseNodeModel {
+export class DiamondNodeModel<
+  P extends IDiamondNodeProperties = IDiamondNodeProperties,
+> extends BaseNodeModel<P> {
   modelType = ModelType.DIAMOND_NODE
   @observable rx = 30
   @observable ry = 50
-  @observable properties: IDiamondNodeProperties = {}
+  // @observable properties: IDiamondNodeProperties = {}
 
-  constructor(data: NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
+    // this.properties = data.properties || {}
 
     this.setAttributes()
   }
