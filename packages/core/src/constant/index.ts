@@ -114,6 +114,7 @@ export enum EventType {
   TEXT_UPDATE = 'text:update',
   GRAPH_TRANSFORM = 'graph:transform',
   GRAPH_RENDERED = 'graph:rendered',
+  GRAPH_UPDATED = 'graph:updated',
 }
 
 export enum OverlapMode {

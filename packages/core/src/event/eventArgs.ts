@@ -282,6 +282,15 @@ interface CommonEventArgs {
      */
     data: GraphData
   }
+  /**
+   * 画布渲染数据更新后后触发，即改变画布上的属性，比如partial。
+   */
+  'graph:updated': {
+    /**
+     * 渲染后的画布数据
+     */
+    data: GraphData
+  }
 }
 
 type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =

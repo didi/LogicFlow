@@ -12,14 +12,19 @@ import {
   Space,
   Select,
   Input,
+  InputNumber,
+  Switch,
 } from 'antd'
 import ImageNode from './imageNode'
-import Uml from './uml'
+import CustomHtml from '../../../components/nodes/custom-html/Html'
 import data from './data'
+import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg'
 
 import './index.less'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
+
+import type { ToImageOptions } from '@logicflow/extension'
 
 const config: Partial<LogicFlow.Options> = {
   style: {
@@ -52,6 +57,7 @@ const config: Partial<LogicFlow.Options> = {
   grid: {
     size: 20,
   },
+  partial: true,
 }
 
 /**
@@ -63,10 +69,11 @@ export default function SnapshotExample() {
 
   const [fileName, setFileName] = useState<string>() // 文件名
   const [fileType, setFileType] = useState<string>('png') // 下载的图片类型
-  const [width, setWidth] = useState<string>() // 宽度
-  const [height, setHeight] = useState<string>() // 高度
-  const [padding, setPaddding] = useState<string>() //padding
-  const [quality, setQuality] = useState<string>() // 图片质量
+  const [width, setWidth] = useState<number>() // 宽度
+  const [height, setHeight] = useState<number>() // 高度
+  const [padding, setPadding] = useState<number>() //padding
+  const [quality, setQuality] = useState<number>() // 图片质量
+  const [partial, setPartial] = useState<boolean>(true) // 导出局部渲染
 
   const [blobData, setBlobData] = useState('')
   const [base64Data, setBase64Data] = useState('')
@@ -80,7 +87,7 @@ export default function SnapshotExample() {
         plugins: [Snapshot, DndPanel],
       })
 
-      lf.register(Uml)
+      lf.register(CustomHtml)
       lf.register(ImageNode)
 
       lf.setPatternItems([
@@ -88,15 +95,21 @@ export default function SnapshotExample() {
           type: 'circle',
           text: 'circle',
           label: 'circle',
-          icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAAH6ji2bAAAABGdBTUEAALGPC/xhBQAAAnBJREFUOBGdVL1rU1EcPfdGBddmaZLiEhdx1MHZQXApraCzQ7GKLgoRBxMfcRELuihWKcXFRcEWF8HBf0DdDCKYRZpnl7p0svLe9Zzbd29eQhTbC8nv+9zf130AT63jvooOGS8Vf9Nt5zxba7sXQwODfkWpkbjTQfCGUd9gIp3uuPP8bZ946g56dYQvnBg+b1HB8VIQmMFrazKcKSvFW2dQTxJnJdQ77urmXWOMBCmXM2Rke4S7UAW+/8ywwFoewmBps2tu7mbTdp8VMOkIRAkKfrVawalJTtIliclFbaOBqa0M2xImHeVIfd/nKAfVq/LGnPss5Kh00VEdSzfwnBXPUpmykNss4lUI9C1ga+8PNrBD5YeqRY2Zz8PhjooIbfJXjowvQJBqkmEkVnktWhwu2SM7SMx7Cj0N9IC0oQXRo8xwAGzQms+xrB/nNSUWVveI48ayrFGyC2+E2C+aWrZHXvOuz+CiV6iycWe1Rd1Q6+QUG07nb5SbPrL4426d+9E1axKjY3AoRrlEeSQo2Eu0T6BWAAr6COhTcWjRaYfKG5csnvytvUr/WY4rrPMB53Uo7jZRjXaG6/CFfNMaXEu75nG47X+oepU7PKJvvzGDY1YLSKHJrK7vFUwXKkaxwhCW3u+sDFMVrIju54RYYbFKpALZAo7sB6wcKyyrd+aBMryMT2gPyD6GsQoRFkGHr14TthZni9ck0z+Pnmee460mHXbRAypKNy3nuMdrWgVKj8YVV8E7PSzp1BZ9SJnJAsXdryw/h5ctboUVi4AFiCd+lQaYMw5z3LGTBKjLQOeUF35k89f58Vv/tGh+l+PE/wG0rgfIUbZK5AAAAABJRU5ErkJggg==',
+          icon: circleSvgUrl,
         },
         {
           type: 'rect',
           label: 'rect',
           text: 'circle',
-          icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAEFVwZaAAAABGdBTUEAALGPC/xhBQAAAqlJREFUOBF9VM9rE0EUfrMJNUKLihGbpLGtaCOIR8VjQMGDePCgCCIiCNqzCAp2MyYUCXhUtF5E0D+g1t48qAd7CCLqQUQKEWkStcEfVGlLdp/fm3aW2QQdyLzf33zz5m2IsAZ9XhDpyaaIZkTS4ASzK41TFao88GuJ3hsr2pAbipHxuSYyKRugagICGANkfFnNh3HeE2N0b3nN2cgnpcictw5veJIzxmDamSlxxQZicq/mflxhbaH8BLRbuRwNtZp0JAhoplVRUdzmCe/vO27wFuuA3S5qXruGdboy5/PRGFsbFGKo/haRtQHIrM83bVeTrOgNhZReWaYGnE4aUQgTJNvijJFF4jQ8BxJE5xfKatZWmZcTQ+BVgh7s8SgPlCkcec4mGTmieTP4xd7PcpIEg1TX6gdeLW8rTVMVLVvb7ctXoH0Cydl2QOPJBG21STE5OsnbweVYzAnD3A7PVILuY0yiiyDwSm2g441r6rMSgp6iK42yqroI2QoXeJVeA+YeZSa47gZdXaZWQKTrG93rukk/l2Al6Kzh5AZEl7dDQy+JjgFahQjRopSxPbrbvK7GRe9ePWBo1wcU7sYrFZtavXALwGw/7Dnc50urrHJuTPSoO2IMV3gUQGNg87IbSOIY9BpiT9HV7FCZ94nPXb3MSnwHn/FFFE1vG6DTby+r31KAkUktB3Qf6ikUPWxW1BkXSPQeMHHiW0+HAd2GelJsZz1OJegCxqzl+CLVHa/IibuHeJ1HAKzhuDR+ymNaRFM+4jU6UWKXorRmbyqkq/D76FffevwdCp+jN3UAN/C9JRVTDuOxC/oh+EdMnqIOrlYteKSfadVRGLJFJPSB/ti/6K8f0CNymg/iH2gO/f0DwE0yjAFO6l8JaR5j0VPwPwfaYHqOqrCI319WzwhwzNW/aQAAAABJRU5ErkJggg==',
+          icon: rectSvgUrl,
         },
       ])
+
+      lf.on('custom:button-click', (model: any) => {
+        lf.setProperties(model.id, {
+          body: 'LogicFlow',
+        })
+      })
 
       // 默认开启css样式
       lf.extension.snapshot.useGlobalRules = true
@@ -118,14 +131,14 @@ export default function SnapshotExample() {
 
   // 下载
   const downLoad = () => {
-    const params = {
+    const params: ToImageOptions = {
       fileType,
       backgroundColor: 'yellow',
-      partialElement: true,
-      ...(width ? { width: Number(width) } : {}),
-      ...(height ? { height: Number(height) } : {}),
-      ...(padding ? { padding: Number(padding) } : {}),
-      ...(quality ? { quality: Number(quality) } : {}),
+      partial,
+      width,
+      height,
+      padding,
+      quality,
     }
     console.log(params, 'params')
     lfRef.current && lfRef.current.getSnapshot(fileName, params)
@@ -177,6 +190,38 @@ export default function SnapshotExample() {
     }
   }
 
+  const handleWidthChange = (value: number | null | undefined) => {
+    if (value === null || value === undefined) {
+      setWidth(undefined) // 处理 null 或 undefined 的情况
+    } else {
+      setWidth(value) // 设置有效的数字值
+    }
+  }
+
+  const handleHeightChange = (value: number | null | undefined) => {
+    if (value === null || value === undefined) {
+      setHeight(undefined) // 处理 null 或 undefined 的情况
+    } else {
+      setHeight(value) // 设置有效的数字值
+    }
+  }
+
+  const handlePaddingChange = (value: number | null | undefined) => {
+    if (value === null || value === undefined) {
+      setPadding(undefined) // 处理 null 或 undefined 的情况
+    } else {
+      setPadding(value) // 设置有效的数字值
+    }
+  }
+
+  const handleQualityChange = (value: number | null | undefined) => {
+    if (value === null || value === undefined) {
+      setQuality(undefined) // 处理 null 或 undefined 的情况
+    } else {
+      setQuality(value) // 设置有效的数字值
+    }
+  }
+
   return (
     <Card title="LogicFlow Extension - Snapshot">
       <Space>
@@ -198,29 +243,31 @@ export default function SnapshotExample() {
             { value: 'svg', label: 'svg' },
           ]}
         />
-        <Input
+        <InputNumber
           addonBefore="宽度："
           value={width}
-          onChange={(e) => setWidth(e.target.value)}
+          onChange={handleWidthChange}
         />
-        <Input
+        <InputNumber
           addonBefore="高度："
           value={height}
-          onChange={(e) => setHeight(e.target.value)}
+          onChange={handleHeightChange}
         />
       </Space>
       <p></p>
       <Space>
-        <Input
+        <InputNumber
           addonBefore="padding："
           value={padding}
-          onChange={(e) => setPaddding(e.target.value)}
+          onChange={handlePaddingChange}
         />
-        <Input
+        <InputNumber
           addonBefore="图片质量："
           value={quality}
-          onChange={(e) => setQuality(e.target.value)}
+          onChange={handleQualityChange}
         />
+        <span>导出局部渲染：</span>
+        <Switch defaultChecked onChange={(partial) => setPartial(partial)} />
       </Space>
       <Divider />
       <Space>
