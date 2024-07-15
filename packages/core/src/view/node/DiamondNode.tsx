@@ -7,7 +7,9 @@ export type IDiamondNodeProps = {
   graphModel: GraphModel
 }
 
-export class DiamondNode extends BaseNode<IDiamondNodeProps> {
+export class DiamondNode<
+  P extends IDiamondNodeProps = IDiamondNodeProps,
+> extends BaseNode<P> {
   getShape() {
     const { model } = this.props
     const style = model.getNodeStyle()

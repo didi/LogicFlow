@@ -7,7 +7,9 @@ export type ITextNodeProps = {
   graphModel: GraphModel
 }
 
-export class TextNode extends BaseNode<ITextNodeProps> {
+export class TextNode<
+  P extends ITextNodeProps = ITextNodeProps,
+> extends BaseNode<P> {
   getBackground() {
     const { model } = this.props
     const style = model.getTextStyle()

@@ -3,7 +3,6 @@ import { Model } from '../BaseModel'
 import { ModelType } from '../../constant'
 
 import AnchorConfig = Model.AnchorConfig
-import { observable } from 'mobx'
 import LogicFlow from '../../LogicFlow'
 import GraphModel from '../GraphModel'
 
@@ -13,16 +12,18 @@ export type IHtmlNodeProperties = {
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
-  [key: string]: any
+  [key: string]: unknown
 }
 
-export class HtmlNodeModel extends BaseNodeModel {
+export class HtmlNodeModel<
+  P extends IHtmlNodeProperties = IHtmlNodeProperties,
+> extends BaseNodeModel<P> {
   modelType = ModelType.HTML_NODE
-  @observable properties: IHtmlNodeProperties = {}
+  // @observable properties: IHtmlNodeProperties = {}
 
-  constructor(data: LogicFlow.NodeConfig, graphModel: GraphModel) {
+  constructor(data: LogicFlow.NodeConfig<P>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
+    // this.properties = data.properties || {}
 
     this.setAttributes()
   }

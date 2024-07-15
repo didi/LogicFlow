@@ -7,7 +7,9 @@ export type IPolygonNodeProps = {
   graphModel: GraphModel
 }
 
-export class PolygonNode extends BaseNode<IPolygonNodeProps> {
+export class PolygonNode<
+  P extends IPolygonNodeProps = IPolygonNodeProps,
+> extends BaseNode<P> {
   getShape() {
     const { model } = this.props
     const { x, y, width, height, points } = model as PolygonNodeModel

@@ -18,9 +18,11 @@ export type ICircleNodeProperties = {
   [key: string]: any
 }
 
-export class CircleNodeModel extends BaseNodeModel {
+export class CircleNodeModel<
+  P extends ICircleNodeProperties = ICircleNodeProperties,
+> extends BaseNodeModel<P> {
   modelType = ModelType.CIRCLE_NODE
-  @observable properties: ICircleNodeProperties = {}
+  // @observable properties: ICircleNodeProperties = {}
   @observable r = 50
 
   @computed get width(): number {
@@ -31,9 +33,9 @@ export class CircleNodeModel extends BaseNodeModel {
     return this.r * 2
   }
 
-  constructor(data: NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
+    // this.properties = data.properties || {}
 
     this.setAttributes()
   }

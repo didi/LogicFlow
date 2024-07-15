@@ -7,7 +7,9 @@ export type IEllipseNodeProps = {
   graphModel: GraphModel
 }
 
-export class EllipseNode extends BaseNode<IEllipseNodeProps> {
+export class EllipseNode<
+  P extends IEllipseNodeProps = IEllipseNodeProps,
+> extends BaseNode<P> {
   getShape() {
     const { model } = this.props
     const style = model.getNodeStyle()
