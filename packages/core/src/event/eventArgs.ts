@@ -283,14 +283,11 @@ interface CommonEventArgs {
     data: GraphData
   }
   /**
-   * 画布渲染数据更新后后触发，即改变画布上的属性，比如partial。
+   * 画布重新更新后触发. 即 lf.render(graphData)方法被调用后或者改变画布（garphModel）上的属性后触发。
+   * 如果是主动修改某个特定属性导致画布更新，想要在画布更新后做一些操作，建议注册事件后在回调函数中及时注销该事件，或者使用once事件代替on事件。
+   * 因为其他属性也可能导致画布更新，触发该事件。
    */
-  'graph:updated': {
-    /**
-     * 渲染后的画布数据
-     */
-    data: GraphData
-  }
+  'graph:updated': Record<string, undefined>
 }
 
 type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =

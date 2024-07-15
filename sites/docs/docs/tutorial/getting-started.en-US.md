@@ -17,14 +17,23 @@ toc: content
 
 ```bash [npm]
 npm install @logicflow/core --save
+
+# extension package（No need to import when not using plugins）
+npm install @logicflow/extension --save
 ```
 
 ```bash [yarn]
 yarn add @logicflow/core
+
+# extension package（No need to import when not using plugins）
+yarn add @logicflow/extension
 ```
 
 ```bash [pnpm]
 pnpm add @logicflow/core
+
+# extension package（No need to import when not using plugins）
+pnpm add @logicflow/extension
 ```
 
 :::
@@ -38,8 +47,12 @@ pnpm add @logicflow/core
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
 
+<!-- Import extension package. -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/lib/style/index.min.css" />
+
 ```
-  The current latest version is 2.0.0-beta.2. For other versions, please check: https://www.jsdelivr.com/package/npm/@logicflow/core
+  The curren tversion is 2.0.0-beta.2. For other versions, please check: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">jsDelivr</a>
 
 ## Getting Started
 
