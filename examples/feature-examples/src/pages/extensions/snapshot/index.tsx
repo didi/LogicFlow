@@ -16,7 +16,7 @@ import {
   Switch,
 } from 'antd'
 import ImageNode from './imageNode'
-import CustomHtml from '../../../components/nodes/custom-html/Html'
+import CustomHtml from '@/components/nodes/custom-html/Html'
 import data from './data'
 import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg'
 
@@ -141,7 +141,7 @@ export default function SnapshotExample() {
       quality,
     }
     console.log(params, 'params')
-    lfRef.current && lfRef.current.getSnapshot(fileName, params)
+    lfRef.current?.getSnapshot(fileName, params)
   }
 
   // 预览 blob
@@ -172,7 +172,7 @@ export default function SnapshotExample() {
     if (lfRef.current) {
       setBlobData('')
       lfRef.current
-        .getSnapshotBase64('#FFFFFF')
+        .getSnapshotBase64('#fff')
         .then(
           ({
             data,
@@ -190,35 +190,44 @@ export default function SnapshotExample() {
     }
   }
 
-  const handleWidthChange = (value: number | null | undefined) => {
+  const handleInputChange = (
+    value: number | null | undefined,
+    prop: string,
+  ) => {
     if (value === null || value === undefined) {
-      setWidth(undefined) // 处理 null 或 undefined 的情况
+      switch (
+        prop // 处理 null 或 undefined 的情况
+      ) {
+        case 'width':
+          setWidth(undefined)
+          break
+        case 'height':
+          setHeight(undefined)
+          break
+        case 'padding':
+          setPadding(undefined)
+          break
+        case 'quality':
+          setQuality(undefined)
+          break
+      }
     } else {
-      setWidth(value) // 设置有效的数字值
-    }
-  }
-
-  const handleHeightChange = (value: number | null | undefined) => {
-    if (value === null || value === undefined) {
-      setHeight(undefined) // 处理 null 或 undefined 的情况
-    } else {
-      setHeight(value) // 设置有效的数字值
-    }
-  }
-
-  const handlePaddingChange = (value: number | null | undefined) => {
-    if (value === null || value === undefined) {
-      setPadding(undefined) // 处理 null 或 undefined 的情况
-    } else {
-      setPadding(value) // 设置有效的数字值
-    }
-  }
-
-  const handleQualityChange = (value: number | null | undefined) => {
-    if (value === null || value === undefined) {
-      setQuality(undefined) // 处理 null 或 undefined 的情况
-    } else {
-      setQuality(value) // 设置有效的数字值
+      switch (
+        prop // 设置有效的数字值
+      ) {
+        case 'width':
+          setWidth(value)
+          break
+        case 'height':
+          setHeight(value)
+          break
+        case 'padding':
+          setPadding(value)
+          break
+        case 'quality':
+          setQuality(value)
+          break
+      }
     }
   }
 
@@ -246,12 +255,12 @@ export default function SnapshotExample() {
         <InputNumber
           addonBefore="宽度："
           value={width}
-          onChange={handleWidthChange}
+          onChange={(value) => handleInputChange(value, 'width')}
         />
         <InputNumber
           addonBefore="高度："
           value={height}
-          onChange={handleHeightChange}
+          onChange={(value) => handleInputChange(value, 'height')}
         />
       </Space>
       <p></p>
@@ -259,12 +268,12 @@ export default function SnapshotExample() {
         <InputNumber
           addonBefore="padding："
           value={padding}
-          onChange={handlePaddingChange}
+          onChange={(value) => handleInputChange(value, 'padding')}
         />
         <InputNumber
           addonBefore="图片质量："
           value={quality}
-          onChange={handleQualityChange}
+          onChange={(value) => handleInputChange(value, 'quality')}
         />
         <span>导出局部渲染：</span>
         <Switch defaultChecked onChange={(partial) => setPartial(partial)} />

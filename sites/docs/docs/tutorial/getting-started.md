@@ -53,7 +53,7 @@ pnpm add @logicflow/extension
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/lib/style/index.min.css" />
 
 ```
-  当前最新版本是2.0.0-beta.2，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">jsDelivr</a>
+  当前引入的版本是2.0.0-beta.2，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">jsDelivr</a>
 
 ## 开始使用
 

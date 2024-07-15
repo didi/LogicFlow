@@ -108,6 +108,7 @@ The event object contains the following:
 | text:update       | Update text        | data        |
 | graph:transform   | Triggered when panning or zooming the canvas      | data        |
 | graph:rendered    | Triggered after the canvas renders data, i.e. after the lf.render(graphData) method is called. `Add in v1.1.0`| graphData   |
+| graph:updated   | Triggered after the canvas is updated. That is, it is triggered after the lf.render(graphData) method is called or after the properties on the canvas (graphModel) are changed. If the canvas is updated due to active modification of a property, and you want to do something after the canvas is updated, it is recommended to register the event and unregister the event in the callback function in time, or use the once event instead of the on event, because as other properties may also cause the canvas to update, trigger this event. `Add inv2.0.0`  | -|
 
 The event object contains the following:
 
