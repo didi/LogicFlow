@@ -150,12 +150,18 @@ export default function BPMNExtension() {
     }
   }, [])
 
-  const getGraphData = () => {}
+  const getGraphData = () => {
+    const graphData = lfRef.current?.getGraphRawData()
+    console.log('cur graph data:', graphData)
+  }
 
   const rerender = () => {}
 
   return (
-    <Card title="LogicFlow Extension - DndPanel" className="control-container">
+    <Card
+      title="LogicFlow Extension - DynamicGroup"
+      className="control-container"
+    >
       <Flex wrap="wrap" gap="small">
         <Button type="primary" key="getData" onClick={getGraphData}>
           获取数据

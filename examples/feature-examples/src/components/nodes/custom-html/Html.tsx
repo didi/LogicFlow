@@ -12,7 +12,7 @@ export type CustomProperties = {
 }
 
 class CustomHtmlNode extends HtmlNode {
-  setHtml(rootEl: HTMLElement) {
+  setHtml(rootEl: SVGForeignObjectElement) {
     const { properties } = this.props.model
 
     const el = document.createElement('div')
