@@ -1,6 +1,11 @@
 import { get } from 'lodash-es'
 import { h, PolygonNode, PolygonNodeModel } from '@logicflow/core'
 
+export type INodeSelectionProperties = {
+  strokeColor?: string | 'none'
+  node_selection_ids?: string[]
+}
+
 class NodeSelectionView extends PolygonNode {
   getLabelShape(): h.JSX.Element {
     const { id, x, y, width, height, properties } = this.props.model
@@ -74,7 +79,7 @@ class NodeSelectionView extends PolygonNode {
   }
 }
 
-class NodeSelectionModel extends PolygonNodeModel {
+class NodeSelectionModel extends PolygonNodeModel<INodeSelectionProperties> {
   d = 10
 
   initNodeData(data) {
