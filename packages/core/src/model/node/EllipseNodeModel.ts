@@ -16,18 +16,20 @@ export type IEllipseNodeProperties = {
   style?: LogicFlow.CommonTheme
   textStyle?: LogicFlow.CommonTheme
 
-  [key: string]: any
+  [key: string]: unknown
 }
 
-export class EllipseNodeModel extends BaseNodeModel {
+export class EllipseNodeModel<
+  P extends IEllipseNodeProperties = IEllipseNodeProperties,
+> extends BaseNodeModel<P> {
   modelType = ModelType.ELLIPSE_NODE
   @observable rx = 30
   @observable ry = 45
-  @observable properties: IEllipseNodeProperties = {}
+  // @observable properties: IEllipseNodeProperties = {}
 
-  constructor(data: NodeConfig, graphModel: GraphModel) {
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.properties = data.properties || {}
+    // this.properties = data.properties || {}
 
     this.setAttributes()
   }

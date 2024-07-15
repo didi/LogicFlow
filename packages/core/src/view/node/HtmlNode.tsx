@@ -7,7 +7,9 @@ export type IHtmlNodeProps = {
   graphModel: GraphModel
 }
 
-export class HtmlNode extends BaseNode<IHtmlNodeProps> {
+export class HtmlNode<
+  P extends IHtmlNodeProps = IHtmlNodeProps,
+> extends BaseNode<P> {
   ref = createRef()
   currentProperties?: string
   preProperties?: string

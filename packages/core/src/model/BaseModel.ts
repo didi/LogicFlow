@@ -4,6 +4,7 @@ import LogicFlow from '../LogicFlow'
 import { ElementState } from '../constant'
 
 export namespace Model {
+  import PropertiesType = LogicFlow.PropertiesType
   export type AdditionStateDataType = Record<string, unknown>
   export type PropertyType = Record<string, unknown>
   export type VectorType = [number, number]
@@ -87,7 +88,20 @@ export namespace Model {
     y1: number
   }
 
-  export interface BaseModel {
+  export interface BoxBounds {
+    x: number
+    y: number
+    width: number
+    height: number
+    minX: number
+    minY: number
+    maxX: number
+    maxY: number
+    centerX: number
+    centerY: number
+  }
+
+  export interface BaseModel<P extends PropertiesType = PropertiesType> {
     /**
      * 节点或边对应的 ID.
      *
@@ -140,8 +154,7 @@ export namespace Model {
      * 此属性控制的是第二种。节点和边在删除、调整的同时，其关联的文本也会对应删除、调整。
      */
     text: LogicFlow.TextConfig
-
-    properties: Record<string, unknown>
+    properties: P
 
     isSelected: boolean // 元素是否被选中
     isHovered: boolean // 鼠标是否悬停在元素上
