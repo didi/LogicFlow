@@ -149,7 +149,7 @@ export default function SnapshotExample() {
     if (lfRef.current) {
       setBase64Data('')
       lfRef.current
-        .getSnapshotBlob('#FFFFFF', fileType)
+        .getSnapshotBlob('#fff', fileType)
         .then(
           ({
             data,
