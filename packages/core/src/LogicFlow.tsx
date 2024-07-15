@@ -692,10 +692,7 @@ export class LogicFlow {
    * @param edges
    * @param distance
    */
-  addElements(
-    { nodes, edges }: GraphConfigData,
-    distance = 40,
-  ): GraphElements | undefined {
+  addElements({ nodes, edges }: GraphConfigData, distance = 40): GraphElements {
     // TODO: 1. 解决下面方法中 distance 传参缺未使用的问题；该方法在快捷键中有调用
     // TODO: 2. review 一下本函数代码逻辑，确认 nodeIdMap 的作用，看是否有优化的空间
     console.log('distance', distance)
