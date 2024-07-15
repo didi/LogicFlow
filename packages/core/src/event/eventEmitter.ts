@@ -74,10 +74,9 @@ export default class EventEmitter {
    */
   emit<T extends keyof EventArgs>(evts: T, eventArgs: CallbackArgs<T>): void
   emit<T extends string>(evts: T, eventArgs: CallbackArgs<T>): void
-  emit(evts: string, eventArgs: EventCallback) {
+  emit(evts: string, eventArgs?: EventCallback) {
     evts?.split(',').forEach((evt) => {
       const events = this._events[evt] || []
-      // TODO: 这是什么？？？ +1
       const wildcardEvents = this._events[WILDCARD] || []
       // 实际的处理 emit 方法
       const doEmit = (es: EventType[]) => {

@@ -135,8 +135,6 @@ export async function updateImageSource(node: HTMLElement | SVGElement) {
  * @param originCanvas HTMLCanvasElement
  * @param targetWidth number
  * @param targetHeight number
- * @param padding number
- * @param dpr number
  */
 export function copyCanvas(
   originCanvas: HTMLCanvasElement,
