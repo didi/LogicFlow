@@ -1,5 +1,4 @@
 import { createElement as h, Component } from 'preact/compat'
-import { isArray } from 'lodash-es'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, BaseEdgeModel, Model } from '../../model'
 import {
@@ -9,7 +8,7 @@ import {
   targetNodeInfo,
   NodeContaint,
 } from '../../util'
-import { ElementState, EventType, ModelType, TextMode } from '../../constant'
+import { ElementState, EventType, ModelType } from '../../constant'
 import Point = LogicFlow.Point
 import NodeData = LogicFlow.NodeData
 import AnchorConfig = Model.AnchorConfig
@@ -160,27 +159,22 @@ export class AdjustPoint extends Component<IProps, IState> {
         ? edgeModel.updateStartPoint({ x, y })
         : edgeModel.updateEndPoint({ x, y })
     }
-    // 移动边文本，分为两种情况
-    // 如果textMode === TEXT
-    if (
-      edgeModel.textMode === TextMode.TEXT &&
-      edgeModel.text.value &&
-      editConfigModel.adjustEdge
-    ) {
-      edgeModel.setText(
-        Object.assign({}, edgeModel.text, edgeModel.textPosition),
-      )
-    }
-    // 如果textMode === LABEL
-    if (
-      edgeModel.textMode === TextMode.LABEL &&
-      isArray(edgeModel.label) &&
-      editConfigModel.adjustEdge
-    ) {
-      edgeModel.label.forEach((item) => {
-        item.x += deltaX
-        item.y += deltaY
-      })
+    if (editConfigModel.adjustEdge) {
+      if (graphModel.useLabelText(this)) {
+        console.log('AdjustPoint')
+        graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+          model: {
+            relateId: edgeModel.id,
+            BaseType: edgeModel.BaseType,
+            deltaX,
+            deltaY,
+          },
+        })
+      } else {
+        edgeModel.setText(
+          Object.assign({}, edgeModel.text, edgeModel.textPosition),
+        )
+      }
     }
   }
   onDragEnd = ({ event }: Partial<IDragParams>) => {
@@ -210,7 +204,6 @@ export class AdjustPoint extends Component<IProps, IState> {
         if (pass) {
           const {
             text,
-            label,
             sourceAnchorId = '',
             targetAnchorId = '',
             ...rest
@@ -220,7 +213,6 @@ export class AdjustPoint extends Component<IProps, IState> {
             targetAnchorId,
             ...rest,
             text: text?.value || '',
-            label,
           }
           // 根据调整点是边的起点或重点，计算创建边需要的参数
           if (type === AdjustType.SOURCE) {
