@@ -127,7 +127,7 @@ export default function BPMNExtension() {
             // children: ["rect_3"],
             text: 'sub-process-1',
             properties: {
-              isFolded: true,
+              isFolded: false,
             },
           },
           // {
