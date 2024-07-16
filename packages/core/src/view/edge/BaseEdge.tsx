@@ -3,7 +3,7 @@ import { Circle } from '../shape'
 import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseEdgeModel, PolylineEdgeModel } from '../../model'
-import { ElementState, EventType, ModelType, TextMode } from '../../constant'
+import { ElementState, EventType, ModelType } from '../../constant'
 import {
   isMultipleSelect,
   getClosestPointOfPolyline,
@@ -384,22 +384,26 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       y: e.clientY,
     })
     if (isDoubleClick) {
-      const { editConfigModel, textEditElement } = graphModel
-      const { id, text, modelType, textMode } = model
+      const { editConfigModel, textEditElement, useLabelText } = graphModel
+      const { id, text, modelType } = model
       // 当前边正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === id) {
         graphModel.setElementStateById(id, ElementState.DEFAULT)
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (
-        editConfigModel.edgeTextEdit &&
-        (textMode === TextMode.LABEL ||
-          (textMode === TextMode.TEXT && text.editable))
-      ) {
-        model.setSelected(false)
-        graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
-        textMode === TextMode.LABEL &&
-          model.addLabel(position.canvasOverlayPosition)
+      if (editConfigModel.edgeTextEdit) {
+        if (useLabelText(edgeData)) {
+          graphModel.eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
+            model: edgeData,
+            e,
+            position: position.domOverlayPosition,
+          })
+          model.setSelected(false)
+          graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
+        } else if (text.editable) {
+          model.setSelected(false)
+          graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
+        }
       }
       if (modelType === ModelType.POLYLINE_EDGE) {
         const polylineEdgeModel = model as PolylineEdgeModel
@@ -464,7 +468,8 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    */
   render() {
     const {
-      model: { textMode, isSelected, isHitable, isShowAdjustPoint },
+      model: { isSelected, isHitable, isShowAdjustPoint },
+      graphModel: { useLabelText },
     } = this.props
     return (
       <g>
@@ -485,7 +490,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         >
           {this.getShape()}
           {this.getAppend()}
-          {textMode === TextMode.TEXT && this.getText()}
+          {!useLabelText(this.props.model) && this.getText()}
           {this.getArrow()}
         </g>
         {isShowAdjustPoint && isSelected ? this.getAdjustPoints() : ''}
