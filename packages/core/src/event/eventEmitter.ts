@@ -1,6 +1,6 @@
 import { EventArgs } from './eventArgs'
 
-export interface EventType<T extends string = string> {
+export type EventType<T extends string = string> = {
   readonly callback: EventCallback<T>
   readonly once: boolean
 }
