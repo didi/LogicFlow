@@ -1,9 +1,9 @@
-import { cloneDeep, isArray, get, isEmpty } from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { BaseEdgeModel } from '.'
 import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
-import { ModelType, SegmentDirection, TextMode } from '../../constant'
+import { EventType, ModelType, SegmentDirection } from '../../constant'
 import {
   isInNode,
   distance,
@@ -12,7 +12,6 @@ import {
   getCrossPointWithCircle,
   getCrossPointWithEllipse,
   getCrossPointWithPolygon,
-  getTextPositionOfPolyline,
   getPolylinePoints,
   getLongestEdge,
   getCrossPointInRect,
@@ -50,23 +49,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
 
   getTextPosition() {
     // 在文本为空的情况下，文本位置为双击位置
-    let textValue
-    if (this.textMode === TextMode.TEXT) {
-      textValue = this.text?.value
-    }
-    if (this.textMode === TextMode.LABEL && !isEmpty(this.label)) {
-      textValue = get(this.label, '0.value')
-    }
-    if (
-      this.dbClickPosition &&
-      (this.textMode === TextMode.LABEL ||
-        (this.textMode === TextMode.TEXT && !textValue))
-    ) {
+    if (this.dbClickPosition) {
       const { x, y } = this.dbClickPosition
-      return {
-        x,
-        y,
-      }
+      return { x, y }
     }
     // 文本不为空或者没有双击位置时，取最长边的中点作为文本位置
     const currentPositionList = points2PointsList(this.points)
@@ -450,16 +435,19 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     }
     this.updatePointsAfterDrag(draggingPointList)
     this.draggingPointList = draggingPointList
-    if (this.textMode === TextMode.TEXT && this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
-    } else if (this.textMode === TextMode.LABEL && isArray(this.label)) {
-      this.label = this.label.map((item) => {
-        const newPoint = getTextPositionOfPolyline(item, this.points)
-        return {
-          ...item,
-          ...newPoint,
-        }
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+          modelType: this.modelType,
+          points: this.points,
+          pointsList: this.pointsList,
+        },
       })
+    }
+    if (!this.graphModel.useLabelText(this) && this.text?.value) {
+      this.setText(Object.assign({}, this.text, this.textPosition))
     }
     return {
       start: Object.assign({}, pointsList[startIndex]),
@@ -593,16 +581,19 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.updatePointsAfterDrag(draggingPointList)
       this.draggingPointList = draggingPointList
     }
-    if (this.textMode === TextMode.TEXT && this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
-    } else if (this.textMode === TextMode.LABEL && isArray(this.label)) {
-      this.label = this.label.map((item) => {
-        const newPoint = getTextPositionOfPolyline(item, this.points)
-        return {
-          ...item,
-          ...newPoint,
-        }
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+          modelType: this.modelType,
+          points: this.points,
+          pointsList: this.pointsList,
+        },
       })
+    }
+    if (!this.graphModel.useLabelText(this) && this.text?.value) {
+      this.setText(Object.assign({}, this.text, this.textPosition))
     }
     return {
       start: Object.assign({}, pointsList[startIndex]),
