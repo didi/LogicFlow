@@ -1,7 +1,7 @@
 import { forEach, map } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+import { SelectionSelect, RichTextEditor, Label } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
-
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 import { combine, square, star, uml, user } from './nodes'
@@ -16,6 +16,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
+  stopMoveGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -47,6 +48,7 @@ const config: Partial<LogicFlow.Options> = {
       color: 'white',
     },
   },
+  plugins: [SelectionSelect, RichTextEditor, Label],
 }
 
 const customTheme: Partial<LogicFlow.Theme> = {
@@ -56,8 +58,9 @@ const customTheme: Partial<LogicFlow.Theme> = {
   // nodeText 样式设置
   nodeText: {
     overflowMode: 'ellipsis',
-    lineHeight: 1.5,
+    lineHeight: 1,
     fontSize: 13,
+    textWidth: 60,
   },
   edgeText: {
     overflowMode: 'ellipsis',
@@ -81,26 +84,124 @@ const data = {
   nodes: [
     {
       id: 'custom-node-1',
-      rotate: 1.1722738811284763,
+      textMode: 'label',
+      type: 'rect',
+      // rotate: 1.1722738811284763,
       text: {
         x: 600,
         y: 200,
         value: 'node-1',
       },
+      x: 600,
+      y: 200,
+    },
+    {
+      id: 'custom-node-2',
       type: 'rect',
       x: 600,
+      y: 300,
+      textMode: 'label',
+      text: 'custom-node-2',
+      properties: {
+        _label: ['22221', '22222', '22223'],
+        _labelOptions: {
+          multiple: true,
+          verticle: true,
+          // max: 4,
+        },
+      },
+    },
+    {
+      id: 'custom-node-3',
+      textMode: 'label',
+      // rotate: 1.1722738811284763,
+      type: 'rect',
+      x: 800,
+      y: 100,
+      properties: {
+        _label: [
+          {
+            value: '333331',
+            x: 800,
+            y: 50,
+          },
+          {
+            value: '333332',
+            x: 800,
+            y: 150,
+          },
+        ],
+      },
+    },
+    {
+      id: 'custom-node-4',
+      type: 'rect',
+      x: 800,
+      y: 300,
+    },
+    {
+      id: 'custom-node-5',
+      type: 'rect',
+      x: 1000,
       y: 200,
       properties: {
         width: 80,
         height: 120,
       },
     },
+  ],
+  edges: [
     {
-      id: 'custom-node-2',
-      text: 'node-2',
-      type: 'polygon',
-      x: 90,
-      y: 94,
+      sourceNodeId: 'custom-node-2',
+      targetNodeId: 'custom-node-3',
+      type: 'bezier',
+      text: 'bezier',
+    },
+    {
+      sourceNodeId: 'custom-node-3',
+      targetNodeId: 'custom-node-5',
+      type: 'bezier',
+      textMode: 'label',
+      properties: {
+        _label: ['label1', 'label2'],
+        _labelOptions: {
+          multiple: true,
+        },
+      },
+    },
+    {
+      sourceNodeId: 'custom-node-3',
+      targetNodeId: 'custom-node-1',
+      type: 'polyline',
+      properties: {
+        _label: [
+          'polyline3',
+          'polyline4',
+          // {
+          //   value: 'polyline3',
+          //   draggable: true,
+          //   editable: false,
+          //   x: 620,
+          //   y: 90,
+          // },
+          // {
+          //   value: 'polyline4',
+          //   x: 520,
+          //   y: 90,
+          // },
+          // {
+          //   value: 'polyline5',
+          //   x: 620,
+          //   y: 50,
+          // },
+        ],
+        _labelOptions: {
+          multiple: true,
+          max: 3,
+        },
+      },
+      // text: 'polyline111',
+      textMode: 'label',
     },
   ],
 }
@@ -108,7 +209,6 @@ const data = {
 export default function BasicNode() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
-
   const registerElements = (lf: LogicFlow) => {
     const elements: LogicFlow.RegisterConfig[] = [
       // edges
@@ -157,6 +257,7 @@ export default function BasicNode() {
         allowRotate: true,
         // allowResize: true,
         edgeTextEdit: true,
+        nodeLabelVerticle: true,
         keyboard: {
           enabled: true,
           // shortcuts: [
@@ -204,7 +305,6 @@ export default function BasicNode() {
       registerElements(lf)
       // 注册事件
       registerEvents(lf)
-
       lf.render(data)
       lfRef.current = lf
     }
