@@ -1,9 +1,12 @@
 import { isEmpty } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
+import { map } from 'lodash-es'
 import GraphModel from '../model/GraphModel'
 
 import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
+import NodeConfig = LogicFlow.NodeConfig
+import EdgeConfig = LogicFlow.EdgeConfig
 
 let selected: LogicFlow.GraphData | null = null
 
@@ -40,6 +43,70 @@ export function translateEdgeData(edgeData: EdgeData, distance: number) {
     edgeData.text.y += distance
   }
   return edgeData
+}
+
+export function transformNodeData(
+  nodeData: NodeData,
+  distance: number,
+): NodeConfig {
+  const { x, y, text } = nodeData
+  // 重新计算 text 的位置，保证粘贴后 text 位置和复制的原节点相对位置一致
+  const nextText = text
+    ? {
+        x: text.x + distance,
+        y: text.y + distance,
+        value: text.value,
+      }
+    : undefined
+
+  return {
+    ...nodeData,
+    id: '',
+    x: x + distance,
+    y: y + distance,
+    text: nextText,
+  }
+}
+
+export function transformEdgeData(
+  edgeData: EdgeData,
+  distance: number,
+): EdgeConfig {
+  const { startPoint, endPoint, pointsList, text, ...edgeConfig } = edgeData
+  // 清除原始边的 id
+  edgeConfig.id = ''
+
+  // 重新计算边的位置，包括 startPoint、endPoint、pointsList 以及 text
+  // TODO: 看这个是否可以提出一个通用方法，用于重新计算边的位置
+  const nextStartPoint = {
+    x: startPoint.x + distance,
+    y: startPoint.y + distance,
+  }
+  const nextEndPoint = {
+    x: endPoint.x + distance,
+    y: endPoint.y + distance,
+  }
+  const newPointsList: LogicFlow.Point[] = map(pointsList, (point) => {
+    return {
+      x: point.x + distance,
+      y: point.y + distance,
+    }
+  })
+  const nextText = text
+    ? {
+        ...text,
+        x: text.x + distance,
+        y: text.y + distance,
+      }
+    : undefined
+
+  return {
+    ...edgeConfig,
+    startPoint: nextStartPoint,
+    endPoint: nextEndPoint,
+    pointsList: newPointsList,
+    text: nextText,
+  }
 }
 
 const TRANSLATION_DISTANCE = 40

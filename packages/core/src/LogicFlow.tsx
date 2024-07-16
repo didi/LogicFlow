@@ -19,10 +19,9 @@ import { formatData } from './util'
 import { Dnd, snapline } from './view/behavior'
 import Tool from './tool'
 import History from './history'
-import Keyboard from './keyboard'
+import Keyboard, { initDefaultShortcut } from './keyboard'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
-import { initDefaultShortcut } from './keyboard/shortcut'
 
 import Extension = LogicFlow.Extension
 import ExtensionConfig = LogicFlow.ExtensionConfig
