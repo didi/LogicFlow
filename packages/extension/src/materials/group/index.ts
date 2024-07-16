@@ -508,6 +508,7 @@ export class Group {
         (node as GroupNodeModel).isInRange(bounds) &&
         node.id !== nodeData.id,
     )
+
     if (groups.length === 0) return
     if (groups.length === 1) return groups[0]
     let topGroup = groups[groups.length - 1]
