@@ -64,10 +64,10 @@ export namespace Model {
 
   // 定义边界数据结构，左上坐标 + 右下坐标定位一个矩形
   export type BoxBoundsPoint = {
-    x1: number // Left Top X
-    y1: number // Left Top Y
-    x2: number // Right Bottom X
-    y2: number // Right Bottom Y
+    minX: number // Left Top X
+    minY: number // Left Top Y
+    maxX: number // Right Bottom X
+    maxY: number // Right Bottom Ys
   }
 
   export type OutlineInfo = {
@@ -207,7 +207,6 @@ export namespace Model {
 
     getData: () => Record<string, unknown>
     getProperties: () => PropertyType
-    getLabelShape: () => HTMLElement | null
     setProperty: (key: string, val: unknown) => void
     setProperties: (properties: PropertyType) => void
     deleteProperty: (key: string) => void

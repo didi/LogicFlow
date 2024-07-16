@@ -18,7 +18,7 @@ import Point = LogicFlow.Point
 import Direction = LogicFlow.Direction
 import NodeConfig = LogicFlow.NodeConfig
 import LineSegment = LogicFlow.LineSegment
-import BBox = LogicFlow.BBox
+import BoxBoundsPoint = Model.BoxBoundsPoint
 import AnchorInfo = Model.AnchorInfo
 
 /* 获取所有锚点 */
@@ -148,7 +148,7 @@ export type NodeBBox = {
   height: number
   centerX: number
   centerY: number
-} & BBox
+} & BoxBoundsPoint
 
 /* 获取节点bbox */
 export const getNodeBBox = (node: BaseNodeModel): NodeBBox => {
@@ -410,7 +410,6 @@ export const pickNodeConfig = (data: NodeConfig): NodeConfig => {
     'y',
     'text',
     'label',
-    'textMode',
     'properties',
     'virtual', // 区域节点是否为dnd添加的虚拟节点
     'rotate',
@@ -536,47 +535,4 @@ export const formatAnchorConnectValidateData = (
     }
   }
   return data
-}
-/**
- * 根据文本坐标获取文本偏移百分比，用于节点缩放和移动时，文本新坐标的计算
- */
-export const getNodeTextDeltaPerent = (
-  point: Point,
-  nodePoint: Point,
-  width: number,
-  height: number,
-) => {
-  const { x, y } = point
-  const { x: nodeX, y: nodeY } = nodePoint
-  const startX = nodeX - width / 2
-  const startY = nodeY - height / 2
-  const endX = nodeX + width / 2
-  const endY = nodeY + height / 2
-  return {
-    xDeltaPercent: startX === endX ? 0.5 : (x - startX) / (endX - startX),
-    yDeltaPercent: startY === endY ? 0.5 : (y - startY) / (endY - startY),
-  }
-}
-
-export const pointPositionAfterRotate = (
-  point: Point,
-  angle: number,
-  center: Point,
-): Point => {
-  const radians = (Math.PI / 100) * angle
-  const cos = Math.cos(radians)
-  const sin = Math.sin(radians)
-
-  const translatedX = point.x - center.x
-  const translatedY = point.y - center.y
-
-  // Rotate point
-  const rotatedX = translatedX * cos - translatedY * sin
-  const rotatedY = translatedX * sin + translatedY * cos
-
-  // Translate point back
-  return {
-    x: rotatedX + center.x,
-    y: rotatedY + center.y,
-  }
 }

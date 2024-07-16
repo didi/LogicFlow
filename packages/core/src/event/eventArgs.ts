@@ -12,7 +12,6 @@ import EdgeData = LogicFlow.EdgeData
 import GraphData = LogicFlow.GraphData
 import AnchorConfig = Model.AnchorConfig
 import ClientPosition = LogicFlow.ClientPosition
-import LabelConfig = LogicFlow.LabelConfig
 
 type ClickEventArgs = {
   /**
@@ -43,19 +42,20 @@ type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
   T
 >
 
-type TextEventArgsPick<T extends 'data' | 'e' | 'model' | 'element'> = Pick<
+type TextEventArgsPick<
+  T extends 'data' | 'e' | 'model' | 'element' | 'position',
+> = Pick<
   {
     // 节点数据
-    data:
-      | LabelConfig
-      | LabelConfig[]
-      | { text: string; id?: string; type?: string }
+    data?: any
     // 原生鼠标事件对象
     e?: MouseEvent
     // 文本所在元素model
-    model?: NodeData | EdgeData
+    model?: NodeData | EdgeData | any
     // 文本dom
     element?: HTMLElement
+    // 文本位置
+    position?: { x: number; y: number }
   },
   T
 >
@@ -231,6 +231,52 @@ interface TextEventArgs {
   'text:delete': TextEventArgsPick<'data' | 'e' | 'model'>
   // 不允许增加文本
   'text:not-allowed-add': TextEventArgsPick<'data' | 'e' | 'model'>
+}
+
+/**
+ * label插件文本事件
+ */
+interface TextEventArgs {
+  // 鼠标按下文本
+  'label:mousedown': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 开始拖拽文本
+  'label:dragstart': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本拖拽
+  'label:drag': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本拖拽结束
+  'label:drop': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本单击
+  'label:click': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本双击
+  'label:dbclick': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本失焦
+  'label:blur': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  // 鼠标移动文本
+  'label:mousemove': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 鼠标抬起
+  'label:mouseup': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本获焦
+  'label:focus': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  // 文本新增
+  'label:add': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本更新
+  'label:update': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本清空
+  'label:clear': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本删除
+  'label:delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本新增
+  'label:should-add': TextEventArgsPick<'data' | 'e' | 'model' | 'position'>
+  // 文本批量新增
+  'label:batch-add': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本更新
+  'label:should-update': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本删除
+  'label:should-delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 文本批量删除
+  'label:batch-delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  // 不允许增加文本
+  'label:not-allowed-add': TextEventArgsPick<'data' | 'e' | 'model'>
 }
 
 /**

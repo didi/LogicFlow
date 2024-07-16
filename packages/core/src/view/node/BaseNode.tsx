@@ -1,11 +1,11 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map, reduce } from 'lodash-es'
+import { map } from 'lodash-es'
 import Anchor from '../Anchor'
 import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
-import { ElementState, EventType, TextMode } from '../../constant'
+import { ElementState, EventType } from '../../constant'
 import {
   StepDrag,
   snapToGrid,
@@ -149,7 +149,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props
     // label状态不展示文本
-    if (model.textMode === TextMode.LABEL) return null
+    if (graphModel.useLabelText(model)) return null
     // 文本被编辑的时候，显示编辑框，不显示文本。
     if (model.state === ElementState.TEXT_EDIT) {
       return null
@@ -337,7 +337,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return
 
-    const { editConfigModel } = graphModel
+    const { editConfigModel, useLabelText, eventCenter } = graphModel
     // 在multipleSelect tool禁用的情况下，允许取消选中节点
     const isMultiple = isMultipleSelect(e, editConfigModel)
     eventOptions.isMultiple = isMultiple
@@ -353,15 +353,16 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       if (editConfigModel.nodeTextEdit) {
-        if (
-          model.textMode === TextMode.LABEL ||
-          (model.textMode === TextMode.TEXT && model.text.editable)
-        ) {
+        if (useLabelText(model)) {
+          eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
+            model,
+            position: position.domOverlayPosition,
+          })
           model.setSelected(false)
           graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
-        }
-        if (model.textMode === TextMode.LABEL) {
-          model.addLabel(position.canvasOverlayPosition)
+        } else if (model.text.editable) {
+          model.setSelected(false)
+          graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
         }
       }
       graphModel.eventCenter.emit(EventType.NODE_DBCLICK, eventOptions)
@@ -420,18 +421,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     const nodeData = model.getData()
     // 文本focus时，关联的元素也需要高亮，所以元素失焦时还要判断下是否有文本处于focus状态
     if (!model.isHovered) return
-    let textIsFocus = false
-    if (model.textMode === TextMode.LABEL) {
-      textIsFocus = reduce(
-        model.label,
-        (result, value) => {
-          return result || !!value.isHovered
-        },
-        false,
-      )
-    }
-
-    model.setHovered(false && !textIsFocus)
+    model.setHovered(false)
     graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
       data: nodeData,
       e: ev,
@@ -464,14 +454,15 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       },
       gridSize,
       transformModel: { SCALE_X },
+      useLabelText,
     } = graphModel
-    const { isHitable, draggable, transform, textMode } = model
+    const { isHitable, draggable, transform } = model
     const { className = '', ...restAttributes } = model.getOuterGAttributes()
     const nodeShapeInner = (
       <g className="lf-node-content">
         <g transform={transform}>
           {this.getShape()}
-          {textMode === TextMode.TEXT && this.getText()}
+          {!useLabelText(model) && this.getText()}
           {allowRotate && this.getRotateControl()}
           {allowResize && this.getResizeControl()}
         </g>

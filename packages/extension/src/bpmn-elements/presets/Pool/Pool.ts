@@ -1,8 +1,7 @@
 /**
  * 泳道节点
  */
-import LogicFlow, { h } from '@logicflow/core'
-import { isArray } from 'lodash-es'
+import LogicFlow, { h, EventType } from '@logicflow/core'
 import { poolToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
 
@@ -23,25 +22,31 @@ export class HorizontalLaneModel extends GroupNodeModel {
     this.foldedWidth = 42
     this.resizable = true
     this.zIndex = 1
-    if (this.textMode === 'label' && isArray(this.label)) {
-      this.label.forEach((item) => {
-        item.editable = true
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        data: { editable: true },
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+        },
       })
     } else {
-      ;(this.text as TextConfig).editable = true
+      this.text.editable = true
     }
     this.toJSON = poolToJSON
   }
 
   setAttributes() {
-    if (this.textMode === 'label' && isArray(this.label)) {
-      this.label = this.label.map((item) => {
-        return {
-          ...item,
-          value: item.value || '泳池示例',
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        data: {
           x: this.x - this.width / 2 + 11,
           y: this.y,
-        }
+        },
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+        },
       })
       return
     }
