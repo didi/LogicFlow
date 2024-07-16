@@ -61,8 +61,9 @@ class RichTextEditor {
   enable: boolean = false
   editorOptions: any
   editor: MediumEditor | null = null
-  constructor({ lf }) {
-    this.enable = !lf.richTextConfig?.disabled
+  constructor({ lf, options }) {
+    this.enable = options.enable
+    lf.useRichText = true
     const defaultOption = {
       toolbar: {
         allowMultiParagraphSelection: true,
@@ -101,6 +102,9 @@ class RichTextEditor {
       disableEditing: true,
     }
     this.editorOptions = merge(defaultOption, lf.richTextConfig)
+    lf.on('rich-text:init', () => {
+      this.init()
+    })
   }
 
   init() {

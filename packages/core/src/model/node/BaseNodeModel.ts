@@ -1,15 +1,5 @@
 import { action, computed, isObservable, observable, toJS } from 'mobx'
-import {
-  assign,
-  cloneDeep,
-  has,
-  isNil,
-  findIndex,
-  isArray,
-  slice,
-  mapKeys,
-  isUndefined,
-} from 'lodash-es'
+import { assign, cloneDeep, has, isNil, mapKeys, isUndefined } from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -20,8 +10,6 @@ import {
   Matrix,
   pickNodeConfig,
   TranslateMatrix,
-  getNodeTextDeltaPerent,
-  pointPositionAfterRotate,
 } from '../../util'
 import {
   ElementState,
@@ -43,8 +31,6 @@ import CommonTheme = LogicFlow.CommonTheme
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
 import PCTResizeParams = ResizeControl.PCTResizeParams
-import LabelConfig = LogicFlow.LabelConfig
-import LabelOptions = LogicFlow.LabelOptions
 
 export interface IBaseNodeModel extends Model.BaseModel {
   /**
@@ -75,7 +61,6 @@ export class BaseNodeModel implements IBaseNodeModel {
     draggable: false,
     editable: true,
   }
-  @observable label: LabelConfig[] = []
   @observable properties: Record<string, unknown> = {}
   // 形状属性
   @observable private _width = 100
@@ -120,7 +105,6 @@ export class BaseNodeModel implements IBaseNodeModel {
 
   // 其它属性
   graphModel: GraphModel
-  textMode = TextMode.TEXT
   @observable zIndex = 1
   @observable state = ElementState.DEFAULT
   @observable autoToFront = true // 节点选中时是否自动置顶，默认为true.
@@ -136,18 +120,16 @@ export class BaseNodeModel implements IBaseNodeModel {
   set rotate(value: number) {
     this._rotate = value
     const { x = 0, y = 0 } = this
-    if (this.textMode === TextMode.LABEL) {
-      this.label = this.label.map((item) => {
-        const { x, y } = item
-        const { x: nodeX, y: nodeY } = this
-        const newPosition = pointPositionAfterRotate({ x, y }, this.rotate, {
-          x: nodeX,
-          y: nodeY,
-        })
-        return {
-          ...item,
-          ...newPosition,
-        }
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          relateId: this.id,
+          x,
+          y,
+          rotate: value,
+          updateRotate: true,
+          BaseType: this.BaseType,
+        },
       })
     }
     this.transform = new TranslateMatrix(-x, -y)
@@ -217,21 +199,20 @@ export class BaseNodeModel implements IBaseNodeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties.LabelOptions) {
+    if (!data.properties._labelOptions) {
       const {
         editConfigModel: { multipleNodeText, nodeLabelVerticle },
       } = this.graphModel
-      data.properties.LabelOptions = {
+      data.properties._labelOptions = {
         verticle: nodeLabelVerticle,
         multiple: multipleNodeText,
       }
     }
-    if (!data.textMode) {
-      data.textMode = nodeTextMode
+    if (!data.properties._textMode) {
+      data.properties._textMode = nodeTextMode
     }
-    if (data.textMode === TextMode.LABEL) {
-      this.formatLabel(data)
-    } else {
+    if (data.properties._textMode !== TextMode.LABEL) {
+      console.log('data.properties._textMode', data)
       this.formatText(data)
     }
     // 在下面又将 NodeConfig 中的数据赋值给了 this，应该会触发 setAttributes，确认是否符合预期
@@ -299,106 +280,6 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   /**
-   * 始化文本属性
-   */
-  private formatLabel(data): void {
-    const { LabelOptions } = data.properties
-    const defaultPosition = (index = 0) => {
-      /**
-       * 多文本在节点中的默认位置排列:
-       * 中心 -> 左上 -> 右上 -> 左下 -> 右下 -> 中间按y轴堆积
-       */
-      const width = data.properties.width || this.width
-      const height = data.properties.height || this.height
-      switch (index) {
-        case 0:
-          return {
-            x: data.x - 10, // 视图层div默认宽高是20
-            y: data.y + 20 * index - 10, //如果初始化了多个文本，则在y轴位置上累加
-          }
-        case 1:
-          return {
-            x: data.x - width / 2 - 10,
-            y: data.y - height / 2 - 10,
-          }
-        case 2:
-          return {
-            x: data.x + width / 2 - 10,
-            y: data.y - height / 2 - 10,
-          }
-        case 3:
-          return {
-            x: data.x - width / 2 - 10,
-            y: data.y + height / 2 - 10,
-          }
-        case 4:
-          return {
-            x: data.x + width / 2 - 10,
-            y: data.y + height / 2 - 10,
-          }
-        default:
-          return {
-            x: data.x - 10,
-            y: data.y + 20 * (index - 5) - 10,
-          }
-      }
-    }
-    if (!data.label || !isArray(data.label)) {
-      data.label = []
-      return
-    }
-    // multiple时，判断是否有max，有的话超出max的数据就不存入，没有max就不限制
-    // 非multiple时只取第一个作为对象给data.label
-    const labelList = data.label.map((item, index) => {
-      const defaultText = {
-        id: createUuid(),
-        relateId: data.id,
-        verticle: LabelOptions.virtical,
-        draggable: false,
-        editable: true,
-        isFocus: false,
-        ...defaultPosition(index),
-        ...getNodeTextDeltaPerent(
-          defaultPosition(index),
-          { x: this.x, y: this.y },
-          this.width,
-          this.height,
-        ),
-      }
-      if (typeof item === 'string') {
-        return {
-          ...defaultText,
-          value: item,
-          content: item,
-        }
-      }
-      return {
-        ...defaultText,
-        ...item,
-        content: item.content || item.value,
-        ...getNodeTextDeltaPerent(
-          item,
-          { x: this.x, y: this.y },
-          this.width,
-          this.height,
-        ),
-      }
-    })
-    if (!isNil(LabelOptions.max) && LabelOptions.max < labelList.length) {
-      console.warn('传入文案数量超出所设置最大值')
-    }
-    data.label = LabelOptions.multiple
-      ? slice(
-          labelList,
-          0,
-          isNil(LabelOptions.max) || LabelOptions.max > labelList.length
-            ? labelList.length
-            : LabelOptions.max,
-        )
-      : labelList[0]
-  }
-
-  /**
    * @overridable 支持重写
    * 计算节点 resize 时
    */
@@ -425,14 +306,13 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 支持重写
    */
   getData(): NodeData {
-    const { properties, textMode } = this
+    const { properties } = this
     const data: NodeData = {
       id: this.id,
       type: this.type,
       x: this.x,
       y: this.y,
       properties,
-      textMode,
     }
     if (this.rotate) {
       data.rotate = this.rotate
@@ -443,29 +323,12 @@ export class BaseNodeModel implements IBaseNodeModel {
     if (isObservable(properties)) {
       data.properties = toJS(properties)
     }
-    if (textMode === TextMode.LABEL) {
-      if (!isArray(this.label)) {
-        this.label = []
-        data.label = []
-      } else {
-        data.label = this.label.map((textItem) => {
-          const { x, y, value, content } = textItem
-          return {
-            x,
-            y,
-            value,
-            content,
-          }
-        })
-      }
-    } else {
-      const { x, y, value } = this.text
-      if (value) {
-        data.text = {
-          x,
-          y,
-          value,
-        }
+    const { x, y, value } = this.text
+    if (value) {
+      data.text = {
+        x,
+        y,
+        value,
       }
     }
     return data
@@ -508,14 +371,6 @@ export class BaseNodeModel implements IBaseNodeModel {
       ...this.graphModel.theme.baseNode,
       ...this.style,
     }
-  }
-
-  /**
-   * @overridable 支持重写
-   * 获取当前节点文本内容
-   */
-  getLabelShape() {
-    return null
   }
 
   /**
@@ -758,10 +613,10 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   public getBounds(): Model.BoxBoundsPoint {
     return {
-      x1: this.x - this.width / 2,
-      y1: this.y - this.height / 2,
-      x2: this.x + this.width / 2,
-      y2: this.y + this.height / 2,
+      minX: this.x - this.width / 2,
+      minY: this.y - this.height / 2,
+      maxX: this.x + this.width / 2,
+      maxY: this.y + this.height / 2,
     }
   }
 
@@ -827,15 +682,33 @@ export class BaseNodeModel implements IBaseNodeModel {
     )
     if (isAllowMoveX) {
       this.x = this.x + deltaX
-      this.textMode === TextMode.TEXT
-        ? this.text && this.moveText(deltaX, 0)
-        : this.label && this.moveLabel(deltaX, 0)
+      if (this.graphModel.useLabelText(this)) {
+        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+          model: {
+            relateId: this.id,
+            BaseType: this.BaseType,
+            deltaX,
+            deltaY: 0,
+          },
+        })
+      } else {
+        this.text && this.moveText(deltaX, 0)
+      }
     }
     if (isAllowMoveY) {
       this.y = this.y + deltaY
-      this.textMode === TextMode.TEXT
-        ? this.text && this.moveText(0, deltaY)
-        : this.label && this.moveLabel(0, deltaY)
+      if (this.graphModel.useLabelText(this)) {
+        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+          model: {
+            relateId: this.id,
+            BaseType: this.BaseType,
+            deltaX: 0,
+            deltaY,
+          },
+        })
+      } else {
+        this.text && this.moveText(0, deltaY)
+      }
     }
     return isAllowMoveX || isAllowMoveY
   }
@@ -855,16 +728,34 @@ export class BaseNodeModel implements IBaseNodeModel {
 
     if (isAllowMoveX && deltaX) {
       this.x = this.x + deltaX
-      this.textMode === TextMode.TEXT
-        ? this.text && this.moveText(deltaX, 0)
-        : this.label && this.moveLabel(deltaX, 0)
+      if (this.graphModel.useLabelText(this)) {
+        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+          model: {
+            relateId: this.id,
+            BaseType: this.BaseType,
+            deltaX,
+            deltaY: 0,
+          },
+        })
+      } else {
+        this.text && this.moveText(deltaX, 0)
+      }
       moveX = deltaX
     }
     if (isAllowMoveY && deltaY) {
       this.y = this.y + deltaY
-      this.textMode === TextMode.TEXT
-        ? this.text && this.moveText(0, deltaY)
-        : this.label && this.moveLabel(0, deltaY)
+      if (this.graphModel.useLabelText(this)) {
+        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+          model: {
+            relateId: this.id,
+            BaseType: this.BaseType,
+            deltaX: 0,
+            deltaY,
+          },
+        })
+      } else {
+        this.text && this.moveText(0, deltaY)
+      }
       moveY = deltaY
     }
     return [moveX, moveY]
@@ -874,10 +765,17 @@ export class BaseNodeModel implements IBaseNodeModel {
     const deltaX = x - this.x
     const deltaY = y - this.y
     if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false
-    if (this.textMode === TextMode.TEXT) {
-      this.moveText(deltaX, deltaY)
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          relateId: this.id,
+          BaseType: this.BaseType,
+          deltaX,
+          deltaY,
+        },
+      })
     } else {
-      this.moveLabel(deltaX, deltaY)
+      this.text && this.moveText(deltaX, deltaY)
     }
     this.x = x
     this.y = y
@@ -896,92 +794,11 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action
-  moveLabel(deltaX, deltaY, textId?: string): void {
-    this.label = this.label.map((item) => {
-      if (textId && item.id !== textId) return item
-      return {
-        ...item,
-        x: item.x + deltaX,
-        y: item.y + deltaY,
-      }
-    })
-  }
-
   @action updateText(value: string): void {
     this.text = {
       ...toJS(this.text),
       value,
     }
-  }
-
-  @action
-  updateLabel(
-    value:
-      | string
-      | {
-          content?: string
-          value?: string
-          x?: number
-          y?: number
-          isFocus?: boolean
-        },
-    id?: string,
-  ): void {
-    const textIndex = findIndex(this.label, (item) => item.id === id)
-    if (textIndex < 0) return
-    assign(this.label[textIndex], value)
-  }
-
-  @action
-  addLabel(labelConf: LabelConfig | { x: number; y: number }): void {
-    const { LabelOptions } = this.properties
-    const { eventCenter } = this.graphModel
-    const { multiple = false, max } = LabelOptions as LabelOptions
-    // 不是多选或者当前文本数量已到最大值时不允许新增文本
-
-    if (!multiple && this.label.length) {
-      this.label[0] = {
-        ...this.label[0],
-        isFocus: true,
-      }
-      return
-    }
-    if (multiple && !isNil(max) && this.label.length >= max) {
-      eventCenter.emit(EventType.TEXT_NOT_ALLOWED_ADD, {
-        data: this.label,
-        model: this,
-      })
-      console.warn('该元素可添加文本已达上限')
-      return
-    }
-    const newLabel = {
-      id: createUuid(),
-      relateId: this.id,
-      value: '',
-      content: '',
-      draggable: false,
-      editable: true,
-      x: multiple && max !== 1 ? labelConf.x : this.x - 10,
-      y: multiple && max !== 1 ? labelConf.y : this.y - 10,
-      isFocus: true,
-    }
-    this.label.push(newLabel)
-    eventCenter.emit(EventType.TEXT_ADD, {
-      data: newLabel,
-      model: this,
-    })
-  }
-
-  @action
-  deleteLabel(labelInfo: { index?: number; id?: string }): void {
-    if (labelInfo.index) {
-      this.label.splice(labelInfo.index, 1)
-      return
-    }
-    const textIndex = findIndex(this.label, (item) => item.id === labelInfo.id)
-    if (textIndex < 0) return
-    this.label.splice(textIndex, 1)
   }
 
   @action

@@ -1,30 +1,40 @@
-import { isObject } from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
 import GraphModel from '../model/GraphModel'
-import { TextMode } from '../constant'
+import { ElementType, EventType } from '../constant'
 
 import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
 
 let selected: LogicFlow.GraphData | null = null
 
-function translationNodeData(nodeData: NodeData, distance: number) {
+function translationNodeData(
+  nodeData: NodeData,
+  distance: number,
+  graph: GraphModel,
+) {
   nodeData.x += distance
   nodeData.y += distance
-  if (nodeData.textMode === TextMode.LABEL && nodeData.label) {
-    nodeData.label.forEach((item) => {
-      item.x += distance
-      item.y += distance
-    })
-  }
-  if (nodeData.textMode === TextMode.TEXT && isObject(nodeData.text)) {
+  if (!isEmpty(nodeData.text)) {
     nodeData.text.x += distance
     nodeData.text.y += distance
   }
+  graph.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+    model: {
+      relateId: nodeData.id,
+      deltaX: distance,
+      deltaY: distance,
+      BaseType: ElementType.NODE,
+    },
+  })
   return nodeData
 }
 
-function translationEdgeData(edgeData: EdgeData, distance: number) {
+function translationEdgeData(
+  edgeData: EdgeData,
+  distance: number,
+  graph: GraphModel,
+) {
   if (edgeData.startPoint) {
     edgeData.startPoint.x += distance
     edgeData.startPoint.y += distance
@@ -39,13 +49,16 @@ function translationEdgeData(edgeData: EdgeData, distance: number) {
       point.y += distance
     })
   }
-  if (edgeData.textMode === TextMode.LABEL && edgeData.label) {
-    edgeData.label.forEach((item) => {
-      item.x += distance
-      item.y += distance
+  if (graph.useLabelText(edgeData)) {
+    graph.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+      model: {
+        relateId: edgeData.id,
+        deltaX: distance,
+        deltaY: distance,
+        BaseType: ElementType.EDGE,
+      },
     })
-  }
-  if (edgeData.textMode === TextMode.TEXT && edgeData.text) {
+  } else if (!isEmpty(edgeData.text)) {
     edgeData.text.x += distance
     edgeData.text.y += distance
   }
@@ -79,10 +92,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     }
     selected = elements
     selected.nodes.forEach((node) =>
-      translationNodeData(node, TRANSLATION_DISTANCE),
+      translationNodeData(node, TRANSLATION_DISTANCE, graph),
     )
     selected.edges.forEach((edge) =>
-      translationEdgeData(edge, TRANSLATION_DISTANCE),
+      translationEdgeData(edge, TRANSLATION_DISTANCE, graph),
     )
     return false
   })
@@ -100,10 +113,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
       addElements.nodes.forEach((node) => lf.selectElementById(node.id, true))
       addElements.edges.forEach((edge) => lf.selectElementById(edge.id, true))
       selected.nodes.forEach((node) =>
-        translationNodeData(node, TRANSLATION_DISTANCE),
+        translationNodeData(node, TRANSLATION_DISTANCE, graph),
       )
       selected.edges.forEach((edge) =>
-        translationEdgeData(edge, TRANSLATION_DISTANCE),
+        translationEdgeData(edge, TRANSLATION_DISTANCE, graph),
       )
       CHILDREN_TRANSLATION_DISTANCE =
         CHILDREN_TRANSLATION_DISTANCE + TRANSLATION_DISTANCE

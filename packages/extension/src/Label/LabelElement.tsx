@@ -11,8 +11,8 @@ import LogicFlow, {
   EventType,
   LogicFlowUtil,
 } from '@logicflow/core'
+import LabelModel from './LabelModel'
 
-import LabelConfig = LogicFlow.LabelConfig
 import LabelOptions = LogicFlow.LabelOptions
 
 const { StepDrag } = LogicFlowUtil
@@ -22,7 +22,7 @@ type IProps = {
   editor: any
   model: BaseEdgeModel | BaseNodeModel // 元素model
   graphModel: GraphModel // 画布model
-  labelInfo: LabelConfig // 当前标签的配置数据
+  labelModel: LabelModel // 当前标签的配置数据
   haveEditor: boolean
 }
 
@@ -38,10 +38,10 @@ export class Label extends Component<IProps> {
   constructor(props) {
     super()
     const {
-      labelInfo: { id, draggable },
+      labelModel: { id, draggable },
     } = props
     this.stepDrag = new StepDrag({
-      eventType: 'TEXT',
+      eventType: 'LABEL',
       onDragging: this.onDragging,
       step: 1,
     })
@@ -52,16 +52,16 @@ export class Label extends Component<IProps> {
     this.textRef = dom
   }
   setHoverOn = () => {
-    const { labelInfo, model } = this.props
-    labelInfo.isHovered = true
+    const { labelModel, model } = this.props
+    labelModel.setAttribute('isHovered', true)
     model.setHovered(true)
     if (this.textRef) {
       this.textRef.style.zIndex = `${model.zIndex + 10}`
     }
   }
   setHoverOff = () => {
-    const { labelInfo, model } = this.props
-    labelInfo.isHovered = false
+    const { labelModel, model } = this.props
+    labelModel.setAttribute('isHovered', false)
     model.setHovered(false)
     if (this.textRef) {
       this.textRef.style.zIndex = `${model.zIndex}`
@@ -69,39 +69,39 @@ export class Label extends Component<IProps> {
   }
   // 拖拽事件
   onDragging = (e) => {
-    const { model, labelInfo, graphModel } = this.props
+    const { model, labelModel, graphModel } = this.props
     const { transformModel, eventCenter } = graphModel
     const { deltaX, deltaY } = e
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
-    model.moveLabel(curDeltaX, curDeltaY, labelInfo.id)
+    labelModel.moveLabel(curDeltaX, curDeltaY)
     eventCenter.emit(EventType.TEXT_DRAG, {
-      data: labelInfo,
+      data: labelModel,
       e,
       model,
     })
   }
   onDbClick = (e) => {
     const {
-      labelInfo,
+      labelModel,
       model,
       editable,
       graphModel: { eventCenter },
     } = this.props
     this.draggable = false
     model.setElementState(ElementState.TEXT_EDIT)
-    labelInfo.isFocus = true
+    labelModel.setAttribute('isFocus', true)
     if (editable && this.textRef && this.textRef.contentEditable !== 'true') {
       this.autoFocus()
     }
     eventCenter.emit(EventType.TEXT_DBCLICK, {
-      data: labelInfo,
+      data: labelModel,
       e,
       model,
     })
   }
   onBlur = (e) => {
     const {
-      labelInfo,
+      labelModel,
       model,
       editable,
       graphModel: { eventCenter },
@@ -111,9 +111,8 @@ export class Label extends Component<IProps> {
       this.hideToolBar()
       this.setHoverOff()
       if (!this.textRef.innerText) {
-        model.deleteLabel({ id: labelInfo.id })
-        eventCenter.emit(EventType.TEXT_DELETE, {
-          data: labelInfo,
+        eventCenter.emit(EventType.LABEL_SHOULD_DELETE, {
+          data: labelModel,
           model,
         })
       } else {
@@ -122,13 +121,12 @@ export class Label extends Component<IProps> {
           value: this.textRef.innerText,
           isFocus: false,
         }
-        model.updateLabel(label, this.id)
+        labelModel.setAttributes(label)
         model.setElementState(ElementState.DEFAULT)
-        labelInfo.isFocus = false
-        this.draggable = !!labelInfo.draggable
+        this.draggable = !!labelModel.draggable
       }
       eventCenter.emit(EventType.TEXT_BLUR, {
-        data: labelInfo,
+        data: labelModel,
         e,
         element: this.textRef,
         model,
@@ -137,19 +135,19 @@ export class Label extends Component<IProps> {
   }
   onMouseDown = (ev: MouseEvent) => {
     const {
-      model,
+      labelModel,
       graphModel: {
         editConfigModel: { nodeTextDraggable },
       },
     } = this.props
     if (this.draggable || nodeTextDraggable) {
-      this.stepDrag.model = model
+      this.stepDrag.model = labelModel
       this.stepDrag.handleMouseDown(ev)
     }
   }
   autoFocus = () => {
     const {
-      labelInfo,
+      labelModel,
       graphModel: { eventCenter },
     } = this.props
     if (!this.textRef) return
@@ -163,20 +161,20 @@ export class Label extends Component<IProps> {
     selection?.addRange(range)
     this.showToolBar()
     eventCenter.emit(EventType.TEXT_FOCUS, {
-      data: labelInfo,
+      data: labelModel,
       element: this.textRef,
     })
   }
 
   showToolBar = () => {
-    const { editor, labelInfo } = this.props
+    const { editor, labelModel } = this.props
     if (!isEmpty(editor)) {
       const toolDom = document.getElementById('medium-editor-toolbar-1')
       if (!toolDom) return
       toolDom.style.display = 'block'
       toolDom.style.position = 'absolute'
-      toolDom.style.top = `${labelInfo.y - 60}px`
-      toolDom.style.left = `${labelInfo.x - 20}px`
+      toolDom.style.top = `${labelModel.y - 60}px`
+      toolDom.style.left = `${labelModel.x - 20}px`
     }
   }
 
@@ -196,13 +194,13 @@ export class Label extends Component<IProps> {
     const {
       model,
       graphModel: { theme },
-      labelInfo,
+      labelModel,
     } = this.props
     const {
       width,
       height,
       BaseType,
-      properties: { LabelOptions },
+      properties: { _labelOptions },
     } = model
     // 自动换行节点边通用样式
     const commonAutoStyle = {
@@ -215,11 +213,11 @@ export class Label extends Component<IProps> {
     // 首先判断渲染传入的数据里是否设置了最大宽高，是的话就用传入的
     // 其次判断是节点还是边，如果是节点最大宽高取节点的宽高；如果是边则不做限制
     // 最后判断文本朝向，如果是纵向文本，最大宽高===节点的高宽；如果是横向文本，最大宽高===节点宽高
-    let maxWidth = labelInfo.maxWidth
-    let maxHeight = labelInfo.maxHeight
+    let maxWidth = labelModel.style.maxWidth
+    let maxHeight = labelModel.style.maxHeight
     if (BaseType === 'node') {
-      maxWidth = (LabelOptions as LabelOptions)?.verticle ? height : width
-      maxHeight = (LabelOptions as LabelOptions)?.verticle ? width : height
+      maxWidth = (_labelOptions as LabelOptions)?.verticle ? height : width
+      maxHeight = (_labelOptions as LabelOptions)?.verticle ? width : height
     }
 
     // 如果边文案自动换行, 设置编辑框宽度
@@ -247,7 +245,7 @@ export class Label extends Component<IProps> {
       const finalTextWidth =
         nodeTextWidth ||
         textWidth ||
-        ((LabelOptions as LabelOptions)?.verticle ? height : width)
+        ((_labelOptions as LabelOptions)?.verticle ? height : width)
       // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
       if (
         (modelType !== ModelType.TEXT_NODE && overflowMode !== 'autoWrap') ||
@@ -295,16 +293,16 @@ export class Label extends Component<IProps> {
   componentDidMount(): void {
     const {
       model: { state },
-      labelInfo,
+      labelModel,
       haveEditor,
       editor,
     } = this.props
-    this.draggable = get(labelInfo, 'draggable', false)
-    this.id = get(labelInfo, 'id', '')
+    this.draggable = get(labelModel, 'draggable', false)
+    this.id = get(labelModel, 'id', '')
     if (this.textRef) {
-      this.textRef.innerHTML = get(labelInfo, 'content', '')
+      this.textRef.innerHTML = get(labelModel, 'content', '')
     }
-    if (state === ElementState.TEXT_EDIT && labelInfo.isFocus) {
+    if (state === ElementState.TEXT_EDIT && labelModel.isFocus) {
       this.autoFocus()
     }
     // 画布初始化时富文本插件还没有初始化，所以需要在update的时候加上监听事件
@@ -324,10 +322,12 @@ export class Label extends Component<IProps> {
 
   componentDidUpdate(): void {
     const {
-      model: { state },
-      labelInfo: { isFocus = false },
+      model,
+      labelModel: { isFocus = false },
       editor,
     } = this.props
+    if (!model) return
+    const { state } = model
     if (state === ElementState.TEXT_EDIT && isFocus) {
       this.autoFocus()
     }
@@ -348,20 +348,18 @@ export class Label extends Component<IProps> {
   render() {
     const {
       editor,
-      labelInfo,
+      labelModel,
       graphModel: { transformModel },
-      model: {
-        properties: { LabelOptions },
-        getLabelShape,
-      },
+      model,
     } = this.props
+    if (!model) return null
+    const {
+      properties: { _labelOptions },
+    } = model
     const { transform } = transformModel.getTransformStyle()
-    if (getLabelShape()) {
-      return <div>{getLabelShape()}</div>
-    }
     return (
       <div
-        id={`element-container-${labelInfo.id}`}
+        id={`element-container-${labelModel.id}`}
         class={this.elementContainerClass()}
         onMouseDown={this.onMouseDown}
         onDblClick={(!editor && this.onDbClick) || undefined}
@@ -373,14 +371,14 @@ export class Label extends Component<IProps> {
           width: '20px',
           height: '20px',
           transform: `${transform} rotate(${
-            (LabelOptions as LabelOptions)?.verticle ? -0.25 : 0
+            (_labelOptions as LabelOptions)?.verticle ? -0.25 : 0
           }turn)`,
-          top: `${labelInfo.y}px`,
-          left: `${labelInfo.x}px`,
+          top: `${labelModel.y}px`,
+          left: `${labelModel.x}px`,
         }}
       >
         <div
-          id={`editor-container-${labelInfo.id}`}
+          id={`editor-container-${labelModel.id}`}
           ref={this.setRef}
           style={this.textRefStyle()}
           class="lf-label-editor"

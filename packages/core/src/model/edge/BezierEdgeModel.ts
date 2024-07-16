@@ -1,15 +1,11 @@
-import { cloneDeep, isArray } from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import { action, observable } from 'mobx'
 import BaseEdgeModel from './BaseEdgeModel'
 import { BaseNodeModel } from '../node'
 import LogicFlow from '../../LogicFlow'
 import GraphModel from '../GraphModel'
-import { ModelType, TextMode } from '../../constant'
-import {
-  getBezierControlPoints,
-  getClosestPointOnBezier,
-  IBezierControls,
-} from '../../util'
+import { ModelType } from '../../constant'
+import { getBezierControlPoints, IBezierControls } from '../../util'
 
 import Point = LogicFlow.Point
 import EdgeConfig = LogicFlow.EdgeConfig
@@ -156,16 +152,20 @@ export class BezierEdgeModel extends BaseEdgeModel {
       this.pointsList[2] = anchor
     }
     this.path = this.getPath(this.pointsList)
-    if (this.textMode === TextMode.TEXT && this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
-    } else if (this.textMode === TextMode.LABEL && isArray(this.label)) {
-      this.label = this.label.map((item) => {
-        const newPoint = getClosestPointOnBezier(item, this.pointsList)
-        return {
-          ...item,
-          ...newPoint,
-        }
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit('LABEL_SHOULD_UPDATE', {
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+          modelType: this.modelType,
+          points: this.points,
+          pointsList: this.pointsList,
+        },
       })
+      return
+    }
+    if (this.text?.value) {
+      this.setText(Object.assign({}, this.text, this.textPosition))
     }
   }
   // 获取边调整的起点
