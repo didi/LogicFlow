@@ -1,4 +1,4 @@
-import { find, forEach, isObject, map } from 'lodash-es'
+import { find, forEach, map } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -789,7 +789,7 @@ export class GraphModel {
     if (nodeX && nodeY) {
       node.x = snapToGrid(nodeX, this.gridSize)
       node.y = snapToGrid(nodeY, this.gridSize)
-      if (isObject(node.text)) {
+      if (typeof node.text === 'object' && node.text !== null) {
         // 原来的处理是：node.text.x -= getGridOffset(nodeX, this.gridSize)
         // 由于snapToGrid()使用了Math.round()四舍五入的做法，因此无法判断需要执行
         // node.text.x = node.text.x + getGridOffset()
@@ -815,7 +815,7 @@ export class GraphModel {
       data.x += 30
       data.y += 30
       data.id = ''
-      if (isObject(data.text)) {
+      if (typeof data.text === 'object' && data.text !== null) {
         data.text.x += 30
         data.text.y += 30
       }

@@ -2,6 +2,8 @@ import { isArray } from 'lodash-es'
 import Mousetrap, { MousetrapInstance } from 'mousetrap'
 import LogicFlow from '../LogicFlow'
 
+export * from './shortcut'
+
 export type Action = 'keypress' | 'keydown' | 'keyup'
 export type Handler = (e: KeyboardEvent) => void
 
