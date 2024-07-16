@@ -638,6 +638,9 @@ importers:
       medium-editor:
         specifier: ^5.23.3
         version: 5.23.3
+      mobx:
+        specifier: ^5.15.7
+        version: 5.15.7
       preact:
         specifier: ^10.17.1
         version: 10.22.0

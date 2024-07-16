@@ -1,4 +1,4 @@
-import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
+import LogicFlow, { h, BaseEdgeModel, EventType } from '@logicflow/core'
 import { isArray } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
@@ -8,7 +8,6 @@ import Point = LogicFlow.Point
 import EdgeConfig = LogicFlow.EdgeConfig
 import LabelConfig = LogicFlow.LabelConfig
 import LabelOptions = LogicFlow.LabelOptions
-import TextConfig = LogicFlow.TextConfig
 
 const defaultWidth = 500
 const defaultHeight = 300
@@ -65,14 +64,17 @@ export class GroupNodeModel extends RectResizeModel {
     this.foldedHeight = 60
     this.zIndex = DEFAULT_BOTTOM_Z_INDEX
     this.radius = 0
-    if (data.textMode === 'label' && isArray(data.label)) {
-      this.label.forEach((item) => {
-        item.editable = false
-        item.draggable = false
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        data: { editable: false, draggable: false },
+        model: {
+          BaseType: this.BaseType,
+          relateId: this.id,
+        },
       })
-    } else if (data.textMode === 'text') {
-      ;(this.text as TextConfig).editable = false
-      ;(this.text as TextConfig).draggable = false
+    } else {
+      this.text.editable = false
+      this.text.draggable = false
     }
     this.isRestrict = false
     this.resizable = false
@@ -200,7 +202,6 @@ export class GroupNodeModel extends RectResizeModel {
         endPoint,
         type,
         text,
-        label,
       } = edgeModel
       const properties = edgeModel.getProperties()
       const data: EdgeConfig = {
@@ -212,7 +213,6 @@ export class GroupNodeModel extends RectResizeModel {
         type,
         properties,
         text: text?.value,
-        label,
       }
       if (edgeModel.virtual) {
         this.graphModel.deleteEdgeById(edgeModel.id)
@@ -279,8 +279,8 @@ export class GroupNodeModel extends RectResizeModel {
     model.virtual = true
     // 强制不保存group连线数据
     // model.getData = () => null;
-    const { LabelOptions } = model.properties
-    if ((LabelOptions as LabelOptions)?.multiple && isArray(model.text)) {
+    const { _labelOptions } = model.properties
+    if ((_labelOptions as LabelOptions)?.multiple && isArray(model.text)) {
       model.text.forEach((item) => {
         item.editable = false
       })
@@ -290,12 +290,12 @@ export class GroupNodeModel extends RectResizeModel {
     model.isFoldedEdge = true
   }
 
-  isInRange({ x1, y1, x2, y2 }) {
+  isInRange({ minX, minY, maxX, maxY }) {
     return (
-      x1 >= this.x - this.width / 2 &&
-      x2 <= this.x + this.width / 2 &&
-      y1 >= this.y - this.height / 2 &&
-      y2 <= this.y + this.height / 2
+      minX >= this.x - this.width / 2 &&
+      maxX <= this.x + this.width / 2 &&
+      minY >= this.y - this.height / 2 &&
+      maxY <= this.y + this.height / 2
     )
   }
 
