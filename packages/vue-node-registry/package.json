@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/vue-node-registry",
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1-beta.1",
   "description": "LogicFlow Vue Component Node Registry",
   "main": "lib/index.js",
   "module": "es/index.js",
