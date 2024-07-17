@@ -1,0 +1,18 @@
+// TODO: 后面优化下：兼容下移动端布局
+.container-page {
+  display: flex;
+  height: 100%;
+  overflow: scroll;
+
+  .container-sidebar {
+    position: fixed;
+    top: 10vh; /* 保持在父容器顶部固定 */
+    max-height: 800px;
+  }
+
+  .container-content {
+    flex-grow: 1;
+    height: 100%;
+    margin-left: 300px;
+  }
+}

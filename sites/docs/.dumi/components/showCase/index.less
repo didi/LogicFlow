@@ -1,0 +1,42 @@
+.header-case {
+  margin-bottom: 18px;
+  border-bottom: 1px dashed #e1dfdf;
+}
+
+.body-case {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 260px);
+  gap: 30px; /* 可选项，设置子元素间隔 */
+  justify-content: space-around; /* 在主轴上均匀分布 */
+  margin-bottom: 80px;
+
+  .card-case {
+    .screen-shot {
+      width: 100%;
+      height: 180px;
+      cursor: pointer;
+      transition: all linear 0.2s; /* 添加默认的 transform 过渡效果 */
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .introduction {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 5px;
+    }
+
+    .title {
+      font-weight: 400;
+    }
+
+    .avatar {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  }
+}
