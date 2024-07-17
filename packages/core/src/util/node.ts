@@ -413,6 +413,10 @@ export const pickNodeConfig = (data: NodeConfig): NodeConfig => {
     'properties',
     'virtual', // 区域节点是否为dnd添加的虚拟节点
     'rotate',
+
+    // TODO: 确认是否可以加到此处
+    'resizable',
+    'rotatable',
   ])
   return nodeData
 }

@@ -175,9 +175,9 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   /**
    * @overridable 可以重写
    * 初始化节点数据
-   * initNodeData和setAttributes的区别在于
-   * initNodeData只在节点初始化的时候调用，用于初始化节点的所有属性。
-   * setAttributes除了初始化调用外，还会在properties发生变化了调用。
+   * initNodeData 和 setAttributes 的区别在于
+   * initNodeData 只在节点初始化的时候调用，用于初始化节点的所有属性。
+   * setAttributes 除了初始化调用外，还会在 properties 发生变化了调用。
    */
   public initNodeData(data: NodeConfig) {
     if (!data.properties) {
@@ -214,7 +214,9 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    *
    * @overridable 支持重写
    */
-  public setAttributes() {}
+  public setAttributes() {
+    console.log('base node setAttributes')
+  }
 
   /**
    * @overridable 支持重写，自定义此类型节点默认生成方式
