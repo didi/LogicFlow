@@ -3,11 +3,16 @@
  */
 import React from 'react';
 import Sidebar from '../../components/sidebar';
-import CasePage from './case';
-import NodePage from './node';
-import EdgePage from './edge';
-import ReactPage from './react';
-import ExtensionPage from './extension';
+import ShowCase from '../../components/showCase';
+
+import {
+  bussinessData,
+  demoData,
+  nodeData,
+  edgeData,
+  extensionData,
+  reactData,
+} from './data';
 
 import './index.less';
 
@@ -16,14 +21,45 @@ const PageIndex: React.FC = () => {
     <>
       <div className="container-page">
         <div className="container-sidebar">
-          <Sidebar></Sidebar>
+          <Sidebar language="zh"></Sidebar>
         </div>
         <div className="container-content">
-          <CasePage></CasePage>
-          <NodePage></NodePage>
-          <EdgePage></EdgePage>
-          <ReactPage></ReactPage>
-          <ExtensionPage></ExtensionPage>
+          <ShowCase
+            id="bussiness"
+            title="业务场景"
+            caseData={bussinessData}
+            language="zh"
+          ></ShowCase>
+          <ShowCase
+            id="demo"
+            title="示例"
+            caseData={demoData}
+            language="zh"
+          ></ShowCase>
+          <ShowCase
+            id="node"
+            title="节点"
+            caseData={nodeData}
+            language="zh"
+          ></ShowCase>
+          <ShowCase
+            id="edge"
+            title="边"
+            caseData={edgeData}
+            language="zh"
+          ></ShowCase>
+          <ShowCase
+            id="react"
+            title="react节点"
+            caseData={reactData}
+            language="zh"
+          ></ShowCase>
+          <ShowCase
+            id="extension"
+            title="插件"
+            caseData={extensionData}
+            language="zh"
+          ></ShowCase>
         </div>
       </div>
     </>

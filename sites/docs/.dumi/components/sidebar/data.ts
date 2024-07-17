@@ -1,8 +1,13 @@
-import type { MenuProps } from 'antd';
+export type MenuItem = {
+  key: string;
+  label: string;
+  children?: MenuItem[];
+};
 
-export type MenuItem = Required<MenuProps>['items'][number];
-
-const items: MenuItem[] = [
+/**
+ * 中文菜单
+ */
+export const MenuItemZh: MenuItem[] = [
   {
     key: 'case',
     label: '场景案例',
@@ -35,4 +40,38 @@ const items: MenuItem[] = [
   },
 ];
 
-export default items;
+/**
+ * 英文菜单
+ */
+export const MenuItemEn: MenuItem[] = [
+  {
+    key: 'case',
+    label: 'Case Study',
+    children: [
+      {
+        key: 'bussiness',
+        label: 'Business Scene',
+      },
+      {
+        key: 'demo',
+        label: 'Demo',
+      },
+    ],
+  },
+  {
+    key: 'node',
+    label: 'Node',
+  },
+  {
+    key: 'edge',
+    label: 'Edge',
+  },
+  {
+    key: 'react',
+    label: 'React Nodes',
+  },
+  {
+    key: 'extension',
+    label: 'Extension',
+  },
+];
