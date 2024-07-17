@@ -3,13 +3,14 @@ import {
   Control,
   DndPanel,
   ShapeItem,
-  Group,
+  // Group,
+  DynamicGroup,
   SelectionSelect,
 } from '@logicflow/extension'
 
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
-import { customGroup, subProcess } from './nodes'
+// import { customGroup, subProcess } from './nodes'
 import GraphConfigData = LogicFlow.GraphConfigData
 
 import '@logicflow/core/es/index.css'
@@ -21,17 +22,18 @@ const config: Partial<LogicFlow.Options> = {
   grid: true,
   multipleSelectKey: 'alt',
   autoExpand: false,
+  allowResize: true,
   keyboard: {
     enabled: true,
   },
-  plugins: [Group, Control, DndPanel, SelectionSelect],
+  plugins: [DynamicGroup, Control, DndPanel, SelectionSelect],
 }
 
 const customDndConfig: ShapeItem[] = [
   {
-    type: 'custom-group',
-    label: '自定义分组',
-    text: 'CustomGroup',
+    type: 'dynamic-group',
+    label: '内置动态分组',
+    text: 'DynamicGroup',
     icon: getImageUrl('/group/group.png'),
   },
   {
@@ -46,18 +48,18 @@ const customDndConfig: ShapeItem[] = [
     text: 'Rect',
     icon: getImageUrl('/group/rect.png'),
   },
-  {
-    type: 'sub-process',
-    label: '子流程-展开',
-    text: 'SubProcess',
-    icon: getImageUrl('/group/subprocess-expanded.png'),
-  },
-  {
-    type: 'sub-process',
-    label: '子流程-收起',
-    text: 'SubProcess',
-    icon: getImageUrl('/group/subprocess-collapsed.png'),
-  },
+  // {
+  //   type: 'sub-process',
+  //   label: '子流程-展开',
+  //   text: 'SubProcess',
+  //   icon: getImageUrl('/group/subprocess-expanded.png'),
+  // },
+  // {
+  //   type: 'sub-process',
+  //   label: '子流程-收起',
+  //   text: 'SubProcess',
+  //   icon: getImageUrl('/group/subprocess-collapsed.png'),
+  // },
 ]
 
 const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
@@ -88,8 +90,8 @@ export default function BPMNExtension() {
       const dndPanelConfig = getDndPanelConfig(lf)
       lf.setPatternItems(dndPanelConfig)
 
-      lf.register(customGroup)
-      lf.register(subProcess)
+      // lf.register(customGroup)
+      // lf.register(subProcess)
 
       // 获取渲染数据
       const graphData: GraphConfigData = {
@@ -119,15 +121,48 @@ export default function BPMNExtension() {
           //   x: 800,
           //   y: 140
           // },
+          // {
+          //   id: 'group_1',
+          //   type: 'sub-process',
+          //   x: 300,
+          //   y: 120,
+          //   // children: ["rect_3"],
+          //   text: 'sub-process-1',
+          //   properties: {
+          //     isFolded: false,
+          //   },
+          // },
           {
-            id: 'group_1',
-            type: 'sub-process',
-            x: 300,
-            y: 120,
+            id: 'dynamic-group_1',
+            type: 'dynamic-group',
+            x: 500,
+            y: 140,
             // children: ["rect_3"],
-            text: 'sub-process-1',
+            text: 'dynamic-group_1',
+            resizable: true,
             properties: {
-              isFolded: false,
+              // resizable: true,
+              collapsible: true,
+              width: 420,
+              height: 250,
+              radius: 5,
+              isCollapsed: false,
+            },
+          },
+          {
+            id: 'dynamic-group_2',
+            type: 'dynamic-group',
+            x: 500,
+            y: 420,
+            // children: ["rect_3"],
+            text: 'dynamic-group_2',
+            resizable: true,
+            properties: {
+              width: 420,
+              height: 250,
+              radius: 5,
+              collapsible: false,
+              isCollapsed: false,
             },
           },
           // {

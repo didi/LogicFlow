@@ -3,6 +3,9 @@ export * from './bpmn-adapter'
 export * from './bpmn-elements'
 export * from './bpmn-elements-adapter'
 
+// 新版 Group
+export * from './dynamic-group'
+
 export * from './tools/snapshot'
 export * from './turbo-adapter'
 export * from './insert-node-in-polyline'
