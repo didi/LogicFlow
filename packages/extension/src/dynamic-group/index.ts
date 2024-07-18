@@ -358,6 +358,7 @@ export class DynamicGroup {
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
+    console.log('data', data)
     forEach(data.nodes, (node) => {
       if (node.children) {
         forEach(node.children, (childId) => {
@@ -513,6 +514,8 @@ export class DynamicGroup {
     lf.on('node:drag,node:dnd-drag', this.setActiveGroup)
     lf.on('node:click', this.onNodeSelect)
     lf.on('graph:rendered', this.onGraphRendered)
+
+    lf.on('graph:updated', ({ data }) => console.log('data', data))
 
     lf.on('group:add-node', ({ data }) => console.log('group:add-node', data))
     // lf.eventCenter.on('node:resize', this.onGroupResize)

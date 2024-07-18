@@ -7,13 +7,13 @@ import BoxBoundsPoint = Model.BoxBoundsPoint
  * @param group
  */
 export function isBoundsInGroup(bounds: BoxBoundsPoint, group: BaseNodeModel) {
-  const { x1, y1, x2, y2 } = bounds
+  const { minX, minY, maxX, maxY } = bounds
   const { x, y, width, height } = group
   return (
-    x1 >= x - width / 2 &&
-    x2 <= x + width / 2 &&
-    y1 >= y - height / 2 &&
-    y2 <= y + height / 2
+    minX >= x - width / 2 &&
+    maxX <= x + width / 2 &&
+    minY >= y - height / 2 &&
+    maxY <= y + height / 2
   )
 }
 
@@ -23,11 +23,11 @@ export function isBoundsInGroup(bounds: BoxBoundsPoint, group: BaseNodeModel) {
  * @param group
  */
 export function isAllowMoveTo(bounds: BoxBoundsPoint, group: BaseNodeModel) {
-  const { x1, y1, x2, y2 } = bounds
+  const { minX, minY, maxX, maxY } = bounds
   const { x, y, width, height } = group
 
   return {
-    x: x1 >= x - width / 2 && x2 <= x + width / 2,
-    y: y1 >= y - height / 2 && y2 <= y + height / 2,
+    x: minX >= x - width / 2 && maxX <= x + width / 2,
+    y: minY >= y - height / 2 && maxY <= y + height / 2,
   }
 }

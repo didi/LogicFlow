@@ -146,7 +146,7 @@ export default function BPMNExtension() {
               width: 420,
               height: 250,
               radius: 5,
-              isCollapsed: false,
+              isCollapsed: true,
             },
           },
           {

@@ -56,8 +56,8 @@ export class DynamicGroupNode<
 
     if (!model.collapsible) return null
     const iconPath = model?.isCollapsed
-      ? this.getExpandIcon(sx, sy)
-      : this.getCollapseIcon(sx, sy)
+      ? this.getCollapseIcon(sx, sy)
+      : this.getExpandIcon(sx, sy)
 
     const operateIcon = h('path', {
       fill: 'none',

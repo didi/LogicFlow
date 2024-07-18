@@ -447,6 +447,7 @@ export class GraphModel {
     const nodes: LogicFlow.NodeData[] = []
     this.nodes.forEach((node) => {
       const data = node.getData()
+      console.log('data --->>>', data)
       if (data && !node.virtual) nodes.push(data)
     })
     return {
