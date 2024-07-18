@@ -63,6 +63,7 @@ export namespace Model {
   }
 
   // 定义边界数据结构，左上坐标 + 右下坐标定位一个矩形
+  // TODO: 在使用该类型的 API 中，都要做声明，返回值格式已更新
   export type BoxBoundsPoint = {
     minX: number // Left Top X
     minY: number // Left Top Y
@@ -70,24 +71,20 @@ export namespace Model {
     maxY: number // Right Bottom Ys
   }
 
+  export interface BoxBounds extends BoxBoundsPoint {
+    x: number
+    y: number
+    width: number
+    height: number
+    centerX: number
+    centerY: number
+  }
+
   export type OutlineInfo = {
     x: number
     y: number
     x1: number
     y1: number
-  }
-
-  export interface BoxBounds {
-    x: number
-    y: number
-    width: number
-    height: number
-    minX: number
-    minY: number
-    maxX: number
-    maxY: number
-    centerX: number
-    centerY: number
   }
 
   export interface BaseModel {
@@ -143,6 +140,8 @@ export namespace Model {
      * 此属性控制的是第二种。节点和边在删除、调整的同时，其关联的文本也会对应删除、调整。
      */
     text: LogicFlow.TextConfig
+    // REMIND
+    // 2.0.0 新增特性，引入 Label 插件后启用
     label?: LogicFlow.LabelConfig[]
     properties: Record<string, unknown>
 

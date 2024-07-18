@@ -1,5 +1,5 @@
 import { forEach } from 'lodash-es'
-import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+import LogicFlow, { LogicFlowUtil } from '@logicflow/core'
 import { SelectionSelect, RichTextEditor, Label } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
@@ -96,20 +96,20 @@ const data = {
       type: 'rect',
       // rotate: 1.1722738811284763,
       text: {
-        x: 600,
+        x: 300,
         y: 200,
         value: 'node-1',
       },
       properties: {
         _textMode: 'text',
       },
-      x: 600,
+      x: 300,
       y: 200,
     },
     {
       id: 'custom-node-2',
       type: 'rect',
-      x: 600,
+      x: 300,
       y: 300,
       properties: {
         _textMode: 'label',
@@ -126,29 +126,29 @@ const data = {
         _label: [
           {
             value: '333331',
-            x: 800,
+            x: 500,
             y: 50,
           },
           {
             value: '333332',
-            x: 800,
+            x: 500,
             y: 150,
           },
         ],
       },
-      x: 800,
+      x: 500,
       y: 100,
     },
     {
       id: 'custom-node-4',
       type: 'rect',
-      x: 800,
+      x: 500,
       y: 300,
     },
     {
       id: 'custom-node-5',
       type: 'rect',
-      x: 1000,
+      x: 800,
       y: 200,
       properties: {
         width: 80,
@@ -229,63 +229,24 @@ export default function BasicNode() {
       const lf = new LogicFlow({
         ...config,
         container: containerRef.current as HTMLElement,
-        // hideAnchors: true,
-        // width: 800,
-        // height: 400,
-        // adjustNodePosition: false,
-        // isSilentMode: true,
-        // overlapMode: 1,
-        // hoverOutline: false,
-        // nodeSelectedOutline: false,
         multipleSelectKey: 'shift',
         disabledTools: ['multipleSelect'],
         autoExpand: true,
-        // metaKeyMultipleSelected: false,
-        // adjustEdgeMiddle: true,
-        // stopMoveGraph: true,
         adjustEdgeStartAndEnd: true,
-        // adjustEdge: false,
         allowRotate: true,
         // allowResize: true,
         edgeTextEdit: true,
         nodeLabelVerticle: false,
         keyboard: {
           enabled: true,
-          // shortcuts: [
-          //   {
-          //     keys: ["backspace"],
-          //     callback: () => {
-          //       const r = window.confirm("确定要删除吗？");
-          //       if (r) {
-          //         const elements = lf.getSelectElements(true);
-          //         lf.clearSelectElements();
-          //         elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
-          //         elements.nodes.forEach((node) => lf.deleteNode(node.id));
-          //         const graphData = lf.getGraphData()
-          //         console.log(42, graphData, graphData.nodes.length)
-          //       }
-          //       // console.log(1)
-          //     }
-          //   }
-          // ]
         },
         partial: true,
         background: {
           color: '#FFFFFF',
         },
         grid: true,
-        // grid: {
-        //   size: 1,
-        // },
         edgeTextDraggable: true,
         edgeType: 'bezier',
-        // 全局自定义id
-        // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
-        //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
-        //   if (sourceNode.type === 'rect') return 'bezier'
-        //   if (currentEdge) return currentEdge.type
-        //   return 'polyline'
-        // },
         idGenerator(type) {
           return type + '_' + Math.random()
         },
@@ -298,57 +259,6 @@ export default function BasicNode() {
       lfRef.current = lf
     }
   }, [])
-
-  const setArrow = (arrowName: string) => {
-    const lf = lfRef.current
-    if (lf) {
-      const { edges } = lf.getSelectElements()
-      edges.forEach(({ id, properties }) => {
-        console.log(4444, properties)
-        lf.setProperties(id, {
-          arrowType: arrowName,
-        })
-      })
-    }
-  }
-
-  const focusOn = () => {
-    lfRef?.current?.focusOn({
-      id: 'custom-node-1',
-    })
-  }
-
-  const handleChangeNodeType = () => {
-    const lf = lfRef.current
-    if (lf) {
-      const { nodes } = lf.getSelectElements()
-      nodes.forEach(({ id, type }) => {
-        lf.setNodeType(id, type === 'rect' ? 'star' : 'rect')
-      })
-    }
-  }
-
-  const handleChangeEditConfig = () => {
-    const isSilentMode = lfRef.current?.options.isSilentMode
-    lfRef?.current?.updateEditConfig({
-      isSilentMode: !isSilentMode,
-    })
-  }
-
-  const handleCancelEdit = () =>
-    lfRef?.current?.graphModel.textEditElement?.setElementState(
-      ElementState.DEFAULT,
-    )
-
-  const handleChangeId = () => {
-    const lf = lfRef.current
-    if (lf) {
-      const { edges } = lf.getSelectElements()
-      edges.forEach(({ id }) => {
-        lf.setEdgeId(id, 'newId')
-      })
-    }
-  }
 
   const handleRefreshGraph = () => {
     const lf = lfRef.current
@@ -401,55 +311,6 @@ export default function BasicNode() {
 
   return (
     <Card title="Graph" className="graph-container">
-      <Flex wrap="wrap" gap="small">
-        <Button key="arrow1" type="primary" onClick={() => setArrow('half')}>
-          箭头 1
-        </Button>
-        <Button key="arrow2" type="primary" onClick={() => setArrow('empty')}>
-          箭头 2
-        </Button>
-        <Button key="focusOn" type="primary" onClick={focusOn}>
-          定位到五角星
-        </Button>
-        <Button
-          key="undo"
-          type="primary"
-          onClick={() => lfRef?.current?.undo()}
-        >
-          上一步
-        </Button>
-        <Button
-          key="redo"
-          type="primary"
-          onClick={() => lfRef?.current?.redo()}
-        >
-          下一步
-        </Button>
-        <Button
-          key="clearData"
-          type="primary"
-          onClick={() => lfRef?.current?.clearData()}
-        >
-          清空数据
-        </Button>
-        <Button key="changeType" type="primary" onClick={handleChangeNodeType}>
-          切换节点为五角星
-        </Button>
-        <Button
-          key="changeConfig"
-          type="primary"
-          onClick={handleChangeEditConfig}
-        >
-          修改配置
-        </Button>
-        <Button key="cancelEdit" type="primary" onClick={handleCancelEdit}>
-          取消编辑
-        </Button>
-        <Button key="changeEdgeId" type="primary" onClick={handleChangeId}>
-          修改边 ID
-        </Button>
-      </Flex>
-      <Divider orientation="left" orientationMargin="5" plain></Divider>
       <Flex wrap="wrap" gap="small">
         <Button
           key="getData"
