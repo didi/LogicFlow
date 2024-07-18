@@ -624,9 +624,18 @@ export class GraphModel {
     return newId
   }
 
+  // TODO: 如果现在这样的方法，感觉没必要写在 graphModel 里面。
+  // 提到 utils 里面就可以感觉
+  // 另外一个是否需要一个全局的，一个私有的判断
+  // 没有私有的，用全局的；有私有的，用私有的  yes
   useLabelText(model) {
     const { _textMode: textMode } = model.properties
     return textMode === TextMode.LABEL
+  }
+
+  @action
+  setTextMode(mode: TextMode) {
+    this.textMode = mode
   }
 
   /**

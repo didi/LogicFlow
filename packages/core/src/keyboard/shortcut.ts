@@ -19,6 +19,10 @@ function translationNodeData(
     nodeData.text.x += distance
     nodeData.text.y += distance
   }
+
+  // TODO: feature/label-text
+  // 1. 如果 translationNodeData 外部调用了该方法，是否也应该触发该事件
+  // 2. LABEL_SHOULD_UPDATE 事件，是否抛出 NODE_UPDATE 事件就可以
   graph.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
     model: {
       relateId: nodeData.id,
