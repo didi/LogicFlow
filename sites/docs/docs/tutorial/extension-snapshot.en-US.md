@@ -116,7 +116,7 @@ console.log(blob)
 
 ```
 
-Get `Blob` object. `backgroundColor`: background, transparent by default if not filled.
+`backgroundColor`: background, transparent by default if not filled.
 
 `fileType`: file type, png by default if not filled.
 
@@ -134,7 +134,7 @@ export type SnapshotResponse = {
 
 ### lf.getSnapshotBase64(...)
 
-Get the Base64 text encoding of the text.
+Get the `Base64 text encoding` of the text.
 
 ```ts
 
