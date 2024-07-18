@@ -177,7 +177,6 @@ LogicFlow.use(Control);
 在某些情况下，LogicFlow 生成的数据格式可能不满足业务需要的格式。比如后端需要的数据格式是 bpmn-js 生成的格式，那么可以使用数据转换工具，将 LogicFlow 生成的数据转换为 bpmn-js 生成的数据。
 
 ```jsx | pure
-
 // 这里把userData转换为LogicFlow支持的格式
 lf.adapterIn = function (userData) {
   ...
