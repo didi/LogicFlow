@@ -127,7 +127,7 @@ export class BaseNodeModel implements IBaseNodeModel {
           x,
           y,
           rotate: value,
-          updateRotate: true,
+          nodeRotate: true,
           BaseType: this.BaseType,
         },
       })
@@ -285,6 +285,7 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
     const { width, height, deltaX, deltaY } = resizeInfo
+    const { x, y, BaseType } = this
     // 移动节点以及文本内容
     this.move(deltaX / 2, deltaY / 2)
 
@@ -294,7 +295,19 @@ export class BaseNodeModel implements IBaseNodeModel {
       width,
       height,
     })
-
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          relateId: this.id,
+          x: x + deltaX,
+          y: y + deltaY,
+          BaseType,
+          nodeResize: true,
+          width,
+          height,
+        },
+      })
+    }
     return this.getData()
   }
 

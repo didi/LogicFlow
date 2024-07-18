@@ -93,6 +93,13 @@ export default function BPMNExtension() {
       // 获取渲染数据
       const graphData: GraphConfigData = {
         nodes: [
+          {
+            id: 'rect_3',
+            type: 'rect',
+            x: 400,
+            y: 400,
+            text: 'custom-group1',
+          },
           // {
           //   type: "custom-group",
           //   x: 400,
@@ -123,7 +130,7 @@ export default function BPMNExtension() {
             type: 'sub-process',
             x: 300,
             y: 120,
-            // children: ["rect_3"],
+            children: ['rect_3'],
             text: 'sub-process-1',
             properties: {
               isFolded: true,
