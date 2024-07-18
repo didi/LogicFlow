@@ -396,7 +396,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           graphModel.eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
             model: edgeData,
             e,
-            position: position.domOverlayPosition,
+            position: position.canvasOverlayPosition,
           })
           model.setSelected(false)
           graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
