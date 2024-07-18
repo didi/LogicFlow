@@ -15,6 +15,7 @@ const config: Partial<LogicFlow.Options> = {
   stopScrollGraph: true,
   stopZoomGraph: true,
   stopMoveGraph: false,
+  allowResize: true,
   style: {
     rect: {
       rx: 5,
@@ -116,7 +117,7 @@ const data = {
     },
     {
       id: 'custom-node-3',
-      type: 'rect',
+      type: 'circle',
       properties: {
         _labelOptions: {
           multiple: true,

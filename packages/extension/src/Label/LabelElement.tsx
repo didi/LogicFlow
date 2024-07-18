@@ -74,7 +74,7 @@ export class Label extends Component<IProps> {
     const { deltaX, deltaY } = e
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
     labelModel.moveLabel(curDeltaX, curDeltaY)
-    eventCenter.emit(EventType.TEXT_DRAG, {
+    eventCenter.emit(EventType.LABEL_DRAG, {
       data: labelModel,
       e,
       model,
@@ -93,7 +93,7 @@ export class Label extends Component<IProps> {
     if (editable && this.textRef && this.textRef.contentEditable !== 'true') {
       this.autoFocus()
     }
-    eventCenter.emit(EventType.TEXT_DBCLICK, {
+    eventCenter.emit(EventType.LABEL_DBCLICK, {
       data: labelModel,
       e,
       model,
@@ -125,7 +125,7 @@ export class Label extends Component<IProps> {
         model.setElementState(ElementState.DEFAULT)
         this.draggable = !!labelModel.draggable
       }
-      eventCenter.emit(EventType.TEXT_BLUR, {
+      eventCenter.emit(EventType.LABEL_BLUR, {
         data: labelModel,
         e,
         element: this.textRef,
@@ -160,7 +160,7 @@ export class Label extends Component<IProps> {
     selection?.removeAllRanges()
     selection?.addRange(range)
     this.showToolBar()
-    eventCenter.emit(EventType.TEXT_FOCUS, {
+    eventCenter.emit(EventType.LABEL_FOCUS, {
       data: labelModel,
       element: this.textRef,
     })
