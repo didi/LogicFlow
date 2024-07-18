@@ -1457,14 +1457,6 @@ export namespace LogicFlow {
     editable?: boolean
     draggable?: boolean
     verticle?: boolean // 是否渲染纵向文本
-    // isFocus?: boolean // label是否获焦
-    // isHovered?: boolean // label是否hover
-    // isInLine?: boolean // label是否在边上
-    // // 位置属性
-    // xDeltaPercent?: number // label在节点/边上相对x轴最左边的偏移比例，用于节点和边调整后更新文本坐标
-    // yDeltaPercent?: number // label在节点/边上相对y轴最上面的偏移比例，用于节点和边调整后更新文本坐标
-    // yDeltaDistance?: number // label在x轴上相对节点/边的偏移距离
-    // xDeltaDistance?: number // label在y轴上相对节点/边的偏移距离
   }
 
   export type LabelOptions = {

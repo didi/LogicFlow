@@ -356,7 +356,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
         if (useLabelText(model)) {
           eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
             model,
-            position: position.domOverlayPosition,
+            position: position.canvasOverlayPosition,
           })
           model.setSelected(false)
           graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
