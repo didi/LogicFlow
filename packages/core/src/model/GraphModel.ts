@@ -955,6 +955,7 @@ export class GraphModel {
           points: edgeModel.points,
           pointsList: edgeModel.pointsList,
           BaseType: edgeModel.BaseType,
+          modelType: edgeModel.modelType,
         },
       })
       return
