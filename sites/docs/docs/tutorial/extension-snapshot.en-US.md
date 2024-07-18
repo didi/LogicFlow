@@ -145,9 +145,6 @@ const { data : base64 } = await lf.getSnapshotBlob()
 console.log(base64)
 ```
 
-
-
-
 ## 其他导出类型
 
 ### xml
