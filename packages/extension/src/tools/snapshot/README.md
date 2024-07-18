@@ -78,13 +78,13 @@ getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
 
 | 属性名  | 类型 | 默认值 | 必填 | 描述   |
 | --------- | -------- | -------------------------- | -------- | ----------------------------------------------------------------- |
-| fileType | string | png |  |  图片类型: 默认不填是png 还可以设置有webp、gif、jpeg、svg |
-| width | number | - | | 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形 |
-| height | numebr | - | | 自定义导出图片的宽度，不设置即可，设置可能会拉伸图形 |
-| backgroundColor | string | - | | 图片背景，不设置背景默认透明 |
-| quality | number | - | | 图片质量，在指定图片格式为 jpeg 或 webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92。其他不合法参数会被忽略 |
-| padding | number | 40 | | 图片内边距: 元素内容所在区之外空白空间，不设置默认有40的内边距 |
-| partial | boolean | - |  | 导出时是否开启局部渲染，false：将导出画布上所有的元素，true：只导出画面区域内的可见元素，不设置默认为lf实例身上partial值 |
+| fileType | string | png |  |  导出图片的格式，可选值为：`png`、`webp`、`gif`、`jpeg`、`svg`，默认值为 `png` |
+| width | number | - | | 导出图片的宽度，通常无需设置，设置后可能会拉伸图形 |
+| height | numebr | - | | 导出图片的高度，通常无需设置，设置后可能会拉伸图形 |
+| backgroundColor | string | - | | 导出图片的背景色，默认为透明 |
+| quality | number | - | | 导出图片的质量。在指定图片格式为 `jpeg` 或 `webp` 的情况下，可以从 0 到 1 的区间内选择图片的质量，如果超出取值范围，将会使用默认值 0.92。导出为其他格式的图片时，该参数会被忽略 |
+| padding | number | 40 | | 导出图片的内边距，即元素内容所在区域边界与图片边界的距离，单位为像素，默认为 40 |
+| partial | boolean | - |  | 导出图片时是否开启局部渲染，`false`：将导出画布上所有的元素，`true`：只导出画面区域内的可见元素 |
 
 注意：
 -  `svg`目前暂不支持`width`，`height`， `backgroundColor`， `padding` 属性。
@@ -132,3 +132,4 @@ async getSnapshotBase64(backgroundColor?: string, fileType?: string) : Promise<S
 // example
 const { data : base64 } = await lf.getSnapshotBlob()
 console.log(base64)
+```
