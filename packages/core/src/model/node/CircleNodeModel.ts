@@ -3,7 +3,7 @@ import { computed, observable } from 'mobx'
 import BaseNodeModel from './BaseNodeModel'
 import GraphModel from '../GraphModel'
 import LogicFlow from '../../LogicFlow'
-import { ModelType } from '../../constant'
+import { EventType, ModelType } from '../../constant'
 import { ResizeControl } from '../../view/Control'
 
 import NodeConfig = LogicFlow.NodeConfig
@@ -73,7 +73,8 @@ export class CircleNodeModel extends BaseNodeModel {
   }
 
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
-    const { width, deltaX, deltaY } = resizeInfo
+    const { width, height, deltaX, deltaY } = resizeInfo
+    const { x, y, BaseType } = this
     // 移动节点以及文本内容
     this.move(deltaX / 2, deltaY / 2)
 
@@ -81,7 +82,19 @@ export class CircleNodeModel extends BaseNodeModel {
     this.setProperties({
       r: width,
     })
-
+    if (this.graphModel.useLabelText(this)) {
+      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+        model: {
+          relateId: this.id,
+          x: x + deltaX,
+          y: y + deltaY,
+          BaseType,
+          nodeResize: true,
+          width,
+          height,
+        },
+      })
+    }
     return this.getData()
   }
 }
