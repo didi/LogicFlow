@@ -66,9 +66,12 @@ export namespace Options {
     keyboard?: KeyboardDef
     style?: Partial<LogicFlow.Theme> // 主题配置
     edgeType?: EdgeType
-    edgeTextMode?: TextMode.LABEL | TextMode.TEXT
-    nodeTextMode?: TextMode.LABEL | TextMode.TEXT
     adjustEdge?: boolean
+
+    // 元素文本类型：text or label
+    textMode?: TextMode
+    edgeTextMode?: TextMode
+    nodeTextMode?: TextMode
 
     allowRotate?: boolean // 允许节点旋转
     allowResize?: boolean // 是否允许缩放
