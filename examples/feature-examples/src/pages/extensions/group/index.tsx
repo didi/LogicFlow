@@ -19,6 +19,7 @@ import styles from './index.less'
 const config: Partial<LogicFlow.Options> = {
   grid: true,
   multipleSelectKey: 'alt',
+  allowResize: true,
   autoExpand: false,
   keyboard: {
     enabled: true,
