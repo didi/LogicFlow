@@ -88,6 +88,12 @@ export interface EditConfigInterface {
    * 不支持ctrl，ctrl会触发contextmenu
    */
   multipleSelectKey?: string
+
+  /**
+   * 2.0.0 新增配置，启用 Label 后生效
+   * 是否支持多文本，文本文字是否垂直展示
+   * 当前文本类型
+   */
   multipleNodeText?: boolean
   multipleEdgeText?: boolean
   nodeLabelVerticle?: boolean
@@ -147,6 +153,7 @@ const keys = [
  * 页面编辑配置
  */
 export class EditConfigModel {
+  @observable textMode = TextMode.TEXT
   /*********************************************************
    * 画布相关配置
    ********************************************************/
