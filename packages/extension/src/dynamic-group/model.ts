@@ -99,8 +99,26 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
   constructor(data: NodeConfig<IGroupNodeProperties>, graphModel: GraphModel) {
     super(data, graphModel)
+    this.initNodeData(data)
 
     this.setAttributes()
+  }
+
+  initNodeData(data: LogicFlow.NodeConfig<IGroupNodeProperties>) {
+    super.initNodeData(data)
+
+    // 如何定义其类型呢
+    const {
+      children,
+      // properties,
+    } = data
+    // const { isCollapsed } = properties ?? {}
+    this.children = children ? new Set(children) : new Set()
+
+    // 当前状态为折叠时，调用一下折叠的方法
+    // 确认是否
+    // console.log('isCollapsed -->>', isCollapsed)
+    // isCollapsed && this.toggleCollapse(isCollapsed)
   }
 
   setAttributes() {
@@ -108,7 +126,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     super.setAttributes()
 
     const {
-      children,
+      // children,
       width,
       height,
       collapsedWidth,
@@ -122,7 +140,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       // groupAddable,
     } = this.properties
 
-    this.children = children ? new Set(children) : new Set()
+    // this.children = children ? new Set(children) : new Set()
     this.zIndex = zIndex ?? DEFAULT_BOTTOM_Z_INDEX
 
     if (!width) {
@@ -145,30 +163,41 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.text.editable = false
     this.text.draggable = false
 
-    // 当前状态为折叠时，调用一下折叠的方法
-    // 确认是否
-    console.log('isCollapsed -->>', isCollapsed)
-    // isCollapsed && this.toggleCollapse(isCollapsed)
+    if (isCollapsed !== this.isCollapsed) {
+      this.toggleCollapse(isCollapsed)
+    }
   }
 
   getData(): NodeData {
     const data = super.getData()
     const children: string[] = []
+
+    console.log('this', this)
+    console.log('this.children', this.children)
     forEach(Array.from(this.children), (childId) => {
       const model = this.graphModel.getNodeModelById(childId)
       if (model && !model.virtual) {
         children.push(childId)
       }
     })
+    console.log('children -->>', children)
     data.children = children
-    const { properties } = data
-    // TODO: 为什么要删除这两个属性？？？
-    delete properties?.groupAddable
-    delete properties?.isCollapsed
+
+    // if (data.properties) {
+    //   data.properties.children = children
+    // }
+
+    // // TODO: 为什么要删除这两个属性？？？
+    // const { properties } = data
+    // delete properties?.groupAddable
+    // delete properties?.isCollapsed
 
     return data
   }
 
+  /**
+   * 重写 getHistoryData 方法
+   */
   getHistoryData(): NodeData {
     const data = super.getHistoryData()
     data.children = Array.from(this.children)
