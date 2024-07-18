@@ -3,10 +3,9 @@ import LogicFlow, {
   BaseNodeModel,
   BaseEdgeModel,
   ModelType,
-  Model,
 } from '@logicflow/core'
 import {
-  getEdgeBboxInfo,
+  getBboxPosit,
   getDistanceToSegment,
   labelIsInSegments,
   pointOnBezier,
@@ -14,8 +13,6 @@ import {
   totalLength,
 } from './algorithm'
 import LabelModel from './LabelModel'
-
-import BoxBoundsPoint = Model.BoxBoundsPoint
 import Point = LogicFlow.Point
 import Position = LogicFlow.Position
 
@@ -83,15 +80,6 @@ const defaultPositionOfNode = (index: number, model: BaseNodeModel) => {
   }
 }
 
-export type NodeBBox = {
-  x: number
-  y: number
-  width: number
-  height: number
-  centerX: number
-  centerY: number
-} & BoxBoundsPoint
-
 const defaultPositionOfLine = (index: number = 0, model: BaseEdgeModel) => {
   const {
     textPosition: { x, y },
@@ -146,25 +134,62 @@ const defaultPositionOfLine = (index: number = 0, model: BaseEdgeModel) => {
   }
 }
 
-/**
- * 根据文本坐标获取文本偏移百分比，用于节点缩放和移动时，文本新坐标的计算
- */
-export const getNodeTextDeltaPerent = (
-  point: Point,
-  nodePoint: Point,
+export const getNodeBBoxInfo = (
+  position: Point,
   width: number,
   height: number,
 ) => {
-  const { x, y } = point
-  const { x: nodeX, y: nodeY } = nodePoint
-  const startX = nodeX - width / 2
-  const startY = nodeY - height / 2
-  const endX = nodeX + width / 2
-  const endY = nodeY + height / 2
-  return {
-    xDeltaPercent: startX === endX ? 0.5 : (x - startX) / (endX - startX),
-    yDeltaPercent: startY === endY ? 0.5 : (y - startY) / (endY - startY),
+  const { x, y } = position
+  const minX = x - width / 2
+  const minY = y - height / 2
+  const maxX = x + width / 2
+  const maxY = y + height / 2
+  return [
+    { x: minX, y: minY }, // 左上
+    { x: minX, y: maxY }, // 右上
+    { x: maxX, y: minY }, // 左下
+    { x: maxX, y: maxY }, // 右下
+  ]
+}
+
+export const getNodeLabelPosition = (
+  label: LabelModel,
+  bBoxPoints: Position[],
+) => {
+  const { x, y, xDeltaPercent, yDeltaPercent, yDeltaDistance, xDeltaDistance } =
+    label
+  if (isEmpty(bBoxPoints)) return { x, y }
+  const { x: minX, y: minY } = head(bBoxPoints) as Position
+  const { x: maxX, y: maxY } = last(bBoxPoints) as Position
+  if (xDeltaPercent && yDeltaPercent) {
+    return {
+      x: minX + (maxX - minX) * xDeltaPercent,
+      y: minY + (maxY - minY) * yDeltaPercent,
+    }
   }
+  // 如果文本在节点的上方或者下方
+  if (xDeltaPercent && yDeltaDistance) {
+    return {
+      x: minX + (maxX - minX) * xDeltaPercent,
+      y: yDeltaDistance < 0 ? minY + yDeltaDistance : maxY + yDeltaDistance,
+    }
+  }
+  // 如果文本在节点的左边或者右边
+  if (yDeltaPercent && xDeltaDistance) {
+    return {
+      x: xDeltaDistance < 0 ? minX + xDeltaDistance : maxX + xDeltaDistance,
+      y: minY + (maxY - minY) * yDeltaPercent,
+    }
+  }
+  // 如果文本在节点左上/左下/右上/右下
+  if (xDeltaDistance && yDeltaDistance) {
+    return {
+      x: xDeltaDistance < 0 ? minX + xDeltaDistance : maxX + xDeltaDistance,
+      y: yDeltaDistance < 0 ? minY + yDeltaDistance : maxY + yDeltaDistance,
+    }
+  }
+  // 兜底
+  return { x, y }
 }
 
 /**
@@ -194,14 +219,19 @@ export const pointPositionAfterRotate = (
 }
 
 /**
- *
+ * 通用方法，获取节点在元素上的偏移量
  * @param point 文本坐标
  * @param startPoint 边起点坐标
  * @param endPoint 边终点坐标
  * @returns 文本在x轴和y轴上的偏移百分比
  */
-export const getEdgeLabelDeltaOfBbox = (point: Point, pointList: Point[]) => {
-  const bBoxInfo = getEdgeBboxInfo(pointList)
+export const getLabelDeltaOfBbox = (
+  point: Point,
+  pointList: Point[],
+  baseType,
+) => {
+  // 双击创建文本时不一定能精准地点在边上，所以增加10的容错空间
+  const bBoxInfo = getBboxPosit(pointList, baseType === 'node' ? 0 : 10)
   const { x, y } = point
   const { minX, minY, maxX, maxY } = bBoxInfo
   let xDeltaPercent
@@ -213,16 +243,16 @@ export const getEdgeLabelDeltaOfBbox = (point: Point, pointList: Point[]) => {
    * 文本在凸包外，记录绝对距离
    * 用于边路径变化时计算文本新位置
    */
-  if (minX <= x && x <= maxX) {
+  if (minX < x && x < maxX) {
     xDeltaPercent = minX && maxX ? min([(x - minX) / (maxX - minX), 1]) : 0.5
-  } else if (x < minX) {
+  } else if (x <= minX) {
     xDeltaDistance = x - minX
   } else {
     xDeltaDistance = x - maxX
   }
-  if (minY <= y && y <= maxY) {
+  if (minY < y && y < maxY) {
     yDeltaPercent = minY && maxY ? min([(y - minY) / (maxY - minY), 1]) : 0.5
-  } else if (y < minY) {
+  } else if (y <= minY) {
     yDeltaDistance = y - minY
   } else {
     yDeltaDistance = y - maxY
@@ -323,15 +353,13 @@ export const getTextPositionOfPolyline = (
     yDeltaDistance,
     xDeltaDistance,
     isInLine,
-    id,
     ratio,
   } = label
   const pointsPosition = points2PointsList(points)
-  console.log('label info', id, label, points)
   const startPoint = head(pointsPosition)
   const endPoint = last(pointsPosition)
   // 分别取路径中 x轴和y轴上的最大最小坐标值组合成一个矩形
-  const bBoxInfo = getEdgeBboxInfo(pointsPosition)
+  const bBoxInfo = getBboxPosit(pointsPosition, 10)
   const { minX, minY, maxX, maxY } = bBoxInfo
   if (!startPoint || !endPoint) return { x, y }
   /**
@@ -366,10 +394,10 @@ export const getTextPositionOfPolyline = (
     }
   }
   // 如果文本在凸包左上/左下/右上/右下
-  if (xDeltaPercent && yDeltaPercent) {
+  if (xDeltaDistance && yDeltaDistance) {
     return {
-      x: minX + (maxX - minX) * xDeltaPercent,
-      y: minY + (maxY - minY) * yDeltaPercent,
+      x: xDeltaDistance < 0 ? minX + xDeltaDistance : maxX + xDeltaDistance,
+      y: yDeltaDistance < 0 ? minY + yDeltaDistance : maxY + yDeltaDistance,
     }
   }
   // 兜底

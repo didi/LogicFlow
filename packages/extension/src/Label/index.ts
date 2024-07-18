@@ -14,14 +14,14 @@ import LabelContainer from './LabelOverlay'
 import LabelModel from './LabelModel'
 import LabelOverlayModel from './LabelOverlayModel'
 import {
-  getEdgeLabelDeltaOfBbox,
+  getNodeBBoxInfo,
+  getLabelDeltaOfBbox,
+  getNodeLabelPosition,
   isPointInBezier,
   isPointInPolyline,
   defaultPosition,
-  getNodeTextDeltaPerent,
   getClosestPointOnBezier,
   getTextPositionOfPolyline,
-  // newPointPositionAtDistance,
   pointPositionAfterRotate,
   pointPositionRatio,
 } from './util'
@@ -46,6 +46,7 @@ export class Label {
   }
   addListeners() {
     const {
+      LABEL_DROP,
       LABEL_SHOULD_ADD,
       LABEL_BATCH_ADD,
       LABEL_SHOULD_DELETE,
@@ -117,10 +118,13 @@ export class Label {
         deltaY,
         points,
         pointsList,
+        width,
+        height,
         x,
         y,
         rotate,
-        updateRotate,
+        nodeRotate,
+        nodeResize,
       } = model
       if (BaseType === ElementType.NODE && relateId) {
         // 内部触发节点变换时文本更新
@@ -128,6 +132,7 @@ export class Label {
           (label) => label.relateId === model.relateId,
         )
         if (isEmpty(targetLabels)) return
+        // 节点移动的情况
         if (!isNil(deltaX) && !isNil(deltaY)) {
           targetLabels.forEach((item) => {
             item.setAttributes({
@@ -137,7 +142,8 @@ export class Label {
           })
           return
         }
-        if (updateRotate) {
+        // 节点旋转的情况
+        if (nodeRotate) {
           targetLabels.forEach((item) => {
             const { x: itemX, y: itemY } = item
             const newPosition = pointPositionAfterRotate(
@@ -152,6 +158,18 @@ export class Label {
           })
           return
         }
+        // 节点缩放的情况
+        if (nodeResize) {
+          targetLabels.forEach((item) => {
+            const newPosition = getNodeLabelPosition(
+              item,
+              getNodeBBoxInfo({ x, y }, width, height),
+            )
+            item.setAttributes(newPosition)
+          })
+          return
+        }
+        // 其他情况
         if (data) {
           targetLabels.forEach((item) => {
             item.setAttributes(data)
@@ -191,6 +209,33 @@ export class Label {
             item.setAttributes(data)
           })
         }
+      }
+    })
+    this.lf.on(LABEL_DROP, ({ data }) => {
+      const targetLabel = this.model.labels.find((item) => item.id === data.id)
+      if (!targetLabel) return
+      const { type, relateId, x, y } = targetLabel
+      if (type === ElementType.NODE) {
+        const nodeModel = this.lf.graphModel.getNodeModelById(relateId)
+        const { x: nodeX, y: nodeY, width, height, BaseType } = nodeModel
+        targetLabel.setAttributes(
+          getLabelDeltaOfBbox(
+            { x, y },
+            getNodeBBoxInfo({ x: nodeX, y: nodeY }, width, height),
+            BaseType,
+          ),
+        )
+      } else {
+        const edgeModel = this.lf.graphModel.getEdgeModelById(relateId)
+        const { pointsList, modelType, BaseType } = edgeModel
+        targetLabel.setAttributes({
+          ...getLabelDeltaOfBbox({ x, y }, pointsList, BaseType),
+          isInLine:
+            modelType === ModelType.BEZIER_EDGE
+              ? isPointInBezier({ x, y }, pointsList)
+              : isPointInPolyline({ x, y }, pointsList),
+          ratio: pointPositionRatio({ x, y }, pointsList),
+        })
       }
     })
   }
@@ -233,11 +278,15 @@ export class Label {
         editable: editable,
         isFocus: false,
         ...defaultPosit,
-        ...getNodeTextDeltaPerent(defaultPosit, { x, y }, width, height),
+        ...getLabelDeltaOfBbox(
+          defaultPosit,
+          getNodeBBoxInfo({ x, y }, width, height),
+          BaseType,
+        ),
       }
       if (BaseType === ElementType.EDGE) {
         assign(defaultText, {
-          ...getEdgeLabelDeltaOfBbox(defaultPosit, pointsList),
+          ...getLabelDeltaOfBbox(defaultPosit, pointsList, BaseType),
           isInLine:
             modelType === ModelType.BEZIER_EDGE
               ? isPointInBezier(defaultPosit, pointsList)
@@ -256,7 +305,11 @@ export class Label {
         ...defaultText,
         ...item,
         content: item.content || item.value,
-        ...getNodeTextDeltaPerent(item, { x, y }, width, height),
+        ...getLabelDeltaOfBbox(
+          item,
+          getNodeBBoxInfo({ x, y }, width, height),
+          BaseType,
+        ),
       }
     })
     if (!isNil(_labelOptions.max) && _labelOptions.max < labelList.length) {

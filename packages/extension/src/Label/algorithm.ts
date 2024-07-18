@@ -14,17 +14,20 @@ import Point = LogicFlow.Point
  *  maxY: 外框在y轴上的最大坐标
  * }
  */
-export const getEdgeBboxInfo = (pointList: Point[]): BoxBoundsPoint => {
+export const getBboxPosit = (
+  pointList: Point[],
+  tolerance: number = 0,
+): BoxBoundsPoint => {
   return reduce(
     pointList,
     (result: BoxBoundsPoint, value: Point) => {
       const { minX, minY, maxX, maxY } = result
-      // 双击创建文本时不一定能精准地点在边上，所以增加10的容错空间
+
       return {
-        minX: (min([minX, value.x]) || result.minX) - 10,
-        minY: (min([minY, value.y]) || result.minY) - 10,
-        maxX: (max([maxX, value.x]) || result.maxX) + 10,
-        maxY: (max([maxY, value.y]) || result.maxY) + 10,
+        minX: (min([minX, value.x]) || result.minX) - tolerance,
+        minY: (min([minY, value.y]) || result.minY) - tolerance,
+        maxX: (max([maxX, value.x]) || result.maxX) + tolerance,
+        maxY: (max([maxY, value.y]) || result.maxY) + tolerance,
       }
     },
     {
