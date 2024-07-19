@@ -2,6 +2,7 @@ import { forEach } from 'lodash-es'
 import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
 import { SelectionSelect, RichTextEditor, Label } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
+import '@logicflow/extension/es/index.css'
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 
