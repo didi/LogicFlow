@@ -221,6 +221,8 @@ export const content = `.lf-control {
 }
 .lf-label-overlay {
   overflow: visible;
+  height: 0;
+  width: 0;
 }
 .lf-label-overlay .lf-label-editor {
   box-sizing: content-box;
