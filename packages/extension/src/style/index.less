@@ -255,6 +255,8 @@
 }
 
 .lf-label-overlay {
+  width: 0;
+  height: 0;
   overflow: visible;
 
   .lf-label-editor {
@@ -297,12 +299,12 @@
     .medium-editor-toolbar-actions {
       display: flex !important;
       flex-wrap: nowrap;
-      place-content: center flex-start;
       height: 30px;
       padding-left: 0;
       list-style: none;
       border-radius: 6px;
       box-shadow: 0 0 1px #fafafa;
+      place-content: center flex-start;
 
       li {
         button {
