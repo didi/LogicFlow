@@ -40,7 +40,7 @@ const lf = new LogicFlow({
 
 在LogicFlow里面，我们把流程图看做是由节点和边组成的图。所以我们采用如下数据结构来表示LogicFlow的图数据。
 
-<code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
+<code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
 
 **`nodes`**: 包含所有的节点。每个节点的数据属性详见 <a href="../api/nodeModelApi#数据属性">
 nodeModel</a> 。

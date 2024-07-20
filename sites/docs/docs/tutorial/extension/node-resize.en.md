@@ -30,14 +30,19 @@ export default {
 If we expect the custom node to be scaled, then change it to:
 
 ```tsx | pure
-import { RectResize } from "@logicflow/extension";
-class CustomNode extends RectResize.view {}
-class CustomNodeModel extends RectResize.model {}
+import { RectResize } from '@logicflow/extension'
+
+class CustomNode extends RectResize.view {
+}
+
+class CustomNodeModel extends RectResize.model {
+}
+
 export default {
-  type: "custom-node",
+  type: 'custom-node',
   model: CustomNodeModel,
   view: CustomNode,
-};
+}
 ```
 
 ### Setting shape attributes of a node

@@ -27,12 +27,12 @@ N，N 到 B。示例如下。
 ## 使用
 
 ```tsx | pure
-import LogicFlow from "@logicflow/core";
-import "@logicflow/core/dist/style/index.css";
-import { InsertNodeInPolyline } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import LogicFlow from '@logicflow/core'
+import '@logicflow/core/dist/style/index.css'
+import { InsertNodeInPolyline } from '@logicflow/extension'
+import '@logicflow/extension/lib/style/index.css'
 
-LogicFlow.use(InsertNodeInPolyline);
+LogicFlow.use(InsertNodeInPolyline)
 ```
 
 ## 个性化配置

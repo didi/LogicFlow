@@ -22,19 +22,19 @@ Take a square for example, at the edge we want its next node to be only a circle
 should add a check rule for `square` as a `source` node.
 
 ```tsx | pure
-import { RectNode, RectNodeModel } from '@logicflow/core';
+import { RectNode, RectNodeModel } from '@logicflow/core'
 
 class SquareModel extends RectNodeModel {
   initNodeData(data) {
-    super.initNodeData(data);
+    super.initNodeData(data)
 
     const circleOnlyAsTarget = {
-      message: "The next node of a square node can only be a round node",
+      message: 'The next node of a square node can only be a round node',
       validate: (sourceNode, targetNode, sourceAnchor, targetAnchor) => {
-        return targetNode.type === "circle";
+        return targetNode.type === 'circle'
       },
-    };
-    this.sourceRules.push(circleOnlyAsTarget);
+    }
+    this.sourceRules.push(circleOnlyAsTarget)
   }
 }
 ```
@@ -68,7 +68,7 @@ In the node model, there is a state attribute, when the node connection rule che
 the value of the state attribute is 5. We can use this attribute to realize the effect of the hint
 that the connection is a node.
 
-<code id="node-connect" src="../../src/tutorial/advanced/node/connect"></code>
+<code id="node-connect" src="../../../src/tutorial/advanced/node/connect"></code>
 
 ## Move
 
@@ -101,14 +101,14 @@ lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
 });
 ```
 
-<code id="node-movable" src="../../src/tutorial/advanced/node/movable"></code>
+<code id="node-movable" src="../../../src/tutorial/advanced/node/movable"></code>
 
 ## Anchor Points
 
 For various base type nodes, we have built-in default anchor points.LogicFlow supports customizing
 the anchor point of a node by overriding the method of getting the anchor point.
 
-<code id="node-sql" src="../../src/tutorial/advanced/node/sql"></code>
+<code id="node-sql" src="../../../src/tutorial/advanced/node/sql"></code>
 
 In the above example, when we customize the anchors, we can not only define the number and position
 of the anchors, but we can also add any attributes to the anchors. With these attributes, we can
@@ -127,7 +127,7 @@ for [examples](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hid
 ## Text
 
 LogicFlow supports customizing the appearance and editing state of node text.
-References [nodeModel API](../../api/nodeModel.en) `textObject`
+References [nodeModel API](../../api/nodeModel.en.md) `textObject`
 
 ```tsx | pure
 class CustomNodeModel extends RectNodeModel {
@@ -154,7 +154,7 @@ be rendered using any framework for the internal.
 
 The following is an example of an HTML node 👇.
 
-<code id="node-html-node" src="../../src/tutorial/advanced/node/htmlNode/index"></code>
+<code id="node-html-node" src="../../../src/tutorial/advanced/node/htmlNode/index"></code>
 
 ## React nodes
 
@@ -162,7 +162,7 @@ Since a custom html node exposes a DOM node to the outside world, you can use th
 existing capabilities to render the node. In react, we utilize the `render` method of `reactDom` to
 render the React component to the dom node.
 
-<code id="node-react-node" src="../../src/tutorial/advanced/node/reactNode/index"></code>
+<code id="node-react-node" src="../../../src/tutorial/advanced/node/reactNode/index"></code>
 
 ## Vue Nodes
 

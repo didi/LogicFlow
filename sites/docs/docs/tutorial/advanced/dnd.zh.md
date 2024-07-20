@@ -51,4 +51,4 @@ type NodeConfig = {
 **使用拖拽面板插件**
 
 LogicFlow 在 extension 中内置了**拖拽面板插件**
-，如果不想自定义图形面板，可以使用此插件快速实现。详情见[拖拽面板](../extension/dnd-panel.zh)。
+，如果不想自定义图形面板，可以使用此插件快速实现。详情见[拖拽面板](../extension/dnd-panel.zh.md)。

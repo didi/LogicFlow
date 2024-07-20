@@ -31,7 +31,7 @@ const lf = new LogicFlow({
 lf.updateEditConfig({
   stopZoomGraph: false,
   stopScrollGraph: false,
-});
+})
 ```
 
 ## Silent Mode

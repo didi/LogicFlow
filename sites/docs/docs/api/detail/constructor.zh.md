@@ -1,5 +1,5 @@
 ---
-title: constructor
+title: 初始化选项
 toc: content
 order: 0
 ---
@@ -154,7 +154,7 @@ const lf = new LogicFlow({
 
 ### `style`
 
-可以通过 style 配置主题，详细支持的样式选项见教程[主题 Theme](../../tutorial/basic/theme.zh)
+可以通过 style 配置主题，详细支持的样式选项见教程[主题 Theme](../../tutorial/basic/theme.zh.md)
 
 ### `snapline`
 

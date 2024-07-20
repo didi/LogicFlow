@@ -42,13 +42,13 @@ is required. See [LogicFlow API](../../api) for the complete set of configuratio
 Inside LogicFlow, we think of a flowchart as a graph consisting of nodes and edges. So we use the
 following data structure to represent the graph data of LogicFlow.
 
-<code id="graphData" src="../../src/tutorial/basic/instance/graphData"></code>
+<code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
 
 **`nodes`**: Contains all nodes. Each node's data attributes are detailed in
-the <a href="../api/nodeModelApi.en#DataAttributes">nodeModel</a>.
+the <a href="../api/nodeModelApi.en.md#DataAttributes">nodeModel</a>.
 
 **`edges`**: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`.
-Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en#DataAttributes">
+Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en.md#DataAttributes">
 EdgeModel</a>.
 
 **`type`**: Indicates the type of node or edge, which can be a basic type built into LogicFlow such
