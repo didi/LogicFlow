@@ -21,6 +21,7 @@ class CustomPolygonModel extends PolygonNodeModel {
     ];
     this.points = pointList as PointTuple[];
   }
+
   getTextStyle() {
     const { refX = 0, refY = 0 } = this.properties;
     const style = super.getTextStyle();

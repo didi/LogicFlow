@@ -1,3 +1,3 @@
 import { rollupConfig } from '../../rollup.config'
 
-export default rollupConfig()
+export default rollupConfig({})

@@ -1,4 +1,4 @@
-import { ReactComponent as IconDown } from '@ant-design/icons-svg/inline-svg/outlined/down.svg';
+import { DownOutlined } from '@ant-design/icons';
 import React, { type FC } from 'react';
 import './index.less';
 
@@ -34,7 +34,7 @@ const HeaderExtra: FC = () => {
         <option value={historyVersion.ONE}>1.x</option>
         <option value={historyVersion.ZERO}>0.x</option>
       </select>
-      <IconDown />
+      <DownOutlined />
     </div>
   );
 };
