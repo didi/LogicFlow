@@ -14,7 +14,7 @@ You can customize the edges based on React components using the following method
 React component you want to the edges, or even hide the original edges by styling them and redrawing
 them using React
 
-<code id="edge-react" src="../../src/tutorial/advanced/edge/reactEdge"></code>
+<code id="edge-react" src="../../../src/tutorial/advanced/edge/reactEdge"></code>
 
 ## Anchor Points
 
@@ -28,10 +28,10 @@ together.
 class CustomEdgeModel2 extends LineEdgeModel {
   // Rewrite this method to save the data with the anchors.
   getData() {
-    const data = super.getData();
-    data.sourceAnchorId = this.sourceAnchorId;
-    data.targetAnchorId = this.targetAnchorId;
-    return data;
+    const data = super.getData()
+    data.sourceAnchorId = this.sourceAnchorId
+    data.targetAnchorId = this.targetAnchorId
+    return data
   }
 }
 ```
@@ -61,4 +61,4 @@ class CustomEdgeModel extends PolylineEdgeModel {
 }
 ```
 
-<code id="edge-animation" src="../../src/tutorial/advanced/edge/animation"></code>
+<code id="edge-animation" src="../../../src/tutorial/advanced/edge/animation"></code>

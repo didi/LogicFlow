@@ -29,7 +29,7 @@ shapes. There are seven types of basic nodes built into LogicFlow, namely:
 6. <a href="https://developer.mozilla.org/en/docs/Web/SVG/Element/text" target="_blank">text</a>
 7. `html`
 
-<code id="node-shapes" src="../../src/tutorial/basic/node/shapes"></code>
+<code id="node-shapes" src="../../../src/tutorial/basic/node/shapes"></code>
 
 The basic nodes in LogicFlow are relatively simple, but in business scenarios, there may be various
 requirements for the appearance of nodes. LogicFlow provides a powerful custom node feature that
@@ -67,9 +67,9 @@ overriding `getShape` in the `view` to define complex node appearances.
 Here's an example of customizing a node by inheriting and overriding the `model`. Customizing nodes
 can be achieved using different approaches 😊.
 
-<code id="node-custom" src="../../src/tutorial/basic/node/custom"></code>
+<code id="node-custom" src="../../../src/tutorial/basic/node/custom"></code>
 
-[lf.register](../../api/detail/index.en#register): Register custom nodes. After registration,
+[lf.register](../../api/detail/index.en.md#register): Register custom nodes. After registration,
 custom nodes can be used.
 
 :::info
@@ -171,7 +171,7 @@ styles, developers can use properties from
 the [properties](../../api/nodeModel.en.md#data-attributes) to control how nodes display different
 styles.
 
-<code id="custom-rect" src="../../src/tutorial/basic/node/properties"></code>
+<code id="custom-rect" src="../../../src/tutorial/basic/node/properties"></code>
 
 :::info
 
@@ -189,7 +189,7 @@ provided by LogicFlow.
 
 The following is an example of a node `view`. Click `node1` several times to try it out.
 
-<code id="node-custom-view" src="../../src/tutorial/basic/node/custom-view"></code>
+<code id="node-custom-view" src="../../../src/tutorial/basic/node/custom-view"></code>
 
 Here the `h function` is used for the return of `Shape`. The `h` method is a rendering function
 exposed by LogicFlow, and its usage is the same as `react` and `vue`'

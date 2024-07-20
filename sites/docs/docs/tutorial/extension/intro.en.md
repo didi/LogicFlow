@@ -31,8 +31,9 @@ LogicFlow.use(DndPanel)
 
 npm:
 ```tsx | pure
-import { BpmnElement } from '@logicflow/extension';
-LogicFlow.use(BpmnElement);
+import { BpmnElement } from '@logicflow/extension'
+
+LogicFlow.use(BpmnElement)
 ```
 
 cdn:

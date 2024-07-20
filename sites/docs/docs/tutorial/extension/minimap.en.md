@@ -34,9 +34,11 @@ lf.extension.miniMap.show(leftPosition, topPosition)
 MiniMap.show(leftPosition, topPosition)
 ```
 
-`show()` supports passing the values of the style attributes left and top to determine the position of the mini-map in the canvas.
+`show()` supports passing the values of the style attributes left and top to determine the position
+of the mini-map in the canvas.
 
-Only left and top are provided because they can be used with the `lf.getPointByClient` API, but if you want to realize more flexible styles, you can set the styles directly by the class name.
+Only left and top are provided because they can be used with the `lf.getPointByClient` API, but if
+you want to realize more flexible styles, you can set the styles directly by the class name.
 
 - `lf-mini-map` - mini-map root element
 - `lf-mini-map-header` - mini-map header element

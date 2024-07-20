@@ -20,9 +20,12 @@ import "@logicflow/extension/lib/style/index.css";
 LogicFlow.use(Control);
 ```
 
-After registering the `Control` component, Logic Flow creates a control panel at the top right of the canvas, as shown here
+After registering the `Control` component, Logic Flow creates a control panel at the top right of
+the canvas, as shown here
 
-The control panel provides the common ability to zoom in and out or adapt to the canvas, and also has built-in redo and undo functionality, of course if you don't like the UI or the functionality, you can define your own based on the [API](../../api) provided by `LogicFlow`.
+The control panel provides the common ability to zoom in and out or adapt to the canvas, and also
+has built-in redo and undo functionality, of course if you don't like the UI or the functionality,
+you can define your own based on the [API](../../api) provided by `LogicFlow`.
 
 
 <details>
@@ -77,8 +80,6 @@ private controlItems: ControlItem[] = [
   ];</code></pre>
 </details>
 
-
-
 ### example
 
 <a href="https://codesandbox.io/embed/intelligent-matsumoto-t1dc5?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> Go to CodeSandbox for examples</a>
@@ -107,8 +108,11 @@ lf.extension.control.addItem({
   },
 })
 ```
+
 ### Removing Options
+
 For example, to remove the navigation controls added above
+
 ```tsx | pure
 lf.extension.control.removeItem('mini-map')
 ```

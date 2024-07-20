@@ -16,7 +16,7 @@ There are two ways to set a theme:
 - Initialize `LogicFlow` and pass it in as configuration.
 - After initialization, call the setTheme method of `LogicFlow`.
 
-See [Theme API](../../api/theme.en) for theme configuration parameters.
+See [Theme API](../../api/theme.en.md) for theme configuration parameters.
 
 ## Configuration
 
@@ -29,15 +29,15 @@ const config = {
   width: 1000,
   height: 800,
   style: { // Setting the default theme style
-    rect: {...}, // Rectangle Style
-    circle: {...},
-    nodeText: {...},
-    edgeText: {...},
-    anchor: {...},
-    ...
-  }
+    rect: { ... }, // Rectangle Style
+    circle: { ... },
+    nodeText: { ... },
+    edgeText: { ... },
+    anchor: { ... },
+    // ...,
+  },
 }
-const lf = new LogicFlow(config);
+const lf = new LogicFlow(config)
 ```
 
 ## setTheme

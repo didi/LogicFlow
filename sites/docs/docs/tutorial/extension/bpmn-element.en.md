@@ -14,9 +14,9 @@ toc: content
 > the BPMN extension, which allows you to use LogicFlow directly to draw processes compatible with the
 > BPMN 2.0 specification, and its exported data can be run on the Activity process engine.
 
-LogicFlow provides [custom-node](../basic/node.en) and [custom-edge](../basic/edge.en) to
+LogicFlow provides [custom-node](../basic/node.en.md) and [custom-edge](../basic/edge.en.md) to
 implement nodes and edges that meet the BPMN2.0 specification. Then use
-the [extension-adapter](adapter.en) to convert the generated data to the format required by
+the [extension-adapter](adapter.en.md) to convert the generated data to the format required by
 Activity.
 
 :::info
@@ -38,8 +38,7 @@ handing over the business logic to third-party libraries.
 <script src="/lib/BpmnAdapter.js"></script>
 <script>
   LogicFlow.use(BpmnElement);
-  LogicFlow.use(BpmnAdapter);
-</script>
+  LogicFlow.use(BpmnAdapter); </script>
 ```
 
 <!-- TODO -->
@@ -370,7 +369,7 @@ const complexGateway = GatewayNodeFactory('bpmn:complexGateway', complexIcon)
 #### Streams
 
 Streams can be extended in exactly the same way as custom edges are defined,
-see [edge](../basic/edge.en)
+see [edge](../basic/edge.en.md)
 
 #### Other Nodes
 

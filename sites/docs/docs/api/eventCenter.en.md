@@ -47,7 +47,7 @@ The event object contains the following:
 
 | Property | Type       | Description                                                                                                                      |
 |:---------|:-----------|:---------------------------------------------------------------------------------------------------------------------------------|
-| data     | Object     | The [data attribute](nodeModel.zh.md#数据属性)                                                                                       |
+| data     | Object     | The [data attribute](nodeModel.en.md#数据属性)                                                                                             |
 | e        | MouseEvent | Native mouse event object                                                                                                        |
 | position | Object     | Coordinates of the mouse trigger point in the canvas ( Refer to the return value of [getPointByClient](detail#getpointbyclient)) |
 
@@ -71,7 +71,7 @@ The event object contains the following:
 
 | Property | 类型         | 值                                                                                                                              |
 |:---------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| data     | Object     | The [data attribute](edgeModel.zh.md#数据属性)                                                                                     |
+| data     | Object     | The [data attribute](edgeModel.en.md#数据属性)                                                                                           |
 | e        | MouseEvent | Native mouse event object                                                                                                      |
 | position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](detail#getpointbyclient)) |
 | msg      | string     | Verification information of the edge                                                                                           |

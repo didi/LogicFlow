@@ -5,7 +5,7 @@ module.exports = {
   trailingComma: 'all',
   overrides: [
     {
-      files: '*.md',
+      files: '*',
       options: {
         proseWrap: 'preserve',
       },

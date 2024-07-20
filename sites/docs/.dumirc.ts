@@ -2,7 +2,6 @@ import { defineConfig } from 'dumi';
 import { repository, version } from './package.json';
 
 export default defineConfig({
-  mfsu: {},
   // define: {
   //   'process.env.DUMI_VERSION': version,
   // },
@@ -10,24 +9,49 @@ export default defineConfig({
     { id: 'zh', name: '中文' },
     { id: 'en', name: 'English' },
   ],
+  favicons: [
+    'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/favicon.png',
+  ], // 网站 favicon
   themeConfig: {
     title: 'LogicFlow',
-    description: 'JavaScript diagramming library',
+    description: '低成本实现，让逻辑管理更简单、更高效',
     siteUrl: '/',
-
-    // name: 'LogicFlow',
-    // logo: '/logo.png',
     footer: `Copyright © 2024 | Powered by LogicFlow Team`,
     githubUrl: repository, // GitHub 地址
-    isAntVSite: false,
-    showAntVProductsCard: false,
     defaultLanguage: 'zh',
     es5: false,
     footerTheme: 'light',
-    // rtl: true, // 导航栏会展示 RTL 按钮
-    // nprogress: true, // 切换页面时是否在页面顶部展示进度条
-    // prefersColor: false,
+
+    showSearch: true, // 是否显示搜索框
+    showGithubCorner: true, // 是否显示头部的 GitHub icon
+    showGithubStars: true, // 是否显示 GitHub star 数量
+    showLanguageSwitcher: true, // 是否显示官网语言切换
+    showWxQrcode: true, // 是否显示头部菜单的微信公众号
+    showChartResize: true, // 是否在 demo 页展示图表视图切换
+    showAPIDoc: false, // 是否在 demo 页展示API文档
+
+    versions: {
+      '2.x': 'https://site.logic-flow.cn',
+      '1.x': 'https://docs.logic-flow.cn',
+    },
+
     navs: [
+      {
+        slug: 'docs/tutorial/about',
+        title: {
+          zh: '教程',
+          en: 'Tutorial',
+        },
+        order: 0,
+      },
+      {
+        slug: 'docs/api',
+        title: {
+          zh: 'API',
+          en: 'API',
+        },
+        order: 1,
+      },
       {
         slug: 'examples',
         title: {
@@ -36,19 +60,122 @@ export default defineConfig({
         },
         order: 2,
       },
+      {
+        slug: 'docs/article',
+        title: {
+          zh: '相关文章',
+          en: 'Articles',
+        },
+        order: 3,
+      },
+      {
+        slug: 'docs/release',
+        title: {
+          zh: '更新日志',
+          en: 'CHANGELOG',
+        },
+        order: 4,
+      },
+    ],
+
+    docs: [
+      {
+        slug: 'tutorial/basic',
+        title: {
+          zh: '基础教程',
+          en: 'Basic',
+        },
+        order: 3,
+      },
+      {
+        slug: 'tutorial/advanced',
+        title: {
+          zh: '进阶教程',
+          en: 'Advanced',
+        },
+        order: 4,
+      },
+      {
+        slug: 'tutorial/extension',
+        title: {
+          zh: '插件',
+          en: 'Extension',
+        },
+        order: 5,
+      },
+      {
+        slug: 'api/model',
+        title: {
+          zh: 'Model定义',
+          en: 'Models',
+        },
+        order: 6,
+      },
+      {
+        slug: 'api/detail',
+        title: {
+          zh: '构造函数',
+          en: 'Constructor',
+        },
+        order: 1,
+      },
+    ],
+    examples: [
+      {
+        slug: 'showcase',
+        icon: 'case',
+        title: {
+          zh: '场景案例',
+          en: 'Case',
+        },
+      },
+    ],
+    companies: [
+      {
+        name: '阿里云',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*V_xMRIvw2iwAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '支付宝',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*lYDrRZvcvD4AAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '天猫',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*BQrxRK6oemMAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '淘宝网',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*1l8-TqUr7UcAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '网上银行',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*ZAKFQJ5Bz4MAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '京东',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*yh-HRr3hCpgAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: 'yunos',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*_js7SaNosUwAAAAAAAAAAABkARQnAQ',
+      },
+      {
+        name: '菜鸟',
+        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*TgV-RZDODJIAAAAAAAAAAABkARQnAQ',
+      },
     ],
     detail: {
       engine: {
-        zh: 'X6',
-        en: 'X6',
+        zh: 'LogicFlow',
+        en: 'LogicFlow',
       },
       title: {
-        zh: 'X6·图编辑引擎',
-        en: 'X6·图编辑引擎',
+        zh: 'LogicFlow·业务流程图编辑框架',
+        en: 'LogicFlow·业务流程图编辑框架',
       },
       description: {
-        zh: 'X6 是基于 HTML 和 SVG 的图编辑引擎，提供低成本的定制能力和开箱即用的内置扩展，方便我们快速搭建 DAG 图、ER 图、流程图、血缘图等应用。',
-        en: 'X6 是基于 HTML 和 SVG 的图编辑引擎，提供低成本的定制能力和开箱即用的内置扩展，方便我们快速搭建 DAG 图、ER 图、流程图、血缘图等应用。',
+        zh: '低成本实现，让逻辑管理更简单、更高效',
+        en: 'Low-cost implementation for simpler, more efficient logic management',
       },
       image:
         'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*5qQsTo0dkOcAAAAAAAAAAAAADmJ7AQ/original',
@@ -63,7 +190,7 @@ export default defineConfig({
             zh: '开始使用',
             en: 'Getting Started',
           },
-          link: `/tutorial/getting-started`,
+          link: `/tutorial/get-started`,
         },
         {
           text: {
@@ -75,16 +202,6 @@ export default defineConfig({
         },
       ],
     },
-    examples: [
-      {
-        slug: 'showcase',
-        icon: 'case',
-        title: {
-          zh: '场景案例',
-          en: 'Case',
-        },
-      },
-    ],
     playground: {
       extraLib: '',
       container:
@@ -111,6 +228,12 @@ export default defineConfig({
     //   github: repository,
     // },
   },
+  mfsu: {},
+  alias: {
+    '@': __dirname,
+  },
+  links: [],
+  scripts: [],
   // theme: {
   //   '@c-primary': '#2d71fa',
   // },

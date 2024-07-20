@@ -12,8 +12,9 @@ toc: content
 
 ### Provides methods to modify the background of the canvas, including background color or background image, which is located at the bottom of the canvas. <Badge>info</Badge>
 
-The `background` option sets the style of the background layer of the canvas when it is created, and supports passthrough of any style attribute to the background layer. The default value of `false` means no background.
-
+The `background` option sets the style of the background layer of the canvas when it is created, and
+supports passthrough of any style attribute to the background layer. The default value of `false`
+means no background.
 
 ```tsx | pure
 const lf = new LogicFlow({

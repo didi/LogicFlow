@@ -7,8 +7,6 @@ order: 1
 toc: content
 ---
 
-# 快速上手
-
 ## 安装
 
 - 命令安装：通过使用 npm、yarn、pnpm 进行安装。
@@ -117,7 +115,7 @@ LogicFlow 本身是以 umd 打包为纯 JS 的包，所以不论是 vue 还是 r
 LogicFlow 实例的时候，传入的参数 container,必须要 dom 上存在这个节点，不然会报错请检查 container
 参数是否有效。
 
-<code id="use-in-react" src="../../src/tutorial/getting-started/use-in-react"></code>
+<code id="use-in-react" src="../../src/tutorial/get-started/use-in-react"></code>
 
 ### 3. Vue 框架中使用
 
@@ -175,9 +173,9 @@ LogicFlow.use(Control);
 
 示例：
 
-<code id="use-plugin" src="../../src/tutorial/getting-started/use-plugin"></code>
+<code id="use-plugin" src="../../src/tutorial/get-started/use-plugin"></code>
 
-想要发现更多插件功能，请看[插件简介](extension/intro.zh)。
+想要发现更多插件功能，请看[插件简介](extension/intro.zh.md)。
 
 ### 5. 数据转换
 
@@ -212,7 +210,7 @@ lf.getGraphData()
 当然，我们也可以在`render`传入时手动处理非LogicFlow支持的数据格式，在获取`getGraphData`
 的时候再手动转为我们想要的其他数据格式。
 
-想要深入更多数据转换功能，请看[数据转换](extension/adapter.zh)。
+想要深入更多数据转换功能，请看[数据转换](extension/adapter.zh.md)。
 
-我们的演示 demo 就到这里了，想继续了解 Logicflow 的一些能力，可以从[基础教程](basic/class.zh)开始阅读。
+我们的演示 demo 就到这里了，想继续了解 Logicflow 的一些能力，可以从[基础教程](basic/class.zh.md)开始阅读。
 

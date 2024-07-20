@@ -29,12 +29,12 @@ Currently only the fold line is supported
 ## Use
 
 ```tsx | pure
-import LogicFlow from "@logicflow/core";
-import "@logicflow/core/dist/style/index.css";
-import { InsertNodeInPolyline } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import LogicFlow from '@logicflow/core'
+import '@logicflow/core/dist/style/index.css'
+import { InsertNodeInPolyline } from '@logicflow/extension'
+import '@logicflow/extension/lib/style/index.css'
 
-LogicFlow.use(InsertNodeInPolyline);
+LogicFlow.use(InsertNodeInPolyline)
 ```
 
 ## Personalized Configuration

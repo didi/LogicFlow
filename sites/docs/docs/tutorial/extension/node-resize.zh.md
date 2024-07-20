@@ -56,7 +56,7 @@ export default {
 
 ### 设置节点的形状属性
 
-LogicFlow 把节点的宽高、半径等属性称之为[形状属性](../../api/nodeModel.zh#形状属性)，我们可以重写
+LogicFlow 把节点的宽高、半径等属性称之为[形状属性](../../api/nodeModel.zh.md#形状属性)，我们可以重写
 model 中的[initNodeData](../../api/nodeModel.zh.md#getoutlinestyle)
 或者[setAttributes](../../api/nodeModel.zh.md#setattributes)
 方法来设置节点的形状属性。但是当节点可以缩放后，我们不能在`setAttributes`

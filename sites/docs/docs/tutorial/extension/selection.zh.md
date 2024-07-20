@@ -36,9 +36,9 @@ lf.extension.selectionSelect.openSelectionSelect();
 ### 关闭
 
 ```tsx | purex | pure
-lf.closeSelectionSelect();
+lf.closeSelectionSelect()
 // 1.1.0新增用法
-lf.extension.selectionSelect.closeSelectionSelect();
+lf.extension.selectionSelect.closeSelectionSelect()
 ```
 
 <!-- <example href="/examples/#/extension/components/selection" :height="300" ></example> -->

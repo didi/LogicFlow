@@ -1,5 +1,5 @@
 ---
-title: constructor
+title: Options
 toc: content
 order: 0
 ---
@@ -12,7 +12,7 @@ order: 0
 ```tsx | purex | pure
 import LogicFlow from '@logicflow/core'
 
-const options: LogicFlow.Options = { 
+const options: LogicFlow.Options = {
   //... 
 }
 new LogicFlow(options)
@@ -161,7 +161,7 @@ const lf = new LogicFlow({
 
 ### `style`
 
-Themes can be configured by style, see the tutorial [Theme](../../tutorial/basic/theme.en) for
+Themes can be configured by style, see the tutorial [Theme](../../tutorial/basic/theme.en.md) for
 details of supported style options.
 
 ### `snapline`
