@@ -2,6 +2,7 @@ import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
 
 class CustomEdgeModel extends PolylineEdgeModel {
   customTextPosition = true;
+
   getTextStyle() {
     const style = super.getTextStyle();
     // const { x: x1 } = this.pointsList[0];
@@ -15,6 +16,7 @@ class CustomEdgeModel extends PolylineEdgeModel {
     style.className = 'custom-text';
     return style;
   }
+
   getTextPosition() {
     const position = super.getTextPosition();
 
