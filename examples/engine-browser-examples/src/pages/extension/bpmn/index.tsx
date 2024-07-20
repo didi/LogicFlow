@@ -181,6 +181,7 @@ export default function BPMNExtension() {
       const { control, miniMap } = lf.extension
 
       ;(control as Control).addItem({
+        key: 'minimap',
         iconClass: 'custom-minimap',
         title: '',
         text: '导航',

@@ -24,6 +24,7 @@ class CustomRectModel extends RectNodeModel {
     this.height = 80;
     this.radius = 50;
   }
+
   // 重写文本样式属性
   getTextStyle(): LogicFlow.TextNodeTheme {
     const { refX = 0, refY = 0 } = this.properties as CustomProperties;
@@ -35,6 +36,7 @@ class CustomRectModel extends RectNodeModel {
       transform: `matrix(1 0 0 1 ${refX} ${refY + 60})`,
     };
   }
+
   // 设置矩形的样式属性：边框颜色
   getNodeStyle() {
     const style = super.getNodeStyle();

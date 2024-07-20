@@ -64,7 +64,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     draggable: false,
     editable: true,
   }
-  @observable properties: Record<string, unknown> = {}
+  @observable properties: Record<string, any> = {}
   @observable points = ''
   @observable pointsList: Point[] = []
 

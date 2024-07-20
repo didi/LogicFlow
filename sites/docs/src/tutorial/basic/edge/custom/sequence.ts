@@ -12,6 +12,7 @@ class SequenceModel extends PolylineEdgeModel {
     style.stroke = 'orange';
     return style;
   }
+
   // 设置边文本样式
   getTextStyle() {
     const style: EdgeTextTheme = super.getTextStyle();
@@ -22,6 +23,7 @@ class SequenceModel extends PolylineEdgeModel {
     });
     return style;
   }
+
   // 设置 hover 轮廓样式
   getOutlineStyle() {
     const style = super.getOutlineStyle();
