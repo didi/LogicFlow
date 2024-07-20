@@ -21,7 +21,7 @@ The example is as follows:
 lf.dnd.startDrag({
   type,
   text: `${type}-node`,
-});
+})
 ```
 
 <a href="https://codesandbox.io/embed/logicflow-base18-odj3g?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> Go to CodeSandbox for examples </a>

@@ -18,11 +18,11 @@ You can configure only the enabled attribute, which, when true, enables the defa
 
 ```tsx | pure
 const lf = new LogicFlow({
-  container: document.querySelector("#app"),
+  container: document.querySelector('#app'),
   keyboard: {
     enabled: true,
   },
-});
+})
 ```
 
 ## 内置快捷键功能

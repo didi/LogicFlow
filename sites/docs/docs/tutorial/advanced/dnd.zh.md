@@ -20,7 +20,7 @@ toc: content
 lf.dnd.startDrag({
   type,
   text: `${type}节点`,
-});
+})
 ```
 
 <a href="https://codesandbox.io/embed/logicflow-base18-odj3g?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> 去 CodeSandbox 查看示例</a>

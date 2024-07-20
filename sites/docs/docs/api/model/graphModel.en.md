@@ -24,7 +24,7 @@ You can get the graphModel in several ways
 ```tsx | pure
 class CustomModel extends RectNodeModel {
   getNodeStyle() {
-    const graphModel = this.graphModel;
+    const graphModel = this.graphModel
   }
 }
 ```
@@ -51,7 +51,7 @@ provided to do so.
 |:----------------------------|:----------------------------------------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | width                       | `number`                                      |         | LogicFlow Canvas Width                                                                                                                                                       |
 | height                      | `number`                                      |         | LogicFlow Canvas Height                                                                                                                                                      |
-| theme                       | `LogicFlow.Theme`                             |         | [Detailed API](../theme.en.md)                                                                                                                                           |
+| theme                       | `LogicFlow.Theme`                             |         | [Detailed API](../theme.en.md)                                                                                                                                               |
 | animation                   | `boolean \| LFOptions.AnimationConfig`        | false   | Animation state configuration, if or not the corresponding animation is turned on                                                                                            |
 | [eventCenter](#eventCenter) | `EventEmitter`                                |         | Event center, through which events can be thrown to the outside world.                                                                                                       |
 | modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | Maintains a model for all nodes and edge types                                                                                                                               |
@@ -66,8 +66,8 @@ provided to do so.
 | fakeNode                    | `BaseNodeModel  \| null`                      | null    | When dragging nodes from outside into the canvas, use fakeNode to distinguish them from formal nodes on the canvas.                                                          |
 | [overlapMode](#overlapMode) | `number`                                      |         | Stacking mode when elements overlap; 0: default mode, 1: incremental mode                                                                                                    |
 | background                  | `false \| LFOptions.BackgroundConfig`         |         | Canvas background configuration.                                                                                                                                             |
-| transformModel              | `TransformModel`                              |         | current canvas translation and scaling matrix `model`, see [API](transformModel.en.md) for more details                                                               |
-| editConfigModel             | `EditConfigModel`                             |         | Basic configuration object, see [editConfigApi](editConfigModel.en.md) for details.                                                                                   |
+| transformModel              | `TransformModel`                              |         | current canvas translation and scaling matrix `model`, see [API](transformModel.en.md) for more details                                                                      |
+| editConfigModel             | `EditConfigModel`                             |         | Basic configuration object, see [editConfigApi](editConfigModel.en.md) for details.                                                                                          |
 | gridSize                    | `number`                                      | 1       | Grid size                                                                                                                                                                    |
 | partial                     | `boolean`                                     | false   | whether or not to enable localized rendering, when the number of elements on the page is too large, enabling localized rendering will improve the page rendering performance |
 | nodesMap                    | `GraphModel.NodesMapType`                     |         | The `map` of all nodes in the canvas.                                                                                                                                        |

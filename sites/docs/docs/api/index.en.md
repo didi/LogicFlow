@@ -24,8 +24,8 @@ performed on the `LogicFlow` instance.
 
 ### Graph Related
 
-| Option                                                 | Description                                                                                                                                                                  |
-|:-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Option                                                    | Description                                                                                                                                                                  |
+|:----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [setTheme](theme.en.md)                                   | Set the theme.                                                                                                                                                               |
 | [focusOn](./detail/index.en.md#focuson)                   | Position to the center of the canvas viewport.                                                                                                                               |
 | [resize](./detail/index.en.md#resize)                     | Adjusts the width and height of the canvas, if the width or height is not passed, the width and height of the canvas will be calculated automatically.                       |

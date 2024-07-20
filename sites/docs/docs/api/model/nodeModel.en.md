@@ -70,7 +70,8 @@ Usually used for customizing the node, based on the state attribute for more gra
 
 LogicFlow's shape attributes control the primary appearance of the base node. Shape attributes can
 be set via `setAttributes` or `initNodeData`.
-See [Shape Attributes for Custom Nodes](../../tutorial/basic/node.en.md#shape-attributes) for details
+See [Shape Attributes for Custom Nodes](../../tutorial/basic/node.en.md#shape-attributes) for
+details
 on how to set them.
 
 | Name   | Type              | Required or not | Description                                                                                                                                                 |
