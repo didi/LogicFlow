@@ -11,7 +11,8 @@ toc: content
 # BpmnElement
 
 > BPMN is one of the more well-known modeling language standards for workflow. LogicFlow implements
-> the BPMN extension, which allows you to use LogicFlow directly to draw processes compatible with the
+> the BPMN extension, which allows you to use LogicFlow directly to draw processes compatible with
+> the
 > BPMN 2.0 specification, and its exported data can be run on the Activity process engine.
 
 LogicFlow provides [custom-node](../basic/node.en.md) and [custom-edge](../basic/edge.en.md) to

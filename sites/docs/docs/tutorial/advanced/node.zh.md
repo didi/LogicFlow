@@ -109,7 +109,8 @@ sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_h
 
 ## 文本
 
-LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](../../api/nodeModel.zh.md)中的`textObject`
+LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](../../api/nodeModel.zh.md)
+中的`textObject`
 
 ```tsx | pure
 class CustomNodeModel extends RectNodeModel {

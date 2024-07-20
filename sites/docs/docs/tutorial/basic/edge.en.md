@@ -24,11 +24,11 @@ The effect is as follows：
 
 ```tsx | pure
 // line
-import { LineEdge, LineEdgeModel } from "@logicflow/core";
+import { LineEdge, LineEdgeModel } from '@logicflow/core'
 // polyline
-import { PolylineEdge, PolylineEdgeModel } from "@logicflow/core";
+import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
 // bezier
-import { BezierEdge, BezierEdgeModel } from "@logicflow/core";
+import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 ```
 
 ## Inheritance-based customization of edges

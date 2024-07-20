@@ -24,7 +24,7 @@ toc: content
 // 关闭对齐线功能
 const lf = new LogicFlow({
   snapline: false,
-});
+})
 ```
 
 ## 对齐线样式设置
