@@ -19,14 +19,20 @@ LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连�
 1. 矩形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect" target="_blank">
    rect</a>
 2.
+
 圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">
 circle</a>
+
 3.
+
 椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">
 ellipse</a>
+
 4.
+
 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon" target="_blank">
 polygon</a>
+
 5. 菱形 --- `diamond`
 6. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">
    text</a>
@@ -83,13 +89,18 @@ class CustomNode extends RectResize.view {}
 
 ### 自定义节点`model`
 
-LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`两种方式。更多详细定义方法，请查看[NodeModelApi](../../api/nodeModel.zh.md)。
+LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`
+两种方式。更多详细定义方法，请查看[NodeModelApi](../../api/nodeModel.zh.md)。
 
 #### 1. 样式属性
 
-在LogicFlow中，外观属性表示控制着节点`边框`、`颜色`这类偏外观的属性。这些属性是可以直接通过[主题配置](../../api/theme.zh.md)来控制。自定义节点样式可以看做在主题的基础上基于当前节点的类型进行再次定义。
+在LogicFlow中，外观属性表示控制着节点`边框`、`颜色`
+这类偏外观的属性。这些属性是可以直接通过[主题配置](../../api/theme.zh.md)
+来控制。自定义节点样式可以看做在主题的基础上基于当前节点的类型进行再次定义。
 
-例如：在主题中对所有`rect`节点都定义其边框颜色为红色`stroke: red`，那么可以在自定义节点`UserTask`的时候，重新定义`UserTask`边框为蓝色`stroke: blue`。更细粒度的节点样式控制方法，详情见[API 样式属性](../../api/nodeModel.zh.md#样式属性)。
+例如：在主题中对所有`rect`节点都定义其边框颜色为红色`stroke: red`，那么可以在自定义节点`UserTask`
+的时候，重新定义`UserTask`边框为蓝色`stroke: blue`
+。更细粒度的节点样式控制方法，详情见[API 样式属性](../../api/nodeModel.zh.md#样式属性)。
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
@@ -136,7 +147,11 @@ class customRectModel extends RectNodeModel {
 
 #### 3. 基于properties属性自定义节点样式
 
-在上一节LogicFlow的实例中的`图数据`里提到，不论是节点还是边，LogicFlow都保留了properties字段，不仅可以修改元素的`样式`、`形状`属性，可以用于给开发者存放自己的`业务`属性。所以在自定义节点样式的时候，可以基于[properties](../../api/nodeModel.zh.md#数据属性)中的属性来控制节点显示不同的样式。
+在上一节LogicFlow的实例中的`图数据`
+里提到，不论是节点还是边，LogicFlow都保留了properties字段，不仅可以修改元素的`样式`、`形状`
+属性，可以用于给开发者存放自己的`业务`
+属性。所以在自定义节点样式的时候，可以基于[properties](../../api/nodeModel.zh.md#数据属性)
+中的属性来控制节点显示不同的样式。
 
 <code id="custom-rect" src="../../../src/tutorial/basic/node/properties"></code>
 

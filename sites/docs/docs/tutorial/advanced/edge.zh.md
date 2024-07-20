@@ -24,10 +24,10 @@ React 重新绘制
 class CustomEdgeModel2 extends LineEdgeModel {
   // 重写此方法，使保存数据是能带上锚点数据。
   getData() {
-    const data = super.getData();
-    data.sourceAnchorId = this.sourceAnchorId;
-    data.targetAnchorId = this.targetAnchorId;
-    return data;
+    const data = super.getData()
+    data.sourceAnchorId = this.sourceAnchorId
+    data.targetAnchorId = this.targetAnchorId
+    return data
   }
 }
 ```

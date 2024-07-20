@@ -23,7 +23,7 @@ LogicFlow 实例上的大多方法都是在 graphModel 上进行的简单封装�
 ```tsx | pure
 class CustomModel extends RectNodeModel {
   getNodeStyle() {
-    const graphModel = this.graphModel;
+    const graphModel = this.graphModel
   }
 }
 ```
@@ -33,7 +33,7 @@ class CustomModel extends RectNodeModel {
 ```tsx | pure
 class CustomNode extends RectNode {
   getShape() {
-    const { model, graphModel } = this.props;
+    const { model, graphModel } = this.props
     // ...
   }
 }
@@ -45,36 +45,36 @@ class CustomNode extends RectNode {
 
 ## 属性
 
-| 属性                          | 类型                                            | 默认值   | 描述                                                           |
-|:----------------------------|:----------------------------------------------|:------|:-------------------------------------------------------------|
-| width                       | `number`                                      |       | LogicFlow 画布宽度                                               |
-| height                      | `number`                                      |       | LogicFlow 画布高度                                               |
-| theme                       | `LogicFlow.Theme`                             |       | [详细 API](../theme.zh.md)                                 |
-| animation                   | `boolean \| LFOptions.AnimationConfig`        | false | 动画状态配置，是否已打开对应的动画                                            |
-| [eventCenter](#eventCenter) | `EventEmitter`                                |       | 事件中心, 可以通过这个对象向外部抛出事件                                        |
-| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 维护所有节点和边类型对应的 model                                          |
-| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |       | 位于当前画布顶部的元素                                                  |
-| idGenerator                 | `(type?: string) => string \| undefined`      |       | 自定义全局 id 生成器                                                 |
-| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []    | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断                              |
-| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |       | 获取自定义连线轨迹                                                    |
-| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |       | 节点间连线、连线变更时边的生成规则                                            |
-| edgeType                    | `string`                                      |       | 在图上操作创建边时，默认使用的边类型                                           |
-| nodes                       | `BaseNodeModel[]`                             | []    | 画布所有的节点对象                                                    |
-| edges                       | `BaseEdgeModel[]`                             | []    | 画布所有的连线对象                                                    |
-| fakeNode                    | `BaseNodeModel  \| null`                      | null  | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开                      |
-| [overlapMode](#overlapMode) | `number`                                      |       | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                                    |
-| background                  | `false \| LFOptions.BackgroundConfig`         |       | 画布背景配置                                                       |
-| transformModel              | `TransformModel`                              |       | 当前画布平移、缩放矩阵 `model`, 详细见[API](../api/transformModel.zh.md)   |
-| editConfigModel             | `EditConfigModel`                             |       | 页面编辑基本配置对象, 详细见[editConfigApi](../api/editConfigModel.zh.md) |
-| gridSize                    | `number`                                      | 1     | 网格大小                                                         |
-| partial                     | `boolean`                                     | false | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能                        |
-| nodesMap                    | `GraphModel.NodesMapType`                     |       | 画布所有节点的构成的 `map`                                             |
-| edgesMap                    | `GraphModel.EdgesMapType`                     |       | 画布所有边构成的 `map`                                               |
-| modelsMap                   | `GraphModel.ModelsMapType`                    |       | 画布所有节点和边共同构成的 `map`                                          |
-| selectNodes                 | `BaseNodeModel[]`                             |       | 画布中所有选中节点对象                                                  |
-| sortElements                | `array`                                       |       | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                             |
-| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |       | 当前被编辑的元素                                                     |
-| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 当前画布所有被选中的元素                                                 |
+| 属性                          | 类型                                            | 默认值   | 描述                                                    |
+|:----------------------------|:----------------------------------------------|:------|:------------------------------------------------------|
+| width                       | `number`                                      |       | LogicFlow 画布宽度                                        |
+| height                      | `number`                                      |       | LogicFlow 画布高度                                        |
+| theme                       | `LogicFlow.Theme`                             |       | [详细 API](../theme.zh.md)                              |
+| animation                   | `boolean \| LFOptions.AnimationConfig`        | false | 动画状态配置，是否已打开对应的动画                                     |
+| [eventCenter](#eventCenter) | `EventEmitter`                                |       | 事件中心, 可以通过这个对象向外部抛出事件                                 |
+| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 维护所有节点和边类型对应的 model                                   |
+| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |       | 位于当前画布顶部的元素                                           |
+| idGenerator                 | `(type?: string) => string \| undefined`      |       | 自定义全局 id 生成器                                          |
+| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []    | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断                       |
+| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |       | 获取自定义连线轨迹                                             |
+| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |       | 节点间连线、连线变更时边的生成规则                                     |
+| edgeType                    | `string`                                      |       | 在图上操作创建边时，默认使用的边类型                                    |
+| nodes                       | `BaseNodeModel[]`                             | []    | 画布所有的节点对象                                             |
+| edges                       | `BaseEdgeModel[]`                             | []    | 画布所有的连线对象                                             |
+| fakeNode                    | `BaseNodeModel  \| null`                      | null  | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开               |
+| [overlapMode](#overlapMode) | `number`                                      |       | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                             |
+| background                  | `false \| LFOptions.BackgroundConfig`         |       | 画布背景配置                                                |
+| transformModel              | `TransformModel`                              |       | 当前画布平移、缩放矩阵 `model`, 详细见[API](transformModel.zh.md)   |
+| editConfigModel             | `EditConfigModel`                             |       | 页面编辑基本配置对象, 详细见[editConfigApi](editConfigModel.zh.md) |
+| gridSize                    | `number`                                      | 1     | 网格大小                                                  |
+| partial                     | `boolean`                                     | false | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能                 |
+| nodesMap                    | `GraphModel.NodesMapType`                     |       | 画布所有节点的构成的 `map`                                      |
+| edgesMap                    | `GraphModel.EdgesMapType`                     |       | 画布所有边构成的 `map`                                        |
+| modelsMap                   | `GraphModel.ModelsMapType`                    |       | 画布所有节点和边共同构成的 `map`                                   |
+| selectNodes                 | `BaseNodeModel[]`                             |       | 画布中所有选中节点对象                                           |
+| sortElements                | `array`                                       |       | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                      |
+| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |       | 当前被编辑的元素                                              |
+| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 当前画布所有被选中的元素                                          |
 
 ### eventCenter<Badge>属性</Badge>
 

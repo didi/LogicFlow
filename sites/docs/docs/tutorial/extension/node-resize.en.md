@@ -17,14 +17,19 @@ LogicFlow provides `RectResize`, `EllipseResize`, `DiamonResize`, `HtmlResize` i
 For example, if we need a rectangle that can be scaled, when we didn't support node scaling before, we customize the node in the following way:
 
 ```tsx | pure
-import { RectNode, RectNodeModel } from "@logicflow/core";
-class CustomNode extends RectNode {}
-class CustomNodeModel extends RectNodeModel {}
+import { RectNode, RectNodeModel } from '@logicflow/core'
+
+class CustomNode extends RectNode {
+}
+
+class CustomNodeModel extends RectNodeModel {
+}
+
 export default {
-  type: "custom-node",
+  type: 'custom-node',
   model: CustomNodeModel,
   view: CustomNode,
-};
+}
 ```
 
 If we expect the custom node to be scaled, then change it to:
