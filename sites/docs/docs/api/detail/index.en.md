@@ -1,7 +1,7 @@
 ---
 toc: content
 order: 1
-title: detail
+title: LogicFlow functions
 ---
 
 <style>
@@ -14,7 +14,7 @@ table td:first-of-type {
 
 ### setTheme
 
-Set the theme, see [Theme](../theme.en) for details.
+Set the theme, see [Theme](../theme.en.md) for details.
 
 ### focusOn
 
@@ -273,7 +273,7 @@ line.
 // 函数定义
 deleteNode: (nodeId: string) => void
 // 函数调用
-lf.deletaNode(nodeId)
+  lf.deleteNode(nodeId)
 ```
 
 Parameters:
@@ -939,7 +939,7 @@ lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
 ### updateAttributes
 
 Modifies an attribute in the corresponding element model, which is
-called [graphModel](../GraphModel.en#updateattributes) inside the method.
+called [graphModel](../GraphModel#updateattributes) inside the method.
 
 :::warning
 This method is used with caution unless you know enough about logicflow internals.<br>
@@ -962,7 +962,7 @@ lf.updateAttributes("node_id_1", { radius: 4 });
 
 ### editText
 
-same as [graphModel.editText](../GraphModel.en#editText)
+same as [graphModel.editText](../GraphModel.en.md#editText)
 
 ### updateText
 
@@ -987,7 +987,7 @@ lf.updateText("id", "value");
 
 Update the basic configuration of the flow editor.
 
-See [editConfig](../EditConfigModel.en) for detailed parameters
+See [editConfig](../EditConfigModel.en.md) for detailed parameters
 
 ```ts | pure
 lf.updateEditConfig({
@@ -999,7 +999,7 @@ lf.updateEditConfig({
 
 Get the basic configuration of the flow editor.
 
-See [editConfig](../EditConfigModel.en) for detailed parameters
+See [editConfig](../EditConfigModel.en.md) for detailed parameters
 
 ```ts | pure
 lf.getEditConfig();
@@ -1179,7 +1179,7 @@ closeEdgeAnimation: (edgeId: string): void => {}
 
 ### on
 
-Event listener for the graph, see [event](../eventCenter.en).
+Event listener for the graph, see [event](../eventCenter.en.md).
 
 ```ts | pure
 import { CallbackType } from './EventEmitter'

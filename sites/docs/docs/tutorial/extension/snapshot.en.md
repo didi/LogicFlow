@@ -27,16 +27,16 @@ LogicFlow.use(Snapshot)
 With the first step, register the plugin with `LogicFlow` so that there is an additional instance method on the `LogicFlow` instance lf.getSnapshot
 ```tsx | purex | pure
 const lf = new LogicFlow({
-  container: document.querySelector("#graph"),
+  container: document.querySelector('#graph'),
   width: 700,
   height: 600,
-});
+})
 // It can be triggered in any way, and then the plotted graphic is downloaded to a local disk
-document.getElementById("download").addEventListener("click", () => {
-  lf.getSnapshot();
+document.getElementById('download').addEventListener('click', () => {
+  lf.getSnapshot()
   // or version 1.1.13
   // lf.extension.snapshot.getSnapshot()
-});
+})
 ```
 
 It is worth mentioning: the downloaded images intercepted by this plugin will not be affected by the offset and scaling.

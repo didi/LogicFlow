@@ -18,7 +18,7 @@ Like nodes, LogicFlow has some basic edges built in.
 
 The effect is as follows：
 
-<code id="edge-shapes" src="../../src/tutorial/basic/edge/shapes"></code>
+<code id="edge-shapes" src="../../../src/tutorial/basic/edge/shapes"></code>
 
 ## Selecting built-in edges inherited by custom edges
 
@@ -37,9 +37,9 @@ Like nodes, LogicFlow edges support inheritance-based customization. Again, you 
 from both `view` and `model`.
 However, unlike nodes, in most cases it is not recommended to customize `view` when customizing
 edges due to the editing complexity of edges.
-You just need to customize the style class in [edgeModel](../../api/edgeModel.en).
+You just need to customize the style class in [edgeModel](../../api/edgeModel.en.md).
 
-<code id="edge-custom" src="../../src/tutorial/basic/edge/custom"></code>
+<code id="edge-custom" src="../../../src/tutorial/basic/edge/custom"></code>
 
 :::info{title=提示}
 Custom edges also need to be registered using `register`.
@@ -59,7 +59,7 @@ next to the start of the edge. The way to define this is to set the property `cu
 true, then override the `getTextPosition` method, the coordinates sent back by this method are the
 coordinates of the text.
 
-<code id="edge-text" src="../../src/tutorial/basic/edge/textPosition"></code>
+<code id="edge-text" src="../../../src/tutorial/basic/edge/textPosition"></code>
 
 ## Customize the type of edges between nodes
 
@@ -108,7 +108,7 @@ two methods.
 Here's an example of controlling the appearance of a line by using the arrowType in the line's
 properties.
 
-<code id="custom-arrow" src="../../src/tutorial/basic/edge/arrow"></code>
+<code id="custom-arrow" src="../../../src/tutorial/basic/edge/arrow"></code>
 
 ### Customize the adjustment point style
 

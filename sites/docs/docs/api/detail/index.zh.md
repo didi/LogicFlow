@@ -1,7 +1,7 @@
 ---
 toc: content
 order: 1
-title: 详情
+title: LogicFlow 方法
 ---
 
 <style>
@@ -14,7 +14,7 @@ table td:first-of-type {
 
 ### setTheme
 
-设置主题, 详情见[主题](../theme.zh)
+设置主题, 详情见[主题](../theme.zh.md)
 
 ### focusOn
 
@@ -31,15 +31,15 @@ table td:first-of-type {
 ```tsx | pure
 // 定位画布视口中心到node_1元素所处位置
 lf.focusOn({
-  id: "node_1",
-});
+  id: 'node_1',
+})
 // 定位画布视口中心到坐标[1000, 1000]处
 lf.focusOn({
   coordinate: {
     x: 1000,
     y: 1000,
   },
-});
+})
 ```
 
 ### resize
@@ -934,7 +934,7 @@ lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
 
 ### updateAttributes
 
-修改对应元素 model 中的属性, 方法内部就是调用的[graphModel](../graphModel.zh#updateattributes)。
+修改对应元素 model 中的属性, 方法内部就是调用的[graphModel](../graphModel.zh.md#updateattributes)。
 
 :::warning{title=注意}
 此方法慎用，除非您对logicflow内部有足够的了解。<br>
@@ -956,7 +956,7 @@ lf.updateAttributes("node_id_1", { radius: 4 });
 
 ### editText
 
-同[graphModel.editText](../graphModel.zh#edittext)
+同[graphModel.editText](../graphModel.zh.md#edittext)
 
 ### updateText
 
@@ -981,7 +981,7 @@ lf.updateText("id", "value");
 
 更新流程编辑基本配置.
 
-详细参数见：[editConfig](../editConfigModel.zh)
+详细参数见：[editConfig](../editConfigModel.zh.md)
 
 ```tsx | pure
 lf.updateEditConfig({
@@ -993,7 +993,7 @@ lf.updateEditConfig({
 
 获取流程编辑基本配置。
 
-详细参数见：[editConfig](../editConfigModel.zh)
+详细参数见：[editConfig](../editConfigModel.zh.md)
 
 ```tsx | pure
 lf.getEditConfig();
@@ -1172,7 +1172,7 @@ closeEdgeAnimation: (edgeId: string): void => {}
 
 ### on
 
-图的监听事件，更多事件请查看[事件](../eventCenter.zh)。
+图的监听事件，更多事件请查看[事件](../eventCenter.zh.md)。
 
 ```tsx | pure
 import { CallbackType } from './EventEmitter'

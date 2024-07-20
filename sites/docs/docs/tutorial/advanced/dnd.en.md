@@ -61,4 +61,4 @@ to[#185](https://github.com/didi/LogicFlow/issues/185)
 
 LogicFlow has built-in **Drag & Drop Panel Plugin** in extension, if you don't want to customize the
 graphic panel, you can use this plugin to do it quickly.
-See [DndPanel](../extension/dnd-panel.en) for more details.
+See [DndPanel](../extension/dnd-panel.en.md) for more details.

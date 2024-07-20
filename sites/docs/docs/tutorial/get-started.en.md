@@ -122,7 +122,7 @@ LogicFlow itself is packaged as pure JS with UMD, making it compatible with both
 frameworks. One key point to note is that when initializing a LogicFlow instance, the container
 parameter must refer to an existing DOM node to avoid errors.
 
-<code id="use-in-react" src="../../src/tutorial/getting-started/use-in-react"></code>
+<code id="use-in-react" src="../../src/tutorial/get-started/use-in-react"></code>
 
 ### 3. Usage in Vue Framework
 
@@ -182,10 +182,10 @@ LogicFlow.use(Control);
 
 Example:
 
-<code id="use-plugin" src="../../src/tutorial/getting-started/use-plugin"></code>
+<code id="use-plugin" src="../../src/tutorial/get-started/use-plugin"></code>
 
 To discover more about plugin functionalities, refer to
-the [Plugin Introduction](./extension/intro.en).
+the [Plugin Introduction](./extension/intro.en.md).
 
 ### 5. Data Transformation
 
@@ -224,8 +224,8 @@ Additionally, you can manually handle non-LogicFlow supported data formats durin
 convert them to desired formats during `getGraphData`.
 
 For a deeper dive into data transformation capabilities, refer
-to [Data Transformation](./extension/adapter.en).
+to [Data Transformation](./extension/adapter.en.md).
 
 This concludes our demo. To further explore LogicFlow's capabilities, you can start with
-the [Basic Tutorial](./basic/class.en).
+the [Basic Tutorial](./basic/class.en.md).
 

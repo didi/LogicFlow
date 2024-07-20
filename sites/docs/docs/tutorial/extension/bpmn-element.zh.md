@@ -13,7 +13,7 @@ toc: content
 > BPMN 是目前较为著名的 workflow 的建模语言标准之一。LogicFlow 实现了 BPMN 扩展，可以直接使用
 > LogicFlow 来绘制兼容 BPMN2.0 规范的流程，并且其导出的数据可以在 Activity 流程引擎上运行。
 
-LogicFlow 提供了[自定义节点](../basic/node.zh)和[自定义边](../basic/edge.zh), 可以实现满足
+LogicFlow 提供了[自定义节点](../basic/node.zh.md)和[自定义边](../basic/edge.zh.md), 可以实现满足
 BPMN2.0 规范的节点和边。然后在使用[数据转换](adapter.zh.md)将生成的数据转换为 Activity 需要的格式。
 
 :::info{title=注意}

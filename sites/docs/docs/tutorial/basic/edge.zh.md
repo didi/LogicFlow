@@ -18,7 +18,7 @@ toc: content
 
 效果如下：
 
-<code id="edge-shapes" src="../../src/tutorial/basic/edge/shapes"></code>
+<code id="edge-shapes" src="../../../src/tutorial/basic/edge/shapes"></code>
 
 ## 选择自定义边继承的内置边
 
@@ -35,9 +35,9 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 
 和节点一样，LogicFlow 的边也支持基于继承的自定义机制。同样也只需同时继承`view`和`model`。
 但是和节点不一样的是，由于边的编辑复杂度问题，绝大多数情况下，自定义边时不推荐自定义`view`。
-只需要在自定义[edgeModel](../../api/edgeModel.zh)中样式类即可。
+只需要在自定义[edgeModel](../../api/edgeModel.zh.md)中样式类即可。
 
-<code id="edge-custom" src="../../src/tutorial/basic/edge/custom"></code>
+<code id="edge-custom" src="../../../src/tutorial/basic/edge/custom"></code>
 
 :::info{title=提示}
 自定义边同样需要使用`register`注册哦。
@@ -54,7 +54,7 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 LogicFlow 支持开发者自定义文本位置，例如文本位置永远在边起点旁边。定义方式为将属性`customTextPosition`
 设置为 true, 然后重写`getTextPosition`方法, 此方法发回的坐标就是文本的坐标。
 
-<code id="edge-text" src="../../src/tutorial/basic/edge/textPosition"></code>
+<code id="edge-text" src="../../../src/tutorial/basic/edge/textPosition"></code>
 
 ## 自定义节点之间边的类型
 
@@ -97,7 +97,7 @@ lf.setTheme({
 
 这里以通过连线属性中的 arrowType 来控制连线不同的外观为例。
 
-<code id="custom-arrow" src="../../src/tutorial/basic/edge/arrow"></code>
+<code id="custom-arrow" src="../../../src/tutorial/basic/edge/arrow"></code>
 
 ### 自定义调整点样式
 

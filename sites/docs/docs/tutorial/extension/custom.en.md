@@ -10,7 +10,8 @@ toc: content
 
 # CustomPlugin
 
-LogicFlow provides a lot of plug-ins, but these plug-ins are some of the plug-ins with universal, not always meet the business needs. You can customize the plug-ins based on your business scenarios.
+LogicFlow provides a lot of plug-ins, but these plug-ins are some of the plug-ins with universal,
+not always meet the business needs. You can customize the plug-ins based on your business scenarios.
 
 ## Plug-in base format
 
@@ -33,18 +34,27 @@ class PluginCls {
 ```
 
 - A plugin is a class.
-- The class has a static property `pluginName` that identifies the name of the plugin. Plugins with the same name are overridden when initializing an instance of `lf`, also, the user can get an instance of the class plugin by `lf.extension.pluginName`.
-- When initializing `lf` instances, plugin instances are initialized at the same time, and the parameters `lf` and `LogicFlow` are passed in.
-- After `lf` is rendered, the `render` method of the plugin instance is called (if any). The second parameter, toolOverlay, is a node representing the `LogicFlow` Dom layer. Plugin developers can insert html content directly into this node.
+- The class has a static property `pluginName` that identifies the name of the plugin. Plugins with
+  the same name are overridden when initializing an instance of `lf`, also, the user can get an
+  instance of the class plugin by `lf.extension.pluginName`.
+- When initializing `lf` instances, plugin instances are initialized at the same time, and the
+  parameters `lf` and `LogicFlow` are passed in.
+- After `lf` is rendered, the `render` method of the plugin instance is called (if any). The second
+  parameter, toolOverlay, is a node representing the `LogicFlow` Dom layer. Plugin developers can
+  insert html content directly into this node.
 - `destroy` is the method that is called to destroy the plugin. It can be left out in most cases.
 
 ## Implementing the context-pad plugin
 
-The following is an example of implementing a `context-pad` plugin to show you how to define a plugin that fits your business. A `context-pad` plugin is a node that, when clicked on, displays an optional shortcut action next to the node, which can be thought of as a menu that appears when left-clicked on.
+The following is an example of implementing a `context-pad` plugin to show you how to define a
+plugin that fits your business. A `context-pad` plugin is a node that, when clicked on, displays an
+optional shortcut action next to the node, which can be thought of as a menu that appears when
+left-clicked on.
 
 ### Add plug-in option method
 
-LogicFlow mounts instances of plugins as plugin names on `lf.extension` so that our methods in `class` can be called with `lf.extension.plugin-name. PluginMethods` calls.
+LogicFlow mounts instances of plugins as plugin names on `lf.extension` so that our methods
+in `class` can be called with `lf.extension.plugin-name. PluginMethods` calls.
 
 ```tsx | pure
 class ContextPad {
@@ -65,7 +75,8 @@ lf.extension.contextPad.setContextMenuItems([
 
 ### Listening for nodes to be clicked
 
-When the plugin is initialized, `lf` is passed to the plugin as a parameter, which can then be used to listen for events occurring on the canvas.
+When the plugin is initialized, `lf` is passed to the plugin as a parameter, which can then be used
+to listen for events occurring on the canvas.
 
 ```tsx | pure
 class ContextPad {
@@ -74,6 +85,7 @@ class ContextPad {
       this.showContextPad(data);
     });
   }
+
   showContextPad() {
     // ...
   }
@@ -82,22 +94,27 @@ class ContextPad {
 
 ### Displaying HTML content at a specified location on the canvas
 
-The plugin's render function takes two arguments, `lf` and `toolOverlay`, which is the component layer; LogicFlow's canvas is made up of multiple layers, and the component layer is dedicated to rendering custom components.
+The plugin's render function takes two arguments, `lf` and `toolOverlay`, which is the component
+layer; LogicFlow's canvas is made up of multiple layers, and the component layer is dedicated to
+rendering custom components.
 
 **LogicFlow's diagram layers**
 
 <img src="../../../public/overlay.png" alt="overlay info" width="798">
 
-So here we just need to insert the menu into `toolOverlay`, and then move its menu to the corresponding position.
+So here we just need to insert the menu into `toolOverlay`, and then move its menu to the
+corresponding position.
 
 ```tsx | pure
 class ContextPad {
   render(lf, toolOverlay) {
     this.toolOverlay = toolOverlay;
   }
+
   createMenu() {
     this.__menuDOM = document.createElement("div");
   }
+
   // Calculate where the menu should be displayed (top right corner of the node)
   getContextMenuPosition() {
     const data = this._activeData;
@@ -110,6 +127,7 @@ class ContextPad {
     }
     return this.lf.graphModel.transformModel.CanvasPointToHtmlPoint([x, y]);
   }
+
   showMenu() {
     const [x, y] = this.getContextMenuPosition();
     this.__menuDOM.style.display = "flex";
