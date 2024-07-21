@@ -1,12 +1,13 @@
 import { forEach } from 'lodash-es'
+import { useEffect, useRef } from 'react'
+import { Button, Card, Divider, Flex } from 'antd'
 import LogicFlow, { LogicFlowUtil } from '@logicflow/core'
 import { SelectionSelect, RichTextEditor, Label } from '@logicflow/extension'
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
-import { Button, Card, Divider, Flex } from 'antd'
-import { useEffect, useRef } from 'react'
 
 import GraphData = LogicFlow.GraphData
+
+import '@logicflow/core/es/index.css'
+import '@logicflow/extension/es/index.css'
 import './index.less'
 
 import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
@@ -51,7 +52,7 @@ const config: Partial<LogicFlow.Options> = {
   plugins: [SelectionSelect, RichTextEditor, Label],
   pluginsOptions: {
     Label: {
-      nodeLabelVerticle: true,
+      nodeTextVertical: true,
       edgeLabelVerticle: true,
     },
     RichTextEditor: {
@@ -120,8 +121,8 @@ const data = {
       id: 'custom-node-3',
       type: 'circle',
       properties: {
-        _labelOptions: {
-          multiple: true,
+        _labelOption: {
+          isMultiple: true,
         },
         _label: [
           {
@@ -173,8 +174,8 @@ const data = {
       label: ['label1', 'label2'],
       properties: {
         _textMode: 'label',
-        _labelOptions: {
-          multiple: true,
+        _labelOption: {
+          isMultiple: true,
         },
       },
     },
@@ -205,9 +206,9 @@ const data = {
           //   y: 50,
           // },
         ],
-        _labelOptions: {
-          multiple: true,
-          max: 3,
+        _labelOption: {
+          isMultiple: true,
+          maxCount: 3,
         },
       },
     },
@@ -236,7 +237,7 @@ export default function BasicNode() {
         allowRotate: true,
         // allowResize: true,
         edgeTextEdit: true,
-        nodeLabelVerticle: false,
+        nodeTextVertical: false,
         keyboard: {
           enabled: true,
         },

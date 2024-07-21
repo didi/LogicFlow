@@ -220,9 +220,9 @@ export const content = `.lf-control {
   margin-top: 10px;
 }
 .lf-label-overlay {
-  overflow: visible;
-  height: 0;
   width: 0;
+  height: 0;
+  overflow: visible;
 }
 .lf-label-overlay .lf-label-editor {
   box-sizing: content-box;
@@ -259,12 +259,12 @@ export const content = `.lf-control {
 .lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions {
   display: flex !important;
   flex-wrap: nowrap;
-  place-content: center flex-start;
   height: 30px;
   padding-left: 0;
   list-style: none;
   border-radius: 6px;
   box-shadow: 0 0 1px #fafafa;
+  place-content: center flex-start;
 }
 .lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li button {
   box-shadow: none;
