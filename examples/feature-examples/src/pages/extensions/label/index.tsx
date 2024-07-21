@@ -51,7 +51,7 @@ const config: Partial<LogicFlow.Options> = {
   plugins: [SelectionSelect, RichTextEditor, Label],
   pluginsOptions: {
     Label: {
-      nodeLabelVerticle: true,
+      nodeTextVertical: true,
       edgeLabelVerticle: true,
     },
     RichTextEditor: {
@@ -120,8 +120,8 @@ const data = {
       id: 'custom-node-3',
       type: 'circle',
       properties: {
-        _labelOptions: {
-          multiple: true,
+        _labelOption: {
+          isMultiple: true,
         },
         _label: [
           {
@@ -173,8 +173,8 @@ const data = {
       label: ['label1', 'label2'],
       properties: {
         _textMode: 'label',
-        _labelOptions: {
-          multiple: true,
+        _labelOption: {
+          isMultiple: true,
         },
       },
     },
@@ -205,9 +205,9 @@ const data = {
           //   y: 50,
           // },
         ],
-        _labelOptions: {
-          multiple: true,
-          max: 3,
+        _labelOption: {
+          isMultiple: true,
+          maxCount: 3,
         },
       },
     },
@@ -248,7 +248,7 @@ export default function BasicNode() {
         allowRotate: true,
         // allowResize: true,
         edgeTextEdit: true,
-        nodeLabelVerticle: false,
+        nodeTextVertical: false,
         keyboard: {
           enabled: true,
           // shortcuts: [

@@ -18,8 +18,8 @@ import Point = LogicFlow.Point
 import Direction = LogicFlow.Direction
 import NodeConfig = LogicFlow.NodeConfig
 import LineSegment = LogicFlow.LineSegment
-import BoxBoundsPoint = Model.BoxBoundsPoint
 import AnchorInfo = Model.AnchorInfo
+import BoxBoundsPoint = Model.BoxBoundsPoint
 
 /* 获取所有锚点 */
 export const getAnchors = (data: BaseNodeModel) => {

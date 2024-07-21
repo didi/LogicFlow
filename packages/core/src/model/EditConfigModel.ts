@@ -94,10 +94,10 @@ export interface EditConfigInterface {
    * 是否支持多文本，文本文字是否垂直展示
    * 当前文本类型
    */
-  multipleNodeText?: boolean
-  multipleEdgeText?: boolean
-  nodeLabelVerticle?: boolean
-  edgeTextVerticle?: boolean
+  nodeTextMultiple?: boolean
+  edgeTextMultiple?: boolean
+  nodeTextVertical?: boolean
+  edgeTextVertical?: boolean
   // 节点文本类型
   nodeTextMode?: TextMode.LABEL | TextMode.TEXT
   // 边文本类型
@@ -142,10 +142,10 @@ const keys = [
   'edgeTextDraggable',
   'multipleSelectKey',
   'autoExpand',
-  'multipleNodeText',
-  'multipleEdgeText',
-  'nodeLabelVerticle',
-  'edgeTextVerticle',
+  'nodeTextMultiple',
+  'edgeTextMultiple',
+  'nodeTextVertical',
+  'edgeTextVertical',
   'nodeTextMode',
   'edgeTextMode',
 ]
@@ -153,7 +153,6 @@ const keys = [
  * 页面编辑配置
  */
 export class EditConfigModel {
-  @observable textMode = TextMode.TEXT
   /*********************************************************
    * 画布相关配置
    ********************************************************/
@@ -161,6 +160,7 @@ export class EditConfigModel {
   @observable stopZoomGraph = false
   @observable stopScrollGraph = false
   @observable stopMoveGraph = false
+  @observable textMode = TextMode.TEXT // 全局的 textMode 设置
   /*********************************************************
    * 节点相关配置
    ********************************************************/
@@ -172,8 +172,8 @@ export class EditConfigModel {
   @observable nodeTextEdit = true
   @observable nodeTextDraggable = false
   @observable autoExpand = false
-  @observable multipleNodeText = false // 是否支持多个节点文本
-  @observable nodeLabelVerticle = false // 节点文本朝向是否是纵向
+  @observable nodeTextMultiple = false // 是否支持多个节点文本
+  @observable nodeTextVertical = false // 节点文本朝向是否是纵向
   @observable nodeTextMode = TextMode.TEXT // 节点文本模式
   /*********************************************************
    * 边相关配置
@@ -185,8 +185,8 @@ export class EditConfigModel {
   @observable edgeSelectedOutline = true
   @observable edgeTextEdit = true
   @observable edgeTextDraggable = false
-  @observable multipleEdgeText = false // 是否支持多个边文本
-  @observable edgeTextVerticle = false // 边文本朝向是否是纵向
+  @observable edgeTextMultiple = false // 是否支持多个边文本
+  @observable edgeTextVertical = false // 边文本朝向是否是纵向
   @observable edgeTextMode = TextMode.TEXT // 边文本模式
   /*********************************************************
    * 其他
@@ -235,10 +235,10 @@ export class EditConfigModel {
         nodeTextDraggable: this.nodeTextDraggable,
         edgeTextDraggable: this.edgeTextDraggable,
         autoExpand: this.autoExpand,
-        multipleNodeText: this.multipleNodeText,
-        multipleEdgeText: this.multipleEdgeText,
-        nodeLabelVerticle: this.nodeLabelVerticle,
-        edgeTextVerticle: this.edgeTextVerticle,
+        nodeTextMultiple: this.nodeTextMultiple,
+        edgeTextMultiple: this.edgeTextMultiple,
+        nodeTextVertical: this.nodeTextVertical,
+        edgeTextVertical: this.edgeTextVertical,
       }
       assign(conf, silentConfig)
     }

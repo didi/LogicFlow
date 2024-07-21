@@ -1456,13 +1456,13 @@ export namespace LogicFlow {
     // 状态属性
     editable?: boolean
     draggable?: boolean
-    verticle?: boolean // 是否渲染纵向文本
+    vertical?: boolean // 是否渲染纵向文本
   }
 
-  export type LabelOptions = {
-    verticle: boolean
-    multiple: boolean
-    max?: number
+  export type LabelOption = {
+    isVertical: boolean
+    isMultiple: boolean
+    maxCount?: number
   }
 
   export interface LabelData extends LabelConfig {
