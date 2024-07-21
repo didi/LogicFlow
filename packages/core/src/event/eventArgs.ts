@@ -1,5 +1,4 @@
-import {
-  LogicFlow,
+import LogicFlow, {
   BaseNodeModel,
   BaseEdgeModel,
   Model,
@@ -55,7 +54,10 @@ type TextEventArgsPick<
     // 文本dom
     element?: HTMLElement
     // 文本位置
-    position?: { x: number; y: number }
+    position?: {
+      x: number
+      y: number
+    }
   },
   T
 >
@@ -551,13 +553,13 @@ interface SelectionEventArgs {
   'selection:contextmenu': SelectionEventArgsPick<'data' | 'e' | 'position'>
 }
 
-export interface EventArgs
-  extends NodeEventArgs,
-    EdgeEventArgs,
-    ConnectionEventArgs,
-    CommonEventArgs,
-    AnchorEventArgs,
-    BlankEventArgs,
-    HistoryEventArgs,
-    SelectionEventArgs,
-    TextEventArgs {}
+// 此处主要是对事件参数进行聚合
+export type EventArgs = NodeEventArgs &
+  EdgeEventArgs &
+  ConnectionEventArgs &
+  CommonEventArgs &
+  AnchorEventArgs &
+  BlankEventArgs &
+  HistoryEventArgs &
+  SelectionEventArgs &
+  TextEventArgs

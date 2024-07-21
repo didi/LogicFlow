@@ -143,6 +143,7 @@ export namespace Model {
     // REMIND
     // 2.0.0 新增特性，引入 Label 插件后启用
     label?: LogicFlow.LabelConfig[]
+
     properties: Record<string, unknown>
 
     isSelected: boolean // 元素是否被选中

@@ -199,13 +199,13 @@ export class BaseNodeModel implements IBaseNodeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties._labelOptions) {
+    if (!data.properties._labelOption) {
       const {
-        editConfigModel: { multipleNodeText, nodeLabelVerticle },
+        editConfigModel: { nodeTextMultiple, nodeTextVertical },
       } = this.graphModel
-      data.properties._labelOptions = {
-        verticle: nodeLabelVerticle,
-        multiple: multipleNodeText,
+      data.properties._labelOption = {
+        isVertical: nodeTextVertical,
+        isMultiple: nodeTextMultiple,
       }
     }
     if (!data.properties._textMode) {
