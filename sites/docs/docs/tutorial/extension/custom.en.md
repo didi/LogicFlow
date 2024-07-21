@@ -100,7 +100,7 @@ rendering custom components.
 
 **LogicFlow's diagram layers**
 
-<img src="../../../public/overlay.png" alt="overlay info" width="798">
+<img src="../../../public/overlay.png" alt="overlay info" style="width: 300px">
 
 So here we just need to insert the menu into `toolOverlay`, and then move its menu to the
 corresponding position.
