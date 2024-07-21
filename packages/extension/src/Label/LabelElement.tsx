@@ -13,7 +13,7 @@ import LogicFlow, {
 } from '@logicflow/core'
 import LabelModel from './LabelModel'
 
-import LabelOptions = LogicFlow.LabelOptions
+import LabelOption = LogicFlow.LabelOption
 
 const { StepDrag } = LogicFlowUtil
 
@@ -200,7 +200,7 @@ export class Label extends Component<IProps> {
       width,
       height,
       BaseType,
-      properties: { _labelOptions },
+      properties: { _labelOption },
     } = model
     // 自动换行节点边通用样式
     const commonAutoStyle = {
@@ -216,8 +216,8 @@ export class Label extends Component<IProps> {
     let maxWidth = labelModel.style.maxWidth
     let maxHeight = labelModel.style.maxHeight
     if (BaseType === 'node') {
-      maxWidth = (_labelOptions as LabelOptions)?.verticle ? height : width
-      maxHeight = (_labelOptions as LabelOptions)?.verticle ? width : height
+      maxWidth = (_labelOption as LabelOption)?.isVertical ? height : width
+      maxHeight = (_labelOption as LabelOption)?.isVertical ? width : height
     }
 
     // 如果边文案自动换行, 设置编辑框宽度
@@ -245,7 +245,7 @@ export class Label extends Component<IProps> {
       const finalTextWidth =
         nodeTextWidth ||
         textWidth ||
-        ((_labelOptions as LabelOptions)?.verticle ? height : width)
+        ((_labelOption as LabelOption)?.isVertical ? height : width)
       // 文本节点没有默认宽高，只有在设置了textWidth之后才能进行自动换行
       if (
         (modelType !== ModelType.TEXT_NODE && overflowMode !== 'autoWrap') ||
@@ -354,7 +354,7 @@ export class Label extends Component<IProps> {
     } = this.props
     if (!model) return null
     const {
-      properties: { _labelOptions },
+      properties: { _labelOption },
     } = model
     const { transform } = transformModel.getTransformStyle()
     return (
@@ -371,7 +371,7 @@ export class Label extends Component<IProps> {
           width: '20px',
           height: '20px',
           transform: `${transform} rotate(${
-            (_labelOptions as LabelOptions)?.verticle ? -0.25 : 0
+            (_labelOption as LabelOption)?.isVertical ? -0.25 : 0
           }turn)`,
           top: `${labelModel.y}px`,
           left: `${labelModel.x}px`,

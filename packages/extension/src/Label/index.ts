@@ -245,9 +245,9 @@ export class Label {
         editConfigModel: { edgeTextEdit, nodeTextEdit },
       },
     } = this.lf
-    const { nodeLabelVerticle, edgeLabelVerticle } = this.options
+    const { nodeTextVertical, edgeLabelVerticle } = this.options
     const {
-      properties: { _labelOptions, _label },
+      properties: { _labelOption, _label },
       BaseType,
       modelType,
       id,
@@ -267,13 +267,13 @@ export class Label {
       const defaultPosit = defaultPosition(index, data)
       const editable =
         BaseType === ElementType.NODE ? nodeTextEdit : edgeTextEdit
-      const verticle =
-        BaseType === ElementType.NODE ? nodeLabelVerticle : edgeLabelVerticle
+      const vertical =
+        BaseType === ElementType.NODE ? nodeTextVertical : edgeLabelVerticle
       const defaultText = {
         id: `${BaseType}_${id}_label_${index}`,
         type: BaseType,
         relateId: data.id,
-        verticle: _labelOptions.verticle || verticle,
+        vertical: _labelOption.isVertical || vertical,
         draggable: false,
         editable: editable,
         isFocus: false,
@@ -312,16 +312,20 @@ export class Label {
         ),
       }
     })
-    if (!isNil(_labelOptions.max) && _labelOptions.max < labelList.length) {
+    if (
+      !isNil(_labelOption.maxCount) &&
+      _labelOption.maxCount < labelList.length
+    ) {
       console.warn('传入文案数量超出所设置最大值')
     }
-    return _labelOptions.multiple
+    return _labelOption.isMultiple
       ? slice(
           labelList,
           0,
-          isNil(_labelOptions.max) || _labelOptions.max > labelList.length
+          isNil(_labelOption.maxCount) ||
+            _labelOption.maxCount > labelList.length
             ? labelList.length
-            : _labelOptions.max,
+            : _labelOption.maxCount,
         )
       : [labelList[0]]
   }

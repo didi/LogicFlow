@@ -8,36 +8,40 @@ import EdgeData = LogicFlow.EdgeData
 
 let selected: LogicFlow.GraphData | null = null
 
-function translationNodeData(
+export function translateNodeData(
   nodeData: NodeData,
   distance: number,
-  graph: GraphModel,
+  graphModel?: GraphModel,
 ) {
   nodeData.x += distance
   nodeData.y += distance
+
   if (!isEmpty(nodeData.text)) {
     nodeData.text.x += distance
     nodeData.text.y += distance
   }
 
   // TODO: feature/label-text
-  // 1. 如果 translationNodeData 外部调用了该方法，是否也应该触发该事件
+  // 1. 如果 translateNodeData 外部调用了该方法，是否也应该触发该事件
   // 2. LABEL_SHOULD_UPDATE 事件，是否抛出 NODE_UPDATE 事件就可以
-  graph.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-    model: {
-      relateId: nodeData.id,
-      deltaX: distance,
-      deltaY: distance,
-      BaseType: ElementType.NODE,
-    },
-  })
+  // 3. 为什么 node 和 edge 不一样呢？
+  if (graphModel) {
+    graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+      model: {
+        relateId: nodeData.id,
+        deltaX: distance,
+        deltaY: distance,
+        BaseType: ElementType.NODE,
+      },
+    })
+  }
   return nodeData
 }
 
-function translationEdgeData(
+export function translateEdgeData(
   edgeData: EdgeData,
   distance: number,
-  graph: GraphModel,
+  graphModel?: GraphModel,
 ) {
   if (edgeData.startPoint) {
     edgeData.startPoint.x += distance
@@ -53,8 +57,9 @@ function translationEdgeData(
       point.y += distance
     })
   }
-  if (graph.useLabelText(edgeData)) {
-    graph.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
+
+  if (graphModel && graphModel.useLabelText(edgeData)) {
+    graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
       model: {
         relateId: edgeData.id,
         deltaX: distance,
@@ -96,10 +101,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     }
     selected = elements
     selected.nodes.forEach((node) =>
-      translationNodeData(node, TRANSLATION_DISTANCE, graph),
+      translateNodeData(node, TRANSLATION_DISTANCE, graph),
     )
     selected.edges.forEach((edge) =>
-      translationEdgeData(edge, TRANSLATION_DISTANCE, graph),
+      translateEdgeData(edge, TRANSLATION_DISTANCE, graph),
     )
     return false
   })
@@ -117,10 +122,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
       addElements.nodes.forEach((node) => lf.selectElementById(node.id, true))
       addElements.edges.forEach((edge) => lf.selectElementById(edge.id, true))
       selected.nodes.forEach((node) =>
-        translationNodeData(node, TRANSLATION_DISTANCE, graph),
+        translateNodeData(node, TRANSLATION_DISTANCE, graph),
       )
       selected.edges.forEach((edge) =>
-        translationEdgeData(edge, TRANSLATION_DISTANCE, graph),
+        translateEdgeData(edge, TRANSLATION_DISTANCE, graph),
       )
       CHILDREN_TRANSLATION_DISTANCE =
         CHILDREN_TRANSLATION_DISTANCE + TRANSLATION_DISTANCE

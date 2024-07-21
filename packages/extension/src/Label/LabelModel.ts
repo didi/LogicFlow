@@ -17,7 +17,7 @@ export interface ILabelModel {
   // 状态属性
   editable: boolean
   draggable: boolean
-  verticle: boolean // 是否渲染纵向文本
+  vertical: boolean // 是否渲染纵向文本
   isFocus: boolean // label是否获焦
   isHovered: boolean // label是否hover
   isInLine: boolean // label是否在边上
@@ -45,7 +45,7 @@ export class LabelModel implements ILabelModel {
   // 状态属性
   @observable editable = true
   @observable draggable = false
-  @observable verticle = false
+  @observable vertical = false
   @observable isFocus = false
   @observable isHovered = false
   @observable isInLine = true

@@ -128,13 +128,13 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties._labelOptions) {
+    if (!data.properties._labelOption) {
       const {
-        editConfigModel: { multipleEdgeText, edgeTextVerticle },
+        editConfigModel: { edgeTextMultiple, edgeTextVertical },
       } = this.graphModel
-      data.properties._labelOptions = {
-        verticle: edgeTextVerticle,
-        multiple: multipleEdgeText,
+      data.properties._labelOption = {
+        isVertical: edgeTextVertical,
+        isMultiple: edgeTextMultiple,
       }
     }
     this.arrowConfig.markerEnd = `url(#marker-end-${data.id})`

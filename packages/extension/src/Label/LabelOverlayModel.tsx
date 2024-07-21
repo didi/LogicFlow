@@ -51,7 +51,7 @@ export class LabelOverlayModel implements ILabelOverlayModel {
         id,
         BaseType,
         textPosition,
-        properties: { _labelOptions },
+        properties: { _labelOption },
         x: modelX,
         y: modelY,
       },
@@ -59,10 +59,10 @@ export class LabelOverlayModel implements ILabelOverlayModel {
     } = data
     const { eventCenter } = this.lf.graphModel
     const { x, y } = position
-    const { multiple = false, max } = _labelOptions
+    const { isMultiple = false, maxCount } = _labelOption
     const relatedLabels = this.labels.filter((item) => item.relateId === id)
     // 当前文本数量有上限且当前已到最大值时不允许新增文本
-    if (multiple && !isNil(max) && relatedLabels.length >= max) {
+    if (isMultiple && !isNil(maxCount) && relatedLabels.length >= maxCount) {
       eventCenter.emit(EventType.LABEL_NOT_ALLOWED_ADD, {
         data: relatedLabels,
         model: data.model,
@@ -71,7 +71,7 @@ export class LabelOverlayModel implements ILabelOverlayModel {
       return
     }
     if (
-      (multiple && (isNil(max) || relatedLabels.length < max)) ||
+      (isMultiple && (isNil(maxCount) || relatedLabels.length < maxCount)) ||
       isEmpty(relatedLabels)
     ) {
       const position =
@@ -83,8 +83,8 @@ export class LabelOverlayModel implements ILabelOverlayModel {
         content: 'new Text',
         draggable: false,
         editable: true,
-        x: multiple ? x : position.x - 10,
-        y: multiple ? y : position.y - 10,
+        x: isMultiple ? x : position.x - 10,
+        y: isMultiple ? y : position.y - 10,
         isFocus: true,
       }
       const newLabelModel = new LabelModel(newLabel)
