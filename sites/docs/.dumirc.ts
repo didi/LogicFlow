@@ -210,23 +210,6 @@ export default defineConfig({
         typescript: 'latest',
       },
     },
-    // nav: {
-    //   'zh-CN': [
-    //     { title: '文档', link: '/tutorial' },
-    //     { title: 'API', link: '/api' },
-    //     { title: '示例', link: '/examples' },
-    //     { title: '文章', link: '/article/article01' },
-    //   ],
-    //   'en': [
-    //     { title: 'Tutorial', link: '/en/tutorial' },
-    //     { title: 'API', link: '/en/api' },
-    //     { title: 'Examples', link: '/en/examples' },
-    //     { title: 'Article', link: '/en/article/article01' },
-    //   ],
-    // },
-    // socialLinks: {
-    //   github: repository,
-    // },
   },
   mfsu: {},
   alias: {
