@@ -40,13 +40,13 @@ export default class MultipleSelect extends Component<IToolProps> {
       clientY,
       ctrlKey,
     })
-    this.props.logicFlow.container
+    this.props.lf.container
       ?.querySelector('.lf-canvas-overlay[name="canvas-overlay"]')
       ?.dispatchEvent(newEvent)
   }
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
-    const { graphModel, logicFlow } = this.props
-    const { SCALE_X, SCALE_Y } = logicFlow.getTransform()
+    const { graphModel, lf } = this.props
+    const { SCALE_X, SCALE_Y } = lf.getTransform()
     const selectElements = graphModel.getSelectElements(true)
     graphModel.moveNodes(
       selectElements.nodes.map((node) => node.id),
@@ -88,7 +88,7 @@ export default class MultipleSelect extends Component<IToolProps> {
     const {
       graphModel: { selectElements, transformModel },
     } = this.props
-    const { SCALE_X, SCALE_Y } = this.props.logicFlow.getTransform()
+    const { SCALE_X, SCALE_Y } = this.props.lf.getTransform()
     if (selectElements.size <= 1) return
     let x = Number.MAX_SAFE_INTEGER
     let y = Number.MAX_SAFE_INTEGER

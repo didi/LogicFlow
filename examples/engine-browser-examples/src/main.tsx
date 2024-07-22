@@ -9,6 +9,7 @@ import ErrorPage from './pages/ErrorPage'
 import Graph from './pages/graph'
 import Bpmn from './pages/extension/bpmn'
 import Label from './pages/extension/label'
+import NextLabel from './pages/extension/next-label'
 
 import GetStarted from './pages/engine/GetStarted'
 import Recorder from './pages/engine/Recorder'
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: '/extension/label',
             element: <Label />,
+          },
+          {
+            path: '/extension/next-label',
+            element: <NextLabel />,
           },
         ],
       },

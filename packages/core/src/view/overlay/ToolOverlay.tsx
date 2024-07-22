@@ -35,7 +35,7 @@ export class ToolOverlay extends Component<IProps> {
       h(t, {
         textEditElement,
         graphModel,
-        logicFlow: tool.instance,
+        lf: tool.instance,
       }),
     )
     tool.components = components
@@ -43,6 +43,7 @@ export class ToolOverlay extends Component<IProps> {
   }
 
   triggerToolRender() {
+    console.log('123 123')
     const { tool, graphModel } = this.props
     const ToolOverlayElement = document.querySelector(
       `#ToolOverlay_${graphModel.flowId}`,
