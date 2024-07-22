@@ -9,7 +9,9 @@ import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
 export type IToolProps = {
   textEditElement?: BaseNodeModel | BaseEdgeModel
   graphModel: GraphModel
-  logicFlow: LogicFlow
+  lf: LogicFlow
+  // TODO: 是否可以在此处将各 Tool 对应 Options 透传进去
+  toolOptions?: unknown
 }
 
 type ToolConstructor = new (props: IToolProps) => Component<IToolProps>
@@ -25,7 +27,6 @@ export class Tool {
 
   constructor(instance: LogicFlow) {
     this.instance = instance
-
     forEach(defaultTools, (tool) => {
       if (!this.isDisabledTool(tool.toolName)) {
         this.registerTool(tool.toolName, tool)
