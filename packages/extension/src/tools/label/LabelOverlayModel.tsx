@@ -95,6 +95,7 @@ export class LabelOverlayModel implements ILabelOverlayModel {
       })
     }
   }
+
   getData() {
     return this.labels.map((label) => label.getData())
   }

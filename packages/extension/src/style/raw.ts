@@ -219,6 +219,7 @@ export const content = `.lf-control {
 .lf-mindmap_addIcon {
   margin-top: 10px;
 }
+/* label */
 .lf-label-overlay {
   width: 0;
   height: 0;

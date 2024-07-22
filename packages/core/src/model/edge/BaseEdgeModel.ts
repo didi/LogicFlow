@@ -58,6 +58,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   @observable startPoint!: Point
   @observable endPoint!: Point
 
+  @observable textMode = TextMode.TEXT
   @observable text: Required<TextConfig> = {
     value: '',
     x: 0,
@@ -504,6 +505,14 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     this.style = {
       ...formatData(styles),
     }
+  }
+
+  /**
+   * 设置当前元素的文本模式
+   * @param mode
+   */
+  @action setTextMode(mode: TextMode) {
+    this.textMode = mode
   }
 
   /**
