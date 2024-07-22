@@ -16,11 +16,10 @@ import Graph from './view/Graph'
 import * as _View from './view'
 import { formatData } from './util'
 
-import Dnd from './view/behavior/dnd'
-import Tool from './tool/tool'
-import { snapline } from './tool'
-import Keyboard from './keyboard'
+import { Dnd, snapline } from './view/behavior'
+import Tool from './tool'
 import History from './history'
+import Keyboard from './keyboard'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
 import { initDefaultShortcut } from './keyboard/shortcut'
@@ -1322,7 +1321,7 @@ export class LogicFlow {
       ([, extension]) => extension,
     )
     // 安装插件，优先使用个性插件
-    const extensions = [...extensionsAddByUse, ...this.plugins]
+    const extensions = [...this.plugins, ...extensionsAddByUse]
     forEach(extensions, (ext) => {
       let extension: ExtensionConstructor | ExtensionDefinition
       let props: Record<string, any> | undefined
