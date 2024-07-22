@@ -311,7 +311,7 @@ export default function BasicNode() {
   }
 
   return (
-    <Card title="Graph" className="graph-container">
+    <Card title="Label 插件" className="graph-container">
       <Flex wrap="wrap" gap="small">
         <Button
           key="getData"

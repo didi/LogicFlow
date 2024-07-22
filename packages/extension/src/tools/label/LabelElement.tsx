@@ -35,6 +35,7 @@ export class Label extends Component<IProps> {
   editable: boolean = false
   stepDrag: LogicFlowUtil.StepDrag
   textRef: HTMLElement | null = null
+
   constructor(props) {
     super()
     const {
@@ -48,6 +49,7 @@ export class Label extends Component<IProps> {
     this.draggable = draggable
     this.id = id
   }
+
   setRef = (dom) => {
     this.textRef = dom
   }

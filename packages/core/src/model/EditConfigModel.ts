@@ -1,5 +1,5 @@
 import { assign, pick } from 'lodash-es'
-import { observable, action } from '../util/mobx'
+import { observable, action } from 'mobx'
 import { TextMode } from '../constant'
 
 export interface EditConfigInterface {
@@ -149,6 +149,7 @@ const keys = [
   'nodeTextMode',
   'edgeTextMode',
 ]
+
 /**
  * 页面编辑配置
  */
@@ -197,11 +198,13 @@ export class EditConfigModel {
   constructor(config: EditConfigInterface) {
     assign(this, this.getConfigDetail(config))
   }
+
   @action
   updateEditConfig(config) {
     const newConfig = this.getConfigDetail(config)
     assign(this, newConfig)
   }
+
   getConfigDetail(config) {
     const { isSilentMode, textEdit } = config
     const conf = {}
@@ -252,6 +255,7 @@ export class EditConfigModel {
     const userConfig = pick(config, keys)
     return assign(conf, userConfig)
   }
+
   getConfig() {
     return pick(this, keys)
   }

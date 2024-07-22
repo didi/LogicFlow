@@ -61,6 +61,7 @@ class RichTextEditor {
   enable: boolean = false
   editorOptions: any
   editor: MediumEditor | null = null
+
   constructor({ lf, options }) {
     this.enable = options.enable
     lf.useRichText = true
