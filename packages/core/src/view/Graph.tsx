@@ -12,8 +12,8 @@ import {
 } from './overlay'
 import DnD from './behavior/dnd'
 import { observer } from '..'
+import Tool from '../tool'
 import { Options as LFOptions } from '../options'
-import Tool from '../tool/tool'
 import {
   GraphModel,
   BaseEdgeModel,
