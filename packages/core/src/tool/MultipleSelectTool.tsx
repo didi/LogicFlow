@@ -1,10 +1,10 @@
 import { Component } from 'preact/compat'
+import { IToolProps } from '.'
 import { Model, observer } from '..'
 import LogicFlow from '../LogicFlow'
 import { StepDrag, IDragParams } from '../util'
 import { ElementType, EventType } from '../constant'
 import { getNodeOutline, getEdgeOutline } from '../algorithm/outline'
-import { IToolProps } from './tool'
 
 import GraphData = LogicFlow.GraphData
 

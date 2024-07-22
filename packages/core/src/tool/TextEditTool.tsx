@@ -1,7 +1,7 @@
-import { createRef, Component } from 'preact'
+import { createRef, Component } from 'preact/compat'
+import { IToolProps } from '.'
 import { ElementState, observer } from '..'
 import { ElementType, EventType, ModelType } from '../constant'
-import { IToolProps } from './tool'
 
 type IState = {
   style: {
