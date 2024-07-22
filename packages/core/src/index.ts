@@ -10,6 +10,7 @@ export function observer<P>(props: P) {
 
 export { LogicFlow, h, createRef, Component, LogicFlowUtil }
 
+export * from './tool'
 export * from './view'
 export * from './model'
 export * from './options'

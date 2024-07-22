@@ -1439,6 +1439,7 @@ export namespace LogicFlow {
     y: number
     editable?: boolean
     draggable?: boolean
+    // 直接在这儿设置文本模式
     // overflowMode?: 'default' | 'autoWrap' | 'ellipsis'
   }
 
