@@ -56,38 +56,42 @@ const ColorPickerButton = MediumEditor.extensions.button.extend({
   },
 })
 
-class RichTextEditor {
+export class RichTextEditor {
   static pluginName = 'richTextEditor'
-  enable: boolean = false
+  options: any
+  enable: boolean = true
   editorOptions: any
   editor: MediumEditor | null = null
-  constructor({ lf, options }) {
-    this.enable = options.enable
+  lf: any
+  constructor({ lf, options: { RichTextEditor: option } }) {
+    this.options = option
+    this.enable = Boolean(option.enable)
     lf.useRichText = true
+    this.lf = lf
     const defaultOption = {
       toolbar: {
         allowMultiParagraphSelection: true,
         buttons: [
           'bold',
-          'colorpicker',
-          'italic',
-          'underline',
-          'strikethrough',
-          'quote',
-          'justifyLeft',
-          'justifyCenter',
-          'justifyRight',
-          'justifyFull',
-          'superscript',
-          'subscript',
-          'orderedlist',
-          'unorderedlist',
-          'pre',
-          'removeFormat',
-          'outdent',
-          'indent',
-          'h2',
-          'h3',
+          // 'colorpicker',
+          // 'italic',
+          // 'underline',
+          // 'strikethrough',
+          // 'quote',
+          // 'justifyLeft',
+          // 'justifyCenter',
+          // 'justifyRight',
+          // 'justifyFull',
+          // 'superscript',
+          // 'subscript',
+          // 'orderedlist',
+          // 'unorderedlist',
+          // 'pre',
+          // 'removeFormat',
+          // 'outdent',
+          // 'indent',
+          // 'h2',
+          // 'h3',
         ],
         diffLeft: 100,
         diffTop: 0,
@@ -101,16 +105,21 @@ class RichTextEditor {
       },
       disableEditing: true,
     }
-    this.editorOptions = merge(defaultOption, lf.richTextConfig)
+    this.editorOptions = merge(defaultOption, option.editorConfig)
     lf.on('rich-text:init', () => {
       this.init()
     })
   }
 
   init() {
-    const container = document.getElementById('lf-label-overlay')
+    const { graphModel } = this.lf
+    const container = document.getElementById(
+      `ToolOverlay_${graphModel.flowId}`,
+    )
+    const watchList = this.options.inputs
+    if (!container) return
     this.editor = new MediumEditor(
-      '.lf-label-editor',
+      watchList,
       merge(this.editorOptions, {
         elementsContainer: container,
         toolbar: {
@@ -121,6 +130,7 @@ class RichTextEditor {
         },
       }),
     )
+    graphModel.eventCenter.emit('rich-text:inited', { editor: this.editor })
   }
 
   addElements(
@@ -173,7 +183,5 @@ class RichTextEditor {
     this.enable = enable
   }
 }
-
-export { RichTextEditor }
 
 export default RichTextEditor

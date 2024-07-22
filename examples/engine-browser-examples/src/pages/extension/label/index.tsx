@@ -56,6 +56,32 @@ const config: Partial<LogicFlow.Options> = {
     },
     RichTextEditor: {
       enable: true,
+      editorConfig: {
+        toolbar: {
+          buttons: [
+            'colorpicker',
+            'italic',
+            'underline',
+            'strikethrough',
+            'quote',
+            'justifyLeft',
+            'justifyCenter',
+            'justifyRight',
+            'justifyFull',
+            'superscript',
+            'subscript',
+            'orderedlist',
+            'unorderedlist',
+            'pre',
+            'removeFormat',
+            'outdent',
+            'indent',
+            'h2',
+            'h3',
+          ],
+        },
+      },
+      inputs: ['.lf-text-input', '.lf-label-editor'],
     },
   },
 }
