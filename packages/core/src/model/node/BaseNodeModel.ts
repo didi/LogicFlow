@@ -54,6 +54,7 @@ export class BaseNodeModel implements IBaseNodeModel {
   @observable readonly type = ''
   @observable x = 0
   @observable y = 0
+  @observable textMode = TextMode.TEXT
   @observable text: TextConfig = {
     value: '',
     x: 0,
@@ -243,6 +244,14 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   public createId(): string | null {
     return null
+  }
+
+  /**
+   * 设置当前元素的文本模式
+   * @param mode
+   */
+  @action setTextMode(mode: TextMode) {
+    this.textMode = mode
   }
 
   /**

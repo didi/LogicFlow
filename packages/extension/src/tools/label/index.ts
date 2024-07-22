@@ -33,6 +33,7 @@ export class Label {
   labelContainer: any
   options: any
   model: LabelOverlayModel
+
   constructor({ lf, options }) {
     this.lf = lf
     this.labelContainer = new LabelContainer()
@@ -44,6 +45,7 @@ export class Label {
     this.addListeners()
     this.model = new LabelOverlayModel(lf)
   }
+
   addListeners() {
     const {
       LABEL_DROP,
@@ -68,6 +70,7 @@ export class Label {
         labelList = curLabels.map((labelITem) => {
           const { x, y } = labelITem
           // 多个文本的情况下，每个文本的移动距离 = 当前位置 + 当前文本位置与节点中心位置的差 + 固定偏移量
+          // TODO：这个 30 是否可以用某个全局控制偏移量的常量
           return {
             ...labelITem,
             x: x + (x - model.x) + 30,
@@ -239,6 +242,7 @@ export class Label {
       }
     })
   }
+
   formatLabel(data): LabelModel[] {
     const {
       graphModel: {
@@ -329,6 +333,7 @@ export class Label {
         )
       : [labelList[0]]
   }
+
   render(lf, toolOverlay) {
     // label需要存储关联节点/边的信息，所以labelModel初始化时机需要在节点/边Model初始化后
     this.model.labels = flattenDeep(
