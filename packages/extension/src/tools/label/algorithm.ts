@@ -7,6 +7,7 @@ import Point = LogicFlow.Point
 /**
  * 根据边所有点信息计算凸包坐标信息
  * @param pointList 组成边的点的数组
+ * @param tolerance
  * @return bBoxInfo {
  *  minX: 外框在X轴上的最小坐标
  *  maxX: 外框在x轴上的最大坐标

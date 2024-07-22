@@ -1,4 +1,4 @@
-import { find, forEach, map, isObject } from 'lodash-es'
+import { find, forEach, isObject, map } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -36,7 +36,6 @@ import {
   updateTheme,
 } from '../util'
 import EventEmitter from '../event/eventEmitter'
-
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
@@ -628,14 +627,43 @@ export class GraphModel {
   // 提到 utils 里面就可以感觉
   // 另外一个是否需要一个全局的，一个私有的判断
   // 没有私有的，用全局的；有私有的，用私有的  yes
-  useLabelText(model) {
+  useLabelText(model: any) {
     const { _textMode: textMode } = model.properties
     return textMode === TextMode.LABEL
   }
 
+  /**
+   * 获取元素的文本模式
+   * @param model
+   */
+  getTextModel(model: BaseNodeModel): TextMode | undefined {
+    const { textMode, nodeTextMode, edgeTextMode } = this.editConfigModel
+
+    // textMode 的优先级：
+    // 元素自身 model.textMode > editConfigModel.node(edge)TextMode > editConfigModel.textMode
+    if (model.BaseType === ElementType.NODE) {
+      return model.textMode || nodeTextMode || textMode || TextMode.TEXT
+    }
+
+    // 同上
+    if (model.BaseType === ElementType.EDGE) {
+      return model.textMode || edgeTextMode || textMode || TextMode.TEXT
+    }
+  }
+
+  /**
+   * 更新元素的文本模式
+   * @param mode
+   * @param model
+   */
   @action
-  setTextMode(mode: TextMode) {
-    this.textMode = mode
+  setTextMode(mode: TextMode, model?: BaseNodeModel | BaseEdgeModel) {
+    // 如果有传入 model，则直接更新 model 的 textMode
+    if (model) {
+      // model.updateTextMode(mode)
+    }
+    // 调用 editConfigModel 的方法更新 textMode
+    this.editConfigModel.updateEditConfig({ textMode: mode })
   }
 
   /**

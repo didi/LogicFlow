@@ -59,18 +59,22 @@ export class LabelModel implements ILabelModel {
   constructor(data) {
     assign(this, data)
   }
+
   @action setAttributes(config): void {
     keys(config).forEach((key) => {
       set(this, key, config[key])
     })
   }
+
   @action moveLabel(deltaX, deltaY) {
     this.x += deltaX
     this.y += deltaY
   }
+
   @action setAttribute(key: string, value: any) {
     set(this, key, value)
   }
+
   getData(): LabelData {
     return {
       id: this.id,

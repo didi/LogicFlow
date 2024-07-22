@@ -154,7 +154,7 @@ export class AdjustPoint extends Component<IProps, IState> {
             }
       edgeModel.updateAfterAdjustStartAndEnd(params)
     } else {
-      // 如果没有找到目标节点，更显起终点为当前坐标
+      // 如果没有找到目标节点，更新起终点为当前坐标
       type === AdjustType.SOURCE
         ? edgeModel.updateStartPoint({ x, y })
         : edgeModel.updateEndPoint({ x, y })

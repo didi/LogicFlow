@@ -55,7 +55,7 @@ export class StepDrag {
     | 'LABEL'
     | ''
   eventCenter?: EventEmitter
-  model?: Model.BaseModel | any
+  model?: Model.BaseModel | any // TODO: 如何兼容 LabelModel 类型。 LabelModel 能否是 BaseModel 的实现呢？
   data?: Record<string, unknown>
 
   // 运行时

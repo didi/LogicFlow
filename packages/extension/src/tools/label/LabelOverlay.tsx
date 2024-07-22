@@ -32,6 +32,7 @@ type LabelCompontentConfig = {
   labelModel: LabelModel // 当前标签的配置数据
   haveEditor: boolean // 当前是否挂载了富文本插件，用于新增文本时判断是否需要初始化文本的监听
 }
+
 @observer
 class LabelContainer extends Component<IProps, IState> {
   edges: BaseEdgeModel[] = []
@@ -82,6 +83,9 @@ class LabelContainer extends Component<IProps, IState> {
     if (isEmpty(graphModel.textEditElement) && toolDom) {
       toolDom.style.display = 'none'
     }
+
+    // 绑定事件 监听到了富文本初始化完成的事件
+    // 触发 labelOverlayModel.update
   }
 
   render() {
