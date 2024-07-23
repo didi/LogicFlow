@@ -1,0 +1,72 @@
+{
+  "demos": [
+    {
+      "filename": "bpmn.tsx",
+      "title": {
+        "zh": "BPMN-插件",
+        "en": "BPMN-extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/bpmn.png"
+    },
+    {
+      "filename": "approve.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "审批流",
+        "en": "Approval Flow"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/approve.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/examples/#/usage/approve?from=doc"
+    },
+    {
+      "filename": "mvp.tsx",
+      "title": {
+        "zh": "流程图绘制MVP",
+        "en": "MVP Flowchart"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/mvp.png",
+      "isExternal": true,
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/mvp"
+    },
+    {
+      "filename": "games.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "比赛晋级图",
+        "en": "Competition promotion chart"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/games.png",
+      "previewUrl": "https://hsole.github.io/S12"
+    },
+    {
+      "filename": "draft.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "手绘风格流程图",
+        "en": "Hand-drawn style flowchart"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/draft.png",
+      "previewUrl": "https://github.com/towersxu/draft-flow"
+    },
+    {
+      "filename": "pool.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "泳道图",
+        "en": "Swimlane diagram"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/pool.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/pool"
+    },
+    {
+      "filename": "organizer.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "编排器",
+        "en": "Orchestrator"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/organizer.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/organizer"
+    }
+  ]
+}

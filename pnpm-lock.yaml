@@ -689,11 +689,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/dumi-theme-simple':
-        specifier: ^0.0.3
-        version: 0.0.3(@algolia/client-search@4.24.0)(@babel/core@7.23.6)(@types/react@18.2.46)(dumi@2.4.6(@babel/core@7.23.6)(@swc/helpers@0.5.5)(@types/node@20.14.9)(@types/react@18.2.46)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.10.6)(typescript@5.3.3)))(lightningcss@1.22.1)(postcss-less@6.0.0(postcss@8.4.32))(prettier@3.1.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(rollup@3.29.4)(stylelint@15.11.0(typescript@5.4.5))(sugarss@2.0.0)(terser@5.26.0)(type-fest@3.13.1)(typescript@5.4.5)(webpack-dev-server@4.15.1(webpack@5.89.0(@swc/core@1.4.2)))(webpack@5.89.0(@swc/core@1.4.2)))(jquery@3.7.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)
+        specifier: ^0.0.5
+        version: 0.0.5(@algolia/client-search@4.24.0)(@babel/core@7.23.6)(@types/react@18.2.46)(dumi@2.4.6(@babel/core@7.23.6)(@swc/helpers@0.5.5)(@types/node@20.14.9)(@types/react@18.2.46)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.10.6)(typescript@5.3.3)))(lightningcss@1.22.1)(postcss-less@6.0.0(postcss@8.4.32))(prettier@3.1.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(rollup@3.29.4)(stylelint@15.11.0(typescript@5.4.5))(sugarss@2.0.0)(terser@5.26.0)(type-fest@3.13.1)(typescript@5.4.5)(webpack-dev-server@4.15.1(webpack@5.89.0(@swc/core@1.4.2)))(webpack@5.89.0(@swc/core@1.4.2)))(jquery@3.7.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)
       '@logicflow/extension':
         specifier: workspace:*
         version: link:../../packages/extension
+      '@logicflow/react-node-registry':
+        specifier: workspace:*
+        version: link:../../packages/react-node-registry
       '@types/insert-css':
         specifier: ^2.0.3
         version: 2.0.3
@@ -2957,8 +2960,8 @@ packages:
     peerDependencies:
       react: '>=16.3.0'
 
-  '@logicflow/dumi-theme-simple@0.0.3':
-    resolution: {integrity: sha512-oYITOewrsRO+HHIt7H3ovOM/aPErFTpwYWuYBlJJCaQwXvVL+/5y8uBs5cSGBvG0CC6XFBfLcbcd/Z5MV9YosA==}
+  '@logicflow/dumi-theme-simple@0.0.5':
+    resolution: {integrity: sha512-xunULpCO9PCsENUa/LeKf5dbiq/P+f2bR7DrAN0Vn5ZeZjCCJ51Yqpky7GeTnpptRlooxJ6S+4NrBFWVF8vd2w==}
     peerDependencies:
       dumi: ^2.0.0
       react: '>=16.9.0'
@@ -18206,7 +18209,7 @@ snapshots:
       react: 18.3.1
       react-is: 16.13.1
 
-  '@logicflow/dumi-theme-simple@0.0.3(@algolia/client-search@4.24.0)(@babel/core@7.23.6)(@types/react@18.2.46)(dumi@2.4.6(@babel/core@7.23.6)(@swc/helpers@0.5.5)(@types/node@20.14.9)(@types/react@18.2.46)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.10.6)(typescript@5.3.3)))(lightningcss@1.22.1)(postcss-less@6.0.0(postcss@8.4.32))(prettier@3.1.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(rollup@3.29.4)(stylelint@15.11.0(typescript@5.4.5))(sugarss@2.0.0)(terser@5.26.0)(type-fest@3.13.1)(typescript@5.4.5)(webpack-dev-server@4.15.1(webpack@5.89.0(@swc/core@1.4.2)))(webpack@5.89.0(@swc/core@1.4.2)))(jquery@3.7.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)':
+  '@logicflow/dumi-theme-simple@0.0.5(@algolia/client-search@4.24.0)(@babel/core@7.23.6)(@types/react@18.2.46)(dumi@2.4.6(@babel/core@7.23.6)(@swc/helpers@0.5.5)(@types/node@20.14.9)(@types/react@18.2.46)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.10.6)(typescript@5.3.3)))(lightningcss@1.22.1)(postcss-less@6.0.0(postcss@8.4.32))(prettier@3.1.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(rollup@3.29.4)(stylelint@15.11.0(typescript@5.4.5))(sugarss@2.0.0)(terser@5.26.0)(type-fest@3.13.1)(typescript@5.4.5)(webpack-dev-server@4.15.1(webpack@5.89.0(@swc/core@1.4.2)))(webpack@5.89.0(@swc/core@1.4.2)))(jquery@3.7.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)':
     dependencies:
       '@ant-design/icons': 4.8.3(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
       '@babel/plugin-syntax-unicode-sets-regex': 7.18.6(@babel/core@7.23.6)
