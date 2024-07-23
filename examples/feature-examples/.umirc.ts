@@ -159,19 +159,19 @@ export default defineConfig({
         },
         {
           path: '/extension/rules',
-          name: 'rules 插件',
+          name: 'Rules 插件',
           component: './extensions/rules',
         },
       ],
     },
     {
-      name: 'test',
-      path: '/test',
+      name: 'performance',
+      path: '/performance',
       routes: [
         {
-          path: '/test/mini-map&snapshot',
-          name: 'mini-map&snapshot 测试',
-          component: './test/mini-map&snapshot',
+          path: '/performance/snapshot-elements',
+          name: 'Snapshot 元素数量性能测试',
+          component: './performance/snapshot-elements',
         },
       ],
     },

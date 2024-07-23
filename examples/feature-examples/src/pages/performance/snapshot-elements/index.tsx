@@ -20,7 +20,7 @@ import {
   Row,
   Col,
 } from 'antd'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import styles from './index.less'
 
 import '@logicflow/core/es/index.css'
@@ -42,42 +42,6 @@ const config: Partial<LogicFlow.Options> = {
     },
   },
   partial: true,
-}
-
-const nodes: LogicFlow.NodeConfig[] = []
-const edges: LogicFlow.EdgeConfig[] = []
-
-for (let i = 0; i < 0; i++) {
-  const nodeStartId = `${i * 2 + 1}`
-  const nodeEndId = `${i * 2 + 2}`
-  const nodeStart: LogicFlow.NodeConfig = {
-    id: nodeStartId,
-    type: 'rect',
-    x: 400 * (i % 10) - 200,
-    y: 100 * Math.floor(i / 10) - 500,
-    text: `${i}-start`,
-  }
-  const nodeEnd: LogicFlow.NodeConfig = {
-    id: nodeEndId,
-    type: 'rect',
-    x: 400 * (i % 10),
-    y: 100 * Math.floor(i / 10) - 500,
-    text: `${i}-end`,
-  }
-  const edge: LogicFlow.EdgeConfig = {
-    id: `e_${i}`,
-    type: 'polyline',
-    sourceNodeId: nodeStartId,
-    targetNodeId: nodeEndId,
-  }
-  nodes.push(nodeStart)
-  nodes.push(nodeEnd)
-  edges.push(edge)
-}
-
-const data: LogicFlow.GraphConfigData = {
-  nodes,
-  edges,
 }
 
 const miniMapOptions: MiniMap.MiniMapOption = {
@@ -132,6 +96,60 @@ export default function MiniMapExtension() {
       lfRef.current = lf
     }
   }, [])
+
+  const [elementsNumber, setElementsNumber] = useState(0) // 元素数量
+
+  // 创建画布数据
+  const createData = useCallback(() => {
+    const nodes: LogicFlow.NodeConfig[] = []
+    const edges: LogicFlow.EdgeConfig[] = []
+
+    for (let i = 0; i < elementsNumber; i++) {
+      const nodeStartId = `${i * 2 + 1}`
+      const nodeEndId = `${i * 2 + 2}`
+      const nodeStart: LogicFlow.NodeConfig = {
+        id: nodeStartId,
+        type: 'rect',
+        x: 400 * (i % 10) - 200,
+        y: 100 * Math.floor(i / 10) - 500,
+        text: `${i}-start`,
+      }
+      const nodeEnd: LogicFlow.NodeConfig = {
+        id: nodeEndId,
+        type: 'rect',
+        x: 400 * (i % 10),
+        y: 100 * Math.floor(i / 10) - 500,
+        text: `${i}-end`,
+      }
+      const edge: LogicFlow.EdgeConfig = {
+        id: `e_${i}`,
+        type: 'polyline',
+        sourceNodeId: nodeStartId,
+        targetNodeId: nodeEndId,
+      }
+      nodes.push(nodeStart)
+      nodes.push(nodeEnd)
+      edges.push(edge)
+    }
+
+    return {
+      nodes,
+      edges,
+    }
+  }, [elementsNumber])
+
+  // 画布数据
+  const [data, setData] = useState<LogicFlow.GraphConfigData>(createData)
+
+  // 元素数量改变后更新
+  useEffect(() => {
+    if (lfRef.current) {
+      const newData = createData() // 生成新的数据
+      setData(newData) // 更新数据
+      lfRef.current.render(newData)
+      lfRef.current.translateCenter()
+    }
+  }, [elementsNumber])
 
   const toggleVisible = () => {
     if (lfRef.current) {
@@ -293,7 +311,7 @@ export default function MiniMapExtension() {
   }
 
   return (
-    <Card title="LogicFlow Extension - MiniMap">
+    <Card title="Snapshot 元素数量性能测试">
       <Flex wrap="wrap" gap="middle" align="center" justify="space-between">
         <Space>
           <Button onClick={toggleVisible}>
@@ -387,6 +405,13 @@ export default function MiniMapExtension() {
         <Button onClick={downLoad}>下载快照</Button>
         <Button onClick={previewBlob}>预览(blob)</Button>
         <Button onClick={previewBase64}>预览(base64)</Button>
+        <InputNumber
+          addonBefore="元素数量"
+          value={elementsNumber}
+          onChange={(value) => {
+            setElementsNumber(value!)
+          }}
+        ></InputNumber>
       </Space>
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
