@@ -157,6 +157,11 @@ export default defineConfig({
           name: 'InsertNodeInPolyline 插件',
           component: './extensions/insert-node-in-polyline',
         },
+        {
+          path: '/extension/rules',
+          name: 'rules 插件',
+          component: './extensions/rules',
+        },
       ],
     },
     {
