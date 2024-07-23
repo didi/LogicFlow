@@ -152,6 +152,11 @@ export default defineConfig({
           name: 'Snapshot 插件',
           component: './extensions/snapshot',
         },
+        {
+          path: '/extension/insert-node-in-polyline',
+          name: 'InsertNodeInPolyline 插件',
+          component: './extensions/insert-node-in-polyline',
+        },
       ],
     },
     {
