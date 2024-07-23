@@ -19,7 +19,6 @@ const config: Partial<LogicFlow.Options> = {
 
 export default function HighLightExtension() {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const currentLf = useRef<LogicFlow>()
 
   useEffect(() => {
     LogicFlow.use(InsertNodeInPolyline)
@@ -50,7 +49,6 @@ export default function HighLightExtension() {
       },
     ])
     lf.render(data)
-    currentLf.current = lf
   }, [])
   return (
     <Card
