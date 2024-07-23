@@ -40,6 +40,8 @@ const config: Partial<LogicFlow.Options> = {
       fontSize: 12,
     },
   },
+  allowRotate: true,
+  allowResize: true,
 }
 
 const data = {

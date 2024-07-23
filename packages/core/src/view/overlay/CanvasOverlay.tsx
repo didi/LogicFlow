@@ -123,6 +123,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       })
     }
   }
+  // 鼠标、触摸板 按下
   mouseDownHandler = (ev: MouseEvent) => {
     const {
       graphModel: {
