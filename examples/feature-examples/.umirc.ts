@@ -154,5 +154,16 @@ export default defineConfig({
         },
       ],
     },
+    {
+      name: 'test',
+      path: '/test',
+      routes: [
+        {
+          path: '/test/mini-map&snapshot',
+          name: 'mini-map&snapshot 测试',
+          component: './test/mini-map&snapshot',
+        },
+      ],
+    },
   ],
 })
