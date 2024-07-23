@@ -61,25 +61,13 @@ export class Snapshot {
     this.customCssRules = ''
     this.useGlobalRules = true
 
+    // TODO: 设置fileType为gif但是下载下来的还是png
+    // TODO: 完善静默模式不允许添加、操作元素能力
     /* 下载快照 */
     lf.getSnapshot = async (
       fileName?: string,
       toImageOptions?: ToImageOptions,
-    ) => {
-      const curPartial = this.lf.graphModel.getPartial()
-      const { partial = curPartial } = toImageOptions ?? {}
-      // 画布当前渲染模式和用户导出渲染模式不一致时，需要更新画布
-      if (curPartial !== partial) {
-        this.lf.graphModel.setPartial(partial)
-        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
-          await this.getSnapshot(fileName, toImageOptions)
-          // 恢复原来渲染模式
-          this.lf.graphModel.setPartial(curPartial)
-        })
-      } else {
-        await this.getSnapshot(fileName, toImageOptions)
-      }
-    }
+    ) => await this.getSnapshot(fileName, toImageOptions)
 
     /* 获取Blob对象，用户图片上传 */
     lf.getSnapshotBlob = async (backgroundColor?: string, fileType?: string) =>
@@ -94,10 +82,10 @@ export class Snapshot {
 
   /**
    * 获取svgRoot对象dom: 画布元素（不包含grid背景）
-   * @param lf LogicFlow
+   * @param lf
    * @returns
    */
-  getSvgRootElement(lf: LogicFlow) {
+  private getSvgRootElement(lf: LogicFlow) {
     const svgRootElement = lf.container.querySelector('.lf-canvas-overlay')!
     return svgRootElement
   }
@@ -106,7 +94,7 @@ export class Snapshot {
    * 通过 imgUrl 下载图片
    * @param imgUrl
    */
-  triggerDownload(imgUrl: string) {
+  private triggerDownload(imgUrl: string) {
     const evt = new MouseEvent('click', {
       view: document.defaultView,
       bubbles: false,
@@ -121,7 +109,7 @@ export class Snapshot {
 
   /**
    * 删除锚点
-   * @param element ChildNode
+   * @param element
    */
   private removeAnchor(element: ChildNode) {
     const { childNodes } = element
@@ -156,14 +144,42 @@ export class Snapshot {
   }
 
   /**
-   * 下载图片
-   * @param fileName string
+   * 下载前的处理画布工作：局部渲染模式处理、静默模式处理
+   * @param fileName
    * @param toImageOptions
    */
-  private async getSnapshot(
-    fileName?: string,
-    toImageOptions?: ToImageOptions,
-  ) {
+  async getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) {
+    const curPartial = this.lf.graphModel.getPartial()
+    const { partial = curPartial } = toImageOptions ?? {}
+    // 获取流程图配置
+    const editConfig = this.lf.getEditConfig()
+    // 开启静默模式：如果元素多的话 避免用户交互 感知卡顿
+    this.lf.updateEditConfig({
+      isSilentMode: true,
+      stopScrollGraph: true,
+      stopMoveGraph: true,
+    })
+    // 画布当前渲染模式和用户导出渲染模式不一致时，需要更新画布
+    if (curPartial !== partial) {
+      this.lf.graphModel.setPartial(partial)
+      this.lf.graphModel.eventCenter.once('graph:updated', async () => {
+        await this.snapshot(fileName, toImageOptions)
+        // 恢复原来渲染模式
+        this.lf.graphModel.setPartial(curPartial)
+      })
+    } else {
+      await this.snapshot(fileName, toImageOptions)
+    }
+    // 恢复原来配置
+    this.lf.updateEditConfig(editConfig)
+  }
+
+  /**
+   * 下载图片
+   * @param fileName
+   * @param toImageOptions
+   */
+  private async snapshot(fileName?: string, toImageOptions?: ToImageOptions) {
     const { fileType = 'png', quality } = toImageOptions ?? {}
     this.fileName = `${fileName ?? `logic-flow.${Date.now()}`}.${fileType}`
     const svg = this.getSvgRootElement(this.lf)
@@ -191,9 +207,9 @@ export class Snapshot {
 
   /**
    * 获取base64对象
-   * @param backgroundColor string | undefined
-   * @param fileType string | undefined
-   * @returns Promise<SnapshotResponse>
+   * @param backgroundColor
+   * @param fileType
+   * @returns
    */
   private async getSnapshotBase64(
     backgroundColor?: string,
@@ -218,8 +234,8 @@ export class Snapshot {
 
   /**
    * 获取Blob对象
-   * @param backgroundColor string | undefined
-   * @param fileType string | undefined
+   * @param backgroundColor
+   * @param fileType
    * @returns
    */
   private async getSnapshotBlob(
@@ -249,7 +265,7 @@ export class Snapshot {
 
   /**
    * 获取脚本css样式
-   * @returns rules string
+   * @returns
    */
   private getClassRules(): string {
     let rules = ''
@@ -257,8 +273,15 @@ export class Snapshot {
       const { styleSheets } = document
       for (let i = 0; i < styleSheets.length; i++) {
         const sheet = styleSheets[i]
-        for (let j = 0; j < sheet.cssRules.length; j++) {
-          rules += sheet.cssRules[j].cssText
+        // 这里是为了过滤掉不同源css脚本
+        try {
+          for (let j = 0; j < sheet.cssRules.length; j++) {
+            rules += sheet.cssRules[j].cssText
+          }
+        } catch (error) {
+          console.log(
+            'CSS scripts from different sources have been filtered out',
+          )
         }
       }
     }
@@ -270,9 +293,9 @@ export class Snapshot {
 
   /**
    * 获取图片生成中间产物canvas对象，用户转换为其他需要的格式
-   * @param svg Element
-   * @param toImageOptions ToImageOptions
-   * @returns Promise<HTMLCanvasElement>
+   * @param svg
+   * @param toImageOptions
+   * @returns
    */
   private async getCanvasData(
     svg: Element,
@@ -397,7 +420,7 @@ export class Snapshot {
 
   /**
    * 克隆并处理画布节点
-   * @param svg Node
+   * @param svg
    * @returns
    */
   private cloneSvg(svg: Element, addStyle: boolean = true): Node {
