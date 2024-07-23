@@ -1,4 +1,9 @@
-const config = {
+import React, { useEffect, useRef } from 'react';
+
+const container = document.querySelector('#container');
+const root = createRoot(container);
+
+const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
@@ -49,7 +54,7 @@ const data = {
       text: {
         x: 350,
         y: 100,
-        value: '圆形射门来问\n撒发啊乐趣\n撒旦法捡垃圾二楼飒飒饭店\n阿萨德刚撒',
+        value: 'line one\nline two\nline three\nline four',
       },
     },
     {
@@ -90,14 +95,34 @@ const data = {
   ],
 };
 
-// @ts-ignore
-const lf = new LogicFlow({
-  ...config,
-  container: document.getElementById('container') as HTMLElement,
-  // container: document.querySelector('#graph') as HTMLElement,
-  grid: {
-    size: 10,
-  },
-});
+const BasicNode: React.FC = () => {
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!lfRef.current) {
+      const lf = new LogicFlow({
+        ...config,
+        container: containerRef.current as HTMLElement,
+        // container: document.querySelector('#graph') as HTMLElement,
+        grid: {
+          size: 10,
+        },
+      });
 
-lf.render(data);
+      lf.render(data);
+      lfRef.current = lf;
+      (window as any).lf = lf;
+    }
+  }, []);
+
+  return <div ref={containerRef} id="graph"></div>;
+};
+
+root.render(<BasicNode></BasicNode>);
+
+insertCss(`
+#graph{
+  width: 100%;
+  height: 100%;
+}
+`);

@@ -74,7 +74,7 @@ export default function DndPanelExtension() {
           type: 'start',
           text: '开始',
           label: '开始节点',
-          icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/start.png', // TODO: 设置图片在节点上合理展示
+          icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/approve/circle.png',
         },
         {
           type: 'rect',
