@@ -120,6 +120,8 @@ export default defineConfig({
         order: 1,
       },
     ],
+
+    // 示例页菜单配置
     examples: [
       {
         slug: 'showcase',
@@ -127,6 +129,46 @@ export default defineConfig({
         title: {
           zh: '场景案例',
           en: 'Case',
+        },
+      },
+      {
+        slug: 'graph',
+        icon: 'graph',
+        title: {
+          zh: '画布',
+          en: 'Graph',
+        },
+      },
+      {
+        slug: 'node',
+        icon: 'node',
+        title: {
+          zh: '节点',
+          en: 'Node',
+        },
+      },
+      {
+        slug: 'edge',
+        icon: 'edge',
+        title: {
+          zh: '边',
+          en: 'Edge',
+        },
+      },
+      {
+        slug: 'react',
+        icon: 'react',
+        title: {
+          zh: 'react',
+          en: 'React',
+        },
+      },
+      {
+        slug: 'extension',
+        icon: 'extension',
+        title: {
+          zh: '插件',
+          en: 'Extension',
         },
       },
     ],
