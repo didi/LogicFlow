@@ -2,6 +2,7 @@ import LogicFlow, {
   BaseNodeModel,
   BaseEdgeModel,
   Model,
+  GraphModel,
   TransformData,
   TransformType,
 } from '..'
@@ -363,6 +364,10 @@ interface CommonEventArgs {
      * 渲染后的画布数据
      */
     data: GraphData
+    /**
+     * 渲染后的画布 model
+     */
+    graphModel: GraphModel
   }
   /**
    * 画布重新更新后触发. 即 lf.render(graphData)方法被调用后或者改变画布（garphModel）上的属性后触发。

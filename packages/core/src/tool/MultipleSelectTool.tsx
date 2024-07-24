@@ -10,7 +10,7 @@ import GraphData = LogicFlow.GraphData
 
 @observer
 export default class MultipleSelect extends Component<IToolProps> {
-  static toolName = 'multipleSelect'
+  static toolName = 'multiple-select-tool'
   stepDrag: StepDrag
 
   constructor(props: IToolProps) {

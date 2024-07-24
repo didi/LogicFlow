@@ -129,6 +129,7 @@ const data = {
             value: '333331',
             x: 500,
             y: 50,
+            draggable: true,
           },
           {
             value: '333332',
