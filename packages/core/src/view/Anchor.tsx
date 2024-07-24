@@ -116,7 +116,7 @@ class Anchor extends Component<IProps, IState> {
       endY: anchorData.y,
     })
   }
-  onDragging = ({ event }) => {
+  onDragging = ({ event }: IDragParams) => {
     const { graphModel, nodeModel, anchorData } = this.props
     const {
       transformModel,
@@ -125,6 +125,8 @@ class Anchor extends Component<IProps, IState> {
       height,
       editConfigModel: { autoExpand, stopMoveGraph },
     } = graphModel
+    // TODO：确认该方法是否有影响！理论上 onDragging 时 event 必有值
+    if (!event) return
     const { clientX, clientY } = event
     const {
       domOverlayPosition: { x, y },

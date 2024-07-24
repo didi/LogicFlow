@@ -23,12 +23,14 @@ export class Tool {
   tools?: Component[]
   components?: ReactElement<IToolProps>[]
   toolMap = new Map<string, ToolConstructor>()
+
+  disabledToolMap = new Map<string, ToolConstructor>()
   instance: LogicFlow
 
   constructor(instance: LogicFlow) {
     this.instance = instance
     forEach(defaultTools, (tool) => {
-      if (!this.isDisabledTool(tool.toolName)) {
+      if (!this.isDisabled(tool.toolName)) {
         this.registerTool(tool.toolName, tool)
       }
     })
@@ -51,12 +53,34 @@ export class Tool {
     )
   }
 
-  private isDisabledTool(toolName) {
+  private isDisabled(toolName) {
     return this.instance.options.disabledTools?.indexOf(toolName) !== -1
   }
 
+  // 注册工具
   registerTool(name: string, component: ToolConstructor) {
     this.toolMap.set(name, component)
+  }
+
+  // 禁用工具
+  disableTool(name: string): boolean | Error {
+    const tool = this.toolMap.get(name)
+    if (tool) {
+      this.disabledToolMap.set(name, tool)
+      this.toolMap.delete(name)
+      return true
+    }
+    throw new Error('禁用失败，不存在名为 ${tool} 的工具')
+  }
+
+  enableTool(name: string): boolean | Error {
+    const tool = this.disabledToolMap.get(name)
+    if (tool) {
+      this.toolMap.set(name, tool)
+      this.disabledToolMap.delete(name)
+      return true
+    }
+    throw new Error('不存在名为 ${tool} 的工具')
   }
 
   getTools() {

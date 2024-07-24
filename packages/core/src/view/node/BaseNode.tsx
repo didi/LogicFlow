@@ -5,7 +5,7 @@ import Anchor from '../Anchor'
 import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseNodeModel, Model } from '../../model'
-import { ElementState, EventType } from '../../constant'
+import { ElementState, EventType, TextMode } from '../../constant'
 import {
   StepDrag,
   snapToGrid,
@@ -148,14 +148,14 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
 
   getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props
-    // label状态不展示文本
-    if (graphModel.useLabelText(model)) return null
+    const { editConfigModel } = graphModel
+    // // label状态不展示文本
+    // if (graphModel.useLabelText(model)) return null
     // 文本被编辑的时候，显示编辑框，不显示文本。
-    if (model.state === ElementState.TEXT_EDIT) {
-      return null
-    }
+    if (editConfigModel.nodeTextMode !== TextMode.TEXT) return null
+    if (model.state === ElementState.TEXT_EDIT) return null
+
     if (model.text) {
-      const { editConfigModel } = graphModel
       let draggable = false
       if (model.text.draggable || editConfigModel.nodeTextDraggable) {
         draggable = true
