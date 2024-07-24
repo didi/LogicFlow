@@ -1,3 +1,7 @@
+@import url('medium-editor/dist/css/medium-editor.min.css');
+//@import url('medium-editor/dist/css/themes/bootstrap.min.css');
+@import url('medium-editor/dist/css/themes/beagle.min.css');
+
 .lf-control {
   position: absolute;
   top: 0;
@@ -264,6 +268,7 @@
     box-sizing: content-box;
     padding: 4px;
     background: #fff;
+    border-radius: 5px;
 
     &:hover {
       border: 2px dashed #acacac;
@@ -293,32 +298,12 @@
     }
   }
 
-  .medium-editor-toolbar {
-    min-width: 200px;
-    height: 50px;
+  .lf-label-editor-editing {
+    border: 2px solid #275dc5;
+    outline: none;
 
-    .medium-editor-toolbar-actions {
-      display: flex !important;
-      flex-wrap: nowrap;
-      height: 30px;
-      padding-left: 0;
-      list-style: none;
-      border-radius: 6px;
-      box-shadow: 0 0 1px #fafafa;
-      place-content: center flex-start;
-
-      li {
-        button {
-          box-shadow: none;
-        }
-
-        .medium-editor-action {
-          line-height: 1;
-          border: 0;
-          border-radius: 0;
-          box-shadow: 0;
-        }
-      }
+    &:hover {
+      border: 2px solid #275dc5;
     }
   }
 }

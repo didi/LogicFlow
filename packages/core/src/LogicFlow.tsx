@@ -6,7 +6,7 @@ import * as _Model from './model'
 import {
   BaseEdgeModel,
   BaseNodeModel,
-  EditConfigInterface,
+  IEditConfigType,
   GraphModel,
   SnaplineModel,
   ZoomParamType,
@@ -887,7 +887,7 @@ export class LogicFlow {
    * @param {object} config 编辑配置
    * @see todo docs link
    */
-  updateEditConfig(config: EditConfigInterface) {
+  updateEditConfig(config: Partial<IEditConfigType>) {
     const { editConfigModel, transformModel } = this.graphModel
     editConfigModel.updateEditConfig(config)
     if (config?.stopMoveGraph !== undefined) {
@@ -1071,6 +1071,7 @@ export class LogicFlow {
     )
     this.emit(EventType.GRAPH_RENDERED, {
       data: this.graphModel.modelToGraphData(),
+      graphModel: this.graphModel,
     })
   }
 
@@ -1363,6 +1364,8 @@ export class LogicFlow {
       lf: this,
       LogicFlow,
       props,
+      // TODO: 这里的 options 应该传入插件对应的 options，而不是全局的 options
+      // 所以应该这么写 this.options.pluginsOptions[ExtensionCtor.pluginName] ?? {}
       options: this.options.pluginsOptions ?? {},
     })
     extensionIns.render &&
@@ -1450,18 +1453,24 @@ export namespace LogicFlow {
     y: number // label中心在y轴上的位置
     content?: string // label html的内容，
     value: string // label文本内容
-    relateId?: string // 关联节点/关联边的id
-    //样式属性
+    // relateId?: string // 关联节点/关联边的id
+    // 样式属性
     style?: h.JSX.CSSProperties // label自定义样式
-    // 状态属性
+
+    // 编辑状态属性
     editable?: boolean
     draggable?: boolean
-    vertical?: boolean // 是否渲染纵向文本
+
+    // 当前 Label 是否渲染纵向文本
+    vertical?: boolean
   }
 
   export type LabelOption = {
+    // 节点的所有 Label 是否纵向展示
     isVertical: boolean
+    // 是否支持多个 label
     isMultiple: boolean
+    // 允许设置多个 label 时最大个数
     maxCount?: number
   }
 

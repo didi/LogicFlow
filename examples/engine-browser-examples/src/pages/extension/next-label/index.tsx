@@ -8,6 +8,8 @@ import { useEffect, useRef } from 'react'
 import './index.less'
 
 const config: Partial<LogicFlow.Options> = {
+  allowResize: true,
+  allowRotate: true,
   isSilentMode: false,
   stopScrollGraph: false,
   stopZoomGraph: true,
@@ -48,6 +50,27 @@ const data = {
       x: 150,
       y: 100,
       text: '矩形',
+      properties: {
+        _label: [
+          {
+            x: 150,
+            y: 100,
+            value: '矩形 label1',
+            content: '矩形 label1',
+            draggable: true,
+          },
+          {
+            x: 100,
+            y: 50,
+            value: '矩形 label2',
+            content: '矩形 label2',
+            draggable: true,
+          },
+        ],
+        _labelOption: {
+          isMultiple: true,
+        },
+      },
     },
     {
       id: '2',
@@ -99,7 +122,7 @@ const data = {
   ],
   edges: [
     {
-      sourceNodeId: '1',
+      sourceNodeId: '3',
       targetNodeId: '2',
       type: 'polyline',
       text: 'edge 1',
