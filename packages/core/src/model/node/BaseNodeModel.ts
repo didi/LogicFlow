@@ -186,9 +186,6 @@ export class BaseNodeModel implements IBaseNodeModel {
    * setAttributes除了初始化调用外，还会在properties发生变化了调用。
    */
   public initNodeData(data: NodeConfig) {
-    const {
-      editConfigModel: { nodeTextMode },
-    } = this.graphModel
     if (!data.properties) {
       data.properties = {}
     }
@@ -200,24 +197,11 @@ export class BaseNodeModel implements IBaseNodeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties._labelOption) {
-      const {
-        editConfigModel: { nodeTextMultiple, nodeTextVertical },
-      } = this.graphModel
-      data.properties._labelOption = {
-        isVertical: nodeTextVertical,
-        isMultiple: nodeTextMultiple,
-      }
-    }
-    if (!data.properties._textMode) {
-      data.properties._textMode = nodeTextMode
-    }
-    if (data.properties._textMode !== TextMode.LABEL) {
-      console.log('data.properties._textMode', data)
-      this.formatText(data)
-    }
+
+    this.formatText(data)
     // 在下面又将 NodeConfig 中的数据赋值给了 this，应该会触发 setAttributes，确认是否符合预期
     assign(this, pickNodeConfig(data)) // TODO: 确认 constructor 中赋值 properties 是否必要
+
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex()

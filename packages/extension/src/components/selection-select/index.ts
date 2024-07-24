@@ -11,7 +11,11 @@ export class SelectionSelect {
   private startPoint?: Position
   private endPoint?: Position
   private disabled = true
-  private isDefaultStopMoveGraph = false
+  private isDefaultStopMoveGraph:
+    | boolean
+    | 'horizontal'
+    | 'vertical'
+    | [number, number, number, number] = false
   private isWholeNode = true
   private isWholeEdge = true
 

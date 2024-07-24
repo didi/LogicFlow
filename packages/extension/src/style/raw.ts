@@ -4,7 +4,9 @@
  * Auto generated file, do not modify it!
  */
 
-export const content = `.lf-control {
+export const content = `@import url('medium-editor/dist/css/medium-editor.min.css');
+@import url('medium-editor/dist/css/themes/beagle.min.css');
+.lf-control {
   position: absolute;
   top: 0;
   right: 10px;
@@ -229,6 +231,7 @@ export const content = `.lf-control {
   box-sizing: content-box;
   padding: 4px;
   background: #fff;
+  border-radius: 5px;
 }
 .lf-label-overlay .lf-label-editor:hover {
   border: 2px dashed #acacac;
@@ -253,27 +256,11 @@ export const content = `.lf-control {
   overflow: scroll;
   background: #fafafa;
 }
-.lf-label-overlay .medium-editor-toolbar {
-  min-width: 200px;
-  height: 50px;
+.lf-label-overlay .lf-label-editor-editing {
+  border: 2px solid #275dc5;
+  outline: none;
 }
-.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions {
-  display: flex !important;
-  flex-wrap: nowrap;
-  height: 30px;
-  padding-left: 0;
-  list-style: none;
-  border-radius: 6px;
-  box-shadow: 0 0 1px #fafafa;
-  place-content: center flex-start;
-}
-.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li button {
-  box-shadow: none;
-}
-.lf-label-overlay .medium-editor-toolbar .medium-editor-toolbar-actions li .medium-editor-action {
-  line-height: 1;
-  border: 0;
-  border-radius: 0;
-  box-shadow: 0;
+.lf-label-overlay .lf-label-editor-editing:hover {
+  border: 2px solid #275dc5;
 }
 `

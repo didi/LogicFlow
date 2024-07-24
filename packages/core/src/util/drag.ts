@@ -10,7 +10,7 @@ const LEFT_MOUSE_BUTTON_CODE = 0
 export type IDragParams = {
   deltaX: number
   deltaY: number
-  event: MouseEvent | null
+  event?: MouseEvent
   [key: string]: unknown
 }
 
@@ -32,7 +32,7 @@ export type IStepperDragProps = {
     | 'LABEL'
     | ''
   eventCenter?: EventEmitter
-  model?: Model.BaseModel | null
+  model?: Model.BaseModel | unknown
   data?: Record<string, unknown>
   [key: string]: unknown
 } & Partial<ICreateDragParams>
@@ -194,7 +194,7 @@ export class StepDrag {
 
     DOC.removeEventListener('mousemove', this.handleMouseMove, false)
     DOC.removeEventListener('mouseup', this.handleMouseUp, false)
-    this.onDragEnd({ event: null })
+    this.onDragEnd({ event: undefined })
     this.isDragging = false
   }
 }

@@ -27,8 +27,6 @@ export const defaultOptions = {
       'h2',
       'h3',
     ],
-    diffLeft: 100,
-    diffTop: 0,
     standardizeSelectionStart: false,
     updateOnEmptySelection: false,
   },

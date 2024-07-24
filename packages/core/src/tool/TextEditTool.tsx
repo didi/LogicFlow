@@ -12,7 +12,7 @@ type IState = {
 
 @observer
 export class TextEditTool extends Component<IToolProps, IState> {
-  static toolName = 'textEdit'
+  static toolName = 'text-edit-tool'
   ref = createRef()
   __prevText = {
     type: '',
