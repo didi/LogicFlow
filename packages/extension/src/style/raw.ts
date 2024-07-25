@@ -233,9 +233,6 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   background: #fff;
   border-radius: 5px;
 }
-.lf-label-overlay .lf-label-editor:hover {
-  border: 2px dashed #acacac;
-}
 .lf-label-overlay .lf-label-editor-container {
   position: absolute;
   display: flex;
@@ -256,11 +253,15 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   overflow: scroll;
   background: #fafafa;
 }
+.lf-label-overlay .lf-label-editor-dragging {
+  cursor: move;
+}
 .lf-label-overlay .lf-label-editor-editing {
   border: 2px solid #275dc5;
   outline: none;
+  cursor: text;
 }
-.lf-label-overlay .lf-label-editor-editing:hover {
-  border: 2px solid #275dc5;
+.lf-label-overlay .lf-label-editor-hover {
+  border: 2px dashed #acacac;
 }
 `

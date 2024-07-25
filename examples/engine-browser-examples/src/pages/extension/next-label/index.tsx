@@ -3,7 +3,7 @@ import { NextLabel } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 
-import { Card } from 'antd'
+import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 import './index.less'
 
@@ -141,7 +141,7 @@ export default function BasicNode() {
         // container: document.querySelector('#graph') as HTMLElement,
         plugins: [NextLabel],
         grid: {
-          size: 10,
+          size: 5,
         },
       })
 
@@ -152,6 +152,17 @@ export default function BasicNode() {
 
   return (
     <Card title="Next Label 插件">
+      <Flex wrap="wrap" gap="small">
+        <Button
+          key="getData"
+          type="primary"
+          onClick={() => console.log(lfRef?.current?.getGraphData())}
+        >
+          获取数据
+        </Button>
+      </Flex>
+      <Divider orientation="left" orientationMargin="5" plain></Divider>
+
       <div ref={containerRef} id="graph" className="viewport"></div>
     </Card>
   )
