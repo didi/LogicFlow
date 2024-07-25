@@ -45,26 +45,24 @@ pnpm add @logicflow/extension
 
 ```tsx
 <!-- Import the core package. -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css"
-      rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/lib/style/index.min.css" rel="stylesheet">
 
-  <!-- Import extension package. -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/dist/index.min.js"></script>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/lib/style/index.min.css" />
+<!-- Import extension package. -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/lib/style/index.min.css" />
 
 ```
 
-The current version is 2.0.0-beta.4. For other versions, please
-check: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">jsdelivr</a>
+The current version is 2.0.0. For other versions, please
+check: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">core</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
+entension</a>
 
 ## Getting Started
 
 ### 1. Direct `<script>` Usage
 
-```pure
+```html | pure
 <!-- Import the core package -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css"
