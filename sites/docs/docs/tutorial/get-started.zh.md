@@ -41,25 +41,26 @@ pnpm add @logicflow/extension
 
   由于LogicFlow本身会有一些预置样式，所以除了需要引入js, 还`需要引入css`。
 
-```pure
+```html | pure
 <!-- 引入 core包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/lib/style/index.min.css" rel="stylesheet">
 
 <!--  引入 extension包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0-beta.2/lib/style/index.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/lib/style/index.min.css" />
 
 ```
 
-当前引入的版本是2.0.0-beta.2，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
-jsDelivr</a>
+当前引入的版本是2.0.0，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
+core包</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
+entension包</a>
 
 ## 开始使用
 
 ### 1. 直接`<script>`使用
 
-```pure
+```html | pure
 <!-- 引入 core包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
