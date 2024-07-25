@@ -1,5 +1,5 @@
-import LogicFlow, { GraphModel } from '@logicflow/core'
-import { forEach, isArray, isObject, map } from 'lodash-es'
+import LogicFlow, { createUuid, GraphModel } from '@logicflow/core'
+import { cloneDeep, forEach, isArray, isObject, map } from 'lodash-es'
 import LabelOverlay, { LabelConfigType } from './LabelOverlay'
 
 import Extension = LogicFlow.Extension
@@ -12,8 +12,6 @@ export type INextLabelOptions = {
   isMultiple?: boolean
   maxCount?: number
 }
-
-let idx = 1
 
 export class NextLabel implements Extension {
   static pluginName = 'NextLabel'
@@ -42,7 +40,7 @@ export class NextLabel implements Extension {
     this.addEventListeners()
 
     // TODO: 3. 是否需要重写一些额外的方法，插件中需要的，比如 lf.addElements 等方法
-    this.rewriteInnerMethods()
+    // this.rewriteInnerMethods()
 
     // 插件中注册 LabelOverlay 工具，用于 label 的编辑
     lf.tool.registerTool(LabelOverlay.toolName, LabelOverlay)
@@ -112,8 +110,7 @@ export class NextLabel implements Extension {
     // 当全局 isMultiple 为 false 时，局部的 isMultiple 不生效
     return map(formatConfig, (config) => {
       if (!config.id) {
-        // config.id = createUuid()
-        config.id = `${idx++}`
+        config.id = createUuid()
       }
 
       const { editable, draggable, vertical } = config
@@ -149,12 +146,12 @@ export class NextLabel implements Extension {
     // TODO: 1. 筛选出当前画布上，textMode 为 TextMode.LABEL 的元素(在支持元素级别的 textMode 时，需要做这个筛选)
     // REMIND: 本期先只支持全局配置，所以判断全局的 textMode 即可
     forEach(elements, (element) => {
-      console.log('element-data --->>>', element.getData())
-
       // DONE: 2. 在此处做数据的转换
       // 输入：NodeConfig.properties._label: string | LabelConfig | LabelConfig[]
       // 输出：NodeData.properties._label: LabelData | LabelData[]
       // 是否需要根据 isMultiple 控制是否返回数组或对象 or 直接全部返回数组 ❓❓❓ -> 目前直接全部返回数组
+
+      this.rewriteInnerMethods(element)
 
       const formatLabelConfig = this.formatConfig(graphModel, element)
       // FIX: BUG Here: 格式化后的 labelConfig 没有同步到 element 上，导致每次重新渲染时，都会重新格式化，且重新生成 id
@@ -176,7 +173,38 @@ export class NextLabel implements Extension {
     })
   }
 
-  rewriteInnerMethods() {}
+  rewriteInnerMethods(element: GraphElement) {
+    // 重写 edgeModel/nodeModel moveText 方法，在 move text 时，以相同的逻辑移动 label
+    element.moveText = (deltaX: number, deltaY: number) => {
+      if (!element.text) return
+      const {
+        text: { x, y, value, draggable, editable },
+      } = element
+
+      element.text = {
+        value,
+        editable,
+        draggable,
+        x: x + deltaX,
+        y: y + deltaY,
+      }
+      const properties = cloneDeep(element.getProperties())
+      // 重新计算新的 label 位置信息
+      if (isArray(properties._label)) {
+        const nextLabel = map(properties._label as LabelConfig[], (label) => {
+          return {
+            ...label,
+            x: label.x + deltaX,
+            y: label.y + deltaY,
+          }
+        })
+        // console.log('nextLabel --->>>', nextLabel)
+        element?.setProperty('_label', nextLabel)
+      }
+    }
+
+    // TODO: others methods
+  }
 
   render() {}
 

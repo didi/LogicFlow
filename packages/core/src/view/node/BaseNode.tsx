@@ -149,8 +149,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
   getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props
     const { editConfigModel } = graphModel
-    // // label状态不展示文本
-    // if (graphModel.useLabelText(model)) return null
+
     // 文本被编辑的时候，显示编辑框，不显示文本。
     if (editConfigModel.nodeTextMode !== TextMode.TEXT) return null
     if (model.state === ElementState.TEXT_EDIT) return null
@@ -191,7 +190,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
         break
     }
     if (isDragging) {
-      className += ' lf-isDragging'
+      className += ' lf-dragging'
     }
     if (isSelected) {
       className += ' lf-node-selected'
