@@ -121,18 +121,6 @@ export class BaseNodeModel implements IBaseNodeModel {
   set rotate(value: number) {
     this._rotate = value
     const { x = 0, y = 0 } = this
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          relateId: this.id,
-          x,
-          y,
-          rotate: value,
-          nodeRotate: true,
-          BaseType: this.BaseType,
-        },
-      })
-    }
     this.transform = new TranslateMatrix(-x, -y)
       .rotate(value)
       .translate(x, y)
@@ -278,7 +266,6 @@ export class BaseNodeModel implements IBaseNodeModel {
    */
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
     const { width, height, deltaX, deltaY } = resizeInfo
-    const { x, y, BaseType } = this
     // 移动节点以及文本内容
     this.move(deltaX / 2, deltaY / 2)
 
@@ -288,19 +275,6 @@ export class BaseNodeModel implements IBaseNodeModel {
       width,
       height,
     })
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          relateId: this.id,
-          x: x + deltaX,
-          y: y + deltaY,
-          BaseType,
-          nodeResize: true,
-          width,
-          height,
-        },
-      })
-    }
     return this.getData()
   }
 
@@ -312,7 +286,11 @@ export class BaseNodeModel implements IBaseNodeModel {
    * @overridable 支持重写
    */
   getData(): NodeData {
-    const { properties } = this
+    const { x, y, value } = this.text
+    let { properties } = this
+    if (isObservable(properties)) {
+      properties = toJS(properties)
+    }
     const data: NodeData = {
       id: this.id,
       type: this.type,
@@ -326,10 +304,6 @@ export class BaseNodeModel implements IBaseNodeModel {
     if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
       data.zIndex = this.zIndex
     }
-    if (isObservable(properties)) {
-      data.properties = toJS(properties)
-    }
-    const { x, y, value } = this.text
     if (value) {
       data.text = {
         x,
@@ -688,33 +662,11 @@ export class BaseNodeModel implements IBaseNodeModel {
     )
     if (isAllowMoveX) {
       this.x = this.x + deltaX
-      if (this.graphModel.useLabelText(this)) {
-        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-          model: {
-            relateId: this.id,
-            BaseType: this.BaseType,
-            deltaX,
-            deltaY: 0,
-          },
-        })
-      } else {
-        this.text && this.moveText(deltaX, 0)
-      }
+      this.text && this.moveText(deltaX, 0)
     }
     if (isAllowMoveY) {
       this.y = this.y + deltaY
-      if (this.graphModel.useLabelText(this)) {
-        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-          model: {
-            relateId: this.id,
-            BaseType: this.BaseType,
-            deltaX: 0,
-            deltaY,
-          },
-        })
-      } else {
-        this.text && this.moveText(0, deltaY)
-      }
+      this.text && this.moveText(0, deltaY)
     }
     return isAllowMoveX || isAllowMoveY
   }
@@ -734,34 +686,12 @@ export class BaseNodeModel implements IBaseNodeModel {
 
     if (isAllowMoveX && deltaX) {
       this.x = this.x + deltaX
-      if (this.graphModel.useLabelText(this)) {
-        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-          model: {
-            relateId: this.id,
-            BaseType: this.BaseType,
-            deltaX,
-            deltaY: 0,
-          },
-        })
-      } else {
-        this.text && this.moveText(deltaX, 0)
-      }
+      this.text && this.moveText(deltaX, 0)
       moveX = deltaX
     }
     if (isAllowMoveY && deltaY) {
       this.y = this.y + deltaY
-      if (this.graphModel.useLabelText(this)) {
-        this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-          model: {
-            relateId: this.id,
-            BaseType: this.BaseType,
-            deltaX: 0,
-            deltaY,
-          },
-        })
-      } else {
-        this.text && this.moveText(0, deltaY)
-      }
+      this.text && this.moveText(0, deltaY)
       moveY = deltaY
     }
     return [moveX, moveY]
@@ -771,18 +701,8 @@ export class BaseNodeModel implements IBaseNodeModel {
     const deltaX = x - this.x
     const deltaY = y - this.y
     if (!isIgnoreRule && !this.isAllowMoveNode(deltaX, deltaY)) return false
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          relateId: this.id,
-          BaseType: this.BaseType,
-          deltaX,
-          deltaY,
-        },
-      })
-    } else {
-      this.text && this.moveText(deltaX, deltaY)
-    }
+
+    this.text && this.moveText(deltaX, deltaY)
     this.x = x
     this.y = y
     return true

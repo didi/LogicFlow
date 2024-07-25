@@ -155,6 +155,8 @@ export class StepDrag {
           event: e,
         })
         this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEMOVE`], {
+          deltaX,
+          deltaY,
           e,
           data: this.data || elementData,
         })
