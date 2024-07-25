@@ -63,12 +63,12 @@ document.getElementById("button").addEventListener("click", () => {
 lf.extension.snapshot.useGlobalRules = true
 // 不会覆盖css样式，会叠加，customCssRules优先级高
 lf.extension.snapshot.customCssRules = `
-    .uml-wrapper {
-      line-height: 1.2;
-      text-align: center;
-      color: blue;
-    }
-  `
+  .uml-wrapper {
+    line-height: 1.2;
+    text-align: center;
+    color: blue;
+  }
+`
   
 ```
 
@@ -146,10 +146,7 @@ const { data : base64 } = await lf.getSnapshotBlob()
 console.log(base64)
 ```
 
-
-
-
-## Other export types
+## 其他导出类型
 
 ### xml
 

@@ -43,18 +43,18 @@ pnpm add @logicflow/extension
   Since LogicFlow itself has some preset styles, in addition to importing js, you also need
   to `import css`.
 
-```tsx
+```html | pure
 <!-- Import the core package. -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/lib/style/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/lib/style/index.min.css" rel="stylesheet">
 
-<!-- Import extension package. -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/lib/style/index.min.css" />
+<!-- Import the extension package. -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/lib/style/index.min.css" />
 
 ```
 
-The current version is 2.0.0. For other versions, please
+The current version is latest. For other versions, please
 check: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">core</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
 entension</a>
 
@@ -64,11 +64,10 @@ entension</a>
 
 ```html | pure
 <!-- Import the core package -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css"
-      rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/lib/style/index.min.css" rel="stylesheet">
 
-<!-- Create canvas container -->
+<!-- Create graph container -->
 <div id="container"></div>
 
 <script>
@@ -109,7 +108,7 @@ entension</a>
     grid: true,
   })
 
-  // Render canvas instance
+  // Render graph instance
   lf.render(data)
 </script>
 ```

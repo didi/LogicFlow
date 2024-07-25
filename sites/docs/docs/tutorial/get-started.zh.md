@@ -43,16 +43,16 @@ pnpm add @logicflow/extension
 
 ```html | pure
 <!-- 引入 core包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0/lib/style/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/lib/style/index.min.css" rel="stylesheet">
 
 <!--  引入 extension包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@2.0.0/lib/style/index.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/lib/style/index.min.css" />
 
 ```
 
-当前引入的版本是2.0.0，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
+当前引入的版本是最新版本，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
 core包</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
 entension包</a>
 
@@ -62,8 +62,8 @@ entension包</a>
 
 ```html | pure
 <!-- 引入 core包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@2.0.0-beta.2/lib/style/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/lib/style/index.min.css" rel="stylesheet">
 
 <!-- 创建画布容器 -->
 <div id="container"></div>
