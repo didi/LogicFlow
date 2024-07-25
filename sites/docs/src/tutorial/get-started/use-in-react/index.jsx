@@ -38,6 +38,7 @@ export default function App() {
       height: 200,
     });
     lf.render(data);
+    lf.translateCenter();
   }, []);
 
   return <div className="App" ref={refContainer}></div>;

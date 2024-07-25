@@ -394,8 +394,6 @@ export class Snapshot {
               width && height ? copyCanvas(canvas, width, height) : canvas,
             )
           }
-          // 如果局部渲染本来是开启的，继续开启
-          // partial && this.lf.graphModel.setPartial(true)
         } catch (e) {
           ctx?.drawImage(img, padding / dpr, padding / dpr)
           resolve(width && height ? copyCanvas(canvas, width, height) : canvas)
