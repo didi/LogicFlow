@@ -270,10 +270,6 @@
     background: #fff;
     border-radius: 5px;
 
-    &:hover {
-      border: 2px dashed #acacac;
-    }
-
     &-container {
       position: absolute;
       display: flex;
@@ -287,23 +283,18 @@
       }
     }
 
-    &-tool {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 200px;
-      overflow: scroll;
-      background: #fafafa;
+    &-dragging {
+      cursor: move;
     }
-  }
 
-  .lf-label-editor-editing {
-    border: 2px solid #275dc5;
-    outline: none;
-
-    &:hover {
+    &-editing {
       border: 2px solid #275dc5;
+      outline: none;
+      cursor: text;
+    }
+
+    &-hover {
+      border: 2px dashed #275dc5;
     }
   }
 }

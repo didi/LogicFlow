@@ -24,7 +24,9 @@ type ClickEventArgs = {
   isMultiple: boolean
 }
 
-type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
+type NodeEventArgsPick<
+  T extends 'data' | 'e' | 'position' | 'deltaX' | 'deltaY',
+> = Pick<
   {
     /**
      * 节点数据
@@ -38,6 +40,14 @@ type NodeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
      * 鼠标触发点相对于画布左上角的坐标
      */
     position: ClientPosition
+    /**
+     * 鼠标 X轴移动的距离
+     */
+    deltaX: number
+    /**
+     * 鼠标Y轴移动的距离
+     */
+    deltaY: number
   },
   T
 >
@@ -86,7 +96,7 @@ interface NodeEventArgs {
   /**
    * 鼠标移动节点
    */
-  'node:mousemove': NodeEventArgsPick<'data' | 'e'>
+  'node:mousemove': NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
   /**
    * 鼠标进入节点
    */
@@ -118,7 +128,7 @@ interface NodeEventArgs {
   /**
    * 拖拽节点
    */
-  'node:drag': NodeEventArgsPick<'data' | 'e'>
+  'node:drag': NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
   /**
    * 拖拽节点结束
    */
