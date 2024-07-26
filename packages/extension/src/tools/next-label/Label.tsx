@@ -85,11 +85,11 @@ export class Label extends Component<ILabelProps, ILabelState> {
   handleDragging = ({ deltaX, deltaY }: IDragParams) => {
     const { label, element, graphModel } = this.props
 
-    // TODO: 添加缩放时拖拽的逻辑，对 deltaX 和 deltaY 进行按比例缩放
-    // const { transformModel } = graphModel
-    // const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
+    // DONE: 添加缩放时拖拽的逻辑，对 deltaX 和 deltaY 进行按比例缩放
+    const { transformModel } = graphModel
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
 
-    // TODO：更新 label 位置，触发 LABEL:DRAG 事件，并抛出相关的数据
+    // DONE：更新 label 位置，触发 LABEL:DRAG 事件，并抛出相关的数据
     const {
       properties: { _label },
     } = element
@@ -99,8 +99,8 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const target = elementLabel[idx]
     elementLabel[idx] = {
       ...target,
-      x: target.x + deltaX,
-      y: target.y + deltaY,
+      x: target.x + curDeltaX,
+      y: target.y + curDeltaY,
     }
     const targetElem = graphModel.getElement(element.id)
     targetElem?.setProperty('_label', elementLabel)
@@ -211,9 +211,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
     // eventCenter.on('node:properties-change,node:properties-delete', () => {})
   }
 
-  componentDidUpdate() // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
-  // snapshot: any,
-  {
+  componentDidUpdate() { // snapshot: any, // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
     console.log('Label componentDidUpdate')
     // console.log('previousProps', previousProps)
     // console.log('previousState', previousState)
@@ -229,22 +227,25 @@ export class Label extends Component<ILabelProps, ILabelState> {
   // shouldComponentUpdate or memo
 
   render() {
-    const { label, graphModel } = this.props
+    const { label, element, graphModel } = this.props
     const { isDragging, isHovered, isEditing } = this.state
     const { transformModel } = graphModel
     const { transform } = transformModel.getTransformStyle()
+    const { id, x, y, vertical, style, content, textOverflowMode } = label
 
+    console.log('element width --->>>', element.width)
+    const maxLabelWidth = element.BaseType === 'node' ? element.width - 20 : 80
     const containerStyle = {
-      left: `${label.x - 10}px`,
-      top: `${label.y - 10}px`,
-      width: '20px',
+      left: `${x - maxLabelWidth / 2}px`,
+      top: `${y - 10}px`,
+      width: `${maxLabelWidth}px`,
       height: '20px',
-      transform: `${transform} rotate(${label.vertical ? -0.25 : 0}turn)`,
+      transform: `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
     }
 
     return (
       <div
-        id={`element-container-${label.id}`}
+        id={`element-container-${id}`}
         className={classNames('lf-label-editor-container')}
         style={containerStyle}
         onMouseDown={this.handleMouseDown}
@@ -256,14 +257,19 @@ export class Label extends Component<ILabelProps, ILabelState> {
       >
         <div
           ref={this.textRef}
-          id={`editor-container-${label.id}`}
+          id={`editor-container-${id}`}
           className={classNames('lf-label-editor', {
             'lf-label-editor-dragging': isDragging,
             'lf-label-editor-editing': isEditing,
             'lf-label-editor-hover': !isEditing && isHovered,
+            [`lf-label-editor-${textOverflowMode}`]: true,
           })}
-          style={label.style}
-          dangerouslySetInnerHTML={{ __html: label.content }}
+          style={{
+            ...style,
+            width: `${maxLabelWidth}px`,
+            'max-width': `${maxLabelWidth}px`,
+          }}
+          dangerouslySetInnerHTML={{ __html: content }}
         ></div>
       </div>
     )

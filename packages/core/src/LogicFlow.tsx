@@ -1360,17 +1360,18 @@ export class LogicFlow {
     }
 
     const ExtensionCtor = extension as ExtensionConstructor
+    const pluginName = ExtensionCtor.pluginName
     const extensionIns = new ExtensionCtor({
       lf: this,
       LogicFlow,
       props,
       // TODO: 这里的 options 应该传入插件对应的 options，而不是全局的 options
       // 所以应该这么写 this.options.pluginsOptions[ExtensionCtor.pluginName] ?? {}
-      options: this.options.pluginsOptions ?? {},
+      options: this.options.pluginsOptions?.[pluginName] ?? {},
     })
     extensionIns.render &&
       this.components.push(extensionIns.render.bind(extensionIns))
-    this.extension[ExtensionCtor.pluginName] = extensionIns
+    this.extension[pluginName] = extensionIns
   }
 }
 
@@ -1460,6 +1461,7 @@ export namespace LogicFlow {
     // 编辑状态属性
     editable?: boolean
     draggable?: boolean
+    textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 
     // 当前 Label 是否渲染纵向文本
     vertical?: boolean

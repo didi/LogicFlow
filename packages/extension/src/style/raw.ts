@@ -6,6 +6,7 @@
 
 export const content = `@import url('medium-editor/dist/css/medium-editor.min.css');
 @import url('medium-editor/dist/css/themes/beagle.min.css');
+@import url('vanilla-picker/dist/vanilla-picker.csp.css');
 .lf-control {
   position: absolute;
   top: 0;
@@ -228,7 +229,6 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   overflow: visible;
 }
 .lf-label-overlay .lf-label-editor {
-  box-sizing: content-box;
   padding: 4px;
   background: #fff;
   border-radius: 5px;
@@ -244,15 +244,6 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
 .lf-label-overlay .lf-label-editor-container p {
   margin: 0;
 }
-.lf-label-overlay .lf-label-editor-tool {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 200px;
-  overflow: scroll;
-  background: #fafafa;
-}
 .lf-label-overlay .lf-label-editor-dragging {
   cursor: move;
 }
@@ -262,6 +253,33 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   cursor: text;
 }
 .lf-label-overlay .lf-label-editor-hover {
-  border: 2px dashed #acacac;
+  border: 2px dashed #275dc5;
+}
+.lf-label-overlay .lf-label-editor-clip {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 100px;
+  /* 根据需要调整宽度 */
+}
+.lf-label-overlay .lf-label-editor-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100px;
+  /* 根据需要调整宽度 */
+}
+.lf-label-overlay .lf-label-editor-wrap {
+  white-space: normal;
+  overflow-wrap: break-word;
+  /* 允许单词内换行 */
+  width: 100px;
+  /* 根据需要调整宽度 */
+}
+.lf-label-overlay .lf-label-editor-nowrap {
+  white-space: nowrap;
+  overflow: visible;
+  width: 100px;
+  /* 根据需要调整宽度 */
 }
 `
