@@ -1,5 +1,5 @@
 import { assign, cloneDeep, find, isUndefined } from 'lodash-es'
-import { action, computed, observable, toJS } from 'mobx'
+import { action, computed, isObservable, observable, toJS } from 'mobx'
 import { BaseNodeModel, GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -129,24 +129,12 @@ export class BaseEdgeModel implements IBaseEdgeModel {
       const nodeId = this.createId()
       data.id = nodeId || globalId || createUuid()
     }
-    if (!data.properties._labelOption) {
-      const {
-        editConfigModel: { edgeTextMultiple, edgeTextVertical },
-      } = this.graphModel
-      data.properties._labelOption = {
-        isVertical: edgeTextVertical,
-        isMultiple: edgeTextMultiple,
-      }
-    }
     this.arrowConfig.markerEnd = `url(#marker-end-${data.id})`
     this.arrowConfig.markerStart = `url(#marker-start-${data.id})`
     const {
-      editConfigModel: { adjustEdgeStartAndEnd, edgeTextMode },
+      editConfigModel: { adjustEdgeStartAndEnd },
     } = this.graphModel
     this.isShowAdjustPoint = adjustEdgeStartAndEnd
-    if (!data.properties._textMode) {
-      data.properties._textMode = edgeTextMode
-    }
     assign(this, pickEdgeConfig(data))
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
@@ -158,9 +146,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     // 边的拐点依赖于两个端点
     this.initPoints()
     // 文本位置依赖于边上的所有拐点
-    if (data.properties._textMode !== TextMode.LABEL) {
-      this.formatText(data)
-    }
+    this.formatText(data)
   }
 
   /**
@@ -388,19 +374,23 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * @overridable 支持重写
    */
   getData(): EdgeData {
+    let { properties } = this
+    if (isObservable(properties)) {
+      properties = toJS(properties)
+    }
     const data: EdgeData = {
       id: this.id,
       type: this.type,
+      properties,
       sourceNodeId: this.sourceNode.id,
       targetNodeId: this.targetNode.id,
       startPoint: assign({}, this.startPoint),
       endPoint: assign({}, this.endPoint),
-      properties: toJS(this.properties),
     }
     if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
       data.zIndex = this.zIndex
     }
-    const { x, y, value } = this.text as TextConfig
+    const { x, y, value } = this.text
     if (value) {
       data.text = {
         x,
@@ -565,19 +555,13 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    * 移动边上的文本
    */
   @action moveText(deltaX: number, deltaY: number): void {
-    const {
-      x,
-      y,
-      value,
-      draggable = false,
-      editable = false,
-    } = this.text as TextConfig
+    const { x, y, value, draggable, editable } = this.text
     this.text = {
       value,
+      editable,
       draggable,
       x: x + deltaX,
       y: y + deltaY,
-      editable,
     }
   }
 

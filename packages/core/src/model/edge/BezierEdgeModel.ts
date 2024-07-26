@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash-es'
+import { assign, cloneDeep } from 'lodash-es'
 import { action, observable } from 'mobx'
 import BaseEdgeModel from './BaseEdgeModel'
 import { BaseNodeModel } from '../node'
@@ -152,20 +152,8 @@ export class BezierEdgeModel extends BaseEdgeModel {
       this.pointsList[2] = anchor
     }
     this.path = this.getPath(this.pointsList)
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit('LABEL_SHOULD_UPDATE', {
-        model: {
-          BaseType: this.BaseType,
-          relateId: this.id,
-          modelType: this.modelType,
-          points: this.points,
-          pointsList: this.pointsList,
-        },
-      })
-      return
-    }
     if (this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
+      this.setText(assign({}, this.text, this.textPosition))
     }
   }
   // 获取边调整的起点

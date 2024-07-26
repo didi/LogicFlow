@@ -1,4 +1,4 @@
-import LogicFlow, { Component, h, observer } from '@logicflow/core'
+import LogicFlow, { Component, GraphModel, h, observer } from '@logicflow/core'
 import type { IToolProps } from '@logicflow/core'
 import { forEach, merge } from 'lodash-es'
 import NextLabelPlugin from '.'
@@ -15,7 +15,7 @@ export interface INextLabelOverlayState {
 }
 // const { createUuid } = LogicFlowUtil
 
-// TODO: 解决问题，如果 NextLabelOverlay 设置为 Observer，拖拽 Label 时会导致 NextLabelOverlay 组件重新渲染，不知道为何
+// DONE: 解决问题，如果 NextLabelOverlay 设置为 Observer，拖拽 Label 时会导致 NextLabelOverlay 组件重新渲染，不知道为何
 // 目前解决了。流程是 拖动 -> 更新 label 的数据信息到 element model -> 重新渲染 LabelOverlay
 // 这种目前存在的问题，会全量重新渲染，是否会影响性能 ❓❓❓
 // 另一种解决方案是，在此组件中监听一些事件，当这些事件触发时，再重新渲染 LabelOverlay
@@ -26,15 +26,18 @@ export class NextLabelOverlay extends Component<
   INextLabelOverlayState
 > {
   static toolName = 'label-edit-tool'
+
+  lf: LogicFlow
   editor?: MediumEditor
+  graphModel: GraphModel
   labelMap: Map<string, LabelModel> = new Map()
 
   constructor(props: IToolProps) {
     super(props)
 
     const { lf, graphModel } = props
-    console.log('lf instance', lf)
-    console.log('graphModel', graphModel) // 通过 graphModel 获取全部 label 数据
+    this.lf = lf
+    this.graphModel = graphModel
 
     this.state = { tick: 0 }
   }
@@ -68,6 +71,11 @@ export class NextLabelOverlay extends Component<
         this.setState({ tick: this.state.tick + 1 })
       },
     )
+
+    graphModel.eventCenter.on('node:dbclick,edge:dbclick', ({ e }) => {
+      console.log('e', e)
+      // TODO: 增加 label 的数据信息到 element model
+    })
   }
 
   componentDidUpdate() {
