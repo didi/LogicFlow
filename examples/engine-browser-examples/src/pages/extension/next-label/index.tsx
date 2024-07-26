@@ -43,12 +43,12 @@ const config: Partial<LogicFlow.Options> = {
   // draggable 相关配置
   textDraggable: true,
   edgeTextDraggable: false,
-  nodeTextDraggable: false,
+  nodeTextDraggable: true,
 
   // editable 相关配置
   textEdit: true,
-  nodeTextEdit: false,
-  edgeTextEdit: true,
+  // nodeTextEdit: true,
+  // edgeTextEdit: true,
 
   isSilentMode: false,
   stopZoomGraph: true,
@@ -63,28 +63,30 @@ const data = {
       type: 'rect',
       x: 150,
       y: 100,
-      text: '矩形',
+      text: '锄禾日当午，汗滴禾下土；谁知盘中餐，粒粒皆辛苦。',
       draggable: true,
       properties: {
         _label: [
           {
             x: 150,
             y: 100,
-            value: '矩形 label1',
-            content: '矩形 label1',
+            value: '锄禾日当午，汗滴禾下土；谁知盘中餐，粒粒皆辛苦。',
+            content: '锄禾日当午，汗滴禾下土；谁知盘中餐，粒粒皆辛苦。',
             draggable: true,
             style: { color: 'blue' },
+            textOverflowMode: 'ellipsis',
           },
           {
             x: 100,
             y: 50,
-            value: '矩形 label2',
-            content: '矩形 label2',
+            value: 'abcdefghijklmnopqrstuvwxyz',
+            content: 'abcdefghijklmnopqrstuvwxyz',
             draggable: true,
           },
         ],
         _labelOption: {
           isMultiple: true,
+          maxCount: 4,
         },
       },
     },
@@ -156,6 +158,14 @@ export default function BasicNode() {
         container: containerRef.current as HTMLElement,
         // container: document.querySelector('#graph') as HTMLElement,
         plugins: [NextLabel],
+        pluginsOptions: {
+          NextLabel: {
+            isMultiple: true,
+            maxCount: 1,
+            // textOverflowMode -> 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
+            textOverflowMode: 'default',
+          },
+        },
         grid: {
           size: 5,
         },

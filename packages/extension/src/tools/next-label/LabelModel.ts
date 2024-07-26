@@ -29,6 +29,12 @@ export class LabelModel {
   @observable vertical: boolean = false // 文字是否垂直显示
   @observable editable: boolean = true // label 是否可编辑
   @observable draggable: boolean = true // label 是否可拖拽
+  @observable textOverflowMode:
+    | 'ellipsis'
+    | 'wrap'
+    | 'clip'
+    | 'nowrap'
+    | 'default' = 'default' // Label 节点的文本溢出模式
 
   // TODO: 后续看 label 是否可以独立存在，不依赖节点 or 边
   element: BaseNodeModel | BaseEdgeModel // 当前节点关联的元素 Model
@@ -64,6 +70,7 @@ export class LabelModel {
 
       draggable: this.draggable,
       editable: this.editable,
+      textOverflowMode: this.textOverflowMode,
 
       vertical: this.vertical,
     }
