@@ -5,6 +5,7 @@ import LabelOverlay, { LabelConfigType } from './LabelOverlay'
 import Extension = LogicFlow.Extension
 import LabelConfig = LogicFlow.LabelConfig
 import GraphElement = LogicFlow.GraphElement
+import { TextMode } from '@logicflow/core/es/constant'
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
 export type INextLabelOptions = {
@@ -33,7 +34,7 @@ export class NextLabel implements Extension {
     this.maxCount = options.maxCount ?? Infinity
 
     // TODO: 1. 启用插件时，将当前画布的 textMode 更新为 TextMode.LABEL。
-    // lf.graphModel.editConfigModel.updateTextMode(TextMode.LABEL)
+    lf.graphModel.editConfigModel.updateTextMode(TextMode.LABEL)
     // 如果将其又重新设置为 TextModel.TEXT，则需要 disable 掉 Label 工具，enable TextEditTool
 
     // TODO: 2. 做一些插件需要的事件监听
@@ -204,6 +205,22 @@ export class NextLabel implements Extension {
     }
 
     // TODO: others methods
+  }
+
+  public updateTextMode(textMode: TextMode) {
+    const {
+      graphModel: { editConfigModel },
+    } = this.lf
+    if (textMode === editConfigModel.textMode) return
+
+    editConfigModel.updateTextMode(textMode)
+    if (textMode === TextMode.LABEL) {
+      this.lf.tool.enableTool(LabelOverlay.toolName)
+      this.lf.tool.disableTool('text-edit-tool')
+    } else if (textMode === TextMode.TEXT) {
+      this.lf.tool.enableTool('text-edit-tool')
+      this.lf.tool.disableTool(LabelOverlay.toolName)
+    }
   }
 
   render() {}
