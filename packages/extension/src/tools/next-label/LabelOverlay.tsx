@@ -25,7 +25,7 @@ export class NextLabelOverlay extends Component<
   IToolProps,
   INextLabelOverlayState
 > {
-  static toolName = 'nextLabel'
+  static toolName = 'label-edit-tool'
   editor?: MediumEditor
   labelMap: Map<string, LabelModel> = new Map()
 

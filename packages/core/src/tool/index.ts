@@ -5,6 +5,7 @@ import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'
 import { ElementState, EventType } from '../constant'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
+import { action, observable } from 'mobx'
 
 export type IToolProps = {
   textEditElement?: BaseNodeModel | BaseEdgeModel
@@ -22,7 +23,7 @@ const defaultTools = [TextEdit, MultipleSelect]
 export class Tool {
   tools?: Component[]
   components?: ReactElement<IToolProps>[]
-  toolMap = new Map<string, ToolConstructor>()
+  @observable toolMap = new Map<string, ToolConstructor>()
 
   disabledToolMap = new Map<string, ToolConstructor>()
   instance: LogicFlow
@@ -63,6 +64,7 @@ export class Tool {
   }
 
   // 禁用工具
+  @action
   disableTool(name: string): boolean | Error {
     const tool = this.toolMap.get(name)
     if (tool) {
@@ -73,6 +75,7 @@ export class Tool {
     throw new Error('禁用失败，不存在名为 ${tool} 的工具')
   }
 
+  @action
   enableTool(name: string): boolean | Error {
     const tool = this.disabledToolMap.get(name)
     if (tool) {
