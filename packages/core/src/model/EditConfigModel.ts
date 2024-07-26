@@ -116,6 +116,7 @@ export interface IEditConfigType {
   // 边文本类型
   edgeTextMode: TextMode
 }
+
 export type IConfigKeys = keyof IEditConfigType
 
 const silentModeConfig = {
@@ -198,7 +199,7 @@ export class EditConfigModel {
   @observable nodeTextDraggable = true
   @observable nodeTextMultiple = false // 是否支持多个节点文本
   @observable nodeTextVertical = false // 节点文本朝向是否是纵向
-  @observable nodeTextMode = TextMode.LABEL // 节点文本模式
+  @observable nodeTextMode = TextMode.TEXT // 节点文本模式
   // 边
   @observable edgeTextMode = TextMode.TEXT // 边文本模式
   @observable edgeTextEdit = true
@@ -239,7 +240,7 @@ export class EditConfigModel {
 
   // TODO: 确认一下这个函数的逻辑，是否会有误合并的问题
   computeConfig(config: Partial<IEditConfigType>) {
-    const { isSilentMode, textMode, textEdit } = config
+    const { isSilentMode, textDraggable, textMode, textEdit } = config
     const conf: Partial<IEditConfigType> = {}
 
     // false 表示从静默模式恢复
@@ -271,6 +272,13 @@ export class EditConfigModel {
       assign(conf, {
         nodeTextMode: textMode,
         edgeTextMode: textMode,
+      })
+    }
+
+    if (textDraggable === false) {
+      assign(conf, {
+        nodeTextDraggable: false,
+        edgeTextDraggable: false,
       })
     }
 

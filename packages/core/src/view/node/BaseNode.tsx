@@ -213,6 +213,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       }
     }
   }
+
   onDragging = ({ event }: IDragParams) => {
     const { model, graphModel } = this.props
     // const { isDragging } = model;
@@ -295,6 +296,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       graphModel.moveNodes(moveNodes, x - model.x, y - model.y)
     }
   }
+
   onDragEnd = () => {
     if (this.t) {
       cancelRaf(this.t)
@@ -302,10 +304,12 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     const { model } = this.props
     model.isDragging = false
   }
+
   handleMouseUp = () => {
     const { model } = this.props
     this.mouseUpDrag = model.isDragging
   }
+
   handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
@@ -363,6 +367,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       graphModel.eventCenter.emit(EventType.NODE_CLICK, eventOptions)
     }
   }
+
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault()
     const { model, graphModel } = this.props
@@ -388,6 +393,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     })
     this.toFront()
   }
+
   handleMouseDown = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     this.startTime = new Date().getTime()
@@ -396,6 +402,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       this.stepDrag && this.stepDrag.handleMouseDown(ev)
     }
   }
+
   // 为什么将hover状态放到model中？
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverOn = (ev: MouseEvent) => {
@@ -408,6 +415,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       e: ev,
     })
   }
+
   setHoverOff = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     const nodeData = model.getData()
@@ -419,6 +427,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       e: ev,
     })
   }
+
   onMouseOut = (ev: MouseEvent) => {
     if (isIe) {
       this.setHoverOff(ev)

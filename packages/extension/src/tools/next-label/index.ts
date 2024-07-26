@@ -35,9 +35,9 @@ export class NextLabel implements Extension {
     this.isMultiple = options.isMultiple ?? true
     this.maxCount = options.maxCount ?? Infinity
 
-    // TODO: 1. 启用插件时，将当前画布的 textMode 更新为 TextMode.LABEL。
-    lf.graphModel.editConfigModel.updateTextMode(TextMode.LABEL)
+    // DONE: 1. 启用插件时，将当前画布的 textMode 更新为 TextMode.LABEL。
     // 如果将其又重新设置为 TextModel.TEXT，则需要 disable 掉 Label 工具，enable TextEditTool
+    lf.graphModel.editConfigModel.updateTextMode(TextMode.LABEL)
 
     // TODO: 2. 做一些插件需要的事件监听
     this.addEventListeners()
@@ -103,7 +103,8 @@ export class NextLabel implements Extension {
       const config: LabelConfig = {
         ...text,
         content: curLabelConfig || text.value,
-        // draggable: element.BaseType === 'edge' ? edgeTextDraggable : nodeTextDraggable,
+        draggable:
+          element.BaseType === 'edge' ? edgeTextDraggable : nodeTextDraggable,
       }
       formatConfig = [config]
     }
@@ -164,7 +165,9 @@ export class NextLabel implements Extension {
   }
 
   /**
-   * TODO: 给元素添加一个 label。参数待定
+   * 给元素添加一个 label
+   * @param element
+   * @param position
    */
   addLabel(element: GraphElement, position: Position) {
     const {
@@ -190,7 +193,7 @@ export class NextLabel implements Extension {
 
   addEventListeners() {
     const { graphModel } = this.lf
-    const { eventCenter } = graphModel
+    const { eventCenter, editConfigModel } = graphModel
 
     eventCenter.on('graph:rendered', ({ graphModel }) => {
       this.setupLabels(graphModel)
@@ -216,13 +219,17 @@ export class NextLabel implements Extension {
           x: x1,
           y: y1,
         }
-        if (target) {
+        if (target && editConfigModel.textMode === TextMode.LABEL) {
           this.addLabel(target, point)
         }
       },
     )
   }
 
+  /**
+   * 重写元素的一些方法，以支持 Label 的拖拽、编辑等
+   * @param element
+   */
   rewriteInnerMethods(element: GraphElement) {
     // 重写 edgeModel/nodeModel moveText 方法，在 move text 时，以相同的逻辑移动 label
     element.moveText = (deltaX: number, deltaY: number) => {
@@ -256,7 +263,9 @@ export class NextLabel implements Extension {
     // TODO: others methods
   }
 
-  // 更新当前渲染使用的 Text or Label 模式
+  /**
+   * 更新当前渲染使用的 Text or Label 模式
+   */
   public updateTextMode(textMode: TextMode) {
     const {
       graphModel: { editConfigModel },
