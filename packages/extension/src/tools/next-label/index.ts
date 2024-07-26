@@ -11,9 +11,9 @@ import GraphElement = LogicFlow.GraphElement
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
 export type INextLabelOptions = {
-  isVertical?: boolean
   isMultiple?: boolean
   maxCount?: number
+  textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 }
 
 export class NextLabel implements Extension {
@@ -22,7 +22,7 @@ export class NextLabel implements Extension {
   lf: LogicFlow
   options: INextLabelOptions
 
-  isVertical: boolean
+  textOverflowMode: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
   isMultiple: boolean
   maxCount: number // 默认值给无限大数值
 
@@ -31,7 +31,7 @@ export class NextLabel implements Extension {
     // DONE: 根据 options 初始化一些插件配置，比如是否支持多个 label 等，生效在所有 label 中
     this.options = options ?? {}
 
-    this.isVertical = options.isVertical ?? false
+    this.textOverflowMode = options.textOverflowMode ?? 'default'
     this.isMultiple = options.isMultiple ?? true
     this.maxCount = options.maxCount ?? Infinity
 
@@ -67,7 +67,7 @@ export class NextLabel implements Extension {
         edgeTextDraggable,
       },
     } = graphModel
-    const { isMultiple, maxCount } = this
+    const { textOverflowMode, isMultiple, maxCount } = this
     const {
       text,
       properties: { _label, _labelOption = {} },
@@ -80,15 +80,15 @@ export class NextLabel implements Extension {
       maxCount: curMaxCount,
     }: INextLabelOptions = _labelOption as INextLabelOptions
 
+    // REMIND: 对 3 种可能得数据类型进行处理
     let formatConfig: LabelConfig[] = [] // 保存格式化后的 LabelConfig
-    // 对 3 种可能得数据类型进行处理
     if (isArray(curLabelConfig)) {
       // 1. 数组的话就是 LabelConfig[] 类型
       // 判断是否开启 isMultiple, 如果开启了，判断是否超过最大数量。超出就截取
       const size = curMaxCount ?? maxCount // 优先级，当设置 multiple 时，元素的 maxCount 优先级高于插件的 maxCount
       if (isMultiple && curIsMultiple) {
         if (curLabelConfig.length > size) {
-          formatConfig = curLabelConfig.slice(0, size - 1)
+          formatConfig = curLabelConfig.slice(0, size)
         } else {
           formatConfig = curLabelConfig
         }
@@ -109,7 +109,7 @@ export class NextLabel implements Extension {
       formatConfig = [config]
     }
 
-    // TODO: 再根据一些全局配置，比如是否支持垂直显示等，对 LabelConfig 进行二次处理
+    // DONE: 再根据一些全局配置，比如是否支持垂直显示等，对 LabelConfig 进行二次处理
     // 优先级：全局配置 > 元素配置。比如全局设置 isMultiple 为 true 时，才可以使用 局部的 isMultiple 设置才生效
     // 当全局 isMultiple 为 false 时，局部的 isMultiple 不生效
     return map(formatConfig, (config) => {
@@ -117,23 +117,26 @@ export class NextLabel implements Extension {
         config.id = createUuid()
       }
 
-      const { editable, draggable, vertical } = config
-      if (element.BaseType === 'node') {
-        return {
-          ...config,
-          vertical: vertical ?? false,
-          editable: nodeTextEdit && editable,
-          draggable: nodeTextDraggable && draggable,
-        }
-      } else if (element.BaseType === 'edge') {
-        return {
-          ...config,
-          vertical: vertical ?? false,
-          editable: edgeTextEdit && editable,
-          draggable: edgeTextDraggable && draggable,
-        }
+      const {
+        value,
+        content,
+        editable,
+        draggable,
+        vertical,
+        textOverflowMode: labelTextOverflowMode,
+      } = config
+
+      const textEdit = element.BaseType === 'node' ? nodeTextEdit : edgeTextEdit
+      const textDraggable =
+        element.BaseType === 'node' ? nodeTextDraggable : edgeTextDraggable
+      return {
+        ...config,
+        content: content ?? value,
+        vertical: vertical ?? false,
+        editable: textEdit && editable,
+        draggable: textDraggable && draggable,
+        textOverflowMode: labelTextOverflowMode ?? textOverflowMode,
       }
-      return config
     })
     // 它会触发重新渲染，所以这里不能 setProperty
     // element.setProperty('_label', elementLabelConfig)
@@ -170,10 +173,13 @@ export class NextLabel implements Extension {
    * @param position
    */
   addLabel(element: GraphElement, position: Position) {
+    const { maxCount } = this
     const {
-      properties: { _label },
+      properties: { _label, _labelOption },
     } = element
     const curLabelConfig = _label as LabelConfig[]
+    const curLabelOption = _labelOption as INextLabelOptions
+
     const len = curLabelConfig.length
     const newLabel = {
       id: createUuid(),
@@ -186,6 +192,8 @@ export class NextLabel implements Extension {
       editable: true,
       vertical: false,
     }
+
+    if (len >= (curLabelOption.maxCount ?? maxCount)) return
 
     curLabelConfig.push(newLabel)
     element.setProperty('_label', curLabelConfig)
@@ -206,9 +214,8 @@ export class NextLabel implements Extension {
         // DONE: 增加 label 的数据信息到 element model
         const target: GraphElement | undefined = graphModel.getElement(data.id)
 
-        // TODO: 将 clientX 和 clientY 转换为画布坐标
+        // DONE: 将 clientX 和 clientY 转换为画布坐标
         const {
-          // domOverlayPosition: { x, y },
           canvasOverlayPosition: { x: x1, y: y1 },
         } = graphModel.getPointByClient({
           x: e.clientX,
