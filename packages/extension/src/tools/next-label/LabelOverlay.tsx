@@ -74,11 +74,21 @@ export class NextLabelOverlay extends Component<
   }
 
   componentDidUpdate() {
-    // console.log('componentDidUpdate')
-    // this.setState({ tick: this.state.tick + 1 })
     // 在组件更新后，将新增的 label 元素添加到富文本编辑器中
-    if (this.editor) {
+    if (this.editor && this.editor.elements.length > 0) {
       this.editor.addElements('.lf-label-editor')
+    } else {
+      // FIX: 如果初始化的数据中没有 properties._label，需要重新初始化富文本编辑器
+      this.editor?.destroy()
+      this.editor = new MediumEditor(
+        '.lf-label-editor',
+        merge(defaultOptions, {
+          autoLink: true,
+          extensions: {
+            colorPicker: new ColorPickerButton(),
+          },
+        }),
+      )
     }
   }
 
