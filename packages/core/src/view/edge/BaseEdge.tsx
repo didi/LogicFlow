@@ -384,7 +384,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       y: e.clientY,
     })
     if (isDoubleClick) {
-      const { editConfigModel, textEditElement, useLabelText } = graphModel
+      const { editConfigModel, textEditElement } = graphModel
       const { id, text, modelType } = model
       // 当前边正在编辑，需要先重置状态才能变更文本框位置
       if (textEditElement && textEditElement.id === id) {
@@ -392,15 +392,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       }
       // 边文案可编辑状态，才可以进行文案编辑
       if (editConfigModel.edgeTextEdit) {
-        if (useLabelText(edgeData)) {
-          graphModel.eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
-            model: edgeData,
-            e,
-            position: position.canvasOverlayPosition,
-          })
-          model.setSelected(false)
-          graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
-        } else if (text.editable) {
+        if (text.editable) {
           model.setSelected(false)
           graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
         }
@@ -469,7 +461,6 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   render() {
     const {
       model: { isSelected, isHitable, isShowAdjustPoint },
-      graphModel: { useLabelText },
     } = this.props
     return (
       <g>
@@ -490,7 +481,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         >
           {this.getShape()}
           {this.getAppend()}
-          {!useLabelText(this.props.model) && this.getText()}
+          {this.getText()}
           {this.getArrow()}
         </g>
         {isShowAdjustPoint && isSelected ? this.getAdjustPoints() : ''}

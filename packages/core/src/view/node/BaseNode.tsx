@@ -336,7 +336,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     // 判断是否有右击，如果有右击则取消点击事件触发
     if (isRightClick) return
 
-    const { editConfigModel, useLabelText, eventCenter } = graphModel
+    const { editConfigModel } = graphModel
     // 在multipleSelect tool禁用的情况下，允许取消选中节点
     const isMultiple = isMultipleSelect(e, editConfigModel)
     eventOptions.isMultiple = isMultiple
@@ -352,14 +352,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       if (editConfigModel.nodeTextEdit) {
-        if (useLabelText(model)) {
-          eventCenter.emit(EventType.LABEL_SHOULD_ADD, {
-            model,
-            position: position.canvasOverlayPosition,
-          })
-          model.setSelected(false)
-          graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
-        } else if (model.text.editable) {
+        if (model.text.editable) {
           model.setSelected(false)
           graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
         }
@@ -453,7 +446,6 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       },
       gridSize,
       transformModel: { SCALE_X },
-      useLabelText,
     } = graphModel
     const { isHitable, draggable, transform } = model
     const { className = '', ...restAttributes } = model.getOuterGAttributes()
@@ -461,7 +453,7 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
       <g className="lf-node-content">
         <g transform={transform}>
           {this.getShape()}
-          {!useLabelText(model) && this.getText()}
+          {this.getText()}
           {allowRotate && this.getRotateControl()}
           {allowResize && this.getResizeControl()}
         </g>

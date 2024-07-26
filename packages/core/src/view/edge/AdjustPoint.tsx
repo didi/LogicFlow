@@ -160,21 +160,9 @@ export class AdjustPoint extends Component<IProps, IState> {
         : edgeModel.updateEndPoint({ x, y })
     }
     if (editConfigModel.adjustEdge) {
-      if (graphModel.useLabelText(this)) {
-        console.log('AdjustPoint')
-        graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-          model: {
-            relateId: edgeModel.id,
-            BaseType: edgeModel.BaseType,
-            deltaX,
-            deltaY,
-          },
-        })
-      } else {
-        edgeModel.setText(
-          Object.assign({}, edgeModel.text, edgeModel.textPosition),
-        )
-      }
+      edgeModel.setText(
+        Object.assign({}, edgeModel.text, edgeModel.textPosition),
+      )
     }
   }
   onDragEnd = ({ event }: Partial<IDragParams>) => {
