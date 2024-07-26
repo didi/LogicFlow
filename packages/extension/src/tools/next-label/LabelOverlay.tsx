@@ -71,11 +71,6 @@ export class NextLabelOverlay extends Component<
         this.setState({ tick: this.state.tick + 1 })
       },
     )
-
-    graphModel.eventCenter.on('node:dbclick,edge:dbclick', ({ e }) => {
-      console.log('e', e)
-      // TODO: 增加 label 的数据信息到 element model
-    })
   }
 
   componentDidUpdate() {
