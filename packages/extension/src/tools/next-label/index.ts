@@ -1,11 +1,13 @@
-import LogicFlow, { createUuid, GraphModel } from '@logicflow/core'
+import LogicFlow, { createUuid, GraphModel, TextMode } from '@logicflow/core'
 import { cloneDeep, forEach, isArray, isObject, map } from 'lodash-es'
 import LabelOverlay, { LabelConfigType } from './LabelOverlay'
 
+import Position = LogicFlow.Position
+import NodeData = LogicFlow.NodeData
+import EdgeData = LogicFlow.EdgeData
 import Extension = LogicFlow.Extension
 import LabelConfig = LogicFlow.LabelConfig
 import GraphElement = LogicFlow.GraphElement
-import { TextMode } from '@logicflow/core/es/constant'
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
 export type INextLabelOptions = {
@@ -164,14 +166,61 @@ export class NextLabel implements Extension {
   /**
    * TODO: 给元素添加一个 label。参数待定
    */
-  addLabel() {}
+  addLabel(element: GraphElement, position: Position) {
+    const {
+      properties: { _label },
+    } = element
+    const curLabelConfig = _label as LabelConfig[]
+    const len = curLabelConfig.length
+    const newLabel = {
+      id: createUuid(),
+      x: position.x,
+      y: position.y,
+      content: `Label${len + 1}`,
+      value: `Label${len + 1}`,
+      style: {},
+      draggable: true,
+      editable: true,
+      vertical: false,
+    }
+
+    curLabelConfig.push(newLabel)
+    element.setProperty('_label', curLabelConfig)
+  }
 
   addEventListeners() {
-    const { eventCenter } = this.lf.graphModel
+    const { graphModel } = this.lf
+    const { eventCenter } = graphModel
 
     eventCenter.on('graph:rendered', ({ graphModel }) => {
       this.setupLabels(graphModel)
     })
+
+    // 监听元素双击事件，给元素增加 Label
+    eventCenter.on(
+      'node:dbclick,edge:dbclick',
+      ({ e, data }: { e: MouseEvent; data: NodeData | EdgeData }) => {
+        // DONE: 增加 label 的数据信息到 element model
+        const target: GraphElement | undefined = graphModel.getElement(data.id)
+
+        // TODO: 将 clientX 和 clientY 转换为画布坐标
+        const {
+          // domOverlayPosition: { x, y },
+          canvasOverlayPosition: { x: x1, y: y1 },
+        } = graphModel.getPointByClient({
+          x: e.clientX,
+          y: e.clientY,
+        })
+
+        const point: Position = {
+          x: x1,
+          y: y1,
+        }
+        if (target) {
+          this.addLabel(target, point)
+        }
+      },
+    )
   }
 
   rewriteInnerMethods(element: GraphElement) {
@@ -207,6 +256,7 @@ export class NextLabel implements Extension {
     // TODO: others methods
   }
 
+  // 更新当前渲染使用的 Text or Label 模式
   public updateTextMode(textMode: TextMode) {
     const {
       graphModel: { editConfigModel },
