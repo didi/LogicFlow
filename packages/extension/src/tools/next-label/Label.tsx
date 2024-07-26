@@ -116,6 +116,13 @@ export class Label extends Component<ILabelProps, ILabelState> {
 
   handleDbClick = (e: MouseEvent) => {
     const { label, element, graphModel } = this.props
+    graphModel.eventCenter.emit('label:dblclick', {
+      data: label.getData(),
+      e,
+      model: element,
+    })
+
+    if (!label.editable) return
     element.setSelected()
     element.setElementState(ElementState.TEXT_EDIT)
 
@@ -133,34 +140,30 @@ export class Label extends Component<ILabelProps, ILabelState> {
       selection?.removeAllRanges()
       selection?.addRange(range)
     }
+  }
+  handleBlur = (e: FocusEvent) => {
+    const {
+      label,
+      element,
+      graphModel: { eventCenter },
+    } = this.props
 
-    graphModel.eventCenter.emit('label:dblclick', {
-      data: label.getData(),
+    // DONE: 触发 LABEL:BLUR 事件，并抛出相关的事件
+    eventCenter.emit('label:blur', {
       e,
       model: element,
+      data: label.getData(),
+      element: this.textRef.current,
     })
-  }
-  handleBlur = () => {
+
     this.setState({
       isDragging: false,
       isHovered: false,
-      isEditing: false,
     })
-    // TODO: 1. 触发 LABEL:BLUR 事件，并抛出相关的事件
-
-    // TODO: 2. 调用 LabelModel 的方法保存 label 的数据
-    // const text = this.textRef.current?.innerText ?? ''
-    // const content = this.textRef.current?.innerHTML ?? ''
-    // label.updateLabel(text, content)
-
-    // REMIND: 还原 contentEditable 属性，直接通过 JSX 的方式配置属性不得行，不会自动出现光标
-    // if (this.textRef.current) {
-    //   this.textRef.current.contentEditable = 'false'
-    // }
   }
 
   // 重新计算 Label 大小
-  reCaleLabelSize = () => {}
+  reCalcLabelSize = () => {}
 
   // TODO：如何处理 Label zIndex 的问题, Label 永远会比节点层级高
   // 当 Label 被元素遮盖时，隐藏它
@@ -190,9 +193,10 @@ export class Label extends Component<ILabelProps, ILabelState> {
           content,
         }
 
-        console.log('elementLabel[idx]', elementLabel[idx])
         const targetElem = graphModel.getElement(element.id)
         targetElem?.setProperty('_label', elementLabel)
+
+        element.setElementState(ElementState.DEFAULT)
       }
       if (this.textRef.current) {
         this.textRef.current.contentEditable = 'false'
@@ -206,6 +210,23 @@ export class Label extends Component<ILabelProps, ILabelState> {
     //
     // eventCenter.on('node:properties-change,node:properties-delete', () => {})
   }
+
+  componentDidUpdate() // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
+  // snapshot: any,
+  {
+    console.log('Label componentDidUpdate')
+    // console.log('previousProps', previousProps)
+    // console.log('previousState', previousState)
+    // console.log('snapshot', snapshot)
+  }
+
+  componentWillUnmount() {
+    const { graphModel } = this.props
+    graphModel.eventCenter.off('blank:click,node:click,edge:click')
+  }
+
+  // TODO: 当某一个标签更新时，如何避免其它标签的更新
+  // shouldComponentUpdate or memo
 
   render() {
     const { label, graphModel } = this.props
