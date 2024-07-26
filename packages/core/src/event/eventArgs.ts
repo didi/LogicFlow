@@ -59,11 +59,11 @@ type TextEventArgsPick<
     // 节点数据
     data?: any
     // 原生鼠标事件对象
-    e?: MouseEvent
+    e?: MouseEvent | FocusEvent
     // 文本所在元素model
-    model?: NodeData | EdgeData | any
+    model?: BaseNodeModel | BaseEdgeModel | unknown
     // 文本dom
-    element?: HTMLElement
+    element?: HTMLElement | null
     // 文本位置
     position?: {
       x: number
