@@ -241,6 +241,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
             'lf-label-editor-editing': isEditing,
             'lf-label-editor-hover': !isEditing && isHovered,
           })}
+          style={label.style}
           dangerouslySetInnerHTML={{ __html: label.content }}
         ></div>
       </div>

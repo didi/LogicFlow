@@ -6,6 +6,7 @@ import '@logicflow/extension/es/index.css'
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 import './index.less'
+import { TextMode } from '@logicflow/core/es/constant'
 
 const config: Partial<LogicFlow.Options> = {
   allowResize: true,
@@ -58,6 +59,7 @@ const data = {
             value: '矩形 label1',
             content: '矩形 label1',
             draggable: true,
+            style: { color: 'blue' },
           },
           {
             x: 100,
@@ -159,6 +161,33 @@ export default function BasicNode() {
           onClick={() => console.log(lfRef?.current?.getGraphData())}
         >
           获取数据
+        </Button>
+        <Button
+          key="getTools"
+          type="primary"
+          onClick={() => console.log(lfRef?.current?.tool?.getTools())}
+        >
+          获取当前工具
+        </Button>
+        <Button
+          key="text"
+          type="primary"
+          onClick={() => {
+            const nextLabel = lfRef?.current?.extension?.NextLabel as NextLabel
+            nextLabel.updateTextMode(TextMode.TEXT)
+          }}
+        >
+          使用 Text 渲染
+        </Button>
+        <Button
+          key="label"
+          type="primary"
+          onClick={() => {
+            const nextLabel = lfRef?.current?.extension?.NextLabel as NextLabel
+            nextLabel.updateTextMode(TextMode.LABEL)
+          }}
+        >
+          使用 Label 渲染
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain></Divider>
