@@ -1,4 +1,4 @@
-import LogicFlow, { h, BaseEdgeModel, EventType } from '@logicflow/core'
+import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
 import { isArray } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
@@ -64,18 +64,10 @@ export class GroupNodeModel extends RectResizeModel {
     this.foldedHeight = 60
     this.zIndex = DEFAULT_BOTTOM_Z_INDEX
     this.radius = 0
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        data: { editable: false, draggable: false },
-        model: {
-          BaseType: this.BaseType,
-          relateId: this.id,
-        },
-      })
-    } else {
-      this.text.editable = false
-      this.text.draggable = false
-    }
+
+    this.text.editable = false
+    this.text.draggable = false
+
     this.isRestrict = false
     this.resizable = false
     this.autoToFront = false

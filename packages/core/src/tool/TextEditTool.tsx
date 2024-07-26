@@ -169,10 +169,10 @@ export class TextEditTool extends Component<IToolProps, IState> {
 
   render() {
     const {
-      graphModel: { textEditElement, useLabelText },
+      graphModel: { textEditElement },
     } = this.props
     const { style } = this.state
-    return textEditElement && !useLabelText(textEditElement) ? (
+    return textEditElement ? (
       <div
         contentEditable
         className="lf-text-input"

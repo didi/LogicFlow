@@ -1,18 +1,16 @@
 import { Component, ReactElement } from 'preact/compat'
+import { action, observable } from 'mobx'
 import { forEach } from 'lodash-es'
 import TextEdit from './TextEditTool'
 import MultipleSelect from './MultipleSelectTool'
 import LogicFlow from '../LogicFlow'
 import { ElementState, EventType } from '../constant'
 import { GraphModel, BaseEdgeModel, BaseNodeModel } from '../model'
-import { action, observable } from 'mobx'
 
 export type IToolProps = {
-  textEditElement?: BaseNodeModel | BaseEdgeModel
-  graphModel: GraphModel
   lf: LogicFlow
-  // TODO: 是否可以在此处将各 Tool 对应 Options 透传进去
-  toolOptions?: unknown
+  graphModel: GraphModel
+  textEditElement?: BaseNodeModel | BaseEdgeModel
 }
 
 type ToolConstructor = new (props: IToolProps) => Component<IToolProps>

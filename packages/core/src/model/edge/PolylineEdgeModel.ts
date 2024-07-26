@@ -1,9 +1,9 @@
-import { cloneDeep } from 'lodash-es'
+import { assign, cloneDeep } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { BaseEdgeModel } from '.'
 import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
-import { EventType, ModelType, SegmentDirection } from '../../constant'
+import { ModelType, SegmentDirection } from '../../constant'
 import {
   isInNode,
   distance,
@@ -25,7 +25,7 @@ import {
 import Point = LogicFlow.Point
 import Position = LogicFlow.Position
 import AppendConfig = LogicFlow.AppendConfig
-import ArchorConfig = Model.AnchorConfig
+import AnchorConfig = Model.AnchorConfig
 
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
@@ -66,9 +66,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   getAfterAnchor(
     direction: SegmentDirection,
     position: Position,
-    anchorList: ArchorConfig[],
+    anchorList: AnchorConfig[],
   ) {
-    let anchor: ArchorConfig
+    let anchor: AnchorConfig
     let minDistance: number
     anchorList.forEach((item) => {
       let distanceX: number
@@ -183,7 +183,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     direction: SegmentDirection,
     positionType: string,
     position: Position,
-    anchorList: ArchorConfig[],
+    anchorList: AnchorConfig[],
     draggingPointList: Point[],
   ) {
     const pointList = draggingPointList.map((i) => i)
@@ -435,23 +435,13 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     }
     this.updatePointsAfterDrag(draggingPointList)
     this.draggingPointList = draggingPointList
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          BaseType: this.BaseType,
-          relateId: this.id,
-          modelType: this.modelType,
-          points: this.points,
-          pointsList: this.pointsList,
-        },
-      })
-    }
-    if (!this.graphModel.useLabelText(this) && this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
+    // TODO: 判断该逻辑是否需要
+    if (this.text?.value) {
+      this.setText(assign({}, this.text, this.textPosition))
     }
     return {
-      start: Object.assign({}, pointsList[startIndex]),
-      end: Object.assign({}, pointsList[endIndex]),
+      start: assign({}, pointsList[startIndex]),
+      end: assign({}, pointsList[endIndex]),
       startIndex,
       endIndex,
       direction,
@@ -581,23 +571,13 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.updatePointsAfterDrag(draggingPointList)
       this.draggingPointList = draggingPointList
     }
-    if (this.graphModel.useLabelText(this)) {
-      this.graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          BaseType: this.BaseType,
-          relateId: this.id,
-          modelType: this.modelType,
-          points: this.points,
-          pointsList: this.pointsList,
-        },
-      })
-    }
-    if (!this.graphModel.useLabelText(this) && this.text?.value) {
-      this.setText(Object.assign({}, this.text, this.textPosition))
+    // TODO: 确认该判断逻辑是否需要
+    if (this.text?.value) {
+      this.setText(assign({}, this.text, this.textPosition))
     }
     return {
-      start: Object.assign({}, pointsList[startIndex]),
-      end: Object.assign({}, pointsList[endIndex]),
+      start: assign({}, pointsList[startIndex]),
+      end: assign({}, pointsList[endIndex]),
       startIndex,
       endIndex,
       direction,
@@ -614,9 +594,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.draggingPointList = []
       // 更新起终点
       const startPoint = pointsList[0]
-      this.startPoint = Object.assign({}, startPoint)
+      this.startPoint = assign({}, startPoint)
       const endPoint = pointsList[pointsList.length - 1]
-      this.endPoint = Object.assign({}, endPoint)
+      this.endPoint = assign({}, endPoint)
     }
     this.isDragging = false
   }
