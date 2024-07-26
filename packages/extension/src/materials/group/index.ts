@@ -139,12 +139,10 @@ export class Group {
       const childNodeModel = lf.getNodeModelById(childId)
       if (childNodeModel) {
         const {
-          id,
           x,
           y,
           properties,
           type,
-          text,
           rotate,
           children,
           // incoming,
@@ -159,25 +157,11 @@ export class Group {
           // 如果不传递type，会自动触发NODE_ADD
           // 有概率触发appendToGroup
         }
-        if (!lf.graphModel.useLabelText(nodeConfig)) {
-          nodeConfig.text = {
-            ...text,
-            x: text.x + distance,
-            y: text.y + distance,
-          }
-        }
+
         const eventType =
           EventType.NODE_GROUP_COPY || ('node:group-copy-add' as EventType)
         const newChildModel = lf.addNode(nodeConfig, eventType)
-        if (lf.graphModel.useLabelText(newChildModel)) {
-          lf.graphModel.eventCenter.emit(EventType.LABEL_BATCH_ADD, {
-            model: {
-              relateId: id,
-              x: newChildModel.x,
-              y: newChildModel.y,
-            },
-          })
-        }
+
         ;(current as GroupNodeModel).addChild(newChildModel.id)
         nodeIdMap[childId] = newChildModel.id
         nodesArray.push(newChildModel)
@@ -229,7 +213,7 @@ export class Group {
     let targetId = edge.targetNodeId
     if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId]
     if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId]
-    const { id, type, startPoint, endPoint, pointsList, text } = edge
+    const { type, startPoint, endPoint, pointsList, text } = edge
     // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
     const newStartPoint = {
       x: (startPoint?.x || 0) + distance,
@@ -256,7 +240,7 @@ export class Group {
       pointsList: newPointsList,
     }
 
-    if (!lf.graphModel.useLabelText(edge) && isObject(text) && !isEmpty(text)) {
+    if (isObject(text) && !isEmpty(text)) {
       edgeConfig.text = {
         ...text,
         x: text?.x + distance,
@@ -266,17 +250,7 @@ export class Group {
     // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
 
     // 简化复制时的参数传入，防止创建出两个edge属于同个group这种情况
-    const newEdge = lf.graphModel.addEdge(edgeConfig)
-    if (lf.graphModel.useLabelText(newEdge)) {
-      lf.graphModel.eventCenter.emit(EventType.LABEL_BATCH_ADD, {
-        model: {
-          relateId: id,
-          x: newEdge.x,
-          y: newEdge.y,
-        },
-      })
-    }
-    return newEdge
+    return lf.graphModel.addEdge(edgeConfig)
   }
 
   /**

@@ -623,15 +623,6 @@ export class GraphModel {
     return newId
   }
 
-  // TODO: 如果现在这样的方法，感觉没必要写在 graphModel 里面。
-  // 提到 utils 里面就可以感觉
-  // 另外一个是否需要一个全局的，一个私有的判断
-  // 没有私有的，用全局的；有私有的，用私有的  yes
-  useLabelText(model: any) {
-    const { _textMode: textMode } = model.properties
-    return textMode === TextMode.LABEL
-  }
-
   /**
    * 获取元素的文本模式
    * @param model
@@ -832,19 +823,11 @@ export class GraphModel {
       data.x += 30
       data.y += 30
       data.id = ''
-      if (!this.useLabelText(data) && isObject(data.text)) {
+      if (isObject(data.text)) {
         data.text.x += 30
         data.text.y += 30
       }
       const nodeModel = this.addNode(data)
-      if (this.useLabelText(data)) {
-        this.eventCenter.emit(EventType.LABEL_BATCH_ADD, {
-          model: {
-            ...nodeModel.getData(),
-            relateId: data.id,
-          },
-        })
-      }
       nodeModel.setSelected(true)
       targetNode?.setSelected(false)
       return nodeModel.getData()
@@ -983,18 +966,6 @@ export class GraphModel {
     // 如果是自定义边文本位置，则移动节点的时候重新计算其位置
     if (edgeModel.customTextPosition) {
       edgeModel.resetTextPosition()
-      return
-    }
-    if (this.useLabelText(edgeModel)) {
-      this.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          relateId: edgeModel.id,
-          points: edgeModel.points,
-          pointsList: edgeModel.pointsList,
-          BaseType: edgeModel.BaseType,
-          modelType: edgeModel.modelType,
-        },
-      })
       return
     }
     if (

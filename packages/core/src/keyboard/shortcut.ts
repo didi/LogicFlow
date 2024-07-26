@@ -1,18 +1,13 @@
 import { isEmpty } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
 import GraphModel from '../model/GraphModel'
-import { ElementType, EventType } from '../constant'
 
 import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
 
 let selected: LogicFlow.GraphData | null = null
 
-export function translateNodeData(
-  nodeData: NodeData,
-  distance: number,
-  graphModel?: GraphModel,
-) {
+export function translateNodeData(nodeData: NodeData, distance: number) {
   nodeData.x += distance
   nodeData.y += distance
 
@@ -21,28 +16,10 @@ export function translateNodeData(
     nodeData.text.y += distance
   }
 
-  // TODO: feature/label-text
-  // 1. 如果 translateNodeData 外部调用了该方法，是否也应该触发该事件
-  // 2. LABEL_SHOULD_UPDATE 事件，是否抛出 NODE_UPDATE 事件就可以
-  // 3. 为什么 node 和 edge 不一样呢？
-  if (graphModel) {
-    graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-      model: {
-        relateId: nodeData.id,
-        deltaX: distance,
-        deltaY: distance,
-        BaseType: ElementType.NODE,
-      },
-    })
-  }
   return nodeData
 }
 
-export function translateEdgeData(
-  edgeData: EdgeData,
-  distance: number,
-  graphModel?: GraphModel,
-) {
+export function translateEdgeData(edgeData: EdgeData, distance: number) {
   if (edgeData.startPoint) {
     edgeData.startPoint.x += distance
     edgeData.startPoint.y += distance
@@ -58,16 +35,7 @@ export function translateEdgeData(
     })
   }
 
-  if (graphModel && graphModel.useLabelText(edgeData)) {
-    graphModel.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-      model: {
-        relateId: edgeData.id,
-        deltaX: distance,
-        deltaY: distance,
-        BaseType: ElementType.EDGE,
-      },
-    })
-  } else if (!isEmpty(edgeData.text)) {
+  if (!isEmpty(edgeData.text)) {
     edgeData.text.x += distance
     edgeData.text.y += distance
   }
@@ -101,10 +69,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     }
     selected = elements
     selected.nodes.forEach((node) =>
-      translateNodeData(node, TRANSLATION_DISTANCE, graph),
+      translateNodeData(node, TRANSLATION_DISTANCE),
     )
     selected.edges.forEach((edge) =>
-      translateEdgeData(edge, TRANSLATION_DISTANCE, graph),
+      translateEdgeData(edge, TRANSLATION_DISTANCE),
     )
     return false
   })
@@ -122,10 +90,10 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
       addElements.nodes.forEach((node) => lf.selectElementById(node.id, true))
       addElements.edges.forEach((edge) => lf.selectElementById(edge.id, true))
       selected.nodes.forEach((node) =>
-        translateNodeData(node, TRANSLATION_DISTANCE, graph),
+        translateNodeData(node, TRANSLATION_DISTANCE),
       )
       selected.edges.forEach((edge) =>
-        translateEdgeData(edge, TRANSLATION_DISTANCE, graph),
+        translateEdgeData(edge, TRANSLATION_DISTANCE),
       )
       CHILDREN_TRANSLATION_DISTANCE =
         CHILDREN_TRANSLATION_DISTANCE + TRANSLATION_DISTANCE
