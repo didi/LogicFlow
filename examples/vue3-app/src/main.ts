@@ -1,5 +1,6 @@
 import './assets/main.css'
 import 'element-plus/dist/index.css'
+import '@logicflow/core/dist/index.css'
 
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'

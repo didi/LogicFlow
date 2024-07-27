@@ -17,17 +17,31 @@ import { RouterView } from 'vue-router'
           <el-icon><trend-charts /></el-icon>
           <span>LogicFlow</span>
         </el-menu-item>
+
+        <el-menu-item index="/performance">
+          <el-icon><trend-charts /></el-icon>
+          <span>performacne</span>
+        </el-menu-item>
       </el-menu>
     </div>
   </header>
-
-  <RouterView />
+  <div class="content">
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
 header {
+  width: 180px;
+  position: relative;
+  left: 0;
   line-height: 1.5;
   max-height: 100vh;
+}
+.content {
+  position: relative;
+  width: calc(100% - 180px);
+  height: 100%;
 }
 
 .logo {
@@ -66,7 +80,6 @@ nav a:first-of-type {
     display: flex;
     flex-direction: column;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
   }
 
   .logo {

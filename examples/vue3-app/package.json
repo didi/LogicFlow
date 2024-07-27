@@ -19,6 +19,7 @@
     "@logicflow/engine": "workspace:*",
     "@logicflow/extension": "workspace:*",
     "@logicflow/vue-node-registry": "workspace:*",
+    "echarts": "^5.5.1",
     "element-plus": "^2.0.4",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
