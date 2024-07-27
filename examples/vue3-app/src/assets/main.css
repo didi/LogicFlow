@@ -1,10 +1,10 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  display: flex;
   font-weight: normal;
+  height: 100vh;
 }
 
 a,
@@ -25,11 +25,5 @@ a,
   body {
     display: flex;
     place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    padding: 0 2rem;
   }
 }
