@@ -3,7 +3,7 @@ import { Circle } from '../shape'
 import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseEdgeModel, PolylineEdgeModel } from '../../model'
-import { ElementState, EventType, ModelType } from '../../constant'
+import { ElementState, EventType, ModelType, TextMode } from '../../constant'
 import {
   isMultipleSelect,
   getClosestPointOfPolyline,
@@ -56,24 +56,31 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    */
   getText(): h.JSX.Element | null {
     const { model, graphModel } = this.props
-    // 文本被编辑的时候，显示编辑框，不显示文本。
-    if (model.state === ElementState.TEXT_EDIT) {
-      return null
-    }
-    let draggable = false
     const { editConfigModel } = graphModel
-    if (model.text.draggable || editConfigModel.edgeTextDraggable) {
-      draggable = true
+
+    // 当 边文本模式非 TEXT 时，不显示文本
+    if (editConfigModel.edgeTextMode !== TextMode.TEXT) return null
+    // 文本被编辑的时候，显示编辑框，不显示文本。
+    if (model.state === ElementState.TEXT_EDIT) return null
+
+    if (model.text) {
+      let draggable = false
+      if (editConfigModel.edgeTextDraggable && model.text.draggable) {
+        draggable = true
+      }
+      return (
+        <LineText
+          ref={this.textRef}
+          editable={
+            editConfigModel.edgeTextEdit && (model.text.editable ?? true)
+          }
+          model={model}
+          graphModel={graphModel}
+          draggable={draggable}
+        />
+      )
     }
-    return (
-      <LineText
-        ref={this.textRef}
-        editable={(editConfigModel.edgeTextEdit && model.text.editable) || true}
-        model={model}
-        graphModel={graphModel}
-        draggable={draggable}
-      />
-    )
+    return null
   }
 
   /**
@@ -391,11 +398,9 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         graphModel.setElementStateById(id, ElementState.DEFAULT)
       }
       // 边文案可编辑状态，才可以进行文案编辑
-      if (editConfigModel.edgeTextEdit) {
-        if (text.editable) {
-          model.setSelected(false)
-          graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
-        }
+      if (editConfigModel.edgeTextEdit && text.editable) {
+        model.setSelected(false)
+        graphModel.setElementStateById(id, ElementState.TEXT_EDIT)
       }
       if (modelType === ModelType.POLYLINE_EDGE) {
         const polylineEdgeModel = model as PolylineEdgeModel
@@ -405,14 +410,13 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           x: e.x,
           y: e.y,
         })
-        const crossPoint = getClosestPointOfPolyline(
+        polylineEdgeModel.dbClickPosition = getClosestPointOfPolyline(
           {
             x,
             y,
           },
           polylineEdgeModel.points,
         )
-        polylineEdgeModel.dbClickPosition = crossPoint
       }
       graphModel.eventCenter.emit(EventType.EDGE_DBCLICK, {
         data: edgeData,

@@ -17,6 +17,7 @@ export * from './model'
 export * from './options'
 export * from './keyboard'
 export * from './constant'
+export * from './algorithm'
 export { ElementState, ModelType, ElementType, EventType } from './constant'
 
 export { formatAnchorConnectValidateData } from './util/node'

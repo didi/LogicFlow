@@ -3,8 +3,11 @@ import { getNodeBBox, isInNode, distance, sampleCubic } from '.'
 import LogicFlow from '../LogicFlow'
 import { Options } from '../options'
 import { SegmentDirection } from '../constant'
-import { getVerticalPointOfLine } from '../algorithm'
-import { getCrossPointOfLine, isInSegment } from '../algorithm/edge'
+import {
+  getVerticalPointOfLine,
+  getCrossPointOfLine,
+  isInSegment,
+} from '../algorithm'
 import {
   Model,
   BaseNodeModel,
@@ -397,7 +400,7 @@ export const getNextNeighborPoints = (
   return filterRepeatPoints(neighbors)
 }
 
-/* 路径查找,Astart查找+曼哈顿距离
+/* 路径查找,AStar查找+曼哈顿距离
  * 算法wiki:https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
  * 方法无法复用，且调用了很多polyline相关的方法，暂不抽离到src/algorithm中
  */
@@ -590,10 +593,10 @@ export const getPolylinePoints = (
  * @param pointsList 多个点组成的数组
  */
 export const getLongestEdge = (pointsList: Point[]): [Point, Point] => {
-  let points
   if (pointsList.length === 1) {
-    points = [pointsList[0], pointsList[0]]
-  } else if (pointsList.length >= 2) {
+    const [point] = pointsList
+    return [point, point]
+  } else {
     let point1 = pointsList[0]
     let point2 = pointsList[1]
     let edgeLength = distance(point1.x, point1.y, point2.x, point2.y)
@@ -612,9 +615,8 @@ export const getLongestEdge = (pointsList: Point[]): [Point, Point] => {
         point2 = newPoint2
       }
     }
-    points = [point1, point2]
+    return [point1, point2]
   }
-  return points
 }
 
 /* 线段是否在节点内部，被包含了 */
@@ -650,8 +652,7 @@ export const getCrossPointInRect = (
   start: Point,
   end: Point,
   node: BaseNodeModel,
-): Point => {
-  let point
+): Point | false | undefined => {
   let crossSegments: [Point, Point] | undefined = undefined
   const nodeBox = getNodeBBox(node)
   const points = getPointsFromBBox(nodeBox)
@@ -667,9 +668,8 @@ export const getCrossPointInRect = (
     }
   }
   if (crossSegments) {
-    point = getCrossPointOfLine(start, end, crossSegments[0], crossSegments[1])
+    return getCrossPointOfLine(start, end, crossSegments[0], crossSegments[1])
   }
-  return point
 }
 /* 判断线段的方向 */
 export const segmentDirection = (

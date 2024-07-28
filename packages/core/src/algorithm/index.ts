@@ -1,4 +1,6 @@
 // 各类算法的实现
+export * from './outline'
+export * from './edge'
 
 /*
  * 计算垂直边的与起始点有一定距离对称，边垂直于边的点

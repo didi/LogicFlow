@@ -709,7 +709,6 @@ export class BaseNodeModel implements IBaseNodeModel {
   }
 
   @action moveText(deltaX: number, deltaY: number): void {
-    if (!this.text) return
     const { x, y, value, draggable, editable } = this.text
     this.text = {
       value,
@@ -727,8 +726,7 @@ export class BaseNodeModel implements IBaseNodeModel {
     }
   }
 
-  @action
-  setSelected(flag = true): void {
+  @action setSelected(flag = true): void {
     this.isSelected = flag
   }
 
