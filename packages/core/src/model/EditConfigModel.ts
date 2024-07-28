@@ -1,4 +1,4 @@
-import { assign, pick } from 'lodash-es'
+import { assign, isBoolean, pick } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { TextMode } from '../constant'
 
@@ -39,6 +39,14 @@ export interface IEditConfigType {
    * 允许调整边起点和终点
    */
   adjustEdgeStartAndEnd: boolean
+  /**
+   * 允许调整边起点
+   */
+  adjustEdgeStart: boolean
+  /**
+   * 允许调整边的终点
+   */
+  adjustEdgeEnd: boolean
   /**
    * 允许拖动节点
    */
@@ -149,6 +157,8 @@ const allKeys = [
   'adjustEdge', // 允许调整边
   'adjustEdgeMiddle', // 允许调整边中点
   'adjustEdgeStartAndEnd', // 允许调整边起点和终点
+  'adjustEdgeStart', // 允许调整边起点
+  'adjustEdgeEnd', // 允许调整边终点
   'adjustNodePosition', // 允许拖动节点
   'hideAnchors', // 隐藏节点所有锚点
   'allowRotate', // 是否允许节点旋转
@@ -222,6 +232,8 @@ export class EditConfigModel {
   @observable adjustEdge = true
   @observable adjustEdgeMiddle = false
   @observable adjustEdgeStartAndEnd = false
+  @observable adjustEdgeStart = false
+  @observable adjustEdgeEnd = false
   @observable edgeSelectedOutline = true
   /*********************************************************
    * 其他
@@ -240,7 +252,13 @@ export class EditConfigModel {
 
   // TODO: 确认一下这个函数的逻辑，是否会有误合并的问题
   computeConfig(config: Partial<IEditConfigType>) {
-    const { isSilentMode, textDraggable, textMode, textEdit } = config
+    const {
+      isSilentMode,
+      textDraggable,
+      textMode,
+      textEdit,
+      adjustEdgeStartAndEnd,
+    } = config
     const conf: Partial<IEditConfigType> = {}
 
     // false 表示从静默模式恢复
@@ -279,6 +297,13 @@ export class EditConfigModel {
       assign(conf, {
         nodeTextDraggable: false,
         edgeTextDraggable: false,
+      })
+    }
+
+    if (isBoolean(adjustEdgeStartAndEnd)) {
+      assign(conf, {
+        adjustEdgeStart: adjustEdgeStartAndEnd,
+        adjustEdgeEnd: adjustEdgeStartAndEnd,
       })
     }
 
