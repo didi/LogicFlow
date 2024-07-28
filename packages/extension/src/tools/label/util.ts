@@ -200,7 +200,7 @@ export const pointPositionAfterRotate = (
   angle: number,
   center: Point,
 ): Point => {
-  const radians = (Math.PI / 100) * angle
+  const radians = (Math.PI / 180) * angle
   const cos = Math.cos(radians)
   const sin = Math.sin(radians)
 

@@ -1450,17 +1450,18 @@ export namespace LogicFlow {
   // label数据类型声明
   export type LabelConfig = {
     id?: string // label唯一标识
-    x: number // label中心在x轴上的位置
-    y: number // label中心在y轴上的位置
-    content?: string // label html的内容，
-    value: string // label文本内容
-    // relateId?: string // 关联节点/关联边的id
+    x: number
+    y: number
+    content?: string // 富文本内容
+    value: string // 纯文本内容
+    rotate?: number // 旋转角度
     // 样式属性
     style?: h.JSX.CSSProperties // label自定义样式
 
     // 编辑状态属性
     editable?: boolean
     draggable?: boolean
+    labelWidth?: number
     textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 
     // 当前 Label 是否渲染纵向文本

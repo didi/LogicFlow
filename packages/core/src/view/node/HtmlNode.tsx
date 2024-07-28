@@ -52,14 +52,14 @@ export class HtmlNode extends BaseNode<IHtmlNodeProps> {
   }
 
   componentDidMount() {
-    console.log('HtmlNode --->>> componentDidMount - 初始化内容')
+    // console.log('HtmlNode --->>> componentDidMount - 初始化内容')
     if (this.shouldUpdate() && this.rootEl) {
       this.setHtml(this.rootEl)
     }
   }
 
   componentDidUpdate() {
-    console.log('HtmlNode --->>> componentDidUpdate - 更新节点内容')
+    // console.log('HtmlNode --->>> componentDidUpdate - 更新节点内容')
     // DONE: 将 componentDidMount 和 componentDidUpdate 区分开，如果写在一次，渲染 React 组件会重复初始化，消耗过多资源
     // 为了保证历史兼容性，先将默认 HTML 节点的 setHtml 和 confirmUpdate 保持一直，用户可通过自定义的方式重新定义
     if (this.shouldUpdate() && this.rootEl) {
