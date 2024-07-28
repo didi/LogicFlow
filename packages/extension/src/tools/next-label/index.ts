@@ -8,11 +8,17 @@ import EdgeData = LogicFlow.EdgeData
 import Extension = LogicFlow.Extension
 import LabelConfig = LogicFlow.LabelConfig
 import GraphElement = LogicFlow.GraphElement
+import {
+  BBoxInfo,
+  calcPointAfterResize,
+  rotatePointAroundCenter,
+} from './utils'
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
 export type INextLabelOptions = {
   isMultiple?: boolean
   maxCount?: number
+  labelWidth?: number
   textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 }
 
@@ -24,7 +30,10 @@ export class NextLabel implements Extension {
 
   textOverflowMode: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
   isMultiple: boolean
+  labelWidth?: number
   maxCount: number // 默认值给无限大数值
+
+  labelInitPositionMap: Map<string, Position> = new Map()
 
   constructor({ lf, options }: { lf: LogicFlow; options: INextLabelOptions }) {
     this.lf = lf
@@ -33,6 +42,7 @@ export class NextLabel implements Extension {
 
     this.textOverflowMode = options.textOverflowMode ?? 'default'
     this.isMultiple = options.isMultiple ?? true
+    this.labelWidth = options.labelWidth
     this.maxCount = options.maxCount ?? Infinity
 
     // DONE: 1. 启用插件时，将当前画布的 textMode 更新为 TextMode.LABEL。
@@ -58,7 +68,10 @@ export class NextLabel implements Extension {
    * @param element 当前元素 model
    * @return LabelConfig[]
    */
-  formatConfig(graphModel: GraphModel, element: GraphElement): LabelConfig[] {
+  private formatConfig(
+    graphModel: GraphModel,
+    element: GraphElement,
+  ): LabelConfig[] {
     const {
       editConfigModel: {
         nodeTextEdit,
@@ -67,7 +80,7 @@ export class NextLabel implements Extension {
         edgeTextDraggable,
       },
     } = graphModel
-    const { textOverflowMode, isMultiple, maxCount } = this
+    const { textOverflowMode, isMultiple, maxCount, labelWidth } = this
     const {
       text,
       properties: { _label, _labelOption = {} },
@@ -120,9 +133,9 @@ export class NextLabel implements Extension {
       const {
         value,
         content,
+        vertical,
         editable,
         draggable,
-        vertical,
         textOverflowMode: labelTextOverflowMode,
       } = config
 
@@ -131,6 +144,7 @@ export class NextLabel implements Extension {
         element.BaseType === 'node' ? nodeTextDraggable : edgeTextDraggable
       return {
         ...config,
+        labelWidth,
         content: content ?? value,
         vertical: vertical ?? false,
         editable: textEdit && editable,
@@ -146,9 +160,9 @@ export class NextLabel implements Extension {
    * 根据初始化的数据，格式化 Label 的数据格式后，统一更新到元素的 properties._label 中，保证后续的渲染以这个数据格式进行
    * @param graphModel
    */
-  setupLabels(graphModel: GraphModel) {
-    const elements = [...graphModel.nodes, ...graphModel.edges]
-    // const labels: h.JSX.Element[] = [] // 保存所有的 Label 元素
+  private setupLabels(graphModel: GraphModel) {
+    // const elements = [...graphModel.nodes, ...graphModel.edges]
+    const elements = graphModel.sortElements
 
     // TODO: 1. 筛选出当前画布上，textMode 为 TextMode.LABEL 的元素(在支持元素级别的 textMode 时，需要做这个筛选)
     // REMIND: 本期先只支持全局配置，所以判断全局的 textMode 即可
@@ -172,7 +186,7 @@ export class NextLabel implements Extension {
    * @param element
    * @param position
    */
-  addLabel(element: GraphElement, position: Position) {
+  private addLabel(element: GraphElement, position: Position) {
     const { maxCount } = this
     const {
       properties: { _label, _labelOption },
@@ -193,13 +207,15 @@ export class NextLabel implements Extension {
       vertical: false,
     }
 
-    if (len >= (curLabelOption.maxCount ?? maxCount)) return
+    if (len >= (curLabelOption?.maxCount ?? maxCount)) {
+      return
+    }
 
     curLabelConfig.push(newLabel)
     element.setProperty('_label', curLabelConfig)
   }
 
-  addEventListeners() {
+  private addEventListeners() {
     const { graphModel } = this.lf
     const { eventCenter, editConfigModel } = graphModel
 
@@ -213,7 +229,6 @@ export class NextLabel implements Extension {
       ({ e, data }: { e: MouseEvent; data: NodeData | EdgeData }) => {
         // DONE: 增加 label 的数据信息到 element model
         const target: GraphElement | undefined = graphModel.getElement(data.id)
-
         // DONE: 将 clientX 和 clientY 转换为画布坐标
         const {
           canvasOverlayPosition: { x: x1, y: y1 },
@@ -231,13 +246,84 @@ export class NextLabel implements Extension {
         }
       },
     )
+
+    // 监听 node:resize 事件，在 resize 时，重新计算 label 的位置信息
+    eventCenter.on('node:resize', ({ preData, data, model }) => {
+      const {
+        width: preWidth,
+        height: preHeight,
+        _label = [],
+      } = preData.properties ?? {}
+      const { width: curWidth, height: curHeight } = data.properties ?? {}
+
+      if (preWidth && preHeight && curWidth && curHeight) {
+        const origin: BBoxInfo = {
+          x: preData.x,
+          y: preData.y,
+          width: preWidth,
+          height: preHeight,
+        }
+        const scaled: BBoxInfo = {
+          x: data.x,
+          y: data.y,
+          width: curWidth,
+          height: curHeight,
+        }
+        const newLabelConfig = map(_label as LabelConfig[], (label) => {
+          const { x, y } = label
+          const newPoint = calcPointAfterResize(origin, scaled, { x, y })
+          return {
+            ...label,
+            ...newPoint,
+          }
+        })
+
+        model.setProperty('_label', newLabelConfig)
+      }
+    })
+
+    // 监听 node:rotate 事件，在 rotate 时，重新计算 Label 的位置信息
+    eventCenter.on('node:rotate', ({ model }) => {
+      const {
+        x,
+        y,
+        rotate,
+        properties: { _label = [] },
+      } = model
+      const center: Position = { x, y }
+
+      const newLabelConfig = map(_label as LabelConfig[], (label) => {
+        if (!label.id) return label
+
+        let point: Position = { x: label.x, y: label.y }
+        if (this.labelInitPositionMap.has(label.id)) {
+          point = this.labelInitPositionMap.get(label.id)!
+        } else {
+          this.labelInitPositionMap.set(label.id, point)
+        }
+
+        // 弧度转角度
+        let theta = rotate * (180 / Math.PI)
+        if (theta < 0) theta += 360
+        const radian = theta * (Math.PI / 180)
+
+        const newPoint = rotatePointAroundCenter(point, center, radian)
+        return {
+          ...label,
+          ...newPoint,
+          rotate: theta,
+        }
+      })
+
+      model.setProperty('_label', newLabelConfig)
+    })
   }
 
   /**
    * 重写元素的一些方法，以支持 Label 的拖拽、编辑等
    * @param element
    */
-  rewriteInnerMethods(element: GraphElement) {
+  private rewriteInnerMethods(element: GraphElement) {
     // 重写 edgeModel/nodeModel moveText 方法，在 move text 时，以相同的逻辑移动 label
     element.moveText = (deltaX: number, deltaY: number) => {
       if (!element.text) return
@@ -273,7 +359,7 @@ export class NextLabel implements Extension {
   /**
    * 更新当前渲染使用的 Text or Label 模式
    */
-  public updateTextMode(textMode: TextMode) {
+  updateTextMode(textMode: TextMode) {
     const {
       graphModel: { editConfigModel },
     } = this.lf

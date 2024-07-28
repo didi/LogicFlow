@@ -211,7 +211,8 @@ export class Label extends Component<ILabelProps, ILabelState> {
     // eventCenter.on('node:properties-change,node:properties-delete', () => {})
   }
 
-  componentDidUpdate() { // snapshot: any, // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
+  componentDidUpdate() {
+    // snapshot: any, // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
     console.log('Label componentDidUpdate')
     // console.log('previousProps', previousProps)
     // console.log('previousState', previousState)
@@ -231,16 +232,28 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const { isDragging, isHovered, isEditing } = this.state
     const { transformModel } = graphModel
     const { transform } = transformModel.getTransformStyle()
-    const { id, x, y, vertical, style, content, textOverflowMode } = label
+    const {
+      id,
+      x,
+      y,
+      vertical,
+      style,
+      rotate,
+      content,
+      labelWidth,
+      textOverflowMode,
+    } = label
 
-    console.log('element width --->>>', element.width)
-    const maxLabelWidth = element.BaseType === 'node' ? element.width - 20 : 80
+    const maxLabelWidth: number =
+      labelWidth ?? (element.BaseType === 'node' ? element.width - 20 : 80)
     const containerStyle = {
       left: `${x - maxLabelWidth / 2}px`,
       top: `${y - 10}px`,
       width: `${maxLabelWidth}px`,
       height: '20px',
-      transform: `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
+      transform: rotate
+        ? `${transform} rotate(${rotate}deg)`
+        : `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
     }
 
     return (
@@ -262,12 +275,12 @@ export class Label extends Component<ILabelProps, ILabelState> {
             'lf-label-editor-dragging': isDragging,
             'lf-label-editor-editing': isEditing,
             'lf-label-editor-hover': !isEditing && isHovered,
-            [`lf-label-editor-${textOverflowMode}`]: true,
+            [`lf-label-editor-${textOverflowMode}`]: !isEditing,
           })}
           style={{
-            ...style,
+            maxWidth: `${maxLabelWidth}px`,
             width: `${maxLabelWidth}px`,
-            'max-width': `${maxLabelWidth}px`,
+            ...style,
           }}
           dangerouslySetInnerHTML={{ __html: content }}
         ></div>

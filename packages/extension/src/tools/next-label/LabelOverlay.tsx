@@ -112,8 +112,6 @@ export class NextLabelOverlay extends Component<
     const elements = [...graphModel.nodes, ...graphModel.edges]
     const curExtension = extension['NextLabel'] as NextLabelPlugin
 
-    // console.log('rect', JSON.stringify(graphModel.getNodeModelById('1')?.getData()))
-
     if (curExtension) {
       const labels: h.JSX.Element[] = [] // 保存所有的 Label 元素
 
@@ -135,7 +133,6 @@ export class NextLabelOverlay extends Component<
           // }
           const label = new LabelModel(config, element, graphModel)
           labelMap.set(label.id, label)
-          // console.log('size', labelMap.size)
 
           labels.push(
             <Label

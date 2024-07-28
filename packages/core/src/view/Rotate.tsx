@@ -83,7 +83,8 @@ class RotateControlPoint extends Component<IRotateControlProps> {
 
     eventCenter.emit(EventType.NODE_ROTATE, {
       e: event,
-      nodeModel,
+      model: nodeModel,
+      data: nodeModel.getData(),
     })
   }
 

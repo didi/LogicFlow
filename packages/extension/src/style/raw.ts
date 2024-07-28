@@ -253,33 +253,33 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   cursor: text;
 }
 .lf-label-overlay .lf-label-editor-hover {
-  border: 2px dashed #275dc5;
+  border: 2px dashed #acacac;
 }
 .lf-label-overlay .lf-label-editor-clip {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
   width: 100px;
   /* 根据需要调整宽度 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
 }
 .lf-label-overlay .lf-label-editor-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   width: 100px;
   /* 根据需要调整宽度 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .lf-label-overlay .lf-label-editor-wrap {
+  width: 100px;
+  /* 根据需要调整宽度 */
   white-space: normal;
   overflow-wrap: break-word;
   /* 允许单词内换行 */
-  width: 100px;
-  /* 根据需要调整宽度 */
 }
 .lf-label-overlay .lf-label-editor-nowrap {
-  white-space: nowrap;
-  overflow: visible;
   width: 100px;
   /* 根据需要调整宽度 */
+  overflow: visible;
+  white-space: nowrap;
 }
 `
