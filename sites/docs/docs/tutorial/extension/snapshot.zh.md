@@ -91,7 +91,7 @@ getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
 
 | 属性名  | 类型 | 默认值 | 必填 | 描述   |
 | --------- | -------- | -------------------------- | -------- | ----------------------------------------------------------------- |
-| fileType | string | png |  |  导出图片的格式，可选值为：`png`、`webp`、`gif`、`jpeg`、`svg`，默认值为 `png` |
+| fileType | string | png |  |  导出图片的格式，可选值为：`png`、`webp`、`jpeg`、`svg`，默认值为 `png` |
 | width | number | - | | 导出图片的宽度，通常无需设置，设置后可能会拉伸图形 |
 | height | numebr | - | | 导出图片的高度，通常无需设置，设置后可能会拉伸图形 |
 | backgroundColor | string | - | | 导出图片的背景色，默认为透明 |

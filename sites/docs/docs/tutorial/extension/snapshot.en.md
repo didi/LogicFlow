@@ -91,7 +91,7 @@ getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
 
 | Property Name | Type | Default Value | Required | Description |
 | --------- | -------- | -------------------------- | -------- | ----------------------------------------------------------------- |
-| fileType | string | png | | The format of the exported image. The optional values ​​are: `png`, `webp`, `gif`, `jpeg`, `svg`. The default value is `png` |
+| fileType | string | png | | The format of the exported image. The optional values ​​are: `png`, `webp`, `jpeg`, `svg`. The default value is `png` |
 | width | number | - | | The width of the exported image. Usually, it does not need to be set. Setting it may stretch the image. |
 | height | numebr | - | | The height of the exported image. Usually, it does not need to be set. Setting it may stretch the image. |
 | backgroundColor | string | - | | The background color of the exported image. The default value is transparent |

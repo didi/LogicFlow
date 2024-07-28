@@ -4,7 +4,7 @@ import { updateImageSource, copyCanvas } from './utils'
 // 导出图片
 export type ToImageOptions = {
   /**
-   * 导出图片的格式，可选值为：`png`、`webp`、`gif`、`jpeg`、`svg`，默认值为 `png`
+   * 导出图片的格式，可选值为：`png`、`webp`、`jpeg`、`svg`，默认值为 `png`
    */
   fileType?: string
   /**
@@ -63,17 +63,17 @@ export class Snapshot {
 
     // TODO: 设置fileType为gif但是下载下来的还是png
     // TODO: 完善静默模式不允许添加、操作元素能力
-    /* 下载快照 */
+    /* 导出画布快照 */
     lf.getSnapshot = async (
       fileName?: string,
       toImageOptions?: ToImageOptions,
     ) => await this.getSnapshot(fileName, toImageOptions)
 
-    /* 获取Blob对象，用户图片上传 */
+    /* 获取Blob对象 */
     lf.getSnapshotBlob = async (backgroundColor?: string, fileType?: string) =>
       await this.getSnapshotBlob(backgroundColor, fileType)
 
-    /* 获取Base64对象，用户图片上传 */
+    /* 获取Base64对象 */
     lf.getSnapshotBase64 = async (
       backgroundColor?: string,
       fileType?: string,
@@ -144,7 +144,7 @@ export class Snapshot {
   }
 
   /**
-   * 下载前的处理画布工作：局部渲染模式处理、静默模式处理
+   * 导出画布：导出前的处理画布工作，局部渲染模式处理、静默模式处理
    * @param fileName
    * @param toImageOptions
    */
@@ -195,7 +195,7 @@ export class Snapshot {
     } else {
       this.getCanvasData(svg, toImageOptions ?? {}).then(
         (canvas: HTMLCanvasElement) => {
-          // canvas元素 => url   image/octet-stream: 确保所有浏览器都能正常下载
+          // canvas元素 => base64 url   image/octet-stream: 确保所有浏览器都能正常下载
           const imgUrl = canvas
             .toDataURL(`image/${fileType}`, quality)
             .replace(`image/${fileType}`, 'image/octet-stream')
@@ -211,7 +211,7 @@ export class Snapshot {
    * @param fileType
    * @returns
    */
-  private async getSnapshotBase64(
+  async getSnapshotBase64(
     backgroundColor?: string,
     fileType?: string,
   ): Promise<SnapshotResponse> {
@@ -238,7 +238,7 @@ export class Snapshot {
    * @param fileType
    * @returns
    */
-  private async getSnapshotBlob(
+  async getSnapshotBlob(
     backgroundColor?: string,
     fileType?: string,
   ): Promise<SnapshotResponse> {
@@ -292,7 +292,7 @@ export class Snapshot {
   }
 
   /**
-   * 获取图片生成中间产物canvas对象，用户转换为其他需要的格式
+   * 将 svg 转化为中间产物 canvas 对象，再转换为用户需要的其它格式
    * @param svg
    * @param toImageOptions
    * @returns
