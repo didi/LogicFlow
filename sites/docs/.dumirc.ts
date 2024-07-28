@@ -120,6 +120,14 @@ export default defineConfig({
         },
         order: 1,
       },
+      {
+        slug: 'article/extension',
+        title: {
+          zh: '插件实现原理',
+          en: 'Extension Implementation Principles',
+        },
+        order: 6,
+      },
     ],
 
     // 示例页菜单配置
