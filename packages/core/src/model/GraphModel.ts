@@ -799,14 +799,6 @@ export class GraphModel {
         node.text.x += node.x - nodeX
         node.text.y += node.y - nodeY
       }
-      this.eventCenter.emit(EventType.LABEL_SHOULD_UPDATE, {
-        model: {
-          relateId: node.id,
-          baseType: ElementType.NODE,
-          deltaX: node.x - nodeX,
-          deltaY: node.y - nodeY,
-        },
-      })
     }
     return new Model(node, this)
   }

@@ -52,8 +52,8 @@ export class NextLabel implements Extension {
     // TODO: 2. 做一些插件需要的事件监听
     this.addEventListeners()
 
-    // TODO: 3. 是否需要重写一些额外的方法，插件中需要的，比如 lf.addElements 等方法
-    // this.rewriteInnerMethods()
+    // TODO: 3. 自定义快捷键，比如 delete，选中 label 时，移除 label
+    // this.rewriteShortcut()
 
     // 插件中注册 LabelOverlay 工具，用于 label 的编辑
     lf.tool.registerTool(LabelOverlay.toolName, LabelOverlay)
@@ -120,6 +120,17 @@ export class NextLabel implements Extension {
           element.BaseType === 'edge' ? edgeTextDraggable : nodeTextDraggable,
       }
       formatConfig = [config]
+    }
+
+    // TODO: 针对 Edge，在 edge 更新时 重新计算 Label 的位置
+    if (element.BaseType === 'edge') {
+      // 判断当前 label，是否在 edge 的路径上，如果不在，就重新计算位置
+      formatConfig = map(formatConfig, (config) => {
+        const { x, y } = config
+        console.log('x, y --->>>', x, y)
+
+        return config
+      })
     }
 
     // DONE: 再根据一些全局配置，比如是否支持垂直显示等，对 LabelConfig 进行二次处理
@@ -191,8 +202,8 @@ export class NextLabel implements Extension {
     const {
       properties: { _label, _labelOption },
     } = element
-    const curLabelConfig = _label as LabelConfig[]
-    const curLabelOption = _labelOption as INextLabelOptions
+    const curLabelConfig = (_label as LabelConfig[]) ?? []
+    const curLabelOption = (_labelOption as INextLabelOptions) ?? {}
 
     const len = curLabelConfig.length
     const newLabel = {
@@ -214,6 +225,12 @@ export class NextLabel implements Extension {
     curLabelConfig.push(newLabel)
     element.setProperty('_label', curLabelConfig)
   }
+
+  /**
+   * 移除元素的某个 label
+   * @private
+   */
+  // private removeLabel() {}
 
   private addEventListeners() {
     const { graphModel } = this.lf
@@ -353,8 +370,10 @@ export class NextLabel implements Extension {
       }
     }
 
-    // TODO: others methods
+    // TODO: others methods ???
   }
+
+  // private rewriteShortcut() {}
 
   /**
    * 更新当前渲染使用的 Text or Label 模式
