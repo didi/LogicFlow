@@ -247,24 +247,36 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    */
   private getAdjustPoints() {
     const { model, graphModel } = this.props
+    const {
+      editConfigModel: {
+        adjustEdgeStartAndEnd,
+        adjustEdgeStart,
+        adjustEdgeEnd,
+      },
+    } = graphModel
     const start = model.getAdjustStart()
     const end = model.getAdjustEnd()
+
     return (
       <g>
-        <AdjustPoint
-          type={AdjustType.SOURCE}
-          {...start}
-          getAdjustPointShape={this.getAdjustPointShape}
-          edgeModel={model}
-          graphModel={graphModel}
-        />
-        <AdjustPoint
-          type={AdjustType.TARGET}
-          {...end}
-          getAdjustPointShape={this.getAdjustPointShape}
-          edgeModel={model}
-          graphModel={graphModel}
-        />
+        {adjustEdgeStartAndEnd && adjustEdgeStart && (
+          <AdjustPoint
+            type={AdjustType.SOURCE}
+            {...start}
+            getAdjustPointShape={this.getAdjustPointShape}
+            edgeModel={model}
+            graphModel={graphModel}
+          />
+        )}
+        {adjustEdgeStartAndEnd && adjustEdgeEnd && (
+          <AdjustPoint
+            type={AdjustType.TARGET}
+            {...end}
+            getAdjustPointShape={this.getAdjustPointShape}
+            edgeModel={model}
+            graphModel={graphModel}
+          />
+        )}
       </g>
     )
   }
