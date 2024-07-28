@@ -103,11 +103,13 @@ export class ResizeControl extends Component<
 
   triggerResizeEvent = (
     preNodeData: ResizeNodeData,
-    nextNodeData: ResizeNodeData,
+    curNodeData: ResizeNodeData,
+    nodeModel: BaseNodeModel,
   ) => {
     this.graphModel.eventCenter.emit(EventType.NODE_RESIZE, {
-      preNodeData,
-      nextNodeData,
+      preData: preNodeData,
+      data: curNodeData,
+      model: nodeModel,
     })
   }
 
@@ -282,14 +284,12 @@ export class ResizeControl extends Component<
     nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
 
     const preNodeData = this.nodeModel.getData()
-    const nextNodeData = this.nodeModel.resize(nextSize)
-
-    console.log('nextNodeData ===>>>', nextNodeData)
+    const curNodeData = this.nodeModel.resize(nextSize)
 
     // 更新边
     this.updateEdgePointByAnchors()
     // 触发 resize 事件
-    this.triggerResizeEvent(preNodeData, nextNodeData)
+    this.triggerResizeEvent(preNodeData, curNodeData, this.nodeModel)
   }
 
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
