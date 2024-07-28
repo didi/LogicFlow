@@ -8,11 +8,16 @@
           <el-button type="primary" @click="addElementNode(10)">添加10个element</el-button>
           <el-button type="primary" @click="addEchartNode(1)">添加1个Echart</el-button>
           <el-button type="primary" @click="addEchartNode(10)">添加10个Echart</el-button>
-          <el-button type="primary" @click="addDomNumber(domNumber)">添加个dom数量:</el-button>
+          <el-button type="primary" @click="addDomNumber(domNumber, true)"
+            >添加个节点和边:</el-button
+          >
+          <el-button type="primary" @click="addDomNumber(domNumber, false)">只添加节点:</el-button>
           <el-input v-model="domNumber"></el-input>
-          <span>elment元素数量：{{ ElementNumber }}</span>
-          <span>Echart元素数量：{{ EchartNumber }}</span>
-          <span>Total DOM elements: {{ TotalDOMNumber }}</span>
+          <span>elment元素数量：{{ elementNumber }}</span>
+          <span>Echart元素数量：{{ echartNumber }}</span>
+          <span>节点数量：{{ nodeNumber }}</span>
+          <span>边数量：{{ edgeNumber }}</span>
+          <span>Total DOM elements: {{ totalDOMNumber }}</span>
         </el-space>
       </div>
     </template>
@@ -33,11 +38,14 @@ import { ElNotification } from 'element-plus'
 
 const containerRef = ref<HTMLDivElement | null>(null)
 const lfRef = ref<LogicFlow | null>(null)
-const ElementNumber = ref(0)
-const EchartNumber = ref(0)
-const TotalDOMNumber = ref(0)
+const elementNumber = ref<number>(0)
+const echartNumber = ref<number>(0)
+const totalDOMNumber = ref<number>(0)
 const eventType = ref<undefined | string>()
-const domNumber = ref(0)
+const nodeNumber = ref<number>(0)
+const domNumber = ref<number>(0)
+const edgeNumber = ref<number>(0)
+const id = ref<number>(0)
 
 // 添加 element 元素
 const addElementNode = (number: number) => {
@@ -52,16 +60,16 @@ const addElementNode = (number: number) => {
           height: 2500
         }
       })
-    ElementNumber.value++
+    elementNumber.value++
     nextTick(() => {
-      TotalDOMNumber.value = getTotalDOMNumber()
+      totalDOMNumber.value = getTotalDOMNumber()
     })
   }
 }
 
 // 添加 Echart 元素
 const addEchartNode = (number: number) => {
-  for (let i = 0; i < number; i++) {
+  for (let i = 0; i < +number; i++) {
     lfRef.value &&
       lfRef.value.addNode({
         type: 'echart-node',
@@ -72,27 +80,41 @@ const addEchartNode = (number: number) => {
           height: 2000
         }
       })
-    EchartNumber.value++
+    echartNumber.value++
     nextTick(() => {
-      TotalDOMNumber.value = getTotalDOMNumber()
+      totalDOMNumber.value = getTotalDOMNumber()
     })
   }
 }
 
 // 添加 dom 数量元素
-const addDomNumber = (number: number) => {
-  for (let i = 0; i < number; i++) {
-    lfRef.value &&
+const addDomNumber = (number: number, hasEdge: boolean) => {
+  if (lfRef.value) {
+    for (let i = 0; i < number; i++) {
       lfRef.value.addNode({
+        id: '' + id.value,
         type: 'dom-number',
         x: getRandom(0, 2000),
         y: getRandom(0, 1000),
         properties: {
-          width: 100
+          width: 150,
+          height: 30
         }
       })
+      id.value >= 1 &&
+        lfRef.value &&
+        hasEdge &&
+        lfRef.value.addEdge({
+          sourceNodeId: '' + (id.value - 1),
+          targetNodeId: '' + id.value,
+          type: 'bezier'
+        })
+      id.value++
+    }
+    nodeNumber.value += +number
+    hasEdge && (edgeNumber.value += +number)
     nextTick(() => {
-      TotalDOMNumber.value = getTotalDOMNumber()
+      totalDOMNumber.value = getTotalDOMNumber()
     })
   }
 }
@@ -131,6 +153,13 @@ onMounted(() => {
       lfRef.value as LogicFlow
     )
 
+    lfRef.value.setTheme({
+      bezier: {
+        stroke: '#ccc',
+        strokeWidth: 1
+      }
+    })
+
     lfRef.value.render({})
 
     getTotalDOMNumber()
@@ -156,7 +185,7 @@ onMounted(() => {
 
   // 每隔1s获取一次DOM数量
   setInterval(() => {
-    TotalDOMNumber.value = getTotalDOMNumber()
+    totalDOMNumber.value = getTotalDOMNumber()
   }, 1000)
 })
 </script>
