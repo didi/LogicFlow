@@ -150,13 +150,14 @@ export abstract class BaseNode<P extends IProps> extends Component<P, IState> {
     const { model, graphModel } = this.props
     const { editConfigModel } = graphModel
 
-    // 文本被编辑的时候，显示编辑框，不显示文本。
+    // 当 节点文本模式非 TEXT 时，不显示文本
     if (editConfigModel.nodeTextMode !== TextMode.TEXT) return null
+    // 文本被编辑的时候，显示编辑框，不显示文本。
     if (model.state === ElementState.TEXT_EDIT) return null
 
     if (model.text) {
       let draggable = false
-      if (model.text.draggable || editConfigModel.nodeTextDraggable) {
+      if (editConfigModel.nodeTextDraggable && model.text.draggable) {
         draggable = true
       }
       return (

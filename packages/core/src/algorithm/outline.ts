@@ -1,11 +1,11 @@
 import { ModelType } from '../constant'
 import {
   Model,
-  PolylineEdgeModel,
-  BezierEdgeModel,
   BaseNodeModel,
   BaseEdgeModel,
   LineEdgeModel,
+  BezierEdgeModel,
+  PolylineEdgeModel,
 } from '../model'
 import { points2PointsList, getBBoxOfPoints, getBezierPoints } from '../util'
 

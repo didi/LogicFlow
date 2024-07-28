@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { TextMode } from '@logicflow/core'
 import { NextLabel } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
@@ -6,7 +6,7 @@ import '@logicflow/extension/es/index.css'
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
 import './index.less'
-import { TextMode } from '@logicflow/core/es/constant'
+// import { data } from './data'
 
 const theme: Partial<LogicFlow.Theme> = {
   rect: {
