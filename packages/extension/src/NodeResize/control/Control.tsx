@@ -463,8 +463,9 @@ class Control extends Component<IControlProps, IControlState> {
       ...afterNode,
     }
     this.graphModel.eventCenter.emit('node:resize', {
-      oldNodeSize,
-      newNodeSize,
+      preData: oldNodeSize,
+      data: newNodeSize,
+      model: this.nodeModel,
     })
   }
   onDragging = ({ deltaX, deltaY }: VectorData) => {

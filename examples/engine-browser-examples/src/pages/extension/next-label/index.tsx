@@ -161,9 +161,10 @@ export default function BasicNode() {
         pluginsOptions: {
           NextLabel: {
             isMultiple: true,
-            maxCount: 1,
+            maxCount: 3,
+            labelWidth: 80,
             // textOverflowMode -> 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
-            textOverflowMode: 'default',
+            textOverflowMode: 'wrap',
           },
         },
         grid: {

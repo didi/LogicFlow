@@ -43,7 +43,6 @@ export class ToolOverlay extends Component<IProps> {
   }
 
   triggerToolRender() {
-    console.log('<<<---triggered tool overlay render--->>>')
     const { tool, graphModel } = this.props
     const ToolOverlayElement = document.querySelector(
       `#ToolOverlay_${graphModel.flowId}`,

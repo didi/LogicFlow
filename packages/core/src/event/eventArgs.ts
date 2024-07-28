@@ -25,13 +25,28 @@ type ClickEventArgs = {
 }
 
 type NodeEventArgsPick<
-  T extends 'data' | 'e' | 'position' | 'deltaX' | 'deltaY',
+  T extends
+    | 'preData'
+    | 'data'
+    | 'model'
+    | 'e'
+    | 'position'
+    | 'deltaX'
+    | 'deltaY',
 > = Pick<
   {
+    /**
+     * 上一个状态的节点数据
+     */
+    preData: NodeData
     /**
      * 节点数据
      */
     data: NodeData
+    /**
+     * 节点 model
+     */
+    model: BaseNodeModel
     /**
      * 原生鼠标事件对象
      */
@@ -137,6 +152,14 @@ interface NodeEventArgs {
    * 右键点击节点
    */
   'node:contextmenu': NodeEventArgsPick<'data' | 'e' | 'position'>
+  /**
+   * 节点旋转
+   */
+  'node:rotate': NodeEventArgsPick<'data' | 'e' | 'model'>
+  /**
+   * 节点缩放
+   */
+  'node:resize': NodeEventArgsPick<'preData' | 'data' | 'model'>
 }
 
 type EdgeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<

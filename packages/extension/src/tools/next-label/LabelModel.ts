@@ -24,11 +24,13 @@ export class LabelModel {
   @observable y!: number
   @observable content: string = ''
   @observable value: string = ''
+  @observable rotate?: number
   @observable style: h.JSX.CSSProperties = {}
 
   @observable vertical: boolean = false // 文字是否垂直显示
   @observable editable: boolean = true // label 是否可编辑
   @observable draggable: boolean = true // label 是否可拖拽
+  @observable labelWidth?: number
   @observable textOverflowMode:
     | 'ellipsis'
     | 'wrap'
@@ -54,9 +56,6 @@ export class LabelModel {
 
   initLabelData(config: LabelConfig): void {
     assign(this, config)
-
-    // 1. 将一些节点维度的配置，添加到节点 model 上，eg: isVertical
-    // this.updateElementProperty()
   }
 
   getData(): LabelData {
@@ -66,10 +65,12 @@ export class LabelModel {
       y: this.y,
       content: this.content,
       value: this.value,
+      rotate: this.rotate,
       style: toJS(this.style),
 
       draggable: this.draggable,
       editable: this.editable,
+      labelWidth: this.labelWidth,
       textOverflowMode: this.textOverflowMode,
 
       vertical: this.vertical,
