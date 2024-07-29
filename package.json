@@ -127,11 +127,12 @@
     "stylelint-order": "^6.0.3",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.1",
-    "turbo": "^1.6.3",
+    "turbo": "^2.0.9",
     "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=16.0.0",
     "pnpm": ">=9.0.0"
-  }
+  },
+  "packageManager": "pnpm@9.4.0"
 }
