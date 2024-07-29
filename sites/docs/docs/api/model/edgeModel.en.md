@@ -15,7 +15,7 @@ table td:first-of-type {
 All edges in LogicFlow will have an edgeModel corresponding to them. Due to the mechanism of Data
 Driven View, all our operations on edges are in fact operations on models. In most cases, it is not
 recommended to assign values to edgeModel properties directly, but to call the methods provided on
-model or [graphModel](graphModel.en.md)
+model or [graphModel](./graphModel.en.md)
 
 ## Data attributes
 
@@ -66,7 +66,7 @@ For example, you can get `graphModel`,  `model` , etc.
 
 | 名称                 | 类型                            | 是否必须 | 描述                                                                                                                                                                                                                                                                                                                                                                          |
 |:-------------------|:------------------------------|:-----|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| graphModel         | `GraphModel`                  | ✅    | The model corresponding to the entire canvas. For details, see [graphModelApi](graphModel.en.md)                                                                                                                                                                                                                                                                            |
+| graphModel         | `GraphModel`                  | ✅    | The model corresponding to the entire canvas. For details, see [graphModelApi](./graphModel.en.md)                                                                                                                                                                                                                                                                            |
 | zIndex             | number                        | ✅    | The height of the node on the z-axis. When elements overlap, the higher zIndex is on top, default is 0                                                                                                                                                                                                                                                                      |
 | state              | number                        | ✅    | Element state. Different states correspond to the display effect of the element. DEFAULT = 1 means the default display effect; TEXT_EDIT = 2 means the element is being edited; ALLOW_CONNECT = 4, means the element is allowed to be the target node of the current edge; NOT_ALLOW_CONNECT = 5 means the element is not allowed to be the target node of the current edge |
 | BaseType           | string                        | ✅    | The base type of the current model, which is fixed to `edge` for edges. It is mainly used to identify whether this `model` is a node or an edge when nodes and edges are mixed.                                                                                                                                                                                             |
@@ -83,13 +83,12 @@ For example, you can get `graphModel`,  `model` , etc.
 
 All edges of LogicFlow are eventually rendered as SVG DOM. But except for the shape attributes, all
 other properties belonging to svg do not exist directly in `edgeModel`. When developers want to add
-more [svg attributes](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute) to the SVG DOM,
-they can do so by overriding the method on `edgeModel` that gets the node style attributes.
+more <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg attributes</a> to the SVG DOM, they can do so by overriding the method on `edgeModel` that gets the node style attributes.
 
 ## getEdgeStyle
 
 Supports overriding this method to customize edge style attributes. Default
-is [theme baseEdge](theme.en.md#baseedge)
+is [theme baseEdge](../theme.en.md#baseedge)
 
 ```tsx | pure
 class SequenceFlowModel extends PolylineModel {
@@ -126,7 +125,7 @@ class CustomBezierModel extends BezierEdgeModel {
 ## getTextStyle
 
 Support overriding this method to customize edge text style attributes, default
-is [theme edgeText](theme.en.md#edgetext)
+is [theme edgeText](../theme.en.md#edgetext)
 
 ```tsx | pure
 class SequenceFlowModel extends PolylineModel {
@@ -226,7 +225,7 @@ It is supported to override this method to customize the generation rules of nod
 
 1. Please ensure the uniqueness of the id returned by this method.<br>
 2. This method is synchronous, if you want to modify the node id asynchronously, please refer
-   to [#272](https://github.com/didi/LogicFlow/issues/272)
+   to <a href="https://github.com/didi/LogicFlow/issues/272" target="_blank">issues</a>
    :::
 
 ```tsx | pure

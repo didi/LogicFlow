@@ -3,7 +3,9 @@ title: Decoding LogicFlow's Extension Mechanism
 order: 1
 toc: content
 ---
-# Decoding LogicFlow's Extension Mechanism
+
+Decoding LogicFlow's Extension Mechanism
+
 ## Introduction
 
 Since [LogicFlow](https://github.com/didi/LogicFlow) was officially open-sourced, it has received much more attention than we expected. When we first started to develop LogicFlow, we spent a lot of time discussing what kind of flow visualization library we should build. One option was to create an out-of-the-box library that includes all the commonly used features of a flow editor, with everything pre-configured for easy use. However, we ultimately chose not to go this route because of our background: **in different projects, there are significant differences in the appearance and data format required for the flowchart.** Some projects use activiti, while others use custom workflow engines. **Therefore, we needed a flow visualization library that could support smooth migration across different systems, be flexible enough to meet the visual styles of different systems, and ideally allow selective use of various flowchart features based on specific needs.**

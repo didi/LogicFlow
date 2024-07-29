@@ -51,7 +51,7 @@ class CustomNode extends RectNode {
 | height                      | `number`                                      |       | LogicFlow 画布高度                                        |
 | theme                       | `LogicFlow.Theme`                             |       | [详细 API](../theme.zh.md)                              |
 | animation                   | `boolean \| LFOptions.AnimationConfig`        | false | 动画状态配置，是否已打开对应的动画                                     |
-| [eventCenter](#eventCenter) | `EventEmitter`                                |       | 事件中心, 可以通过这个对象向外部抛出事件                                 |
+| [eventCenter](#eventcenter) | `EventEmitter`                                |       | 事件中心, 可以通过这个对象向外部抛出事件                                 |
 | modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 维护所有节点和边类型对应的 model                                   |
 | [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |       | 位于当前画布顶部的元素                                           |
 | idGenerator                 | `(type?: string) => string \| undefined`      |       | 自定义全局 id 生成器                                          |
@@ -62,10 +62,10 @@ class CustomNode extends RectNode {
 | nodes                       | `BaseNodeModel[]`                             | []    | 画布所有的节点对象                                             |
 | edges                       | `BaseEdgeModel[]`                             | []    | 画布所有的连线对象                                             |
 | fakeNode                    | `BaseNodeModel  \| null`                      | null  | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开               |
-| [overlapMode](#overlapMode) | `number`                                      |       | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                             |
+| [overlapMode](#overlapmode) | `number`                                      |       | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                             |
 | background                  | `false \| LFOptions.BackgroundConfig`         |       | 画布背景配置                                                |
-| transformModel              | `TransformModel`                              |       | 当前画布平移、缩放矩阵 `model`, 详细见[API](transformModel.zh.md)   |
-| editConfigModel             | `EditConfigModel`                             |       | 页面编辑基本配置对象, 详细见[editConfigApi](editConfigModel.zh.md) |
+| transformModel              | `TransformModel`                              |       | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)   |
+| editConfigModel             | `EditConfigModel`                             |       | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md) |
 | gridSize                    | `number`                                      | 1     | 网格大小                                                  |
 | partial                     | `boolean`                                     | false | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能                 |
 | nodesMap                    | `GraphModel.NodesMapType`                     |       | 画布所有节点的构成的 `map`                                      |
@@ -143,7 +143,7 @@ graphModel.getAreaElement([100, 100], [800, 800]);
 |------|--------|-----|----|
 | type | string | 无   | 类型 |
 
-返回值: [NodeModel](nodeModel.zh.md) 或 [EdgeModel](edgeModel.zh.md)
+返回值: [NodeModel](./nodeModel.zh.md) 或 [EdgeModel](./edgeModel.zh.md)
 
 ```tsx | pure
 graphModel.getModel("rect");
@@ -159,7 +159,7 @@ graphModel.getModel("rect");
 |------|--------|-----|----|
 | type | string | 无   | 类型 |
 
-返回值: [NodeModel](nodeModel.zh.md)
+返回值: [NodeModel](./nodeModel.zh.md)
 
 ```tsx | pure
 graphModel.getNodeModelById("node_1");
@@ -333,7 +333,7 @@ console.log(historyData)
 |--------|--------|-----|------|
 | edgeId | string | 无   | 边 Id |
 
-返回值: [EdgeModel](edgeModel.zh.md)
+返回值: [EdgeModel](./edgeModel.zh.md)
 
 ```tsx | pure
 const edgeModel = graphModel.getEdgeModelById('edge_id');
@@ -350,7 +350,7 @@ console.log(edgeModel)
 |----|--------|-----|--------------|
 | id | string | 无   | 边 Id 或者节点 Id |
 
-返回值: [EdgeModel](edgeModel.zh.md) 或者 [NodeModel](nodeModel.zh.md)
+返回值: [EdgeModel](./edgeModel.zh.md) 或者 [NodeModel](nodeModel.zh.md)
 
 ```tsx | pure
 const edgeModel = graphModel.getElement('edge_id');
@@ -367,7 +367,7 @@ console.log(edgeModel)
 |--------|--------|-----|-------|
 | nodeId | string | 无   | 节点 Id |
 
-返回值: [EdgeModel](edgeModel.zh.md)
+返回值: [EdgeModel](./edgeModel.zh.md)
 
 ```tsx | pure
 const edgeModels = graphModel.getNodeEdges('node_id_1');

@@ -11,7 +11,6 @@ table td:first-of-type {
 }
 </style>
 
-
 The graphModel is the `model` that corresponds to the entire canvas in LogicFlow.
 
 Most of the methods on the LogicFlow instance are simply wrapped around the graphModel.
@@ -53,9 +52,9 @@ provided to do so.
 | height                      | `number`                                      |         | LogicFlow Canvas Height                                                                                                                                                      |
 | theme                       | `LogicFlow.Theme`                             |         | [Detailed API](../theme.en.md)                                                                                                                                               |
 | animation                   | `boolean \| LFOptions.AnimationConfig`        | false   | Animation state configuration, if or not the corresponding animation is turned on                                                                                            |
-| [eventCenter](#eventCenter) | `EventEmitter`                                |         | Event center, through which events can be thrown to the outside world.                                                                                                       |
+| [eventCenter](#eventcenter) | `EventEmitter`                                |         | Event center, through which events can be thrown to the outside world.                                                                                                       |
 | modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | Maintains a model for all nodes and edge types                                                                                                                               |
-| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |         | The element at the top of the current canvas                                                                                                                                 |
+| [topElement](#topelement)   | `BaseNodeModel \| BaseEdgeModel`              |         | The element at the top of the current canvas                                                                                                                                 |
 | idGenerator                 | `(type?: string) => string \| undefined`      |         | Custom global id generator                                                                                                                                                   |
 | nodeMoveRules               | `Model.NodeMoveRule[]`                        | []      | Node movement rules, all rules in this array are triggered when a node is moved.                                                                                             |
 | customTrajectory            | `LFOptions.CustomAnchorLineProps`             |         | Get customized line traces                                                                                                                                                   |
@@ -64,10 +63,10 @@ provided to do so.
 | nodes                       | `BaseNodeModel[]`                             | []      | All node objects of the canvas                                                                                                                                               |
 | edges                       | `BaseEdgeModel[]`                             | []      | All line objects of the canvas                                                                                                                                               |
 | fakeNode                    | `BaseNodeModel  \| null`                      | null    | When dragging nodes from outside into the canvas, use fakeNode to distinguish them from formal nodes on the canvas.                                                          |
-| [overlapMode](#overlapMode) | `number`                                      |         | Stacking mode when elements overlap; 0: default mode, 1: incremental mode                                                                                                    |
+| [overlapMode](#overlapmode) | `number`                                      |         | Stacking mode when elements overlap; 0: default mode, 1: incremental mode                                                                                                    |
 | background                  | `false \| LFOptions.BackgroundConfig`         |         | Canvas background configuration.                                                                                                                                             |
-| transformModel              | `TransformModel`                              |         | current canvas translation and scaling matrix `model`, see [API](transformModel.en.md) for more details                                                                      |
-| editConfigModel             | `EditConfigModel`                             |         | Basic configuration object, see [editConfigApi](editConfigModel.en.md) for details.                                                                                          |
+| transformModel              | `TransformModel`                              |         | current canvas translation and scaling matrix `model`, see [API](./transformModel.en.md) for more details                                                                      |
+| editConfigModel             | `EditConfigModel`                             |         | Basic configuration object, see [editConfigApi](./editConfigModel.en.md) for details.                                                                                          |
 | gridSize                    | `number`                                      | 1       | Grid size                                                                                                                                                                    |
 | partial                     | `boolean`                                     | false   | whether or not to enable localized rendering, when the number of elements on the page is too large, enabling localized rendering will improve the page rendering performance |
 | nodesMap                    | `GraphModel.NodesMapType`                     |         | The `map` of all nodes in the canvas.                                                                                                                                        |
@@ -145,7 +144,7 @@ Parameters:
 |------|--------|---------|
 | type | string | None    |
 
-return: [NodeModel](nodeModel.en.md) or [EdgeModel](edgeModel.en.md)
+return: [NodeModel](./nodeModel.en.md) or [EdgeModel](./edgeModel.en.md)
 
 ```tsx | pure
 graphModel.getModel("rect");
@@ -159,7 +158,7 @@ Parameters:
 |------|--------|---------|
 | type | string | None    |
 
-return: [NodeModel](nodeModel.en.md)
+return: [NodeModel](./nodeModel.en.md)
 
 ```tsx | pure
 graphModel.getNodeModelById("node_1");
@@ -349,7 +348,7 @@ Parameters:
 |------|--------|---------|--------------------|
 | id   | string | None    | edge Id or node Id |
 
-return: [EdgeModel](edgeModel.en.md) or [NodeModel](nodeModel.en.md)
+return: [EdgeModel](./edgeModel.en.md) or [NodeModel](./nodeModel.en.md)
 
 ```tsx | pure
 const edgeModel = graphModel.getElement('edge_id');
@@ -364,7 +363,7 @@ Parameters:
 |--------|--------|---------|-------------|
 | nodeId | string | None    | node Id     |
 
-return: [EdgeModel](edgeModel.en.md)
+return: [EdgeModel](./edgeModel.en.md)
 
 ```tsx | pure
 const edgeModels = graphModel.getNodeEdges('node_id_1');

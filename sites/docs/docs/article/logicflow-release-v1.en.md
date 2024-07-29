@@ -4,7 +4,7 @@ order: 4
 toc: content
 ---
 
-# LogicFlow released version 1.0
+LogicFlow released version 1.0
 
 ![LogicFlow-2](https://github.com/didi/LogicFlow/assets/27529822/2208aad3-34eb-4f47-b738-0856a9a54545)
 

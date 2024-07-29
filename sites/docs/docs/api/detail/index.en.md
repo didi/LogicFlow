@@ -1,7 +1,7 @@
 ---
 toc: content
 order: 1
-title: LogicFlow functions
+title: LogicFlow methods
 ---
 
 <style>
@@ -939,7 +939,7 @@ lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
 ### updateAttributes
 
 Modifies an attribute in the corresponding element model, which is
-called [graphModel](../GraphModel#updateattributes) inside the method.
+called [graphModel](../model/GraphModel#updateattributes) inside the method.
 
 :::warning
 This method is used with caution unless you know enough about logicflow internals.<br>
@@ -962,7 +962,7 @@ lf.updateAttributes("node_id_1", { radius: 4 });
 
 ### editText
 
-same as [graphModel.editText](../GraphModel.en.md#editText)
+same as [graphModel.editText](../model/graphModel.en.md#edittext)
 
 ### updateText
 
@@ -987,7 +987,7 @@ lf.updateText("id", "value");
 
 Update the basic configuration of the flow editor.
 
-See [editConfig](../EditConfigModel.en.md) for detailed parameters
+See [editConfig](../model/editConfigModel.en.md) for detailed parameters
 
 ```ts | pure
 lf.updateEditConfig({
@@ -999,7 +999,7 @@ lf.updateEditConfig({
 
 Get the basic configuration of the flow editor.
 
-See [editConfig](../EditConfigModel.en.md) for detailed parameters
+See [editConfig](../model/editConfigModel.en.md) for detailed parameters
 
 ```ts | pure
 lf.getEditConfig();
@@ -1182,9 +1182,9 @@ closeEdgeAnimation: (edgeId: string): void => {}
 Event listener for the graph, see [event](../eventCenter.en.md).
 
 ```ts | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-on: (evt: string, callback: CallbackType): void => {}
+on: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 Parameters:
@@ -1192,7 +1192,7 @@ Parameters:
 | Name     | Type   | Required | Default | Description       |
 |:---------|:-------|:---------|:--------|:------------------|
 | evt      | string | ✅        | -       | Event name        |
-| callback | string | ✅        | -       | Callback function |
+| callback | `EventCallback<T>` | ✅        | -       | Callback function |
 
 Example：
 
@@ -1210,9 +1210,9 @@ lf.on("element:click", (args) => {
 Remove event listener.
 
 ```ts | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-off: (evt: string, callback: CallbackType): void => {}
+off: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 Parameters:
@@ -1220,7 +1220,7 @@ Parameters:
 | Name     | Type   | Required | Default | Description       |
 |:---------|:-------|:---------|:--------|:------------------|
 | evt      | string | ✅        | -       | Event name        |
-| callback | string | ✅        | -       | Callback function |
+| callback | `EventCallback<T>` | ✅        | -       | Callback function |
 
 Example：
 
@@ -1238,9 +1238,9 @@ lf.off("element:click", () => {
 Event listener that triggers only once.
 
 ```ts | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-once: (evt: string, callback: CallbackType): void => {}
+once: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 Parameters:
@@ -1248,7 +1248,7 @@ Parameters:
 | 名称       | 类型     | 必传 | 默认值 | 描述                |
 |:---------|:-------|:---|:----|:------------------|
 | evt      | string | ✅  | -   | Event name        |
-| callback | string | ✅  | -   | Callback function |
+| callback | `EventCallback<T>` | ✅  | -   | Callback function |
 
 Example：
 
@@ -1265,15 +1265,15 @@ Trigger an event.
 ```ts | pure
 import { CallbackArgs } from './eventEmitter'
 
-emit: (evt: T, args: CallbackArgs<T>): void => {}
+emit: (evt: string, eventArgs: CallbackArgs<T>): void => {}
 ```
 
 Parameters:
 
 | Name | Type            | Required | Default | Description              |
 |:-----|:----------------|:---------|:--------|:-------------------------|
-| evt  | T               | ✅        | -       | Event name               |
-| args | CallbackArgs<T> | ✅        | -       | Trigger event parameters |
+| evt  | string               | ✅        | -       | Event name         |
+| eventArgs | `CallbackArgs<T>`           | ✅        | -       | Trigger event parameters |
 
 Example：
 

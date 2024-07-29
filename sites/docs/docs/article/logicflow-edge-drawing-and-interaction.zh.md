@@ -3,7 +3,8 @@ title: 边的绘制与交互
 order: 2
 toc: content
 ---
-# LogicFlow 边的绘制与交互
+
+LogicFlow 边的绘制与交互
 
 ## 前言
 [LogicFlow](https://github.com/didi/LogicFlow/) 是专注于业务的流程图可视化编辑框架（以下简称 LF），在这之前我们分别介绍了 LF 的[整体设计](https://juejin.cn/post/6933413834682007560)和[扩展机制](https://juejin.cn/post/6938319455529369636)，今天我们来聊一聊流程图中比较核心的一个概念 —— 边（Edge）。
