@@ -2,12 +2,10 @@ import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
 import { isArray } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
-import GraphElements = LogicFlow.GraphElements
-import NodeData = LogicFlow.NodeData
 import Point = LogicFlow.Point
+import NodeData = LogicFlow.NodeData
 import EdgeConfig = LogicFlow.EdgeConfig
-import LabelConfig = LogicFlow.LabelConfig
-import LabelOption = LogicFlow.LabelOption
+import GraphElements = LogicFlow.GraphElements
 
 const defaultWidth = 500
 const defaultHeight = 300
@@ -271,14 +269,7 @@ export class GroupNodeModel extends RectResizeModel {
     model.virtual = true
     // 强制不保存group连线数据
     // model.getData = () => null;
-    const { _labelOption } = model.properties
-    if ((_labelOption as LabelOption)?.isVertical && isArray(model.text)) {
-      model.text.forEach((item) => {
-        item.editable = false
-      })
-    } else {
-      ;(model.text as LabelConfig).editable = false
-    }
+    model.text.editable = false
     model.isFoldedEdge = true
   }
 

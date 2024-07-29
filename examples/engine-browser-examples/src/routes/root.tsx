@@ -28,7 +28,6 @@ export default function Root() {
             <div className="nav-title">Extension</div>
             <li>
               <a href={`/extension/bpmn`}>BPMN</a>
-              <a href={`/extension/label`}>Label</a>
               <a href={`/extension/next-label`}>Next Label</a>
             </li>
             <div className="nav-title">Engine</div>

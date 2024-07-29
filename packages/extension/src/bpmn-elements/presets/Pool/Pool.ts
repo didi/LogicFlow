@@ -5,8 +5,6 @@ import LogicFlow, { h } from '@logicflow/core'
 import { poolToJSON } from '.'
 import { GroupNode, GroupNodeModel } from '../../../materials/group'
 
-import TextConfig = LogicFlow.TextConfig
-
 const laneMinSize = {
   width: 312,
   height: 72,
@@ -29,7 +27,7 @@ export class HorizontalLaneModel extends GroupNodeModel {
   setAttributes() {
     this.text = {
       ...this.text,
-      value: (this.text as TextConfig).value || '泳池示例',
+      value: this.text.value || '泳池示例',
       x: this.x - this.width / 2 + 11,
       y: this.y,
     }
