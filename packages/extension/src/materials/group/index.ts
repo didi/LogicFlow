@@ -105,18 +105,18 @@ export class Group {
         this.createEdgeModel(edge, nodeIdMap, distance)
       })
       // 构建的时候直接偏移，这里不需要再进行再度偏移
-      // groupInnerChildren.nodes.forEach(node => this.translationNodeData(node, distance));
-      // groupInnerChildren.edges.forEach(edge => this.translationEdgeData(edge, distance));
+      // groupInnerChildren.nodes.forEach(node => this.translateNodeData(node, distance));
+      // groupInnerChildren.edges.forEach(edge => this. translateEdgeData(edge, distance));
 
       // 最外层的edges继续执行创建edgeModel的流程
-      // 由于最外层会调用translationEdgeData()，因此这里不用传入distance进行偏移
+      // 由于最外层会调用 translateEdgeData()，因此这里不用传入distance进行偏移
       forEach(selectedEdges, (edge) => {
         const edgeModel = this.createEdgeModel(edge, nodeIdMap, 0)
         elements.edges.push(edgeModel)
       })
 
       // 返回elements进行选中效果，即触发element.selectElementById()
-      // shortcut.ts也会对最外层的nodes和edges进行偏移，即translationNodeData()
+      // shortcut.ts也会对最外层的nodes和edges进行偏移，即translateNodeData()
       return elements
     }
   }
@@ -214,7 +214,7 @@ export class Group {
     if (nodeIdMap[sourceId]) sourceId = nodeIdMap[sourceId]
     if (nodeIdMap[targetId]) targetId = nodeIdMap[targetId]
     const { type, startPoint, endPoint, pointsList, text } = edge
-    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
+    // ====== 仿造shortcut.ts的 translateEdgeData()逻辑 ======
     const newStartPoint = {
       x: (startPoint?.x || 0) + distance,
       y: (startPoint?.y || 0) + distance,
@@ -247,7 +247,7 @@ export class Group {
         y: text?.y + distance,
       }
     }
-    // ====== 仿造shortcut.ts的translationEdgeData()逻辑 ======
+    // ====== 仿造shortcut.ts的 translateEdgeData()逻辑 ======
 
     // 简化复制时的参数传入，防止创建出两个edge属于同个group这种情况
     return lf.graphModel.addEdge(edgeConfig)
