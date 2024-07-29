@@ -159,7 +159,7 @@ export class AdjustPoint extends Component<IProps, IState> {
         ? edgeModel.updateStartPoint({ x, y })
         : edgeModel.updateEndPoint({ x, y })
     }
-    if (editConfigModel.adjustEdge) {
+    if (edgeModel.text.value && editConfigModel.adjustEdge) {
       edgeModel.setText(
         Object.assign({}, edgeModel.text, edgeModel.textPosition),
       )
