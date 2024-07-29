@@ -1,5 +1,5 @@
 import LogicFlow, { TextMode } from '@logicflow/core'
-import { NextLabel } from '@logicflow/extension'
+import { Label } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 
@@ -159,9 +159,9 @@ export default function BasicNode() {
         ...config,
         container: containerRef.current as HTMLElement,
         // container: document.querySelector('#graph') as HTMLElement,
-        plugins: [NextLabel],
+        plugins: [Label],
         pluginsOptions: {
-          NextLabel: {
+          Label: {
             isMultiple: true,
             maxCount: 3,
             labelWidth: 80,
@@ -200,7 +200,7 @@ export default function BasicNode() {
           key="text"
           type="primary"
           onClick={() => {
-            const nextLabel = lfRef?.current?.extension?.NextLabel as NextLabel
+            const nextLabel = lfRef?.current?.extension?.Label as Label
             nextLabel.updateTextMode(TextMode.TEXT)
           }}
         >
@@ -210,7 +210,7 @@ export default function BasicNode() {
           key="label"
           type="primary"
           onClick={() => {
-            const nextLabel = lfRef?.current?.extension?.NextLabel as NextLabel
+            const nextLabel = lfRef?.current?.extension?.Label as Label
             nextLabel.updateTextMode(TextMode.LABEL)
           }}
         >

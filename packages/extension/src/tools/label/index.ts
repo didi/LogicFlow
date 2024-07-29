@@ -15,18 +15,18 @@ import {
 } from './utils'
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
-export type INextLabelOptions = {
+export type ILabelOptions = {
   isMultiple?: boolean
   maxCount?: number
   labelWidth?: number
   textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 }
 
-export class NextLabel implements Extension {
-  static pluginName = 'NextLabel'
+export class Label implements Extension {
+  static pluginName = 'Label'
 
   lf: LogicFlow
-  options: INextLabelOptions
+  options: ILabelOptions
 
   textOverflowMode: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
   isMultiple: boolean
@@ -35,7 +35,7 @@ export class NextLabel implements Extension {
 
   labelInitPositionMap: Map<string, Position> = new Map()
 
-  constructor({ lf, options }: { lf: LogicFlow; options: INextLabelOptions }) {
+  constructor({ lf, options }: { lf: LogicFlow; options: ILabelOptions }) {
     this.lf = lf
     // DONE: 根据 options 初始化一些插件配置，比如是否支持多个 label 等，生效在所有 label 中
     this.options = options ?? {}
@@ -89,10 +89,8 @@ export class NextLabel implements Extension {
 
     // 当前元素的 Label 相关配置
     const curLabelConfig = _label as LabelConfigType
-    const {
-      isMultiple: curIsMultiple,
-      maxCount: curMaxCount,
-    }: INextLabelOptions = _labelOption as INextLabelOptions
+    const { isMultiple: curIsMultiple, maxCount: curMaxCount }: ILabelOptions =
+      _labelOption as ILabelOptions
 
     // REMIND: 对 3 种可能得数据类型进行处理
     let formatConfig: LabelConfig[] = [] // 保存格式化后的 LabelConfig
@@ -204,7 +202,7 @@ export class NextLabel implements Extension {
       properties: { _label, _labelOption },
     } = element
     const curLabelConfig = (_label as LabelConfig[]) ?? []
-    const curLabelOption = (_labelOption as INextLabelOptions) ?? {}
+    const curLabelOption = (_labelOption as ILabelOptions) ?? {}
 
     const len = curLabelConfig.length
     const newLabel = {
@@ -366,7 +364,7 @@ export class NextLabel implements Extension {
             y: label.y + deltaY,
           }
         })
-        // console.log('nextLabel --->>>', nextLabel)
+        // console.log('Label --->>>', nextLabel)
         element?.setProperty('_label', nextLabel)
       }
     }
@@ -400,4 +398,4 @@ export class NextLabel implements Extension {
   destroy() {}
 }
 
-export default NextLabel
+export default Label
