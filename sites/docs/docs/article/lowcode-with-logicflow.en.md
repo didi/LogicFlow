@@ -4,7 +4,7 @@ order: 5
 toc: content
 ---
 
-# didi/logicflow
+Zero code new idea, page logic arrangement based on LogicFlow
 
 ## Introduction
 In DiDi's customer service business, we already have rich experience to configure the page by zero-code, which greatly improves the efficiency ad quality of service users. However, the traditional zero-code solution does not perform well in page logic configuration, and it is difficult to achieve flexible expansion. Therefore, our team explored a new way of thinking, using the flowchart way to organize the logic of the page, to solve the problem of difficult to extend the zero-code.

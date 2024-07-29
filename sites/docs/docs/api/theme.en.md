@@ -11,28 +11,18 @@ table td:first-of-type {
 }
 </style>
 
-# Theme
-
 Themes allow you to set the appearance of LogicFlow base graphics in a uniform way. Its properties
-are consistent with [svg properties](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)
-In most cases, we only need to set a few common properties.
+are consistent with <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg properties</a> In most cases, we only need to set a few common properties.
 
 ## Common Properties
 
-- [stroke](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke)attribute defines the
-  color of the outer outline of the given graphic element.
-- [stroke-dasharray](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-dasharray)
-  property controls the pattern paradigm of the dotted lines used to stroke.
-- [stroke-width](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-width)property
-  specifies the width of the outline of the current object.
-- [fill](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill)attribute is used to define
-  the color of the interior of a given graphic element.
-- [fill-opacity](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill-opacity)property
-  specifies the opacity of the fill color or the opacity of the contents of the current object.
-- [font-size](https://developer.mozilla.org/en/docs/Web/SVG/Attribute/font-size)property defines the
-  text font size.
-- [color](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/color)attribute defines the
-  text color.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke" target="_blank">stroke</a> attribute defines the color of the outer outline of the given graphic element.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray" target="_blank">stroke-dasharray</a> property controls the pattern paradigm of the dotted lines used to stroke.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-width" target="_blank">stroke-width</a> property specifies the width of the outline of the current object.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill" target="_blank">fill</a> attribute is used to define the color of the interior of a given graphic element.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-opacity" target="_blank">fill-opacity</a> property specifies the opacity of the fill color or the opacity of the contents of the current object.
+- <a href="https://developer.mozilla.org/en/docs/Web/SVG/Attribute/font-size" target="_blank">font-size</a> property defines the text font size.
+- <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color" target="_blank">color</a> attribute defines the text color.
 
 Since LogicFlow recommends fully customizing the appearance and style of nodes in real business, the
 built-in theme styles in LogicFlow itself contain only a few essential styles. Developers can
@@ -43,21 +33,22 @@ redefine and extend them based on their own business scenarios.
 LogicFlow calls `width`, `height`, `r` attributes that affect the size of nodes
 as `shape attributes`, `shape attributes` affect the position of anchors and the calculation of
 lines. Therefore, they are not supported to be configured in themes, but only in customization,
-see [NodeModel Shape Attributes](nodeModel.en.md#shape-attributes) for details.
+see [NodeModel Shape Attributes](./model/nodeModel.en.md#shape-attributes) for details.
 
 ## setTheme set
 
-| Type                                       | Name                                                                                                                                                                        |
-|:-------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Type                                       | Name                                                                                                  |
+|:-------------------------------------------|:------------------------------------------------------------------------------------------------------|
 | node                                       | - [baseNode](#basenode) <br> - [rect](#rect) <br> - [circle](#circle) <br> - [diamond](#diamond) <br> - [ellipse](#ellipse) <br> - [polygon](#polygon) <br> - [text](#text) |
-| anchor                                     | [anchor](#anchor)                                                                                                                                                           |
-| text                                       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                                                                                        |
-| edge                                       | -[baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                                                           |
-| snapline                                   | [snapline](#snapline)                                                                                                                                                       |
-| anchorLine                                 | [anchorLine](#anchorline)                                                                                                                                                   |
-| arrow                                      | [arrow](#arrow)                                                                                                                                                             |
-| Adjustment points at both ends of the line | [edgeAdjust](#edgeadjust)                                                                                                                                                   |
-| choose/hover                               | [outline](#outline)                                                                                                                                                         |
+| anchor                                     | [anchor](#anchor)                                                                                     |
+| text                                       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                  |
+| edge                                       | - [baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)  |
+| snapline                                   | [snapline](#snapline)                                                                               |
+| anchorLine                                 | [anchorLine](#anchorline)                                                                           |
+| arrow                                      | [arrow](#arrow)                                                                                     |
+| Adjustment points at both ends of the line | [edgeAdjust](#edgeadjust)                                                                           |
+| choose/hover                               | [outline](#outline)                                                                               |
+
 
 ### baseNode
 

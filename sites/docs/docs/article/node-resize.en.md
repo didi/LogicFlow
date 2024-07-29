@@ -3,7 +3,9 @@ title: LogicFlow Node Resize
 order: 3
 toc: content
 ---
-# LogicFlow Node Resize
+
+LogicFlow Node Resize
+
 ## Introduction
 
 LogicFlow currently includes built-in node types such as rectangle, circle, diamond, polygon, ellipse, and text. By inheriting these basic types, you can implement custom nodes and extend their functionality. Node resize is implemented through custom nodes. This article will provide a detailed explanation of the node resize feature's implementation.

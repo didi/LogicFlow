@@ -11,25 +11,22 @@ table td:first-of-type {
 }
 </style>
 
-# 主题
-
 主题可以对 LogicFlow
-基础图形的外观进行统一设置。其属性与[svg 属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)
+基础图形的外观进行统一设置。其属性与<a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg 属性</a>
 保持一致。
 大多数情况下，我们只需要设置一些常用属性即可。
 
 ## 常用属性
 
-- [stroke](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke)属性定义了给定图形元素的外轮廓的颜色。
-- [stroke-dasharray](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-dasharray)
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke" target="_blank">stroke</a>属性定义了给定图形元素的外轮廓的颜色。
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-dasharray" target="_blank">stroke-dasharray</a>
   属性可控制用来描边的点划线的图案范式。
-- [stroke-width](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-width)
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/stroke-width" target="_blank">stroke-width</a> 
   属性指定了当前对象的轮廓的宽度。
-- [fill](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill)属性用来定义给定图形元素内部的颜色。
-- [fill-opacity](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill-opacity)
-  属性指定了填色的不透明度或当前对象的内容物的不透明度。
-- [font-size](https://developer.mozilla.org/en/docs/Web/SVG/Attribute/font-size)属性定义文本字体大小
-- [color](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/color)属性定义文本颜色
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill" target="_blank">fill</a> 属性用来定义给定图形元素内部的颜色。
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/fill-opacity" target="_blank">fill-opacity</a> 属性指定了填色的不透明度或当前对象的内容物的不透明度。
+- <a href="https://developer.mozilla.org/en/docs/Web/SVG/Attribute/font-size" target="_blank">font-size</a>属性定义文本字体大小。
+- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/color" target="_blank">color</a>属性定义文本颜色。
 
 由于 LogicFlow 推荐在实际业务中完全自定义节点的外观和样式，所以 LogicFlow
 本身内置的主题样式只包含极少数必须的样式。开发者可以基于自己业务场景对其进行重新定义和扩展。
@@ -37,21 +34,21 @@ table td:first-of-type {
 ## 形状属性
 
 LogicFlow 将`width`、`height`、`r`这些影响节点大小的属性叫做`形状属性`, `形状属性`
-会影响锚点位置、连线计算。所以不支持在主题中配置，只支持在自定义时配置，详情见[NodeModel 形状属性](nodeModel.zh.md#形状属性)。
+会影响锚点位置、连线计算。所以不支持在主题中配置，只支持在自定义时配置，详情见[NodeModel 形状属性](./model/nodeModel.zh.md#形状属性)。
 
 ## setTheme 设置
 
-| 类型       | 名称                                                                                                                                                                          |
-|:---------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 类型       | 名称                                    |
+|:---------|:-----------------------------------------|
 | 节点       | - [baseNode](#basenode) <br> - [rect](#rect) <br> - [circle](#circle) <br> - [diamond](#diamond) <br> - [ellipse](#ellipse) <br> - [polygon](#polygon) <br> - [text](#text) |
-| 锚点       | [anchor](#anchor)                                                                                                                                                           |
-| 文本       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                                                                                        |
-| 线        | -[baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                                                           |
-| 对齐线      | [snapline](#snapline)                                                                                                                                                       |
-| 锚点拖出线    | [anchorLine](#anchorline)                                                                                                                                                   |
-| 箭头       | [arrow](#arrow)                                                                                                                                                             |
-| 连线两端调整点  | [edgeAdjust](#edgeadjust)                                                                                                                                                   |
-| 选中/hover | [outline](#outline)                                                                                                                                                         |
+| 锚点       | [anchor](#anchor)                              |
+| 文本       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)     |
+| 线        | -[baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                     |
+| 对齐线      | [snapline](#snapline)          |
+| 锚点拖出线    | [anchorLine](#anchorline)     |
+| 箭头       | [arrow](#arrow)                 |
+| 连线两端调整点 | [edgeAdjust](#edgeadjust)     |
+| 选中/hover | [outline](#outline)             |
 
 ### baseNode
 
