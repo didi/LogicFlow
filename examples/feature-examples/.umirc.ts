@@ -162,11 +162,6 @@ export default defineConfig({
           name: 'Rules 插件',
           component: './extensions/rules',
         },
-        {
-          path: '/extension/label',
-          name: 'Label 插件',
-          component: './extensions/label',
-        },
       ],
     },
     {
@@ -177,7 +172,7 @@ export default defineConfig({
           path: '/performance/snapshot-elements',
           name: 'Snapshot 元素数量性能测试',
           component: './performance/snapshot-elements',
-        }
+        },
       ],
     },
   ],
