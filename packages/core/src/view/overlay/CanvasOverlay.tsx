@@ -33,7 +33,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       eventCenter,
       model: undefined,
     })
-    // 当ctrl键被按住的时候，可以放大缩小。
+    // 当 ctrl、cmd 键被按住的时候，可以放大缩小。
     this.state = {
       isDragging: false,
     }
@@ -65,8 +65,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
       graphModel,
     } = this.props
     const { deltaX: eX, deltaY: eY } = ev
-    // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键没有按住, 那么移动画布
-    if (!editConfigModel.stopScrollGraph && ev.ctrlKey !== true) {
+    // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键、cmd键没有按住, 那么移动画布
+    if (!editConfigModel.stopScrollGraph && !ev.ctrlKey && !ev.metaKey) {
       ev.preventDefault()
       this.stepScrollX += eX
       this.stepScrollY += eY
@@ -84,7 +84,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       }
       return
     }
-    // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住ctrl键也不能缩放了。
+    // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住 ctrl、cmd 键也不能缩放了。
     if (!editConfigModel.stopZoomGraph) {
       ev.preventDefault()
       const position = graphModel.getPointByClient({
