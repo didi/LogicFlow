@@ -180,8 +180,8 @@ export class MiniMap {
   constructor({ lf, LogicFlow, options }: LogicFlow.IExtensionProps) {
     this.lf = lf
     this.LFCtor = LogicFlow
-    if (options && options.MiniMap) {
-      this.setOption(options.MiniMap as MiniMapOption)
+    if (options) {
+      this.setOption(options as MiniMapOption)
     }
     this.viewPortWidth = lf.graphModel.width
     this.viewPortHeight = lf.graphModel.height

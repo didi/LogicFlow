@@ -49,7 +49,8 @@ export class PolylineEdgeModel extends BaseEdgeModel {
 
   getTextPosition() {
     // 在文本为空的情况下，文本位置为双击位置
-    if (this.dbClickPosition) {
+    const textValue = this.text?.value
+    if (this.dbClickPosition && !textValue) {
       const { x, y } = this.dbClickPosition
       return { x, y }
     }

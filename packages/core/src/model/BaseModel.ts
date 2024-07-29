@@ -1,7 +1,7 @@
 import GraphModel from './GraphModel'
 import { BaseNodeModel } from './node'
 import LogicFlow from '../LogicFlow'
-import { ElementState, TextMode } from '../constant'
+import { ElementState } from '../constant'
 
 export namespace Model {
   export type AdditionStateDataType = Record<string, unknown>
@@ -68,7 +68,7 @@ export namespace Model {
     minX: number // Left Top X
     minY: number // Left Top Y
     maxX: number // Right Bottom X
-    maxY: number // Right Bottom Ys
+    maxY: number // Right Bottom Y
   }
 
   export interface BoxBounds extends BoxBoundsPoint {
@@ -140,10 +140,6 @@ export namespace Model {
      * 此属性控制的是第二种。节点和边在删除、调整的同时，其关联的文本也会对应删除、调整。
      */
     text: LogicFlow.TextConfig
-    textMode: TextMode
-    // REMIND
-    // 2.0.0 新增特性，引入 Label 插件后启用
-    label?: LogicFlow.LabelConfig[]
 
     properties: Record<string, unknown>
 
