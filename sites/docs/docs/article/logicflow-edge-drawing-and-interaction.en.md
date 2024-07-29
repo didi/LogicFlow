@@ -3,7 +3,9 @@ title: LogicFlow Edge Drawing and Interaction
 order: 2
 toc: content
 ---
-# LogicFlow Edge Drawing and Interaction
+
+LogicFlow Edge Drawing and Interaction
+
 ## Preface
 [LogicFlow](https://github.com/didi/LogicFlow/) is a business-focused framework for visualizing and editing flowcharts (referred to as LF for short). Previously, we introduced the overall [design](https://juejin.cn/post/6933413834682007560) and extension [mechanism](https://juejin.cn/post/6938319455529369636) of LF. Today, let's talk about a core concept in flowcharts - Edges.
 

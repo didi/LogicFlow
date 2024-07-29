@@ -13,7 +13,7 @@ table td:first-of-type {
 
 LogicFlow 中所有的节点都会有一个 nodeModel 与其对应。由于数据驱动视图的机制，我们对节点的所有操作事实上就是对
 model 的操作。大多数情况下，我们不建议直接对 nodeModel 的属性进行赋值操作，而是调用 model
-或者 [graphModel](graphModel.zh.md) 上提供的方法。
+或者 [graphModel](./graphModel.zh.md) 上提供的方法。
 
 :::error{title=警告}
 在对 LogicFlow 内部源码不熟悉的情况下，对 model 的属性进行赋值操作可能会引起很多不符合预期的问题。例如在
@@ -64,7 +64,7 @@ nodeModel 上节点属性有很多，由于用途不一样，我们对其进行�
 ## 形状属性
 
 LogicFlow 的形状属性主要是控制基础节点的主要外观。形状属性可以通过`setAttributes`或者`initNodeData`
-来设置。具体设置方式见[自定义节点的形状属性](../../tutorial/basic/node.zh.md#形状属性)。
+来设置。具体设置方式见[自定义节点的形状属性](../../tutorial/basic/node.zh.md#2-形状属性)。
 
 | 名称     | 类型                | 是否必须 | 描述                                    |
 |:-------|:------------------|:-----|:--------------------------------------|
@@ -83,7 +83,7 @@ LogicFlow 在`model`上还维护一些属性，开发者可以通过这些属性
 
 | 名称          | 类型                     | 是否必须 | 描述                                                                                                                                        |
 |:------------|:-----------------------|:-----|:------------------------------------------------------------------------------------------------------------------------------------------|
-| graphModel  | GraphModel             | ✅    | 整个画布对应的 model，详情见[graphModelApi](graphModel.zh.md)                                                                                        |
+| graphModel  | GraphModel             | ✅    | 整个画布对应的 model，详情见[graphModelApi](./graphModel.zh.md)                                                                                        |
 | zIndex      | number                 | ✅    | 节点在 z 轴的高度，元素重合时，zIndex 高的在上面, 默认为 1                                                                                                      |
 | state       | number                 | ✅    | 元素状态，不同的状态对应着元素显示效果。DEFAULT = 1 默认显示；TEXT_EDIT = 2 此元素正在进行文本编辑；ALLOW_CONNECT = 4, 此元素允许作为当前边的目标节点；NOT_ALLOW_CONNECT = 5, 此元素不允许作为当前边的目标节点 |
 | BaseType    | string                 | ✅    | 当前 model 的基础类型，对于节点，则固定为`node`。主要用在节点和边混合的时候识别此`model`是节点还是边。                                                                             |
@@ -106,7 +106,7 @@ LogicFlow 在`model`上还维护一些属性，开发者可以通过这些属性
 
 LogicFlow 所有的节点最终都是以 SVG DOM 的方式渲染。但是除了形状属性之外，所有的其他属于 svg
 的属性都不会直接存在`nodeModel`。当开发者想要对 SVG DOM
-添加更多的[svg 属性](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute)
+添加更多的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg 属性</a> 
 时，可以通过重写`nodeModel`上获取节点样式属性方法来实现。
 
 ## 方法
@@ -244,7 +244,7 @@ class UserTaskModel extends RectNodeModel {
 
 1. 请保证此方法返回 id 的唯一性。<br>
 2. 此方法为同步方法，如果想要异步修改节点 id,
-   请参考[#272](https://github.com/didi/LogicFlow/issues/272)
+   请参考 <a href="https://github.com/didi/LogicFlow/issues/272" target="_blank">issues</a>。
    :::
 
 ```tsx | pure
@@ -435,7 +435,7 @@ class UserTaskModel extends RectNodeModel {
 | targetAnchor | `Model.AnchorConfig` | ✅ | 目标锚点 |
 | edgeId | `string` | - | 调整后边的 id |
 
-返回值 `LogicFlow.ConnectRuleResult` [详见issues](https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306)
+返回值 `LogicFlow.ConnectRuleResult` <a href="https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306" target="_blank">详见issues</a>
 
 ### isAllowConnectedAsTarget
 
@@ -449,7 +449,8 @@ class UserTaskModel extends RectNodeModel {
 | targetAnchor | `Model.AnchorConfig` | ✅ | 目标锚点 |
 | edgeId | `string` | - | 调整后边的 id |
 
-返回值 `LogicFlow.ConnectRuleResult` [详见issues](https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306)
+返回值 `LogicFlow.ConnectRuleResult` 
+<a href="https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306" target="_blank">详见issues</a>
 
 ### getRotateControlStyle
 

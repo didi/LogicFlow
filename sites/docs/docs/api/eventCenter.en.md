@@ -7,20 +7,12 @@ order: 1
 
 <style>
 table td:first-of-type {
-  word-break: normal;
+  word-break: normal; 
 }
 </style>
-
-# Event
 
 LogicFlow provides an event system to inform the developer of events that occur in the current
 flowchart. The detailed usage of events is described in [events](../tutorial/basic/event.en.md)。
-
-<style>
-table td:first-of-type {
-  word-break: normal;
-}
-</style>
 
 ## Node Events
 
@@ -45,11 +37,11 @@ table td:first-of-type {
 
 The event object contains the following:
 
-| Property | Type       | Description                                                                                                                      |
-|:---------|:-----------|:---------------------------------------------------------------------------------------------------------------------------------|
-| data     | Object     | The [data attribute](./model/nodeModel.en.md#Data-Attributes)                                                                    |
-| e        | MouseEvent | Native mouse event object                                                                                                        |
-| position | Object     | Coordinates of the mouse trigger point in the canvas ( Refer to the return value of [getPointByClient](detail#getpointbyclient)) |
+| Property | Type       | Description                                                                                  |
+|:---------|:-----------|:---------------------------------------------------------------------------------------------|
+| data     | Object     | The [data attribute](./model/nodeModel.en.md#data-attributes)                                |
+| e        | MouseEvent | Native mouse event object                                                                    |
+| position | Object     | Coordinates of the mouse trigger point in the canvas ( Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
 
 ## Edge Events
 
@@ -71,9 +63,9 @@ The event object contains the following:
 
 | Property | 类型         | 值                                                                                                                              |
 |:---------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| data     | Object     | The [data attribute](./model/edgeModel.en.md#Data-Attributes)                                                                  |
+| data     | Object     | The [data attribute](./model/edgeModel.en.md#data-attributes)                                                                  |
 | e        | MouseEvent | Native mouse event object                                                                                                      |
-| position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](detail#getpointbyclient)) |
+| position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
 | msg      | string     | Verification information of the edge                                                                                           |
 
 ## Anchor Events
@@ -81,7 +73,7 @@ The event object contains the following:
 | Event names      | Description                                                                                                                                                                                           | Event object                  |
 |:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------|
 | anchor:dragstart | Start connecting based on anchor points                                                                                                                                                               | data, e, nodeModel            |
-| anchor:drop      | Manual connection success based on anchor points. Triggered only if the edge is created successfully. Used to distinguish between manually created edges and automatically created edges (`edge:add`) | data, e, nodeModel, edgeModel |
+| anchor:drop      | Manual connection success based on anchor points. Triggered only if the edge is created successfully. Used to distinguish between manually created edges and automatically created edges ( `edge:add` ) | data, e, nodeModel, edgeModel |
 | anchor:dragend   | End of manual connection based on anchor points. This is triggered whether or not the edge is successfully created.                                                                                   | data, e, nodeModel            |
 | anchor:dragend   | The end of the anchor linkage is triggered regardless of whether the linkage is created or not.                                                                                                       | data, e, nodeModel            |
 
@@ -97,19 +89,19 @@ The event object contains the following:
 
 ## Graph Events
 
-| Event names       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Event object |
-|:------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|
-| blank:mousedown   | Press the mouse on the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | e            |
-| blank:mousemove   | Move the mouse pointer on the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | e            |
-| blank:mouseup     | Release the mouse on the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | e            |
-| blank:click       | Click on the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | e            |
-| blank:contextmenu | Right-click on the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | e, position  |
-| blank:dragstart   | Start dragging canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | e            |
-| blank:drag        | Canvas in dragging                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | e            |
-| blank:drop        | End of canvas dragging                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | e            |
-| text:update       | Update text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | data         |
-| graph:transform   | Triggered when panning or zooming the canvas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | data         |
-| graph:rendered    | Triggered after the canvas renders data, i.e. after the lf.render(graphData) method is called. `Add in v1.1.0`                                                                                                                                                                                                                                                                                                                                                                                                                                                     | graphData    |
+| Event names       | Description                            | Event object |
+|:------------------|:---------------------------------------|:-------------|
+| blank:mousedown   | Press the mouse on the canvas          | e            |
+| blank:mousemove   | Move the mouse pointer on the canvas   | e            |
+| blank:mouseup     | Release the mouse on the canvas        | e            |
+| blank:click       | Click on the canvas                    | e            |
+| blank:contextmenu | Right-click on the canvas              | e, position  |
+| blank:dragstart   | Start dragging canvas                  | e            |
+| blank:drag        | Canvas in dragging                     | e            |
+| blank:drop        | End of canvas dragging                 | e            |
+| text:update       | Update text                            | data         |
+| graph:transform   | Triggered when panning or zooming the canvas          | data         |
+| graph:rendered    | Triggered after the canvas renders data, i.e. after the lf.render(graphData) method is called. `Add in v1.1.0` | graphData    |
 | graph:updated     | Triggered after the canvas is updated. That is, it is triggered after the lf.render(graphData) method is called or after the properties on the canvas (graphModel) are changed. If the canvas is updated due to active modification of a property, and you want to do something after the canvas is updated, it is recommended to register the event and unregister the event in the callback function in time, or use the once event instead of the on event, because as other properties may also cause the canvas to update, trigger this event. `Add inv2.0.0` | -            |
 
 The event object contains the following:
@@ -117,7 +109,7 @@ The event object contains the following:
 | Property | Type       | Description                                                                                                                   |
 |:---------|:-----------|:------------------------------------------------------------------------------------------------------------------------------|
 | e        | MouseEvent | Native mouse event object                                                                                                     |
-| position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of[getPointByClient](detail#getpointbyclient)) |
+| position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of[getPointByClient](./detail/index.en.md#getpointbyclient)) |
 
 ## History Events
 
@@ -157,7 +149,7 @@ The event object contains the following:
 | Properties | Type       | Description                                                                                                                    |
 |:-----------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
 | e          | MouseEvent | Native mouse event                                                                                                             |
-| position   | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](detail#getpointbyclient)) |
+| position   | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
 
 ## on
 
@@ -173,14 +165,15 @@ Parameters:
 Example:
 
 ```tsx | pure
-const { eventCenter } = lf.graphModel;
+const { eventCenter } = lf.graphModel; 
 
 eventCenter.on("node:click", (args) => {
-  console.log("node:click", args.position);
-});
+  console.log("node:click", args.position); 
+}); 
 eventCenter.on("element:click", (args) => {
-  console.log("element:click", args.e.target);
-});
+  console.log("element:click", args.e.target); 
+}); 
+
 ```
 
 ## off
@@ -203,9 +196,11 @@ Example:
 
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
+
 eventCenter.off("node:click", () => {
   console.log("node:click off");
 });
+
 eventCenter.off("element:click", () => {
   console.log("element:click off");
 });
@@ -225,11 +220,12 @@ Parameters:
 Example:
 
 ```tsx | pure
-const { eventCenter } = lf.graphModel;
+const { eventCenter } = lf.graphModel; 
 
 eventCenter.once("node:click", () => {
-  console.log("node:click");
-});
+  console.log("node:click"); 
+}); 
+
 ```
 
 ## emit
@@ -247,5 +243,6 @@ Example:
 
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
+
 eventCenter.emit("custom:button-click", data);
 ```

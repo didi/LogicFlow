@@ -3,7 +3,9 @@ title: The design and architecture of LogicFlow
 order: 0
 toc: content
 ---
-# The design and architecture of LogicFlow
+
+The design and architecture of LogicFlow
+
 ## Introduction to LogicFlow
 
 LogicFlow is a flowchart editing framework by didi experience platform, providing a series of functions necessary for flowchart interaction and editing, as well as simple and flexible node customization, plug-in and other expansion mechanisms, so that we can quickly meet the needs of flowcharts in business systems. Currently, LogicFlow has supported many systems such as IVR, work order flow and intelligent robot under customer service business, and has been proven in different process configuration requirements of each system.

@@ -934,7 +934,7 @@ lf.deleteProperty("aF2Md2P23moN2gasd", "isRollbackNode");
 
 ### updateAttributes
 
-修改对应元素 model 中的属性, 方法内部就是调用的[graphModel](../graphModel.zh.md#updateattributes)。
+修改对应元素 model 中的属性, 方法内部就是调用 graphModel 上的 [updateAttributes](../model/graphModel.zh.md#updateattributes)。
 
 :::warning{title=注意}
 此方法慎用，除非您对logicflow内部有足够的了解。<br>
@@ -956,7 +956,7 @@ lf.updateAttributes("node_id_1", { radius: 4 });
 
 ### editText
 
-同[graphModel.editText](../graphModel.zh.md#edittext)
+同[graphModel.editText](../model/graphModel.zh.md#edittext)
 
 ### updateText
 
@@ -981,7 +981,7 @@ lf.updateText("id", "value");
 
 更新流程编辑基本配置.
 
-详细参数见：[editConfig](../editConfigModel.zh.md)
+详细参数见：[editConfig](../model/editConfigModel.zh.md)
 
 ```tsx | pure
 lf.updateEditConfig({
@@ -993,7 +993,7 @@ lf.updateEditConfig({
 
 获取流程编辑基本配置。
 
-详细参数见：[editConfig](../editConfigModel.zh.md)
+详细参数见：[editConfig](../model/editConfigModel.zh.md)
 
 ```tsx | pure
 lf.getEditConfig();
@@ -1175,9 +1175,9 @@ closeEdgeAnimation: (edgeId: string): void => {}
 图的监听事件，更多事件请查看[事件](../eventCenter.zh.md)。
 
 ```tsx | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-on: (evt: string, callback: CallbackType): void => {}
+on: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 参数：
@@ -1185,7 +1185,7 @@ on: (evt: string, callback: CallbackType): void => {}
 | 名称       | 类型     | 必传 | 默认值 | 描述   |
 |:---------|:-------|:---|:----|:-----|
 | evt      | string | ✅  | -   | 事件名称 |
-| callback | string | ✅  | -   | 回调函数 |
+| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
 
 示例：
 
@@ -1203,9 +1203,9 @@ lf.on("element:click", (args) => {
 删除事件监听。
 
 ```tsx | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-off: (evt: string, callback: CallbackType): void => {}
+off: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 参数：
@@ -1213,7 +1213,7 @@ off: (evt: string, callback: CallbackType): void => {}
 | 名称       | 类型     | 必传 | 默认值 | 描述   |
 |:---------|:-------|:---|:----|:-----|
 | evt      | string | ✅  | -   | 事件名称 |
-| callback | string | ✅  | -   | 回调函数 |
+| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
 
 示例：
 
@@ -1231,9 +1231,9 @@ lf.off("element:click", () => {
 事件监听一次。
 
 ```tsx | pure
-import { CallbackType } from './EventEmitter'
+import { EventCallback } from './EventEmitter'
 
-once: (evt: string, callback: CallbackType): void => {}
+once: (evt: string, callback: EventCallback<T>): void => {}
 ```
 
 参数：
@@ -1241,7 +1241,7 @@ once: (evt: string, callback: CallbackType): void => {}
 | 名称       | 类型     | 必传 | 默认值 | 描述   |
 |:---------|:-------|:---|:----|:-----|
 | evt      | string | ✅  | -   | 事件名称 |
-| callback | string | ✅  | -   | 回调函数 |
+| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
 
 示例：
 
@@ -1258,7 +1258,7 @@ lf.once("node:click", () => {
 ```tsx | pure
 import { CallbackArgs } from './eventEmitter'
 
-emit: (evt: T, args: CallbackArgs<T>): void => {}
+emit: (evt: string, eventArgs: CallbackArgs<T>): void => {}
 ```
 
 参数：
@@ -1266,7 +1266,7 @@ emit: (evt: T, args: CallbackArgs<T>): void => {}
 | 名称   | 类型     | 必传 | 默认值 | 描述     |
 |:-----|:-------|:---|:----|:-------|
 | evt  | string | ✅  | -   | 事件名称   |
-| args | Array  | ✅  | -   | 触发事件参数 |
+| eventArgs | `CallbackArgs<T>`  | ✅  | -   | 触发事件参数 |
 
 示例：
 

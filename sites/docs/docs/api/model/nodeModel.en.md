@@ -11,11 +11,10 @@ table td:first-of-type {
 }
 </style>
 
-
 All nodes in LogicFlow have a nodeModel associated with them. Due to the data-driven view mechanism,
 all operations on a node are in fact operations on the model. In most cases, it is not recommended
 to assign values to the properties of the nodeModel directly, but rather to call the methods
-provided on the model or [graphModel](graphModel.en.md).
+provided on the model or [graphModel](./graphModel.en.md).
 
 :::error{title=Warning}
 Without being familiar with LogicFlow's internal source code, assignment operations on the model's
@@ -70,7 +69,7 @@ Usually used for customizing the node, based on the state attribute for more gra
 
 LogicFlow's shape attributes control the primary appearance of the base node. Shape attributes can
 be set via `setAttributes` or `initNodeData`.
-See [Shape Attributes for Custom Nodes](../../tutorial/basic/node.en.md#shape-attributes) for
+See [Shape Attributes for Custom Nodes](../../tutorial/basic/node.en.md#2-shape-attributes) for
 details
 on how to set them.
 
@@ -92,7 +91,7 @@ on.
 
 | Name        | Type                   | Required or Not | Description                                                                                                                                                                                                                                                                                                                                       |
 |:------------|:-----------------------|:----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| graphModel  | GraphModel             | ✅               | model corresponding to the whole canvas, see [graphModelApi](graphModel.en.md)                                                                                                                                                                                                                                                                    |
+| graphModel  | GraphModel             | ✅               | model corresponding to the whole canvas, see [graphModelApi](./graphModel.en.md)                                                                                                                                                                                                                                                                    |
 | zIndex      | number                 | ✅               | The height of the node on the z-axis. When elements overlap, the one with the highest zIndex is on top, default is 1                                                                                                                                                                                                                              |
 | state       | number                 | ✅               | Element state, different state corresponds to the display effect of the element; DEFAULT = 1 is displayed by default; TEXT_EDIT = 2 the element is being edited; ALLOW_CONNECT = 4, the element is allowed to be the target node of the current edge; NOT_ALLOW_CONNECT = 5, the element is not allowed to be the target node of the current edge |
 | BaseType    | string                 | ✅               | The base type of the current model, fixed to `node` for nodes. This is mainly used to identify whether the `model` is a node or an edge when nodes and edges are mixed.                                                                                                                                                                           |
@@ -116,7 +115,7 @@ this time we can't use `type`, instead we have to use `modelType` to determine i
 All LogicFlow nodes are eventually rendered as SVG DOM. However, except for the shape
 attribute, all other attributes belonging to svg are not directly present in `nodeModel`. When
 developers want to add
-more [svg attributes](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute) to the SVG DOM,
+more <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute" target="blank">svg attributes</a> to the SVG DOM,
 they can do so by overriding the GetNodeStyleProperty method on `nodeModel`.
 
 ## method
@@ -263,7 +262,7 @@ Overrides are supported to customize the rules for generating node ids.
 
 1. Please ensure the uniqueness of the id returned by this method.<br>
 2. This method is synchronous, if you want to modify the node id asynchronously, please refer
-   to [#272](https://github.com/didi/LogicFlow/issues/272)
+   to <a href="https://github.com/didi/LogicFlow/issues/272" target="_blank">issues</a>
    :::
 
 ```tsx | pure
@@ -360,13 +359,12 @@ class cNode extends RectNodeModel {
 
 Anchor Attributes
 
-| Name | Type | Required | Description | Anchor x-coordinate |
+| Name | Type | Required | Description  |
 | :---------- | :------ | :------- | :-------------------------------------- |
 | x | number | ✅ | Anchor x coordinate |
 | y | number | ✅ | Anchor y coordinate |
 | id | string | ✅ | Anchor id |
-| edgeAddable | boolean | ✅ | Whether to allow this anchor to manually create wires, default is
-true |
+| edgeAddable | boolean | ✅ | Whether to allow this anchor to manually create wires, default is true |
 
 ### getConnectedSourceRules
 
@@ -454,11 +452,11 @@ Parameters
 | targetAnchor | `Model.AnchorConfig` | ✅ | target anchor |
 | edgeId | `string` | - | Adjust the back id |
 
-return `LogicFlow.ConnectRuleResult` [详见issues](https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306)
+return `LogicFlow.ConnectRuleResult`, please refer to <a href="https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306" target="_blank">issues</a>.
 
 ### isAllowConnectedAsTarget
 
-Determine if this node is allowed to be a target node at the time of concatenation
+Determine if this node is allowed to be a target node at the time of concatenation.
 
 Parameters
 | 名称 | 类型 | 是否必填 | 描述 |
@@ -468,7 +466,7 @@ Parameters
 | targetAnchor | `Model.AnchorConfig` | ✅ | target anchor |
 | edgeId | `string` | - | Adjust the back id |
 
-return `LogicFlow.ConnectRuleResult` [详见issues](https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306)
+return `LogicFlow.ConnectRuleResult`, please refer to <a href="https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306" target="_blank">issues</a>.
 
 ### getRotateControlStyle
 
@@ -566,7 +564,7 @@ this.move(0, 24 / 2);
 
 ### getMoveDistance
 
-Get distance traveled
+Get distance traveled.
 
 Parameters：`deltaX: number, deltaY: number, isIgnoreRule: boolean = false`
 
@@ -590,7 +588,7 @@ Parameters：`isHittable: boolean`
 
 ### setIsShowAnchor
 
-Set whether to show anchors
+Set whether to show anchors.
 
 Parameters：`isShowAnchor: boolean = true`
 
@@ -602,7 +600,7 @@ Parameters：`attributes: LogicFlow.AttributesType`
 
 Setting Node | Edge model state
 
-Parameters：`state: ElementState, additionStateData?: Model.AdditionStateDataType | undefined,`
+Parameters：`state: ElementState, additionStateData?: Model.AdditionStateDataType | undefined`
 
 ### setStyle
 
