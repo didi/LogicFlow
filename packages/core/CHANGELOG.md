@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.28](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.24...@logicflow/core@1.2.28) (2024-07-29)
+
+
+### Bug Fixes
+
+* **core:** snap the text pos of cloneNode to grid([#1545](https://github.com/didi/LogicFlow/issues/1545)) ([dc661bd](https://github.com/didi/LogicFlow/commit/dc661bd1a01c740eb886da8a98142d02dacced2d))
+* error when diamondNode's edge is dragging ([4978bf1](https://github.com/didi/LogicFlow/commit/4978bf12fde753b731a03341cc9b3c63253fcbaa))
+* optimize the experience of resizeNode ([135a8e3](https://github.com/didi/LogicFlow/commit/135a8e3385799c3c9c98634ad0fecb0532377001))
+* 修复使用框选插件会阻塞页面滚轮事件问题 ([5266822](https://github.com/didi/LogicFlow/commit/52668221b1570606efa6caace2f6f7ae4d2bf935))
+* 更新readme logo & publish 1.2.25 ([4da3db7](https://github.com/didi/LogicFlow/commit/4da3db7aebc892e685269340ca38a0b9a4f68c56))
+* 框选拖动折线时更新起终点位置 ([27ca25b](https://github.com/didi/LogicFlow/commit/27ca25b02014e9b8f742702b70c0389687a6f4d5))
+
+
+
+
+
 ## [1.2.27](https://github.com/didi/LogicFlow/compare/@logicflow/core@1.2.24...@logicflow/core@1.2.27) (2024-05-06)
 
 

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.28](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.23...@logicflow/extension@1.2.28) (2024-07-29)
+
+
+### Bug Fixes
+
+* **extension:** perform topGroupZIndex calibration when add node([#1535](https://github.com/didi/LogicFlow/issues/1535)) ([2d6e41c](https://github.com/didi/LogicFlow/commit/2d6e41c3e25df2a95887980652241963710e8e11))
+* **extension:** trigger updateEdgePointByAnchors() after moveTo([#1384](https://github.com/didi/LogicFlow/issues/1384)) ([65e7027](https://github.com/didi/LogicFlow/commit/65e7027170583a3f0a6ce07bc06d15a230e6e8fb))
+* optimize the experience of resizeNode ([135a8e3](https://github.com/didi/LogicFlow/commit/135a8e3385799c3c9c98634ad0fecb0532377001))
+* 修复使用框选插件会阻塞页面滚轮事件问题 ([5266822](https://github.com/didi/LogicFlow/commit/52668221b1570606efa6caace2f6f7ae4d2bf935))
+* 修复选区插件无法触发鼠标事件的问题，同时兼容 Ctrl + 滚轮事件 ([129f101](https://github.com/didi/LogicFlow/commit/129f101faf2c3aae3d25917eb68ccabadbb93ec3))
+* 更新readme logo & publish 1.2.25 ([4da3db7](https://github.com/didi/LogicFlow/commit/4da3db7aebc892e685269340ca38a0b9a4f68c56))
+
+
+
+
+
 ## [1.2.27](https://github.com/didi/LogicFlow/compare/@logicflow/extension@1.2.23...@logicflow/extension@1.2.27) (2024-05-06)
 
 
