@@ -122,7 +122,10 @@ export class Label extends Component<ILabelProps, ILabelState> {
       model: element,
     })
 
-    if (!label.editable) return
+    if (!label.editable) {
+      element.setSelected(true)
+      return
+    }
     element.setSelected()
     element.setElementState(ElementState.TEXT_EDIT)
 
@@ -236,6 +239,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
       id,
       x,
       y,
+      zIndex,
       vertical,
       style,
       rotate,
@@ -251,6 +255,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
       top: `${y - 10}px`,
       width: `${maxLabelWidth}px`,
       height: '20px',
+      zIndex: zIndex ?? 1,
       transform: rotate
         ? `${transform} rotate(${rotate}deg)`
         : `${transform} rotate(${vertical ? -0.25 : 0}turn)`,

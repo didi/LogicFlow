@@ -53,6 +53,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopZoomGraph: true,
   stopScrollGraph: false,
+  // overlapMode: OverlapMode.INCREASE,
   style: theme,
 }
 
@@ -81,6 +82,7 @@ const data = {
             y: 50,
             value: 'abcdefghijklmnopqrstuvwxyz',
             content: 'abcdefghijklmnopqrstuvwxyz',
+            editable: false,
             draggable: true,
           },
         ],
