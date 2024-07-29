@@ -27,6 +27,7 @@ export class LabelModel {
   @observable rotate?: number
   @observable style: h.JSX.CSSProperties = {}
 
+  @observable zIndex?: number
   @observable vertical: boolean = false // 文字是否垂直显示
   @observable editable: boolean = true // label 是否可编辑
   @observable draggable: boolean = true // label 是否可拖拽

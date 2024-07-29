@@ -83,6 +83,7 @@ export class NextLabel implements Extension {
     const { textOverflowMode, isMultiple, maxCount, labelWidth } = this
     const {
       text,
+      zIndex,
       properties: { _label, _labelOption = {} },
     } = element
 
@@ -119,7 +120,7 @@ export class NextLabel implements Extension {
         draggable:
           element.BaseType === 'edge' ? edgeTextDraggable : nodeTextDraggable,
       }
-      formatConfig = [config]
+      formatConfig = config.value ? [config] : []
     }
 
     // TODO: 针对 Edge，在 edge 更新时 重新计算 Label 的位置
@@ -153,8 +154,10 @@ export class NextLabel implements Extension {
       const textEdit = element.BaseType === 'node' ? nodeTextEdit : edgeTextEdit
       const textDraggable =
         element.BaseType === 'node' ? nodeTextDraggable : edgeTextDraggable
+
       return {
         ...config,
+        zIndex,
         labelWidth,
         content: content ?? value,
         vertical: vertical ?? false,
@@ -163,8 +166,6 @@ export class NextLabel implements Extension {
         textOverflowMode: labelTextOverflowMode ?? textOverflowMode,
       }
     })
-    // 它会触发重新渲染，所以这里不能 setProperty
-    // element.setProperty('_label', elementLabelConfig)
   }
 
   /**
