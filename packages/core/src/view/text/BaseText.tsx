@@ -79,7 +79,7 @@ export class BaseText<
       editConfigModel: { nodeTextDraggable },
     } = graphModel
 
-    if (draggable || nodeTextDraggable) {
+    if (draggable ?? nodeTextDraggable) {
       this.stepperDrag.model = model
       this.stepperDrag.handleMouseDown(e)
     }

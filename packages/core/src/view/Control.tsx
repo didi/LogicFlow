@@ -335,8 +335,8 @@ export class ResizeControl extends Component<
           className="lf-resize-control-content"
           x={x}
           y={y}
-          width={30}
-          height={30}
+          width={25}
+          height={25}
           fill="transparent"
           stroke="transparent"
           onMouseDown={this.dragHandler.handleMouseDown}
