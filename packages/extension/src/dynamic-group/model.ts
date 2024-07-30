@@ -1,4 +1,5 @@
 import LogicFlow, {
+  observable,
   BaseEdgeModel,
   ElementType,
   GraphModel,
@@ -57,10 +58,6 @@ export type IGroupNodeProperties = {
    */
   autoToFront?: boolean
 
-  // 这是个实时状态，应该理解 当前 group 是否可添加
-  // TODO: 确认该属性是否应该放在 properties 中
-  // groupAddable?: boolean
-
   // 节点是否允许添加到分组中，是否可以通过 properties 的方式传入
   // TODO: 函数类型的 properties 该如何传入
   isAllowAppendIn?: (_nodeData) => boolean
@@ -84,8 +81,6 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   isRestrict: boolean = false
   // 分组节点是否可以折叠
   collapsible: boolean = true
-  // 当前组是否收起状态
-  isCollapsed: boolean = false
 
   // 分组节点 初始化尺寸(默认展开)，后续支持从 properties 中传入 width 和 height 设置
   expandWidth!: number
@@ -94,7 +89,10 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   collapsedWidth!: number
   collapsedHeight!: number
 
-  groupAddable?: boolean = false // 这是个实时状态，应该理解 当前 group 是否可添加
+  // 当前组是否收起状态
+  @observable isCollapsed: boolean = false
+  // 当前分组是否在可添加状态 - 实时状态
+  @observable groupAddable: boolean = false
   childrenLastCollapseStateDict: Record<string, boolean> = {}
 
   constructor(data: NodeConfig<IGroupNodeProperties>, graphModel: GraphModel) {
@@ -107,26 +105,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   initNodeData(data: LogicFlow.NodeConfig<IGroupNodeProperties>) {
     super.initNodeData(data)
 
-    // 如何定义其类型呢
     const {
       children,
-      // properties,
-    } = data
-    // const { isCollapsed } = properties ?? {}
-    this.children = children ? new Set(children) : new Set()
-
-    // 当前状态为折叠时，调用一下折叠的方法
-    // 确认是否
-    // console.log('isCollapsed -->>', isCollapsed)
-    // isCollapsed && this.toggleCollapse(isCollapsed)
-  }
-
-  setAttributes() {
-    console.log('group node setAttributes')
-    super.setAttributes()
-
-    const {
-      // children,
       width,
       height,
       collapsedWidth,
@@ -137,34 +117,38 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       zIndex,
       isRestrict,
       autoToFront,
-      // groupAddable,
-    } = this.properties
+    } = data.properties ?? {}
 
-    // this.children = children ? new Set(children) : new Set()
+    this.children = children ? new Set(children) : new Set()
     this.zIndex = zIndex ?? DEFAULT_BOTTOM_Z_INDEX
+    this.isCollapsed = isCollapsed ?? false
 
-    if (!width) {
-      this.width = DEFAULT_GROUP_EXPAND_WIDTH
-    }
-    if (!height) {
-      this.height = DEFAULT_GROUP_EXPAND_HEIGHT
-    }
-    this.expandWidth = width ?? DEFAULT_GROUP_EXPAND_WIDTH
-    this.expandHeight = height ?? DEFAULT_GROUP_EXPAND_HEIGHT
+    const expandWidth = width ?? DEFAULT_GROUP_EXPAND_WIDTH
+    const expandHeight = height ?? DEFAULT_GROUP_EXPAND_HEIGHT
+
+    // 初始化分组节点的宽高数据
+    this.width = expandWidth
+    this.height = expandHeight
+    this.expandWidth = expandWidth
+    this.expandHeight = expandHeight
     this.collapsedWidth = collapsedWidth ?? DEFAULT_GROUP_COLLAPSE_WIDTH
     this.collapsedHeight = collapsedHeight ?? DEFAULT_GROUP_COLLAPSE_HEIGHT
 
     this.isRestrict = isRestrict ?? false
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false
-    // this.groupAddable = groupAddable ?? false
 
     // 禁用掉 Group 节点的文本编辑能力
     this.text.editable = false
     this.text.draggable = false
+  }
 
-    if (isCollapsed !== this.isCollapsed) {
-      this.toggleCollapse(isCollapsed)
+  setAttributes() {
+    super.setAttributes()
+
+    // 初始化时，如果 this.isCollapsed 为 true，则主动触发一次折叠操作
+    if (this.isCollapsed) {
+      this.toggleCollapse(true)
     }
   }
 
@@ -183,14 +167,10 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     console.log('children -->>', children)
     data.children = children
 
-    // if (data.properties) {
-    //   data.properties.children = children
-    // }
-
-    // // TODO: 为什么要删除这两个属性？？？
-    // const { properties } = data
-    // delete properties?.groupAddable
-    // delete properties?.isCollapsed
+    if (data.properties) {
+      data.properties.children = children
+      data.properties.isCollapsed = this.isCollapsed
+    }
 
     return data
   }
@@ -210,7 +190,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       collapsedHeight,
       expandWidth,
       expandHeight,
-      properties: { isCollapsed },
+      isCollapsed,
     } = this
     if (isCollapsed) {
       data.x = x + expandWidth / 2 - collapsedWidth / 2
@@ -228,7 +208,6 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    */
   toggleCollapse(collapse?: boolean) {
     const nextCollapseState = !!collapse
-    // this.setProperty('isCollapsed', nextCollapseState)
     this.isCollapsed = nextCollapseState
     // step 1
     if (nextCollapseState) {
@@ -247,7 +226,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
       if (model) {
         // TODO: ??? 普通节点有这个属性吗？确认这个代码的意义
-        const collapseStatus = model.isCollapse
+        const collapseStatus = model.isCollapsed
         // FIX: https://github.com/didi/LogicFlow/issues/1007
         // 下面代码片段，针对 Group 节点执行
         if (model.isGroup) {
@@ -457,7 +436,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    * @param isAllow
    */
   setAllowAppendChild(isAllow: boolean) {
-    this.setProperty('groupAddable', isAllow)
+    // this.setProperty('groupAddable', isAllow)
+    this.groupAddable = isAllow
   }
 
   /**

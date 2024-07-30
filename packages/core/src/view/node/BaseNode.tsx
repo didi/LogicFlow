@@ -1,6 +1,6 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map, merge } from 'lodash-es'
+import { map } from 'lodash-es'
 import Anchor from '../Anchor'
 import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
@@ -125,10 +125,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const { isSelected, isHitable, rotatable, isHovered } = model
 
     // 合并全局 allResize 和节点自身的 resizable 配置，以节点配置高于全局配置
-    const { canRotate } = merge(
-      { canRotate: allowRotate },
-      { canRotate: rotatable },
-    )
+    const canRotate = allowRotate && rotatable // 全局开关 > 节点配置
+
     const style = model.getRotateControlStyle()
     if (!isSilentMode && isHitable && (isSelected || isHovered) && canRotate) {
       return (
@@ -150,10 +148,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const { isSelected, isHitable, resizable, isHovered } = model
 
     // 合并全局 allResize 和节点自身的 resizable 配置，以节点配置高于全局配置
-    const { canResize } = merge(
-      { canResize: allowResize },
-      { canResize: resizable },
-    )
+    const canResize = allowResize && resizable // 全局开关 > 节点配置
     const style = model.getResizeControlStyle()
     if (!isSilentMode && isHitable && (isSelected || isHovered) && canResize) {
       return (
@@ -238,7 +233,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
 
   onDragging = ({ event }: IDragParams) => {
     const { model, graphModel } = this.props
-    // const { isDragging } = model;
     const {
       editConfigModel: { stopMoveGraph, autoExpand },
       transformModel,

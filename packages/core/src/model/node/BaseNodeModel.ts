@@ -107,8 +107,8 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   @observable draggable = true
   @observable visible = true
 
-  @observable rotatable = true
-  @observable resizable = true
+  @observable rotatable = true // 节点可旋转
+  @observable resizable = true // 节点可缩放
 
   // 其它属性
   graphModel: GraphModel
@@ -196,6 +196,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     // 在下面又将 NodeConfig 中的数据赋值给了 this，应该会触发 setAttributes，确认是否符合预期
     // TODO: 确认 constructor 中赋值 properties 是否必要，此处将 NodeConfig 中所有属性赋值给 this，包括 rotate、rotatable，resizable 等
     assign(this, pickNodeConfig(data))
+
     const { overlapMode } = this.graphModel
     if (overlapMode === OverlapMode.INCREASE) {
       this.zIndex = data.zIndex || getZIndex()
