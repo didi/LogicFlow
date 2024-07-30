@@ -22,11 +22,11 @@ export class VueNodeView extends HtmlNode {
 
   setHtml(rootEl: SVGForeignObjectElement) {
     const el = document.createElement('div')
-    el.className = 'custom-react-node-content'
+    el.className = 'custom-vue-node-content'
     this.root = el
+    rootEl.appendChild(el)
 
     this.renderVueComponent()
-    rootEl.appendChild(el)
   }
 
   confirmUpdate(_rootEl: SVGForeignObjectElement) {
@@ -45,7 +45,6 @@ export class VueNodeView extends HtmlNode {
         if (isVue2) {
           const Vue = Vue2 as any
           this.vm = new Vue({
-            el: root,
             render(h: any) {
               return h(component, {
                 node: model,
