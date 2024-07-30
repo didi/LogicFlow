@@ -360,7 +360,11 @@ export class BaseNodeModel implements IBaseNodeModel {
   getTextStyle() {
     // 透传 nodeText
     const { nodeText } = this.graphModel.theme
-    return cloneDeep(nodeText)
+    const { textStyle = {} } = this.properties
+    return {
+      ...cloneDeep(nodeText),
+      ...cloneDeep(textStyle as object),
+    }
   }
 
   /**
