@@ -16,7 +16,7 @@ export class DynamicGroupNode<
   }
 
   getAppendAreaShape(): h.JSX.Element | null {
-    // TODO: 此区域用于初始化 group container, 即元素拖拽进入感应区域
+    // DONE: 此区域用于初始化 group container, 即元素拖拽进入感应区域
     const { model } = this.props
     const { width, height, x, y, radius, groupAddable } = model
     if (!groupAddable) return null
@@ -51,8 +51,8 @@ export class DynamicGroupNode<
   getOperateIcon(): h.JSX.Element | null {
     const { model } = this.props
     const { x, y, width, height } = model
-    const sx = x - width / 2 + 5
-    const sy = y - height / 2 + 5
+    const sx = x - width / 2 + 10
+    const sy = y - height / 2 + 10
 
     if (!model.collapsible) return null
     const iconPath = model?.isCollapsed

@@ -1,4 +1,4 @@
-import { assign, isBoolean, pick } from 'lodash-es'
+import { assign, isBoolean, isUndefined, pick } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { TextMode } from '../constant'
 
@@ -206,7 +206,7 @@ export class EditConfigModel {
   @observable textDraggable = false
   // 节点
   @observable nodeTextEdit = true
-  @observable nodeTextDraggable = true
+  @observable nodeTextDraggable = false
   @observable nodeTextMultiple = false // 是否支持多个节点文本
   @observable nodeTextVertical = false // 节点文本朝向是否是纵向
   @observable nodeTextMode = TextMode.TEXT // 节点文本模式
@@ -279,10 +279,17 @@ export class EditConfigModel {
     }
 
     // 如果不传，默认undefined表示允许文本编辑
-    if (textEdit === false) {
+    if (!isUndefined(textEdit)) {
       assign(conf, {
         nodeTextEdit: false,
         edgeTextEdit: false,
+      })
+    }
+
+    if (!isUndefined(textDraggable)) {
+      assign(conf, {
+        nodeTextDraggable: false,
+        edgeTextDraggable: false,
       })
     }
 
@@ -290,13 +297,6 @@ export class EditConfigModel {
       assign(conf, {
         nodeTextMode: textMode,
         edgeTextMode: textMode,
-      })
-    }
-
-    if (textDraggable === false) {
-      assign(conf, {
-        nodeTextDraggable: false,
-        edgeTextDraggable: false,
       })
     }
 

@@ -7,7 +7,7 @@ import LogicFlow, {
   transformNodeData,
   transformEdgeData,
 } from '@logicflow/core'
-import { cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
+import { assign, cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
 import { DynamicGroupNode } from './node'
 import { DynamicGroupNodeModel } from './model'
 import { isAllowMoveTo, isBoundsInGroup } from './utils'
@@ -42,10 +42,12 @@ export class DynamicGroup {
   // 存储节点与 group 的映射关系
   nodeGroupMap: Map<string, string> = new Map()
 
-  constructor({ lf }: LogicFlow.IExtensionProps) {
+  constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(dynamicGroup)
     this.lf = lf
 
+    console.log('options', options)
+    assign(this, options)
     // 初始化插件，从监听事件开始及设置规则开始
     this.init()
   }
@@ -201,10 +203,12 @@ export class DynamicGroup {
   addNodeToGroup = ({ data: node }: CallbackArgs<'node:add'>) => {
     // 1. 如果该节点之前已经在 group 中了，则将其从之前的 group 移除
     const preGroupId = this.nodeGroupMap.get(node.id)
+
     if (preGroupId) {
       const group = this.lf.getNodeModelById(
         preGroupId,
       ) as DynamicGroupNodeModel
+
       group.removeChild(node.id)
       this.nodeGroupMap.delete(node.id)
       group.setAllowAppendChild(false)
@@ -247,7 +251,7 @@ export class DynamicGroup {
         if (isAllowAppendIn) {
           group.addChild(node.id)
           this.nodeGroupMap.set(node.id, group.id)
-          group.setAllowAppendChild(false)
+          group.setAllowAppendChild(true)
         } else {
           // 抛出不允许插入的事件
           this.lf.emit('group:not-allowed', {
@@ -296,6 +300,7 @@ export class DynamicGroup {
       if (!isAllowAppendIn) return
 
       this.activeGroup = targetGroup
+      console.log('this.activeGroup', this.activeGroup)
       this.activeGroup.setAllowAppendChild(true)
     }
   }

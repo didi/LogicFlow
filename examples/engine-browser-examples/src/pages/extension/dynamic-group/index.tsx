@@ -115,12 +115,19 @@ export default function BPMNExtension() {
           //   x: 200,
           //   y: 100
           // },
-          // {
-          //   id: "circle_2",
-          //   type: "circle",
-          //   x: 800,
-          //   y: 140
-          // },
+          {
+            id: 'circle_2',
+            type: 'circle',
+            x: 800,
+            y: 140,
+            text: {
+              value: 'circle_2',
+              x: 800,
+              y: 140,
+              editable: false,
+              draggable: true,
+            },
+          },
           // {
           //   id: 'group_1',
           //   type: 'sub-process',
@@ -153,7 +160,7 @@ export default function BPMNExtension() {
             id: 'dynamic-group_2',
             type: 'dynamic-group',
             x: 500,
-            y: 420,
+            y: 220,
             // children: ["rect_3"],
             text: 'dynamic-group_2',
             resizable: true,
