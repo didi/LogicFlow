@@ -13,8 +13,7 @@
     "feature-examples",
     "material-ui-app",
     "next-app",
-    "vue3-app",
-    "vue3-memory-leak"
+    "vue3-app"
   ],
   "extends": [],
   "pipeline": {}

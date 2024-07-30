@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/react-node-registry",
-  "version": "0.0.1-beta.3",
+  "version": "0.0.1-beta.4",
   "description": "LogicFlow React Shape",
   "main": "lib/index.js",
   "module": "es/index.js",
