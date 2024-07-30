@@ -45,6 +45,7 @@ export class VueNodeView extends HtmlNode {
         if (isVue2) {
           const Vue = Vue2 as any
           this.vm = new Vue({
+            el: root,
             render(h: any) {
               return h(component, {
                 node: model,
