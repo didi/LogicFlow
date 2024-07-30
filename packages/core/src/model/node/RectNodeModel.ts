@@ -48,14 +48,6 @@ export class RectNodeModel extends BaseNodeModel {
       { x: x - width / 2, y, id: `${this.id}_3` },
     ]
   }
-  getTextStyle() {
-    const style = super.getTextStyle()
-    const { textStyle } = this.properties
-    return {
-      ...style,
-      ...cloneDeep(textStyle),
-    }
-  }
   getNodeStyle() {
     const style = super.getNodeStyle()
     const { rect } = this.graphModel.theme
