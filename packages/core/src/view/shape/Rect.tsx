@@ -38,6 +38,9 @@ export function Rect(props: IRectProps): h.JSX.Element {
   attrs.x = leftTopX
   attrs.y = leftTopY
 
+  attrs.radius = radius
+  console.log('attrs', attrs, props)
+
   return <rect {...attrs} />
 }
 

@@ -44,6 +44,15 @@ export class EllipseNodeModel extends BaseNodeModel {
     }
   }
 
+  getTextStyle() {
+    const style = super.getTextStyle()
+    const { textStyle } = this.properties
+    return {
+      ...style,
+      ...cloneDeep(textStyle),
+    }
+  }
+
   getNodeStyle() {
     const style = super.getNodeStyle()
     const {
