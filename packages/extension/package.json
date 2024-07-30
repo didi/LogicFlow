@@ -35,9 +35,6 @@
   ],
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
-  "peerDependencies": {
-    "@logicflow/core": "workspace:*"
-  },
   "dependencies": {
     "@logicflow/core": "workspace:*",
     "@antv/hierarchy": "^0.6.11",
