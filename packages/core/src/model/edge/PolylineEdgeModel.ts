@@ -41,9 +41,11 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   getEdgeStyle() {
     const { polyline } = this.graphModel.theme
     const style = super.getEdgeStyle()
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(polyline),
+      ...cloneDeep(customStyle),
     }
   }
 
