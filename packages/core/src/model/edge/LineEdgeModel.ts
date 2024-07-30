@@ -10,9 +10,11 @@ export class LineEdgeModel extends BaseEdgeModel {
   getEdgeStyle() {
     const { line } = this.graphModel.theme
     const style = super.getEdgeStyle()
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(line),
+      ...cloneDeep(customStyle),
     }
   }
   getTextPosition(): Point {

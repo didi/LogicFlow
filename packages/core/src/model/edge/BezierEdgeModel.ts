@@ -30,9 +30,11 @@ export class BezierEdgeModel extends BaseEdgeModel {
   getEdgeStyle() {
     const { bezier } = this.graphModel.theme
     const style = super.getEdgeStyle()
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(bezier),
+      ...cloneDeep(customStyle),
     }
   }
   getTextPosition(): Point {

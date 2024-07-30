@@ -106,6 +106,18 @@ const data = {
       y: 94,
     },
   ],
+  edges: [
+    {
+      type: 'bezier',
+      sourceNodeId: 'custom-node-1',
+      targetNodeId: 'custom-node-2',
+      properties: {
+        style: {
+          stroke: 'red',
+        },
+      },
+    },
+  ],
 }
 
 export default function BasicNode() {
@@ -265,6 +277,20 @@ export default function BasicNode() {
     }
   }
 
+  const handleChangeColor = () => {
+    const lf = lfRef.current
+    if (lf) {
+      const { edges } = lf.graphModel
+      edges.forEach(({ id }) => {
+        lf.setProperties(id, {
+          style: {
+            stroke: 'blue',
+          },
+        })
+      })
+    }
+  }
+
   const handleRefreshGraph = () => {
     const lf = lfRef.current
     if (lf) {
@@ -362,6 +388,9 @@ export default function BasicNode() {
         </Button>
         <Button key="changeEdgeId" type="primary" onClick={handleChangeId}>
           修改边 ID
+        </Button>
+        <Button key="changeEdgeId" type="primary" onClick={handleChangeColor}>
+          修改边 颜色
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain></Divider>
