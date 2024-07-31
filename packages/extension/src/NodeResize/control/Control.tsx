@@ -307,6 +307,8 @@ class Control extends Component<IControlProps, IControlState> {
     // 更新边
     this.updateEdgePointByAnchors()
     this.eventEmit({
+      deltaX,
+      deltaY,
       beforeNode,
       afterNode,
     })
@@ -373,6 +375,8 @@ class Control extends Component<IControlProps, IControlState> {
     // 更新边
     this.updateEdgePointByAnchors()
     this.eventEmit({
+      deltaX,
+      deltaY,
       beforeNode: {
         ...beforeNode,
         rx,
@@ -444,11 +448,13 @@ class Control extends Component<IControlProps, IControlState> {
     // 更新边
     this.updateEdgePointByAnchors()
     this.eventEmit({
+      deltaX,
+      deltaY,
       beforeNode,
       afterNode,
     })
   }
-  eventEmit = ({ beforeNode, afterNode }: any) => {
+  eventEmit = ({ deltaX, deltaY, beforeNode, afterNode }: any) => {
     const { id, modelType, type } = this.nodeModel
     const oldNodeSize = {
       id,
@@ -465,6 +471,9 @@ class Control extends Component<IControlProps, IControlState> {
     this.graphModel.eventCenter.emit('node:resize', {
       preData: oldNodeSize,
       data: newNodeSize,
+      deltaX,
+      deltaY,
+      index: this.index,
       model: this.nodeModel,
     })
   }

@@ -86,6 +86,7 @@ const data = {
         x: 600,
         y: 200,
         value: 'node-1',
+        draggable: true,
       },
       type: 'rect',
       x: 600,

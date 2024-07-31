@@ -32,7 +32,8 @@ type NodeEventArgsPick<
     | 'e'
     | 'position'
     | 'deltaX'
-    | 'deltaY',
+    | 'deltaY'
+    | 'index',
 > = Pick<
   {
     /**
@@ -63,6 +64,10 @@ type NodeEventArgsPick<
      * 鼠标Y轴移动的距离
      */
     deltaY: number
+    /**
+     * Resize 时调整的是哪个控制点
+     */
+    index: number
   },
   T
 >
@@ -159,7 +164,9 @@ interface NodeEventArgs {
   /**
    * 节点缩放
    */
-  'node:resize': NodeEventArgsPick<'preData' | 'data' | 'model'>
+  'node:resize': NodeEventArgsPick<
+    'preData' | 'data' | 'model' | 'deltaX' | 'deltaY' | 'index'
+  >
 }
 
 type EdgeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
