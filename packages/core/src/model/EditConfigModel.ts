@@ -281,15 +281,15 @@ export class EditConfigModel {
     // 如果不传，默认undefined表示允许文本编辑
     if (!isUndefined(textEdit)) {
       assign(conf, {
-        nodeTextEdit: false,
-        edgeTextEdit: false,
+        nodeTextEdit: textEdit,
+        edgeTextEdit: textEdit,
       })
     }
 
     if (!isUndefined(textDraggable)) {
       assign(conf, {
-        nodeTextDraggable: false,
-        edgeTextDraggable: false,
+        nodeTextDraggable: textDraggable,
+        edgeTextDraggable: textDraggable,
       })
     }
 
