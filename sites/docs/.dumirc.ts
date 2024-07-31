@@ -16,8 +16,7 @@ export default defineConfig({
     title: 'LogicFlow',
     description: '低成本实现，让逻辑管理更简单、更高效',
     siteUrl: '/',
-    // footer: `Copyright © 2024 | Powered by LogicFlow Team`,
-    footer: false,
+    footer: `Copyright © 2024 | Powered by LogicFlow Team`,
     githubUrl: repository, // GitHub 地址
     defaultLanguage: 'zh',
     es5: false,
@@ -209,11 +208,11 @@ export default defineConfig({
         {
           icon: 'icon-chajian1',
           title: {
-            zh: '自执行引擎',
-            en: 'Self-executing engine',
+            zh: '灵活易拓展',
+            en: 'Flexible and expandable',
           },
           description: {
-            zh: '执行引擎支持浏览器端执行流程图逻辑，为无代码执行提供新思路。',
+            zh: '内置提供丰富的插件，用户也可根据自身需求定制复杂插件实现业务需求。',
             en: 'The execution engine supports browser-side flow chart logic, providing new ideas for code-free execution.',
           },
         },
