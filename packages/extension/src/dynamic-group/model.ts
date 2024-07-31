@@ -77,7 +77,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
   // 保存组内的节点
   children!: Set<string>
-  // 是否限制组内节点的移动范围。默认不限制
+  // 是否限制组内节点的移动范围。默认不限制 TODO: 完善该功能
   isRestrict: boolean = false
   // 分组节点是否可以折叠
   collapsible: boolean = true
@@ -93,6 +93,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   @observable isCollapsed: boolean = false
   // 当前分组是否在可添加状态 - 实时状态
   @observable groupAddable: boolean = false
+  // 缩放或旋转容器时，是否缩放或旋转组内节点
+  @observable transformWidthContainer: boolean = true
   childrenLastCollapseStateDict: Record<string, boolean> = {}
 
   constructor(data: NodeConfig<IGroupNodeProperties>, graphModel: GraphModel) {
@@ -156,15 +158,12 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     const data = super.getData()
     const children: string[] = []
 
-    console.log('this', this)
-    console.log('this.children', this.children)
     forEach(Array.from(this.children), (childId) => {
       const model = this.graphModel.getNodeModelById(childId)
       if (model && !model.virtual) {
         children.push(childId)
       }
     })
-    console.log('children -->>', children)
     data.children = children
 
     if (data.properties) {

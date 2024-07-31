@@ -23,6 +23,8 @@ const config: Partial<LogicFlow.Options> = {
   multipleSelectKey: 'alt',
   autoExpand: false,
   allowResize: true,
+  allowRotate: true,
+  nodeTextDraggable: false,
   keyboard: {
     enabled: true,
   },
@@ -96,25 +98,6 @@ export default function BPMNExtension() {
       // 获取渲染数据
       const graphData: GraphConfigData = {
         nodes: [
-          // {
-          //   type: "custom-group",
-          //   x: 400,
-          //   y: 400,
-          //   text: 'custom-group1',
-          //   children: ["circle_1"]
-          // },
-          // {
-          //   id: "circle_1",
-          //   type: "circle",
-          //   x: 400,
-          //   y: 400
-          // },
-          // {
-          //   id: "rect_1",
-          //   type: "rect",
-          //   x: 200,
-          //   y: 100
-          // },
           {
             id: 'circle_2',
             type: 'circle',
@@ -128,17 +111,6 @@ export default function BPMNExtension() {
               draggable: true,
             },
           },
-          // {
-          //   id: 'group_1',
-          //   type: 'sub-process',
-          //   x: 300,
-          //   y: 120,
-          //   // children: ["rect_3"],
-          //   text: 'sub-process-1',
-          //   properties: {
-          //     isFolded: false,
-          //   },
-          // },
           {
             id: 'dynamic-group_1',
             type: 'dynamic-group',
@@ -172,19 +144,93 @@ export default function BPMNExtension() {
               isCollapsed: false,
             },
           },
-          // {
-          //   id: "group_2",
-          //   type: "sub-process",
-          //   x: 800,
-          //   y: 120,
-          //   children: ["circle_4"],
-          //   text: 'sub-process-2',
-          //   properties: {
-          //     isFolded: true
-          //   }
-          // }
         ],
         edges: [],
+        // 'nodes': [
+        //   {
+        //     'id': 'circle_2',
+        //     'type': 'circle',
+        //     'x': 800,
+        //     'y': 140,
+        //     'properties': {},
+        //     'text': {
+        //       'x': 800,
+        //       'y': 140,
+        //       'value': 'circle_2',
+        //     },
+        //   },
+        //   {
+        //     'id': 'dynamic-group_1',
+        //     'type': 'dynamic-group',
+        //     'x': 330,
+        //     'y': 45,
+        //     'properties': {
+        //       'collapsible': true,
+        //       'width': 420,
+        //       'height': 250,
+        //       'radius': 5,
+        //       'isCollapsed': true,
+        //       'children': [],
+        //     },
+        //     'text': {
+        //       'x': 330,
+        //       'y': 45,
+        //       'value': 'dynamic-group_1',
+        //     },
+        //     'children': [],
+        //   },
+        //   {
+        //     'id': 'dynamic-group_2',
+        //     'type': 'dynamic-group',
+        //     'x': 500,
+        //     'y': 220,
+        //     'properties': {
+        //       'width': 420,
+        //       'height': 250,
+        //       'radius': 5,
+        //       'collapsible': false,
+        //       'isCollapsed': false,
+        //       'children': [
+        //         '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
+        //         '37869799-e2ee-45b8-9150-b38ccc8e65d3',
+        //       ],
+        //     },
+        //     'text': {
+        //       'x': 500,
+        //       'y': 220,
+        //       'value': 'dynamic-group_2',
+        //     },
+        //     'children': [
+        //       '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
+        //       '37869799-e2ee-45b8-9150-b38ccc8e65d3',
+        //     ],
+        //   },
+        //   {
+        //     'id': '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
+        //     'type': 'circle',
+        //     'x': 552,
+        //     'y': 194,
+        //     'properties': {},
+        //     'text': {
+        //       'x': 552,
+        //       'y': 194,
+        //       'value': 'Circle',
+        //     },
+        //   },
+        //   {
+        //     'id': '37869799-e2ee-45b8-9150-b38ccc8e65d3',
+        //     'type': 'rect',
+        //     'x': 390,
+        //     'y': 214,
+        //     'properties': {},
+        //     'text': {
+        //       'x': 390,
+        //       'y': 214,
+        //       'value': 'Rect',
+        //     },
+        //   },
+        // ],
+        // 'edges': [],
       }
       lf.render(graphData)
 
