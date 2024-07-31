@@ -22,12 +22,15 @@ import Point = LogicFlow.Point
 import EdgeData = LogicFlow.EdgeData
 import EdgeConfig = LogicFlow.EdgeConfig
 import TextConfig = LogicFlow.TextConfig
+import PropertiesType = LogicFlow.PropertiesType
 
-export interface IBaseEdgeModel extends Model.BaseModel {
+export interface IBaseEdgeModel<P extends PropertiesType>
+  extends Model.BaseModel<P> {
   /**
    * model 基础类型，固定为 edge
    */
   readonly BaseType: ElementType.EDGE
+  properties: P
 
   sourceNodeId: string
   targetNodeId: string
@@ -46,7 +49,9 @@ export interface IBaseEdgeModel extends Model.BaseModel {
   arrowConfig?: LogicFlow.ArrowConfig
 }
 
-export class BaseEdgeModel implements IBaseEdgeModel {
+export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
+  implements IBaseEdgeModel<P>
+{
   readonly BaseType = ElementType.EDGE
   static BaseType: ElementType = ElementType.EDGE
 
@@ -66,7 +71,7 @@ export class BaseEdgeModel implements IBaseEdgeModel {
     draggable: false,
     editable: true,
   }
-  @observable properties: Record<string, unknown> = {}
+  @observable properties: P
   @observable points = ''
   @observable pointsList: Point[] = []
 
@@ -104,8 +109,10 @@ export class BaseEdgeModel implements IBaseEdgeModel {
   };
   [propName: string]: unknown // 支持自定义
 
-  constructor(data: EdgeConfig, graphModel: GraphModel) {
+  constructor(data: EdgeConfig<P>, graphModel: GraphModel) {
     this.graphModel = graphModel
+    this.properties = data.properties ?? ({} as P)
+
     this.initEdgeData(data)
     this.setAttributes()
   }
@@ -420,7 +427,12 @@ export class BaseEdgeModel implements IBaseEdgeModel {
    */
   @action
   setProperty(key: string, val: any): void {
-    this.properties[key] = formatData(val)
+    const preProperties = toJS(this.properties)
+    this.properties = {
+      ...preProperties,
+      [key]: formatData(val),
+    }
+
     this.setAttributes()
   }
 

@@ -370,7 +370,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     const { textStyle = {} } = this.properties
     return {
       ...cloneDeep(nodeText),
-      ...cloneDeep(textStyle as object),
+      ...cloneDeep(textStyle),
     }
   }
 

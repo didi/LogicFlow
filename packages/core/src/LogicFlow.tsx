@@ -1389,6 +1389,9 @@ export namespace LogicFlow {
     rx?: number
     ry?: number
 
+    style?: LogicFlow.CommonTheme
+    textStyle?: LogicFlow.CommonTheme
+
     [key: string]: any
   }
   export type AttributesType = Record<string, any>
@@ -1551,7 +1554,7 @@ export namespace LogicFlow {
     [key: string]: unknown
   }
 
-  export interface EdgeConfig {
+  export interface EdgeConfig<P extends PropertiesType = PropertiesType> {
     id?: string
     type?: string // TODO: 将所有类型选项列出来；LogicFlow 内部默认为 polyline
 
@@ -1564,7 +1567,7 @@ export namespace LogicFlow {
     text?: TextConfig | string
     pointsList?: Point[]
     zIndex?: number
-    properties?: PropertiesType
+    properties?: P
   }
 
   export interface EdgeData extends EdgeConfig {
@@ -1830,7 +1833,7 @@ export namespace LogicFlow {
   export type FocusOnArgsType = FocusOnById | FocusOnByCoordinate
 
   export type BaseNodeModelCtor = typeof BaseNodeModel<PropertiesType>
-  export type BaseEdgeModelCtor = typeof BaseEdgeModel
+  export type BaseEdgeModelCtor = typeof BaseEdgeModel<PropertiesType>
 
   export type GraphElementCtor = BaseNodeModelCtor | BaseEdgeModelCtor
   export type GraphElement = BaseNodeModel | BaseEdgeModel
