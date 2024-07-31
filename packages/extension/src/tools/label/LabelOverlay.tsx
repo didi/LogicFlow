@@ -107,7 +107,7 @@ export class LabelOverlay extends Component<IToolProps, ILabelOverlayState> {
     } = this.props
 
     const elements = [...graphModel.nodes, ...graphModel.edges]
-    const curExtension = extension['Label'] as LabelPlugin
+    const curExtension = extension['label'] as LabelPlugin
 
     if (curExtension) {
       const labels: h.JSX.Element[] = [] // 保存所有的 Label 元素

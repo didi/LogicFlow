@@ -23,7 +23,7 @@ export type ILabelOptions = {
 }
 
 export class Label implements Extension {
-  static pluginName = 'Label'
+  static pluginName = 'label'
 
   lf: LogicFlow
   options: ILabelOptions
