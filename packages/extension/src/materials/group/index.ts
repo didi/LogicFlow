@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * 待废弃，2.0 版本将 提供 dynamic-group 支持分组功能，当前 Group 插件设计和实现有比较多的问题，后续不再维护，请及时切换
+ */
 import { forEach, isEmpty, isObject } from 'lodash-es'
 import LogicFlow, {
   BaseEdgeModel,

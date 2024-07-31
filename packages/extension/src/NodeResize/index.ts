@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * 待废弃，2.0 版本将 NodeResize 能力内置，该插件设计和实现有比较多的问题，后续不再维护，请及时切换
+ */
 import LogicFlow from '@logicflow/core'
 
 import EllipseResize from './node/EllipseResize'
