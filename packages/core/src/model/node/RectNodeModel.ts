@@ -32,7 +32,6 @@ export class RectNodeModel<
   }
 
   setAttributes() {
-    console.log('rect node setAttributes')
     super.setAttributes()
 
     const { width, height, radius } = this.properties

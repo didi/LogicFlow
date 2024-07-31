@@ -1,5 +1,7 @@
 import { GraphModel, h, RectNode } from '@logicflow/core'
+import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
+import { handleResize } from '@logicflow/core/es/util/resize'
 
 export interface IDynamicGroupNodeProps {
   model: DynamicGroupNodeModel
@@ -9,6 +11,45 @@ export interface IDynamicGroupNodeProps {
 export class DynamicGroupNode<
   P extends IDynamicGroupNodeProps = IDynamicGroupNodeProps,
 > extends RectNode<P> {
+  componentDidMount() {
+    super.componentDidMount()
+
+    const { model: curGroup, graphModel } = this.props
+    const { eventCenter } = graphModel
+
+    // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
+    eventCenter.on('node:rotate', ({ model }) => {
+      if (model.id === curGroup.id) {
+        forEach(Array.from(curGroup.children), (childId) => {
+          const child = graphModel.getNodeModelById(childId)
+          if (child) {
+            child.rotate = model.rotate
+          }
+        })
+      }
+    })
+
+    // 在 group 缩放时，对组内的所有子节点也进行对应的缩放计算
+    eventCenter.on('node:resize', ({ deltaX, deltaY, index, model }) => {
+      if (model.id === curGroup.id) {
+        forEach(Array.from(curGroup.children), (childId) => {
+          const child = graphModel.getNodeModelById(childId)
+          if (child) {
+            // child.rotate = model.rotate
+            handleResize({
+              deltaX,
+              deltaY,
+              index,
+              nodeModel: child,
+              graphModel,
+              cancelCallback: () => {},
+            })
+          }
+        })
+      }
+    })
+  }
+
   getResizeControl(): h.JSX.Element | null {
     const { resizable, isCollapsed } = this.props.model
     const showResizeControl = resizable && !isCollapsed

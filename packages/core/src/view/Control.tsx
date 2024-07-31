@@ -2,7 +2,7 @@ import { createElement as h, Component } from 'preact/compat'
 import { cloneDeep, find, forEach, map } from 'lodash-es'
 import { Rect } from './shape'
 import LogicFlow from '../LogicFlow'
-import { getNodeBBox, IDragParams, StepDrag } from '../util'
+import { getNodeBBox, IDragParams, StepDrag, handleResize } from '../util'
 import { BaseNodeModel, GraphModel } from '../model'
 
 import NodeData = LogicFlow.NodeData
@@ -104,11 +104,17 @@ export class ResizeControl extends Component<
   triggerResizeEvent = (
     preNodeData: ResizeNodeData,
     curNodeData: ResizeNodeData,
+    deltaX,
+    deltaY,
+    index,
     nodeModel: BaseNodeModel,
   ) => {
     this.graphModel.eventCenter.emit(EventType.NODE_RESIZE, {
       preData: preNodeData,
       data: curNodeData,
+      deltaX,
+      deltaY,
+      index,
       model: nodeModel,
     })
   }
@@ -234,62 +240,75 @@ export class ResizeControl extends Component<
   }
 
   resizeNode = ({ deltaX, deltaY }: VectorData) => {
-    // TODO: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
-    // 1. 计算当前 Control 的一些信息，
-    const {
-      r, // circle
-      rx, // ellipse/diamond
-      ry,
-      width, // rect/html
-      height,
-      PCTResizeInfo,
+    const { index } = this
+    const { model, graphModel } = this.props
 
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-    } = this.nodeModel
-    const isFreezeWidth = minWidth === maxWidth
-    const isFreezeHeight = minHeight === maxHeight
-
-    const resizeInfo = {
-      width: r || rx || width,
-      height: r || ry || height,
+    // DONE: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
+    handleResize({
       deltaX,
       deltaY,
-      PCTResizeInfo,
-    }
-
-    const pct = r || (rx && ry) ? 1 / 2 : 1
-    const nextSize = this.recalcResizeInfo(
-      this.index,
-      resizeInfo,
-      pct,
-      isFreezeWidth,
-      isFreezeHeight,
-    )
-
-    // 限制放大缩小的最大最小范围
-    if (
-      nextSize.width < minWidth ||
-      nextSize.width > maxWidth ||
-      nextSize.height < minHeight ||
-      nextSize.height > maxHeight
-    ) {
-      this.dragHandler.cancelDrag()
-      return
-    }
-    // 如果限制了宽高不变，对应的 x/y 不产生位移
-    nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
-    nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
-
-    const preNodeData = this.nodeModel.getData()
-    const curNodeData = this.nodeModel.resize(nextSize)
-
-    // 更新边
-    this.updateEdgePointByAnchors()
-    // 触发 resize 事件
-    this.triggerResizeEvent(preNodeData, curNodeData, this.nodeModel)
+      index,
+      nodeModel: model,
+      graphModel,
+      cancelCallback: () => {
+        this.dragHandler.cancelDrag()
+      },
+    })
+    // 1. 计算当前 Control 的一些信息，
+    // const {
+    //   r, // circle
+    //   rx, // ellipse/diamond
+    //   ry,
+    //   width, // rect/html
+    //   height,
+    //   PCTResizeInfo,
+    //
+    //   minWidth,
+    //   minHeight,
+    //   maxWidth,
+    //   maxHeight,
+    // } = this.nodeModel
+    // const isFreezeWidth = minWidth === maxWidth
+    // const isFreezeHeight = minHeight === maxHeight
+    //
+    // const resizeInfo = {
+    //   width: r || rx || width,
+    //   height: r || ry || height,
+    //   deltaX,
+    //   deltaY,
+    //   PCTResizeInfo,
+    // }
+    //
+    // const pct = r || (rx && ry) ? 1 / 2 : 1
+    // const nextSize = this.recalcResizeInfo(
+    //   this.index,
+    //   resizeInfo,
+    //   pct,
+    //   isFreezeWidth,
+    //   isFreezeHeight,
+    // )
+    //
+    // // 限制放大缩小的最大最小范围
+    // if (
+    //   nextSize.width < minWidth ||
+    //   nextSize.width > maxWidth ||
+    //   nextSize.height < minHeight ||
+    //   nextSize.height > maxHeight
+    // ) {
+    //   this.dragHandler.cancelDrag()
+    //   return
+    // }
+    // // 如果限制了宽高不变，对应的 x/y 不产生位移
+    // nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
+    // nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
+    //
+    // const preNodeData = this.nodeModel.getData()
+    // const curNodeData = this.nodeModel.resize(nextSize)
+    //
+    // // 更新边
+    // this.updateEdgePointByAnchors()
+    // // 触发 resize 事件
+    // this.triggerResizeEvent(preNodeData, curNodeData, deltaX, deltaY, this.index, this.nodeModel)
   }
 
   onDragging = ({ deltaX, deltaY }: IDragParams) => {

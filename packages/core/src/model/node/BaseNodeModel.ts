@@ -215,9 +215,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    *
    * @overridable 支持重写
    */
-  public setAttributes() {
-    console.log('base node setAttributes')
-  }
+  public setAttributes() {}
 
   /**
    * @overridable 支持重写，自定义此类型节点默认生成方式
