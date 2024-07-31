@@ -88,7 +88,7 @@ export default function MiniMapExtension() {
         // plugins: [Control, MiniMap],
         plugins: [Control],
         pluginsOptions: {
-          MiniMap: {
+          miniMap: {
             ...miniMapOptions,
             showEdge,
           },

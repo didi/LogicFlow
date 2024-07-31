@@ -161,7 +161,7 @@ export default function BasicNode() {
         // container: document.querySelector('#graph') as HTMLElement,
         plugins: [Label],
         pluginsOptions: {
-          Label: {
+          label: {
             isMultiple: true,
             maxCount: 3,
             labelWidth: 80,
@@ -200,7 +200,7 @@ export default function BasicNode() {
           key="text"
           type="primary"
           onClick={() => {
-            const nextLabel = lfRef?.current?.extension?.Label as Label
+            const nextLabel = lfRef?.current?.extension?.label as Label
             nextLabel.updateTextMode(TextMode.TEXT)
           }}
         >
