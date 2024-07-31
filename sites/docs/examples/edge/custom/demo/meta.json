@@ -6,7 +6,7 @@
         "zh": "自定义折线",
         "en": "Custom Polyline"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/custom-polyline.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/custom-polyline-new.png"
     },
     {
       "filename": "curvedPolyline.tsx",
@@ -14,7 +14,7 @@
         "zh": "圆角折线",
         "en": "Curved Polyline"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/rounded-polyline.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/rounded-polyline-new.png"
     }
   ]
 }

@@ -6,7 +6,7 @@
         "zh": "矩形节点",
         "en": "Rect Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/rect.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/rect-new.png"
     },
     {
       "filename": "ellipse.tsx",
@@ -14,7 +14,7 @@
         "zh": "椭圆节点",
         "en": "Ellipse Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/circle.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/circle-new.png"
     },
     {
       "filename": "icon.tsx",
@@ -22,7 +22,7 @@
         "zh": "图标节点",
         "en": "Icon Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/icon.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/icon-new.png"
     },
     {
       "filename": "image.tsx",
@@ -30,7 +30,7 @@
         "zh": "图像节点",
         "en": "Image Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/image.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/image-new.png"
     },
     {
       "filename": "html.tsx",
@@ -38,7 +38,7 @@
         "zh": "Html节点",
         "en": "Html Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/html.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/html-new.png"
     },
     {
       "filename": "theme.tsx",
@@ -46,7 +46,7 @@
         "zh": "自定义主题",
         "en": "Custom Theme"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/custom-theme.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/custom-theme-new.png"
     }
   ]
 }

@@ -6,7 +6,7 @@
         "zh": "BPMN-插件",
         "en": "BPMN-extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/bpmn.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/bpmn-new.png"
     },
     {
       "filename": "approve.tsx",
@@ -15,7 +15,7 @@
         "zh": "审批流",
         "en": "Approval Flow"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/approve.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/approve-new.png",
       "previewUrl": "https://examples.logic-flow.cn/demo/dist/examples/#/usage/approve?from=doc"
     },
     {
@@ -24,7 +24,7 @@
         "zh": "流程图绘制MVP",
         "en": "MVP Flowchart"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/mvp.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/mvp-new.png",
       "isExternal": true,
       "previewUrl": "https://examples.logic-flow.cn/demo/dist/mvp"
     },
@@ -35,7 +35,7 @@
         "zh": "比赛晋级图",
         "en": "Competition promotion chart"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/games.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/games-new.png",
       "previewUrl": "https://hsole.github.io/S12"
     },
     {
@@ -45,7 +45,7 @@
         "zh": "手绘风格流程图",
         "en": "Hand-drawn style flowchart"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/draft.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/draft-new.png",
       "previewUrl": "https://github.com/towersxu/draft-flow"
     },
     {
@@ -55,7 +55,7 @@
         "zh": "泳道图",
         "en": "Swimlane diagram"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/pool.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/pool-new.png",
       "previewUrl": "https://examples.logic-flow.cn/demo/dist/pool"
     },
     {
@@ -65,7 +65,7 @@
         "zh": "编排器",
         "en": "Orchestrator"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/organizer.png",
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/organizer-new.png",
       "previewUrl": "https://examples.logic-flow.cn/demo/dist/organizer"
     }
   ]

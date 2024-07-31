@@ -6,7 +6,7 @@
         "zh": "自定义 react 节点",
         "en": "Custom React Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/react-portal.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/custom-react-new.png"
     },
     {
       "filename": "reactPortal.tsx",
@@ -14,7 +14,7 @@
         "zh": "React Portal 节点",
         "en": "React Portal Nodes"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/react-portal.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/react-portal-new.png"
     }
   ]
 }

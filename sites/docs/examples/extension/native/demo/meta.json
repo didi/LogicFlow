@@ -6,7 +6,7 @@
         "zh": "Control 插件",
         "en": "Control extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/control.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/control-new.png"
     },
     {
       "filename": "menu.tsx",
@@ -14,7 +14,7 @@
         "zh": "Menu 插件",
         "en": "Menu extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/menu.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/menu-new.png"
     },
     {
       "filename": "dndPanel.tsx",
@@ -22,7 +22,7 @@
         "zh": "DndPanel 插件",
         "en": "DndPanel extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/dnd-panel.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/dnd-panel-new.png"
     },
     {
       "filename": "bpmn.tsx",
@@ -30,7 +30,7 @@
         "zh": "BPMN 插件",
         "en": "BPMN extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn-new.png"
     },
     {
       "filename": "group.tsx",
@@ -38,7 +38,7 @@
         "zh": "Group 插件",
         "en": "Group extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group-new.png"
     },
     {
       "filename": "selectionSelect.tsx",
@@ -46,7 +46,7 @@
         "zh": "SelectionSelect 插件",
         "en": "SelectionSelect extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/select.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/select-new.png"
     },
     {
       "filename": "miniMap.tsx",
@@ -54,7 +54,7 @@
         "zh": "MiniMap 插件",
         "en": "MiniMap extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/mini-map.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/mini-map-new.png"
     },
     {
       "filename": "nodeSelection.tsx",
@@ -62,7 +62,7 @@
         "zh": "NodeSelection 插件",
         "en": "NodeSelection extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/node-selection.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/node-selection-new.png"
     },
     {
       "filename": "highlight.tsx",
@@ -70,7 +70,7 @@
         "zh": "Highlight 插件",
         "en": "Highlight extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/highlight.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/highlight-new.png"
     },
     {
       "filename": "snapshot.tsx",
@@ -78,7 +78,7 @@
         "zh": "Snapshot 插件",
         "en": "Snapshot extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/snapshot.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/snapshot-new.png"
     }
   ]
 }
