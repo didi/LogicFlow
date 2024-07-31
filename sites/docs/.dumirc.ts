@@ -16,13 +16,15 @@ export default defineConfig({
     title: 'LogicFlow',
     description: '低成本实现，让逻辑管理更简单、更高效',
     siteUrl: '/',
-    footer: `Copyright © 2024 | Powered by LogicFlow Team`,
+    // footer: `Copyright © 2024 | Powered by LogicFlow Team`,
+    footer: false,
     githubUrl: repository, // GitHub 地址
     defaultLanguage: 'zh',
     es5: false,
     footerTheme: 'light',
 
     showSearch: true, // 是否显示搜索框
+    showLFBanner: true, // Banner是否以 Demo 的形式展示
     showGithubCorner: true, // 是否显示头部的 GitHub icon
     showGithubStars: true, // 是否显示 GitHub star 数量
     showLanguageSwitcher: true, // 是否显示官网语言切换
@@ -172,40 +174,96 @@ export default defineConfig({
         },
       },
     ],
+    /** 首页特性介绍 */
+    features: {
+      style: {
+        paddingTop: 50,
+      },
+      // title: {
+      //   zh: '我们的优势',
+      //   en: 'Our advantage',
+      // },
+      cards: [
+        {
+          icon: 'icon-liuchengtu',
+          title: {
+            zh: '可视化模型',
+            en: 'The Visualization model',
+          },
+          description: {
+            zh: '通过 LogicFlow 提供的直观可视化界面，用户可以轻松创建、编辑和管理复杂的逻辑流程图。',
+            en: 'With the intuitive visual interface provided by LogicFlow, users can easily create, edit, and manage complex logical flowcharts.',
+          },
+        },
+        {
+          icon: 'icon-leftfont-07',
+          title: {
+            zh: '高可定制性',
+            en: 'High customizability',
+          },
+          description: {
+            zh: '用户可以根据自己的需要定制节点、连接器和样式，创建符合特定用例的定制逻辑流程图。',
+            en: 'Users can customize nodes, connectors, and styles to suit their needs, creating custom logical flowcharts that match specific use cases.',
+          },
+        },
+        {
+          icon: 'icon-chajian1',
+          title: {
+            zh: '自执行引擎',
+            en: 'Self-executing engine',
+          },
+          description: {
+            zh: '执行引擎支持浏览器端执行流程图逻辑，为无代码执行提供新思路。',
+            en: 'The execution engine supports browser-side flow chart logic, providing new ideas for code-free execution.',
+          },
+        },
+      ],
+    },
+    /** 首页案例 */
+    cases: [
+      {
+        logo: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*-dLnTIexOxwAAAAAAAAAAABkARQnAQ',
+        title: {
+          zh: '场景示例 Gallery',
+          en: 'Boutique Gallery',
+        },
+        description: {
+          zh: '真实的数据可视化案例，我们将它们归纳为一个个故事性的设计模板，让用户达到开箱即用的效果。',
+          en: 'Real data visualization cases, we summarize them into story-based design templates, allowing users to achieve out-of-the-box effects.',
+        },
+        // link: `/examples/gallery`,
+        image:
+          'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/examples.png',
+      },
+    ],
+    /** 首页合作公司 */
     companies: [
       {
-        name: '阿里云',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*V_xMRIvw2iwAAAAAAAAAAABkARQnAQ',
+        name: '滴滴',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/DiDiLogo.svg',
       },
       {
-        name: '支付宝',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*lYDrRZvcvD4AAAAAAAAAAABkARQnAQ',
-      },
-      {
-        name: '天猫',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*BQrxRK6oemMAAAAAAAAAAABkARQnAQ',
-      },
-      {
-        name: '淘宝网',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*1l8-TqUr7UcAAAAAAAAAAABkARQnAQ',
-      },
-      {
-        name: '网上银行',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*ZAKFQJ5Bz4MAAAAAAAAAAABkARQnAQ',
+        name: '中国科学院',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/CAOS%20Logo.svg',
       },
       {
         name: '京东',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*yh-HRr3hCpgAAAAAAAAAAABkARQnAQ',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/JDLogo.svg',
       },
       {
-        name: 'yunos',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*_js7SaNosUwAAAAAAAAAAABkARQnAQ',
+        name: '华为数字能源',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/HWLogo.svg',
       },
       {
-        name: '菜鸟',
-        img: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*TgV-RZDODJIAAAAAAAAAAABkARQnAQ',
+        name: 'Moka',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/MokaLogo.svg',
+      },
+      {
+        name: '美团',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/MTLogo.svg',
       },
     ],
+
     detail: {
       engine: {
         zh: 'LogicFlow',
@@ -232,6 +290,7 @@ export default defineConfig({
             zh: '开始使用',
             en: 'Getting Started',
           },
+          type: 'primary',
           link: `/tutorial/get-started`,
         },
         {
@@ -240,7 +299,62 @@ export default defineConfig({
             en: 'Examples',
           },
           link: `/examples`,
-          type: 'primary',
+        },
+      ],
+      advantages: [
+        {
+          icon: 'icon-liuchengtu',
+          advantageStyle: {
+            background: '#fdfcdf',
+            color: '#FFCA40',
+          },
+          iconStyle: {
+            fontSize: '42px',
+            color: '#FFCA40',
+            strokeWidth: 10,
+            stroke: '#FFCA40',
+          },
+          position: {
+            x: 0,
+            y: 650,
+          },
+          // title: {
+          //   zh: '可视化模型',
+          //   en: 'The Visualization model',
+          // },
+        },
+        {
+          icon: 'icon-leftfont-07',
+          advantageStyle: {
+            background: '#B5AdF9',
+            borderRadius: 20,
+          },
+          iconStyle: {
+            fontSize: '36px',
+            color: '#F8F6FF',
+            strokeWidth: 10,
+            stroke: '#F8F6FF',
+          },
+          position: {
+            x: 1890,
+            y: 430,
+          },
+        },
+        {
+          icon: 'icon-chajian1',
+          advantageStyle: {
+            background: '#fff',
+          },
+          iconStyle: {
+            fontSize: '36px',
+            color: '#333',
+            strokeWidth: 10,
+            stroke: '#333',
+          },
+          position: {
+            x: 1720,
+            y: 180,
+          },
         },
       ],
     },
