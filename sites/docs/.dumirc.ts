@@ -375,21 +375,17 @@ export default defineConfig({
   // theme: {
   //   '@c-primary': '#2d71fa',
   // },
-  // headScripts: [
-  //   `var config = {
-  //     appKey: "omega32096b582a",
-  //     autoPerformance: true,
-  //     autoWhiteScreenMonitor: {
-  //       container: "body",
-  //       childrenDepth: 2,
-  //       durationSeconds: 3000,
-  //     },
-  //   };
-  //   var Omega = Omega || config;
-  //   var startTime = Math.ceil(new Date().getTime() / 1000);
-  // `,
-  //   `//tracker.didistatic.com/static/tracker/latest2x/omega.min.js`,
-  // ],
+  headScripts: [
+    // 百度埋点统计
+    `var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?88ab3587a3c0260f5185ce73ec82847d";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+  `,
+  ],
   // codeSplitting: { jsStrategy: 'granularChunks' },
   // chainWebpack: (config) => {
   //   // 打开 bundle 分析器
