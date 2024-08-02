@@ -7,8 +7,6 @@ order: 1
 toc: content
 ---
 
-# Getting Started
-
 ## Installation
 
 - Command installation: Install by using npm, yarn, or pnpm.

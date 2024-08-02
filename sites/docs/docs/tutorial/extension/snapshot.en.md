@@ -8,8 +8,6 @@ order: 12
 toc: content
 ---
 
-# Snapshot
-
 We often need to export the canvas content as an image. We provide an independent plug-in package `Snapshot` to use this function.
 
 ## usage

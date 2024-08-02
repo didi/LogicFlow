@@ -8,8 +8,6 @@ order: 2
 toc: content
 ---
 
-# 边 Edge
-
 和节点一样，LogicFlow 也内置一些基础的边。LogicFlow 的内置边包括:
 
 1. 直线 - line

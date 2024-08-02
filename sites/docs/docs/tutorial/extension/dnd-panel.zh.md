@@ -8,8 +8,6 @@ order: 2
 toc: content
 ---
 
-# 拖拽面板 DndPanel
-
 ### 自定义拖拽面板内容
 
 **lf.setPatternItems(patternItems)**

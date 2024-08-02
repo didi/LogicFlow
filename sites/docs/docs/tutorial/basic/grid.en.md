@@ -8,8 +8,6 @@ order: 4
 toc: content
 ---
 
-# Grid
-
 A mesh is the smallest unit for rendering/moving nodes. The primary purpose of a mesh is to ensure
 that the position of each node center point is on the mesh when moving nodes. This is more conducive
 to direct node alignment. Generally speaking, the larger the interval of the grid, the better the

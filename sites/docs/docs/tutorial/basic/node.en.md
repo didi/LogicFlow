@@ -8,8 +8,6 @@ order: 1
 toc: content
 ---
 
-# Node
-
 LogicFlow has built-in some basic nodes, and developers can, in practical application scenarios,
 define nodes that fit their business logic based on these basic nodes.
 

@@ -3,7 +3,6 @@ title: Upgrade from v1.1 to v1.2
 order: 1
 toc: content
 ---
-# Upgrade from v1.1 to v1.2
 
 ### Breaking Changes
 

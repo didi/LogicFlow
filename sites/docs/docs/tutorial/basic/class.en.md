@@ -8,8 +8,6 @@ order: 0
 toc: content
 ---
 
-## LogicFlow Instances
-
 ## Creating instances
 
 Each process design interface is an instance of LogicFlow. To standardize terminology, we will later

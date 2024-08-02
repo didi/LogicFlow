@@ -8,8 +8,6 @@ order: 6
 toc: content
 ---
 
-# 节点缩放 NodeResize
-
 ## 使用
 
 LogicFlow 在 extension 包中提供了`RectResize`、`EllipseResize`、`DiamonResize`、`HtmlResize`这 4

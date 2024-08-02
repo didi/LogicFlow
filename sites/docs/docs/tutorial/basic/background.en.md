@@ -8,8 +8,6 @@ order: 5
 toc: content
 ---
 
-# Background
-
 ### Provides methods to modify the background of the canvas, including background color or background image, which is located at the bottom of the canvas. <Badge>info</Badge>
 
 The `background` option sets the style of the background layer of the canvas when it is created, and

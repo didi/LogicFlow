@@ -8,8 +8,6 @@ order: 7
 toc: content
 ---
 
-# 分组 Group
-
 LogicFlow 支持分组。分组是 LogicFlow 内置的自定义节点, 所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。
 
 ## 默认分组

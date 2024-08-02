@@ -8,8 +8,6 @@ order: 2
 toc: content
 ---
 
-# Edge
-
 Like nodes, LogicFlow has some basic edges built in.
 
 1. line

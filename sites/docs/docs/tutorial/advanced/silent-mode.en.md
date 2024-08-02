@@ -8,8 +8,6 @@ order: 5
 toc: content
 ---
 
-# Set the editing method of flowchart
-
 LogicFlow provides a very large number of configurations that control how diagrams are edited,
 see [editConfigModel](../../api/editConfigModel.en.md) for details.
 
