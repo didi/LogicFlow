@@ -428,5 +428,3 @@ const mergeInNOutObject = (target: any, source: any): TransformerType => {
   return target;
 };
 ```
-
-进行合并
