@@ -390,7 +390,7 @@ export default defineConfig({
       },
     },
   },
-  mfsu: {},
+  mfsu: false,
   alias: {
     '@': __dirname,
   },

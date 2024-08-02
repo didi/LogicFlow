@@ -16,26 +16,12 @@ LogicFlow 内置了一些基础节点，开发者在实际应用场景中，可�
 
 LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连线都是svg基本形状，对LogicFlow节点样式的修改，也就是对svg基本形状的修改。LogicFlow内部存在7种基础节点，分别为：
 
-1. 矩形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect" target="_blank">
-   rect</a>
-2.
-
-圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">
-circle</a>
-
-3.
-
-椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">
-ellipse</a>
-
-4.
-
-多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon" target="_blank">
-polygon</a>
-
-5. 菱形 --- `diamond`
-6. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">
-   text</a>
+1. 矩形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/rect" target="_blank">rect</a>
+2. 圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">circle</a>
+3. 椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">ellipse</a>
+4. 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon" target="_blank">polygon</a>
+5. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">text</a>
+6. 菱形 --- `diamond`
 7. HTML --- `html`
 
 <code id="node-shapes" src="../../../src/tutorial/basic/node/shapes"></code>
