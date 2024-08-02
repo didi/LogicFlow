@@ -8,8 +8,6 @@ order: 6
 toc: content
 ---
 
-# Events
-
 Events are triggered when we interact with the canvas using the mouse or other means. By listening
 to these events, we can get the data generated when they are triggered, and then use this data to
 realize the required functions. See [event API](../../api/eventCenter.en.md) for details on

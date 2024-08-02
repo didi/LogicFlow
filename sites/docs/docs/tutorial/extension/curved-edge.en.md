@@ -8,8 +8,6 @@ order: 8
 toc: content
 ---
 
-# CurvedEdge
-
 The LogicFlow core package has three built-in baselines: line, polyline, and bezier. Since SVG polyline does not have rounded corners, we provide CurvedEdge in the extension package.
 
 Rounded edges are used in the same way as LogicFlow's custom edges, by inheriting CurvedEdgeModel and CurvedEdge.

@@ -8,8 +8,6 @@ order: 0
 toc: content
 ---
 
-# LogicFlow实例
-
 ## 创建实例
 
 每一个流程设计界面，就是一个LogicFlow的实例。为了统一术语，我们后面统一在代码层面将`LogicFlow`

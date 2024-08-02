@@ -8,8 +8,6 @@ order: 6
 toc: content
 ---
 
-# NodeResize
-
 ## Use
 
 LogicFlow provides `RectResize`, `EllipseResize`, `DiamonResize`, `HtmlResize` in the extension package, each node has `view` and `model` attributes. The scaling of nodes is also achieved by using LogicFlow's custom node mechanism, which allows developers to inherit from these 4 types of nodes that can be scaled to achieve node scaling.

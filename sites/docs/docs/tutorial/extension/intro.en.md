@@ -8,8 +8,6 @@ order: 0
 toc: content
 ---
 
-# Introduction
-
 > LogicFlow's original goal was to support an extensible process mapping tool that could be used to meet a variety of business needs. In order to make LogicFlow extensible enough, LogicFlow develops all non-core functionality using plug-ins, and then puts these plug-ins into the `@logicflow/extension` package.
 
 ## Usage Guidelines

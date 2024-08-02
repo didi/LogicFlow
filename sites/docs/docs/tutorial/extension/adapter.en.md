@@ -8,8 +8,6 @@ order: 10
 toc: content
 ---
 
-# Adapter
-
 ## Data format of LogicFlow
 
 In LogicFlow, graph is composed of **nodes** and **edges**.

@@ -14,8 +14,6 @@ table td:first-of-type {
 }
 </style>
 
-# Menu
-
 > Menu refers to the right-click menu
 
 ## Enable

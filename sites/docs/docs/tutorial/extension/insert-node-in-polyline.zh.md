@@ -8,8 +8,6 @@ order: 9
 toc: content
 ---
 
-# 边上插入节点 InsertNodeInPolyline
-
 ## 功能
 
 拖动节点到边中间，自动成为边中间的点。

@@ -8,8 +8,6 @@ order: 3
 toc: content
 ---
 
-# Theme
-
 LogicFlow provides a way to set the theme, which makes it easy for users to set the style of all elements inside it in a uniform way.
 There are two ways to set a theme:
 

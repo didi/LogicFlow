@@ -8,8 +8,6 @@ order: 9
 toc: content
 ---
 
-# InsertNodeInPolyline
-
 ## Function
 
 Drag a node to the center of an edge, it will automatically become the point in the center of the

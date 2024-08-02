@@ -8,8 +8,6 @@ order: 5
 toc: content
 ---
 
-# 背景 Background
-
 ### 提供可以修改画布背景的方法，包括背景颜色或背景图片，背景层位于画布的最底层。 <Badge>info</Badge>
 
 创建画布时，通过 `background` 选项来设置画布的背景层样式，支持透传任何样式属性到背景层。默认值为 `false` 表示没有背景。

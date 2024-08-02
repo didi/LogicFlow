@@ -8,8 +8,6 @@ order: 13
 toc: content
 ---
 
-# CustomPlugin
-
 LogicFlow provides a lot of plug-ins, but these plug-ins are some of the plug-ins with universal,
 not always meet the business needs. You can customize the plug-ins based on your business scenarios.
 

@@ -8,8 +8,6 @@ order: 10
 toc: content
 ---
 
-# 数据转换 Adapter
-
 ## LogicFlow 的数据格式
 
 在 LogicFlow 中，一个流程图是由**节点**和**边**组成的。

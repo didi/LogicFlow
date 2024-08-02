@@ -8,8 +8,6 @@ order: 3
 toc: content
 ---
 
-# Control
-
 ### start using
 
 ```tsx | purex | pure
