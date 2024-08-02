@@ -8,8 +8,6 @@ order: 4
 toc: content
 ---
 
-# MiniMap
-
 ### Start
 
 ```tsx | purex | pure

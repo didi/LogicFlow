@@ -3,7 +3,6 @@ title: 1.1 升级到 1.2
 order: 0
 toc: content
 ---
-# 从 1.1 升级到 1.2
 
 ### Breaking Changes
 

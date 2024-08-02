@@ -3,7 +3,6 @@ title: Upgrade from v0.7 to v1.0
 order: 3
 toc: content
 ---
-# Upgrade from v0.7 to v1.0
 
 ### Theme
 

@@ -14,8 +14,6 @@ table td:first-of-type {
 }
 </style>
 
-# 框选 SelectionSelect
-
 ```tsx | purex | pure
 import LogicFlow from "@logicflow/core";
 import { SelectionSelect } from "@logicflow/extension";

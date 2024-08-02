@@ -8,8 +8,6 @@ order: 3
 toc: contents
 ---
 
-# 控制面板 Control
-
 ### 启用
 
 ```tsx | purex | pure

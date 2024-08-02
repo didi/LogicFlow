@@ -8,8 +8,6 @@ order: 4
 toc: content
 ---
 
-# Dnd
-
 #### In a flowchart editing scenario rather than creating nodes through code configuration, we may need to manipulate the creation of the flowchart through the graphical user interface, which can be achieved through drag and drop. <Badge>info</Badge>
 
 Drag and drop needs to be combined with a graphical panel, steps: create panel → initialize drag and

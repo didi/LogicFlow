@@ -8,8 +8,6 @@ order: 3
 toc: content
 ---
 
-# 键盘快捷键 Keyboard
-
 ## 快捷键配置
 
 通过创建 `LogicFlow` 实例时传入 options 的 keyboard 属性可以开启快捷键，

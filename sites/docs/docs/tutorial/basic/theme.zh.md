@@ -8,8 +8,6 @@ order: 3
 toc: content
 ---
 
-# 主题 Theme
-
 LogicFlow 提供了设置主题的方法，便于用户统一设置其内部所有元素的样式。
 设置方式有两种：
 

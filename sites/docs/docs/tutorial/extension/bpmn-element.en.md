@@ -8,8 +8,6 @@ order: 11
 toc: content
 ---
 
-# BpmnElement
-
 > BPMN is one of the more well-known modeling language standards for workflow. LogicFlow implements
 > the BPMN extension, which allows you to use LogicFlow directly to draw processes compatible with
 > the

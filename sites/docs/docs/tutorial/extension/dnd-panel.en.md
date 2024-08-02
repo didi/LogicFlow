@@ -8,8 +8,6 @@ order: 2
 toc: content
 ---
 
-# DndPanel
-
 ### Customizing Drag & Drop Panel Content
 
 **lf.setPatternItems(patternItems)**

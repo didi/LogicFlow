@@ -3,7 +3,6 @@ title: 0.7 升级到 1.0
 order: 2
 toc: content
 ---
-# 从 0.7 升级到 1.0
 
 ### 主题
 

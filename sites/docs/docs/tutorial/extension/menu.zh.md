@@ -14,8 +14,6 @@ table td:first-of-type {
 }
 </style>
 
-# 菜单 Menu
-
 > 菜单指的是右键菜单
 
 ## 启用

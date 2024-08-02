@@ -8,8 +8,6 @@ order: 2
 toc: content
 ---
 
-# Snapline
-
 Snap-lines assist in positional adjustment by comparing the position of a moving node with the
 position of other nodes in the canvas as the node moves. The position comparison is done in two
 ways.

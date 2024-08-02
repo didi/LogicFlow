@@ -8,8 +8,6 @@ order: 3
 toc: content
 ---
 
-# Keyboard
-
 ## Shortcut Configuration
 
 Shortcuts can be enabled by passing the keyboard attribute to options when creating a `LogicFlow`
