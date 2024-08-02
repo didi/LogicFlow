@@ -242,10 +242,6 @@ export default defineConfig({
         img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/DiDiLogo.svg',
       },
       {
-        name: '中国科学院',
-        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/CAOS%20Logo.svg',
-      },
-      {
         name: '京东',
         img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/JDLogo.svg',
       },
@@ -254,12 +250,40 @@ export default defineConfig({
         img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/HWLogo.svg',
       },
       {
-        name: 'Moka',
-        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/MokaLogo.svg',
-      },
-      {
         name: '美团',
         img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/MTLogo.svg',
+      },
+      {
+        name: '中国科学院',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/CAOS%20Logo.svg',
+      },
+      {
+        name: '中国民生银行',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/CMSBLogo.svg',
+      },
+      {
+        name: '中国招商银行',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/CMBLogo.svg',
+      },
+      {
+        name: '中国农业银行',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/ABOCLogo.svg',
+      },
+      {
+        name: '海信',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/HXLogo.svg',
+      },
+      {
+        name: 'Vivo',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/ViVoLogo.svg',
+      },
+      {
+        name: '太极计算机',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/TJLogo.svg',
+      },
+      {
+        name: 'Moka',
+        img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/MokaLogo.svg',
       },
     ],
 
