@@ -39,3 +39,6 @@ export * from './materials/node-selection'
  */
 export * from './NodeResize'
 export * from './materials/group'
+
+// 迷之插件
+export * from './rect-label-node'
