@@ -1,4 +1,5 @@
 import LogicFlow, { BaseNodeModel } from '@logicflow/core'
+import { concat } from 'lodash-es'
 
 // 后续并入FlowPath
 const getPath = (id: string, lf: LogicFlow) => {
@@ -80,25 +81,28 @@ const getNodePath = (node, lf: LogicFlow) => {
   return [...new Set([...incomingPaths.flat(), ...outgoingPaths.flat()])]
 }
 
-type IMode = 'single' | 'path'
+type IMode = 'single' | 'path' | 'neighbour'
 
 export class Highlight {
   lf: LogicFlow
   static pluginName = 'highlight'
   mode: IMode = 'path'
-  manual = false
+  enable = true
   tempStyles = {}
 
-  constructor({ lf }) {
+  constructor({ lf, options }) {
+    const { mode = 'path', enable = true } = options
     this.lf = lf
+    this.mode = mode
+    this.enable = enable
   }
 
   setMode(mode: IMode) {
     this.mode = mode
   }
 
-  setManual(manual: boolean) {
-    this.manual = manual
+  setEnable(enable: boolean) {
+    this.enable = enable
   }
 
   private highlightSingle(id: string) {
@@ -107,6 +111,28 @@ export class Highlight {
     if (model?.BaseType === 'node') {
       // 高亮节点
       model.updateStyles(this.tempStyles[id])
+    } else if (model?.BaseType === 'edge') {
+      // 高亮边及对应的节点
+      model.updateStyles(this.tempStyles[id])
+      model.sourceNode.updateStyles(this.tempStyles[model.sourceNode.id])
+      model.targetNode.updateStyles(this.tempStyles[model.targetNode.id])
+    }
+  }
+
+  private highlightNeighbours(id: string) {
+    const model = this.lf.getModelById(id)
+
+    if (model?.BaseType === 'node') {
+      // 高亮节点
+      model.updateStyles(this.tempStyles[id])
+      const { nodes: incomingNodes, edges: incomingEdges } = model.incoming
+      const { nodes: outgoingNodes, edges: outgoingEdges } = model.outgoing
+      concat(incomingNodes, outgoingNodes).forEach((node) => {
+        node.updateStyles(this.tempStyles[node.id])
+      })
+      concat(incomingEdges, outgoingEdges).forEach((edge) => {
+        edge.updateStyles(this.tempStyles[edge.id])
+      })
     } else if (model?.BaseType === 'edge') {
       // 高亮边及对应的节点
       model.updateStyles(this.tempStyles[id])
@@ -124,7 +150,7 @@ export class Highlight {
   }
 
   highlight(id: string, mode: IMode = this.mode) {
-    if (this.manual) return
+    if (!this.enable) return
     if (Object.keys(this.tempStyles).length) {
       this.restoreHighlight()
     }
@@ -141,6 +167,7 @@ export class Highlight {
 
     const modeTrigger = {
       single: this.highlightSingle.bind(this),
+      neighbour: this.highlightNeighbours.bind(this),
       path: this.highlightPath.bind(this),
     }
 
