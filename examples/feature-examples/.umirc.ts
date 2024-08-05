@@ -162,6 +162,11 @@ export default defineConfig({
           name: 'Rules 插件',
           component: './extensions/rules',
         },
+        {
+          path: '/extension/rect-label-node',
+          name: 'RectLabelNode 插件',
+          component: './extensions/rect-label-node',
+        },
       ],
     },
     {
