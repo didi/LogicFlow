@@ -3,7 +3,6 @@ import LogicFlow from '@logicflow/core'
 import { useEffect, useRef } from 'react'
 import { RectLabelNode } from '@logicflow/extension'
 
-import './index.less'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
 
