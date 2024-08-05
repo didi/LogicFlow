@@ -20,6 +20,11 @@ const config: Partial<LogicFlow.Options> = {
   },
   plugins: [Highlight],
   snapline: true, // 是否开启辅助对齐线
+  pluginsOptions: {
+    highlight: {
+      mode: 'neighbour',
+    },
+  },
 }
 
 export default function HighLightExtension() {

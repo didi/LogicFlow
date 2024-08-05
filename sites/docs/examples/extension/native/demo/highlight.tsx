@@ -12,6 +12,13 @@ const config: Partial<LogicFlow.Options> = {
   },
   plugins: [Highlight],
   snapline: true, // 是否开启辅助对齐线
+  pluginsOptions: {
+    // highlight: {
+    //   mode: 'neighbour', // 取消注释后高亮模式会设置成相邻元素高亮
+    //   // mode: 'single', // 取消注释后高亮模式会设置成仅当前高亮
+    //   enable: false, // 取消注释后高亮插件会被禁用
+    // },
+  },
 };
 
 const data = {

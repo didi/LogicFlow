@@ -45,7 +45,7 @@ LogicFlow.use(Menu);
 | icon      | boolean  | 是否创建 icon 的 span 展位 |      | 如果简单的文案不能丰富表示菜单，可以加个 icon 设置为 true,对应的菜单项会增加 class 为 lf-menu-icon 的 span，通过为其设置背景的方式，丰富菜单的表示，一般与 className 配合使用。 |
 | callback  | Function | 点击后执行的回调            | ✅    | 三种菜单回调中分别可以拿到节点数据/边数据/事件信息。                                                                                      |
 
-节点右键菜单删除功能，示例如下：
+这里以节点右键菜单删除功能的写法为例：
 
 ```tsx | purex | pure
 const menuItem = {
