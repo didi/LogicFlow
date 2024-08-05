@@ -9,7 +9,8 @@ toc: content
 
 ## 安装
 
-- 命令安装：通过使用 npm、yarn、pnpm 进行安装。
+### 命令安装
+通过使用 npm、yarn、pnpm 进行安装。
 
 :::code-group
 
@@ -37,33 +38,50 @@ pnpm add @logicflow/extension
 
 :::
 
-- 直接用`<script>`引入
+### 通过CDN引入
 
-  由于LogicFlow本身会有一些预置样式，所以除了需要引入js, 还`需要引入css`。
+  由于LogicFlow本身会有一些预置样式，所除了需要引入js包外还需要引入css包。
+
+- 2.0版本之后的CDN包的引入方式
 
 ```html | pure
-<!-- 引入 core包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/lib/style/index.min.css" rel="stylesheet">
 
-<!--  引入 extension包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/lib/style/index.min.css" />
+<!-- 引入 core包和对应css -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+
+<!--  引入 extension包和对应css（不使用插件时不需要引入） -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+
+```
+- 2.0版本以前的CDN包的引入方式
+```html | pure
+
+<!-- 引入 core包和对应css -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/logic-flow.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/style/index.css" rel="stylesheet">
+
+<!--  引入 extension包和对应css（不使用插件时不需要引入） -->
+<!-- 值得注意的是：2.0版本之前，插件的脚本包是分开导出的 -->
+<!-- 因此引入某个组件，引用路径需要具体到包名，就像下文引入Menu插件这样👇🏻 -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Menu.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
 
 ```
 
-当前引入的版本是最新版本，其他版本请查看：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
+默认情况下CDN引入的是最新版本的包，如需引入其他版本的包，可到此处查看具体包信息：<a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">
 core包</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
-entension包</a>
+entension包</a> ，再根据自己的诉求在cdn路径中加上包版本。
 
 ## 开始使用
 
-### 1. 直接`<script>`使用
+### 1. 在原生JS环境下使用
 
 ```html | pure
 <!-- 引入 core包 -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/lib/style/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
 
 <!-- 创建画布容器 -->
 <div id="container"></div>
@@ -110,15 +128,22 @@ lf.render(data)
 </script>
 ```
 
-### 2. React 框架中使用
 
-LogicFlow 本身是以 umd 打包为纯 JS 的包，所以不论是 vue 还是 react 中都可以使用。这里需要注意一个点，那就是初始化
-LogicFlow 实例的时候，传入的参数 container,必须要 dom 上存在这个节点，不然会报错请检查 container
-参数是否有效。
+
+### 2. 在框架中使用
+LogicFlow 本身是以 umd 打包为纯 JS 的包，所以无论是 vue 还是 react 都可以使用。
+
+:::warning{title=Tip}
+LogicFlow初始化时支持不传画布宽高，这种情况下默认取的是container参数传入的DOM节点的宽高。
+
+为了保障画布能正常渲染，请在确保对应容器已存在且有宽高后再初始化LogicFlow实例。
+:::
+
+#### 在React中使用
 
 <code id="use-in-react" src="../../src/tutorial/get-started/use-in-react"></code>
 
-### 3. Vue 框架中使用
+#### 在Vue框架中使用
 
 ```vue
 
@@ -150,19 +175,59 @@ LogicFlow 实例的时候，传入的参数 container,必须要 dom 上存在这
 
 ```
 
-:::warning{title=注意}
-LogicFlow支持初始化不传容器宽高参数，这个时候默认会使用container的宽高。请保证初始化LogicFlow的时候，container已经存在宽高了。
-:::
-
-### 4. 使用插件
+### 3. 使用插件
 
 LogicFlow
-最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。为了让LogicFlow的拓展性足够强，LogicFlow将所有的非核心功能都使用插件的方式开发，然后将这些插件放到`@logicflow/extension`
+最初的目标就是提供一个扩展性强的流程绘制工具，用来满足各种业务需求。
+
+为了让LogicFlow的拓展性足够强，LogicFlow所有的非核心功能都使用插件的方式开发，并放到`@logicflow/extension`
 包中。
 
-如下使用了控制面板插件功能，提供了放大缩小或者自适应画布的能力，同时也内置了 `redo` 和 `undo` 的功能，
+如果需要使用插件，用户需要引入`@logicflow/extension`依赖，并根据自己的诉求取用插件。
 
-引入：
+如下使用了控制面板插件功能，提供了放大缩小或者自适应画布的能力，同时也内置了 `redo` 和 `undo` 的功能。
+
+#### 安装并使用CDN引入的LogicFlow插件包
+- 2.0版本后的写法
+```html | pure
+<!-- 引入 extension包 -->
+
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<!-- 创建画布容器 -->
+<div id="container"></div>
+<script>
+  // Extension CDN会抛出一个包含所有插件的Extension变量，使用的插件需要从Extension中取用
+  const { Control } = Extension
+   //全局维度安装控制面板插件的写法：
+  Core.use(Control);
+   //实例维度安装控制面板插件的写法：
+  const lf = new Core.default({
+    ..., // 其他配置
+    plugins: [Control],
+  })
+</script>
+```
+
+- 2.0版本前的写法
+```html | pure
+<!-- 引入 extension包 -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Control.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+<!-- 创建画布容器 -->
+<div id="container"></div>
+<script>
+  //全局维度安装控制面板插件的写法：
+  LogicFlow.use(Control);
+  //实例维度安装控制面板插件的写法：
+  const lf = new LogicFlow({
+    ..., // 其他配置
+    plugins: [Control]
+  });
+</script>
+```
+
+#### 安装并使用命令安装的LogicFlow插件包
 
 ```js
 import LogicFlow from "@logicflow/core";
@@ -176,42 +241,12 @@ LogicFlow.use(Control);
 
 <code id="use-plugin" src="../../src/tutorial/get-started/use-plugin"></code>
 
-想要发现更多插件功能，请看[插件简介](extension/intro.zh.md)。
+想要进一步了解插件功能，请看[插件简介](extension/intro.zh.md)。
 
-### 5. 数据转换
+### 4. 数据转换
+在某些对数据格式有要求的场景下，LogicFlow的数据格式无法满足业务诉求，因此我们提供了数据转换能力。
 
-在某些情况下，LogicFlow 生成的数据格式可能不满足业务需要的格式。比如后端需要的数据格式是 bpmn-js
-生成的格式，那么可以使用数据转换工具，将 LogicFlow 生成的数据转换为 bpmn-js 生成的数据。
-
-```tsx | pure
-
-// 这里把userData转换为LogicFlow支持的格式
-lf.adapterIn = function(userData: unknown): LogicFlow.GraphData {
-  // ...
-  return logicFlowData
-}
-
-// 这里把LogicFlow生成的数据转换为用户需要的格式。
-lf.adapterOut = function(logicFlowData: LogicFlow.GraphData): unknown {
-  // ...
-  return userData
-}
-
-// 这时可以直接使用userData，内部会调用adapterIn 
-lf.render(userData)
-
-// 可以直接获取userData， 内部会调用adapterOut
-lf.getGraphData()
-```
-
-自定义数据转换工具本质上是将用户传入的数据，通过一个`lf.adapterIn`方法，将其转换为 LogicFlow
-可以识别的格式。然后在生成数据的时候，又通过`lf.adapterOut`方法将 LogicFlow
-的数据转换为用户传入的数据。所以自定义数据转换工具我们只需要重新覆盖这两个方法即可。
-
-当然，我们也可以在`render`传入时手动处理非LogicFlow支持的数据格式，在获取`getGraphData`
-的时候再手动转为我们想要的其他数据格式。
+对于需要bpmn格式的数据，可以直接使用使用我们[内置提供的数据转换](extension/adapter.zh.md#使用内置的数据转换工具)插件，将 LogicFlow 生成的数据转换为 bpmn-js 生成的数据。
 
 想要深入更多数据转换功能，请看[数据转换](extension/adapter.zh.md)。
-
-我们的演示 demo 就到这里了，想继续了解 Logicflow 的一些能力，可以从[基础教程](basic/class.zh.md)开始阅读。
 
