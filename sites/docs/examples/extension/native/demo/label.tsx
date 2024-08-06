@@ -1,12 +1,11 @@
-import LogicFlow, { TextMode } from '@logicflow/core'
-import { Label } from '@logicflow/extension'
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+import { Button, Divider, Flex } from 'antd';
+import React, { useEffect, useRef } from 'react';
 
-import { Button, Card, Divider, Flex } from 'antd'
-import { useEffect, useRef } from 'react'
-import './index.less'
-// import { data } from './data'
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
+import './index.less';
+
+const { Label } = Extension;
 
 const theme: Partial<LogicFlow.Theme> = {
   rect: {
@@ -34,7 +33,7 @@ const theme: Partial<LogicFlow.Theme> = {
     color: '#b85450',
     fontSize: 12,
   },
-}
+};
 
 const config: Partial<LogicFlow.Options> = {
   allowResize: true,
@@ -55,7 +54,7 @@ const config: Partial<LogicFlow.Options> = {
   stopScrollGraph: false,
   // overlapMode: OverlapMode.INCREASE,
   style: theme,
-}
+};
 
 const data = {
   nodes: [
@@ -148,11 +147,11 @@ const data = {
       text: 'edge 1',
     },
   ],
-}
+};
 
-export default function BasicNode() {
-  const lfRef = useRef<LogicFlow>()
-  const containerRef = useRef<HTMLDivElement>(null)
+export default function LabelExtension() {
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -172,15 +171,15 @@ export default function BasicNode() {
         grid: {
           size: 5,
         },
-      })
+      });
 
-      lf.render(data)
-      lfRef.current = lf
+      lf.render(data);
+      lfRef.current = lf;
     }
-  }, [])
+  }, []);
 
   return (
-    <Card title="Next Label 插件">
+    <>
       <Flex wrap="wrap" gap="small">
         <Button
           key="getData"
@@ -200,8 +199,8 @@ export default function BasicNode() {
           key="text"
           type="primary"
           onClick={() => {
-            const nextLabel = lfRef?.current?.extension?.label as Label
-            nextLabel.updateTextMode(TextMode.TEXT)
+            const nextLabel = lfRef?.current?.extension?.label as Label;
+            nextLabel.updateTextMode('text');
           }}
         >
           使用 Text 渲染
@@ -210,8 +209,8 @@ export default function BasicNode() {
           key="label"
           type="primary"
           onClick={() => {
-            const nextLabel = lfRef?.current?.extension?.label as Label
-            nextLabel.updateTextMode(TextMode.LABEL)
+            const nextLabel = lfRef?.current?.extension?.label as Label;
+            nextLabel.updateTextMode('label');
           }}
         >
           使用 Label 渲染
@@ -220,6 +219,10 @@ export default function BasicNode() {
       <Divider orientation="left" orientationMargin="5" plain></Divider>
 
       <div ref={containerRef} id="graph" className="viewport"></div>
-    </Card>
-  )
+    </>
+  );
 }
+
+const container = document.querySelector('#container');
+const root = createRoot(container);
+root.render(<LabelExtension></LabelExtension>);

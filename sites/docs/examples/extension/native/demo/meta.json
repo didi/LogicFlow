@@ -41,6 +41,14 @@
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group.png"
     },
     {
+      "filename": "dynamicGroup.tsx",
+      "title": {
+        "zh": "Dynamic Group 插件",
+        "en": "Dynamic Group extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/dynamic-group.png"
+    },
+    {
       "filename": "selectionSelect.tsx",
       "title": {
         "zh": "SelectionSelect 插件",
@@ -79,6 +87,14 @@
         "en": "Snapshot extension"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/snapshot.png"
+    },
+    {
+      "filename": "label.tsx",
+      "title": {
+        "zh": "Label 插件",
+        "en": "Label extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/label.png"
     }
   ]
 }
