@@ -6,7 +6,8 @@
         "zh": "BPMN-插件",
         "en": "BPMN-extension"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/bpmn.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/bpmn.png",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/examples/src/pages/usage/bpmn"
     },
     {
       "filename": "approve.tsx",
@@ -16,7 +17,8 @@
         "en": "Approval Flow"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/approve.png",
-      "previewUrl": "https://examples.logic-flow.cn/demo/dist/examples/#/usage/approve?from=doc"
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/examples/#/usage/approve?from=doc",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/examples/src/pages/usage/approve"
     },
     {
       "filename": "mvp.tsx",
@@ -26,7 +28,8 @@
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/mvp.png",
       "isExternal": true,
-      "previewUrl": "https://examples.logic-flow.cn/demo/dist/mvp"
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/mvp",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/mvp"
     },
     {
       "filename": "games.tsx",
@@ -36,7 +39,8 @@
         "en": "Competition promotion chart"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/games.png",
-      "previewUrl": "https://hsole.github.io/S12"
+      "previewUrl": "https://hsole.github.io/S12",
+      "githubUrl": "https://github.com/hsole/S12"
     },
     {
       "filename": "draft.tsx",
@@ -46,7 +50,8 @@
         "en": "Hand-drawn style flowchart"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/draft.png",
-      "previewUrl": "https://github.com/towersxu/draft-flow"
+      "previewUrl": "https://github.com/towersxu/draft-flow",
+      "githubUrl": "https://github.com/towersxu/draft-flow"
     },
     {
       "filename": "pool.tsx",
@@ -56,7 +61,8 @@
         "en": "Swimlane diagram"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/pool.png",
-      "previewUrl": "https://examples.logic-flow.cn/demo/dist/pool"
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/pool",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/pool"
     },
     {
       "filename": "organizer.tsx",
@@ -66,7 +72,8 @@
         "en": "Orchestrator"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/organizer.png",
-      "previewUrl": "https://examples.logic-flow.cn/demo/dist/organizer"
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/organizer",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/organizer"
     }
   ]
 }
