@@ -21,7 +21,7 @@ export default defineConfig({
     defaultLanguage: 'zh',
     es5: false,
     footerTheme: 'light',
-
+    useSpeedInsights: true,
     showSearch: true, // 是否显示搜索框
     showLFBanner: true, // Banner是否以 Demo 的形式展示
     showGithubCorner: true, // 是否显示头部的 GitHub icon
