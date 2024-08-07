@@ -1,10 +1,12 @@
-import { Button, Divider, Flex } from 'antd';
-import React, { useEffect, useRef } from 'react';
-
+import LogicFlow, { TextMode } from '@logicflow/core';
+import { Label } from '@logicflow/extension';
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
 
-const { Label } = Extension;
+import { Button, Card, Divider, Flex } from 'antd';
+import { useEffect, useRef } from 'react';
+import styles from './index.less';
+// import { data } from './data'
 
 const theme: Partial<LogicFlow.Theme> = {
   rect: {
@@ -148,7 +150,7 @@ const data = {
   ],
 };
 
-export default function LabelExtension() {
+export default function BasicNode() {
   const lfRef = useRef<LogicFlow>();
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -178,7 +180,7 @@ export default function LabelExtension() {
   }, []);
 
   return (
-    <>
+    <Card title="Label 插件">
       <Flex wrap="wrap" gap="small">
         <Button
           key="getData"
@@ -199,7 +201,7 @@ export default function LabelExtension() {
           type="primary"
           onClick={() => {
             const nextLabel = lfRef?.current?.extension?.label as Label;
-            nextLabel.updateTextMode('text');
+            nextLabel.updateTextMode(TextMode.TEXT);
           }}
         >
           使用 Text 渲染
@@ -209,7 +211,7 @@ export default function LabelExtension() {
           type="primary"
           onClick={() => {
             const nextLabel = lfRef?.current?.extension?.label as Label;
-            nextLabel.updateTextMode('label');
+            nextLabel.updateTextMode(TextMode.LABEL);
           }}
         >
           使用 Label 渲染
@@ -217,11 +219,7 @@ export default function LabelExtension() {
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain></Divider>
 
-      <div ref={containerRef} id="graph" className="viewport"></div>
-    </>
+      <div ref={containerRef} id="graph" className={styles.viewport}></div>
+    </Card>
   );
 }
-
-const container = document.querySelector('#container');
-const root = createRoot(container);
-root.render(<LabelExtension></LabelExtension>);

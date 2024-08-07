@@ -9,24 +9,23 @@ toc: content
 tag: 新插件
 ---
 
-LogicFlow 支持分组。分组是 LogicFlow 内置的自定义节点, 所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。
+LogicFlow 支持动态分组。动态分组是 LogicFlow 内置的自定义节点, 是 Group 分组的升级版本（因为我们内置了 Node Resize 功能，且 Group 分组的功能命名不够规范，所以我们推出了升级版的 DynamicGroup 节点）。我们会持续在该插件中做能力增强，欢迎大家一起参与共建。
 
-## 默认分组
+## 使用插件
 
 ```tsx | pure
 import LogicFlow from '@logicflow/core'
-import '@logicflow/core/es/style/index.css'
-import { Group } from '@logicflow/extension'
+import { DynamicGroup } from '@logicflow/extension'
 import '@logicflow/extension/es/style/index.css'
 
 const lf = new LogicFlow({
   // ...
-  plugins: [Group],
+  plugins: [DynamicGroup],
 })
 lf.render({
   nodes: [
     {
-      type: 'group',
+      type: 'dynamic-group',
       x: 300,
       y: 300,
     },
@@ -34,17 +33,19 @@ lf.render({
 })
 ```
 
-## group 的数据格式
+## 演示
+<code id="react-portal" src="@/src/tutorial/extension/dynamic-group"></code>
 
-`group`对 LogicFlow
-来说是一种特殊的节点，所以其数据格式仍然和节点基本一致。但是相对于普通的节点，`group`
+## DynamicGroup 节点的数据格式
+
+`dynamic-group`对 LogicFlow 来说是一种特殊的节点，所以其数据格式仍然和节点基本一致。只是相对于普通的节点，`dynamic-group`
 节点多了一个`children`属性，用来存储其子节点 Id.
 
 ```tsx | pure
 lf.render({
   nodes: [
     {
-      type: "group",
+      type: "dynamic-group",
       x: 400,
       y: 400,
       children: ["rect_2"],
@@ -59,18 +60,18 @@ lf.render({
 });
 ```
 
-## 自定义分组
+## 自定义分组节点
 
 在实际业务中，我们建议和自定义节点一样，开发者基于自己的业务自定义分组，然后给分组取个符合自己业务的名字。例如在
 bpmn 中的子分组，取名叫做`subProcess`，然后自定义分组节点的样式。
 
 ```tsx | pure
-import { GroupNode } from "@logicflow/extension";
+import { dynamicGroup } from "@logicflow/extension";
 
-class MyGroup extends GroupNode.view {
+class CustomGroup extends dynamicGroup.view {
 }
 
-class MyGroupModel extends GroupNode.model {
+class CustomGroupModel extends dynamicGroup.model {
   getNodeStyle() {
     const style = super.getNodeStyle();
     style.stroke = "#AEAFAE";
@@ -81,47 +82,100 @@ class MyGroupModel extends GroupNode.model {
 }
 
 lf.register({
-  type: "my-group",
-  model: MyGroupModel,
-  view: MyGroup,
+  type: "my-custom-group",
+  model: CustomGroup,
+  view: CustomGroupModel,
 });
 ```
 
 ## groupModel 的属性和方法
 
-分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见[nodeModel](../../api/nodeModel.zh.md)。
+分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见 [nodeModel](../../api/nodeModel.zh.md)。
 
 ### 状态属性
+```ts
+export type IRectNodeProperties = {
+  width?: number
+  height?: number
+  radius?: number
+  style?: LogicFlow.CommonTheme
+  textStyle?: LogicFlow.CommonTheme
 
-| 名称           | 类型      | 描述                                |
-|:-------------|:--------|:----------------------------------|
-| isRestrict   | boolean | 是否限制分组子节点拖出分组，默认 false            |
-| resizable    | boolean | 分组是否支持手动调整大小，默认 false             |
-| foldable     | boolean | 分组是否显示展开收起按钮，默认 false             |
-| width        | number  | 分组宽度                              |
-| height       | number  | 分组高度                              |
-| foldedWidth  | number  | 分组折叠后的宽度                          |
-| foldedHeight | number  | 分组折叠后的高度                          |
-| isFolded     | boolean | 只读，表示分组是否被折叠。                     |
-| isGroup      | boolean | 只读，永远为 true, 用于识别`model`为`group`。 |
+  [key: string]: unknown
+}
 
-group 的属性设置方式和节点一样，可以在`groupModel`的`initNodeData`或`setAttributes`方法中设置。
+export type IGroupNodeProperties = {
+  /**
+   * 当前分组中的节点 id
+   */
+  children?: string[]
+  /**
+   * 分组节点是否可以折叠
+   */
+  collapsible?: boolean
+  /**
+   * 分组节点折叠状态
+   */
+  isCollapsed?: boolean
+  /**
+   * 子节点是否限制移动范围
+   * 默认为 false，允许拖拽移除分组
+   */
+  isRestrict?: boolean
+  /**
+   * isRestrict 模式启用时，
+   * 如果同时设置 autoResize 为 true，
+   * 那么子节点在父节点中移动时，父节点会自动调整大小
+   */
+  autoResize?: boolean
 
-```tsx | pure
-class MyGroupModel extends GroupNode.model {
-  initNodeData(data) {
-    super.initNodeData(data);
-    this.isRestrict = true;
-    this.resizable = true;
-    this.foldable = true;
-    this.width = 500;
-    this.height = 300;
-    this.foldedWidth = 50;
-    this.foldedHeight = 50;
-  }
+  // 默认宽高作为 group 的展开宽高
+  /**
+   * 分组节点展开状态宽高
+   */
+  width?: number
+  height?: number
+  
+  /**
+   * 分组节点的收起状态宽高
+   */
+  collapsedWidth?: number
+  collapsedHeight?: number
+
+  /**
+   * 当前分组元素的 zIndex
+   */
+  zIndex?: number
+  /**
+   * 分组节点是否自动置顶
+   */
+  autoToFront?: boolean
+} & IRectNodeProperties
+```
+
+group 的属性设置方式和节点一样，可以在 `groupModel` 的 `initNodeData` 或 `setAttributes` 方法中设置。也可以直接在节点初始化时，在 properties 中传入（推荐用法）
+
+```ts
+const dynamicGroupNodeConfig = {
+  id: 'dynamic-group_1',
+  type: 'dynamic-group',
+  x: 500,
+  y: 140,
+  text: 'dynamic-group_1',
+  resizable: true,
+  rotatable: false,
+  properties: {
+    children: ["rect_3"],
+    collapsible: true,
+    width: 420,
+    height: 250,
+    radius: 5,
+    isCollapsed: true,
+  },
 }
 ```
 
+## API
 ### addChild
 
 将某个节点设置为分组的子节点。注意，此方法只会添加关系，不会自动将节点移动到分组里面。
@@ -145,13 +199,13 @@ const groupModel = lf.getNodeModelById("group_id");
 groupModel.removeChild("node_id_1");
 ```
 
-### foldGroup
+### toggleCollapse
 
-收起分组, 参数为`true`表示收起分组、false 表示展开分组
+收起分组, 参数为`true`表示收起分组、`false` 表示展开分组
 
 ```tsx | pure
-const groupModel = lf.getNodeModelById("group_id");
-groupModel.foldGroup(true);
+const groupModel = lf.getNodeModelById('group_id')
+groupModel.toggleCollapse(true)
 ```
 
 ### isAllowAppendIn(nodeData)
@@ -159,7 +213,7 @@ groupModel.foldGroup(true);
 校验是否允许传入节点添加到此分组中，默认所有的节点都可以。
 
 ```tsx | pure
-class MyGroupModel extends GroupNode.model {
+class MyGroupModel extends dynamicGroup.model {
   isAllowAppendIn(nodeData) {
     // 设置只允许custom-rect节点被添加到此分组中
     return nodeData.type === "custom-rect";
@@ -177,7 +231,7 @@ class MyGroupModel extends GroupNode.model {
 设置拖动节点到分组上时，分组高亮的提示效果样式。
 
 ```tsx | pure
-class MyGroupModel extends GroupNode.model {
+class MyGroupModel extends dynamicGroup.model {
   getAddableOutlineStyle() {
     const style = super.getAddableOutlineStyle();
     style.stroke = "#AEAFAE";
@@ -193,10 +247,7 @@ class MyGroupModel extends GroupNode.model {
 0，因为在分组被折叠时，会通过分组的锚点与外部节点相连来表示分组内部节点与外部节点的关系。
 :::
 
-## 示例
-
-<a href="https://codesandbox.io/embed/bold-moore-vgvpf?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> 去 CodeSandbox 查看示例</a>
-
+## 关于泳道
 :::info{title=关于泳道}
 分组功能不是泳道，需要开发者在分组的基础上自己实现。后续 LogicFlow 提供的 Bpmn 全功能支持会支持 BPMN
 泳道。也欢迎自己实现了的同学给我们 PR。
