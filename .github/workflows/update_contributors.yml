@@ -1,0 +1,25 @@
+name: 🤝 Update Contributors
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  push:
+    branches:
+      - master
+      - next
+      - next-major
+      - alpha
+      - beta
+jobs:
+  contrib-readme-job:
+    runs-on: ubuntu-latest
+    name: A job to automate contributors in readme
+    # Only run workflow if the repository is not a fork
+    if: ${{ !github.event.repository.fork }}
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: wow-actions/contributors-list@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.CONTRIBUTORS_TOKEN }}
+          excludeUsers: semantic-release-bot ImgBotApp

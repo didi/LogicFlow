@@ -1,23 +1,26 @@
-import { v4 as uuidv4 } from 'uuid';
-import { GraphConfigData } from '..';
+import { v4 as uuidV4 } from 'uuid'
+import LogicFlow from '../LogicFlow'
 
-export const createUuid = (): string => {
-  const uuid = uuidv4();
-  return uuid;
-};
+import GraphData = LogicFlow.GraphData
+
+export const createUuid = (): string => uuidV4()
+
 /**
  * 重新刷新流程图的所有id
  */
-export const refreshGraphId = (graphData: GraphConfigData, prefix = ''): GraphConfigData => {
+export const refreshGraphId = (
+  graphData: GraphData,
+  prefix = '',
+): GraphData => {
   const nodeIdMap = graphData.nodes.reduce((nMap, node) => {
-    nMap[node.id] = prefix + uuidv4();
-    node.id = nMap[node.id];
-    return nMap;
-  }, {});
+    nMap[node.id] = prefix + uuidV4()
+    node.id = nMap[node.id]
+    return nMap
+  }, {})
   graphData.edges.forEach((edge) => {
-    edge.id = prefix + uuidv4();
-    edge.sourceNodeId = nodeIdMap[edge.sourceNodeId];
-    edge.targetNodeId = nodeIdMap[edge.targetNodeId];
-  });
-  return graphData;
-};
+    edge.id = prefix + uuidV4()
+    edge.sourceNodeId = nodeIdMap[edge.sourceNodeId]
+    edge.targetNodeId = nodeIdMap[edge.targetNodeId]
+  })
+  return graphData
+}

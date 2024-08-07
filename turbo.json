@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "clean": {
+      "outputs": []
+    },
+    "build:esm": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["es/**", "src/style/raw.ts"]
+    },
+    "build:cjs": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["lib/**", "src/style/raw.ts"]
+    },
+    "build:umd": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["dist/**", "src/style/raw.ts"]
+    },
+    "build:dev": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["lib/**", "es/**", "src/style/raw.ts"]
+    },
+    "build": {
+      "dependsOn": ["^build:dev"],
+      "outputs": ["lib/**", "es/**", "dist/**", "src/style/raw.ts"]
+    }
+  }
+}

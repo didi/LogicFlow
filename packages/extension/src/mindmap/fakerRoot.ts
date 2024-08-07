@@ -1,12 +1,12 @@
-import { BaseNode, RectNodeModel } from '@logicflow/core';
+import { BaseNode, RectNodeModel } from '@logicflow/core'
 
 class MarkRootModel extends RectNodeModel {
-  static extendKey = 'MarkRootModel';
+  static extendKey = 'MarkRootModel'
 }
 
-class MarkRootView extends BaseNode {
+class MarkRootView extends BaseNode<any> {
   getShape() {
-    return '';
+    return null
   }
 }
 
@@ -14,6 +14,6 @@ const MarkRoot = {
   type: 'faker:root',
   view: MarkRootView,
   model: MarkRootModel,
-};
+}
 
-export default MarkRoot;
+export default MarkRoot

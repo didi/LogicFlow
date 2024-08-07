@@ -1,0 +1,70 @@
+.viewport {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+}
+
+:global {
+  *:focus {
+    outline: none;
+  }
+
+  .dnd-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .wrapper {
+    width: 80px;
+    height: 50px;
+    background: #fff;
+    border: 2px solid #000;
+  }
+
+  .uml-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: rgb(255 242 204);
+    border: 1px solid rgb(214 182 86);
+    border-radius: 10px;
+  }
+
+  .uml-head {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+  }
+
+  .uml-body {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-top: 1px solid rgb(214 182 86);
+    border-bottom: 1px solid rgb(214 182 86);
+  }
+
+  .uml-footer {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  /* 输入框字体大小和设置的大小保持一致，自动换行输入和展示保持一致 */
+
+  .lf-text-input {
+    font-size: 12px;
+  }
+
+  .buttons {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .button-list {
+    display: flex;
+    align-items: center;
+  }
+}

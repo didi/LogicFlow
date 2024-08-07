@@ -1,0 +1,20 @@
+{
+  "demos": [
+    {
+      "filename": "customReact.tsx",
+      "title": {
+        "zh": "自定义 react 节点",
+        "en": "Custom React Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/react-portal.png"
+    },
+    {
+      "filename": "reactPortal.tsx",
+      "title": {
+        "zh": "React Portal 节点",
+        "en": "React Portal Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/react/react-portal.png"
+    }
+  ]
+}

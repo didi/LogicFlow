@@ -1,45 +1,49 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import {
+import LogicFlow, {
+  h,
   CircleNode,
   CircleNodeModel,
   GraphModel,
-  NodeConfig,
-  h,
-} from '@logicflow/core';
-import { genBpmnId, groupRule } from '../../utils';
+} from '@logicflow/core'
+import { genBpmnId, groupRule } from '../../utils'
+
+import NodeConfig = LogicFlow.NodeConfig
 
 export function IntermediateCatchEventFactory(lf: any): {
-  type: string,
-  model: any,
-  view: any,
+  type: string
+  model: any
+  view: any
 } {
-  const [definition] = lf.useDefinition();
+  const [definition] = lf.useDefinition()
+
   class view extends CircleNode {
     getAnchorStyle() {
       return {
         visibility: 'hidden',
-      };
+      }
     }
+
     getShape() {
       // @ts-ignore
-      const { model } = this.props;
-      const style = model.getNodeStyle();
-      const { x, y, r, width, height, properties } = model;
-      const { definitionType } = properties;
-      const { icon } = definition.intermediateCatchEvent?.get(definitionType) || {};
+      const { model } = this.props
+      const style = model.getNodeStyle()
+      const { x, y, r, width, height, properties } = model as CircleNodeModel
+      const { definitionType } = properties
+      const { icon } =
+        definition.intermediateCatchEvent?.get(definitionType) || {}
 
       const i = Array.isArray(icon)
         ? h(
-          'g',
-          {
-            transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
-          },
-          ...icon,
-        )
+            'g',
+            {
+              transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
+            },
+            ...icon,
+          )
         : h('path', {
-          transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
-          d: icon,
-        });
+            transform: `matrix(1 0 0 1 ${x - width / 2} ${y - height / 2})`,
+            d: icon,
+          })
       return h(
         'g',
         {},
@@ -58,38 +62,41 @@ export function IntermediateCatchEventFactory(lf: any): {
           strokeWidth: 1.5,
         }),
         i,
-      );
+      )
     }
   }
+
   class model extends CircleNodeModel {
     constructor(data: NodeConfig, graphModel: GraphModel) {
       if (!data.id) {
-        data.id = `Event_${genBpmnId()}`;
+        data.id = `Event_${genBpmnId()}`
       }
       if (!data.text) {
-        data.text = '';
+        data.text = ''
       }
       if (data.text && typeof data.text === 'string') {
         data.text = {
           value: data.text,
           x: data.x,
           y: data.y + 40,
-        };
+        }
       }
-      const { properties = {} } = definition.intermediateCatchEvent?.get(
-          data.properties?.definitionType
-        ) || {};
+      const { properties = {} } =
+        definition.intermediateCatchEvent?.get(
+          data.properties?.definitionType,
+        ) || {}
       data.properties = {
         ...properties,
         ...data.properties,
-      };
-      data.properties?.definitionType
-        && (data.properties!.definitionId = `Definition_${genBpmnId()}`);
-      super(data, graphModel);
-      groupRule.call(this);
+      }
+      data.properties?.definitionType &&
+        (data.properties!.definitionId = `Definition_${genBpmnId()}`)
+      super(data, graphModel)
+      groupRule.call(this)
     }
+
     setAttributes(): void {
-      this.r = 18;
+      this.r = 18
     }
   }
 
@@ -97,5 +104,5 @@ export function IntermediateCatchEventFactory(lf: any): {
     type: 'bpmn:intermediateCatchEvent',
     view,
     model,
-  };
+  }
 }

@@ -6,8 +6,7 @@ LogicFlow 扩展包
 
 ```js
 import LogicFlow from '@logicflow/core';
-import BpmnAdapter from '@logicflow/extension/lib/BpmnAdapter';
+import { BpmnAdapter } from '@logicflow/extension';
 
 LogicFlow.use(BpmnAdapter);
-
 ```

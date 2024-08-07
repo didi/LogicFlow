@@ -1,42 +1,26 @@
-import RectResize from './Node/RectResize';
-import EllipseResize from './Node/EllipseResize';
-import DiamondResize from './Node/DiamondResize';
-import HtmlResize from './Node/HtmlResize';
+/**
+ * @deprecated
+ * 待废弃，2.0 版本将 NodeResize 能力内置，该插件设计和实现有比较多的问题，后续不再维护，请及时切换
+ */
+import LogicFlow from '@logicflow/core'
 
-const NodeResize = {
+import EllipseResize from './node/EllipseResize'
+import DiamondResize from './node/DiamondResize'
+import HtmlResize from './node/HtmlResize'
+import RectResize from './node/RectResize'
+
+export * from './node'
+export const NodeResize = {
   pluginName: 'nodeResize',
   // 拖动step
   step: 0,
-  install(lf) {
-    lf.register({
-      type: RectResize.type,
-      view: RectResize.view,
-      model: RectResize.model,
-    });
-    lf.register({
-      type: EllipseResize.type,
-      view: EllipseResize.view,
-      model: EllipseResize.model,
-    });
-    lf.register({
-      type: DiamondResize.type,
-      view: DiamondResize.view,
-      model: DiamondResize.model,
-    });
-    lf.register({
-      type: HtmlResize.type,
-      view: HtmlResize.view,
-      model: HtmlResize.model,
-    });
+
+  install(lf: LogicFlow) {
+    lf.register(EllipseResize)
+    lf.register(DiamondResize)
+    lf.register(HtmlResize)
+    lf.register(RectResize)
   },
-};
+}
 
-export default NodeResize;
-
-export {
-  NodeResize,
-  RectResize,
-  EllipseResize,
-  DiamondResize,
-  HtmlResize,
-};
+export default NodeResize

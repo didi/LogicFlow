@@ -1,0 +1,12 @@
+{
+  "demos": [
+    {
+      "filename": "graph.tsx",
+      "title": {
+        "zh": "基础画布",
+        "en": "Basic Graph"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
+    }
+  ]
+}

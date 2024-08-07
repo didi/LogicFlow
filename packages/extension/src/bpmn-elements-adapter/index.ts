@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-shadow */
-import _ from 'lodash-es';
+import _ from 'lodash-es'
 import {
   ExclusiveGatewayConfig,
   InclusiveGatewayConfig,
@@ -15,78 +15,78 @@ import {
   ServiceTaskConfig,
   UserTaskConfig,
   SubProcessConfig,
-} from './constant';
-import { lfXml2Json } from './xml2json';
-import { lfJson2Xml, handleAttributes } from './json2xml';
+} from './constant'
+import { lfXml2Json } from './xml2json'
+import { lfJson2Xml, handleAttributes } from './json2xml'
 
 type NodeConfig = {
-  id: string;
-  properties?: Record<string, unknown>;
+  id: string
+  properties?: Record<string, unknown>
   text?: {
-    x: number;
-    y: number;
-    value: string;
-  };
-  type: string;
-  x: number;
-  y: number;
-  children?: string[];
-};
+    x: number
+    y: number
+    value: string
+  }
+  type: string
+  x: number
+  y: number
+  children?: string[]
+}
 
 type Point = {
-  x: number;
-  y: number;
-};
+  x: number
+  y: number
+}
 
 type EdgeConfig = {
-  id: string;
-  sourceNodeId: string;
-  targetNodeId: string;
-  type: string;
+  id: string
+  sourceNodeId: string
+  targetNodeId: string
+  type: string
   startPoint?: {
-    x: number;
-    y: number;
-  };
+    x: number
+    y: number
+  }
   endPoint?: {
-    x: number;
-    y: number;
-  };
+    x: number
+    y: number
+  }
   text?: {
-    x: number;
-    y: number;
-    value: string;
-  };
-  pointsList?: Point[];
-  properties: Record<string, unknown>;
-};
+    x: number
+    y: number
+    value: string
+  }
+  pointsList?: Point[]
+  properties: Record<string, unknown>
+}
 
 type TransformerType = {
   [key: string]: {
-    in?: (key: string, data: any) => any;
-    out?: (data: any) => any;
-  };
-};
+    in?: (key: string, data: any) => any
+    out?: (data: any) => any
+  }
+}
 
 type MappingType = {
   in?: {
-    [key: string]: string;
-  };
+    [key: string]: string
+  }
   out?: {
-    [key: string]: string;
-  };
-};
+    [key: string]: string
+  }
+}
 
 type excludeFieldsType = {
-  in?: Set<string>;
-  out?: Set<string>;
-};
+  in?: Set<string>
+  out?: Set<string>
+}
 
 type ExtraPropsType = {
-  retainedAttrsFields?: string[];
-  excludeFields?: excludeFieldsType;
-  transformer?: TransformerType;
-  mapping?: MappingType;
-};
+  retainedAttrsFields?: string[]
+  excludeFields?: excludeFieldsType
+  transformer?: TransformerType
+  mapping?: MappingType
+}
 
 enum BpmnElements {
   START = 'bpmn:startEvent',
@@ -111,14 +111,14 @@ const defaultAttrsForInput = [
   '-sourceRef',
   '-targetRef',
   '-children',
-];
+]
 
 const defaultRetainedProperties = [
   'properties',
   'startPoint',
   'endPoint',
   'pointsList',
-];
+]
 
 const defaultExcludeFields = {
   in: [],
@@ -132,51 +132,51 @@ const defaultExcludeFields = {
     'properties.parent',
     'properties.isBoundaryEventTouchingTask',
   ],
-};
+}
 
 const mergeInNOutObject = (target: any, source: any): TransformerType => {
-  const sourceKeys = Object.keys(source || {});
+  const sourceKeys = Object.keys(source || {})
   sourceKeys.forEach((key) => {
     if (target[key]) {
-      const { in: fnIn, out: fnOut } = source[key];
+      const { in: fnIn, out: fnOut } = source[key]
       if (fnIn) {
-        target[key].in = fnIn;
+        target[key].in = fnIn
       }
       if (fnOut) {
-        target[key].out = fnOut;
+        target[key].out = fnOut
       }
     } else {
-      target[key] = source[key];
+      target[key] = source[key]
     }
-  });
-  return target;
-};
+  })
+  return target
+}
 
 // @ts-ignore
 let defaultTransformer: TransformerType = {
   'bpmn:startEvent': {
     out(data: any) {
-      const { properties } = data;
-      return defaultTransformer[properties.definitionType]?.out?.(data) || {};
+      const { properties } = data
+      return defaultTransformer[properties.definitionType]?.out?.(data) || {}
     },
   },
   // 'bpmn:endEvent': undefined,
   'bpmn:intermediateCatchEvent': {
     out(data: any) {
-      const { properties } = data;
-      return defaultTransformer[properties.definitionType]?.out?.(data) || {};
+      const { properties } = data
+      return defaultTransformer[properties.definitionType]?.out?.(data) || {}
     },
   },
   'bpmn:intermediateThrowEvent': {
     out(data: any) {
-      const { properties } = data;
-      return defaultTransformer[properties.definitionType]?.out?.(data) || {};
+      const { properties } = data
+      return defaultTransformer[properties.definitionType]?.out?.(data) || {}
     },
   },
   'bpmn:boundaryEvent': {
     out(data: any) {
-      const { properties } = data;
-      return defaultTransformer[properties.definitionType]?.out?.(data) || {};
+      const { properties } = data
+      return defaultTransformer[properties.definitionType]?.out?.(data) || {}
     },
   },
   // 'bpmn:userTask': undefined,
@@ -184,20 +184,20 @@ let defaultTransformer: TransformerType = {
     out(data: any) {
       const {
         properties: { expressionType, condition },
-      } = data;
+      } = data
       if (condition) {
         if (expressionType === 'cdata') {
           return {
             json: `<bpmn:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[\${${condition}}]]></bpmn:conditionExpression>`,
-          };
+          }
         }
         return {
           json: `<bpmn:conditionExpression xsi:type="bpmn2:tFormalExpression">${condition}</bpmn:conditionExpression>`,
-        };
+        }
       }
       return {
         json: '',
-      };
+      }
     },
   },
   // 'bpmn:subProcess': undefined,
@@ -206,9 +206,10 @@ let defaultTransformer: TransformerType = {
     out(data: any) {
       const {
         properties: { timerType, timerValue, definitionId },
-      } = data;
+      } = data
 
-      const typeFunc = () => `<bpmn:${timerType} xsi:type="bpmn:tFormalExpression">${timerValue}</bpmn:${timerType}>`;
+      const typeFunc = () =>
+        `<bpmn:${timerType} xsi:type="bpmn:tFormalExpression">${timerValue}</bpmn:${timerType}>`
 
       return {
         json: `<bpmn:timerEventDefinition id="${definitionId}"${
@@ -216,17 +217,17 @@ let defaultTransformer: TransformerType = {
             ? `>${typeFunc()}</bpmn:timerEventDefinition>`
             : '/>'
         }`,
-      };
+      }
     },
     in(key: string, data: any) {
-      const definitionType = key;
-      const definitionId = data['-id'];
-      let timerType = '';
-      let timerValue = '';
+      const definitionType = key
+      const definitionId = data['-id']
+      let timerType = ''
+      let timerValue = ''
       for (const key of Object.keys(data)) {
         if (key.includes('bpmn:')) {
-          [, timerType] = key.split(':');
-          timerValue = data[key]?.['#text'];
+          ;[, timerType] = key.split(':')
+          timerValue = data[key]?.['#text']
         }
       }
       return {
@@ -234,28 +235,28 @@ let defaultTransformer: TransformerType = {
         '-definitionType': definitionType,
         '-timerType': timerType,
         '-timerValue': timerValue,
-      };
+      }
     },
   },
   'bpmn:conditionExpression': {
     in(_key: string, data: any) {
-      let condition = '';
-      let expressionType = '';
+      let condition = ''
+      let expressionType = ''
       if (data['#cdata-section']) {
-        expressionType = 'cdata';
-        condition = /^\$\{(.*)\}$/g.exec(data['#cdata-section'])?.[1] || '';
+        expressionType = 'cdata'
+        condition = /^\$\{(.*)\}$/g.exec(data['#cdata-section'])?.[1] || ''
       } else if (data['#text']) {
-        expressionType = 'normal';
-        condition = data['#text'];
+        expressionType = 'normal'
+        condition = data['#text']
       }
 
       return {
         '-condition': condition,
         '-expressionType': expressionType,
-      };
+      }
     },
   },
-};
+}
 
 /**
  * 将普通json转换为xmlJson
@@ -270,50 +271,51 @@ let defaultTransformer: TransformerType = {
  * @param transformer 对应节点或者边的子内容转换规则
  */
 function convertNormalToXml(other?: ExtraPropsType) {
-  const { retainedAttrsFields, excludeFields, transformer } = other ?? {};
+  const { retainedAttrsFields, excludeFields, transformer } = other ?? {}
   const retainedAttrsSet = new Set([
     ...defaultRetainedProperties,
     ...(retainedAttrsFields || []),
-  ]);
+  ])
   const excludeFieldsSet = {
     in: new Set([...defaultExcludeFields.in, ...(excludeFields?.in || [])]),
     out: new Set([...defaultExcludeFields.out, ...(excludeFields?.out || [])]),
-  };
+  }
 
-  defaultTransformer = mergeInNOutObject(defaultTransformer, transformer);
+  defaultTransformer = mergeInNOutObject(defaultTransformer, transformer)
 
   return (object: { nodes: any; edges: any }) => {
-    const { nodes } = object;
-    const { edges } = object;
+    const { nodes } = object
+    const { edges } = object
     function ToXmlJson(obj: any, path: string): any {
       if (obj?.flag === 1) {
-        return;
+        return
       }
 
-      let fn;
+      let fn
       // @ts-ignore
       if ((fn = defaultTransformer[obj.type]) && fn.out) {
-        const output = fn.out(obj);
-        const keys = Object.keys(output);
+        const output = fn.out(obj)
+        const keys = Object.keys(output)
         if (keys.length > 0) {
           keys.forEach((key: string) => {
-            obj[key] = output[key];
-          });
+            obj[key] = output[key]
+          })
         }
       }
 
       if (obj?.children) {
         obj.children = obj.children.map((key: any) => {
-          const target = nodes.find((item: { id: any }) => item.id === key)
-            || edges.find((item: { id: any }) => item.id === key);
-          return target || {};
-        });
+          const target =
+            nodes.find((item: { id: any }) => item.id === key) ||
+            edges.find((item: { id: any }) => item.id === key)
+          return target || {}
+        })
       }
 
-      const xmlJson: any = {};
+      const xmlJson: any = {}
 
       if (typeof obj === 'string') {
-        return obj;
+        return obj
       }
 
       if (Array.isArray(obj)) {
@@ -322,59 +324,59 @@ function convertNormalToXml(other?: ExtraPropsType) {
             .map((item) => ToXmlJson(item, ''))
             // eslint-disable-next-line eqeqeq
             .filter((item) => item != undefined)
-        );
+        )
       }
 
       for (const [key, value] of Object.entries(obj)) {
         if ((value as any)?.['flag'] === 1) {
-          return;
+          return
         }
-        const newPath = [path, key].filter((item) => item).join('.');
+        const newPath = [path, key].filter((item) => item).join('.')
         if (excludeFieldsSet.out.has(newPath)) {
-          continue;
+          continue
         } else if (typeof value !== 'object') {
           // node type reference https://www.w3schools.com/xml/dom_nodetype.asp
           if (
-            key.indexOf('-') === 0
-            || ['#text', '#cdata-section', '#comment'].includes(key)
+            key.indexOf('-') === 0 ||
+            ['#text', '#cdata-section', '#comment'].includes(key)
           ) {
-            xmlJson[key] = value;
+            xmlJson[key] = value
           } else {
-            xmlJson[`-${key}`] = value;
+            xmlJson[`-${key}`] = value
           }
         } else if (retainedAttrsSet.has(newPath)) {
-          xmlJson[`-${key}`] = ToXmlJson(value, newPath);
+          xmlJson[`-${key}`] = ToXmlJson(value, newPath)
         } else {
-          xmlJson[key] = ToXmlJson(value, newPath);
+          xmlJson[key] = ToXmlJson(value, newPath)
         }
       }
 
-      return xmlJson;
+      return xmlJson
     }
-    return ToXmlJson(object, '');
-  };
+    return ToXmlJson(object, '')
+  }
 }
 
 /**
  * 将xmlJson转换为普通的json，在内部使用。
  */
 function convertXmlToNormal(xmlJson: any) {
-  const json: any = {};
+  const json: any = {}
   for (const [key, value] of Object.entries(xmlJson)) {
     if (key.indexOf('-') === 0) {
-      json[key.substring(1)] = handleAttributes(value);
+      json[key.substring(1)] = handleAttributes(value)
     } else if (typeof value === 'string') {
-      json[key] = value;
+      json[key] = value
     } else if (Object.prototype.toString.call(value) === '[object Object]') {
-      json[key] = convertXmlToNormal(value);
+      json[key] = convertXmlToNormal(value)
     } else if (Array.isArray(value)) {
       // contain the process of array
-      json[key] = value.map((v) => convertXmlToNormal(v));
+      json[key] = value.map((v) => convertXmlToNormal(v))
     } else {
-      json[key] = value;
+      json[key] = value
     }
   }
-  return json;
+  return json
 }
 
 /**
@@ -390,9 +392,9 @@ function convertLf2ProcessData(
   data: any,
   other?: ExtraPropsType,
 ) {
-  const nodeIdMap = new Map();
+  const nodeIdMap = new Map()
 
-  const xmlJsonData = convertNormalToXml(other)(data);
+  const xmlJsonData = convertNormalToXml(other)(data)
 
   xmlJsonData.nodes.forEach((node: any) => {
     const {
@@ -401,144 +403,145 @@ function convertLf2ProcessData(
       text,
       children,
       ...otherProps
-    } = node;
-    const processNode: any = { '-id': nodeId };
+    } = node
+    const processNode: any = { '-id': nodeId }
 
     if (text?.['-value']) {
-      processNode['-name'] = text['-value'];
+      processNode['-name'] = text['-value']
     }
 
     if (otherProps['-json']) {
-      processNode['-json'] = otherProps['-json'];
+      processNode['-json'] = otherProps['-json']
     }
 
     if (otherProps['-properties']) {
-      Object.assign(processNode, otherProps['-properties']);
+      Object.assign(processNode, otherProps['-properties'])
     }
 
     if (children) {
-      processNode.children = children;
+      processNode.children = children
     }
 
     // (bpmnData[nodeType] ??= []).push(processNode);
 
     if (!bpmnData[nodeType]) {
-      bpmnData[nodeType] = [];
+      bpmnData[nodeType] = []
     }
-    bpmnData[nodeType].push(processNode);
+    bpmnData[nodeType].push(processNode)
 
-    nodeIdMap.set(nodeId, processNode);
-  });
+    nodeIdMap.set(nodeId, processNode)
+  })
 
   const sequenceFlow = xmlJsonData.edges.map((edge: any) => {
     const {
       '-id': id,
-      '-type': type,
+      // '-type': type,
       '-sourceNodeId': sourceNodeId,
       '-targetNodeId': targetNodeId,
       text,
       ...otherProps
-    } = edge;
-    const targetNode = nodeIdMap.get(targetNodeId);
+    } = edge
+    const targetNode = nodeIdMap.get(targetNodeId)
     // (targetNode['bpmn:incoming'] ??= []).push(id);
 
     if (!targetNode['bpmn:incoming']) {
-      targetNode['bpmn:incoming'] = [];
+      targetNode['bpmn:incoming'] = []
     }
-    targetNode['bpmn:incoming'].push(id);
+    targetNode['bpmn:incoming'].push(id)
 
     const edgeConfig: any = {
       '-id': id,
       '-sourceRef': sourceNodeId,
       '-targetRef': targetNodeId,
-    };
+    }
 
     if (text?.['-value']) {
-      edgeConfig['-name'] = text['-value'];
+      edgeConfig['-name'] = text['-value']
     }
 
     if (otherProps['-json']) {
-      edgeConfig['-json'] = otherProps['-json'];
+      edgeConfig['-json'] = otherProps['-json']
     }
 
     if (otherProps['-properties']) {
-      Object.assign(edgeConfig, otherProps['-properties']);
+      Object.assign(edgeConfig, otherProps['-properties'])
     }
 
-    return edgeConfig;
-  });
+    return edgeConfig
+  })
 
   // @see https://github.com/didi/LogicFlow/issues/325
   // 需要保证incoming在outgoing之前
   data.edges.forEach(({ sourceNodeId, id }: any) => {
-    const sourceNode = nodeIdMap.get(sourceNodeId);
+    const sourceNode = nodeIdMap.get(sourceNodeId)
     // (sourceNode['bpmn:outgoing'] ??= []).push(id);
 
     if (!sourceNode['bpmn:outgoing']) {
-      sourceNode['bpmn:outgoing'] = [];
+      sourceNode['bpmn:outgoing'] = []
     }
-    sourceNode['bpmn:outgoing'].push(id);
-  });
+    sourceNode['bpmn:outgoing'].push(id)
+  })
 
   bpmnData['bpmn:subProcess']?.forEach((item: any) => {
     const setMap: any = {
       'bpmn:incoming': new Set<string>(),
       'bpmn:outgoing': new Set<string>(),
-    };
-    const edgesInSubProcess: any = [];
+    }
+    const edgesInSubProcess: any = []
     item.children.forEach((child: any) => {
-      const target = nodeIdMap.get(child['-id']);
-      ['bpmn:incoming', 'bpmn:outgoing'].forEach((key: string) => {
-        target[key]
-          && target[key].forEach((value: string) => {
-            setMap[key].add(value);
-          });
-      });
+      const target = nodeIdMap.get(child['-id'])
+      ;['bpmn:incoming', 'bpmn:outgoing'].forEach((key: string) => {
+        target[key] &&
+          target[key].forEach((value: string) => {
+            setMap[key].add(value)
+          })
+      })
 
       const index = bpmnData[child['-type']]?.findIndex(
         (_item: any) => _item['-id'] === child['-id'],
-      );
+      )
       if (index >= 0) {
-        bpmnData[child['-type']].splice(index, 1);
+        bpmnData[child['-type']].splice(index, 1)
       }
 
-      nodeIdMap.delete(child['-id']);
+      nodeIdMap.delete(child['-id'])
 
       // (item[child['-type']] ??= []).push(target);
       if (!item[child['-type']]) {
-        item[child['-type']] = [];
+        item[child['-type']] = []
       }
-      item[child['-type']].push(target);
-    });
+      item[child['-type']].push(target)
+    })
 
-    const { 'bpmn:incoming': incomingSet, 'bpmn:outgoing': outgoingSet } = setMap;
+    const { 'bpmn:incoming': incomingSet, 'bpmn:outgoing': outgoingSet } =
+      setMap
 
     outgoingSet.forEach((value: string) => {
-      incomingSet.has(value) && edgesInSubProcess.push(value);
-    });
+      incomingSet.has(value) && edgesInSubProcess.push(value)
+    })
 
-    for (let i = 0; i < edgesInSubProcess.length;) {
+    for (let i = 0; i < edgesInSubProcess.length; ) {
       const index = sequenceFlow.findIndex(
         (item: any) => item['-id'] === edgesInSubProcess[i],
-      );
+      )
       if (index >= 0) {
         // (item['bpmn:sequenceFlow'] ??= []).push(sequenceFlow[index]);
         if (!item['bpmn:sequenceFlow']) {
-          item['bpmn:sequenceFlow'] = [];
+          item['bpmn:sequenceFlow'] = []
         }
-        item['bpmn:sequenceFlow'].push(sequenceFlow[index]);
-        sequenceFlow.splice(index, 1);
+        item['bpmn:sequenceFlow'].push(sequenceFlow[index])
+        sequenceFlow.splice(index, 1)
       } else {
-        i++;
+        i++
       }
     }
 
-    delete item.children;
-  });
+    delete item.children
+  })
 
-  bpmnData[BpmnElements.FLOW] = sequenceFlow;
+  bpmnData[BpmnElements.FLOW] = sequenceFlow
 
-  return bpmnData;
+  return bpmnData
 }
 
 /**
@@ -546,18 +549,18 @@ function convertLf2ProcessData(
  */
 function convertLf2DiagramData(bpmnDiagramData: any, data: any) {
   bpmnDiagramData['bpmndi:BPMNEdge'] = data.edges.map((edge: any) => {
-    const edgeId = edge.id;
+    const edgeId = edge.id
     const pointsList = edge.pointsList.map(
       ({ x, y }: { x: number; y: number }) => ({
         '-x': x,
         '-y': y,
       }),
-    );
+    )
     const diagramData: any = {
       '-id': `${edgeId}_di`,
       '-bpmnElement': edgeId,
       'di:waypoint': pointsList,
-    };
+    }
     if (edge.text?.value) {
       diagramData['bpmndi:BPMNLabel'] = {
         'dc:Bounds': {
@@ -566,23 +569,23 @@ function convertLf2DiagramData(bpmnDiagramData: any, data: any) {
           '-width': edge.text.value.length * 10,
           '-height': 14,
         },
-      };
+      }
     }
-    return diagramData;
-  });
+    return diagramData
+  })
   bpmnDiagramData['bpmndi:BPMNShape'] = data.nodes.map((node: any) => {
-    const nodeId = node.id;
-    let width = 100;
-    let height = 80;
-    let { x, y } = node;
+    const nodeId = node.id
+    let width = 100
+    let height = 80
+    let { x, y } = node
     // bpmn坐标是基于左上角，LogicFlow基于中心点，此处处理一下。
-    const shapeConfig = BPMNBaseAdapter.shapeConfigMap.get(node.type);
+    const shapeConfig = BPMNBaseAdapter.shapeConfigMap.get(node.type)
     if (shapeConfig) {
-      width = shapeConfig.width;
-      height = shapeConfig.height;
+      width = shapeConfig.width
+      height = shapeConfig.height
     }
-    x -= width / 2;
-    y -= height / 2;
+    x -= width / 2
+    y -= height / 2
     const diagramData: any = {
       '-id': `${nodeId}_di`,
       '-bpmnElement': nodeId,
@@ -592,7 +595,7 @@ function convertLf2DiagramData(bpmnDiagramData: any, data: any) {
         '-width': width,
         '-height': height,
       },
-    };
+    }
     if (node.text?.value) {
       diagramData['bpmndi:BPMNLabel'] = {
         'dc:Bounds': {
@@ -601,87 +604,87 @@ function convertLf2DiagramData(bpmnDiagramData: any, data: any) {
           '-width': node.text.value.length * 10,
           '-height': 14,
         },
-      };
+      }
     }
-    return diagramData;
-  });
+    return diagramData
+  })
 }
 
-const ignoreType = ['bpmn:incoming', 'bpmn:outgoing'];
+const ignoreType = ['bpmn:incoming', 'bpmn:outgoing']
 
 /**
  * 将bpmn数据转换为LogicFlow内部能识别数据
  */
 function convertBpmn2LfData(bpmnData: any, other?: ExtraPropsType) {
-  let nodes: any[] = [];
-  let edges: any[] = [];
+  let nodes: any[] = []
+  let edges: any[] = []
 
-  const eleMap = new Map<string, any>();
+  const eleMap = new Map<string, any>()
 
-  const { transformer, excludeFields } = other ?? {};
+  const { transformer, excludeFields } = other ?? {}
 
   const excludeFieldsSet = {
     in: new Set([...defaultExcludeFields.in, ...(excludeFields?.in || [])]),
     out: new Set([...defaultExcludeFields.out, ...(excludeFields?.out || [])]),
-  };
+  }
 
-  defaultTransformer = mergeInNOutObject(defaultTransformer, transformer);
+  defaultTransformer = mergeInNOutObject(defaultTransformer, transformer)
 
-  const definitions = bpmnData['bpmn:definitions'];
+  const definitions = bpmnData['bpmn:definitions']
   if (definitions) {
-    const process = definitions['bpmn:process'];
-    (function (data, callbacks) {
+    const process = definitions['bpmn:process']
+    ;(function (data, callbacks) {
       callbacks.forEach((callback) => {
         try {
           Object.keys(data).forEach((key: string) => {
             try {
-              callback(key);
+              callback(key)
             } catch (error) {
-              console.error(error);
+              console.error(error)
             }
-          });
+          })
         } catch (error) {
-          console.error(error);
+          console.error(error)
         }
-      });
-    }(process, [
+      })
+    })(process, [
       (key: string) => {
         // 将bpmn:subProcess中的数据提升到process中
         function subProcessProcessing(data: any) {
           // data['-children'] ??= [];
           if (!data['-children']) {
-            data['-children'] = [];
+            data['-children'] = []
           }
           Object.keys(data).forEach((key: string) => {
             if (key.indexOf('bpmn:') === 0 && !ignoreType.includes(key)) {
               // process[key] ??= [];
               if (!process[key]) {
-                process[key] = [];
+                process[key] = []
               }
-              !Array.isArray(process[key]) && (process[key] = [process[key]]);
+              !Array.isArray(process[key]) && (process[key] = [process[key]])
               Array.isArray(data[key])
                 ? process[key].push(...data[key])
-                : process[key].push(data[key]);
+                : process[key].push(data[key])
               if (Array.isArray(data[key])) {
                 data[key].forEach((item: any) => {
-                  !key.includes('Flow') && data['-children'].push(item['-id']);
-                });
+                  !key.includes('Flow') && data['-children'].push(item['-id'])
+                })
               } else {
-                !key.includes('Flow')
-                  && data['-children'].push(data[key]['-id']);
+                !key.includes('Flow') &&
+                  data['-children'].push(data[key]['-id'])
               }
-              delete data[key];
+              delete data[key]
             }
-          });
+          })
         }
         if (key === 'bpmn:subProcess') {
-          const data = process[key];
+          const data = process[key]
           if (Array.isArray(data)) {
             data.forEach((item: any) => {
-              key === 'bpmn:subProcess' && subProcessProcessing(item);
-            });
+              key === 'bpmn:subProcess' && subProcessProcessing(item)
+            })
           } else {
-            subProcessProcessing(data);
+            subProcessProcessing(data)
           }
         }
       },
@@ -690,186 +693,190 @@ function convertBpmn2LfData(bpmnData: any, other?: ExtraPropsType) {
         const fn = (obj: any) => {
           Object.keys(obj).forEach((key: string) => {
             if (key.includes('bpmn:')) {
-              let props: any = {};
+              let props: any = {}
               if (defaultTransformer[key] && defaultTransformer[key].in) {
-                props = defaultTransformer[key].in?.(
-                  key,
-                  _.cloneDeep(obj[key]),
-                );
-                delete obj[key];
+                props = defaultTransformer[key].in?.(key, _.cloneDeep(obj[key]))
+                delete obj[key]
               } else {
-                func(obj[key]);
+                func(obj[key])
               }
-              let keys: (string | number | symbol)[];
+              let keys: (string | number | symbol)[]
               if ((keys = Reflect.ownKeys(props)).length > 0) {
                 keys.forEach((key) => {
-                  Reflect.set(obj, key, props[key]);
-                });
+                  Reflect.set(obj, key, props[key])
+                })
               }
             }
-          });
-        };
+          })
+        }
         function func(data: any) {
-          eleMap.set(data['-id'], data);
+          eleMap.set(data['-id'], data)
           if (Array.isArray(data)) {
             data.forEach((item) => {
-              func(item);
-            });
+              func(item)
+            })
           } else if (typeof data === 'object') {
-            fn(data);
+            fn(data)
           }
         }
-        func(process[key]);
+        func(process[key])
       },
       (key: string) => {
         if (key.indexOf('bpmn:') === 0) {
-          const value = process[key];
+          const value = process[key]
           if (key === 'bpmn:sequenceFlow') {
-            const bpmnEdges = definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
-              'bpmndi:BPMNEdge'
-            ];
-            edges = getLfEdges(value, bpmnEdges);
+            const bpmnEdges =
+              definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
+                'bpmndi:BPMNEdge'
+              ]
+            edges = getLfEdges(value, bpmnEdges)
           } else {
-            const shapes = definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
-              'bpmndi:BPMNShape'
-            ];
+            const shapes =
+              definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
+                'bpmndi:BPMNShape'
+              ]
             if (key === 'bpmn:boundaryEvent') {
-              const data = process[key];
+              const data = process[key]
               const fn = (item: any) => {
-                const { '-attachedToRef': attachedToRef } = item;
-                const attachedToNode = eleMap.get(attachedToRef);
+                const { '-attachedToRef': attachedToRef } = item
+                const attachedToNode = eleMap.get(attachedToRef)
 
                 // attachedToNode['-boundaryEvents'] ??= [];
 
                 if (!attachedToNode['-boundaryEvents']) {
-                  attachedToNode['-boundaryEvents'] = [];
+                  attachedToNode['-boundaryEvents'] = []
                 }
 
-                attachedToNode['-boundaryEvents'].push(item['-id']);
-              };
+                attachedToNode['-boundaryEvents'].push(item['-id'])
+              }
               if (Array.isArray(data)) {
                 data.forEach((item) => {
-                  fn(item);
-                });
+                  fn(item)
+                })
               } else {
-                fn(data);
+                fn(data)
               }
             }
-            nodes = nodes.concat(getLfNodes(value, shapes, key));
+            nodes = nodes.concat(getLfNodes(value, shapes, key))
           }
         }
       },
-    ]));
+    ])
   }
 
-  const ignoreFields = (obj: Object, filterSet: Set<string>, path: string) => {
+  const ignoreFields = (
+    obj: Record<string, any>,
+    filterSet: Set<string>,
+    path: string,
+  ) => {
     Object.keys(obj).forEach((key) => {
-      const tmpPath = path ? `${path}.${key}` : key;
+      const tmpPath = path ? `${path}.${key}` : key
       if (filterSet.has(tmpPath)) {
-        delete obj[key];
+        delete obj[key]
       } else if (typeof obj[key] === 'object') {
-        ignoreFields(obj[key], filterSet, tmpPath);
+        ignoreFields(obj[key], filterSet, tmpPath)
       }
-    });
-  };
+    })
+  }
 
   nodes.forEach((node) => {
     if (other?.mapping?.in) {
-      const mapping = other?.mapping?.in;
-      const { type } = node;
+      const mapping = other?.mapping?.in
+      const { type } = node
       if (mapping[type]) {
-        node.type = mapping[type];
+        node.type = mapping[type]
       }
     }
-    ignoreFields(node, excludeFieldsSet.in, '');
+    ignoreFields(node, excludeFieldsSet.in, '')
     // Object.keys(node.properties).forEach((key) => {
     //   excludeFieldsSet.in.has(key) && delete node.properties[key];
     // });
-  });
+  })
 
   edges.forEach((edge) => {
     if (other?.mapping?.in) {
-      const mapping = other?.mapping?.in;
-      const { type } = edge;
+      const mapping = other?.mapping?.in
+      const { type } = edge
       if (mapping[type]) {
-        edge.type = mapping[type];
+        edge.type = mapping[type]
       }
     }
-    ignoreFields(edge, excludeFieldsSet.in, '');
+    ignoreFields(edge, excludeFieldsSet.in, '')
     // Object.keys(edge.properties).forEach((key) => {
     //   excludeFieldsSet.in.has(key) && delete edge.properties[key];
     // });
-  });
+  })
 
   return {
     nodes,
     edges,
-  };
+  }
 }
 
 function getLfNodes(value: any, shapes: any, key: any) {
-  const nodes: NodeConfig[] = [];
+  const nodes: NodeConfig[] = []
   if (Array.isArray(value)) {
     // 数组
     value.forEach((val) => {
-      let shapeValue: any;
+      let shapeValue: any
       if (Array.isArray(shapes)) {
         shapeValue = shapes.find(
           (shape) => shape['-bpmnElement'] === val['-id'],
-        );
+        )
       } else {
-        shapeValue = shapes;
+        shapeValue = shapes
       }
-      const node = getNodeConfig(shapeValue, key, val);
-      nodes.push(node);
-    });
+      const node = getNodeConfig(shapeValue, key, val)
+      nodes.push(node)
+    })
   } else {
-    let shapeValue;
+    let shapeValue
     if (Array.isArray(shapes)) {
       shapeValue = shapes.find(
         (shape) => shape['-bpmnElement'] === value['-id'],
-      );
+      )
     } else {
-      shapeValue = shapes;
+      shapeValue = shapes
     }
-    const node = getNodeConfig(shapeValue, key, value);
-    nodes.push(node);
+    const node = getNodeConfig(shapeValue, key, value)
+    nodes.push(node)
   }
-  return nodes;
+  return nodes
 }
 
 function getNodeConfig(shapeValue: any, type: any, processValue: any) {
-  let x = Number(shapeValue['dc:Bounds']['-x']);
-  let y = Number(shapeValue['dc:Bounds']['-y']);
-  const { '-children': children } = processValue;
-  const name = processValue['-name'];
-  const shapeConfig = BPMNBaseAdapter.shapeConfigMap.get(type);
+  let x = Number(shapeValue['dc:Bounds']['-x'])
+  let y = Number(shapeValue['dc:Bounds']['-y'])
+  const { '-children': children } = processValue
+  const name = processValue['-name']
+  const shapeConfig = BPMNBaseAdapter.shapeConfigMap.get(type)
   if (shapeConfig) {
-    x += shapeConfig.width / 2;
-    y += shapeConfig.height / 2;
+    x += shapeConfig.width / 2
+    y += shapeConfig.height / 2
   }
-  let properties: any = {};
+  let properties: any = {}
   // 判断是否存在额外的属性，将额外的属性放到properties中
   Object.entries(processValue).forEach(([key, value]) => {
     if (!defaultAttrsForInput.includes(key)) {
-      properties[key] = value;
+      properties[key] = value
     }
-  });
-  properties = convertXmlToNormal(properties);
-  let text;
+  })
+  properties = convertXmlToNormal(properties)
+  let text
   if (name) {
     text = {
       x,
       y,
       value: name,
-    };
+    }
     // 自定义文本位置
     if (
-      shapeValue['bpmndi:BPMNLabel'] && shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
+      shapeValue['bpmndi:BPMNLabel'] &&
+      shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
     ) {
-      const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds'];
-      text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2;
-      text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2;
+      const textBounds = shapeValue['bpmndi:BPMNLabel']['dc:Bounds']
+      text.x = Number(textBounds['-x']) + Number(textBounds['-width']) / 2
+      text.y = Number(textBounds['-y']) + Number(textBounds['-height']) / 2
     }
   }
   const nodeConfig: NodeConfig = {
@@ -878,73 +885,73 @@ function getNodeConfig(shapeValue: any, type: any, processValue: any) {
     x,
     y,
     properties,
-  };
-  children && (nodeConfig.children = children);
-  if (text) {
-    nodeConfig.text = text;
   }
-  return nodeConfig;
+  children && (nodeConfig.children = children)
+  if (text) {
+    nodeConfig.text = text
+  }
+  return nodeConfig
 }
 
 function getLfEdges(value: any, bpmnEdges: any) {
-  const edges: EdgeConfig[] = [];
+  const edges: EdgeConfig[] = []
   if (Array.isArray(value)) {
     value.forEach((val) => {
-      let edgeValue;
+      let edgeValue
       if (Array.isArray(bpmnEdges)) {
         edgeValue = bpmnEdges.find(
           (edge) => edge['-bpmnElement'] === val['-id'],
-        );
+        )
       } else {
-        edgeValue = bpmnEdges;
+        edgeValue = bpmnEdges
       }
-      edges.push(getEdgeConfig(edgeValue, val));
-    });
+      edges.push(getEdgeConfig(edgeValue, val))
+    })
   } else {
-    let edgeValue;
+    let edgeValue
     if (Array.isArray(bpmnEdges)) {
       edgeValue = bpmnEdges.find(
         (edge) => edge['-bpmnElement'] === value['-id'],
-      );
+      )
     } else {
-      edgeValue = bpmnEdges;
+      edgeValue = bpmnEdges
     }
-    edges.push(getEdgeConfig(edgeValue, value));
+    edges.push(getEdgeConfig(edgeValue, value))
   }
-  return edges;
+  return edges
 }
 
 function getEdgeConfig(edgeValue: any, processValue: any) {
-  let text;
-  const textVal = processValue['-name'];
+  let text
+  const textVal = processValue['-name']
   if (textVal) {
-    const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds'];
+    const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds']
     // 如果边文本换行，则其偏移量应该是最长一行的位置
-    let textLength = 0;
+    let textLength = 0
     textVal.split('\n').forEach((textSpan: string) => {
       if (textLength < textSpan.length) {
-        textLength = textSpan.length;
+        textLength = textSpan.length
       }
-    });
+    })
 
     text = {
       value: textVal,
       x: Number(textBounds['-x']) + (textLength * 10) / 2,
       y: Number(textBounds['-y']) + 7,
-    };
+    }
   }
-  let properties: any = {};
+  let properties: any = {}
   // 判断是否存在额外的属性，将额外的属性放到properties中
   Object.entries(processValue).forEach(([key, value]) => {
     if (!defaultAttrsForInput.includes(key)) {
-      properties[key] = value;
+      properties[key] = value
     }
-  });
-  properties = convertXmlToNormal(properties);
+  })
+  properties = convertXmlToNormal(properties)
   const pointsList = edgeValue['di:waypoint'].map((point: any) => ({
     x: Number(point['-x']),
     y: Number(point['-y']),
-  }));
+  }))
   const edge: EdgeConfig = {
     id: processValue['-id'],
     type: BpmnElements.FLOW,
@@ -952,39 +959,39 @@ function getEdgeConfig(edgeValue: any, processValue: any) {
     sourceNodeId: processValue['-sourceRef'],
     targetNodeId: processValue['-targetRef'],
     properties,
-  };
-  if (text) {
-    edge.text = text;
   }
-  return edge;
+  if (text) {
+    edge.text = text
+  }
+  return edge
 }
 
 class BPMNBaseAdapter {
-  static pluginName = 'bpmn-adapter';
-  static shapeConfigMap = new Map();
+  static pluginName = 'bpmn-adapter'
+  static shapeConfigMap = new Map()
   processAttributes: {
-    ['-isExecutable']: string;
-    ['-id']: string;
-  };
+    ['-isExecutable']: string
+    ['-id']: string
+  }
   definitionAttributes: {
-    ['-id']: string;
-    ['-xmlns:xsi']: string;
-    ['-xmlns:bpmn']: string;
-    ['-xmlns:bpmndi']: string;
-    ['-xmlns:dc']: string;
-    ['-xmlns:di']: string;
-    ['-targetNamespace']: string;
-    ['-exporter']: string;
-    ['-exporterVersion']: string;
-    [key: string]: any;
-  };
+    ['-id']: string
+    ['-xmlns:xsi']: string
+    ['-xmlns:bpmn']: string
+    ['-xmlns:bpmndi']: string
+    ['-xmlns:dc']: string
+    ['-xmlns:di']: string
+    ['-targetNamespace']: string
+    ['-exporter']: string
+    ['-exporterVersion']: string
+    [key: string]: any
+  }
   constructor({ lf }: any) {
-    lf.adapterIn = this.adapterIn;
-    lf.adapterOut = this.adapterOut;
+    lf.adapterIn = this.adapterIn
+    lf.adapterOut = this.adapterOut
     this.processAttributes = {
       '-isExecutable': 'true',
       '-id': 'Process',
-    };
+    }
     this.definitionAttributes = {
       '-id': 'Definitions',
       '-xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -995,10 +1002,10 @@ class BPMNBaseAdapter {
       '-targetNamespace': 'http://logic-flow.org',
       '-exporter': 'logicflow',
       '-exporterVersion': '1.2.10',
-    };
+    }
   }
   setCustomShape(key: string, val: any) {
-    BPMNBaseAdapter.shapeConfigMap.set(key, val);
+    BPMNBaseAdapter.shapeConfigMap.set(key, val)
   }
   /**
    * @param retainedAttrsFields?: string[] (可选)属性保留字段，retainedField会和默认的defaultRetainedFields:
@@ -1008,120 +1015,120 @@ class BPMNBaseAdapter {
    * @param transformer 对应节点或者边的内容转换规则
    */
   adapterOut = (data: any, other?: ExtraPropsType) => {
-    const bpmnProcessData = { ...this.processAttributes };
-    convertLf2ProcessData(bpmnProcessData, data, other);
+    const bpmnProcessData = { ...this.processAttributes }
+    convertLf2ProcessData(bpmnProcessData, data, other)
     const bpmnDiagramData = {
       '-id': 'BPMNPlane_1',
       '-bpmnElement': bpmnProcessData['-id'],
-    };
-    convertLf2DiagramData(bpmnDiagramData, data);
-    const definitions = this.definitionAttributes;
-    definitions['bpmn:process'] = bpmnProcessData;
+    }
+    convertLf2DiagramData(bpmnDiagramData, data)
+    const definitions = this.definitionAttributes
+    definitions['bpmn:process'] = bpmnProcessData
     definitions['bpmndi:BPMNDiagram'] = {
       '-id': 'BPMNDiagram_1',
       'bpmndi:BPMNPlane': bpmnDiagramData,
-    };
+    }
     const bpmnData = {
       'bpmn:definitions': definitions,
-    };
+    }
 
     if (other?.mapping?.out) {
-      const mapping = other?.mapping?.out;
+      const mapping = other?.mapping?.out
 
-      const nameMapping = (obj: Object | any[]): any => {
+      const nameMapping = (obj: Record<string, any> | any[]): any => {
         if (Array.isArray(obj)) {
-          obj.forEach((item) => nameMapping(item));
+          obj.forEach((item) => nameMapping(item))
         }
         if (typeof obj === 'object') {
           Object.keys(obj).forEach((key: string) => {
-            let mappingName: string;
-            if (mappingName = mapping[key]) {
-              obj[mappingName] = _.cloneDeep(obj[key]);
-              delete obj[key];
-              nameMapping(obj[mappingName]);
+            let mappingName: string
+            if ((mappingName = mapping[key])) {
+              obj[mappingName] = _.cloneDeep(obj[key])
+              delete obj[key]
+              nameMapping(obj[mappingName])
             } else {
-              nameMapping(obj[key]);
+              nameMapping(obj[key])
             }
-          });
+          })
         }
-      };
-      nameMapping(bpmnData);
+      }
+      nameMapping(bpmnData)
     }
 
-    return bpmnData;
-  };
+    return bpmnData
+  }
   adapterIn = (bpmnData: any, other?: ExtraPropsType) => {
     if (bpmnData) {
-      return convertBpmn2LfData(bpmnData, other);
+      return convertBpmn2LfData(bpmnData, other)
     }
-  };
+  }
 }
 
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.START, {
   width: StartEventConfig.width,
   height: StartEventConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.END, {
   width: EndEventConfig.width,
   height: EndEventConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.INTERMEDIATE_CATCH, {
   width: IntermediateEventConfig.width,
   height: IntermediateEventConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.INTERMEDIATE_THROW, {
   width: IntermediateEventConfig.width,
   height: IntermediateEventConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.BOUNDARY, {
   width: BoundaryEventConfig.width,
   height: BoundaryEventConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.PARALLEL_GATEWAY, {
   width: ParallelGatewayConfig.width,
   height: ParallelGatewayConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.INCLUSIVE_GATEWAY, {
   width: InclusiveGatewayConfig.width,
   height: InclusiveGatewayConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.EXCLUSIVE_GATEWAY, {
   width: ExclusiveGatewayConfig.width,
   height: ExclusiveGatewayConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.SYSTEM, {
   width: ServiceTaskConfig.width,
   height: ServiceTaskConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.USER, {
   width: UserTaskConfig.width,
   height: UserTaskConfig.height,
-});
+})
 BPMNBaseAdapter.shapeConfigMap.set(BpmnElements.SUBPROCESS, {
   width: SubProcessConfig.width,
   height: SubProcessConfig.height,
-});
+})
 
 class BPMNAdapter extends BPMNBaseAdapter {
-  static pluginName = 'BPMNAdapter';
-  private props: ExtraPropsType;
+  static pluginName = 'BPMNAdapter'
+  private props: ExtraPropsType
   constructor(data: any) {
-    super(data);
-    const { lf, props } = data;
-    lf.adapterIn = this.adapterXmlIn;
-    lf.adapterOut = this.adapterXmlOut;
-    this.props = props;
+    super(data)
+    const { lf, props } = data
+    lf.adapterIn = this.adapterXmlIn
+    lf.adapterOut = this.adapterXmlOut
+    this.props = props
   }
   adapterXmlIn = (bpmnData: any) => {
-    const json = lfXml2Json(bpmnData);
-    return this.adapterIn(json, this.props);
-  };
+    const json = lfXml2Json(bpmnData)
+    return this.adapterIn(json, this.props)
+  }
   adapterXmlOut = (data: any) => {
-    const outData = this.adapterOut(data, this.props);
-    return lfJson2Xml(outData);
-  };
+    const outData = this.adapterOut(data, this.props)
+    return lfJson2Xml(outData)
+  }
 }
 
-export { BPMNBaseAdapter, BPMNAdapter, convertNormalToXml, convertXmlToNormal };
+export { BPMNBaseAdapter, BPMNAdapter, convertNormalToXml, convertXmlToNormal }
 
-export default BPMNAdapter;
+export default BPMNAdapter

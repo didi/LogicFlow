@@ -1,430 +1,666 @@
-import { throttle } from 'lodash-es';
+import LogicFlow from '@logicflow/core'
 
-interface MiniMapStaticOption {
-  width?: number,
-  height?: number,
-  isShowHeader?: boolean,
-  isShowCloseIcon?: boolean,
-  leftPosition?: number,
-  rightPosition?: number,
-  topPosition?: number,
-  bottomPosition?: number,
-  headerTitle?: string,
+import Position = LogicFlow.Position
+import MiniMapOption = MiniMap.MiniMapOption
+import MiniMapPosition = MiniMap.MiniMapPosition
+
+export namespace MiniMap {
+  export type MiniMapOption = Partial<{
+    /**
+     * 小地图中画布的宽度
+     */
+    width: number
+    /**
+     * 小地图中画布的高度
+     */
+    height: number
+    /**
+     * 在小地图的画布中是否渲染边
+     */
+    showEdge: boolean
+    /**
+     * 是否显示小地图的标题栏
+     */
+    isShowHeader: boolean
+    /**
+     * 是否显示关闭按钮
+     */
+    isShowCloseIcon: boolean
+    /**
+     * 小地图标题栏的文本内容
+     */
+    headerTitle: string
+    /**
+     * 小地图与画布左边界的左边距，优先级高于`rightPosition`
+     */
+    leftPosition: number
+    /**
+     * 小地图与画布右边界的右边距，优先级低于`leftPosition`
+     */
+    rightPosition: number
+    /**
+     * 小地图与画布上边界的上边距，优先级高于`bottomPosition`
+     */
+    topPosition: number
+    /**
+     * 小地图与画布下边界的下边距，优先级低于`topPosition`
+     */
+    bottomPosition: number
+  }>
+
+  export type AbsolutePosition = Partial<
+    Record<'left' | 'right' | 'top' | 'bottom', number>
+  >
+
+  export type MiniMapPosition =
+    | 'left-top' // 表示迷你地图位于容器的左上角
+    | 'right-top' // 表示迷你地图位于容器的右上角
+    | 'left-bottom' // 表示迷你地图位于容器的右上角
+    | 'right-bottom' // 表示迷你地图位于容器的右下角。
+    | AbsolutePosition // 自定义小地图在画布上的位置
 }
-class MiniMap {
-  static pluginName = 'miniMap';
-  static width = 150;
-  static height = 220;
-  static viewPortWidth = 150;
-  static viewPortHeight = 75;
-  static isShowHeader = true;
-  static isShowCloseIcon = true;
-  static leftPosition = 0;
-  static topPosition = 0;
-  static rightPosition = null;
-  static bottomPosition = null;
-  static headerTitle = '导航';
-  private lf = null;
-  private container = null;
-  private miniMapWrap = null;
-  private miniMapContainer = null;
-  private lfMap = null;
-  private viewport = null;
-  private width = 150;
-  private height = 220;
-  private leftPosition = undefined;
-  private topPosition = undefined;
-  private rightPosition = undefined;
-  private bottomPosition = undefined;
-  private miniMapWidth =450;
-  private miniMapHeight = 660;
-  private viewPortTop = 0;
-  private viewPortLeft = 0;
-  private startPosition = null;
-  private viewPortScale = 1;
-  private viewPortWidth = 150;
-  private viewPortHeight = 75;
-  private resetDataX = 0;
-  private resetDataY = 0;
-  private LogicFlow = null;
-  private isShow = false;
-  private isShowHeader = true;
-  private isShowCloseIcon = true;
-  private dragging = false;
-  private disabledPlugins = ['miniMap', 'control', 'selectionSelect'];
-  constructor({ lf, LogicFlow, options }) {
-    this.lf = lf;
-    if (options && options.MiniMap) {
-      this.setOption(options);
+
+type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
+
+export class MiniMap {
+  static pluginName = 'miniMap'
+
+  /**
+   * 主画布的LogicFlow实例
+   */
+  private lf: LogicFlow
+  /**
+   * LogicFlow构造函数
+   */
+  private LFCtor: LogicFlow.LogicFlowConstructor
+  /**
+   * 小地图中画布的LogicFlow实例
+   */
+  private lfMap!: LogicFlow
+
+  /**
+   * lf的工具层容器，用于挂载小地图
+   */
+  private container?: HTMLElement
+  /**
+   * 小地图的容器
+   */
+  private miniMapContainer?: HTMLDivElement
+  /**
+   * 小地图的画布容器
+   */
+  private miniMapWrap!: HTMLDivElement
+  /**
+   * 小地图的预览视窗
+   */
+  private viewport!: HTMLDivElement
+
+  /**
+   * 小地图中画布容器的宽度
+   */
+  private width = 200
+  /**
+   * 小地图中画布容器的高度
+   */
+  private height = 150
+  /**
+   * 小地图中画布的缩放比例
+   */
+  private scale = 1
+  /**
+   * 小地图中画布的水平位移
+   */
+  private translateX = 0
+  /**
+   * 小地图中画布的垂直位移
+   */
+  private translateY = 0
+  /**
+   * 在小地图的画布中是否渲染边
+   */
+  private showEdge = false
+
+  /**
+   * 小地图中画布的区域范围
+   */
+  private bounds: Bounds
+  /**
+   * 所有元素占领的区域范围
+   */
+  private elementAreaBounds: Bounds
+  /**
+   * 主画布视口的区域范围
+   */
+  private viewPortBounds: Bounds
+
+  // 小地图相对画布的绝对定位
+  private leftPosition?: number
+  private topPosition?: number
+  private rightPosition?: number
+  private bottomPosition?: number
+
+  /**
+   * 预览视窗左上角在主画布的y坐标
+   */
+  private viewPortTop = 0
+  /**
+   * 预览视窗左上角在主画布的x坐标
+   */
+  private viewPortLeft = 0
+  // 预览视窗的宽高
+  private viewPortWidth = 150
+  private viewPortHeight = 75
+
+  /**
+   * 拖拽预览视窗时，记录起始点的位置
+   */
+  private startPosition!: Position
+
+  /**
+   * 是否显示小地图
+   */
+  private isShow = false
+  /**
+   * 是否显示小地图的标题栏
+   */
+  private isShowHeader = false
+  /**
+   * 是否显示关闭按钮
+   */
+  private isShowCloseIcon = false
+  /**
+   * 小地图标题栏的文本内容
+   */
+  private headerTitle = '导航'
+  /**
+   * 小地图的logicFlow实例需要禁用的插件
+   */
+  private disabledPlugins = ['miniMap', 'control', 'selectionSelect']
+
+  constructor({ lf, LogicFlow, options }: LogicFlow.IExtensionProps) {
+    this.lf = lf
+    this.LFCtor = LogicFlow
+    if (options) {
+      this.setOption(options as MiniMapOption)
     }
-    this.miniMapWidth = lf.graphModel.width;
-    this.miniMapHeight = (lf.graphModel.width * this.height) / this.width;
-    this.LogicFlow = LogicFlow;
-    this.initMiniMap();
+    this.viewPortWidth = lf.graphModel.width
+    this.viewPortHeight = lf.graphModel.height
+    const boundsInit: Bounds = {
+      left: 0,
+      right: this.viewPortWidth,
+      top: 0,
+      bottom: this.viewPortHeight,
+    }
+    this.bounds = boundsInit
+    this.elementAreaBounds = boundsInit
+    this.viewPortBounds = boundsInit
+    this.initMiniMap()
   }
-  render(lf, container) {
-    this.container = container;
+
+  render = (_: LogicFlow, container: HTMLElement) => {
+    this.container = container
     this.lf.on('history:change', () => {
       if (this.isShow) {
-        this.setView();
+        this.setView()
       }
-    });
-    this.lf.on('graph:transform', throttle(() => {
-      // 小地图已展示，并且没有拖拽小地图视口
-      if (this.isShow && !this.dragging) {
-        this.setView();
+    })
+    this.lf.on('graph:transform', () => {
+      if (this.isShow) {
+        this.setView(false)
       }
-    }, 300));
+    })
   }
-  init(option) {
-    this.disabledPlugins = this.disabledPlugins.concat(
-      option.disabledPlugins || [],
-    );
-  }
+
   /**
-   * 显示mini map
-  */
-  show = (leftPosition?: number, topPosition?: number) => {
-    this.setView();
-    if (!this.isShow) {
-      this.createMiniMap(leftPosition, topPosition);
-    }
-    this.isShow = true;
-  };
-  /**
-   * 隐藏mini map
+   * 显示小地图
+   * @param left 相对画布的左边距
+   * @param top 相对画布的上边距
    */
-  hide = () => {
-    if (this.isShow) {
-      this.removeMiniMap();
+  public show = (left?: number, top?: number) => {
+    if (!this.isShow) {
+      this.createMiniMap(left, top)
+      this.setView()
     }
-    this.isShow = false;
-  };
-  reset = () => {
-    this.lf.resetTranslate();
-    this.lf.resetZoom();
-    this.hide();
-    this.show();
-  };
-  private setOption(options) {
+    this.isShow = true
+  }
+  /**
+   * 隐藏小地图
+   */
+  public hide = () => {
+    if (this.isShow) {
+      this.removeMiniMap()
+      this.lf.emit('miniMap:close', {})
+    }
+    this.isShow = false
+  }
+  /**
+   * 更新小地图在画布中的位置
+   * @param {MiniMapPosition} position
+   */
+  public updatePosition = (position: MiniMapPosition) => {
+    if (typeof position === 'object') {
+      if (position.left !== undefined || position.right !== undefined) {
+        this.leftPosition = position.left
+        this.rightPosition = position.right
+      }
+      if (position.top !== undefined || position.bottom !== undefined) {
+        this.topPosition = position.top
+        this.bottomPosition = position.bottom
+      }
+    } else {
+      switch (position) {
+        case 'left-top':
+          this.leftPosition = 0
+          this.rightPosition = undefined
+          this.topPosition = 0
+          this.bottomPosition = undefined
+          break
+        case 'right-top':
+          this.leftPosition = undefined
+          this.rightPosition = 0
+          this.topPosition = 0
+          this.bottomPosition = undefined
+          break
+        case 'left-bottom':
+          this.leftPosition = 0
+          this.rightPosition = undefined
+          this.topPosition = undefined
+          this.bottomPosition = 0
+          break
+        case 'right-bottom':
+          this.leftPosition = undefined
+          this.rightPosition = 0
+          this.topPosition = undefined
+          this.bottomPosition = 0
+          break
+      }
+    }
+    this.updateMiniMapPosition()
+  }
+  /**
+   * 重置主画布的缩放和平移
+   */
+  public reset = () => {
+    this.lf.resetTranslate()
+    this.lf.resetZoom()
+  }
+  /**
+   * 设置小地图的画布中是否显示边
+   * @param {boolean} showEdge
+   */
+  public setShowEdge = (showEdge: boolean) => {
+    if (this.showEdge !== showEdge) {
+      this.showEdge = showEdge
+      this.setView()
+    }
+  }
+
+  /**
+   * 初始化小地图的配置
+   * @param options
+   */
+  private setOption(options: MiniMapOption) {
     const {
       width = 150,
       height = 220,
-      isShowHeader = true,
-      isShowCloseIcon = true,
-      leftPosition = 0,
-      topPosition = 0,
-      rightPosition,
-      bottomPosition,
-    } = options.MiniMap as MiniMapStaticOption;
-    this.width = width;
-    this.height = height;
-    this.isShowHeader = isShowHeader;
-    this.isShowCloseIcon = isShowCloseIcon;
-    this.viewPortWidth = width;
-    this.leftPosition = leftPosition;
-    this.topPosition = topPosition;
-    this.rightPosition = rightPosition;
-    this.bottomPosition = bottomPosition;
+      showEdge = false,
+      isShowHeader = false,
+      isShowCloseIcon = false,
+      leftPosition,
+      topPosition,
+      rightPosition = 0,
+      bottomPosition = 0,
+      headerTitle = '导航',
+    } = options
+    this.width = width
+    this.height = height
+    this.showEdge = showEdge
+    this.isShowHeader = isShowHeader
+    this.isShowCloseIcon = isShowCloseIcon
+    this.leftPosition = leftPosition
+    this.rightPosition = leftPosition !== undefined ? undefined : rightPosition
+    this.topPosition = topPosition
+    this.bottomPosition = topPosition !== undefined ? undefined : bottomPosition
+    this.headerTitle = headerTitle
   }
+
+  /**
+   * 初始化小地图的 LogicFlow 实例
+   */
   private initMiniMap() {
-    const miniMapWrap = document.createElement('div');
-    miniMapWrap.className = 'lf-mini-map-graph';
-    miniMapWrap.style.width = `${this.width + 4}px`;
-    miniMapWrap.style.height = `${this.height}px`;
-    this.lfMap = new this.LogicFlow({
+    const miniMapWrap = document.createElement('div')
+    miniMapWrap.className = 'lf-mini-map-graph'
+    miniMapWrap.style.width = `${this.width}px`
+    miniMapWrap.style.height = `${this.height}px`
+    this.lfMap = new this.LFCtor({
       container: miniMapWrap,
+      grid: false,
       isSilentMode: true,
       stopZoomGraph: true,
       stopScrollGraph: true,
-      stopMoveGraph: true,
-      hideAnchors: true,
-      hoverOutline: false,
+      // 禁用画布移动会导致 transformModel.translate 无效，所以这里不禁用
+      stopMoveGraph: false,
+      history: false,
+      snapline: false,
       disabledPlugins: this.disabledPlugins,
-    });
+    })
     // minimap中禁用adapter。
-    this.lfMap.adapterIn = (a) => a;
-    this.lfMap.adapterOut = (a) => a;
-    this.miniMapWrap = miniMapWrap;
-    this.createViewPort();
-    miniMapWrap.addEventListener('click', this.mapClick);
+    // this.lfMap.adapterIn = (a) => a
+    // this.lfMap.adapterOut = (a) => a
+    this.miniMapWrap = miniMapWrap
+    this.createViewPort()
+    miniMapWrap.addEventListener('click', this.mapClick)
   }
+
   private createMiniMap(left?: number, top?: number) {
-    const miniMapContainer = document.createElement('div');
-    miniMapContainer.appendChild(this.miniMapWrap);
-    if (typeof left !== 'undefined' || typeof top !== 'undefined') {
-      miniMapContainer.style.left = `${left || 0}px`;
-      miniMapContainer.style.top = `${top || 0}px`;
-    } else {
-      if (typeof this.rightPosition !== 'undefined') {
-        miniMapContainer.style.right = `${this.rightPosition}px`;
-      } else if (typeof this.leftPosition !== 'undefined') {
-        miniMapContainer.style.left = `${this.leftPosition}px`;
-      }
-      if (typeof this.bottomPosition !== 'undefined') {
-        miniMapContainer.style.bottom = `${this.bottomPosition}px`;
-      } else if (typeof this.topPosition !== 'undefined') {
-        miniMapContainer.style.top = `${this.topPosition}px`;
-      }
+    const miniMapContainer = document.createElement('div')
+    this.miniMapContainer = miniMapContainer
+    miniMapContainer.appendChild(this.miniMapWrap)
+
+    miniMapContainer.style.position = 'absolute'
+    if (left !== undefined || top !== undefined) {
+      this.leftPosition = left || 0
+      this.topPosition = top || 0
+      this.rightPosition = undefined
+      this.bottomPosition = undefined
     }
-    miniMapContainer.style.position = 'absolute';
-    miniMapContainer.className = 'lf-mini-map';
+    this.updateMiniMapPosition()
+
+    miniMapContainer.className = 'lf-mini-map'
     if (!this.isShowCloseIcon) {
-      miniMapContainer.classList.add('lf-mini-map-no-close-icon');
+      miniMapContainer.classList.add('lf-mini-map-no-close-icon')
     }
     if (!this.isShowHeader) {
-      miniMapContainer.classList.add('lf-mini-map-no-header');
+      miniMapContainer.classList.add('lf-mini-map-no-header')
     }
-    this.container.appendChild(miniMapContainer);
-    this.miniMapWrap.appendChild(this.viewport);
+    this.container?.appendChild(miniMapContainer)
+    this.miniMapWrap.appendChild(this.viewport)
 
-    const header = document.createElement('div');
-    header.className = 'lf-mini-map-header';
-    header.innerText = MiniMap.headerTitle;
-    miniMapContainer.appendChild(header);
+    const header = document.createElement('div')
+    header.className = 'lf-mini-map-header'
+    header.innerText = this.headerTitle
+    miniMapContainer.appendChild(header)
 
-    const close = document.createElement('span');
-    close.className = 'lf-mini-map-close';
-    close.addEventListener('click', this.hide);
-    miniMapContainer.appendChild(close);
-    this.miniMapContainer = miniMapContainer;
+    const close = document.createElement('span')
+    close.className = 'lf-mini-map-close'
+    close.addEventListener('click', this.hide)
+    miniMapContainer.appendChild(close)
   }
+
+  private updateMiniMapPosition() {
+    if (this.miniMapContainer) {
+      const { style } = this.miniMapContainer
+
+      if (this.rightPosition !== undefined) {
+        style.right = `${this.rightPosition}px`
+        style.left = ''
+      } else {
+        style.left = `${this.leftPosition}px`
+        style.right = ''
+      }
+
+      if (this.bottomPosition !== undefined) {
+        style.bottom = `${this.bottomPosition}px`
+        style.top = ''
+      } else {
+        style.top = `${this.topPosition}px`
+        style.bottom = ''
+      }
+    }
+  }
+
   private removeMiniMap() {
-    this.container.removeChild(this.miniMapContainer);
+    if (this.miniMapContainer) {
+      this.container?.removeChild(this.miniMapContainer)
+    }
   }
+
+  /**
+   * 更新小地图的区域范围
+   * @param data
+   */
+  private updateBounds(data?: LogicFlow.GraphData) {
+    if (data) {
+      this.updateElementAreaBounds(data)
+    }
+    this.updateViewPortBounds()
+    this.bounds = {
+      left: Math.min(this.elementAreaBounds.left, this.viewPortBounds.left),
+      right: Math.max(this.elementAreaBounds.right, this.viewPortBounds.right),
+      top: Math.min(this.elementAreaBounds.top, this.viewPortBounds.top),
+      bottom: Math.max(
+        this.elementAreaBounds.bottom,
+        this.viewPortBounds.bottom,
+      ),
+    }
+  }
+
   /**
    * 计算所有图形一起，占领的区域范围。
    * @param data
    */
-  private getBounds(data) {
-    let left = 0;
-    let right = this.miniMapWidth;
-    let top = 0;
-    let bottom = this.miniMapHeight;
-    const { nodes } = data;
+  private updateElementAreaBounds(data: LogicFlow.GraphData) {
+    const elementAreaBounds: Bounds = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }
+    const { nodes } = data
     if (nodes && nodes.length > 0) {
-      // 因为获取的节点不知道真实的宽高，这里需要补充一点数值
-      nodes.forEach(({ x, y, width = 200, height = 200 }) => {
-        const nodeLeft = x - width / 2;
-        const nodeRight = x + width / 2;
-        const nodeTop = y - height / 2;
-        const nodeBottom = y + height / 2;
-        left = nodeLeft < left ? nodeLeft : left;
-        right = nodeRight > right ? nodeRight : right;
-        top = nodeTop < top ? nodeTop : top;
-        bottom = nodeBottom > bottom ? nodeBottom : bottom;
-      });
+      // TODO: 后续能获取节点高宽信息后，需要更新这里的计算方式
+      nodes.forEach((node) => {
+        const { x, y } = node
+        const width = (node.width as number) ?? 200
+        const height = (node.height as number) ?? 200
+
+        const nodeLeft = x - width / 2
+        const nodeRight = x + width / 2
+        const nodeTop = y - height / 2
+        const nodeBottom = y + height / 2
+
+        elementAreaBounds.left = Math.min(nodeLeft, elementAreaBounds.left)
+        elementAreaBounds.right = Math.max(nodeRight, elementAreaBounds.right)
+        elementAreaBounds.top = Math.min(nodeTop, elementAreaBounds.top)
+        elementAreaBounds.bottom = Math.max(
+          nodeBottom,
+          elementAreaBounds.bottom,
+        )
+      })
+    }
+    this.elementAreaBounds = elementAreaBounds
+  }
+
+  /**
+   * 获取视口范围
+   */
+  private updateViewPortBounds() {
+    const { TRANSLATE_X, TRANSLATE_Y, SCALE_X, SCALE_Y } =
+      this.lf.getTransform()
+    const { width, height } = this.lf.graphModel
+
+    this.viewPortBounds = {
+      left: -TRANSLATE_X / SCALE_X,
+      right: (-TRANSLATE_X + width) / SCALE_X,
+      top: -TRANSLATE_Y / SCALE_Y,
+      bottom: (-TRANSLATE_Y + height) / SCALE_Y,
+    }
+  }
+
+  /**
+   * 删除部分内容以简化渲染，包括边与节点文本
+   */
+  private resetData(data: LogicFlow.GraphData): LogicFlow.GraphData {
+    const { nodes, edges } = data
+    nodes.forEach((node) => {
+      // 删除节点文本
+      node.text = undefined
+    })
+    if (this.showEdge) {
+      edges.forEach((edge) => {
+        // 删除边上的文本
+        edge.text = undefined
+      })
     }
     return {
-      left,
-      top,
-      bottom,
-      right,
-    };
-  }
-  /**
-   * 将负值的平移转换为正值。
-   * 保证渲染的时候，minimap能完全展示。
-   * 获取将画布所有元素平移到0，0开始时，所有节点数据
-   */
-  private resetData(data) {
-    const { nodes, edges } = data;
-    let left = 0;
-    let top = 0;
-    if (nodes && nodes.length > 0) {
-      // 因为获取的节点不知道真实的宽高，这里需要补充一点数值
-      nodes.forEach(({ x, y, width = 200, height = 200 }) => {
-        const nodeLeft = x - width / 2;
-        const nodeTop = y - height / 2;
-        left = nodeLeft < left ? nodeLeft : left;
-        top = nodeTop < top ? nodeTop : top;
-      });
-      if (left < 0 || top < 0) {
-        this.resetDataX = left;
-        this.resetDataY = top;
-        nodes.forEach((node) => {
-          node.x = node.x - left;
-          node.y = node.y - top;
-          if (node.text) {
-            node.text.x = node.text.x - left;
-            node.text.y = node.text.y - top;
-          }
-        });
-        edges.forEach((edge) => {
-          if (edge.startPoint) {
-            edge.startPoint.x = edge.startPoint.x - left;
-            edge.startPoint.y = edge.startPoint.y - top;
-          }
-          if (edge.endPoint) {
-            edge.endPoint.x = edge.endPoint.x - left;
-            edge.endPoint.y = edge.endPoint.y - top;
-          }
-          if (edge.text) {
-            edge.text.x = edge.text.x - left;
-            edge.text.y = edge.text.y - top;
-          }
-          if (edge.pointsList) {
-            edge.pointsList.forEach((point) => {
-              point.x = point.x - left;
-              point.y = point.y - top;
-            });
-          }
-        });
-      }
+      nodes,
+      // 是否渲染边
+      edges: this.showEdge ? edges : [],
     }
-    return data;
   }
+
   /**
-   * 显示导航
-   * 显示视口范围
-   * 1. 基于画布的范围比例，设置视口范围比例。宽度默认为导航宽度。
+   * MiniMap视图重绘
+   * @param reRender 是否重新渲染画布元素
    */
-  private setView() {
-    // 1. 获取到图中所有的节点中的位置，将其偏移到原点开始（避免节点位置为负的时候无法展示问题）。
-    const graphData = this.lf.getGraphRawData();
-    const data = this.resetData(graphData);
-    // 由于随时都会有新节点注册进来，需要同步将注册的
-    const { viewMap } : { viewMap: Map<string, any> } = this.lf;
-    const { modelMap } : { modelMap: Map<string, any> } = this.lf.graphModel;
-    const { viewMap: minimapViewMap } : { viewMap: Map<string, any> } = this.lfMap;
-    // todo: no-restricted-syntax
-    for (const key of viewMap.keys()) {
-      if (!minimapViewMap.has(key)) {
-        this.lfMap.setView(key, viewMap.get(key));
-        this.lfMap.graphModel.modelMap.set(key, modelMap.get(key));
+  // TODO: 确定 render 函数是否为增量渲染，如果是则不需要 reRender 参数做限制
+  private setView(reRender: boolean = true) {
+    if (reRender) {
+      // 1. 获取到图中所有的节点中的位置
+      const graphData = this.lf.getGraphRawData()
+      const data = this.resetData(graphData)
+      // 由于随时都会有新节点注册进来，需要同步将注册的
+      const { viewMap } = this.lf
+      const { modelMap } = this.lf.graphModel
+      const { viewMap: minimapViewMap } = this.lfMap
+
+      for (const key of viewMap.keys()) {
+        if (!minimapViewMap.has(key)) {
+          this.lfMap.register({
+            type: key,
+            view: viewMap.get(key)!,
+            model: modelMap.get(key)!,
+          })
+        }
       }
+
+      // 2. 将数据渲染到小地图的画布上
+      this.lfMap.render(data)
+
+      // 3. 更新所有节点与当前视口构成的区域范围
+      this.updateBounds(data)
+    } else {
+      this.updateBounds()
     }
-    this.lfMap.render(data);
-    // 2. 将偏移后的数据渲染到minimap画布上
-    // 3. 计算出所有节点在一起的边界。
-    const { left, top, right, bottom } = this.getBounds(data);
-    // 4. 计算所有节点的边界与minimap看板的边界的比例.
-    const realWidthScale = this.width / (right - left);
-    const realHeightScale = this.height / (bottom - top);
-    // 5. 取比例最小的值，将渲染的画布缩小对应比例。
-    const innerStyle = this.miniMapWrap.firstChild.style;
-    const scale = Math.min(realWidthScale, realHeightScale);
-    innerStyle.pointerEvents = 'none';
-    innerStyle.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`;
-    innerStyle.transformOrigin = 'left top';
-    innerStyle.height = `${bottom - Math.min(top, 0)}px`;
-    innerStyle.width = `${right - Math.min(left, 0)}px`;
-    this.viewPortScale = scale;
-    this.setViewPort(scale, {
-      left,
-      top,
-      right,
-      bottom,
-    });
+
+    // 4. 计算小地图画布相对小地图容器的缩放比例，并移动小地图的视图保证元素全部可见且整体居中。
+    const { left, top, right, bottom } = this.bounds
+    const realWidth = right - left
+    const realHeight = bottom - top
+    const realWidthScale = this.width / realWidth
+    const realHeightScale = this.height / realHeight
+    const scale = Math.min(realWidthScale, realHeightScale)
+    this.scale = scale
+
+    const translateX = left - (this.width / scale - realWidth) / 2
+    const translateY = top - (this.height / scale - realHeight) / 2
+    this.lfMap.graphModel.transformModel.translate(
+      -translateX + this.translateX,
+      -translateY + this.translateY,
+    )
+    this.translateX = translateX
+    this.translateY = translateY
+
+    // 5. 将小地图的画布缩放对应的比例。
+    if (this.miniMapWrap.firstChild) {
+      const innerStyle = (this.miniMapWrap.firstChild as HTMLElement).style
+      innerStyle.pointerEvents = 'none'
+      innerStyle.transform = `matrix(${scale}, 0, 0, ${scale}, 0, 0)`
+      innerStyle.transformOrigin = 'left top'
+      innerStyle.height = `${this.height / scale}px`
+      innerStyle.width = `${this.width / scale}px`
+      this.updateViewPort()
+    }
   }
-  // 设置视口
-  private setViewPort(scale, { left, right, top, bottom }) {
-    const viewStyle = this.viewport.style;
-    viewStyle.width = `${this.viewPortWidth}px`;
-    viewStyle.height = `${
-      (this.viewPortWidth) / (this.lf.graphModel.width / this.lf.graphModel.height)
-    }px`;
-    const { TRANSLATE_X, TRANSLATE_Y, SCALE_X, SCALE_Y } = this.lf.getTransform();
-    const realWidth = right - left;
-    // 视口宽 = 小地图宽 / (所有元素一起占据的真实宽 / 绘布宽)
-    const viewPortWidth = (this.width) / (realWidth / this.lf.graphModel.width);
-    // 实际视口宽 = 小地图宽 * 占宽度比例
-    const realViewPortWidth = this.width * (viewPortWidth / this.width);
-    const graphRatio = (this.lf.graphModel.width / this.lf.graphModel.height);
-    // 视口实际高 = 视口实际宽 / (绘布宽 / 绘布高)
-    const realViewPortHeight = realViewPortWidth / graphRatio;
-    const graphData = this.lf.getGraphRawData();
-    const { left: graphLeft, top: graphTop } = this.getBounds(graphData);
-    let viewportLeft = graphLeft;
-    let viewportTop = graphTop;
-    viewportLeft += TRANSLATE_X / SCALE_X;
-    viewportTop += TRANSLATE_Y / SCALE_Y;
-    this.viewPortTop = viewportTop > 0 ? 0 : (-viewportTop * scale);
-    this.viewPortLeft = viewportLeft > 0 ? 0 : (-viewportLeft * scale);
-    this.viewPortWidth = realViewPortWidth;
-    this.viewPortHeight = realViewPortHeight;
-    viewStyle.top = `${this.viewPortTop}px`;
-    viewStyle.left = `${this.viewPortLeft}px`;
-    viewStyle.width = `${realViewPortWidth / SCALE_X}px`;
-    viewStyle.height = `${realViewPortHeight / SCALE_Y}px`;
+
+  /**
+   * 更新预览视窗的位置
+   */
+  private updateViewPort() {
+    const viewStyle = this.viewport.style
+    const { TRANSLATE_X, TRANSLATE_Y, SCALE_X, SCALE_Y } =
+      this.lf.getTransform()
+    const { width, height } = this.lf.graphModel
+
+    this.viewPortLeft = -TRANSLATE_X / SCALE_X
+    this.viewPortTop = -TRANSLATE_Y / SCALE_Y
+    this.viewPortWidth = (width / SCALE_X) * this.scale
+    this.viewPortHeight = (height / SCALE_Y) * this.scale
+
+    viewStyle.width = `${this.viewPortWidth}px`
+    viewStyle.height = `${this.viewPortHeight}px`
+    viewStyle.left = `${(this.viewPortLeft - this.translateX) * this.scale}px`
+    viewStyle.top = `${(this.viewPortTop - this.translateY) * this.scale}px`
   }
-  // 预览视窗
+
+  /**
+   * 创建预览视窗元素
+   */
   private createViewPort() {
-    const div = document.createElement('div');
-    div.className = 'lf-minimap-viewport';
-    div.addEventListener('mousedown', this.startDrag);
-    this.viewport = div;
+    const div = document.createElement('div')
+    div.className = 'lf-minimap-viewport'
+
+    // 拖拽预览视窗，主画布视口跟随移动
+    div.addEventListener('mousedown', this.startDrag)
+
+    // 禁止预览视窗的点击事件冒泡
+    div.addEventListener('click', (e: MouseEvent) => {
+      e.stopPropagation()
+    })
+    this.viewport = div
   }
-  private startDrag = (e) => {
-    document.addEventListener('mousemove', this.drag);
-    document.addEventListener('mouseup', this.drop);
-    this.startPosition = {
-      x: e.x,
-      y: e.y,
-    };
-  };
-  private moveViewport = (top, left) => {
-    const viewStyle = this.viewport.style;
-    this.viewPortTop = top;
-    this.viewPortLeft = left;
-    viewStyle.top = `${this.viewPortTop}px`;
-    viewStyle.left = `${this.viewPortLeft}px`;
-  };
-  private drag = (e) => {
-    this.dragging = true;
-    const top = this.viewPortTop + e.y - this.startPosition.y;
-    const left = this.viewPortLeft + e.x - this.startPosition.x;
-    this.moveViewport(top, left);
-    this.startPosition = {
-      x: e.x,
-      y: e.y,
-    };
-    const centerX = (this.viewPortLeft + this.viewPortWidth / 2)
-      / this.viewPortScale;
-    const centerY = (this.viewPortTop + this.viewPortHeight / 2)
-      / this.viewPortScale;
+
+  private startDrag = (e: MouseEvent) => {
+    document.addEventListener('mousemove', this.drag)
+    document.addEventListener('mouseup', this.drop)
+    const { x, y } = e
+    this.startPosition = { x, y }
+  }
+
+  /**
+   * 拖拽预览视窗过程中，更新主画布视口
+   */
+  private drag = (e: MouseEvent) => {
+    const { x, y } = e
+    const translateX = (x - this.startPosition.x) / this.scale
+    const translateY = (y - this.startPosition.y) / this.scale
+    const centerX =
+      this.viewPortLeft + translateX + this.viewPortWidth / this.scale / 2
+    const centerY =
+      this.viewPortTop + translateY + this.viewPortHeight / this.scale / 2
+
+    // 每移动一次预览视窗都需要更新拖拽的起始点
+    this.startPosition = { x, y }
     this.lf.focusOn({
       coordinate: {
-        x: centerX + this.resetDataX,
-        y: centerY + this.resetDataY,
+        x: centerX,
+        y: centerY,
       },
-    });
-  };
+    })
+  }
+
+  /**
+   * 拖拽预览视窗结束，移除拖拽事件
+   */
   private drop = () => {
-    document.removeEventListener('mousemove', this.drag);
-    document.removeEventListener('mouseup', this.drop);
-    let top = this.viewPortTop;
-    let left = this.viewPortLeft;
-    if (this.viewPortLeft > this.width) {
-      left = this.width - this.viewPortWidth;
-    }
-    if (this.viewPortTop > this.height) {
-      top = this.height - this.viewPortHeight;
-    }
-    if (this.viewPortLeft < -this.width) {
-      left = 0;
-    }
-    if (this.viewPortTop < -this.height) {
-      top = 0;
-    }
-    this.moveViewport(top, left);
-  };
-  private mapClick = (e) => {
-    if (this.dragging) {
-      this.dragging = false;
-    } else {
-      const { layerX, layerY } = e;
-      const ViewPortCenterX = layerX;
-      const ViewPortCenterY = layerY;
-      const graphData = this.lf.getGraphRawData();
-      const { left, top } = this.getBounds(graphData);
-      const resetGraphX = left + ViewPortCenterX / this.viewPortScale;
-      const resetGraphY = top + ViewPortCenterY / this.viewPortScale;
-      this.lf.focusOn({ coordinate: { x: resetGraphX, y: resetGraphY } });
-    }
-  };
+    document.removeEventListener('mousemove', this.drag)
+    document.removeEventListener('mouseup', this.drop)
+  }
+
+  /**
+   * 点击小地图中非预览视窗的区域时，移动主画布视口聚焦于点击位置
+   */
+  private mapClick = (e: MouseEvent) => {
+    const { offsetX, offsetY } = e
+    const centerX = this.translateX + offsetX / this.scale
+    const centerY = this.translateY + offsetY / this.scale
+    this.lf.focusOn({
+      coordinate: {
+        x: centerX,
+        y: centerY,
+      },
+    })
+  }
 }
 
-export default MiniMap;
-
-export { MiniMap };
+export default MiniMap

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>UMD 资源示例 demo</title>
+
+    <link rel="stylesheet" href="../packages/core/dist/index.css" />
+  </head>
+  <body
+    style="
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <!-- 创建容器 -->
+    <div id="container"></div>
+    <script src="../packages/core/dist/index.min.js"></script>
+    <script src="../packages/extension/dist/index.min.js"></script>
+    <script>
+      // 准备图数据
+      const data = {
+        // 节点
+        nodes: [
+          {
+            id: '21',
+            type: 'rect',
+            x: 100,
+            y: 100,
+            text: 'rect node',
+          },
+          {
+            id: '50',
+            type: 'circle',
+            x: 300,
+            y: 400,
+            text: 'circle node',
+          },
+        ],
+        // 边
+        edges: [
+          {
+            type: 'polyline',
+            sourceNodeId: '50',
+            targetNodeId: '21',
+          },
+        ],
+      }
+
+      // 创建实例
+      const lf = new Core.default({
+        container: document.querySelector('#container'),
+        width: 700,
+        height: 500,
+        grid: true,
+      })
+
+      // 渲染实例
+      lf.render(data)
+
+      console.log('Core --->>>', Core)
+      console.log('Extension --->>>', Extension)
+    </script>
+  </body>
+</html>

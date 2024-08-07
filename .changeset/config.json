@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.1/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "engine-browser-app",
+    "engine-node-app",
+    "feature-examples",
+    "material-ui-app",
+    "next-app",
+    "vue3-app"
+  ],
+  "extends": [],
+  "pipeline": {}
+}

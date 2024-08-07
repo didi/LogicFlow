@@ -1,0 +1,52 @@
+{
+  "demos": [
+    {
+      "filename": "rect.tsx",
+      "title": {
+        "zh": "矩形节点",
+        "en": "Rect Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/rect.png"
+    },
+    {
+      "filename": "ellipse.tsx",
+      "title": {
+        "zh": "椭圆节点",
+        "en": "Ellipse Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/circle.png"
+    },
+    {
+      "filename": "icon.tsx",
+      "title": {
+        "zh": "图标节点",
+        "en": "Icon Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/icon.png"
+    },
+    {
+      "filename": "image.tsx",
+      "title": {
+        "zh": "图像节点",
+        "en": "Image Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/image.png"
+    },
+    {
+      "filename": "html.tsx",
+      "title": {
+        "zh": "Html节点",
+        "en": "Html Nodes"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/html.png"
+    },
+    {
+      "filename": "theme.tsx",
+      "title": {
+        "zh": "自定义主题",
+        "en": "Custom Theme"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/node/custom-theme.png"
+    }
+  ]
+}
