@@ -276,7 +276,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   }
 
   // 折叠操作
-  collapse() {
+  private collapse() {
     const { x, y, text, width, height, collapsedWidth, collapsedHeight } = this
     this.x = x - width / 2 + collapsedWidth / 2
     this.y = y - height / 2 + collapsedHeight / 2
@@ -293,7 +293,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   }
 
   // 展开操作
-  expand() {
+  private expand() {
     const {
       x,
       y,
