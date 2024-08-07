@@ -53,11 +53,11 @@ export namespace MiniMap {
   >
 
   export type MiniMapPosition =
-    | 'left-top'
-    | 'right-top'
-    | 'left-bottom'
-    | 'right-bottom'
-    | AbsolutePosition
+    | 'left-top' // 表示迷你地图位于容器的左上角
+    | 'right-top' // 表示迷你地图位于容器的右上角
+    | 'left-bottom' // 表示迷你地图位于容器的右上角
+    | 'right-bottom' // 表示迷你地图位于容器的右下角。
+    | AbsolutePosition // 自定义小地图在画布上的位置
 }
 
 type Bounds = Record<'left' | 'top' | 'bottom' | 'right', number>
@@ -285,7 +285,7 @@ export class MiniMap {
     this.lf.resetZoom()
   }
   /**
-   * 设置小地图的画布中是否绘制边
+   * 设置小地图的画布中是否显示边
    * @param {boolean} showEdge
    */
   public setShowEdge = (showEdge: boolean) => {

@@ -62,18 +62,20 @@ const data: LogicFlow.GraphConfigData = {
 }
 
 const miniMapOptions: MiniMap.MiniMapOption = {
-  isShowHeader: false,
+  isShowHeader: true,
   isShowCloseIcon: true,
   headerTitle: 'MiniMap',
   width: 200,
   height: 120,
+  // leftPosition: 100,
+  // topPosition: 100,
 }
 
 export default function MiniMapExtension() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const [showEdge, setShowEdge] = useState(true)
+  const [showEdge, setShowEdge] = useState(false)
   const [position, setPosition] = useState('right-bottom')
 
   useEffect(() => {
