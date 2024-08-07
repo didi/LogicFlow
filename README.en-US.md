@@ -27,11 +27,11 @@ LogicFlow is a flowchart editing framework , providing a series of functions nec
 
 ## Features
 
-- 高可定制性：自定义能力，支持 SVG、HTML、React、Vue 等自定义节点；边的富文本编辑
-- 丰富的插件
-- 可视化模型：MVVM
-- 自执行引擎
-- 数据可转换：BPMN、...
+- High customizability：With the intuitive visual interface provided by LogicFlow, users can easily create, edit, and manage complex logical flowcharts.
+- Rich Plug-ins: Built-in rich plug-ins, users can also customize complex plug-ins according to their own needs to achieve business requirements.
+- The Visualization model：Users can customize nodes, connectors, and styles to suit their needs, creating custom logical flowcharts that match specific use cases.
+- Self-executing engine: The execution engine supports browser-side flow chart logic, providing new ideas for code-free execution.
+- Data convertible：Supports the conversion of LogicFlow data to BPMN, Turbo, and other backend execution engine data structures.
 
 ## Installation
 
@@ -62,14 +62,14 @@ const data = {
       type: 'rect',
       x: 100,
       y: 200,
-      text: '矩形节点',
+      text: 'Rect Node',
     },
     {
       id: '50',
       type: 'circle',
       x: 300,
       y: 400,
-      text: '圆形节点',
+      text: 'Circle Node',
     },
   ],
   // 边
@@ -93,17 +93,17 @@ lf.render(data);
 
 ## Links
 
-[Official Website](https://site.logic-flow.cn/)
+[Official Website](https://site.logic-flow.cn/en/)
 
-- [Getting Started](https://site.logic-flow.cn/tutorial/getting-started)
-- [Examples](https://site.logic-flow.cn/examples)
-- [Articles](https://site.logic-flow.cn/article/article01)
+- [Getting Started](https://site.logic-flow.cn/en/tutorial/get-started)
+- [Examples](https://site.logic-flow.cn/en/examples)
+- [Articles](https://site.logic-flow.cn/en/article/architecture-of-logicflow)
 
-[CHANGELOG]()
-[FAQs]()
-[Issue Template]()
+---
+- [CHANGELOG](https://github.com/didi/LogicFlow/releases)
+- [Issue Template](https://github.com/didi/LogicFlow/issues/new/choose)
 
-## Development
+## [Development](/CONTRIBUTING.en-US.md)
 
 ```shell
 # install deps and build

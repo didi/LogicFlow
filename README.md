@@ -26,11 +26,11 @@ LogicFlow 是一款流程图编辑框架，提供了一系列流程图交互、�
 
 ## 核心能力
 
-- 高可定制性：自定义能力，支持 SVG、HTML、React、Vue 等自定义节点；边的富文本编辑
-- 丰富的插件
-- 可视化模型：MVVM
-- 自执行引擎
-- 数据可转换：BPMN、...
+- 可视化模型：通过 LogicFlow 提供的直观可视化界面，用户可以轻松创建、编辑和管理复杂的逻辑流程图。
+- 高可定制性：用户可以根据自己的需要定制节点、连接器和样式，创建符合特定用例的定制逻辑流程图。
+- 灵活易拓展: 内置提供丰富的插件，用户也可根据自身需求定制复杂插件实现业务需求。
+- 自执行引擎: 执行引擎支持浏览器端执行流程图逻辑，为无代码执行提供新思路。
+- 数据可转换：支持 LogicFlow 数据与 BPMN、Turbo 等各种后端执行引擎数据结构转换能力。
 
 ## 安装
 
@@ -94,15 +94,15 @@ lf.render(data);
 
 [官方文档](https://site.logic-flow.cn/)
 
-- [快速上手](https://site.logic-flow.cn/tutorial/getting-started)
-- [示例](https://site.logic-flow.cn/examples)
-- [文章](https://site.logic-flow.cn/article/article01)
+- [快速上手](https://site.logic-flow.cn/tutorial/get-started)
+- [图表示例](https://site.logic-flow.cn/examples)
+- [相关文章](https://site.logic-flow.cn/article/architecture-of-logicflow)
 
-[更新日志]()
-[常见问题]()
-[issue模板]()
+---
+- [更新日志](https://github.com/didi/LogicFlow/releases)
+- [issue模板](https://github.com/didi/LogicFlow/issues/new/choose)
 
-## 本地开发
+## [本地开发](/CONTRIBUTING.md)
 
 ```shell
 # 安装项目依赖和初始化构建
