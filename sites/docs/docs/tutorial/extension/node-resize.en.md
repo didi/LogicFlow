@@ -6,6 +6,7 @@ group:
 title: NodeResize
 order: 6
 toc: content
+tag: Deprecated
 ---
 
 ## Use

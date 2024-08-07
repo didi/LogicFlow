@@ -3,9 +3,10 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 节点缩放 NodeResize
-order: 6
+title: 节点缩放 (NodeResize)
+order: 16
 toc: content
+tag:  即将废弃
 ---
 
 ## 使用

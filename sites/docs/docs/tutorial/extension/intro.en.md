@@ -67,4 +67,3 @@ const lf = new LogicFlow({
   plugins: [DndPanel, SelectionSelect]
 });
 ```
-
