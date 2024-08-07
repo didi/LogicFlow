@@ -1,21 +1,26 @@
-import Circle from '../shape/Circle'
-import BaseNode from './BaseNode'
-import { GraphModel, CircleNodeModel } from '../../model'
+import { h } from 'preact';
+import Circle from '../basic-shape/Circle';
+import BaseNode from './BaseNode';
+import GraphModel from '../../model/GraphModel';
+import { CircleNodeModel } from '../../model';
 
-export type ICircleNodeProps = {
-  model: CircleNodeModel
-  graphModel: GraphModel
-}
+type IProps = {
+  model: CircleNodeModel;
+  graphModel: GraphModel;
+};
 
-export class CircleNode<
-  P extends ICircleNodeProps = ICircleNodeProps,
-> extends BaseNode<P> {
+export default class CircleNode extends BaseNode {
   getShape() {
-    const { model } = this.props
-    const { x, y, r } = model
-    const style = model.getNodeStyle()
-    return <Circle {...style} x={x} y={y} r={r} />
+    const { model } = this.props;
+    const { x, y, r } = model;
+    const style = model.getNodeStyle();
+    return (
+      <Circle
+        {...style}
+        x={x}
+        y={y}
+        r={r}
+      />
+    );
   }
 }
-
-export default CircleNode

@@ -1,9 +1,8 @@
-import { RectNode, h } from '@logicflow/core'
+import { RectNode, h } from '@logicflow/core';
 
 export class RectLabelNodeView extends RectNode {
-  getLabelShape(): h.JSX.Element {
-    const { x, y, width, height, properties } = this.props.model
-
+  getLabelShape() {
+    const { x, y, width, height, properties } = this.props.model;
     return h(
       'text',
       {
@@ -12,13 +11,12 @@ export class RectLabelNodeView extends RectNode {
         fontSize: 12,
         fill: 'blue',
       },
-      properties.moreText as string,
-    )
+      properties.moreText,
+    );
   }
-
-  getShape(): h.JSX.Element {
-    const { x, y, width, height } = this.props.model
-    const style = this.props.model.getNodeStyle()
+  getShape() {
+    const { x, y, width, height } = this.props.model;
+    const style = this.props.model.getNodeStyle();
     // todo: 将basic-shape对外暴露，在这里可以直接用。现在纯手写有点麻烦。
     return h('g', {}, [
       h('rect', {
@@ -28,6 +26,6 @@ export class RectLabelNodeView extends RectNode {
         y: y - height / 2,
       }),
       this.getLabelShape(),
-    ])
+    ]);
   }
 }

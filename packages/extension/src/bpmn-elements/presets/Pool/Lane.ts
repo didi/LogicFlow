@@ -1,75 +1,67 @@
-import LogicFlow, { h } from '@logicflow/core'
-import { laneToJSON } from '.'
-import { GroupNode, GroupNodeModel } from '../../../materials/group'
-import { HorizontalLaneModel } from './Pool'
+import { h } from '@logicflow/core';
+import { GroupNode } from '../../../materials/group/index';
+import { laneToJSON } from '.';
 
 // 泳道
-class LaneModel extends GroupNodeModel {
-  initNodeData(
-    data: LogicFlow.NodeConfig & Record<'width' | 'height', number>,
-  ) {
+class LaneModel extends GroupNode.model {
+  initNodeData(data: {
+    width: number;
+    height: number;
+    properties: Record<string, any>;
+  }) {
     data.properties = {
       ...data.properties,
       processRef: '',
       panels: ['processRef'],
-    }
-    super.initNodeData(data)
+    };
+    super.initNodeData(data);
     if (data.width) {
-      this.width = data.width
+      this.width = data.width;
     }
     if (data.height) {
-      this.height = data.height
+      this.height = data.height;
     }
     if (data.properties) {
       this.properties = {
         ...this.properties,
         ...data.properties,
-      }
+      };
     }
-    this.draggable = false
-    this.resizable = true
-    this.zIndex = 1
-    this.toJSON = laneToJSON
+    this.draggable = false;
+    this.resizable = true;
+    this.zIndex = 1;
+    this.toJSON = laneToJSON;
   }
 
   changeAttribute({ width, height, x, y }: any) {
-    if (width) this.width = width
-    if (height) this.height = height
-    if (x) this.x = x
-    if (y) this.y = y
+    if (width) this.width = width;
+    if (height) this.height = height;
+    if (x) this.x = x;
+    if (y) this.y = y;
   }
 }
 
-class LaneView extends GroupNode {
+class LaneView extends GroupNode.view {
   getOperateIcon() {
-    const { model } = this.props
-    const { isSelected } = model
+    const { model } = this.props;
+    const { isSelected } = model;
     if (!isSelected) {
-      return null
+      return null;
     }
-    return [this.addAboveIcon(), this.addBelowIcon(), this.deleteIcon()]
+    return [this.addAboveIcon(), this.addBelowIcon(), this.deleteIcon()];
   }
 
   addAboveIcon() {
-    const { x, y, width, height, id } = this.props.model
+    const { x, y, width, height, id } = this.props.model;
     return h(
       'g',
       {
         cursor: 'pointer',
         onClick: () => {
-          const groupId = this.props.graphModel.group.nodeGroupMap.get(id)
+          const groupId = this.props.graphModel.group.nodeGroupMap.get(id);
           if (groupId) {
-            const groupModel = this.props.graphModel.getNodeModelById(groupId)
-            if (groupModel) {
-              ;(
-                groupModel as GroupNodeModel as HorizontalLaneModel
-              ).addChildAbove({
-                x,
-                y,
-                width,
-                height,
-              })
-            }
+            const groupModel = this.props.graphModel.getNodeModelById(groupId);
+            groupModel.addChildAbove({ x, y, width, height });
           }
         },
       },
@@ -94,29 +86,19 @@ class LaneView extends GroupNode {
           y: y - height / 2 + 10,
         }),
       ],
-    )
+    );
   }
-
   addBelowIcon() {
-    const { x, y, width, height, id } = this.props.model
+    const { x, y, width, height, id } = this.props.model;
     return h(
       'g',
       {
         cursor: 'pointer',
         onClick: () => {
-          const groupId = this.props.graphModel.group.nodeGroupMap.get(id)
+          const groupId = this.props.graphModel.group.nodeGroupMap.get(id);
           if (groupId) {
-            const groupModel = this.props.graphModel.getNodeModelById(groupId)
-            if (groupModel) {
-              ;(
-                groupModel as GroupNodeModel as HorizontalLaneModel
-              ).addChildBelow({
-                x,
-                y,
-                width,
-                height,
-              })
-            }
+            const groupModel = this.props.graphModel.getNodeModelById(groupId);
+            groupModel.addChildBelow({ x, y, width, height });
           }
         },
       },
@@ -141,22 +123,19 @@ class LaneView extends GroupNode {
           y: y - height / 2 + 2.5 + 20 + 5,
         }),
       ],
-    )
+    );
   }
-
   deleteIcon() {
-    const { x, y, width, height, id } = this.props.model
+    const { x, y, width, height, id } = this.props.model;
     return h(
       'g',
       {
         cursor: 'pointer',
         onClick: () => {
-          const groupId = this.props.graphModel.group.nodeGroupMap.get(id)
+          const groupId = this.props.graphModel.group.nodeGroupMap.get(id);
           if (groupId) {
-            const groupModel = this.props.graphModel.getNodeModelById(groupId)
-            ;(groupModel as GroupNodeModel as HorizontalLaneModel).deleteChild(
-              id,
-            )
+            const groupModel = this.props.graphModel.getNodeModelById(groupId);
+            groupModel.deleteChild(id);
           }
         },
       },
@@ -194,11 +173,10 @@ class LaneView extends GroupNode {
           ],
         ),
       ],
-    )
+    );
   }
-
   getResizeShape() {
-    return h('g', {}, [super.getResizeShape(), this.getOperateIcon()])
+    return h('g', {}, [super.getResizeShape(), this.getOperateIcon()]);
   }
 }
 
@@ -206,6 +184,6 @@ const LaneNode = {
   type: 'lane',
   view: LaneView,
   model: LaneModel,
-}
+};
 
-export default LaneNode
+export default LaneNode;

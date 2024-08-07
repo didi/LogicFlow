@@ -1,24 +1,32 @@
-import LogicFlow from '@logicflow/core'
+import { h, Point, Size } from '@logicflow/core';
 
-import Point = LogicFlow.Point
-import RectSize = LogicFlow.RectSize
-
+// TODO: 常用的属性集合定一个interface
 type IProps = {
-  className?: string
-  radius?: number
-  stroke?: string
-  strokeDasharray?: string
-} & Point &
-  RectSize
+  className?: string,
+  radius?: number,
+  stroke?: string,
+  strokeDasharray?: string,
+} & Point & Size;
+
+// TODO: 默认样式引入
 
 export default function Rect(props: IProps) {
-  const { x, y, width = 10, height = 10, radius, className } = props
+  const {
+    x,
+    y,
+    width,
+    height,
+    radius,
+    className,
+  } = props;
 
-  const leftTopX = x - width / 2
-  const leftTopY = y - height / 2
+  const leftTopX = x - width / 2;
+  const leftTopY = y - height / 2;
 
   const attrs = {
     // default
+    width: 10,
+    height: 10,
     cx: 0,
     cy: 0,
     rx: radius || 0,
@@ -32,8 +40,10 @@ export default function Rect(props: IProps) {
     ...props,
     x: leftTopX,
     y: leftTopY,
-  }
-  return <rect {...attrs} />
+  };
+  return (
+    <rect {...attrs} />
+  );
 }
 
 Rect.defaultProps = {
@@ -41,4 +51,4 @@ Rect.defaultProps = {
   stroke: '',
   strokeDasharray: '',
   className: '',
-}
+};

@@ -1,25 +1,25 @@
-import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core'
-import { getBpmnId } from '../getBpmnId'
+import { PolylineEdge, PolylineEdgeModel } from '@logicflow/core';
+import { getBpmnId } from '../getBpmnId';
 
-export class SequenceFlowModel extends PolylineEdgeModel {
-  static extendKey = 'SequenceFlowModel'
-
+class SequenceFlowModel extends PolylineEdgeModel {
+  static extendKey = 'SequenceFlowModel';
   constructor(data, graphModel) {
     if (!data.id) {
-      data.id = `Flow_${getBpmnId()}`
+      data.id = `Flow_${getBpmnId()}`;
     }
-    super(data, graphModel)
+    super(data, graphModel);
   }
 }
 
-export class SequenceFlowView extends PolylineEdge {
-  static extendKey = 'SequenceFlowEdge'
+class SequenceFlowView extends PolylineEdge {
+  static extendKey = 'SequenceFlowEdge';
 }
 
-export const SequenceFlow = {
+const SequenceFlow = {
   type: 'bpmn:sequenceFlow',
   view: SequenceFlowView,
   model: SequenceFlowModel,
-}
+};
 
-export default SequenceFlow
+export { SequenceFlowView, SequenceFlowModel };
+export default SequenceFlow;

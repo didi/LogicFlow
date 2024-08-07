@@ -1,14 +1,6 @@
 {
-  "semi": false,
+  "tabWidth": 2,
   "singleQuote": true,
-  "printWidth": 80,
-  "trailingComma": "all",
-  "proseWrap": "never",
-  "endOfLine": "auto",
-  "useTabs": false,
-  "overrides": [
-    { "files": ".eslintrc", "options": { "parser": "json" } },
-    { "files": ".prettierrc", "options": { "parser": "json" } },
-    { "files": ".stylelintrc", "options": { "parser": "json" } }
-  ]
+  "semi": true,
+  "trailingComma": "all"
 }

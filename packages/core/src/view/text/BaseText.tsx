@@ -1,130 +1,98 @@
-import classNames from 'classnames'
-import { createElement as h, Component } from 'preact/compat'
-import { ElementState, EventType } from '../../constant'
-import { GraphModel, BaseNodeModel, BaseEdgeModel } from '../../model'
-import { Text } from '../shape'
-import { IDragParams, StepDrag } from '../../util'
+import { h, Component } from 'preact';
+import GraphModel from '../../model/GraphModel';
+import { StepDrag } from '../../util/drag';
+import Text from '../basic-shape/Text';
+import { IBaseModel } from '../../model/BaseModel';
+import { ElementState } from '../../constant/constant';
 
-export type IBaseTextProps = {
-  model: BaseNodeModel | BaseEdgeModel
-  graphModel: GraphModel
-  draggable: boolean
-  editable: boolean
-}
+type IProps = {
+  model: IBaseModel;
+  graphModel: GraphModel;
+  draggable: boolean;
+  editable: boolean;
+};
+type IState = {
+  isHovered: boolean;
+};
 
-export type IBaseTextState = {
-  isHovered: boolean
-}
-
-export class BaseText<
-  P extends IBaseTextProps,
-  S extends IBaseTextState,
-> extends Component<P, S> {
-  stepperDrag: StepDrag
-
-  constructor(props: P) {
-    super()
-    const { draggable } = props
-    // TODO: 确认为什么不在 new 的时候传入 model，而在下面使用的时候赋值
-    this.stepperDrag = new StepDrag({
+export default class BaseText extends Component<IProps, IState> {
+  dragHandler: (ev: MouseEvent) => void;
+  sumDeltaX = 0;
+  sumDeltaY = 0;
+  stepDrag: StepDrag;
+  constructor(config) {
+    super();
+    const { model, draggable } = config;
+    this.stepDrag = new StepDrag({
       onDragging: this.onDragging,
       step: 1,
-      // model,
-      eventType: 'TEXT',
       isStopPropagation: draggable,
-    })
+    });
   }
-
-  getShape(): h.JSX.Element | null {
-    const { model, graphModel } = this.props
-    const { editConfigModel } = graphModel
-    const {
-      text: { value, x, y, editable, draggable },
-    } = model
+  getShape() {
+    const { model, graphModel } = this.props;
+    const { text } = model;
+    const { editConfigModel } = graphModel;
+    const { value, x, y, editable, draggable } = text;
     const attr = {
       x,
       y,
       className: '',
       value,
-    }
-    // DONE: 代码优化，看是否可以引入 classnames
-    // TODO: 确认下面逻辑是否正确，确认正确后删除下面注释
-    // if (editable) {
-    //   attr.className = 'lf-element-text';
-    // } else if (draggable || editConfigModel.nodeTextDraggable) {
-    //   attr.className = 'lf-text-draggable';
-    // } else {
-    //   attr.className = 'lf-text-disabled';
-    // }
-    const style = model.getTextStyle()
-    const isDraggable = editConfigModel.nodeTextDraggable || draggable
-
-    return (
-      <Text
-        {...attr}
-        {...style}
-        className={classNames({
-          'lf-element-text': editable,
-          'lf-text-draggable': !editable && isDraggable,
-          'lf-text-disabled': !editable && !isDraggable,
-        })}
-        model={model}
-      />
-    )
-  }
-
-  mouseDownHandler = (e: MouseEvent) => {
-    const { draggable, model, graphModel } = this.props
-    const {
-      editConfigModel: { nodeTextDraggable },
-    } = graphModel
-
-    if (draggable ?? nodeTextDraggable) {
-      this.stepperDrag.model = model
-      this.stepperDrag.handleMouseDown(e)
-    }
-  }
-
-  onDragging = ({ deltaX, deltaY }: IDragParams) => {
-    const {
-      model,
-      graphModel: { transformModel },
-    } = this.props
-
-    if (deltaX && deltaY) {
-      const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
-      model.moveText(curDeltaX, curDeltaY)
-    }
-  }
-
-  dbClickHandler = () => {
-    // 静默模式下，双击不更改状态，不可编辑
-    const {
-      editable,
-      graphModel: { eventCenter },
-      model,
-    } = this.props
+    };
     if (editable) {
-      model.setElementState(ElementState.TEXT_EDIT)
+      attr.className = 'lf-element-text';
+    } else if (draggable || editConfigModel.nodeTextDraggable) {
+      attr.className = 'lf-text-draggable';
+    } else {
+      attr.className = 'lf-text-disabled';
     }
-    eventCenter.emit(EventType.TEXT_DBCLICK, {
-      data: model.text,
-      model,
-    })
+    const style = model.getTextStyle();
+    return (
+      <Text {...attr} {...style} model={model} />
+    );
   }
-
-  render(): h.JSX.Element | undefined {
+  onDragging = ({ deltaX, deltaY }) => {
     const {
-      model: { text },
-    } = this.props
+      model,
+      graphModel: {
+        transformModel,
+      },
+    } = this.props;
+    const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY);
+    model.moveText(curDeltaX, curDeltaY);
+  };
+  dblClickHandler = () => {
+    // 静默模式下，双击不更改状态，不可编辑
+    const { editable } = this.props;
+    if (editable) {
+      const { model } = this.props;
+      model.setElementState(ElementState.TEXT_EDIT);
+    }
+  };
+  mouseDownHandle = (ev: MouseEvent) => {
+    const {
+      draggable,
+      model,
+      graphModel: {
+        editConfigModel: { nodeTextDraggable },
+      },
+    } = this.props;
+    if (draggable || nodeTextDraggable) {
+      this.stepDrag.model = model;
+      this.stepDrag.handleMouseDown(ev);
+    }
+  };
+  render() {
+    const { model: { text } } = this.props;
     if (text) {
       return (
-        <g onMouseDown={this.mouseDownHandler} onDblClick={this.dbClickHandler}>
-          {this.getShape()}
+        <g onMouseDown={this.mouseDownHandle} onDblClick={this.dblClickHandler}>
+          {
+            this.getShape()
+          }
         </g>
-      )
+      );
     }
   }
 }
-
-export default BaseText
