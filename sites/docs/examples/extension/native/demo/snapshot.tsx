@@ -123,28 +123,28 @@ const data = {
     {
       id: 'rect_1',
       type: 'rect',
-      x: 200,
+      x: 300,
       y: 0,
       text: '你好1',
     },
     {
       id: 'rect_2',
       type: 'rect',
-      x: 400,
+      x: 500,
       y: 0,
       text: '你好2',
     },
     {
       id: '3',
       type: 'image',
-      x: 200,
+      x: 300,
       y: 100,
       text: '云',
     },
     {
       id: '5',
       type: 'image',
-      x: 400,
+      x: 500,
       y: 100,
       text: '菱形',
     },
@@ -495,5 +495,10 @@ insertCss(`
 .uml-footer {
   padding: 5px 10px;
   font-size: 14px;
+}
+
+.lf-dnd-shape {
+  width: 20px !important;
+  height: 20px !important;
 }
 `);
