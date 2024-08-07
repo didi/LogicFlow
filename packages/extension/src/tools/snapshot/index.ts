@@ -264,7 +264,7 @@ export class Snapshot {
   }
 
   /**
-   * 获取脚本css样式
+   * 获取脚本 css 样式
    * @returns
    */
   private getClassRules(): string {
@@ -273,7 +273,7 @@ export class Snapshot {
       const { styleSheets } = document
       for (let i = 0; i < styleSheets.length; i++) {
         const sheet = styleSheets[i]
-        // 这里是为了过滤掉不同源css脚本
+        // 这里是为了过滤掉不同源 css 脚本，防止报错终止导出
         try {
           for (let j = 0; j < sheet.cssRules.length; j++) {
             rules += sheet.cssRules[j].cssText
@@ -292,10 +292,10 @@ export class Snapshot {
   }
 
   /**
-   * 将 svg 转化为中间产物 canvas 对象，再转换为用户需要的其它格式
-   * @param svg
-   * @param toImageOptions
-   * @returns
+   * 将 svg 转化为 canvas
+   * @param svg - svg 元素
+   * @param toImageOptions - 图像选项
+   * @returns Promise<canvas> - 返回 canvas 对象
    */
   private async getCanvasData(
     svg: Element,
@@ -334,15 +334,19 @@ export class Snapshot {
     const { graphModel } = this.lf
     const { transformModel } = graphModel
     const { SCALE_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } = transformModel
+
+    // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
     ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
       (-offsetX + TRANSLATE_X) * (1 / SCALE_X)
     }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y)})`
+
     // 包含所有元素的最小宽高
     const bboxWidth = Math.ceil(bbox.width / SCALE_X)
     const bboxHeight = Math.ceil(bbox.height / SCALE_Y)
     const canvas = document.createElement('canvas')
     canvas.style.width = `${bboxWidth}px`
     canvas.style.height = `${bboxHeight}px`
+
     // 宽高值 默认加padding 40，保证图形不会紧贴着下载图片
     canvas.width = bboxWidth * dpr + padding * 2
     canvas.height = bboxHeight * dpr + padding * 2
@@ -362,7 +366,7 @@ export class Snapshot {
 
     const img = new Image()
 
-    // 设置css样式
+    // 注入 css 样式
     const style = document.createElement('style')
     style.innerHTML = this.getClassRules()
     const foreignObject = document.createElement('foreignObject')
