@@ -20,7 +20,7 @@ import CustomHtml from '../../components/nodes/custom-html/Html';
 import data from './data';
 import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg';
 
-import './index.less';
+import styles from './index.less';
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
 
@@ -233,56 +233,64 @@ export default function SnapshotExample() {
 
   return (
     <Card title="LogicFlow Extension - Snapshot">
-      <Space>
+      <Flex wrap gap="small">
         <Input
+          className={styles.input}
           addonBefore="文件名："
           value={fileName}
           onChange={(e) => setFileName(e.target.value)}
         />
-        <span>文件类型：</span>
-        <Select
-          defaultValue={fileType}
-          style={{ width: 120 }}
-          onChange={(value) => setFileType(value)}
-          options={[
-            { value: 'png', label: 'png' },
-            { value: 'jpeg', label: 'jpeg' },
-            { value: 'webp', label: 'webp' },
-            { value: 'gif', label: 'gif' },
-            { value: 'svg', label: 'svg' },
-          ]}
-        />
+
         <InputNumber
+          className={styles.input}
           addonBefore="宽度："
           value={width}
           onChange={(value) => handleInputChange(value, 'width')}
         />
         <InputNumber
+          className={styles.input}
           addonBefore="高度："
           value={height}
           onChange={(value) => handleInputChange(value, 'height')}
         />
-      </Space>
-      <p></p>
-      <Space>
         <Input
+          className={styles.input}
           addonBefore="背景颜色"
           value={backgroundColor}
           onChange={(e) => setBackgroundColor(e.target.value)}
         />
         <InputNumber
+          className={styles.input}
           addonBefore="padding："
           value={padding}
           onChange={(value) => handleInputChange(value, 'padding')}
         />
         <InputNumber
+          className={styles.input}
           addonBefore="图片质量："
           value={quality}
           onChange={(value) => handleInputChange(value, 'quality')}
         />
-        <span>导出局部渲染：</span>
-        <Switch onChange={(partial) => setPartial(partial)} />
-      </Space>
+        <div>
+          <span>文件类型：</span>
+          <Select
+            defaultValue={fileType}
+            style={{ width: 120 }}
+            onChange={(value) => setFileType(value)}
+            options={[
+              { value: 'png', label: 'png' },
+              { value: 'jpeg', label: 'jpeg' },
+              { value: 'webp', label: 'webp' },
+              { value: 'gif', label: 'gif' },
+              { value: 'svg', label: 'svg' },
+            ]}
+          />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span>导出局部渲染：</span>
+          <Switch onChange={(partial) => setPartial(partial)} />
+        </div>
+      </Flex>
       <Divider />
       <Space>
         <Button onClick={downLoad}>下载快照</Button>
@@ -291,7 +299,7 @@ export default function SnapshotExample() {
       </Space>
       <Divider />
       <Flex align="center" justify="center">
-        <div ref={containerRef} className="graph"></div>
+        <div ref={containerRef} className={styles.graph}></div>
       </Flex>
       <Row>
         <Col span={12}>
