@@ -13,7 +13,6 @@ export type PerformanceLongTaskEntry = {
 
 /**
  * 监控长任务事件响应时间：耗费了 50 毫秒或更多时间
- * 如果entry.duration > 100， 判断大于100ms，用户就会感觉卡顿
  */
 export const startObservingLongTasks = (callback: any) => {
   const observer = new PerformanceObserver((entryList) => {

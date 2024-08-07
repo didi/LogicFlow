@@ -4,15 +4,13 @@
       <div class="card-header">
         <el-space wrap :size="20">
           <span>操作栏</span>
-          <el-button type="primary" @click="addElementNode(1)">添加1个element</el-button>
-          <el-button type="primary" @click="addElementNode(10)">添加10个element</el-button>
-          <el-button type="primary" @click="addEchartNode(1)">添加1个Echart</el-button>
-          <el-button type="primary" @click="addEchartNode(10)">添加10个Echart</el-button>
+          <el-input v-model="domNumber"></el-input>
+          <el-button type="primary" @click="addElementNode(domNumber)">添加Element节点</el-button>
+          <el-button type="primary" @click="addEchartNode(domNumber)">添加Echart节点</el-button>
           <el-button type="primary" @click="addDomNumber(domNumber, true)"
             >添加个节点和边:</el-button
           >
           <el-button type="primary" @click="addDomNumber(domNumber, false)">只添加节点:</el-button>
-          <el-input v-model="domNumber"></el-input>
           <span>elment元素数量：{{ elementNumber }}</span>
           <span>Echart元素数量：{{ echartNumber }}</span>
           <span>节点数量：{{ nodeNumber }}</span>
