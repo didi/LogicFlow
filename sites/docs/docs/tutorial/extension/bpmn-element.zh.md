@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: BPMN 元素 BpmnElement
+title: BPMN 元素 (BpmnElement)
 order: 11
 toc: content
 ---

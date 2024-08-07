@@ -3,9 +3,10 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 导出 Snapshot
-order: 12
+title: 导出图片 (Snapshot)
+order: 6
 toc: content
+tag: 优化
 ---
 
 我们经常需要将画布内容通过图片的形式导出来，我们提供了一个独立的插件包 `Snapshot` 来使用这个功能。

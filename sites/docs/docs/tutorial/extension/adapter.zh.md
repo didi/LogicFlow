@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 数据转换 Adapter
+title: 数据转换 (Adapter)
 order: 10
 toc: content
 ---

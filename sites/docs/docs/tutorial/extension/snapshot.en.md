@@ -4,7 +4,7 @@ group:
   title: Plug-in functionality
   order: 3
 title: Snapshot
-order: 12
+order:  6
 toc: content
 ---
 

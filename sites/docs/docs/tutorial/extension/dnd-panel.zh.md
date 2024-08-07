@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 拖拽面板 DndPanel
+title: 拖拽面板 (DndPanel)
 order: 2
 toc: content
 ---

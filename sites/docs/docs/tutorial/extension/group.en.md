@@ -6,6 +6,7 @@ group:
 title: Group
 order: 7
 toc: content
+tag: Deprecated
 ---
 
 LogicFlow supports grouping. Grouping is a custom node built-in in LogicFlow, so developers can

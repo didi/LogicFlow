@@ -3,10 +3,10 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 分组 (Group)
-order: 15
+title: 动态分组 (DynamicGroup)
+order: 8
 toc: content
-tag: 即将废弃
+tag: 新插件
 ---
 
 LogicFlow 支持分组。分组是 LogicFlow 内置的自定义节点, 所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。

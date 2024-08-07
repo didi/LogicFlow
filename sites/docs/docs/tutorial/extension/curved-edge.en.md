@@ -4,7 +4,7 @@ group:
   title: Plug-in functionality
   order: 3
 title: CurvedEdge
-order: 8
+order: 12
 toc: content
 ---
 

@@ -3,9 +3,10 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 框选 SelectionSelect
+title: 框选 (SelectionSelect)
 order: 5
 toc: content
+tag: 优化
 ---
 
 <style>

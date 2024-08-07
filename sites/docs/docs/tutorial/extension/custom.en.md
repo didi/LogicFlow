@@ -3,8 +3,8 @@ nav: Guide
 group:
   title: Plug-in functionality
   order: 3
-title: CustomPlugin
-order: 13
+title: Custom Plugin
+order: 17
 toc: content
 ---
 

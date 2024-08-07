@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 边上插入节点 InsertNodeInPolyline
+title: 边上插入节点 (InsertNodeInPolyline)
 order: 9
 toc: content
 ---

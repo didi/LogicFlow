@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 控制面板 Control
+title: 控制面板 (Control)
 order: 3
 toc: contents
 ---

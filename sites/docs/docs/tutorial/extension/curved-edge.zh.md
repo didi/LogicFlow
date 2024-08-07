@@ -3,8 +3,8 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 圆角折线 CurvedEdge
-order: 8
+title: 圆角折线 (CurvedEdge)
+order: 12
 toc: content
 ---
 

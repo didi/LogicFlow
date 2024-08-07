@@ -3,7 +3,7 @@ nav: Guide
 group:
   title: Intermediate
   order: 2
-title: Set the editing method of flowchart
+title: Edit Config Settings
 order: 5
 toc: content
 ---

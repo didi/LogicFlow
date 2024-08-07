@@ -3,8 +3,8 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 自定义插件 CustomPlugin
-order: 13
+title: 自定义插件 (Custom Plugin)
+order: 17
 toc: content
 ---
 

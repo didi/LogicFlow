@@ -3,9 +3,10 @@ nav: 指南
 group:
   title: 插件功能
   order: 3
-title: 小地图 MiniMap
+title: 小地图 (MiniMap)
 order: 4
 toc: content
+tag: 优化
 ---
 
 ### 启用

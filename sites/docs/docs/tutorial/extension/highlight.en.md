@@ -18,26 +18,26 @@ import LogicFlow from '@logicflow/core'
 import { Highlight } from '@logicflow/extension'
 import '@logicflow/extension/es/index.css'
 
-LogicFlow.use(Highlight);
+LogicFlow.use(Highlight)
 
 ```
 
 ## Configuration items
 
-| Field | Type | Function | Required | Description |
-|-----------|----------|---------------------|------|----------------------------------------------------------------------------------------------------------------|
-| mode | string | Highlight type, used to control the highlight display effect | | This configuration item supports three values: <br/>1. 'single': Highlight the current node/edge<br/>2. 'path': Highlight all edges and nodes on the path of the current node/edge<br/>3. 'neighbour': Highlight all edges and nodes directly associated with the current node/edge |
-| enable | boolean | Whether to enable highlighting | | This configuration item is used to control whether to display the highlighting effect |
+| Field  | Type    | Function                                                     | Required | Description                                                                                                                                                                                                                                                                         |
+|--------|---------|--------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mode   | string  | Highlight type, used to control the highlight display effect |          | This configuration item supports three values: <br/>1. 'single': Highlight the current node/edge<br/>2. 'path': Highlight all edges and nodes on the path of the current node/edge<br/>3. 'neighbour': Highlight all edges and nodes directly associated with the current node/edge |
+| enable | boolean | Whether to enable highlighting                               |          | This configuration item is used to control whether to display the highlighting effect                                                                                                                                                                                               |
 
 ## Default state
 By default, the highlight plug-in is enabled, using the mode of highlighting all edges and nodes on the path of the current node/edge. It will take effect when the mouse moves into the node.
 
 ## API
 The Highlight plug-in provides an API for modifying the state:
+
 ### setMode
 Set the highlighting mode, usage:
 ```tsx | purex | pure
-
 lf.extension.highlight.setMode('single');
 
 ```

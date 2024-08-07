@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 进阶
   order: 2
-title: 设置图编辑方式
+title: 图编辑配置项
 order: 5
 toc: content
 ---
