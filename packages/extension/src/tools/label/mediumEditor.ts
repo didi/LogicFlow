@@ -1,6 +1,7 @@
 import MediumEditor from 'medium-editor'
 import Picker from 'vanilla-picker'
 import rangy from 'rangy'
+import 'rangy/lib/rangy-classapplier'
 
 export const defaultOptions = {
   toolbar: {

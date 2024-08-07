@@ -39,11 +39,11 @@
     "@logicflow/core": "workspace:*"
   },
   "dependencies": {
-    "@logicflow/core": "workspace:*",
     "@antv/hierarchy": "^0.6.11",
+    "@logicflow/core": "workspace:*",
+    "classnames": "^2.3.2",
     "lodash-es": "^4.17.21",
     "medium-editor": "^5.23.3",
-    "classnames": "^2.3.2",
     "mobx": "^5.15.7",
     "preact": "^10.17.1",
     "rangy": "^1.3.1",
