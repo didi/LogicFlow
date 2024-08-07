@@ -91,6 +91,7 @@ class Graph extends Component<IGraphProps> {
     const { adjustEdge } = editConfigModel
     return (
       <div className="lf-graph" flow-id={graphModel.flowId}>
+        {/* 元素层 */}
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>
           <g className="lf-base">
             {map(graphModel.sortElements, (nodeModel) =>
@@ -99,6 +100,7 @@ class Graph extends Component<IGraphProps> {
           </g>
           {fakeNode ? this.getComponent(fakeNode, graphModel) : ''}
         </CanvasOverlay>
+        {/* 虚线边框 */}
         <ModificationOverlay graphModel={graphModel}>
           <OutlineOverlay graphModel={graphModel} />
           {adjustEdge ? <BezierAdjustOverlay graphModel={graphModel} /> : ''}
@@ -108,10 +110,12 @@ class Graph extends Component<IGraphProps> {
             ''
           )}
         </ModificationOverlay>
+        {/* 工具层：插件 */}
         <ToolOverlay graphModel={graphModel} tool={tool} />
         {options.background && (
           <BackgroundOverlay background={options.background} />
         )}
+        {/* 画布网格 */}
         {grid && <Grid {...grid} graphModel={graphModel} />}
       </div>
     )

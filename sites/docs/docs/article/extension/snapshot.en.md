@@ -6,17 +6,17 @@ toc: content
 
 ## Introduction
 
-The `snapshot` plugin is used to export canvas snapshots, a feature frequently used in daily operations and one of the core plugins in the LogicFlow system. Although this plugin was introduced in version `1.0`, its basic export capabilities and certain defects led to frequent feedback from the LogicFlow community. Consequently, in version `2.0`, we have significantly upgraded the plugin, enhancing its export capabilities and fixing the issue of exporting online images. This article will delve into the implementation details of the `snapshot` plugin, explaining how it presents canvas content as images.
+The `snapshot` plugin is used to export canvas snapshots. This feature is frequently used in daily operations and is one of the core plugins in the LogicFlow plugin system. Although this plugin was implemented in version 1.0, the export capabilities were basic and had some export issues, leading to frequent feedback from the LogicFlow community. Therefore, we made significant upgrades in version 2.0, enhancing export capabilities and fixing issues with exporting online images on the canvas. This document will explore the implementation principles of the `snapshot` plugin and demonstrate how to present the canvas content as an image.
 
-Before diving into the implementation details of `snapshot`, it is advisable to have a basic understanding of `svg` and `canvas`. If you are not familiar with these concepts, it is recommended to review related materials to better grasp the content of this article.
+Before diving into the `snapshot` implementation principles, it is recommended that you have a basic understanding of `svg` and `canvas`. If you are not familiar with these concepts, it is advised to read related materials to better understand the content of this document.
 
-Additionally, to better understand the implementation principles of `snapshot`, please review the basic usage of the [snapshot](../../tutorial/extension/snapshot.en.md) plugin and how to [customize plugins](../../tutorial/extension/custom.en.md). This will provide a solid foundation for comprehending the implementation of `snapshot`.
+Additionally, to better understand the implementation principles of `snapshot`, it would be helpful to first read the basic usage of the [snapshot](../../tutorial/extension/snapshot.zh.md) plugin and how to [customize plugins](../../tutorial/extension/custom.zh.md), which will provide a good foundation for understanding the `snapshot` implementation.
 
-## 2. Registration and Usage
+## 1. Registration and Usage
 
-During plugin initialization, three methods are created: `getSnapshot`, `getSnapshotBlob`, and `getSnapshotBase64`. These methods are designed for exporting canvas images, retrieving `Blob` objects, and obtaining `base64` representations respectively.
+When the plugin initializes, it creates three methods: `getSnapshot`, `getSnapshotBlob`, and `getSnapshotBase64`, which are used to export canvas images, get `Blob` objects, and get `base64` objects, respectively.
 
-We directly implement these three methods within the class to allow calling them via `lf.extension.snapshot.getSnapshot`. In the constructor, each method is bound to the `lf` instance, enabling invocation using `lf.getSnapshot`.
+These methods are implemented in the class and bound to the `lf` instance in the `constructor`, allowing them to be called via `lf.getSnapshot`, `lf.getSnapshotBlob`, and `lf.getSnapshotBase64`.
 
 ```ts
 class Snapshot {
@@ -44,7 +44,7 @@ class Snapshot {
    * @param fileName
    * @param toImageOptions
    */
-  getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) {}
+  getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) => {}
 
   /**
    * Get Blob object
@@ -52,8 +52,7 @@ class Snapshot {
    * @param fileType
    * @returns
    */
-  getSnapshotBlob(backgroundColor?: string, fileType?: string) {}
-
+  getSnapshotBlob(backgroundColor?: string, fileType?: string) => {}
 
   /**
    * Get base64 object
@@ -61,24 +60,22 @@ class Snapshot {
    * @param fileType
    * @returns
    */
-  getSnapshotBase64(backgroundColor?: string, fileType?: string) {}
-
+  getSnapshotBase64(backgroundColor?: string, fileType?: string) => {}
 }
 ```
 
-## 3. Convert SVG to Canvas
+## 2. Converting SVG to Canvas
 
-The LogicFlow canvas is essentially an `svg` element where all elements reside. Our goal is to convert this `svg` into an image, `base64` data, or a `blob` object. `canvas` is the optimal choice because it provides native APIs to generate `base64` and `blob` data.
+The LogicFlow canvas is essentially an `svg` element where all elements reside. Our goal is to convert the `svg` into an image, `base64`, or `blob` object, and `canvas` is the best choice because it provides native `base64` and `blob` generation capabilities.
 
-Therefore, we implement the `getCanvasData` method to achieve the conversion from `svg` to `canvas`.
+Thus, we implement the `getCanvasData` method to convert `svg` to `canvas`.
 
 ```ts
-
 /**
- * Convert SVG into an intermediate canvas object, then transform it into other desired formats
- * @param svg
- * @param toImageOptions
- * @returns
+ * Convert SVG to Canvas
+ * @param svg - SVG element
+ * @param toImageOptions - Image options
+ * @returns Promise<canvas> - Returns canvas object
  */
 getCanvasData(svg: Element, toImageOptions: ToImageOptions) {
   const canvas = document.createElement('canvas')
@@ -86,9 +83,10 @@ getCanvasData(svg: Element, toImageOptions: ToImageOptions) {
   const { width, height } = svg.getBoundingClientRect()
   canvas.width = width
   canvas.height = height
-  // Serialize svg to base64
+  // Serialize SVG to string: essentially HTML code text
   const data = new XMLSerializer().serializeToString(svg)
   const img = new Image()
+  // Convert SVG string to base64
   img.src = `data:image/svg+xml;base64,${btoa(data)}`
   return new Promise((resolve) => {
     img.onload = () => {
@@ -97,28 +95,26 @@ getCanvasData(svg: Element, toImageOptions: ToImageOptions) {
     }
   })
 }
-
 ```
 
 1. Create a `canvas` element.
-2. Retrieve the width and height of the `svg` element and set them as the dimensions of the `canvas` element.
-3. Serialize the `svg` element into a `base64` string.
-4. Create an `img` element and load the `base64` string into it.
-5. Draw the `img` element onto the `canvas` and return the `canvas` element.
+2. Get the width and height of the `svg` element and set these dimensions for the `canvas` element.
+3. Serialize the `svg` element to a `base64` string.
+4. Create an `img` element, set its `src` to the `base64` string, and draw the `img` element onto the `canvas`.
 
-#### Some considerations 🤔️
+#### Some Thoughts 🤔️
 
-##### 1. Why serialize the svg into a base64 string and draw it onto the canvas using an img element?
+##### 1. Why serialize SVG to a base64 string and draw it on a canvas?
 
-Because `canvas` does not support direct drawing of `svg` elements, it's necessary to first serialize the `svg` element into a `base64` string, load it into an `img` element, and then draw this `img` element onto the `canvas`.
+Because `canvas` does not support directly drawing `svg` elements, the `svg` needs to be serialized to a `base64` string, which is then used as the `src` of an `img` element, and finally drawn onto the `canvas`.
 
-##### 2. Why generate a base64 string using canvas when svg is already serialized into base64?
+##### 2. Why generate base64 strings via canvas when the `svg` string is already base64 encoded?
 
-The base64 string generated from `canvas` can store various types of image data (`png`, `jpeg`, etc.), whereas the initial base64 string only contains `svg` type image data. Therefore, `canvas` is used to generate the appropriate `base64` string format.
+The base64 encoded string only stores `svg` type image data, while `canvas` can generate base64 strings for various image types like `png` and `jpeg`. Thus, we need `canvas` to generate base64 strings of different image types.
 
-## 4. Implementing getSnapshotBase64
+## 3. Implementing `getSnapshotBase64`
 
-By calling the `getCanvasData` method to obtain the `canvas`, we then use the `canvas`'s `toDataURL` method to generate a `base64` string.
+By calling `getCanvasData`, we obtain a `canvas` and then use the `toDataURL` method on the `canvas` to generate the `base64` string.
 
 ```ts
 /**
@@ -132,7 +128,7 @@ getSnapshotBase64(backgroundColor?: string, fileType?: string) {
     this.getCanvasData(svg).then(
       (canvas: HTMLCanvasElement) => {
         const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
-        // Output base64 and image dimensions
+        // Output base64 as well as image width and height
         resolve({
           data: base64,
           width: canvas.width,
@@ -144,9 +140,9 @@ getSnapshotBase64(backgroundColor?: string, fileType?: string) {
 }
 ```
 
-## 5. Implementing getSnapshot
+## 4. Implementing `getSnapshot`
 
-Once the `base64` is generated, we can directly use it to download the image.
+Having generated the `base64`, we can directly use it to download the image.
 
 ```ts
 /**
@@ -157,7 +153,7 @@ Once the `base64` is generated, we can directly use it to download the image.
 getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) {
   this.getCanvasData(svg).then(
     (canvas: HTMLCanvasElement) => {
-      // Convert canvas element to base64, using image/octet-stream ensures all browsers can download correctly
+      // Convert canvas element to base64 and use image/octet-stream to ensure compatibility across browsers
       const imgUrl = canvas
         .toDataURL(`image/${fileType}`, quality)
         .replace(`image/${fileType}`, 'image/octet-stream')
@@ -184,9 +180,9 @@ private triggerDownload(imgUrl: string) {
 }
 ```
 
-## 6. Implementing getSnapshotBlob
+## 5. Implementing `getSnapshotBlob`
 
-By calling the `getCanvasData` method to obtain the `canvas`, we then use the `canvas`'s `toBlob` method to generate a `blob` object.
+By calling `getCanvasData`, we obtain a `canvas` and then use the `toBlob` method on the `canvas` to generate the `blob` object.
 
 ```ts
 /**
@@ -201,7 +197,7 @@ getSnapshotBlob(backgroundColor?: string, fileType?: string){
       (canvas: HTMLCanvasElement) => {
         canvas.toBlob(
           (blob) => {
-            // Output blob and image dimensions
+            // Output blob as well as image width and height
             resolve({
               data: blob!,
               width: canvas.width,
@@ -216,8 +212,117 @@ getSnapshotBlob(backgroundColor?: string, fileType?: string){
 }
 ```
 
+## 6. In-Depth Exploration
+
+### 1. Exporting the Area Range
+
+The canvas has zooming and panning capabilities, meaning exporting the entire canvas is not practical. We need to export the smallest rectangle that encompasses all elements on the canvas, as shown below:
+
+![area](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/article/extension/snapshot/image.png)
+
+The image above shows the smallest rectangle that needs to be exported. By adjusting the drawing area on the `canvas`, we can ensure that only the important parts of the canvas are exported.
+
+How do we ensure that only this area is drawn on the `canvas`?
+
+To ensure only this area is drawn on the `canvas`, we:
+
+1. Copy the `svg` element to keep the original canvas unchanged.
+2. Adjust the position of the copied `svg` element to move the smallest rectangle to the top-left corner since `canvas` starts drawing from the top-left corner by default.
+3. Set the drawing width and height on the `canvas` to match the width and height of the area to ensure the exported content is
+
+ consistent.
+
+This section only provides the general idea as understanding the source code requires some knowledge of the LogicFlow canvas structure. Interested readers can explore the source code on their own 🤗.
+
+### 2. Image Clarity on Export
+
+`canvas` draws images as bitmaps, and screen device pixel ratios need to be considered. You can get the device pixel ratio using `window.devicePixelRatio`. Adjust the export width and height of the `canvas` according to the device pixel ratio.
+
+```ts
+const dpr = window.devicePixelRatio || 1;
+
+// bboxWidth, bboxHeight export area width and height
+canvas.width = bboxWidth * dpr; // Physical pixel width
+canvas.height = bboxHeight * dpr; // Physical pixel height
+
+// Adjust the drawing context scaling:
+const context = canvas.getContext('2d');
+context.scale(dpr, dpr);
+```
+
+### 3. Online Images Not Exporting Issue
+
+**Phenomenon**: When `svg` elements contain online images, whether as `image` SVG tags or `img` tags within `foreignObject`, these images do not appear in the exported image.
+
+**Reason**: When serializing `svg` to `base64`, the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa" target="_blank">btoa</a> method only encodes the raw `svg` string and does not include external resources. Thus, online images are lost during this process.
+
+**Solution**: Convert online image URLs to local `base64` addresses to ensure that image resources are not lost. This involves using `fetch` to convert the online `url` to a `blob` object, then converting the `blob` to a `base64` address.
+
+```ts
+fetch(url)
+  .then(response => {
+    return response.blob();
+  })
+  .then(blob => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    })
+  })
+  .catch(error => {
+    return Promise.resolve(url); // Return original URL to continue processing in case of error
+  });
+```
+
+### 4. Injecting CSS Styles
+
+Styles Loss: For exporting `svg`, we serialize the `svg` and convert it to an image. As a result, external styles defined outside are not included and are therefore lost.
+
+How to inject?
+
+Embed all related `css` styles directly into the `svg` file to ensure that these styles are included during the serialization.
+
+```ts
+/**
+ * Get script CSS styles
+ * @returns
+ */
+private getClassRules(): string {
+  let rules = ''
+  if (this.useGlobalRules) {
+    const { styleSheets } = document
+    for (let i = 0; i < styleSheets.length; i++) {
+      const sheet = styleSheets[i]
+      // Filter out CSS scripts from different origins to avoid errors
+      try {
+        for (let j = 0; j < sheet.cssRules.length; j++) {
+          rules += sheet.cssRules[j].cssText
+        }
+      } catch (error) {
+        console.log(
+          'CSS scripts from different sources have been filtered out',
+        )
+      }
+    }
+  }
+  if (this.customCssRules) {
+    rules += this.customCssRules
+  }
+  return rules
+}
+
+// Inject CSS styles
+const style = document.createElement('style')
+style.innerHTML = this.getClassRules()
+const foreignObject = document.createElement('foreignObject')
+foreignObject.appendChild(style)
+svg.appendChild(foreignObject)
+```
+
 ## Conclusion
 
-The above describes the implementation approach for the snapshot plugin. We will continue to enhance the snapshot functionality to meet more requirements. Special thanks to external open-source contributors (<a href="https://github.com/didi/LogicFlow/pull/1678" target="_blank">PR</a>). If you have any ideas or suggestions, please feel free to discuss them in the user group.
+In summary, the `snapshot` plugin exports images by converting `svg` to `canvas` and using the `toDataURL` and `toBlob` methods of `canvas` to export the image. This document outlines the implementation plan and core code of the `snapshot` plugin. We will continue to enhance the `snapshot` functionality to meet more needs. Special thanks to external contributors (see <a href="https://github.com/didi/LogicFlow/pull/1678" target="_blank">PR</a>). If you have any ideas or suggestions, feel free to discuss them in the user group!
 
 > Add WeChat ID to join the user group: logic-flow
