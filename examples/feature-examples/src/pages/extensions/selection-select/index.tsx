@@ -1,5 +1,5 @@
 import LogicFlow from '@logicflow/core'
-import { SelectionSelect } from '@logicflow/extension'
+import { SelectionSelect, DynamicGroup } from '@logicflow/extension'
 
 import { Card, Button, Flex, Form, Radio, Divider, Space } from 'antd'
 import { useState, useEffect, useRef } from 'react'
@@ -137,7 +137,7 @@ export default function SelectionSelectExample() {
         grid: {
           size: 20,
         },
-        plugins: [SelectionSelect],
+        plugins: [SelectionSelect, DynamicGroup],
       })
 
       lf.on(

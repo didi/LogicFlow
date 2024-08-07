@@ -197,7 +197,7 @@ export class Label implements Extension {
    * @param position
    */
   private addLabel(element: GraphElement, position: Position) {
-    const { maxCount } = this
+    const { isMultiple, maxCount } = this
     const {
       properties: { _label, _labelOption },
     } = element
@@ -217,7 +217,7 @@ export class Label implements Extension {
       vertical: false,
     }
 
-    if (len >= (curLabelOption?.maxCount ?? maxCount)) {
+    if (!isMultiple || len >= (curLabelOption?.maxCount ?? maxCount)) {
       return
     }
 

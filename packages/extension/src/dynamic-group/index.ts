@@ -512,7 +512,7 @@ export class DynamicGroup {
 
       return true
     })
-    graphModel.group = this
+    graphModel.dynamicGroup = this
 
     lf.on('node:add,node:drop,node:dnd-add', this.addNodeToGroup)
     lf.on('node:delete', this.removeNodeFromGroup)

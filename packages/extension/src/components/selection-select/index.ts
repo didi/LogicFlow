@@ -149,10 +149,10 @@ export class SelectionSelect {
       const { x: x1, y: y1 } = this.endPoint
       // 返回框选范围，左上角和右下角的坐标
       const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)]
-      const rt: PointTuple = [Math.max(x, x1), Math.max(y, y1)]
+      const rb: PointTuple = [Math.max(x, x1), Math.max(y, y1)]
       this.lf.emit('selection:selected-area', {
         topLeft: lt,
-        bottomRight: rt,
+        bottomRight: rb,
       })
       // 选区太小的情况就忽略
       if (Math.abs(x1 - x) < 10 && Math.abs(y1 - y) < 10) {
@@ -160,19 +160,23 @@ export class SelectionSelect {
       }
       const elements = this.lf.graphModel.getAreaElement(
         lt,
-        rt,
+        rb,
         this.isWholeEdge,
         this.isWholeNode,
         true,
       )
-      const { group } = this.lf.graphModel
+      const { dynamicGroup } = this.lf.graphModel
       elements.forEach((element) => {
         // 如果节点属于分组，则不不选中节点
-        if (!group || !group.getNodeGroup(element.id)) {
+        if (!dynamicGroup || !dynamicGroup.getGroupByNodeId(element.id)) {
           this.lf.selectElementById(element.id, true)
         }
       })
-      this.lf.emit('selection:selected', elements)
+      this.lf.emit('selection:selected', {
+        elements,
+        leftTopPoint: lt,
+        rightBottomPoint: rb,
+      })
     }
   }
 
