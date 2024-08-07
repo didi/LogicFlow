@@ -1,12 +1,12 @@
-import LogicFlow from '@logicflow/core'
-import { Control, MiniMap } from '@logicflow/extension'
+import LogicFlow from '@logicflow/core';
+import { Control, MiniMap } from '@logicflow/extension';
 
-import { Button, Card, Flex, Divider, Select, Form, Space } from 'antd'
-import { useState, useEffect, useRef } from 'react'
-import styles from './index.less'
+import { Button, Card, Flex, Divider, Select, Form, Space } from 'antd';
+import { useState, useEffect, useRef } from 'react';
+import styles from './index.less';
 
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -23,43 +23,43 @@ const config: Partial<LogicFlow.Options> = {
       fontSize: 12,
     },
   },
-}
+};
 
-const nodes: LogicFlow.NodeConfig[] = []
-const edges: LogicFlow.EdgeConfig[] = []
+const nodes: LogicFlow.NodeConfig[] = [];
+const edges: LogicFlow.EdgeConfig[] = [];
 
 for (let i = 0; i < 200; i++) {
-  const nodeStartId = `${i * 2 + 1}`
-  const nodeEndId = `${i * 2 + 2}`
+  const nodeStartId = `${i * 2 + 1}`;
+  const nodeEndId = `${i * 2 + 2}`;
   const nodeStart: LogicFlow.NodeConfig = {
     id: nodeStartId,
     type: 'rect',
     x: 400 * (i % 10) - 200,
     y: 100 * Math.floor(i / 10) - 500,
     text: `${i}-start`,
-  }
+  };
   const nodeEnd: LogicFlow.NodeConfig = {
     id: nodeEndId,
     type: 'rect',
     x: 400 * (i % 10),
     y: 100 * Math.floor(i / 10) - 500,
     text: `${i}-end`,
-  }
+  };
   const edge: LogicFlow.EdgeConfig = {
     id: `e_${i}`,
     type: 'polyline',
     sourceNodeId: nodeStartId,
     targetNodeId: nodeEndId,
-  }
-  nodes.push(nodeStart)
-  nodes.push(nodeEnd)
-  edges.push(edge)
+  };
+  nodes.push(nodeStart);
+  nodes.push(nodeEnd);
+  edges.push(edge);
 }
 
 const data: LogicFlow.GraphConfigData = {
   nodes,
   edges,
-}
+};
 
 const miniMapOptions: MiniMap.MiniMapOption = {
   isShowHeader: true,
@@ -69,17 +69,17 @@ const miniMapOptions: MiniMap.MiniMapOption = {
   height: 120,
   // leftPosition: 100,
   // topPosition: 100,
-}
+};
 
 export default function MiniMapExtension() {
-  const lfRef = useRef<LogicFlow>()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-  const [showEdge, setShowEdge] = useState(false)
-  const [position, setPosition] = useState('right-bottom')
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [showEdge, setShowEdge] = useState(false);
+  const [position, setPosition] = useState('right-bottom');
 
   useEffect(() => {
-    LogicFlow.use(MiniMap)
+    LogicFlow.use(MiniMap);
     if (!lfRef.current) {
       const lf = new LogicFlow({
         ...config,
@@ -95,64 +95,64 @@ export default function MiniMapExtension() {
             showEdge,
           },
         },
-      })
+      });
 
       lf.on('miniMap:close', () => {
-        setVisible(false)
-      })
+        setVisible(false);
+      });
 
-      lf.render(data)
-      lfRef.current = lf
+      lf.render(data);
+      lfRef.current = lf;
     }
-  }, [])
+  }, []);
 
   const toggleVisible = () => {
     if (lfRef.current) {
-      const miniMap = lfRef.current.extension.miniMap as MiniMap
+      const miniMap = lfRef.current.extension.miniMap as MiniMap;
       if (visible) {
-        miniMap.hide()
+        miniMap.hide();
       } else {
-        miniMap.show()
+        miniMap.show();
       }
-      setVisible(!visible)
+      setVisible(!visible);
     }
-  }
+  };
 
   const toggleShowEdge = () => {
     if (lfRef.current) {
-      const miniMap = lfRef.current.extension.miniMap as MiniMap
-      miniMap.setShowEdge(!showEdge)
-      setShowEdge(!showEdge)
+      const miniMap = lfRef.current.extension.miniMap as MiniMap;
+      miniMap.setShowEdge(!showEdge);
+      setShowEdge(!showEdge);
     }
-  }
+  };
 
   const handleReset = () => {
     if (lfRef.current) {
-      ;(lfRef.current.extension.miniMap as MiniMap).reset()
+      (lfRef.current.extension.miniMap as MiniMap).reset();
     }
-  }
+  };
 
   const updatePosition = (position: any) => {
     if (lfRef.current) {
-      const miniMap = lfRef.current.extension.miniMap as MiniMap
-      miniMap.updatePosition(position)
-      setPosition(position)
+      const miniMap = lfRef.current.extension.miniMap as MiniMap;
+      miniMap.updatePosition(position);
+      setPosition(position);
     }
-  }
+  };
 
   const updatePositionWithObject1 = () => {
-    ;(lfRef.current?.extension.miniMap as MiniMap).updatePosition({
+    (lfRef.current?.extension.miniMap as MiniMap).updatePosition({
       left: 100,
       top: 100,
-    })
-  }
+    });
+  };
 
   const updatePositionWithObject2 = () => {
-    ;(lfRef.current?.extension.miniMap as MiniMap).updatePosition({
+    (lfRef.current?.extension.miniMap as MiniMap).updatePosition({
       right: 100,
       bottom: 100,
-    })
-  }
+    });
+  };
 
   return (
     <Card title="LogicFlow Extension - MiniMap">
@@ -196,5 +196,5 @@ export default function MiniMapExtension() {
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
-  )
+  );
 }

@@ -9,9 +9,19 @@ toc: content
 tag: 优化
 ---
 
+<style>
+table td:first-of-type {
+  word-break: normal;
+}
+</style>
+
 LogicFlow 的画布小地图是一个缩略图视图，帮助用户快速导航和定位大型或复杂图表的不同区域。
 
-本文是 2.0 版本最新语法，2.0 版本以前请移步<a href="https://docs.logic-flow.cn/docs/#/zh/guide/extension/component-minimap" target="_blank">旧版</a>
+本文是 2.0 版本最新语法，2.0 版本以前请移步<a href="https://docs.logic-flow.cn/docs/#/zh/guide/extension/component-minimap" target="_blank">旧版</a>。
+
+## 演示
+
+<code id="react-portal" src="@/src/tutorial/extension/mini-map"></code>
 
 ## 使用
 
@@ -167,9 +177,3 @@ mini-map 事件。
 | 事件名  | 说明 | 事件对象 |
 | --------- | -------- | --------------------------- |
 | miniMap:close | 小地图隐藏 | {} |
-
-
-
-### 示例
-
-<a href="https://codesandbox.io/embed/intelligent-matsumoto-t1dc5?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> 去 CodeSandbox 查看示例</a>

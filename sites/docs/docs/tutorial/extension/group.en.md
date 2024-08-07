@@ -4,7 +4,7 @@ group:
   title: Plug-in functionality
   order: 3
 title: Group
-order: 7
+order: 15
 toc: content
 tag: Deprecated
 ---

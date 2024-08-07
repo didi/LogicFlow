@@ -6,9 +6,14 @@ group:
 title: Snapshot
 order:  6
 toc: content
+tag: Optimization
 ---
 
 We often need to export the canvas content as an image. We provide an independent plug-in package `Snapshot` to use this function.
+
+## Demonstration
+
+<code id="react-portal" src="@/src/tutorial/extension/snapshot"></code>
 
 ## usage
 

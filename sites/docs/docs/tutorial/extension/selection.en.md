@@ -6,6 +6,7 @@ group:
 title: SelectionSelect
 order: 5
 toc: content
+tag: Optimization
 ---
 
 <style>
@@ -14,37 +15,79 @@ table td:first-of-type {
 }
 </style>
 
-```tsx | purex | pure
-import LogicFlow from '@logicflow/core'
-import { SelectionSelect } from '@logicflow/extension'
-import '@logicflow/extension/lib/style/index.css'
+The SelectionSelect plugin in LogicFlow allows users to select multiple graphical elements by dragging the mouse to draw a rectangular box, facilitating batch operations or editing.
 
-LogicFlow.use(SelectionSelect)
+## Demonstration
+
+<code id="react-portal" src="@/src/tutorial/extension/selection-select"></code>
+
+## Usage
+
+### Registration
+
+There are two registration methods: global registration and local registration. The difference is that global registration allows every `lf` instance to use it.
+
+```tsx | pure
+import LogicFlow from "@logicflow/core";
+import { SelectionSelect } from "@logicflow/extension";
+
+// Global registration
+LogicFlow.use(SelectionSelect);
+
+// Local registration
+const lf = new LogicFlow({
+  ...config,
+  plugins: [SelectionSelect]
+});
 ```
 
-### start
+## API
 
-```tsx | purex | pure
+### openSelectionSelect
+
+Enable selection selection.
+
+```tsx | pure
 lf.openSelectionSelect();
 
-// 1.1.0 new
+// Added in 1.1.0
 lf.extension.selectionSelect.openSelectionSelect();
 ```
 
-### close
+### closeSelectionSelect
 
-```tsx | purex | pure
-lf.closeSelectionSelect()
-// 1.1.0 new
-lf.extension.selectionSelect.closeSelectionSelect()
+Disable selection selection.
+
+```tsx | pure
+lf.closeSelectionSelect();
+
+// Added in 1.1.0
+lf.extension.selectionSelect.closeSelectionSelect();
 ```
 
-<!-- <example href="/examples/#/extension/components/selection" :height="300" ></example> -->
+### setSelectionSense
 
-### Default state
+Set selection sensitivity.
 
-Whether box selection is enabled by default is affected by whether the page allows
-canvas dragging. The canvas can be dragged and the selection cannot exist at the same time.
+- By default, the entire node must be within the selection box to be selected.
+- By default, both the start and end points of the edge must be within the selection box to be selected.
+
+You can call the `setSelectionSense` method to reconfigure this.
+
+| Parameter      | Default Value | Description                                    |
+| -------------- | -------------- | ---------------------------------------------- |
+| isWholeEdge    | true           | Whether both the start and end points of the edge must be within the selection area to be selected |
+| isWholeNode    | true           | Whether the entire node must be within the selection area to be selected |
+
+Usage:
+
+```tsx | pure
+lf.extension.selectionSelect.setSelectionSense(false, true);
+```
+
+## Default State
+
+The default state of the selection functionality is influenced by whether the canvas dragging is allowed on the page. The canvas can either be dragged or have the selection box, but not both simultaneously.
 
 ```tsx | pure
 const lf = new LogicFlow({
@@ -53,33 +96,8 @@ const lf = new LogicFlow({
 });
 ```
 
-If `stopMoveGraph` is true, i.e. dragging the canvas is not allowed, then box selection is allowed
-by default.
+If `stopMoveGraph` is true, meaning canvas dragging is not allowed, then selection is enabled by default.
 
-If `stopMoveGraph` is not true, i.e., canvas dragging is allowed, then box selection is not allowed
-by default.
+If `stopMoveGraph` is false, meaning canvas dragging is allowed, then selection is disabled by default.
 
-In most cases, we expect to allow canvas dragging, and only turn on the selection when the user
-clicks on the drag and drop panel. See [drag-and-drop panel plugin](dnd-panel.en.md)
-
-### Set selection sensitivity
-
-- By default, the entire node needs to be boxed in order to select the node.
-- By default, the start and end of an edge need to be selected to select the edge.
-
-You can call the plugin method `setSelectionSense` to reset it.
-
-| Parameters  | Default | Description                                                                                      |
-|-------------|---------|--------------------------------------------------------------------------------------------------|
-| isWholeEdge | true    | Whether the start and end of an edge should be in the selection range to be considered selected. |
-| isWholeNode | true    | Whether all points of the node should be in the selection range to be considered selected.       |
-
-usage：
-
-```tsx | pure
-lf.extension.selectionSelect.setSelectionSense(false, true);
-```
-
-### example
-
-<a href="https://codesandbox.io/embed/trusting-archimedes-m0bn4r?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> Go to CodeSandbox for examples </a>
+In most cases, we expect to allow canvas dragging and only enable selection when the user clicks and drags the panel. Please refer to the [Drag-and-Drop Panel Plugin](dnd-panel.en.md).

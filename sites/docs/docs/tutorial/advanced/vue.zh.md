@@ -9,7 +9,6 @@ toc: content
 tag: 新特性
 ---
 
-
 :::info{title=我们带来了新特性，本节内容主要介绍}
 - 如何使用 Vue 组件来注册节点内容
 - properties 更新后如何同步更新节点内容
