@@ -4,7 +4,7 @@ group:
   title: Plug-in functionality
   order: 3
 title: NodeResize
-order: 6
+order: 16
 toc: content
 tag: Deprecated
 ---

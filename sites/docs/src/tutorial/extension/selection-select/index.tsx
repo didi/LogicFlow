@@ -1,12 +1,12 @@
-import LogicFlow from '@logicflow/core'
-import { SelectionSelect, DynamicGroup } from '@logicflow/extension'
+import LogicFlow from '@logicflow/core';
+import { SelectionSelect } from '@logicflow/extension';
 
-import { Card, Button, Flex, Form, Radio, Divider, Space } from 'antd'
-import { useState, useEffect, useRef } from 'react'
-import styles from './index.less'
+import { Card, Button, Flex, Form, Radio, Divider, Space } from 'antd';
+import { useState, useEffect, useRef } from 'react';
+import styles from './index.less';
 
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -42,7 +42,7 @@ const config: Partial<LogicFlow.Options> = {
   },
   allowRotate: true,
   allowResize: true,
-}
+};
 
 const data = {
   nodes: [
@@ -116,17 +116,17 @@ const data = {
       targetNodeId: '5',
     },
   ],
-}
+};
 
 /**
  * 框选插件 SelectionSelect 示例
  */
 export default function SelectionSelectExample() {
-  const lfRef = useRef<LogicFlow>()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [isSelectionSelectOpen, setIsSelectionSelectOpen] = useState(false)
-  const [isWholeEdge, setIsWholeEdge] = useState(true)
-  const [isWholeNode, setIsWholeNode] = useState(true)
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isSelectionSelectOpen, setIsSelectionSelectOpen] = useState(false);
+  const [isWholeEdge, setIsWholeEdge] = useState(true);
+  const [isWholeNode, setIsWholeNode] = useState(true);
 
   // 初始化 LogicFlow
   useEffect(() => {
@@ -137,62 +137,62 @@ export default function SelectionSelectExample() {
         grid: {
           size: 20,
         },
-        plugins: [SelectionSelect, DynamicGroup],
-      })
+        plugins: [SelectionSelect],
+      });
 
       lf.on(
         'selection:selected-area',
         ({ topLeft, bottomRight }: Record<string, LogicFlow.PointTuple>) => {
-          console.log('get selection area:', topLeft, bottomRight)
+          console.log('get selection area:', topLeft, bottomRight);
         },
-      )
-      lf.render(data)
-      lf.translateCenter()
-      lfRef.current = lf
+      );
+      lf.render(data);
+      lf.translateCenter();
+      lfRef.current = lf;
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (lfRef.current) {
       const selectionSelect = lfRef.current.extension
-        .selectionSelect as SelectionSelect
-      selectionSelect.setSelectionSense(isWholeEdge, isWholeNode)
+        .selectionSelect as SelectionSelect;
+      selectionSelect.setSelectionSense(isWholeEdge, isWholeNode);
     }
-  }, [isWholeEdge, isWholeNode])
+  }, [isWholeEdge, isWholeNode]);
 
   const handleOpenSelectionSelectOnce = () => {
     if (lfRef.current) {
-      const lf = lfRef.current
-      const selectionSelect = lf.extension.selectionSelect as SelectionSelect
+      const lf = lfRef.current;
+      const selectionSelect = lf.extension.selectionSelect as SelectionSelect;
 
       // 开启框选功能
-      selectionSelect.openSelectionSelect()
-      setIsSelectionSelectOpen(true)
+      selectionSelect.openSelectionSelect();
+      setIsSelectionSelectOpen(true);
       // 框选操作结束后关闭框选功能
       lf.once('selection:selected', () => {
-        selectionSelect.closeSelectionSelect()
-        setIsSelectionSelectOpen(false)
-      })
+        selectionSelect.closeSelectionSelect();
+        setIsSelectionSelectOpen(false);
+      });
     }
-  }
+  };
 
   const handleOpenSelectionSelect = () => {
     if (lfRef.current) {
       const selectionSelect = lfRef.current.extension
-        .selectionSelect as SelectionSelect
-      selectionSelect.openSelectionSelect()
-      setIsSelectionSelectOpen(true)
+        .selectionSelect as SelectionSelect;
+      selectionSelect.openSelectionSelect();
+      setIsSelectionSelectOpen(true);
     }
-  }
+  };
 
   const handleCloseSelectionSelect = () => {
     if (lfRef.current) {
       const selectionSelect = lfRef.current.extension
-        .selectionSelect as SelectionSelect
-      selectionSelect.closeSelectionSelect()
-      setIsSelectionSelectOpen(false)
+        .selectionSelect as SelectionSelect;
+      selectionSelect.closeSelectionSelect();
+      setIsSelectionSelectOpen(false);
     }
-  }
+  };
 
   return (
     <Card title="LogicFlow Extension - SelectionSelect">
@@ -248,5 +248,5 @@ export default function SelectionSelectExample() {
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
-  )
+  );
 }

@@ -11,6 +11,10 @@ tag: 优化
 
 我们经常需要将画布内容通过图片的形式导出来，我们提供了一个独立的插件包 `Snapshot` 来使用这个功能。
 
+## 演示
+
+<code id="react-portal" src="@/src/tutorial/extension/snapshot"></code>
+
 ## 用法
 
 ### 1. 注册

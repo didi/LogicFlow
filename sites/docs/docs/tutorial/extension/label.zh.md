@@ -13,6 +13,10 @@ LogicFlow
 内部提供了节点文本以及文本编辑能力，但是有时候我们需要更加丰富的文本内容，比如支持多行文本、富文本等。这时候我们可以选择使用`Label`
 插件。
 
+## 演示
+
+<code id="react-portal" src="@/src/tutorial/extension/label"></code>
+
 ## 使用插件
 
 ```tsx | purex | pure
@@ -35,10 +39,6 @@ const lf = new LogicFlow({
   },
 });
 ```
-
-## 演示
-
-<code id="react-portal" src="@/src/tutorial/extension/label"></code>
 
 ## 配置项
 
