@@ -1,0 +1,100 @@
+{
+  "demos": [
+    {
+      "filename": "control.tsx",
+      "title": {
+        "zh": "Control 插件",
+        "en": "Control extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/control.png"
+    },
+    {
+      "filename": "menu.tsx",
+      "title": {
+        "zh": "Menu 插件",
+        "en": "Menu extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/menu.png"
+    },
+    {
+      "filename": "dndPanel.tsx",
+      "title": {
+        "zh": "DndPanel 插件",
+        "en": "DndPanel extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/dnd-panel.png"
+    },
+    {
+      "filename": "bpmn.tsx",
+      "title": {
+        "zh": "BPMN 插件",
+        "en": "BPMN extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn.png"
+    },
+    {
+      "filename": "group.tsx",
+      "title": {
+        "zh": "Group 插件",
+        "en": "Group extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group.png"
+    },
+    {
+      "filename": "dynamicGroup.tsx",
+      "title": {
+        "zh": "Dynamic Group 插件",
+        "en": "Dynamic Group extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/dynamic-group.png"
+    },
+    {
+      "filename": "selectionSelect.tsx",
+      "title": {
+        "zh": "SelectionSelect 插件",
+        "en": "SelectionSelect extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/select.png"
+    },
+    {
+      "filename": "miniMap.tsx",
+      "title": {
+        "zh": "MiniMap 插件",
+        "en": "MiniMap extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/mini-map.png"
+    },
+    {
+      "filename": "nodeSelection.tsx",
+      "title": {
+        "zh": "NodeSelection 插件",
+        "en": "NodeSelection extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/node-selection.png"
+    },
+    {
+      "filename": "highlight.tsx",
+      "title": {
+        "zh": "Highlight 插件",
+        "en": "Highlight extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/highlight.png"
+    },
+    {
+      "filename": "snapshot.tsx",
+      "title": {
+        "zh": "Snapshot 插件",
+        "en": "Snapshot extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/snapshot.png"
+    },
+    {
+      "filename": "label.tsx",
+      "title": {
+        "zh": "Label 插件",
+        "en": "Label extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/label.png"
+    }
+  ]
+}

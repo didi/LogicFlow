@@ -1,20 +1,29 @@
-import { cloneDeep, merge } from 'lodash-es';
-import {
-  defaultAnimationCloseConfig,
-  defaultAnimationOpenConfig,
-  AnimationConfig,
-} from '../constant/DefaultAnimation';
+import { cloneDeep, merge } from 'lodash-es'
+import { Options } from '../options'
 
-export const updateAnimation = (
-  config: boolean | Partial<AnimationConfig>,
+import AnimationConfig = Options.AnimationConfig
+
+export const defaultAnimationOffConfig = {
+  node: false,
+  edge: false,
+}
+
+export const defaultAnimationOnConfig = {
+  node: true,
+  edge: true,
+}
+
+export const setupAnimation = (
+  config?: boolean | Partial<AnimationConfig>,
 ): AnimationConfig => {
   if (!config || typeof config === 'boolean') {
-    // 不转类型
     return config === true
-      ? cloneDeep(defaultAnimationOpenConfig)
-      : cloneDeep(defaultAnimationCloseConfig);
+      ? cloneDeep(defaultAnimationOnConfig)
+      : cloneDeep(defaultAnimationOffConfig)
   }
 
-  // 传入的是对象AnimationConfig
-  return merge(cloneDeep(defaultAnimationCloseConfig), config);
-};
+  // 当传入的是对象时，将其与默认关合并
+  return merge(cloneDeep(defaultAnimationOffConfig), config)
+}
+
+export const updateAnimation = setupAnimation

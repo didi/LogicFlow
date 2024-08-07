@@ -1,11 +1,18 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ]
+  "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "experimentalDecorators": true,
+    "outDir": "es",
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "noImplicitAny": false,
+    "baseUrl": "./",
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
+    }
+  },
+  "include": ["src/**/*", "**/*.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "es", "lib", "__tests__"]
 }

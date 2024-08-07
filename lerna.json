@@ -1,11 +1,14 @@
 {
-  "npmClient": "yarn",
+  "npmClient": "pnpm",
   "npmClientArgs": ["--no-package-lock", "--no-ci"],
   "version": "independent",
   "useWorkspaces": true,
   "packages": [
     "packages/core",
-    "packages/extension"
+    "packages/engine",
+    "packages/extension",
+    "packages/react-node-registry",
+    "packages/vue-node-registry"
   ],
   "command": {
     "version": {

@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import { Component } from 'preact/compat'
 
 /**
  * 背景配置, 支持css属性配置
@@ -6,32 +6,34 @@ import { h, Component } from 'preact';
  * @example
  * {
  *  backgroundImage: "url('./img/grid.svg')",
-    backgroundRepeat: 'repeat',
+ backgroundRepeat: 'repeat',
  * }
  */
 export type BackgroundConfig = {
   /**
    * 背景图片地址
    */
-  backgroundImage?: string;
+  backgroundImage?: string
   /**
    * 是否重复
    */
-  backgroundRepeat?: string;
-  [key: string]: any;
-};
+  backgroundRepeat?: string
+  [key: string]: any
+}
 
 type IProps = {
-  background: BackgroundConfig;
-};
+  background: BackgroundConfig
+}
 
-export default class BackgroundOverlay extends Component<IProps> {
+export class BackgroundOverlay extends Component<IProps> {
   render() {
-    const { background } = this.props;
+    const { background } = this.props
     return (
       <div className="lf-background">
         <div style={background} className="lf-background-area" />
       </div>
-    );
+    )
   }
 }
+
+export default BackgroundOverlay

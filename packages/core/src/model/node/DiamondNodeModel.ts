@@ -1,79 +1,131 @@
-import { cloneDeep } from 'lodash-es';
-import { computed, observable } from '../../util/mobx';
-import { Point, PointTuple } from '../../type';
-import BaseNodeModel from './BaseNodeModel';
-import { ModelType } from '../../constant/constant';
+import { cloneDeep, forEach, map } from 'lodash-es'
+import { computed, observable } from 'mobx'
+import GraphModel from '../GraphModel'
+import BaseNodeModel from './BaseNodeModel'
+import LogicFlow from '../../LogicFlow'
+import { ModelType } from '../../constant'
+import { ResizeControl } from '../../view/Control'
 
-class DiamondNodeModel extends BaseNodeModel {
-  modelType = ModelType.DIAMOND_NODE;
-  @observable rx = 30;
-  @observable ry = 50;
+import Point = LogicFlow.Point
+import PointTuple = LogicFlow.PointTuple
+import NodeConfig = LogicFlow.NodeConfig
+import ResizeInfo = ResizeControl.ResizeInfo
+import ResizeNodeData = ResizeControl.ResizeNodeData
+
+export type IDiamondNodeProperties = {
+  rx?: number
+  ry?: number
+  style?: LogicFlow.CommonTheme
+  textStyle?: LogicFlow.CommonTheme
+
+  [key: string]: unknown
+}
+
+export class DiamondNodeModel<
+  P extends IDiamondNodeProperties = IDiamondNodeProperties,
+> extends BaseNodeModel<P> {
+  modelType = ModelType.DIAMOND_NODE
+  @observable rx = 30
+  @observable ry = 50
+  // @observable properties: IDiamondNodeProperties = {}
+
+  constructor(data: NodeConfig<P>, graphModel: GraphModel) {
+    super(data, graphModel)
+    // this.properties = data.properties || {}
+
+    this.setAttributes()
+  }
+
+  setAttributes() {
+    super.setAttributes()
+
+    const { rx, ry } = this.properties
+    if (rx) {
+      this.rx = rx
+    }
+    if (ry) {
+      this.ry = ry
+    }
+  }
+
   getNodeStyle() {
-    const style = super.getNodeStyle();
+    const style = super.getNodeStyle()
     const {
       graphModel: {
-        theme: {
-          diamond,
-        },
+        theme: { diamond },
       },
-    } = this;
+    } = this
+    const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(diamond),
-    };
+      ...cloneDeep(customStyle),
+    }
   }
+
   @computed get points(): PointTuple[] {
-    const {
-      x, y, rx, ry,
-    } = this;
+    const { x, y, rx, ry } = this
     return [
       [x, y - ry],
       [x + rx, y],
       [x, y + ry],
       [x - rx, y],
-    ];
+    ]
   }
 
   @computed get pointsPosition(): Point[] {
-    const pointsPosition = this.points.map(item => ({
-      x: item[0],
-      y: item[1],
-    }));
-    return pointsPosition;
+    return map(this.points, ([x, y]) => ({ x, y }))
   }
 
   @computed get width(): number {
-    let min = Number.MAX_SAFE_INTEGER;
-    let max = Number.MIN_SAFE_INTEGER;
-    this.points.forEach(([x]) => {
+    let min = Number.MAX_SAFE_INTEGER
+    let max = Number.MIN_SAFE_INTEGER
+    forEach(this.points, ([x]) => {
       if (x < min) {
-        min = x;
+        min = x
       }
       if (x > max) {
-        max = x;
+        max = x
       }
-    });
-    return max - min;
+    })
+    return max - min
   }
 
   @computed get height(): number {
-    let min = Number.MAX_SAFE_INTEGER;
-    let max = Number.MIN_SAFE_INTEGER;
-    this.points.forEach(([, y]) => {
+    let min = Number.MAX_SAFE_INTEGER
+    let max = Number.MIN_SAFE_INTEGER
+    forEach(this.points, ([, y]) => {
       if (y < min) {
-        min = y;
+        min = y
       }
       if (y > max) {
-        max = y;
+        max = y
       }
-    });
-    return max - min;
+    })
+    return max - min
   }
 
   getDefaultAnchor() {
-    return this.points.map(([x1, y1], idx) => ({ x: x1, y: y1, id: `${this.id}_${idx}` }));
+    return map(this.points, ([x, y], idx) => ({
+      x,
+      y,
+      id: `${this.id}_${idx}`,
+    }))
+  }
+
+  resize(resizeInfo: ResizeInfo): ResizeNodeData {
+    const { width, height, deltaX, deltaY } = resizeInfo
+    // 移动节点以及文本内容
+    this.move(deltaX / 2, deltaY / 2)
+
+    this.rx = width
+    this.ry = height
+    this.setProperties({
+      rx: width,
+      ry: height,
+    })
+    return this.getData()
   }
 }
 
-export { DiamondNodeModel };
-export default DiamondNodeModel;
+export default DiamondNodeModel

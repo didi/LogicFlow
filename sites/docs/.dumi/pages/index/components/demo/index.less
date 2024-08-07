@@ -1,0 +1,189 @@
+.demo {
+  position: relative;
+  width: 100%;
+  min-width: 700px;
+  max-width: 1200px;
+  height: min-content;
+  margin: auto;
+  margin-bottom: 90px;
+  overflow: hidden;
+  border-radius: 12px;
+  // box-shadow: -5px 5px 15px #0000001a;
+
+  .app-content {
+    height: 440px;
+  }
+  // 执行按钮
+  .run-btn {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    font-weight: bolder;
+    font-size: 15px;
+
+    button {
+      padding: 5px 20px;
+      color: #3487fc;
+      text-align: center;
+      background: #fff;
+      border: 1px solid #3487fc;
+      border-radius: 26px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    button:last-child {
+      margin-left: 20px;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    button.is-disabled {
+      color: #c0c4cc;
+      border-color: #ebeef5;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
+    button.active {
+      color: #fff;
+      background: #a0cfff;
+      border-color: #a0cfff;
+    }
+  }
+
+  // 元素
+  .step-wrapper {
+    position: relative;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    color: #747e92;
+    background: #f9f9f9;
+    // background: rgb(255 255 255 / 70%);
+    border-radius: 8px;
+
+    box-shadow: inset 0 0 0 2px #d4d5d6;
+
+    .text {
+      width: 100%;
+      padding-top: 10%;
+      text-align: center;
+    }
+
+    &::before {
+      position: absolute;
+      box-sizing: inherit;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      border-radius: 8px;
+      content: '';
+    }
+  }
+
+  .circle-wrapper {
+    border-radius: 50%;
+
+    .text {
+      padding-top: 35%;
+    }
+  }
+
+  .spin {
+    &:hover {
+      color: #2d71fa;
+
+      .border-animate {
+        background: unset;
+      }
+    }
+
+    &::before {
+      top: 0;
+      left: 0;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 2px;
+    }
+
+    &:hover::before {
+      border-color: #2d71fa;
+      transition:
+        border-top-color 0.15s linear,
+        border-right-color 0.15s linear 0.1s,
+        border-bottom-color 0.15s linear 0.2s,
+        border-left-color 0.15s linear 0.3s;
+    }
+  }
+
+  .circle-wrapper {
+    &::before {
+      border-radius: 100%;
+    }
+  }
+
+  // 执行时
+  .is-animate.step-wrapper {
+    box-shadow: unset;
+  }
+
+  .border-div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+  }
+
+  .border-circle-animate {
+    border: 2px dashed #3487fc;
+    border-radius: 50%;
+    animation: linearGradientMove 0.5s infinite linear;
+
+    &:hover {
+      border: unset;
+      animation: unset;
+    }
+  }
+  @keyframes linearGradientMove {
+    100% {
+      transform: rotate(30deg);
+    }
+  }
+
+  .border-animate {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(90deg, #3487fc 50%, transparent 0) repeat-x,
+      linear-gradient(90deg, #3487fc 50%, transparent 0) repeat-x,
+      linear-gradient(0deg, #3487fc 50%, transparent 0) repeat-y,
+      linear-gradient(0deg, #3487fc 50%, transparent 0) repeat-y;
+    background-position:
+      0 0,
+      0 100%,
+      0 0,
+      100% 0;
+    background-size:
+      15px 2.4px,
+      15px 2.4px,
+      2.4px 15px,
+      2.4px 15px;
+    animation: linearMove 0.3s infinite linear;
+    clip-path: inset(0 round 0.7rem);
+
+    &:hover {
+      background: unset;
+    }
+  }
+  @keyframes linearMove {
+    100% {
+      background-position:
+        15px 0,
+        -15px 100%,
+        0 -15px,
+        100% 15px;
+    }
+  }
+}

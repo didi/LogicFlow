@@ -1,92 +1,90 @@
 function type(obj) {
-  return Object.prototype.toString.call(obj);
+  return Object.prototype.toString.call(obj)
 }
 
 function addSpace(depth) {
-  return "  ".repeat(depth);
+  return '  '.repeat(depth)
 }
 
-function handleAttributes(o:any) {
-  let t = o;
-  if (type(o) === "[object Object]") {
-    t = {};
+function handleAttributes(o: any) {
+  let t = o
+  if (type(o) === '[object Object]') {
+    t = {}
     Object.keys(o).forEach((k) => {
-      let tk = k;
-      if (k.charAt(0) === "-") {
-        tk = k.substring(1);
+      let tk = k
+      if (k.charAt(0) === '-') {
+        tk = k.substring(1)
       }
-      t[tk] = handleAttributes(o[k]);
-    });
+      t[tk] = handleAttributes(o[k])
+    })
   } else if (Array.isArray(o)) {
-    t = [];
+    t = []
     o.forEach((item, index) => {
-      t[index] = handleAttributes(item);
-    });
+      t[index] = handleAttributes(item)
+    })
   }
-  return t;
-};
+  return t
+}
 
 function getAttributes(obj: any) {
-  let tmp = obj;
+  let tmp = obj
   try {
-    if (typeof tmp !== "string") {
-      tmp = JSON.parse(obj);
+    if (typeof tmp !== 'string') {
+      tmp = JSON.parse(obj)
     }
   } catch (error) {
-
-    tmp = JSON.stringify(handleAttributes(obj)).replace(/"/g, "'");
+    tmp = JSON.stringify(handleAttributes(obj)).replace(/"/g, "'")
   }
-  return tmp;
+  return tmp
 }
 
-const tn = "\t\n";
+const tn = '\t\n'
 
 // @see issue https://github.com/didi/LogicFlow/issues/718, refactoring of function toXml
 function toXml(obj: string | any[] | Object, name: string, depth: number) {
-  const frontSpace = addSpace(depth);
-  let str = "";
-  if (name === "#text") {
-    return tn + frontSpace + obj;
-  } else if (name === "#cdata-section") {
-    return tn + frontSpace + "<![CDATA[" + obj + "]]>";
-  } else if (name === "#comment") {
-    return tn + frontSpace + "<!--" + obj + "-->";
+  const frontSpace = addSpace(depth)
+  let str = ''
+  if (name === '#text') {
+    return tn + frontSpace + obj
+  } else if (name === '#cdata-section') {
+    return tn + frontSpace + '<![CDATA[' + obj + ']]>'
+  } else if (name === '#comment') {
+    return tn + frontSpace + '<!--' + obj + '-->'
   }
-  if (`${name}`.charAt(0) === "-") {
-    return " " + name.substring(1) + '="' + getAttributes(obj) + '"';
+  if (`${name}`.charAt(0) === '-') {
+    return ' ' + name.substring(1) + '="' + getAttributes(obj) + '"'
   } else {
     if (Array.isArray(obj)) {
       obj.forEach((item) => {
-        str += toXml(item, name, depth + 1);
-      });
-    } else if (type(obj) === "[object Object]") {
-      const keys = Object.keys(obj);
-      let attributes = "";
-      let children = "";
-      str += (depth === 0 ? "" : tn + frontSpace) + "<" + name;
+        str += toXml(item, name, depth + 1)
+      })
+    } else if (type(obj) === '[object Object]') {
+      const keys = Object.keys(obj)
+      let attributes = ''
+      let children = ''
+      str += (depth === 0 ? '' : tn + frontSpace) + '<' + name
       keys.forEach((k) => {
-        k.charAt(0) === "-"
+        k.charAt(0) === '-'
           ? (attributes += toXml(obj[k], k, depth + 1))
-          : (children += toXml(obj[k], k, depth + 1));
-      });
+          : (children += toXml(obj[k], k, depth + 1))
+      })
       str +=
         attributes +
-        (children !== "" ? `>${children}${tn + frontSpace}</${name}>` : " />");
+        (children !== '' ? `>${children}${tn + frontSpace}</${name}>` : ' />')
     } else {
-      str += tn + frontSpace + `<${name}>${obj.toString()}</${name}>`;
+      str += tn + frontSpace + `<${name}>${obj.toString()}</${name}>`
     }
   }
 
-  return str;
+  return str
 }
 
 function lfJson2Xml(o: Object) {
-  let xmlStr = "";
+  let xmlStr = ''
   for (var m in o) {
-    xmlStr += toXml(o[m], m, 0);
+    xmlStr += toXml(o[m], m, 0)
   }
-  return xmlStr;
+  return xmlStr
 }
 
-export { lfJson2Xml, handleAttributes };
-
+export { lfJson2Xml, handleAttributes }

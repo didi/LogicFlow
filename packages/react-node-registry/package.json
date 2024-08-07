@@ -1,0 +1,47 @@
+{
+  "name": "@logicflow/react-node-registry",
+  "version": "0.0.1-beta.4",
+  "description": "LogicFlow React Shape",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/index.js",
+  "jsdeliver": "dist/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "clean:turbo": "rss",
+    "clean:build": "rss",
+    "clean": "rss",
+    "build:less": "rss",
+    "build:esm": "tsc --module esnext --target es5 --outDir ./es",
+    "build:cjs": "tsc --module commonjs --target es5 --outDir ./lib",
+    "build:umd": "rss",
+    "build:dev": "rss",
+    "build:watch": "rss",
+    "build:watch:esm": "rss",
+    "build:watch:cjs": "rss",
+    "build": "rss",
+    "prebuild": "rss",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "@logicflow/react-node-registry",
+    "LogicFlow",
+    "React",
+    "Custom Node"
+  ],
+  "author": "Logicflow-Team",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "@logicflow/core": "workspace:*",
+    "react": ">= 18.0.0",
+    "react-dom": ">= 18.0.0"
+  },
+  "dependencies": {
+    "@logicflow/core": "workspace:*",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "lodash-es": "^4.17.21"
+  }
+}

@@ -1,37 +1,62 @@
-import { h } from 'preact';
-import { pick } from 'lodash-es';
-import Text from '../basic-shape/Text';
-import Rect from '../basic-shape/Rect';
-import BaseText from './BaseText';
-import { getBytesLength } from '../../util/edge';
-import { BaseEdgeModel } from '../../model';
-import { getHtmlTextHeight, getSvgTextWidthHeight } from '../../util/node';
+import { createElement as h } from 'preact/compat'
+import { Text, ITextProps, Rect, IRectProps } from '..'
+import { BaseText } from '.'
+import { BaseEdgeModel, GraphModel } from '../../model'
+import { getHtmlTextHeight, getSvgTextSize } from '../../util'
 
-export default class LineText extends BaseText {
-  constructor(config) {
-    super(config);
+export type ILineTextProps = {
+  model: BaseEdgeModel
+  graphModel: GraphModel
+  draggable: boolean
+  editable: boolean
+  [key: string]: unknown
+}
+
+export type ILineTextState = {
+  isHovered: boolean
+}
+
+export class LineText extends BaseText<ILineTextProps, ILineTextState> {
+  constructor(props: ILineTextProps) {
+    super(props)
     this.state = {
       isHovered: false,
-    };
-  }
-  getBackground() {
-    const model = this.props.model as BaseEdgeModel;
-    const style = model.getTextStyle();
-    const { text, width: modelWidth } = model;
-    let backgroundStyle = style.background || {};
-    const { isHovered } = this.state;
-    if (isHovered && style.hover && style.hover.background) {
-      backgroundStyle = { ...backgroundStyle, ...style.hover.background };
     }
-    // 存在文本并且文本背景不为透明时计算背景框
-    if (text && text.value && backgroundStyle.fill !== 'transparent') {
-      const { fontSize, overflowMode, lineHeight, wrapPadding, textWidth } = style;
-      const { value } = text;
-      let { x, y } = text;
-      const rows = String(value).split(/[\r\n]/g);
-      // 计算行数
-      const rowsLength = rows.length;
-      let rectAttr;
+  }
+
+  // Hover 状态相关
+  setHoverOn = () => {
+    this.setState({
+      isHovered: true,
+    })
+  }
+  setHoverOff = () => {
+    this.setState({
+      isHovered: false,
+    })
+  }
+
+  getBackground(): h.JSX.Element | null {
+    const { isHovered } = this.state
+    const { model } = this.props
+    const { text } = model
+    const style = model.getTextStyle()
+
+    let backgroundStyle = style.background || {}
+    if (isHovered && style.hover && style.hover.background) {
+      backgroundStyle = { ...backgroundStyle, ...style.hover.background }
+    }
+
+    // 当存在文本并且文本背景不为透明时，计算背景框
+    if (text?.value && backgroundStyle?.fill !== 'transparent') {
+      const { fontSize, textWidth, lineHeight, overflowMode } = style
+      const { wrapPadding } = backgroundStyle
+      const rows = text?.value.split(/[\r\n]/g)
+      const rowsLength = rows.length
+
+      let { x, y } = text
+      let rectAttr: unknown = {}
+
       if (overflowMode === 'autoWrap' && textWidth) {
         const textHeight = getHtmlTextHeight({
           rows,
@@ -43,25 +68,19 @@ export default class LineText extends BaseText {
           },
           rowsLength,
           className: 'lf-get-text-height',
-        });
+        })
+
         rectAttr = {
           ...backgroundStyle,
-          x: x - 1,
-          y: y - 1,
+          x,
+          y,
           width: textWidth,
           height: textHeight,
-        };
+        }
       } else {
-        // 计算文本中最长的一行的字节数
-        let longestBytes = 0;
-        rows && rows.forEach(item => {
-          const rowByteLength = getBytesLength(item);
-          longestBytes = rowByteLength > longestBytes ? rowByteLength : longestBytes;
-        });
-        // 背景框宽度，最长一行字节数/2 * fontsize + 2
-        // 背景框宽度， 行数 * fontsize + 2
-        let { width, height } = getSvgTextWidthHeight({ rows, fontSize, rowsLength });
-
+        // 背景框宽度，最长一行字节数 / 2 * fontSize + 2
+        // 背景框宽度，行数 * fontSize + 2
+        let { width, height } = getSvgTextSize({ rows, rowsLength, fontSize })
         if (overflowMode === 'ellipsis') {
           // https://github.com/didi/LogicFlow/issues/1151
           // 边上的文字过长（使用"ellipsis"模式）出现省略号，背景也需要进行宽度的重新计算
@@ -69,72 +88,81 @@ export default class LineText extends BaseText {
           // 跟Text.tsx保持同样的计算逻辑(overflowMode === 'ellipsis')
           // Text.tsx使用textRealWidth=textWidth || width
           // Text.tsx使用foreignObjectHeight = fontSize + 2;
-          width = textWidth || modelWidth;
-          height = fontSize + 2;
+          width = textWidth
+          height = fontSize + 2
         }
 
-        // 根据设置的padding调整width, height, x, y的值
+        // 根据设置的 padding 调整 width, height, x, y 的值
+        // TODO: 下面方法感觉可以提取成工具方法
         if (typeof backgroundStyle.wrapPadding === 'string') {
-          let paddings = backgroundStyle.wrapPadding.split(',')
-            .filter(padding => padding.trim())
-            .map(padding => parseFloat(padding.trim()));
-          if (paddings.length > 0 && paddings.length <= 4) {
-            if (paddings.length === 1) {
-              paddings = [paddings[0], paddings[0], paddings[0], paddings[0]];
-            } else if (paddings.length === 2) {
-              paddings = [paddings[0], paddings[1], paddings[0], paddings[1]];
-            } else if (paddings.length === 3) {
-              paddings = [paddings[0], paddings[1], paddings[2], paddings[1]];
+          let padding = backgroundStyle.wrapPadding
+            .split(',')
+            .filter((padding) => padding.trim())
+            .map((padding) => parseFloat(padding.trim()))
+
+          if (padding.length > 0 && padding.length <= 4) {
+            if (padding.length === 1) {
+              const [allSides] = padding
+              padding = [allSides, allSides, allSides, allSides]
+            } else if (padding.length === 2) {
+              const [vertical, horizontal] = padding
+              padding = [vertical, horizontal, vertical, horizontal]
+            } else if (padding.length === 3) {
+              const [top, horizontal, bottom] = padding
+              padding = [top, horizontal, bottom, horizontal]
             }
-            width += paddings[1] + paddings[3];
-            height += paddings[0] + paddings[2];
-            x = x + (paddings[1] - paddings[3]) / 2;
-            y = y + (paddings[2] - paddings[0]) / 2;
+
+            const [top, right, bottom, left] = padding
+            width += right + left
+            height += top + bottom
+            x = x + (right - left) / 2
+            y = y + (bottom - top) / 2
           }
         }
+
         rectAttr = {
           ...backgroundStyle,
           x: x - 1,
           y: y - 1,
           width,
           height,
-        };
+        }
       }
-      return <Rect {...rectAttr} />;
+
+      return <Rect {...(rectAttr as IRectProps)} />
     }
+
+    return null
   }
-  setHoverON = () => {
-    this.setState({
-      isHovered: true,
-    });
-  };
-  setHoverOFF = () => {
-    this.setState({
-      isHovered: false,
-    });
-  };
-  getShape() {
-    const { model } = this.props;
-    const { text } = model;
-    const { value, x, y } = text;
-    if (!value) return;
-    const style = model.getTextStyle();
-    const attr = {
+
+  getShape(): h.JSX.Element | null {
+    const { model } = this.props
+    const {
+      text: { x, y, value },
+    } = model
+    if (!value) return null
+
+    const style = model.getTextStyle()
+    const attrs: ITextProps = {
       x,
       y,
-      className: 'lf-element-text',
       value,
-      ...style, // 透传 edgeText 属性, 如 color fontSize fontWeight fontFamily textAnchor 等
-    };
+      model,
+      className: 'lf-element-text',
+      ...style, // 透传 edgeText 属性，如：color, fontSize, fontWeight, fontFamily, textAnchor 等
+    }
+
     return (
       <g
         className="lf-line-text"
-        onMouseEnter={this.setHoverON}
-        onMouseLeave={this.setHoverOFF}
+        onMouseEnter={this.setHoverOn}
+        onMouseLeave={this.setHoverOff}
       >
         {this.getBackground()}
-        <Text {...attr} model={model} />
+        <Text {...attrs} />
       </g>
-    );
+    )
   }
 }
+
+export default LineText

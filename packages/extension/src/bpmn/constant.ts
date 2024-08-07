@@ -1,29 +1,31 @@
+import LogicFlow from '@logicflow/core'
+
 export const StartEventConfig = {
   width: 40,
   height: 40,
-};
+}
 
 export const EndEventConfig = {
   width: 40,
   height: 40,
-};
+}
 
 export const ExclusiveGatewayConfig = {
   width: 40,
   height: 40,
-};
+}
 
 export const ServiceTaskConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const UserTaskConfig = {
   width: 100,
   height: 80,
-};
+}
 
-export const theme = {
+export const theme: Partial<LogicFlow.Theme> = {
   rect: {
     radius: 5,
     stroke: 'rgb(24, 125, 255)',
@@ -41,6 +43,9 @@ export const theme = {
     selectedStroke: 'rgb(24, 125, 255)',
   },
   edgeText: {
+    textWidth: 100,
+    overflowMode: 'default',
+    fontSize: 12,
     background: {
       fill: 'white',
       height: 14,
@@ -48,4 +53,4 @@ export const theme = {
       radius: 3,
     },
   },
-};
+}

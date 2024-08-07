@@ -1,0 +1,93 @@
+{
+  "demos": [
+    {
+      "filename": "treelikeDemoVue3.tsx",
+      "isExternal": true,
+      "isNew": true,
+      "title": {
+        "zh": "树状流程编排",
+        "en": "Tree-like process orchestration"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/treelikeDemoVue3.png",
+      "previewUrl": "https://xoobom.github.io/",
+      "githubUrl": "https://github.com/xoobom/logicflow-vue3"
+    },
+    {
+      "filename": "beautification.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "脑图和一键美化",
+        "en": "Mindmap and one-click beautification"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/beautification.png",
+      "previewUrl": "https://hsole.github.io/layoutFlow/",
+      "githubUrl": "https://github.com/hsole/layoutFlow"
+    },
+    {
+      "filename": "bpmnEvent.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "自定义BPMN边界事件",
+        "en": "Custom BPMN Boundary Events"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/custom-bpmn.png",
+      "previewUrl": "https://hsole.github.io/BoundaryEvents/",
+      "githubUrl": "https://github.com/hsole/BoundaryEvents"
+    },
+    {
+      "filename": "nodeRedVue3.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "logicflow-node-red-vue3",
+        "en": "logicflow-node-red-vue3"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/node-red-vue3.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/logicflow-node-red-vue3",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/logicflow-node-red-vue3"
+    },
+    {
+      "filename": "vueDemo.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "Vue demo",
+        "en": "Vue demo"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/vue-demo.png",
+      "previewUrl": "https://xinxin93.github.io/logicflow_vue_demo/#/",
+      "githubUrl": "https://github.com/xinxin93/logicflow_vue_demo"
+    },
+    {
+      "filename": "angularDemo.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "Angular demo",
+        "en": "Angular demo"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/angular-demo.png",
+      "previewUrl": "https://chenweihan.github.io/logicflow-angular/bpmn",
+      "githubUrl": "https://github.com/chenweihan/logicflow-angular"
+    },
+    {
+      "filename": "bpmnVue.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "bpmn-vue demo",
+        "en": "bpmn-vue demo"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/bpmn-vue.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/bpmn-vue",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/bpmn-vue"
+    },
+    {
+      "filename": "engine.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "可执行的流程图",
+        "en": "Executable Flowchart"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/demo/bpmn-and-engine.png",
+      "previewUrl": "https://examples.logic-flow.cn/demo/dist/bpmn-and-engine",
+      "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/bpmn-and-engine"
+    }
+  ]
+}

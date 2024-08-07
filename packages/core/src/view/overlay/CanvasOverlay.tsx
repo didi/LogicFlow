@@ -1,31 +1,29 @@
-import { h, Component } from 'preact';
-import GraphModel from '../../model/GraphModel';
-import { ElementState, EventType } from '../../constant/constant';
-import { StepDrag } from '../../util/drag';
-// import getTransform from './getTransformHoc';
-import EventEmitter from '../../event/eventEmitter';
-// import { GraphTransform } from '../../type';
-import Dnd from '../behavior/DnD';
-import { observer } from '../..';
+import { Component } from 'preact/compat'
+import Dnd from '../behavior/dnd'
+import { observer } from '../..'
+import GraphModel from '../../model/GraphModel'
+import { EventType } from '../../constant'
+import { StepDrag, IDragParams } from '../../util'
 
 type IProps = {
-  graphModel: GraphModel;
+  graphModel: GraphModel
   dnd: Dnd
-};
+}
 type IState = {
-  isDragging: boolean,
-};
-// type InjectedProps = IProps & {
-//   transformStyle: GraphTransform
-// };
+  isDragging: boolean
+}
+
 @observer
-class CanvasOverlay extends Component<IProps, IState> {
-  stepDrag: StepDrag;
-  stepScrollX = 0;
-  stepScrollY = 0;
+export class CanvasOverlay extends Component<IProps, IState> {
+  stepDrag: StepDrag
+  stepScrollX = 0
+  stepScrollY = 0
+
   constructor(props: IProps) {
-    super();
-    const { graphModel: { gridSize, eventCenter } } = props;
+    super()
+    const {
+      graphModel: { gridSize, eventCenter },
+    } = props
     this.stepDrag = new StepDrag({
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
@@ -33,127 +31,130 @@ class CanvasOverlay extends Component<IProps, IState> {
       eventType: 'BLANK',
       isStopPropagation: false,
       eventCenter,
-      model: null,
-    });
-    // 当ctrl键被按住的时候，可以放大缩小。
+      model: undefined,
+    })
+    // 当 ctrl、cmd 键被按住的时候，可以放大缩小。
     this.state = {
       isDragging: false,
-    };
+    }
   }
+
   // get InjectedProps() {
   //   return this.props as InjectedProps;
   // }
-  onDragging = ({ deltaX, deltaY }) => {
+  onDragging = ({ deltaX, deltaY }: IDragParams) => {
     this.setState({
       isDragging: true,
-    });
+    })
     const {
-      graphModel: {
-        transformModel,
-        editConfigModel,
-      },
-    } = this.props;
+      graphModel: { transformModel, editConfigModel },
+    } = this.props
     if (editConfigModel.stopMoveGraph === true) {
-      return;
+      return
     }
-    transformModel.translate(deltaX, deltaY);
-  };
+    transformModel.translate(deltaX, deltaY)
+  }
   onDragEnd = () => {
     this.setState({
       isDragging: false,
-    });
-  };
+    })
+  }
   zoomHandler = (ev: WheelEvent) => {
-    const { graphModel: { editConfigModel, transformModel, gridSize }, graphModel } = this.props;
-    const { deltaX: eX, deltaY: eY } = ev;
-    // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键没有按住, 那么移动画布
-    if (!editConfigModel.stopScrollGraph && ev.ctrlKey !== true) {
-      ev.preventDefault();
-      this.stepScrollX += eX;
-      this.stepScrollY += eY;
+    const {
+      graphModel: { editConfigModel, transformModel, gridSize },
+      graphModel,
+    } = this.props
+    const { deltaX: eX, deltaY: eY } = ev
+    // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键、cmd键没有按住, 那么移动画布
+    if (!editConfigModel.stopScrollGraph && !ev.ctrlKey && !ev.metaKey) {
+      ev.preventDefault()
+      this.stepScrollX += eX
+      this.stepScrollY += eY
       if (Math.abs(this.stepScrollX) >= gridSize) {
-        const remainderX = this.stepScrollX % gridSize;
-        const moveDistance = this.stepScrollX - remainderX;
-        transformModel.translate(-moveDistance * transformModel.SCALE_X, 0);
-        this.stepScrollX = remainderX;
+        const remainderX = this.stepScrollX % gridSize
+        const moveDistance = this.stepScrollX - remainderX
+        transformModel.translate(-moveDistance * transformModel.SCALE_X, 0)
+        this.stepScrollX = remainderX
       }
       if (Math.abs(this.stepScrollY) >= gridSize) {
-        const remainderY = this.stepScrollY % gridSize;
-        const moveDistanceY = this.stepScrollY - remainderY;
-        transformModel.translate(0, -moveDistanceY * transformModel.SCALE_Y);
-        this.stepScrollY = remainderY;
+        const remainderY = this.stepScrollY % gridSize
+        const moveDistanceY = this.stepScrollY - remainderY
+        transformModel.translate(0, -moveDistanceY * transformModel.SCALE_Y)
+        this.stepScrollY = remainderY
       }
-      return;
+      return
     }
-    // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住ctrl键也不能缩放了。
+    // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住 ctrl、cmd 键也不能缩放了。
     if (!editConfigModel.stopZoomGraph) {
-      ev.preventDefault();
+      ev.preventDefault()
       const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
-      });
-      const { x, y } = position.canvasOverlayPosition;
-      transformModel.zoom(ev.deltaY < 0, [x, y]);
+      })
+      const { x, y } = position.canvasOverlayPosition
+      transformModel.zoom(ev.deltaY < 0, [x, y])
     }
-  };
+  }
   clickHandler = (ev: MouseEvent) => {
     // 点击空白处取消节点选中状态, 不包括冒泡过来的事件。
-    const target = ev.target as HTMLElement;
+    const target = ev.target as HTMLElement
     if (target.getAttribute('name') === 'canvas-overlay') {
-      const { graphModel } = this.props;
-      const { selectElements } = graphModel;
+      const { graphModel } = this.props
+      const { selectElements } = graphModel
       if (selectElements.size > 0) {
-        graphModel.clearSelectElements();
+        graphModel.clearSelectElements()
       }
-      graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev });
+      graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev })
     }
-  };
+  }
   handleContextMenu = (ev: MouseEvent) => {
-    const target = ev.target as HTMLElement;
+    const target = ev.target as HTMLElement
     if (target.getAttribute('name') === 'canvas-overlay') {
-      ev.preventDefault();
-      const { graphModel } = this.props;
+      ev.preventDefault()
+      const { graphModel } = this.props
       const position = graphModel.getPointByClient({
         x: ev.clientX,
         y: ev.clientY,
-      });
+      })
       // graphModel.setElementState(ElementState.SHOW_MENU, position.domOverlayPosition);
-      graphModel.eventCenter.emit(EventType.BLANK_CONTEXTMENU, { e: ev, position });
+      graphModel.eventCenter.emit(EventType.BLANK_CONTEXTMENU, {
+        e: ev,
+        position,
+      })
     }
-  };
+  }
+  // 鼠标、触摸板 按下
   mouseDownHandler = (ev: MouseEvent) => {
     const {
       graphModel: {
         eventCenter,
         editConfigModel,
-        transformModel: {
-          SCALE_X,
-        },
+        transformModel: { SCALE_X },
         gridSize,
       },
-    } = this.props;
-    const target = ev.target as HTMLElement;
-    const isFrozenElement = !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition;
+    } = this.props
+    const target = ev.target as HTMLElement
+    const isFrozenElement =
+      !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition
     if (target.getAttribute('name') === 'canvas-overlay' || isFrozenElement) {
       if (editConfigModel.stopMoveGraph !== true) {
-        this.stepDrag.setStep(gridSize * SCALE_X);
-        this.stepDrag.handleMouseDown(ev);
+        this.stepDrag.setStep(gridSize * SCALE_X)
+        this.stepDrag.handleMouseDown(ev)
       } else {
-        eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev });
+        eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev })
       }
       // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
-      this.clickHandler(ev);
+      this.clickHandler(ev)
     }
-  };
+  }
+
   render() {
     const {
-      graphModel: {
-        transformModel,
-      },
-    } = this.props;
-    const { transform } = transformModel.getTransformStyle();
-    const { children, dnd } = this.props;
-    const { isDragging } = this.state;
+      graphModel: { transformModel },
+    } = this.props
+    const { transform } = transformModel.getTransformStyle()
+    const { children, dnd } = this.props
+    const { isDragging } = this.state
 
     return (
       <svg
@@ -164,15 +165,17 @@ class CanvasOverlay extends Component<IProps, IState> {
         onWheel={this.zoomHandler}
         onMouseDown={this.mouseDownHandler}
         onContextMenu={this.handleContextMenu}
-        className={isDragging ? 'lf-canvas-overlay lf-dragging' : 'lf-canvas-overlay lf-drag-able'}
+        className={
+          isDragging
+            ? 'lf-canvas-overlay lf-dragging'
+            : 'lf-canvas-overlay lf-drag-able'
+        }
         {...dnd.eventMap()}
       >
-        <g transform={transform}>
-          {children}
-        </g>
+        <g transform={transform}>{children}</g>
       </svg>
-    );
+    )
   }
 }
 
-export default CanvasOverlay;
+export default CanvasOverlay
