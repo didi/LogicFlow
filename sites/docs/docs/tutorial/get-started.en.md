@@ -129,7 +129,8 @@ parameter must refer to an existing DOM node to avoid errors.
 
 <script>
   import LogicFlow from "@logicflow/core";
-  import "@logicflow/core/dist/style/index.css";
+  import "@logicflow/core/lib/style/index.css";
+  // import "@logicflow/core/dist/style/index.css"; // Introduced before version 2.0
 
   export default {
     mounted() {

@@ -58,7 +58,8 @@ cdn方式
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { DndPanel, SelectionSelect } from "@logicflow/extension";
-import "@logicflow/core/dist/style/index.css";
+import "@logicflow/core/lib/style/index.css";
+// import "@logicflow/core/dist/style/index.css"; // 2.0版本前的引入方式
 import "@logicflow/extension/lib/style/index.css";
 
 const lf = new LogicFlow({

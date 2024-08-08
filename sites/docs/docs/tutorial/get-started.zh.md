@@ -153,7 +153,8 @@ LogicFlow初始化时支持不传画布宽高，这种情况下默认取的是co
 
 <script>
   import LogicFlow from "@logicflow/core";
-  import "@logicflow/core/dist/style/index.css";
+  import "@logicflow/core/lib/style/index.css";
+  // import "@logicflow/core/dist/style/index.css"; // 2.0版本前的引入方式
 
   export default {
     mounted() {
