@@ -2,9 +2,6 @@ import { defineConfig } from 'dumi';
 import { repository, version } from './package.json';
 
 export default defineConfig({
-  // define: {
-  //   'process.env.DUMI_VERSION': version,
-  // },
   locales: [
     { id: 'zh', name: '中文' },
     { id: 'en', name: 'English' },
@@ -401,9 +398,6 @@ export default defineConfig({
   },
   links: [],
   scripts: [],
-  // theme: {
-  //   '@c-primary': '#2d71fa',
-  // },
   headScripts: [
     // 百度埋点统计
     `var _hmt = _hmt || [];
@@ -415,6 +409,11 @@ export default defineConfig({
     })();
   `,
   ],
+  lessLoader: {
+    lessOptions: {
+      javascriptEnabled: true,
+    },
+  },
   // codeSplitting: { jsStrategy: 'granularChunks' },
   // chainWebpack: (config) => {
   //   // 打开 bundle 分析器

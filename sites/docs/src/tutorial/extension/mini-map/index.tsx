@@ -3,7 +3,7 @@ import { Control, MiniMap } from '@logicflow/extension';
 
 import { Button, Card, Flex, Divider, Select, Form, Space } from 'antd';
 import { useState, useEffect, useRef } from 'react';
-import styles from './index.less';
+import styles from './index.module.less';
 
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
@@ -62,7 +62,7 @@ const data: LogicFlow.GraphConfigData = {
 };
 
 const miniMapOptions: MiniMap.MiniMapOption = {
-  isShowHeader: true,
+  isShowHeader: false,
   isShowCloseIcon: true,
   headerTitle: 'MiniMap',
   width: 200,

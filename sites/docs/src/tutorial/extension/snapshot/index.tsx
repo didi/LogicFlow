@@ -20,7 +20,7 @@ import CustomHtml from '../../components/nodes/custom-html/Html';
 import data from './data';
 import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg';
 
-import styles from './index.less';
+import styles from './index.module.less';
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
 
@@ -112,15 +112,16 @@ export default function SnapshotExample() {
       });
 
       // 默认开启css样式
-      lf.extension.snapshot.useGlobalRules = true;
+      const snapshot = lf.extension.snapshot as unknown as Snapshot;
+      snapshot.useGlobalRules = true;
       // 不会覆盖css样式，会叠加，customCssRules优先级高
-      lf.extension.snapshot.customCssRules = `
-          .uml-wrapper {
-            line-height: 1.2;
-            text-align: center;
-            color: blue;
-          }
-        `;
+      snapshot.customCssRules = `
+        .uml-wrapper {
+          line-height: 1.2;
+          text-align: center;
+          color: blue;
+        }
+      `;
 
       lf.render(data);
       lf.translateCenter();

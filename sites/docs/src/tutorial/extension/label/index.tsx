@@ -5,7 +5,7 @@ import '@logicflow/extension/es/index.css';
 
 import { Button, Card, Divider, Flex } from 'antd';
 import { useEffect, useRef } from 'react';
-import styles from './index.less';
+import styles from './index.module.less';
 // import { data } from './data'
 
 const theme: Partial<LogicFlow.Theme> = {

@@ -14,7 +14,7 @@ import GraphConfigData = LogicFlow.GraphConfigData;
 
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
-import styles from './index.less';
+import styles from './index.module.less';
 
 const config: Partial<LogicFlow.Options> = {
   grid: true,
