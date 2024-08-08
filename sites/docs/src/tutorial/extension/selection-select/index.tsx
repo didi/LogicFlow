@@ -3,7 +3,7 @@ import { SelectionSelect } from '@logicflow/extension';
 
 import { Card, Button, Flex, Form, Radio, Divider, Space } from 'antd';
 import { useState, useEffect, useRef } from 'react';
-import styles from './index.less';
+import styles from './index.module.less';
 
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
