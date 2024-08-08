@@ -58,7 +58,8 @@ When a single-page application has multiple pages that use LogicFlow, different 
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { DndPanel, SelectionSelect } from "@logicflow/extension";
-import "@logicflow/core/dist/style/index.css";
+import "@logicflow/core/lib/style/index.css";
+// import "@logicflow/core/dist/style/index.css"; // Introduced before version 2.0
 import "@logicflow/extension/lib/style/index.css";
 
 const lf = new LogicFlow({

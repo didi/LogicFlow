@@ -232,7 +232,7 @@ export default defineConfig({
           en: 'Online Debugging',
         },
         description: {
-          zh: '基于内置能力提供丰富的示例供用户在线调试，帮助用户低成本了解LogicFlow的使用方式和能力',
+          zh: '基于内置能力提供丰富的示例供用户在线调试，帮助用户低成本了解LogicFlow的使用方式和能力。',
           en: 'Based on the built-in capabilities, a wealth of examples are provided for users to debug online, helping users understand the usage and capabilities of LogicFlow at a low cost.',
         },
         // link: `/examples/gallery`,
