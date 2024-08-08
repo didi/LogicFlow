@@ -226,7 +226,7 @@ export default defineConfig({
     /** 首页案例 */
     cases: [
       {
-        logo: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/online-commissioning-icon.png',
+        logo: 'https://s3-gzpu.didistatic.com/ese-feedback/LogicFlow/online-commissioning-icon.png',
         title: {
           zh: '在线调试',
           en: 'Online Debugging',
@@ -237,12 +237,12 @@ export default defineConfig({
         },
         // link: `/examples/gallery`,
         image:
-          'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/high-quality-plugins.png',
+          'https://s3-gzpu.didistatic.com/ese-feedback/LogicFlow/high-quality-plugins.png',
       },
     ],
     companyGallery: {
       name: '企业用户展示墙',
-      img: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/companylist.png',
+      img: 'https://s3-gzpu.didistatic.com/ese-feedback/LogicFlow/comanylist.png',
     },
     /** 首页合作公司 */
     companies: [
