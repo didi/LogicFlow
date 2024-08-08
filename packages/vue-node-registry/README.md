@@ -1,6 +1,6 @@
 # @logicflow/vue-node-registry
 
-LogicFlow Shape for rendering React components.
+LogicFlow Shape for rendering Vue components.
 
 ## Installation
 ```shell
