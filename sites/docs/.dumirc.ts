@@ -221,18 +221,18 @@ export default defineConfig({
     /** 首页案例 */
     cases: [
       {
-        logo: 'https://gw.alipayobjects.com/mdn/rms_2274c3/afts/img/A*-dLnTIexOxwAAAAAAAAAAABkARQnAQ',
+        logo: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/online-commissioning-icon.png',
         title: {
-          zh: '场景示例 Gallery',
-          en: 'Boutique Gallery',
+          zh: '在线调试',
+          en: 'Online Debugging',
         },
         description: {
-          zh: '真实的数据可视化案例，我们将它们归纳为一个个故事性的设计模板，让用户达到开箱即用的效果。',
-          en: 'Real data visualization cases, we summarize them into story-based design templates, allowing users to achieve out-of-the-box effects.',
+          zh: '基于内置能力提供丰富的示例供用户在线调试，帮助用户低成本了解LogicFlow的使用方式和能力',
+          en: 'Based on the built-in capabilities, a wealth of examples are provided for users to debug online, helping users understand the usage and capabilities of LogicFlow at a low cost.',
         },
         // link: `/examples/gallery`,
         image:
-          'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/examples.png',
+          'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/homepage/high-quality-plugins.png',
       },
     ],
     companyGallery: {
