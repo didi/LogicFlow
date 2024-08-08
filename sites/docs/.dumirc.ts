@@ -395,7 +395,7 @@ export default defineConfig({
     },
   },
   mfsu: false,
-  mako: {},
+  // mako: {},
   alias: {
     '@': __dirname,
   },
