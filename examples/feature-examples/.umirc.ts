@@ -128,6 +128,11 @@ export default defineConfig({
           component: './extensions/group',
         },
         {
+          path: '/extension/dynamic-group',
+          name: 'DynamicGroup 插件',
+          component: './extensions/dynamic-group',
+        },
+        {
           path: '/extension/selection-select',
           name: 'SelectionSelect 插件',
           component: './extensions/selection-select',
