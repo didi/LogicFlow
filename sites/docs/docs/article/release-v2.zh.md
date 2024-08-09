@@ -4,8 +4,6 @@ order: 0
 toc: content
 ---
 
-![LogicFlow 功能展示](https://s3-gzpu.didistatic.com/ese-feedback/LogicFlow/2.0HeadImg.png)
-
 ## 导读
 
 LogicFlow 是一款滴滴客服技术团队开源的流程图编辑框架，它提供了一系列流程图交互、编辑所必需的功能和灵活的节点自定义、插件等拓展机制。自发布以来，LogicFlow 影响力持续增长，现已成为国内头部开源流程图编辑框架，GitHub star 数量已超过 7.4k，npm 下载量累计超过 900k。除了我们内部团队的使用外，还吸引了如美团、京东、华为等企业的技术团队在项目中应用 LogicFlow。

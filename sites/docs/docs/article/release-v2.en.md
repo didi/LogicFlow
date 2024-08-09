@@ -4,8 +4,6 @@ order: 0
 toc: content
 ---
 
-![LogicFlow Feature Showcase](https://s3-gzpu.didistatic.com/ese-feedback/LogicFlow/2.0HeadImg.png)
-
 ## Introduction
 
 LogicFlow is an open source flowchart editing framework for DDT customer service technical team,
