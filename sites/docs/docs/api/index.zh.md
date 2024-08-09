@@ -113,7 +113,7 @@ table td:first-of-type {
 | [resetZoom](./detail/index.zh.md#resetzoom)                   | 重置图形的缩放比例为默认，默认是 1。                    |
 | [setZoomMiniSize](./detail/index.zh.md#setzoomminisize)       | 设置图形缩小时，能缩放到的最小倍数。参数一般为 0-1 之间，默认 0.2。 |
 | [setZoomMaxSize](./detail/index.zh.md#setzoommaxsize)         | 设置图形放大时，能放大到的最大倍数，默认 16。               |
-| [getTransform](./detail/index.zh.md#gettransform)             | 获取当前画布的放大缩小值。                          |
+| [getTransform](./detail/index.zh.md#gettransform)             | 获取当前画布的缩放值与偏移值。                          |
 | [translate](./detail/index.zh.md#translate)                   | 平移图。                                   |
 | [resetTranslate](./detail/index.zh.md#resettranslate)         | 还原图形为初始位置。                             |
 | [translateCenter](./detail/index.zh.md#translatecenter)       | 图形画布居中显示。                              |
