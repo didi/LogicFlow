@@ -93,7 +93,7 @@ if (this.timer) {
 ```
 
 ## Portal 方式
-上面的 React 组件渲染方式有一个缺点，因为内部是通过一下方式将组件渲染到节点的 DOM 中。
+上面的 React 组件渲染方式有一个缺点，因为内部是通过以下方式将组件渲染到节点的 DOM 中。
   
 ```tsx | pure
 import { createRoot, Root } from 'react-dom/client'
