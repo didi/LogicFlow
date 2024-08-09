@@ -1099,12 +1099,21 @@ lf.setZoomMaxSize(20);
 
 ### getTransform
 
-获取当前画布的放大缩小值。
+获取当前画布的缩放值与偏移值。
 
 ```tsx | pure
 const transform = lf.getTransform();
 console.log(transform);
 ```
+
+`getTransform` 方法返回的对象包含以下属性：
+
+| 属性   | 类型     | 值 |
+|:-----|:-------|:---|
+| SCALE_X | number | x 轴缩放比例 |
+| SCALE_Y | number | y 轴缩放比例 |
+| TRANSLATE_X | number | x 轴偏移值 |
+| TRANSLATE_Y | number | y 轴偏移值 |
 
 ### translate
 
