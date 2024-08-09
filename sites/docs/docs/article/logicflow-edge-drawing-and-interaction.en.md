@@ -1,6 +1,6 @@
 ---
 title: LogicFlow Edge Drawing and Interaction
-order: 2
+order: 3
 toc: content
 ---
 

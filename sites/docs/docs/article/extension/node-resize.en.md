@@ -1,6 +1,6 @@
 ---
-title: LogicFlow Node Resize
-order: 3
+title: NodeResize Extension
+order: 0
 toc: content
 ---
 

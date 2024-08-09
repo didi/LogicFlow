@@ -1,6 +1,6 @@
 ---
 title: The design and architecture of LogicFlow
-order: 0
+order: 1
 toc: content
 ---
 
