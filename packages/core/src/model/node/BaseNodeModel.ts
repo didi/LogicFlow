@@ -774,23 +774,27 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     this.additionStateData = additionStateData
   }
 
-  // TODO: 处理重复代码，setProperty 和 setProperties  -> 公用代码提到 updateProperties 中？
-  @action setProperty(key: string, val: any): void {
+  private updateProperties(nextProperties: P, updateKeys: string[]): void {
     const preProperties = toJS(this.properties)
-    const nextProperties = {
-      ...preProperties,
-      [key]: formatData(val),
-    }
     this.properties = nextProperties
     this.setAttributes()
 
     // 触发更新节点 properties:change 的事件
     this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
       id: this.id,
-      keys: [key],
+      keys: updateKeys,
       preProperties,
       properties: nextProperties,
     })
+  }
+
+  @action setProperty(key: string, val: any): void {
+    const preProperties = toJS(this.properties)
+    const nextProperties = {
+      ...preProperties,
+      [key]: formatData(val),
+    }
+    this.updateProperties(nextProperties, [key])
   }
 
   @action setProperties(properties: Record<string, any>): void {
@@ -799,8 +803,6 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
       ...preProperties,
       ...formatData(properties),
     }
-    this.properties = nextProperties
-    this.setAttributes()
 
     const updateKeys: string[] = []
     mapKeys(properties, (val, key) => {
@@ -813,13 +815,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
       }
     })
 
-    // 触发更新节点 properties:change 的事件
-    this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
-      id: this.id,
-      keys: updateKeys,
-      preProperties,
-      properties: nextProperties,
-    })
+    this.updateProperties(nextProperties, updateKeys)
   }
 
   @action deleteProperty(key: string): void {
