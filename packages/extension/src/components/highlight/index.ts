@@ -14,6 +14,7 @@ const getNodePath = (node, lf: LogicFlow) => {
   const outgoingPaths: any[] = []
 
   const getIncomingPaths = (curNode, path, prevNode?: BaseNodeModel) => {
+    if (!curNode) return
     if (prevNode) {
       // * 上个节点和当前节点中间边
       path.unshift(
@@ -48,6 +49,7 @@ const getNodePath = (node, lf: LogicFlow) => {
 
   // * 同上逻辑
   const getOutgoingPaths = (curNode, path, prevNode?: BaseNodeModel) => {
+    if (!curNode) return
     if (prevNode) {
       path.push(
         ...lf
