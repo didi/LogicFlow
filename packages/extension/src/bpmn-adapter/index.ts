@@ -429,7 +429,7 @@ function getLfEdges(value, bpmnEdges) {
 
 function getEdgeConfig(edgeValue, processValue): EdgeConfig {
   let text
-  const textVal = processValue['-name']
+  const textVal = `${processValue['-name']}`
   if (textVal) {
     const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds']
     // 如果边文本换行，则其偏移量应该是最长一行的位置
