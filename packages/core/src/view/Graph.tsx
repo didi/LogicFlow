@@ -38,12 +38,13 @@ type ContainerStyle = {
 
 @observer
 class Graph extends Component<IGraphProps> {
+  private resizeFunction: any = () => throttle(this.handleResize, 200)
   handleResize = () => {
     this.props.graphModel.resize()
   }
 
   componentDidMount() {
-    window.addEventListener('resize', throttle(this.handleResize, 200))
+    window.addEventListener('resize', this.resizeFunction)
   }
 
   componentDidUpdate() {
@@ -52,7 +53,7 @@ class Graph extends Component<IGraphProps> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', throttle(this.handleResize, 200))
+    window.removeEventListener('resize', this.resizeFunction)
   }
 
   getComponent(
