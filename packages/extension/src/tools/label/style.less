@@ -1,0 +1,71 @@
+@import url('medium-editor/dist/css/medium-editor.min.css');
+@import url('medium-editor/dist/css/themes/beagle.min.css');
+@import url('vanilla-picker/dist/vanilla-picker.csp.css');
+
+/* label */
+.lf-label-overlay {
+  width: 0;
+  height: 0;
+  overflow: visible;
+
+  .lf-label-editor {
+    //box-sizing: content-box;
+    padding: 4px;
+    background: #fff;
+    border-radius: 5px;
+
+    &-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      text-align: center;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    &-dragging {
+      cursor: move;
+    }
+
+    &-editing {
+      border: 2px solid #275dc5;
+      outline: none;
+      cursor: text;
+    }
+
+    &-hover {
+      border: 2px dashed #acacac;
+    }
+
+    // textOverflowMode
+    &-clip {
+      width: 100px; /* 根据需要调整宽度 */
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: clip;
+    }
+
+    &-ellipsis {
+      width: 100px; /* 根据需要调整宽度 */
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &-wrap {
+      width: 100px; /* 根据需要调整宽度 */
+      white-space: normal;
+      overflow-wrap: break-word; /* 允许单词内换行 */
+    }
+
+    &-nowrap {
+      width: 100px; /* 根据需要调整宽度 */
+      overflow: visible;
+      white-space: nowrap;
+    }
+  }
+}

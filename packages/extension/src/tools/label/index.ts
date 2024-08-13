@@ -22,6 +22,8 @@ export type ILabelOptions = {
   textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 }
 
+import './style.less'
+
 export class Label implements Extension {
   static pluginName = 'label'
 
