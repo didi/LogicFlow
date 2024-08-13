@@ -1,79 +1,105 @@
 # Change Log
 
+## 2.0.1
+
+### Patch Changes: 修复 2.0 版本中 Core 包及 Extension 中 dynamic-group/label 等插件的 bug
+
+- Release 2.0.1. Fix some issues on 2.0.0
+- Updated dependencies
+  - @logicflow/core@2.0.1
+- 修复初始化时 DynamicGroup 插件折叠展开报错的问题 #1767
+- 修复 RectNodeModel 初始化时设置 width、height、radius 为 0 时无效的 bug
+- Rename: resizeFunction -> throttleResize 函数命名优化
+- 修复 isRestrict 开启后子节点仍能拖拽出分组区域的 bug
+- 优化分组旋转时，子节点的旋转逻辑，以分组中心为中心点旋转，并更新自身的 rotate 属性
+- 增加 elementsModelMap 解决 Group 初始化时，children 中的元素未完成初始化导致 model 为空的bug
+- Rename: outcomingEdgeList，getAnchorOutcomingEdge，outcoming -> outgoing #1449
+- 修复画布加载完后新增节点时Label不展示问题 #1759
+- 重新修改样式打包配置,用于修复引入插件包后起服务报错问题 #1760
+- 修复画布切换后页面宽高变化时持续出现警告问题 #1756
+- 统一数据类型, 修复textVal为数字时报错问题 #1612
+- 修复节点id切换后某一次更新边拿不到NodeId问题 #864
+
 ## 2.0.0
 
 ### Major Changes： Release 2.0 New Version 🎉🎉🎉🎉
 
 #### refactor: 重构 LogicFlow 项目结构，升级打包工具，使用 pnpm 做包管理工具
 
- - rename index.tsx -> index.ts, update dependencies and declare module mobx-preact
- - 配置 husky pre-commit
- - 完善 LogicFlow.tsx 主文件类型定义
- - update .gitignore
- - git rm -r --cached sites/docs/.dumi/tmp
- - add index.less
- - 解决项目中 core 包 TypeScript 类型错误导致打包失败的问题
+- rename index.tsx -> index.ts, update dependencies and declare module mobx-preact
+- 配置 husky pre-commit
+- 完善 LogicFlow.tsx 主文件类型定义
+- update .gitignore
+- git rm -r --cached sites/docs/.dumi/tmp
+- add index.less
+- 解决项目中 core 包 TypeScript 类型错误导致打包失败的问题
 
- - 项目代码重构，包括 examples、extension 及 core 包
-   - remove react-umi-app demo
-   - rename lf-engine-browser -> engine-browser-examples
-   - rename lf-engine-node -> engine-node-examples
-   - extension 包中修改文件夹名大小写未生效，恢复成 Control 和 Node 文件夹，后续再处理
-   - add feature-examples DEMO 项目，用于汇总所有官方 demo，后续再 docs 中使用
-   - 完成 feature-examples 中 demo 的改造，增加 graph 页面
-   - 优化 DndPanel 的demo
-   - 开发 feature-examples 中 BPMN 插件 demo
-   - feature-examples 中增加 BPMN demo
-   - engine-browser-examples 中增加 graph demo，方便后续在 vite 环境下调试包功能，测试 umi 与 vite 是否一致
-   - engine-browser-examples bpmn demo 更新
-   - 新增 next-app 用来测试服务端渲染项目中 window is not defined 的问题
-   - 修复 vue3-memory-leak 项目中引入 vue 文件报错的问题
-   - 新增 vue3-app 用于测试 vue-node-registry，后续使用该项目开发 vue 组件或 demo
-   - feature-examples 类型完善
-   - 修复 engine-browser-examples 中类型错误问题
-   - 优化 engine-browser-examples 样式
-   - 补充自定义折线、圆角折线、节点选择示例 (#1680)
-   - 添加insert-node-in-polyline，rules两个插件的demo
-   - 增加测试vue3性能demo
-   - 增加rect-label-node插件示例
-   - 增加高亮插件说明文档 - 优化高亮插件示例
+- 项目代码重构，包括 examples、extension 及 core 包
 
- - 文件夹重命名，将大驼峰命名修改为 小写+短横线
-   - DefaultAnimation.ts -> defaultAnimation.ts
-   - DefatultTheme.ts -> defaultTheme.ts
-   - history/History.ts -> history/index.ts
-   - 并更新项目中各个文件的引用地址
+  - remove react-umi-app demo
+  - rename lf-engine-browser -> engine-browser-examples
+  - rename lf-engine-node -> engine-node-examples
+  - extension 包中修改文件夹名大小写未生效，恢复成 Control 和 Node 文件夹，后续再处理
+  - add feature-examples DEMO 项目，用于汇总所有官方 demo，后续再 docs 中使用
+  - 完成 feature-examples 中 demo 的改造，增加 graph 页面
+  - 优化 DndPanel 的demo
+  - 开发 feature-examples 中 BPMN 插件 demo
+  - feature-examples 中增加 BPMN demo
+  - engine-browser-examples 中增加 graph demo，方便后续在 vite 环境下调试包功能，测试 umi 与 vite 是否一致
+  - engine-browser-examples bpmn demo 更新
+  - 新增 next-app 用来测试服务端渲染项目中 window is not defined 的问题
+  - 修复 vue3-memory-leak 项目中引入 vue 文件报错的问题
+  - 新增 vue3-app 用于测试 vue-node-registry，后续使用该项目开发 vue 组件或 demo
+  - feature-examples 类型完善
+  - 修复 engine-browser-examples 中类型错误问题
+  - 优化 engine-browser-examples 样式
+  - 补充自定义折线、圆角折线、节点选择示例 (#1680)
+  - 添加insert-node-in-polyline，rules两个插件的demo
+  - 增加测试vue3性能demo
+  - 增加rect-label-node插件示例
+  - 增加高亮插件说明文档 - 优化高亮插件示例
 
- - 解决 git config core.ignorecase 为 true 导致修改文件夹名大小写不生效的问题
-   - 重命名 BPMN -> bpmn; Control -> control
-   - 命名规范：文件夹名小写（name or  name1-name2-name3）；.js or .ts 小驼峰；.tsx or .jsx 大驼峰
-   - 新增 Vue3-memory-leak demo 用于定位内存泄漏的问题，后续基于此 demo 增加 LogicFlow destroy 的方法
-   - 优化 properties 类型定义为 Record<string, any>，避免 unknow 引起的问题，后续再优化
-   - 解决 graph demo 中发现 BezierEdge 初始化 path 为空的问题，可以看 -> BezierEdgeModel.ts 的改动
+- 文件夹重命名，将大驼峰命名修改为 小写+短横线
 
- - 通过 git rm --cached Xxxx 移除修改大小写的文件夹内容
+  - DefaultAnimation.ts -> defaultAnimation.ts
+  - DefatultTheme.ts -> defaultTheme.ts
+  - history/History.ts -> history/index.ts
+  - 并更新项目中各个文件的引用地址
 
- - 完善 README.md 以及 CONTRIBUTING 相关文档，解决 eslint 问题
-   - 完善开源共享引导文档：README 以及 CONTRIBUTING
-   - 项目根目录运行 pnpm run lint:ts，解决项目中 eslint 错误及 warning
+- 解决 git config core.ignorecase 为 true 导致修改文件夹名大小写不生效的问题
 
- - Update update_contributors.yml
-  
- - update package.json, add changesets to generate CHANGELOG
-   - .gitnore add .umi/ and delete .npmrc file
-   - dependencies 中 'workspace:latest' -> 'workspace:*' 解决 changeset 中生成 CHANGELOG 报错的问题
-   - update build-docs shell
-   - add @changesets/cli and related scripts
+  - 重命名 BPMN -> bpmn; Control -> control
+  - 命名规范：文件夹名小写（name or name1-name2-name3）；.js or .ts 小驼峰；.tsx or .jsx 大驼峰
+  - 新增 Vue3-memory-leak demo 用于定位内存泄漏的问题，后续基于此 demo 增加 LogicFlow destroy 的方法
+  - 优化 properties 类型定义为 Record<string, any>，避免 unknow 引起的问题，后续再优化
+  - 解决 graph demo 中发现 BezierEdge 初始化 path 为空的问题，可以看 -> BezierEdgeModel.ts 的改动
 
- - 更新 rollup config 并增加 umd 包使用 demo 文件
+- 通过 git rm --cached Xxxx 移除修改大小写的文件夹内容
 
- - npm 包 dependencies 中新增 lodash-es 依赖，解决引入项目中报错的问题
-   - 开发节点文本换行等体验优化的功能
-   - 解决 examples 中报错的问题
+- 完善 README.md 以及 CONTRIBUTING 相关文档，解决 eslint 问题
 
- - 移除文档中 lodash-es 依赖，移除无用 console
- - 优化代码注释歧义的问题
- - 更新 turbo 版本并解决 extension 打包 core 依赖报错的问题
+  - 完善开源共享引导文档：README 以及 CONTRIBUTING
+  - 项目根目录运行 pnpm run lint:ts，解决项目中 eslint 错误及 warning
+
+- Update update_contributors.yml
+
+- update package.json, add changesets to generate CHANGELOG
+
+  - .gitnore add .umi/ and delete .npmrc file
+  - dependencies 中 'workspace:latest' -> 'workspace:\*' 解决 changeset 中生成 CHANGELOG 报错的问题
+  - update build-docs shell
+  - add @changesets/cli and related scripts
+
+- 更新 rollup config 并增加 umd 包使用 demo 文件
+
+- npm 包 dependencies 中新增 lodash-es 依赖，解决引入项目中报错的问题
+
+  - 开发节点文本换行等体验优化的功能
+  - 解决 examples 中报错的问题
+
+- 移除文档中 lodash-es 依赖，移除无用 console
+- 优化代码注释歧义的问题
+- 更新 turbo 版本并解决 extension 打包 core 依赖报错的问题
 
 #### Core & Extension
 
@@ -86,16 +112,19 @@
 - 修复 GraphModel 中 getAreaElement 方法的 bug 及一些其他类型定义的优化
 
 - 修复 GroupNode 中 getNodeStyle 解构后调用，BaseNodeModel 中 getNodeStyle 方法 this 为空的问题
+
   - 确认解构后赋值和直接 this.props.model.getNodeStyle() 方法调用的区别 -> this 指向的问题
   - LogicFlow Examples 中新增 Group 插件
 
 - 主要修复 TextEditTool 无效的 bug，后注原因
+
   - TextEditTool 组件更新时，原先的 graphModel 和 LogicFlow props 不会触发组件的更新，通过将 textEditElement 传入触发组件更新
   - 移除代码中无用的 console
   - 更新依赖 @babel/plugin-proposal-class-properties -> @babel/plugin-transform-class-properties
   - EventArgs 相关类型由 unknown 改为 any
 
 - 框选插件重构与示例内容丰富
+
   - 完善部分类型定义
   - 框选插件示例内容丰富
   - 修复使用框选插件后，网页滚轮事件被阻塞的问题
@@ -104,6 +133,7 @@
   - 优化框选工具在缩放时的边距与外边框宽度计算
 
 - feat: 小地图插件重构与相关示例增加
+
   - 优化画布移动时，小地图的更新策略，减少性能消耗
   - 小地图显示区域计算逻辑修改，现在由画布元素与视口共同决定
   - 优化小地图预览视窗的拖拽交互
@@ -111,6 +141,7 @@
   - 新增小地图插件的示例
 
 - selection-select 插件中 disabled 默认设置为 true
+
   - 用于解决当用于 stopMoveGraph 设置为 true 且启用了 selection-select 插件时，插件状态默认开启的 bug
   - 更新 LICENSE 文件，格式化内容
   - 其它 demo 的一些样式更新
@@ -120,6 +151,7 @@
 - 完善与修正core包的部分类型定义
 
 - minimap插件功能完善与相关示例丰富
+
   - 小地图中可选择是否渲染连线，支持初始化时设置或通过`setShowEdge`方法更新设置
   - 更完善的代码注释与类型定义
   - 现在，小地图默认将位于画布的右下角，保留`show`方法设置画布位置的功能，新增`updatePosition`方法用于更新小地图相对画布的决定定位
@@ -128,6 +160,7 @@
 - 完善 BaseEdge 和 BaseNode 泛型类型，内置节点 props 定义更新
 
 - 重构 LogicFlow.tsx 以及 GraphMode 代码，代码按功能分区管理
+
   - Fix typo -> fakerNode 重命名为 fakeNode，意指虚拟节点
   - 主要重构 LogicFlow.tsx 中代码: 将代码按 Register，Nodes，Edges，Element，Text，EditConfig，Graph，EventCenter，History 等分模块管理
   - 重构 LogicFlow 中 getPointByClient 方法，通过重载，支持多种类型参数
@@ -136,31 +169,37 @@
 - core包类型定义完善
 
 - 小地图插件新增功能与示例丰富
+
   - 小地图插件现在支持设置关闭小地图时的回调，用于外部更新小地图的显示状态（#829）
   - 小地图插件示例增加与新增功能相关的内容
 
 - extension包的类型定义修复
+
   - 修复 349252c 提交后，extension 包中的类型错误问题
   - 为 BaseNode 的范型设置默认类型
 
 - 修复小地图的预览视窗无法拖拽的问题
 
 - 小地图设置回调逻辑调整为抛出事件
+
   - 删除原有设置关闭时回调的逻辑
   - 现在小地图插件在关闭时会抛出事件 `miniMap:close`，可以通过 `lf.on()` 监听该事件来设置小地图关闭时的回调
 
 - 事件系统的类型定义完善
 
 - 将节点 Resize 功能内置
+
   - 新增 Control 组件，用于控制节点放大缩小，并在 BaseNodeModel 中增加 resize 方法
   - 更新 GitHub Actions 任务名
   - 重命名 allowRotation -> allowRotate；后续增加 allowResize 选项，保持命名一致性
   - circle/diamond/ellipse/polygon 等节点增加 resize 能力
   - 节点 model 中增加初始化时 properties 的保存，调试多边形节点 outline 不符合预期的问题
+
     - 解决resize 结束后节点重新定位的问题
       - Control.tsx 中 new StepDrag 参数中 step 传入 graphModel.gridSize，保证调整时拖拽以 gridSize 为步长移动
 
   - 完成自定义节点内置功能的开发
+
     - 移除目前系统中无用的 defaultTheme 和 defaultAnimation 文件
     - 通过 points 置原点并基于设定的 width 和 height 缩放的方法，解决多边形形状与边框定位异常的问题
 
@@ -174,25 +213,29 @@
 - 修复 HtmlREsize 节点 outlineStyle fill 默认为 黑色的 bug
 - 统一 NodeResize 中 getResizeOutlineStyle fill 和 stroke 的返回值
 - 更新插件相关类型定义，完善插件相关方法 use/installPlugins/installPlugin 的功能
+
   - 解决插件中一些类型问题
   - 测试并修复 LogicFlow.use api 的功能 bug
   - 调整安装插件的顺序，如有重名默认优先使用 plugins 中定义的插件
 
 - 重构项目中 basic shape 组件，修复功能 bug、完善类型定义
+
   - rename formateAnchorConnectValidateData - formatAnchorConnectValidateData
-  - rename  setHoverON -> setHoverOn, setHoverOFF -> setHoverOff
+  - rename setHoverON -> setHoverOn, setHoverOFF -> setHoverOff
   - 修复 Text 文本节点，文本不在节点中间的显示 bug，通过设置 dominantBaseline: central 解决
   - TextNode getBackground 中 rectAttr 设置 y: y-1, 移除该设置
 
 - 新增 common 文件夹用于存放通用方法
 
 - 增加用户设置画布 100% ，在调整视窗时，画布大小同步更新的逻辑，优化体验
+
   - 优化初始化时设置画布大小的逻辑
   - 优化 DEMO 代码，解决设置 theme 未生效的 bug（ 代码问题。在初始化时 style 覆盖了 defaultConfig 中的 style）
 
 - 支持导出节点中的网络图片
 
 - 修复线的 menu 无法正常显示的 bug (#1679)
+
   - 修复初始化时 edgeConfig 中 type 未传值场景下，未使用 graphModel.edgeType(默认边类型) 初始化边的 bug
 
 - 优化 snapshot 交互体验，内容居中且开启拖拽画布，调整菜单顺序
@@ -200,6 +243,7 @@
 - 修复画布拖动阻止滚动 (#1700)
 
 - 新增Label文本模式, 支持配置多文本和修改文本朝向
+
   - graphModel 中增加 textMode 属性，用于标识当前使用什么文本模式
   - BaseNodeMode and BaseEdgeModel 以及 graphModel 中增加 更新 textMode 的方法
   - 更新 tool 中 props 名称，logicflow -> lf，便于理解
@@ -218,9 +262,10 @@
   - 增加 API，updateTextMode 可切换 textMode 并更新页面
 
   - 增加双击节点 or 边增加 Label 的功能
+
     - 可传入设置样式 设置 label
     - 富文本编辑内容无法同步到 content 的问题
-    - 如果 properties 中没有 _label 配置项时，MediumEditor 初始化有点问题，选中文本无法显示工具栏
+    - 如果 properties 中没有 \_label 配置项时，MediumEditor 初始化有点问题，选中文本无法显示工具栏
     - 更新完Label content 后，Label 拖拽无效的问题（isDragging state 更新时机问题）
 
   - 完成 Label 溢出模式配置能力开发
@@ -234,6 +279,7 @@
   - 移除或注释项目中无用的 console
 
   - 移植 Label 在边上定位 的相关代码，在调整节点更新边时，保持 Label 位置
+
     - 根据 PR 整理代码中 Text 和 Label 相关逻辑，移除无效代码
     - next-label 中增加 Edge 计算相关的逻辑
 
@@ -242,28 +288,33 @@
   - 修复 isMultiple 对于双击节点或边增加 label 无效的 bug
 
 - 调整core包tool文件夹
+
   - 将 snapline 移出 tool 文件夹，因为它本身非 tool，放这里面会有误导
   - 优化 tool 文件夹，将 tool 内容移至 index 中，并更新项目中相关导入
 
 - 新增 adjustEdgeStart 和 adjustEdgeEnd，可单独控制调整起始点或结束点
+
   - 支持cmd - 鼠标滚动操作放大缩小画布
   - 节点文本支样式持通过properties传入textStylele配置
 
 - 重构 core 包中 properties 类型定义，通过泛型的方式约束其类型
+
   - 修复 node-selection 中 properties 未定义类型导致的报错
 
 - 升级 group 插件为 dynamic-group 插件
+
   - 完成 dynamic-group 插件 isCollased 初始化及groupAddable 状态即时更新
   - 优化 editConfigModel 中属性的初始化逻辑及其初始化值调整
   - 调小 ResizeControl 的范围 30 -> 15，原因是会盖住 Group 折叠的小按钮
   - 优化允许文本拖动的逻辑判断 -> nodeTextDraggable && draggable 才可以允许拖动
 
   - 开发节点缩放旋转时，同步缩放 or 旋转节点内部元素功能
+
     - 完善 node:resize 及 node:rotate 事件抛出的数据
     - 将 Control 中 resize 相关的方法提取到 utils/resize.ts 中，方便在插件中直接调用
     - 在 group 组件中监听 node:resize 和 node:rotate 事件，完成对子元素的更新
 
-  - 测试 SelectionSelct 与 DynamicGroup 不兼容的问题并修复 
+  - 测试 SelectionSelct 与 DynamicGroup 不兼容的问题并修复
 
 - 边支持传入自定义样式
 - 优化高亮插件功能

@@ -1,11 +1,19 @@
 # @logicflow/react-node-registry
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.0.1
+
 ## 1.0.0
 
 ### Patch Changes
 
 - Release 2.0 New Version 🎉🎉🎉🎉
 - Updated dependencies
+
   - @logicflow/core@2.0.0
 
 - feat: 开发 react-node-registry 包用于用户自定义 react 节点

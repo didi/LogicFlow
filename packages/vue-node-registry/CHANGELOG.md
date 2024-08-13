@@ -1,11 +1,19 @@
 # @logicflow/vue-node-registry
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.0.1
+
 ## 1.0.0
 
 ### Patch Changes
 
 - Release 2.0 New Version 🎉🎉🎉🎉
 - Updated dependencies
+
   - @logicflow/core@2.0.0
 
 - feat: 开发 vue-node-registry 包用于用户自定义 vue 节点
@@ -16,4 +24,3 @@
     - 更新 extension 包的 package.json
     - 修复 vue-node-registry 渲染顺序，先 appendChild，再 new Vue
     - 修复渲染自定义节点 new Vue2 实例时未传 el 的问题
-    
