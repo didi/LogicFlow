@@ -506,8 +506,8 @@ export class DynamicGroup {
 
       if (groupModel && groupModel.isRestrict) {
         // 如果移动的节点存在与分组中，且这个分组禁止子节点移出去
-        const bounds = model.getBounds()
-        return isAllowMoveTo(bounds, groupModel)
+        const groupBounds = groupModel.getBounds()
+        return isAllowMoveTo(groupBounds, model, deltaX, deltaY)
       }
 
       return true
@@ -523,7 +523,6 @@ export class DynamicGroup {
     lf.on('graph:updated', ({ data }) => console.log('data', data))
 
     lf.on('group:add-node', ({ data }) => console.log('group:add-node', data))
-    // lf.eventCenter.on('node:resize', this.onGroupResize)
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能

@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
 import styles from './index.less'
 
 import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+// import '@logicflow/extension/es/index.css'
 
 import EdgeData = LogicFlow.EdgeData
 import NodeData = LogicFlow.NodeData

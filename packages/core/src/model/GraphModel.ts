@@ -43,10 +43,6 @@ import NodeConfig = LogicFlow.NodeConfig
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
 
-export interface Constructable<T> {
-  new (...args: any): T
-}
-
 export class GraphModel {
   /**
    * LogicFlow画布挂载元素
@@ -75,6 +71,13 @@ export class GraphModel {
   idGenerator?: (type?: string) => string | undefined
   // 节点间连线、连线变更时的边的生成规则
   edgeGenerator: LFOptions.Definition['edgeGenerator']
+
+  // Remind：用于记录当前画布上所有节点和边的 model 的 Map
+  // 现在的处理方式，用 this.nodes.map 生成的方式，如果在 new Model 的过程中依赖于其它节点的 model，会出现找不到的情况
+  // eg: new DynamicGroupModel 时，需要获取当前 children 的 model，根据 groupModel 的 isCollapsed 状态更新子节点的 visible
+  nodeModelMap: Map<string, BaseNodeModel> = new Map()
+  edgeModelMap: Map<string, BaseEdgeModel> = new Map()
+  elementsModelMap: Map<string, BaseNodeModel | BaseEdgeModel> = new Map()
 
   /**
    * 节点移动规则判断
@@ -161,9 +164,7 @@ export class GraphModel {
     }, {} as GraphModel.NodesMapType)
   }
 
-  @computed get edgesMap(): {
-    [key: string]: { index: number; model: BaseEdgeModel }
-  } {
+  @computed get edgesMap(): GraphModel.EdgesMapType {
     return this.edges.reduce((eMap, model, index) => {
       eMap[model.id] = {
         index,
@@ -191,7 +192,7 @@ export class GraphModel {
 
     // 只显示可见区域的节点和边
     const visibleElements: (BaseNodeModel | BaseEdgeModel)[] = []
-    // TODO: 缓存，优化计算效率 by xutao. So what to do?
+    // TODO: 缓存，优化计算效率 by xutao. So how?
     const visibleLt: PointTuple = [
       -DEFAULT_VISIBLE_SPACE,
       -DEFAULT_VISIBLE_SPACE,
@@ -428,7 +429,11 @@ export class GraphModel {
         if (!Model) {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
-        return new Model(edge, this)
+        const edgeModel = new Model(edge, this)
+        this.edgeModelMap.set(edgeModel.id, edgeModel)
+        this.elementsModelMap.set(edgeModel.id, edgeModel)
+
+        return edgeModel
       })
     } else {
       this.edges = []
@@ -800,7 +805,11 @@ export class GraphModel {
         node.text.y += node.y - nodeY
       }
     }
-    return new Model(node, this)
+    const nodeModel = new Model(node, this)
+    this.nodeModelMap.set(nodeModel.id, nodeModel)
+    this.elementsModelMap.set(nodeModel.id, nodeModel)
+
+    return nodeModel
   }
 
   /**
@@ -914,6 +923,8 @@ export class GraphModel {
       },
       this,
     )
+    this.edgeModelMap.set(edgeModel.id, edgeModel)
+    this.elementsModelMap.set(edgeModel.id, edgeModel)
 
     const edgeData = edgeModel.getData()
     this.edges.push(edgeModel)
@@ -1153,8 +1164,10 @@ export class GraphModel {
     // 如果节点之间存在连线，则只移动连线一次。
     const nodeIdMap: Record<string, [number, number]> = nodeIds.reduce(
       (acc, cur) => {
-        const nodeModel = this.nodesMap[cur].model
-        acc[cur] = nodeModel.getMoveDistance(deltaX, deltaY, isIgnoreRule)
+        const nodeModel = this.nodesMap[cur]?.model
+        if (nodeModel) {
+          acc[cur] = nodeModel.getMoveDistance(deltaX, deltaY, isIgnoreRule)
+        }
         return acc
       },
       {},
@@ -1337,10 +1350,9 @@ export class GraphModel {
   }
 
   /**
-   * TODO: 命名问题 outcoming -> outgoing or incoming
    * 获取所有以此锚点为起点的边
    */
-  @action getAnchorOutcomingEdge(anchorId?: string) {
+  @action getAnchorOutgoingEdge(anchorId?: string) {
     const edges: BaseEdgeModel[] = []
     this.edges.forEach((edge) => {
       if (edge.sourceAnchorId === anchorId) {

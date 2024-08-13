@@ -1,7 +1,7 @@
 import LogicFlow, { TextMode } from '@logicflow/core'
 import { Label } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+// import '@logicflow/extension/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
 import { useEffect, useRef } from 'react'
