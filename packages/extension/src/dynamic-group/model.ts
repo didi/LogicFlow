@@ -95,12 +95,13 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   @observable groupAddable: boolean = false
   // 缩放或旋转容器时，是否缩放或旋转组内节点
   @observable transformWidthContainer: boolean = true
-  childrenLastCollapseStateDict: Record<string, boolean> = {}
+  childrenLastCollapseStateDict: Map<string, boolean> = new Map()
 
   constructor(data: NodeConfig<IGroupNodeProperties>, graphModel: GraphModel) {
     super(data, graphModel)
-    this.initNodeData(data)
+    this.childrenLastCollapseStateDict = new Map()
 
+    this.initNodeData(data)
     this.setAttributes()
   }
 
@@ -118,6 +119,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       isCollapsed,
       zIndex,
       isRestrict,
+      autoResize,
       autoToFront,
     } = data.properties ?? {}
 
@@ -137,6 +139,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapsedHeight = collapsedHeight ?? DEFAULT_GROUP_COLLAPSE_HEIGHT
 
     this.isRestrict = isRestrict ?? false
+    this.autoResize = autoResize ?? false
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false
 
@@ -217,11 +220,12 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
     // step 2
     let allRelatedEdges = [...this.incoming.edges, ...this.outgoing.edges]
-    console.log('this -->>', this)
-    console.log('this.children -->>', this.children)
     const childrenArr = Array.from(this.children)
+
     forEach(childrenArr, (elementId) => {
-      const model = this.graphModel.getElement(elementId)
+      // FIX: 当使用 graphModel.getElement 获取元素时，会因为
+      // const model = this.graphModel.getElement(elementId)
+      const model = this.graphModel.elementsModelMap.get(elementId)
 
       if (model) {
         // TODO: ??? 普通节点有这个属性吗？确认这个代码的意义
@@ -242,7 +246,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
           if (!collapse) {
             // 当 parent 准备展开时，children 的值应该恢复到折叠前的状态
             const lastCollapseStatus =
-              this.childrenLastCollapseStateDict[elementId]
+              this.childrenLastCollapseStateDict?.get(elementId)
             if (
               lastCollapseStatus !== undefined &&
               lastCollapseStatus !== model.isCollapsed
@@ -255,7 +259,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
           }
         }
 
-        this.childrenLastCollapseStateDict[elementId] = !!collapseStatus
+        this.childrenLastCollapseStateDict?.set(elementId, !!collapseStatus)
         model.visible = !collapse
 
         // 判断，如果是节点时，才去读取节点的 incoming 和 outgoing
@@ -360,13 +364,15 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         graphModel.deleteEdgeById(edge.id)
       }
       // 考虑目标节点也属于分组的情况
-      let targetNodeGroup = graphModel.group.getGroupByNodeId(targetNodeId)
+      let targetNodeGroup =
+        graphModel.dynamicGroup.getGroupByNodeId(targetNodeId)
       if (!targetNodeGroup) {
         targetNodeGroup = graphModel.getNodeModelById(targetNodeId)
       }
 
       // 考虑源节点也属于分组的情况
-      let sourceNodeGroup = graphModel.group.getGroupByNodeId(sourceNodeId)
+      let sourceNodeGroup =
+        graphModel.dynamicGroup.getGroupByNodeId(sourceNodeId)
       if (!sourceNodeGroup) {
         sourceNodeGroup = graphModel.getNodeModelById(sourceNodeId)
       }

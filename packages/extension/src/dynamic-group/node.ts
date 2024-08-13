@@ -1,7 +1,10 @@
-import { GraphModel, h, RectNode } from '@logicflow/core'
+import LogicFlow, { GraphModel, h, RectNode } from '@logicflow/core'
 import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
 import { handleResize } from '@logicflow/core/es/util/resize'
+
+import Position = LogicFlow.Position
+import { rotatePointAroundCenter } from '../tools/label/utils'
 
 export interface IDynamicGroupNodeProps {
   model: DynamicGroupNodeModel
@@ -17,12 +20,32 @@ export class DynamicGroupNode<
     const { model: curGroup, graphModel } = this.props
     const { eventCenter } = graphModel
 
+    const childrenPositionMap: Map<string, Position> = new Map()
+
     // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
     eventCenter.on('node:rotate', ({ model }) => {
+      // DONE: 目前操作是对分组内节点以节点中心旋转节点本身，而按照正常逻辑，应该是以分组中心，旋转节点（跟 Label 旋转操作逻辑一致）
       if (model.id === curGroup.id) {
+        const center = { x: curGroup.x, y: curGroup.y }
         forEach(Array.from(curGroup.children), (childId) => {
           const child = graphModel.getNodeModelById(childId)
+
           if (child) {
+            let point: Position = { x: child.x, y: child.y }
+            if (childrenPositionMap.has(child.id)) {
+              point = childrenPositionMap.get(child.id)!
+            } else {
+              childrenPositionMap.set(child.id, point)
+            }
+
+            // 弧度转角度
+            let theta = model.rotate * (180 / Math.PI)
+            if (theta < 0) theta += 360
+            const radian = theta * (Math.PI / 180)
+
+            const newPoint = rotatePointAroundCenter(point, center, radian)
+
+            child.moveTo(newPoint.x, newPoint.y)
             child.rotate = model.rotate
           }
         })
@@ -31,6 +54,7 @@ export class DynamicGroupNode<
 
     // 在 group 缩放时，对组内的所有子节点也进行对应的缩放计算
     eventCenter.on('node:resize', ({ deltaX, deltaY, index, model }) => {
+      // TODO: 目前 Resize 的比例值有问题，导致缩放时，节点会变形，需要修复
       if (model.id === curGroup.id) {
         forEach(Array.from(curGroup.children), (childId) => {
           const child = graphModel.getNodeModelById(childId)

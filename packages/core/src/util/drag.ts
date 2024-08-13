@@ -148,6 +148,8 @@ export class StepDrag {
       }
       this.isDragging = true
       // 为了让dragstart和drag不在同一个事件循环中，使drag事件放到下一个消息队列中。
+      // TODO: 放到下一个消息队列中是否会有延迟，比如
+      // 限制某个元素的拖拽范围，如果在dragstart中设置了拖拽范围，那么在drag中就会有延迟。
       Promise.resolve().then(() => {
         this.onDragging({
           deltaX,

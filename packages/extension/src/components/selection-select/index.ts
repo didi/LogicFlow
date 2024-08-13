@@ -165,9 +165,13 @@ export class SelectionSelect {
         this.isWholeNode,
         true,
       )
-      const { dynamicGroup } = this.lf.graphModel
+      const { dynamicGroup, group } = this.lf.graphModel
       elements.forEach((element) => {
-        // 如果节点属于分组，则不不选中节点
+        // 如果节点属于分组，则不选中节点，此处兼容旧版 Group 插件
+        if (!group || !group.getNodeGroup(element.id)) {
+          this.lf.selectElementById(element.id, true)
+        }
+        // 如果节点属于动态分组，则不不选中节点
         if (!dynamicGroup || !dynamicGroup.getGroupByNodeId(element.id)) {
           this.lf.selectElementById(element.id, true)
         }

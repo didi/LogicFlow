@@ -3,7 +3,6 @@ import {
   Control,
   DndPanel,
   ShapeItem,
-  // Group,
   DynamicGroup,
   SelectionSelect,
 } from '@logicflow/extension'
@@ -14,7 +13,7 @@ import { useEffect, useRef } from 'react'
 import GraphConfigData = LogicFlow.GraphConfigData
 
 import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+// import '@logicflow/extension/es/index.css'
 import './index.less'
 import { getImageUrl } from '@/utls.ts'
 
@@ -78,7 +77,7 @@ const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
   ...customDndConfig,
 ]
 
-export default function BPMNExtension() {
+export default function DynamicGroupDemo() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -112,28 +111,53 @@ export default function BPMNExtension() {
             },
           },
           {
+            id: 'circle_3',
+            type: 'circle',
+            x: 544,
+            y: 94,
+            properties: {},
+            text: {
+              x: 544,
+              y: 94,
+              value: 'Circle',
+            },
+          },
+          {
             id: 'dynamic-group_1',
             type: 'dynamic-group',
             x: 500,
             y: 140,
-            // children: ["rect_3"],
             text: 'dynamic-group_1',
             resizable: true,
             properties: {
-              // resizable: true,
               collapsible: true,
               width: 420,
               height: 250,
               radius: 5,
               isCollapsed: true,
+              children: ['circle_3', 'circle_2'],
             },
+          },
+          {
+            id: 'rect_1',
+            type: 'rect',
+            x: 455,
+            y: 213,
+            properties: {
+              width: 40,
+              height: 40,
+            },
+            // text: {
+            //   x: 455,
+            //   y: 213,
+            //   value: 'Rect',
+            // },
           },
           {
             id: 'dynamic-group_2',
             type: 'dynamic-group',
             x: 500,
             y: 220,
-            // children: ["rect_3"],
             text: 'dynamic-group_2',
             resizable: true,
             properties: {
@@ -142,6 +166,8 @@ export default function BPMNExtension() {
               radius: 5,
               collapsible: false,
               isCollapsed: false,
+              isRestrict: true,
+              children: ['rect_1'],
             },
           },
         ],

@@ -1,6 +1,12 @@
 import LogicFlow, { createUuid, GraphModel, TextMode } from '@logicflow/core'
 import { cloneDeep, forEach, isArray, isObject, map } from 'lodash-es'
 import LabelOverlay, { LabelConfigType } from './LabelOverlay'
+import {
+  BBoxInfo,
+  calcPointAfterResize,
+  rotatePointAroundCenter,
+} from './utils'
+import './style.less'
 
 import Position = LogicFlow.Position
 import NodeData = LogicFlow.NodeData
@@ -8,11 +14,6 @@ import EdgeData = LogicFlow.EdgeData
 import Extension = LogicFlow.Extension
 import LabelConfig = LogicFlow.LabelConfig
 import GraphElement = LogicFlow.GraphElement
-import {
-  BBoxInfo,
-  calcPointAfterResize,
-  rotatePointAroundCenter,
-} from './utils'
 
 // 类型定义，如果 isMultiple 为 true 的话，maxCount 为数值且大于 1
 export type ILabelOptions = {
@@ -21,8 +22,6 @@ export type ILabelOptions = {
   labelWidth?: number
   textOverflowMode?: 'ellipsis' | 'wrap' | 'clip' | 'nowrap' | 'default'
 }
-
-import './style.less'
 
 export class Label implements Extension {
   static pluginName = 'label'

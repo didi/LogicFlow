@@ -208,12 +208,12 @@ class Anchor extends Component<IProps, IState> {
 
   get relateEdges() {
     const {
-      graphModel: { getAnchorIncomingEdge, getAnchorOutcomingEdge },
+      graphModel: { getAnchorIncomingEdge, getAnchorOutgoingEdge },
       anchorData: { id },
     } = this.props
     return {
       incomingEdgeList: getAnchorIncomingEdge(id),
-      outcomingEdgeList: getAnchorOutcomingEdge(id),
+      outgoingEdgeList: getAnchorOutgoingEdge(id),
     }
   }
 
