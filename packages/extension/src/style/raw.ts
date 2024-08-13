@@ -219,5 +219,4 @@ export const content = `.lf-control {
 .lf-mindmap_addIcon {
   margin-top: 10px;
 }
-/* label */
 `
