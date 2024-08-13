@@ -290,7 +290,7 @@ const changeId = () => {
 const refreshGraph = () => {
   const lf = lfRef?.value
   if (lf) {
-    const data = lf.getGraphData()
+    const data = lf.getGraphRawData()
     console.log('current graph data', data)
     const refreshData = LogicFlowUtil.refreshGraphId(data)
     console.log('after refresh graphId', data)
@@ -319,7 +319,9 @@ const turnAnimationOn = () => {
   if (lfRef?.value) {
     const { edges } = lfRef?.value.getGraphData() as LogicFlow.GraphConfigData
     forEach(edges, (edge) => {
-      lfRef?.value?.openEdgeAnimation(edge.id)
+      if (edge.id) {
+        lfRef?.value?.openEdgeAnimation(edge.id)
+      }
     })
   }
 }
@@ -328,7 +330,9 @@ const turnAnimationOff = () => {
   if (lfRef?.value) {
     const { edges } = lfRef?.value.getGraphData() as LogicFlow.GraphConfigData
     forEach(edges, (edge) => {
-      lfRef?.value?.closeEdgeAnimation(edge.id)
+      if (edge.id) {
+        lfRef?.value?.closeEdgeAnimation(edge.id)
+      }
     })
   }
 }

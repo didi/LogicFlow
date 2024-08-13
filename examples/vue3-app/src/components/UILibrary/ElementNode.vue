@@ -83,11 +83,11 @@
           </el-form-item>
           <el-form-item label="Activity type">
             <el-checkbox-group v-model="form.type">
-              <el-checkbox value="Online activities" name="type"> Online activities </el-checkbox>
+              <el-checkbox value="Online activities" name="type"> Online activities</el-checkbox>
               <el-checkbox value="Promotion activities" name="type">
                 Promotion activities
               </el-checkbox>
-              <el-checkbox value="Offline activities" name="type"> Offline activities </el-checkbox>
+              <el-checkbox value="Offline activities" name="type"> Offline activities</el-checkbox>
               <el-checkbox value="Simple brand exposure" name="type">
                 Simple brand exposure
               </el-checkbox>
@@ -141,7 +141,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button class="mt-4" style="width: 100%" @click="onAddItem"> Add Item </el-button>
+        <el-button class="mt-4" style="width: 100%" @click="onAddItem"> Add Item</el-button>
         <el-divider></el-divider>
         <el-text class="mx-1" type="primary">el-timeline</el-text>
         <el-timeline style="max-width: 600px">
@@ -252,7 +252,7 @@
             content="this is content, this is content, this is content"
           >
             <template #reference>
-              <el-button class="m-2" @click="visible = !visible"> Manual to activate </el-button>
+              <el-button class="m-2" @click="visible = !visible"> Manual to activate</el-button>
             </template>
           </el-popover>
         </div>
@@ -407,7 +407,7 @@ import {
   Male
 } from '@element-plus/icons-vue'
 
-const fits = reactive(['fill', 'contain', 'cover', 'none', 'scale-down'])
+const fits: any = reactive(['fill', 'contain', 'cover', 'none', 'scale-down'])
 const url = ref('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
 const date = ref(new Date())
 const form = reactive({
