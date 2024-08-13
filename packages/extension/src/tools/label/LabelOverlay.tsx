@@ -130,7 +130,6 @@ export class LabelOverlay extends Component<IToolProps, ILabelOverlayState> {
           // }
           const label = new LabelModel(config, element, graphModel)
           labelMap.set(label.id, label)
-
           labels.push(
             <Label
               key={label.id}

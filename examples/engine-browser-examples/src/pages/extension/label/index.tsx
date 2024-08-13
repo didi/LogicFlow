@@ -216,6 +216,33 @@ export default function BasicNode() {
         >
           使用 Label 渲染
         </Button>
+        <Button
+          key="label"
+          type="primary"
+          onClick={() => {
+            lfRef?.current?.addNode({
+              type: 'rect',
+              x: 280,
+              y: 280,
+              text: '节点名称节点名称',
+              properties: {
+                // _label: {
+                //   x: 280,
+                //   y: 280,
+                //   value: '节点名称节点名称',
+                //   content: '节点名称节点名称',
+                //   draggable: false,
+                //   style: { color: 'blue' },
+                //   textOverflowMode: 'ellipsis',
+                // },
+                width: 60,
+                height: 60,
+              },
+            })
+          }}
+        >
+          增加节点
+        </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain></Divider>
 

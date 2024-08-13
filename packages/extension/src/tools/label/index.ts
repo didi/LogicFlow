@@ -335,6 +335,14 @@ export class Label implements Extension {
 
       model.setProperty('_label', newLabelConfig)
     })
+    // 监听元素新增事件，元素label格式化
+    eventCenter.on('node:add,edge:add', ({ data }) => {
+      const element = graphModel.getElement(data.id)
+      if (element) {
+        const formatedLabel = this.formatConfig(graphModel, data)
+        element.setProperty('_label', formatedLabel)
+      }
+    })
   }
 
   /**
