@@ -6,7 +6,7 @@ import * as echarts from 'echarts'
 import { onMounted, ref } from 'vue'
 
 const chartDom = ref(null)
-let option
+let option: any
 const data: any = []
 
 for (let i = 0; i < 5; ++i) {
@@ -67,6 +67,7 @@ onMounted(() => {
       ]
     })
   }
+
   setTimeout(function () {
     run()
   }, 0)
