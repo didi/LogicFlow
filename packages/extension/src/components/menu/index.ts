@@ -322,11 +322,11 @@ class Menu {
   /**
    * 设置指定类型元素的菜单
    */
-  private setMenuByType(config) {
-    if (!config.type || !config.menu) {
+  setMenuByType({ type, menu }: { type: string; menu: MenuItem[] }) {
+    if (!type || !menu) {
       return
     }
-    this.menuTypeMap?.set(config.type, config.menu)
+    this.menuTypeMap?.set(type, menu)
   }
 
   /**
