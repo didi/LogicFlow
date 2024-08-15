@@ -28,6 +28,7 @@ export class RectNodeModel<
     // TODO：类字段初始化会覆盖 super、setAttributes 中设置的属性
     // this.properties = data.properties || {}
     // TODO: bug here, 上面更新 properties 会触发 setAttributes，下面再主动调用，会导致触发两次
+    this.initNodeData(data)
     this.setAttributes()
   }
 

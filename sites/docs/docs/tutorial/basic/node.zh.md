@@ -18,8 +18,8 @@ LogicFlow是基于svg做的流程图编辑框架，所以我们的节点和连�
 2. 圆形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/circle" target="_blank">circle</a>
 3. 椭圆 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/ellipse" target="_blank">ellipse</a>
 4. 多边形 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/polygon" target="_blank">polygon</a>
-5. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">text</a>
-6. 菱形 --- `diamond`
+5. 菱形 --- `diamond`
+6. 文本 --- <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/text" target="_blank">text</a>
 7. HTML --- `html`
 
 <code id="node-shapes" src="../../../src/tutorial/basic/node/shapes"></code>
@@ -74,7 +74,7 @@ class CustomNode extends RectResize.view {}
 ### 自定义节点`model`
 
 LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自定义节点形状属性`
-两种方式。更多详细定义方法，请查看[NodeModelApi](../../api/nodeModel.zh.md)。
+两种方式。更多详细定义方法，请查看[NodeModel](../../api/model/nodeModel.zh.md)。
 
 #### 1. 样式属性
 
@@ -84,7 +84,7 @@ LogicFlow把自定义节点外观分为了`自定义节点样式属性`和`自�
 
 例如：在主题中对所有`rect`节点都定义其边框颜色为红色`stroke: red`，那么可以在自定义节点`UserTask`
 的时候，重新定义`UserTask`边框为蓝色`stroke: blue`
-。更细粒度的节点样式控制方法，详情见[API 样式属性](../../api/nodeModel.zh.md#样式属性)。
+。更细粒度的节点样式控制方法，详情见[API 样式属性](../../api/model/nodeModel.zh.md#样式属性)。
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
@@ -103,7 +103,7 @@ class UserTaskModel extends RectNodeModel {
 等这些控制着节点最终形状的属性。因为LogicFlow在计算节点的锚点、连线的起点终点的时候，会基于形状属性进行计算。对于形状属性的自定义，需要在`setAttributes`
 方法或`initNodeData`方法中进行。
 
-LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](../../api/nodeModel.zh.md#形状属性)。
+LogicFlow对于不同的基础节点，存在一些各基础节点自己特有的形状属性。详情见[API 形状属性](../../api/model/nodeModel.zh.md#形状属性)。
 
 ```tsx | pure
 class customRectModel extends RectNodeModel {
@@ -134,7 +134,7 @@ class customRectModel extends RectNodeModel {
 在上一节LogicFlow的实例中的`图数据`
 里提到，不论是节点还是边，LogicFlow都保留了properties字段，不仅可以修改元素的`样式`、`形状`
 属性，可以用于给开发者存放自己的`业务`
-属性。所以在自定义节点样式的时候，可以基于[properties](../../api/nodeModel.zh.md#数据属性)
+属性。所以在自定义节点样式的时候，可以基于 [properties](../../api/model/nodeModel.zh.md#数据属性) 
 中的属性来控制节点显示不同的样式。
 
 <code id="custom-rect" src="../../../src/tutorial/basic/node/properties"></code>
@@ -142,7 +142,7 @@ class customRectModel extends RectNodeModel {
 :::info{title=提示}
 
 如果不了解为什么`this.properties`打印出来是一个Proxy对象,
-无法看到属性。请查看[issue](https://github.com/didi/LogicFlow/issues/530),
+无法看到属性。请查看 <a href="https://github.com/didi/LogicFlow/issues/530" target="_blank">issue</a> ,
 可以使用`{ ...this.properties }`打印Proxy对象。
 
 :::
@@ -158,8 +158,8 @@ LogicFlow在自定义节点的`model`
 <code id="node-custom-view" src="../../../src/tutorial/basic/node/custom-view"></code>
 
 这里对于`getShape`的方法返回用到了`h函数`，`h`函数是LogicFlow对外暴露的渲染函数，其用法与`react`、`vue`
-的[createElement](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0)
-一致。但是这里我们需要创建的是`svg`标签，所以需要有一定的svg基础知识。
+的 <a href="https://v2.cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0" target="_blank">createElement</a> 
+一致。但是这里我们需要创建的是 `svg` 标签，所以需要有一定的 `svg` 基础知识。
 
 举几个简单的例子:
 
@@ -275,7 +275,7 @@ h('polygon', {
 :::info{title=自定义矩形的view时radius设置}
 在`model`中，`radius`是矩形节点的形状属性。但是在自定义`view`
 时需要注意，svg里面设置矩形的圆角并不是用`radius`
-，而是使用[rx](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/rx), ry。所以在自定义`view`
+，而是使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/rx" target="_blank">rx</a> , ry。所以在自定义`view`
 的矩形时，需要将model中`radius`的赋值给`rx`和`ry`，否则圆角将不生效。
 :::
 
@@ -285,17 +285,17 @@ LogicFlow是基于`preact`开发的，我们自定义节点view的时候，可�
 获取父组件传递过来的数据。`this.props`对象包含两个属性，分别为:
 
 - `model`: 表示自定义节点的model
-- [graphModel](../../api/graphModel.zh.md): 表示logicflow整个图的model
+- [graphModel](../../api/model/graphModel.zh.md): 表示logicflow整个图的model
 
 ##### 3. 图标的path如何获取？
 
-一般情况下，图标我们可以找UI或者去[iconfont.cn](https://www.iconfont.cn/)
+一般情况下，图标我们可以找UI或者去 <a href="https://www.iconfont.cn/" target="_blank">iconfont.cn</a> 
 获得一个svg格式的文件。然后再IDE中以文本的方式打开，然后格式化，就可以看到代码。代码中一般是最外层一个svg标签，里面是一个或者多个path。这个时候，我们使用前面提到的`h`
 方法来实现svg文件中的代码即可。
 
 svg标签一般包括如下属性：
 
-- `viewBox`: [viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)
+- `viewBox`: <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox" target="_blank">viewBox</a>
   属性允许指定一个给定的一组图形伸展以适应特定的容器元素。一般把svg标签上的`viewBox`属性值复制过来就行。
 - `width`和`height`: 这个不需要使用svg标签上的`width`和`height`, 直接写成你期望的宽高就行。
 
