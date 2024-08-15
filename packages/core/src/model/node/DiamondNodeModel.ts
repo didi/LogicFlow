@@ -33,6 +33,7 @@ export class DiamondNodeModel<
     super(data, graphModel)
     // this.properties = data.properties || {}
 
+    this.initNodeData(data)
     this.setAttributes()
   }
 

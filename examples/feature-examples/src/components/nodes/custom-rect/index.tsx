@@ -19,6 +19,13 @@ export type CustomProperties = {
 class CustomRectNode extends RectNode {}
 
 class CustomRectNodeModel extends RectNodeModel {
+  // initNodeData(data: LogicFlow.NodeConfig): void {
+  //   super.initNodeData(data)
+  //   this.width = 100
+  //   this.height = 50
+  //   this.radius = 10
+  // }
+
   setAttributes() {
     console.log('this.properties', this.properties)
     const { width, height, radius } = this.properties as CustomProperties

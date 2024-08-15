@@ -37,6 +37,7 @@ export class CircleNodeModel<
     super(data, graphModel)
     // this.properties = data.properties || {}
 
+    this.initNodeData(data)
     this.setAttributes()
   }
 
