@@ -7,6 +7,12 @@ import { useEffect, useRef } from 'react'
 import { combine, square, star, uml, user } from './nodes'
 import { animation, connection } from './edges'
 
+import customCircle from '@/components/nodes/custom-circle'
+import customRect from '@/components/nodes/custom-rect'
+import customEllipse from '@/components/nodes/custom-ellipse'
+import customDiamond from '@/components/nodes/custom-diamond'
+import customPolygon from '@/components/nodes/custom-polygon'
+
 import GraphData = LogicFlow.GraphData
 import styles from './index.less'
 
@@ -120,6 +126,46 @@ const data = {
   ],
 }
 
+// const customData = {
+//   nodes: [
+//     {
+//       id: 'custom-circle',
+//       text: 'custom-circle',
+//       type: 'customCircle',
+//       x: 100,
+//       y: 100,
+//     },
+//     {
+//       id: 'custom-rect',
+//       text: 'custom-rect',
+//       type: 'customRect',
+//       x: 300,
+//       y: 100,
+//     },
+//     {
+//       id: 'custom-ellipse',
+//       text: 'custom-ellipse',
+//       type: 'customEllipse',
+//       x: 500,
+//       y: 100,
+//     },
+//     {
+//       id: 'custom-diamond',
+//       text: 'custom-diamond',
+//       type: 'customDiamond',
+//       x: 700,
+//       y: 100,
+//     },
+//     {
+//       id: 'custom-polygon',
+//       text: 'custom-polygon',
+//       type: 'customPolygon',
+//       x: 100,
+//       y: 300,
+//     },
+//   ]
+// }
+
 export default function BasicNode() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -135,6 +181,11 @@ export default function BasicNode() {
       star,
       uml,
       user,
+      customCircle,
+      customRect,
+      customEllipse,
+      customDiamond,
+      customPolygon,
     ]
 
     map(elements, (customElement) => {
@@ -221,6 +272,8 @@ export default function BasicNode() {
       registerEvents(lf)
 
       lf.render(data)
+      // lf.render(customData)
+
       lfRef.current = lf
       ;(window as any).lf = lf
     }

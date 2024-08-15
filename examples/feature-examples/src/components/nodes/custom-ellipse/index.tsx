@@ -18,15 +18,21 @@ export type CustomProperties = {
 class CustomEllipseNode extends EllipseNode {}
 
 class CustomEllipseNodeModel extends EllipseNodeModel {
-  setAttributes() {
-    const { rx, ry } = this.properties as CustomProperties
-    if (rx) {
-      this.rx = rx
-    }
-    if (ry) {
-      this.ry = ry
-    }
+  initNodeData(data: LogicFlow.NodeConfig): void {
+    super.initNodeData(data)
+    this.rx = 50
+    this.ry = 30
   }
+
+  // setAttributes() {
+  //   const { rx, ry } = this.properties as CustomProperties
+  //   if (rx) {
+  //     this.rx = rx
+  //   }
+  //   if (ry) {
+  //     this.ry = ry
+  //   }
+  // }
 
   getTextStyle(): LogicFlow.TextNodeTheme {
     // const { x, y, width, height } = this

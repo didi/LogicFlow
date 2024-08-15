@@ -38,7 +38,7 @@ nodes based on inheritance.
 
 LogicFlow implements custom nodes and edges based on inheritance. Developers can inherit the
 built-in nodes of LogicFlow and then use
-object-oriented [overriding](https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin)
+object-oriented <a href="https://baike.baidu.com/item/%E9%87%8D%E5%86%99/9355942?fr=aladdin" target="_blanl">overriding</a> 
 mechanisms. By overriding methods related to node styles, developers can achieve the effect of
 customizing node styles.
 
@@ -101,7 +101,7 @@ class CustomNode extends RectResize.view {
 
 LogicFlow categorizes custom node appearance into two ways: `custom node style attribute`
 and `custom node shape attribute`. For more details on how to define them,
-see [NodeModelApi](../../api/nodeModel.en.md)。
+see [NodeModelApi](../../api/model/nodeModel.en.md)。
 
 #### 1. style attributes
 
@@ -113,7 +113,7 @@ redefining the theme based on the current node type.
 For example, if all `rect` nodes in the theme have their border color defined as red `stroke: red`,
 then you can redefine `UserTask` to have a blue `stroke: blue` border when customizing the
 node `UserTask`. For more granular node style control,
-see [API Style Attributes](../../api/nodeModel.en.md#style-attributes).
+see [API Style Attributes](../../api/model/nodeModel.en.md#style-attributes).
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
@@ -134,7 +134,7 @@ points for nodes and start/end points for connections based on them. Customizing
 requires modification within the `setAttributes` method or `initNodeData` method.
 
 LogicFlow has some shape attributes specific to each base node.
-See [API Shape Attributes](../../api/nodeModel.en.md#shape-attributes) for details.
+See [API Shape Attributes](../../api/model/nodeModel.en.md#shape-attributes) for details.
 
 ```tsx | pure
 class customRectModel extends RectNodeModel {
@@ -166,7 +166,7 @@ In the previous LogicFlow example, it was mentioned that both nodes and edges in
 retain a properties field. This field allows developers not only to modify elements' `styles`
 and `shapes`, but also to store their own `business` attributes. Therefore, when customizing node
 styles, developers can use properties from
-the [properties](../../api/nodeModel.en.md#data-attributes) to control how nodes display different
+the [properties](../../api/model/nodeModel.en.md#data-attributes) to control how nodes display different
 styles.
 
 <code id="custom-rect" src="../../../src/tutorial/basic/node/properties"></code>
@@ -174,7 +174,7 @@ styles.
 :::info
 
 If you don't understand why `this.properties` prints out as a Proxy object, you can't see the
-properties. Please check the [issue](https://github.com/didi/LogicFlow/issues/530), Printing a Proxy
+properties. Please check the <a href="https://github.com/didi/LogicFlow/issues/530" target="_blank">issue</a>, Printing a Proxy
 object using `{ ...this.properties }`.
 
 :::
@@ -191,7 +191,7 @@ The following is an example of a node `view`. Click `node1` several times to try
 
 Here the `h function` is used for the return of `Shape`. The `h` method is a rendering function
 exposed by LogicFlow, and its usage is the same as `react` and `vue`'
-s [createElement](https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0).
+s <a href="https://v2.vuejs.org/v2/guide/render-function#createElement-Arguments" target="_blank">createElement</a> .
 But here we need to create `svg` tags, so some basic knowledge of svg is required.
 
 To give a few simple examples.
@@ -318,7 +318,7 @@ h("polygon", {
 :::info{title=Customize the view of the rectangle with the radius setting.}
 In `model`, `radius` is the shape attribute of the rectangle node. But when customizing `view`, you
 need to note that svg doesn't use `radius` to set the rounded corners of the rectangle,
-but [rx](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/rx), ry. So when
+but <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/rx" target="_blank">rx</a>, ry. So when
 customizing `view`'s rectangle, you need to assign the value of `radius` in the model to `rx`
 and `ry`. you need to assign `radius` to `rx` and `ry` in the model when customizing the rectangle
 of `view`, otherwise the rounded corners won't take effect.
@@ -331,18 +331,18 @@ passed from the parent component through `this.props`. The `this.props` object c
 properties, they are.
 
 - `model`: represents the model of the custom node
-- [graphModel](../../api/graphModel.en.md): the model for the entire graph of logicflow
+- [graphModel](../../api/model/graphModel.en.md): the model for the entire graph of logicflow
 
 ##### 3. How to get the path of an icon?
 
-Generally, for icons we can look for the UI or go to [iconfont.co.uk](https://www.iconfont.cn/) to
+Generally, for icons we can look for the UI or go to <a href="https://www.iconfont.cn/?lang=en-us" target="_blank">iconfont.co.uk</a> to
 get a file in svg format. Then open it as text in IDE and format it to see the code. The code is
 usually an outermost svg tag with one or more paths inside. at this point, we can just use the `h`
 method mentioned earlier to implement the code in the svg file.
 
 The svg tag typically includes the following attributes:
 
-- `viewBox`: The [viewBox](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox)
+- `viewBox`: The <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute/viewBox" target="_blank">viewBox</a>
   attribute allows a given set of graphic stretches to be specified to fit a particular container
   element. It is generally sufficient to copy the value of the `viewBox` attribute from the svg tag.
 - `width` and `height`: This doesn't need to use the `width` and `height` on the svg tag, just write
