@@ -165,7 +165,6 @@ const fitView = () => {
 }
 
 // 模拟长任务
-// 模拟长任务
 // const startObservingLongTasks = (callback: (entry: { eventType: any; duration: any }) => void) => {
 //   const observer = new PerformanceObserver((list) => {
 //     for (const entry of list.getEntries()) {
