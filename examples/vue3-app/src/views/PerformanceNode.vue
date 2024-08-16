@@ -16,6 +16,7 @@
           <span>节点数量：{{ nodeNumber }}</span>
           <span>边数量：{{ edgeNumber }}</span>
           <span>Total DOM elements: {{ totalDOMNumber }}</span>
+          <el-button type="primary" @click="fitView">fitView:</el-button>
         </el-space>
       </div>
     </template>
@@ -97,7 +98,7 @@ const addDomNumber = (number: number, hasEdge: boolean) => {
         id: '' + id.value,
         type: 'dom-number',
         x: getRandom(0, 2000),
-        y: getRandom(0, 1000),
+        y: getRandom(0, 1000, 480, 520),
         properties: {
           width: 150,
           height: 30
@@ -155,6 +156,15 @@ const autoAddNode = (time: number, count: number, nodeNumber) => {
   }, time)
 }
 
+// fitViw
+const fitView = () => {
+  if (lfRef.value) {
+    lfRef.value.fitView()
+    lfRef.value.translateCenter()
+  }
+}
+
+// 模拟长任务
 // 模拟长任务
 // const startObservingLongTasks = (callback: (entry: { eventType: any; duration: any }) => void) => {
 //   const observer = new PerformanceObserver((list) => {
@@ -235,7 +245,7 @@ onMounted(() => {
   }, 1000)
 
   // 自动增加节点
-  // autoAddNode(1000, 150, 100)
+  // autoAddNode(500, 500, 50)
 })
 </script>
 
