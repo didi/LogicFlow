@@ -698,9 +698,6 @@ importers:
       '@ant-design/icons':
         specifier: ^5.0.1
         version: 5.4.0(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
-      '@babel/runtime':
-        specifier: ^7.25.0
-        version: 7.25.0
       '@logicflow/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -713,9 +710,6 @@ importers:
       '@logicflow/react-node-registry':
         specifier: workspace:*
         version: link:../../packages/react-node-registry
-      '@types/insert-css':
-        specifier: ^2.0.3
-        version: 2.0.3
       antd:
         specifier: ^5.4.0
         version: 5.19.4(date-fns@2.30.0)(moment@2.30.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
@@ -735,6 +729,9 @@ importers:
         specifier: '>=16.8'
         version: 18.3.1(react@18.2.0)
     devDependencies:
+      '@types/insert-css':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/react':
         specifier: ^18.2.17
         version: 18.3.3
