@@ -16,6 +16,7 @@
           <span>节点数量：{{ nodeNumber }}</span>
           <span>边数量：{{ edgeNumber }}</span>
           <span>Total DOM elements: {{ totalDOMNumber }}</span>
+          <el-button type="primary" @click="fitView">fitView:</el-button>
         </el-space>
       </div>
     </template>
@@ -24,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, reactive } from 'vue'
 import LogicFlow from '@logicflow/core'
 import { register } from '@logicflow/vue-node-registry'
 import ElementNode from '@/components/UILibrary/ElementNode.vue'
@@ -44,6 +45,8 @@ const nodeNumber = ref<number>(0)
 const domNumber = ref<number>(0)
 const edgeNumber = ref<number>(0)
 const id = ref<number>(0)
+
+const increaseInfo = reactive([])
 
 // 添加 element 元素
 const addElementNode = (number: number) => {
@@ -88,12 +91,14 @@ const addEchartNode = (number: number) => {
 // 添加 dom 数量元素
 const addDomNumber = (number: number, hasEdge: boolean) => {
   if (lfRef.value) {
+    performance.mark('start')
+
     for (let i = 0; i < number; i++) {
       lfRef.value.addNode({
         id: '' + id.value,
         type: 'dom-number',
         x: getRandom(0, 2000),
-        y: getRandom(0, 1000),
+        y: getRandom(0, 1000, 480, 520),
         properties: {
           width: 150,
           height: 30
@@ -113,9 +118,61 @@ const addDomNumber = (number: number, hasEdge: boolean) => {
     hasEdge && (edgeNumber.value += +number)
     nextTick(() => {
       totalDOMNumber.value = getTotalDOMNumber()
+      increaseInfo.push({
+        nodeNumber: nodeNumber.value,
+        domNumber: totalDOMNumber.value
+      })
+    })
+
+    requestAnimationFrame(() => {
+      performance.mark('mid')
+
+      requestAnimationFrame(() => {
+        performance.mark('end')
+        performance.measure('renderTime', 'start', 'end')
+        const measure = performance.getEntriesByName('renderTime')[0]
+        ElNotification({
+          message: `Time to render: ${measure.duration} ms`
+        })
+        increaseInfo[increaseInfo.length - 1].renderTime = measure.duration
+        console.log('increaseInfo', increaseInfo)
+        performance.clearMarks()
+        performance.clearMeasures()
+      })
     })
   }
 }
+
+// 模拟自动添加节点
+const autoAddNode = (time: number, count: number, nodeNumber) => {
+  let total = 0
+  const timer = setInterval(() => {
+    if (total >= count) {
+      clearInterval(timer)
+    } else {
+      addDomNumber(nodeNumber, false)
+      total++
+    }
+  }, time)
+}
+
+// fitViw
+const fitView = () => {
+  if (lfRef.value) {
+    lfRef.value.fitView()
+    lfRef.value.translateCenter()
+  }
+}
+
+// 模拟长任务
+// const startObservingLongTasks = (callback: (entry: { eventType: any; duration: any }) => void) => {
+//   const observer = new PerformanceObserver((list) => {
+//     for (const entry of list.getEntries()) {
+//       callback(entry)
+//     }
+//   })
+//   observer.observe({ entryTypes: ['longtask'] }, time)
+// }
 
 onMounted(() => {
   if (containerRef.value) {
@@ -163,12 +220,12 @@ onMounted(() => {
     getTotalDOMNumber()
 
     // 开启长任务
-    startObservingLongTasks((entry: { eventType: any; duration: any }) => {
-      ElNotification({
-        title: `交互行为：${eventType.value}`,
-        message: `耗时：${entry.duration}ms`
-      })
-    })
+    // startObservingLongTasks((entry: { eventType: any; duration: any }) => {
+    //   ElNotification({
+    //     title: `交互行为：${eventType.value}`,
+    //     message: `耗时：${entry.duration}ms`
+    //   })
+    // })
 
     // 监听画布滚动
     window.addEventListener('wheel', () => {
@@ -181,10 +238,13 @@ onMounted(() => {
     })
   }
 
-  // 每隔1s获取一次DOM数量
+  // 实时获取 DOM 元素数量
   setInterval(() => {
     totalDOMNumber.value = getTotalDOMNumber()
   }, 1000)
+
+  // 自动增加节点
+  // autoAddNode(500, 500, 50)
 })
 </script>
 

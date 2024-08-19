@@ -18,7 +18,7 @@ export type CustomProperties = {
 
 export class VueNodeModel extends HtmlNodeModel {
   setAttributes() {
-    console.log('this.properties', this.properties)
+    // console.log('this.properties', this.properties)
     const { width, height, radius } = this.properties as CustomProperties
     if (width) {
       this.width = width
