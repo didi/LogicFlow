@@ -735,9 +735,6 @@ importers:
         specifier: '>=16.8'
         version: 18.3.1(react@18.2.0)
     devDependencies:
-      '@babel/plugin-transform-runtime':
-        specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.25.2)
       '@types/react':
         specifier: ^18.2.17
         version: 18.3.3

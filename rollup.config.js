@@ -92,7 +92,10 @@ export function rollupConfig(config = {}) {
         ],
       }),
       nodePolyfills(),
-      terser({ sourceMap: true }),
+      terser({
+        sourceMap: true,
+        drop_console: true,
+      }),
       fileSize({
         reporter: [
           async (options, bundle, result) => {
