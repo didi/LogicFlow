@@ -1,5 +1,13 @@
 import { action, computed, isObservable, observable, toJS } from 'mobx'
-import { assign, cloneDeep, has, isNil, mapKeys, isUndefined } from 'lodash-es'
+import {
+  assign,
+  cloneDeep,
+  has,
+  isNil,
+  mapKeys,
+  isUndefined,
+  set,
+} from 'lodash-es'
 import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -790,10 +798,12 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
 
   @action setProperty(key: string, val: any): void {
     const preProperties = toJS(this.properties)
-    const nextProperties = {
-      ...preProperties,
-      [key]: formatData(val),
-    }
+    const nextProperties = cloneDeep(preProperties)
+    // https://lodash.com/docs/4.17.15#set
+    // 使用 lodash 的 set 方法更新某个属性，可以支持 key 为 'a.b.c' 的情况
+    // TODO：待测试
+    set(nextProperties, key, formatData(val))
+
     this.updateProperties(nextProperties, [key])
   }
 
