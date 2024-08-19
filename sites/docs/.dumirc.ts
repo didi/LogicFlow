@@ -1,5 +1,7 @@
 import { defineConfig } from 'dumi';
 import { repository, version } from './package.json';
+import CompressionPlugin from 'compression-webpack-plugin';
+import * as process from 'node:process';
 
 export default defineConfig({
   locales: [
@@ -399,8 +401,8 @@ export default defineConfig({
       },
     },
   },
-  mfsu: false,
-  // mako: {},
+  // mako: {}, // 开启 mako 打包，目前会导致 Examples 模块不可用，暂时关闭，恢复至 webpack 打包
+  mfsu: {},
   alias: {
     '@': __dirname,
   },
@@ -412,12 +414,53 @@ export default defineConfig({
       javascriptEnabled: true,
     },
   },
-  // codeSplitting: { jsStrategy: 'granularChunks' },
-  // chainWebpack: (config) => {
-  //   // 打开 bundle 分析器
-  //   config
-  //     .plugin('webpack-bundle-analyzer')
-  //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
-  //   return config;
-  // },
+  extraBabelPlugins: [
+    [
+      'import',
+      {
+        libraryName: 'antd',
+        libraryDirectory: 'es',
+        style: true,
+      },
+    ],
+    // 下面的 @ant-design/icons 和 lodash-es 需要按需加载，但目前看来不起作用（或者是起作用了，就那么大。需要确认下）
+    [
+      'import',
+      {
+        libraryName: '@ant-design/icons',
+        libraryDirectory: 'es/icons', // 指定图标路径
+        camel2DashComponentName: false, // 禁用驼峰转换
+      },
+      '@ant-design/icons',
+    ],
+    // [
+    //   'import',
+    //   {
+    //     libraryName: 'lodash-es',
+    //     libraryDirectory: '',
+    //     camel2DashComponentName: false
+    //   }, 'lodash-es'
+    // ]
+  ],
+  codeSplitting: { jsStrategy: 'granularChunks' },
+  chainWebpack: (config) => {
+    if (process.env.NODE_ENV === 'production') {
+      // 设置资源 gzip 压缩
+      config.plugin('compression-webpack-plugin').use(CompressionPlugin, [
+        {
+          algorithm: 'gzip',
+          test: /\.js$|\.css$|\.html$/, // 匹配文件名
+          threshold: 10240, // 对超过 10K 的数据压缩
+          deleteOriginalAssets: false, // 不删除源文件
+        },
+      ]);
+
+      // 打开 bundle 分析器
+      config
+        .plugin('webpack-bundle-analyzer')
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
+    }
+
+    return config;
+  },
 });
