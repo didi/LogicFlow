@@ -17,16 +17,22 @@
     "react-dom": ">=16.8"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.24.7",
     "@types/react": "^18.2.17",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.3.0",
+    "babel-plugin-import": "^1.13.8",
+    "babel-plugin-lodash": "^3.3.4",
+    "compression-webpack-plugin": "^11.1.0",
     "dumi": "2.4.6",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@babel/runtime": "^7.25.0",
     "@logicflow/core": "workspace:*",
-    "@logicflow/dumi-theme-simple": "^0.0.18",
+    "@logicflow/dumi-theme-simple": "^0.0.19",
     "@logicflow/extension": "workspace:*",
     "@logicflow/react-node-registry": "workspace:*",
     "@types/insert-css": "^2.0.3",
@@ -36,5 +42,10 @@
     "rc-util": "^5.43.0",
     "react": "18.2.0"
   },
-  "repository": "https://github.com/didi/LogicFlow"
+  "repository": "https://github.com/didi/LogicFlow",
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "not ie <= 11"
+  ]
 }
