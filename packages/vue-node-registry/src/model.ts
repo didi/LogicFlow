@@ -18,7 +18,7 @@ export type CustomProperties = {
 
 export class VueNodeModel extends HtmlNodeModel {
   setAttributes() {
-    // console.log('this.properties', this.properties)
+    // TODO: 解决 width、height、radius 为 0 时的问题
     const { width, height, radius } = this.properties as CustomProperties
     if (width) {
       this.width = width

@@ -18,6 +18,16 @@ const router = createRouter({
       path: '/performance',
       name: 'performance',
       component: () => import('../views/PerformanceNode.vue')
+    },
+    {
+      path: '/keep-alive-and-teleport',
+      name: 'keepaliveAndTeleport',
+      component: () => import('../views/KeepAliveAndTeleport.vue')
+    },
+    {
+      path: '/lf-chart',
+      name: 'lfChart',
+      component: () => import('../views/LFChartView.vue')
     }
   ]
 })

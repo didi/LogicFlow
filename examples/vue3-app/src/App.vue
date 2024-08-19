@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HomeFilled, TrendCharts } from '@element-plus/icons-vue'
+import { HomeFilled, TrendCharts, Stopwatch } from '@element-plus/icons-vue'
 import { RouterView } from 'vue-router'
 </script>
 
@@ -9,18 +9,28 @@ import { RouterView } from 'vue-router'
     <div class="wrapper">
       <el-menu router class="el-menu-vertical-demo">
         <el-menu-item index="/">
-          <el-icon><home-filled /></el-icon>
+          <el-icon><HomeFilled /></el-icon>
           <span>Home</span>
         </el-menu-item>
 
         <el-menu-item index="/logicflow">
-          <el-icon><trend-charts /></el-icon>
+          <el-icon><TrendCharts /></el-icon>
           <span>LogicFlow</span>
         </el-menu-item>
 
         <el-menu-item index="/performance">
-          <el-icon><trend-charts /></el-icon>
+          <el-icon><Stopwatch /></el-icon>
           <span>performacne</span>
+        </el-menu-item>
+
+        <el-menu-item index="/keep-alive-and-teleport">
+          <el-icon><TrendCharts /></el-icon>
+          <span>KeepAlive</span>
+        </el-menu-item>
+
+        <el-menu-item index="/lf-chart">
+          <el-icon><TrendCharts /></el-icon>
+          <span>LFChartView</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -32,7 +42,7 @@ import { RouterView } from 'vue-router'
 
 <style scoped>
 header {
-  width: 180px;
+  width: 280px;
   position: relative;
   left: 0;
   line-height: 1.5;
@@ -40,7 +50,7 @@ header {
 }
 .content {
   position: relative;
-  width: calc(100% - 180px);
+  width: calc(100% - 340px);
   height: 100%;
 }
 

@@ -19,8 +19,11 @@
     "@logicflow/engine": "workspace:*",
     "@logicflow/extension": "workspace:*",
     "@logicflow/vue-node-registry": "workspace:*",
+    "autoprefixer": "^10.4.20",
     "echarts": "^5.5.1",
     "element-plus": "^2.0.4",
+    "postcss": "^8.4.41",
+    "tailwindcss": "latest",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

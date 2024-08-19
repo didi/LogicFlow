@@ -1,5 +1,5 @@
 import { assign, cloneDeep, find, isUndefined } from 'lodash-es'
-import { action, computed, isObservable, observable, toJS } from 'mobx'
+import { action, computed, isObservable, observable, set, toJS } from 'mobx'
 import { BaseNodeModel, GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
@@ -425,14 +425,12 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
    * @param key 属性名
    * @param val 属性值
    */
-  @action
-  setProperty(key: string, val: any): void {
+  @action setProperty(key: string, val: any): void {
     const preProperties = toJS(this.properties)
-    this.properties = {
-      ...preProperties,
-      [key]: formatData(val),
-    }
+    const newProperties = cloneDeep(preProperties)
+    set(newProperties, key, formatData(val))
 
+    this.properties = newProperties
     this.setAttributes()
   }
 
@@ -440,8 +438,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
    * 删除边的属性，会触发重新渲染
    * @param key 属性名
    */
-  @action
-  deleteProperty(key: string): void {
+  @action deleteProperty(key: string): void {
     delete this.properties[key]
     this.setAttributes()
   }
