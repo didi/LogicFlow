@@ -433,14 +433,15 @@ export default defineConfig({
       },
       '@ant-design/icons',
     ],
-    // [
-    //   'import',
-    //   {
-    //     libraryName: 'lodash-es',
-    //     libraryDirectory: '',
-    //     camel2DashComponentName: false
-    //   }, 'lodash-es'
-    // ]
+    [
+      'import',
+      {
+        libraryName: 'lodash-es',
+        libraryDirectory: '',
+        camel2DashComponentName: false,
+      },
+      'lodash-es',
+    ],
   ],
   codeSplitting: { jsStrategy: 'granularChunks' },
   chainWebpack: (config) => {
@@ -456,9 +457,9 @@ export default defineConfig({
       ]);
 
       // 打开 bundle 分析器
-      config
-        .plugin('webpack-bundle-analyzer')
-        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
+      // config
+      //   .plugin('webpack-bundle-analyzer')
+      //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
     }
 
     return config;
