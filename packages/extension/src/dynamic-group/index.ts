@@ -45,8 +45,6 @@ export class DynamicGroup {
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(dynamicGroup)
     this.lf = lf
-
-    console.log('options', options)
     assign(this, options)
     // 初始化插件，从监听事件开始及设置规则开始
     this.init()

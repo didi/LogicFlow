@@ -126,9 +126,6 @@ export class Label implements Extension {
     if (element.BaseType === 'edge') {
       // 判断当前 label，是否在 edge 的路径上，如果不在，就重新计算位置
       formatConfig = map(formatConfig, (config) => {
-        const { x, y } = config
-        console.log('x, y --->>>', x, y)
-
         return config
       })
     }
@@ -373,7 +370,6 @@ export class Label implements Extension {
             y: label.y + deltaY,
           }
         })
-        // console.log('Label --->>>', nextLabel)
         element?.setProperty('_label', nextLabel)
       }
     }
