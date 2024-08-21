@@ -31,7 +31,8 @@ import { register } from '@logicflow/vue-node-registry'
 import ElementNode from '@/components/UILibrary/ElementNode.vue'
 import EchartNode from '@/components/UILibrary/EchartNode.vue'
 import DomNumber from '@/components/dom/DomNumber.vue'
-import { getTotalDOMNumber, startObservingLongTasks } from '@/utils/performance'
+// import { startObservingLongTasks } from '@/utils/performance'
+import { getTotalDOMNumber } from '@/utils/performance'
 import { getRandom } from '@/utils/math'
 import { ElNotification } from 'element-plus'
 
@@ -46,7 +47,12 @@ const domNumber = ref<number>(0)
 const edgeNumber = ref<number>(0)
 const id = ref<number>(0)
 
-const increaseInfo = reactive([])
+type increaseInfoModel = {
+  nodeNumber: number
+  domNumber: number
+  renderTime?: number
+}
+const increaseInfo = reactive<increaseInfoModel[]>([])
 
 // 添加 element 元素
 const addElementNode = (number: number) => {
@@ -144,17 +150,17 @@ const addDomNumber = (number: number, hasEdge: boolean) => {
 }
 
 // 模拟自动添加节点
-const autoAddNode = (time: number, count: number, nodeNumber) => {
-  let total = 0
-  const timer = setInterval(() => {
-    if (total >= count) {
-      clearInterval(timer)
-    } else {
-      addDomNumber(nodeNumber, false)
-      total++
-    }
-  }, time)
-}
+// const autoAddNode = (time: number, count: number, nodeNumber: number) => {
+//   let total = 0
+//   const timer = setInterval(() => {
+//     if (total >= count) {
+//       clearInterval(timer)
+//     } else {
+//       addDomNumber(nodeNumber, false)
+//       total++
+//     }
+//   }, time)
+// }
 
 // fitViw
 const fitView = () => {
