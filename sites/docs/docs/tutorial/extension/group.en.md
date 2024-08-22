@@ -16,7 +16,7 @@ customize more scenarios based on grouping by referring to the custom node.
 
 ```tsx | pure
 import LogicFlow from '@logicflow/core'
-import '@logicflow/core/dist/style/index.css'
+import '@logicflow/core/lib/style/index.css'
 import { Group } from '@logicflow/extension'
 import '@logicflow/extension/lib/style/index.css'
 
