@@ -6,7 +6,6 @@ import {
   calcPointAfterResize,
   rotatePointAroundCenter,
 } from './utils'
-import './style.less'
 
 import Position = LogicFlow.Position
 import NodeData = LogicFlow.NodeData

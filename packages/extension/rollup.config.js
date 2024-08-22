@@ -1,6 +1,6 @@
 import postcss from 'rollup-plugin-postcss'
-import postcssImport from 'postcss-import'
 import postcssUrl from 'postcss-url'
+import postcssImport from 'postcss-import'
 import { rollupConfig } from '../../rollup.config'
 
 export default rollupConfig({

@@ -4,7 +4,70 @@
  * Auto generated file, do not modify it!
  */
 
-export const content = `.lf-control {
+export const content = `@import url('medium-editor/dist/css/medium-editor.min.css');
+@import url('medium-editor/dist/css/themes/beagle.min.css');
+@import url('vanilla-picker/dist/vanilla-picker.csp.css');
+/* label */
+.lf-label-overlay {
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+.lf-label-overlay .lf-label-editor {
+  padding: 4px;
+  background: #fff;
+  border-radius: 5px;
+}
+.lf-label-overlay .lf-label-editor-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  text-align: center;
+}
+.lf-label-overlay .lf-label-editor-container p {
+  margin: 0;
+}
+.lf-label-overlay .lf-label-editor-dragging {
+  cursor: move;
+}
+.lf-label-overlay .lf-label-editor-editing {
+  border: 2px solid #275dc5;
+  outline: none;
+  cursor: text;
+}
+.lf-label-overlay .lf-label-editor-hover {
+  border: 2px dashed #acacac;
+}
+.lf-label-overlay .lf-label-editor-clip {
+  width: 100px;
+  /* 根据需要调整宽度 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+.lf-label-overlay .lf-label-editor-ellipsis {
+  width: 100px;
+  /* 根据需要调整宽度 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.lf-label-overlay .lf-label-editor-wrap {
+  width: 100px;
+  /* 根据需要调整宽度 */
+  white-space: normal;
+  overflow-wrap: break-word;
+  /* 允许单词内换行 */
+}
+.lf-label-overlay .lf-label-editor-nowrap {
+  width: 100px;
+  /* 根据需要调整宽度 */
+  overflow: visible;
+  white-space: nowrap;
+}
+.lf-control {
   position: absolute;
   top: 0;
   right: 10px;
