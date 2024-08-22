@@ -11,6 +11,6 @@
       "@@/*": [".dumi/tmp/*"]
     }
   },
-  "exclude": ["examples"],
+  "exclude": ["examples/**/*.tsx"],
   "include": [".dumirc.ts", "src/**/*"]
 }

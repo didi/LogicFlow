@@ -1,39 +1,51 @@
 /**
  * 挂载到全局
  */
+const asyncImport = async () => {
+  const LogicFlow = await import('@logicflow/core');
+  const Extension = await import('@logicflow/extension');
+  const ReactNodeRegistry = await import('@logicflow/react-node-registry');
+
+  (window as any).react = await import('react');
+  (window as any).reactDom = await import('react-dom');
+  (window as any).createRoot = await import('react-dom/client').then(
+    (m) => m.createRoot,
+  );
+
+  (window as any).insertCSS = await import('insert-css');
+  (window as any).antd = await import('antd');
+  (window as any).DownOutlined = await import('@ant-design/icons').then(
+    (m) => m.DownOutlined,
+  );
+
+  (window as any).LogicFlow = LogicFlow.default;
+  (window as any).Extension = Extension;
+
+  (window as any).BaseNode = LogicFlow.BaseNode;
+  (window as any).BaseNodeModel = LogicFlow.BaseNodeModel;
+  (window as any).CircleNodeModel = LogicFlow.CircleNodeModel;
+  (window as any).CircleNode = LogicFlow.CircleNode;
+  (window as any).h = LogicFlow.h;
+  (window as any).RectNode = LogicFlow.RectNode;
+  (window as any).RectNodeModel = LogicFlow.RectNodeModel;
+  (window as any).PolygonNode = LogicFlow.PolygonNode;
+  (window as any).PolygonNodeModel = LogicFlow.PolygonNodeModel;
+  (window as any).HtmlNode = LogicFlow.HtmlNode;
+  (window as any).EllipseNode = LogicFlow.EllipseNode;
+  (window as any).EllipseNodeModel = LogicFlow.EllipseNodeModel;
+  (window as any).HtmlNodeModel = LogicFlow.HtmlNodeModel;
+  (window as any).PolylineEdge = LogicFlow.PolylineEdge;
+  (window as any).PolylineEdgeModel = LogicFlow.PolylineEdgeModel;
+  (window as any).BezierEdgeModel = LogicFlow.BezierEdgeModel;
+  (window as any).BezierEdge = LogicFlow.BezierEdge;
+  (window as any).GraphModel = LogicFlow.GraphModel;
+
+  (window as any).CurvedEdge = Extension.CurvedEdge;
+  (window as any).CurvedEdgeModel = Extension.CurvedEdgeModel;
+  (window as any).register = ReactNodeRegistry.register;
+  (window as any).Portal = ReactNodeRegistry.Portal;
+};
+
 if (window) {
-  (window as any).react = require('react');
-  (window as any).reactDom = require('react-dom');
-  (window as any).createRoot = require('react-dom/client').createRoot;
-  (window as any).antd = require('antd');
-  (window as any).insertCSS = require('insert-css');
-  (window as any).LogicFlow = require('@logicflow/core').default;
-  (window as any).Extension = require('@logicflow/extension');
-  (window as any).BaseNode = require('@logicflow/core').BaseNode;
-  (window as any).BaseNodeModel = require('@logicflow/core').BaseNodeModel;
-  (window as any).CircleNodeModel = require('@logicflow/core').CircleNodeModel;
-  (window as any).CircleNode = require('@logicflow/core').CircleNode;
-  (window as any).h = require('@logicflow/core').h;
-  (window as any).RectNode = require('@logicflow/core').RectNode;
-  (window as any).RectNodeModel = require('@logicflow/core').RectNodeModel;
-  (window as any).PolygonNode = require('@logicflow/core').PolygonNode;
-  (window as any).PolygonNodeModel =
-    require('@logicflow/core').PolygonNodeModel;
-  (window as any).HtmlNode = require('@logicflow/core').HtmlNode;
-  (window as any).EllipseNode = require('@logicflow/core').EllipseNode;
-  (window as any).EllipseNodeModel =
-    require('@logicflow/core').EllipseNodeModel;
-  (window as any).HtmlNodeModel = require('@logicflow/core').HtmlNodeModel;
-  (window as any).PolylineEdge = require('@logicflow/core').PolylineEdge;
-  (window as any).PolylineEdgeModel =
-    require('@logicflow/core').PolylineEdgeModel;
-  (window as any).BezierEdgeModel = require('@logicflow/core').BezierEdgeModel;
-  (window as any).BezierEdge = require('@logicflow/core').BezierEdge;
-  (window as any).GraphModel = require('@logicflow/core').GraphModel;
-  (window as any).DownOutlined = require('@ant-design/icons').DownOutlined;
-  (window as any).CurvedEdge = require('@logicflow/extension').CurvedEdge;
-  (window as any).CurvedEdgeModel =
-    require('@logicflow/extension').CurvedEdgeModel;
-  (window as any).register = require('@logicflow/react-node-registry').register;
-  (window as any).Portal = require('@logicflow/react-node-registry').Portal;
+  asyncImport();
 }

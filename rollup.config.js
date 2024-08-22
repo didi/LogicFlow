@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { startCase, camelCase } from 'lodash'
 import colors from 'colors/safe'
-import fileSize from 'rollup-plugin-filesize'
 import babel from '@rollup/plugin-babel'
 import alias from '@rollup/plugin-alias'
 import terser from '@rollup/plugin-terser'
@@ -11,7 +10,9 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
+import fileSize from 'rollup-plugin-filesize'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export function formatName(name) {
   const realName = name
@@ -76,9 +77,13 @@ export function rollupConfig(config = {}) {
     output: outputs,
     plugins: [
       babel({ babelHelpers: 'bundled' }),
-      typescript({ declaration: false }),
       resolve(),
       commonjs(),
+      typescript({
+        declaration: false,
+        sourceMap: true,
+        inlineSources: true,
+      }),
       replace({
         preventAssignment: true,
         'process.env.NODE_ENV': JSON.stringify('production'),
@@ -93,8 +98,13 @@ export function rollupConfig(config = {}) {
       }),
       nodePolyfills(),
       terser({
+        format: {
+          comments: false,
+        },
+        compress: {
+          drop_console: true,
+        },
         sourceMap: true,
-        // drop_console: true,
       }),
       fileSize({
         reporter: [
@@ -141,6 +151,7 @@ export function rollupConfig(config = {}) {
         ],
       }),
       ...plugins,
+      visualizer(),
     ],
     external,
     ...others,

@@ -1,5 +1,5 @@
 import LogicFlow, { HtmlNodeModel } from '@logicflow/core'
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, isNil } from 'lodash-es'
 
 export type CustomProperties = {
   // 形状属性
@@ -18,21 +18,20 @@ export type CustomProperties = {
 
 export class VueNodeModel extends HtmlNodeModel {
   setAttributes() {
-    // TODO: 解决 width、height、radius 为 0 时的问题
+    // DONE: 解决 width、height、radius 为 0 时的问题
     const { width, height, radius } = this.properties as CustomProperties
-    if (width) {
+    if (!isNil(width)) {
       this.width = width
     }
-    if (height) {
+    if (!isNil(height)) {
       this.height = height
     }
-    if (radius) {
+    if (!isNil(radius)) {
       this.radius = radius
     }
   }
 
   getTextStyle(): LogicFlow.TextNodeTheme {
-    // const { x, y, width, height } = this
     const {
       refX = 0,
       refY = 0,

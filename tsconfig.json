@@ -5,7 +5,9 @@
     "module": "ES2020",
     "moduleResolution": "Node",
     "experimentalDecorators": true,
-    "sourceMap": true,
+    // rollup 打包生成 umd 包时，需要生成 sourcemap，此处的选项应该移除，下面是对应说明
+    // https://stackoverflow.com/questions/63128597/how-to-get-rid-of-the-rollup-plugin-typescript-rollup-sourcemap-option-must
+    // "sourceMap": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -16,6 +18,7 @@
     "target": "ES5",
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
+
     // see more from: https://preactjs.com/guide/v10/typescript
     // "jsx": "preserve",
     // "jsxFactory": "h",
