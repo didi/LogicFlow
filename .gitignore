@@ -6,6 +6,7 @@ lib
 es
 dist
 output
+stats.html
 
 coverage
 types/**

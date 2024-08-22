@@ -64,6 +64,11 @@
       // 渲染实例
       lf.render(data)
 
+      // 获取图数据。可以对比一下输入和输出数据的不同
+      // 如果有 adapterIn 和 adaptOut 方法，则通过 lf.getGraphData 获取经过 adapterOut 处理过的数据
+      const graphData = lf.getGraphRawData()
+      console.log('graph data --->>>', graphData)
+
       console.log('Core --->>>', Core)
       console.log('Extension --->>>', Extension)
     </script>

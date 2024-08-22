@@ -422,6 +422,7 @@ export default defineConfig({
         libraryDirectory: 'es',
         style: true,
       },
+      'antd',
     ],
     // 下面的 @ant-design/icons 和 lodash-es 需要按需加载，但目前看来不起作用（或者是起作用了，就那么大。需要确认下）
     [
