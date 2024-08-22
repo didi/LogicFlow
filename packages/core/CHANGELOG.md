@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.0.2
+
+### Patch Changes: Release 2.0.2 Version
+- 修复自定义节点 Model 中 initNodeData 方法不生效
+  - 修复circle、diamond、polygon、rect、ellipse 中 initNodeData 方法不生效
+  - 修复官网教程- 基础教程- 节点文章中跳转错误
+  - example中补充自定义circle、diamon、polygon节点
+- 解决 Menu 插件 setMenuByType 为私有方法导致用户无法调用的 bug close #1773
+- 修复单独引入less导致的用户侧启动服务报错的问题
+- 修复文档中 core 包 css 资源地址错误的问题 close #1798
+- 修复 model 中 width/height/radius 等 properties 传 0 无效的 bug
+
 ## 2.0.1
 
 ### Patch Changes: 修复 2.0 版本中 Core 包及 Extension 中 dynamic-group/label 等插件的 bug

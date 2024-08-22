@@ -1,5 +1,11 @@
 # @logicflow/engine
 
+## 0.1.1
+
+### Patch Changes
+
+- 更新依赖
+
 ## 0.1.0
 
 ### Minor Changes

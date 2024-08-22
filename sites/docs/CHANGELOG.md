@@ -1,5 +1,21 @@
 # logicflow-docs
 
+## 2.0.3
+
+### Patch Changes: 优化 docs 项目打包，减少包体积，修复若干 bug
+
+- 升级 rollup 以及相关 plugins 版本，用于解决 build:umd 时 sourceMap 失败的问题
+- 增加 visualizer 包用于分析打包产物
+- docs 中 global.ts 中依赖加载通过 import 引入，之前通过 require 引入会导致 tree-shaking 失效
+- 修复文档中 core 包 css 资源地址错误的问题
+- 升级 dumi-theme-logicflow 包为 0.0.19，将 @babel/standalone 按需加载
+- 官网移除百度统计埋点
+
+- Updated dependencies
+  - @logicflow/core@2.0.2
+  - @logicflow/extension@2.0.2
+  - @logicflow/react-node-registry@1.0.2
+
 ## 2.0.2
 
 ### Patch Changes
