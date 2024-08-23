@@ -13,7 +13,9 @@ export default rollupConfig({
           // maxSize: 10, // 以KB为单位的最大文件大小，超过此大小的文件将不会被内联
         }),
       ],
+      use: [['less', { javascriptEnabled: true }]],
       extract: 'index.css', // 提取到一个单独的 CSS 文件
+      minimize: true,
     }),
   ],
 })

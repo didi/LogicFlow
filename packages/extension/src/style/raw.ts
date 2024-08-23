@@ -4,9 +4,9 @@
  * Auto generated file, do not modify it!
  */
 
-export const content = `@import url('medium-editor/dist/css/medium-editor.min.css');
-@import url('medium-editor/dist/css/themes/beagle.min.css');
-@import url('vanilla-picker/dist/vanilla-picker.csp.css');
+export const content = `@import url('~medium-editor/dist/css/medium-editor.min.css');
+@import url('~medium-editor/dist/css/themes/beagle.min.css');
+@import url('~vanilla-picker/dist/vanilla-picker.csp.css');
 /* label */
 .lf-label-overlay {
   width: 0;
