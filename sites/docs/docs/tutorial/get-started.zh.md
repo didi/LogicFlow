@@ -245,9 +245,18 @@ LogicFlow.use(Control);
 想要进一步了解插件功能，请看[插件简介](extension/intro.zh.md)。
 
 ### 4. 数据转换
+
+#### 获取画布数据
+
+我们提供了 [getGraphData](../api/detail/index.zh.md#getgraphdata) 方法，可以获取 LogicFlow 的画布数据，包括所有的节点和边的数据。
+
+```js
+const data = lf.getGraphData();
+```
+
+#### 自定义数据格式
 在某些对数据格式有要求的场景下，LogicFlow的数据格式无法满足业务诉求，因此我们提供了数据转换能力。
 
 对于需要bpmn格式的数据，可以直接使用使用我们[内置提供的数据转换](extension/adapter.zh.md#使用内置的数据转换工具)插件，将 LogicFlow 生成的数据转换为 bpmn-js 生成的数据。
 
 想要深入更多数据转换功能，请看[数据转换](extension/adapter.zh.md)。
-
