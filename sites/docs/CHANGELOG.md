@@ -1,5 +1,12 @@
 # logicflow-docs
 
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/extension@2.0.3
+
 ## 2.0.3
 
 ### Patch Changes: 优化 docs 项目打包，减少包体积，修复若干 bug

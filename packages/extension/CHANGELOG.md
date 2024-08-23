@@ -1,8 +1,15 @@
 # Change Log
 
+## 2.0.3
+
+### Patch Changes
+
+- 解决打包时 Extension 中三方 css 依赖无法找到的报错
+
 ## 2.0.2
 
 ### Patch Changes: Release 2.0.2 Version
+
 - 修复自定义节点 Model 中 initNodeData 方法不生效
   - 修复circle、diamond、polygon、rect、ellipse 中 initNodeData 方法不生效
   - 修复官网教程- 基础教程- 节点文章中跳转错误
