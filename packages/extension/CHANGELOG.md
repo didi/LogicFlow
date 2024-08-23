@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.4
+
+### Patch Changes: Release 2.0.4 Version
+
+- chore: 新增 rollup.config 将 extension less 文件打包成 css，并不在 js 中引入 less
+- 解决 BaseEdgeModel 中 setProperty 方法使用 set 时报错的 bug
+- isIe 调整为方法，解决 ssr 项目中 window is not defined 的问题 close #1524
+
+- Updated dependencies
+  - @logicflow/core@2.0.3
+
 ## 2.0.3
 
 ### Patch Changes
