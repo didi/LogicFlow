@@ -39,8 +39,8 @@
     "build:umd": "pnpm run --if-present build:less && rollup -c ../../rollup.config.js --bundleConfigAsCjs",
     "build:dev": "pnpm run --if-present build:less && run-p -s build:cjs build:esm",
     "build:watch": "run-p -s build:less build:watch:esm build:watch:cjs",
-    "build:watch:esm": "run-s -s 'build:esm -w'",
-    "build:watch:cjs": "run-s -s 'build:cjs -w'",
+    "build:watch:esm": "run-s -s  \"build:esm -w\"",
+    "build:watch:cjs": "run-s -s  \"build:cjs -w\"",
     "build": "run-p -s build:dev build:umd",
     "prebuild": "run-s -s clean:build"
   },
