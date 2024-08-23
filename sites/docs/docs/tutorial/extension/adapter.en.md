@@ -12,8 +12,7 @@ toc: content
 
 In LogicFlow, graph is composed of **nodes** and **edges**.
 
-- For a node, we need to know the **id**, [type](adapter.en.md#type), **position**, **text
-  **, [properties](adapter.en.md#properties) of the node.
+- For a node, we need to know the **id**, [type](adapter.en.md#type), **position**, **text**, [properties](adapter.en.md#properties) of the node.
 - For an edge, we then need to know the **id**, [type](adapter.en.md#type), start node id (*
   *sourceNodeId**), target node id (**targetNodeId**), **text
   **, [properties](adapter.en.md#properties) and the start position of the edge (**startPoint**),

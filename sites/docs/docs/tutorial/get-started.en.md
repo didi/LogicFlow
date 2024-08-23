@@ -9,120 +9,139 @@ toc: content
 
 ## Installation
 
-- Command installation: Install by using npm, yarn, or pnpm.
+### Command Installation
+
+You can install using npm, yarn, or pnpm.
 
 :::code-group
 
 ```bash [npm]
 npm install @logicflow/core --save
 
-# extension package（No need to import when not using plugins）
+# Plugin package (not needed if plugins are not used)
 npm install @logicflow/extension --save
 ```
 
 ```bash [yarn]
 yarn add @logicflow/core
 
-# extension package（No need to import when not using plugins）
+# Plugin package (not needed if plugins are not used)
 yarn add @logicflow/extension
 ```
 
 ```bash [pnpm]
 pnpm add @logicflow/core
 
-# extension package（No need to import when not using plugins）
+# Plugin package (not needed if plugins are not used)
 pnpm add @logicflow/extension
 ```
 
 :::
 
-- Directly import with `<script>`
+### Using CDN
 
-  Since LogicFlow itself has some preset styles, in addition to importing js, you also need
-  to `import css`.
+LogicFlow requires including CSS files for its built-in styles in addition to the JS files.
+
+- For versions 2.0 and later:
 
 ```html | pure
-<!-- Import the core package. -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest/lib/style/index.min.css" rel="stylesheet">
+<!-- Include core package and corresponding CSS -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
 
-<!-- Import the extension package. -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@latest/lib/style/index.min.css" />
-
+<!-- Include extension package and corresponding CSS (not needed if plugins are not used) -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
 ```
 
-The current version is latest. For other versions, please
-check: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">core</a>、<a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">
-entension</a>
+- For versions before 2.0:
+
+```html | pure
+<!-- Include core package and corresponding CSS -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/logic-flow.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/style/index.css" rel="stylesheet">
+
+<!-- Include extension package and corresponding CSS (not needed if plugins are not used) -->
+<!-- Note: For versions before 2.0, the extension scripts are exported separately -->
+<!-- Therefore, the path needs to be specific to the package name, as shown below for the Menu plugin -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Menu.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+```
+
+By default, the CDN will include the latest version. To include a different version, refer to the specific package information here: <a href="https://www.jsdelivr.com/package/npm/@logicflow/core" target="_blank">core package</a>, <a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">extension package</a>, and adjust the CDN path accordingly.
 
 ## Getting Started
 
-### 1. Direct `<script>` Usage
+### 1. Using in Native JS
 
 ```html | pure
-<!-- Import the core package -->
-<script src="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@latest-beta.2/lib/style/index.min.css" rel="stylesheet">
+<!-- Include core package -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
 
-<!-- Create graph container -->
+<!-- Create canvas container -->
 <div id="container"></div>
 
 <script>
-  // Prepare graph data
-  const data = {
-    // Nodes
-    nodes: [
-      {
-        id: '21',
-        type: 'rect',
-        x: 100,
-        y: 200,
-        text: 'rect node',
-      },
-      {
-        id: '50',
-        type: 'circle',
-        x: 300,
-        y: 400,
-        text: 'circle node',
-      },
-    ],
-    // Edges
-    edges: [
-      {
-        type: 'polyline',
-        sourceNodeId: '50',
-        targetNodeId: '21',
-      },
-    ],
-  }
-  
-  // Create instance of LogicFlow
-  const lf = new Core.default({
-    container: document.querySelector('#container'),
-    width: 700,
-    height: 500,
-    grid: true,
-  })
+// Prepare graph data
+const data = {
+  // Nodes
+  nodes: [
+    {
+      id: '21',
+      type: 'rect',
+      x: 100,
+      y: 200,
+      text: 'rect node',
+    },
+    {
+      id: '50',
+      type: 'circle',
+      x: 300,
+      y: 400,
+      text: 'circle node',
+    },
+  ],
+  // Edges
+  edges: [
+    {
+      type: 'polyline',
+      sourceNodeId: '50',
+      targetNodeId: '21',
+    },
+  ],
+}
 
-  // Render graph instance
-  lf.render(data)
+// Create canvas instance
+const lf = new Core.default({
+  container: document.querySelector('#container'),
+  width: 700,
+  height: 500,
+  grid: true,
+})
+
+// Render canvas instance
+lf.render(data)
 </script>
 ```
 
-### 2. Usage in React Framework
+### 2. Using in Frameworks
 
-LogicFlow itself is packaged as pure JS with UMD, making it compatible with both Vue and React
-frameworks. One key point to note is that when initializing a LogicFlow instance, the container
-parameter must refer to an existing DOM node to avoid errors.
+LogicFlow is packaged as a pure JS library using UMD, so it can be used in both Vue and React.
+
+:::warning{title=Tip}
+LogicFlow can be initialized without specifying canvas width and height; in this case, it will use the width and height of the container DOM node provided.
+
+To ensure proper rendering of the canvas, make sure the container exists and has dimensions before initializing the LogicFlow instance.
+:::
+
+#### Using in React
 
 <code id="use-in-react" src="../../src/tutorial/get-started/use-in-react"></code>
 
-### 3. Usage in Vue Framework
+#### Using in Vue Framework
 
-```vue | pure
-
+```vue
 <template>
   <div class="container" ref="container"></div>
 </template>
@@ -130,7 +149,7 @@ parameter must refer to an existing DOM node to avoid errors.
 <script>
   import LogicFlow from "@logicflow/core";
   import "@logicflow/core/lib/style/index.css";
-  // import "@logicflow/core/dist/style/index.css"; // Introduced before version 2.0
+  // import "@logicflow/core/dist/style/index.css"; // For versions before 2.0
 
   export default {
     mounted() {
@@ -151,28 +170,70 @@ parameter must refer to an existing DOM node to avoid errors.
 </style>
 ```
 
-:::warning{title=warning}
-LogicFlow supports initializing without specifying container width and height parameters, in which
-case it will default to the width and height of the container. Ensure that the container has its
-dimensions set when initializing LogicFlow.
-:::
+### 3. Using Plugins
 
-### 4. Using Plugins
+LogicFlow's primary goal is to be an extensible flowchart tool to meet various business needs.
 
-LogicFlow was initially designed to be a highly extensible workflow diagramming tool to meet various
-business requirements. To achieve strong extensibility, LogicFlow develops all non-core features as
-plugins, which are then included in the `@logicflow/extension` package.
+To ensure strong extensibility, all non-core features of LogicFlow are developed as plugins and placed in the `@logicflow/extension` package.
 
-Below demonstrates the use of the control panel plugin, providing capabilities such as zooming,
-fitting the canvas, and built-in `redo` and `undo` functionalities:
+If you need to use plugins, you need to include the `@logicflow/extension` dependency and select the plugins based on your requirements.
 
-Import statement:
+For example, the control panel plugin provides zooming and fit-to-canvas capabilities, and also includes `redo` and `undo` functionality.
+
+#### Installing and Using Plugins from CDN
+
+- For versions 2.0 and later:
+
+```html | pure
+<!-- Include extension package -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+
+<!-- Create canvas container -->
+<div id="container"></div>
+<script>
+  // The Extension CDN exposes an Extension variable containing all plugins; use the plugins from Extension
+  const { Control } = Extension;
+  
+  // Global level installation of the control panel plugin:
+  Core.use(Control);
+  
+  // Instance level installation of the control panel plugin:
+  const lf = new Core.default({
+    ..., // Other configurations
+    plugins: [Control],
+  });
+</script>
+```
+
+- For versions before 2.0:
+
+```html | pure
+<!-- Include extension package -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Control.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+
+<!-- Create canvas container -->
+<div id="container"></div>
+<script>
+  // Global level installation of the control panel plugin:
+  LogicFlow.use(Control);
+  
+  // Instance level installation of the control panel plugin:
+  const lf = new LogicFlow({
+    ..., // Other configurations
+    plugins: [Control],
+  });
+</script>
+```
+
+#### Installing and Using Plugins from Commands
 
 ```js
 import LogicFlow from "@logicflow/core";
 import { Control } from "@logicflow/extension";
 
-// Globally enable Control plugin for every LogicFlow instance
+// Global usage: Every lf instance will have Control
 LogicFlow.use(Control);
 ```
 
@@ -180,48 +241,22 @@ Example:
 
 <code id="use-plugin" src="../../src/tutorial/get-started/use-plugin"></code>
 
-To discover more about plugin functionalities, refer to
-the [Plugin Introduction](./extension/intro.en.md).
+For more information about plugin functionalities, please refer to the [Plugin Introduction](extension/intro.en.md).
 
-### 5. Data Transformation
+### 4. Data Transformation
 
-In some scenarios, the data format generated by LogicFlow may not meet specific business
-requirements. For instance, backend systems might require data in the format generated by bpmn-js.
-In such cases, a data transformation tool can be used to convert data generated by LogicFlow into
-the required format.
+#### Getting Canvas Data
 
-```tsx | pure
+You can use the [getGraphData](../api/detail/index.en.md#getgraphdata) method to get the data of the LogicFlow canvas, including all nodes and edges data.
 
-// Convert userData into LogicFlow-supported format
-lf.adapterIn = function(userData: unknown): GraphData {
-  // ...
-  return logicFlowData;
-}
-
-// Convert LogicFlow-generated data into the desired format
-lf.adapterOut = function(logicFlowData: GraphData): unknown {
-  // ...
-  return userData;
-}
-
-// Render using userData, internally calling adapterIn 
-lf.render(userData)
-
-// Retrieve userData directly, internally calling adapterOut
-lf.getGraphData()
+```js
+const data = lf.getGraphData();
 ```
 
-Custom data transformation tools essentially involve converting user-provided data into a format
-recognized by LogicFlow through `lf.adapterIn`. Conversely, when generating data, `lf.adapterOut`
-converts LogicFlow's data into the format required by the user. Therefore, custom data
-transformation tools only need to redefine these two methods.
+#### Custom Data Formats
 
-Additionally, you can manually handle non-LogicFlow supported data formats during `render` and
-convert them to desired formats during `getGraphData`.
+In some scenarios where the data format requirements are specific, the default LogicFlow data format may not meet the business needs. Thus, we provide data transformation capabilities.
 
-For a deeper dive into data transformation capabilities, refer
-to [Data Transformation](./extension/adapter.en.md).
+For data in bpmn format, you can use our [built-in data transformation](extension/adapter.en.md#use-the-built-in-data-conversion-tools) plugin to convert LogicFlow-generated data to bpmn-js data.
 
-This concludes our demo. To further explore LogicFlow's capabilities, you can start with
-the [Basic Tutorial](./basic/class.en.md).
-
+For more details on data transformation features, please refer to [Data Transformation](extension/adapter.en.md).
