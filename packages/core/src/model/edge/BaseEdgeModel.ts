@@ -426,11 +426,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
    * @param val 属性值
    */
   @action setProperty(key: string, val: any): void {
-    const preProperties = toJS(this.properties)
-    const newProperties = cloneDeep(preProperties)
-    set(newProperties, key, formatData(val))
-
-    this.properties = newProperties
+    set(this.properties, key, formatData(val))
     this.setAttributes()
   }
 

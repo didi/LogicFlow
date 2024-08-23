@@ -217,7 +217,7 @@ export default function BasicNode() {
           使用 Label 渲染
         </Button>
         <Button
-          key="label"
+          key="add-node"
           type="primary"
           onClick={() => {
             lfRef?.current?.addNode({

@@ -321,7 +321,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     model.isDragging = false
   }
   onMouseOut = (ev: MouseEvent) => {
-    if (isIe) {
+    if (isIe()) {
       this.setHoverOff(ev)
     }
   }
