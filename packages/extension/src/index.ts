@@ -1,5 +1,3 @@
-import './index.less'
-
 // BPMN 相关
 export * from './bpmn'
 export * from './bpmn-adapter'
