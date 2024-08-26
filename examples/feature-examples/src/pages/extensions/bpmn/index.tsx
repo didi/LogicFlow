@@ -149,7 +149,8 @@ export default function BPMNExtension() {
     if (!lf) {
       return
     }
-    lf.renderByXml(xml)
+
+    lf.render(xml)
   }
 
   useEffect(() => {
@@ -158,7 +159,7 @@ export default function BPMNExtension() {
         ...config,
         container: containerRef.current as HTMLElement,
       })
-
+      lfRef.current = lf
       lf.setMenuConfig(menuConfig)
 
       const commonMenuConfig = {
@@ -207,8 +208,7 @@ export default function BPMNExtension() {
 
       const sessionStorageData = window.sessionStorage.getItem('lf-data')
       if (sessionStorageData) {
-        lfData = JSON.parse(sessionStorageData)
-        renderXml(lfData)
+        renderXml(sessionStorageData)
       } else {
         const lfJsonData = window.sessionStorage.getItem('lf-json-data')
         if (!lfJsonData) {
@@ -225,16 +225,13 @@ export default function BPMNExtension() {
       if (pathes) {
         lf.setRawPathes(JSON.parse(pathes))
       }
-
-      lfRef.current = lf
     }
   }, [])
 
   const handleDownloadData = () => {
-    const data = lfRef.current?.getGraphData()
-    const dataString = JSON.stringify(data)
-    download('logicflow.xml', dataString)
-    window.sessionStorage.setItem('lf-data', dataString)
+    const data = lfRef.current?.getGraphData() as string
+    download('logicflow.xml', data)
+    window.sessionStorage.setItem('lf-data', data)
   }
 
   const handleUploadData = (e: React.ChangeEvent<HTMLInputElement>) => {
