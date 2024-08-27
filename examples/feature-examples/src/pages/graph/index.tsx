@@ -99,9 +99,7 @@ const data = {
       properties: {
         width: 80,
         height: 120,
-        style: {
-          radius: 20,
-        },
+        radius: 20,
       },
     },
     {
@@ -393,6 +391,21 @@ export default function BasicNode() {
     lfRef?.current?.dnd.startDrag(node)
   }
 
+  const changeNodeBorderColor = () => {
+    const lf = lfRef.current
+    if (lf) {
+      const { nodes } = lf.getSelectElements()
+      nodes.forEach(({ id, properties }) => {
+        console.log('properties', properties)
+        lf.setProperties(id, {
+          style: {
+            stroke: 'pink',
+          },
+        })
+      })
+    }
+  }
+
   return (
     <Card title="Graph">
       <Flex wrap="wrap" gap="small">
@@ -444,6 +457,13 @@ export default function BasicNode() {
         </Button>
         <Button key="changeEdgeId" type="primary" onClick={handleChangeColor}>
           修改边 颜色
+        </Button>
+        <Button
+          key="changeNodeBorderColor"
+          type="primary"
+          onClick={changeNodeBorderColor}
+        >
+          修改选中节点边框颜色
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain></Divider>
