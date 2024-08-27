@@ -401,7 +401,10 @@ export default defineConfig({
       },
     },
   },
-  // mako: {}, // 开启 mako 打包，目前会导致 Examples 模块不可用，暂时关闭，恢复至 webpack 打包
+  // TODO: 开启 mako 打包，目前会导致 Examples 模块不可用，暂时关闭，恢复至 webpack 打包
+  // mako: {},
+  // TODO: 开启 SSR 后，umi.server.js 中 process.versions.node.split(".") 会报错， Cannot read properties of undefined (reading 'split')
+  // ssr: {}, // 先关闭，后续测试是否由 LogicFlow 引起报错，目前看是 umi 的原因
   mfsu: {},
   alias: {
     '@': __dirname,

@@ -46,6 +46,6 @@ const asyncImport = async () => {
   (window as any).Portal = ReactNodeRegistry.Portal;
 };
 
-if (window) {
+if (typeof window !== 'undefined') {
   asyncImport();
 }

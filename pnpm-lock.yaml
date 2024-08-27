@@ -712,8 +712,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       '@logicflow/dumi-theme-simple':
-        specifier: ^0.0.19
-        version: 0.0.19(@algolia/client-search@4.24.0)(@babel/core@7.25.2)(@types/react@18.3.3)(dumi@2.4.6(@babel/core@7.25.2)(@swc/helpers@0.5.5)(@types/node@20.14.13)(@types/react@18.3.3)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.5.1)(typescript@5.4.5)))(postcss-less@6.0.0(postcss@8.4.40))(prettier@3.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@4.21.0)(stylelint@15.11.0(typescript@5.4.5))(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.4.2)))(jquery@3.7.1)(next@14.2.3(@babel/core@7.25.2)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)(vue-router@4.4.0(vue@3.4.34(typescript@5.4.5)))(vue@3.4.34(typescript@5.4.5))
+        specifier: ^0.0.20
+        version: 0.0.20(@algolia/client-search@4.24.0)(@babel/core@7.25.2)(@types/react@18.3.3)(dumi@2.4.6(@babel/core@7.25.2)(@swc/helpers@0.5.5)(@types/node@20.14.13)(@types/react@18.3.3)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.5.1)(typescript@5.4.5)))(postcss-less@6.0.0(postcss@8.4.40))(prettier@3.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@4.21.0)(stylelint@15.11.0(typescript@5.4.5))(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.4.2)))(jquery@3.7.1)(next@14.2.3(@babel/core@7.25.2)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)(vue-router@4.4.0(vue@3.4.34(typescript@5.4.5)))(vue@3.4.34(typescript@5.4.5))
       '@logicflow/extension':
         specifier: workspace:*
         version: link:../../packages/extension
@@ -2731,23 +2731,25 @@ packages:
     peerDependencies:
       react: '>=16.3.0'
 
-  '@logicflow/core@2.0.0-beta.9':
-    resolution: {integrity: sha512-XTtMTU5qRk6ENq3Wwuz/2kBdWLrlz7ESjFLjQmhbReZH9AM+NhHOmr35QhOP1Rvh9ipzGDbvWUOgP36dxtxnsQ==}
+  '@logicflow/core@2.0.3':
+    resolution: {integrity: sha512-eUhBDS/xdiy1rKnH2ZWoP0be6JLGt7bEUY569W9pwuMzkoTD9jWSV0bu82LI1mvnXicrFiIzZUvUzit21P5qRg==}
 
-  '@logicflow/dumi-theme-simple@0.0.19':
-    resolution: {integrity: sha512-N9rB4EA3SHcxGgJP5RCDYsred5+vCWOkusjAYByeceva8lABu9k4rukCRWAbLlJeYWeXcCVingUXjPMHg2xhgQ==}
+  '@logicflow/dumi-theme-simple@0.0.20':
+    resolution: {integrity: sha512-6TTVzNbGgbLdGVM81ZmPc4u361P6enLAeT9QpSydbnmCGyqhIQBejqT4X17/LmO1DWNmwUsfXiFPW4J8ok5/fg==}
     peerDependencies:
       dumi: ^2.0.0
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
-  '@logicflow/extension@2.0.0-beta.9':
-    resolution: {integrity: sha512-vJfsGrMGnOq2+lFFcbz9t0+7EpFulq0EIt4o8rSu3zpjnzFsL025Flv74qO2TowQjeX/QNo1jSaKfPkUm1iVVw==}
-
-  '@logicflow/react-node-registry@0.0.1-beta.4':
-    resolution: {integrity: sha512-Sl2YIXC/IqSR0wHtqC4IKqiN7UngLkUxKWkGPWQpTmd07EisE6iRjPgt8jV6NX3gdWDv3Li5JU+m7d2tynCoUg==}
+  '@logicflow/extension@2.0.4':
+    resolution: {integrity: sha512-TeyqVS81eMf5vOgiF/2nmRdlRFNh4fvzSSq0vIrAmtwEi9/91/LMvvwWfiy9EUw9lxBorcSB+7JI291H/G6tjg==}
     peerDependencies:
-      '@logicflow/core': 2.0.0-beta.7
+      '@logicflow/core': 2.0.3
+
+  '@logicflow/react-node-registry@1.0.3':
+    resolution: {integrity: sha512-F9+2K0GYxZedT/KQlkxyJonXd9AM5TMU3GmYDsC+RKwloBlEWDuicdmlbTdDzIG2tD3+6WBVBTQFze3VeJUFyA==}
+    peerDependencies:
+      '@logicflow/core': 2.0.3
       react: '>= 18.0.0'
       react-dom: '>= 18.0.0'
 
@@ -17672,7 +17674,7 @@ snapshots:
       react: 18.3.1
       react-is: 16.13.1
 
-  '@logicflow/core@2.0.0-beta.9':
+  '@logicflow/core@2.0.3':
     dependencies:
       classnames: 2.5.1
       lodash-es: 4.17.21
@@ -17683,16 +17685,16 @@ snapshots:
       preact: 10.23.1
       uuid: 9.0.1
 
-  '@logicflow/dumi-theme-simple@0.0.19(@algolia/client-search@4.24.0)(@babel/core@7.25.2)(@types/react@18.3.3)(dumi@2.4.6(@babel/core@7.25.2)(@swc/helpers@0.5.5)(@types/node@20.14.13)(@types/react@18.3.3)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.5.1)(typescript@5.4.5)))(postcss-less@6.0.0(postcss@8.4.40))(prettier@3.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@4.21.0)(stylelint@15.11.0(typescript@5.4.5))(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.4.2)))(jquery@3.7.1)(next@14.2.3(@babel/core@7.25.2)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)(vue-router@4.4.0(vue@3.4.34(typescript@5.4.5)))(vue@3.4.34(typescript@5.4.5))':
+  '@logicflow/dumi-theme-simple@0.0.20(@algolia/client-search@4.24.0)(@babel/core@7.25.2)(@types/react@18.3.3)(dumi@2.4.6(@babel/core@7.25.2)(@swc/helpers@0.5.5)(@types/node@20.14.13)(@types/react@18.3.3)(eslint@8.57.0)(jest@29.7.0(@types/node@20.14.13)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.4.2)(@types/node@20.5.1)(typescript@5.4.5)))(postcss-less@6.0.0(postcss@8.4.40))(prettier@3.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@4.21.0)(stylelint@15.11.0(typescript@5.4.5))(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.4.2)))(jquery@3.7.1)(next@14.2.3(@babel/core@7.25.2)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)(vue-router@4.4.0(vue@3.4.34(typescript@5.4.5)))(vue@3.4.34(typescript@5.4.5))':
     dependencies:
       '@ant-design/icons': 4.8.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@babel/plugin-syntax-unicode-sets-regex': 7.18.6(@babel/core@7.25.2)
       '@babel/standalone': 7.25.2
       '@docsearch/css': 3.6.1
       '@docsearch/react': 3.6.1(@algolia/client-search@4.24.0)(@types/react@18.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.15.0)
-      '@logicflow/core': 2.0.0-beta.9
-      '@logicflow/extension': 2.0.0-beta.9
-      '@logicflow/react-node-registry': 0.0.1-beta.4(@logicflow/core@2.0.0-beta.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@logicflow/core': 2.0.3
+      '@logicflow/extension': 2.0.4(@logicflow/core@2.0.3)
+      '@logicflow/react-node-registry': 1.0.3(@logicflow/core@2.0.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@monaco-editor/react': 4.6.0(monaco-editor@0.25.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@stackblitz/sdk': 1.11.0
       '@vercel/analytics': 1.3.1(next@14.2.3(@babel/core@7.25.2)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -17751,10 +17753,10 @@ snapshots:
       - vue
       - vue-router
 
-  '@logicflow/extension@2.0.0-beta.9':
+  '@logicflow/extension@2.0.4(@logicflow/core@2.0.3)':
     dependencies:
       '@antv/hierarchy': 0.6.12
-      '@logicflow/core': 2.0.0-beta.9
+      '@logicflow/core': 2.0.3
       classnames: 2.5.1
       lodash-es: 4.17.21
       medium-editor: 5.23.3
@@ -17763,9 +17765,9 @@ snapshots:
       rangy: 1.3.1
       vanilla-picker: 2.12.3
 
-  '@logicflow/react-node-registry@0.0.1-beta.4(@logicflow/core@2.0.0-beta.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@logicflow/react-node-registry@1.0.3(@logicflow/core@2.0.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@logicflow/core': 2.0.0-beta.9
+      '@logicflow/core': 2.0.3
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
       lodash-es: 4.17.21
