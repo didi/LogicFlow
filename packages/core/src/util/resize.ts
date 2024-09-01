@@ -5,6 +5,70 @@ import { EventType } from '../constant'
 
 import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
+import {
+  calculatePointAfterRotateAngle,
+  getNewCenter,
+  radianToAngle,
+} from '../algorithm/rotate'
+import type { SimplePoint } from '../algorithm/rotate'
+
+function recalcRotatedResizeInfo(
+  pct: number,
+  resizeInfo: ResizeInfo,
+  rotate: number,
+  anchorX: number,
+  anchorY: number,
+  oldCenterX: number,
+  oldCenterY: number,
+  freezeWidth = false,
+  freezeHeight = false,
+) {
+  // 假设我们触摸的点是右下角的anchor
+  const { deltaX, deltaY, width: oldWidth, height: oldHeight } = resizeInfo
+  const angle = radianToAngle(rotate)
+
+  // 右下角的anchor
+  const startZeroTouchAnchorPoint = {
+    x: anchorX, // control锚点的坐标x
+    y: anchorY, // control锚点的坐标y
+  }
+  const oldCenter = { x: oldCenterX, y: oldCenterY }
+  // 右下角的anchor坐标（transform后的-touchStartPoint）
+  const startRotatedTouchAnchorPoint = calculatePointAfterRotateAngle(
+    startZeroTouchAnchorPoint,
+    oldCenter,
+    angle,
+  )
+  // 右下角的anchor坐标（transform后的-touchEndPoint）
+  const endRotatedTouchAnchorPoint = {
+    x: startRotatedTouchAnchorPoint.x + deltaX,
+    y: startRotatedTouchAnchorPoint.y + deltaY,
+  }
+  // 计算出新的宽度和高度以及新的中心点
+  const {
+    width: newWidth,
+    height: newHeight,
+    center: newCenter,
+  } = calculateWidthAndHeight(
+    startRotatedTouchAnchorPoint,
+    endRotatedTouchAnchorPoint,
+    oldCenter,
+    angle,
+    freezeWidth,
+    freezeHeight,
+    oldWidth,
+    oldHeight,
+  )
+  // calculateWidthAndHeight()得到的是整个宽度，比如圆pct=0.5,此时newWidth等于整个圆直径
+  resizeInfo.width = newWidth * pct
+  resizeInfo.height = newHeight * pct
+
+  // BaseNodeModel.resize(deltaX/2, deltaY/2)，因此这里要*2
+  resizeInfo.deltaX = (newCenter.x - oldCenter.x) * 2
+  resizeInfo.deltaY = (newCenter.y - oldCenter.y) * 2
+
+  return resizeInfo
+}
 
 /**
  * 计算 Control 拖动后，节点的高度信息
@@ -20,6 +84,11 @@ export const recalcResizeInfo = (
   pct = 1,
   freezeWidth = false,
   freezeHeight = false,
+  rotate = 0,
+  anchorX: number,
+  anchorY: number,
+  oldCenterX: number,
+  oldCenterY: number,
 ): ResizeInfo => {
   const nextResizeInfo = cloneDeep(resizeInfo)
   let { deltaX, deltaY } = nextResizeInfo
@@ -99,6 +168,23 @@ export const recalcResizeInfo = (
         break
     }
     return nextResizeInfo
+  }
+
+  if (rotate % (2 * Math.PI) !== 0) {
+    // 角度rotate不为0，则触发另外的计算修正resize的deltaX和deltaY
+    // 因为rotate不为0的时候，左上角的坐标一直在变化
+    // 角度rotate不为0得到的resizeInfo.deltaX仅仅代表中心点的变化，而不是宽度的变化
+    return recalcRotatedResizeInfo(
+      pct,
+      nextResizeInfo,
+      rotate,
+      anchorX,
+      anchorY,
+      oldCenterX,
+      oldCenterY,
+      freezeWidth,
+      freezeHeight,
+    )
   }
 
   // 如果限制了宽/高不变，对应的 width/height 保持一致
@@ -213,6 +299,8 @@ export const triggerResizeEvent = (
  * @param cancelCallback
  */
 export const handleResize = ({
+  x,
+  y,
   deltaX,
   deltaY,
   index,
@@ -232,6 +320,9 @@ export const handleResize = ({
     minHeight,
     maxWidth,
     maxHeight,
+    rotate,
+    x: oldCenterX,
+    y: oldCenterY,
   } = nodeModel
   const isFreezeWidth = minWidth === maxWidth
   const isFreezeHeight = minHeight === maxHeight
@@ -245,12 +336,19 @@ export const handleResize = ({
   }
 
   const pct = r || (rx && ry) ? 1 / 2 : 1
+  const anchorX = x
+  const anchorY = y
   const nextSize = recalcResizeInfo(
     index,
     resizeInfo,
     pct,
     isFreezeWidth,
     isFreezeHeight,
+    rotate,
+    anchorX,
+    anchorY,
+    oldCenterX,
+    oldCenterY,
   )
 
   // 限制放大缩小的最大最小范围
@@ -264,9 +362,14 @@ export const handleResize = ({
     cancelCallback?.()
     return
   }
-  // 如果限制了宽高不变，对应的 x/y 不产生位移
-  nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
-  nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
+  if (rotate % (2 * Math.PI) == 0 || PCTResizeInfo) {
+    // rotate!==0并且不是PCTResizeInfo时，即使是isFreezeWidth||isFreezeHeight
+    // recalcRotatedResizeInfo()计算出来的中心点会发生变化
+
+    // 如果限制了宽高不变，对应的 x/y 不产生位移
+    nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
+    nextSize.deltaY = isFreezeHeight ? 0 : nextSize.deltaY
+  }
 
   const preNodeData = nodeModel.getData()
   const curNodeData = nodeModel.resize(nextSize)
@@ -283,4 +386,115 @@ export const handleResize = ({
     nodeModel,
     graphModel,
   )
+}
+
+export function calculateWidthAndHeight(
+  startRotatedTouchAnchorPoint: SimplePoint,
+  endRotatedTouchAnchorPoint: SimplePoint,
+  oldCenter: SimplePoint,
+  angle: number,
+  freezeWidth = false,
+  freezeHeight = false,
+  oldWidth: number,
+  oldHeight: number,
+) {
+  // 假设目前触摸的是右下角的anchor
+  // 计算出来左上角的anchor坐标，resize过程左上角的anchor坐标保持不变
+  const freezePoint: SimplePoint = {
+    x: oldCenter.x - (startRotatedTouchAnchorPoint.x - oldCenter.x),
+    y: oldCenter.y - (startRotatedTouchAnchorPoint.y - oldCenter.y),
+  }
+  // 【touchEndPoint】右下角 + freezePoint左上角 计算出新的中心点
+  let newCenter = getNewCenter(freezePoint, endRotatedTouchAnchorPoint)
+
+  // 得到【touchEndPoint】右下角-没有transform的坐标
+  let endZeroTouchAnchorPoint: SimplePoint = calculatePointAfterRotateAngle(
+    endRotatedTouchAnchorPoint,
+    newCenter,
+    -angle,
+  )
+
+  // ---------- 使用transform之前的坐标计算出新的width和height ----------
+
+  // 得到左上角---没有transform的坐标
+  let zeroFreezePoint: SimplePoint = calculatePointAfterRotateAngle(
+    freezePoint,
+    newCenter,
+    -angle,
+  )
+
+  if (freezeWidth) {
+    // 如果固定width，那么不能单纯使用endZeroTouchAnchorPoint.x=startZeroTouchAnchorPoint.x
+    // 因为去掉transform的左上角不一定是重合的，我们要保证的是transform后的左上角重合
+    const newWidth = Math.abs(endZeroTouchAnchorPoint.x - zeroFreezePoint.x)
+    const widthDx = newWidth - oldWidth
+
+    // 点击的是左边锚点，是+widthDx/2，点击是右边锚点，是-widthDx/2
+    if (newCenter.x > endZeroTouchAnchorPoint.x) {
+      // 当前触摸的是左边锚点
+      newCenter.x = newCenter.x + widthDx / 2
+    } else {
+      // 当前触摸的是右边锚点
+      newCenter.x = newCenter.x - widthDx / 2
+    }
+  }
+  if (freezeHeight) {
+    const newHeight = Math.abs(endZeroTouchAnchorPoint.y - zeroFreezePoint.y)
+    const heightDy = newHeight - oldHeight
+    if (newCenter.y > endZeroTouchAnchorPoint.y) {
+      // 当前触摸的是上边锚点
+      newCenter.y = newCenter.y + heightDy / 2
+    } else {
+      newCenter.y = newCenter.y - heightDy / 2
+    }
+  }
+
+  if (freezeWidth || freezeHeight) {
+    // 如果调整过transform之前的坐标，那么transform后的坐标也会改变，那么算出来的newCenter也得调整
+    // 由于无论如何rotate，中心点都是不变的，因此我们可以使用transform之前的坐标算出新的中心点
+    const nowFreezePoint = calculatePointAfterRotateAngle(
+      zeroFreezePoint,
+      newCenter,
+      angle,
+    )
+
+    // 得到当前新rect的左上角与实际上transform后的左上角的偏移量
+    const dx = nowFreezePoint.x - freezePoint.x
+    const dy = nowFreezePoint.y - freezePoint.y
+
+    // 修正不使用transform的坐标: 左上角、右下角、center
+    newCenter.x = newCenter.x - dx
+    newCenter.y = newCenter.y - dy
+    zeroFreezePoint = calculatePointAfterRotateAngle(
+      freezePoint,
+      newCenter,
+      -angle,
+    )
+    endZeroTouchAnchorPoint = {
+      x: newCenter.x - (zeroFreezePoint.x - newCenter.x),
+      y: newCenter.y - (zeroFreezePoint.y - newCenter.y),
+    }
+  }
+
+  // transform之前的坐标的左上角+右下角计算出宽度和高度
+  let width = Math.abs(endZeroTouchAnchorPoint.x - zeroFreezePoint.x)
+  let height = Math.abs(endZeroTouchAnchorPoint.y - zeroFreezePoint.y)
+
+  // ---------- 使用transform之前的坐标计算出新的width和height ----------
+
+  if (freezeWidth) {
+    // 理论计算出来的width应该等于oldWidth
+    // 但是有误差，比如oldWidth = 100; newWidth=100.000000000001
+    // 会在handleResize()限制放大缩小的最大最小范围中被阻止滑动
+    width = oldWidth
+  }
+  if (freezeHeight) {
+    height = oldHeight
+  }
+
+  return {
+    width,
+    height,
+    center: newCenter,
+  }
 }
