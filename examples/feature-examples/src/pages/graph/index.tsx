@@ -551,6 +551,20 @@ export default function BasicNode() {
         >
           删除节点
         </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            if (lfRef.current) {
+              const graphData = lfRef.current?.getEditConfig()
+              const { allowResize } = graphData
+              lfRef.current.updateEditConfig({
+                allowResize: !allowResize,
+              })
+            }
+          }}
+        >
+          切换allowResize
+        </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain>
         节点面板

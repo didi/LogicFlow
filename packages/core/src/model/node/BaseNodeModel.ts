@@ -699,6 +699,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
       this.y = this.y + deltaY
       this.text && this.moveText(0, deltaY)
     }
+    if (isAllowMoveX || isAllowMoveY) {
+      // 更新x和y的同时也要更新对应的transform旋转矩阵（依赖x、y)
+      this.rotate = this._rotate
+    }
     return isAllowMoveX || isAllowMoveY
   }
 

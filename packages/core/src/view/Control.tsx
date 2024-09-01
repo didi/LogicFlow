@@ -56,6 +56,10 @@ export class ResizeControl extends Component<
     })
   }
 
+  componentWillUnmount() {
+    this.dragHandler.cancelDrag()
+  }
+
   updateEdgePointByAnchors = () => {
     // https://github.com/didi/LogicFlow/issues/807
     // https://github.com/didi/LogicFlow/issues/875
@@ -241,10 +245,12 @@ export class ResizeControl extends Component<
 
   resizeNode = ({ deltaX, deltaY }: VectorData) => {
     const { index } = this
-    const { model, graphModel } = this.props
+    const { model, graphModel, x, y } = this.props
 
     // DONE: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
     handleResize({
+      x,
+      y,
       deltaX,
       deltaY,
       index,
