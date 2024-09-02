@@ -106,14 +106,14 @@ LogicFlow 在`model`上还维护一些属性，开发者可以通过这些属性
 
 LogicFlow 所有的节点最终都是以 SVG DOM 的方式渲染。但是除了形状属性之外，所有的其他属于 svg
 的属性都不会直接存在`nodeModel`。当开发者想要对 SVG DOM
-添加更多的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg 属性</a> 
+添加更多的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute" target="_blank">svg 属性</a>
 时，可以通过重写`nodeModel`上获取节点样式属性方法来实现。
 
 ## 方法
 
 ### getNodeStyle
 
-支持重写，自定义节点样式属性， 默认为[主题 baseNode](../theme.zh.md#basenode)
+支持重写，自定义节点样式属性，默认为[主题 baseNode](../theme.zh.md#basenode)
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
@@ -449,7 +449,7 @@ class UserTaskModel extends RectNodeModel {
 | targetAnchor | `Model.AnchorConfig` | ✅ | 目标锚点 |
 | edgeId | `string` | - | 调整后边的 id |
 
-返回值 `LogicFlow.ConnectRuleResult` 
+返回值 `LogicFlow.ConnectRuleResult`
 <a href="https://github.com/didi/LogicFlow/issues/926#issuecomment-1371823306" target="_blank">详见issues</a>
 
 ### getRotateControlStyle
@@ -483,8 +483,6 @@ const { anchors } = node
 获取锚点信息
 
 入参：`anchorId?: string`
-
-## @action
 
 ### updateText
 
