@@ -122,7 +122,7 @@ they can do so by overriding the GetNodeStyleProperty method on `nodeModel`.
 
 ### getNodeStyle
 
-Support for rewriting, custom node style attributes， which defaults
+Support for rewriting, custom node style attributes，which defaults
 to [theme baseNode](../theme.en.md#basenode)
 
 ```tsx | pure
@@ -491,8 +491,6 @@ const { anchors } = node
 ### getAnchorInfo
 
 Parameters：`anchorId?: string`
-
-## @action
 
 ### updateText
 
