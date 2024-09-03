@@ -230,7 +230,7 @@ getSnapshotBlob(backgroundColor?: string, fileType?: string){
 
 画布具有放大缩小、平移能力，意味着导出整张画布是不现实的，我们只需要导出画布上元素集中在的一个最小矩形区域，如下图：
 
-![area](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/article/extension/snapshot/image.png)
+![area](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/article/extension/snapshot/image-g.png)
 
 上图展示了需要导出的最小矩形区域。通过调整 `canvas` 的绘制区域，我们可以确保只导出画布上重要的部分。
 
@@ -246,7 +246,9 @@ getSnapshotBlob(backgroundColor?: string, fileType?: string){
 
 ### 2. 导出图片清晰度
 
-`canvas` 绘制的图形是位图，需要考虑屏幕设备像素比，可以通过 `window.devicePixelRatio` 获取。需要根据设备像素比调整 `canvas` 的导出宽高。
+`canvas` 绘制的图形是位图，位图图像由像素构成，同一宽高的 `canvas` 物理像素大小是固定的。在高分辨率显示屏上，每个点需要更多物理像素，因而 `canvas` 会显得模糊，所以我们需要根据不同分辨率显示器来调整 `canvas` 像素大小，调整 `canvas` 宽高就可以调整物理像素大小。
+
+通过 `window.devicePixelRatio` 获取屏幕设备像素比，根据设备像素比自动调整 `canvas` 的导出宽高以调整物理像素大小来适配不同分辨率显示屏的图片清晰度。
 
 ```ts
 
@@ -261,6 +263,10 @@ const context = canvas.getContext('2d');
 context.scale(dpr, dpr);
 
 ```
+
+- **清晰度提升**: 当 `dpr` 增大时，你实际上是在提升 `canvas` 的物理分辨率，这样绘制的 `canvas` 的图像会更加清晰，因为每个点包含更多的物理像素信息。
+
+- **平衡清晰度和文件大小**: 较大的 `dpr` 会导致生成的图片文件更大，这可能会影响性能和加载时间。通常，设置 `dpr` 为 2 或 3 可以获得较好的清晰度和合理的文件大小平衡。
 
 ### 3. 在线图片无法导出问题
 
