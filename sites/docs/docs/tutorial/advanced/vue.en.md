@@ -16,7 +16,7 @@ tag: New
 
 ## Rendering Vue Components as Node Content
 
-Similar to React, we provide a separate package `@logiclfow/vue-node-registry` for rendering nodes with Vue components.
+Similar to React, we provide a separate package `@logicflow/vue-node-registry` for rendering nodes with Vue components.
 
 ### Vue 3
 
