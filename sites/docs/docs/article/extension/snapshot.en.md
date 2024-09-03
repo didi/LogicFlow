@@ -218,7 +218,7 @@ getSnapshotBlob(backgroundColor?: string, fileType?: string){
 
 The canvas has zooming and panning capabilities, meaning exporting the entire canvas is not practical. We need to export the smallest rectangle that encompasses all elements on the canvas, as shown below:
 
-![area](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/article/extension/snapshot/image.png)
+![area](https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/article/extension/snapshot/image-g.png)
 
 The image above shows the smallest rectangle that needs to be exported. By adjusting the drawing area on the `canvas`, we can ensure that only the important parts of the canvas are exported.
 
@@ -236,7 +236,9 @@ This section only provides the general idea as understanding the source code req
 
 ### 2. Image Clarity on Export
 
-`canvas` draws images as bitmaps, and screen device pixel ratios need to be considered. You can get the device pixel ratio using `window.devicePixelRatio`. Adjust the export width and height of the `canvas` according to the device pixel ratio.
+The `canvas` renders graphics as a bitmap, where the image is composed of pixels, and the physical size of pixels in a `canvas` is fixed for the same width and height. On high-resolution displays, each point requires more physical pixels, which can make the `canvas` appear blurry. To address this, we need to adjust the pixel size of the `canvas` based on different resolution displays. By adjusting the width and height of the `canvas`, we can change the physical pixel size.
+
+Using `window.devicePixelRatio`, we can obtain the screen device pixel ratio and automatically adjust the `canvas` export width and height to match the physical pixel size for different resolution displays, thereby improving image clarity.
 
 ```ts
 const dpr = window.devicePixelRatio || 1;
@@ -249,6 +251,10 @@ canvas.height = bboxHeight * dpr; // Physical pixel height
 const context = canvas.getContext('2d');
 context.scale(dpr, dpr);
 ```
+
+- **Clarity Enhancement**: When increasing `dpr`, you are effectively boosting the physical resolution of the `canvas`, resulting in a clearer image as each point contains more physical pixel information.
+
+- **Balancing Clarity and File Size**: A higher `dpr` results in larger image files, which can affect performance and load times. Typically, setting `dpr` to 2 or 3 strikes a good balance between improved clarity and reasonable file size.
 
 ### 3. Online Images Not Exporting Issue
 
