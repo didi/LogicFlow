@@ -17,7 +17,7 @@ tag: New
 ## Rendering React Components as Node Content
 Although we provide the capability to customize nodes by extending `HTMLNode`, user feedback indicates that this approach is not very intuitive and may cause performance issues due to improper destruction timing.
 
-Therefore, we offer a separate package `@logiclfow/react-node-registry` to customize nodes in a more intuitive way by registering nodes through React components. This allows you to use the rich component libraries already included in the system or to quickly develop custom node content using React's convenient development features.
+Therefore, we offer a separate package `@logicflow/react-node-registry` to customize nodes in a more intuitive way by registering nodes through React components. This allows you to use the rich component libraries already included in the system or to quickly develop custom node content using React's convenient development features.
 
 ```tsx | pure
 import { register, ReactNodeProps } from '@logicflow/react-node-registry'
