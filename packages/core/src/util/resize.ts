@@ -85,8 +85,8 @@ export const recalcResizeInfo = (
   freezeWidth = false,
   freezeHeight = false,
   rotate = 0,
-  anchorX: number,
-  anchorY: number,
+  anchorX: number | undefined,
+  anchorY: number | undefined,
   oldCenterX: number,
   oldCenterY: number,
 ): ResizeInfo => {
@@ -169,8 +169,11 @@ export const recalcResizeInfo = (
     }
     return nextResizeInfo
   }
-
-  if (rotate % (2 * Math.PI) !== 0) {
+  if (
+    rotate % (2 * Math.PI) !== 0 &&
+    anchorX !== undefined &&
+    anchorY !== undefined
+  ) {
     // 角度rotate不为0，则触发另外的计算修正resize的deltaX和deltaY
     // 因为rotate不为0的时候，左上角的坐标一直在变化
     // 角度rotate不为0得到的resizeInfo.deltaX仅仅代表中心点的变化，而不是宽度的变化
@@ -280,17 +283,21 @@ export const triggerResizeEvent = (
 }
 
 // TODO：确认 handleResize 函数的类型定义
-// export type IHandleResizeParams = {
-//   deltaX: number
-//   deltaY: number
-//   index: ResizeControlIndex
-//   nodeModel: BaseNodeModel
-//   graphModel: GraphModel
-//   cancelCallback?: () => void
-// }
+export type IHandleResizeParams = {
+  x?: number
+  y?: number
+  deltaX: number
+  deltaY: number
+  index: ResizeControlIndex
+  nodeModel: BaseNodeModel
+  graphModel: GraphModel
+  cancelCallback?: () => void
+}
 
 /**
  * 处理节点的 resize 事件，提出来放到 utils 中，方便在外面（extension）中使用
+ * @param x
+ * @param y
  * @param deltaX
  * @param deltaY
  * @param index
@@ -307,7 +314,7 @@ export const handleResize = ({
   nodeModel,
   graphModel,
   cancelCallback,
-}) => {
+}: IHandleResizeParams) => {
   const {
     r, // circle
     rx, // ellipse/diamond
@@ -362,7 +369,12 @@ export const handleResize = ({
     cancelCallback?.()
     return
   }
-  if (rotate % (2 * Math.PI) == 0 || PCTResizeInfo) {
+  if (
+    rotate % (2 * Math.PI) == 0 ||
+    PCTResizeInfo ||
+    anchorX === undefined ||
+    anchorY === undefined
+  ) {
     // rotate!==0并且不是PCTResizeInfo时，即使是isFreezeWidth||isFreezeHeight
     // recalcRotatedResizeInfo()计算出来的中心点会发生变化
 
