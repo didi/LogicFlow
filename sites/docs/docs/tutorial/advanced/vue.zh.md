@@ -15,7 +15,7 @@ tag: 新特性
   :::
 
 ## 渲染 Vue 组件为节点内容
-同 React 一样我们提供了一个独立的包 `@logiclfow/vue-node-registry` 来使用 Vue 组件渲染节点。
+同 React 一样我们提供了一个独立的包 `@logicflow/vue-node-registry` 来使用 Vue 组件渲染节点。
 
 ### Vue3
 在 Vue3 中使用示例如下：
