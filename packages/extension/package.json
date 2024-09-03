@@ -21,7 +21,7 @@
     "build:esm": "tsc --module esnext --target es5 --outDir ./es",
     "build:cjs": "tsc --module commonjs --target es5 --outDir ./lib",
     "build:umd": "rollup -c ./rollup.config.js --bundleConfigAsCjs",
-    "build:dev": "rss",
+    "build:dev": "run-p -s build:cjs build:esm",
     "build:watch": "rss",
     "build:watch:esm": "rss",
     "build:watch:cjs": "rss",

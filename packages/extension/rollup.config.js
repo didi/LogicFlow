@@ -7,9 +7,23 @@ import { rollupConfig } from '../../rollup.config'
 export default [
   {
     input: 'src/index.less',
-    output: {
-      file: 'dist/index.css',
-    },
+    output: [
+      {
+        file: 'dist/index.css',
+      },
+      {
+        file: 'lib/index.css',
+      },
+      {
+        file: 'lib/style/index.css',
+      },
+      {
+        file: 'es/index.css',
+      },
+      {
+        file: 'es/style/index.css',
+      },
+    ],
     plugins: [
       postcss({
         plugins: [
