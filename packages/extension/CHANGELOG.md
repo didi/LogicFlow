@@ -1,14 +1,22 @@
 # Change Log
 
+## 2.0.6
+
+### Patch Changes - Release @logicflow/extension@2.0.6
+
+- fix(extension): 修复lib/style/index.css引用报错问题
+
 ## 2.0.5
 
 ### Patch Changes - Release New Extension Version
 
 - fix(extension): 修复 BpmnAdapter 导入含有边的 xml 报错问题
+
   - 修复 BpmnAdapter、BPMNAdapter 插件导入含有边的 xml 报错问题 close #1823
   - 修复 example 中 bpmn demo 用法错误
 
 - refactor(build): 修正 build:watch 脚本中的命令格式
+
   - 在 build:watch:esm 和 build:watch:cjs 脚本中添加反斜杠，以确保命令在各种环境中正确执行。这个修改提高了构建过程的可靠性和跨平台兼容性。 close #1818
 
 - docs(site): 获取画布数据 api 补充到快速上手页
