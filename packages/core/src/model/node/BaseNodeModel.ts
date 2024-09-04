@@ -267,7 +267,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
           textConfig.draggable = text.draggable
         }
         if (!isUndefined(text.editable)) {
-          textConfig.draggable = text.draggable
+          textConfig.editable = text.editable
         }
       }
     }
