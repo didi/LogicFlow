@@ -334,6 +334,7 @@ export class Label implements Extension {
     eventCenter.on('node:add,edge:add', ({ data }) => {
       const element = graphModel.getElement(data.id)
       if (element) {
+        this.rewriteInnerMethods(element)
         const formatedLabel = this.formatConfig(graphModel, data)
         element.setProperty('_label', formatedLabel)
       }
