@@ -16,33 +16,33 @@ function recalcRotatedResizeInfo(
   pct: number,
   resizeInfo: ResizeInfo,
   rotate: number,
-  anchorX: number,
-  anchorY: number,
+  controlX: number,
+  controlY: number,
   oldCenterX: number,
   oldCenterY: number,
   freezeWidth = false,
   freezeHeight = false,
 ) {
-  // 假设我们触摸的点是右下角的anchor
+  // 假设我们触摸的点是右下角的control
   const { deltaX, deltaY, width: oldWidth, height: oldHeight } = resizeInfo
   const angle = radianToAngle(rotate)
 
-  // 右下角的anchor
-  const startZeroTouchAnchorPoint = {
-    x: anchorX, // control锚点的坐标x
-    y: anchorY, // control锚点的坐标y
+  // 右下角的control
+  const startZeroTouchControlPoint = {
+    x: controlX, // control锚点的坐标x
+    y: controlY, // control锚点的坐标y
   }
   const oldCenter = { x: oldCenterX, y: oldCenterY }
-  // 右下角的anchor坐标（transform后的-touchStartPoint）
-  const startRotatedTouchAnchorPoint = calculatePointAfterRotateAngle(
-    startZeroTouchAnchorPoint,
+  // 右下角的control坐标（transform后的-touchStartPoint）
+  const startRotatedTouchControlPoint = calculatePointAfterRotateAngle(
+    startZeroTouchControlPoint,
     oldCenter,
     angle,
   )
-  // 右下角的anchor坐标（transform后的-touchEndPoint）
-  const endRotatedTouchAnchorPoint = {
-    x: startRotatedTouchAnchorPoint.x + deltaX,
-    y: startRotatedTouchAnchorPoint.y + deltaY,
+  // 右下角的control坐标（transform后的-touchEndPoint）
+  const endRotatedTouchControlPoint = {
+    x: startRotatedTouchControlPoint.x + deltaX,
+    y: startRotatedTouchControlPoint.y + deltaY,
   }
   // 计算出新的宽度和高度以及新的中心点
   const {
@@ -50,8 +50,8 @@ function recalcRotatedResizeInfo(
     height: newHeight,
     center: newCenter,
   } = calculateWidthAndHeight(
-    startRotatedTouchAnchorPoint,
-    endRotatedTouchAnchorPoint,
+    startRotatedTouchControlPoint,
+    endRotatedTouchControlPoint,
     oldCenter,
     angle,
     freezeWidth,
@@ -85,8 +85,8 @@ export const recalcResizeInfo = (
   freezeWidth = false,
   freezeHeight = false,
   rotate = 0,
-  anchorX: number | undefined,
-  anchorY: number | undefined,
+  controlX: number | undefined,
+  controlY: number | undefined,
   oldCenterX: number,
   oldCenterY: number,
 ): ResizeInfo => {
@@ -171,8 +171,8 @@ export const recalcResizeInfo = (
   }
   if (
     rotate % (2 * Math.PI) !== 0 &&
-    anchorX !== undefined &&
-    anchorY !== undefined
+    controlX !== undefined &&
+    controlY !== undefined
   ) {
     // 角度rotate不为0，则触发另外的计算修正resize的deltaX和deltaY
     // 因为rotate不为0的时候，左上角的坐标一直在变化
@@ -181,8 +181,8 @@ export const recalcResizeInfo = (
       pct,
       nextResizeInfo,
       rotate,
-      anchorX,
-      anchorY,
+      controlX,
+      controlY,
       oldCenterX,
       oldCenterY,
       freezeWidth,
@@ -343,8 +343,8 @@ export const handleResize = ({
   }
 
   const pct = r || (rx && ry) ? 1 / 2 : 1
-  const anchorX = x
-  const anchorY = y
+  const controlX = x
+  const controlY = y
   const nextSize = recalcResizeInfo(
     index,
     resizeInfo,
@@ -352,8 +352,8 @@ export const handleResize = ({
     isFreezeWidth,
     isFreezeHeight,
     rotate,
-    anchorX,
-    anchorY,
+    controlX,
+    controlY,
     oldCenterX,
     oldCenterY,
   )
@@ -372,8 +372,8 @@ export const handleResize = ({
   if (
     rotate % (2 * Math.PI) == 0 ||
     PCTResizeInfo ||
-    anchorX === undefined ||
-    anchorY === undefined
+    controlX === undefined ||
+    controlY === undefined
   ) {
     // rotate!==0并且不是PCTResizeInfo时，即使是isFreezeWidth||isFreezeHeight
     // recalcRotatedResizeInfo()计算出来的中心点会发生变化
@@ -401,8 +401,8 @@ export const handleResize = ({
 }
 
 export function calculateWidthAndHeight(
-  startRotatedTouchAnchorPoint: SimplePoint,
-  endRotatedTouchAnchorPoint: SimplePoint,
+  startRotatedTouchControlPoint: SimplePoint,
+  endRotatedTouchControlPoint: SimplePoint,
   oldCenter: SimplePoint,
   angle: number,
   freezeWidth = false,
@@ -410,18 +410,18 @@ export function calculateWidthAndHeight(
   oldWidth: number,
   oldHeight: number,
 ) {
-  // 假设目前触摸的是右下角的anchor
-  // 计算出来左上角的anchor坐标，resize过程左上角的anchor坐标保持不变
+  // 假设目前触摸的是右下角的control点
+  // 计算出来左上角的control坐标，resize过程左上角的control坐标保持不变
   const freezePoint: SimplePoint = {
-    x: oldCenter.x - (startRotatedTouchAnchorPoint.x - oldCenter.x),
-    y: oldCenter.y - (startRotatedTouchAnchorPoint.y - oldCenter.y),
+    x: oldCenter.x - (startRotatedTouchControlPoint.x - oldCenter.x),
+    y: oldCenter.y - (startRotatedTouchControlPoint.y - oldCenter.y),
   }
   // 【touchEndPoint】右下角 + freezePoint左上角 计算出新的中心点
-  let newCenter = getNewCenter(freezePoint, endRotatedTouchAnchorPoint)
+  let newCenter = getNewCenter(freezePoint, endRotatedTouchControlPoint)
 
   // 得到【touchEndPoint】右下角-没有transform的坐标
-  let endZeroTouchAnchorPoint: SimplePoint = calculatePointAfterRotateAngle(
-    endRotatedTouchAnchorPoint,
+  let endZeroTouchControlPoint: SimplePoint = calculatePointAfterRotateAngle(
+    endRotatedTouchControlPoint,
     newCenter,
     -angle,
   )
@@ -436,13 +436,13 @@ export function calculateWidthAndHeight(
   )
 
   if (freezeWidth) {
-    // 如果固定width，那么不能单纯使用endZeroTouchAnchorPoint.x=startZeroTouchAnchorPoint.x
+    // 如果固定width，那么不能单纯使用endZeroTouchControlPoint.x=startZeroTouchControlPoint.x
     // 因为去掉transform的左上角不一定是重合的，我们要保证的是transform后的左上角重合
-    const newWidth = Math.abs(endZeroTouchAnchorPoint.x - zeroFreezePoint.x)
+    const newWidth = Math.abs(endZeroTouchControlPoint.x - zeroFreezePoint.x)
     const widthDx = newWidth - oldWidth
 
     // 点击的是左边锚点，是+widthDx/2，点击是右边锚点，是-widthDx/2
-    if (newCenter.x > endZeroTouchAnchorPoint.x) {
+    if (newCenter.x > endZeroTouchControlPoint.x) {
       // 当前触摸的是左边锚点
       newCenter.x = newCenter.x + widthDx / 2
     } else {
@@ -451,9 +451,9 @@ export function calculateWidthAndHeight(
     }
   }
   if (freezeHeight) {
-    const newHeight = Math.abs(endZeroTouchAnchorPoint.y - zeroFreezePoint.y)
+    const newHeight = Math.abs(endZeroTouchControlPoint.y - zeroFreezePoint.y)
     const heightDy = newHeight - oldHeight
-    if (newCenter.y > endZeroTouchAnchorPoint.y) {
+    if (newCenter.y > endZeroTouchControlPoint.y) {
       // 当前触摸的是上边锚点
       newCenter.y = newCenter.y + heightDy / 2
     } else {
@@ -482,15 +482,15 @@ export function calculateWidthAndHeight(
       newCenter,
       -angle,
     )
-    endZeroTouchAnchorPoint = {
+    endZeroTouchControlPoint = {
       x: newCenter.x - (zeroFreezePoint.x - newCenter.x),
       y: newCenter.y - (zeroFreezePoint.y - newCenter.y),
     }
   }
 
   // transform之前的坐标的左上角+右下角计算出宽度和高度
-  let width = Math.abs(endZeroTouchAnchorPoint.x - zeroFreezePoint.x)
-  let height = Math.abs(endZeroTouchAnchorPoint.y - zeroFreezePoint.y)
+  let width = Math.abs(endZeroTouchControlPoint.x - zeroFreezePoint.x)
+  let height = Math.abs(endZeroTouchControlPoint.y - zeroFreezePoint.y)
 
   // ---------- 使用transform之前的坐标计算出新的width和height ----------
 
