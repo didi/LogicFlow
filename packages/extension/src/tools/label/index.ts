@@ -114,7 +114,7 @@ export class Label implements Extension {
       // 3. 字符串或者为空的话就是 string 类型，基于 text 的数据合成 LabelConfig 信息（主要复用 text 的 x,y 信息）
       const config: LabelConfig = {
         ...text,
-        content: curLabelConfig || text.value,
+        content: curLabelConfig || text?.value,
         draggable:
           element.BaseType === 'edge' ? edgeTextDraggable : nodeTextDraggable,
       }
@@ -331,7 +331,7 @@ export class Label implements Extension {
       model.setProperty('_label', newLabelConfig)
     })
     // 监听元素新增事件，元素label格式化
-    eventCenter.on('node:add,edge:add', ({ data }) => {
+    eventCenter.on('node:dnd-add,node:add,edge:add', ({ data }) => {
       const element = graphModel.getElement(data.id)
       if (element) {
         this.rewriteInnerMethods(element)
