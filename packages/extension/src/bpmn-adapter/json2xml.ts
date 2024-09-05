@@ -44,8 +44,8 @@ const tn = '\t\n'
 function toXml(obj: string | any[] | Object, name: string, depth: number) {
   const frontSpace = addSpace(depth)
 
-  // 假值除 0 外 -> 直接返回空元素 <prop />
-  if (obj !== 0 && !obj) {
+  // 假值除 0、false 外 -> 直接返回空元素 <prop />
+  if (obj !== 0 && obj !== false && !obj) {
     return tn + frontSpace + `<${name} />`
   }
 
