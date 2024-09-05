@@ -175,5 +175,5 @@ lf.render(data);
 const xml = lfJson2Xml(lf.getGraphData());
 
 // xml -> json
-const jsonData = lfXmlJson(xml)
+const jsonData = lfXml2Json(xml)
 ```
