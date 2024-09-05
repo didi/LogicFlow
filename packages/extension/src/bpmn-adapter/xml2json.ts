@@ -537,6 +537,11 @@ which I will do instead of keeping this documentation like it is.
 // ========================================================================
 */
 
+/**
+ * xml 转 json
+ * @param xmlData
+ * @returns
+ */
 const lfXml2Json = (xmlData) => {
   return new XML.ObjTree().parseXML(xmlData)
 }

@@ -161,10 +161,20 @@ LogicFlow 默认生成的数据是 json 格式，可能会有一些流程引擎�
 import LogicFlow from "@logicflow/core";
 import { lfJson2Xml, lfXml2Json } from "@logicflow/extension";
 
+const data = {
+  // ...
+};
+
 const lf = new LogicFlow({
   // ...
 });
-const data = lfJson2Xml(jsonData);
+
 lf.render(data);
+
+// json -> xml
 const xml = lfJson2Xml(lf.getGraphData());
+
+// xml -> json
+const jsonData = lfXmlJson(xml)
+
 ```

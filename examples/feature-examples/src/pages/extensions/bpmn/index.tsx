@@ -13,6 +13,8 @@ import {
   MiniMap,
   SelectionSelect,
   Snapshot,
+  lfJson2Xml,
+  lfXml2Json,
 } from '@logicflow/extension'
 
 import { Button, Card, Divider, Flex } from 'antd'
@@ -277,8 +279,16 @@ export default function BPMNExtension() {
     }
   }
 
+  const getXml = () => {
+    const data = lfRef.current?.getGraphRawData() as object
+    const xml = lfJson2Xml(data)
+    const jsonData = lfXml2Json(xml)
+    console.log('xml', xml)
+    console.log('jsonData', jsonData)
+  }
+
   return (
-    <Card title="LogicFlow Extension - DndPanel">
+    <Card title="LogicFlow Extension - BPMN">
       <p>兼容BPMN官方DEMO，此处仅实现了bpmn中的一部分节点</p>
       <p>此页面绘制的图可以在BPMN官方DEMO中正常使用</p>
       <p>
@@ -321,6 +331,9 @@ export default function BPMNExtension() {
           onClick={() => lfRef.current?.resize(1200, 400)}
         >
           重设宽高
+        </Button>
+        <Button type="primary" key="getXml" onClick={getXml}>
+          获取xml数据
         </Button>
       </Flex>
       <Divider />
