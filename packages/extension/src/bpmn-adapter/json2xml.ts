@@ -79,6 +79,11 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
   return str
 }
 
+/**
+ * json 转 xml
+ * @param o object
+ * @returns
+ */
 function lfJson2Xml(o: Object) {
   let xmlStr = ''
   for (var m in o) {
