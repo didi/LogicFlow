@@ -75,7 +75,7 @@ By default, the CDN will include the latest version. To include a different vers
 ### 1. Using in Native JS
 
 ```html | pure
-<!-- Include core package -->
+<!-- Include core package And css -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
 
@@ -83,6 +83,9 @@ By default, the CDN will include the latest version. To include a different vers
 <div id="container"></div>
 
 <script>
+// Include inheritance nodes. After including the core package, window.Core will be automatically attached.
+// const { RectNode, RectNodeModel } = Core;
+
 // Prepare graph data
 const data = {
   // Nodes
@@ -112,7 +115,7 @@ const data = {
   ],
 }
 
-// Create canvas instance
+// Create canvas instance. You can also use new Core.LogicFlow.
 const lf = new Core.default({
   container: document.querySelector('#container'),
   width: 700,
