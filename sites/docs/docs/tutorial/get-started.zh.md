@@ -79,7 +79,7 @@ entension包</a> ，再根据自己的诉求在cdn路径中加上包版本。
 ### 1. 在原生JS环境下使用
 
 ```html | pure
-<!-- 引入 core包 -->
+<!-- 引入 core 包和对应 css-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
 
@@ -87,6 +87,9 @@ entension包</a> ，再根据自己的诉求在cdn路径中加上包版本。
 <div id="container"></div>
 
 <script>
+// 引入继承节点，引入 core 包后，会自动挂载 window.Core 
+// const { RectNode, RectNodeModel } = Core;
+
 // 准备图数据
 const data = {
   // 节点
@@ -115,7 +118,8 @@ const data = {
     },
   ],
 }
-// 创建画布实例
+
+// 创建画布实例，也可以 new Core.LogicFLow
 const lf = new Core.default({
   container: document.querySelector('#container'),
   width: 700,
