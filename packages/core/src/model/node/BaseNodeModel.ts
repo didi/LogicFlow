@@ -306,6 +306,18 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     if (isObservable(properties)) {
       properties = toJS(properties)
     }
+    if (isNil(properties.width)) {
+      // resize()的时候会触发this.setProperties({width,height})
+      // 然后返回getData()，可以从properties拿到width
+      // 但是初始化如果没有在properties传入width，那么getData()就一直无法从properties拿到width
+      properties.width = this.width
+    }
+    if (isNil(properties.height)) {
+      // resize()的时候会触发this.setProperties({width,height})
+      // 然后返回getData()，可以从properties拿到height
+      // 但是初始化如果没有在properties传入height，那么getData()就一直无法从properties拿到width
+      properties.height = this.height
+    }
     const data: NodeData = {
       id: this.id,
       type: this.type,
