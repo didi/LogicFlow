@@ -38,9 +38,8 @@ export function SubProcessFactory(): {
           x: x - width / 2 + 5,
           y: y - height / 2 + 5,
           onClick: (e: any) => {
-            e
-              .stopPropagation()(model as GroupNodeModel)
-              .foldGroup?.(!properties.isFolded)
+            e.stopPropagation()
+            ;(model as GroupNodeModel).foldGroup?.(!properties.isFolded)
           },
         }),
         iconIcon,
