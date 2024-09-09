@@ -1,7 +1,11 @@
-import LogicFlow, { GraphModel, h, RectNode } from '@logicflow/core'
+import LogicFlow, {
+  GraphModel,
+  h,
+  RectNode,
+  handleResize,
+} from '@logicflow/core'
 import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
-import { handleResize } from '@logicflow/core/es/util/resize'
 
 import Position = LogicFlow.Position
 import { rotatePointAroundCenter } from '../tools/label/utils'
@@ -53,25 +57,71 @@ export class DynamicGroupNode<
     })
 
     // 在 group 缩放时，对组内的所有子节点也进行对应的缩放计算
-    eventCenter.on('node:resize', ({ deltaX, deltaY, index, model }) => {
-      // TODO: 目前 Resize 的比例值有问题，导致缩放时，节点会变形，需要修复
-      if (model.id === curGroup.id) {
-        forEach(Array.from(curGroup.children), (childId) => {
-          const child = graphModel.getNodeModelById(childId)
-          if (child) {
-            // child.rotate = model.rotate
-            handleResize({
-              deltaX,
-              deltaY,
-              index,
-              nodeModel: child,
-              graphModel,
-              cancelCallback: () => {},
-            })
-          }
-        })
+    eventCenter.on(
+      'node:resize',
+      ({ deltaX, deltaY, index, model, preData }) => {
+        if (model.id === curGroup.id) {
+          // node:resize是group已经改变width和height后的回调
+          // 因此这里一定得用preData（没resize改变width之前的值），而不是data/model
+          const { properties } = preData
+          const { width: groupWidth, height: groupHeight } = properties || {}
+          forEach(Array.from(curGroup.children), (childId) => {
+            const child = graphModel.getNodeModelById(childId)
+            if (child) {
+              // 根据比例去控制缩放dx和dy
+              const childDx = (child.width / groupWidth!) * deltaX
+              const childDy = (child.height / groupHeight!) * deltaY
+
+              // child.rotate = model.rotate
+              handleResize({
+                deltaX: childDx,
+                deltaY: childDy,
+                index,
+                nodeModel: child,
+                graphModel,
+                cancelCallback: () => {},
+              })
+            }
+          })
+        }
+      },
+    )
+
+    // 在 group 移动时，对组内的所有子节点也进行对应的移动计算
+    eventCenter.on('node:mousemove', ({ deltaX, deltaY, data }) => {
+      if (data.id === curGroup.id) {
+        const { model: curGroup, graphModel } = this.props
+        const nodeIds = this.getNodesInGroup(curGroup, graphModel)
+        graphModel.moveNodes(nodeIds, deltaX, deltaY, true)
       }
     })
+  }
+
+  /**
+   * 获取分组内的节点
+   * @param groupModel
+   */
+  getNodesInGroup(
+    groupModel: DynamicGroupNodeModel,
+    graphModel: GraphModel,
+  ): string[] {
+    let nodeIds: string[] = []
+    if (groupModel.isGroup) {
+      forEach(Array.from(groupModel.children), (nodeId: string) => {
+        nodeIds.push(nodeId)
+
+        const nodeModel = graphModel.getNodeModelById(nodeId)
+        if (nodeModel?.isGroup) {
+          nodeIds = nodeIds.concat(
+            this.getNodesInGroup(
+              nodeModel as DynamicGroupNodeModel,
+              graphModel,
+            ),
+          )
+        }
+      })
+    }
+    return nodeIds
   }
 
   getResizeControl(): h.JSX.Element | null {

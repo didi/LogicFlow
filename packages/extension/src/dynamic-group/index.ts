@@ -51,27 +51,6 @@ export class DynamicGroup {
   }
 
   /**
-   * 获取分组内的节点
-   * @param groupModel
-   */
-  getNodesInGroup(groupModel: DynamicGroupNodeModel): string[] {
-    let nodeIds: string[] = []
-    if (groupModel.isGroup) {
-      forEach(Array.from(groupModel.children), (nodeId: string) => {
-        nodeIds.push(nodeId)
-
-        const nodeModel = this.lf.getNodeModelById(nodeId)
-        if (nodeModel?.isGroup) {
-          nodeIds = nodeIds.concat(
-            this.getNodesInGroup(nodeModel as DynamicGroupNodeModel),
-          )
-        }
-      })
-    }
-    return nodeIds
-  }
-
-  /**
    * 获取节点所属的分组
    * @param nodeId
    */
@@ -492,8 +471,13 @@ export class DynamicGroup {
     graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
       // 判断如果是 group，移动时需要同时移动组内的所有节点
       if (model.isGroup) {
-        const nodeIds = this.getNodesInGroup(model as DynamicGroupNodeModel)
-        graphModel.moveNodes(nodeIds, deltaX, deltaY, true)
+        // https://github.com/didi/LogicFlow/issues/1826
+        // 这里不应该触发移动子节点的逻辑，这里是判断是否可以移动，而不是触发移动逻辑
+        // 而且这里触发移动，会导致resize操作的this.x变动也会触发子item的this.x变动
+        // resize时的deltaX跟正常移动的deltaX是不同的
+
+        // const nodeIds = this.getNodesInGroup(model as DynamicGroupNodeModel)
+        // graphModel.moveNodes(nodeIds, deltaX, deltaY, true)
         return true
       }
 
@@ -503,7 +487,7 @@ export class DynamicGroup {
       ) as DynamicGroupNodeModel
 
       if (groupModel && groupModel.isRestrict) {
-        // 如果移动的节点存在与分组中，且这个分组禁止子节点移出去
+        // 如果移动的节点存在于某个分组中，且这个分组禁止子节点移出去
         const groupBounds = groupModel.getBounds()
         return isAllowMoveTo(groupBounds, model, deltaX, deltaY)
       }
