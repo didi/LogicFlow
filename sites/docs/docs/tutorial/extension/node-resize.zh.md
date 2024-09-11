@@ -124,24 +124,24 @@ export default {
 
 ## 事件
 
-节点缩放后抛出事件`node:resize`，抛出数据包括节点缩放前后的节点位置、节点大小信息， 数据为{oldNodeSize,
-newNodeSize}, 详细字段如下。
+节点缩放后抛出事件`node:resize`，抛出数据包括节点缩放前后的节点位置、节点大小信息， 数据为{preData,
+data}, 详细字段如下。
 
-| 名称        | 类型     | 描述           |
-|:----------|:-------|:-------------|
-| id        | string | 节点 id        |
-| type      | string | 节点类型         |
+| 名称      | 类型   | 描述                     |
+| :-------- | :----- | :----------------------- |
+| id        | string | 节点 id                  |
+| type      | string | 节点类型                 |
 | modelType | string | 节点图形类型，已内部定义 |
-| x         | number | 节点中心 x 轴坐标   |
-| y         | number | 节点中心 y 轴坐标   |
-| rx        | number | x 轴半径(椭圆、菱形) |
-| ry        | number | y 轴半径(椭圆、菱形) |
-| width     | number | 节点宽度(矩形)     |
-| height    | number | 节点高度(矩形)     |
+| x         | number | 节点中心 x 轴坐标        |
+| y         | number | 节点中心 y 轴坐标        |
+| rx        | number | x 轴半径(椭圆、菱形)     |
+| ry        | number | y 轴半径(椭圆、菱形)     |
+| width     | number | 节点宽度(矩形)           |
+| height    | number | 节点高度(矩形)           |
 
 ```tsx | pure
-lf.on("node:resize", ({ oldNodeSize, newNodeSize }) => {
-  console.log(oldNodeSize, newNodeSize);
+lf.on("node:resize", ({ preData, data }) => {
+  console.log(preData, data);
 });
 ```
 
