@@ -195,6 +195,10 @@ export default function BasicNode() {
       const data = lf.getGraphData()
       console.log('history:change', data)
     })
+
+    lf.on('blank:drop', (data) => {
+      console.log('blank:drop', data)
+    })
   }
 
   useEffect(() => {
@@ -219,7 +223,7 @@ export default function BasicNode() {
         adjustEdgeStartAndEnd: true,
         // adjustEdge: false,
         allowRotate: true,
-        // allowResize: true,
+        allowResize: true,
         edgeTextEdit: true,
         keyboard: {
           enabled: true,
