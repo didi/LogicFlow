@@ -199,7 +199,7 @@ For example, the control panel plugin provides zooming and fit-to-canvas capabil
   const { Control } = Extension;
   
   // Global level installation of the control panel plugin:
-  Core.use(Control);
+  Core.default.use(Control);
   
   // Instance level installation of the control panel plugin:
   const lf = new Core.default({

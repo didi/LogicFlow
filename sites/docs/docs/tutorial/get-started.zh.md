@@ -182,8 +182,7 @@ LogicFlow初始化时支持不传画布宽高，这种情况下默认取的是co
 
 ### 3. 使用插件
 
-LogicFlow
-最初的目标就是提供一个扩展性强的流程绘制工具，用来满足各种业务需求。
+LogicFlow最初的目标就是提供一个扩展性强的流程绘制工具，用来满足各种业务需求。
 
 为了让LogicFlow的拓展性足够强，LogicFlow所有的非核心功能都使用插件的方式开发，并放到`@logicflow/extension`
 包中。
@@ -205,7 +204,7 @@ LogicFlow
   // Extension CDN会抛出一个包含所有插件的Extension变量，使用的插件需要从Extension中取用
   const { Control } = Extension
    //全局维度安装控制面板插件的写法：
-  Core.use(Control);
+  Core.default.use(Control);
    //实例维度安装控制面板插件的写法：
   const lf = new Core.default({
     ..., // 其他配置
