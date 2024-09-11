@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.0.7
+
+### Patch Changes
+
+- fix: bugs from issues
+
+  - fix(extension/bpmn-elements): 修复bpmn-elements插件中pool节点的node:resize事件取值参数错误的问题 close #1802
+  - fix: 修复 bpmn-elements/Task/subProcess 中 onClick 方法报错的问题 close #1857
+
 ## 2.0.6
 
 ### Patch Changes - Release @logicflow/extension@2.0.6
