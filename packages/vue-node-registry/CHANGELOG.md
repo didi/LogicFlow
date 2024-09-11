@@ -1,5 +1,13 @@
 # @logicflow/vue-node-registry
 
+## 1.0.4
+
+### Patch Changes
+
+- fix: bugs from issues
+
+  - fix: 移除 vue-node-registry view 中无用 console，close #1856
+
 ## 1.0.3
 
 ### Patch Changes: Release 1.0.3 Version
