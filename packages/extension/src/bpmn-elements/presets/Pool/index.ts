@@ -52,18 +52,18 @@ function poolEvent(lf: any) {
       poolModel.addChild(laneId)
     }
   })
-  lf.on('node:resize', ({ oldNodeSize, newNodeSize }: any) => {
-    const { id, type } = oldNodeSize
-    const deltaHeight = newNodeSize.height - oldNodeSize.height
-    // const resizeDir = newNodeSize.y - oldNodeSize.y > 0 ? 'below': 'above'
+  lf.on('node:resize', ({ preData, data }: any) => {
+    const { id, type } = preData
+    const deltaHeight = data.height - preData.height
+    // const resizeDir = data.y - preData.y > 0 ? 'below': 'above'
     // 节点高度变高，y下移， 方向为below
     // 节点高度变高， y上移， 方向为above
     // 节点高度变小， y下移， 方向为above
     // 节点高度变小， y上移，方向为below
     let resizeDir = 'below'
-    if (deltaHeight > 0 && newNodeSize.y - oldNodeSize.y < 0) {
+    if (deltaHeight > 0 && data.y - preData.y < 0) {
       resizeDir = 'above'
-    } else if (deltaHeight < 0 && newNodeSize.y - oldNodeSize.y > 0) {
+    } else if (deltaHeight < 0 && data.y - preData.y > 0) {
       resizeDir = 'above'
     }
     if (type === 'pool') {
@@ -76,7 +76,7 @@ function poolEvent(lf: any) {
       // 泳道缩放， 调整泳池
       const groupId = lf.extension.group.nodeGroupMap.get(id)
       if (groupId) {
-        lf.getNodeModelById(groupId).resize(id, newNodeSize)
+        lf.getNodeModelById(groupId).resize(id, data)
       }
     }
   })

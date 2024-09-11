@@ -110,22 +110,22 @@ For nodes that inherit `HtmlResize`, customize `view` by continuing to use the `
 
 ## Event `node:resize` is thrown after node resizing.
 
-Throw event `node:resize` after node resizing, the data include node position and node size before and after node resizing, the data is {oldNodeSize, newNodeSize}, the details are as follows.
-| Name | Type | Description               |
-| :-------- | :----- | :----------------------- |
-| id        | string | Node id                  |
-| type      | string | Node type           |
+Throw event `node:resize` after node resizing, the data include node position and node size before and after node resizing, the data is {preData, data}, the details are as follows.
+| Name      | Type   | Description                         |
+| :-------- | :----- | :---------------------------------- |
+| id        | string | Node id                             |
+| type      | string | Node type                           |
 | modelType | string | Node graph type, internally defined |
-| x         | number | Node center x-axis coordinates       |
-| y         | number | Node center y-axis coordinate         |
-| rx        | number | x-axis radius (ellipse, rhombus)      |
+| x         | number | Node center x-axis coordinates      |
+| y         | number | Node center y-axis coordinate       |
+| rx        | number | x-axis radius (ellipse, rhombus)    |
 | ry        | number | y-axis radius (ellipse, diamond)    |
 | width     | number | Node width (rectangle)              |
-| height    | number | Node height (rectangle)              |
+| height    | number | Node height (rectangle)             |
 
 ```tsx | pure
-lf.on("node:resize", ({ oldNodeSize, newNodeSize }) => {
-  console.log(oldNodeSize, newNodeSize);
+lf.on("node:resize", ({ preData, data }) => {
+  console.log(preData, data);
 });
 ```
 
