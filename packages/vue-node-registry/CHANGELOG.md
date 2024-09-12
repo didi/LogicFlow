@@ -1,5 +1,13 @@
 # @logicflow/vue-node-registry
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @logicflow/core@2.0.4
+
 ## 1.0.4
 
 ### Patch Changes

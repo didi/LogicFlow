@@ -1,5 +1,13 @@
 # @logicflow/react-node-registry
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @logicflow/core@2.0.4
+
 ## 1.0.3
 
 ### Patch Changes: Release 1.0.3 Version
