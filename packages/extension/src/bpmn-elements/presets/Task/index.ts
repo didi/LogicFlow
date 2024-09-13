@@ -1,11 +1,17 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 import { serviceTaskIcon, userTaskIcon } from '../icons'
 import { TaskNodeFactory } from './task'
 import { SubProcessFactory } from './subProcess'
 
 function boundaryEvent(lf: any) {
-  lf.on('node:drag,node:dnd-drag', checkAppendBoundaryEvent)
-  lf.on('node:drop,node:dnd-add', appendBoundaryEvent)
+  lf.on(
+    [EventType.NODE_DRAG, EventType.NODE_DND_DRAG].join(','),
+    checkAppendBoundaryEvent,
+  )
+  lf.on(
+    [EventType.NODE_DROP, EventType.NODE_DND_ADD].join(','),
+    appendBoundaryEvent,
+  )
   lf.graphModel.addNodeMoveRules(
     (
       model: { isTaskNode: any; boundaryEvents: any },

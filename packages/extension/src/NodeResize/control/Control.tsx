@@ -10,6 +10,7 @@ import {
   ModelType,
   Rect,
   LogicFlowUtil,
+  EventType,
 } from '@logicflow/core'
 import { RectResizeModel } from '../node'
 
@@ -468,7 +469,7 @@ class Control extends Component<IControlProps, IControlState> {
       type,
       ...afterNode,
     }
-    this.graphModel.eventCenter.emit('node:resize', {
+    this.graphModel.eventCenter.emit(EventType.NODE_RESIZE, {
       preData: oldNodeSize,
       data: newNodeSize,
       deltaX,

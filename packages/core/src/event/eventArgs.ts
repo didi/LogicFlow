@@ -5,6 +5,7 @@ import LogicFlow, {
   GraphModel,
   TransformData,
   TransformType,
+  EventType,
 } from '..'
 
 import NodeData = LogicFlow.NodeData
@@ -100,71 +101,74 @@ interface NodeEventArgs {
   /**
    * 单击节点
    */
-  'node:click': NodeEventArgsPick<'data' | 'e' | 'position'> & ClickEventArgs
+  [EventType.NODE_CLICK]: NodeEventArgsPick<'data' | 'e' | 'position'> &
+    ClickEventArgs
   /**
    * 双击节点
    */
-  'node:dbclick': NodeEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.NODE_DBCLICK]: NodeEventArgsPick<'data' | 'e' | 'position'>
   /**
    * 鼠标按下节点
    */
-  'node:mousedown': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_MOUSEDOWN]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 鼠标抬起节点
    */
-  'node:mouseup': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_MOUSEUP]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 鼠标移动节点
    */
-  'node:mousemove': NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
+  [EventType.NODE_MOUSEMOVE]: NodeEventArgsPick<
+    'data' | 'e' | 'deltaX' | 'deltaY'
+  >
   /**
    * 鼠标进入节点
    */
-  'node:mouseenter': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_MOUSEENTER]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 鼠标离开节点
    */
-  'node:mouseleave': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_MOUSELEAVE]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 添加节点
    */
-  'node:add': NodeEventArgsPick<'data'>
+  [EventType.NODE_ADD]: NodeEventArgsPick<'data'>
   /**
    * 删除节点
    */
-  'node:delete': NodeEventArgsPick<'data'>
+  [EventType.NODE_DELETE]: NodeEventArgsPick<'data'>
   /**
    * 添加外部拖入节点
    */
-  'node:dnd-add': NodeEventArgsPick<'data'>
+  [EventType.NODE_DND_ADD]: NodeEventArgsPick<'data'>
   /**
    * 拖拽外部拖入节点
    */
-  'node:dnd-drag': NodeEventArgsPick<'data'>
+  [EventType.NODE_DND_DRAG]: NodeEventArgsPick<'data'>
   /**
    * 开始拖拽节点
    */
-  'node:dragstart': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_DRAGSTART]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 拖拽节点
    */
-  'node:drag': NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
+  [EventType.NODE_DRAG]: NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
   /**
    * 拖拽节点结束
    */
-  'node:drop': NodeEventArgsPick<'data' | 'e'>
+  [EventType.NODE_DROP]: NodeEventArgsPick<'data' | 'e'>
   /**
    * 右键点击节点
    */
-  'node:contextmenu': NodeEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.NODE_CONTEXTMENU]: NodeEventArgsPick<'data' | 'e' | 'position'>
   /**
    * 节点旋转
    */
-  'node:rotate': NodeEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.NODE_ROTATE]: NodeEventArgsPick<'data' | 'e' | 'model'>
   /**
    * 节点缩放
    */
-  'node:resize': NodeEventArgsPick<
+  [EventType.NODE_RESIZE]: NodeEventArgsPick<
     'preData' | 'data' | 'model' | 'deltaX' | 'deltaY' | 'index'
   >
 }
@@ -194,39 +198,39 @@ interface EdgeEventArgs {
   /**
    * 单击边
    */
-  'edge:click': EdgeEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.EDGE_CLICK]: EdgeEventArgsPick<'data' | 'e' | 'position'>
   /**
    * 双击边
    */
-  'edge:dbclick': EdgeEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.EDGE_DBCLICK]: EdgeEventArgsPick<'data' | 'e' | 'position'>
   /**
    * 鼠标进入边
    */
-  'edge:mouseenter': EdgeEventArgsPick<'data' | 'e'>
+  [EventType.EDGE_MOUSEENTER]: EdgeEventArgsPick<'data' | 'e'>
   /**
    * 鼠标离开边
    */
-  'edge:mouseleave': EdgeEventArgsPick<'data' | 'e'>
+  [EventType.EDGE_MOUSELEAVE]: EdgeEventArgsPick<'data' | 'e'>
   /**
    * 添加边
    */
-  'edge:add': EdgeEventArgsPick<'data'>
+  [EventType.EDGE_ADD]: EdgeEventArgsPick<'data'>
   /**
    * 删除边
    */
-  'edge:delete': EdgeEventArgsPick<'data'>
+  [EventType.EDGE_DELETE]: EdgeEventArgsPick<'data'>
   /**
    * 右键点击边
    */
-  'edge:contextmenu': EdgeEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.EDGE_CONTEXTMENU]: EdgeEventArgsPick<'data' | 'e' | 'position'>
   /**
    * 拖拽调整边
    */
-  'edge:adjust': EdgeEventArgsPick<'data'>
+  [EventType.EDGE_ADJUST]: EdgeEventArgsPick<'data'>
   /**
    * 调整边的起点/终点
    */
-  'edge:exchange-node': {
+  [EventType.EDGE_EXCHANGE_NODE]: {
     data: {
       /**
        * 新的边的数据
@@ -245,35 +249,35 @@ interface EdgeEventArgs {
  */
 interface TextEventArgs {
   // 鼠标按下文本
-  'text:mousedown': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_MOUSEDOWN]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 开始拖拽文本
-  'text:dragstart': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_DRAGSTART]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本拖拽
-  'text:drag': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_DRAG]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本拖拽结束
-  'text:drop': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_DROP]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本单击
-  'text:click': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_CLICK]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本双击
-  'text:dbclick': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_DBCLICK]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本失焦
-  'text:blur': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  [EventType.TEXT_BLUR]: TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
   // 鼠标移动文本
-  'text:mousemove': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_MOUSEMOVE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 鼠标抬起
-  'text:mouseup': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_MOUSEUP]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本获焦
-  'text:focus': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  [EventType.TEXT_FOCUS]: TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
   // 文本新增
-  'text:add': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_ADD]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本更新
-  'text:update': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_UPDATE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本清空
-  'text:clear': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_CLEAR]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本删除
-  'text:delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_DELETE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 不允许增加文本
-  'text:not-allowed-add': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.TEXT_NOT_ALLOWED_ADD]: TextEventArgsPick<'data' | 'e' | 'model'>
 }
 
 /**
@@ -281,52 +285,54 @@ interface TextEventArgs {
  */
 interface TextEventArgs {
   // 鼠标按下文本
-  'label:mousedown': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_MOUSEDOWN]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 开始拖拽文本
-  'label:dragstart': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_DRAGSTART]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本拖拽
-  'label:drag': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_DRAG]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本拖拽结束
-  'label:drop': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_DROP]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本单击
-  'label:click': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_CLICK]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本双击
-  'label:dbclick': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_DBCLICK]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本失焦
-  'label:blur': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  [EventType.LABEL_BLUR]: TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
   // 鼠标移动文本
-  'label:mousemove': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_MOUSEMOVE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 鼠标抬起
-  'label:mouseup': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_MOUSEUP]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本获焦
-  'label:focus': TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
+  [EventType.LABEL_FOCUS]: TextEventArgsPick<'data' | 'e' | 'model' | 'element'>
   // 文本新增
-  'label:add': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_ADD]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本更新
-  'label:update': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_UPDATE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本清空
-  'label:clear': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_CLEAR]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本删除
-  'label:delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_DELETE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本新增
-  'label:should-add': TextEventArgsPick<'data' | 'e' | 'model' | 'position'>
+  [EventType.LABEL_SHOULD_ADD]: TextEventArgsPick<
+    'data' | 'e' | 'model' | 'position'
+  >
   // 文本批量新增
-  'label:batch-add': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_BATCH_ADD]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本更新
-  'label:should-update': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_SHOULD_UPDATE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本删除
-  'label:should-delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_SHOULD_DELETE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 文本批量删除
-  'label:batch-delete': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_BATCH_DELETE]: TextEventArgsPick<'data' | 'e' | 'model'>
   // 不允许增加文本
-  'label:not-allowed-add': TextEventArgsPick<'data' | 'e' | 'model'>
+  [EventType.LABEL_NOT_ALLOWED_ADD]: TextEventArgsPick<'data' | 'e' | 'model'>
 }
 
 /**
  * 连线事件
  */
 interface ConnectionEventArgs {
-  'connection:not-allowed': {
+  [EventType.CONNECTION_NOT_ALLOWED]: {
     /**
      * 目标节点数据
      */
@@ -342,7 +348,7 @@ interface ConnectionEventArgs {
  * 公共事件
  */
 interface CommonEventArgs {
-  'element:click': {
+  [EventType.ELEMENT_CLICK]: {
     /**
      * 点击元素的数据（节点/边）
      */
@@ -359,7 +365,7 @@ interface CommonEventArgs {
   /**
    * 元素的 properties 发生改变
    */
-  'properties:change': {
+  [EventType.PROPERTIES_CHANGE]: {
     data: {
       /**
        * 元素的 id
@@ -386,7 +392,7 @@ interface CommonEventArgs {
   /**
    * 进行画布平移或缩放等变化操作时触发
    */
-  'graph:transform': {
+  [EventType.GRAPH_TRANSFORM]: {
     /**
      * 变换操作类型
      */
@@ -399,7 +405,7 @@ interface CommonEventArgs {
   /**
    * 画布渲染数据后触发，即 `lf.render()` 方法被调用后触发。
    */
-  'graph:rendered': {
+  [EventType.GRAPH_RENDERED]: {
     /**
      * 渲染后的画布数据
      */
@@ -414,7 +420,7 @@ interface CommonEventArgs {
    * 如果是主动修改某个特定属性导致画布更新，想要在画布更新后做一些操作，建议注册事件后在回调函数中及时注销该事件，或者使用once事件代替on事件。
    * 因为其他属性也可能导致画布更新，触发该事件。
    */
-  'graph:updated': {
+  [EventType.GRAPH_UPDATED]: {
     /**
      * 更新后的画布数据
      */
@@ -452,20 +458,22 @@ interface AnchorEventArgs {
   /**
    * 开始拖拽锚点
    */
-  'anchor:dragstart': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
+  [EventType.ANCHOR_DRAGSTART]: AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
   /**
    * 拖拽锚点
    */
-  'anchor:drag': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
+  [EventType.ANCHOR_DRAG]: AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
   /**
    * 拖拽锚点结束，并成功添加边。
    * 只有在创建连线成功时才触发。用于区分手动创建的连线和自动创建的连线 `edge:add`
    */
-  'anchor:drop': AnchorEventArgsPick<'data' | 'e' | 'nodeModel' | 'edgeModel'>
+  [EventType.ANCHOR_DROP]: AnchorEventArgsPick<
+    'data' | 'e' | 'nodeModel' | 'edgeModel'
+  >
   /**
    * 拖拽锚点结束，不管是否成功添加边都会触发
    */
-  'anchor:dragend': AnchorEventArgsPick<
+  [EventType.ANCHOR_DRAGEND]: AnchorEventArgsPick<
     'data' | 'e' | 'nodeModel' | 'edgeModel'
   >
 }
@@ -491,42 +499,42 @@ interface BlankEventArgs {
   /**
    * 鼠标按下画布
    */
-  'blank:mousedown': BlankEventArgsPick<'e'>
+  [EventType.BLANK_MOUSEDOWN]: BlankEventArgsPick<'e'>
   /**
    * 鼠标抬起画布
    */
-  'blank:mouseup': BlankEventArgsPick<'e'>
+  [EventType.BLANK_MOUSEUP]: BlankEventArgsPick<'e'>
   /**
    * 鼠标移动画布
    */
-  'blank:mousemove': BlankEventArgsPick<'e'>
+  [EventType.BLANK_MOUSEMOVE]: BlankEventArgsPick<'e'>
   /**
    * 单击画布
    */
-  'blank:click': BlankEventArgsPick<'e'>
+  [EventType.BLANK_CLICK]: BlankEventArgsPick<'e'>
   /**
    * 右键点击画布
    */
-  'blank:contextmenu': BlankEventArgsPick<'e' | 'position'>
+  [EventType.BLANK_CONTEXTMENU]: BlankEventArgsPick<'e' | 'position'>
   /**
    * 开始拖拽画布
    */
-  'blank:dragstart': BlankEventArgsPick<'e'>
+  [EventType.BLANK_DRAGSTART]: BlankEventArgsPick<'e'>
   /**
    * 拖拽画布
    */
-  'blank:drag': BlankEventArgsPick<'e'>
+  [EventType.BLANK_DRAG]: BlankEventArgsPick<'e'>
   /**
    * 拖拽画布结束
    */
-  'blank:drop': BlankEventArgsPick<'e'>
+  [EventType.BLANK_DROP]: BlankEventArgsPick<'e'>
 }
 
 interface HistoryEventArgs {
   /**
    * 历史记录变化
    */
-  'history:change': {
+  [EventType.HISTORY_CHANGE]: {
     /**
      * 历史数据
      */
@@ -576,31 +584,33 @@ interface SelectionEventArgs {
   /**
    * 鼠标按下选区
    */
-  'selection:mousedown': SelectionEventArgsPick<'e'>
+  [EventType.SELECTION_MOUSEDOWN]: SelectionEventArgsPick<'e'>
   /**
    * 开始拖拽选区
    */
-  'selection:dragstart': SelectionEventArgsPick<'e'>
+  [EventType.SELECTION_DRAGSTART]: SelectionEventArgsPick<'e'>
   /**
    * 拖拽选区
    */
-  'selection:drag': SelectionEventArgsPick<'e'>
+  [EventType.SELECTION_DRAG]: SelectionEventArgsPick<'e'>
   /**
    * 拖拽选区结束
    */
-  'selection:drop': SelectionEventArgsPick<'e'>
+  [EventType.SELECTION_DROP]: SelectionEventArgsPick<'e'>
   /**
    * 鼠标移动选区
    */
-  'selection:mousemove': SelectionEventArgsPick<'e' | 'position'>
+  [EventType.SELECTION_MOUSEMOVE]: SelectionEventArgsPick<'e' | 'position'>
   /**
    * 鼠标抬起选区
    */
-  'selection:mouseup': SelectionEventArgsPick<'e'>
+  [EventType.SELECTION_MOUSEUP]: SelectionEventArgsPick<'e'>
   /**
    * 右键点击选区
    */
-  'selection:contextmenu': SelectionEventArgsPick<'data' | 'e' | 'position'>
+  [EventType.SELECTION_CONTEXTMENU]: SelectionEventArgsPick<
+    'data' | 'e' | 'position'
+  >
 }
 
 // 此处主要是对事件参数进行聚合

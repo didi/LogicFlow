@@ -5,6 +5,7 @@ import LogicFlow, {
   GraphModel,
   IRectNodeProperties,
   RectNodeModel,
+  EventType,
 } from '@logicflow/core'
 import { forEach } from 'lodash-es'
 
@@ -452,7 +453,9 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   addChild(id: string) {
     this.children.add(id)
     const groupData = this.getData()
-    this.graphModel.eventCenter.emit('group:add-node', { data: groupData })
+    this.graphModel.eventCenter.emit(EventType.GROUP_ADD_NODE, {
+      data: groupData,
+    })
   }
 
   /**
@@ -462,7 +465,9 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   removeChild(id: string) {
     this.children.delete(id)
     const groupData = this.getData()
-    this.graphModel.eventCenter.emit('group:remove-node', { data: groupData })
+    this.graphModel.eventCenter.emit(EventType.GROUP_REMOVE_NODE, {
+      data: groupData,
+    })
   }
 
   /**

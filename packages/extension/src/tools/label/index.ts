@@ -1,4 +1,9 @@
-import LogicFlow, { createUuid, GraphModel, TextMode } from '@logicflow/core'
+import LogicFlow, {
+  createUuid,
+  GraphModel,
+  TextMode,
+  EventType,
+} from '@logicflow/core'
 import { cloneDeep, forEach, isArray, isObject, map } from 'lodash-es'
 import LabelOverlay, { LabelConfigType } from './LabelOverlay'
 import {
@@ -232,7 +237,7 @@ export class Label implements Extension {
     const { graphModel } = this.lf
     const { eventCenter, editConfigModel } = graphModel
 
-    eventCenter.on('graph:rendered', ({ graphModel }) => {
+    eventCenter.on(EventType.GRAPH_RENDERED, ({ graphModel }) => {
       this.setupLabels(graphModel)
     })
 
@@ -261,7 +266,7 @@ export class Label implements Extension {
     )
 
     // 监听 node:resize 事件，在 resize 时，重新计算 label 的位置信息
-    eventCenter.on('node:resize', ({ preData, data, model }) => {
+    eventCenter.on(EventType.NODE_RESIZE, ({ preData, data, model }) => {
       const {
         width: preWidth,
         height: preHeight,
@@ -296,7 +301,7 @@ export class Label implements Extension {
     })
 
     // 监听 node:rotate 事件，在 rotate 时，重新计算 Label 的位置信息
-    eventCenter.on('node:rotate', ({ model }) => {
+    eventCenter.on(EventType.NODE_ROTATE, ({ model }) => {
       const {
         x,
         y,
@@ -331,7 +336,7 @@ export class Label implements Extension {
       model.setProperty('_label', newLabelConfig)
     })
     // 监听元素新增事件，元素label格式化
-    eventCenter.on('node:dnd-add,node:add,edge:add', ({ data }) => {
+    eventCenter.on([EventType.NODE_DND_ADD, EventType.NODE_ADD, EventType.EDGE_ADD].join(','), ({ data }) => {
       const element = graphModel.getElement(data.id)
       if (element) {
         this.rewriteInnerMethods(element)

@@ -32,6 +32,13 @@ export const dynamicGroup = {
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
 
+const ADD_TO_GROUP_EVENTS = [
+  EventType.NODE_ADD,
+  EventType.NODE_DROP,
+  EventType.NODE_DND_ADD,
+]
+const SET_ACTIVE_GROUP_EVENTS = [EventType.NODE_DRAG, EventType.NODE_DND_DRAG]
+
 export class DynamicGroup {
   static pluginName = 'dynamicGroup'
 
@@ -198,7 +205,7 @@ export class DynamicGroup {
   }
 
   // 监听 LogicFlow 的相关事件，做对应的处理
-  addNodeToGroup = ({ data: node }: CallbackArgs<'node:add'>) => {
+  addNodeToGroup = ({ data: node }: CallbackArgs<EventType.NODE_ADD>) => {
     // 1. 如果该节点之前已经在 group 中了，则将其从之前的 group 移除
     const preGroupId = this.nodeGroupMap.get(node.id)
 
@@ -252,7 +259,7 @@ export class DynamicGroup {
           group.setAllowAppendChild(true)
         } else {
           // 抛出不允许插入的事件
-          this.lf.emit('group:not-allowed', {
+          this.lf.emit(EventType.GROUP_NOT_ALLOWED, {
             group: group.getData(),
             node,
           })
@@ -261,7 +268,9 @@ export class DynamicGroup {
     }
   }
 
-  removeNodeFromGroup = ({ data: node }: CallbackArgs<'node:delete'>) => {
+  removeNodeFromGroup = ({
+    data: node,
+  }: CallbackArgs<EventType.NODE_DELETE>) => {
     if (node.isGroup && node.children) {
       forEach(
         Array.from((node as DynamicGroupNodeModel).children),
@@ -280,7 +289,7 @@ export class DynamicGroup {
     }
   }
 
-  setActiveGroup = ({ data: node }: CallbackArgs<'node:drag'>) => {
+  setActiveGroup = ({ data: node }: CallbackArgs<EventType.NODE_DRAG>) => {
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
 
@@ -316,7 +325,7 @@ export class DynamicGroup {
     data: node,
     isMultiple,
     isSelected,
-  }: Omit<CallbackArgs<'node:click'>, 'e' | 'position'>) => {
+  }: Omit<CallbackArgs<EventType.NODE_CLICK>, 'e' | 'position'>) => {
     const nodeModel = this.lf.getNodeModelById(node.id)
     this.sendNodeToFront(nodeModel)
 
@@ -360,7 +369,7 @@ export class DynamicGroup {
     }
   }
 
-  onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
+  onGraphRendered = ({ data }: CallbackArgs<EventType.GRAPH_RENDERED>) => {
     console.log('data', data)
     forEach(data.nodes, (node) => {
       if (node.children) {
@@ -396,7 +405,7 @@ export class DynamicGroup {
       const childNode = this.lf.getNodeModelById(childId)
       if (childNode) {
         const childNodeData = childNode.getData()
-        const eventType = EventType.NODE_GROUP_COPY || 'node:group-copy-add'
+        const eventType = EventType.NODE_GROUP_COPY
 
         const newNodeConfig = transformNodeData(childNodeData, distance)
         const tempChildNode = this.lf.addNode(newNodeConfig, eventType)
@@ -512,15 +521,17 @@ export class DynamicGroup {
     })
     graphModel.dynamicGroup = this
 
-    lf.on('node:add,node:drop,node:dnd-add', this.addNodeToGroup)
-    lf.on('node:delete', this.removeNodeFromGroup)
-    lf.on('node:drag,node:dnd-drag', this.setActiveGroup)
-    lf.on('node:click', this.onNodeSelect)
-    lf.on('graph:rendered', this.onGraphRendered)
+    lf.on(ADD_TO_GROUP_EVENTS.join(','), this.addNodeToGroup)
+    lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    lf.on(SET_ACTIVE_GROUP_EVENTS.join(','), this.setActiveGroup)
+    lf.on(EventType.NODE_CLICK, this.onNodeSelect)
+    lf.on(EventType.GRAPH_RENDERED, this.onGraphRendered)
 
-    lf.on('graph:updated', ({ data }) => console.log('data', data))
+    lf.on(EventType.GRAPH_UPDATED, ({ data }) => console.log('data', data))
 
-    lf.on('group:add-node', ({ data }) => console.log('group:add-node', data))
+    lf.on(EventType.GROUP_ADD_NODE, ({ data }) =>
+      console.log('group:add-node', data),
+    )
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
@@ -580,11 +591,11 @@ export class DynamicGroup {
 
   destroy() {
     // 销毁监听的事件，并移除渲染的 dom 内容
-    this.lf.off('node:add,node:drop,node:dnd-add', this.addNodeToGroup)
-    this.lf.off('node:delete', this.removeNodeFromGroup)
-    this.lf.off('node:drag,node:dnd-drag', this.setActiveGroup)
-    this.lf.off('node:click', this.onNodeSelect)
-    this.lf.off('graph:rendered', this.onGraphRendered)
+    this.lf.off(ADD_TO_GROUP_EVENTS.join(','), this.addNodeToGroup)
+    this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    this.lf.off(SET_ACTIVE_GROUP_EVENTS.join(','), this.setActiveGroup)
+    this.lf.off(EventType.NODE_CLICK, this.onNodeSelect)
+    this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
 
     // 还原 lf.addElements 方法？
     // 移除 graphModel 上重写的 addNodeMoveRules 方法？

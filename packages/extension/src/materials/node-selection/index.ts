@@ -1,5 +1,5 @@
 import { get } from 'lodash-es'
-import { h, PolygonNode, PolygonNodeModel } from '@logicflow/core'
+import { h, PolygonNode, PolygonNodeModel, EventType } from '@logicflow/core'
 
 export type INodeSelectionProperties = {
   strokeColor?: string | 'none'
@@ -238,7 +238,7 @@ class NodeSelection {
   render(lf) {
     this.lf = lf
 
-    lf.on('node:click', (val) => {
+    lf.on(EventType.NODE_CLICK, (val) => {
       if (!val.e.shiftKey || val.data.type === 'node-selection') return
       this.currentClickNode = val.data
 

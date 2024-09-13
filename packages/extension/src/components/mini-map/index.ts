@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 
 import Position = LogicFlow.Position
 import MiniMapOption = MiniMap.MiniMapOption
@@ -199,12 +199,12 @@ export class MiniMap {
 
   render = (_: LogicFlow, container: HTMLElement) => {
     this.container = container
-    this.lf.on('history:change', () => {
+    this.lf.on(EventType.HISTORY_CHANGE, () => {
       if (this.isShow) {
         this.setView()
       }
     })
-    this.lf.on('graph:transform', () => {
+    this.lf.on(EventType.GRAPH_TRANSFORM, () => {
       if (this.isShow) {
         this.setView(false)
       }

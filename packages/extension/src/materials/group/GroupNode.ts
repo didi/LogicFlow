@@ -1,4 +1,4 @@
-import LogicFlow, { h, BaseEdgeModel } from '@logicflow/core'
+import LogicFlow, { h, BaseEdgeModel, EventType } from '@logicflow/core'
 import { isArray } from 'lodash-es'
 import { RectResizeModel, RectResizeView } from '../../NodeResize'
 
@@ -295,7 +295,9 @@ export class GroupNodeModel extends RectResizeModel {
    */
   addChild(id: string) {
     this.children.add(id)
-    this.graphModel.eventCenter.emit('group:add-node', { data: this.getData() })
+    this.graphModel.eventCenter.emit(EventType.GROUP_ADD_NODE, {
+      data: this.getData(),
+    })
   }
 
   /**
@@ -304,7 +306,7 @@ export class GroupNodeModel extends RectResizeModel {
    */
   removeChild(id: string) {
     this.children.delete(id)
-    this.graphModel.eventCenter.emit('group:remove-node', {
+    this.graphModel.eventCenter.emit(EventType.GROUP_REMOVE_NODE, {
       data: this.getData(),
     })
   }

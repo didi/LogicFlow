@@ -123,6 +123,8 @@ export enum EventType {
   TEXT_ADD = 'text:add',
   TEXT_UPDATE = 'text:update',
   TEXT_CLEAR = 'text:clear',
+  TEXT_DELETE = 'text:delete',
+  TEXT_NOT_ALLOWED_ADD = 'text:not-allowed-add',
 
   // label events
   LABEL_MOUSEDOWN = 'label:mousedown',
@@ -146,11 +148,17 @@ export enum EventType {
   LABEL_BATCH_DELETE = 'label:batch-delete',
   LABEL_NOT_ALLOWED_ADD = 'label:not-allowed-add',
 
+  // Group events
+  GROUP_ADD_NODE = 'group:add-node',
+  GROUP_NOT_ALLOWED = 'group:not-allowed',
+  GROUP_REMOVE_NODE = 'group:remove-node',
+
   // Other events
   HISTORY_CHANGE = 'history:change',
   GRAPH_TRANSFORM = 'graph:transform',
   GRAPH_RENDERED = 'graph:rendered',
   GRAPH_UPDATED = 'graph:updated',
+  PROPERTIES_CHANGE = 'properties:change',
 }
 
 export enum OverlapMode {

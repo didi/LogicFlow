@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
@@ -35,7 +35,7 @@ export class SelectionSelect {
 
   render(lf: LogicFlow, domContainer: HTMLElement) {
     this.container = domContainer
-    lf.on('blank:mousedown', ({ e }: { e: MouseEvent }) => {
+    lf.on(EventType.BLANK_MOUSEDOWN, ({ e }: { e: MouseEvent }) => {
       const config = lf.getEditConfig()
       // 鼠标控制滚动移动画布的时候，不能选区。
       if (!config.stopMoveGraph || this.disabled) {

@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 
 type MenuItem = {
   icon: string
@@ -19,6 +19,13 @@ export type ContextMenuNodeData = {
 const COMMON_TYPE_KEY = 'menu-common'
 const NEXT_X_DISTANCE = 200
 const NEXT_Y_DISTANCE = 100
+
+const MENU_EVENTS = [
+  EventType.NODE_DELETE,
+  EventType.EDGE_DELETE,
+  EventType.NODE_DRAG,
+  EventType.GRAPH_TRANSFORM,
+]
 
 export class ContextMenu {
   static pluginName = 'contextMenu'
@@ -50,16 +57,16 @@ export class ContextMenu {
 
   render(lf, container) {
     this.container = container
-    lf.on('node:click', ({ data }) => {
+    lf.on(EventType.NODE_CLICK, ({ data }) => {
       this._activeData = data
       this.createContextMenu()
     })
-    lf.on('edge:click', ({ data }) => {
+    lf.on(EventType.EDGE_CLICK, ({ data }) => {
       // 获取右上角坐标
       this._activeData = data
       this.createContextMenu()
     })
-    lf.on('blank:click', () => {
+    lf.on(EventType.BLANK_CLICK, () => {
       this.hideContextMenu()
     })
   }
@@ -77,10 +84,7 @@ export class ContextMenu {
     if (this.isShow) {
       this.container.removeChild(this.__menuDOM)
     }
-    this.lf.off(
-      'node:delete,edge:delete,node:drag,graph:transform',
-      this.listenDelete,
-    )
+    this.lf.off(MENU_EVENTS.join(','), this.listenDelete)
     this.isShow = false
   }
 
@@ -236,11 +240,7 @@ export class ContextMenu {
       this.__menuDOM.style.left = `${x + 10}px`
       this.container.appendChild(this.__menuDOM)
       // 菜单显示的时候，监听删除，同时隐藏
-      !this.isShow &&
-        this.lf.on(
-          'node:delete,edge:delete,node:drag,graph:transform',
-          this.listenDelete,
-        )
+      !this.isShow && this.lf.on(MENU_EVENTS.join(','), this.listenDelete)
       this.isShow = true
     }
   }

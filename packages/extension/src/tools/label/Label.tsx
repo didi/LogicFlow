@@ -4,6 +4,7 @@ import LogicFlow, {
   Component,
   createRef,
   ElementState,
+  EventType,
   GraphModel,
   IDragParams,
   observer,
@@ -26,6 +27,13 @@ export interface ILabelState {
   isHovered: boolean
   isDragging: boolean
 }
+
+// 公共点击事件
+const LABEL_CLICK_EVENTS = [
+  EventType.BLANK_CLICK,
+  EventType.NODE_CLICK,
+  EventType.EDGE_CLICK,
+]
 
 @observer
 export class Label extends Component<ILabelProps, ILabelState> {
@@ -105,7 +113,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const targetElem = graphModel.getElement(element.id)
     targetElem?.setProperty('_label', elementLabel)
 
-    graphModel.eventCenter.emit('label:drag', {
+    graphModel.eventCenter.emit(EventType.LABEL_DRAG, {
       data: label.getData(),
       model: label,
     })
@@ -116,7 +124,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
 
   handleDbClick = (e: MouseEvent) => {
     const { label, element, graphModel } = this.props
-    graphModel.eventCenter.emit('label:dblclick', {
+    graphModel.eventCenter.emit(EventType.LABEL_DBCLICK, {
       data: label.getData(),
       e,
       model: element,
@@ -152,7 +160,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
     } = this.props
 
     // DONE: 触发 LABEL:BLUR 事件，并抛出相关的事件
-    eventCenter.emit('label:blur', {
+    eventCenter.emit(EventType.LABEL_BLUR, {
       e,
       model: element,
       data: label.getData(),
@@ -175,7 +183,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const { label, element, graphModel } = this.props
 
     // 在点击元素、边或者画布 时，结束 Label 的编辑态
-    graphModel.eventCenter.on('blank:click,node:click,edge:click', () => {
+    graphModel.eventCenter.on(LABEL_CLICK_EVENTS.join(','), () => {
       // 如果当前 label 处于编辑态，则结束编辑态
       if (this.state.isEditing) {
         this.setState({ isEditing: false })
@@ -224,7 +232,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
 
   componentWillUnmount() {
     const { graphModel } = this.props
-    graphModel.eventCenter.off('blank:click,node:click,edge:click')
+    graphModel.eventCenter.off(LABEL_CLICK_EVENTS.join(','))
   }
 
   // TODO: 当某一个标签更新时，如何避免其它标签的更新

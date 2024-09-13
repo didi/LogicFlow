@@ -1,4 +1,4 @@
-import LogicFlow, { BaseNodeModel } from '@logicflow/core'
+import LogicFlow, { BaseNodeModel, EventType } from '@logicflow/core'
 import { concat } from 'lodash-es'
 
 // 后续并入FlowPath
@@ -188,12 +188,16 @@ export class Highlight {
   }
 
   render() {
-    this.lf.on('node:mouseenter', ({ data }: any) => this.highlight(data.id))
-    this.lf.on('edge:mouseenter', ({ data }: any) => this.highlight(data.id))
+    this.lf.on(EventType.NODE_MOUSEENTER, ({ data }: any) =>
+      this.highlight(data.id),
+    )
+    this.lf.on(EventType.EDGE_MOUSEENTER, ({ data }: any) =>
+      this.highlight(data.id),
+    )
 
-    this.lf.on('node:mouseleave', this.restoreHighlight.bind(this))
-    this.lf.on('edge:mouseleave', this.restoreHighlight.bind(this))
-    this.lf.on('history:change', this.restoreHighlight.bind(this))
+    this.lf.on(EventType.NODE_MOUSELEAVE, this.restoreHighlight.bind(this))
+    this.lf.on(EventType.EDGE_MOUSELEAVE, this.restoreHighlight.bind(this))
+    this.lf.on(EventType.HISTORY_CHANGE, this.restoreHighlight.bind(this))
   }
 
   destroy() {}

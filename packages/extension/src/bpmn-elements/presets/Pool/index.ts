@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 import PoolNode from './Pool'
 import LaneNode from './Lane'
 
@@ -32,7 +32,7 @@ function poolEvent(lf: any) {
 
   lf.keyboard.on('cmd + a', selectAll)
   lf.keyboard.on('ctrl + a', selectAll)
-  lf.on('node:dnd-add, edge:add', ({ data }: any) => {
+  lf.on([EventType.NODE_DND_ADD, EventType.EDGE_ADD].join(','), ({ data }: any) => {
     const { x, y, type, id } = data
     if (type === 'pool') {
       lf.setProperties(data.id, {})
@@ -52,7 +52,7 @@ function poolEvent(lf: any) {
       poolModel.addChild(laneId)
     }
   })
-  lf.on('node:resize', ({ preData, data }: any) => {
+  lf.on(EventType.NODE_RESIZE, ({ preData, data }: any) => {
     const { id, type } = preData
     const deltaHeight = data.height - preData.height
     // const resizeDir = data.y - preData.y > 0 ? 'below': 'above'

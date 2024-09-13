@@ -1,4 +1,4 @@
-import LogicFlow, { GraphModel, h, RectNode } from '@logicflow/core'
+import LogicFlow, { GraphModel, h, RectNode, EventType } from '@logicflow/core'
 import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
 import { handleResize } from '@logicflow/core/es/util/resize'
@@ -23,7 +23,7 @@ export class DynamicGroupNode<
     const childrenPositionMap: Map<string, Position> = new Map()
 
     // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
-    eventCenter.on('node:rotate', ({ model }) => {
+    eventCenter.on(EventType.NODE_ROTATE, ({ model }) => {
       // DONE: 目前操作是对分组内节点以节点中心旋转节点本身，而按照正常逻辑，应该是以分组中心，旋转节点（跟 Label 旋转操作逻辑一致）
       if (model.id === curGroup.id) {
         const center = { x: curGroup.x, y: curGroup.y }
@@ -53,25 +53,28 @@ export class DynamicGroupNode<
     })
 
     // 在 group 缩放时，对组内的所有子节点也进行对应的缩放计算
-    eventCenter.on('node:resize', ({ deltaX, deltaY, index, model }) => {
-      // TODO: 目前 Resize 的比例值有问题，导致缩放时，节点会变形，需要修复
-      if (model.id === curGroup.id) {
-        forEach(Array.from(curGroup.children), (childId) => {
-          const child = graphModel.getNodeModelById(childId)
-          if (child) {
-            // child.rotate = model.rotate
-            handleResize({
-              deltaX,
-              deltaY,
-              index,
-              nodeModel: child,
-              graphModel,
-              cancelCallback: () => {},
-            })
-          }
-        })
-      }
-    })
+    eventCenter.on(
+      EventType.NODE_RESIZE,
+      ({ deltaX, deltaY, index, model }) => {
+        // TODO: 目前 Resize 的比例值有问题，导致缩放时，节点会变形，需要修复
+        if (model.id === curGroup.id) {
+          forEach(Array.from(curGroup.children), (childId) => {
+            const child = graphModel.getNodeModelById(childId)
+            if (child) {
+              // child.rotate = model.rotate
+              handleResize({
+                deltaX,
+                deltaY,
+                index,
+                nodeModel: child,
+                graphModel,
+                cancelCallback: () => {},
+              })
+            }
+          })
+        }
+      },
+    )
   }
 
   getResizeControl(): h.JSX.Element | null {

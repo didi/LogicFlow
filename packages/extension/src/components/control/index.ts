@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 
 type ControlItem = {
   key: string
@@ -118,14 +118,20 @@ export class Control {
       itemContainer.append(icon, text)
       switch (item.text) {
         case '上一步':
-          this.lf.on('history:change', ({ data: { undoAble } }: any) => {
-            itemContainer.className = undoAble ? NORMAL : DISABLED
-          })
+          this.lf.on(
+            EventType.HISTORY_CHANGE,
+            ({ data: { undoAble } }: any) => {
+              itemContainer.className = undoAble ? NORMAL : DISABLED
+            },
+          )
           break
         case '下一步':
-          this.lf.on('history:change', ({ data: { redoAble } }: any) => {
-            itemContainer.className = redoAble ? NORMAL : DISABLED
-          })
+          this.lf.on(
+            EventType.HISTORY_CHANGE,
+            ({ data: { redoAble } }: any) => {
+              itemContainer.className = redoAble ? NORMAL : DISABLED
+            },
+          )
           break
         default:
           itemContainer.className = NORMAL

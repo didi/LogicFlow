@@ -27,12 +27,12 @@ export class InsertNodeInPolyline {
   eventHandler() {
     // 监听事件
     if (this.dndAdd) {
-      this._lf.on('node:dnd-add', ({ data }: { data: NodeData }) => {
+      this._lf.on(EventType.NODE_DND_ADD, ({ data }: { data: NodeData }) => {
         this.insetNode(data)
       })
     }
     if (this.dropAdd) {
-      this._lf.on('node:drop', ({ data }: { data: NodeData }) => {
+      this._lf.on(EventType.NODE_DROP, ({ data }: { data: NodeData }) => {
         const { edges } = this._lf.graphModel
         const { id } = data
         // 只有游离节点才能插入到连线上

@@ -18,6 +18,12 @@ type ToolConstructor = new (props: IToolProps) => Component<IToolProps>
 // 默认内置的工具
 const defaultTools = [TextEdit, MultipleSelect]
 
+const TOOL_EVENTS = [
+  EventType.GRAPH_TRANSFORM,
+  EventType.NODE_CLICK,
+  EventType.BLANK_CLICK,
+]
+
 export class Tool {
   tools?: Component[]
   components?: ReactElement<IToolProps>[]
@@ -37,19 +43,16 @@ export class Tool {
     // @see https://github.com/didi/LogicFlow/issues/152
     const { graphModel } = instance
     const { eventCenter } = graphModel
-    eventCenter.on(
-      `${EventType.GRAPH_TRANSFORM},${EventType.NODE_CLICK},${EventType.BLANK_CLICK} `,
-      () => {
-        const {
-          textEditElement,
-          editConfigModel: { edgeTextEdit, nodeTextEdit },
-        } = graphModel
-        // fix #826, 保留之前的文本可以编辑点击空白才设置为不可编辑。如果以后有其他需求再改。
-        if ((edgeTextEdit || nodeTextEdit) && textEditElement) {
-          graphModel.textEditElement?.setElementState(ElementState.DEFAULT)
-        }
-      },
-    )
+    eventCenter.on(TOOL_EVENTS.join(','), () => {
+      const {
+        textEditElement,
+        editConfigModel: { edgeTextEdit, nodeTextEdit },
+      } = graphModel
+      // fix #826, 保留之前的文本可以编辑点击空白才设置为不可编辑。如果以后有其他需求再改。
+      if ((edgeTextEdit || nodeTextEdit) && textEditElement) {
+        graphModel.textEditElement?.setElementState(ElementState.DEFAULT)
+      }
+    })
   }
 
   private isDisabled(toolName) {

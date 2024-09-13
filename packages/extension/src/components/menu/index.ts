@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 
 import GraphData = LogicFlow.GraphData
 import NodeData = LogicFlow.NodeData
@@ -151,7 +151,7 @@ class Menu {
       )
     }
     // 通过事件控制菜单的显示和隐藏
-    this.lf.on('node:contextmenu', ({ data, position, e }) => {
+    this.lf.on(EventType.NODE_CONTEXTMENU, ({ data, position, e }) => {
       const {
         domOverlayPosition: { x, y },
       } = position
@@ -179,7 +179,7 @@ class Menu {
         clientY: e.clientY,
       })
     })
-    this.lf.on('edge:contextmenu', ({ data, position, e }) => {
+    this.lf.on(EventType.EDGE_CONTEXTMENU, ({ data, position, e }) => {
       const {
         domOverlayPosition: { x, y },
       } = position
@@ -204,14 +204,14 @@ class Menu {
         clientY: e.clientY,
       })
     })
-    this.lf.on('blank:contextmenu', ({ position }) => {
+    this.lf.on(EventType.BLANK_CONTEXTMENU, ({ position }) => {
       const menuList = this.menuTypeMap?.get(DefaultGraphMenuKey) ?? []
       const {
         domOverlayPosition: { x, y },
       } = position
       this.showMenu(x, y, menuList)
     })
-    this.lf.on('selection:contextmenu', ({ data, position }) => {
+    this.lf.on(EventType.SELECTION_CONTEXTMENU, ({ data, position }) => {
       const menuList = this.menuTypeMap?.get(DefaultSelectionMenuKey)
       const {
         domOverlayPosition: { x, y },
@@ -220,13 +220,13 @@ class Menu {
       this.showMenu(x, y, menuList)
     })
 
-    this.lf.on('node:mousedown', () => {
+    this.lf.on(EventType.NODE_MOUSEDOWN, () => {
       this.__menuDOM!.style.display = 'none'
     })
-    this.lf.on('edge:click', () => {
+    this.lf.on(EventType.EDGE_CLICK, () => {
       this.__menuDOM!.style.display = 'none'
     })
-    this.lf.on('blank:click', () => {
+    this.lf.on(EventType.BLANK_CLICK, () => {
       this.__menuDOM!.style.display = 'none'
     })
   }
