@@ -10,7 +10,7 @@ import { Button, Card, Divider } from 'antd';
 import '@logicflow/core/es/index.css';
 import './index.less';
 
-const LFReactPortalProvider = Portal.getProvider(); // 注意，一个 LogicFlow 实例只能生命一个 portal provider
+const LFReactPortalProvider = Portal.getProvider(); // 注意，一个 LogicFlow 实例只能声明一个 portal provider
 const ThemeContext = React.createContext('light');
 
 const NodeComponent: FC<ReactNodeProps> = ({ node }) => {
