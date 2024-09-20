@@ -1,5 +1,5 @@
 import LogicFlow from '..'
-import { EditConfigModel } from 'src/model'
+import { EditConfigModel } from '..'
 
 import PointTuple = LogicFlow.PointTuple
 
