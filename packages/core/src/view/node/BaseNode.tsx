@@ -1,4 +1,4 @@
-import { createElement as h, Component } from 'preact/compat'
+import { createElement as h, Component, createRef } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
 import { map } from 'lodash-es'
 import Anchor from '../Anchor'
@@ -43,6 +43,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   mouseUpDrag?: boolean
   startTime?: number
   modelDisposer: IReactionDisposer
+  nodeRef = createRef()
 
   constructor(props: IProps) {
     super()
@@ -82,7 +83,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.stepDrag.element = this.nodeRef.current
+  }
 
   componentDidUpdate() {}
 
@@ -221,8 +224,14 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       const {
         canvasOverlayPosition: { x, y },
       } = graphModel.getPointByClient({
-        x: event.clientX,
-        y: event.clientY,
+        x:
+          event instanceof MouseEvent
+            ? event.clientX
+            : event.touches[0].clientX,
+        y:
+          event instanceof MouseEvent
+            ? event.clientY
+            : event.touches[0].clientY,
       })
       this.moveOffset = {
         dx: model.x - x,
@@ -242,12 +251,13 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       gridSize,
     } = graphModel
     model.isDragging = true
-    const { clientX, clientY } = event!
     let {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
-      x: clientX,
-      y: clientY,
+      x:
+        event instanceof MouseEvent ? event.clientX : event!.touches[0].clientX,
+      y:
+        event instanceof MouseEvent ? event.clientY : event!.touches[0].clientY,
     })
     const [x1, y1] = transformModel.CanvasPointToHtmlPoint([x, y])
     // 1. 考虑画布被缩放
@@ -424,10 +434,24 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
+  /**
+   * 移动端：touchstart
+   * @param ev
+   */
+  handleTouchStart = (ev: TouchEvent) => {
+    const { model, graphModel } = this.props
+    this.startTime = new Date().getTime()
+    const { editConfigModel } = graphModel
+    if (editConfigModel.adjustNodePosition && model.draggable) {
+      this.stepDrag && this.stepDrag.handleTouchStart(ev)
+    }
+  }
+
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverOn = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
     if (model.isHovered) return
+
     const nodeData = model.getData()
     model.setHovered(true)
     graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
@@ -499,6 +523,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       }
       nodeShape = (
         <g
+          ref={this.nodeRef}
           className={`${this.getStateClassName()} ${className}`}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.handleMouseUp}
@@ -507,6 +532,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           onMouseOver={this.setHoverOn}
           onMouseLeave={this.setHoverOff}
           onMouseOut={this.onMouseOut}
+          onTouchStart={this.handleTouchStart}
           onContextMenu={this.handleContextMenu}
           {...restAttributes}
         >

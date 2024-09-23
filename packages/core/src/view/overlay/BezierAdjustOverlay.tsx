@@ -41,8 +41,14 @@ export class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
     const {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
-      x: event!.clientX,
-      y: event!.clientY,
+      x:
+        event instanceof MouseEvent
+          ? event!.clientX
+          : event!.touches[0].clientX,
+      y:
+        event instanceof MouseEvent
+          ? event!.clientY
+          : event!.touches[0].clientY,
     })
     bezierModel.updateAdjustAnchor(
       {

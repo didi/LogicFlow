@@ -58,11 +58,22 @@ export enum EventType {
   NODE_ROTATE = 'node:rotate',
   NODE_RESIZE = 'node:resize',
 
-  // 节点 properties 变化事件
+  /**
+   * 节点 touch 事件
+   */
+  NODE_TOUCHSTART = 'node:touchstart',
+  NODE_TOUCHMOVE = 'node:touchmove',
+  NODE_TOUCHEND = 'node:touchend',
+
+  /**
+   * 节点 properties 事件
+   */
   NODE_PROPERTIES_CHANGE = 'node:properties-change',
   NODE_PROPERTIES_DELETE = 'node:properties-delete',
 
-  // Edge events
+  /**
+   * Edge events
+   */
   EDGE_ADD = 'edge:add',
   EDGE_DELETE = 'edge:delete',
   EDGE_CLICK = 'edge:click',
@@ -74,13 +85,17 @@ export enum EventType {
   EDGE_ADJUST = 'edge:adjust',
   EDGE_EXCHANGE_NODE = 'edge:exchange-node',
 
-  // Anchor events
+  /**
+   * Anchor events
+   */
   ANCHOR_DRAGSTART = 'anchor:dragstart',
   ANCHOR_DRAG = 'anchor:drag',
   ANCHOR_DROP = 'anchor:drop',
   ANCHOR_DRAGEND = 'anchor:dragend',
 
-  // Adjust point events
+  /**
+   * Adjust point events
+   */
   ADJUST_POINT_MOUSEDOWN = 'adjustPoint:mousedown',
   ADJUST_POINT_MOUSEUP = 'adjustPoint:mouseup',
   ADJUST_POINT_MOUSEMOVE = 'adjustPoint:mousemove',
@@ -89,7 +104,9 @@ export enum EventType {
   ADJUST_POINT_DROP = 'adjustPoint:drop',
   ADJUST_POINT_DRAGEND = 'adjustPoint:dragend',
 
-  // Blank events
+  /**
+   * Blank events
+   */
   BLANK_MOUSEDOWN = 'blank:mousedown',
   BLANK_DRAGSTART = 'blank:dragstart',
   BLANK_DRAG = 'blank:drag',
@@ -98,8 +115,13 @@ export enum EventType {
   BLANK_MOUSEUP = 'blank:mouseup',
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
+  BLANK_TOUCHSTART = 'blank:touchstart',
+  BLANK_TOUCHMOVE = 'blank:touchmove',
+  BLANK_TOUCHEND = 'blank:touchend',
 
-  // Selection events
+  /**
+   * Selection events
+   */
   SELECTION_MOUSEDOWN = 'selection:mousedown',
   SELECTION_DRAGSTART = 'selection:dragstart',
   SELECTION_DRAG = 'selection:drag',
@@ -109,7 +131,9 @@ export enum EventType {
   SELECTION_CONTEXTMENU = 'selection:contextmenu',
   CONNECTION_NOT_ALLOWED = 'connection:not-allowed',
 
-  // Text events
+  /**
+   * Text events
+   */
   TEXT_MOUSEDOWN = 'text:mousedown',
   TEXT_DRAGSTART = 'text:dragstart',
   TEXT_DRAG = 'text:drag',
@@ -124,7 +148,9 @@ export enum EventType {
   TEXT_UPDATE = 'text:update',
   TEXT_CLEAR = 'text:clear',
 
-  // label events
+  /**
+   * Label events
+   */
   LABEL_MOUSEDOWN = 'label:mousedown',
   LABEL_DRAGSTART = 'label:dragstart',
   LABEL_DRAG = 'label:drag',
@@ -146,7 +172,9 @@ export enum EventType {
   LABEL_BATCH_DELETE = 'label:batch-delete',
   LABEL_NOT_ALLOWED_ADD = 'label:not-allowed-add',
 
-  // Other events
+  /**
+   * Other events
+   */
   HISTORY_CHANGE = 'history:change',
   GRAPH_TRANSFORM = 'graph:transform',
   GRAPH_RENDERED = 'graph:rendered',

@@ -127,13 +127,12 @@ class Anchor extends Component<IProps, IState> {
     } = graphModel
     // TODO：确认该方法是否有影响！理论上 onDragging 时 event 必有值
     if (!event) return
-    const { clientX, clientY } = event
     const {
       domOverlayPosition: { x, y },
       canvasOverlayPosition: { x: x1, y: y1 },
     } = graphModel.getPointByClient({
-      x: clientX,
-      y: clientY,
+      x: event instanceof MouseEvent ? event.clientX : event.touches[0].clientX,
+      y: event instanceof MouseEvent ? event.clientY : event.touches[0].clientY,
     })
     if (this.t) {
       cancelRaf(this.t)
@@ -217,7 +216,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
-  checkEnd = (event: MouseEvent | null | undefined) => {
+  checkEnd = (event: MouseEvent | TouchEvent | null | undefined) => {
     const {
       graphModel,
       nodeModel,

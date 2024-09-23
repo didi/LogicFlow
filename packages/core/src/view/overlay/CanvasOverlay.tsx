@@ -3,7 +3,7 @@ import Dnd from '../behavior/dnd'
 import { observer } from '../..'
 import GraphModel from '../../model/GraphModel'
 import { EventType } from '../../constant'
-import { StepDrag, IDragParams } from '../../util'
+import { StepDrag, IDragParams, IZoomParams } from '../../util'
 
 type IProps = {
   graphModel: GraphModel
@@ -27,11 +27,13 @@ export class CanvasOverlay extends Component<IProps, IState> {
     this.stepDrag = new StepDrag({
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
+      onZoom: this.onZoom,
       step: gridSize,
       eventType: 'BLANK',
       isStopPropagation: false,
       eventCenter,
       model: undefined,
+      element: window?.document,
     })
     // 当 ctrl、cmd 键被按住的时候，可以放大缩小。
     this.state = {
@@ -52,6 +54,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
     if (editConfigModel.stopMoveGraph === true) {
       return
     }
+
     transformModel.translate(deltaX, deltaY)
   }
   onDragEnd = () => {
@@ -59,6 +62,18 @@ export class CanvasOverlay extends Component<IProps, IState> {
       isDragging: false,
     })
   }
+
+  onZoom = ({ scale, x, y }: IZoomParams) => {
+    const {
+      graphModel: { editConfigModel, transformModel },
+    } = this.props
+
+    // 如果没有禁止缩放画布，那么进行缩放.
+    if (!editConfigModel.stopZoomGraph) {
+      transformModel.zoom(scale, [x, y])
+    }
+  }
+
   zoomHandler = (ev: WheelEvent) => {
     const {
       graphModel: { editConfigModel, transformModel, gridSize },
@@ -148,6 +163,28 @@ export class CanvasOverlay extends Component<IProps, IState> {
     }
   }
 
+  onTouchStart = (ev: TouchEvent) => {
+    const {
+      graphModel: {
+        eventCenter,
+        editConfigModel,
+        transformModel: { SCALE_X },
+        gridSize,
+      },
+    } = this.props
+    const target = ev.target as HTMLElement
+    const isFrozenElement =
+      !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition
+    if (target.getAttribute('name') === 'canvas-overlay' || isFrozenElement) {
+      if (editConfigModel.stopMoveGraph !== true) {
+        this.stepDrag.setStep(gridSize * SCALE_X)
+        this.stepDrag.handleTouchStart(ev)
+      } else {
+        eventCenter.emit(EventType.BLANK_TOUCHSTART, { e: ev })
+      }
+    }
+  }
+
   render() {
     const {
       graphModel: { transformModel },
@@ -164,6 +201,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
         name="canvas-overlay"
         onWheel={this.zoomHandler}
         onMouseDown={this.mouseDownHandler}
+        onTouchStart={this.onTouchStart}
         onContextMenu={this.handleContextMenu}
         className={
           isDragging

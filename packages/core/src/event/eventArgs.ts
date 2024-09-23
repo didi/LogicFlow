@@ -126,6 +126,18 @@ interface NodeEventArgs {
    */
   'node:mouseleave': NodeEventArgsPick<'data' | 'e'>
   /**
+   * 触摸开始
+   */
+  'node:touchstart': NodeEventArgsPick<'data' | 'e'>
+  /**
+   * 触摸移动
+   */
+  'node:touchmove': NodeEventArgsPick<'data' | 'e' | 'deltaX' | 'deltaY'>
+  /**
+   * 触摸结束
+   **/
+  'node:touchend': NodeEventArgsPick<'data' | 'e'>
+  /**
    * 添加节点
    */
   'node:add': NodeEventArgsPick<'data'>
@@ -430,9 +442,9 @@ type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =
        */
       data: AnchorConfig
       /**
-       * 原生鼠标事件对象
+       * 原生鼠标事件、触摸事件对象
        */
-      e: MouseEvent
+      e: MouseEvent | TouchEvent
       /**
        * 锚点所属节点的数据
        */
@@ -475,7 +487,7 @@ type BlankEventArgsPick<T extends 'e' | 'position'> = Pick<
     /**
      * 原生鼠标事件对象
      */
-    e: MouseEvent
+    e: MouseEvent | TouchEvent
     /**
      * 鼠标触发点相对于画布左上角的坐标
      */
@@ -500,6 +512,18 @@ interface BlankEventArgs {
    * 鼠标移动画布
    */
   'blank:mousemove': BlankEventArgsPick<'e'>
+  /**
+   * 开始触摸画布
+   */
+  'blank:touchstart': BlankEventArgsPick<'e'>
+  /**
+   * 移动触摸画布
+   */
+  'blank:touchmove': BlankEventArgsPick<'e'>
+  /**
+   * 结束触摸画布
+   */
+  'blank:touchend': BlankEventArgsPick<'e'>
   /**
    * 单击画布
    */

@@ -16,24 +16,27 @@ LogicFlow
 
 ## 节点事件
 
-| 事件名              | 说明          | 事件对象                                        |
-|:-----------------|:------------|:--------------------------------------------|
-| element:click    | 元素单击        | data, e, position                           |
-| node:click       | 节点单击        | data, e, position                           |
-| node:dbclick     | 节点双击        | data, e, position                           |
-| node:mousedown   | 鼠标按下节点      | data, e                                     |
-| node:mouseup     | 鼠标抬起节点      | data, e                                     |
-| node:mousemove   | 鼠标移动节点      | data, e                                     |
-| node:mouseenter  | 鼠标进入节点      | data, e                                     |
-| node:mouseleave  | 鼠标离开节点      | data, e                                     |
-| node:delete      | 节点的删除       | data                                        |
-| node:add         | 节点的添加       | data                                        |
-| node:dnd-add     | 外部拖入节点添加时触发 | data                                        |
-| node:dnd-drag    | 外部拖入节点拖拽中触发 | data                                        |
-| node:dragstart   | 节点开始拖拽      | data, e                                     |
-| node:drag        | 节点拖拽        | data, e                                     |
-| node:drop        | 节点拖拽放开      | data, e                                     |
-| node:contextmenu | 右键点击节点      | data, e, position                           |
+| 事件名           | 说明                   | 事件对象          |
+| :--------------- | :--------------------- | :---------------- |
+| element:click    | 元素单击               | data, e, position |
+| node:click       | 节点单击               | data, e, position |
+| node:dbclick     | 节点双击               | data, e, position |
+| node:mousedown   | 鼠标按下节点           | data, e           |
+| node:mouseup     | 鼠标抬起节点           | data, e           |
+| node:mousemove   | 鼠标移动节点           | data, e           |
+| node:mouseenter  | 鼠标进入节点           | data, e           |
+| node:mouseleave  | 鼠标离开节点           | data, e           |
+| node:touchstart  | 开始触摸节点           | data, e           |
+| node:touchend    | 结束触摸节点           | data, e           |
+| node:touchmove   | 移动触摸节点           | data, e           |
+| node:delete      | 节点的删除             | data              |
+| node:add         | 节点的添加             | data              |
+| node:dnd-add     | 外部拖入节点添加时触发 | data              |
+| node:dnd-drag    | 外部拖入节点拖拽中触发 | data              |
+| node:dragstart   | 节点开始拖拽           | data, e           |
+| node:drag        | 节点拖拽               | data, e           |
+| node:drop        | 节点拖拽放开           | data, e           |
+| node:contextmenu | 右键点击节点           | data, e, position |
 | node:resize      | 调整节点缩放      | preData, data, model, deltaX, deltaY, index |
 
 事件对象包含如下内容：
@@ -90,19 +93,22 @@ LogicFlow
 
 ## 画布事件
 
-| 事件名               | 说明                                                                                                                                                                      | 事件对象        |
-|:------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| blank:mousedown   | 画布鼠标按下                                                                                                                                                                  | e           |
-| blank:mousemove   | 画布鼠标移动                                                                                                                                                                  | e           |
-| blank:mouseup     | 画布鼠标抬起                                                                                                                                                                  | e           |
-| blank:click       | 画布单击                                                                                                                                                                    | e           |
-| blank:contextmenu | 画布右键                                                                                                                                                                    | e, position |
-| blank:dragstart   | 画布开始拖拽                                                                                                                                                                  | e           |
-| blank:drag        | 画布拖拽                                                                                                                                                                    | e           |
-| blank:drop        | 画布拖拽放开                                                                                                                                                                  | e           |
-| text:update       | 文案更新                                                                                                                                                                    | data        |
-| graph:transform   | 画布平移或者缩放触发                                                                                                                                                              | data        |
-| graph:rendered    | 画布渲染数据后触发. 即 lf.render(graphData)方法被调用后触发。 `v1.1.0新增`                                                                                                                   | graphData   |
+| 事件名            | 说明                                                                                                                                                                                                                                                                                            | 事件对象    |
+| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| blank:mousedown   | 画布鼠标按下          | e           |
+| blank:mousemove   | 画布鼠标移动          | e           |
+| blank:mouseup     | 画布鼠标抬起          | e           |
+| blank:click       | 画布单击             | e           |
+| blank:touchstart  | 画布触摸开始          | e           |
+| blank:touchmove   | 画布触摸移动          | e           |
+| blank:touchend    | 画布触摸结束          | e           |
+| blank:contextmenu | 画布右键             | e, position |
+| blank:dragstart   | 画布开始拖拽          | e           |
+| blank:drag        | 画布拖拽             | e           |
+| blank:drop        | 画布拖拽放开          | e           |
+| text:update       | 文案更新             | data        |
+| graph:transform   | 画布平移或者缩放触发   | data        |
+| graph:rendered    | 画布渲染数据后触发. 即 lf.render(graphData)方法被调用后触发。 `v1.1.0新增`           | graphData   |
 | graph:updated     | 画布重新更新后触发. 即 lf.render(graphData)方法被调用后或者改变画布（graphModel）上的属性后触发。如果是主动修改某个属性导致画布更新，想要在画布更新后做一些操作，建议注册事件后在回调函数中及时注销该事件，或者使用once事件代替on事件，因为其他属性也可能导致画布更新，触发该事件。`v2.0.0新增` | -           |
 
 事件对象包含如下内容：

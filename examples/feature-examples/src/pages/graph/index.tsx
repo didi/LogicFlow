@@ -20,8 +20,9 @@ import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
-  stopScrollGraph: true,
-  stopZoomGraph: true,
+  // stopScrollGraph: true,
+  // stopMoveGraph: true,
+  // stopZoomGraph: true,
   style: {
     rect: {
       rx: 5,
@@ -198,6 +199,26 @@ export default function BasicNode() {
 
     lf.on('blank:drop', (data) => {
       console.log('blank:drop', data)
+    })
+
+    lf.on('node:touchstart', (eventOptions) => {
+      console.log('node:touchstart', eventOptions)
+    })
+    lf.on('node:touchmove', (eventOptions) => {
+      console.log('node:touchmove', eventOptions)
+    })
+    lf.on('node:touchend', (eventOptions) => {
+      console.log('node:touchend', eventOptions)
+    })
+
+    lf.on('blank:touchstart', (eventOptions) => {
+      console.log('blank:touchstart', eventOptions)
+    })
+    lf.on('blank:touchmove', (eventOptions) => {
+      console.log('blank:touchmove', eventOptions)
+    })
+    lf.on('blank:touchend', (eventOptions) => {
+      console.log('blank:touchend', eventOptions)
     })
   }
 
@@ -459,7 +480,11 @@ export default function BasicNode() {
         <Button key="changeEdgeId" type="primary" onClick={handleChangeId}>
           修改边 ID
         </Button>
-        <Button key="changeEdgeId" type="primary" onClick={handleChangeColor}>
+        <Button
+          key="changeEdgeColor"
+          type="primary"
+          onClick={handleChangeColor}
+        >
           修改边 颜色
         </Button>
         <Button

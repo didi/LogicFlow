@@ -113,6 +113,7 @@ class Graph extends Component<IGraphProps> {
         </ModificationOverlay>
         {/* 工具层：插件 */}
         <ToolOverlay graphModel={graphModel} tool={tool} />
+        {/* 画布背景 */}
         {options.background && (
           <BackgroundOverlay background={options.background} />
         )}
