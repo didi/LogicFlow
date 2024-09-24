@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.5
+
+### Patch Changes
+
+- fix(core&extension): fix bugs from issues
+  - fix(core): update import path to relative path style to remove compile error in angular(修复angular中引用后编译报错问题)
+  - fix(core): 修复BaseNodeModel的getData()拿不到width和height的问题(#1826)
+  - fix(core): node => rotate+正常模式resize(#1428)
+  - fix(core): 外部调用handleResize()没有传入anchor坐标不触发recalcRotatedResizeInfo方法
+  - chore(core): rotate+正常模式resize的相关变量名称从anchor改为control
+
 ## 2.0.4
 
 ### Patch Changes
