@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.0.9
+
+### Patch Changes
+
+- fix(core&extension): fix bugs from issues
+  - fix(extension): 【dynamic-group】修复resize和move的冲突问题(#1826)
+  - Updated dependencies
+    - @logicflow/core@2.0.5
+
 ## 2.0.8
 
 ### Patch Changes
