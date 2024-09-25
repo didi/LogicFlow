@@ -119,7 +119,8 @@ export type IGroupNodeProperties = {
    */
   isCollapsed?: boolean
   /**
-   * 子节点是否限制移动范围
+   * 子节点是否限制移动范围 + 
+   * 限制resize不能超过children占地面积
    * 默认为 false，允许拖拽移除分组
    */
   isRestrict?: boolean
@@ -142,6 +143,12 @@ export type IGroupNodeProperties = {
    */
   collapsedWidth?: number
   collapsedHeight?: number
+
+  /**
+   * 缩放或旋转容器时，是否缩放或旋转组内节点
+   * 默认为 true，缩放或旋转容器时，默认缩放或旋转组内节点
+   */
+  transformWithContainer: boolean
 
   /**
    * 当前分组元素的 zIndex
@@ -172,6 +179,7 @@ const dynamicGroupNodeConfig = {
     height: 250,
     radius: 5,
     isCollapsed: true,
+    transformWithContainer: true,
   },
 }
 ```
