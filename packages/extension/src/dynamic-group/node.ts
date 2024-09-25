@@ -28,8 +28,14 @@ export class DynamicGroupNode<
 
     // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
     eventCenter.on('node:rotate', ({ model }) => {
-      const { transformWithContainer } = this.props.model
-      if (!transformWithContainer) {
+      const { transformWithContainer, isRestrict } = this.props.model
+      if (!transformWithContainer || isRestrict) {
+        // isRestrict限制模式下，当前model resize时不能小于占地面积
+        // 由于parent:resize=>child:resize计算复杂，需要根据child:resize的判定结果来递归判断parent能否resize
+        // 不符合目前 parent:resize成功后emit事件 -> 触发child:resize 的代码交互模式
+        // 因此isRestrict限制模式下不支持联动(parent:resize=>child:resize)
+        // 由于transformWidthContainer是控制rotate+resize，为保持transformWidthContainer本来的含义
+        // parent:resize=>child:resize不支持，那么parent:rotate=>child:rotate也不支持
         return
       }
       // DONE: 目前操作是对分组内节点以节点中心旋转节点本身，而按照正常逻辑，应该是以分组中心，旋转节点（跟 Label 旋转操作逻辑一致）
@@ -64,8 +70,12 @@ export class DynamicGroupNode<
     eventCenter.on(
       'node:resize',
       ({ deltaX, deltaY, index, model, preData }) => {
-        const { transformWithContainer } = this.props.model
-        if (!transformWithContainer) {
+        const { transformWithContainer, isRestrict } = this.props.model
+        if (!transformWithContainer || isRestrict) {
+          // isRestrict限制模式下，当前model resize时不能小于占地面积
+          // 由于parent:resize=>child:resize计算复杂，需要根据child:resize的判定结果来递归判断parent能否resize
+          // 不符合目前 parent:resize成功后emit事件 -> 触发child:resize 的代码交互模式
+          // 因此isRestrict限制模式下不支持联动(parent:resize=>child:resize)
           return
         }
         if (model.id === curGroup.id) {
