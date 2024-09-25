@@ -195,8 +195,15 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       isCollapsed,
     } = this
     if (isCollapsed) {
+      // 如果当前是折叠模式
+      // 存入history的时候，将坐标恢复到未折叠前的坐标数据
+      // 因为拿出history数据的时候，会触发collapse()进行坐标的折叠计算
       data.x = x + expandWidth / 2 - collapsedWidth / 2
       data.y = y + expandHeight / 2 - collapsedHeight / 2
+      if (data.text) {
+        data.text.x = data.text.x + expandWidth / 2 - collapsedWidth / 2
+        data.text.y = data.text.y + expandHeight / 2 - collapsedHeight / 2
+      }
     }
     return data
   }
