@@ -56,6 +56,22 @@ export namespace Model {
     deltaY: number,
   ) => boolean | IsAllowMove
 
+  /**
+   * 限制节点resize规则
+   * model: 移动节点的 model
+   * deltaX: 中心点移动的 X 轴距离
+   * deltaY: 中心点移动的 Y 轴距离
+   * width: 中心点新的width
+   * height: 中心点新的height
+   */
+  export type NodeResizeRule = (
+    model: BaseNodeModel,
+    deltaX: number,
+    deltaY: number,
+    width: number,
+    height: number,
+  ) => boolean
+
   export type AdjustEdgeStartAndEndParams = {
     startPoint: LogicFlow.Point
     endPoint: LogicFlow.Point

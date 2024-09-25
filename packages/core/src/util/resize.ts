@@ -386,6 +386,12 @@ export const handleResize = ({
   const preNodeData = nodeModel.getData()
   const curNodeData = nodeModel.resize(nextSize)
 
+  // 检测preNodeData和curNodeData是否没变化
+  if (preNodeData.x === curNodeData.x && preNodeData.y === curNodeData.y) {
+    // 中心点x和y都没有变化，说明无法resize，阻止下面边的更新以及resize事件的emit
+    return
+  }
+
   // 更新边
   updateEdgePointByAnchors(nodeModel, graphModel)
   // 触发 resize 事件
@@ -417,7 +423,7 @@ export function calculateWidthAndHeight(
     y: oldCenter.y - (startRotatedTouchControlPoint.y - oldCenter.y),
   }
   // 【touchEndPoint】右下角 + freezePoint左上角 计算出新的中心点
-  let newCenter = getNewCenter(freezePoint, endRotatedTouchControlPoint)
+  const newCenter = getNewCenter(freezePoint, endRotatedTouchControlPoint)
 
   // 得到【touchEndPoint】右下角-没有transform的坐标
   let endZeroTouchControlPoint: SimplePoint = calculatePointAfterRotateAngle(
