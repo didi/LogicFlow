@@ -116,7 +116,8 @@ export type IGroupNodeProperties = {
    */
   isCollapsed?: boolean
   /**
-   * Whether to restrict the movement range of child nodes
+   * Whether to restrict the movement range of child nodes +
+   * Limit resizing to not exceed children's floor area
    * Defaults to false, allowing nodes to be dragged out of the group
    */
   isRestrict?: boolean
@@ -138,6 +139,14 @@ export type IGroupNodeProperties = {
    */
   collapsedWidth?: number
   collapsedHeight?: number
+
+  /**
+   * When scaling or rotating a container,
+   * do you scale or rotate the nodes within the group
+   * Default to true, when scaling or rotating the container, 
+   * the nodes within the group are scaled or rotated by default
+   */
+  transformWithContainer: boolean
 
   /**
    * zIndex of the group element
@@ -168,6 +177,7 @@ const dynamicGroupNodeConfig = {
     height: 250,
     radius: 5,
     isCollapsed: true,
+    transformWidthContainer: true,
   },
 }
 ```
