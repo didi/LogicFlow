@@ -28,6 +28,10 @@ export class DynamicGroupNode<
 
     // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
     eventCenter.on('node:rotate', ({ model }) => {
+      const { transformWidthContainer } = this.props.model
+      if (!transformWidthContainer) {
+        return
+      }
       // DONE: 目前操作是对分组内节点以节点中心旋转节点本身，而按照正常逻辑，应该是以分组中心，旋转节点（跟 Label 旋转操作逻辑一致）
       if (model.id === curGroup.id) {
         const center = { x: curGroup.x, y: curGroup.y }
@@ -60,6 +64,10 @@ export class DynamicGroupNode<
     eventCenter.on(
       'node:resize',
       ({ deltaX, deltaY, index, model, preData }) => {
+        const { transformWidthContainer } = this.props.model
+        if (!transformWidthContainer) {
+          return
+        }
         if (model.id === curGroup.id) {
           // node:resize是group已经改变width和height后的回调
           // 因此这里一定得用preData（没resize改变width之前的值），而不是data/model
