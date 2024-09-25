@@ -81,10 +81,15 @@ export class GraphModel {
 
   /**
    * 节点移动规则判断
-   * 在节点移动的时候，会出发此数组中的所有规则判断
+   * 在节点移动的时候，会触发此数组中的所有规则判断
    */
-
   nodeMoveRules: Model.NodeMoveRule[] = []
+  /**
+   * 节点resize规则判断
+   * 在节点resize的时候，会触发此数组中的所有规则判断
+   */
+  nodeResizeRules: Model.NodeResizeRule[] = []
+
   /**
    * 获取自定义连线轨迹
    */
@@ -1227,6 +1232,12 @@ export class GraphModel {
   addNodeMoveRules(fn: Model.NodeMoveRule) {
     if (!this.nodeMoveRules.includes(fn)) {
       this.nodeMoveRules.push(fn)
+    }
+  }
+
+  addNodeResizeRules(fn: Model.NodeResizeRule) {
+    if (!this.nodeResizeRules.includes(fn)) {
+      this.nodeResizeRules.push(fn)
     }
   }
 

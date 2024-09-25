@@ -148,6 +148,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   targetRules: Model.ConnectRule[] = []
   sourceRules: Model.ConnectRule[] = []
   moveRules: Model.NodeMoveRule[] = [] // 节点移动之前的hook
+  resizeRules: Model.NodeResizeRule[] = [] // 节点resize之前的hook
   hasSetTargetRules = false // 用来限制rules的重复值
   hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: any // 支持用户自定义属性
@@ -281,6 +282,13 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    */
   resize(resizeInfo: ResizeInfo): ResizeNodeData {
     const { width, height, deltaX, deltaY } = resizeInfo
+
+    const isAllowResize = this.isAllowResizeNode(deltaX, deltaY, width, height)
+
+    if (!isAllowResize) {
+      return this.getData()
+    }
+
     // 移动节点以及文本内容
     this.move(deltaX / 2, deltaY / 2)
 
@@ -759,6 +767,30 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
       ...toJS(this.text),
       value,
     }
+  }
+
+  @action addNodeResizeRules(fn: Model.NodeResizeRule) {
+    if (!this.resizeRules.includes(fn)) {
+      this.resizeRules.push(fn)
+    }
+  }
+
+  /**
+   * 内部方法
+   * 是否允许resize节点到新的位置
+   */
+  isAllowResizeNode(
+    deltaX: number,
+    deltaY: number,
+    width: number,
+    height: number,
+  ): boolean {
+    const rules = this.resizeRules.concat(this.graphModel.nodeResizeRules)
+    for (const rule of rules) {
+      const r = rule(this, deltaX, deltaY, width, height)
+      if (!r) return false
+    }
+    return true
   }
 
   @action setSelected(flag = true): void {
