@@ -50,6 +50,11 @@ export type IGroupNodeProperties = {
   // expandHeight?: number
 
   /**
+   * 缩放或旋转容器时，是否缩放或旋转组内节点
+   */
+  transformWidthContainer: boolean
+
+  /**
    * 当前分组元素的 zIndex
    */
   zIndex?: number
@@ -121,6 +126,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       isRestrict,
       autoResize,
       autoToFront,
+      transformWidthContainer,
     } = data.properties ?? {}
 
     this.children = children ? new Set(children) : new Set()
@@ -139,6 +145,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapsedHeight = collapsedHeight ?? DEFAULT_GROUP_COLLAPSE_HEIGHT
 
     this.isRestrict = isRestrict ?? false
+    this.transformWidthContainer = transformWidthContainer ?? true
     this.autoResize = autoResize ?? false
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false
