@@ -52,7 +52,7 @@ export type IGroupNodeProperties = {
   /**
    * 缩放或旋转容器时，是否缩放或旋转组内节点
    */
-  transformWithContainer: boolean
+  transformWithContainer?: boolean
 
   /**
    * 当前分组元素的 zIndex
@@ -99,7 +99,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   // 当前分组是否在可添加状态 - 实时状态
   @observable groupAddable: boolean = false
   // 缩放或旋转容器时，是否缩放或旋转组内节点
-  @observable transformWithContainer: boolean = true
+  @observable transformWithContainer: boolean = false
   childrenLastCollapseStateDict: Map<string, boolean> = new Map()
 
   constructor(data: NodeConfig<IGroupNodeProperties>, graphModel: GraphModel) {
@@ -145,7 +145,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapsedHeight = collapsedHeight ?? DEFAULT_GROUP_COLLAPSE_HEIGHT
 
     this.isRestrict = isRestrict ?? false
-    this.transformWithContainer = transformWithContainer ?? true
+    this.transformWithContainer = transformWithContainer ?? false
     this.autoResize = autoResize ?? false
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false

@@ -143,10 +143,10 @@ export type IGroupNodeProperties = {
   /**
    * When scaling or rotating a container,
    * do you scale or rotate the nodes within the group
-   * Default to true, when scaling or rotating the container, 
+   * Default to false, when scaling or rotating the container, 
    * the nodes within the group are scaled or rotated by default
    */
-  transformWithContainer: boolean
+  transformWithContainer?: boolean
 
   /**
    * zIndex of the group element
