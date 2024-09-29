@@ -339,6 +339,72 @@ export class DynamicGroup {
     }
   }
 
+  onNodeMove = ({
+    deltaX,
+    deltaY,
+    data,
+  }: Omit<CallbackArgs<'node:mousemove'>, 'e' | 'position'>) => {
+    const { id, x, y, properties } = data
+    if (!properties) {
+      return
+    }
+    const { width, height } = properties
+    const groupId = this.nodeGroupMap.get(id)
+    if (!groupId) {
+      return
+    }
+    const groupModel = this.lf.getNodeModelById(
+      groupId,
+    ) as DynamicGroupNodeModel
+
+    if (!groupModel || !groupModel.isRestrict || !groupModel.autoResize) {
+      return
+    }
+    // 当父节点isRestrict=true & autoResize=true
+    // 子节点在父节点中移动时，父节点会自动调整大小
+
+    // step1: 计算出当前child的bounds
+    const newX = x + deltaX / 2
+    const newY = y + deltaY / 2
+    const minX = newX - width! / 2
+    const minY = newY - height! / 2
+    const maxX = newX + width! / 2
+    const maxY = newY + height! / 2
+    // step2：比较当前child.bounds与parent.bounds的差异，比如child.minX<parent.minX，那么parent.minX=child.minX
+    let hasChange = false
+    const groupBounds = groupModel.getBounds()
+    const newGroupBounds = Object.assign({}, groupBounds)
+    if (minX < newGroupBounds.minX) {
+      newGroupBounds.minX = minX
+      hasChange = true
+    }
+    if (minY < newGroupBounds.minY) {
+      newGroupBounds.minY = minY
+      hasChange = true
+    }
+    if (maxX > newGroupBounds.maxX) {
+      newGroupBounds.maxX = maxX
+      hasChange = true
+    }
+    if (maxY > newGroupBounds.maxY) {
+      newGroupBounds.maxY = maxY
+      hasChange = true
+    }
+    if (!hasChange) {
+      return
+    }
+    // step3: 根据当前parent.bounds去计算出最新的x、y、width、height
+    const newGroupX =
+      newGroupBounds.minX + (newGroupBounds.maxX - newGroupBounds.minX) / 2
+    const newGroupY =
+      newGroupBounds.minY + (newGroupBounds.maxY - newGroupBounds.minY) / 2
+    const newGroupWidth = newGroupBounds.maxX - newGroupBounds.minX
+    const newGroupHeight = newGroupBounds.maxY - newGroupBounds.minY
+    groupModel.moveTo(newGroupX, newGroupY)
+    groupModel.width = newGroupWidth
+    groupModel.height = newGroupHeight
+  }
+
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
     console.log('data', data)
     forEach(data.nodes, (node) => {
@@ -537,9 +603,15 @@ export class DynamicGroup {
       ) as DynamicGroupNodeModel
 
       if (groupModel && groupModel.isRestrict) {
-        // 如果移动的节点存在于某个分组中，且这个分组禁止子节点移出去
-        const groupBounds = groupModel.getBounds()
-        return isAllowMoveTo(groupBounds, model, deltaX, deltaY)
+        if (groupModel.autoResize) {
+          // 子节点在父节点中移动时，父节点会自动调整大小
+          // 在node:mousemove中进行父节点的调整
+          return true
+        } else {
+          // 如果移动的节点存在于某个分组中，且这个分组禁止子节点移出去
+          const groupBounds = groupModel.getBounds()
+          return isAllowMoveTo(groupBounds, model, deltaX, deltaY)
+        }
       }
 
       return true
@@ -569,6 +641,7 @@ export class DynamicGroup {
     lf.on('node:delete', this.removeNodeFromGroup)
     lf.on('node:drag,node:dnd-drag', this.setActiveGroup)
     lf.on('node:click', this.onNodeSelect)
+    lf.on('node:mousemove', this.onNodeMove)
     lf.on('graph:rendered', this.onGraphRendered)
 
     lf.on('graph:updated', ({ data }) => console.log('data', data))
@@ -637,6 +710,7 @@ export class DynamicGroup {
     this.lf.off('node:delete', this.removeNodeFromGroup)
     this.lf.off('node:drag,node:dnd-drag', this.setActiveGroup)
     this.lf.off('node:click', this.onNodeSelect)
+    this.lf.off('node:mousemove', this.onNodeMove)
     this.lf.off('graph:rendered', this.onGraphRendered)
 
     // 还原 lf.addElements 方法？
