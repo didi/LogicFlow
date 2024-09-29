@@ -146,9 +146,9 @@ export type IGroupNodeProperties = {
 
   /**
    * 缩放或旋转容器时，是否缩放或旋转组内节点
-   * 默认为 true，缩放或旋转容器时，默认缩放或旋转组内节点
+   * 默认为 false，缩放或旋转容器时，默认缩放或旋转组内节点
    */
-  transformWithContainer: boolean
+  transformWithContainer?: boolean
 
   /**
    * 当前分组元素的 zIndex
