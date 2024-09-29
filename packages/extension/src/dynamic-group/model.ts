@@ -84,6 +84,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   children!: Set<string>
   // 是否限制组内节点的移动范围。默认不限制 TODO: 完善该功能
   isRestrict: boolean = false
+  // isRestrict 模式启用时，如果同时设置 autoResize 为 true，那么子节点在父节点中移动时，父节点会自动调整大小
+  autoResize: boolean = false
   // 分组节点是否可以折叠
   collapsible: boolean = true
 
