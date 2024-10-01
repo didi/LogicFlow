@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full">
     <div ref="container" class="flow w-full h-full overflow-hidden" />
-    <!-- <TeleportContainer />-->
+    <TeleportContainer :flow-id="flowId" />
   </div>
 </template>
 
@@ -21,6 +21,7 @@ const TeleportContainer = getTeleport()
 const container = ref()
 const graphData = ref<IGraphData>()
 
+const flowId = ref('')
 onMounted(() => {
   graphData.value = {
     nodes: [
@@ -203,10 +204,11 @@ onMounted(() => {
       }
     ]
   }
-  LinkChart.create({
+  const linkChart = LinkChart.create({
     container: container.value,
     graphData: graphData.value
   })
+  flowId.value = linkChart.flowId!
 })
 </script>
 

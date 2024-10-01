@@ -11,6 +11,7 @@ interface IOptions {
 
 export default class LinkChart {
   lf: LogicFlow
+  flowId: string = ''
 
   constructor(options: IOptions) {
     this.lf = new LogicFlow({
@@ -28,8 +29,10 @@ export default class LinkChart {
     })
     this.lf.graphModel.graphData = options.graphData
     const g = this.lf.extension.graph as any
+    this.lf.on('graph:rendered', ({ graphModel }) => {
+      this.flowId = graphModel.flowId!
+    })
     g.init()
-
     // this.lf.render()
   }
 
