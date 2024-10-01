@@ -1,7 +1,7 @@
 import { isVue2, isVue3, createApp, h, Vue2 } from 'vue-demi'
 import { HtmlNode } from '@logicflow/core'
 import { vueNodesMap } from './registry'
-import { isActive, connect } from './teleport'
+import { isActive, connect, disconnect } from './teleport'
 
 export class VueNodeView extends HtmlNode {
   root?: any
@@ -89,7 +89,7 @@ export class VueNodeView extends HtmlNode {
     const root = this.getComponentContainer()
     if (this.vm) {
       isVue2 && this.vm.$destroy()
-      isVue3 && this.vm.$destroy()
+      isVue3 && this.vm.unmount()
       this.vm = null
     }
     if (root) {
@@ -99,6 +99,9 @@ export class VueNodeView extends HtmlNode {
   }
 
   unmount() {
+    if (isActive()) {
+      disconnect(this.targetId())
+    }
     this.unmountVueComponent()
   }
 }
