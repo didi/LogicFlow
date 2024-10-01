@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { getTeleport } from '@logicflow/vue-node-registry'
 import '@logicflow/core/lib/style/index.css'
 import LinkChart from '@/components/chart/linkChart'
@@ -22,6 +22,9 @@ const container = ref()
 const graphData = ref<IGraphData>()
 
 const flowId = ref('')
+
+let linkChart: LinkChart
+
 onMounted(() => {
   graphData.value = {
     nodes: [
@@ -204,11 +207,16 @@ onMounted(() => {
       }
     ]
   }
-  const linkChart = LinkChart.create({
+  linkChart = LinkChart.create({
     container: container.value,
     graphData: graphData.value
   })
   flowId.value = linkChart.flowId!
+})
+
+onUnmounted(() => {
+  // 非KeepAlive模式下应该主动触发destroy()方法触发LogicFlow.clearData()
+  linkChart && linkChart.destroy()
 })
 </script>
 

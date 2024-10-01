@@ -14,6 +14,13 @@
         <component :is="LFChartView" :key="activeKey" :active-key="activeKey" />
       </KeepAlive>
     </div>
+    <div class="flex-1 overflow-hidden">
+      <component
+        :is="LFChartView"
+        :key="activeKey + 'notkeepalive'"
+        :active-key="activeKey + 'notkeepalive'"
+      />
+    </div>
   </div>
 </template>
 
