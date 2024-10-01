@@ -23,7 +23,7 @@ tag: 新特性
 ```html
 <template>
   <div ref="containerRef" id="graph" class="viewport"></div>
-  <TeleportContainer />
+  <TeleportContainer :flow-id="flowId"/>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +38,7 @@ tag: 新特性
   const lfRef = ref<LogicFlow | null>(null)
   const containerRef = ref<HTMLDivElement | null>(null)
   const TeleportContainer = getTeleport()
+  const flowId = ref('')
 
   onMounted(() => {
     if (containerRef.value) {
@@ -51,6 +52,10 @@ tag: 新特性
         type: 'custom-vue-node',
         component: ProgressNode
       }, lf)
+
+      lf.on('graph:rendered', ({ graphModel }) => {
+        flowId.value = graphModel.flowId!
+      })
 
       // 注册事件
       lf.render({})
