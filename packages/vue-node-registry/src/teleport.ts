@@ -52,13 +52,34 @@ export function getTeleport(): any {
   active = true
 
   return defineComponent({
-    setup() {
-      return () =>
-        h(
+    props: {
+      flowId: {
+        type: String,
+        required: true,
+      },
+    },
+    setup(props) {
+      return () => {
+        const children: Record<string, any>[] = []
+        Object.keys(items).forEach((id) => {
+          // https://github.com/didi/LogicFlow/issues/1768
+          // 多个不同的VueNodeView都会connect注册到items中，因此items存储了可能有多个flowId流程图的数据
+          // 当使用多个LogicFlow时，会创建多个flowId + 同时使用KeepAlive
+          // 每一次items改变，会触发不同flowId持有的setup()执行，由于每次setup()执行就是遍历items，因此存在多次重复渲染元素的问题
+          // 即items[0]会在Page1的setup()执行，items[0]也会在Page2的setup()执行，从而生成两个items[0]
+
+          // 比对当前界面显示的flowId，只更新items[当前页面flowId:nodeId]的数据
+          // 比如items[0]属于Page1的数据，那么Page2无论active=true/false，都无法执行items[0]
+          if (id.startsWith(props.flowId)) {
+            children.push(items[id])
+          }
+        })
+        return h(
           Fragment,
           {},
-          Object.keys(items).map((id) => h(items[id])),
+          children.map((item) => h(item)),
         )
+      }
     },
   })
 }
