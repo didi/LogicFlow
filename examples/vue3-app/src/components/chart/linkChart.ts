@@ -36,6 +36,10 @@ export default class LinkChart {
     // this.lf.render()
   }
 
+  destroy() {
+    this.lf.clearData()
+  }
+
   static create(options: IOptions) {
     return new LinkChart(options)
   }
