@@ -1,5 +1,14 @@
 # @logicflow/vue-node-registry
 
+## 1.0.7
+
+### Patch Changes
+
+- fix(vue-node-registry): 修复Teleport+KeepAlive场景下DOM重复渲染的问题 close #1768 #1862
+
+- Updated dependencies
+  - @logicflow/core@2.0.6
+
 ## 1.0.6
 
 ### Patch Changes

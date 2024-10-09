@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.6
+
+### Patch Changes
+
+- feat(core&extension): 解决 transform 相关问题 #1446
+- fix(core&extension): 优化分组缩放时子元素是否缩放的逻辑，并解决元素缩放时出现的问题
+- fix(extension): 解决动态分组 resize 时，建议增加参数控制子元素是否需要同时缩放的问题 close #1826
+
 ## 2.0.5
 
 ### Patch Changes

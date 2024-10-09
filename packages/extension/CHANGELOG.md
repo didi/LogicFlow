@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.10
+
+### Patch Changes
+
+- feat(extension): 分组组件实现自动扩展 close #1750
+- fix(extension): 「dynamic-group」存入history时，将text坐标恢复到未折叠前的数据 close #1810
+
+- Updated dependencies
+  - @logicflow/core@2.0.6
+
 ## 2.0.9
 
 ### Patch Changes
