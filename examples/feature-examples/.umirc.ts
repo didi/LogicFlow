@@ -185,5 +185,16 @@ export default defineConfig({
         },
       ],
     },
+    {
+      name: 'grid',
+      path: '/grid',
+      routes: [
+        {
+          path: '/grid',
+          name: '动态调整网格配置',
+          component: './grid',
+        },
+      ],
+    },
   ],
 })
