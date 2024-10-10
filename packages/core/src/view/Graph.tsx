@@ -87,7 +87,6 @@ class Graph extends Component<IGraphProps> {
     if (options.height) {
       style.height = `${graphModel.height}px`
     }
-    const grid = options.grid && Grid.getGridOptions(options.grid)
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
     return (
@@ -117,7 +116,7 @@ class Graph extends Component<IGraphProps> {
           <BackgroundOverlay background={options.background} />
         )}
         {/* 画布网格 */}
-        {grid && <Grid {...grid} graphModel={graphModel} />}
+        <Grid graphModel={graphModel} />
       </div>
     )
   }

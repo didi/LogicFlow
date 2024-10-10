@@ -1,4 +1,4 @@
-import { find, forEach, map } from 'lodash-es'
+import { find, forEach, map, merge } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -36,6 +36,7 @@ import {
   updateTheme,
 } from '../util'
 import EventEmitter from '../event/eventEmitter'
+import { Grid } from '../view/overlay'
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
@@ -55,6 +56,8 @@ export class GraphModel {
 
   // 流程图主题配置
   theme: LogicFlow.Theme
+  // 网格配置
+  @observable grid: Grid.GridOptions
   // 事件中心
   readonly eventCenter: EventEmitter
   // 维护所有节点和边类型对应的 model
@@ -142,6 +145,7 @@ export class GraphModel {
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
     this.theme = setupTheme(options.style)
+    this.grid = Grid.getGridOptions(grid ?? false)
     this.edgeType = options.edgeType || 'polyline'
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
@@ -1405,6 +1409,13 @@ export class GraphModel {
    */
   @action setTheme(style: Partial<LogicFlow.Theme>) {
     this.theme = updateTheme({ ...this.theme, ...style })
+  }
+
+  /**
+   * 更新网格配置
+   */
+  updateGridOptions(options: Partial<Grid.GridOptions>) {
+    merge(this.grid, options)
   }
 
   /**
