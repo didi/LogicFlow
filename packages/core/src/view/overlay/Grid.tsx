@@ -5,19 +5,24 @@ import { createUuid } from '../../util'
 import { GraphModel } from '../../model'
 import { DEFAULT_GRID_SIZE } from '../../constant'
 
-import GridOptions = Grid.GridOptions
-
-type IProps = GridOptions & {
+type IProps = {
   graphModel: GraphModel
 }
 
 @observer
 export class Grid extends Component<IProps> {
+  gridOptions: Grid.GridOptions
+
   readonly id = createUuid()
+
+  constructor(props: IProps) {
+    super(props)
+    this.gridOptions = this.props.graphModel.grid
+  }
 
   // 网格类型为点状
   renderDot() {
-    const { config, size = 1, visible } = this.props
+    const { config, size = 1, visible } = this.gridOptions
 
     const { color, thickness = 2 } = config ?? {}
 
@@ -37,7 +42,7 @@ export class Grid extends Component<IProps> {
   // 网格类型为交叉线
   // todo: 采用背景缩放的方式，实现更好的体验
   renderMesh() {
-    const { config, size = 1, visible } = this.props
+    const { config, size = 1, visible } = this.gridOptions
     const { color, thickness = 1 } = config ?? {}
 
     // 对于交叉线网格，线的宽度不能大于网格大小的一半
@@ -57,10 +62,9 @@ export class Grid extends Component<IProps> {
 
   render() {
     const {
-      type,
-      size = 1,
       graphModel: { transformModel },
     } = this.props
+    const { type, size = 1 } = this.gridOptions
     const { SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } =
       transformModel
     const matrixString = [
@@ -124,7 +128,7 @@ export namespace Grid {
       /**
        * 网格的颜色
        */
-      color: string
+      color?: string
       /**
        * 网格的宽度
        * - 对于 `dot` 点状网格，表示点的大小
