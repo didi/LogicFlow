@@ -309,7 +309,24 @@ export default function BasicNode() {
       })
     }
   }
-
+  const handleChangeSize = () => {
+    const lf = lfRef.current
+    if (lf) {
+      if (lf.graphModel.isContainerHeight || lf.graphModel.isContainerWidth) {
+        console.log('resize by width,height')
+        lf.resize(300, 100)
+      } else {
+        console.log('resize by container')
+        lf.resize()
+      }
+      console.log(
+        'current is container',
+        lf.graphModel.isContainerHeight,
+        lf.graphModel.isContainerWidth,
+      )
+      console.log('current option size', lf.options.width, lf.options.height)
+    }
+  }
   const handleChangeEditConfig = () => {
     const isSilentMode = lfRef.current?.options.isSilentMode
     lfRef?.current?.updateEditConfig({
@@ -446,6 +463,7 @@ export default function BasicNode() {
         <Button key="changeType" type="primary" onClick={handleChangeNodeType}>
           切换节点为五角星
         </Button>
+
         <Button
           key="changeConfig"
           type="primary"
@@ -564,6 +582,9 @@ export default function BasicNode() {
           }}
         >
           切换allowResize
+        </Button>
+        <Button key="changeSize" type="primary" onClick={handleChangeSize}>
+          修改尺寸
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain>
