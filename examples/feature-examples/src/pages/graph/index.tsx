@@ -329,6 +329,11 @@ export default function BasicNode() {
         lf.graphModel.isContainerWidth,
       )
       console.log('current option size', lf.options.width, lf.options.height)
+      console.log(
+        'current griphModel size',
+        lf.graphModel.width,
+        lf.graphModel.height,
+      )
     }
   }
   const handleChangeEditConfig = () => {
