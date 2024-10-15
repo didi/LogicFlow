@@ -121,7 +121,7 @@ export default function SelectionSelectExample() {
   const lfRef = useRef<LogicFlow>()
   const [gridVisible, setGridVisible] = useState(true)
   const [gridType, setGridType] = useState<'dot' | 'mesh'>('dot')
-  const [gridSize, setGridSize] = useState(10)
+  const [gridSize, setGridSize] = useState(20)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // 初始化 LogicFlow
