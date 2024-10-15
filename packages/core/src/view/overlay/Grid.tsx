@@ -53,7 +53,7 @@ export class Grid extends Component<IProps> {
       <path
         d={d}
         stroke={color}
-        strokeWidth={strokeWidth}
+        strokeWidth={strokeWidth / 2}
         opacity={opacity}
         fill="transparent"
       />
