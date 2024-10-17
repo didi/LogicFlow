@@ -129,6 +129,14 @@ export class DynamicGroupNode<
     eventCenter.on('node:mousemove', this.onNodeMouseMove)
   }
 
+  componentWillUnmount() {
+    super.componentWillUnmount()
+    const { eventCenter } = this.props.graphModel
+    eventCenter.off('node:rotate', this.onNodeRotate)
+    eventCenter.off('node:resize', this.onNodeResize)
+    eventCenter.off('node:mousemove', this.onNodeMouseMove)
+  }
+
   /**
    * 获取分组内的节点
    * @param groupModel
