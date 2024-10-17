@@ -67,7 +67,7 @@ export class Dnd {
       this.lf.setNodeSnapLine(nodeData)
       this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_DRAG, {
         data: nodeData,
-        e
+        e,
       })
     }
     return false
