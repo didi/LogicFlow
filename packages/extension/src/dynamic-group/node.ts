@@ -125,6 +125,25 @@ export class DynamicGroupNode<
     }
   }
 
+  graphRendered = () => {
+    const { model } = this.props
+    // 初始化时，如果 this.isCollapsed 为 true，则主动触发一次折叠操作
+    if (model.isCollapsed) {
+      // https://github.com/didi/LogicFlow/issues/1918
+      // 当lf.render({nodes:[{分组节点}, {普通节点}]})时，由于是顺序遍历
+      // 会先触发分组Group节点的new Model => toggleCollapse()
+      // => 此时在graphModel.elementsModelMap找不到它的children，因为还没初始化，因此无法正确折叠子元素
+      // --------------------
+      // 当lf.render({nodes:[{普通节点}, {分组节点}]})时，
+      // 会先触发普通节点的new Model => graphModel.elementsModelMap.set(id, new Model())
+      // 然后再触发分组Group节点的new Model => toggleCollapse() =>
+      // 此时在graphModel.elementsModelMap能找到它的children了，因此可以正确折叠子元素
+      // --------------------
+      // 因此将整个初始化判断是否【主动触发一次折叠操作】放在"graph:rendered"全部渲染完成后再执行
+      model.toggleCollapse(true)
+    }
+  }
+
   componentDidMount() {
     super.componentDidMount()
     const { eventCenter } = this.props.graphModel
@@ -134,6 +153,8 @@ export class DynamicGroupNode<
     eventCenter.on('node:resize', this.onNodeResize)
     // 在 group 移动时，对组内的所有子节点也进行对应的移动计算
     eventCenter.on('node:mousemove', this.onNodeMouseMove)
+    // 全部渲染完成后，判断是否【主动触发一次折叠操作】
+    eventCenter.on('graph:rendered', this.graphRendered)
   }
 
   componentWillUnmount() {
@@ -142,6 +163,7 @@ export class DynamicGroupNode<
     eventCenter.off('node:rotate', this.onNodeRotate)
     eventCenter.off('node:resize', this.onNodeResize)
     eventCenter.off('node:mousemove', this.onNodeMouseMove)
+    eventCenter.off('graph:rendered', this.graphRendered)
   }
 
   /**
