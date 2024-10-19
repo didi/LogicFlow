@@ -19,7 +19,7 @@ function compile(source, target) {
   if (os.type() === 'Windows_NT') {
     cmd = path.join(cwd, `${cmd}.cmd`)
   }
-  cp.execFileSync(cmd, [source, target])
+  cp.execFileSync(cmd, [source, target], { shell: true })
 }
 
 function toCSSPath(source) {
