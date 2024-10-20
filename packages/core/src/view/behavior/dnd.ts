@@ -6,6 +6,7 @@ import { EventType } from '../../constant'
 
 import Position = LogicFlow.Position
 import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
+import { CallbackArgs } from 'src/event/eventEmitter'
 
 export class Dnd {
   nodeConfig: OnDragNodeConfig | null = null
@@ -68,7 +69,7 @@ export class Dnd {
       this.lf.graphModel.eventCenter.emit(EventType.NODE_DND_DRAG, {
         data: nodeData,
         e,
-      })
+      } as CallbackArgs)
     }
     return false
   }
