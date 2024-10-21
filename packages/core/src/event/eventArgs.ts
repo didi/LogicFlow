@@ -140,7 +140,7 @@ interface NodeEventArgs {
   /**
    * 拖拽外部拖入节点
    */
-  'node:dnd-drag': NodeEventArgsPick<'data'>
+  'node:dnd-drag': NodeEventArgsPick<'data' | 'e'>
   /**
    * 开始拖拽节点
    */
