@@ -39,7 +39,22 @@ type ContainerStyle = {
 @observer
 class Graph extends Component<IGraphProps> {
   private handleResize = () => {
-    this.props.graphModel.resize()
+    let resizeWidth:number | undefined = this.props.graphModel.width
+    let resizeHeight:number | undefined = this.props.graphModel.height
+    let needUpdate = false
+    if (this.props.graphModel.isContainerWidth) {
+      resizeWidth = undefined
+      needUpdate = true
+    }
+    if (this.props.graphModel.isContainerHeight) {
+      resizeHeight =  undefined
+      needUpdate = true
+    }
+    if (needUpdate) {
+      this.props.graphModel.resize(resizeWidth, resizeHeight)
+    }
+    this.props.options.width = this.props.graphModel.width
+    this.props.options.height = this.props.graphModel.height
   }
   private throttleResize = () => throttle(this.handleResize, 200)
 
@@ -90,7 +105,7 @@ class Graph extends Component<IGraphProps> {
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
     return (
-      <div className="lf-graph" flow-id={graphModel.flowId}>
+      <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
         {/* 元素层 */}
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>
           <g className="lf-base">
