@@ -29,7 +29,7 @@ flowchart. The detailed usage of events is described in [events](../tutorial/bas
 | node:delete      | Delete node                                                                                  | data                                        |
 | node:add         | Add node                                                                                     | data                                        |
 | node:dnd-add     | When a node is dragged in from outside, the node added will trigger the event                | data                                        |
-| node:dnd-drag    | When a node is dragged in from outside, the node in the dragged state will trigger the event | data                                        |
+| node:dnd-drag    | When a node is dragged in from outside, the node in the dragged state will trigger the event | data, e                                     |
 | node:dragstart   | Start dragging nodes                                                                         | data, e                                     |
 | node:drag        | Nodes in dragging                                                                            | data, e                                     |
 | node:drop        | End of node dragging                                                                         | data, e                                     |
