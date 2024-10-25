@@ -202,7 +202,7 @@ export class StepDrag {
     this.isDragging = false
   }
 
-  componentWillUnmount = () => {
+  destroy = () => {
     if (this.isStartDragging) {
       // https://github.com/didi/LogicFlow/issues/1934
       // https://github.com/didi/LogicFlow/issues/1926
