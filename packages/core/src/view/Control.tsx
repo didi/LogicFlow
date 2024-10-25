@@ -57,7 +57,7 @@ export class ResizeControl extends Component<
   }
 
   componentWillUnmount() {
-    this.dragHandler.cancelDrag()
+    this.dragHandler.componentWillUnmount()
   }
 
   updateEdgePointByAnchors = () => {

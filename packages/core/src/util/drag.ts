@@ -201,4 +201,16 @@ export class StepDrag {
     this.onDragEnd({ event: undefined })
     this.isDragging = false
   }
+
+  componentWillUnmount = () => {
+    if (this.isStartDragging) {
+      // https://github.com/didi/LogicFlow/issues/1934
+      // https://github.com/didi/LogicFlow/issues/1926
+      // cancelDrag()->onDragEnd()->updateEdgePointByAnchors()触发线的重新计算
+      // 我们的本意是为了防止mousemove和mouseup没有及时被移除
+      // 因此这里增加if(this.isStartDragging)的判断，isStartDragging=true代表没有触发handleMouseUp()，此时监听还没被移除
+      // 在拖拽情况下(isStartDragging=true)，此时注册了监听，在组件突然销毁时，强制触发cancelDrag进行监听事件的移除
+      this.cancelDrag()
+    }
+  }
 }
