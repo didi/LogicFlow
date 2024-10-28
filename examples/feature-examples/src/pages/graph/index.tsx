@@ -199,6 +199,10 @@ export default function BasicNode() {
     lf.on('blank:drop', (data) => {
       console.log('blank:drop', data)
     })
+
+    lf.on('edge:click', (data) => {
+      console.log('edge:click', data)
+    })
   }
 
   useEffect(() => {
