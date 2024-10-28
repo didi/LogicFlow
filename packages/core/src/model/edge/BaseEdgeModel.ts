@@ -87,6 +87,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
   // 边特有属性，动画及调整点
   @observable isAnimation = false
   @observable isShowAdjustPoint = false // 是否显示边两端的调整点
+  isDragging?: boolean
   // 引用属性
   graphModel: GraphModel
   @observable zIndex: number = 0
