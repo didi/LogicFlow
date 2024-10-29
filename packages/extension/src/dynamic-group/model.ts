@@ -440,8 +440,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    * TODO: 如何重写该方法呢？
    * @param _nodeData
    */
-  isAllowAppendIn() {
-    // TODO @typescript-eslint/no-unused-vars错误=>暂时删除@param _nodeData
+  // eslint-disable-next-line
+  isAllowAppendIn(_nodeData: NodeData) {
     // TODO: 此处使用 this.properties.groupAddable 还是 this.groupAddable
     // this.groupAddable 是否存在更新不及时的问题
     return true
