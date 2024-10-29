@@ -159,11 +159,6 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
   setAttributes() {
     super.setAttributes()
-
-    // 初始化时，如果 this.isCollapsed 为 true，则主动触发一次折叠操作
-    // if (this.isCollapsed) {
-    //   this.toggleCollapse(true)
-    // }
   }
 
   getData(): NodeData {
@@ -445,7 +440,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    * TODO: 如何重写该方法呢？
    * @param _nodeData
    */
-  isAllowAppendIn(_nodeData: NodeData) {
+  isAllowAppendIn() {
+    // TODO @typescript-eslint/no-unused-vars错误=>暂时删除@param _nodeData
     // TODO: 此处使用 this.properties.groupAddable 还是 this.groupAddable
     // this.groupAddable 是否存在更新不及时的问题
     return true
