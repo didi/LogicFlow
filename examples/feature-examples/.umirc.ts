@@ -68,6 +68,11 @@ export default defineConfig({
           component: './edges/custom/polyline',
         },
         {
+          path: '/custom-edges/animate-polyline',
+          name: '动画折线',
+          component: './edges/custom/animate-polyline',
+        },
+        {
           path: '/custom-edges/curved-polyline',
           name: '圆角折线',
           component: './edges/custom/curved-polyline',
