@@ -835,7 +835,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     this.properties = nextProperties
     this.setAttributes()
 
-    // 触发更新节点 properties:change 的事件
+    // 触发更新节点 node:properties-change 的事件
     this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
       id: this.id,
       keys: updateKeys,

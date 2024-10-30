@@ -167,6 +167,27 @@ interface NodeEventArgs {
   'node:resize': NodeEventArgsPick<
     'preData' | 'data' | 'model' | 'deltaX' | 'deltaY' | 'index'
   >
+  /**
+   * 元素的 properties 发生改变
+   */
+  'node:properties-change': {
+    /**
+     * 元素的 id
+     */
+    id: string
+    /**
+     * 改变的 properties 的 key
+     */
+    keys: string[]
+    /**
+     * 改变前的 properties
+     */
+    preProperties: Record<string, any>
+    /**
+     * 改变后的 properties
+     */
+    properties: Record<string, any>
+  }
 }
 
 type EdgeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
@@ -355,33 +376,6 @@ interface CommonEventArgs {
      * 鼠标触发点相对于画布左上角的坐标
      */
     position: ClientPosition
-  }
-  /**
-   * 元素的 properties 发生改变
-   */
-  'properties:change': {
-    data: {
-      /**
-       * 元素的 id
-       */
-      id: string
-      /**
-       * 元素的类型
-       */
-      type: string
-      /**
-       * 改变的 properties 的 key
-       */
-      keys: string[]
-      /**
-       * 改变前的 properties
-       */
-      preProperties: Record<string, any>
-      /**
-       * 改变后的 properties
-       */
-      properties: Record<string, any>
-    }
   }
   /**
    * 进行画布平移或缩放等变化操作时触发
