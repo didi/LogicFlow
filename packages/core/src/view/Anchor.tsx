@@ -189,14 +189,13 @@ class Anchor extends Component<IProps, IState> {
     this.sourceRuleResults.clear()
     this.targetRuleResults.clear()
     const { graphModel, nodeModel, anchorData } = this.props
-    if (edgeModel) {
-      graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
-        data: anchorData,
-        e: event!,
-        nodeModel,
-        edgeModel,
-      })
-    }
+
+    graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
+      data: anchorData,
+      e: event!,
+      nodeModel,
+      edgeModel: edgeModel ?? undefined,
+    })
   }
 
   get customTrajectory() {

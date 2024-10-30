@@ -434,7 +434,7 @@ type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =
       /**
        * 通过拖动锚点连线添加的边的数据
        */
-      edgeModel: BaseEdgeModel
+      edgeModel?: BaseEdgeModel
     },
     T
   >
