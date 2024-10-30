@@ -90,7 +90,7 @@ class Graph extends Component<IGraphProps> {
     const { fakeNode, editConfigModel } = graphModel
     const { adjustEdge } = editConfigModel
     return (
-      <div className="lf-graph" flow-id={graphModel.flowId}>
+      <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
         {/* 元素层 */}
         <CanvasOverlay graphModel={graphModel} dnd={dnd}>
           <g className="lf-base">

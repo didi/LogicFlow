@@ -463,7 +463,11 @@ export default function BasicNode() {
         <Button key="changeEdgeId" type="primary" onClick={handleChangeId}>
           修改边 ID
         </Button>
-        <Button key="changeEdgeId" type="primary" onClick={handleChangeColor}>
+        <Button
+          key="changeEdgeColor"
+          type="primary"
+          onClick={handleChangeColor}
+        >
           修改边 颜色
         </Button>
         <Button
@@ -556,6 +560,7 @@ export default function BasicNode() {
           删除节点
         </Button>
         <Button
+          key="allowResize"
           type="primary"
           onClick={() => {
             if (lfRef.current) {
@@ -568,6 +573,17 @@ export default function BasicNode() {
           }}
         >
           切换allowResize
+        </Button>
+        <Button
+          key="resizeGraph"
+          type="primary"
+          onClick={() => {
+            if (lfRef.current) {
+              lfRef.current?.resize(400, 400)
+            }
+          }}
+        >
+          更新画布大小
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain>

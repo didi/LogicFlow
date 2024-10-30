@@ -15,6 +15,17 @@ export default defineConfig({
       name: 'native nodes',
     },
     {
+      name: 'grid',
+      path: '/grid',
+      routes: [
+        {
+          path: '/grid/adjust',
+          name: '动态调整网格配置',
+          component: './grid',
+        },
+      ],
+    },
+    {
       path: '/custom-nodes',
       name: 'custom nodes',
       routes: [
@@ -187,17 +198,6 @@ export default defineConfig({
           path: '/performance/snapshot-elements',
           name: 'Snapshot 元素数量性能测试',
           component: './performance/snapshot-elements',
-        },
-      ],
-    },
-    {
-      name: 'grid',
-      path: '/grid',
-      routes: [
-        {
-          path: '/grid',
-          name: '动态调整网格配置',
-          component: './grid',
         },
       ],
     },
