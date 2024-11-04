@@ -6,7 +6,7 @@ import AnchorConfig = Model.AnchorConfig
 import LogicFlow from '../../LogicFlow'
 import GraphModel from '../GraphModel'
 
-export type IHtmlNodeProperties = {
+export interface IHtmlNodeProperties {
   width?: number
   height?: number
   style?: LogicFlow.CommonTheme
