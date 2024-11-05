@@ -45,12 +45,12 @@ export class Group {
       ) as GroupNodeModel
       if (groupModel && groupModel.isRestrict) {
         // 如果移动的节点存在分组中，且这个分组禁止子节点移出去。
-        const { minX: x1, minY: y1, maxX: x2, maxY: y2 } = model.getBounds()
+        const { minX, minY, maxX, maxY } = model.getBounds()
         return groupModel.isAllowMoveTo({
-          x1: x1 + deltaX,
-          y1: y1 + deltaY,
-          x2: x2 + deltaX,
-          y2: y2 + deltaY,
+          minX: minX + deltaX,
+          minY: minY + deltaY,
+          maxX: maxX + deltaX,
+          maxY: maxY + deltaY,
         })
       }
 
