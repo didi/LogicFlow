@@ -26,6 +26,17 @@ export default defineConfig({
       ],
     },
     {
+      name: 'background',
+      path: '/background',
+      routes: [
+        {
+          path: '/background/adjust',
+          name: '动态调整画布背景',
+          component: './background',
+        },
+      ],
+    },
+    {
       path: '/custom-nodes',
       name: 'custom nodes',
       routes: [
