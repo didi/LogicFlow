@@ -87,7 +87,7 @@ class Graph extends Component<IGraphProps> {
     if (options.height) {
       style.height = `${graphModel.height}px`
     }
-    const { fakeNode, editConfigModel } = graphModel
+    const { fakeNode, editConfigModel, background } = graphModel
     const { adjustEdge } = editConfigModel
     return (
       <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
@@ -112,9 +112,8 @@ class Graph extends Component<IGraphProps> {
         </ModificationOverlay>
         {/* 工具层：插件 */}
         <ToolOverlay graphModel={graphModel} tool={tool} />
-        {options.background && (
-          <BackgroundOverlay background={options.background} />
-        )}
+        {/* 画布背景 */}
+        {background && <BackgroundOverlay background={background} />}
         {/* 画布网格 */}
         <Grid graphModel={graphModel} />
       </div>

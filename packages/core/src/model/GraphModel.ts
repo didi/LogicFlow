@@ -1419,6 +1419,24 @@ export class GraphModel {
   }
 
   /**
+   * 更新网格配置
+   */
+  updateBackgroundOptions(
+    options: boolean | Partial<LFOptions.BackgroundConfig>,
+  ) {
+    if (typeof options === 'boolean') {
+      this.background = options
+    } else if (typeof this.background === 'boolean') {
+      this.background = options
+    } else {
+      this.background = {
+        ...this.background,
+        ...options,
+      }
+    }
+  }
+
+  /**
    * 重新设置画布的宽高
    */
   @action resize(width?: number, height?: number): void {
