@@ -39,7 +39,7 @@ import "@logicflow/core/lib/style/index.css";
 
 ```
 
-1. pluginOptions参数传入的各插件的options需要根据插件名分割开
+3. pluginOptions参数传入的各插件的options需要根据插件名分割开
 ```js
 // 这里以设置小地图是否显示连线配置项：showEdge为例
 // 1.x版本
@@ -57,6 +57,14 @@ new LogicFlow({
     },
   },
 })
+```
+
+4. Group插件提供的isAllowMoveTo方法和isInRange方法的参数名调整:
+```
+x1 → minX
+y1 → minY
+x2 → maxX
+y2 → maxY
 ```
 其他改动理论上对使用没有影响，以下是改动内容一览：
 
