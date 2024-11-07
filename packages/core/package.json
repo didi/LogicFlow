@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/core",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "LogicFlow, help you quickly create flowcharts",
   "main": "lib/index.js",
   "module": "es/index.js",
