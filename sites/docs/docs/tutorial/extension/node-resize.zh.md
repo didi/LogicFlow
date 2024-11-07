@@ -11,7 +11,7 @@ tag:  即将废弃
 
 ## 使用
 
-LogicFlow 在 extension 包中提供了`RectResize`、`EllipseResize`、`DiamonResize`、`HtmlResize`这 4
+LogicFlow 在 extension 包中提供了`RectResize`、`EllipseResize`、`DiamondResize`、`HtmlResize`这 4
 种支持缩放的基础节点, 每个节点都有`view`和`model`这两个属性。节点的缩放也是利用 LogicFlow
 的自定义节点机制，使开发者可以继承这 4 种可以缩放的节点，来实现节点的缩放。
 
