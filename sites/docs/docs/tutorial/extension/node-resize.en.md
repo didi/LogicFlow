@@ -11,7 +11,7 @@ tag: Deprecated
 
 ## Use
 
-LogicFlow provides `RectResize`, `EllipseResize`, `DiamonResize`, `HtmlResize` in the extension package, each node has `view` and `model` attributes. The scaling of nodes is also achieved by using LogicFlow's custom node mechanism, which allows developers to inherit from these 4 types of nodes that can be scaled to achieve node scaling.
+LogicFlow provides `RectResize`, `EllipseResize`, `DiamondResize`, `HtmlResize` in the extension package, each node has `view` and `model` attributes. The scaling of nodes is also achieved by using LogicFlow's custom node mechanism, which allows developers to inherit from these 4 types of nodes that can be scaled to achieve node scaling.
 
 For example, if we need a rectangle that can be scaled, when we didn't support node scaling before, we customize the node in the following way:
 
