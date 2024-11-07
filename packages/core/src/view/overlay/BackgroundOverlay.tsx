@@ -1,4 +1,5 @@
 import { Component } from 'preact/compat'
+import { isObject } from 'lodash-es'
 import { Options as LFOptions } from '../../options'
 import { observer } from '../..'
 
@@ -22,7 +23,7 @@ export class BackgroundOverlay extends Component<IProps> {
     return (
       <div className="lf-background">
         <div
-          style={typeof background === 'object' ? background : {}}
+          style={isObject(background) ? background : {}}
           className="lf-background-area"
         />
       </div>

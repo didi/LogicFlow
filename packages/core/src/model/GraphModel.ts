@@ -1,4 +1,4 @@
-import { find, forEach, map, merge } from 'lodash-es'
+import { find, forEach, map, merge, isBoolean } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -1424,9 +1424,7 @@ export class GraphModel {
   updateBackgroundOptions(
     options: boolean | Partial<LFOptions.BackgroundConfig>,
   ) {
-    if (typeof options === 'boolean') {
-      this.background = options
-    } else if (typeof this.background === 'boolean') {
+    if (isBoolean(options) || isBoolean(this.background)) {
       this.background = options
     } else {
       this.background = {
