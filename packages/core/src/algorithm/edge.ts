@@ -62,6 +62,6 @@ export const isInSegment = (point: Point, start: Point, end: Point) => {
   return (
     ((x >= startX && x <= endX) || (x <= startX && x >= endX)) &&
     ((y >= startY && y <= endY) || (y <= startY && y >= endY)) &&
-    Math.abs(y - k * x + b) < Number.EPSILON
+    Math.abs(y - k * x - b) < Number.EPSILON
   )
 }
