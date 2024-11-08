@@ -105,10 +105,10 @@ describe('algorithm/edge', () => {
         y: -10,
       },
     ]
-    expect(isInSegment(point, line1[0], line2[1])).toBeTruthy()
-    expect(isInSegment(point, line1[1], line2[0])).toBeTruthy()
-    expect(isInSegment(point, line2[0], line1[1])).toBeTruthy()
-    expect(isInSegment(point, line2[1], line1[0])).toBeTruthy()
+    expect(isInSegment(point, line1[0], line1[1])).toBeTruthy()
+    expect(isInSegment(point, line1[1], line1[0])).toBeTruthy()
+    expect(isInSegment(point, line2[0], line2[1])).toBeTruthy()
+    expect(isInSegment(point, line2[1], line2[0])).toBeTruthy()
   })
   // not in segment
   test('not in segment', () => {
