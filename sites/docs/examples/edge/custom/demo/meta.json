@@ -15,6 +15,14 @@
         "en": "Curved Polyline"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/rounded-polyline.png"
+    },
+    {
+      "filename": "animatePolyline.tsx",
+      "title": {
+        "zh": "动画折线",
+        "en": "Animate Polyline"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/rounded-polyline.png"
     }
   ]
 }
