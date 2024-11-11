@@ -188,6 +188,11 @@ export default defineConfig({
           name: 'RectLabelNode 插件',
           component: './extensions/rect-label-node',
         },
+        {
+          path: '/extension/proximity-connect',
+          name: 'Proximity Connect 插件',
+          component: './extensions/proximity-connect',
+        },
       ],
     },
     {
