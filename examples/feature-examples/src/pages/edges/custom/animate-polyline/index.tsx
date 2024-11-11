@@ -1,6 +1,6 @@
 import LogicFlow from '@logicflow/core'
 import CustomAnimatePolyline from '@/components/edges/custom-animate-polyline'
-import { Button, Card, Select } from 'antd'
+import { Card, Select } from 'antd'
 import { useEffect, useRef } from 'react'
 import styles from './index.less'
 
@@ -159,78 +159,6 @@ export default function customAnimatePolylineEdge() {
 
   return (
     <Card title="自定义折线">
-      <Button
-        type="primary"
-        className={styles.btn}
-        onClick={() => {
-          if (lfRef.current) {
-            const graphData = lfRef.current?.getGraphRawData()
-            console.log('graphData --->>>', graphData)
-          }
-        }}
-      >
-        获取当前图数据
-      </Button>
-      <Button
-        type="primary"
-        className={styles.btn}
-        onClick={() => {
-          if (lfRef.current) {
-            const { edges } = lfRef.current.getGraphRawData()
-            edges.forEach((edge) => {
-              const edgeModel =
-                lfRef.current && lfRef.current.getEdgeModelById(edge.id)
-              if (edgeModel) {
-                edgeModel.setProperties({
-                  edgeWeight: !edge.properties?.edgeWeight,
-                })
-              }
-            })
-          }
-        }}
-      >
-        切换边粗细
-      </Button>
-      <Button
-        type="primary"
-        className={styles.btn}
-        onClick={() => {
-          if (lfRef.current) {
-            const { edges } = lfRef.current.getGraphRawData()
-            edges.forEach((edge) => {
-              const edgeModel =
-                lfRef.current && lfRef.current.getEdgeModelById(edge.id)
-              if (edgeModel) {
-                edgeModel.setProperties({
-                  highlight: !edge.properties?.highlight,
-                })
-              }
-            })
-          }
-        }}
-      >
-        切换边颜色
-      </Button>
-      <Button
-        type="primary"
-        className={styles.btn}
-        onClick={() => {
-          if (lfRef.current) {
-            const { edges } = lfRef.current.getGraphRawData()
-            edges.forEach((edge) => {
-              const edgeModel =
-                lfRef.current && lfRef.current.getEdgeModelById(edge.id)
-              if (edgeModel) {
-                edgeModel.setProperties({
-                  openAnimation: !edge.properties?.openAnimation,
-                })
-              }
-            })
-          }
-        }}
-      >
-        开关动画
-      </Button>
       <Select
         placeholder="修改边文本位置"
         className={styles.select}
@@ -242,29 +170,6 @@ export default function customAnimatePolylineEdge() {
         <Select.Option value="center">默认文本位置</Select.Option>
         <Select.Option value="start">文本位置在边的起点处</Select.Option>
         <Select.Option value="end">文本位置在边的终点处</Select.Option>
-      </Select>
-      <Select
-        placeholder="修改边锚点形状"
-        className={styles.select}
-        onChange={(val) => {
-          if (lfRef.current) {
-            const { edges } = lfRef.current.getGraphRawData()
-            edges.forEach((edge) => {
-              const edgeModel =
-                lfRef.current && lfRef.current.getEdgeModelById(edge.id)
-              if (edgeModel) {
-                edgeModel.setProperties({
-                  arrowType: val,
-                })
-              }
-            })
-          }
-        }}
-        defaultValue=""
-      >
-        <Select.Option value="empty">空心箭头</Select.Option>
-        <Select.Option value="half">半箭头</Select.Option>
-        <Select.Option value="">默认箭头</Select.Option>
       </Select>
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
