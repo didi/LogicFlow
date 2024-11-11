@@ -667,8 +667,11 @@ export class DynamicGroup {
 
       forEach(selectedNodes, (node) => {
         const originId = node.id
-        const { children, ...rest } = node
-        const model = lf.addNode(rest)
+        const { children, properties, ...rest } = node
+        const newProperties = { ...properties }
+        delete newProperties.children
+        const newNodeConfig = { ...rest, properties: newProperties }
+        const model = lf.addNode(newNodeConfig)
 
         if (originId) nodeIdMap[originId] = model.id
         elements.nodes.push(model) // 此时为 group 的 nodeModel
