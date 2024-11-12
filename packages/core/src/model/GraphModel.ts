@@ -749,11 +749,15 @@ export class GraphModel {
    */
   @action
   deleteNode(nodeId: string) {
-    const nodeData = this.nodesMap[nodeId].model.getData()
+    const nodeModel = this.nodesMap[nodeId].model
+    const nodeData = nodeModel.getData()
     this.deleteEdgeBySource(nodeId)
     this.deleteEdgeByTarget(nodeId)
     this.nodes.splice(this.nodesMap[nodeId].index, 1)
-    this.eventCenter.emit(EventType.NODE_DELETE, { data: nodeData })
+    this.eventCenter.emit(EventType.NODE_DELETE, {
+      data: nodeData,
+      model: nodeModel,
+    })
   }
 
   /**

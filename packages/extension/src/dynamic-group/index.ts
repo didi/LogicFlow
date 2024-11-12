@@ -240,8 +240,11 @@ export class DynamicGroup {
     }
   }
 
-  removeNodeFromGroup = ({ data: node }: CallbackArgs<'node:delete'>) => {
-    if (node.isGroup && node.children) {
+  removeNodeFromGroup = ({
+    data: node,
+    model,
+  }: CallbackArgs<'node:delete'>) => {
+    if (model.isGroup && node.children) {
       forEach(
         Array.from((node as DynamicGroupNodeModel).children),
         (childId) => {

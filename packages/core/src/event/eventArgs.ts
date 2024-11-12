@@ -132,7 +132,7 @@ interface NodeEventArgs {
   /**
    * 删除节点
    */
-  'node:delete': NodeEventArgsPick<'data'>
+  'node:delete': NodeEventArgsPick<'data' | 'model'>
   /**
    * 添加外部拖入节点
    */
