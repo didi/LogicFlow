@@ -86,7 +86,9 @@ export class DynamicGroup {
     } else {
       let topZIndexGroup = groups[count - 1]
       for (let i = count - 2; i >= 0; i--) {
-        topZIndexGroup = groups[i]
+        if (groups[i].zIndex > topZIndexGroup.zIndex) {
+          topZIndexGroup = groups[i]
+        }
       }
       return topZIndexGroup as DynamicGroupNodeModel
     }
