@@ -425,6 +425,17 @@ export class DynamicGroup {
     this.calibrateTopGroupZIndex(data.nodes)
   }
 
+  removeChildrenInGroupNodeData<
+    T extends LogicFlow.NodeData | LogicFlow.NodeConfig,
+  >(nodeData: T) {
+    const newNodeData = cloneDeep(nodeData)
+    delete newNodeData.children
+    if (newNodeData.properties?.children) {
+      delete newNodeData.properties.children
+    }
+    return newNodeData
+  }
+
   /**
    * 创建一个 Group 类型节点内部所有子节点的副本
    * 并且在遍历所有 nodes 的过程中，顺便拿到所有 edges (只在 Group 范围的 edges)
@@ -445,10 +456,14 @@ export class DynamicGroup {
     forEach(Array.from(children), (childId: string) => {
       const childNode = this.lf.getNodeModelById(childId)
       if (childNode) {
+        const childNodeChildren = childNode.children
         const childNodeData = childNode.getData()
         const eventType = EventType.NODE_GROUP_COPY || 'node:group-copy-add'
 
-        const newNodeConfig = transformNodeData(childNodeData, distance)
+        const newNodeConfig = transformNodeData(
+          this.removeChildrenInGroupNodeData(childNodeData),
+          distance,
+        )
         const tempChildNode = this.lf.addNode(newNodeConfig, eventType)
         curGroup.addChild(tempChildNode.id)
 
@@ -460,10 +475,10 @@ export class DynamicGroup {
           ...[...tempChildNode.incoming.edges, ...tempChildNode.outgoing.edges],
         )
 
-        if (children instanceof Set) {
+        if (childNodeChildren instanceof Set) {
           const { childNodes, edgesData } = this.initGroupChildNodes(
             nodeIdMap,
-            children,
+            childNodeChildren,
             tempChildNode as DynamicGroupNodeModel,
             distance,
           )
@@ -672,11 +687,9 @@ export class DynamicGroup {
 
       forEach(selectedNodes, (node) => {
         const originId = node.id
-        const { children, properties, ...rest } = node
-        const newProperties = { ...properties }
-        delete newProperties.children
-        const newNodeConfig = { ...rest, properties: newProperties }
-        const model = lf.addNode(newNodeConfig)
+        const children = node.properties?.children ?? node.children
+
+        const model = lf.addNode(this.removeChildrenInGroupNodeData(node))
 
         if (originId) nodeIdMap[originId] = model.id
         elements.nodes.push(model) // 此时为 group 的 nodeModel
