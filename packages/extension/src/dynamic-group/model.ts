@@ -182,6 +182,47 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   }
 
   /**
+   * 获取分组内的节点
+   * @param groupModel
+   */
+  getNodesInGroup(
+    groupModel: DynamicGroupNodeModel,
+    graphModel: GraphModel,
+  ): string[] {
+    let nodeIds: string[] = []
+    if (groupModel.isGroup) {
+      forEach(Array.from(groupModel.children), (nodeId: string) => {
+        nodeIds.push(nodeId)
+
+        const nodeModel = graphModel.getNodeModelById(nodeId)
+        if (nodeModel?.isGroup) {
+          nodeIds = nodeIds.concat(
+            this.getNodesInGroup(
+              nodeModel as DynamicGroupNodeModel,
+              graphModel,
+            ),
+          )
+        }
+      })
+    }
+    return nodeIds
+  }
+  getMoveDistance(
+    deltaX: number,
+    deltaY: number,
+    isIgnoreRule = false,
+  ): [number, number] {
+    const [moveDeltaX, moveDeltaY] = super.getMoveDistance(
+      deltaX,
+      deltaY,
+      isIgnoreRule,
+    )
+    const nodeIds = this.getNodesInGroup(this, this.graphModel)
+    this.graphModel.moveNodes(nodeIds, deltaX, deltaY, isIgnoreRule)
+    return [moveDeltaX, moveDeltaY]
+  }
+
+  /**
    * 重写 getHistoryData 方法
    */
   getHistoryData(): NodeData {

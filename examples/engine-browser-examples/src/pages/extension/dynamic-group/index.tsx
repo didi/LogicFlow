@@ -87,6 +87,24 @@ export default function DynamicGroupDemo() {
         ...config,
         container: containerRef.current as HTMLElement,
       })
+      ;(lf.extension.control as Control).addItem({
+        key: 'move-group',
+        iconClass: 'custom-minimap',
+        title: '',
+        text: '右移分组',
+        onClick: (lf) => {
+          const { nodes } = lf.getSelectElements()
+          const selectedNode = nodes[0]
+          if (!selectedNode) {
+            return
+          }
+          const isGroup = lf.getModelById(selectedNode.id)?.isGroup
+          if (!isGroup) {
+            return
+          }
+          lf.graphModel.moveNode(selectedNode.id, 10, 0)
+        },
+      })
 
       const dndPanelConfig = getDndPanelConfig(lf)
       lf.setPatternItems(dndPanelConfig)
@@ -161,12 +179,13 @@ export default function DynamicGroupDemo() {
             text: 'dynamic-group_2',
             resizable: true,
             properties: {
+              transformWithContainer: false,
               width: 420,
               height: 250,
               radius: 5,
               collapsible: false,
               isCollapsed: false,
-              isRestrict: true,
+              isRestrict: false,
               children: ['rect_1'],
             },
           },
