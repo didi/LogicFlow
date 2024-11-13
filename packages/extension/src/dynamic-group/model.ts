@@ -185,24 +185,11 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    * 获取分组内的节点
    * @param groupModel
    */
-  getNodesInGroup(
-    groupModel: DynamicGroupNodeModel,
-    graphModel: GraphModel,
-  ): string[] {
-    let nodeIds: string[] = []
+  getNodesInGroup(groupModel: DynamicGroupNodeModel): string[] {
+    const nodeIds: string[] = []
     if (groupModel.isGroup) {
       forEach(Array.from(groupModel.children), (nodeId: string) => {
         nodeIds.push(nodeId)
-
-        const nodeModel = graphModel.getNodeModelById(nodeId)
-        if (nodeModel?.isGroup) {
-          nodeIds = nodeIds.concat(
-            this.getNodesInGroup(
-              nodeModel as DynamicGroupNodeModel,
-              graphModel,
-            ),
-          )
-        }
       })
     }
     return nodeIds
@@ -217,7 +204,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       deltaY,
       isIgnoreRule,
     )
-    const nodeIds = this.getNodesInGroup(this, this.graphModel)
+    const nodeIds = this.getNodesInGroup(this)
     this.graphModel.moveNodes(nodeIds, deltaX, deltaY, isIgnoreRule)
     return [moveDeltaX, moveDeltaY]
   }
