@@ -1369,6 +1369,11 @@ export class LogicFlow {
       this.components.push(extensionIns.render.bind(extensionIns))
     this.extension[pluginName] = extensionIns
   }
+
+  /** 销毁当前实例 */
+  destroy() {
+    this.graphModel.destroy()
+  }
 }
 
 // Option

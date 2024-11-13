@@ -1,4 +1,4 @@
-import { find, forEach, map, merge, isBoolean } from 'lodash-es'
+import { find, forEach, map, merge, isBoolean, debounce } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -127,6 +127,8 @@ export class GraphModel {
   // 用户自定义属性
   [propName: string]: any
 
+  private waitCleanEffects: (() => void)[] = []
+
   constructor(options: LFOptions.Common) {
     const {
       container,
@@ -152,6 +154,27 @@ export class GraphModel {
 
     this.width = options.width || this.rootEl.getBoundingClientRect().width
     this.height = options.height || this.rootEl.getBoundingClientRect().height
+
+    const resizeObserver = new ResizeObserver(
+      debounce(
+        ((entries) => {
+          for (const entry of entries) {
+            if (entry.target === this.rootEl) {
+              this.resize()
+              this.eventCenter.emit('graph:resize', {
+                target: this.rootEl,
+                contentRect: entry.contentRect,
+              })
+            }
+          }
+        }) as ResizeObserverCallback,
+        16,
+      ),
+    )
+    resizeObserver.observe(this.rootEl)
+    this.waitCleanEffects.push(() => {
+      resizeObserver.disconnect()
+    })
 
     this.eventCenter = new EventEmitter()
     this.editConfigModel = new EditConfigModel(options)
@@ -1588,6 +1611,18 @@ export class GraphModel {
    */
   @action setPartial(partial: boolean): void {
     this.partial = partial
+  }
+
+  /** 销毁当前实例 */
+  destroy() {
+    try {
+      this.waitCleanEffects.forEach((fn) => {
+        fn()
+      })
+    } catch (err) {
+      console.warn('error on destroy GraphModel', err)
+    }
+    this.waitCleanEffects.length = 0
   }
 }
 

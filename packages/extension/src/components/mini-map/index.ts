@@ -195,6 +195,14 @@ export class MiniMap {
     this.elementAreaBounds = boundsInit
     this.viewPortBounds = boundsInit
     this.initMiniMap()
+    lf.graphModel.eventCenter.on('graph:resize', this.onGraphResize)
+  }
+
+  onGraphResize = () => {
+    this.updateViewPortBounds()
+    if (this.isShow) {
+      this.updateViewPort()
+    }
   }
 
   render = (_: LogicFlow, container: HTMLElement) => {
@@ -660,6 +668,9 @@ export class MiniMap {
         y: centerY,
       },
     })
+  }
+  destroy() {
+    this.lf.graphModel.eventCenter.off('graph:resize', this.onGraphResize)
   }
 }
 

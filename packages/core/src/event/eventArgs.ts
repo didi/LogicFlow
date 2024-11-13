@@ -414,6 +414,16 @@ interface CommonEventArgs {
      */
     data: GraphData
   }
+  /**
+   * 画布容器大小发生变化触发，为了性能考虑对事件做了防抖处理，间隔为16ms
+   */
+  'graph:resize': {
+    /**
+     * 更新后的画布数据
+     */
+    target: HTMLElement
+    contentRect: DOMRectReadOnly
+  }
 }
 
 type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =
