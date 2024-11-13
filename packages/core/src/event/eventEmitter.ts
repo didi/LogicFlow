@@ -21,6 +21,32 @@ export type EventCallback<T extends string = string> = (
 
 const WILDCARD = '*'
 
+interface OnMethod {
+  <T extends keyof EventArgs>(
+    evt: T,
+    callback: EventCallback<T>,
+    once?: boolean,
+  ): ClearMethod
+  <T extends string>(
+    evt: T,
+    callback: EventCallback<T>,
+    once?: boolean,
+  ): ClearMethod
+  (evt: string, callback: EventCallback, once?: boolean): ClearMethod
+}
+
+interface OnceMethod {
+  <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearMethod
+  <T extends string>(evt: T, callback: EventCallback<T>): ClearMethod
+  (evt: string, callback: EventCallback): ClearMethod
+}
+
+interface ClearMethod {
+  (): void
+  on: OnMethod
+  once: OnceMethod
+}
+
 /* event-emitter */
 export default class EventEmitter {
   private _events: EventsType = {}
@@ -31,13 +57,11 @@ export default class EventEmitter {
    * @param callback 回调函数
    * @param once 是否只监听一次
    */
-  on<T extends keyof EventArgs>(
-    evt: T,
-    callback: EventCallback<T>,
+  on: OnMethod = (
+    evt: string,
+    callback: EventCallback,
     once?: boolean,
-  ): void
-  on<T extends string>(evt: T, callback: EventCallback<T>, once?: boolean): void
-  on(evt: string, callback: EventCallback, once?: boolean) {
+  ): ClearMethod => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       if (!this._events[evKey]) {
@@ -48,6 +72,12 @@ export default class EventEmitter {
         once: !!once,
       })
     })
+
+    return createClearMethod(this, () => {
+      if (evt) {
+        this.off(evt, callback)
+      }
+    })
   }
 
   /**
@@ -55,15 +85,16 @@ export default class EventEmitter {
    * @param evt 事件名称
    * @param callback 回调函数
    */
-  once<T extends keyof EventArgs>(
-    evt: T,
-    callback: (args: EventArgs[T]) => void,
-  ): void
-  once<T extends string>(evt: T, callback: EventCallback<T>): void
-  once(evt: string, callback: EventCallback) {
+  once: OnceMethod = (evt: string, callback: EventCallback): ClearMethod => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       this.on(evKey, callback, true)
+    })
+
+    return createClearMethod(this, () => {
+      if (evt) {
+        this.off(evt, callback)
+      }
     })
   }
 
@@ -147,6 +178,31 @@ export default class EventEmitter {
   getEvents() {
     return this._events
   }
+}
+
+const createClearMethod = (
+  ctx: EventEmitter,
+  clear: () => void,
+): ClearMethod => {
+  const preClear = clear as ClearMethod
+
+  preClear.on = (evt: string, callback: EventCallback, once?: boolean) => {
+    const clear = ctx.on(evt, callback, once)
+    return createClearMethod(ctx, () => {
+      preClear()
+      clear()
+    })
+  }
+
+  preClear.once = (evt: string, callback: EventCallback) => {
+    const clear = ctx.once(evt, callback)
+    return createClearMethod(ctx, () => {
+      preClear()
+      clear()
+    })
+  }
+
+  return preClear
 }
 
 export { EventEmitter, EventArgs }
