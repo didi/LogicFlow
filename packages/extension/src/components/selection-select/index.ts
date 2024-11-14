@@ -166,18 +166,20 @@ export class SelectionSelect {
         true,
       )
       const { dynamicGroup, group } = this.lf.graphModel
+      const nonGroupedElements: typeof elements = []
       elements.forEach((element) => {
         // 如果节点属于分组，则不选中节点，此处兼容旧版 Group 插件
-        if (!group || !group.getNodeGroup(element.id)) {
-          this.lf.selectElementById(element.id, true)
+        if (group && group.getNodeGroup(element.id)) {
+          return
         }
-        // 如果节点属于动态分组，则不不选中节点
-        if (!dynamicGroup || !dynamicGroup.getGroupByNodeId(element.id)) {
-          this.lf.selectElementById(element.id, true)
+        if (dynamicGroup && dynamicGroup.getGroupByNodeId(element.id)) {
+          return
         }
+        this.lf.selectElementById(element.id, true)
+        nonGroupedElements.push(element)
       })
       this.lf.emit('selection:selected', {
-        elements,
+        elements: nonGroupedElements,
         leftTopPoint: lt,
         rightBottomPoint: rb,
       })
