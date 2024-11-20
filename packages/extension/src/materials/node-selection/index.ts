@@ -361,7 +361,6 @@ class NodeSelection {
     })
 
     lf.graphModel.addNodeResizeRules((model) => {
-      console.log('id', model.id)
       if (!isNodeSelectionModel(model)) {
         this.onNodeChange(lf, model)
       }
