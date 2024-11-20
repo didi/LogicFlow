@@ -106,24 +106,27 @@ export class DynamicGroupNode<
     }
   }
 
-  onNodeMouseMove = ({
-    deltaX,
-    deltaY,
-    data,
-  }: Omit<CallbackArgs<'node:mousemove'>, 'e' | 'position'>) => {
-    const { model: curGroup, graphModel } = this.props
-    const { transformModel } = graphModel
-    const { SCALE_X, SCALE_Y } = transformModel
-    if (data.id === curGroup.id) {
-      const nodeIds = this.getNodesInGroup(curGroup, graphModel)
-      // https://github.com/didi/LogicFlow/issues/1914
-      // 当调用lf.fitView()时，会改变整体的SCALE_X和SCALE_Y
-      // 由于group的mousemove是在drag.ts的this.onDragging()处理的，在onDragging()里面进行SCALE的处理
-      // 而"node:mousemove"emit出来跟onDragging()是同时的，也就是emit出来的数据是没有经过SCALE处理的坐标
-      // 因此这里需要增加SCALE的处理
-      graphModel.moveNodes(nodeIds, deltaX / SCALE_X, deltaY / SCALE_Y, true)
+  onNodeMouseMove = () =>
+    // {
+    // deltaX,
+    // deltaY,
+    // data,
+    // }: Omit<CallbackArgs<'node:mousemove'>, 'e' | 'position'>
+    {
+      // console.log(data,deltaX,deltaY,'111')
+      // const { model: curGroup, graphModel } = this.props
+      // const { transformModel } = graphModel
+      // const { SCALE_X, SCALE_Y } = transformModel
+      // if (data.id === curGroup.id) {
+      //   const nodeIds = this.getNodesInGroup(curGroup, graphModel)
+      //   // https://github.com/didi/LogicFlow/issues/1914
+      //   // 当调用lf.fitView()时，会改变整体的SCALE_X和SCALE_Y
+      //   // 由于group的mousemove是在drag.ts的this.onDragging()处理的，在onDragging()里面进行SCALE的处理
+      //   // 而"node:mousemove"emit出来跟onDragging()是同时的，也就是emit出来的数据是没有经过SCALE处理的坐标
+      //   // 因此这里需要增加SCALE的处理
+      //   graphModel.moveNodes(nodeIds, deltaX / SCALE_X, deltaY / SCALE_Y, true)
+      // }
     }
-  }
 
   graphRendered = () => {
     const { model } = this.props
