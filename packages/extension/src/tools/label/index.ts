@@ -1,5 +1,13 @@
 import LogicFlow, { createUuid, GraphModel, TextMode } from '@logicflow/core'
-import { cloneDeep, forEach, isArray, isObject, map } from 'lodash-es'
+import {
+  cloneDeep,
+  forEach,
+  isArray,
+  isEmpty,
+  isEqual,
+  isObject,
+  map,
+} from 'lodash-es'
 import LabelOverlay, { LabelConfigType } from './LabelOverlay'
 import {
   BBoxInfo,
@@ -53,7 +61,7 @@ export class Label implements Extension {
     this.addEventListeners()
 
     // TODO: 3. 自定义快捷键，比如 delete，选中 label 时，移除 label
-    // this.rewriteShortcut()
+    this.rewriteShortcut()
 
     // 插件中注册 LabelOverlay 工具，用于 label 的编辑
     lf.tool.registerTool(LabelOverlay.toolName, LabelOverlay)
@@ -377,7 +385,49 @@ export class Label implements Extension {
     // TODO: others methods ???
   }
 
-  // private rewriteShortcut() {}
+  private rewriteShortcut() {
+    const { keyboard, graphModel } = this.lf
+    const {
+      options: { keyboard: keyboardOptions },
+    } = keyboard
+    keyboard.off(['backspace'])
+    keyboard.on(['backspace'], () => {
+      if (!keyboardOptions?.enabled) return true
+      if (graphModel.textEditElement) return true
+      const elements = graphModel.getSelectElements(true)
+      this.lf.clearSelectElements()
+      elements.edges.forEach((edge) => {
+        const { properties } = edge
+        if (properties && !isEmpty(properties._label)) {
+          const newLabelList = properties._label.filter(
+            (label) => !label.isSelected,
+          )
+          // 如果两个labelList长度不一致，说明有选中的元素，此时backspace做的动作是删除label
+          if (!isEqual(newLabelList.length, properties._label.length)) {
+            const edgeModel = graphModel.getEdgeModelById(edge.id)
+            edgeModel?.setProperty('_label', newLabelList)
+            return
+          }
+        }
+        edge.id && this.lf.deleteEdge(edge.id)
+      })
+      elements.nodes.forEach((node) => {
+        const { properties } = node
+        if (properties && !isEmpty(properties._label)) {
+          const newLabelList = properties._label.filter(
+            (label) => !label.isSelected,
+          )
+          if (!isEqual(newLabelList.length, properties._label.length)) {
+            const nodeModel = graphModel.getNodeModelById(node.id)
+            nodeModel?.setProperty('_label', newLabelList)
+            return
+          }
+        }
+        node.id && this.lf.deleteNode(node.id)
+      })
+      return false
+    })
+  }
 
   /**
    * 更新当前渲染使用的 Text or Label 模式
