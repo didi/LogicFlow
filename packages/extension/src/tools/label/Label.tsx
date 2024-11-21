@@ -25,6 +25,7 @@ export interface ILabelState {
   isEditing: boolean
   isHovered: boolean
   isDragging: boolean
+  isSelected: boolean
 }
 
 @observer
@@ -52,6 +53,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
       isEditing: false,
       isHovered: false,
       isDragging: false,
+      isSelected: false,
     }
   }
 
@@ -75,8 +77,12 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const {
       editConfigModel: { nodeTextDraggable },
     } = graphModel
-    // 当 label 允许拖拽 且不处于拖拽状态时， StepDrag 开启拖拽
-    if ((label.draggable ?? nodeTextDraggable) && !this.state.isDragging) {
+    // 当 label 允许拖拽 且不处于拖拽状态、不处于编辑状态时， StepDrag 开启拖拽
+    if (
+      (label.draggable ?? nodeTextDraggable) &&
+      !this.state.isDragging &&
+      !this.state.isEditing
+    ) {
       this.stepDrag.handleMouseDown(e)
     }
   }
@@ -89,27 +95,16 @@ export class Label extends Component<ILabelProps, ILabelState> {
     if (!this.state.isDragging) {
       this.setState({ isDragging: true })
     }
-    const { label, element, graphModel } = this.props
+    const { label, graphModel } = this.props
 
     // DONE: 添加缩放时拖拽的逻辑，对 deltaX 和 deltaY 进行按比例缩放
     const { transformModel } = graphModel
     const [curDeltaX, curDeltaY] = transformModel.fixDeltaXY(deltaX, deltaY)
 
-    // DONE：更新 label 位置，触发 LABEL:DRAG 事件，并抛出相关的数据
-    const {
-      properties: { _label },
-    } = element
-    const elementLabel = _label as LabelConfig[]
-    const idx = findIndex(elementLabel, (cur) => cur.id === label.id)
-
-    const target = elementLabel[idx]
-    elementLabel[idx] = {
-      ...target,
-      x: target.x + curDeltaX,
-      y: target.y + curDeltaY,
-    }
-    const targetElem = graphModel.getElement(element.id)
-    targetElem?.setProperty('_label', elementLabel)
+    this.setElementModelLabelInfo({
+      x: label.x + curDeltaX,
+      y: label.y + curDeltaY,
+    })
 
     graphModel.eventCenter.emit('label:drag', {
       data: label.getData(),
@@ -118,6 +113,21 @@ export class Label extends Component<ILabelProps, ILabelState> {
   }
   handleDragEnd = () => {
     this.setState({ isDragging: false })
+  }
+
+  handleClick = (e: MouseEvent) => {
+    const { label, element, graphModel } = this.props
+    // 更新当前Label选中状态
+    element.setSelected(!this.state.isSelected)
+    this.setState({ isSelected: !this.state.isSelected })
+    this.setElementModelLabelInfo({
+      isSelected: true,
+    })
+    graphModel.eventCenter.emit('label:click', {
+      data: label.getData(),
+      e,
+      model: element,
+    })
   }
 
   handleDbClick = (e: MouseEvent) => {
@@ -169,6 +179,25 @@ export class Label extends Component<ILabelProps, ILabelState> {
       isDragging: false,
       isHovered: false,
     })
+    this.setState({ isSelected: false })
+  }
+
+  setElementModelLabelInfo(data) {
+    const { label, element, graphModel } = this.props
+    const {
+      properties: { _label },
+    } = element
+    const elementLabel = _label as LabelConfig[]
+    const idx = findIndex(elementLabel, (cur) => cur.id === label.id)
+
+    const target = elementLabel[idx]
+    elementLabel[idx] = {
+      ...target,
+      ...data,
+    }
+
+    const targetElem = graphModel.getElement(element.id)
+    targetElem?.setProperty('_label', elementLabel)
   }
 
   // 重新计算 Label 大小
@@ -178,10 +207,13 @@ export class Label extends Component<ILabelProps, ILabelState> {
   // 当 Label 被元素遮盖时，隐藏它
 
   componentDidMount() {
-    const { label, element, graphModel } = this.props
+    const { element, graphModel } = this.props
 
     // 在点击元素、边或者画布 时，结束 Label 的编辑态
     graphModel.eventCenter.on('blank:click,node:click,edge:click', () => {
+      if (this.state.isSelected) {
+        this.setState({ isSelected: false })
+      }
       // 如果当前 label 处于编辑态，则结束编辑态
       if (this.state.isEditing) {
         this.setState({ isEditing: false })
@@ -189,21 +221,11 @@ export class Label extends Component<ILabelProps, ILabelState> {
         const value = this.textRef.current?.innerText ?? ''
         const content = this.textRef.current?.innerHTML ?? ''
 
-        const {
-          properties: { _label },
-        } = element
-        const elementLabel = _label as LabelConfig[]
-        const idx = findIndex(elementLabel, (cur) => cur.id === label.id)
-
-        const target = elementLabel[idx]
-        elementLabel[idx] = {
-          ...target,
+        this.setElementModelLabelInfo({
           value,
           content,
-        }
-
-        const targetElem = graphModel.getElement(element.id)
-        targetElem?.setProperty('_label', elementLabel)
+          isSelected: false,
+        })
 
         element.setElementState(ElementState.DEFAULT)
       }
@@ -211,7 +233,6 @@ export class Label extends Component<ILabelProps, ILabelState> {
         this.textRef.current.contentEditable = 'false'
       }
     })
-
     // TODO: 节点拖拽结束后，更新 Label 的位置
     // eventCenter.on('node:drag', () => {})
     // eventCenter.on('node:drop', () => {})
@@ -222,7 +243,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
 
   componentDidUpdate() {
     // snapshot: any, // previousState: Readonly<ILabelState>, // previousProps: Readonly<ILabelProps>,
-    console.log('Label componentDidUpdate')
+    // console.log('Label componentDidUpdate')
     // console.log('previousProps', previousProps)
     // console.log('previousState', previousState)
     // console.log('snapshot', snapshot)
@@ -238,7 +259,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
 
   render() {
     const { label, element, graphModel } = this.props
-    const { isDragging, isHovered, isEditing } = this.state
+    const { isDragging, isHovered, isSelected, isEditing } = this.state
     const { transformModel } = graphModel
     const { transform } = transformModel.getTransformStyle()
     const {
@@ -266,7 +287,6 @@ export class Label extends Component<ILabelProps, ILabelState> {
         ? `${transform} rotate(${rotate}deg)`
         : `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
     }
-
     return (
       <div
         id={`element-container-${id}`}
@@ -274,6 +294,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
         style={containerStyle}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
+        onClick={this.handleClick}
         onDblClick={this.handleDbClick}
         onBlur={this.handleBlur}
         onMouseEnter={this.setHoverOn}
@@ -286,7 +307,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
           className={classNames('lf-label-editor', {
             'lf-label-editor-dragging': isDragging,
             'lf-label-editor-editing': isEditing,
-            'lf-label-editor-hover': !isEditing && isHovered,
+            'lf-label-editor-hover': !isEditing && (isHovered || isSelected),
             [`lf-label-editor-${textOverflowMode}`]: !isEditing,
           })}
           style={{
