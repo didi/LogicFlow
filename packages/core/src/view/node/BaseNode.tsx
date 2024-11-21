@@ -377,7 +377,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       if (editConfigModel.nodeTextEdit) {
-        if (model.text.editable) {
+        if (model.text.editable && editConfigModel.textMode === TextMode.TEXT) {
           model.setSelected(false)
           graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
         }
