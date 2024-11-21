@@ -75,14 +75,20 @@ export class Label extends Component<ILabelProps, ILabelState> {
     const {
       editConfigModel: { nodeTextDraggable },
     } = graphModel
-
     // 当 label 允许拖拽 且不处于拖拽状态时， StepDrag 开启拖拽
     if ((label.draggable ?? nodeTextDraggable) && !this.state.isDragging) {
-      this.setState({ isDragging: true })
       this.stepDrag.handleMouseDown(e)
     }
   }
+  handleMouseUp = (e: MouseEvent) => {
+    if (this.state.isDragging) {
+      this.stepDrag.handleMouseUp(e)
+    }
+  }
   handleDragging = ({ deltaX, deltaY }: IDragParams) => {
+    if (!this.state.isDragging) {
+      this.setState({ isDragging: true })
+    }
     const { label, element, graphModel } = this.props
 
     // DONE: 添加缩放时拖拽的逻辑，对 deltaX 和 deltaY 进行按比例缩放
@@ -260,8 +266,6 @@ export class Label extends Component<ILabelProps, ILabelState> {
         ? `${transform} rotate(${rotate}deg)`
         : `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
     }
-    const labelContentDom = document.createElement('div')
-    labelContentDom.style.display = 'inline-block'
 
     return (
       <div
@@ -269,6 +273,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
         className={classNames('lf-label-editor-container')}
         style={containerStyle}
         onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
         onDblClick={this.handleDbClick}
         onBlur={this.handleBlur}
         onMouseEnter={this.setHoverOn}
@@ -286,7 +291,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
           })}
           style={{
             maxWidth: `${maxLabelWidth}px`,
-            boxSizing: 'content-box',
+            boxSizing: 'border-box',
             display: 'inline-block',
             background:
               isEditing || element.BaseType === 'edge' ? '#fff' : 'transparent',
