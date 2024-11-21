@@ -33,12 +33,12 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   cursor: move;
 }
 .lf-label-overlay .lf-label-editor-editing {
-  border: 2px solid #275dc5;
+  outline: 2px solid #275dc5;
   outline: none;
   cursor: text;
 }
 .lf-label-overlay .lf-label-editor-hover {
-  border: 2px dashed #acacac;
+  outline: 2px dashed #acacac;
 }
 .lf-label-overlay .lf-label-editor-clip {
   width: 100px;
