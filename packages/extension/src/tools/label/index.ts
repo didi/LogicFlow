@@ -396,9 +396,16 @@ export class Label implements Extension {
       if (graphModel.textEditElement) return true
       const elements = graphModel.getSelectElements(true)
       this.lf.clearSelectElements()
+      const {
+        graphModel: { editConfigModel },
+      } = this.lf
       elements.edges.forEach((edge) => {
         const { properties } = edge
-        if (properties && !isEmpty(properties._label)) {
+        if (
+          properties &&
+          !isEmpty(properties._label) &&
+          editConfigModel.textMode === TextMode.LABEL
+        ) {
           const newLabelList = properties._label.filter(
             (label) => !label.isSelected,
           )
@@ -413,7 +420,11 @@ export class Label implements Extension {
       })
       elements.nodes.forEach((node) => {
         const { properties } = node
-        if (properties && !isEmpty(properties._label)) {
+        if (
+          properties &&
+          !isEmpty(properties._label) &&
+          editConfigModel.textMode === TextMode.LABEL
+        ) {
           const newLabelList = properties._label.filter(
             (label) => !label.isSelected,
           )
