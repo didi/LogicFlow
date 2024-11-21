@@ -154,6 +154,7 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
 }
 /* dndpanel */
 .lf-dndpanel {
+  z-index: 999;
   position: absolute;
   margin: 5px;
   padding: 15px 5px;
