@@ -64,6 +64,7 @@ export class LabelModel {
       id: this.id,
       x: this.x,
       y: this.y,
+      type: 'label',
       content: this.content,
       value: this.value,
       rotate: this.rotate,
