@@ -55,15 +55,11 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   text-overflow: ellipsis;
 }
 .lf-label-overlay .lf-label-editor-wrap {
-  width: 100px;
-  /* 根据需要调整宽度 */
   white-space: normal;
   overflow-wrap: break-word;
   /* 允许单词内换行 */
 }
 .lf-label-overlay .lf-label-editor-nowrap {
-  width: 100px;
-  /* 根据需要调整宽度 */
   overflow: visible;
   white-space: nowrap;
 }
