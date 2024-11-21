@@ -1,4 +1,4 @@
-import { find, forEach, map, merge, isBoolean } from 'lodash-es'
+import { find, forEach, map, merge, isBoolean, isEqual } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -439,6 +439,42 @@ export class GraphModel {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
         const edgeModel = new Model(edge, this)
+        // 根据edgeModel中存储的数据找到当前画布上的起终锚点坐标
+        // 判断当前起终锚点数据和Model中存储的起终点数据是否一致，不一致更新起终点信息
+        const {
+          sourceNodeId,
+          targetNodeId,
+          sourceAnchorId,
+          targetAnchorId,
+          startPoint,
+          endPoint,
+          text,
+          textPosition,
+        } = edgeModel
+        const sourceNode = this.getNodeModelById(sourceNodeId)
+        const targetNode = this.getNodeModelById(targetNodeId)
+        const sourceAnchor = sourceNode?.anchors.find(
+          (anchor) => anchor.id === sourceAnchorId,
+        )
+        const targetAnchor = targetNode?.anchors.find(
+          (anchor) => anchor.id === targetAnchorId,
+        )
+        if (sourceAnchor && !isEqual(sourceAnchor, startPoint)) {
+          edgeModel.updateStartPoint(sourceAnchor)
+        }
+        if (targetAnchor && !isEqual(targetAnchor, endPoint)) {
+          edgeModel.updateEndPoint(targetAnchor)
+        }
+        // 而文本需要先算一下文本与默认文本位置之间的相对位置差
+        // 再计算新路径的文本默认位置，加上相对位置差，得到调整后边的文本的位置
+        if (text) {
+          const { x, y } = text
+          const { x: defaultX, y: defaultY } = textPosition
+          const deltaX = x - defaultX
+          const deltaY = y - defaultY
+          edgeModel.resetTextPosition()
+          edgeModel.moveText(deltaX, deltaY)
+        }
         this.edgeModelMap.set(edgeModel.id, edgeModel)
         this.elementsModelMap.set(edgeModel.id, edgeModel)
 
