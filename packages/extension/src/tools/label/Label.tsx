@@ -260,6 +260,8 @@ export class Label extends Component<ILabelProps, ILabelState> {
         ? `${transform} rotate(${rotate}deg)`
         : `${transform} rotate(${vertical ? -0.25 : 0}turn)`,
     }
+    const labelContentDom = document.createElement('div')
+    labelContentDom.style.display = 'inline-block'
 
     return (
       <div
@@ -284,7 +286,10 @@ export class Label extends Component<ILabelProps, ILabelState> {
           })}
           style={{
             maxWidth: `${maxLabelWidth}px`,
-            width: `${maxLabelWidth}px`,
+            boxSizing: 'content-box',
+            display: 'inline-block',
+            background:
+              isEditing || element.BaseType === 'edge' ? '#fff' : 'transparent',
             ...style,
           }}
           dangerouslySetInnerHTML={{ __html: content }}
