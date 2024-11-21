@@ -178,8 +178,8 @@ export class Label extends Component<ILabelProps, ILabelState> {
     this.setState({
       isDragging: false,
       isHovered: false,
+      isSelected: false,
     })
-    this.setState({ isSelected: false })
   }
 
   setElementModelLabelInfo(data) {
@@ -207,32 +207,52 @@ export class Label extends Component<ILabelProps, ILabelState> {
   // 当 Label 被元素遮盖时，隐藏它
 
   componentDidMount() {
-    const { element, graphModel } = this.props
+    const { label, element, graphModel } = this.props
 
     // 在点击元素、边或者画布 时，结束 Label 的编辑态
-    graphModel.eventCenter.on('blank:click,node:click,edge:click', () => {
-      if (this.state.isSelected) {
-        this.setState({ isSelected: false })
-      }
-      // 如果当前 label 处于编辑态，则结束编辑态
-      if (this.state.isEditing) {
-        this.setState({ isEditing: false })
+    graphModel.eventCenter.on(
+      'blank:click,node:click,edge:click,label:click',
+      ({ data }) => {
+        // 点击的不是label 、点击的不是当前label、点击的是当前label，且当前 label 处于选中态
+        // 则取消选中态
+        if (
+          data?.type !== 'label' ||
+          (data.type === 'label' && data.id !== label.id) ||
+          this.state.isSelected
+        ) {
+          this.setState({ isSelected: false })
+        }
+        // 点击的不是label 、点击的不是当前label、点击的是当前label，且当前 label 处于编辑态
+        // 则结束编辑态
+        if (
+          (data?.type !== 'label' ||
+            (data.type == 'label' && data.id !== label.id)) &&
+          this.state.isEditing
+        ) {
+          this.setState({ isEditing: false })
 
-        const value = this.textRef.current?.innerText ?? ''
-        const content = this.textRef.current?.innerHTML ?? ''
+          const value = this.textRef.current?.innerText ?? ''
+          const content = this.textRef.current?.innerHTML ?? ''
 
-        this.setElementModelLabelInfo({
-          value,
-          content,
-          isSelected: false,
-        })
+          this.setElementModelLabelInfo({
+            value,
+            content,
+            isSelected: false,
+          })
 
-        element.setElementState(ElementState.DEFAULT)
-      }
-      if (this.textRef.current) {
-        this.textRef.current.contentEditable = 'false'
-      }
-    })
+          element.setElementState(ElementState.DEFAULT)
+        }
+        // 点击的不是label 、点击的不是当前label、点击的是当前label，且当前 label 的文本DOM存在
+        // 则结束文本DOM的编辑态
+        if (
+          (data?.type !== 'label' ||
+            (data.type == 'label' && data.id !== label.id)) &&
+          this.textRef.current
+        ) {
+          this.textRef.current.contentEditable = 'false'
+        }
+      },
+    )
     // TODO: 节点拖拽结束后，更新 Label 的位置
     // eventCenter.on('node:drag', () => {})
     // eventCenter.on('node:drop', () => {})
