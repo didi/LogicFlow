@@ -195,7 +195,7 @@ export class MiniMap {
     this.elementAreaBounds = boundsInit
     this.viewPortBounds = boundsInit
     this.initMiniMap()
-    lf.graphModel.eventCenter.on('graph:resize', this.onGraphResize)
+    lf.on('graph:resize', this.onGraphResize)
   }
 
   onGraphResize = () => {
@@ -670,7 +670,7 @@ export class MiniMap {
     })
   }
   destroy() {
-    this.lf.graphModel.eventCenter.off('graph:resize', this.onGraphResize)
+    this.lf.off('graph:resize', this.onGraphResize)
   }
 }
 
