@@ -65,11 +65,12 @@ const lf = new LogicFlow({
 
 菜单中的每一项功能，可以用一条配置进行表示。具体字段如下:
 
-| 字段             | 类型    | 默认值 | 是否必须 | 描述                                                                                                             |
-| ---------------- | ------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| enable           | boolean | `true` |          | 是否启用插件                                                                                                     |
-| distance         | number  | 100    |          | 渐进连线阈值                                                                                                     |
-| reverseDirection | boolean | false  |          | 是否创建反向连线<br/>默认连线方向是当前拖拽的节点指向最近的节点<br/>设置为true后会变为最近的节点指向当前拖拽节点 |
+| 字段             | 类型    | 默认值                                          | 是否必须 | 描述                                                                                                             |
+| ---------------- | ------- | ----------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| enable           | boolean | `true`                                          |          | 是否启用插件                                                                                                     |
+| distance         | number  | 100                                             |          | 渐进连线阈值                                                                                                     |
+| reverseDirection | boolean | false                                           |          | 是否创建反向连线<br/>默认连线方向是当前拖拽的节点指向最近的节点<br/>设置为true后会变为最近的节点指向当前拖拽节点 |
+| virtualEdgeStyle | object  | { strokeDasharray: '10,10', stroke: '#acacac' } |          | 虚拟线样式                                                                                                       |
 
 
 
@@ -91,4 +92,10 @@ setReverseDirection = (reverse: 'boolean'): void => {}
 
 ```ts
 setEnable = (enable: 'boolean'): void => {}
+```
+### setVirtualEdgeStyle(style)
+设置虚拟边样式
+
+```ts
+setVirtualEdgeStyle = (style: 'Record<string, unknown>'): void => {}
 ```
