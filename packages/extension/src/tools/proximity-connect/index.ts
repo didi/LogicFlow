@@ -3,11 +3,11 @@ import LogicFlow, {
   twoPointDistance,
   BaseNodeModel,
   BaseEdgeModel,
-  Point,
 } from '@logicflow/core'
 import { assign, isEmpty, isEqual, isNil, isFinite, reduce } from 'lodash-es'
 
 import AnchorConfig = Model.AnchorConfig
+import Point = LogicFlow.Point
 
 export type ProximityConnectProps = {
   enable: boolean
@@ -104,7 +104,9 @@ export class ProximityConnect {
         this.virtualEdge = undefined
       }
     }
-    this.findClosestAnchorOfNode(this.currentNode, nodes)
+    if (this.currentNode) {
+      this.findClosestAnchorOfNode(this.currentNode, nodes)
+    }
     if (this.currentDistance < this.thresholdDistance) {
       this.addVirtualEdge()
     }
@@ -127,7 +129,7 @@ export class ProximityConnect {
       y: clientY,
     })
     if (isNil(x) || isNil(y)) return
-    const currentPoint = { x, y }
+    const currentPoint: Point = { x, y }
     const { nodes } = graphModel
     // 判断当前是否有虚拟连线，有的话判断两点距离是否超过阈值，超过的话删除连线
     if (!isNil(this.virtualEdge)) {
@@ -227,7 +229,7 @@ export class ProximityConnect {
   anchorAllowConnect(
     node: BaseNodeModel,
     anchor: AnchorConfig,
-    draggingAnchor: AnchorConfig,
+    draggingAnchor: AnchorConfig | undefined,
   ) {
     const { currentNode } = this
     if (!currentNode) return
