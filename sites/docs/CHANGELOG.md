@@ -1,5 +1,20 @@
 # logicflow-docs
 
+## 2.0.13
+
+### Patch Changes
+
+- feat(docs): 增加动画边demo
+- feat: 关闭 useSpeedInsights
+- feat: 新增渐进连线功能说明文档
+- fix: 修正文档内容拼写错误
+- fix: group插件参数改动补充到文档里
+
+- Updated dependencies
+  - @logicflow/core@2.0.8
+  - @logicflow/extension@2.0.12
+  - @logicflow/react-node-registry@1.0.8
+
 ## 2.0.12
 
 ### Patch Changes
@@ -17,7 +32,7 @@
   - fix(core): 在没有拖拽的情况下，Control组件突然销毁，不触发cancelDrag(#1926) by wbccb
   - fix(core): 修复笔记本触摸板点击边事件失效 by wuchenguang1998
   - feat(examples): 添加动画边demo by DymoneLewis
-  - fix(core): 类型定义 properties:change 改为 node:properties-change  by HeatonZ
+  - fix(core): 类型定义 properties:change 改为 node:properties-change by HeatonZ
   - feat: node-registry 自定义properties类型 by HeatonZ
   - fix(core): 修复 polyline 与多边形节点的交点不正确的问题 by Yuan-ZW
 - Updated dependencies

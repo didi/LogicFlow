@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.8
+
+### Patch Changes
+
+- fix(core): 修复已知问题,新增渐进连线能力
+  - feat: 支持动态修改画布背景配置
+  - fix(core): 修复使用label情况下双击节点会让节点进入文本编辑态问题
+  - fix(core): 修复初始化画布时因为节点吸附网格导致的节点与边错位问题 #1954
+  - feat(core): 增加节点和边的focus和blur事件上报 #1917
+  - feat(core): line 和 polyline 增加getPath方法 #1929
+
 ## 2.0.7
 
 ### Patch Changes
@@ -16,10 +27,9 @@
   - fix(core): 在没有拖拽的情况下，Control组件突然销毁，不触发cancelDrag(#1926) by wbccb
   - fix(core): 修复笔记本触摸板点击边事件失效 by wuchenguang1998
   - feat(examples): 添加动画边demo by DymoneLewis
-  - fix(core): 类型定义 properties:change 改为 node:properties-change  by HeatonZ
+  - fix(core): 类型定义 properties:change 改为 node:properties-change by HeatonZ
   - feat: node-registry 自定义properties类型 by HeatonZ
   - fix(core): 修复 polyline 与多边形节点的交点不正确的问题 by Yuan-ZW
-
 
 ## 2.0.6
 
