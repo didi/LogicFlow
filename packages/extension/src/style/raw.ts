@@ -34,7 +34,6 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
 }
 .lf-label-overlay .lf-label-editor-editing {
   outline: 2px solid #275dc5;
-  outline: none;
   cursor: text;
 }
 .lf-label-overlay .lf-label-editor-hover {
