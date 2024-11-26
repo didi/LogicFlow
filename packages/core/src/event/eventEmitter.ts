@@ -21,7 +21,7 @@ export type EventCallback<T extends string = string> = (
 
 const WILDCARD = '*'
 
-interface OnMethod {
+export interface OnMethod {
   <T extends keyof EventArgs>(
     evt: T,
     callback: EventCallback<T>,
@@ -35,7 +35,7 @@ interface OnMethod {
   (evt: string, callback: EventCallback, once?: boolean): ClearMethod
 }
 
-interface OnceMethod {
+export interface OnceMethod {
   <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearMethod
   <T extends string>(evt: T, callback: EventCallback<T>): ClearMethod
   (evt: string, callback: EventCallback): ClearMethod

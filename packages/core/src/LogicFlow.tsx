@@ -20,7 +20,13 @@ import { Dnd, snapline } from './view/behavior'
 import Tool from './tool'
 import History from './history'
 import Keyboard, { initDefaultShortcut } from './keyboard'
-import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
+import {
+  OnMethod,
+  OnceMethod,
+  EventCallback,
+  EventArgs,
+  CallbackArgs,
+} from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
 
 import Extension = LogicFlow.Extension
@@ -1251,12 +1257,9 @@ export class LogicFlow {
    * lf.on('node:click,node:contextmenu', (data) => {
    * });
    */
-  on<T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): void
-  on<T extends string>(evt: T, callback: EventCallback<T>): void
-  on(evt: string, callback: EventCallback) {
-    this.graphModel.eventCenter.on(evt, callback)
+  on: OnMethod = (evt: string, callback: EventCallback, once?: boolean) => {
+    return this.graphModel.eventCenter.on(evt, callback, once)
   }
-
   /**
    * 撤销监听事件
    */
@@ -1269,10 +1272,8 @@ export class LogicFlow {
   /**
    * 监听事件，只监听一次
    */
-  once<T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): void
-  once<T extends string>(evt: T, callback: EventCallback<T>): void
-  once(evt: string, callback: EventCallback) {
-    this.graphModel.eventCenter.once(evt, callback)
+  once: OnceMethod = (evt: string, callback: EventCallback) => {
+    return this.graphModel.eventCenter.once(evt, callback)
   }
 
   /**
