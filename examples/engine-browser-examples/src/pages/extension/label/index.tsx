@@ -158,6 +158,9 @@ export default function BasicNode() {
       const lf = new LogicFlow({
         ...config,
         container: containerRef.current as HTMLElement,
+        keyboard: {
+          enabled: true,
+        },
         // container: document.querySelector('#graph') as HTMLElement,
         plugins: [Label, DndPanel],
         pluginsOptions: {

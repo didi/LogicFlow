@@ -1369,6 +1369,11 @@ export class LogicFlow {
       this.components.push(extensionIns.render.bind(extensionIns))
     this.extension[pluginName] = extensionIns
   }
+
+  /** 销毁当前实例 */
+  destroy() {
+    this.graphModel.destroy()
+  }
 }
 
 // Option
@@ -1451,6 +1456,7 @@ export namespace LogicFlow {
   // label数据类型声明
   export type LabelConfig = {
     id?: string // label唯一标识
+    type?: string
     x: number
     y: number
     content?: string // 富文本内容

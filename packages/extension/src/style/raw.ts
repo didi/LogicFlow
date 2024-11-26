@@ -33,12 +33,11 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   cursor: move;
 }
 .lf-label-overlay .lf-label-editor-editing {
-  border: 2px solid #275dc5;
-  outline: none;
+  outline: 2px solid #275dc5;
   cursor: text;
 }
 .lf-label-overlay .lf-label-editor-hover {
-  border: 2px dashed #acacac;
+  outline: 2px dashed #acacac;
 }
 .lf-label-overlay .lf-label-editor-clip {
   width: 100px;
@@ -55,15 +54,11 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   text-overflow: ellipsis;
 }
 .lf-label-overlay .lf-label-editor-wrap {
-  width: 100px;
-  /* 根据需要调整宽度 */
   white-space: normal;
   overflow-wrap: break-word;
   /* 允许单词内换行 */
 }
 .lf-label-overlay .lf-label-editor-nowrap {
-  width: 100px;
-  /* 根据需要调整宽度 */
   overflow: visible;
   white-space: nowrap;
 }
@@ -159,6 +154,7 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
 /* dndpanel */
 .lf-dndpanel {
   position: absolute;
+  z-index: 999;
   margin: 5px;
   padding: 15px 5px;
   background: rgba(255, 255, 255, 0.8);

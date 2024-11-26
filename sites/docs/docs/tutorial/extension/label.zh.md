@@ -44,14 +44,14 @@ const lf = new LogicFlow({
 
 ### 插件级
 
-菜单中的每一项功能，可以用一条配置进行表示。具体字段如下:
+Label插件支持一些初始化属性。具体字段如下:
 
-| 字段               | 类型                                                      | 默认值        | 是否必须 | 描述                                        |
-|------------------|---------------------------------------------------------|------------|------|-------------------------------------------|
-| isMultiple       | boolean                                                 | `true`     |      | 是否允许一个节点或边拥有多个 Label                      |
-| maxCount         | number                                                  | `Infinity` |      | 当允许多个 Label 时，限制 Label 的最大数量              |
-| labelWidth       | number                                                  | -          |      | 每个 Label 的宽度，可以统一设置配合 textOverflowMode 使用 |
-| textOverflowMode | 'ellipsis' \| 'wrap' \| 'clip' \| 'nowrap' \| 'default' | `default`  |      | 文本溢出显示模式，配合 CSS 样式实现，与 CSS 配置项表现一致。       |
+| 字段             | 类型                                                    | 默认值     | 是否必须 | 描述                                                         |
+| ---------------- | ------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------ |
+| isMultiple       | boolean                                                 | `true`     |          | 是否允许一个节点或边拥有多个 Label                           |
+| maxCount         | number                                                  | `Infinity` |          | 当允许多个 Label 时，限制 Label 的最大数量                   |
+| labelWidth       | number                                                  | -          |          | 每个 Label 的宽度，可以统一设置配合 textOverflowMode 使用    |
+| textOverflowMode | 'ellipsis' \| 'wrap' \| 'clip' \| 'nowrap' \| 'default' | `default`  |          | 文本溢出显示模式，配合 CSS 样式实现，与 CSS 配置项表现一致。 |
 
 ### 元素级
 
