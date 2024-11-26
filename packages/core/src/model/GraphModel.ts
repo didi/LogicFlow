@@ -41,6 +41,7 @@ import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
 import NodeConfig = LogicFlow.NodeConfig
+import AnchorConfig = Model.AnchorConfig
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
 
@@ -444,36 +445,52 @@ export class GraphModel {
         const {
           sourceNodeId,
           targetNodeId,
-          sourceAnchorId,
-          targetAnchorId,
+          sourceAnchorId = '',
+          targetAnchorId = '',
           startPoint,
           endPoint,
           text,
           textPosition,
         } = edgeModel
+        const updateAnchorPoint = (
+          node: BaseNodeModel | undefined,
+          anchorId: string,
+          point: Position,
+          updatePoint: (anchor: AnchorConfig) => void,
+        ) => {
+          const anchor = node?.anchors.find((anchor) => anchor.id === anchorId)
+          if (anchor && !isEqual(anchor, point)) {
+            updatePoint(anchor)
+          }
+        }
+
         const sourceNode = this.getNodeModelById(sourceNodeId)
         const targetNode = this.getNodeModelById(targetNodeId)
-        const sourceAnchor = sourceNode?.anchors.find(
-          (anchor) => anchor.id === sourceAnchorId,
+
+        updateAnchorPoint(
+          sourceNode,
+          sourceAnchorId,
+          startPoint,
+          edgeModel.updateStartPoint.bind(edgeModel),
         )
-        const targetAnchor = targetNode?.anchors.find(
-          (anchor) => anchor.id === targetAnchorId,
+        updateAnchorPoint(
+          targetNode,
+          targetAnchorId,
+          endPoint,
+          edgeModel.updateEndPoint.bind(edgeModel),
         )
-        if (sourceAnchor && !isEqual(sourceAnchor, startPoint)) {
-          edgeModel.updateStartPoint(sourceAnchor)
-        }
-        if (targetAnchor && !isEqual(targetAnchor, endPoint)) {
-          edgeModel.updateEndPoint(targetAnchor)
-        }
+
         // 而文本需要先算一下文本与默认文本位置之间的相对位置差
         // 再计算新路径的文本默认位置，加上相对位置差，得到调整后边的文本的位置
         if (text) {
           const { x, y } = text
           const { x: defaultX, y: defaultY } = textPosition
-          const deltaX = x - defaultX
-          const deltaY = y - defaultY
-          edgeModel.resetTextPosition()
-          edgeModel.moveText(deltaX, deltaY)
+          if (x && y && defaultX && defaultY) {
+            const deltaX = x - defaultX
+            const deltaY = y - defaultY
+            edgeModel.resetTextPosition()
+            edgeModel.moveText(deltaX, deltaY)
+          }
         }
         this.edgeModelMap.set(edgeModel.id, edgeModel)
         this.elementsModelMap.set(edgeModel.id, edgeModel)

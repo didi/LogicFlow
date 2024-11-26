@@ -327,14 +327,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   getPath(points: Point[]): string {
-    return points
-      .map((point, index) => {
-        if (!index) {
-          return `M ${point.x} ${point.y}`
-        }
-        return `L ${point.x} ${point.y}`
-      })
-      .join(' ')
+    return points.map((point) => `${point.x},${point.y}`).join(' ')
   }
 
   @action
