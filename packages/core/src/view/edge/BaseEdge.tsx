@@ -459,6 +459,20 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     this.toFront()
   }
 
+  handleFocus = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.EDGE_FOCUS, {
+      data: model.getData(),
+    })
+  }
+
+  handleBlur = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.EDGE_BLUR, {
+      data: model.getData(),
+    })
+  }
+
   /**
    * @overridable 支持重写, 此方法为获取边的形状，如果需要自定义边的形状，请重写此方法。
    * @example https://docs.logic-flow.cn/docs/#/zh/guide/basic/edge?id=%e5%9f%ba%e4%ba%8e-react-%e7%bb%84%e4%bb%b6%e8%87%aa%e5%ae%9a%e4%b9%89%e8%be%b9
@@ -499,6 +513,8 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           onMouseOver={this.setHoverOn}
           onMouseEnter={this.setHoverOn}
           onMouseLeave={this.setHoverOff}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
         >
           {this.getShape()}
           {this.getAppend()}

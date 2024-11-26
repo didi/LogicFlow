@@ -188,6 +188,14 @@ interface NodeEventArgs {
      */
     properties: Record<string, any>
   }
+  /**
+   * 节点获焦
+   */
+  'node:focus': NodeEventArgsPick<'data'>
+  /**
+   * 节点失焦
+   */
+  'node:blur': NodeEventArgsPick<'data'>
 }
 
 type EdgeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
@@ -259,6 +267,14 @@ interface EdgeEventArgs {
       oldEdge: EdgeData
     }
   }
+  /**
+   * 边获焦
+   */
+  'edge:focus': EdgeEventArgsPick<'data'>
+  /**
+   * 边失焦
+   */
+  'edge:blur': EdgeEventArgsPick<'data'>
 }
 
 /**
