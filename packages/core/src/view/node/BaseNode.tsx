@@ -424,6 +424,32 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
+  handleFocus = (ev: any) => {
+    const { model, graphModel } = this.props
+    const position = graphModel.getPointByClient({
+      x: ev.clientX,
+      y: ev.clientY,
+    })
+    graphModel.eventCenter.emit(EventType.NODE_FOCUS, {
+      data: model.getData(),
+      e: ev,
+      position,
+    })
+  }
+
+  handleBlur = (ev: any) => {
+    const { model, graphModel } = this.props
+    const position = graphModel.getPointByClient({
+      x: ev.clientX,
+      y: ev.clientY,
+    })
+    graphModel.eventCenter.emit(EventType.NODE_BLUR, {
+      data: model.getData(),
+      e: ev,
+      position,
+    })
+  }
+
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
   setHoverOn = (ev: MouseEvent) => {
     const { model, graphModel } = this.props
@@ -508,6 +534,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           onMouseLeave={this.setHoverOff}
           onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
           {...restAttributes}
         >
           {nodeShapeInner}
