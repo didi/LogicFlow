@@ -23,7 +23,7 @@ export class LineEdgeModel extends BaseEdgeModel {
   }
   getPath(points: Point[]): string {
     const [start, end] = points
-    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`
+    return `${start.x},${start.y} ${end.x},${end.y}`
   }
   getTextPosition(): Point {
     return {
