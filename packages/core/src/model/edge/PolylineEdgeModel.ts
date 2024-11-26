@@ -326,12 +326,21 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     })
   }
 
+  getPath(points: Point[]): string {
+    return points
+      .map((point, index) => {
+        if (!index) {
+          return `M ${point.x} ${point.y}`
+        }
+        return `L ${point.x} ${point.y}`
+      })
+      .join(' ')
+  }
+
   @action
   initPoints() {
     if (this.pointsList.length > 0) {
-      this.points = this.pointsList
-        .map((point) => `${point.x},${point.y}`)
-        .join(' ')
+      this.points = this.getPath(this.pointsList)
     } else {
       this.updatePoints()
     }

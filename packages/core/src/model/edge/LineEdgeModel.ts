@@ -17,6 +17,14 @@ export class LineEdgeModel extends BaseEdgeModel {
       ...cloneDeep(customStyle),
     }
   }
+  initEdgeData(data: LogicFlow.EdgeConfig): void {
+    super.initEdgeData(data)
+    this.points = this.getPath([this.startPoint, this.endPoint])
+  }
+  getPath(points: Point[]): string {
+    const [start, end] = points
+    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`
+  }
   getTextPosition(): Point {
     return {
       x: (this.startPoint.x + this.endPoint.x) / 2,
