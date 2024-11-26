@@ -424,29 +424,17 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleFocus = (ev: any) => {
+  handleFocus = () => {
     const { model, graphModel } = this.props
-    const position = graphModel.getPointByClient({
-      x: ev.clientX,
-      y: ev.clientY,
-    })
     graphModel.eventCenter.emit(EventType.NODE_FOCUS, {
       data: model.getData(),
-      e: ev,
-      position,
     })
   }
 
-  handleBlur = (ev: any) => {
+  handleBlur = () => {
     const { model, graphModel } = this.props
-    const position = graphModel.getPointByClient({
-      x: ev.clientX,
-      y: ev.clientY,
-    })
     graphModel.eventCenter.emit(EventType.NODE_BLUR, {
       data: model.getData(),
-      e: ev,
-      position,
     })
   }
 

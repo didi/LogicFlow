@@ -459,29 +459,17 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     this.toFront()
   }
 
-  handleFocus = (ev: any) => {
+  handleFocus = () => {
     const { model, graphModel } = this.props
-    const position = graphModel.getPointByClient({
-      x: ev.clientX,
-      y: ev.clientY,
-    })
     graphModel.eventCenter.emit(EventType.EDGE_FOCUS, {
       data: model.getData(),
-      e: ev,
-      position,
     })
   }
 
-  handleBlur = (ev: any) => {
+  handleBlur = () => {
     const { model, graphModel } = this.props
-    const position = graphModel.getPointByClient({
-      x: ev.clientX,
-      y: ev.clientY,
-    })
     graphModel.eventCenter.emit(EventType.EDGE_BLUR, {
       data: model.getData(),
-      e: ev,
-      position,
     })
   }
 

@@ -21,6 +21,9 @@ export const content = `.lf-graph {
 .lf-text-draggable {
   cursor: move;
 }
+*:focus {
+  outline: none;
+}
 .lf-node-anchor {
   cursor: crosshair;
 }
