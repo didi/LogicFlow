@@ -1,5 +1,11 @@
 # @logicflow/vue-node-registry
 
+## 1.0.10
+
+### Patch Changes
+
+- release react/vue-node-registry
+
 ## 1.0.9
 
 ### Patch Changes
