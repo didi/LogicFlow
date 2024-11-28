@@ -1,4 +1,4 @@
-import { find, forEach, map, merge, isBoolean, debounce, isEqual } from 'lodash-es'
+import { find, forEach, map, merge, isBoolean, debounce, isEqual,isNil } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -161,20 +161,11 @@ export class GraphModel {
     this.edgeType = options.edgeType || 'polyline'
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
-    if (options.width) {
-      this.width = options.width
-      this.isContainerWidth = false
-    } else {
-      this.width = this.rootEl.getBoundingClientRect().width
-      this.isContainerWidth = true
-    }
-    if (options.height) {
-      this.height = options.height
-      this.isContainerHeight = false
-    } else {
-      this.height = this.rootEl.getBoundingClientRect().height
-      this.isContainerHeight = true
-    }
+
+    this.width = options.width ?? this.rootEl.getBoundingClientRect().width
+    this.isContainerWidth = isNil(options.width)
+    this.height = options.height ?? this.rootEl.getBoundingClientRect().height
+    this.isContainerHeight = isNil(options.height)
 
     const resizeObserver = new ResizeObserver(
       debounce(
@@ -1539,20 +1530,11 @@ export class GraphModel {
    * 重新设置画布的宽高
    */
   @action resize(width?: number, height?: number): void {
-    if (width) {
-      this.width = width
-      this.isContainerWidth = false
-    } else {
-      this.width = this.rootEl.getBoundingClientRect().width
-      this.isContainerWidth = true
-    }
-    if (height) {
-      this.height = height
-      this.isContainerHeight = false
-    } else {
-      this.height = this.rootEl.getBoundingClientRect().height
-      this.isContainerHeight = true
-    }
+    this.width = width ?? this.rootEl.getBoundingClientRect().width
+    this.isContainerWidth = isNil(width)
+    this.height = height ?? this.rootEl.getBoundingClientRect().height
+    this.isContainerHeight = isNil(height)
+
     if (!this.width || !this.height) {
       console.warn(
         '渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675',
