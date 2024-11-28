@@ -1182,9 +1182,14 @@ closeEdgeAnimation: (edgeId: string): void => {}
 Event listener for the graph, see [event](../eventCenter.en.md).
 
 ```ts | pure
-import { EventCallback } from './EventEmitter'
+import { EventCallback, ClearCallback } from './EventEmitter'
 
-on: (evt: string, callback: EventCallback<T>): void => {}
+export interface OnEvent {
+  <T extends keyof EventArgs>(evt: T,callback: EventCallback<T>,once?: boolean): ClearCallback
+  <T extends string>(evt: T, callback: EventCallback<T>, once?: boolean): ClearCallback
+}
+
+on: OnEvent
 ```
 
 Parameters:
@@ -1193,16 +1198,18 @@ Parameters:
 |:---------|:-------|:---------|:--------|:------------------|
 | evt      | string | ✅        | -       | Event name        |
 | callback | `EventCallback<T>` | ✅        | -       | Callback function |
+| once | boolean |   | false   | only once |
 
 Example：
 
 ```ts | pure
-lf.on("node:click", (args) => {
-  console.log("node:click", args.position);
-});
-lf.on("element:click", (args) => {
-  console.log("element:click", args.e.target);
-});
+const clear = lf
+  .on("node:click", (args) => {
+    console.log("node:click", args.position);
+  }, false)
+  .on("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  });
 ```
 
 ### off
@@ -1238,9 +1245,14 @@ lf.off("element:click", () => {
 Event listener that triggers only once.
 
 ```ts | pure
-import { EventCallback } from './EventEmitter'
+import { EventCallback, ClearCallback } from './EventEmitter'
 
-once: (evt: string, callback: EventCallback<T>): void => {}
+export interface OnceEvent {
+  <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearCallback
+  <T extends string>(evt: T, callback: EventCallback<T>): ClearCallback
+}
+
+once: OnceEvent
 ```
 
 Parameters:
@@ -1253,9 +1265,13 @@ Parameters:
 Example：
 
 ```ts | pure
-lf.once("node:click", () => {
-  console.log("node:click");
-});
+const clear = lf
+  .once("node:click", (args) => {
+    console.log("node:click", args.position);
+  })
+  .once("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  });
 ```
 
 ### emit

@@ -18,19 +18,28 @@ listening to events.
 The `on` method is provided on the `lf` instance to support listening to events.
 
 ```tsx | pure
-lf.on("node:dnd-add", (data) => {});
+const clear lf.on("node:dnd-add", (data) => {});
+```
+
+LogicFlow supports chaining calls to listen for events.
+
+```tsx | pure
+// The returned 'clear' function cleans up the registered 'node:click' and 'edge:click' events
+const clear = lf
+  .on('node:click', (data) => {})
+  .on('edge:click', (data) => {})
 ```
 
 LogicFlow supports splitting event names with commas.
 
 ```tsx | pure
-lf.on("node:click,edge:click", (data) => {});
+const clear = lf.on("node:click,edge:click", (data) => {});
 ```
 
 ## Customizing events
 
 In addition to the listening events supported on lf, events can be listened to and triggered using
-the [eventCenter](../../api/graphModel.en.md#eventCenter) object. `eventCenter` is a property on
+the [eventCenter](../../api/model/graphModel.en.md#eventcenter) object. `eventCenter` is a property on
 a `graphModel`. So when customizing a node, we can use `eventCenter` to trigger custom events.
 
 ```tsx | pure

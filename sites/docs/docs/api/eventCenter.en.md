@@ -197,19 +197,20 @@ Parameters:
 |:---------|:-------|:---------|:--------|:------------------|
 | evt      | string | ✅        | -       | Event Name        |
 | callback | string | ✅        | -       | Callback function |
+| once | boolean |   | false   | only once |
 
 Example:
 
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
 
-eventCenter.on("node:click", (args) => {
-  console.log("node:click", args.position);
-});
-eventCenter.on("element:click", (args) => {
-  console.log("element:click", args.e.target);
-});
-
+const clear = eventCenter
+  .on("node:click", (args) => {
+    console.log("node:click", args.position);
+  })
+  .on("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  }, true);
 ```
 
 ## off
@@ -258,10 +259,13 @@ Example:
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
 
-eventCenter.once("node:click", () => {
-  console.log("node:click");
-});
-
+const clear = eventCenter
+  .once("node:click", () => {
+    console.log("node:click");
+  })
+  .once("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  });
 ```
 
 ## emit

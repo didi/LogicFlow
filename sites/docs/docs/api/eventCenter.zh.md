@@ -196,18 +196,20 @@ History 用来记录画布上的每一次改动，当画布上的元素发生变
 |:---------|:-------|:---|:----|:-----|
 | evt      | string | ✅  | -   | 事件名称 |
 | callback | string | ✅  | -   | 回调函数 |
+| once | boolean |   | false   | 是否只监听一次 |
 
 示例：
 
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
 
-eventCenter.on("node:click", (args) => {
-  console.log("node:click", args.position);
-});
-eventCenter.on("element:click", (args) => {
-  console.log("element:click", args.e.target);
-});
+const clear = eventCenter
+  .on("node:click", (args) => {
+    console.log("node:click", args.position);
+  })
+  .on("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  }, true);
 ```
 
 ## off
@@ -253,9 +255,13 @@ eventCenter.off("element:click", () => {
 ```tsx | pure
 const { eventCenter } = lf.graphModel;
 
-eventCenter.once("node:click", () => {
-  console.log("node:click");
-});
+const clear = eventCenter
+  .once("node:click", () => {
+    console.log("node:click");
+  })
+  .once("element:click", (args) => {
+    console.log("element:click", args.e.target);
+  });
 ```
 
 ## emit
