@@ -21,30 +21,28 @@ export type EventCallback<T extends string = string> = (
 
 const WILDCARD = '*'
 
-export interface OnMethod {
+export interface OnEvent {
   <T extends keyof EventArgs>(
     evt: T,
     callback: EventCallback<T>,
     once?: boolean,
-  ): ClearMethod
+  ): ClearCallback
   <T extends string>(
     evt: T,
     callback: EventCallback<T>,
     once?: boolean,
-  ): ClearMethod
-  (evt: string, callback: EventCallback, once?: boolean): ClearMethod
+  ): ClearCallback
 }
 
-export interface OnceMethod {
-  <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearMethod
-  <T extends string>(evt: T, callback: EventCallback<T>): ClearMethod
-  (evt: string, callback: EventCallback): ClearMethod
+export interface OnceEvent {
+  <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearCallback
+  <T extends string>(evt: T, callback: EventCallback<T>): ClearCallback
 }
 
-interface ClearMethod {
+interface ClearCallback {
   (): void
-  on: OnMethod
-  once: OnceMethod
+  on: OnEvent
+  once: OnceEvent
 }
 
 /* event-emitter */
@@ -56,7 +54,7 @@ export default class EventEmitter {
    * @param evt 事件名称
    * @param callback 回调函数
    * @param once 是否只监听一次
-   * @returns { ClearMethod } 返回支持链式调用的清除函数
+   * @returns { ClearCallback } 返回支持链式调用的清除函数
    * @example
    * const bus = new EventEmitter();
    * const off = bus
@@ -66,11 +64,11 @@ export default class EventEmitter {
    *
    * off() // 清除这一次注册的 e1、e2、e3 事件
    */
-  on: OnMethod = (
+  on: OnEvent = (
     evt: string,
     callback: EventCallback,
     once?: boolean,
-  ): ClearMethod => {
+  ): ClearCallback => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       if (!this._events[evKey]) {
@@ -82,7 +80,7 @@ export default class EventEmitter {
       })
     })
 
-    return createClearMethod(this, () => {
+    return createClearCallback(this, () => {
       if (evt) {
         this.off(evt, callback)
       }
@@ -93,7 +91,7 @@ export default class EventEmitter {
    * 监听一个事件一次
    * @param evt 事件名称
    * @param callback 回调函数
-   * @returns { ClearMethod } 返回支持链式调用的清除函数
+   * @returns { ClearCallback } 返回支持链式调用的清除函数
    * @example
    * const bus = new EventEmitter();
    * const off = bus
@@ -103,13 +101,13 @@ export default class EventEmitter {
    *
    * off() // 清除这一次注册的 e4、e5、e6 事件
    */
-  once: OnceMethod = (evt: string, callback: EventCallback): ClearMethod => {
+  once: OnceEvent = (evt: string, callback: EventCallback): ClearCallback => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       this.on(evKey, callback, true)
     })
 
-    return createClearMethod(this, () => {
+    return createClearCallback(this, () => {
       if (evt) {
         this.off(evt, callback)
       }
@@ -198,15 +196,15 @@ export default class EventEmitter {
   }
 }
 
-const createClearMethod = (
+const createClearCallback = (
   ctx: EventEmitter,
   clear: () => void,
-): ClearMethod => {
-  const preClear = clear as ClearMethod
+): ClearCallback => {
+  const preClear = clear as ClearCallback
 
   preClear.on = (evt: string, callback: EventCallback, once?: boolean) => {
     const clear = ctx.on(evt, callback, once)
-    return createClearMethod(ctx, () => {
+    return createClearCallback(ctx, () => {
       preClear()
       clear()
     })
@@ -214,7 +212,7 @@ const createClearMethod = (
 
   preClear.once = (evt: string, callback: EventCallback) => {
     const clear = ctx.once(evt, callback)
-    return createClearMethod(ctx, () => {
+    return createClearCallback(ctx, () => {
       preClear()
       clear()
     })

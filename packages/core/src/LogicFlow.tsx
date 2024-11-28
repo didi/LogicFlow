@@ -21,8 +21,8 @@ import Tool from './tool'
 import History from './history'
 import Keyboard, { initDefaultShortcut } from './keyboard'
 import {
-  OnMethod,
-  OnceMethod,
+  OnEvent,
+  OnceEvent,
   EventCallback,
   EventArgs,
   CallbackArgs,
@@ -1257,7 +1257,7 @@ export class LogicFlow {
    * lf.on('node:click,node:contextmenu', (data) => {
    * });
    */
-  on: OnMethod = (evt: string, callback: EventCallback, once?: boolean) => {
+  on: OnEvent = (evt: string, callback: EventCallback, once?: boolean) => {
     return this.graphModel.eventCenter.on(evt, callback, once)
   }
   /**
@@ -1272,7 +1272,7 @@ export class LogicFlow {
   /**
    * 监听事件，只监听一次
    */
-  once: OnceMethod = (evt: string, callback: EventCallback) => {
+  once: OnceEvent = (evt: string, callback: EventCallback) => {
     return this.graphModel.eventCenter.once(evt, callback)
   }
 
