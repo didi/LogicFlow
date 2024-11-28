@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.9
+
+### Patch Changes
+
+- fix: 重新打包以加入最新改动内容
+
 ## 2.0.8
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.13
+
+### Patch Changes
+
+- fix: 重新打包以加入最新改动内容
+- Updated dependencies
+  - @logicflow/core@2.0.9
+
 ## 2.0.12
 
 ### Patch Changes
