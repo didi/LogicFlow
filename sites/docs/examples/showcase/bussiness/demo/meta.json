@@ -74,6 +74,17 @@
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/organizer.png",
       "previewUrl": "https://examples.logic-flow.cn/demo/dist/organizer",
       "githubUrl": "https://github.com/Logic-Flow/docs/tree/master/demo/organizer"
+    },
+    {
+      "filename": "profileEditor.tsx",
+      "isExternal": true,
+      "title": {
+        "zh": "配置文件编辑器",
+        "en": "Instrument Profile Editor"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/case/bussiness/automation.jpg",
+      "previewUrl": "https://instrument-profile-editor.hisoten.xyz/",
+      "githubUrl": "https://github.com/ChangeSuger/instrument-profile-editor"
     }
   ]
 }
