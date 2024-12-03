@@ -221,8 +221,12 @@ export class Label implements Extension {
       editable: true,
       vertical: false,
     }
-
-    if (!isMultiple || len >= (curLabelOption?.maxCount ?? maxCount)) {
+    // 全局的isMultiple为false，或全局isMultiple为true但局部isMultiple指明是false，或当前label长度已经达到上线时，不允许添加多个 label
+    if (
+      !isMultiple ||
+      (isMultiple && curLabelOption.isMultiple === false) ||
+      len >= (curLabelOption?.maxCount ?? maxCount)
+    ) {
       return
     }
 
