@@ -182,6 +182,14 @@ export class Label extends Component<ILabelProps, ILabelState> {
     })
   }
 
+  handleInput = (e: InputEvent) => {
+    const { label, graphModel } = this.props
+    graphModel.eventCenter.emit('label:input', {
+      e,
+      data: label.getData(),
+    })
+  }
+
   setElementModelLabelInfo(data) {
     const { label, element, graphModel } = this.props
     const {
@@ -330,6 +338,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
             'lf-label-editor-hover': !isEditing && (isHovered || isSelected),
             [`lf-label-editor-${textOverflowMode}`]: !isEditing,
           })}
+          onInput={this.handleInput}
           style={{
             maxWidth: `${maxLabelWidth}px`,
             boxSizing: 'border-box',
