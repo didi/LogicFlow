@@ -313,7 +313,29 @@ export default function BasicNode() {
       })
     }
   }
-
+  const handleChangeSize = () => {
+    const lf = lfRef.current
+    if (lf) {
+      if (lf.graphModel.isContainerHeight || lf.graphModel.isContainerWidth) {
+        console.log('resize by width,height')
+        lf.resize(300, 100)
+      } else {
+        console.log('resize by container')
+        lf.resize()
+      }
+      console.log(
+        'current is container',
+        lf.graphModel.isContainerHeight,
+        lf.graphModel.isContainerWidth,
+      )
+      console.log('current option size', lf.options.width, lf.options.height)
+      console.log(
+        'current griphModel size',
+        lf.graphModel.width,
+        lf.graphModel.height,
+      )
+    }
+  }
   const handleChangeEditConfig = () => {
     const isSilentMode = lfRef.current?.options.isSilentMode
     lfRef?.current?.updateEditConfig({
@@ -450,6 +472,7 @@ export default function BasicNode() {
         <Button key="changeType" type="primary" onClick={handleChangeNodeType}>
           切换节点为五角星
         </Button>
+
         <Button
           key="changeConfig"
           type="primary"
@@ -577,11 +600,7 @@ export default function BasicNode() {
         <Button
           key="resizeGraph"
           type="primary"
-          onClick={() => {
-            if (lfRef.current) {
-              lfRef.current?.resize(400, 400)
-            }
-          }}
+          onClick={handleChangeSize}
         >
           更新画布大小
         </Button>
