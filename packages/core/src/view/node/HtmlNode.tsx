@@ -70,6 +70,7 @@ export class HtmlNode<
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount()
     this.rootEl.innerHTML = ''
   }
 
