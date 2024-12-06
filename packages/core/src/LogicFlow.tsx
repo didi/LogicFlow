@@ -1044,6 +1044,8 @@ export class LogicFlow {
    */
   clearData() {
     this.graphModel.clearData()
+    // 强制刷新数据, 让 preact 清除对已删除节点的引用
+    this.render({})
   }
 
   /*********************************************************

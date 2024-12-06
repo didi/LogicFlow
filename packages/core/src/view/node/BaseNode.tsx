@@ -80,6 +80,13 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     if (this.modelDisposer) {
       this.modelDisposer()
     }
+
+    // 以下是 mobx-preact 中 componentWillUnmount 的回调逻辑，但是不知道出于什么考虑，mobx-preact 没有混入这一段逻辑
+    // @ts-ignore
+    if (this.render.$mobx) {
+      // @ts-ignore
+      this.render.$mobx.dispose()
+    }
   }
 
   componentDidMount() {}

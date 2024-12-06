@@ -1,4 +1,12 @@
-import { find, forEach, map, merge, isBoolean, debounce, isEqual } from 'lodash-es'
+import {
+  find,
+  forEach,
+  map,
+  merge,
+  isBoolean,
+  debounce,
+  isEqual,
+} from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -442,14 +450,20 @@ export class GraphModel {
       this.resize()
     }
     if (!graphData) {
-      this.nodes = []
-      this.edges = []
+      this.clearData()
       return
     }
+    this.elementsModelMap.clear()
+    this.nodeModelMap.clear()
+    this.edgeModelMap.clear()
+
     if (graphData.nodes) {
-      this.nodes = map(graphData.nodes, (node: NodeConfig) =>
-        this.getModelAfterSnapToGrid(node),
-      )
+      this.nodes = map(graphData.nodes, (node: NodeConfig) => {
+        const nodeModel = this.getModelAfterSnapToGrid(node)
+        this.elementsModelMap.set(nodeModel.id, nodeModel)
+        this.nodeModelMap.set(nodeModel.id, nodeModel)
+        return nodeModel
+      })
     } else {
       this.nodes = []
     }
@@ -1533,6 +1547,11 @@ export class GraphModel {
   @action clearData(): void {
     this.nodes = []
     this.edges = []
+
+    // 清除对已清除节点的引用
+    this.edgeModelMap.clear()
+    this.nodeModelMap.clear()
+    this.elementsModelMap.clear()
   }
 
   /**
