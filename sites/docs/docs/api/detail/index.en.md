@@ -23,7 +23,7 @@ Position to the center of the canvas viewport.
 Parameters:
 
 | Name        | Type   | Required | Default | Description                         |
-|:------------|:-------|:---------|:--------|:------------------------------------|
+| :---------- | :----- | :------- | :------ | :---------------------------------- |
 | focusOnArgs | object | ✅        | -       | Required parameters for positioning |
 
 Example：
@@ -50,7 +50,7 @@ height of the canvas will be calculated automatically.
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description          |
-|:-------|:-------|:----------|:--------|:---------------------|
+| :----- | :----- | :-------- | :------ | :------------------- |
 | width  | number |           | -       | Width of the canvas  |
 | height | number | ✅         | -       | Height of the canvas |
 
@@ -91,14 +91,14 @@ lf.getPointByClient(x, y)
 Parameters:
 
 | Name | Type   | Required | Default | Description                                                                                                                        |
-|:-----|:-------|:---------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------|
+| :--- | :----- | :------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------- |
 | x    | number | ✅        | -       | The `x` coordinate relative to the top left corner of the page, which is generally the `x` coordinate returned by the native event |
 | y    | number | ✅        | -       | The `y` coordinate relative to the top left corner of the page, which is generally the `y` coordinate returned by the native event |
 
 return：
 
 | Name  | Type  | Description                                                     |
-|:------|:------|:----------------------------------------------------------------|
+| :---- | :---- | :-------------------------------------------------------------- |
 | point | Point | Two coordinates relative to the upper left corner of the canvas |
 
 ```ts | pure
@@ -237,7 +237,7 @@ lf.addNode(nodeConfig)
 Parameters:
 
 | Name       | Type           | Required | Default | Description                                |
-|:-----------|:---------------|:---------|:--------|:-------------------------------------------|
+| :--------- | :------------- | :------- | :------ | :----------------------------------------- |
 | type       | string         | ✅        | -       | Node type name                             |
 | x          | number         | ✅        | -       | Node horizontal coordinate x               |
 | y          | number         | ✅        | -       | Node vertical coordinate y                 |
@@ -279,7 +279,7 @@ deleteNode: (nodeId: string) => void
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description                      |
-|:-------|:-------|:----------|:--------|:---------------------------------|
+| :----- | :----- | :-------- | :------ | :------------------------------- |
 | nodeId | string | ✅         | -       | The id of the node to be deleted |
 
 Example：
@@ -302,7 +302,7 @@ lf.cloneNode(nodeId)
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description    |
-|:-------|:-------|:----------|:--------|:---------------|
+| :----- | :----- | :-------- | :------ | :------------- |
 | nodeId | string | ✅         | -       | Target node id |
 
 Example：
@@ -330,7 +330,7 @@ changeNodeType: (id: string, type: string): void => {}
 ```
 
 | Name | Type   | Required | Default | Description |
-|:-----|:-------|:---------|:--------|:------------|
+| :--- | :----- | :------- | :------ | :---------- |
 | id   | string | ✅        |         | Node id     |
 | type | string | ✅        |         | New type    |
 
@@ -351,7 +351,7 @@ getNodeModelById: (nodeId: string): BaseNodeModel => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 Example：
@@ -371,7 +371,7 @@ getNodeDataById: (nodeId: string): NodeConfig => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 Example：
@@ -391,7 +391,7 @@ getNodeIncomingNode:(nodeId: string): BaseNodeModel[] => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 ### getNodeOutgoingNode
@@ -405,7 +405,7 @@ getNodeOutgoingNode:(nodeId: string): BaseNodeModel[] => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 ### getNodeIncomingEdge
@@ -419,7 +419,7 @@ getNodeIncomingEdge:(nodeId: string): BaseEdgeModel[] => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 ### getNodeOutgoingEdge
@@ -433,7 +433,7 @@ getNodeOutgoingEdge:(nodeId: string): BaseEdgeModel[] => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | nodeId | string | ✅         | -       | Node id     |
 
 ## Edge Related
@@ -447,7 +447,7 @@ setDefaultEdgeType: (type: EdgeType): void => {}
 ```
 
 | Name | Type   | Required | Default    | Description                                                                                                                                                                                                             |
-|:-----|:-------|:---------|:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--- | :----- | :------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | type | string | ✅        | 'polyline' | Set the type of edge, built-in support for edge types are line (straight line), polyline (line), bezier (Bezier curve). The default is a line, and users can customize the type name to switch to the user-defined edge |
 
 Example：
@@ -466,15 +466,17 @@ addEdge: (edgeConfig: EdgeConifg): void => {}
 
 Parameters:
 
-| Name         | Type            | Required | Default | Description                                  |
-|:-------------|:----------------|:---------|:--------|:---------------------------------------------|
-| id           | string          |          | -       | Edge id                                      |
-| type         | string          |          | -       | Edge type                                    |
-| sourceNodeId | string          | ✅        | -       | id of the start node of the edge             |
-| targetNodeId | string          | ✅        | -       | id of the end node of the edge               |
-| startPoint   | Object          |          | -       | Coordinate of the starting point of the edge |
-| endPoint     | Object          |          | -       | Coordinate of the ending point of the edge   |
-| text         | string\| Object |          | -       | Edge text                                    |
+| Name           | Type            | Required | Default | Description                                  |
+| :------------- | :-------------- | :------- | :------ | :------------------------------------------- |
+| id             | string          |          | -       | Edge id                                      |
+| type           | string          |          | -       | Edge type                                    |
+| sourceNodeId   | string          | ✅        | -       | id of the start node of the edge             |
+| targetNodeId   | string          | ✅        | -       | id of the end node of the edge               |
+| sourceAnchorId | string          |          | -       | id of the start anchor of the edge           |
+| targetAnchorId | string          |          | -       | id of the end anchor of the edge             |
+| startPoint     | Object          |          | -       | Coordinate of the starting point of the edge |
+| endPoint       | Object          |          | -       | Coordinate of the ending point of the edge   |
+| text           | string\| Object |          | -       | Edge text                                    |
 
 Example：
 
@@ -528,7 +530,7 @@ export type EdgeConfig = {
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | edgeId | string | ✅         | -       | Edge id     |
 
 Example：
@@ -548,7 +550,7 @@ getEdgeModelById: (edgeId: string): BaseEdgeModel => {}
 Parameters:
 
 | Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
+| :----- | :----- | :-------- | :------ | :---------- |
 | edgeId | string | ✅         | -       | Node id     |
 
 Example：
@@ -562,7 +564,7 @@ lf.getEdgeModelById("id")
 Get the model of the edge that satisfies the condition.
 
 | Name       | Type   | Required | Default | Description          |
-|:-----------|:-------|:---------|:--------|:---------------------|
+| :--------- | :----- | :------- | :------ | :------------------- |
 | edgeFilter | Object | ✅        | -       | Filtering conditions |
 
 ```ts | pure
@@ -612,7 +614,7 @@ deleteEdge: (id): void => {}
 Parameters:
 
 | Name | Type   | Required | Default | Description |
-|:-----|:-------|:---------|:--------|:------------|
+| :--- | :----- | :------- | :------ | :---------- |
 | id   | string |          | -       | Edge id     |
 
 Example：
@@ -633,7 +635,7 @@ deleteEdgeByNodeId: (config: EdgeFilter): void => {}
 Parameters:
 
 | Name         | Type   | Required | Default | Description                         |
-|:-------------|:-------|:---------|:--------|:------------------------------------|
+| :----------- | :----- | :------- | :------ | :---------------------------------- |
 | sourceNodeId | string |          | -       | id of the starting node of the edge |
 | targetNodeId | string |          | -       | id of the ending node of the edge   |
 
@@ -664,7 +666,7 @@ getNodeEdges: (id: string): BaseEdgeModel[] => {}
 ```
 
 | Parameter | Type   | Required | Default | Description |
-|:----------|:-------|:---------|:--------|:------------|
+| :-------- | :----- | :------- | :------ | :---------- |
 | id        | string | ✅        |         | Node id     |
 
 Example：
@@ -686,7 +688,7 @@ register: (config: RegisterConfig): void => {}
 Parameters:
 
 | Name         | Type   | Required | Default | Description                            |
-|:-------------|:-------|:---------|:--------|:---------------------------------------|
+| :----------- | :----- | :------- | :------ | :------------------------------------- |
 | config.type  | string | ✅        | -       | Customize the types of nodes and edges |
 | config.model | Model  | ✅        | -       | Model of nodes and edges               |
 | config.view  | View   | ✅        | -       | View of nodes and edges                |
@@ -778,7 +780,7 @@ Select the graph.
 Parameters:
 
 | Name     | Type    | Required | Default | Description                                                                        |
-|:---------|:--------|:---------|:--------|:-----------------------------------------------------------------------------------|
+| :------- | :------ | :------- | :------ | :--------------------------------------------------------------------------------- |
 | id       | string  | ✅        | -       | Node or edge id                                                                    |
 | multiple | boolean |          | false   | If or not is multi-selected, if true, the last selected element will not be reset. |
 | toFront  | boolean |          | true    | If or not the selected element will be topped, default is true.                    |
@@ -800,7 +802,7 @@ getSelectElements: (isIgnoreCheck: boolean): GraphConfigData => {}
 ```
 
 | Name          | Type    | Required | Default | Description                                                                                    |
-|:--------------|:--------|:---------|:--------|:-----------------------------------------------------------------------------------------------|
+| :------------ | :------ | :------- | :------ | :--------------------------------------------------------------------------------------------- |
 | isIgnoreCheck | boolean | ✅        | true    | Whether to include edges where sourceNode and targetNode are not selected, default is include. |
 
 ```ts | pure
@@ -842,7 +844,7 @@ deleteElement: (id: string): boolean => {}
 ```
 
 | Name | Type   | Required | Default | Description     |
-|:-----|:-------|:---------|:--------|:----------------|
+| :--- | :----- | :------- | :------ | :-------------- |
 | id   | string | ✅        |         | Node or Edge id |
 
 Example：
@@ -860,7 +862,7 @@ Note: This method is not recommended for the default stacking mode.
 Parameters:
 
 | Name   | Type            | Mandatory | Default | Description                                               |
-|:-------|:----------------|:----------|:--------|:----------------------------------------------------------|
+| :----- | :-------------- | :-------- | :------ | :-------------------------------------------------------- |
 | id     | string          | ✅         | -       | Node or edge id                                           |
 | zIndex | string\| number | ✅         | -       | Passing numbers, also supports passing `top` and `bottom` |
 
@@ -881,7 +883,7 @@ For example, after drawing a selection with the mouse, get all the elements insi
 Parameters:
 
 | Name              | Type       | Default | Description                                         |
-|-------------------|------------|---------|-----------------------------------------------------|
+| ----------------- | ---------- | ------- | --------------------------------------------------- |
 | leftTopPoint      | PointTuple | -       | Point at the upper left of the area                 |
 | rightBottomPoint  | PointTuple | -       | point at the bottom right of the area               |
 | wholeEdge         | boolean    | -       | Whether the entire edge has to be inside the region |
@@ -973,7 +975,7 @@ updateText: (id: string, value: string): void => {}
 ```
 
 | Name  | Type   | Required | Default | Description         |
-|:------|:-------|:---------|:--------|:--------------------|
+| :---- | :----- | :------- | :------ | :------------------ |
 | id    | string | ✅        |         | Node or Edge id     |
 | value | string | ✅        |         | Updated text values |
 
@@ -1036,7 +1038,7 @@ Zoom in or out of the canvas.
 Parameters:
 
 | Name     | Type              | Required | Default | Description                                                                                                                                                                                                                               |
-|:---------|:------------------|:---------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------- | :---------------- | :------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | zoomSize | boolean or number |          | false   | The value of zoom in and zoom out is supported by passing in a number between 0 and n. Less than 1 means zoom in, more than 1 means zoom out. It also supports passing true and false to zoom in and out according to the built-in scale. |
 | point    | [x,y]             |          | false   | The origin of the zoom, not passing the default top left corner.                                                                                                                                                                          |
 
@@ -1075,7 +1077,7 @@ setZoomMiniSize: (size: number): void => {}
 Parameters:
 
 | Name | Type   | Required | Default | Description                        |
-|:-----|:-------|:---------|:--------|:-----------------------------------|
+| :--- | :----- | :------- | :------ | :--------------------------------- |
 | size | number | ✅        | 0.2     | Minimum scaling ratio, default 0.2 |
 
 Example：
@@ -1095,7 +1097,7 @@ setZoomMaxSize: (size: number): void => {}
 Parameters:
 
 | Name | Type   | Required | Default | Description                       |
-|:-----|:-------|:---------|:--------|:----------------------------------|
+| :--- | :----- | :------- | :------ | :-------------------------------- |
 | size | number | ✅        | 16      | Maximum magnification, default 16 |
 
 Example：
@@ -1120,7 +1122,7 @@ Panning graph.
 Parameters
 
 | Name | Type   | Required | Default | Description                 |
-|:-----|:-------|:---------|:--------|:----------------------------|
+| :--- | :----- | :------- | :------ | :-------------------------- |
 | x    | number | ✅        |         | x-axis translation distance |
 | y    | number | ✅        |         | y-axis translation distance |
 
@@ -1151,7 +1153,7 @@ Reduce the entire flowchart to a size where the entire canvas can be displayed.
 Parameters:
 
 | Name             | Type   | Required | Default | Description                                                    |
-|:-----------------|:-------|:---------|:--------|:---------------------------------------------------------------|
+| :--------------- | :----- | :------- | :------ | :------------------------------------------------------------- |
 | verticalOffset   | number | ✅        | 20      | The distance from the top and bottom of the box, default is 20 |
 | horizontalOffset | number | ✅        | 20      | The distance to the left and right of the box, default is 20   |
 
@@ -1189,9 +1191,9 @@ on: (evt: string, callback: EventCallback<T>): void => {}
 
 Parameters:
 
-| Name     | Type   | Required | Default | Description       |
-|:---------|:-------|:---------|:--------|:------------------|
-| evt      | string | ✅        | -       | Event name        |
+| Name     | Type               | Required | Default | Description       |
+| :------- | :----------------- | :------- | :------ | :---------------- |
+| evt      | string             | ✅        | -       | Event name        |
 | callback | `EventCallback<T>` | ✅        | -       | Callback function |
 
 Example：
@@ -1217,9 +1219,9 @@ off: (evt: string, callback: EventCallback<T>): void => {}
 
 Parameters:
 
-| Name     | Type   | Required | Default | Description       |
-|:---------|:-------|:---------|:--------|:------------------|
-| evt      | string | ✅        | -       | Event name        |
+| Name     | Type               | Required | Default | Description       |
+| :------- | :----------------- | :------- | :------ | :---------------- |
+| evt      | string             | ✅        | -       | Event name        |
 | callback | `EventCallback<T>` | ✅        | -       | Callback function |
 
 Example：
@@ -1245,10 +1247,10 @@ once: (evt: string, callback: EventCallback<T>): void => {}
 
 Parameters:
 
-| 名称       | 类型     | 必传 | 默认值 | 描述                |
-|:---------|:-------|:---|:----|:------------------|
-| evt      | string | ✅  | -   | Event name        |
-| callback | `EventCallback<T>` | ✅  | -   | Callback function |
+| 名称     | 类型               | 必传 | 默认值 | 描述              |
+| :------- | :----------------- | :--- | :----- | :---------------- |
+| evt      | string             | ✅    | -      | Event name        |
+| callback | `EventCallback<T>` | ✅    | -      | Callback function |
 
 Example：
 
@@ -1270,10 +1272,10 @@ emit: (evt: string, eventArgs: CallbackArgs<T>): void => {}
 
 Parameters:
 
-| Name | Type            | Required | Default | Description              |
-|:-----|:----------------|:---------|:--------|:-------------------------|
-| evt  | string               | ✅        | -       | Event name         |
-| eventArgs | `CallbackArgs<T>`           | ✅        | -       | Trigger event parameters |
+| Name      | Type              | Required | Default | Description              |
+| :-------- | :---------------- | :------- | :------ | :----------------------- |
+| evt       | string            | ✅        | -       | Event name               |
+| eventArgs | `CallbackArgs<T>` | ✅        | -       | Trigger event parameters |
 
 Example：
 
