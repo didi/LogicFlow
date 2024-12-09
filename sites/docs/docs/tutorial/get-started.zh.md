@@ -40,7 +40,7 @@ pnpm add @logicflow/extension
 
 ### 通过CDN引入
 
-  由于LogicFlow本身会有一些预置样式，所除了需要引入js包外还需要引入css包。
+  由于LogicFlow本身会有一些预置样式，所以除了需要引入js包外还需要引入css包。
 
 - 2.0版本之后的CDN包的引入方式
 
