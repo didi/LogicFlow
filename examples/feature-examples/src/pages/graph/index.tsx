@@ -22,6 +22,8 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
+  // textDraggable: true, // TODO: 节点旋转状态下，拖动文本移动是有问题的！！！
+  edgeTextDraggable: true,
   style: {
     rect: {
       rx: 5,
