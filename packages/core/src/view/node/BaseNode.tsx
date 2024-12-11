@@ -371,7 +371,10 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     } else {
       graphModel.selectNodeById(model.id, isMultiple)
       eventOptions.isSelected = true
-      this.toFront()
+      // 静默模式下点击节点不变更节点层级
+      if (!editConfigModel.isSilentMode) {
+        this.toFront()
+      }
     }
 
     // 不是双击的，默认都是单击
@@ -392,6 +395,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault()
     const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData()
 
@@ -412,7 +416,10 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       e: ev,
       position,
     })
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
   }
 
   handleMouseDown = (ev: MouseEvent) => {
