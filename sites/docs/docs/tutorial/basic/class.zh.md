@@ -40,11 +40,11 @@ const lf = new LogicFlow({
 
 <code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
 
-**`nodes`**: 包含所有的节点。每个节点的数据属性详见 <a href="../api/nodeModelApi#数据属性">
+**`nodes`**: 包含所有的节点。每个节点的数据属性详见 <a href="../../api/model/node-model#数据属性">
 nodeModel</a> 。
 
 **`edges`**: 包含所有的边，通过起始 `sourceNodeId` 和 `targetNodeId`
-将两个节点相连。每个边的数据属性详见  <a href="../api/edgeModelApi#数据属性">edgeModel</a>。
+将两个节点相连。每个边的数据属性详见  <a href="../../api/model/edge-model#数据属性">edgeModel</a>。
 
 **`type`**: 表示节点或者边的类型，这里的类型不仅可以是`rect`,`polyline`
 这种LogicFlow内置的基础类型，也可以是用户基于基础类型自定义的类型。
