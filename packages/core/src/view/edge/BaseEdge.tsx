@@ -358,6 +358,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       clearTimeout(this.clickTimer)
     }
     const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
     const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
@@ -367,7 +368,10 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       ElementState.SHOW_MENU,
       position.domOverlayPosition,
     )
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
     if (!model.isSelected) {
       graphModel.selectEdgeById(model.id)
     }
@@ -456,7 +460,10 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     }
     const { editConfigModel } = graphModel
     graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel))
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
   }
 
   handleFocus = () => {
