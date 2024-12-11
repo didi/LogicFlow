@@ -80,6 +80,7 @@ export class BaseText<
     } = graphModel
 
     if (draggable ?? nodeTextDraggable) {
+      e.stopPropagation()
       this.stepperDrag.model = model
       this.stepperDrag.handleMouseDown(e)
     }
