@@ -517,14 +517,17 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
    * 内部方法，处理初始化文本格式
    */
   @action formatText(data: EdgeConfig) {
+    const {
+      editConfigModel: { edgeTextDraggable, edgeTextEdit },
+    } = this.graphModel
     const { x, y } = this.textPosition
     const { text } = data
     let textConfig: Required<TextConfig> = {
       value: '',
       x,
       y,
-      draggable: false,
-      editable: true,
+      draggable: edgeTextDraggable,
+      editable: edgeTextEdit,
     }
 
     if (text) {
