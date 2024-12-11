@@ -1715,6 +1715,7 @@ export class GraphModel {
       console.warn('error on destroy GraphModel', err)
     }
     this.waitCleanEffects.length = 0
+    this.eventCenter.destroy()
   }
 }
 

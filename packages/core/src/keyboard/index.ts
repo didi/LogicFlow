@@ -90,6 +90,10 @@ export class Keyboard {
     }
   }
 
+  destroy() {
+    this.mousetrap.reset()
+  }
+
   private getKeys(keys: string | string[]) {
     return (Array.isArray(keys) ? keys : [keys]).map((key) =>
       this.formatKey(key),
