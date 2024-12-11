@@ -39,9 +39,26 @@ type ContainerStyle = {
 @observer
 class Graph extends Component<IGraphProps> {
   private handleResize = () => {
-    this.props.graphModel.resize()
+    const { graphModel, options } = this.props
+    const { width, height, isContainerWidth, isContainerHeight } = graphModel
+    let resizeWidth: number | undefined = width
+    let resizeHeight: number | undefined = height
+    let needUpdate = false
+    if (isContainerWidth) {
+      resizeWidth = undefined
+      needUpdate = true
+    }
+    if (isContainerHeight) {
+      resizeHeight = undefined
+      needUpdate = true
+    }
+    if (needUpdate) {
+      graphModel.resize(resizeWidth, resizeHeight)
+    }
+    options.width = width
+    options.height = height
   }
-  private throttleResize = () => throttle(this.handleResize, 200)
+  private throttleResize = throttle(this.handleResize, 200)
 
   componentDidMount() {
     window.addEventListener('resize', this.throttleResize)

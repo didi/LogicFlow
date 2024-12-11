@@ -392,6 +392,8 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
       properties,
       sourceNodeId: this.sourceNodeId,
       targetNodeId: this.targetNodeId,
+      sourceAnchorId: this.sourceAnchorId,
+      targetAnchorId: this.targetAnchorId,
       startPoint: assign({}, this.startPoint),
       endPoint: assign({}, this.endPoint),
     }
