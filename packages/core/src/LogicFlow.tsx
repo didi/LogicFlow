@@ -1374,7 +1374,12 @@ export class LogicFlow {
 
   /** 销毁当前实例 */
   destroy() {
+    this.clearData()
+    render(null, this.container)
+    this.keyboard.destroy()
     this.graphModel.destroy()
+    this.tool.destroy()
+    this.history.destroy()
   }
 }
 

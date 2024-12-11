@@ -91,6 +91,11 @@ export class Tool {
   getInstance() {
     return this.instance
   }
+
+  destroy() {
+    this.toolMap.clear()
+    this.disabledToolMap.clear()
+  }
 }
 
 export default Tool

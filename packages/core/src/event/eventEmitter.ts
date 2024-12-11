@@ -147,6 +147,10 @@ export default class EventEmitter {
   getEvents() {
     return this._events
   }
+
+  destroy() {
+    this._events = {}
+  }
 }
 
 export { EventEmitter, EventArgs }
