@@ -11,6 +11,7 @@
             >添加个节点和边:</el-button
           >
           <el-button type="primary" @click="addDomNumber(domNumber, false)">只添加节点:</el-button>
+          <el-button type="warning" @click="clearAll">清空</el-button>
           <span>element元素数量：{{ elementNumber }}</span>
           <span>EChart元素数量：{{ eChartNumber }}</span>
           <span>节点数量：{{ nodeNumber }}</span>
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, reactive } from 'vue'
+import { ref, onMounted, nextTick, reactive, shallowRef } from 'vue'
 import { ElNotification } from 'element-plus'
 import LogicFlow from '@logicflow/core'
 import { register } from '@logicflow/vue-node-registry'
@@ -39,13 +40,13 @@ import { getTotalDOMNumber } from '@/utils/performance'
 import { getRandom } from '@/utils/math'
 
 const containerRef = ref<HTMLDivElement | null>(null)
-const lfRef = ref<LogicFlow | null>(null)
+const lfRef = shallowRef<LogicFlow | null>(null)
 const elementNumber = ref<number>(0)
 const eChartNumber = ref<number>(0)
 const totalDOMNumber = ref<number>(0)
 const eventType = ref<undefined | string>()
 const nodeNumber = ref<number>(0)
-const domNumber = ref<number>(10)
+const domNumber = ref<number>(500)
 const edgeNumber = ref<number>(0)
 const id = ref<number>(0)
 
@@ -151,6 +152,9 @@ const addDomNumber = (number: number, hasEdge: boolean) => {
   }
 }
 
+const clearAll = () => {
+  lfRef.value?.clearData()
+}
 // 模拟自动添加节点
 // const autoAddNode = (time: number, count: number, nodeNumber: number) => {
 //   let total = 0
