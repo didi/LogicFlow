@@ -43,10 +43,10 @@ following data structure to represent the graph data of LogicFlow.
 <code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
 
 **`nodes`**: Contains all nodes. Each node's data attributes are detailed in
-the <a href="../api/nodeModelApi.en.md#DataAttributes">nodeModel</a>.
+the <a href="../../../en/api/model/node-model#DataAttributes">nodeModel</a>.
 
 **`edges`**: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`.
-Each edge's data attributes are detailed in the <a href="../api/edgeModelApi.en.md#DataAttributes">
+Each edge's data attributes are detailed in the <a href="../../../en/api/model/edge-model#DataAttributes">
 EdgeModel</a>.
 
 **`type`**: Indicates the type of node or edge, which can be a basic type built into LogicFlow such
