@@ -1,0 +1,23 @@
+.custom-anchor {
+  stroke: #999;
+  stroke-width: 1;
+  fill: #d9d9d9;
+  cursor: crosshair;
+  rx: 3;
+  ry: 3;
+}
+.custom-anchor:hover {
+  fill: #ff7f0e;
+  stroke: #ff7f0e;
+}
+.node-red-palette {
+  width: 150px;
+  overflow: hidden;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.node-red-start {
+  cursor: pointer;
+  pointer-events: all;
+}

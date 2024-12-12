@@ -132,7 +132,7 @@ interface NodeEventArgs {
   /**
    * 删除节点
    */
-  'node:delete': NodeEventArgsPick<'data'>
+  'node:delete': NodeEventArgsPick<'data' | 'model'>
   /**
    * 添加外部拖入节点
    */
@@ -188,6 +188,14 @@ interface NodeEventArgs {
      */
     properties: Record<string, any>
   }
+  /**
+   * 节点获焦
+   */
+  'node:focus': NodeEventArgsPick<'data'>
+  /**
+   * 节点失焦
+   */
+  'node:blur': NodeEventArgsPick<'data'>
 }
 
 type EdgeEventArgsPick<T extends 'data' | 'e' | 'position'> = Pick<
@@ -259,6 +267,14 @@ interface EdgeEventArgs {
       oldEdge: EdgeData
     }
   }
+  /**
+   * 边获焦
+   */
+  'edge:focus': EdgeEventArgsPick<'data'>
+  /**
+   * 边失焦
+   */
+  'edge:blur': EdgeEventArgsPick<'data'>
 }
 
 /**
@@ -413,6 +429,16 @@ interface CommonEventArgs {
      * 更新后的画布数据
      */
     data: GraphData
+  }
+  /**
+   * 画布容器大小发生变化触发，为了性能考虑对事件做了防抖处理，间隔为16ms
+   */
+  'graph:resize': {
+    /**
+     * 更新后的画布数据
+     */
+    target: HTMLElement
+    contentRect: DOMRectReadOnly
   }
 }
 

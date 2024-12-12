@@ -1,4 +1,12 @@
-import { find, forEach, map, merge, isBoolean } from 'lodash-es'
+import {
+  find,
+  forEach,
+  map,
+  merge,
+  isBoolean,
+  debounce,
+  isNil,
+} from 'lodash-es'
 import { action, computed, observable } from 'mobx'
 import {
   BaseEdgeModel,
@@ -98,6 +106,15 @@ export class GraphModel {
    */
   customTrajectory: LFOptions.Definition['customTrajectory']
 
+  /**
+   * 判断是否使用的是容器的宽度
+   */
+  isContainerWidth: boolean
+  /**
+   * 判断是否使用的是容器的高度
+   */
+  isContainerHeight: boolean
+
   // 在图上操作创建边时，默认使用的边类型.
   @observable edgeType: string
   // 当前图上所有节点的model
@@ -127,6 +144,8 @@ export class GraphModel {
   // 用户自定义属性
   [propName: string]: any
 
+  private waitCleanEffects: (() => void)[] = []
+
   constructor(options: LFOptions.Common) {
     const {
       container,
@@ -141,7 +160,9 @@ export class GraphModel {
     this.rootEl = container
     this.partial = !!partial
     this.background = background
-    if (typeof grid === 'object') {
+    if (typeof grid === 'object' && options.snapGrid) {
+      // 开启网格对齐时才根据网格尺寸设置步长
+      // TODO：需要让用户设置成 0 吗？后面可以讨论一下
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
     this.theme = setupTheme(options.style)
@@ -150,8 +171,31 @@ export class GraphModel {
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
 
-    this.width = options.width || this.rootEl.getBoundingClientRect().width
-    this.height = options.height || this.rootEl.getBoundingClientRect().height
+    this.width = options.width ?? this.rootEl.getBoundingClientRect().width
+    this.isContainerWidth = isNil(options.width)
+    this.height = options.height ?? this.rootEl.getBoundingClientRect().height
+    this.isContainerHeight = isNil(options.height)
+
+    const resizeObserver = new ResizeObserver(
+      debounce(
+        ((entries) => {
+          for (const entry of entries) {
+            if (entry.target === this.rootEl) {
+              this.resize()
+              this.eventCenter.emit('graph:resize', {
+                target: this.rootEl,
+                contentRect: entry.contentRect,
+              })
+            }
+          }
+        }) as ResizeObserverCallback,
+        16,
+      ),
+    )
+    resizeObserver.observe(this.rootEl)
+    this.waitCleanEffects.push(() => {
+      resizeObserver.disconnect()
+    })
 
     this.eventCenter = new EventEmitter()
     this.editConfigModel = new EditConfigModel(options)
@@ -414,18 +458,25 @@ export class GraphModel {
    * @param { object } graphData 图数据
    */
   graphDataToModel(graphData: Partial<LogicFlow.GraphConfigData>) {
-    if (!this.width || !this.height) {
-      this.resize()
-    }
+    // 宽度必然存在，取消重新计算
+    // if (!this.width || !this.height) {
+    //   this.resize()
+    // }
     if (!graphData) {
-      this.nodes = []
-      this.edges = []
+      this.clearData()
       return
     }
+    this.elementsModelMap.clear()
+    this.nodeModelMap.clear()
+    this.edgeModelMap.clear()
+
     if (graphData.nodes) {
-      this.nodes = map(graphData.nodes, (node: NodeConfig) =>
-        this.getModelAfterSnapToGrid(node),
-      )
+      this.nodes = map(graphData.nodes, (node: NodeConfig) => {
+        const nodeModel = this.getModelAfterSnapToGrid(node)
+        this.elementsModelMap.set(nodeModel.id, nodeModel)
+        this.nodeModelMap.set(nodeModel.id, nodeModel)
+        return nodeModel
+      })
     } else {
       this.nodes = []
     }
@@ -749,11 +800,15 @@ export class GraphModel {
    */
   @action
   deleteNode(nodeId: string) {
-    const nodeData = this.nodesMap[nodeId].model.getData()
+    const nodeModel = this.nodesMap[nodeId].model
+    const nodeData = nodeModel.getData()
     this.deleteEdgeBySource(nodeId)
     this.deleteEdgeByTarget(nodeId)
     this.nodes.splice(this.nodesMap[nodeId].index, 1)
-    this.eventCenter.emit(EventType.NODE_DELETE, { data: nodeData })
+    this.eventCenter.emit(EventType.NODE_DELETE, {
+      data: nodeData,
+      model: nodeModel,
+    })
   }
 
   /**
@@ -793,6 +848,7 @@ export class GraphModel {
    */
   getModelAfterSnapToGrid(node: NodeConfig) {
     const Model = this.getModel(node.type) as BaseNodeModelCtor
+    const { snapGrid } = this.editConfigModel
     if (!Model) {
       throw new Error(
         `找不到${node.type}对应的节点，请确认是否已注册此类型节点。`,
@@ -801,8 +857,8 @@ export class GraphModel {
     const { x: nodeX, y: nodeY } = node
     // 根据 grid 修正节点的 x, y
     if (nodeX && nodeY) {
-      node.x = snapToGrid(nodeX, this.gridSize)
-      node.y = snapToGrid(nodeY, this.gridSize)
+      node.x = snapToGrid(nodeX, this.gridSize, snapGrid)
+      node.y = snapToGrid(nodeY, this.gridSize, snapGrid)
       if (typeof node.text === 'object' && node.text !== null) {
         // 原来的处理是：node.text.x -= getGridOffset(nodeX, this.gridSize)
         // 由于snapToGrid()使用了Math.round()四舍五入的做法，因此无法判断需要执行
@@ -1419,7 +1475,14 @@ export class GraphModel {
   }
 
   /**
-   * 更新网格配置
+   * 更新网格尺寸
+   */
+  updateGridSize(size: number) {
+    this.gridSize = size
+  }
+
+  /**
+   * 更新背景配置
    */
   updateBackgroundOptions(
     options: boolean | Partial<LFOptions.BackgroundConfig>,
@@ -1438,8 +1501,11 @@ export class GraphModel {
    * 重新设置画布的宽高
    */
   @action resize(width?: number, height?: number): void {
-    this.width = width || this.rootEl.getBoundingClientRect().width
-    this.height = height || this.rootEl.getBoundingClientRect().height
+    this.width = width ?? this.rootEl.getBoundingClientRect().width
+    this.isContainerWidth = isNil(width)
+    this.height = height ?? this.rootEl.getBoundingClientRect().height
+    this.isContainerHeight = isNil(height)
+
     if (!this.width || !this.height) {
       console.warn(
         '渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675',
@@ -1453,6 +1519,11 @@ export class GraphModel {
   @action clearData(): void {
     this.nodes = []
     this.edges = []
+
+    // 清除对已清除节点的引用
+    this.edgeModelMap.clear()
+    this.nodeModelMap.clear()
+    this.elementsModelMap.clear()
   }
 
   /**
@@ -1588,6 +1659,19 @@ export class GraphModel {
    */
   @action setPartial(partial: boolean): void {
     this.partial = partial
+  }
+
+  /** 销毁当前实例 */
+  destroy() {
+    try {
+      this.waitCleanEffects.forEach((fn) => {
+        fn()
+      })
+    } catch (err) {
+      console.warn('error on destroy GraphModel', err)
+    }
+    this.waitCleanEffects.length = 0
+    this.eventCenter.destroy()
   }
 }
 

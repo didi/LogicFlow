@@ -65,8 +65,9 @@ export class CanvasOverlay extends Component<IProps, IState> {
       graphModel,
     } = this.props
     const { deltaX: eX, deltaY: eY } = ev
+    const { stopScrollGraph, stopZoomGraph } = editConfigModel
     // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键、cmd键没有按住, 那么移动画布
-    if (!editConfigModel.stopScrollGraph && !ev.ctrlKey && !ev.metaKey) {
+    if (!stopScrollGraph && !ev.ctrlKey && !ev.metaKey) {
       ev.preventDefault()
       this.stepScrollX += eX
       this.stepScrollY += eY
@@ -85,7 +86,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       return
     }
     // 如果没有禁止缩放画布，那么进行缩放. 在禁止缩放画布后，按住 ctrl、cmd 键也不能缩放了。
-    if (!editConfigModel.stopZoomGraph) {
+    if (!stopZoomGraph) {
       ev.preventDefault()
       const position = graphModel.getPointByClient({
         x: ev.clientX,
@@ -133,11 +134,11 @@ export class CanvasOverlay extends Component<IProps, IState> {
         gridSize,
       },
     } = this.props
+    const { adjustEdge, adjustNodePosition, stopMoveGraph } = editConfigModel
     const target = ev.target as HTMLElement
-    const isFrozenElement =
-      !editConfigModel.adjustEdge && !editConfigModel.adjustNodePosition
+    const isFrozenElement = !adjustEdge && !adjustNodePosition
     if (target.getAttribute('name') === 'canvas-overlay' || isFrozenElement) {
-      if (editConfigModel.stopMoveGraph !== true) {
+      if (stopMoveGraph !== true) {
         this.stepDrag.setStep(gridSize * SCALE_X)
         this.stepDrag.handleMouseDown(ev)
       } else {

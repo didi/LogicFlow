@@ -41,6 +41,7 @@ const config: Partial<LogicFlow.Options> = {
   },
   multipleSelectKey: 'shift',
   disabledTools: ['multipleSelect'],
+  allowResize: true,
 }
 
 const data = {
@@ -83,8 +84,8 @@ const data = {
     {
       id: '6',
       type: 'node-selection',
-      x: 700,
-      y: 350,
+      x: 0,
+      y: 0,
       properties: {
         node_selection_ids: ['2', '3'],
         labelText: '方案1',

@@ -107,6 +107,13 @@ export class History {
       }, this.waitTime),
     )
   }
+
+  destroy() {
+    this.undos = []
+    this.redos = []
+    this.curData = null
+    this.stopWatch && this.stopWatch()
+  }
 }
 
 export default History

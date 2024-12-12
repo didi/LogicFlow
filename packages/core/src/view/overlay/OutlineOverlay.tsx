@@ -82,7 +82,7 @@ export class OutlineOverlay extends Component<IProps> {
         (hoverOutline && edge.isHovered)
       ) {
         if (edge.modelType === ModelType.LINE_EDGE) {
-          edgeOutline.push(this.getLineOutline(edge))
+          edgeOutline.push(this.getLineOutline(edge as LineEdgeModel))
         } else if (edge.modelType === ModelType.POLYLINE_EDGE) {
           edgeOutline.push(this.getPolylineOutline(edge as PolylineEdgeModel))
         } else if (edge.modelType === ModelType.BEZIER_EDGE) {

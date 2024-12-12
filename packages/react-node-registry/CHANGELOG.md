@@ -1,5 +1,25 @@
 # @logicflow/react-node-registry
 
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.0.9
+
+## 1.0.9
+
+### Patch Changes
+
+- release react/vue-node-registry
+
+## 1.0.8
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.0.8
+
 ## 1.0.7
 
 ### Patch Changes
@@ -17,7 +37,7 @@
   - fix(core): 在没有拖拽的情况下，Control组件突然销毁，不触发cancelDrag(#1926) by wbccb
   - fix(core): 修复笔记本触摸板点击边事件失效 by wuchenguang1998
   - feat(examples): 添加动画边demo by DymoneLewis
-  - fix(core): 类型定义 properties:change 改为 node:properties-change  by HeatonZ
+  - fix(core): 类型定义 properties:change 改为 node:properties-change by HeatonZ
   - feat: node-registry 自定义properties类型 by HeatonZ
   - fix(core): 修复 polyline 与多边形节点的交点不正确的问题 by Yuan-ZW
 - Updated dependencies

@@ -80,6 +80,13 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     if (this.modelDisposer) {
       this.modelDisposer()
     }
+
+    // 以下是 mobx-preact 中 componentWillUnmount 的回调逻辑，但是不知道出于什么考虑，mobx-preact 没有混入这一段逻辑
+    // @ts-ignore
+    if (this.render.$mobx) {
+      // @ts-ignore
+      this.render.$mobx.dispose()
+    }
   }
 
   componentDidMount() {}
@@ -234,7 +241,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   onDragging = ({ event }: IDragParams) => {
     const { model, graphModel } = this.props
     const {
-      editConfigModel: { stopMoveGraph, autoExpand },
+      editConfigModel: { stopMoveGraph, autoExpand, snapGrid },
       transformModel,
       selectNodes,
       width,
@@ -254,9 +261,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     // 2. 考虑鼠标位置不再节点中心
     x = x + (this.moveOffset?.dx ?? 0)
     y = y + (this.moveOffset?.dy ?? 0)
-    // 将x, y移动到grid上
-    x = snapToGrid(x, gridSize)
-    y = snapToGrid(y, gridSize)
+    // 校准坐标
+    x = snapToGrid(x, gridSize, snapGrid)
+    y = snapToGrid(y, gridSize, snapGrid)
     if (!width || !height) {
       graphModel.moveNode2Coordinate(model.id, x, y)
       return
@@ -371,13 +378,16 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     } else {
       graphModel.selectNodeById(model.id, isMultiple)
       eventOptions.isSelected = true
-      this.toFront()
+      // 静默模式下点击节点不变更节点层级
+      if (!editConfigModel.isSilentMode) {
+        this.toFront()
+      }
     }
 
     // 不是双击的，默认都是单击
     if (isDoubleClick) {
       if (editConfigModel.nodeTextEdit) {
-        if (model.text.editable) {
+        if (model.text.editable && editConfigModel.textMode === TextMode.TEXT) {
           model.setSelected(false)
           graphModel.setElementStateById(model.id, ElementState.TEXT_EDIT)
         }
@@ -392,6 +402,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault()
     const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData()
 
@@ -412,7 +423,10 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       e: ev,
       position,
     })
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
   }
 
   handleMouseDown = (ev: MouseEvent) => {
@@ -422,6 +436,20 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev)
     }
+  }
+
+  handleFocus = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.NODE_FOCUS, {
+      data: model.getData(),
+    })
+  }
+
+  handleBlur = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.NODE_BLUR, {
+      data: model.getData(),
+    })
   }
 
   // 因为自定义节点的时候，可能会基于hover状态自定义不同的样式。
@@ -508,6 +536,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           onMouseLeave={this.setHoverOff}
           onMouseOut={this.onMouseOut}
           onContextMenu={this.handleContextMenu}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
           {...restAttributes}
         >
           {nodeShapeInner}

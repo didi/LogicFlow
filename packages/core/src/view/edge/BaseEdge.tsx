@@ -358,6 +358,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       clearTimeout(this.clickTimer)
     }
     const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
     const position = graphModel.getPointByClient({
       x: ev.clientX,
       y: ev.clientY,
@@ -367,7 +368,10 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       ElementState.SHOW_MENU,
       position.domOverlayPosition,
     )
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
     if (!model.isSelected) {
       graphModel.selectEdgeById(model.id)
     }
@@ -456,7 +460,24 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     }
     const { editConfigModel } = graphModel
     graphModel.selectEdgeById(model.id, isMultipleSelect(e, editConfigModel))
-    this.toFront()
+    // 静默模式下点击节点不变更节点层级
+    if (!editConfigModel.isSilentMode) {
+      this.toFront()
+    }
+  }
+
+  handleFocus = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.EDGE_FOCUS, {
+      data: model.getData(),
+    })
+  }
+
+  handleBlur = () => {
+    const { model, graphModel } = this.props
+    graphModel.eventCenter.emit(EventType.EDGE_BLUR, {
+      data: model.getData(),
+    })
   }
 
   /**
@@ -499,6 +520,8 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           onMouseOver={this.setHoverOn}
           onMouseEnter={this.setHoverOn}
           onMouseLeave={this.setHoverOff}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
         >
           {this.getShape()}
           {this.getAppend()}

@@ -246,13 +246,16 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    * 始化文本属性
    */
   private formatText(data: NodeConfig): void {
+    const {
+      editConfigModel: { nodeTextDraggable, nodeTextEdit },
+    } = this.graphModel
     const { x, y, text } = data
     let textConfig: TextConfig = {
       value: '',
       x,
       y,
-      draggable: false,
-      editable: true,
+      draggable: nodeTextDraggable,
+      editable: nodeTextEdit,
     }
     if (text) {
       if (typeof text === 'string') {

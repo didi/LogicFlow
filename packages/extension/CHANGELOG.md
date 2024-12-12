@@ -1,5 +1,27 @@
 # Change Log
 
+## 2.0.13
+
+### Patch Changes
+
+- fix: 重新打包以加入最新改动内容
+- Updated dependencies
+  - @logicflow/core@2.0.9
+
+## 2.0.12
+
+### Patch Changes
+
+- fix(core/extension): 新增渐进连线能力 & 修复Label、MiniMap和DynamicGroup等插件的已知问题
+  - feat(NodeSelection): 新增 NodeSelection 支持自节点移动或resize时自动更新大小，新增resize NodeSelection 节点时，自动缩放其关联的子节点
+  - feat(extension): 新增渐进连线插件&插件说明文档&增加源码调试示例
+  - fix(extension): group插件isAllowMoveTo方法的参数名优化
+  - 修复 DynamicGroup 相关 bug
+  - feat(MiniMap): 新增MiniMap组件跟随的当前容器一起缩放
+  - fix(extension/label): 修复label文本框固定展示白底、hover后内容偏移、单击后无法拖动、拖拽面板遮挡、状态更新问题，支持label删除
+- Updated dependencies
+  - @logicflow/core@2.0.8
+
 ## 2.0.11
 
 ### Patch Changes
@@ -17,7 +39,7 @@
   - fix(core): 在没有拖拽的情况下，Control组件突然销毁，不触发cancelDrag(#1926) by wbccb
   - fix(core): 修复笔记本触摸板点击边事件失效 by wuchenguang1998
   - feat(examples): 添加动画边demo by DymoneLewis
-  - fix(core): 类型定义 properties:change 改为 node:properties-change  by HeatonZ
+  - fix(core): 类型定义 properties:change 改为 node:properties-change by HeatonZ
   - feat: node-registry 自定义properties类型 by HeatonZ
   - fix(core): 修复 polyline 与多边形节点的交点不正确的问题 by Yuan-ZW
 - Updated dependencies

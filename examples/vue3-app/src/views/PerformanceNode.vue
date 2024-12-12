@@ -6,13 +6,14 @@
           <span>操作栏</span>
           <el-input v-model="domNumber"></el-input>
           <el-button type="primary" @click="addElementNode(domNumber)">添加Element节点</el-button>
-          <el-button type="primary" @click="addEchartNode(domNumber)">添加Echart节点</el-button>
+          <el-button type="primary" @click="addEChartNode(domNumber)">添加Echart节点</el-button>
           <el-button type="primary" @click="addDomNumber(domNumber, true)"
             >添加个节点和边:</el-button
           >
           <el-button type="primary" @click="addDomNumber(domNumber, false)">只添加节点:</el-button>
-          <span>elment元素数量：{{ elementNumber }}</span>
-          <span>Echart元素数量：{{ echartNumber }}</span>
+          <el-button type="warning" @click="clearAll">清空</el-button>
+          <span>element元素数量：{{ elementNumber }}</span>
+          <span>EChart元素数量：{{ eChartNumber }}</span>
           <span>节点数量：{{ nodeNumber }}</span>
           <span>边数量：{{ edgeNumber }}</span>
           <span>Total DOM elements: {{ totalDOMNumber }}</span>
@@ -25,25 +26,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, reactive } from 'vue'
+import { ref, onMounted, nextTick, reactive, shallowRef } from 'vue'
+import { ElNotification } from 'element-plus'
 import LogicFlow from '@logicflow/core'
 import { register } from '@logicflow/vue-node-registry'
+
 import ElementNode from '@/components/UILibrary/ElementNode.vue'
 import EchartNode from '@/components/UILibrary/EchartNode.vue'
 import DomNumber from '@/components/dom/DomNumber.vue'
+
 // import { startObservingLongTasks } from '@/utils/performance'
 import { getTotalDOMNumber } from '@/utils/performance'
 import { getRandom } from '@/utils/math'
-import { ElNotification } from 'element-plus'
 
 const containerRef = ref<HTMLDivElement | null>(null)
-const lfRef = ref<LogicFlow | null>(null)
+const lfRef = shallowRef<LogicFlow | null>(null)
 const elementNumber = ref<number>(0)
-const echartNumber = ref<number>(0)
+const eChartNumber = ref<number>(0)
 const totalDOMNumber = ref<number>(0)
 const eventType = ref<undefined | string>()
 const nodeNumber = ref<number>(0)
-const domNumber = ref<number>(0)
+const domNumber = ref<number>(500)
 const edgeNumber = ref<number>(0)
 const id = ref<number>(0)
 
@@ -74,8 +77,8 @@ const addElementNode = (number: number) => {
   }
 }
 
-// 添加 Echart 元素
-const addEchartNode = (number: number) => {
+// 添加 EChart 元素
+const addEChartNode = (number: number) => {
   for (let i = 0; i < +number; i++) {
     lfRef.value &&
       lfRef.value.addNode({
@@ -87,7 +90,7 @@ const addEchartNode = (number: number) => {
           height: 2000
         }
       })
-    echartNumber.value++
+    eChartNumber.value++
     nextTick(() => {
       totalDOMNumber.value = getTotalDOMNumber()
     })
@@ -149,6 +152,9 @@ const addDomNumber = (number: number, hasEdge: boolean) => {
   }
 }
 
+const clearAll = () => {
+  lfRef.value?.clearData()
+}
 // 模拟自动添加节点
 // const autoAddNode = (time: number, count: number, nodeNumber: number) => {
 //   let total = 0
@@ -184,7 +190,8 @@ onMounted(() => {
   if (containerRef.value) {
     lfRef.value = new LogicFlow({
       container: containerRef.value,
-      grid: true
+      grid: true,
+      allowResize: true
     })
 
     // 注册 element 组件库节点

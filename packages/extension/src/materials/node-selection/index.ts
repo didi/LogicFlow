@@ -1,5 +1,11 @@
 import { get } from 'lodash-es'
-import { h, PolygonNode, PolygonNodeModel } from '@logicflow/core'
+import LogicFlow, {
+  BaseNodeModel,
+  h,
+  PolygonNode,
+  PolygonNodeModel,
+} from '@logicflow/core'
+import { ResizeControl } from '@logicflow/core/lib/view/Control'
 
 export type INodeSelectionProperties = {
   strokeColor?: string | 'none'
@@ -124,7 +130,7 @@ class NodeSelectionModel extends PolygonNodeModel<INodeSelectionProperties> {
    * 更新points - 多边形顶点坐标集合
    * @param points
    */
-  updatePoints(points) {
+  updatePoints(points: [number, number][]) {
     this.points = points
   }
 
@@ -139,7 +145,7 @@ class NodeSelectionModel extends PolygonNodeModel<INodeSelectionProperties> {
   /**
    * 计算新的 points 和 x y
    */
-  updatePointsByNodes(nodesIds) {
+  updatePointsByNodes(nodesIds: string[]) {
     const points: [number, number][] = []
     let minX = Infinity
     let minY = Infinity
@@ -165,18 +171,74 @@ class NodeSelectionModel extends PolygonNodeModel<INodeSelectionProperties> {
       y: (maxY + minY) / 2,
     })
   }
+
+  isResize = false
+  override resize(
+    resizeInfo: ResizeControl.ResizeInfo,
+  ): ResizeControl.ResizeNodeData {
+    this.isResize = true
+    const { width, height } = resizeInfo
+    const scale = {
+      x: width / this.width,
+      y: height / this.height,
+    }
+    const childIds = (this.properties.node_selection_ids || []).slice()
+    const childModels: BaseNodeModel[] = []
+    const usedGroupId = new Set<string>()
+    while (childIds.length) {
+      const id = childIds.shift()!
+      const node = this.graphModel.nodesMap[id]?.model
+      if (!node) {
+        continue
+      }
+      if (!isNodeSelectionModel(node)) {
+        childModels.push(node)
+        continue
+      }
+      // 跳出循环引用
+      if (usedGroupId.has(node.id)) {
+        continue
+      }
+      usedGroupId.add(node.id)
+      childIds.push(...(node.properties.node_selection_ids || []))
+    }
+
+    const begin = {
+      x: this.x - this.width / 2,
+      y: this.y - this.height / 2,
+    }
+
+    const res = super.resize(resizeInfo)
+
+    const end = {
+      x: this.x - this.width / 2,
+      y: this.y - this.height / 2,
+    }
+
+    childModels.forEach((node) => {
+      node.width = node.width * scale.x
+      node.height = node.height * scale.y
+      const deltaX = (node.x - begin.x) * scale.x + end.x - node.x
+      const deltaY = (node.y - begin.y) * scale.y + end.y - node.y
+      node.move(deltaX, deltaY, true)
+    })
+    this.isResize = false
+    return res
+  }
 }
 
+const NODE_SELECTION_TYPE = 'node-selection'
 class NodeSelection {
   static pluginName = 'node-selection'
-  lf // lf 实例
+  lf: LogicFlow // lf 实例
   selectNodes: any[] = [] // 选择的nodes
   currentClickNode // 当前点击的节点，选中的节点是无序的
   d = 10
 
-  constructor({ lf }) {
+  constructor({ lf }: LogicFlow.IExtensionProps) {
+    this.lf = lf
     lf.register({
-      type: 'node-selection',
+      type: NODE_SELECTION_TYPE,
       view: NodeSelectionView,
       model: NodeSelectionModel,
     })
@@ -199,6 +261,8 @@ class NodeSelection {
       properties: {
         node_selection_ids: this.selectNodesIds,
       },
+      x: 0,
+      y: 0,
     })
     node.updatePointsByNodes(this.selectNodesIds)
   }
@@ -215,7 +279,7 @@ class NodeSelection {
 
     this.lf
       .getNodeModelById(nodeSelection.id)
-      .updatePointsByNodes(this.selectNodesIds)
+      ?.updatePointsByNodes(this.selectNodesIds)
   }
 
   /**
@@ -228,24 +292,44 @@ class NodeSelection {
     const oldIds = ids.filter((id) => id !== this.currentClickNode.id)
     return rawData.nodes.find((node) => {
       if (node.type === 'node-selection') {
-        const nodeSelectionIds = get(node, 'properties.node_selection_ids', [])
+        const nodeSelectionIds = get(
+          node,
+          'properties.node_selection_ids',
+          [],
+        ) as string[]
         return oldIds.every((id) => nodeSelectionIds.includes(id))
       }
       return false
     })
   }
 
-  render(lf) {
+  protected onNodeChange(lf: LogicFlow, model: BaseNodeModel) {
+    const connectedSelections = lf.graphModel.nodes.filter((node) => {
+      if (!isNodeSelectionModel(node)) {
+        return false
+      }
+      const childIds: string[] = node.properties.node_selection_ids || []
+      return childIds.includes(model.id)
+    })
+
+    Promise.resolve().then(() => {
+      connectedSelections.forEach((node) => {
+        node.updatePointsByNodes(node.properties.node_selection_ids || [])
+      })
+    })
+  }
+
+  render(lf: LogicFlow) {
     this.lf = lf
 
     lf.on('node:click', (val) => {
-      if (!val.e.shiftKey || val.data.type === 'node-selection') return
+      if (!val.e.shiftKey || val.data.type === NODE_SELECTION_TYPE) return
       this.currentClickNode = val.data
 
       // 如果selectNodesIds中已存在此节点，则取消选中此节点
       let hasExists = false
       if (this.selectNodesIds.includes(val.data.id)) {
-        this.lf.getNodeModelById(val.data.id).setSelected(false)
+        this.lf.getNodeModelById(val.data.id)?.setSelected(false)
         hasExists = true
       }
 
@@ -263,15 +347,32 @@ class NodeSelection {
       }
     })
     lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
-      if (model.type === 'node-selection') {
-        // 如果移动的是分组，那么分组的子节点也跟着移动。
-        const nodeIds = model.properties.node_selection_ids
+      this.onNodeChange(lf, model)
+      /**
+       * 如果移动的是分组，那么分组的子节点也跟着移动。
+       * 忽略来自分组resize导致的move
+       */
+      if (isNodeSelectionModel(model) && !model.isResize) {
+        const nodeIds = model.properties.node_selection_ids || []
         lf.graphModel.moveNodes(nodeIds, deltaX, deltaY, true)
         return true
       }
       return true
     })
+
+    lf.graphModel.addNodeResizeRules((model) => {
+      if (!isNodeSelectionModel(model)) {
+        this.onNodeChange(lf, model)
+      }
+      return true
+    })
   }
+}
+
+const isNodeSelectionModel = (
+  node: BaseNodeModel,
+): node is NodeSelectionModel => {
+  return !!(node && (node.type as string) === NODE_SELECTION_TYPE)
 }
 
 export default NodeSelection

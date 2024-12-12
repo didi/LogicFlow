@@ -66,7 +66,7 @@ export const getEdgeOutline = (
   edge: BaseEdgeModel,
 ): OutlineInfo | undefined => {
   if (edge.modelType === ModelType.LINE_EDGE) {
-    return getLineOutline(edge)
+    return getLineOutline(edge as LineEdgeModel)
   }
   if (edge.modelType === ModelType.POLYLINE_EDGE) {
     return getPolylineOutline(edge as PolylineEdgeModel)

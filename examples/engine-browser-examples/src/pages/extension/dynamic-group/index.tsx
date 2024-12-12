@@ -160,7 +160,7 @@ export default function DynamicGroupDemo() {
             id: 'rect_1',
             type: 'rect',
             x: 455,
-            y: 213,
+            y: 243,
             properties: {
               width: 40,
               height: 40,
@@ -174,8 +174,8 @@ export default function DynamicGroupDemo() {
           {
             id: 'dynamic-group_2',
             type: 'dynamic-group',
-            x: 500,
-            y: 220,
+            x: 544,
+            y: 376,
             text: 'dynamic-group_2',
             resizable: true,
             properties: {

@@ -20,8 +20,10 @@ import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
-  stopScrollGraph: true,
-  stopZoomGraph: true,
+  // stopScrollGraph: true,
+  // stopZoomGraph: true,
+  // textDraggable: true, // TODO: 节点旋转状态下，拖动文本移动是有问题的！！！
+  edgeTextDraggable: true,
   style: {
     rect: {
       rx: 5,
@@ -253,10 +255,10 @@ export default function BasicNode() {
         background: {
           color: '#FFFFFF',
         },
-        grid: true,
-        // grid: {
-        //   size: 1,
-        // },
+        // grid: true,
+        grid: {
+          size: 60,
+        },
         edgeTextDraggable: true,
         edgeType: 'bezier',
         // 全局自定义id
@@ -313,7 +315,29 @@ export default function BasicNode() {
       })
     }
   }
-
+  const handleChangeSize = () => {
+    const lf = lfRef.current
+    if (lf) {
+      if (lf.graphModel.isContainerHeight || lf.graphModel.isContainerWidth) {
+        console.log('resize by width,height')
+        lf.resize(300, 100)
+      } else {
+        console.log('resize by container')
+        lf.resize()
+      }
+      console.log(
+        'current is container',
+        lf.graphModel.isContainerHeight,
+        lf.graphModel.isContainerWidth,
+      )
+      console.log('current option size', lf.options.width, lf.options.height)
+      console.log(
+        'current griphModel size',
+        lf.graphModel.width,
+        lf.graphModel.height,
+      )
+    }
+  }
   const handleChangeEditConfig = () => {
     const isSilentMode = lfRef.current?.options.isSilentMode
     lfRef?.current?.updateEditConfig({
@@ -450,6 +474,7 @@ export default function BasicNode() {
         <Button key="changeType" type="primary" onClick={handleChangeNodeType}>
           切换节点为五角星
         </Button>
+
         <Button
           key="changeConfig"
           type="primary"
@@ -574,16 +599,23 @@ export default function BasicNode() {
         >
           切换allowResize
         </Button>
+        <Button key="resizeGraph" type="primary" onClick={handleChangeSize}>
+          更新画布大小
+        </Button>
         <Button
           key="resizeGraph"
           type="primary"
           onClick={() => {
             if (lfRef.current) {
-              lfRef.current?.resize(400, 400)
+              const graphData = lfRef.current?.getEditConfig()
+              const { snapGrid } = graphData
+              lfRef.current.updateEditConfig({
+                snapGrid: !snapGrid,
+              })
             }
           }}
         >
-          更新画布大小
+          修改网格对齐状态
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain>

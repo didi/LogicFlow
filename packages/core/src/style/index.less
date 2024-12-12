@@ -19,6 +19,11 @@
   cursor: move;
 }
 
+// 在元素focus时浏览器会给元素outline设置一个5像素宽的默认样式，这里先全局禁用一下，后续再根据需要再做调整
+*:focus {
+  outline: none;
+}
+
 .lf-node-anchor {
   cursor: crosshair;
 }
