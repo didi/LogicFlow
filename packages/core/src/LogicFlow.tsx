@@ -1,5 +1,5 @@
 import { ComponentType, createElement as h, render } from 'preact/compat'
-import { cloneDeep, forEach, indexOf } from 'lodash-es'
+import { cloneDeep, forEach, indexOf, isNil } from 'lodash-es'
 import { observer } from '.'
 import { Options as LFOptions } from './options'
 import * as _Model from './model'
@@ -885,12 +885,28 @@ export class LogicFlow {
    */
   updateEditConfig(config: Partial<IEditConfigType>) {
     const { editConfigModel, transformModel } = this.graphModel
+    const currentSnapGrid = editConfigModel.snapGrid
+
     editConfigModel.updateEditConfig(config)
     if (config?.stopMoveGraph !== undefined) {
       transformModel.updateTranslateLimits(config.stopMoveGraph)
     }
+
     // 静默模式切换时，修改快捷键的启用状态
     config?.isSilentMode ? this.keyboard.disable() : this.keyboard.enable(true)
+
+    // 切换网格对齐状态时，修改网格尺寸
+    if (!isNil(config?.snapGrid) && config.snapGrid !== currentSnapGrid) {
+      const {
+        grid: { size = 1 },
+        editConfigModel: { snapGrid },
+        gridSize,
+      } = this.graphModel
+      // 开启网格对齐且当前画布网格尺寸与网格对齐尺寸不一致时，或者关闭网格对齐且当前画布网格尺寸不为1时，更新画布网格尺寸
+      if ((snapGrid && gridSize !== size) || (!snapGrid && gridSize !== 1)) {
+        this.graphModel.updateGridSize(snapGrid ? size : 1)
+      }
+    }
   }
 
   /**

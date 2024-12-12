@@ -1,7 +1,9 @@
 import LogicFlow from '../LogicFlow'
 import PointTuple = LogicFlow.PointTuple
 
-export function snapToGrid(point: number, gridSize: number) {
+export function snapToGrid(point: number, gridSize: number, snapGrid: boolean) {
+  // 开启节网格对齐时才根据网格尺寸校准坐标
+  if (!snapGrid) return point
   // 保证 x, y 的值为 gridSize 的整数倍
   return gridSize * Math.round(point / gridSize) || point
 }

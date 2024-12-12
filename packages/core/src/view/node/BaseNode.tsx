@@ -241,7 +241,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   onDragging = ({ event }: IDragParams) => {
     const { model, graphModel } = this.props
     const {
-      editConfigModel: { stopMoveGraph, autoExpand },
+      editConfigModel: { stopMoveGraph, autoExpand, snapGrid },
       transformModel,
       selectNodes,
       width,
@@ -261,9 +261,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     // 2. 考虑鼠标位置不再节点中心
     x = x + (this.moveOffset?.dx ?? 0)
     y = y + (this.moveOffset?.dy ?? 0)
-    // 将x, y移动到grid上
-    x = snapToGrid(x, gridSize)
-    y = snapToGrid(y, gridSize)
+    // 校准坐标
+    x = snapToGrid(x, gridSize, snapGrid)
+    y = snapToGrid(y, gridSize, snapGrid)
     if (!width || !height) {
       graphModel.moveNode2Coordinate(model.id, x, y)
       return

@@ -5,7 +5,6 @@ import {
   merge,
   isBoolean,
   debounce,
-  isEqual,
   isNil,
 } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
@@ -50,7 +49,6 @@ import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
 import NodeConfig = LogicFlow.NodeConfig
-import AnchorConfig = Model.AnchorConfig
 import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import BaseEdgeModelCtor = LogicFlow.BaseEdgeModelCtor
 
@@ -162,7 +160,8 @@ export class GraphModel {
     this.rootEl = container
     this.partial = !!partial
     this.background = background
-    if (typeof grid === 'object') {
+    if (typeof grid === 'object' && options.snapGrid) {
+      // 开启网格对齐时才根据网格尺寸设置步长
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
     this.theme = setupTheme(options.style)
@@ -490,58 +489,6 @@ export class GraphModel {
           throw new Error(`找不到${edge.type}对应的边。`)
         }
         const edgeModel = new Model(edge, this)
-        // 根据edgeModel中存储的数据找到当前画布上的起终锚点坐标
-        // 判断当前起终锚点数据和Model中存储的起终点数据是否一致，不一致更新起终点信息
-        const {
-          sourceNodeId,
-          targetNodeId,
-          sourceAnchorId = '',
-          targetAnchorId = '',
-          startPoint,
-          endPoint,
-          text,
-          textPosition,
-        } = edgeModel
-        const updateAnchorPoint = (
-          node: BaseNodeModel | undefined,
-          anchorId: string,
-          point: Position,
-          updatePoint: (anchor: AnchorConfig) => void,
-        ) => {
-          const anchor = node?.anchors.find((anchor) => anchor.id === anchorId)
-          if (anchor && !isEqual(anchor, point)) {
-            updatePoint(anchor)
-          }
-        }
-
-        const sourceNode = this.getNodeModelById(sourceNodeId)
-        const targetNode = this.getNodeModelById(targetNodeId)
-
-        updateAnchorPoint(
-          sourceNode,
-          sourceAnchorId,
-          startPoint,
-          edgeModel.updateStartPoint.bind(edgeModel),
-        )
-        updateAnchorPoint(
-          targetNode,
-          targetAnchorId,
-          endPoint,
-          edgeModel.updateEndPoint.bind(edgeModel),
-        )
-
-        // 而文本需要先算一下文本与默认文本位置之间的相对位置差
-        // 再计算新路径的文本默认位置，加上相对位置差，得到调整后边的文本的位置
-        if (text) {
-          const { x, y } = text
-          const { x: defaultX, y: defaultY } = textPosition
-          if (x && y && defaultX && defaultY) {
-            const deltaX = x - defaultX
-            const deltaY = y - defaultY
-            edgeModel.resetTextPosition()
-            edgeModel.moveText(deltaX, deltaY)
-          }
-        }
         this.edgeModelMap.set(edgeModel.id, edgeModel)
         this.elementsModelMap.set(edgeModel.id, edgeModel)
 
@@ -900,6 +847,7 @@ export class GraphModel {
    */
   getModelAfterSnapToGrid(node: NodeConfig) {
     const Model = this.getModel(node.type) as BaseNodeModelCtor
+    const { snapGrid } = this.editConfigModel
     if (!Model) {
       throw new Error(
         `找不到${node.type}对应的节点，请确认是否已注册此类型节点。`,
@@ -908,8 +856,8 @@ export class GraphModel {
     const { x: nodeX, y: nodeY } = node
     // 根据 grid 修正节点的 x, y
     if (nodeX && nodeY) {
-      node.x = snapToGrid(nodeX, this.gridSize)
-      node.y = snapToGrid(nodeY, this.gridSize)
+      node.x = snapToGrid(nodeX, this.gridSize, snapGrid)
+      node.y = snapToGrid(nodeY, this.gridSize, snapGrid)
       if (typeof node.text === 'object' && node.text !== null) {
         // 原来的处理是：node.text.x -= getGridOffset(nodeX, this.gridSize)
         // 由于snapToGrid()使用了Math.round()四舍五入的做法，因此无法判断需要执行
@@ -1526,7 +1474,14 @@ export class GraphModel {
   }
 
   /**
-   * 更新网格配置
+   * 更新网格尺寸
+   */
+  updateGridSize(size: number) {
+    this.gridSize = size
+  }
+
+  /**
+   * 更新背景配置
    */
   updateBackgroundOptions(
     options: boolean | Partial<LFOptions.BackgroundConfig>,
