@@ -900,12 +900,8 @@ export class LogicFlow {
       const {
         grid: { size = 1 },
         editConfigModel: { snapGrid },
-        gridSize,
       } = this.graphModel
-      // 开启网格对齐且当前画布网格尺寸与网格对齐尺寸不一致时，或者关闭网格对齐且当前画布网格尺寸不为1时，更新画布网格尺寸
-      if ((snapGrid && gridSize !== size) || (!snapGrid && gridSize !== 1)) {
-        this.graphModel.updateGridSize(snapGrid ? size : 1)
-      }
+      this.graphModel.updateGridSize(snapGrid ? size : 1)
     }
   }
 
