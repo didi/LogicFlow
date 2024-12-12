@@ -162,6 +162,7 @@ export class GraphModel {
     this.background = background
     if (typeof grid === 'object' && options.snapGrid) {
       // 开启网格对齐时才根据网格尺寸设置步长
+      // TODO：需要让用户设置成 0 吗？后面可以讨论一下
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
     this.theme = setupTheme(options.style)
