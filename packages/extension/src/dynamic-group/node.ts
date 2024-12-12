@@ -172,6 +172,7 @@ export class DynamicGroupNode<
   /**
    * 获取分组内的节点
    * @param groupModel
+   * @param graphModel
    */
   getNodesInGroup(
     groupModel: DynamicGroupNodeModel,
