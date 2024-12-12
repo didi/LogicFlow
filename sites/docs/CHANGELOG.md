@@ -1,5 +1,17 @@
 # logicflow-docs
 
+## 2.0.16
+
+### Patch Changes
+
+- 增加业务场景示例
+- fix(docs): 修复文档中“基础教程”和“实例”部分的 nodeModel 和 edgeModel 跳转地址错误
+
+- Updated dependencies
+  - @logicflow/core@2.0.10
+  - @logicflow/extension@2.0.14
+  - @logicflow/react-node-registry@1.0.11
+
 ## 2.0.15
 
 ### Patch Changes

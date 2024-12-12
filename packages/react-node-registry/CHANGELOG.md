@@ -1,5 +1,13 @@
 # @logicflow/react-node-registry
 
+## 1.0.11
+
+### Patch Changes
+
+- fix: 修复issue反馈的bug
+- Updated dependencies
+  - @logicflow/core@2.0.10
+
 ## 1.0.10
 
 ### Patch Changes

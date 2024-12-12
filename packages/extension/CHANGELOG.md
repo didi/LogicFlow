@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.0.14
+
+### Patch Changes
+
+- fix(extension/label): 修复isMultiple设置false后仍能创建多个label的问题&增加input回调事件&增加便签示例
+- fix(extension): 【dynamic-group】DynamicGroup 使用 moveNode 进行移动时子节点没有跟随移动
+- fix(extension): 【dynamic-group】DynamicGroup 嵌套时子分组内元素被重复移动 n 次
+- fix(extension): 【selection-select】修复框选组件的不选中分组节点内部元素的逻辑，避免在选择后拖拽时，与分组移动逻辑重复
+- Updated dependencies
+  - @logicflow/core@2.0.10
+
 ## 2.0.13
 
 ### Patch Changes
