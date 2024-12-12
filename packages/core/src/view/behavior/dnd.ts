@@ -26,10 +26,13 @@ export class Dnd {
     })
     // 处理缩放和偏移
     const { x: x1, y: y1 } = position.canvasOverlayPosition
+    const {
+      editConfigModel: { snapGrid },
+    } = this.lf.graphModel
     // x, y 对齐到网格的 size
     return {
-      x: snapToGrid(x1, gridSize),
-      y: snapToGrid(y1, gridSize),
+      x: snapToGrid(x1, gridSize, snapGrid),
+      y: snapToGrid(y1, gridSize, snapGrid),
     }
   }
 

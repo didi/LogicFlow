@@ -123,6 +123,8 @@ export interface IEditConfigType {
   nodeTextMode: TextMode
   // 边文本类型
   edgeTextMode: TextMode
+  // 开启网格对齐
+  snapGrid: boolean
 }
 
 export type IConfigKeys = keyof IEditConfigType
@@ -154,6 +156,7 @@ const allKeys = [
   'stopZoomGraph', // 禁止缩放画布
   'stopScrollGraph', // 禁止鼠标滚动移动画布
   'stopMoveGraph', // 禁止拖动画布
+  'snapGrid', // 是否开启网格对齐
   'adjustEdge', // 允许调整边
   'adjustEdgeMiddle', // 允许调整边中点
   'adjustEdgeStartAndEnd', // 允许调整边起点和终点
@@ -198,6 +201,7 @@ export class EditConfigModel {
   @observable stopZoomGraph = false
   @observable stopMoveGraph = false
   @observable stopScrollGraph = false
+  @observable snapGrid = false
   /*********************************************************
    * 文本相关配置（全局）
    ********************************************************/
