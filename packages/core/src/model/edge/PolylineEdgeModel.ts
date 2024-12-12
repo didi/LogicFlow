@@ -35,6 +35,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
 
   initEdgeData(data: LogicFlow.EdgeConfig): void {
     this.offset = 30
+    if (data.pointsList) {
+      this.pointsList = data.pointsList
+    }
     super.initEdgeData(data)
   }
 
@@ -313,6 +316,11 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       list[list.length - 1] = endCrossPoint
     }
     return list
+  }
+
+  updatePath(pointList: Point[]) {
+    this.pointsList = pointList
+    this.points = this.getPath(this.pointsList)
   }
 
   getData() {
