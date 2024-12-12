@@ -899,9 +899,8 @@ export class LogicFlow {
     if (!isNil(config?.snapGrid) && config.snapGrid !== currentSnapGrid) {
       const {
         grid: { size = 1 },
-        editConfigModel: { snapGrid },
       } = this.graphModel
-      this.graphModel.updateGridSize(snapGrid ? size : 1)
+      this.graphModel.updateGridSize(config.snapGrid ? size : 1)
     }
   }
 
