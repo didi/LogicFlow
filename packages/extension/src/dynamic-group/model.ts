@@ -194,6 +194,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     }
     return nodeIds
   }
+
   getMoveDistance(
     deltaX: number,
     deltaY: number,
