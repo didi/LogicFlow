@@ -13,6 +13,7 @@ import {
 } from '../model'
 import { SegmentDirection } from '../constant'
 import { isInSegment } from '../algorithm/edge'
+import { Matrix } from './matrix'
 
 import Point = LogicFlow.Point
 import Direction = LogicFlow.Direction
@@ -112,33 +113,33 @@ export const distance = (
 ): number => Math.hypot(x1 - x2, y1 - y2)
 
 /* 是否在某个节点内，手否进行连接，有offset控制粒度，与outline有关，可以优化 */
-export const isInNode = (position: Point, node: BaseNodeModel): boolean => {
+export const isInNode = (
+  position: Point,
+  node: BaseNodeModel,
+  offset = 0,
+): boolean => {
   let inNode = false
-  const offset = 0
   const bBox = getNodeBBox(node)
+  const [x, y] = new Matrix([position.x, position.y, 1])
+    .translate(-node.x, -node.y)
+    .rotate(-node.rotate)
+    .translate(node.x, node.y)[0]
+  const reverseRotatedPosition = {
+    x,
+    y,
+  }
   if (
-    position.x >= bBox.minX - offset &&
-    position.x <= bBox.maxX + offset &&
-    position.y >= bBox.minY - offset &&
-    position.y <= bBox.maxY + offset
+    reverseRotatedPosition.x >= bBox.minX - offset &&
+    reverseRotatedPosition.x <= bBox.maxX + offset &&
+    reverseRotatedPosition.y >= bBox.minY - offset &&
+    reverseRotatedPosition.y <= bBox.maxY + offset
   ) {
     inNode = true
   }
   return inNode
 }
 export const isInNodeBbox = (position: Point, node: BaseNodeModel): boolean => {
-  let inNode = false
-  const offset = 5
-  const bBox = getNodeBBox(node)
-  if (
-    position.x >= bBox.minX - offset &&
-    position.x <= bBox.maxX + offset &&
-    position.y >= bBox.minY - offset &&
-    position.y <= bBox.maxY + offset
-  ) {
-    inNode = true
-  }
-  return inNode
+  return isInNode(position, node, 5)
 }
 
 export type NodeBBox = {
