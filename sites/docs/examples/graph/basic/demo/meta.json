@@ -7,6 +7,22 @@
         "en": "Basic Graph"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
+    },
+    {
+      "filename": "colorfulBackground.tsx",
+      "title": {
+        "zh": "修改背景颜色",
+        "en": "Colorful Background"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
+    },
+    {
+      "filename": "grid.tsx",
+      "title": {
+        "zh": "网格",
+        "en": "Grid"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
     }
   ]
 }
