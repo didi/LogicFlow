@@ -13,7 +13,6 @@ import {
   isMultipleSelect,
   cancelRaf,
   createRaf,
-  TranslateMatrix,
   IDragParams,
   // RotateMatrix,
 } from '../../util'
@@ -296,11 +295,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     if (this.t) {
       cancelRaf(this.t)
     }
-
-    model.transform = new TranslateMatrix(-x, -y)
-      .rotate(model.rotate)
-      .translate(x, y)
-      .toString()
 
     let moveNodes = selectNodes.map((node) => node.id)
     // 未被选中的节点也可以拖动
