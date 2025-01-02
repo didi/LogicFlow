@@ -740,6 +740,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
       this.text && this.moveText(0, deltaY)
       moveY = deltaY
     }
+    this.transform = new TranslateMatrix(-this.x, -this.y)
+      .rotate(this.rotate)
+      .translate(this.x, this.y)
+      .toString()
     return [moveX, moveY]
   }
 
