@@ -229,7 +229,8 @@ export class DynamicGroup {
         console.log('isAllowAppendIn', isAllowAppendIn)
         if (isAllowAppendIn) {
           group.addChild(node.id)
-          this.nodeGroupMap.set(node.id, group.id)
+          // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
+          // TODO 下面这个是干什么的，是否需要一起移动到事件的逻辑中？
           group.setAllowAppendChild(true)
         } else {
           // 抛出不允许插入的事件
@@ -240,6 +241,14 @@ export class DynamicGroup {
         }
       }
     }
+  }
+
+  onGroupAddNode = ({
+    data: groupData,
+    childId,
+  }: CallbackArgs<'group:add-node'>) => {
+    console.log('group:add-node', groupData)
+    this.nodeGroupMap.set(childId, groupData.id)
   }
 
   removeNodeFromGroup = ({
@@ -666,7 +675,7 @@ export class DynamicGroup {
 
     lf.on('graph:updated', ({ data }) => console.log('data', data))
 
-    lf.on('group:add-node', ({ data }) => console.log('group:add-node', data))
+    lf.on('group:add-node', this.onGroupAddNode)
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
@@ -733,6 +742,7 @@ export class DynamicGroup {
     this.lf.off('node:click', this.onNodeSelect)
     this.lf.off('node:mousemove', this.onNodeMove)
     this.lf.off('graph:rendered', this.onGraphRendered)
+    this.lf.off('group:add-node', this.onGroupAddNode)
 
     // 还原 lf.addElements 方法？
     // 移除 graphModel 上重写的 addNodeMoveRules 方法？
