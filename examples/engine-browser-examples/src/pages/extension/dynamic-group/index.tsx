@@ -105,6 +105,17 @@ export default function DynamicGroupDemo() {
           lf.graphModel.moveNode(selectedNode.id, 10, 0)
         },
       })
+      ;(lf.extension.control as Control).addItem({
+        key: 'move-group',
+        iconClass: 'custom-minimap',
+        title: '',
+        text: 'addChild',
+        onClick: (lf) => {
+          const groupModel = lf.getNodeModelById('#2041_dynamic-group_1')
+          groupModel?.addChild('#2041_circle_1')
+          groupModel?.addChild('#2041_circle_2')
+        },
+      })
 
       const dndPanelConfig = getDndPanelConfig(lf)
       lf.setPatternItems(dndPanelConfig)
@@ -220,6 +231,44 @@ export default function DynamicGroupDemo() {
               x: 452,
               y: 357,
               value: 'Rect',
+            },
+          },
+          // #2041
+          {
+            id: '#2041_circle_1',
+            type: 'circle',
+            x: 1022,
+            y: 170,
+            text: {
+              value: 'circle_1',
+              x: 1022,
+              y: 170,
+              draggable: true,
+            },
+          },
+          {
+            id: '#2041_circle_2',
+            type: 'circle',
+            x: 1180,
+            y: 170,
+            text: {
+              value: 'circle_2',
+              x: 1180,
+              y: 170,
+              draggable: true,
+            },
+          },
+          {
+            id: '#2041_dynamic-group_1',
+            type: 'dynamic-group',
+            x: 1042,
+            y: 189,
+            text: 'dynamic-group_fix_#2041',
+            resizable: true,
+            properties: {
+              width: 420,
+              height: 250,
+              radius: 5,
             },
           },
         ],

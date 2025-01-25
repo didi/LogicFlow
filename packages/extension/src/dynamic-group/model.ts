@@ -492,7 +492,10 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   addChild(id: string) {
     this.children.add(id)
     const groupData = this.getData()
-    this.graphModel.eventCenter.emit('group:add-node', { data: groupData })
+    this.graphModel.eventCenter.emit('group:add-node', {
+      data: groupData,
+      childId: id,
+    })
   }
 
   /**
