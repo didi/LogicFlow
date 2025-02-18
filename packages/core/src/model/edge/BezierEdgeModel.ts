@@ -1,4 +1,4 @@
-import { assign, cloneDeep } from 'lodash-es'
+import { get, assign, cloneDeep } from 'lodash-es'
 import { action, observable } from 'mobx'
 import BaseEdgeModel from './BaseEdgeModel'
 import { BaseNodeModel } from '../node'
@@ -21,7 +21,7 @@ export class BezierEdgeModel extends BaseEdgeModel {
     this.setAttributes()
   }
   initEdgeData(data: EdgeConfig): void {
-    this.offset = 100
+    this.offset = get(data, 'properties.offset', 100)
     super.initEdgeData(data)
   }
   getEdgeStyle() {

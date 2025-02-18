@@ -1,4 +1,4 @@
-import { assign, cloneDeep } from 'lodash-es'
+import { get, assign, cloneDeep } from 'lodash-es'
 import { observable, action } from 'mobx'
 import { BaseEdgeModel } from '.'
 import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
@@ -34,7 +34,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   @observable dbClickPosition?: Point
 
   initEdgeData(data: LogicFlow.EdgeConfig): void {
-    this.offset = 30
+    this.offset = get(data, 'properties.offset', 30)
     if (data.pointsList) {
       this.pointsList = data.pointsList
     }

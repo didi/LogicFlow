@@ -81,16 +81,16 @@ const data = {
   nodes: [
     {
       id: 'custom-node-1',
-      rotate: 1.1722738811284763,
+      // rotate: 1.1722738811284763,
       text: {
-        x: 600,
-        y: 200,
+        x: 400,
+        y: 400,
         value: 'node-1',
         draggable: true,
       },
       type: 'rect',
-      x: 600,
-      y: 200,
+      x: 400,
+      y: 400,
       properties: {
         width: 80,
         height: 120,
@@ -103,6 +103,26 @@ const data = {
       x: 90,
       y: 94,
     },
+  ],
+  edges: [
+    {
+      type: 'animation-edge',
+      sourceNodeId: 'custom-node-1',
+      targetNodeId: 'custom-node-2',
+      properties: {
+        // offset: 500,
+        arrowType: 'empty',
+      },
+    },
+    // {
+    //   type: 'polyline',
+    //   sourceNodeId: 'custom-node-1',
+    //   targetNodeId: 'custom-node-2',
+    //   properties: {
+    //     // offset: 10,
+    //     arrowType: 'empty',
+    //   },
+    // }
   ],
 }
 
