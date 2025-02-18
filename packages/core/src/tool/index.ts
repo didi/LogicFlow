@@ -70,7 +70,7 @@ export class Tool {
       this.toolMap.delete(name)
       return true
     }
-    throw new Error('禁用失败，不存在名为 ${tool} 的工具')
+    throw new Error(`禁用失败，不存在名为 ${tool} 的工具`)
   }
 
   @action
@@ -81,7 +81,7 @@ export class Tool {
       this.disabledToolMap.delete(name)
       return true
     }
-    throw new Error('不存在名为 ${tool} 的工具')
+    throw new Error(`不存在名为 ${tool} 的工具`)
   }
 
   getTools() {
