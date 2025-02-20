@@ -321,6 +321,7 @@ export class GroupNodeModel extends RectResizeModel {
   getData() {
     const data = super.getData()
     data.children = []
+    console.log('this.children', this.children)
     this.children.forEach((childId) => {
       const model = this.graphModel.getNodeModelById(childId)
       if (model && !model.virtual) {

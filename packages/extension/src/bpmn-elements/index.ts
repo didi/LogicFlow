@@ -82,8 +82,8 @@ export class BPMNElements {
   constructor({ lf }: any) {
     lf.definition = {}
     lf.useDefinition = useDefinition(lf.definition)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_definition, setDefinition] = lf.useDefinition()
+    console.log('_definition', _definition)
     setDefinition(definitionConfig)
 
     registerEventNodes(lf)

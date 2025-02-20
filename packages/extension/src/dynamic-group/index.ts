@@ -226,6 +226,7 @@ export class DynamicGroup {
       const group = this.getGroupByBounds(bounds, node)
       if (group) {
         const isAllowAppendIn = group.isAllowAppendIn(node)
+        console.log('isAllowAppendIn', isAllowAppendIn)
         if (isAllowAppendIn) {
           group.addChild(node.id)
           // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
@@ -246,6 +247,7 @@ export class DynamicGroup {
     data: groupData,
     childId,
   }: CallbackArgs<'group:add-node'>) => {
+    console.log('group:add-node', groupData)
     this.nodeGroupMap.set(childId, groupData.id)
   }
 
@@ -289,6 +291,7 @@ export class DynamicGroup {
       if (!isAllowAppendIn) return
 
       this.activeGroup = targetGroup
+      console.log('this.activeGroup', this.activeGroup)
       this.activeGroup.setAllowAppendChild(true)
     }
   }
@@ -417,6 +420,7 @@ export class DynamicGroup {
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
+    console.log('data', data)
     forEach(data.nodes, (node) => {
       if (node.children) {
         forEach(node.children, (childId) => {
@@ -495,7 +499,7 @@ export class DynamicGroup {
     })
 
     // TODO: 确认，递归的方式，是否将所有嵌套的边数据都有返回
-    // console.log('allRelatedEdges -->>', allRelatedEdges)
+    console.log('allRelatedEdges -->>', allRelatedEdges)
 
     // 1. 判断每一条边的开始节点、目标节点是否在 Group 中
     const edgesInnerGroup = filter(allRelatedEdges, (edge) => {
@@ -669,7 +673,7 @@ export class DynamicGroup {
     lf.on('node:mousemove', this.onNodeMove)
     lf.on('graph:rendered', this.onGraphRendered)
 
-    // lf.on('graph:updated', ({ data }) => console.log('data', data))
+    lf.on('graph:updated', ({ data }) => console.log('data', data))
 
     lf.on('group:add-node', this.onGroupAddNode)
 
@@ -715,6 +719,7 @@ export class DynamicGroup {
         this.createEdge(edge, nodeIdMap, distance)
       })
 
+      console.log('selectedEdges --->>>', selectedEdges)
       forEach(selectedEdges, (edge) => {
         elements.edges.push(this.createEdge(edge, nodeIdMap, distance))
       })

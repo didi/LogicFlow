@@ -369,6 +369,7 @@ export class ProximityConnect {
 
   // 设置连线阈值
   public setThresholdDistance(distance: number) {
+    console.log('distance', distance)
     if (!isFinite(distance)) return
     this.thresholdDistance = distance
   }

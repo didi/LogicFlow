@@ -96,8 +96,8 @@ export function EndEventFactory(lf: any): {
       const rules = super.getConnectedSourceRules()
       const notAsSource = {
         message: '结束节点不能作为边的起点',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate: (source: any, _target: any) => {
+          console.log('_target', _target)
           return source !== this
         },
       }
