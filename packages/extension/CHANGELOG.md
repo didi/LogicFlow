@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.15
+
+### Patch Changes
+
+- fix: 修复一些已知问题
+  - fix: 修复调整窗口大小后，小地图插件表现异常的问题 fix #2017
+  - fix(extension): dynamic-group 的 addChild 没有处理 nodeGroupMap fix #2041 #2042
+- Updated dependencies
+  - @logicflow/core@2.0.11
+
 ## 2.0.14
 
 ### Patch Changes

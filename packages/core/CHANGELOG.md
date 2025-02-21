@@ -1,20 +1,30 @@
 # Change Log
 
+## 2.0.11
+
+### Patch Changes
+
+- fix: 修复一些已知问题
+  - fix(core): 修复节点旋转后锚点无法被接线的问题 fix #1871
+  - fix(core): 修复旋转节点多选后移动位置异常问题 fix #1794
+  - feat(core): 销毁时调用所有插件的 destroy 方法
+  - fix: 修正错误提示
+  - feat: 折线边支持配置节点相邻第一个拐点位置&曲线边支持配置调整线拉伸长度 fix #1953
+
 ## 2.0.10
 
 ### Patch Changes
 
-- fix(core): 导出的边数据中默认带上连接锚点的ID fix #1991 
-- fix(core): 修复节点和文本同时支持拖拽场景下,拖拽文本时节点也跟随移动问题 fix #1520 
-- fix(core): 修复静默状态下点击节点和边会修修改节点和边的层级 fix #1588 
+- fix(core): 导出的边数据中默认带上连接锚点的ID fix #1991
+- fix(core): 修复节点和文本同时支持拖拽场景下,拖拽文本时节点也跟随移动问题 fix #1520
+- fix(core): 修复静默状态下点击节点和边会修修改节点和边的层级 fix #1588
 - fix: 兼容不设置高度时,窗口变化后更新画布尺寸
 - fix: 修复window resize失效问题
-- fix(内存): 修复调用clearData之后，依然保持对节点的引用导致的内存溢出bug fix #1993 
+- fix(内存): 修复调用clearData之后，依然保持对节点的引用导致的内存溢出bug fix #1993
 - fix: 修复设置 textDraggable 为 true 时，边、节点文本无法拖拽的 bug
 - feat(core): 完善destory方法&增加性能测试demo
 - fix(core/polyline): 修复流程图初次渲染时即使传入pointsList折线路径也会重置问题&新增修改折线pointsList的方法
 - fix(core): 网格对齐改为开关控制 & 修复初始化时流程图偏移问题
-
 
 ## 2.0.9
 
