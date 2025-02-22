@@ -178,8 +178,18 @@ export class DynamicGroup {
     this.topGroupZIndex = max
   }
 
-  // 监听 LogicFlow 的相关事件，做对应的处理
-  addNodeToGroup = ({ data: node }: CallbackArgs<'node:add'>) => {
+  onSelectionDrop = () => {
+    const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
+    selectedNodes.forEach((node) => {
+      this.addNodeToGroup(node)
+    })
+  }
+
+  onNodeAddOrDrop = ({ data: node }: CallbackArgs<'node:add'>) => {
+    this.addNodeToGroup(node)
+  }
+
+  addNodeToGroup = (node: LogicFlow.NodeData) => {
     // 1. 如果该节点之前已经在 group 中了，则将其从之前的 group 移除
     const preGroupId = this.nodeGroupMap.get(node.id)
 
@@ -230,8 +240,7 @@ export class DynamicGroup {
         if (isAllowAppendIn) {
           group.addChild(node.id)
           // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
-          // TODO 下面这个是干什么的，是否需要一起移动到事件的逻辑中？
-          group.setAllowAppendChild(true)
+          group.setAllowAppendChild(false)
         } else {
           // 抛出不允许插入的事件
           this.lf.emit('group:not-allowed', {
@@ -273,7 +282,17 @@ export class DynamicGroup {
     }
   }
 
-  setActiveGroup = ({ data: node }: CallbackArgs<'node:drag'>) => {
+  onSelectionDrag = () => {
+    const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
+    selectedNodes.forEach((node) => {
+      this.setActiveGroup(node)
+    })
+  }
+  onNodeDrag = ({ data: node }: CallbackArgs<'node:drag'>) => {
+    this.setActiveGroup(node)
+  }
+
+  setActiveGroup = (node: LogicFlow.NodeData) => {
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
 
@@ -666,9 +685,11 @@ export class DynamicGroup {
 
     graphModel.dynamicGroup = this
 
-    lf.on('node:add,node:drop,node:dnd-add', this.addNodeToGroup)
+    lf.on('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
+    lf.on('selection:drop', this.onSelectionDrop)
     lf.on('node:delete', this.removeNodeFromGroup)
-    lf.on('node:drag,node:dnd-drag', this.setActiveGroup)
+    lf.on('node:drag,node:dnd-drag', this.onNodeDrag)
+    lf.on('selection:drag', this.onSelectionDrag)
     lf.on('node:click', this.onNodeSelect)
     lf.on('node:mousemove', this.onNodeMove)
     lf.on('graph:rendered', this.onGraphRendered)
@@ -736,9 +757,11 @@ export class DynamicGroup {
 
   destroy() {
     // 销毁监听的事件，并移除渲染的 dom 内容
-    this.lf.off('node:add,node:drop,node:dnd-add', this.addNodeToGroup)
+    this.lf.off('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
+    this.lf.off('selection:drop', this.onSelectionDrop)
     this.lf.off('node:delete', this.removeNodeFromGroup)
-    this.lf.off('node:drag,node:dnd-drag', this.setActiveGroup)
+    this.lf.off('node:drag,node:dnd-drag', this.onNodeDrag)
+    this.lf.off('selection:drag', this.onSelectionDrag)
     this.lf.off('node:click', this.onNodeSelect)
     this.lf.off('node:mousemove', this.onNodeMove)
     this.lf.off('graph:rendered', this.onGraphRendered)
