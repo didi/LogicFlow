@@ -217,5 +217,16 @@ export default defineConfig({
         },
       ],
     },
+    {
+      name: 'event',
+      path: '/event',
+      routes: [
+        {
+          path: '/event/batch-use',
+          name: '批量使用示例',
+          component: './event/batch-use',
+        },
+      ],
+    },
   ],
 })
