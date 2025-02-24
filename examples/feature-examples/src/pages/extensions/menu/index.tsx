@@ -171,6 +171,16 @@ export default function MenuExtension() {
               alert('分享成功！')
             },
           },
+          {
+            text: '添加节点',
+            callback(data: LogicFlow.Position) {
+              lf.addNode({
+                type: 'rect',
+                x: data.x,
+                y: data.y,
+              })
+            },
+          },
         ],
       })
 
