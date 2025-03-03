@@ -50,6 +50,7 @@ export class ResizeControl extends Component<
 
     // 初始化拖拽工具
     this.dragHandler = new StepDrag({
+      onDragStart: this.onDragStart,
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: graphModel.gridSize,
@@ -315,6 +316,10 @@ export class ResizeControl extends Component<
     // this.updateEdgePointByAnchors()
     // // 触发 resize 事件
     // this.triggerResizeEvent(preNodeData, curNodeData, deltaX, deltaY, this.index, this.nodeModel)
+  }
+
+  onDragStart = () => {
+    this.graphModel.selectNodeById(this.nodeModel.id)
   }
 
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
