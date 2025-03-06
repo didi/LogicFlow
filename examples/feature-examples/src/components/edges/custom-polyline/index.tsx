@@ -37,8 +37,10 @@ class CustomPolyline extends PolylineEdge {
 }
 
 class CustomPolylineModel extends PolylineEdgeModel {
+  offset: number = 5
   initEdgeData(data: LogicFlow.EdgeConfig) {
     super.initEdgeData(data)
+
     this.customTextPosition = true
   }
   // 自定义边文本位置

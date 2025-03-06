@@ -10,6 +10,9 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
+  keyboard: {
+    enabled: true,
+  },
 }
 
 export default function CustomPolylineEdge() {
