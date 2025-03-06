@@ -260,14 +260,15 @@ export default function BasicNode() {
           size: 60,
         },
         edgeTextDraggable: true,
-        edgeType: 'bezier',
+        edgeType: 'polyline',
         // 全局自定义id
-        // edgeGenerator: (sourceNode, targetNode, currentEdge) => {
-        //   // 起始节点类型 rect 时使用 自定义的边 custom-edge
-        //   if (sourceNode.type === 'rect') return 'bezier'
-        //   if (currentEdge) return currentEdge.type
-        //   return 'polyline'
-        // },
+        edgeGenerator: (sourceNode, targetNode, currentEdge) => {
+          console.log('edgeGenerator currentEdge', currentEdge)
+          // 起始节点类型 rect 时使用 自定义的边 custom-edge
+          if (sourceNode.type === 'rect') return 'bezier'
+          if (currentEdge) return currentEdge.type
+          return 'polyline'
+        },
         idGenerator(type) {
           return type + '_' + Math.random()
         },
