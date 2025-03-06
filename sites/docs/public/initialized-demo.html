@@ -1,0 +1,44 @@
+<html style="overflow: hidden;">
+  <head>
+      <title>Initlize Demo</title>
+  </head>
+  <body>
+  <!-- 引入 core 包和对应 css-->
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+  <style>
+    #container {
+      width: 1000px;
+      height: 500px
+    }
+  </style>
+
+  <!-- 创建画布容器 -->
+  <div id="container"></div>
+  </body>
+  <script>
+    // 创建画布实例，也可以 new Core.LogicFLow
+    const lf = new Core.default({
+      container: document.querySelector('#container'),
+      // stopScrollGraph: true,
+      // stopZoomGraph: true,
+      grid: true,
+    })
+    lf.render({
+      nodes: [{
+        id: 'text-1',
+        type: 'text',
+        x: 100,
+        y: 100,
+        text: '这就是一张画布啦(oﾟ▽ﾟ)o\n可以滚动、拖动和缩放',
+        properties: {
+          textStyle: {
+            fontSize: 20,
+          }
+        }
+      }],
+      edges: [],
+    })
+    lf.focusOn('text-1')
+  </script>
+</html>

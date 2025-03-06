@@ -1,0 +1,69 @@
+<html style="overflow: hidden;">
+  <head>
+      <title>Original Usage</title>
+  </head>
+  <body>
+  <!-- 引入 core 包和对应 css-->
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+
+  <!-- 创建画布容器 -->
+  <div id="container"></div>
+  </body>
+  <script>
+    // 引入继承节点，引入 core 包后，会自动挂载 window.Core 
+    // const { RectNode, RectNodeModel } = Core;
+    
+    // 准备图数据
+    const data = {
+      // 节点
+      nodes: [
+        {
+          id: '21',
+          type: 'rect',
+          x: 500,
+          y: 100,
+          text: 'Origin Usage-rect',
+          properties: {
+            width: 160,
+            height: 80,
+          }
+        },
+        {
+          id: '50',
+          type: 'circle',
+          x: 700,
+          y: 300,
+          text: 'Origin Usage-circle',
+          properties: {
+            r: 60,
+          }
+        },
+      ],
+      // 边
+      edges: [
+        {
+          type: 'polyline',
+          sourceNodeId: '50',
+          targetNodeId: '21',
+        },
+      ],
+    }
+    const { Control } = Extension
+    //全局维度安装控制面板插件的写法：
+    Core.default.use(Control);
+    // 创建画布实例，也可以 new Core.LogicFLow
+    const lf = new Core.default({
+      container: document.querySelector('#container'),
+      stopScrollGraph: true,
+      stopZoomGraph: true,
+      grid: true,
+      // plugins: [Control], // 单实例安装插件
+    })
+    
+    // 渲染画布实例
+    lf.render(data)
+  </script>
+</html>
