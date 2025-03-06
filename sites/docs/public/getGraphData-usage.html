@@ -1,0 +1,133 @@
+<html style="overflow: scroll;">
+  <head>
+      <title>getGraphData Usage</title>
+  </head>
+  <body>
+  <!-- 引入 core 包和对应 css-->
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+  <style>
+    .result-review {
+      width: 30%;
+      border: 1px sold #000;
+      border-radius: 6px;
+      margin: 0 6px;
+    }
+    .result-review-title {
+      background-color: #ecf4ff;
+      padding: 10px;
+      border-radius: 5px 5px 0 0;
+    }
+    pre {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin: 0;
+      white-space: pre-wrap; /* 处理长行的换行 */
+    }
+  </style>
+
+  <!-- 创建画布容器 -->
+  <div style="display: flex">
+    <div id="container" style="width: 40%"></div>
+    <div class="result-review">
+      <div class="result-review-title">原始数据</div>
+      <pre  class="result-review-result" id="rawData"></pre>
+    </div>
+    <div class="result-review">
+      <div class="result-review-title">转换加工后的数据</div>
+      <pre  class="result-review-result" id="data"></pre>
+    </div>
+  </div>
+  
+  </body>
+  <script>
+    // 引入继承节点，引入 core 包后，会自动挂载 window.Core 
+    // const { RectNode, RectNodeModel } = Core;
+    
+    // 准备图数据
+    const data = {
+      // 节点
+      nodes: [
+        {
+          id: '21',
+          type: 'rect',
+          x: 500,
+          y: 100,
+          text: 'Origin Usage-rect',
+          properties: {
+            width: 160,
+            height: 80,
+          }
+        },
+        {
+          id: '50',
+          type: 'circle',
+          x: 700,
+          y: 300,
+          text: 'Origin Usage-circle',
+          properties: {
+            r: 60,
+          }
+        },
+      ],
+      // 边
+      edges: [
+        {
+          type: 'polyline',
+          sourceNodeId: '50',
+          targetNodeId: '21',
+        },
+      ],
+    }
+    // 创建画布实例，也可以 new Core.LogicFLow
+    const lf = new Core.default({
+      container: document.querySelector('#container'),
+      stopScrollGraph: true,
+      stopZoomGraph: true,
+      grid: true,
+      plugins: [], // 单实例安装插件
+    })
+    // 渲染画布实例
+    lf.adapterIn = (data) => {
+      return data
+    }
+    lf.adapterOut = (data) => {
+      const { nodes, edges } = data
+      return {
+        nodes: nodes.map(node => {
+          const { properties, x, y, width, height } = node
+          return {
+            x,
+            y,
+            width,
+            height,
+            tips: '自定义导出的节点'
+          }
+        }),
+        edges: edges.map(edge => {
+          const { type, sourceNodeId, targetNodeId } = edge
+          return {
+            type,
+            sourceNodeId,
+            targetNodeId,
+            // 添加自定义属性
+            tips: '自定义导出的边',
+          }
+        }),
+      }
+    }
+    lf.render(data)
+    lf.focusOn({ x: 470, y: 20 })
+    lf.zoom(0.8)
+    const rawDataDom = document.querySelector('#rawData')
+    const dataDom = document.querySelector('#data')
+    const rawData = lf.getGraphRawData()
+    rawDataDom.innerHTML = JSON.stringify(rawData, null, 2)
+    const exportData = lf.getGraphData()
+    dataDom.innerHTML = JSON.stringify(exportData, null, 2)
+  </script>
+</html>

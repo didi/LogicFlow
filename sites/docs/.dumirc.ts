@@ -120,6 +120,14 @@ export default defineConfig({
         order: 1,
       },
       {
+        slug: 'api/type',
+        title: {
+          zh: '类型定义字典',
+          en: 'Type Dictionary',
+        },
+        order: 6,
+      },
+      {
         slug: 'article/extension',
         title: {
           zh: '插件实现原理',
