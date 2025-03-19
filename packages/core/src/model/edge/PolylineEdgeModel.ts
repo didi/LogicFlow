@@ -30,7 +30,7 @@ import AnchorConfig = Model.AnchorConfig
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
   draggingPointList: Point[] = []
-  offset?: number
+  @observable offset?: number
   @observable dbClickPosition?: Point
 
   initEdgeData(data: LogicFlow.EdgeConfig): void {
