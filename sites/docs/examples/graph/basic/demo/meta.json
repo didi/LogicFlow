@@ -14,7 +14,7 @@
         "zh": "修改背景颜色",
         "en": "Colorful Background"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/background.png"
     },
     {
       "filename": "grid.tsx",
@@ -22,7 +22,15 @@
         "zh": "网格",
         "en": "Grid"
       },
-      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/graph.png"
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/grid.png"
+    },
+    {
+      "filename": "theme.tsx",
+      "title": {
+        "zh": "元素主题",
+        "en": "Element's Theme"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/graph/theme.png"
     }
   ]
 }
