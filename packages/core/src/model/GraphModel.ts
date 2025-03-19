@@ -63,7 +63,7 @@ export class GraphModel {
   @observable height: number // 画布高度
 
   // 流程图主题配置
-  theme: LogicFlow.Theme
+  @observable theme: LogicFlow.Theme
   // 网格配置
   @observable grid: Grid.GridOptions
   // 事件中心

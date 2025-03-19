@@ -13,7 +13,7 @@ import EdgeConfig = LogicFlow.EdgeConfig
 export class BezierEdgeModel extends BaseEdgeModel {
   modelType = ModelType.BEZIER_EDGE
 
-  offset!: number
+  @observable offset!: number
   @observable path = ''
   constructor(data: EdgeConfig, graphModel: GraphModel) {
     super(data, graphModel)
