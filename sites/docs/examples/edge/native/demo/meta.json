@@ -1,0 +1,12 @@
+{
+  "demos": [
+    {
+      "filename": "basicEdge.tsx",
+      "title": {
+        "zh": "基础内置边",
+        "en": "Basic Native Edges"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/edge/basic-edge.png"
+    }
+  ]
+}

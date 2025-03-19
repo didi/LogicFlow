@@ -95,6 +95,14 @@
         "en": "Label extension"
       },
       "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/label.png"
+    },
+    {
+      "filename": "proximityConnect.tsx",
+      "title": {
+        "zh": "渐进连线 插件",
+        "en": "ProcimityConnection extension"
+      },
+      "screenshot": "https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/label.png"
     }
   ]
 }
