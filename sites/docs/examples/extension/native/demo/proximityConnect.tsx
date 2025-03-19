@@ -133,7 +133,7 @@ const MenuExtension: React.FC = () => {
   }, []);
 
   return (
-    <Card title="LogicFlow Extension - Control">
+    <Card title="LogicFlow Extension - ProximityConnect">
       <Row>
         <Col span={8}>
           <Form.Item label="连线阈值：">
