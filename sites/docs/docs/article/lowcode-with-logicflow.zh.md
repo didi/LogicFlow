@@ -102,7 +102,7 @@ toc: content
 
 ![23-edge-code](https://github.com/didi/LogicFlow/assets/27529822/499ad962-599c-48e9-8059-cd1bee596dd2)
 
-默认情况下，LogicFlow 的文本是 svg 元素，所以当我们需要在这上面提供更多的 html 内容是，可以利用 LogicFlow 的基于**继承重写的自定义机制**，重新实现文本。上面的代码示例就是通过重写 getText 方法，利用在 svg 中插入 **foreignObject** 的方式，实现 svg 内部嵌套 html 内容。
+默认情况下，LogicFlow 的文本是 svg 元素，所以当我们需要在这上面提供更多的 html 内容时，可以利用 LogicFlow 的基于**继承重写的自定义机制**，重新实现文本。上面的代码示例就是通过重写 getText 方法，利用在 svg 中插入 **foreignObject** 的方式，实现 svg 内部嵌套 html 内容。
 
 ### 执行器
 

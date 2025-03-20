@@ -279,13 +279,13 @@ export default function App() {
           ],
         }
       }
-    }
+    },
     mounted() {
       this.lf = new LogicFlow({
         container: this.$refs.container,
         grid: true,
       });
-      this.lf.render(renderData);
+      this.lf.render(this.renderData);
     },
   };
 </script>
