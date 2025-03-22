@@ -11,19 +11,11 @@ export class SelectionSelect {
   private startPoint?: Position
   private endPoint?: Position
   private disabled = true
-  private isDefaultStopMoveGraph:
-    | boolean
-    | 'horizontal'
-    | 'vertical'
-    | [number, number, number, number] = false
   private isWholeNode = true
   private isWholeEdge = true
 
   constructor({ lf }: LogicFlow.IExtensionProps) {
     this.lf = lf
-    // 初始化isDefaultStopMoveGraph取值
-    const { stopMoveGraph } = lf.getEditConfig()
-    this.isDefaultStopMoveGraph = stopMoveGraph!
     // TODO: 有没有既能将方法挂载到lf上，又能提供类型提示的方法？
     lf.openSelectionSelect = () => {
       this.openSelectionSelect()
@@ -31,44 +23,53 @@ export class SelectionSelect {
     lf.closeSelectionSelect = () => {
       this.closeSelectionSelect()
     }
+    this.onToolContainerMouseDown = this.onToolContainerMouseDown.bind(this)
   }
 
-  render(lf: LogicFlow, domContainer: HTMLElement) {
+  render(_: LogicFlow, domContainer: HTMLElement) {
     this.container = domContainer
-    lf.on('blank:mousedown', ({ e }: { e: MouseEvent }) => {
-      const config = lf.getEditConfig()
-      // 鼠标控制滚动移动画布的时候，不能选区。
-      if (!config.stopMoveGraph || this.disabled) {
-        return
-      }
-      // 禁用右键框选，修复可能导致画布出现多个框选框不消失的问题，见https://github.com/didi/LogicFlow/issues/985
-      const isRightClick = e.button === 2
-      if (isRightClick) {
-        return
-      }
-      const {
-        domOverlayPosition: { x, y },
-      } = lf.getPointByClient(e.clientX, e.clientY)
-      this.startPoint = {
-        x,
-        y,
-      }
-      this.endPoint = {
-        x,
-        y,
-      }
-      const wrapper = document.createElement('div')
-      wrapper.className = 'lf-selection-select'
-      wrapper.oncontextmenu = function prevent(ev: MouseEvent) {
-        ev.preventDefault()
-      }
-      wrapper.style.top = `${this.startPoint.y}px`
-      wrapper.style.left = `${this.startPoint.x}px`
-      domContainer.appendChild(wrapper)
-      this.wrapper = wrapper
-      document.addEventListener('mousemove', this.draw)
-      document.addEventListener('mouseup', this.drawOff)
-    })
+  }
+
+  onToolContainerMouseDown(e: MouseEvent) {
+    // 避免在其他插件元素上点击时开启选区
+    if (e.target !== this.container) {
+      return
+    }
+    const lf = this.lf
+    const domContainer = this.container
+    if (!domContainer) {
+      return
+    }
+    if (this.disabled) {
+      return
+    }
+    // 禁用右键框选，修复可能导致画布出现多个框选框不消失的问题，见https://github.com/didi/LogicFlow/issues/985
+    const isRightClick = e.button === 2
+    if (isRightClick) {
+      return
+    }
+    const {
+      domOverlayPosition: { x, y },
+    } = lf.getPointByClient(e.clientX, e.clientY)
+    this.startPoint = {
+      x,
+      y,
+    }
+    this.endPoint = {
+      x,
+      y,
+    }
+    const wrapper = document.createElement('div')
+    wrapper.className = 'lf-selection-select'
+    wrapper.oncontextmenu = function prevent(ev: MouseEvent) {
+      ev.preventDefault()
+    }
+    wrapper.style.top = `${this.startPoint.y}px`
+    wrapper.style.left = `${this.startPoint.x}px`
+    domContainer.appendChild(wrapper)
+    this.wrapper = wrapper
+    document.addEventListener('mousemove', this.draw)
+    document.addEventListener('mouseup', this.drawOff)
   }
 
   /**
@@ -85,13 +86,15 @@ export class SelectionSelect {
    * 开启选区
    */
   openSelectionSelect() {
-    const { stopMoveGraph } = this.lf.getEditConfig()
-    if (!stopMoveGraph) {
-      this.isDefaultStopMoveGraph = false
-      this.lf.updateEditConfig({
-        stopMoveGraph: true,
-      })
+    if (!this.disabled) {
+      this.closeSelectionSelect()
     }
+    if (!this.container) {
+      return
+    }
+    this.container.addEventListener('mousedown', this.onToolContainerMouseDown)
+    // 取消点击事件的穿透，只让 ToolOverlay 接收事件，避免与图形元素的事件冲突
+    this.container.style.pointerEvents = 'auto'
     this.open()
   }
 
@@ -99,11 +102,14 @@ export class SelectionSelect {
    * 关闭选区
    */
   closeSelectionSelect() {
-    if (!this.isDefaultStopMoveGraph) {
-      this.lf.updateEditConfig({
-        stopMoveGraph: false,
-      })
+    if (!this.container) {
+      return
     }
+    this.container.style.pointerEvents = 'none'
+    this.container.removeEventListener(
+      'mousedown',
+      this.onToolContainerMouseDown,
+    )
     this.close()
   }
 
@@ -169,11 +175,19 @@ export class SelectionSelect {
       const nonGroupedElements: typeof elements = []
       elements.forEach((element) => {
         // 如果节点属于分组，则不选中节点，此处兼容旧版 Group 插件
-        if (group && group.getNodeGroup(element.id)) {
-          return
+        if (group) {
+          const elementGroup = group.getNodeGroup(element.id)
+          if (elements.includes(elementGroup)) {
+            // 当被选中的元素的父分组被选中时，不选中该元素
+            return
+          }
         }
-        if (dynamicGroup && dynamicGroup.getGroupByNodeId(element.id)) {
-          return
+        if (dynamicGroup) {
+          const elementGroup = dynamicGroup.getGroupByNodeId(element.id)
+          if (elements.includes(elementGroup)) {
+            // 当被选中的元素的父分组被选中时，不选中该元素
+            return
+          }
         }
         this.lf.selectElementById(element.id, true)
         nonGroupedElements.push(element)

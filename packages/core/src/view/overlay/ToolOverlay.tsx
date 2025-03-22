@@ -1,5 +1,5 @@
 import { createElement as h, Component } from 'preact/compat'
-import { OutlineOverlay } from '.'
+import { CanvasOverlay, OutlineOverlay } from '.'
 import { observer } from '../..'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel } from '../../model'
@@ -8,6 +8,7 @@ import { Tool } from '../../tool'
 type IProps = {
   graphModel: GraphModel
   tool: Tool
+  getCanvasOverlay: () => CanvasOverlay | null
 }
 
 @observer
@@ -52,10 +53,28 @@ export class ToolOverlay extends Component<IProps> {
     lf.components = [] // 保证extension组件的render只执行一次
   }
 
+  zoomHandler = (e: WheelEvent) => {
+    this.props.getCanvasOverlay()?.zoomHandler(e)
+  }
+
+  mouseDownHandler = (e: MouseEvent) => {
+    this.props.getCanvasOverlay()?.mouseDownHandler(e)
+  }
+
   render() {
     const { graphModel } = this.props
     return (
-      <div className="lf-tool-overlay" id={`ToolOverlay_${graphModel.flowId}`}>
+      <div
+        className="lf-tool-overlay"
+        id={`ToolOverlay_${graphModel.flowId}`}
+        /*
+         * 默认情况下该容器设置了 pointer-events: none，不会触发这些事件
+         * 这里会在容器取消 pointer-events: none 后将事件传给画布用来缩放拖拽画布等操作
+         * 目前只在 selection-select 插件中使用。为了能在元素内部进行框选，在开启选区后会关闭事件透传
+         */
+        onWheel={this.zoomHandler}
+        onMouseDown={this.mouseDownHandler}
+      >
         {this.getTools()}
       </div>
     )
