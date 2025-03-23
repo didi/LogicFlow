@@ -79,6 +79,8 @@ export enum EventType {
   EDGE_EXCHANGE_NODE = 'edge:exchange-node',
 
   // Anchor events
+  ANCHOR_CLICK = 'anchor:click',
+  ANCHOR_MOUSEDOWN = 'anchor:mousedown',
   ANCHOR_DRAGSTART = 'anchor:dragstart',
   ANCHOR_DRAG = 'anchor:drag',
   ANCHOR_DROP = 'anchor:drop',

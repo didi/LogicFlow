@@ -75,6 +75,39 @@ export default class Example extends React.Component {
         height: 28,
       },
     })
+    lf.addNode({
+      id: 'react-node-2',
+      type: 'custom-react-node',
+      x: 280,
+      y: 80,
+      properties: {
+        name: '今日出行',
+        width: 120,
+        height: 28,
+      },
+    })
+    lf.addNode({
+      id: 'react-node-3',
+      type: 'custom-react-node',
+      x: 280,
+      y: 180,
+      properties: {
+        name: '今日出行',
+        width: 120,
+        height: 28,
+      },
+    })
+    lf.addNode({
+      id: 'react-node-4',
+      type: 'custom-react-node',
+      x: 80,
+      y: 180,
+      properties: {
+        name: '今日出行',
+        width: 120,
+        height: 28,
+      },
+    })
     console.log('node --->>>', node)
 
     const update = () => {

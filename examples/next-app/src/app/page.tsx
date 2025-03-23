@@ -290,7 +290,9 @@ export default function Graph() {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
       forEach(edges, (edge) => {
-        lfRef.current?.openEdgeAnimation(edge.id)
+        if (edge?.id) {
+          lfRef.current?.openEdgeAnimation(edge.id)
+        }
       })
     }
   }
@@ -298,7 +300,9 @@ export default function Graph() {
     if (lfRef.current) {
       const { edges } = lfRef.current.getGraphData() as GraphConfigData
       forEach(edges, (edge) => {
-        lfRef.current?.closeEdgeAnimation(edge.id)
+        if (edge?.id) {
+          lfRef.current?.closeEdgeAnimation(edge.id)
+        }
       })
     }
   }

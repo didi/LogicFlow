@@ -470,6 +470,14 @@ type AnchorEventArgsPick<T extends 'data' | 'e' | 'nodeModel' | 'edgeModel'> =
  */
 interface AnchorEventArgs {
   /**
+   * anchor 锚点 click
+   */
+  'anchor:click': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
+  /**
+   * anchor 锚点 mousedown
+   */
+  'anchor:mousedown': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>
+  /**
    * 开始拖拽锚点
    */
   'anchor:dragstart': AnchorEventArgsPick<'data' | 'e' | 'nodeModel'>

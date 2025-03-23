@@ -36,15 +36,18 @@ export class ReactNodeView extends HtmlNode {
     const { model, graphModel } = this.props
 
     if (container) {
+      // 基于自定义节点新建 React 元素
       const elem = createElement(Wrapper, {
         node: model,
         graph: graphModel,
       })
 
       if (Portal.isActive()) {
+        // 使用 Portal
         const portal = createPortal(elem, container, model.id) as ReactPortal
         Portal.connect(this.targetId(), portal)
       } else {
+        // 创建 Root 元素
         this.root = createRoot(container)
         this.root.render(elem)
       }

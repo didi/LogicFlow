@@ -89,7 +89,7 @@ const data = {
   nodes: [
     {
       id: 'custom-node-1',
-      rotate: 1.1722738811284763,
+      // rotate: 1.1722738811284763,
       text: {
         x: 600,
         y: 200,
@@ -253,7 +253,9 @@ export default function BasicNode() {
         },
         partial: true,
         background: {
-          color: '#FFFFFF',
+          // color: '#FFFFFF',
+          backgroundImage:
+            "url('https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/rect.png')",
         },
         // grid: true,
         grid: {
@@ -383,6 +385,12 @@ export default function BasicNode() {
       const refreshData = LogicFlowUtil.refreshGraphId(data)
       console.log('after refresh graphId', data)
       lf.render(refreshData)
+
+      // 测试 getAreaElement API
+      // const lt: LogicFlow.PointTuple = [550, 130];
+      // const rb: LogicFlow.PointTuple = [650, 270];
+      // const areaElements = lf.getAreaElement(lt, rb);
+      // console.log('areaElements', areaElements);
     }
   }
 
