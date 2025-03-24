@@ -15,8 +15,8 @@ import {
   InputNumber,
   Switch,
 } from 'antd'
-import ImageNode from './imageNode'
 import CustomHtml from '@/components/nodes/custom-html/Html'
+import ImageNode, { testImage } from './imageNode'
 import data from './data'
 import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg'
 
@@ -89,6 +89,7 @@ export default function SnapshotExample() {
       })
       lf.register(CustomHtml)
       lf.register(ImageNode)
+      lf.register(testImage)
 
       lf.setPatternItems([
         {
@@ -101,6 +102,12 @@ export default function SnapshotExample() {
           type: 'rect',
           label: 'rect',
           text: 'circle',
+          icon: rectSvgUrl,
+        },
+        {
+          type: 'test-image',
+          label: 'Test Image',
+          text: 'Test Image',
           icon: rectSvgUrl,
         },
       ])

@@ -176,139 +176,134 @@ export class Snapshot {
   }
 
   /**
-   * 下载图片
-   * @param fileName
-   * @param toImageOptions
+   * 将图片转换为base64格式
+   * @param url - 图片URL
+   * @returns Promise<string> - base64字符串
    */
-  private async snapshot(fileName?: string, toImageOptions?: ToImageOptions) {
-    const { fileType = 'png', quality } = toImageOptions ?? {}
-    this.fileName = `${fileName ?? `logic-flow.${Date.now()}`}.${fileType}`
-    const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg as SVGElement)
-    if (fileType === 'svg') {
-      const copy = this.cloneSvg(svg)
-      const svgString = new XMLSerializer().serializeToString(copy)
-      const blob = new Blob([svgString], {
-        type: 'image/svg+xml;charset=utf-8',
-      })
-      const url = URL.createObjectURL(blob)
-      this.triggerDownload(url)
-    } else {
-      this.getCanvasData(svg, toImageOptions ?? {}).then(
-        (canvas: HTMLCanvasElement) => {
-          // canvas元素 => base64 url   image/octet-stream: 确保所有浏览器都能正常下载
-          const imgUrl = canvas
-            .toDataURL(`image/${fileType}`, quality)
-            .replace(`image/${fileType}`, 'image/octet-stream')
-          this.triggerDownload(imgUrl)
-        },
-      )
-    }
-  }
-
-  /**
-   * 获取base64对象
-   * @param backgroundColor
-   * @param fileType
-   * @param toImageOptions
-   * @returns
-   */
-  async getSnapshotBase64(
-    backgroundColor?: string,
-    fileType?: string,
-    toImageOptions?: ToImageOptions,
-  ): Promise<SnapshotResponse> {
-    const curPartial = this.lf.graphModel.getPartial()
-    const { partial = curPartial } = toImageOptions ?? {}
-    // 获取流程图配置
-    const editConfig = this.lf.getEditConfig()
-    // 开启静默模式
-    this.lf.updateEditConfig({
-      isSilentMode: true,
-      stopScrollGraph: true,
-      stopMoveGraph: true,
-    })
-
-    let result: SnapshotResponse | undefined
-    // 处理局部渲染模式
-    if (curPartial !== partial) {
-      this.lf.graphModel.setPartial(partial)
-      await new Promise<void>((resolve) => {
-        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
-          result = await this._getSnapshotBase64(
-            backgroundColor,
-            fileType,
-            toImageOptions,
-          )
-          // 恢复原来渲染模式
-          this.lf.graphModel.setPartial(curPartial)
-          resolve()
-        })
-      })
-    } else {
-      result = await this._getSnapshotBase64(
-        backgroundColor,
-        fileType,
-        toImageOptions,
-      )
-    }
-
-    // 恢复原来配置
-    this.lf.updateEditConfig(editConfig)
-    return result!
-  }
-
-  // 内部方法处理实际的base64转换
-  private async _getSnapshotBase64(
-    backgroundColor?: string,
-    fileType?: string,
-    toImageOptions?: ToImageOptions,
-  ): Promise<SnapshotResponse> {
-    const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg as SVGElement)
-    return new Promise((resolve) => {
-      this.getCanvasData(svg, { backgroundColor, ...toImageOptions }).then(
-        (canvas: HTMLCanvasElement) => {
-          const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
-          resolve({
-            data: base64,
-            width: canvas.width,
-            height: canvas.height,
-          })
-        },
-      )
+  private async convertImageToBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.crossOrigin = 'anonymous' // 处理跨域问题
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+        const ctx = canvas.getContext('2d')
+        ctx?.drawImage(img, 0, 0)
+        const base64 = canvas.toDataURL('image/png')
+        resolve(base64)
+      }
+      img.onerror = () => {
+        reject(new Error(`Failed to load image: ${url}`))
+      }
+      img.src = url
     })
   }
 
   /**
-   * 获取Blob对象
-   * @param backgroundColor
-   * @param fileType
+   * 检查URL是否为相对路径
+   * @param url - 要检查的URL
+   * @returns boolean - 是否为相对路径
+   */
+  private isRelativePath(url: string): boolean {
+    return (
+      !url.startsWith('data:') &&
+      !url.startsWith('http://') &&
+      !url.startsWith('https://') &&
+      !url.startsWith('//')
+    )
+  }
+
+  /**
+   * 处理SVG中的图片元素
+   * @param element - SVG元素
+   */
+  private async processImages(element: Element): Promise<void> {
+    // 处理image元素
+    const images = element.getElementsByTagName('image')
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i]
+      const href =
+        image.getAttributeNS('http://www.w3.org/1999/xlink', 'href') ||
+        image.getAttribute('href')
+      if (href && this.isRelativePath(href)) {
+        try {
+          const base64 = await this.convertImageToBase64(href)
+          image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', base64)
+          image.setAttribute('href', base64)
+        } catch (error) {
+          console.warn(`Failed to convert image to base64: ${href}`, error)
+        }
+      }
+    }
+
+    // 处理foreignObject中的img元素
+    const foreignObjects = element.getElementsByTagName('foreignObject')
+    for (let i = 0; i < foreignObjects.length; i++) {
+      const foreignObject = foreignObjects[i]
+      const images = foreignObject.getElementsByTagName('img')
+      for (let j = 0; j < images.length; j++) {
+        const image = images[j]
+        const src = image.getAttribute('src')
+        if (src && this.isRelativePath(src)) {
+          try {
+            const base64 = await this.convertImageToBase64(src)
+            image.setAttribute('src', base64)
+          } catch (error) {
+            console.warn(`Failed to convert image to base64: ${src}`, error)
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * 克隆并处理画布节点
+   * @param svg
    * @returns
    */
-  async getSnapshotBlob(
-    backgroundColor?: string,
-    fileType?: string,
-  ): Promise<SnapshotResponse> {
-    const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg as SVGElement)
-    return new Promise((resolve) => {
-      this.getCanvasData(svg, { backgroundColor }).then(
-        (canvas: HTMLCanvasElement) => {
-          canvas.toBlob(
-            (blob) => {
-              // 输出图片数据以及图片宽高
-              resolve({
-                data: blob!,
-                width: canvas.width,
-                height: canvas.height,
-              })
-            },
-            `image/${fileType ?? 'png'}`,
-          )
-        },
-      )
-    })
+  private async cloneSvg(
+    svg: Element,
+    addStyle: boolean = true,
+  ): Promise<Node> {
+    const copy = svg.cloneNode(true) as Element
+    const graph = copy.lastChild as Element
+    let childLength = graph?.childNodes?.length
+    if (childLength) {
+      for (let i = 0; i < childLength; i++) {
+        const lfLayer = graph?.childNodes[i] as SVGGraphicsElement
+        // 只保留包含节点和边的基础图层进行下载，其他图层删除
+        const layerClassList =
+          lfLayer.classList && Array.from(lfLayer.classList)
+        if (layerClassList && layerClassList.indexOf('lf-base') < 0) {
+          graph?.removeChild(graph.childNodes[i])
+          childLength--
+          i--
+        } else {
+          // 删除锚点
+          const lfBase = graph?.childNodes[i]
+          lfBase &&
+            lfBase.childNodes.forEach((item) => {
+              const element = item as SVGGraphicsElement
+              this.removeAnchor(element.firstChild!)
+              this.removeRotateControl(element.firstChild!)
+            })
+        }
+      }
+    }
+
+    // 处理图片路径
+    await this.processImages(copy)
+
+    // 设置css样式
+    if (addStyle) {
+      const style = document.createElement('style')
+      style.innerHTML = this.getClassRules()
+      const foreignObject = document.createElement('foreignObject')
+      foreignObject.appendChild(style)
+      copy.appendChild(foreignObject)
+    }
+    return copy
   }
 
   /**
@@ -350,7 +345,7 @@ export class Snapshot {
     toImageOptions: ToImageOptions,
   ): Promise<HTMLCanvasElement> {
     const { width, height, backgroundColor, padding = 40 } = toImageOptions
-    const copy = this.cloneSvg(svg, false)
+    const copy = await this.cloneSvg(svg, false)
 
     let dpr = window.devicePixelRatio || 1
     if (dpr < 1) {
@@ -469,45 +464,139 @@ export class Snapshot {
   }
 
   /**
-   * 克隆并处理画布节点
-   * @param svg
+   * 获取Blob对象
+   * @param backgroundColor
+   * @param fileType
    * @returns
    */
-  private cloneSvg(svg: Element, addStyle: boolean = true): Node {
-    const copy = svg.cloneNode(true)
-    const graph = copy.lastChild
-    let childLength = graph?.childNodes?.length
-    if (childLength) {
-      for (let i = 0; i < childLength; i++) {
-        const lfLayer = graph?.childNodes[i] as SVGGraphicsElement
-        // 只保留包含节点和边的基础图层进行下载，其他图层删除
-        const layerClassList =
-          lfLayer.classList && Array.from(lfLayer.classList)
-        if (layerClassList && layerClassList.indexOf('lf-base') < 0) {
-          graph?.removeChild(graph.childNodes[i])
-          childLength--
-          i--
-        } else {
-          // 删除锚点
-          const lfBase = graph?.childNodes[i]
-          lfBase &&
-            lfBase.childNodes.forEach((item) => {
-              const element = item as SVGGraphicsElement
-              this.removeAnchor(element.firstChild!)
-              this.removeRotateControl(element.firstChild!)
-            })
-        }
-      }
+  async getSnapshotBlob(
+    backgroundColor?: string,
+    fileType?: string,
+  ): Promise<SnapshotResponse> {
+    const svg = this.getSvgRootElement(this.lf)
+    await updateImageSource(svg as SVGElement)
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, { backgroundColor }).then(
+        (canvas: HTMLCanvasElement) => {
+          canvas.toBlob(
+            (blob) => {
+              // 输出图片数据以及图片宽高
+              resolve({
+                data: blob!,
+                width: canvas.width,
+                height: canvas.height,
+              })
+            },
+            `image/${fileType ?? 'png'}`,
+          )
+        },
+      )
+    })
+  }
+
+  /**
+   * 获取base64对象
+   * @param backgroundColor
+   * @param fileType
+   * @param toImageOptions
+   * @returns
+   */
+  async getSnapshotBase64(
+    backgroundColor?: string,
+    fileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    const curPartial = this.lf.graphModel.getPartial()
+    const { partial = curPartial } = toImageOptions ?? {}
+    // 获取流程图配置
+    const editConfig = this.lf.getEditConfig()
+    // 开启静默模式
+    this.lf.updateEditConfig({
+      isSilentMode: true,
+      stopScrollGraph: true,
+      stopMoveGraph: true,
+    })
+
+    let result: SnapshotResponse | undefined
+    // 处理局部渲染模式
+    if (curPartial !== partial) {
+      this.lf.graphModel.setPartial(partial)
+      await new Promise<void>((resolve) => {
+        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
+          result = await this._getSnapshotBase64(
+            backgroundColor,
+            fileType,
+            toImageOptions,
+          )
+          // 恢复原来渲染模式
+          this.lf.graphModel.setPartial(curPartial)
+          resolve()
+        })
+      })
+    } else {
+      result = await this._getSnapshotBase64(
+        backgroundColor,
+        fileType,
+        toImageOptions,
+      )
     }
-    // 设置css样式
-    if (addStyle) {
-      const style = document.createElement('style')
-      style.innerHTML = this.getClassRules()
-      const foreignObject = document.createElement('foreignObject')
-      foreignObject.appendChild(style)
-      copy.appendChild(foreignObject)
+
+    // 恢复原来配置
+    this.lf.updateEditConfig(editConfig)
+    return result!
+  }
+
+  // 内部方法处理实际的base64转换
+  private async _getSnapshotBase64(
+    backgroundColor?: string,
+    fileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    const svg = this.getSvgRootElement(this.lf)
+    await updateImageSource(svg as SVGElement)
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, { backgroundColor, ...toImageOptions }).then(
+        (canvas: HTMLCanvasElement) => {
+          const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
+          resolve({
+            data: base64,
+            width: canvas.width,
+            height: canvas.height,
+          })
+        },
+      )
+    })
+  }
+
+  /**
+   * 下载图片
+   * @param fileName
+   * @param toImageOptions
+   */
+  private async snapshot(fileName?: string, toImageOptions?: ToImageOptions) {
+    const { fileType = 'png', quality } = toImageOptions ?? {}
+    this.fileName = `${fileName ?? `logic-flow.${Date.now()}`}.${fileType}`
+    const svg = this.getSvgRootElement(this.lf)
+    await updateImageSource(svg as SVGElement)
+    if (fileType === 'svg') {
+      const copy = await this.cloneSvg(svg)
+      const svgString = new XMLSerializer().serializeToString(copy)
+      const blob = new Blob([svgString], {
+        type: 'image/svg+xml;charset=utf-8',
+      })
+      const url = URL.createObjectURL(blob)
+      this.triggerDownload(url)
+    } else {
+      this.getCanvasData(svg, toImageOptions ?? {}).then(
+        (canvas: HTMLCanvasElement) => {
+          // canvas元素 => base64 url   image/octet-stream: 确保所有浏览器都能正常下载
+          const imgUrl = canvas
+            .toDataURL(`image/${fileType}`, quality)
+            .replace(`image/${fileType}`, 'image/octet-stream')
+          this.triggerDownload(imgUrl)
+        },
+      )
     }
-    return copy
   }
 }
 
