@@ -177,25 +177,25 @@ export default function SnapshotExample() {
   }
 
   // 预览 base64
-  const previewBase64 = () => {
+  const previewBase64 = async () => {
     if (lfRef.current) {
       setBlobData('')
-      lfRef.current
-        .getSnapshotBase64(backgroundColor)
-        .then(
-          ({
-            data,
-            width,
-            height,
-          }: {
-            data: string
-            width: number
-            height: number
-          }) => {
-            setBase64Data(data)
-            console.log('width, height ', width, height)
-          },
-        )
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      }
+      const result = await lfRef.current.getSnapshotBase64(
+        'white',
+        'png',
+        params,
+      )
+      setBase64Data(result.data)
+      console.log('width, height ', result)
     }
   }
 

@@ -77,7 +77,8 @@ export class Snapshot {
     lf.getSnapshotBase64 = async (
       backgroundColor?: string,
       fileType?: string,
-    ) => await this.getSnapshotBase64(backgroundColor, fileType)
+      toImageOptions?: ToImageOptions,
+    ) => await this.getSnapshotBase64(backgroundColor, fileType, toImageOptions)
   }
 
   /**
@@ -209,19 +210,66 @@ export class Snapshot {
    * 获取base64对象
    * @param backgroundColor
    * @param fileType
+   * @param toImageOptions
    * @returns
    */
   async getSnapshotBase64(
     backgroundColor?: string,
     fileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    const curPartial = this.lf.graphModel.getPartial()
+    const { partial = curPartial } = toImageOptions ?? {}
+    // 获取流程图配置
+    const editConfig = this.lf.getEditConfig()
+    // 开启静默模式
+    this.lf.updateEditConfig({
+      isSilentMode: true,
+      stopScrollGraph: true,
+      stopMoveGraph: true,
+    })
+
+    let result: SnapshotResponse | undefined
+    // 处理局部渲染模式
+    if (curPartial !== partial) {
+      this.lf.graphModel.setPartial(partial)
+      await new Promise<void>((resolve) => {
+        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
+          result = await this._getSnapshotBase64(
+            backgroundColor,
+            fileType,
+            toImageOptions,
+          )
+          // 恢复原来渲染模式
+          this.lf.graphModel.setPartial(curPartial)
+          resolve()
+        })
+      })
+    } else {
+      result = await this._getSnapshotBase64(
+        backgroundColor,
+        fileType,
+        toImageOptions,
+      )
+    }
+
+    // 恢复原来配置
+    this.lf.updateEditConfig(editConfig)
+    return result!
+  }
+
+  // 内部方法处理实际的base64转换
+  private async _getSnapshotBase64(
+    backgroundColor?: string,
+    fileType?: string,
+    toImageOptions?: ToImageOptions,
   ): Promise<SnapshotResponse> {
     const svg = this.getSvgRootElement(this.lf)
     await updateImageSource(svg as SVGElement)
     return new Promise((resolve) => {
-      this.getCanvasData(svg, { backgroundColor }).then(
+      this.getCanvasData(svg, { backgroundColor, ...toImageOptions }).then(
         (canvas: HTMLCanvasElement) => {
           const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
-          // 输出图片数据以及图片宽高
           resolve({
             data: base64,
             width: canvas.width,
