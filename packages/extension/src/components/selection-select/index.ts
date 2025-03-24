@@ -13,6 +13,12 @@ export class SelectionSelect {
   private disabled = true
   private isWholeNode = true
   private isWholeEdge = true
+  // 用于区分选区和点击事件
+  private mouseDownInfo: {
+    x: number
+    y: number
+    time: number
+  } | null = null
 
   constructor({ lf }: LogicFlow.IExtensionProps) {
     this.lf = lf
@@ -23,17 +29,21 @@ export class SelectionSelect {
     lf.closeSelectionSelect = () => {
       this.closeSelectionSelect()
     }
-    this.onToolContainerMouseDown = this.onToolContainerMouseDown.bind(this)
   }
 
   render(_: LogicFlow, domContainer: HTMLElement) {
     this.container = domContainer
   }
 
-  onToolContainerMouseDown(e: MouseEvent) {
+  onToolContainerMouseDown = (e: MouseEvent) => {
     // 避免在其他插件元素上点击时开启选区
     if (e.target !== this.container) {
       return
+    }
+    this.mouseDownInfo = {
+      x: e.clientX,
+      y: e.clientY,
+      time: Date.now(),
     }
     const lf = this.lf
     const domContainer = this.container
@@ -72,6 +82,22 @@ export class SelectionSelect {
     document.addEventListener('mouseup', this.drawOff)
   }
 
+  onToolContainerMouseUp = (e: MouseEvent) => {
+    if (this.mouseDownInfo) {
+      const { x, y, time } = this.mouseDownInfo
+      const now = Date.now()
+      // 用 mouseDown 和 mouseUp 的位置偏移及时间间隔来判断是否是点击事件
+      const isClickEvent =
+        Math.abs(e.clientX - x) < 10 &&
+        Math.abs(e.clientY - y) < 10 &&
+        now - time < 100
+      if (isClickEvent) {
+        this.lf.clearSelectElements()
+      }
+      this.mouseDownInfo = null
+    }
+  }
+
   /**
    * 设置选中的灵敏度
    * @param isWholeEdge 是否要边的起点终点都在选区范围才算选中。默认true
@@ -92,7 +118,9 @@ export class SelectionSelect {
     if (!this.container) {
       return
     }
+    this.mouseDownInfo = null
     this.container.addEventListener('mousedown', this.onToolContainerMouseDown)
+    this.container.addEventListener('mouseup', this.onToolContainerMouseUp)
     // 取消点击事件的穿透，只让 ToolOverlay 接收事件，避免与图形元素的事件冲突
     this.container.style.pointerEvents = 'auto'
     this.open()
@@ -106,10 +134,12 @@ export class SelectionSelect {
       return
     }
     this.container.style.pointerEvents = 'none'
+    this.mouseDownInfo = null
     this.container.removeEventListener(
       'mousedown',
       this.onToolContainerMouseDown,
     )
+    this.container.removeEventListener('mouseup', this.onToolContainerMouseUp)
     this.close()
   }
 

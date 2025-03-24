@@ -54,11 +54,8 @@ export class ToolOverlay extends Component<IProps> {
   }
 
   zoomHandler = (e: WheelEvent) => {
+    // TODO 是否应该使用 dispatchEvent 来触发事件
     this.props.getCanvasOverlay()?.zoomHandler(e)
-  }
-
-  mouseDownHandler = (e: MouseEvent) => {
-    this.props.getCanvasOverlay()?.mouseDownHandler(e)
   }
 
   render() {
@@ -69,11 +66,10 @@ export class ToolOverlay extends Component<IProps> {
         id={`ToolOverlay_${graphModel.flowId}`}
         /*
          * 默认情况下该容器设置了 pointer-events: none，不会触发这些事件
-         * 这里会在容器取消 pointer-events: none 后将事件传给画布用来缩放拖拽画布等操作
-         * 目前只在 selection-select 插件中使用。为了能在元素内部进行框选，在开启选区后会关闭事件透传
+         * 只会在容器取消 pointer-events: none 后触发，用于缩放、滚动画布等操作
+         * 目前只在 selection-select 插件中使用。为了能在元素内部进行框选，在开启选区后会关闭事件透传。需要手动触发事件
          */
         onWheel={this.zoomHandler}
-        onMouseDown={this.mouseDownHandler}
       >
         {this.getTools()}
       </div>
