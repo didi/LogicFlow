@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.0.12
+
+### Patch Changes
+
+- fix: 修复及优化一些已知问题
+  - fix(core): graphModel theme + 折线边&曲线边Offset改为监听属性
+  - fix(core): 未选中节点时进行快速缩放会退出缩放
+  - feat(core): 新增锚点 ANCHOR_CLICK/ANCHOR_MOUSEDOWN 事件,用于自定义锚点方法
+
 ## 2.0.11
 
 ### Patch Changes

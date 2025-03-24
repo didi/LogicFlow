@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.16
+
+### Patch Changes
+
+- fix: 修复及优化一些已知问题
+  - feat(extension): menu插件功能完善
+  - fix(extension): 优化多选、框选与分组插件的联动
+- Updated dependencies
+  - @logicflow/core@2.0.12
+
 ## 2.0.15
 
 ### Patch Changes
