@@ -21,6 +21,30 @@ export type EventCallback<T extends string = string> = (
 
 const WILDCARD = '*'
 
+export interface OnEvent {
+  <T extends keyof EventArgs>(
+    evt: T,
+    callback: EventCallback<T>,
+    once?: boolean,
+  ): ClearCallback
+  <T extends string>(
+    evt: T,
+    callback: EventCallback<T>,
+    once?: boolean,
+  ): ClearCallback
+}
+
+export interface OnceEvent {
+  <T extends keyof EventArgs>(evt: T, callback: EventCallback<T>): ClearCallback
+  <T extends string>(evt: T, callback: EventCallback<T>): ClearCallback
+}
+
+interface ClearCallback {
+  (): void
+  on: OnEvent
+  once: OnceEvent
+}
+
 /* event-emitter */
 export default class EventEmitter {
   private _events: EventsType = {}
@@ -30,14 +54,21 @@ export default class EventEmitter {
    * @param evt 事件名称
    * @param callback 回调函数
    * @param once 是否只监听一次
+   * @returns { ClearCallback } 返回支持链式调用的清除函数
+   * @example
+   * const bus = new EventEmitter();
+   * const off = bus
+   *  .on("e1", () => {})
+   *  .once("e2", () => {})
+   *  .on("e3", () => {});
+   *
+   * off() // 清除这一次注册的 e1、e2、e3 事件
    */
-  on<T extends keyof EventArgs>(
-    evt: T,
-    callback: EventCallback<T>,
+  on: OnEvent = (
+    evt: string,
+    callback: EventCallback,
     once?: boolean,
-  ): void
-  on<T extends string>(evt: T, callback: EventCallback<T>, once?: boolean): void
-  on(evt: string, callback: EventCallback, once?: boolean) {
+  ): ClearCallback => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       if (!this._events[evKey]) {
@@ -48,22 +79,38 @@ export default class EventEmitter {
         once: !!once,
       })
     })
+
+    return createClearCallback(this, () => {
+      if (evt) {
+        this.off(evt, callback)
+      }
+    })
   }
 
   /**
    * 监听一个事件一次
    * @param evt 事件名称
    * @param callback 回调函数
+   * @returns { ClearCallback } 返回支持链式调用的清除函数
+   * @example
+   * const bus = new EventEmitter();
+   * const off = bus
+   *  .on("e4", () => {})
+   *  .once("e5", () => {})
+   *  .on("e6", () => {});
+   *
+   * off() // 清除这一次注册的 e4、e5、e6 事件
    */
-  once<T extends keyof EventArgs>(
-    evt: T,
-    callback: (args: EventArgs[T]) => void,
-  ): void
-  once<T extends string>(evt: T, callback: EventCallback<T>): void
-  once(evt: string, callback: EventCallback) {
+  once: OnceEvent = (evt: string, callback: EventCallback): ClearCallback => {
     evt?.split(',').forEach((evKey) => {
       evKey = evKey.trim()
       this.on(evKey, callback, true)
+    })
+
+    return createClearCallback(this, () => {
+      if (evt) {
+        this.off(evt, callback)
+      }
     })
   }
 
@@ -151,6 +198,31 @@ export default class EventEmitter {
   destroy() {
     this._events = {}
   }
+}
+
+const createClearCallback = (
+  ctx: EventEmitter,
+  clear: () => void,
+): ClearCallback => {
+  const preClear = clear as ClearCallback
+
+  preClear.on = (evt: string, callback: EventCallback, once?: boolean) => {
+    const clear = ctx.on(evt, callback, once)
+    return createClearCallback(ctx, () => {
+      preClear()
+      clear()
+    })
+  }
+
+  preClear.once = (evt: string, callback: EventCallback) => {
+    const clear = ctx.once(evt, callback)
+    return createClearCallback(ctx, () => {
+      preClear()
+      clear()
+    })
+  }
+
+  return preClear
 }
 
 export { EventEmitter, EventArgs }
