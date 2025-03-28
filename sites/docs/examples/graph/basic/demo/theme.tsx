@@ -23,7 +23,7 @@ const formList = [
   { key: 'ellipse', label: '椭圆样式' },
   { key: 'polygon', label: '多边形样式' },
   { key: 'line', label: '直线样式' },
-  { key: 'polyline', label: '折现样式' },
+  { key: 'polyline', label: '折线样式' },
   { key: 'bezier', label: '贝塞尔曲线样式' },
   { key: 'anchorLine', label: '从锚点拉出的边的样式' },
   { key: 'text', label: '文本节点样式' },

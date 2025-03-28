@@ -1817,7 +1817,7 @@ export namespace LogicFlow {
      * 基础图形线相关主题
      */
     line: EdgeTheme // 直线样式
-    polyline: EdgePolylineTheme // 折现样式
+    polyline: EdgePolylineTheme // 折线样式
     bezier: EdgeBezierTheme // 贝塞尔曲线样式
     anchorLine: AnchorLineTheme // 从锚点拉出的边的样式
 
