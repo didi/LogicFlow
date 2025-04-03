@@ -12,21 +12,30 @@ toc: content
 
 ## 监听事件
 
-`lf`实例上提供`on`方法支持监听事件。
+`lf`实例上提供`on`方法支持监听事件，并且会返回清理该事件的回调函数。
 
 ```tsx | pure
-lf.on("node:dnd-add", (data) => {});
+const clear = lf.on("node:dnd-add", (data) => {})
 ```
 
-LogicFlow 支持用逗号分割事件名。
+LogicFlow 支持链式调用监听事件。
 
 ```tsx | pure
-lf.on('node:click,edge:click', (data) => {})
+// 返回的 ’clear‘ 函数会清理注册的 ‘node:click’ 和 ‘edge:click’ 事件
+const clear = lf
+  .on('node:click', (data) => {})
+  .on('edge:click', (data) => {})
+```
+
+LogicFlow 同时也支持用逗号分割事件名。
+
+```tsx | pure
+const clear = lf.on('node:click,edge:click', (data) => {})
 ```
 
 ## 自定义事件
 
-除了 lf 上支持的监听事件外，还可以使用[eventCenter](../../api/graphModel.zh.md#eventcenter)
+除了 lf 上支持的监听事件外，还可以使用[eventCenter](../../api/model//graphModel.zh.md#eventcenter)
 对象来监听和触发事件。`eventCenter`是一个`graphModel`
 上的一个属性。所以在自定义节点的时候，我们可以使用`eventCenter`触发自定义事件。
 
