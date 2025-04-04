@@ -193,6 +193,10 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   background: #eaedf2;
   border: 1px solid #93a3b4;
 }
+.lf-mini-map .lf-graph {
+  width: 100% !important;
+  height: 100% !important;
+}
 .lf-mini-map-graph {
   position: relative;
   overflow: hidden;

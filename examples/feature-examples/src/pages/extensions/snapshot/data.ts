@@ -38,6 +38,16 @@ export default {
       y: 100,
       text: '菱形',
     },
+    {
+      id: 'test_image_1',
+      type: 'test-image',
+      x: 300,
+      y: 200,
+      properties: {
+        width: 82,
+        height: 96,
+      },
+    },
   ],
   edges: [
     {
