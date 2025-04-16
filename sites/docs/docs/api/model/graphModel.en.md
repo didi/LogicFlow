@@ -11,14 +11,14 @@ table td:first-of-type {
 }
 </style>
 
-The graphModel is the `model` that corresponds to the entire canvas in LogicFlow.
+graphModel is the model corresponding to the entire canvas in LogicFlow.
 
-Most of the methods on the LogicFlow instance are simply wrapped around the graphModel.
+Most methods on the LogicFlow instance are simple wrappers around graphModel.
 
-You can get the graphModel in several ways
+You can get graphModel in several ways:
 
-- Directly from the lf property. `lf.graphModel`
-- From the constructor when customizing `model`, or from `this` in a method.
+- Directly from the lf property: `lf.graphModel`
+- When customizing a `model`, get it from the constructor or from `this` in methods:
 
 ```tsx | pure
 class CustomModel extends RectNodeModel {
@@ -28,65 +28,66 @@ class CustomModel extends RectNodeModel {
 }
 ```
 
-- Get from `props` when customizing `view`.
+- When customizing a `view`, get it from `props`:
 
 ```tsx | pure
 class CustomNode extends RectNode {
   getShape() {
-    const { model, graphModel } = this.props;
+    const { model, graphModel } = this.props
     // ...
   }
 }
 ```
 
-:::info
-**NOTE** All properties on graphModel are read-only, to modify them, use the corresponding methods
-provided to do so.
+:::info{title=Note}
+**Note** All properties on graphModel are read-only. To modify them, please use the provided corresponding methods.
 :::
 
-## Property
+## Properties
 
-| Name                        | Type                                          | Default | Description                                                                                                                                                                  |
-|:----------------------------|:----------------------------------------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| width                       | `number`                                      |         | LogicFlow Canvas Width                                                                                                                                                       |
-| height                      | `number`                                      |         | LogicFlow Canvas Height                                                                                                                                                      |
-| theme                       | `LogicFlow.Theme`                             |         | [Detailed API](../theme.en.md)                                                                                                                                               |
-| animation                   | `boolean \| LFOptions.AnimationConfig`        | false   | Animation state configuration, if or not the corresponding animation is turned on                                                                                            |
-| [eventCenter](#eventcenter) | `EventEmitter`                                |         | Event center, through which events can be thrown to the outside world.                                                                                                       |
-| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | Maintains a model for all nodes and edge types                                                                                                                               |
-| [topElement](#topelement)   | `BaseNodeModel \| BaseEdgeModel`              |         | The element at the top of the current canvas                                                                                                                                 |
-| idGenerator                 | `(type?: string) => string \| undefined`      |         | Custom global id generator                                                                                                                                                   |
-| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []      | Node movement rules, all rules in this array are triggered when a node is moved.                                                                                             |
-| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |         | Get customized line traces                                                                                                                                                   |
-| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |         | Rules for generating edges when connecting nodes and when connecting lines are changed.                                                                                      |
-| edgeType                    | `string`                                      |         | Default edge type used when creating edges in graph operations                                                                                                               |
-| nodes                       | `BaseNodeModel[]`                             | []      | All node objects of the canvas                                                                                                                                               |
-| edges                       | `BaseEdgeModel[]`                             | []      | All line objects of the canvas                                                                                                                                               |
-| fakeNode                    | `BaseNodeModel  \| null`                      | null    | When dragging nodes from outside into the canvas, use fakeNode to distinguish them from formal nodes on the canvas.                                                          |
-| [overlapMode](#overlapmode) | `number`                                      |         | Stacking mode when elements overlap; 0: default mode, 1: incremental mode                                                                                                    |
-| background                  | `false \| LFOptions.BackgroundConfig`         |         | Canvas background configuration.                                                                                                                                             |
-| transformModel              | `TransformModel`                              |         | current canvas translation and scaling matrix `model`, see [API](./transformModel.en.md) for more details                                                                      |
-| editConfigModel             | `EditConfigModel`                             |         | Basic configuration object, see [editConfigApi](./editConfigModel.en.md) for details.                                                                                          |
-| gridSize                    | `number`                                      | 1       | Grid size                                                                                                                                                                    |
-| partial                     | `boolean`                                     | false   | whether or not to enable localized rendering, when the number of elements on the page is too large, enabling localized rendering will improve the page rendering performance |
-| nodesMap                    | `GraphModel.NodesMapType`                     |         | The `map` of all nodes in the canvas.                                                                                                                                        |
-| edgesMap                    | `GraphModel.EdgesMapType`                     |         | The `map` of all edges of the canvas.                                                                                                                                        |
-| modelsMap                   | `GraphModel.ModelsMapType`                    |         | A `map` of all nodes and edges of the canvas.                                                                                                                                |
-| selectNodes                 | `BaseNodeModel[]`                             |         | All selected node objects in the canvas                                                                                                                                      |
-| sortElements                | `array`                                       |         | Elements sorted by zIndex, sorting elements based on zIndex                                                                                                                  |
-| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |         | Currently edited elements                                                                                                                                                    |
-| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | All currently selected elements in the canvas                                                                                                                                |
+| Property                    | Type                                          | Default | Description                                                                      |
+| :-------------------------- | :-------------------------------------------- | :------ | :------------------------------------------------------------------------------- |
+| width                       | `number`                                      |         | LogicFlow canvas width                                                           |
+| height                      | `number`                                      |         | LogicFlow canvas height                                                          |
+| theme                       | `LogicFlow.Theme`                             |         | [Detailed API](../theme.en.md)                                                   |
+| animation                   | `boolean \| LFOptions.AnimationConfig`        | false   | Animation state configuration, whether corresponding animation is enabled        |
+| [eventCenter](#eventcenter) | `EventEmitter`                                |         | Event center, can emit events to external through this object                    |
+| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | Maintains model mapping for all node and edge types                              |
+| [topElement](#topelement)   | `BaseNodeModel \| BaseEdgeModel`              |         | Element at the top of current canvas                                             |
+| idGenerator                 | `(type?: string) => string \| undefined`      |         | Custom global id generator                                                       |
+| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []      | Node movement rules, all rules in this array are checked when node moves         |
+| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |         | Get custom connection trajectory                                                 |
+| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |         | Edge generation rules for node connections and edge changes                      |
+| edgeType                    | `string`                                      |         | Default edge type used when creating edges on graph                              |
+| nodes                       | `BaseNodeModel[]`                             | []      | All node objects on canvas                                                       |
+| edges                       | `BaseEdgeModel[]`                             | []      | All edge objects on canvas                                                       |
+| fakeNode                    | `BaseNodeModel \| null`                       | null    | Used to distinguish temporary node from formal nodes when dragging external node |
+| [overlapMode](#overlapmode) | `number`                                      |         | Element stacking mode when overlapping; 0:default mode, 1:incremental mode       |
+| background                  | `false \| LFOptions.BackgroundConfig`         |         | Canvas background configuration                                                  |
+| transformModel              | `TransformModel`                              |         | Current canvas transform matrix model, see [API](./transformModel.en.md)         |
+| editConfigModel             | `EditConfigModel`                             |         | Basic page editing config object, see [editConfigApi](./editConfigModel.en.md)   |
+| gridSize                    | `number`                                      | 1       | Grid size                                                                        |
+| partial                     | `boolean`                                     | false   | Whether to enable partial rendering to improve performance with many elements    |
+| nodesMap                    | `GraphModel.NodesMapType`                     |         | Map of all nodes on canvas                                                       |
+| edgesMap                    | `GraphModel.EdgesMapType`                     |         | Map of all edges on canvas                                                       |
+| modelsMap                   | `GraphModel.ModelsMapType`                    |         | Map of all nodes and edges on canvas                                             |
+| selectNodes                 | `BaseNodeModel[]`                             |         | All selected node objects on canvas                                              |
+| sortElements                | `array`                                       |         | Elements sorted by zIndex                                                        |
+| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |         | Currently being edited element                                                   |
+| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |         | All currently selected elements on canvas                                        |
 
-### eventCenter <Badge>Property</Badge>
+### eventCenter<Badge>Property</Badge>
 
-logicflow internal event center, you can use this object to throw events to the outside.
+LogicFlow's internal event center, can emit events to external through this object.
+
+Example:
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
   setAttributes() {
     this.menu = [
       {
-        text: "详情",
+        text: "Details",
         callback: (res) => {
           this.graphModel.eventCenter.emit("user:detail", res);
         },
@@ -95,137 +96,121 @@ class UserTaskModel extends RectNodeModel {
   }
 }
 
+// Listen
 lf.on("user:detail", (res) => {});
 ```
 
 ### topElement<Badge>Property</Badge>
 
-The element at the top of the current canvas.
-
-This element only exists when the stacking mode is the default mode.
-Used to restore the previous top element to its initial order in default mode.
+Element at the top of current canvas.<br>
+This element only exists in default stacking mode.
+Used to restore previous top element to initial order in default mode.
 
 ### overlapMode<Badge>Property</Badge>
 
-Stacking mode when elements overlap<br>
+Element stacking mode when overlapping<br>
 
-- A value of `0`: the default mode, where nodes and edges are selected, will be displayed at the
-  top. When unchecked, the elements revert to their previous level.
-- A value of `1`: Incremental mode, nodes and edges are selected and displayed at the top. When
-  unchecked, the element maintains its hierarchy.
+- Value `0`: Default mode, selected nodes and edges display on top. When deselected, elements restore previous level.
+- Value `1`: Incremental mode, selected nodes and edges display on top. When deselected, elements maintain level.
 
-## method
+## Methods
 
-### getAreaElement<Badge>method</Badge>
+### getAreaElement<Badge>Method</Badge>
 
-Get all elements in the specified area
+Get all elements in specified area
 
 Parameters:
 
-| Name              | Type       | Default | Description                                        |
-|-------------------|------------|---------|----------------------------------------------------|
-| leftTopPoint      | PointTuple | None    | Dots in the upper left corner of the area          |
-| rightBottomPoint  | PointTuple | None    | The point at the bottom right corner of the region |
-| wholeEdge         | boolean    | None    | Whether to have the entire edge inside the region  |
-| wholeNode         | boolean    | None    | Whether to have the entire node inside the region  |
-| ignoreHideElement | boolean    | None    | Whether to ignore hidden nodes                     |
+| Name              | Type       | Default | Description                             |
+| ----------------- | ---------- | ------- | --------------------------------------- |
+| leftTopPoint      | PointTuple | -       | Top-left point of area                  |
+| rightBottomPoint  | PointTuple | -       | Bottom-right point of area              |
+| wholeEdge         | boolean    | -       | Whether entire edge must be inside area |
+| wholeNode         | boolean    | -       | Whether entire node must be inside area |
+| ignoreHideElement | boolean    | -       | Whether to ignore hidden elements       |
 
 ```tsx | pure
 graphModel.getAreaElement([100, 100], [800, 800]);
 ```
 
-### getModel<Badge>method</Badge>
+### getModel<Badge>Method</Badge>
 
-Get the Model constructor for the specified type
+Get Model constructor for specified type
 
 Parameters:
 
-| Name | Type   | Default |
-|------|--------|---------|
-| type | string | None    |
+| Name | Type   | Default | Description |
+| ---- | ------ | ------- | ----------- |
+| type | string | -       | Type        |
 
-return: [NodeModel](./nodeModel.en.md) or [EdgeModel](./edgeModel.en.md)
+Returns: [NodeModel](./nodeModel.en.md) or [EdgeModel](./edgeModel.en.md)
 
 ```tsx | pure
 graphModel.getModel("rect");
 ```
 
-### getNodeModelById<Badge>method</Badge>
+### getNodeModelById<Badge>Method</Badge>
+
+Get Model constructor for specified node type
 
 Parameters:
 
-| Name | Type   | Default |
-|------|--------|---------|
-| type | string | None    |
+| Name | Type   | Default | Description |
+| ---- | ------ | ------- | ----------- |
+| type | string | -       | Type        |
 
-return: [NodeModel](./nodeModel.en.md)
+Returns: [NodeModel](./nodeModel.en.md)
 
 ```tsx | pure
 graphModel.getNodeModelById("node_1");
 ```
 
-### getPointByClient<Badge>method</Badge>
+### getPointByClient<Badge>Method</Badge>
 
-Get the coordinates of the mouse click position on the canvas.
+Get coordinates on canvas from mouse click position
 
-> Because the location of the flowchart can be anywhere on the page, when the internal event needs
-> to get the triggering event, its position relative to the upper-left corner of the canvas needs to
-> be the event triggering position minus the position of the canvas relative to the client.
+> Since flowchart can be placed anywhere on page, when internal events need to get trigger position relative to canvas top-left corner, event trigger position needs to subtract canvas position relative to client.
 
 Parameters:
 
-| Name  | Type     | Default | Description     |
-|-------|----------|---------|-----------------|
-| point | Position | None    | HTML coordinate |
+| Name  | Type     | Default | Description   |
+| ----- | -------- | ------- | ------------- |
+| point | Position | -       | HTML position |
 
-return:
+Returns:
 
-| Name                  | Type     | Default | Description                                                                                               |
-|-----------------------|----------|---------|-----------------------------------------------------------------------------------------------------------|
-| domOverlayPosition    | Position | None    | HTML layer coordinates, generally used when controlling the position of components                        |
-| canvasOverlayPosition | Position | None    | Canvas layer coordinates, generally the coordinates of nodes and edges are the coordinates of this layer. |
+| Name                  | Type     | Default | Description                                                     |
+| --------------------- | -------- | ------- | --------------------------------------------------------------- |
+| domOverlayPosition    | Position | -       | HTML layer position, generally used for component positioning   |
+| canvasOverlayPosition | Position | -       | Canvas layer position, generally used for node/edge coordinates |
 
-Why do you need this method and why does the same position of a mouse click produce two different
-coordinates?
+Why do we need this method? Why does clicking the same position on mouse generate two different coordinates?
 
-Because there is scaling and panning of the canvas. When the canvas is moved, visually it looks like
-the position of the elements on the canvas has changed, but at the data level, the position of the
-nodes and edges on the canvas is unchanged. As a reverse example: there is a node in the middle of a
-canvas with a width and height of 1000px \* 1000px, and the position of this node is likely to
-be `{x: -999,y: -999}`, because of the panning. But when we double-click this node, we need to
-display a text input box at the node position, because the input box is in the `domOverlay` layer,
-which is not scaled and panned like `CanvasOverlay`, and its width and height are the same as the
-canvas width and height. So the coordinates of this text input box should be `{x: 500, y: 500}`.
+Because canvas can be zoomed and panned. When canvas is moved, visually elements' positions change, but at data level, positions of nodes and edges on canvas haven't changed. For example: in a 1000px * 1000px canvas with a node in center, this node's position might be `{x: -999,y: -999}` because it was panned. But when double-clicking this node, we need to show a text input box at node position, since input box is in `domOverlay` layer which unlike `CanvasOverlay` doesn't have zoom and pan, its width and height match canvas. So text input box coordinates should be `{x: 500, y: 500}`.
 
-Let's look at why we need this method again.
+Let's see why we need this method:
 
-Let's say that the canvas is at a distance of 100 from the top of the browser, and 100 from the
-left. So when the user clicks on the center of the canvas, the position that the js listener gets
-from the click function should be `{x: 600, y: 600}`, and by calling this method we can get
-the `canvasOverlayPosition` as `{x: -999,y: -999}`, and the `domainOverlayPosition`
-as `{x: -999,y: -999}`. 999}`, and `domOverlayPosition` is `{x: 500, y:
-500}`. Developers can then base their development on these two coordinates. For example, displaying a menu at `
-domOverlayPosition` or something like that.
+Suppose canvas is 100px from browser top and left. When user clicks canvas center, js click listener gets position `{x: 600, y: 600}`. At this point calling this method will get `canvasOverlayPosition` as `{x: -999,y: -999}` and `domOverlayPosition` as `{x: 500, y: 500}`. Developers can then use these coordinates for their needs, like showing a menu at `domOverlayPosition`.
 
 ```tsx | pure
 graphModel.getPointByClient({ x: 200, y: 200 });
 ```
 
-### isElementInArea<Badge>method</Badge>
+### isElementInArea<Badge>Method</Badge>
 
-Determines whether an element is within the specified rectangular area.
+Check if an element is within specified rectangular area.
 
 Parameters:
 
-| Name      | Type                  | Default | Description                                                          |
-|-----------|-----------------------|---------|----------------------------------------------------------------------|
-| element   | NodeModel 或 EdgeModel | None    | element of the model                                                 |
-| lt        | PointTuple            | None    | upper left corner point                                              |
-| rb        | PointTuple            | None    | lower right                                                          |
-| wholeEdge | boolean               | true    | Only if the start and end points of the edges are within the region. |
-| wholeNode | boolean               | true    | The node's boxes are all in the region before counting the           |
+| Name      | Type                   | Default | Description                                 |
+| --------- | ---------------------- | ------- | ------------------------------------------- |
+| element   | NodeModel or EdgeModel | -       | Element model                               |
+| lt        | PointTuple             | -       | Top-left point                              |
+| rb        | PointTuple             | -       | Bottom-right point                          |
+| wholeEdge | boolean                | true    | Edge counts only if start/end points are in |
+| wholeNode | boolean                | true    | Node counts only if entire box is in        |
 
-return: `boolean`
+Returns: `boolean`
 
 ```tsx | pure
 const node = {
@@ -236,31 +221,33 @@ const node = {
 graphModel.isElementInArea(node, [200, 200], [400, 400]);
 ```
 
-### getAreaElements<Badge>method</Badge>
+### getAreaElements<Badge>Method</Badge>
+
+Get all elements in specified area
 
 Parameters:
 
-| Name              | Type       | Default | Description                                                       |
-|-------------------|------------|---------|-------------------------------------------------------------------|
-| leftTopPoint      | PointTuple | None    | Top Left Point                                                    |
-| rightBottomPoint  | PointTuple | None    | Bottom right point                                                |
-| ignoreHideElement | boolean    | false   | Ignore hidden elements                                            |
-| wholeEdge         | boolean    | true    | Edges count only if their start and end points are in the region. |
-| wholeNode         | boolean    | true    | Nodes count only if their box is inside the region.               |
+| Name              | Type       | Default | Description                                 |
+| ----------------- | ---------- | ------- | ------------------------------------------- |
+| leftTopPoint      | PointTuple | -       | Top-left point                              |
+| rightBottomPoint  | PointTuple | -       | Bottom-right point                          |
+| ignoreHideElement | boolean    | false   | Ignore hidden elements                      |
+| wholeEdge         | boolean    | true    | Edge counts only if start/end points are in |
+| wholeNode         | boolean    | true    | Node counts only if entire box is in        |
 
-return: `LogicFlow.GraphElement[]`
+Returns: `LogicFlow.GraphElement[]`
 
-### graphDataToModel<Badge>method</Badge>
+### graphDataToModel<Badge>Method</Badge>
 
-Reset the entire canvas elements with the new data
+Reset all canvas elements using new data
 
-Note: All existing nodes and edges on the canvas will be cleared.
+Note: Will clear all existing nodes and edges on canvas
 
 Parameters:
 
-| Name      | Type            | Default | Description             |
-|-----------|-----------------|---------|-------------------------|
-| graphData | GraphConfigData | None    | Basic data of the graph |
+| Name      | Type            | Default | Description      |
+| --------- | --------------- | ------- | ---------------- |
+| graphData | GraphConfigData | -       | Basic graph data |
 
 ```tsx | pure
 const graphData = {
@@ -270,7 +257,7 @@ const graphData = {
       type: "rect",
       x: 100,
       y: 100,
-      text: { x: 100, y: 100, value: "node1" },
+      text: { x: 100, y: 100, value: "Node1" },
       properties: {},
     },
     {
@@ -278,7 +265,7 @@ const graphData = {
       type: "circle",
       x: 200,
       y: 300,
-      text: { x: 200, y: 300, value: "node2" },
+      text: { x: 200, y: 300, value: "Node2" },
       properties: {},
     },
   ],
@@ -287,8 +274,8 @@ const graphData = {
       id: "edge_id",
       type: "polyline",
       sourceNodeId: "node_id_1",
-      targetNodeId: "node_id_2",
-      text: { x: 139, y: 200, value: "edge" },
+      targetNodeId: "node_id_2", 
+      text: { x: 139, y: 200, value: "Connection" },
       startPoint: { x: 100, y: 140 },
       endPoint: { x: 200, y: 250 },
       pointsList: [
@@ -305,102 +292,110 @@ const graphData = {
 graphModel.graphDataToModel(graphData);
 ```
 
-### modelToGraphData<Badge>method</Badge>
+### modelToGraphData<Badge>Method</Badge>
 
-return: `GraphConfigData`
+Get raw data corresponding to graphModel
+
+Returns: `GraphConfigData`
 
 ```tsx | pure
 const graphData = graphModel.modelToGraphData();
 console.log(graphData)
 ```
 
-### modelToHistoryData<Badge>method</Badge>
+### modelToHistoryData<Badge>Method</Badge>
 
-return：false | HistoryData
+Get history record data
+
+Returns: false | HistoryData
 
 ```tsx | pure
 const historyData = graphModel.modelToHistoryData();
 console.log(historyData)
 ```
 
-### getEdgeModelById<Badge>method</Badge>
+### getEdgeModelById<Badge>Method</Badge>
+
+Get edge Model
 
 Parameters:
 
 | Name   | Type   | Default | Description |
-|--------|--------|---------|-------------|
-| edgeId | string | None    | edge Id     |
+| ------ | ------ | ------- | ----------- |
+| edgeId | string | -       | Edge Id     |
 
-return: [EdgeModel](edgeModel.en.md)
+Returns: [EdgeModel](./edgeModel.en.md)
 
 ```tsx | pure
 const edgeModel = graphModel.getEdgeModelById('edge_id');
 console.log(edgeModel)
 ```
 
-### getElement<Badge>method</Badge>
+### getElement<Badge>Method</Badge>
 
-get node or edge Model
+Get node or edge Model
 
 Parameters:
 
 | Name | Type   | Default | Description        |
-|------|--------|---------|--------------------|
-| id   | string | None    | edge Id or node Id |
+| ---- | ------ | ------- | ------------------ |
+| id   | string | -       | Edge Id or Node Id |
 
-return: [EdgeModel](./edgeModel.en.md) or [NodeModel](./nodeModel.en.md)
+Returns: [EdgeModel](./edgeModel.en.md) or [NodeModel](nodeModel.en.md)
 
 ```tsx | pure
 const edgeModel = graphModel.getElement('edge_id');
 console.log(edgeModel)
 ```
 
-### getNodeEdges<Badge>method</Badge>
+### getNodeEdges<Badge>Method</Badge>
+
+Get all edges connected to specified node
 
 Parameters:
 
 | Name   | Type   | Default | Description |
-|--------|--------|---------|-------------|
-| nodeId | string | None    | node Id     |
+| ------ | ------ | ------- | ----------- |
+| nodeId | string | -       | Node Id     |
 
-return: [EdgeModel](./edgeModel.en.md)
+Returns: [EdgeModel](./edgeModel.en.md)
 
 ```tsx | pure
 const edgeModels = graphModel.getNodeEdges('node_id_1');
 console.log(edgeModels)
 ```
 
-### getSelectElements<Badge>method</Badge>
+### getSelectElements<Badge>Method</Badge>
+
+Get selected element data
 
 Parameters:
 
-| Name          | Type    | Default | Description                                                                                                                                                                       |
-|---------------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| isIgnoreCheck | boolean | true    | Include or exclude edges where sourceNode and targetNode are not selected, by default. Such edges cannot be included when copying, because copying does not allow dangling edges. |
+| Name          | Type    | Default | Description                                                                                                                                                        |
+| ------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| isIgnoreCheck | boolean | true    | Whether to include edges whose sourceNode and targetNode are not selected, default includes. Cannot include such edges when copying since edges cannot be floating |
 
 ```tsx | pure
 const elements = graphModel.getSelectElements(true);
 console.log(elements)
 ```
 
-### updateAttributes<Badge>method</Badge>
+### updateAttributes<Badge>Method</Badge>
 
-Modify the attributes in the corresponding element model
+Modify attributes in corresponding element model
 
-:::warning
-Note: This method should be used with caution unless you have a good understanding of logicflow
-internals.<br>
-In most cases, use methods like setProperties, updateText, changeNodeId, etc.<br>
-For example, if you use this method to change a node's id, the sourceNodeId of the side connected to
-the node will not be found.
+:::warning{title=Warning}
+Note: Use with caution unless you have sufficient understanding of LogicFlow internals.<br>
+In most cases, please use setProperties, updateText, changeNodeId and other methods.<br>
+For example: directly using this method to modify a node's id will cause sourceNodeId of edges connected to this node to become unfindable.
 :::
 
 Parameters:
 
 | Name       | Type   | Default | Description        |
-|------------|--------|---------|--------------------|
-| id         | string | None    | node Id            |
-| attributes | object | None    | Element Properties |
+| ---------- | ------ | ------- | ------------------ |
+| id         | string | -       | Node Id            |
+| attributes | object | -       | Element attributes |
 
 ```tsx | pure
 graphModel.updateAttributes("node_id_1", {
@@ -408,124 +403,115 @@ graphModel.updateAttributes("node_id_1", {
 });
 ```
 
-### getVirtualRectSize<Badge>method</Badge>
+### getVirtualRectSize<Badge>Method</Badge>
 
-Parameters `includeEdge: boolean = false`
-return `GraphModel.VirtualRectProps`
+Get size and center position of virtual rectangle in graph area
+
+Parameter `includeEdge: boolean = false`
+Returns `GraphModel.VirtualRectProps`
 
 ```tsx | pure
 const virtualdata = graphModel.getVirtualRectSize();
 console.log(virtualdata);
-// virtualdata : { width, height, x, y }
+// virtualdata output: { width, height, x, y }
 ```
 
-### changeNodeId<Badge>method</Badge>
+### changeNodeId<Badge>Method</Badge>
 
-Modify the id of the node, if you don't pass a new id, one will be created internally.
+Change node id. If no new id provided, will automatically create one internally.
+
 Parameters:
 
 | Name  | Type   | Default | Description |
-|-------|--------|---------|-------------|
-| oldId | string | None    | node Id     |
-| newId | string | None    | new Id      |
+| ----- | ------ | ------- | ----------- |
+| oldId | string | -       | Node Id     |
+| newId | string | -       | New Id      |
 
 ```tsx | pure
 graphModel.changeNodeId("node_id_1", "node_id_2");
 ```
 
-### changeEdgeId<Badge>method</Badge>
+### changeEdgeId<Badge>Method</Badge>
 
-Modify the id of the side, if you don't pass a new id, one will be created internally.
+Change edge id. If no new id provided, will automatically create one internally.
 
 Parameters:
 
 | Name  | Type   | Default | Description |
-|-------|--------|---------|-------------|
-| oldId | string | None    | node Id     |
-| newId | string | None    | new Id      |
+| ----- | ------ | ------- | ----------- |
+| oldId | string | -       | Node Id     |
+| newId | string | -       | New Id      |
 
 ```tsx | pure
 graphModel.changeEdgeId("edge_id_1", "edge_id_2");
 ```
 
-### handleEdgeTextMove<Badge>method</Badge>
+### handleEdgeTextMove<Badge>Method</Badge>
+
+Move Text on edge
 
 Parameters:
 
-| Name | Type          | Default | Description             |
-|------|---------------|---------|-------------------------|
-| edge | BaseEdgeModel | None    | edge model              |
-| x    | number        | None    | x-axis coordinate value |
-| y    | number        | None    | y-axis coordinate value |
+| Name | Type          | Default | Description  |
+| ---- | ------------- | ------- | ------------ |
+| edge | BaseEdgeModel | -       | Edge model   |
+| x    | number        | -       | X coordinate |
+| y    | number        | -       | Y coordinate |
 
-### getRelatedEdgesByType<Badge>method</Badge>
+### toFront<Badge>Method</Badge>
 
-Get the model of all edges associated with a node by its node id.
+Bring specified node or edge to front
 
-Parameters:
+In default stacking mode, sets specified element's zIndex to 9999 and restores original top element's zIndex to 1.
 
-| Name   | Type                             | Default | Description                                         |
-|--------|----------------------------------|---------|-----------------------------------------------------|
-| nodeId | string                           | None    | target node id                                      |
-| type   | 'sourceNodeId' \| 'targetNodeId' | None    | sourceNodeId: source node；targetNodeId: target node |
-
-### toFront<Badge>method</Badge>
-
-Place the specified node or edge in front
-
-If the stacking mode is the default mode, set the top zIndex of the specified element to 9999, and
-the original zIndex of the top element will be restored to the original level zIndex is set to 1.
-
-If the stacking mode is incremental, the zIndex of the specified element is set to the current
-maximum zIndex + 1.
+In incremental mode, sets specified element's zIndex to current maximum zIndex + 1.
 
 Parameters:
 
 | Name | Type   | Default | Description        |
-|------|--------|---------|--------------------|
-| id   | string | None    | node id or edge id |
+| ---- | ------ | ------- | ------------------ |
+| id   | string | -       | Node id or edge id |
 
 ```tsx | pure
 graphModel.toFront("edge_id_1");
 ```
 
-### setElementZIndex<Badge>method</Badge>
+### setElementZIndex<Badge>Method</Badge>
 
-Sets the zIndex of the element.
+Set element's zIndex.
 
-Note: This method is not recommended in default stacking mode.
+Note: Not recommended to use this method in default stacking mode.
 
 Parameters:
 
-| Name   | Type                    | Default | Description                                                        |
-|--------|-------------------------|---------|--------------------------------------------------------------------|
-| id     | string                  | None    | node id or edge id                                                 |
-| zIndex | number\|'top'\|'bottom' | None    | You can pass numbers, but you can also pass in `top` and `bottom`. |
+| Name   | Type                    | Default | Description                            |
+| ------ | ----------------------- | ------- | -------------------------------------- |
+| id     | string                  | -       | Node id or edge id                     |
+| zIndex | number\|'top'\|'bottom' | -       | Can pass number, or 'top' and 'bottom' |
 
 ```tsx | pure
 graphModel.setElementZIndex("top");
 ```
 
-### setElementStateById<Badge>method</Badge>
+### setElementStateById<Badge>Method</Badge>
 
-Sets the state of an element (this method can be called when you need to make sure that only one of
-all the elements on the entire canvas has a certain state)
+Set element state (use this method when need to ensure only one element on entire canvas has certain state)
 
 Parameters:
 
-| Name              | Type                          | Must Pass | Default | Description                   |
-|-------------------|-------------------------------|-----------|---------|-------------------------------|
-| id                | string                        | ✅         | None    | node id or edge id            |
-| state             | `ElementState`                | ✅         | None    | Set Node \| Edge  model state |
-| additionStateData | `Model.AdditionStateDataType` | -         | None    | Additional values passed      |
+| Name              | Type                          | Required | Default | Description                  |
+| ----------------- | ----------------------------- | -------- | ------- | ---------------------------- |
+| id                | string                        | ✅        | -       | Node id or edge id           |
+| state             | `ElementState`                | ✅        | -       | Set Node \| Edge model state |
+| additionStateData | `Model.AdditionStateDataType` | -        | -       | Additional passed value      |
 
 ```tsx | pure
 interface ElementState {
   DEFAULT: 1, // Default display
-  TEXT_EDIT: 2, // This element is being edited.
-  SHOW_MENU: 3, // Show menu, deprecate menu plugin.
-  ALLOW_CONNECT: 4, // This element is allowed to be the target node of the current edge.
-  NOT_ALLOW_CONNECT: 5, // This element is not allowed to be the target node of the current edge.
+  TEXT_EDIT: 2, // Element is being text edited  
+  SHOW_MENU: 3, // Show menu, deprecated please use menu plugin
+  ALLOW_CONNECT: 4, // Element allowed as current edge's target node
+  NOT_ALLOW_CONNECT: 5, // Element not allowed as current edge's target node
 }
 ```
 
@@ -535,25 +521,29 @@ Usage:
 graphModel.setElementStateById("node_1", 4);
 ```
 
-### deleteNode<Badge>method</Badge>
+### deleteNode<Badge>Method</Badge>
+
+Delete node
 
 Parameters:
 
 | Name | Type   | Default | Description |
-|------|--------|---------|-------------|
-| id   | string | None    | node ID     |
+| ---- | ------ | ------- | ----------- |
+| id   | string | -       | Node ID     |
 
 ```tsx | pure
 graphModel.deleteNode("node_1");
 ```
 
-### addNode<Badge>method</Badge>
+### addNode<Badge>Method</Badge>
+
+Add node
 
 Parameters:
 
-| Name       | Type       | Default |
-|------------|------------|---------|
-| nodeConfig | NodeConfig | None    |
+| Name       | Type       | Default | Description        |
+| ---------- | ---------- | ------- | ------------------ |
+| nodeConfig | NodeConfig | -       | Node configuration |
 
 ```tsx | pure
 const nodeModel = graphModel.addNode({
@@ -563,83 +553,83 @@ const nodeModel = graphModel.addNode({
 });
 ```
 
-### cloneNode<Badge>method</Badge>
+### cloneNode<Badge>Method</Badge>
+
+Clone node
 
 Parameters:
 
 | Name   | Type   | Default | Description |
-|--------|--------|---------|-------------|
-| nodeId | string | None    | node id     |
+| ------ | ------ | ------- | ----------- |
+| nodeId | string | -       | Node id     |
 
 ```tsx | pure
 const nodeModel = graphModel.cloneNode("node_1");
 ```
 
-### moveNode<Badge>method</Badge>
+### moveNode<Badge>Method</Badge>
 
-移动node
+Move node
 
 Parameters:
 
-| Name         | Type    | Default | Description                                  |
-|--------------|---------|---------|----------------------------------------------|
-| nodeId       | string  | None    | node id                                      |
-| deltaX       | number  | None    | Move x-axis distance                         |
-| deltaY       | number  | None    | Move y-axis distance                         |
-| isignoreRule | boolean | false   | Whether to ignore movement rule restrictions |
+| Name         | Type    | Default | Description                      |
+| ------------ | ------- | ------- | -------------------------------- |
+| nodeId       | string  | -       | Node id                          |
+| deltaX       | number  | -       | X-axis movement distance         |
+| deltaY       | number  | -       | Y-axis movement distance         |
+| isignoreRule | boolean | false   | Whether to ignore movement rules |
 
 ```tsx | pure
 graphModel.moveNode("node_1", 10, 10, true);
 ```
 
-### moveNode2Coordinate<Badge>method</Badge>
+### moveNode2Coordinate<Badge>Method</Badge>
 
-Move node-absolute position
+Move node - absolute position
 
 Parameters:
 
-| Name         | Type    | Default | Description                                  |
-|--------------|---------|---------|----------------------------------------------|
-| nodeId       | string  | None    | node id                                      |
-| x            | number  | None    | Move x-axis distance                         |
-| y            | number  | None    | Move y-axis distance                         |
-| isignoreRule | boolean | false   | Whether to ignore movement rule restrictions |
+| Name         | Type    | Default | Description                      |
+| ------------ | ------- | ------- | -------------------------------- |
+| nodeId       | string  | -       | Node id                          |
+| x            | number  | -       | X-axis coordinate                |
+| y            | number  | -       | Y-axis coordinate                |
+| isignoreRule | boolean | false   | Whether to ignore movement rules |
 
 ```tsx | pure
 graphModel.moveNode2Coordinate("node_1", 100, 100, true);
 ```
 
-### editText<Badge>method</Badge>
+### editText<Badge>Method</Badge>
 
-Display node, line text edit box, enter editing state
+Show node/edge text editor, enter edit state
 
 Parameters:
 
 | Name | Type   | Default | Description        |
-|------|--------|---------|--------------------|
-| id   | string | None    | node id or edge id |
+| ---- | ------ | ------- | ------------------ |
+| id   | string | -       | Node id or edge id |
 
 ```tsx | pure
 graphModel.editText("node_1");
 ```
 
 :::info{title=Note}
-When the lf instance is initialized, the text passed in is not editable, LogicFlow will not listen
-to the event to cancel the editing state of the element. You need to listen to it manually, and then
-use the `setElementState` method to cancel the text editing state.
+When initializing lf instance with text not editable, LogicFlow won't internally listen for events to cancel element edit state. You need to manually listen and use `setElementState` method to cancel text edit state.
 :::
 
-### setElementState<Badge>method</Badge>
+### setElementState<Badge>Method</Badge>
+
+Set element state
 
 Parameters:
 
-| Name | Type   | Default | Description                                                                                                                           |
-|------|--------|---------|---------------------------------------------------------------------------------------------------------------------------------------|
-| type | number | None    | 1 means default; 2 means in text editor; 4 means no node is not allowed to be connected; 5 means the node is allowed to be connected. |
+| Name | Type   | Default | Description                                                                                                       |
+| ---- | ------ | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| type | number | -       | 1 means default state; 2 means text editing; 4 means node not allowed to connect; 5 means node allowed to connect |
 
-For example, in some scenarios, node and line are not allowed to be edited by default. However, when
-certain operations are performed, editing is allowed, and this method can be used to set the element
-from an editable state to a non-editable state.
+For example in some scenarios where nodes and edges are not editable by default. But after certain operations they become editable, you can use this method to change element from edit state to non-editable state.
 
 ```tsx | pure
 lf.on("node:dbclick", ({ data }) => {
@@ -650,13 +640,15 @@ lf.on("node:dbclick", ({ data }) => {
 });
 ```
 
-### addEdge<Badge>method</Badge>
+### addEdge<Badge>Method</Badge>
+
+Add edge
 
 Parameters:
 
-| Name       | Type       | Default |
-|------------|------------|---------|
-| edgeConfig | EdgeConfig | None    |
+| Name       | Type       | Default | Description        |
+| ---------- | ---------- | ------- | ------------------ |
+| edgeConfig | EdgeConfig | -       | Edge configuration |
 
 ```tsx | pure
 const edgeModel = graphModel.addEdge({
@@ -666,132 +658,147 @@ const edgeModel = graphModel.addEdge({
 });
 ```
 
-### deleteEdgeBySourceAndTarget<Badge>method</Badge>
+### deleteEdgeBySourceAndTarget<Badge>Method</Badge>
+
+Delete edge
 
 Parameters:
 
-| Name         | Type   | Default | Description   |
-|--------------|--------|---------|---------------|
-| sourceNodeId | string | None    | start node id |
-| targetNodeId | string | None    | end node ID   |
+| Name         | Type   | Default | Description    |
+| ------------ | ------ | ------- | -------------- |
+| sourceNodeId | string | -       | Source node id |
+| targetNodeId | string | -       | Target node ID |
 
 ```tsx | pure
 graphModel.deleteEdgeBySourceAndTarget("node_1", "node_2");
 ```
 
-### deleteEdgeById<Badge>method</Badge>
+### deleteEdgeById<Badge>Method</Badge>
+
+Delete edge by Id
 
 Parameters:
 
 | Name | Type   | Default | Description |
-|------|--------|---------|-------------|
-| id   | string | None    | edge id     |
+| ---- | ------ | ------- | ----------- |
+| id   | string | -       | Edge id     |
 
 ```tsx | pure
 graphModel.deleteEdgeById("edge_1");
 ```
 
-### deleteEdgeBySource<Badge>method</Badge>
+### deleteEdgeBySource<Badge>Method</Badge>
+
+Delete all edges with specified node as source
 
 Parameters:
 
-| Name | Type   | Default | Description |
-|------|--------|---------|-------------|
-| id   | string | None    | edge id     |
+| Name | Type   | Default | Description    |
+| ---- | ------ | ------- | -------------- |
+| id   | string | -       | Edge source id |
 
 ```tsx | pure
 graphModel.deleteEdgeBySource("node_1");
 ```
 
-### deleteEdgeByTarget<Badge>method</Badge>
+### deleteEdgeByTarget<Badge>Method</Badge>
+
+Delete all edges with specified node as target
 
 Parameters:
 
-| Name | Type   | Default | Description |
-|------|--------|---------|-------------|
-| id   | string | None    | edge id     |
+| Name | Type   | Default | Description    |
+| ---- | ------ | ------- | -------------- |
+| id   | string | -       | Edge target id |
 
 ```tsx | pure
 graphModel.deleteEdgeByTarget("node_1");
 ```
 
-### updateText<Badge>method</Badge>
+### updateText<Badge>Method</Badge>
+
+Set text for specified element
 
 ```tsx | pure
 graphModel.updateText("node_1", "hello world");
 ```
 
-### selectNodeById<Badge>method</Badge>
+### selectNodeById<Badge>Method</Badge>
+
+Select node
 
 Parameters:
 
-| Name     | Type    | Default | Description            |
-|----------|---------|---------|------------------------|
-| id       | string  | None    | node id                |
-| multiple | boolean | None    | Multiple choice or not |
+| Name     | Type    | Default | Description    |
+| -------- | ------- | ------- | -------------- |
+| id       | string  | -       | Node id        |
+| multiple | boolean | -       | Allow multiple |
 
 ```tsx | pure
 graphModel.selectNodeById("node_1", true);
 ```
 
-### selectEdgeById<Badge>method</Badge>
+### selectEdgeById<Badge>Method</Badge>
+
+Select edge
 
 Parameters:
 
-| Name     | Type    | Default | Description            |
-|----------|---------|---------|------------------------|
-| id       | string  | None    | node id                |
-| multiple | boolean | None    | Multiple choice or not |
+| Name     | Type    | Default | Description    |
+| -------- | ------- | ------- | -------------- |
+| id       | string  | -       | Node id        |
+| multiple | boolean | -       | Allow multiple |
 
 ```tsx | pure
 graphModel.selectEdgeById("edge_1", true);
 ```
 
-### selectElementById<Badge>method</Badge>
+### selectElementById<Badge>Method</Badge>
+
+Select node and edge
 
 Parameters:
 
-| Name     | Type    | Default | Description            |
-|----------|---------|---------|------------------------|
-| id       | string  | None    | node或边 id              |
-| multiple | boolean | None    | Multiple choice or not |
+| Name     | Type    | Default | Description     |
+| -------- | ------- | ------- | --------------- |
+| id       | string  | -       | Node or edge id |
+| multiple | boolean | -       | Allow multiple  |
 
 ```tsx | pure
 graphModel.selectElementById("edge_1", true);
 ```
 
-### clearSelectElements<Badge>method</Badge>
+### clearSelectElements<Badge>Method</Badge>
 
-Unchecks all selected elements.
+Clear selection state of all selected elements
 
 ```tsx | pure
 graphModel.clearSelectElements();
 ```
 
-### moveNodes<Badge>method</Badge>
+### moveNodes<Badge>Method</Badge>
 
-Batch move nodes, when the node moves, it will dynamically calculate the edge position of all nodes
-and the unmoved nodes.
+Batch move nodes, when nodes move, dynamically calculate positions of all edges between moved and unmoved nodes
 
-The edges between the moved nodes will keep their relative positions.
+Edges between moved nodes maintain relative positions
 
 Parameters
 
-| Name    | Type     | Mandatory | Default | Description          |
-|:--------|:---------|:----------|:--------|:---------------------|
-| nodeIds | string[] | ✅         | None    | All of node id       |
-| deltaX  | number   | ✅         | None    | Move x-axis distance |
-| deltaY  | number   | ✅         | None    | Move y-axis distance |
+| Name    | Type     | Required | Default | Description          |
+| :------ | :------- | :------- | :------ | :------------------- |
+| nodeIds | string[] | ✅        | -       | All node ids         |
+| deltaX  | number   | ✅        | -       | X-axis move distance |
+| deltaY  | number   | ✅        | -       | Y-axis move distance |
 
 ```tsx | pure
 graphModel.moveNodes(["node_id", "node_2"], 10, 10);
 ```
 
-### addNodeMoveRules<Badge>method</Badge>
+### addNodeMoveRules<Badge>Method</Badge>
 
-Adds a node movement restriction rule that is triggered when a node moves.
+Add node movement restriction rules, triggered when node moves.
 
-If the method returns false, node movement is prevented.
+If method returns false, node movement will be prevented.
 
 ```tsx | pure
 graphModel.addNodeMoveRules((nodeModel, x, y) => {
@@ -802,7 +809,9 @@ graphModel.addNodeMoveRules((nodeModel, x, y) => {
 });
 ```
 
-### getNodeIncomingNode<Badge>method</Badge>
+### getNodeIncomingNode<Badge>Method</Badge>
+
+Get all upstream nodes of a node
 
 ```tsx | pure
 graphModel.getNodeIncomingNode = (nodeId: string): BaseNodeModel[] => {}
@@ -810,11 +819,13 @@ graphModel.getNodeIncomingNode = (nodeId: string): BaseNodeModel[] => {}
 
 Parameters:
 
-| Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
-| nodeId | string | ✅         | -       | node id     |
+| Name   | Type   | Required | Default | Description |
+| :----- | :----- | :------- | :------ | :---------- |
+| nodeId | string | ✅        | -       | Node id     |
 
-### getNodeOutgoingNode<Badge>method</Badge>
+### getNodeOutgoingNode<Badge>Method</Badge>
+
+Get all downstream nodes of a node
 
 ```tsx | pure
 graphModel.getNodeOutgoingNode = (nodeId: string): BaseNodeModel[] => {}
@@ -822,11 +833,11 @@ graphModel.getNodeOutgoingNode = (nodeId: string): BaseNodeModel[] => {}
 
 Parameters:
 
-| Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
-| nodeId | string | ✅         | -       | node id     |
+| Name   | Type   | Required | Default | Description |
+| :----- | :----- | :------- | :------ | :---------- |
+| nodeId | string | ✅        | -       | Node id     |
 
-### getNodeIncomingEdge<Badge>method</Badge>
+### getNodeIncomingEdge<Badge>Method</Badge>
 
 Get all edges that end at this node
 
@@ -836,79 +847,91 @@ graphModel.getNodeIncomingEdge = (nodeId: string): BaseEdgeModel[] => {}
 
 Parameters:
 
-| Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
-| nodeId | string | ✅         | -       | node id     |
+| Name   | Type   | Required | Default | Description |
+| :----- | :----- | :------- | :------ | :---------- |
+| nodeId | string | ✅        | -       | Node id     |
 
-### getNodeOutgoingEdge<Badge>method</Badge>
+### getNodeOutgoingEdge<Badge>Method</Badge>
 
-Get all edges starting at this node
+Get all edges that start from this node
 
 ```tsx | pure
-graphModel.getNodeOutgoingEdge = (nodeId: string): BaseEdgeModel[] => {Î}
+graphModel.getNodeOutgoingEdge = (nodeId: string): BaseEdgeModel[] => {}
 ```
 
 Parameters:
 
-| Name   | Type   | Mandatory | Default | Description |
-|:-------|:-------|:----------|:--------|:------------|
-| nodeId | string | ✅         | -       | node id     |
+| Name   | Type   | Required | Default | Description |
+| :----- | :----- | :------- | :------ | :---------- |
+| nodeId | string | ✅        | -       | Node id     |
 
-### setDefaultEdgeType<Badge>method</Badge>
+### setDefaultEdgeType<Badge>Method</Badge>
+
+Change default edge type
 
 Parameters
 
-| Name | Type   | Mandatory | Default | Description |
-|:-----|:-------|:----------|:--------|:------------|
-| type | string | ✅         | None    | 边类型         |
+| Name | Type   | Required | Default | Description |
+| :--- | :----- | :------- | :------ | :---------- |
+| type | string | ✅        | -       | Edge type   |
 
 ```tsx | pure
 graphModel.setDefaultEdgeType("bezier");
 ```
 
-### changeNodeType<Badge>method</Badge>
+### changeNodeType<Badge>Method</Badge>
+
+Change type of specified node
 
 Parameters
 
-| Name | Type   | Mandatory | Default | Description |
-|:-----|:-------|:----------|:--------|:------------|
-| id   | string | ✅         | None    | Node        |
-| type | string | ✅         | None    | Node Type   |
+| Name | Type   | Required | Default | Description |
+| :--- | :----- | :------- | :------ | :---------- |
+| id   | string | ✅        | -       | Node        |
+| type | string | ✅        | -       | Node type   |
 
 ```tsx | pure
 graphModel.changeNodeType("node_1", "circle");
 ```
 
-### changeEdgeType<Badge>method</Badge>
+### changeEdgeType<Badge>Method</Badge>
+
+Change type of specified edge
 
 Parameters
 
-| Name | Type   | Mandatory | Default | Description |
-|:-----|:-------|:----------|:--------|:------------|
-| id   | string | ✅         | None    | Node        |
-| type | string | ✅         | None    | Edge Type   |
+| Name | Type   | Required | Default | Description |
+| :--- | :----- | :------- | :------ | :---------- |
+| id   | string | ✅        | -       | Node        |
+| type | string | ✅        | -       | Edge type   |
 
 ```tsx | pure
 graphModel.changeEdgeType("edge_1", "bezier");
 ```
 
-### openEdgeAnimation<Badge>method</Badge>
+### openEdgeAnimation<Badge>Method</Badge>
 
-Parameters edgeId: string
+Enable edge animation
+
+Parameter edgeId: string
 
 ```tsx | pure
 graphModel.openEdgeAnimation("edge_1");
 ```
 
-### closeEdgeAnimation<Badge>method</Badge>
+### closeEdgeAnimation<Badge>Method</Badge>
 
-Parameters edgeId: string
+Disable edge animation
+
+Parameter edgeId: string
 
 ```tsx | pure
 graphModel.closeEdgeAnimation("edge_1");
 ```
 
-### setTheme<Badge>method</Badge>
+### setTheme<Badge>Method</Badge>
+
+Set theme
 
 ```tsx | pure
 graphModel.setTheme({
@@ -917,39 +940,41 @@ graphModel.setTheme({
   },
 });
 ```
+### resize<Badge>Method</Badge>
 
-### resize<Badge>method</Badge>
-
-Reset the canvas width and height
+Reset canvas width and height
 
 ```tsx | pure
 graphModel.resize(1000, 600);
 ```
 
-### clearData<Badge>method</Badge>
+### clearData<Badge>Method</Badge>
+
+Clear all elements on canvas
 
 ```tsx | pure
 graphModel.clearData();
 ```
 
-### translateCenter<Badge>method</Badge>
+### translateCenter<Badge>Method</Badge>
 
-Move the entire image to the center of the canvas
+Move entire graph to canvas center
 
 ```tsx | pure
 graphModel.translateCenter();
 ```
 
-### fitView<Badge>method</Badge>
+### fitView<Badge>Method</Badge>
 
-Canvas Graphics Adaptation to Screen Size
+Fit graph to screen size
 
 Parameters
-| Name | Type | Must Pass | Default | Description |
-| :--- | :----- | :--- | :----- | :----- |
-| verticalOffset | number | - | 20 | Distance from top and bottom of box |
-| horizontalOffset | number | - | 20 | Distance to the left and right of the box |
+| Name             | Type   | Required | Default | Description                  |
+| :--------------- | :----- | :------- | :------ | :--------------------------- |
+| verticalOffset   | number | -        | 20      | Distance from box top/bottom |
+| horizontalOffset | number | -        | 20      | Distance from box left/right |
 
 ```tsx | pure
 graphModel.fitView();
 ```
+

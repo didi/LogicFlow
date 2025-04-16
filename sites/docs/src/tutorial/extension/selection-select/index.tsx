@@ -138,6 +138,11 @@ export default function SelectionSelectExample() {
           size: 20,
         },
         plugins: [SelectionSelect],
+        pluginsOptions: {
+          selectionSelect: {
+            defaultExclusiveMode: false,
+          },
+        },
       });
 
       lf.on(
@@ -216,6 +221,12 @@ export default function SelectionSelectExample() {
             danger
           >
             关闭框选
+          </Button>
+          <Button onClick={() => lfRef.current?.setSelectionSelectMode(true)}>
+            开启独占模式
+          </Button>
+          <Button onClick={() => lfRef.current?.setSelectionSelectMode(false)}>
+            关闭独占模式
           </Button>
         </Space>
         <Form layout="inline">

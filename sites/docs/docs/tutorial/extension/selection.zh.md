@@ -17,9 +17,28 @@ table td:first-of-type {
 
 LogicFlow 的框选插件允许用户通过拖动鼠标绘制矩形框来选择多个图形元素，方便进行批量操作或编辑。
 
+
 ## 演示
 
 <code id="react-portal" src="@/src/tutorial/extension/selection-select"></code>
+
+## 更新
+
+### 框选独占模式
+在<Badge>2.0.13</Badge>版本新增了框选独占模式，开启后用户只能做框选动作，相对的用户可以分批框选多个元素，已框选的元素二次框选会被取消选中。
+用户可以通过在创建实例时通过传入`defaultExclusiveMode`参数用来设置是否默认开启独占框选模式
+``` ts
+const lf = new LogicFlow({
+  // ...config, // 其他配置
+  plugins: [SelectionSelect],
+  pluginsOptions: {
+    selectionSelect: {
+      defaultExclusiveMode: false,
+    },
+  },
+});
+```
+也可以通过调用下方的[`toggleExclusiveMode`](#setleexclusivemode)方法动态修改独占模式的启用状态
 
 ## 使用
 
@@ -41,6 +60,8 @@ const lf = new LogicFlow({
 });
 
 ```
+
+注册插件后，插件会在初始化时增加下述方法：
 
 ## API
 
@@ -79,15 +100,35 @@ lf.extension.selectionSelect.closeSelectionSelect()
 
 可以调用插件方法`setSelectionSense`来重新设置
 
-| 参数          | 默认值  | 描述                  |
-|-------------|------|---------------------|
-| isWholeEdge | true | 是否要边的起点终点都在选区范围才算选中 |
-| isWholeNode | true | 是否要节点的全部点都在选区范围才算选中 |
+| 参数        | 默认值 | 描述                                   |
+| ----------- | ------ | -------------------------------------- |
+| isWholeEdge | true   | 是否要边的起点终点都在选区范围才算选中 |
+| isWholeNode | true   | 是否要节点的全部点都在选区范围才算选中 |
 
 用法：
 
 ```tsx | pure
 lf.extension.selectionSelect.setSelectionSense(false, true);
+```
+
+### setleExclusiveMode
+
+设置框选独占模式的启用状态
+
+- 默认不启用独占模式
+
+可以调用插件方法`setSelectionSense`来重新设置
+
+| 参数   | 默认值 | 描述             |
+| ------ | ------ | ---------------- |
+| status | false  | 是否启用独占模式 |
+
+用法：
+
+```tsx | pure
+lf.setSelectionSelectMode(true)
+
+lf.extension.selectionSelect.setleExclusiveMode(true);
 ```
 
 ## 默认状态
