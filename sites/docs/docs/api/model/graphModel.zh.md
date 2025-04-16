@@ -45,36 +45,36 @@ class CustomNode extends RectNode {
 
 ## 属性
 
-| 属性                          | 类型                                            | 默认值   | 描述                                                    |
-|:----------------------------|:----------------------------------------------|:------|:------------------------------------------------------|
-| width                       | `number`                                      |       | LogicFlow 画布宽度                                        |
-| height                      | `number`                                      |       | LogicFlow 画布高度                                        |
-| theme                       | `LogicFlow.Theme`                             |       | [详细 API](../theme.zh.md)                              |
-| animation                   | `boolean \| LFOptions.AnimationConfig`        | false | 动画状态配置，是否已打开对应的动画                                     |
-| [eventCenter](#eventcenter) | `EventEmitter`                                |       | 事件中心, 可以通过这个对象向外部抛出事件                                 |
-| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 维护所有节点和边类型对应的 model                                   |
-| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |       | 位于当前画布顶部的元素                                           |
-| idGenerator                 | `(type?: string) => string \| undefined`      |       | 自定义全局 id 生成器                                          |
-| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []    | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断                       |
-| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |       | 获取自定义连线轨迹                                             |
-| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |       | 节点间连线、连线变更时边的生成规则                                     |
-| edgeType                    | `string`                                      |       | 在图上操作创建边时，默认使用的边类型                                    |
-| nodes                       | `BaseNodeModel[]`                             | []    | 画布所有的节点对象                                             |
-| edges                       | `BaseEdgeModel[]`                             | []    | 画布所有的连线对象                                             |
-| fakeNode                    | `BaseNodeModel  \| null`                      | null  | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开               |
-| [overlapMode](#overlapmode) | `number`                                      |       | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                             |
-| background                  | `false \| LFOptions.BackgroundConfig`         |       | 画布背景配置                                                |
-| transformModel              | `TransformModel`                              |       | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)   |
-| editConfigModel             | `EditConfigModel`                             |       | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md) |
-| gridSize                    | `number`                                      | 1     | 网格大小                                                  |
-| partial                     | `boolean`                                     | false | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能                 |
-| nodesMap                    | `GraphModel.NodesMapType`                     |       | 画布所有节点的构成的 `map`                                      |
-| edgesMap                    | `GraphModel.EdgesMapType`                     |       | 画布所有边构成的 `map`                                        |
-| modelsMap                   | `GraphModel.ModelsMapType`                    |       | 画布所有节点和边共同构成的 `map`                                   |
-| selectNodes                 | `BaseNodeModel[]`                             |       | 画布中所有选中节点对象                                           |
-| sortElements                | `array`                                       |       | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                      |
-| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |       | 当前被编辑的元素                                              |
-| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |       | 当前画布所有被选中的元素                                          |
+| 属性                        | 类型                                          | 默认值 | 描述                                                                       |
+| :-------------------------- | :-------------------------------------------- | :----- | :------------------------------------------------------------------------- |
+| width                       | `number`                                      |        | LogicFlow 画布宽度                                                         |
+| height                      | `number`                                      |        | LogicFlow 画布高度                                                         |
+| theme                       | `LogicFlow.Theme`                             |        | [详细 API](../theme.zh.md)                                                 |
+| animation                   | `boolean \| LFOptions.AnimationConfig`        | false  | 动画状态配置，是否已打开对应的动画                                         |
+| [eventCenter](#eventcenter) | `EventEmitter`                                |        | 事件中心, 可以通过这个对象向外部抛出事件                                   |
+| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 维护所有节点和边类型对应的 model                                           |
+| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |        | 位于当前画布顶部的元素                                                     |
+| idGenerator                 | `(type?: string) => string \| undefined`      |        | 自定义全局 id 生成器                                                       |
+| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []     | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断               |
+| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |        | 获取自定义连线轨迹                                                         |
+| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |        | 节点间连线、连线变更时边的生成规则                                         |
+| edgeType                    | `string`                                      |        | 在图上操作创建边时，默认使用的边类型                                       |
+| nodes                       | `BaseNodeModel[]`                             | []     | 画布所有的节点对象                                                         |
+| edges                       | `BaseEdgeModel[]`                             | []     | 画布所有的连线对象                                                         |
+| fakeNode                    | `BaseNodeModel  \| null`                      | null   | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开       |
+| [overlapMode](#overlapmode) | `number`                                      |        | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                                 |
+| background                  | `false \| LFOptions.BackgroundConfig`         |        | 画布背景配置                                                               |
+| transformModel              | `TransformModel`                              |        | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)        |
+| editConfigModel             | `EditConfigModel`                             |        | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md)       |
+| gridSize                    | `number`                                      | 1      | 网格大小                                                                   |
+| partial                     | `boolean`                                     | false  | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能 |
+| nodesMap                    | `GraphModel.NodesMapType`                     |        | 画布所有节点的构成的 `map`                                                 |
+| edgesMap                    | `GraphModel.EdgesMapType`                     |        | 画布所有边构成的 `map`                                                     |
+| modelsMap                   | `GraphModel.ModelsMapType`                    |        | 画布所有节点和边共同构成的 `map`                                           |
+| selectNodes                 | `BaseNodeModel[]`                             |        | 画布中所有选中节点对象                                                     |
+| sortElements                | `array`                                       |        | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                         |
+| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |        | 当前被编辑的元素                                                           |
+| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 当前画布所有被选中的元素                                                   |
 
 ### eventCenter<Badge>属性</Badge>
 
@@ -121,13 +121,13 @@ lf.on("user:detail", (res) => {});
 
 入参:
 
-| 名称                | 类型         | 默认值 | 说明            |
-|-------------------|------------|-----|---------------|
-| leftTopPoint      | PointTuple | 无   | 区域左上方的点       |
-| rightBottomPoint  | PointTuple | 无   | 区域右下角的点       |
-| wholeEdge         | boolean    | 无   | 是否要整个边都在区域内部  |
-| wholeNode         | boolean    | 无   | 是否要整个节点都在区域内部 |
-| ignoreHideElement | boolean    | 无   | 是否忽略隐藏的节点     |
+| 名称              | 类型       | 默认值 | 说明                       |
+| ----------------- | ---------- | ------ | -------------------------- |
+| leftTopPoint      | PointTuple | 无     | 区域左上方的点             |
+| rightBottomPoint  | PointTuple | 无     | 区域右下角的点             |
+| wholeEdge         | boolean    | 无     | 是否要整个边都在区域内部   |
+| wholeNode         | boolean    | 无     | 是否要整个节点都在区域内部 |
+| ignoreHideElement | boolean    | 无     | 是否忽略隐藏的节点         |
 
 ```tsx | pure
 graphModel.getAreaElement([100, 100], [800, 800]);
@@ -139,9 +139,9 @@ graphModel.getAreaElement([100, 100], [800, 800]);
 
 入参:
 
-| 名称   | 类型     | 默认值 | 说明 |
-|------|--------|-----|----|
-| type | string | 无   | 类型 |
+| 名称 | 类型   | 默认值 | 说明 |
+| ---- | ------ | ------ | ---- |
+| type | string | 无     | 类型 |
 
 返回值: [NodeModel](./nodeModel.zh.md) 或 [EdgeModel](./edgeModel.zh.md)
 
@@ -155,9 +155,9 @@ graphModel.getModel("rect");
 
 入参:
 
-| 名称   | 类型     | 默认值 | 说明 |
-|------|--------|-----|----|
-| type | string | 无   | 类型 |
+| 名称 | 类型   | 默认值 | 说明 |
+| ---- | ------ | ------ | ---- |
+| type | string | 无     | 类型 |
 
 返回值: [NodeModel](./nodeModel.zh.md)
 
@@ -174,16 +174,16 @@ graphModel.getNodeModelById("node_1");
 
 入参:
 
-| 名称    | 类型       | 默认值 | 说明      |
-|-------|----------|-----|---------|
-| point | Position | 无   | HTML 坐标 |
+| 名称  | 类型     | 默认值 | 说明      |
+| ----- | -------- | ------ | --------- |
+| point | Position | 无     | HTML 坐标 |
 
 返回值:
 
-| 名称                    | 类型       | 默认值 | 说明                          |
-|-----------------------|----------|-----|-----------------------------|
-| domOverlayPosition    | Position | 无   | HTML 层坐标，一般控制组件的位置时使用此坐标    |
-| canvasOverlayPosition | Position | 无   | Canvas 层坐标，一般节点、边的坐标是这一层的坐标 |
+| 名称                  | 类型     | 默认值 | 说明                                            |
+| --------------------- | -------- | ------ | ----------------------------------------------- |
+| domOverlayPosition    | Position | 无     | HTML 层坐标，一般控制组件的位置时使用此坐标     |
+| canvasOverlayPosition | Position | 无     | Canvas 层坐标，一般节点、边的坐标是这一层的坐标 |
 
 为什么要这个方法，为什么鼠标点击的同一个位置会产生两个不同的坐标？
 
@@ -211,13 +211,13 @@ graphModel.getPointByClient({ x: 200, y: 200 });
 
 入参:
 
-| 名称        | 类型                    | 默认值  | 说明             |
-|-----------|-----------------------|------|----------------|
-| element   | NodeModel 或 EdgeModel | 无    | 元素的 model      |
-| lt        | PointTuple            | 无    | 左上角点           |
-| rb        | PointTuple            | 无    | 右下角点           |
-| wholeEdge | boolean               | true | 边的起点和终点都在区域内才算 |
-| wholeNode | boolean               | true | 节点的box都在区域内才算  |
+| 名称      | 类型                   | 默认值 | 说明                         |
+| --------- | ---------------------- | ------ | ---------------------------- |
+| element   | NodeModel 或 EdgeModel | 无     | 元素的 model                 |
+| lt        | PointTuple             | 无     | 左上角点                     |
+| rb        | PointTuple             | 无     | 右下角点                     |
+| wholeEdge | boolean                | true   | 边的起点和终点都在区域内才算 |
+| wholeNode | boolean                | true   | 节点的box都在区域内才算      |
 
 返回值: `boolean`
 
@@ -236,13 +236,13 @@ graphModel.isElementInArea(node, [200, 200], [400, 400]);
 
 入参:
 
-| 名称                | 类型         | 默认值   | 说明             |
-|-------------------|------------|-------|----------------|
-| leftTopPoint      | PointTuple | 无     | 左上角点           |
-| rightBottomPoint  | PointTuple | 无     | 右下角点           |
-| ignoreHideElement | boolean    | false | 忽略隐藏元素         |
-| wholeEdge         | boolean    | true  | 边的起点和终点都在区域内才算 |
-| wholeNode         | boolean    | true  | 节点的box都在区域内才算  |
+| 名称              | 类型       | 默认值 | 说明                         |
+| ----------------- | ---------- | ------ | ---------------------------- |
+| leftTopPoint      | PointTuple | 无     | 左上角点                     |
+| rightBottomPoint  | PointTuple | 无     | 右下角点                     |
+| ignoreHideElement | boolean    | false  | 忽略隐藏元素                 |
+| wholeEdge         | boolean    | true   | 边的起点和终点都在区域内才算 |
+| wholeNode         | boolean    | true   | 节点的box都在区域内才算      |
 
 返回值: `LogicFlow.GraphElement[]`
 
@@ -254,9 +254,9 @@ graphModel.isElementInArea(node, [200, 200], [400, 400]);
 
 入参:
 
-| 名称        | 类型              | 默认值 | 说明     |
-|-----------|-----------------|-----|--------|
-| graphData | GraphConfigData | 无   | 图的基本数据 |
+| 名称      | 类型            | 默认值 | 说明         |
+| --------- | --------------- | ------ | ------------ |
+| graphData | GraphConfigData | 无     | 图的基本数据 |
 
 ```tsx | pure
 const graphData = {
@@ -329,9 +329,9 @@ console.log(historyData)
 
 入参:
 
-| 名称     | 类型     | 默认值 | 说明   |
-|--------|--------|-----|------|
-| edgeId | string | 无   | 边 Id |
+| 名称   | 类型   | 默认值 | 说明  |
+| ------ | ------ | ------ | ----- |
+| edgeId | string | 无     | 边 Id |
 
 返回值: [EdgeModel](./edgeModel.zh.md)
 
@@ -346,9 +346,9 @@ console.log(edgeModel)
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明           |
-|----|--------|-----|--------------|
-| id | string | 无   | 边 Id 或者节点 Id |
+| 名称 | 类型   | 默认值 | 说明              |
+| ---- | ------ | ------ | ----------------- |
+| id   | string | 无     | 边 Id 或者节点 Id |
 
 返回值: [EdgeModel](./edgeModel.zh.md) 或者 [NodeModel](nodeModel.zh.md)
 
@@ -363,9 +363,9 @@ console.log(edgeModel)
 
 入参:
 
-| 名称     | 类型     | 默认值 | 说明    |
-|--------|--------|-----|-------|
-| nodeId | string | 无   | 节点 Id |
+| 名称   | 类型   | 默认值 | 说明    |
+| ------ | ------ | ------ | ------- |
+| nodeId | string | 无     | 节点 Id |
 
 返回值: [EdgeModel](./edgeModel.zh.md)
 
@@ -380,9 +380,9 @@ console.log(edgeModels)
 
 入参:
 
-| 名称            | 类型      | 默认值  | 说明                                                                      |
-|---------------|---------|------|-------------------------------------------------------------------------|
-| isIgnoreCheck | boolean | true | 是否包括 sourceNode 和 targetNode 没有被选中的边,默认包括。 复制的时候不能包括此类边, 因为复制的时候不允许悬空的边 |
+| 名称          | 类型    | 默认值 | 说明                                                                                                               |
+| ------------- | ------- | ------ | ------------------------------------------------------------------------------------------------------------------ |
+| isIgnoreCheck | boolean | true   | 是否包括 sourceNode 和 targetNode 没有被选中的边,默认包括。 复制的时候不能包括此类边, 因为复制的时候不允许悬空的边 |
 
 ```tsx | pure
 const elements = graphModel.getSelectElements(true);
@@ -401,10 +401,10 @@ console.log(elements)
 
 入参:
 
-| 名称         | 类型     | 默认值 | 说明    |
-|------------|--------|-----|-------|
-| id         | string | 无   | 节点 Id |
-| attributes | object | 无   | 元素属性  |
+| 名称       | 类型   | 默认值 | 说明     |
+| ---------- | ------ | ------ | -------- |
+| id         | string | 无     | 节点 Id  |
+| attributes | object | 无     | 元素属性 |
 
 ```tsx | pure
 graphModel.updateAttributes("node_id_1", {
@@ -431,10 +431,10 @@ console.log(virtualdata);
 
 入参:
 
-| 名称    | 类型     | 默认值 | 说明    |
-|-------|--------|-----|-------|
-| oldId | string | 无   | 节点 Id |
-| newId | string | 无   | 新的 Id |
+| 名称  | 类型   | 默认值 | 说明    |
+| ----- | ------ | ------ | ------- |
+| oldId | string | 无     | 节点 Id |
+| newId | string | 无     | 新的 Id |
 
 ```tsx | pure
 graphModel.changeNodeId("node_id_1", "node_id_2");
@@ -446,10 +446,10 @@ graphModel.changeNodeId("node_id_1", "node_id_2");
 
 入参:
 
-| 名称    | 类型     | 默认值 | 说明    |
-|-------|--------|-----|-------|
-| oldId | string | 无   | 节点 Id |
-| newId | string | 无   | 新的 Id |
+| 名称  | 类型   | 默认值 | 说明    |
+| ----- | ------ | ------ | ------- |
+| oldId | string | 无     | 节点 Id |
+| newId | string | 无     | 新的 Id |
 
 ```tsx | pure
 graphModel.changeEdgeId("edge_id_1", "edge_id_2");
@@ -461,22 +461,11 @@ graphModel.changeEdgeId("edge_id_1", "edge_id_2");
 
 入参:
 
-| 名称   | 类型            | 默认值 | 说明      |
-|------|---------------|-----|---------|
-| edge | BaseEdgeModel | 无   | 边 model |
-| x    | number        | 无   | x 轴坐标值  |
-| y    | number        | 无   | y 轴坐标值  |
-
-### getRelatedEdgesByType<Badge>方法</Badge>
-
-根据节点 id 获取与之相关的所有边的 model
-
-入参:
-
-| 名称     | 类型                               | 默认值 | 说明                                   |
-|--------|----------------------------------|-----|--------------------------------------|
-| nodeId | string                           | 无   | 目标节点 id                              |
-| type   | 'sourceNodeId' \| 'targetNodeId' | 无   | sourceNodeId: 源节点；targetNodeId: 目标节点 |
+| 名称 | 类型          | 默认值 | 说明       |
+| ---- | ------------- | ------ | ---------- |
+| edge | BaseEdgeModel | 无     | 边 model   |
+| x    | number        | 无     | x 轴坐标值 |
+| y    | number        | 无     | y 轴坐标值 |
 
 ### toFront<Badge>方法</Badge>
 
@@ -488,9 +477,9 @@ graphModel.changeEdgeId("edge_id_1", "edge_id_2");
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明          |
-|----|--------|-----|-------------|
-| id | string | 无   | 节点 id 或边 id |
+| 名称 | 类型   | 默认值 | 说明            |
+| ---- | ------ | ------ | --------------- |
+| id   | string | 无     | 节点 id 或边 id |
 
 ```tsx | pure
 graphModel.toFront("edge_id_1");
@@ -504,10 +493,10 @@ graphModel.toFront("edge_id_1");
 
 入参:
 
-| 名称     | 类型                      | 默认值 | 说明                          |
-|--------|-------------------------|-----|-----------------------------|
-| id     | string                  | 无   | 节点 id 或边 id                 |
-| zIndex | number\|'top'\|'bottom' | 无   | 可以传数字，也支持传入`top` 和 `bottom` |
+| 名称   | 类型                    | 默认值 | 说明                                    |
+| ------ | ----------------------- | ------ | --------------------------------------- |
+| id     | string                  | 无     | 节点 id 或边 id                         |
+| zIndex | number\|'top'\|'bottom' | 无     | 可以传数字，也支持传入`top` 和 `bottom` |
 
 ```tsx | pure
 graphModel.setElementZIndex("top");
@@ -519,11 +508,11 @@ graphModel.setElementZIndex("top");
 
 入参:
 
-| 名称                | 类型                            | 必传 | 默认值 | 说明                          |
-|-------------------|-------------------------------|----|-----|-----------------------------|
-| id                | string                        | ✅  | 无   | 节点 id 或边 id                 |
-| state             | `ElementState`                | ✅  | 无   | 设置 Node \| Edge 等 model 的状态 |
-| additionStateData | `Model.AdditionStateDataType` | -  | 无   | 传递的额外值                      |
+| 名称              | 类型                          | 必传 | 默认值 | 说明                              |
+| ----------------- | ----------------------------- | ---- | ------ | --------------------------------- |
+| id                | string                        | ✅    | 无     | 节点 id 或边 id                   |
+| state             | `ElementState`                | ✅    | 无     | 设置 Node \| Edge 等 model 的状态 |
+| additionStateData | `Model.AdditionStateDataType` | -    | 无     | 传递的额外值                      |
 
 ```tsx | pure
 interface ElementState {
@@ -547,9 +536,9 @@ graphModel.setElementStateById("node_1", 4);
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明    |
-|----|--------|-----|-------|
-| id | string | 无   | 节点 ID |
+| 名称 | 类型   | 默认值 | 说明    |
+| ---- | ------ | ------ | ------- |
+| id   | string | 无     | 节点 ID |
 
 ```tsx | pure
 graphModel.deleteNode("node_1");
@@ -561,9 +550,9 @@ graphModel.deleteNode("node_1");
 
 入参:
 
-| 名称         | 类型         | 默认值 | 说明   |
-|------------|------------|-----|------|
-| nodeConfig | NodeConfig | 无   | 节点配置 |
+| 名称       | 类型       | 默认值 | 说明     |
+| ---------- | ---------- | ------ | -------- |
+| nodeConfig | NodeConfig | 无     | 节点配置 |
 
 ```tsx | pure
 const nodeModel = graphModel.addNode({
@@ -579,9 +568,9 @@ const nodeModel = graphModel.addNode({
 
 入参:
 
-| 名称     | 类型     | 默认值 | 说明    |
-|--------|--------|-----|-------|
-| nodeId | string | 无   | 节点 id |
+| 名称   | 类型   | 默认值 | 说明    |
+| ------ | ------ | ------ | ------- |
+| nodeId | string | 无     | 节点 id |
 
 ```tsx | pure
 const nodeModel = graphModel.cloneNode("node_1");
@@ -593,12 +582,12 @@ const nodeModel = graphModel.cloneNode("node_1");
 
 入参:
 
-| 名称           | 类型      | 默认值   | 说明         |
-|--------------|---------|-------|------------|
-| nodeId       | string  | 无     | 节点 id      |
-| deltaX       | number  | 无     | 移动 x 轴距离   |
-| deltaY       | number  | 无     | 移动 y 轴距离   |
-| isignoreRule | boolean | false | 是否忽略移动规则限制 |
+| 名称         | 类型    | 默认值 | 说明                 |
+| ------------ | ------- | ------ | -------------------- |
+| nodeId       | string  | 无     | 节点 id              |
+| deltaX       | number  | 无     | 移动 x 轴距离        |
+| deltaY       | number  | 无     | 移动 y 轴距离        |
+| isignoreRule | boolean | false  | 是否忽略移动规则限制 |
 
 ```tsx | pure
 graphModel.moveNode("node_1", 10, 10, true);
@@ -610,12 +599,12 @@ graphModel.moveNode("node_1", 10, 10, true);
 
 入参:
 
-| 名称           | 类型      | 默认值   | 说明         |
-|--------------|---------|-------|------------|
-| nodeId       | string  | 无     | 节点 id      |
-| x            | number  | 无     | 移动 x 轴距离   |
-| y            | number  | 无     | 移动 y 轴距离   |
-| isignoreRule | boolean | false | 是否忽略移动规则限制 |
+| 名称         | 类型    | 默认值 | 说明                 |
+| ------------ | ------- | ------ | -------------------- |
+| nodeId       | string  | 无     | 节点 id              |
+| x            | number  | 无     | 移动 x 轴距离        |
+| y            | number  | 无     | 移动 y 轴距离        |
+| isignoreRule | boolean | false  | 是否忽略移动规则限制 |
 
 ```tsx | pure
 graphModel.moveNode2Coordinate("node_1", 100, 100, true);
@@ -627,9 +616,9 @@ graphModel.moveNode2Coordinate("node_1", 100, 100, true);
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明           |
-|----|--------|-----|--------------|
-| id | string | 无   | 节点 id 或者边 id |
+| 名称 | 类型   | 默认值 | 说明              |
+| ---- | ------ | ------ | ----------------- |
+| id   | string | 无     | 节点 id 或者边 id |
 
 ```tsx | pure
 graphModel.editText("node_1");
@@ -646,9 +635,9 @@ graphModel.editText("node_1");
 
 入参:
 
-| 名称   | 类型     | 默认值 | 说明                                          |
-|------|--------|-----|---------------------------------------------|
-| type | number | 无   | 1 表示默认状态；2 表示文本编辑中；4 表示不节点不允许被连接；5 表示节点允许连接 |
+| 名称 | 类型   | 默认值 | 说明                                                                           |
+| ---- | ------ | ------ | ------------------------------------------------------------------------------ |
+| type | number | 无     | 1 表示默认状态；2 表示文本编辑中；4 表示不节点不允许被连接；5 表示节点允许连接 |
 
 例如在某些场景中，节点和连线都默认不允许编辑的。但是当某些操作后，就允许编辑了，这个时候可以通过此方法将元素从编辑状态设置为不可以编辑状态。
 
@@ -667,9 +656,9 @@ lf.on("node:dbclick", ({ data }) => {
 
 入参:
 
-| 名称         | 类型         | 默认值 | 说明  |
-|------------|------------|-----|-----|
-| edgeConfig | EdgeConfig | 无   | 边配置 |
+| 名称       | 类型       | 默认值 | 说明   |
+| ---------- | ---------- | ------ | ------ |
+| edgeConfig | EdgeConfig | 无     | 边配置 |
 
 ```tsx | pure
 const edgeModel = graphModel.addEdge({
@@ -685,10 +674,10 @@ const edgeModel = graphModel.addEdge({
 
 入参:
 
-| 名称           | 类型     | 默认值 | 说明      |
-|--------------|--------|-----|---------|
-| sourceNodeId | string | 无   | 起点 id   |
-| targetNodeId | string | 无   | 结束节点 ID |
+| 名称         | 类型   | 默认值 | 说明        |
+| ------------ | ------ | ------ | ----------- |
+| sourceNodeId | string | 无     | 起点 id     |
+| targetNodeId | string | 无     | 结束节点 ID |
 
 ```tsx | pure
 graphModel.deleteEdgeBySourceAndTarget("node_1", "node_2");
@@ -700,9 +689,9 @@ graphModel.deleteEdgeBySourceAndTarget("node_1", "node_2");
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明   |
-|----|--------|-----|------|
-| id | string | 无   | 边 id |
+| 名称 | 类型   | 默认值 | 说明  |
+| ---- | ------ | ------ | ----- |
+| id   | string | 无     | 边 id |
 
 ```tsx | pure
 graphModel.deleteEdgeById("edge_1");
@@ -714,9 +703,9 @@ graphModel.deleteEdgeById("edge_1");
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明     |
-|----|--------|-----|--------|
-| id | string | 无   | 边起点 id |
+| 名称 | 类型   | 默认值 | 说明      |
+| ---- | ------ | ------ | --------- |
+| id   | string | 无     | 边起点 id |
 
 ```tsx | pure
 graphModel.deleteEdgeBySource("node_1");
@@ -728,9 +717,9 @@ graphModel.deleteEdgeBySource("node_1");
 
 入参:
 
-| 名称 | 类型     | 默认值 | 说明      |
-|----|--------|-----|---------|
-| id | string | 无   | 边目的点 id |
+| 名称 | 类型   | 默认值 | 说明        |
+| ---- | ------ | ------ | ----------- |
+| id   | string | 无     | 边目的点 id |
 
 ```tsx | pure
 graphModel.deleteEdgeByTarget("node_1");
@@ -750,10 +739,10 @@ graphModel.updateText("node_1", "hello world");
 
 入参:
 
-| 名称       | 类型      | 默认值 | 说明    |
-|----------|---------|-----|-------|
-| id       | string  | 无   | 节点 id |
-| multiple | boolean | 无   | 是否多选  |
+| 名称     | 类型    | 默认值 | 说明     |
+| -------- | ------- | ------ | -------- |
+| id       | string  | 无     | 节点 id  |
+| multiple | boolean | 无     | 是否多选 |
 
 ```tsx | pure
 graphModel.selectNodeById("node_1", true);
@@ -765,10 +754,10 @@ graphModel.selectNodeById("node_1", true);
 
 入参:
 
-| 名称       | 类型      | 默认值 | 说明    |
-|----------|---------|-----|-------|
-| id       | string  | 无   | 节点 id |
-| multiple | boolean | 无   | 是否多选  |
+| 名称     | 类型    | 默认值 | 说明     |
+| -------- | ------- | ------ | -------- |
+| id       | string  | 无     | 节点 id  |
+| multiple | boolean | 无     | 是否多选 |
 
 ```tsx | pure
 graphModel.selectEdgeById("edge_1", true);
@@ -780,10 +769,10 @@ graphModel.selectEdgeById("edge_1", true);
 
 入参:
 
-| 名称       | 类型      | 默认值 | 说明      |
-|----------|---------|-----|---------|
-| id       | string  | 无   | 节点或边 id |
-| multiple | boolean | 无   | 是否多选    |
+| 名称     | 类型    | 默认值 | 说明        |
+| -------- | ------- | ------ | ----------- |
+| id       | string  | 无     | 节点或边 id |
+| multiple | boolean | 无     | 是否多选    |
 
 ```tsx | pure
 graphModel.selectElementById("edge_1", true);
@@ -805,11 +794,11 @@ graphModel.clearSelectElements();
 
 参数
 
-| 名称      | 类型       | 必传 | 默认值 | 描述        |
-|:--------|:---------|:---|:----|:----------|
-| nodeIds | string[] | ✅  | 无   | 所有节点 id   |
-| deltaX  | number   | ✅  | 无   | 移动的 x 轴距离 |
-| deltaY  | number   | ✅  | 无   | 移动的 y 轴距离 |
+| 名称    | 类型     | 必传 | 默认值 | 描述            |
+| :------ | :------- | :--- | :----- | :-------------- |
+| nodeIds | string[] | ✅    | 无     | 所有节点 id     |
+| deltaX  | number   | ✅    | 无     | 移动的 x 轴距离 |
+| deltaY  | number   | ✅    | 无     | 移动的 y 轴距离 |
 
 ```tsx | pure
 graphModel.moveNodes(["node_id", "node_2"], 10, 10);
@@ -840,9 +829,9 @@ graphModel.getNodeIncomingNode = (nodeId: string): BaseNodeModel[] => {}
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 id |
 
 ### getNodeOutgoingNode<Badge>方法</Badge>
 
@@ -854,9 +843,9 @@ graphModel.getNodeOutgoingNode = (nodeId: string): BaseNodeModel[] => {}
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 id |
 
 ### getNodeIncomingEdge<Badge>方法</Badge>
 
@@ -868,9 +857,9 @@ graphModel.getNodeIncomingEdge = (nodeId: string): BaseEdgeModel[] => {}
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 id |
 
 ### getNodeOutgoingEdge<Badge>方法</Badge>
 
@@ -882,9 +871,9 @@ graphModel.getNodeOutgoingEdge = (nodeId: string): BaseEdgeModel[] => {}
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 id |
 
 ### setDefaultEdgeType<Badge>方法</Badge>
 
@@ -892,9 +881,9 @@ graphModel.getNodeOutgoingEdge = (nodeId: string): BaseEdgeModel[] => {}
 
 参数
 
-| 名称   | 类型     | 必传 | 默认值 | 描述  |
-|:-----|:-------|:---|:----|:----|
-| type | string | ✅  | 无   | 边类型 |
+| 名称 | 类型   | 必传 | 默认值 | 描述   |
+| :--- | :----- | :--- | :----- | :----- |
+| type | string | ✅    | 无     | 边类型 |
 
 ```tsx | pure
 graphModel.setDefaultEdgeType("bezier");
@@ -906,10 +895,10 @@ graphModel.setDefaultEdgeType("bezier");
 
 参数
 
-| 名称   | 类型     | 必传 | 默认值 | 描述   |
-|:-----|:-------|:---|:----|:-----|
-| id   | string | ✅  | 无   | 节点   |
-| type | string | ✅  | 无   | 节点类型 |
+| 名称 | 类型   | 必传 | 默认值 | 描述     |
+| :--- | :----- | :--- | :----- | :------- |
+| id   | string | ✅    | 无     | 节点     |
+| type | string | ✅    | 无     | 节点类型 |
 
 ```tsx | pure
 graphModel.changeNodeType("node_1", "circle");
@@ -921,10 +910,10 @@ graphModel.changeNodeType("node_1", "circle");
 
 参数
 
-| 名称   | 类型     | 必传 | 默认值 | 描述  |
-|:-----|:-------|:---|:----|:----|
-| id   | string | ✅  | 无   | 节点  |
-| type | string | ✅  | 无   | 边类型 |
+| 名称 | 类型   | 必传 | 默认值 | 描述   |
+| :--- | :----- | :--- | :----- | :----- |
+| id   | string | ✅    | 无     | 节点   |
+| type | string | ✅    | 无     | 边类型 |
 
 ```tsx | pure
 graphModel.changeEdgeType("edge_1", "bezier");
@@ -991,10 +980,10 @@ graphModel.translateCenter();
 画布图形适应屏幕大小
 
 参数
-| 名称 | 类型 | 必传 | 默认值 | 描述 |
-| :--- | :----- | :--- | :----- | :----- |
-| verticalOffset | number | - | 20 | 距离盒子上下的距离 |
-| horizontalOffset | number | - | 20 | 距离盒子左右的距离 |
+| 名称             | 类型   | 必传 | 默认值 | 描述               |
+| :--------------- | :----- | :--- | :----- | :----------------- |
+| verticalOffset   | number | -    | 20     | 距离盒子上下的距离 |
+| horizontalOffset | number | -    | 20     | 距离盒子左右的距离 |
 
 ```tsx | pure
 graphModel.fitView();

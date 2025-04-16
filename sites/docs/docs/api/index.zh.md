@@ -17,12 +17,22 @@ table td:first-of-type {
 
 `LogicFlow`配置项: [constructor](./detail/constructor.zh.md)
 
+### 实例属性
+
+| 属性       | 类型                 | 描述                           | 只读 |
+| :--------- | :------------------- | :----------------------------- | :--- |
+| container  | HTMLElement          | logicflow实例挂载的容器        | 是   |
+| options    | LFOptions.Definition | logicflow实例的配置            | 是   |
+| graphModel | GraphModel           | 控制整个 LogicFlow 画布的model | 是   |
+| width      | number               | 画布宽度                       | 是   |
+| height     | number               | 画布高度                       | 是   |
+
 ## 实例方法
 
 ### Graph 相关
 
 | 选项                                                      | 描述                                                                                     |
-| :-------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| :-------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
 | [setTheme](theme.zh.md)                                   | 设置主题。                                                                               |
 | [focusOn](./detail/index.zh.md#focuson)                   | 定位到画布视口中心。                                                                     |
 | [resize](./detail/index.zh.md#resize)                     | 调整画布宽高, 如果`width` 或者`height`不传会自动计算画布宽高。                           |
@@ -33,11 +43,12 @@ table td:first-of-type {
 | [clearData](./detail/index.zh.md#cleardata)               | 清空画布。                                                                               |
 | [renderRawData](./detail/index.zh.md#renderrawdata)       | 渲染图原始数据，在使用`adapter`后，还想渲染 logicflow 格式的数据。                       |
 | [render](./detail/index.zh.md#render)                     | 渲染图数据。                                                                             |
+| [destroy](./detail/index.zh.md#destroy)                   | 销毁当前 LogicFlow 实例，清理相关资源。                                                  |
 
 ### Node 相关
 
 | 选项                                                            | 描述                                                    |
-| :-------------------------------------------------------------- | ------------------------------------------------------- |
+| :-------------------------------------------------------------- | :------------------------------------------------------ |
 | [addNode](./detail/index.zh.md#addnode)                         | 在图上添加节点。                                        |
 | [deleteNode](./detail/index.zh.md#deletenode)                   | 删除图上的节点, 如果这个节点上有连接线，则同时删除线。  |
 | [cloneNode](./detail/index.zh.md#clonenode)                     | 克隆节点。                                              |
@@ -53,7 +64,7 @@ table td:first-of-type {
 ### Edge 相关
 
 | 选项                                                          | 描述                                                           |
-| :------------------------------------------------------------ | -------------------------------------------------------------- |
+| :------------------------------------------------------------ | :------------------------------------------------------------- |
 | [setDefaultEdgeType](./detail/index.zh.md#setdefaultedgetype) | 设置边的默认类型, 也就是设置当节点直接由用户手动连接的边类型。 |
 | [addEdge](./detail/index.zh.md#addedge)                       | 创建连接两个节点的边。                                         |
 | [getEdgeDataById](./detail/index.zh.md#getedgedatabyid)       | 通过`id`获取边的数据。                                         |
@@ -68,14 +79,14 @@ table td:first-of-type {
 ### Register 相关
 
 | 选项                                                | 描述                 |
-| :-------------------------------------------------- | -------------------- |
+| :-------------------------------------------------- | :------------------- |
 | [register](./detail/index.zh.md#register)           | 注册自定义节点、边。 |
 | [batchRegister](./detail/index.zh.md#batchregister) | 批量注册。           |
 
 ### Element 相关
 
 | 选项                                                            | 描述                                            |
-| :-------------------------------------------------------------- | ----------------------------------------------- |
+| :-------------------------------------------------------------- | :---------------------------------------------- |
 | [addElements](./detail/index.zh.md#addelements)                 | 批量添加节点和边。                              |
 | [selectElementById](./detail/index.zh.md#selectelementbyid)     | 将图形选中。                                    |
 | [getSelectElements](./detail/index.zh.md#getselectelements)     | 获取选中的所有元素。                            |
@@ -92,7 +103,7 @@ table td:first-of-type {
 ### Text 相关
 
 | 选项                                                      | 描述                                                                                   |
-| :-------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| :-------------------------------------------------------- | :------------------------------------------------------------------------------------- |
 | [editText](./detail/index.zh.md#edittext)                 | 显示节点、连线文本编辑框, 进入编辑状态，同[graphModel.editText](graphModel#edittext)。 |
 | [updateText](./detail/index.zh.md#updatetext)             | 更新节点或者边的文案。                                                                 |
 | [updateEditConfig](./detail/index.zh.md#updateeditconfig) | 更新流程编辑基本配置。                                                                 |
@@ -101,14 +112,14 @@ table td:first-of-type {
 ### History 相关
 
 | 选项                              | 描述                      |
-| :-------------------------------- | ------------------------- |
+| :-------------------------------- | :------------------------ |
 | [undo](./detail/index.zh.md#undo) | 历史记录操作-返回上一步。 |
 | [redo](./detail/index.zh.md#redo) | 历史记录操作-恢复下一步。 |
 
 ### Transform 相关
 
 | 选项                                                          | 描述                                                                |
-| :------------------------------------------------------------ | ------------------------------------------------------------------- |
+| :------------------------------------------------------------ | :------------------------------------------------------------------ |
 | [zoom](./detail/index.zh.md#zoom)                             | 放大缩小画布。                                                      |
 | [resetZoom](./detail/index.zh.md#resetzoom)                   | 重置图形的缩放比例为默认，默认是 1。                                |
 | [setZoomMiniSize](./detail/index.zh.md#setzoomminisize)       | 设置图形缩小时，能缩放到的最小倍数。参数一般为 0-1 之间，默认 0.2。 |
@@ -121,10 +132,17 @@ table td:first-of-type {
 | [openEdgeAnimation](./detail/index.zh.md#openedgeanimation)   | 开启边的动画。                                                      |
 | [closeEdgeAnimation](./detail/index.zh.md#closeedgeanimation) | 关闭边的动画。                                                      |
 
-### 事件系统 相关
+### 数据适配器
+
+| 选项                                          | 描述                                                                      |
+| :-------------------------------------------- | :------------------------------------------------------------------------ |
+| [adapterIn](./detail/index.zh.md#adapterin)   | 自定义输入数据转换方法，当接入系统格式和 LogicFlow 数据格式不一致时使用。 |
+| [adapterOut](./detail/index.zh.md#adapterout) | 自定义输出数据转换方法，可以将数据转换为所需格式。                        |
+
+### 事件系统
 
 | 选项                              | 描述                                                      |
-| :-------------------------------- | --------------------------------------------------------- |
+| :-------------------------------- | :-------------------------------------------------------- |
 | [on](./detail/index.zh.md#on)     | 图的监听事件，更多事件请查看[事件](./eventCenter.zh.md)。 |
 | [off](./detail/index.zh.md#off)   | 删除事件监听。                                            |
 | [once](./detail/index.zh.md#once) | 事件监听一次。                                            |

@@ -1,8 +1,27 @@
----
-toc: content
-order: 1
-title: LogicFlow 方法
----
+# LogicFlow API 文档
+
+LogicFlow 提供了丰富的 API 来帮助开发者构建流程图编辑器。本文档详细介绍了所有可用的 API 方法。
+
+## 目录
+
+- [图形相关 API](#graph-相关)
+- [节点相关 API](#node-相关) 
+- [边相关 API](#edge-相关)
+- [注册相关 API](#register-相关)
+- [元素相关 API](#element-相关)
+- [文本相关 API](#text-相关)
+- [历史记录相关 API](#history-相关)
+- [变换相关 API](#transform-相关)
+- [事件系统相关 API](#事件系统-相关)
+
+## API 说明
+
+每个 API 方法都包含以下信息:
+- 方法说明:简要描述方法的功能
+- 参数说明:详细的参数类型和用途说明
+- 返回值:方法的返回值类型和说明  
+- 使用示例:展示如何使用该方法
+- 注意事项:使用该方法时需要注意的问题
 
 <style>
 table td:first-of-type {
@@ -12,126 +31,203 @@ table td:first-of-type {
 
 ## Graph 相关
 
+图形相关的 API 主要用于操作整个流程图画布,包括画布主题设置、视口操作、数据操作等。
+
 ### setTheme
 
-设置主题, 详情见[主题](../theme.zh.md)
+设置画布主题。
+
+**参数**
+
+| 名称        | 类型                    | 必传 | 默认值 | 描述         |
+| :---------- | :---------------------- | :--- | :----- | :----------- |
+| themeConfig | [Theme](../theme.zh.md) | ✅    | -      | 主题配置对象 |
+
+**示例**
+
+```ts
+lf.setTheme({
+  rect: {
+    radius: 6,
+    stroke: '#8f8f8f'
+  },
+  circle: {
+    r: 24,
+    stroke: '#8f8f8f'
+  },
+  nodeText: {
+    color: '#000000'
+  },
+  edgeText: {
+    color: '#000000'
+  }
+});
+```
+
+**版本**
+
+1.0.0+
 
 ### focusOn
 
-定位到画布视口中心。
+将视口中心定位到指定节点或坐标。
 
-参数：
+**参数**
 
-| 参数名         | 类型     | 必传 | 默认值 | 描述     |
-|:------------|:-------|:---|:----|:-------|
-| focusOnArgs | object | ✅  | -   | 定位所需参数 |
+| 名称        | 类型   | 必传 | 默认值 | 描述            |
+| :---------- | :----- | :--- | :----- | :-------------- |
+| focusOnArgs | object | ✅    | -      | 定位参数,见下表 |
 
-示例：
+**focusOnArgs 参数**
 
-```tsx | pure
-// 定位画布视口中心到node_1元素所处位置
+| 名称       | 类型                   | 必传 | 默认值 | 描述    |
+| :--------- | :--------------------- | :--- | :----- | :------ |
+| id         | string                 | -    | -      | 节点 ID |
+| coordinate | {x: number, y: number} | -    | -      | 坐标点  |
+
+**示例**
+
+```ts
+// 定位到节点
 lf.focusOn({
-  id: 'node_1',
-})
-// 定位画布视口中心到坐标[1000, 1000]处
+  id: 'node_1'
+});
+
+// 定位到坐标
 lf.focusOn({
   coordinate: {
-    x: 1000,
-    y: 1000,
-  },
-})
+    x: 100,
+    y: 100
+  }
+}); 
 ```
+
+**注意事项**
+
+- id 和 coordinate 参数二选一
+- 如果节点 ID 不存在会报错
+
+**版本**
+
+1.0.0+
 
 ### resize
 
-调整画布宽高, 如果 width 或者 height 不传会自动计算画布宽高。
+调整画布大小。
 
-参数：
+**参数** 
 
-| 名称     | 类型     | 必传 | 默认值 | 描述   |
-|:-------|:-------|:---|:----|:-----|
-| width  | number |    | -   | 画布的宽 |
-| height | number |    | -   | 画布的高 |
+| 名称   | 类型   | 必传 | 默认值 | 描述     |
+| :----- | :----- | :--- | :----- | :------- |
+| width  | number | -    | -      | 画布宽度 |
+| height | number | -    | -      | 画布高度 |
 
-```tsx | pure
-lf.resize(1200, 600);
+**示例**
+
+```ts
+// 设置画布大小为 1000 x 800
+lf.resize(1000, 800);
+
+// 自适应容器大小
+lf.resize();
 ```
+
+**注意事项**
+
+- 不传参数时会自动适配容器大小
+- 画布大小变化后需要重新渲染内容
+
+**版本**
+
+1.0.0+
 
 ### toFront
 
-将某个元素放置到顶部。
+将指定元素置于顶层。
 
-如果堆叠模式为默认模式，则将指定元素置顶 zIndex 设置为 9999，原置顶元素重新恢复原有层级 zIndex 设置为
-1。
+**参数**
 
-如果堆叠模式为递增模式，则将需指定元素 zIndex 设置为当前最大 zIndex + 1。
+| 名称 | 类型   | 必传 | 默认值 | 描述    |
+| :--- | :----- | :--- | :----- | :------ |
+| id   | string | ✅    | -      | 元素 ID |
 
-示例：
+**示例**
 
-```tsx | pure
-lf.toFront("id");
+```ts
+// 将节点置顶
+lf.toFront('node_1');
+
+// 将边置顶
+lf.toFront('edge_1');
 ```
+
+**注意事项**
+
+- 在默认堆叠模式下,被置顶元素的 zIndex 会被设为 9999,原置顶元素恢复为 1
+- 在递增模式下,被置顶元素的 zIndex 会被设为当前最大 zIndex + 1
+
+**版本**
+
+1.0.0+
 
 ### getPointByClient
 
-获取事件位置相对于画布左上角的坐标。
+获取相对于画布左上角的坐标点。由于画布可以位于页面任意位置,该方法可以将页面坐标转换为画布坐标。
 
-画布所在的位置可以是页面任何地方，原生事件返回的坐标是相对于页面左上角的，该方法可以提供以画布左上角为原点的准确位置。
+**参数**
 
-```tsx | pure
-// 函数定义
-getPointByClient: (x: number, y: number): Point => {}
-// 函数调用
-lf.getPointByClient(x, y)
-```
+| 名称 | 类型   | 必传 | 默认值 | 描述                      |
+| :--- | :----- | :--- | :----- | :------------------------ |
+| x    | number | ✅    | -      | 相对于页面左上角的 x 坐标 |
+| y    | number | ✅    | -      | 相对于页面左上角的 y 坐标 |
 
-参数：
+**返回值**
 
-| 名称 | 类型     | 必传 | 默认值 | 描述                             |
-|:---|:-------|:---|:----|:-------------------------------|
-| x  | number | ✅  | -   | 相对于页面左上角的`x`坐标，一般是原生事件返回的`x`坐标 |
-| y  | number | ✅  | -   | 相对于页面左上角的`y`坐标，一般是原生事件返回的`y`坐标 |
-
-返回值：
-
-| 名称    | 类型    | 描述            |
-|:------|:------|:--------------|
-| point | Point | 相对于画布左上角的两种坐标 |
-
-```tsx | pure
+```ts
 type Position = {
   x: number;
   y: number;
 };
+
 type Point = {
-  domOverlayPosition: Position; // HTML 层上相对于画布左上角的坐标`{x, y}`
-  canvasOverlayPosition: Position; // SVG 层上相对于画布左上角的坐标`{x, y}`
+  domOverlayPosition: Position; // HTML 层的坐标
+  canvasOverlayPosition: Position; // SVG 层的坐标
 };
 ```
 
-示例：
+**示例**
 
-```tsx | pure
-lf.getPointByClient(event.x, event.y);
+```ts
+// 转换鼠标事件坐标
+lf.on('click', (e) => {
+  const point = lf.getPointByClient(e.x, e.y);
+  console.log('DOM层坐标:', point.domOverlayPosition);
+  console.log('画布层坐标:', point.canvasOverlayPosition);
+});
 ```
+
+**注意事项**
+
+- 通常用于处理鼠标事件的坐标转换
+- 返回的坐标包含两个图层的位置信息
+
+**版本**
+
+1.0.0+
 
 ### getGraphData
 
-获取流程绘图数据。
+获取流程图数据。如果使用了数据转换插件(adapter),则返回转换后的数据格式。
 
-```tsx | pure
-// 返回值，如果是应用了adapter插件，且设置为adapterOut，返回为转换后的数据格式，否则为默认的格式
-// 1.2.5版本以后新增了入参，用于某些需要入参的adapterOut的执行，例如内置的BpmnAdapter可能需要传入属性保留字段的数组来保证导出数据中的某些节点属性被正常处理。
-// 这里的入参和引入的Adapter的adapterOut方法除了data以外的其他参数保持一致。
-// 函数定义
-getGraphData: (...params: any): GraphConfigData | unknown => {}
-// 函数调用
-lf.getGraphData()
-```
+**参数**
 
-LogicFlow 默认数据格式。
+| 名称      | 类型  | 必传 | 默认值 | 描述                      |
+| :-------- | :---- | :--- | :----- | :------------------------ |
+| ...params | any[] | -    | -      | 传递给 adapter 的额外参数 |
 
-```tsx | pure
+**返回值**
+
+```ts
 type GraphConfigData = {
   nodes: {
     id?: string;
@@ -147,286 +243,704 @@ type GraphConfigData = {
     type: string;
     sourceNodeId: string;
     targetNodeId: string;
-    startPoint: any;
-    endPoint: any;
-    text: {
+    startPoint: {
+      x: number;
+      y: number;
+    };
+    endPoint: {
+      x: number;
+      y: number;
+    };
+    text?: {
       x: number;
       y: number;
       value: string;
     };
-    properties: {};
+    properties?: Record<string, unknown>;
     zIndex?: number;
-    pointsList?: Point[]; // 折线、曲线会输出pointsList
+    pointsList?: Point[]; // 折线、曲线的路径点
   }[];
 };
 ```
 
-示例：
+**示例**
 
-```tsx | pure
-lf.getGraphData();
+```ts
+// 获取默认格式数据
+const graphData = lf.getGraphData();
+
+// 使用 adapter 并传入参数
+const data = lf.getGraphData(['property1', 'property2']);
 ```
+
+**注意事项**
+
+- 从 1.2.5 版本开始支持传入参数
+- 如果使用了 adapter 插件,返回格式由 adapter 决定
+- 返回的数据可以直接用于渲染流程图
+
+**版本**
+
+1.0.0+
 
 ### getGraphRawData
 
-获取流程绘图原始数据， 与 getGraphData 区别是该方法获取的数据不会受到 adapter 影响。
+获取流程图原始数据。与 getGraphData 不同,该方法返回的数据不会被 adapter 插件转换。
 
-```tsx | pure
-getGraphRawData = (): GraphData => {}
+**返回值**
+
+```ts
+type GraphData = {
+  nodes: NodeConfig[];
+  edges: EdgeConfig[];
+};
 ```
 
-示例：
+**示例**
 
-```tsx | pure
-lf.getGraphRawData();
+```ts
+// 获取原始数据
+const rawData = lf.getGraphRawData();
+console.log('节点:', rawData.nodes);
+console.log('边:', rawData.edges);
 ```
+
+**注意事项**
+
+- 返回 LogicFlow 标准数据格式
+- 即使配置了 adapter 也不会进行格式转换
+- 主要用于需要处理原始数据的场景
+
+**版本**
+
+1.0.0+
 
 ### clearData
 
-清空画布。
+清空画布内容,删除所有节点和边。
 
-```tsx | pure
+**示例**
+
+```ts
+// 清空画布
 lf.clearData();
+
+// 清空后重新渲染
+lf.clearData();
+lf.render(newGraphData);
 ```
+
+**注意事项**
+
+- 该操作会触发 history 记录
+- 清空后可以重新渲染新的数据
+- 不会清除画布的样式和配置
+
+**版本**
+
+1.0.0+
 
 ### renderRawData
 
-渲染图原始数据，和`render`的区别是在使用`adapter`后，如果还想渲染 logicflow 格式的数据，可以用此方法。
+渲染原始数据(LogicFlow 标准格式)。即使配置了 adapter 插件,也可以用该方法渲染标准格式数据。
 
-```tsx | pure
-const lf = new LogicFlow({
-  ...
-})
+**参数**
+
+| 名称      | 类型      | 必传 | 默认值 | 描述                       |
+| :-------- | :-------- | :--- | :----- | :------------------------- |
+| graphData | GraphData | ✅    | -      | LogicFlow 标准格式的图数据 |
+
+**示例**
+
+```ts
+// 渲染标准格式数据
 lf.renderRawData({
-  nodes: [],
-  edges: []
-})
-```
-
-### render
-
-渲染图数据。
-
-```tsx | pure
-const lf = new LogicFlow({
-  ...
-})
-lf.render(graphData)
-```
-
-## Node 相关
-
-### addNode
-
-在图上添加节点。
-
-```tsx | pure
-// 函数定义
-// addNode: (nodeConfig: NodeConfig) => NodeModel
-// 函数调用
-lf.addNode(nodeConfig)
-```
-
-参数：
-
-| 名称         | 类型             | 必传 | 默认值 | 描述           |
-|:-----------|:---------------|:---|:----|:-------------|
-| type       | string         | ✅  | -   | 节点类型名称       |
-| x          | number         | ✅  | -   | 节点横坐标 x      |
-| y          | number         | ✅  | -   | 节点纵坐标 y      |
-| text       | Object\|string |    | -   | 节点文案内容及位置坐标  |
-| id         | string         |    | -   | 节点 id        |
-| properties | Object         |    | -   | 节点属性，用户可以自定义 |
-
-示例：
-
-```tsx | pure
-lf.addNode({
-  type: "user",
-  x: 500,
-  y: 600,
-  id: 20,
-  text: {
-    value: "test",
-    x: 500,
-    y: 600,
-  },
-  properties: {
-    size: 1,
-  },
+  nodes: [
+    {
+      id: 'node_1',
+      type: 'rect',
+      x: 100,
+      y: 100,
+      text: { value: '节点1' }
+    }
+  ],
+  edges: [
+    {
+      id: 'edge_1',
+      type: 'polyline',
+      sourceNodeId: 'node_1',
+      targetNodeId: 'node_2'
+    }
+  ]
 });
 ```
 
+**注意事项**
+
+- 渲染前会先清空画布
+- 数据必须符合 LogicFlow 标准格式
+- 不会被 adapter 插件转换
+
+**版本**
+
+1.0.0+
+
+### render
+
+渲染图数据。如果配置了 adapter 插件,会先将数据转换为标准格式再渲染。
+
+**参数**
+
+| 名称      | 类型    | 必传 | 默认值 | 描述                           |
+| :-------- | :------ | :--- | :----- | :----------------------------- |
+| graphData | unknown | ✅    | -      | 图数据,格式取决于 adapter 配置 |
+
+**示例**
+
+```ts
+// 使用默认格式
+lf.render({
+  nodes: [
+    {
+      id: 'node_1',
+      type: 'rect',
+      x: 100,
+      y: 100
+    }
+  ],
+  edges: []
+});
+
+// 使用自定义 adapter 后的格式
+lf.render({
+  processNodes: [{
+    nodeId: 'node_1',
+    nodeType: 'userTask'
+  }],
+  processEdges: []
+});
+```
+
+**注意事项**
+
+- 渲染前会先清空画布
+- 如果配置了 adapter,数据会被转换为标准格式
+- 支持任意格式的数据,但需要配置对应的 adapter
+
+**版本**
+
+1.0.0+
+
+## Node 相关
+
+节点相关的 API 用于操作流程图中的节点,包括节点的增删改查、属性设置、状态控制等功能。这些 API 让您能够以编程方式控制节点的行为。
+
+### addNode
+
+在画布上添加一个新节点。
+
+**参数**
+
+| 名称       | 类型       | 必传 | 默认值 | 描述            |
+| :--------- | :--------- | :--- | :----- | :-------------- |
+| nodeConfig | NodeConfig | ✅    | -      | 节点配置,见下表 |
+
+**NodeConfig 参数**
+
+| 名称       | 类型                    | 必传 | 默认值   | 描述               |
+| :--------- | :---------------------- | :--- | :------- | :----------------- |
+| id         | string                  | -    | 自动生成 | 节点唯一标识       |
+| type       | string                  | ✅    | -        | 节点类型名称       |
+| x          | number                  | ✅    | -        | 节点中心 x 坐标    |
+| y          | number                  | ✅    | -        | 节点中心 y 坐标    |
+| text       | string \| TextConfig    | -    | -        | 节点文本内容及样式 |
+| properties | Record<string, unknown> | -    | {}       | 节点自定义属性     |
+
+**TextConfig 类型**
+
+```ts
+type TextConfig = {
+  value: string; // 文本内容
+  x?: number; // 文本 x 坐标,不传默认使用节点中心点
+  y?: number; // 文本 y 坐标,不传默认使用节点中心点
+  draggable?: boolean; // 文本是否可拖动
+  editable?: boolean; // 文本是否可编辑
+};
+```
+
+**返回值**
+
+| 类型          | 描述              |
+| :------------ | :---------------- |
+| BaseNodeModel | 节点的 model 实例 |
+
+**示例**
+
+```ts
+// 添加基础节点
+lf.addNode({
+  type: 'rect',
+  x: 100,
+  y: 100
+});
+
+// 添加带文本的节点
+lf.addNode({
+  type: 'circle',
+  x: 200,
+  y: 300,
+  text: '圆形节点'
+});
+
+// 添加带自定义属性的节点
+lf.addNode({
+  type: 'rect',
+  x: 300,
+  y: 200,
+  text: {
+    value: '矩形节点',
+    draggable: true
+  },
+  properties: {
+    status: 'pending',
+    priority: 'high'
+  }
+});
+```
+
+**注意事项**
+
+- type 必须是已注册的节点类型
+- 坐标原点在画布左上角
+- 节点 id 不指定时会自动生成
+- 添加节点会触发 node:add 事件
+
+**版本**
+
+1.0.0+
+
 ### deleteNode
 
-删除图上的节点, 如果这个节点上有连接线，则同时删除线。
+删除指定节点。如果该节点有连接的边,这些边也会被同时删除。
 
-```tsx | pure
-// 函数定义
-deleteNode: (nodeId: string) => void
-// 函数调用
-  lf.deletaNode(nodeId)
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述            |
+| :----- | :----- | :--- | :----- | :-------------- |
+| nodeId | string | ✅    | -      | 要删除的节点 ID |
+
+**示例**
+
+```ts
+// 删除单个节点
+lf.deleteNode('node_1');
+
+// 批量删除节点
+['node_1', 'node_2'].forEach(nodeId => {
+  lf.deleteNode(nodeId);
+});
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述        |
-|:-------|:-------|:---|:----|:----------|
-| nodeId | string | ✅  | -   | 要删除节点的 id |
+- 删除节点会同时删除与之相连的边
+- 该操作会触发 node:delete 事件
+- 支持撤销重做
+- 如果节点不存在会抛出警告
 
-示例：
+**版本**
 
-```tsx | pure
-lf.deleteNode("id");
-```
+1.0.0+
 
 ### cloneNode
 
-克隆节点。
+克隆一个节点,生成一个完全相同的新节点。
 
-```tsx | pure
-// 函数定义
-cloneNode: (nodeId: string): BaseNodeModel => {}
-//函数调用
-lf.cloneNode(nodeId)
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述            |
+| :----- | :----- | :--- | :----- | :-------------- |
+| nodeId | string | ✅    | -      | 要克隆的节点 ID |
+
+**返回值**
+
+| 类型          | 描述                        |
+| :------------ | :-------------------------- |
+| BaseNodeModel | 克隆出的新节点的 model 实例 |
+
+**示例**
+
+```ts
+// 克隆节点
+const nodeModel = lf.cloneNode('node_1');
+console.log('新节点ID:', nodeModel.id);
+
+// 克隆并修改位置
+const source = lf.getNodeModelById('node_1');
+const cloned = lf.cloneNode('node_1');
+if (source && cloned) {
+  // 将克隆的节点放在原节点右侧100px处
+  cloned.x = source.x + 100;
+  cloned.y = source.y;
+}
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述      |
-|:-------|:-------|:---|:----|:--------|
-| nodeId | string | ✅  | -   | 目标节点 id |
+- 克隆的节点会生成新的唯一 ID
+- 会复制节点的所有属性,包括自定义属性
+- 不会克隆与节点相连的边
+- 如果原节点不存在会抛出警告
 
-示例：
+**版本**
 
-```tsx | pure
-lf.cloneNode("id");
-```
+1.0.0+
 
 ### changeNodeId
 
-修改节点的 id， 如果不传新的 id，会内部自动创建一个。
+修改节点的 ID。如果不传入新 ID,会自动生成一个唯一 ID。
 
-示例：
+**参数**
 
-```tsx | pure
-lf.changeNodeId("oldId", "newId");
+| 名称  | 类型   | 必传 | 默认值   | 描述        |
+| :---- | :----- | :--- | :------- | :---------- |
+| oldId | string | ✅    | -        | 当前节点 ID |
+| newId | string | -    | 自动生成 | 新的节点 ID |
+
+**示例**
+
+```ts
+// 指定新 ID
+lf.changeNodeId('node_1', 'new_node_1');
+
+// 自动生成新 ID
+lf.changeNodeId('node_1');
 ```
+
+**注意事项**
+
+- 会同步更新与该节点相连的边的 sourceNodeId 和 targetNodeId
+- 新 ID 必须在画布中唯一,否则会抛出错误
+- 该操作会触发 node:change:id 事件
+- 支持撤销重做
+
+**版本**
+
+1.0.0+
 
 ### changeNodeType
 
-修改节点类型。
+修改节点的类型。
 
-```tsx | pure
-changeNodeType: (id: string, type: string): void => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述         |
+| :----- | :----- | :--- | :----- | :----------- |
+| nodeId | string | ✅    | -      | 节点 ID      |
+| type   | string | ✅    | -      | 新的节点类型 |
+
+**示例**
+
+```ts
+// 将矩形节点改为圆形节点
+lf.changeNodeType('node_1', 'circle');
+
+// 切换为自定义节点类型
+lf.changeNodeType('node_1', 'custom-node');
 ```
 
-| 名称   | 类型     | 必传 | 默认值 | 描述    |
-|:-----|:-------|:---|:----|:------|
-| id   | string | ✅  |     | 节点 id |
-| type | string | ✅  |     | 新的类型  |
+**注意事项**
 
-示例：
+- 新类型必须是已注册的节点类型
+- 会保留节点的位置、尺寸、文本等基础属性
+- 不会保留与原类型相关的特殊属性
+- 该操作会触发 node:change:type 事件
+- 支持撤销重做
 
-```tsx | pure
-lf.changeNodeType("node_id", "rect");
-```
+**版本**
+
+1.0.0+
 
 ### getNodeModelById
 
-获取节点的`model`。
+获取节点的 model 实例。model 实例包含了节点的所有属性和方法。
 
-```tsx | pure
-getNodeModelById: (nodeId: string): BaseNodeModel => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型          | 描述                                             |
+| :------------ | :----------------------------------------------- |
+| BaseNodeModel | 节点的 model 实例,如果节点不存在则返回 undefined |
+
+**示例**
+
+```ts
+// 获取节点 model
+const nodeModel = lf.getNodeModelById('node_1');
+if (nodeModel) {
+  console.log('节点类型:', nodeModel.type);
+  console.log('节点坐标:', nodeModel.x, nodeModel.y);
+  console.log('节点文本:', nodeModel.text);
+}
+
+// 修改节点属性
+const node = lf.getNodeModelById('node_1');
+if (node) {
+  node.setProperties({
+    status: 'completed'
+  });
+}
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+- model 实例包含节点的完整信息
+- 可以通过 model 实例修改节点属性
+- 对 model 的修改会实时反映到画布上
+- 建议先判断返回值是否存在再使用
 
-示例：
+**版本**
 
-```tsx | pure
-lf.getNodeModelById("id");
-```
+1.0.0+
 
 ### getNodeDataById
 
-获取节点的`model`数据。
+获取节点的数据。返回的数据格式与 addNode 方法的参数格式一致。
 
-```tsx | pure
-getNodeDataById: (nodeId: string): NodeConfig => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型       | 描述                                          |
+| :--------- | :-------------------------------------------- |
+| NodeConfig | 节点的配置数据,如果节点不存在则返回 undefined |
+
+**NodeConfig 类型**
+
+```ts
+type NodeConfig = {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
+  text?: string | TextConfig;
+  properties?: Record<string, unknown>;
+};
 ```
 
-参数：
+**示例**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+```ts
+// 获取节点数据
+const nodeData = lf.getNodeDataById('node_1');
+if (nodeData) {
+  console.log('节点配置:', nodeData);
+}
 
-示例：
-
-```tsx | pure
-lf.getNodeDataById("id");
+// 复制节点数据创建新节点
+const data = lf.getNodeDataById('node_1');
+if (data) {
+  // 修改坐标创建新节点
+  data.x += 100;
+  delete data.id;
+  lf.addNode(data);
+}
 ```
+
+**注意事项**
+
+- 返回的是普通的数据对象,不包含方法
+- 主要用于获取节点当前的状态数据
+- 数据可以直接用于创建新的节点
+- 建议先判断返回值是否存在再使用
+
+**版本**
+
+1.0.0+
 
 ### getNodeIncomingEdge
 
-获取所有以此节点为终点的边。
+获取所有以该节点为终点的边。
 
-```tsx | pure
-getNodeIncomingEdge:(nodeId: string): BaseEdgeModel[] => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型            | 描述                |
+| :-------------- | :------------------ |
+| BaseEdgeModel[] | 边的 model 实例数组 |
+
+**示例**
+
+```ts
+// 获取入边
+const incomingEdges = lf.getNodeIncomingEdge('node_1');
+console.log('入边数量:', incomingEdges.length);
+
+// 获取所有上游节点
+const incomingEdges = lf.getNodeIncomingEdge('node_1');
+const sourceNodes = incomingEdges.map(edge => {
+  return lf.getNodeModelById(edge.sourceNodeId);
+});
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+- 返回的是边的 model 实例数组
+- 如果节点没有入边,返回空数组
+- 可以通过边的 sourceNodeId 获取上游节点
+- 主要用于分析节点的入度和上游节点
+
+**版本**
+
+1.0.0+
 
 ### getNodeOutgoingEdge
 
-获取所有以此节点为起点的边。
+获取所有以该节点为起点的边。
 
-```tsx | pure
-getNodeOutgoingEdge:(nodeId: string): BaseEdgeModel[] => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型            | 描述                |
+| :-------------- | :------------------ |
+| BaseEdgeModel[] | 边的 model 实例数组 |
+
+**示例**
+
+```ts
+// 获取出边
+const outgoingEdges = lf.getNodeOutgoingEdge('node_1');
+console.log('出边数量:', outgoingEdges.length);
+
+// 获取所有下游节点
+const outgoingEdges = lf.getNodeOutgoingEdge('node_1');
+const targetNodes = outgoingEdges.map(edge => {
+  return lf.getNodeModelById(edge.targetNodeId);
+});
+
+// 判断节点是否为终点
+const isEndNode = lf.getNodeOutgoingEdge('node_1').length === 0;
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+- 返回的是边的 model 实例数组
+- 如果节点没有出边,返回空数组
+- 可以通过边的 targetNodeId 获取下游节点
+- 主要用于分析节点的出度和下游节点
+
+**版本**
+
+1.0.0+
 
 ### getNodeIncomingNode
 
-获取节点所有的上一级节点。
+获取所有连入该节点的上游节点。
 
-```tsx | pure
-getNodeIncomingNode:(nodeId: string): BaseNodeModel[] => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型            | 描述                  |
+| :-------------- | :-------------------- |
+| BaseNodeModel[] | 节点的 model 实例数组 |
+
+**示例**
+
+```ts
+// 获取上游节点
+const incomingNodes = lf.getNodeIncomingNode('node_1');
+console.log('上游节点数量:', incomingNodes.length);
+
+// 分析节点的入度
+const inDegree = lf.getNodeIncomingNode('node_1').length;
+
+// 判断是否为起始节点
+const isStartNode = lf.getNodeIncomingNode('node_1').length === 0;
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+- 返回的是节点的 model 实例数组
+- 如果节点没有上游节点,返回空数组
+- 与 getNodeIncomingEdge 相比,直接返回节点而不是边
+- 主要用于分析节点的入度和依赖关系
+
+**版本**
+
+1.0.0+
 
 ### getNodeOutgoingNode
 
-获取节点所有的下一级节点。
+获取所有该节点连出的下游节点。
 
-```tsx | pure
-getNodeOutgoingNode:(nodeId: string): BaseNodeModel[] => {}
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| nodeId | string | ✅    | -      | 节点 ID |
+
+**返回值**
+
+| 类型            | 描述                  |
+| :-------------- | :-------------------- |
+| BaseNodeModel[] | 节点的 model 实例数组 |
+
+**示例**
+
+```ts
+// 获取下游节点
+const outgoingNodes = lf.getNodeOutgoingNode('node_1');
+console.log('下游节点数量:', outgoingNodes.length);
+
+// 递归获取所有下游节点
+function getAllDownstreamNodes(nodeId, visited = new Set()) {
+  if (visited.has(nodeId)) return [];
+  visited.add(nodeId);
+  const directNodes = lf.getNodeOutgoingNode(nodeId);
+  const allNodes = [...directNodes];
+  directNodes.forEach(node => {
+    const downstream = getAllDownstreamNodes(node.id, visited);
+    allNodes.push(...downstream);
+  });
+  return allNodes;
+}
 ```
 
-参数：
+**注意事项**
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| nodeId | string | ✅  | -   | 节点 id |
+- 返回的是节点的 model 实例数组
+- 如果节点没有下游节点,返回空数组
+- 与 getNodeOutgoingEdge 相比,直接返回节点而不是边
+- 主要用于分析节点的出度和影响范围
+- 可以配合递归实现获取所有下游节点的功能
+
+**版本**
+
+1.0.0+
 
 ## Edge 相关
 
@@ -438,9 +952,9 @@ getNodeOutgoingNode:(nodeId: string): BaseNodeModel[] => {}
 setDefaultEdgeType: (type: EdgeType): void => {}
 ```
 
-| 名称   | 类型     | 必传 | 默认值        | 描述                                                                                            |
-|:-----|:-------|:---|:-----------|:----------------------------------------------------------------------------------------------|
-| type | string | ✅  | 'polyline' | 设置边的类型，内置支持的边类型有 line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线`polyline`，用户可以自定义 type 名切换到用户自定义的边 |
+| 名称 | 类型   | 必传 | 默认值     | 描述                                                                                                                                              |
+| :--- | :----- | :--- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| type | string | ✅    | 'polyline' | 设置边的类型，内置支持的边类型有 line(直线)、polyline(折线)、bezier(贝塞尔曲线)，默认为折线`polyline`，用户可以自定义 type 名切换到用户自定义的边 |
 
 示例：
 
@@ -458,15 +972,15 @@ addEdge: (edgeConfig: EdgeConifg): BaseEdgeModel => {}
 
 参数：
 
-| 名称           | 类型              | 必传 | 默认值 | 描述        |
-|:-------------|:----------------|:---|:----|:----------|
-| id           | string          |    | -   | 边的 id     |
-| type         | string          |    | -   | 边的类型      |
-| sourceNodeId | string          | ✅  | -   | 边起始节点的 id |
-| targetNodeId | string          | ✅  | -   | 边终止节点的 id |
-| startPoint   | Object          |    | -   | 边起点坐标     |
-| endPoint     | Object          |    | -   | 边终端坐标     |
-| text         | string\| Object |    | -   | 边文案       |
+| 名称         | 类型            | 必传 | 默认值 | 描述            |
+| :----------- | :-------------- | :--- | :----- | :-------------- |
+| id           | string          |      | -      | 边的 id         |
+| type         | string          |      | -      | 边的类型        |
+| sourceNodeId | string          | ✅    | -      | 边起始节点的 id |
+| targetNodeId | string          | ✅    | -      | 边终止节点的 id |
+| startPoint   | Object          |      | -      | 边起点坐标      |
+| endPoint     | Object          |      | -      | 边终端坐标      |
+| text         | string\| Object |      | -      | 边文案          |
 
 示例：
 
@@ -519,9 +1033,9 @@ export type EdgeConfig = {
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| edgeId | string | ✅  | -   | 边的 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| edgeId | string | ✅    | -      | 边的 id |
 
 示例：
 
@@ -539,9 +1053,9 @@ getEdgeModelById: (edgeId: string): BaseEdgeModel => {}
 
 参数：
 
-| 名称     | 类型     | 必传 | 默认值 | 描述    |
-|:-------|:-------|:---|:----|:------|
-| edgeId | string | ✅  | -   | 节点 id |
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| edgeId | string | ✅    | -      | 节点 id |
 
 示例：
 
@@ -553,9 +1067,9 @@ lf.getEdgeModelById("id");
 
 获取满足条件边的 model。
 
-| 名称         | 类型     | 必传 | 默认值 | 描述   |
-|:-----------|:-------|:---|:----|:-----|
-| edgeFilter | Object | ✅  | -   | 过滤条件 |
+| 名称       | 类型   | 必传 | 默认值 | 描述     |
+| :--------- | :----- | :--- | :----- | :------- |
+| edgeFilter | Object | ✅    | -      | 过滤条件 |
 
 ```tsx | pure
 // 获取所有起点为节点A的边的model
@@ -603,9 +1117,9 @@ deleteEdge: (id): void => {}
 
 参数：
 
-| 名称 | 类型     | 必传 | 默认值 | 描述    |
-|:---|:-------|:---|:----|:------|
-| id | string |    | -   | 边的 id |
+| 名称 | 类型   | 必传 | 默认值 | 描述    |
+| :--- | :----- | :--- | :----- | :------ |
+| id   | string |      | -      | 边的 id |
 
 示例：
 
@@ -623,10 +1137,10 @@ deleteEdgeByNodeId: (config: EdgeFilter): void => {}
 
 参数：
 
-| 名称           | 类型     | 必传 | 默认值 | 描述        |
-|:-------------|:-------|:---|:----|:----------|
-| sourceNodeId | string |    | -   | 边起始节点的 id |
-| targetNodeId | string |    | -   | 边终止节点的 id |
+| 名称         | 类型   | 必传 | 默认值 | 描述            |
+| :----------- | :----- | :--- | :----- | :-------------- |
+| sourceNodeId | string |      | -      | 边起始节点的 id |
+| targetNodeId | string |      | -      | 边终止节点的 id |
 
 示例：
 
@@ -654,9 +1168,9 @@ lf.deleteEdgeByNodeId({
 getNodeEdges: (id: string): BaseEdgeModel[] => {}
 ```
 
-| 名称 | 类型     | 必传 | 默认值 | 描述    |
-|:---|:-------|:---|:----|:------|
-| id | string | ✅  |     | 节点 id |
+| 名称 | 类型   | 必传 | 默认值 | 描述    |
+| :--- | :----- | :--- | :----- | :------ |
+| id   | string | ✅    |        | 节点 id |
 
 示例：
 
@@ -676,11 +1190,11 @@ register: (config: RegisterConfig): void => {}
 
 参数：
 
-| 名称           | 类型     | 必传 | 默认值 | 描述          |
-|:-------------|:-------|:---|:----|:------------|
-| config.type  | string | ✅  | -   | 自定义节点、边的名称  |
-| config.model | Model  | ✅  | -   | 节点、边的 model |
-| config.view  | View   | ✅  | -   | 节点、边的 view  |
+| 名称         | 类型   | 必传 | 默认值 | 描述                 |
+| :----------- | :----- | :--- | :----- | :------------------- |
+| config.type  | string | ✅    | -      | 自定义节点、边的名称 |
+| config.model | Model  | ✅    | -      | 节点、边的 model     |
+| config.view  | View   | ✅    | -      | 节点、边的 view      |
 
 示例：
 
@@ -768,11 +1282,11 @@ lf.addElements({
 
 参数：
 
-| 参数名      | 类型      | 必传 | 默认值   | 描述                           |
-|:---------|:--------|:---|:------|:-----------------------------|
-| id       | string  | ✅  | -     | 节点或者连线 Id                    |
-| multiple | boolean |    | false | 是否为多选，如果为 true，不会将上一个选中的元素重置 |
-| toFront  | boolean |    | true  | 是否将选中的元素置顶，默认为 true          |
+| 参数名   | 类型    | 必传 | 默认值 | 描述                                                |
+| :------- | :------ | :--- | :----- | :-------------------------------------------------- |
+| id       | string  | ✅    | -      | 节点或者连线 Id                                     |
+| multiple | boolean |      | false  | 是否为多选，如果为 true，不会将上一个选中的元素重置 |
+| toFront  | boolean |      | true   | 是否将选中的元素置顶，默认为 true                   |
 
 示例：
 
@@ -792,9 +1306,9 @@ selectElementById: (id: string, multiple = false, toFront = true) => BaseNodeMod
 getSelectElements: (isIgnoreCheck: boolean): GraphConfigData => {}
 ```
 
-| 名称            | 类型      | 必传 | 默认值  | 描述                                          |
-|:--------------|:--------|:---|:-----|:--------------------------------------------|
-| isIgnoreCheck | boolean | ✅  | true | 是否包括 sourceNode 和 targetNode 没有被选中的边, 默认包括。 |
+| 名称          | 类型    | 必传 | 默认值 | 描述                                                         |
+| :------------ | :------ | :--- | :----- | :----------------------------------------------------------- |
+| isIgnoreCheck | boolean | ✅    | true   | 是否包括 sourceNode 和 targetNode 没有被选中的边, 默认包括。 |
 
 ```tsx | pure
 lf.getSelectElements(false);
@@ -834,9 +1348,9 @@ lf.getDataById("edge_id");
 deleteElement: (id: string): boolean => {}
 ```
 
-| 名称 | 类型     | 必传 | 默认值 | 描述       |
-|:---|:-------|:---|:----|:---------|
-| id | string | ✅  |     | 节点或者边 id |
+| 名称 | 类型   | 必传 | 默认值 | 描述          |
+| :--- | :----- | :--- | :----- | :------------ |
+| id   | string | ✅    |        | 节点或者边 id |
 
 示例：
 
@@ -852,10 +1366,10 @@ lf.deleteElement("node_id");
 
 参数：
 
-| 名称     | 类型              | 必传 | 默认值 | 描述                          |
-|:-------|:----------------|:---|:----|:----------------------------|
-| id     | string          | ✅  | -   | 边或者节点 id                    |
-| zIndex | string\| number | ✅  | -   | 可以传数字，也支持传入`top` 和 `bottom` |
+| 名称   | 类型            | 必传 | 默认值 | 描述                                    |
+| :----- | :-------------- | :--- | :----- | :-------------------------------------- |
+| id     | string          | ✅    | -      | 边或者节点 id                           |
+| zIndex | string\| number | ✅    | -      | 可以传数字，也支持传入`top` 和 `bottom` |
 
 示例：
 
@@ -875,14 +1389,14 @@ lf.setElementZIndex("element_id", 2000);
 
 入参:
 
-| 名称                | 类型         | 默认值 | 说明            |
-|-------------------|------------|-----|---------------|
-| leftTopPoint      | PointTuple | 无   | 区域左上方的点       |
-| rightBottomPoint  | PointTuple | 无   | 区域右下角的点       |
-| rightBottomPoint  | PointTuple | 无   | 区域右下角的点       |
-| wholeEdge         | boolean    | 无   | 是否要整个边都在区域内部  |
-| wholeNode         | boolean    | 无   | 是否要整个节点都在区域内部 |
-| ignoreHideElement | boolean    | 无   | 是否忽略隐藏的节点     |
+| 名称              | 类型       | 默认值 | 说明                       |
+| ----------------- | ---------- | ------ | -------------------------- |
+| leftTopPoint      | PointTuple | 无     | 区域左上方的点             |
+| rightBottomPoint  | PointTuple | 无     | 区域右下角的点             |
+| rightBottomPoint  | PointTuple | 无     | 区域右下角的点             |
+| wholeEdge         | boolean    | 无     | 是否要整个边都在区域内部   |
+| wholeNode         | boolean    | 无     | 是否要整个节点都在区域内部 |
+| ignoreHideElement | boolean    | 无     | 是否忽略隐藏的节点         |
 
 ```tsx | pure
 lf.getAreaElement([100, 100], [500, 500]);
@@ -966,10 +1480,10 @@ lf.updateAttributes("node_id_1", { radius: 4 });
 updateText: (id: string, value: string): void => {}
 ```
 
-| 名称    | 类型     | 必传 | 默认值 | 描述       |
-|:------|:-------|:---|:----|:---------|
-| id    | string | ✅  |     | 节点或者边 id |
-| value | string | ✅  |     | 更新后的文本值  |
+| 名称  | 类型   | 必传 | 默认值 | 描述           |
+| :---- | :----- | :--- | :----- | :------------- |
+| id    | string | ✅    |        | 节点或者边 id  |
+| value | string | ✅    |        | 更新后的文本值 |
 
 示例：
 
@@ -1017,268 +1531,4 @@ lf.undo();
 
 示例：
 
-```tsx | pure
-lf.redo();
-```
-
-## Transform 相关
-
-### zoom
-
-放大缩小画布。
-
-参数：
-
-| 名称       | 类型               | 必传 | 默认值   | 描述                                                                       |
-|:---------|:-----------------|:---|:------|:-------------------------------------------------------------------------|
-| zoomSize | boolean 或 number |    | false | 放大缩小的值，支持传入 0-n 之间的数字。小于 1 表示缩小，大于 1 表示放大。也支持传入 true 和 false 按照内置的刻度放大缩小 |
-| point    | [x,y]            |    | false | 缩放的原点, 不传默认左上角                                                           |
-
-示例：
-
-```tsx | pure
-// 放大
-lf.zoom(true);
-// 缩小
-lf.zoom(false);
-// 缩放到指定比例
-lf.zoom(2);
-// 缩放到指定比例，并且缩放原点为[100, 100]
-lf.zoom(2, [100, 100]);
-```
-
-### resetZoom
-
-重置图形的缩放比例为默认，默认是 1。
-
-示例：
-
-```tsx | pure
-lf.resetZoom();
-```
-
-### setZoomMiniSize
-
-设置图形缩小时，能缩放到的最小倍数。参数一般为 0-1 之间，默认 0.2。
-
-```tsx | pure
-setZoomMiniSize: (size: number): void => {}
-```
-
-参数：
-
-| 名称   | 类型     | 必传 | 默认值 | 描述           |
-|:-----|:-------|:---|:----|:-------------|
-| size | number | ✅  | 0.2 | 最小缩放比，默认 0.2 |
-
-示例：
-
-```tsx | pure
-lf.setZoomMiniSize(0.3);
-```
-
-### setZoomMaxSize
-
-设置图形放大时，能放大到的最大倍数，默认 16。
-
-```tsx | pure
-setZoomMaxSize: (size: number): void => {}
-```
-
-参数：
-
-| 名称   | 类型     | 必传 | 默认值 | 描述           |
-|:-----|:-------|:---|:----|:-------------|
-| size | number | ✅  | 16  | 最大放大倍数，默认 16 |
-
-示例：
-
-```tsx | pure
-lf.setZoomMaxSize(20);
-```
-
-### getTransform
-
-获取当前画布的缩放值与偏移值。
-
-```tsx | pure
-const transform = lf.getTransform();
-console.log(transform);
-```
-
-`getTransform` 方法返回的对象包含以下属性：
-
-| 属性   | 类型     | 值 |
-|:-----|:-------|:---|
-| SCALE_X | number | x 轴缩放比例 |
-| SCALE_Y | number | y 轴缩放比例 |
-| TRANSLATE_X | number | x 轴偏移值 |
-| TRANSLATE_Y | number | y 轴偏移值 |
-
-### translate
-
-平移图
-
-参数
-
-| 名称 | 类型     | 必传 | 默认值 | 描述      |
-|:---|:-------|:---|:----|:--------|
-| x  | number | ✅  |     | x 轴平移距离 |
-| y  | number | ✅  |     | y 轴平移距离 |
-
-```tsx | pure
-lf.translate(100, 100);
-```
-
-### resetTranslate
-
-还原图形为初始位置
-
-```tsx | pure
-lf.resetTranslate();
-```
-
-### translateCenter
-
-图形画布居中显示。
-
-```tsx | pure
-lf.translateCenter();
-```
-
-### fitView
-
-将整个流程图缩小到画布能全部显示。
-
-参数:
-
-| 名称               | 类型     | 必传 | 默认值 | 描述                |
-|:-----------------|:-------|:---|:----|:------------------|
-| verticalOffset   | number | ✅  | 20  | 距离盒子上下的距离， 默认为 20 |
-| horizontalOffset | number | ✅  | 20  | 距离盒子左右的距离， 默认为 20 |
-
-```tsx | pure
-lf.fitView(deltaX, deltaY);
-```
-
-### openEdgeAnimation
-
-开启边的动画。
-
-```tsx | pure
-openEdgeAnimation: (edgeId: string): void => {}
-```
-
-### closeEdgeAnimation
-
-关闭边的动画。
-
-```tsx | pure
-closeEdgeAnimation: (edgeId: string): void => {}
-```
-
-## 事件系统 相关
-
-### on
-
-图的监听事件，更多事件请查看[事件](../eventCenter.zh.md)。
-
-```tsx | pure
-import { EventCallback } from './EventEmitter'
-
-on: (evt: string, callback: EventCallback<T>): void => {}
-```
-
-参数：
-
-| 名称       | 类型     | 必传 | 默认值 | 描述   |
-|:---------|:-------|:---|:----|:-----|
-| evt      | string | ✅  | -   | 事件名称 |
-| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
-
-示例：
-
-```tsx | pure
-lf.on("node:click", (args) => {
-  console.log("node:click", args.position);
-});
-lf.on("element:click", (args) => {
-  console.log("element:click", args.e.target);
-});
-```
-
-### off
-
-删除事件监听。
-
-```tsx | pure
-import { EventCallback } from './EventEmitter'
-
-off: (evt: string, callback: EventCallback<T>): void => {}
-```
-
-参数：
-
-| 名称       | 类型     | 必传 | 默认值 | 描述   |
-|:---------|:-------|:---|:----|:-----|
-| evt      | string | ✅  | -   | 事件名称 |
-| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
-
-示例：
-
-```tsx | pure
-lf.off("node:click", () => {
-  console.log("node:click off");
-});
-lf.off("element:click", () => {
-  console.log("element:click off");
-});
-```
-
-### once
-
-事件监听一次。
-
-```tsx | pure
-import { EventCallback } from './EventEmitter'
-
-once: (evt: string, callback: EventCallback<T>): void => {}
-```
-
-参数：
-
-| 名称       | 类型     | 必传 | 默认值 | 描述   |
-|:---------|:-------|:---|:----|:-----|
-| evt      | string | ✅  | -   | 事件名称 |
-| callback | `EventCallback<T>` | ✅  | -   | 回调函数 |
-
-示例：
-
-```tsx | pure
-lf.once("node:click", () => {
-  console.log("node:click");
-});
-```
-
-### emit
-
-触发事件。
-
-```tsx | pure
-import { CallbackArgs } from './eventEmitter'
-
-emit: (evt: string, eventArgs: CallbackArgs<T>): void => {}
-```
-
-参数：
-
-| 名称   | 类型     | 必传 | 默认值 | 描述     |
-|:-----|:-------|:---|:----|:-------|
-| evt  | string | ✅  | -   | 事件名称   |
-| eventArgs | `CallbackArgs<T>`  | ✅  | -   | 触发事件参数 |
-
-示例：
-
-```tsx | pure
-lf.emit("custom:button-click", model);
 ```
