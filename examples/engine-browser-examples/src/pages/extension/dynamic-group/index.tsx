@@ -18,12 +18,17 @@ import './index.less'
 import { getImageUrl } from '@/utls.ts'
 
 const config: Partial<LogicFlow.Options> = {
-  grid: true,
+  // grid: true,
   multipleSelectKey: 'alt',
   autoExpand: false,
   allowResize: true,
   allowRotate: true,
   nodeTextDraggable: false,
+  stopMoveGraph: true,
+  grid: {
+    size: 10,
+  },
+  snapGrid: false,
   keyboard: {
     enabled: true,
   },
@@ -65,13 +70,27 @@ const customDndConfig: ShapeItem[] = [
 
 const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
   {
-    label: '选区',
+    label: '单次框选',
     icon: getImageUrl('/bpmn/select.png'),
     callback: () => {
       lf.openSelectionSelect()
       lf.once('selection:selected', () => {
         lf.closeSelectionSelect()
       })
+    },
+  },
+  {
+    label: '开启框选',
+    icon: getImageUrl('/bpmn/select.png'),
+    callback: () => {
+      lf.openSelectionSelect()
+    },
+  },
+  {
+    label: '关闭框选',
+    icon: getImageUrl('/bpmn/select.png'),
+    callback: () => {
+      lf.closeSelectionSelect()
     },
   },
   ...customDndConfig,
@@ -360,6 +379,7 @@ export default function DynamicGroupDemo() {
         // 'edges': [],
       }
       lf.render(graphData)
+      // lf.setSelectionSelectMode(true)
 
       lfRef.current = lf
     }
