@@ -1,4 +1,4 @@
-import { Component, ComponentType, createRef } from 'preact/compat'
+import { Component, ComponentType } from 'preact/compat'
 import { map, throttle } from 'lodash-es'
 import {
   CanvasOverlay,
@@ -38,10 +38,6 @@ type ContainerStyle = {
 
 @observer
 class Graph extends Component<IGraphProps> {
-  canvasOverlayRef = createRef<CanvasOverlay>()
-  getCanvasOverlay = () => {
-    return this.canvasOverlayRef.current
-  }
   private handleResize = () => {
     const { graphModel, options } = this.props
     const { width, height, isContainerWidth, isContainerHeight } = graphModel
@@ -113,11 +109,7 @@ class Graph extends Component<IGraphProps> {
     return (
       <div className="lf-graph" flow-id={graphModel.flowId} style={style}>
         {/* 元素层 */}
-        <CanvasOverlay
-          ref={this.canvasOverlayRef}
-          graphModel={graphModel}
-          dnd={dnd}
-        >
+        <CanvasOverlay graphModel={graphModel} dnd={dnd}>
           <g className="lf-base">
             {map(graphModel.sortElements, (nodeModel) =>
               this.getComponent(nodeModel, graphModel),
@@ -136,11 +128,7 @@ class Graph extends Component<IGraphProps> {
           )}
         </ModificationOverlay>
         {/* 工具层：插件 */}
-        <ToolOverlay
-          graphModel={graphModel}
-          tool={tool}
-          getCanvasOverlay={this.getCanvasOverlay}
-        />
+        <ToolOverlay graphModel={graphModel} tool={tool} />
         {/* 画布背景 */}
         {background && <BackgroundOverlay background={background} />}
         {/* 画布网格 */}

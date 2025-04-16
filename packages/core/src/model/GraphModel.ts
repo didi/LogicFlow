@@ -1197,6 +1197,14 @@ export class GraphModel {
     selectElement?.setSelected(true)
   }
 
+  @action
+  removeElementById(id: string) {
+    const element = this.getElement(id)
+    if (element) {
+      element.setSelected(false)
+    }
+  }
+
   /**
    * 将所有选中的元素设置为非选中
    */
