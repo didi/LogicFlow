@@ -1,7 +1,12 @@
 import LogicFlow from '@logicflow/core'
+import { cloneDeep } from 'lodash-es'
 
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
+
+export interface SelectionConfig {
+  defaultExclusiveMode?: boolean
+}
 
 export class SelectionSelect {
   static pluginName = 'selectionSelect'
@@ -13,15 +18,27 @@ export class SelectionSelect {
   private disabled = true
   private isWholeNode = true
   private isWholeEdge = true
+  exclusiveMode = false
   // 用于区分选区和点击事件
   private mouseDownInfo: {
     x: number
     y: number
     time: number
   } | null = null
+  // 记录原始的 stopMoveGraph 设置
+  private originalStopMoveGraph:
+    | boolean
+    | 'horizontal'
+    | 'vertical'
+    | [number, number, number, number] = false
 
-  constructor({ lf }: LogicFlow.IExtensionProps) {
+  constructor({ lf, options }: LogicFlow.IExtensionProps) {
     this.lf = lf
+    // 从 props 或 options 中获取默认独占模式设置
+    const defaultExclusiveMode =
+      (options?.defaultExclusiveMode as boolean) ?? false
+    this.exclusiveMode = defaultExclusiveMode
+
     // TODO: 有没有既能将方法挂载到lf上，又能提供类型提示的方法？
     lf.openSelectionSelect = () => {
       this.openSelectionSelect()
@@ -29,46 +46,113 @@ export class SelectionSelect {
     lf.closeSelectionSelect = () => {
       this.closeSelectionSelect()
     }
+    // 新增切换独占模式的方法
+    lf.setSelectionSelectMode = (exclusive: boolean) => {
+      this.setExclusiveMode(exclusive)
+    }
+    // 绑定方法的 this 上下文
+    this.handleMouseDown = this.handleMouseDown.bind(this)
+    this.draw = this.draw.bind(this)
+    this.drawOff = this.drawOff.bind(this)
   }
 
   render(_: LogicFlow, domContainer: HTMLElement) {
     this.container = domContainer
   }
 
-  onToolContainerMouseDown = (e: MouseEvent) => {
-    // 避免在其他插件元素上点击时开启选区
-    if (e.target !== this.container) {
-      return
+  /**
+   * 清理选区状态
+   */
+  private cleanupSelectionState() {
+    // 清理当前的选区状态
+    if (this.wrapper) {
+      this.wrapper.oncontextmenu = null
+      if (this.container && this.wrapper.parentNode === this.container) {
+        this.container.removeChild(this.wrapper)
+      }
+      this.wrapper = undefined
     }
-    this.mouseDownInfo = {
-      x: e.clientX,
-      y: e.clientY,
-      time: Date.now(),
+    this.startPoint = undefined
+    this.endPoint = undefined
+
+    // 移除事件监听
+    document.removeEventListener('mousemove', this.draw)
+    document.removeEventListener('mouseup', this.drawOff)
+  }
+
+  /**
+   * 切换框选模式
+   * @param exclusive 是否为独占模式。true 表示只能进行框选操作，false 表示可以同时进行其他画布操作
+   */
+  setExclusiveMode(exclusive: boolean = false) {
+    if (this.exclusiveMode === exclusive) return
+
+    this.cleanupSelectionState()
+    this.exclusiveMode = exclusive
+    if (this.container && !this.disabled) {
+      // 切换事件监听方式
+      this.removeEventListeners()
+      this.addEventListeners()
     }
-    const lf = this.lf
-    const domContainer = this.container
-    if (!domContainer) {
-      return
+  }
+
+  private addEventListeners() {
+    if (!this.container) return
+
+    if (this.exclusiveMode) {
+      // 独占模式：监听 container 的 mousedown 事件
+      this.container.style.pointerEvents = 'auto'
+      this.container.addEventListener('mousedown', this.handleMouseDown)
+    } else {
+      // 非独占模式：监听画布的 blank:mousedown 事件
+      this.container.style.pointerEvents = 'none'
+      // 使用实例方法而不是箭头函数，这样可以正确移除事件监听
+      this.lf.on('blank:mousedown', this.handleBlankMouseDown)
     }
-    if (this.disabled) {
-      return
+  }
+
+  private removeEventListeners() {
+    if (this.container) {
+      this.container.style.pointerEvents = 'none'
+      this.container.removeEventListener('mousedown', this.handleMouseDown)
     }
-    // 禁用右键框选，修复可能导致画布出现多个框选框不消失的问题，见https://github.com/didi/LogicFlow/issues/985
+    // 移除 blank:mousedown 事件监听
+    this.lf.off('blank:mousedown', this.handleBlankMouseDown)
+  }
+
+  /**
+   * 处理画布空白处鼠标按下事件（非独占模式）
+   */
+  private handleBlankMouseDown = ({ e }: { e: MouseEvent }) => {
+    this.handleMouseDown(e)
+  }
+
+  /**
+   * 处理鼠标按下事件
+   */
+  private handleMouseDown(e: MouseEvent) {
+    if (!this.container || this.disabled) return
+
+    // 禁用右键框选
     const isRightClick = e.button === 2
-    if (isRightClick) {
-      return
-    }
+    if (isRightClick) return
+
+    // 清理之前可能存在的选区状态
+    this.cleanupSelectionState()
+
+    // 记录原始设置并临时禁止画布移动
+    this.originalStopMoveGraph = this.lf.getEditConfig().stopMoveGraph!
+    this.lf.updateEditConfig({
+      stopMoveGraph: true,
+    })
+
     const {
       domOverlayPosition: { x, y },
-    } = lf.getPointByClient(e.clientX, e.clientY)
-    this.startPoint = {
-      x,
-      y,
-    }
-    this.endPoint = {
-      x,
-      y,
-    }
+    } = this.lf.getPointByClient(e.clientX, e.clientY)
+
+    this.startPoint = { x, y }
+    this.endPoint = { x, y }
+
     const wrapper = document.createElement('div')
     wrapper.className = 'lf-selection-select'
     wrapper.oncontextmenu = function prevent(ev: MouseEvent) {
@@ -76,8 +160,9 @@ export class SelectionSelect {
     }
     wrapper.style.top = `${this.startPoint.y}px`
     wrapper.style.left = `${this.startPoint.x}px`
-    domContainer.appendChild(wrapper)
+    this.container?.appendChild(wrapper)
     this.wrapper = wrapper
+
     document.addEventListener('mousemove', this.draw)
     document.addEventListener('mouseup', this.drawOff)
   }
@@ -118,11 +203,8 @@ export class SelectionSelect {
     if (!this.container) {
       return
     }
-    this.mouseDownInfo = null
-    this.container.addEventListener('mousedown', this.onToolContainerMouseDown)
-    this.container.addEventListener('mouseup', this.onToolContainerMouseUp)
-    // 取消点击事件的穿透，只让 ToolOverlay 接收事件，避免与图形元素的事件冲突
-    this.container.style.pointerEvents = 'auto'
+    this.cleanupSelectionState()
+    this.addEventListeners()
     this.open()
   }
 
@@ -133,13 +215,18 @@ export class SelectionSelect {
     if (!this.container) {
       return
     }
-    this.container.style.pointerEvents = 'none'
-    this.mouseDownInfo = null
-    this.container.removeEventListener(
-      'mousedown',
-      this.onToolContainerMouseDown,
-    )
-    this.container.removeEventListener('mouseup', this.onToolContainerMouseUp)
+    // 如果还有未完成的框选，先触发 drawOff 完成框选
+    if (this.wrapper && this.startPoint && this.endPoint) {
+      // 记录上一次的结束点，用于触发 mouseup 事件
+      const lastEndPoint = cloneDeep(this.endPoint)
+      const lastEvent = new MouseEvent('mouseup', {
+        clientX: lastEndPoint.x,
+        clientY: lastEndPoint.y,
+      })
+      this.drawOff(lastEvent)
+    }
+    this.cleanupSelectionState()
+    this.removeEventListeners()
     this.close()
   }
 
@@ -173,16 +260,22 @@ export class SelectionSelect {
       }
     }
   }
-  private drawOff = () => {
+  private drawOff = (e: MouseEvent) => {
+    const curStartPoint = cloneDeep(this.startPoint)
+    const curEndPoint = cloneDeep(this.endPoint)
     document.removeEventListener('mousemove', this.draw)
-    document.removeEventListener('mouseup', this.drawOff)
-    if (this.wrapper) {
-      this.wrapper.oncontextmenu = null
-      this.container?.removeChild(this.wrapper)
+    if (!this.exclusiveMode) {
+      document.removeEventListener('mouseup', this.drawOff)
     }
-    if (this.startPoint && this.endPoint) {
-      const { x, y } = this.startPoint
-      const { x: x1, y: y1 } = this.endPoint
+
+    // 恢复原始的 stopMoveGraph 设置
+    this.lf.updateEditConfig({
+      stopMoveGraph: this.originalStopMoveGraph,
+    })
+
+    if (curStartPoint && curEndPoint) {
+      const { x, y } = curStartPoint
+      const { x: x1, y: y1 } = curEndPoint
       // 返回框选范围，左上角和右下角的坐标
       const lt: PointTuple = [Math.min(x, x1), Math.min(y, y1)]
       const rb: PointTuple = [Math.max(x, x1), Math.max(y, y1)]
@@ -192,6 +285,13 @@ export class SelectionSelect {
       })
       // 选区太小的情况就忽略
       if (Math.abs(x1 - x) < 10 && Math.abs(y1 - y) < 10) {
+        if (this.wrapper) {
+          this.wrapper.oncontextmenu = null
+          if (this.container && this.wrapper.parentNode === this.container) {
+            this.container.removeChild(this.wrapper)
+          }
+          this.wrapper = undefined
+        }
         return
       }
       const elements = this.lf.graphModel.getAreaElement(
@@ -203,6 +303,13 @@ export class SelectionSelect {
       )
       const { dynamicGroup, group } = this.lf.graphModel
       const nonGroupedElements: typeof elements = []
+      const selectedElements = this.lf.getSelectElements()
+      // 同时记录节点和边的ID
+      const selectedIds = new Set([
+        ...selectedElements.nodes.map((node) => node.id),
+        ...selectedElements.edges.map((edge) => edge.id),
+      ])
+
       elements.forEach((element) => {
         // 如果节点属于分组，则不选中节点，此处兼容旧版 Group 插件
         if (group) {
@@ -219,14 +326,38 @@ export class SelectionSelect {
             return
           }
         }
+        // 在独占模式下，如果元素已经被选中，则取消选中
+        if (this.exclusiveMode && selectedIds.has(element.id)) {
+          this.lf.removeElementById(element.id)
+          return
+        }
+
+        // 非独占模式下，或者元素未被选中时，选中元素
         this.lf.selectElementById(element.id, true)
         nonGroupedElements.push(element)
       })
+      // 重置起始点和终点
+      // 注意：这两个值必须在触发closeSelectionSelect方法前充值，否则会导致独占模式下元素无法选中的问题
+      this.startPoint = undefined
+      this.endPoint = undefined
+      // 如果有选中的元素，触发 selection:drop 事件
+      if (nonGroupedElements.length > 0) {
+        this.lf.emit('selection:drop', { e })
+      }
+      // 触发 selection:selected 事件
       this.lf.emit('selection:selected', {
         elements: nonGroupedElements,
         leftTopPoint: lt,
         rightBottomPoint: rb,
       })
+    }
+
+    if (this.wrapper) {
+      this.wrapper.oncontextmenu = null
+      if (this.container && this.wrapper.parentNode === this.container) {
+        this.container.removeChild(this.wrapper)
+      }
+      this.wrapper = undefined
     }
   }
 
