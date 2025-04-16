@@ -734,6 +734,14 @@ export class LogicFlow {
   }
 
   /**
+   * 移除选中的元素
+   * @param id 元素ID
+   */
+  removeElementById(id: string) {
+    this.graphModel.removeElementById(id)
+  }
+
+  /**
    * 获取选中的元素数据
    * @param isIgnoreCheck 是否包括sourceNode和targetNode没有被选中的边,默认包括。
    * 注意：复制的时候不能包括此类边, 因为复制的时候不允许悬空的边。
