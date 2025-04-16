@@ -12,7 +12,7 @@ const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: false,
   stopZoomGraph: false,
-  stopMoveGraph: true,
+  stopMoveGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -138,6 +138,11 @@ export default function SelectionSelectExample() {
           size: 20,
         },
         plugins: [SelectionSelect, DynamicGroup],
+        // pluginsOptions: {
+        //   selectionSelect: {
+        //     defaultExclusiveMode: true,
+        //   },
+        // },
       })
 
       lf.on(
@@ -194,6 +199,12 @@ export default function SelectionSelectExample() {
     }
   }
 
+  const handleToggleExclusiveMode = (value: boolean) => {
+    if (lfRef.current) {
+      lfRef.current.setSelectionSelectMode(value)
+    }
+  }
+
   return (
     <Card title="LogicFlow Extension - SelectionSelect">
       <Flex wrap="wrap" gap="middle" align="center" justify="space-between">
@@ -216,6 +227,12 @@ export default function SelectionSelectExample() {
             danger
           >
             关闭框选
+          </Button>
+          <Button onClick={() => handleToggleExclusiveMode(true)}>
+            开启独占模式
+          </Button>
+          <Button onClick={() => handleToggleExclusiveMode(false)}>
+            关闭独占模式
           </Button>
         </Space>
         <Form layout="inline">

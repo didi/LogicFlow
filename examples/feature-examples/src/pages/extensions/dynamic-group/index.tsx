@@ -5,6 +5,7 @@ import {
   ShapeItem,
   Group,
   SelectionSelect,
+  DynamicGroup,
 } from '@logicflow/extension'
 
 import { Button, Card, Divider, Flex } from 'antd'
@@ -23,7 +24,7 @@ const config: Partial<LogicFlow.Options> = {
   keyboard: {
     enabled: true,
   },
-  plugins: [Group, Control, DndPanel, SelectionSelect],
+  plugins: [Group, Control, DndPanel, SelectionSelect, DynamicGroup],
 }
 
 const customDndConfig: ShapeItem[] = [
@@ -120,15 +121,22 @@ export default function BPMNExtension() {
           // },
           {
             id: 'group_1',
-            type: 'sub-process',
+            type: 'dynamic-group',
             x: 300,
             y: 120,
-            // children: ["rect_3"],
-            text: 'sub-process-1',
-            properties: {
-              isFolded: true,
-            },
+            text: 'dynamic-group-1',
           },
+          // {
+          //   id: 'group_1',
+          //   type: 'sub-process',
+          //   x: 300,
+          //   y: 120,
+          //   // children: ["rect_3"],
+          //   text: 'sub-process-1',
+          //   properties: {
+          //     isFolded: true,
+          //   },
+          // },
           // {
           //   id: "group_2",
           //   type: "sub-process",
@@ -154,7 +162,10 @@ export default function BPMNExtension() {
   const rerender = () => {}
 
   return (
-    <Card title="LogicFlow Extension - DndPanel" className="control-container">
+    <Card
+      title="LogicFlow Extension - DynamicGroup"
+      className="control-container"
+    >
       <Flex wrap="wrap" gap="small">
         <Button type="primary" key="getData" onClick={getGraphData}>
           获取数据
