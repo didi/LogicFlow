@@ -140,7 +140,7 @@ export default function SelectionSelectExample() {
         plugins: [SelectionSelect, DynamicGroup],
         // pluginsOptions: {
         //   selectionSelect: {
-        //     defaultExclusiveMode: true,
+        //     exclusiveMode: true,
         //   },
         // },
       })

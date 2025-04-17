@@ -140,7 +140,7 @@ export default function SelectionSelectExample() {
         plugins: [SelectionSelect],
         pluginsOptions: {
           selectionSelect: {
-            defaultExclusiveMode: false,
+            exclusiveMode: false,
           },
         },
       });

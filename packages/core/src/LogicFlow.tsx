@@ -737,8 +737,8 @@ export class LogicFlow {
    * 移除选中的元素
    * @param id 元素ID
    */
-  removeElementById(id: string) {
-    this.graphModel.removeElementById(id)
+  deselectElementById(id: string) {
+    this.graphModel.deselectElementById(id)
   }
 
   /**
