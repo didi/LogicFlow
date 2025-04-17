@@ -5,7 +5,7 @@ import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 
 export interface SelectionConfig {
-  defaultExclusiveMode?: boolean
+  exclusiveMode?: boolean
 }
 
 export class SelectionSelect {
@@ -18,7 +18,7 @@ export class SelectionSelect {
   private disabled = true
   private isWholeNode = true
   private isWholeEdge = true
-  exclusiveMode = false
+  exclusiveMode = false // 框选独占模式：true 表示只能进行框选操作，false 表示可以同时进行其他画布操作
   // 用于区分选区和点击事件
   private mouseDownInfo: {
     x: number
@@ -34,10 +34,8 @@ export class SelectionSelect {
 
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     this.lf = lf
-    // 从 props 或 options 中获取默认独占模式设置
-    const defaultExclusiveMode =
-      (options?.defaultExclusiveMode as boolean) ?? false
-    this.exclusiveMode = defaultExclusiveMode
+
+    this.exclusiveMode = (options?.exclusiveMode as boolean) ?? false
 
     // TODO: 有没有既能将方法挂载到lf上，又能提供类型提示的方法？
     lf.openSelectionSelect = () => {
@@ -328,7 +326,7 @@ export class SelectionSelect {
         }
         // 在独占模式下，如果元素已经被选中，则取消选中
         if (this.exclusiveMode && selectedIds.has(element.id)) {
-          this.lf.removeElementById(element.id)
+          this.lf.deselectElementById(element.id)
           return
         }
 

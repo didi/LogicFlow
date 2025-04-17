@@ -26,14 +26,14 @@ LogicFlow 的框选插件允许用户通过拖动鼠标绘制矩形框来选择�
 
 ### 框选独占模式
 在<Badge>2.0.13</Badge>版本新增了框选独占模式，开启后用户只能做框选动作，相对的用户可以分批框选多个元素，已框选的元素二次框选会被取消选中。
-用户可以通过在创建实例时通过传入`defaultExclusiveMode`参数用来设置是否默认开启独占框选模式
+用户可以通过在创建实例时通过传入`exclusiveMode`参数用来设置是否默认开启独占框选模式
 ``` ts
 const lf = new LogicFlow({
   // ...config, // 其他配置
   plugins: [SelectionSelect],
   pluginsOptions: {
     selectionSelect: {
-      defaultExclusiveMode: false,
+      exclusiveMode: false,
     },
   },
 });

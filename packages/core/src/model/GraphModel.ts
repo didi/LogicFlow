@@ -1198,7 +1198,7 @@ export class GraphModel {
   }
 
   @action
-  removeElementById(id: string) {
+  deselectElementById(id: string) {
     const element = this.getElement(id)
     if (element) {
       element.setSelected(false)

@@ -25,14 +25,14 @@ The SelectionSelect plugin in LogicFlow allows users to select multiple graphica
 
 ### Exclusive Selection Mode
 In version <Badge>2.0.13</Badge>, an exclusive selection mode was added. When enabled, users can only perform selection actions, and in turn, users can select multiple elements in batches. Already selected elements will be deselected when selected again.
-Users can set whether to enable exclusive selection mode by default by passing the `defaultExclusiveMode` parameter when creating an instance:
+Users can set whether to enable exclusive selection mode by default by passing the `exclusiveMode` parameter when creating an instance:
 ``` ts
 const lf = new LogicFlow({
   // ...config, // other configurations
   plugins: [SelectionSelect],
   pluginsOptions: {
     selectionSelect: {
-      defaultExclusiveMode: false,
+      exclusiveMode: false,
     },
   },
 });
