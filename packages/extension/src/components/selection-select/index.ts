@@ -62,6 +62,7 @@ export class SelectionSelect {
    * 清理选区状态
    */
   private cleanupSelectionState() {
+    console.log('cleanupSelectionState')
     // 清理当前的选区状态
     if (this.wrapper) {
       this.wrapper.oncontextmenu = null
@@ -72,6 +73,7 @@ export class SelectionSelect {
     }
     this.startPoint = undefined
     this.endPoint = undefined
+    this.mouseDownInfo = null
 
     // 移除事件监听
     document.removeEventListener('mousemove', this.draw)
@@ -134,9 +136,15 @@ export class SelectionSelect {
     // 禁用右键框选
     const isRightClick = e.button === 2
     if (isRightClick) return
-
     // 清理之前可能存在的选区状态
     this.cleanupSelectionState()
+    // 记录鼠标按下时的位置和时间
+    this.mouseDownInfo = {
+      x: e.clientX,
+      y: e.clientY,
+      time: Date.now(),
+    }
+    console.log('handleMouseDown', this.mouseDownInfo)
 
     // 记录原始设置并临时禁止画布移动
     this.originalStopMoveGraph = this.lf.getEditConfig().stopMoveGraph!
@@ -163,22 +171,6 @@ export class SelectionSelect {
 
     document.addEventListener('mousemove', this.draw)
     document.addEventListener('mouseup', this.drawOff)
-  }
-
-  onToolContainerMouseUp = (e: MouseEvent) => {
-    if (this.mouseDownInfo) {
-      const { x, y, time } = this.mouseDownInfo
-      const now = Date.now()
-      // 用 mouseDown 和 mouseUp 的位置偏移及时间间隔来判断是否是点击事件
-      const isClickEvent =
-        Math.abs(e.clientX - x) < 10 &&
-        Math.abs(e.clientY - y) < 10 &&
-        now - time < 100
-      if (isClickEvent) {
-        this.lf.clearSelectElements()
-      }
-      this.mouseDownInfo = null
-    }
   }
 
   /**
@@ -259,6 +251,23 @@ export class SelectionSelect {
     }
   }
   private drawOff = (e: MouseEvent) => {
+    // 处理鼠标抬起事件
+    // 首先判断是否是点击，如果是，则清空框选
+    console.log('drawOff', e, this.mouseDownInfo)
+    if (this.mouseDownInfo) {
+      const { x, y, time } = this.mouseDownInfo
+      const isClick =
+        Math.abs(e.clientX - x) < 5 &&
+        Math.abs(e.clientY - y) < 5 &&
+        Date.now() - time < 200
+      console.log('isClick', isClick)
+      if (isClick) {
+        this.lf.clearSelectElements()
+        this.cleanupSelectionState()
+        return
+      }
+    }
+
     const curStartPoint = cloneDeep(this.startPoint)
     const curEndPoint = cloneDeep(this.endPoint)
     document.removeEventListener('mousemove', this.draw)
