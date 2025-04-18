@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.17
+
+### Patch Changes
+
+- feat: 优化框选插件的实现,新增框选独占模式
+- Updated dependencies
+  - @logicflow/core@2.0.13
+
 ## 2.0.16
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.13
+
+### Patch Changes
+
+- feat: 新增清空当前选中节点的方法
+
 ## 2.0.12
 
 ### Patch Changes
