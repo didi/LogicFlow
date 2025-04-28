@@ -70,12 +70,15 @@ export class Snapshot {
     ) => await this.getSnapshot(fileName, toImageOptions)
 
     /* 获取Blob对象 */
-    lf.getSnapshotBlob = async (backgroundColor?: string, fileType?: string) =>
-      await this.getSnapshotBlob(backgroundColor, fileType)
+    lf.getSnapshotBlob = async (
+      backgroundColor?: string, // 兼容老的使用方式
+      fileType?: string,
+      toImageOptions?: ToImageOptions,
+    ) => await this.getSnapshotBlob(backgroundColor, fileType, toImageOptions)
 
     /* 获取Base64对象 */
     lf.getSnapshotBase64 = async (
-      backgroundColor?: string,
+      backgroundColor?: string, // 兼容老的使用方式
       fileType?: string,
       toImageOptions?: ToImageOptions,
     ) => await this.getSnapshotBase64(backgroundColor, fileType, toImageOptions)
@@ -142,37 +145,6 @@ export class Snapshot {
         i--
       }
     }
-  }
-
-  /**
-   * 导出画布：导出前的处理画布工作，局部渲染模式处理、静默模式处理
-   * @param fileName
-   * @param toImageOptions
-   */
-  async getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) {
-    const curPartial = this.lf.graphModel.getPartial()
-    const { partial = curPartial } = toImageOptions ?? {}
-    // 获取流程图配置
-    const editConfig = this.lf.getEditConfig()
-    // 开启静默模式：如果元素多的话 避免用户交互 感知卡顿
-    this.lf.updateEditConfig({
-      isSilentMode: true,
-      stopScrollGraph: true,
-      stopMoveGraph: true,
-    })
-    // 画布当前渲染模式和用户导出渲染模式不一致时，需要更新画布
-    if (curPartial !== partial) {
-      this.lf.graphModel.setPartial(partial)
-      this.lf.graphModel.eventCenter.once('graph:updated', async () => {
-        await this.snapshot(fileName, toImageOptions)
-        // 恢复原来渲染模式
-        this.lf.graphModel.setPartial(curPartial)
-      })
-    } else {
-      await this.snapshot(fileName, toImageOptions)
-    }
-    // 恢复原来配置
-    this.lf.updateEditConfig(editConfig)
   }
 
   /**
@@ -378,21 +350,31 @@ export class Snapshot {
     const { transformModel } = graphModel
     const { SCALE_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } = transformModel
 
-    // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
-    ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
-      (-offsetX + TRANSLATE_X) * (1 / SCALE_X)
-    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y)})`
+    // 计算实际宽高，考虑缩放因素
+    // 在宽画布情况下，getBoundingClientRect可能无法获取到所有元素的边界
+    // 因此我们添加一个安全系数来确保能够容纳所有元素
+    const safetyFactor = 1.1 // 安全系数，增加20%的空间
+    const actualWidth = (bbox.width / SCALE_X) * safetyFactor
+    const actualHeight = (bbox.height / SCALE_Y) * safetyFactor
 
-    // 包含所有元素的最小宽高
-    const bboxWidth = Math.ceil(bbox.width / SCALE_X)
-    const bboxHeight = Math.ceil(bbox.height / SCALE_Y)
+    // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
+    // 在transform矩阵中加入padding值，确保左侧元素不会被截断
+    ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
+      (-offsetX + TRANSLATE_X) * (1 / SCALE_X) + padding / dpr
+    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) + padding / dpr})`
+
+    // 包含所有元素的最小宽高，确保足够大以容纳所有元素
+    const bboxWidth = Math.ceil(actualWidth)
+    const bboxHeight = Math.ceil(actualHeight)
     const canvas = document.createElement('canvas')
     canvas.style.width = `${bboxWidth}px`
     canvas.style.height = `${bboxHeight}px`
 
     // 宽高值 默认加padding 40，保证图形不会紧贴着下载图片
-    canvas.width = bboxWidth * dpr + padding * 2
-    canvas.height = bboxHeight * dpr + padding * 2
+    // 为宽画布添加额外的安全边距，确保不会裁剪
+    const safetyMargin = 40 // 额外的安全边距
+    canvas.width = bboxWidth * dpr + padding * 2 + safetyMargin
+    canvas.height = bboxHeight * dpr + padding * 2 + safetyMargin
     const ctx = canvas.getContext('2d')
     if (ctx) {
       // 清空canvas
@@ -430,19 +412,22 @@ export class Snapshot {
                   ? copyCanvas(canvas, width, height).height
                   : canvas.height,
             }).then((imageBitmap) => {
-              ctx?.drawImage(imageBitmap, padding / dpr, padding / dpr)
+              // 由于在transform矩阵中已经考虑了padding，这里不再需要额外的padding偏移
+              ctx?.drawImage(imageBitmap, 0, 0)
               resolve(
                 width && height ? copyCanvas(canvas, width, height) : canvas,
               )
             })
           } else {
-            ctx?.drawImage(img, padding / dpr, padding / dpr)
+            // 由于在transform矩阵中已经考虑了padding，这里不再需要额外的padding偏移
+            ctx?.drawImage(img, 0, 0)
             resolve(
               width && height ? copyCanvas(canvas, width, height) : canvas,
             )
           }
         } catch (e) {
-          ctx?.drawImage(img, padding / dpr, padding / dpr)
+          // 由于在transform矩阵中已经考虑了padding，这里不再需要额外的padding偏移
+          ctx?.drawImage(img, 0, 0)
           resolve(width && height ? copyCanvas(canvas, width, height) : canvas)
         }
       }
@@ -464,108 +449,65 @@ export class Snapshot {
   }
 
   /**
-   * 获取Blob对象
-   * @param backgroundColor
-   * @param fileType
-   * @returns
+   * 封装导出前的通用处理逻辑：局部渲染模式处理、静默模式处理
+   * @param callback 实际执行的导出操作回调函数
+   * @param toImageOptions 导出图片选项
+   * @returns 返回回调函数的执行结果
    */
-  async getSnapshotBlob(
-    backgroundColor?: string,
-    fileType?: string,
-  ): Promise<SnapshotResponse> {
-    const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg as SVGElement)
-    return new Promise((resolve) => {
-      this.getCanvasData(svg, { backgroundColor }).then(
-        (canvas: HTMLCanvasElement) => {
-          canvas.toBlob(
-            (blob) => {
-              // 输出图片数据以及图片宽高
-              resolve({
-                data: blob!,
-                width: canvas.width,
-                height: canvas.height,
-              })
-            },
-            `image/${fileType ?? 'png'}`,
-          )
-        },
-      )
-    })
-  }
-
-  /**
-   * 获取base64对象
-   * @param backgroundColor
-   * @param fileType
-   * @param toImageOptions
-   * @returns
-   */
-  async getSnapshotBase64(
-    backgroundColor?: string,
-    fileType?: string,
+  private async withExportPreparation<T>(
+    callback: () => Promise<T>,
     toImageOptions?: ToImageOptions,
-  ): Promise<SnapshotResponse> {
+  ): Promise<T> {
+    // 获取当前局部渲染状态
     const curPartial = this.lf.graphModel.getPartial()
     const { partial = curPartial } = toImageOptions ?? {}
     // 获取流程图配置
     const editConfig = this.lf.getEditConfig()
-    // 开启静默模式
+
+    // 开启静默模式：如果元素多的话 避免用户交互 感知卡顿
     this.lf.updateEditConfig({
       isSilentMode: true,
       stopScrollGraph: true,
       stopMoveGraph: true,
     })
 
-    let result: SnapshotResponse | undefined
-    // 处理局部渲染模式
-    if (curPartial !== partial) {
-      this.lf.graphModel.setPartial(partial)
-      await new Promise<void>((resolve) => {
-        this.lf.graphModel.eventCenter.once('graph:updated', async () => {
-          result = await this._getSnapshotBase64(
-            backgroundColor,
-            fileType,
-            toImageOptions,
-          )
-          // 恢复原来渲染模式
-          this.lf.graphModel.setPartial(curPartial)
-          resolve()
+    let result: T
+
+    try {
+      // 如果画布的渲染模式与导出渲染模式不一致，则切换渲染模式
+      if (curPartial !== partial) {
+        this.lf.graphModel.setPartial(partial)
+        // 等待画布更新完成
+        result = await new Promise<T>((resolve) => {
+          this.lf.graphModel.eventCenter.once('graph:updated', async () => {
+            const callbackResult = await callback()
+            // 恢复原来渲染模式
+            this.lf.graphModel.setPartial(curPartial)
+            resolve(callbackResult)
+          })
         })
-      })
-    } else {
-      result = await this._getSnapshotBase64(
-        backgroundColor,
-        fileType,
-        toImageOptions,
-      )
+      } else {
+        // 直接执行回调
+        result = await callback()
+      }
+    } finally {
+      // 恢复原来配置
+      this.lf.updateEditConfig(editConfig)
     }
 
-    // 恢复原来配置
-    this.lf.updateEditConfig(editConfig)
-    return result!
+    return result
   }
 
-  // 内部方法处理实际的base64转换
-  private async _getSnapshotBase64(
-    backgroundColor?: string,
-    fileType?: string,
-    toImageOptions?: ToImageOptions,
-  ): Promise<SnapshotResponse> {
-    const svg = this.getSvgRootElement(this.lf)
-    await updateImageSource(svg as SVGElement)
-    return new Promise((resolve) => {
-      this.getCanvasData(svg, { backgroundColor, ...toImageOptions }).then(
-        (canvas: HTMLCanvasElement) => {
-          const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
-          resolve({
-            data: base64,
-            width: canvas.width,
-            height: canvas.height,
-          })
-        },
-      )
-    })
+  /**
+   * 导出画布：导出前的处理画布工作，局部渲染模式处理、静默模式处理
+   * @param fileName
+   * @param toImageOptions
+   */
+  async getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) {
+    await this.withExportPreparation(
+      () => this.snapshot(fileName, toImageOptions),
+      toImageOptions,
+    )
   }
 
   /**
@@ -597,6 +539,100 @@ export class Snapshot {
         },
       )
     }
+  }
+
+  /**
+   * 获取Blob对象
+   * @param fileType
+   * @param toImageOptions
+   * @returns
+   */
+  async getSnapshotBlob(
+    backgroundColor?: string,
+    fileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    return await this.withExportPreparation(
+      () => this.snapshotBlob(toImageOptions, fileType, backgroundColor),
+      toImageOptions,
+    )
+  }
+
+  // 内部方法处理blob转换
+  private async snapshotBlob(
+    toImageOptions?: ToImageOptions,
+    baseFileType?: string,
+    backgroundColor?: string,
+  ): Promise<SnapshotResponse> {
+    const { fileType = baseFileType } = toImageOptions ?? {}
+    const svg = this.getSvgRootElement(this.lf)
+    await updateImageSource(svg as SVGElement)
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, {
+        backgroundColor,
+        ...(toImageOptions ?? {}),
+      }).then((canvas: HTMLCanvasElement) => {
+        canvas.toBlob(
+          (blob) => {
+            // 输出图片数据以及图片宽高
+            resolve({
+              data: blob!,
+              width: canvas.width,
+              height: canvas.height,
+            })
+          },
+          `image/${fileType ?? 'png'}`,
+        )
+      })
+    })
+  }
+
+  /**
+   * 获取base64对象
+   * @param backgroundColor
+   * @param fileType
+   * @param toImageOptions
+   * @returns
+   */
+  async getSnapshotBase64(
+    backgroundColor?: string,
+    fileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    console.log(
+      'getSnapshotBase64---------------',
+      backgroundColor,
+      fileType,
+      toImageOptions,
+    )
+    return await this.withExportPreparation(
+      () => this._getSnapshotBase64(backgroundColor, fileType, toImageOptions),
+      toImageOptions,
+    )
+  }
+
+  // 内部方法处理实际的base64转换
+  private async _getSnapshotBase64(
+    backgroundColor?: string,
+    baseFileType?: string,
+    toImageOptions?: ToImageOptions,
+  ): Promise<SnapshotResponse> {
+    const { fileType = baseFileType } = toImageOptions ?? {}
+    const svg = this.getSvgRootElement(this.lf)
+    await updateImageSource(svg as SVGElement)
+    return new Promise((resolve) => {
+      this.getCanvasData(svg, {
+        backgroundColor,
+        ...(toImageOptions ?? {}),
+      }).then((canvas: HTMLCanvasElement) => {
+        const base64 = canvas.toDataURL(`image/${fileType ?? 'png'}`)
+        resolve({
+          data: base64,
+          width: canvas.width,
+          height: canvas.height,
+        })
+      })
+    })
   }
 }
 

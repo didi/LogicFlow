@@ -15,7 +15,7 @@ import {
   InputNumber,
   Switch,
 } from 'antd';
-import ImageNode from './imageNode';
+import ImageNode, { testImage } from './imageNode';
 import CustomHtml from '../../components/nodes/custom-html/Html';
 import data from './data';
 import { circle as circleSvgUrl, rect as rectSvgUrl } from './svg';
@@ -89,6 +89,7 @@ export default function SnapshotExample() {
       });
       lf.register(CustomHtml);
       lf.register(ImageNode);
+      lf.register(testImage);
 
       lf.setPatternItems([
         {
@@ -101,6 +102,12 @@ export default function SnapshotExample() {
           type: 'rect',
           label: 'rect',
           text: 'circle',
+          icon: rectSvgUrl,
+        },
+        {
+          type: 'test-image',
+          label: 'Test Image',
+          text: 'Test Image',
           icon: rectSvgUrl,
         },
       ]);
@@ -149,8 +156,17 @@ export default function SnapshotExample() {
   const previewBlob = () => {
     if (lfRef.current) {
       setBase64Data('');
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      };
       lfRef.current
-        .getSnapshotBlob(backgroundColor, fileType)
+        .getSnapshotBlob(backgroundColor, fileType, params)
         .then(
           ({
             data,
@@ -172,8 +188,17 @@ export default function SnapshotExample() {
   const previewBase64 = () => {
     if (lfRef.current) {
       setBlobData('');
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      };
       lfRef.current
-        .getSnapshotBase64(backgroundColor)
+        .getSnapshotBase64(backgroundColor, '', params)
         .then(
           ({
             data,

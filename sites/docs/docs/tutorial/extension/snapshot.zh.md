@@ -9,62 +9,75 @@ toc: content
 tag: 优化
 ---
 
-我们经常需要将画布内容通过图片的形式导出来，我们提供了一个独立的插件包 `Snapshot` 来使用这个功能。
-
-## 演示
-
-<code id="react-portal" src="@/src/tutorial/extension/snapshot"></code>
-
+我们常常有需要将画布内容以图片的形式导出来的情况，因此LogicFlow提供了一个独立的插件包 `Snapshot` 以支持用户将画布导出为图片。
 ## 用法
 
-### 1. 注册
+### 注册插件
 
-两种注册方式，全局注册和局部注册，区别是全局注册每一个`lf`实例都可以使用。
+与其他LogicFlow插件一样，Snapshot支持全局注册和局部注册两种方式：
 
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Snapshot } from "@logicflow/extension";
 
-// 全局注册
+// 全局注册：所有LogicFlow实例都能使用
 LogicFlow.use(Snapshot);
 
-// 局部注册
+// 局部注册：仅当前实例可用
 const lf = new LogicFlow({
   ...config,
   plugins: [Snapshot]
 });
-
 ```
 
-### 2. 使用
+### 基本用法
 
-注册后，`lf`实例身上将被挂载`getSnapshot()`方法，通过`lf.getSnapshot()`方法调用。
+注册插件后，您可以直接通过LogicFlow实例调用导出方法：
 
 ```tsx | pure
-
-// 可以使用任意方式触发，然后将绘制的图形下载到本地磁盘上
-document.getElementById("button").addEventListener("click", () => {
-  lf.getSnapshot();
-
-  // 或者 1.1.13版本
-  // lf.extension.snapshot.getSnapshot()
-});
-
+// 导出为PNG图片并下载
+lf.getSnapshot('流程图');
 ```
 
-值得一提的是：通过此插件截取下载的图片不会因为偏移、缩放受到影响。
+## 功能特性
 
-## 自定义设置 css
+在2.0版本中，我们对导出功能进行了全面升级：
 
-当自定义元素在导出图片时需要额外添加 css 样式时，可以用如下方式实现：
+- **多格式支持**：PNG、JPEG、SVG等多种格式
+- **自定义背景和边距**：根据需求调整图片效果
+- **局部渲染**：可选择只导出可见区域，提高效率
+- **自定义样式**：支持添加CSS样式，确保导出图片风格一致
 
-为了保持流程图生成的图片与画布上效果一致，`snapshot`插件默认会将当前页面所有的 `css` 规则都加载到导出图片中, 但是可能会因为 css 文件跨域引起报错，参考 issue575。可以修改useGlobalRules来禁止加载所有 css 规则，然后通过`customCssRules`属性来自定义增加css样式。
+### 配置选项
+
+导出方法支持`toImageOptions`参数，提供以下配置项：
+
+| 属性名          | 类型    | 默认值 | 描述                                      |
+| --------------- | ------- | ------ | ----------------------------------------- |
+| fileType        | string  | png    | 导出格式：`png`、`webp`、`jpeg`、`svg`    |
+| width           | number  | -      | 图片宽度（可能导致图形拉伸）              |
+| height          | number  | -      | 图片高度（可能导致图形拉伸）              |
+| backgroundColor | string  | -      | 背景色，默认透明                          |
+| quality         | number  | 0.92   | 图片质量，仅对`jpeg`和`webp`有效，取值0-1 |
+| padding         | number  | 40     | 内边距，单位像素                          |
+| partial         | boolean | false  | 是否只导出可见区域                        |
+
+:::warning{title=注意事项}
+- 导出SVG格式的图片时不支持`width`、`height`、`backgroundColor`、`padding`属性
+- 自定义宽高可能导致图形拉伸，同时影响内边距
+- 导出时会自动处理宽画布情况，添加安全系数和额外边距
+- 导出过程中会自动开启静默模式，禁用画布交互
+- 自动将SVG中的相对路径图片转换为Base64编码<Badge type="warning">2.0.14新增</Badge> 
+:::
+
+### 自定义CSS样式
+
+为保持导出图片与画布效果一致，插件默认加载页面所有CSS规则。如遇跨域问题，可以：
 
 ```tsx | pure
-
-// 默认开启css样式
-lf.extension.snapshot.useGlobalRules = true
-// 不会覆盖css样式，会叠加，customCssRules优先级高
+// 禁用全局CSS规则
+lf.extension.snapshot.useGlobalRules = false;
+// 添加自定义样式（优先级高）
 lf.extension.snapshot.customCssRules = `
   .uml-wrapper {
     line-height: 1.2;
@@ -72,88 +85,166 @@ lf.extension.snapshot.customCssRules = `
     color: blue;
   }
 `
-  
 ```
 
-## API
+## API参考
 
-### lf.getSnapshot(...)
-
-导出图片。
-
-```ts
-
-getSnapshot(fileName?: string, toImageOptions?: ToImageOptions) : Promise<void>
-
+### getSnapshot
+导出图片并下载
+```tsx | pure
+lf.getSnapshot(name: string, toImageOptions?: ToImageOptions)
 ```
 
-`fileName` 为文件名称，不填为默认为`logic-flow.当前时间戳`，`ToImageOptions` 描述如下：
-
-| 属性名  | 类型 | 默认值 | 必填 | 描述   |
-| --------- | -------- | -------------------------- | -------- | ----------------------------------------------------------------- |
-| fileType | string | png |  |  导出图片的格式，可选值为：`png`、`webp`、`jpeg`、`svg`，默认值为 `png` |
-| width | number | - | | 导出图片的宽度，通常无需设置，设置后可能会拉伸图形 |
-| height | numebr | - | | 导出图片的高度，通常无需设置，设置后可能会拉伸图形 |
-| backgroundColor | string | - | | 导出图片的背景色，默认为透明 |
-| quality | number | - | | 导出图片的质量。在指定图片格式为 `jpeg` 或 `webp` 的情况下，可以从 0 到 1 的区间内选择图片的质量，如果超出取值范围，将会使用默认值 0.92。导出为其他格式的图片时，该参数会被忽略 |
-| padding | number | 40 | | 导出图片的内边距，即元素内容所在区域边界与图片边界的距离，单位为像素，默认为 40 |
-| partial | boolean | - |  | 导出图片时是否开启局部渲染，`false`：将导出画布上所有的元素，`true`：只导出画面区域内的可见元素 |
-
-注意：
--  `svg`目前暂不支持`width`，`height`， `backgroundColor`， `padding` 属性。
-- 自定义宽高后，可能会拉伸图形，这时候`padding`也会被拉伸导致不准确。
-- `2.0.0`版本才开始支持`toImageOptions`选项。
-
-### lf.getSnapshotBlob(...)
-
-`snapshot` 除了支持图片类型导出，还支持下载<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank"> Blob文件对象 </a> 和 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Base64" target="_blank"> Base64文本编码 </a>
-
-获取`Blob`对象。
-
-```ts
-
-async getSnapshotBlob(backgroundColor?: string, fileType?: string) : Promise<SnapshotResponse>
-
-// example
-const { data : blob } = await lf.getSnapshotBlob()
-console.log(blob)
-
+### getSnapshotBlob
+获取Blob对象
+```tsx | pure
+lf.getSnapshotBlob(backgroundColor?: string, fileType?: string): Promise<{ data: Blob; width: number; height: number }>
+// 2.0.14版本后支持的写法👇🏻
+lf.getSnapshotBlob(
+  backgroundColor?: string, // 兼容老写法，传入后会作为toImageOptions.backgroundColor的兜底配置
+  fileType?: string, // 兼容老写法，传入后会作为toImageOptions.fileType的兜底配置
+  toImageOptions?: ToImageOptions // 新增参数
+)
 ```
 
-`backgroundColor`: 背景，不填默认为透明。
+### getSnapshotBase64
+获取Base64字符串
+```tsx | pure
+lf.getSnapshotBase64(backgroundColor?: string, fileType?: string): Promise<{ data: string; width: number; height: number }>
+// 2.0.14版本后支持的写法👇🏻
+lf.getSnapshotBase64(
+  backgroundColor?: string, // 兼容老写法，传入后会作为toImageOptions.backgroundColor的兜底配置
+  fileType?: string, // 兼容老写法，传入后会作为toImageOptions.fileType的兜底配置
+  toImageOptions?: ToImageOptions // 新增参数
+)
+```
 
-`fileType`: 文件类型，不填默认为png。
+## 使用示例
 
-`SnapshotResponse`: 返回对象。
+### 功能演示
+
+<code id="react-portal" src="@/src/tutorial/extension/snapshot"></code>
+
+### 代码示例
+
+**基本用法：导出为PNG图片并下载**
+```tsx | pure
+lf.getSnapshot('流程图');
+```
+
+**高级用法：指定格式、背景色和其他选项**
+```tsx | pure
+lf.getSnapshot('流程图', {
+  fileType: 'png',        // 可选：'png'、'webp'、'jpeg'、'svg'
+  backgroundColor: '#f5f5f5',
+  padding: 30,           // 内边距，单位为像素
+  partial: false,        // false: 导出所有元素，true: 只导出可见区域
+  quality: 0.92          // 对jpeg和webp格式有效，取值范围0-1
+})
+```
+
+**导出为SVG格式**
+```tsx | pure
+lf.getSnapshot('流程图', {
+  fileType:'svg'
+  // 注意：svg格式暂不支持width、height、backgroundColor、padding属性
+});
+```
+
+**获取Blob对象用于进一步处理**
+```tsx | pure
+const { data: blob, width, height } = await lf.getSnapshotBlob({
+  fileType: 'jpeg',
+  backgroundColor: '#ffffff',
+  quality: 0.8
+})
+// 使用Blob对象创建临时URL（例如预览）
+const blobUrl = URL.createObjectURL(blob);
+try {
+  // 使用blobUrl，例如设置为图片源
+  document.getElementById('preview').src = blobUrl;
+} finally {
+  // 使用完毕后释放URL
+  URL.revokeObjectURL(blobUrl);
+}
+```
+
+**获取Base64字符串用于进一步处理**
+```tsx | pure
+const { data: base64 } = await lf.getSnapshotBase64({
+  fileType: 'png',
+  partial: true // 只导出可见区域
+});
+// 将Base64直接用于img标签
+document.getElementById('preview').src = base64;
+```
+
+**自定义CSS样式**
+```tsx | pure
+lf.extension.snapshot.useGlobalRules = false; // 禁用全局CSS规则，避免跨域问题
+lf.extension.snapshot.customCssRules = `
+  .node-container { border: 2px solid blue; }
+  .edge-text { font-weight: bold; }
+  .lf-node-text { font-size: 14px; font-weight: bold; }
+`;
+```
+**在组件组件中使用**
+```tsx | pure
+const downloadSnapshot = async () => {
+  // 导出为图片并下载
+  await lf.getSnapshot('流程图', {
+    fileType: 'png',
+    backgroundColor: '#ffffff',
+    padding: 40
+  });
+};
+```
+
+**在按钮点击事件中使用**
+```tsx | pure
+// 在按钮点击事件中使用
+document.getElementById('download-btn').addEventListener('click', async () => {
+  // 显示加载状态
+  showLoading();
+  try {
+    // 导出图片（会自动应用静默模式和其他优化）
+    await lf.getSnapshot('流程图');
+  } finally {
+    // 隐藏加载状态
+    hideLoading();
+  }
+});
+```
+
+**导出并上传到服务器**
 
 ```tsx | pure
-
-export type SnapshotResponse = {
-  data: Blob | string // Blob对象 或 Base64文本编码文本
-  width: number // 图片宽度
-  height: number // 图片高度
+// 导出为Blob并上传到服务器
+async function exportAndUpload() {
+  const { data: blob } = await lf.getSnapshotBlob({
+    fileType: 'png',
+    backgroundColor: '#ffffff'
+  });
+  
+  const formData = new FormData();
+  formData.append('file', blob, 'flowchart.png');
+  
+  try {
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const result = await response.json();
+    console.log('上传成功:', result);
+  } catch (error) {
+    console.error('上传失败:', error);
+  }
 }
-
-```
-
-### lf.getSnapshotBase64(...)
-
-获取`Base64文本编码`文本。
-
-```ts
-
-async getSnapshotBase64(backgroundColor?: string, fileType?: string) : Promise<SnapshotResponse>
-
-// example
-const { data : base64 } = await lf.getSnapshotBlob()
-console.log(base64)
 ```
 
 ## 其他导出类型
 
-### xml
-
-1.0.7 新增
+### xml <Badge>1.0.7 新增</Badge>
 
 LogicFlow 默认生成的数据是 json 格式，可能会有一些流程引擎需要前端提供 xml 格式数据。`@logicflow/extension`提供了`lfJson2Xml`和`lfXml2Json`两个插件，用于将 json 和 xml 进行互相转换。
 
