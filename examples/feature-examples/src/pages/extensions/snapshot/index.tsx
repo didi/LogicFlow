@@ -163,9 +163,18 @@ export default function SnapshotExample() {
   // 预览 blob
   const previewBlob = () => {
     if (lfRef.current) {
-      setBase64Data('')
+      setBlobData('')
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      }
       lfRef.current
-        .getSnapshotBlob(backgroundColor, fileType)
+        .getSnapshotBlob(backgroundColor, fileType, params)
         .then(
           ({
             data,
@@ -186,7 +195,7 @@ export default function SnapshotExample() {
   // 预览 base64
   const previewBase64 = async () => {
     if (lfRef.current) {
-      setBlobData('')
+      setBase64Data('')
       const params: ToImageOptions = {
         fileType,
         backgroundColor,
@@ -310,17 +319,17 @@ export default function SnapshotExample() {
         <div ref={containerRef} className="graph"></div>
       </Flex>
       <Row>
-        <Col span={12}>
+        <Col span={24}>
           {blobData && (
             <>
               <h2>blobData</h2>
-              <img key="blob" src={blobData} />
+              <img style={{ width: '100%' }} key="blob" src={blobData} />
             </>
           )}
           {base64Data && (
             <>
               <h2>base64Data</h2>
-              <img key="base64" src={base64Data} />
+              <img style={{ width: '100%' }} key="base64" src={base64Data} />
             </>
           )}
         </Col>

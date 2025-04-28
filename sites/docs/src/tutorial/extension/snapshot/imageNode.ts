@@ -28,6 +28,40 @@ class ImageNode extends RectNode {
   }
 }
 
+class TestImageModel extends RectNodeModel {
+  initNodeData(data: any) {
+    super.initNodeData(data);
+    this.width = 100;
+    this.height = 75;
+  }
+}
+
+class TestImageNode extends RectNode {
+  getImageHref() {
+    console.log('getImageHref');
+    return '/test.jpeg';
+  }
+  getShape() {
+    const { x, y, width, height } = this.props.model;
+    const href = this.getImageHref();
+    const attrs = {
+      x: x - (1 / 2) * width,
+      y: y - (1 / 2) * height,
+      width,
+      height,
+      href,
+      preserveAspectRatio: 'none meet',
+    };
+    return h('g', {}, [h('image', { ...attrs })]);
+  }
+}
+
+export const testImage = {
+  type: 'test-image',
+  view: TestImageNode,
+  model: TestImageModel,
+};
+
 export default {
   type: 'image',
   view: ImageNode,

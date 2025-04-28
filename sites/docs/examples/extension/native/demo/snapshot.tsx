@@ -117,7 +117,7 @@ const data = {
       id: 'uml_1',
       properties: {
         name: 'hello',
-        body: '哈哈哈哈',
+        body: '哈哈哈哈111',
       },
     },
     {
@@ -296,8 +296,17 @@ const SnapshotExample: React.FC = () => {
   const previewBlob = () => {
     if (lfRef.current) {
       setBase64Data('');
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      };
       lfRef.current
-        .getSnapshotBlob(backgroundColor, fileType)
+        .getSnapshotBlob(backgroundColor, fileType, params)
         .then(
           ({
             data,
@@ -319,8 +328,17 @@ const SnapshotExample: React.FC = () => {
   const previewBase64 = () => {
     if (lfRef.current) {
       setBlobData('');
+      const params: ToImageOptions = {
+        fileType,
+        backgroundColor,
+        partial,
+        width,
+        height,
+        padding,
+        quality,
+      };
       lfRef.current
-        .getSnapshotBase64(backgroundColor)
+        .getSnapshotBase64(backgroundColor, fileType, params)
         .then(
           ({
             data,

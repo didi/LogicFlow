@@ -7,7 +7,7 @@ export default {
       id: 'uml_1',
       properties: {
         name: 'hello',
-        body: '哈哈哈哈',
+        body: '哈哈哈哈111',
       },
     },
     {
@@ -37,6 +37,24 @@ export default {
       x: 500,
       y: 100,
       text: '菱形',
+    },
+    {
+      id: 'test_image_1',
+      type: 'test-image',
+      x: 300,
+      y: 200,
+      text: {
+        x: 420,
+        y: 200,
+        value: '通过相对路径引入的图片\n实际这张图片放在了\n项目的public目录下',
+      },
+      properties: {
+        width: 82,
+        height: 96,
+        textStyle: {
+          textAlign: 'left',
+        },
+      },
     },
   ],
   edges: [
