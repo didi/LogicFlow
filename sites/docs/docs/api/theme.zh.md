@@ -297,7 +297,7 @@ lf.setTheme({
 
 ### anchorLine
 
-在连线是，从锚点拖出的直线样式
+在连线时，从锚点拖出的直线样式
 
 ```tsx | pure
 lf.setTheme({
