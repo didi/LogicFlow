@@ -300,7 +300,7 @@ lf.setTheme({
 
 ### anchorLine
 
-In the connecting line is, the straight line style dragged from the anchor point.
+In the connecting line, the straight line style dragged from the anchor point.
 
 ```tsx | pure
 lf.setTheme({
