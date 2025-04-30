@@ -37,6 +37,17 @@ export default defineConfig({
       ],
     },
     {
+      name: 'theme',
+      path: '/theme',
+      routes: [
+        {
+          path: '/theme/index',
+          name: '动态调整画布背景',
+          component: './theme',
+        },
+      ],
+    },
+    {
       path: '/custom-nodes',
       name: 'custom nodes',
       routes: [
