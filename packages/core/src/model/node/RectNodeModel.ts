@@ -36,11 +36,13 @@ export class RectNodeModel<
     super.setAttributes()
 
     const { width, height, radius } = this.properties
+    const { radius: styleRadius } = this.getNodeStyle()
     if (!isNil(width)) this.width = width
     if (!isNil(height)) this.height = height
-
+    console.log('radius', radius, styleRadius)
     // 矩形特有
     if (!isNil(radius)) this.radius = radius
+    if (!isNil(styleRadius)) this.radius = styleRadius
   }
 
   getDefaultAnchor() {
@@ -56,6 +58,7 @@ export class RectNodeModel<
   getNodeStyle() {
     const style = super.getNodeStyle()
     const { rect } = this.graphModel.theme
+    console.log('style', style, rect.radius)
     const { style: customStyle = {} } = this.properties
     return {
       ...style,
