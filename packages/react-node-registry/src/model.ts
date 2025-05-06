@@ -20,7 +20,6 @@ export class ReactNodeModel<
   P extends ReactCustomProperties = ReactCustomProperties,
 > extends HtmlNodeModel<P> {
   setAttributes() {
-    console.log('this.properties', this.properties)
     const { width, height, radius } = this.properties
     if (width) {
       this.width = width
