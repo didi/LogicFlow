@@ -170,8 +170,71 @@ History 用来记录画布上的每一次改动，当画布上的元素发生变
 | text:mouseup   | 鼠标在文本区内放开   | e, data                 |
 | text:update    | 更新文本             | data                    |
 
-当Label文本位置、内容出现变更时，文本触发的事件
+事件对象包含如下内容：
 
+| 属性 | 类型       | 值                  |
+| :--- | :--------- | :------------------ |
+| e    | MouseEvent | 原生的鼠标事件对象  |
+| data | Object     | NodeModel/EdgeModel |
+
+## 插件事件
+
+下面是不同插件中触发的事件
+
+### DndPanel
+
+| 事件名                | 说明             | 事件对象 |
+| :-------------------- | :--------------- | :------- |
+| dnd:panel-dbclick     | 拖拽面板双击     | e, data  |
+| dnd:panel-click       | 拖拽面板左键单击 | e, data  |
+| dnd:panel-contextmenu | 拖拽面板右键单击 | e, data  |
+
+
+事件对象包含如下内容：
+
+| 属性 | 类型       | 值                  |
+| :--- | :--------- | :------------------ |
+| e    | MouseEvent | 原生的鼠标事件对象  |
+| data | Object     | NodeModel/EdgeModel |
+
+### MiniMap
+
+| 事件名        | 说明             | 事件对象 |
+| :------------ | :--------------- | :------- |
+| miniMap:close | 小地图隐藏时触发 | -        |
+
+### SelectionSelect
+
+| 事件名                  | 说明                                   | 事件对象                                                             |
+| :---------------------- | :------------------------------------- | :------------------------------------------------------------------- |
+| selection:selected-area | 选框范围                               | topLeft: 左上角坐标, bottomRight: 右下角坐标                         |
+| selection:drop          | 鼠标放开后如果存在框选选中的元素时触发 | e                                                                    |
+| selection:selected      | 框选完成时触发                         | elements: 框选元素集合, topLeft: 左上角坐标, bottomRight: 右下角坐标 |
+
+### DynamicGroup/Group
+
+| 事件名            | 说明                             | 事件对象                                      |
+| :---------------- | :------------------------------- | :-------------------------------------------- |
+| group:add-node    | 节点加入到分组中触发             | data: 分组数据, childId: 新假如节点的id       |
+| group:remove-node | 节点从分组中移除触发             | data: 分组数据                                |
+| group:not-allowed | 命中节点不允许加入到分组中时触发 | group: 分组数据, node: 被禁止加入的节点的信息 |
+
+### Highlight
+
+| 事件名               | 说明                             | 事件对象             |
+| :------------------- | :------------------------------- | :------------------- |
+| highlight:single     | 单元素高亮模式下，元素触发高亮   | data                 |
+| highlight:neighbours | 相邻元素高亮模式下，元素触发高亮 | data, relateElements |
+| highlight:path       | 路径元素高亮模式下，元素触发高亮 | data, relateElements |
+
+事件对象包含如下内容：
+
+| 属性           | 类型   | 值                            |
+| :------------- | :----- | :---------------------------- |
+| data           | Object | NodeModel/EdgeModel           |
+| relateElements | Array  | NodeModel/EdgeModel组成的数组 |
+
+### Label
 | 事件名          | 说明                 | 事件对象                |
 | :-------------- | :------------------- | :---------------------- |
 | label:mousedown | 鼠标按下文本         | e, data                 |
