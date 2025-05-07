@@ -50,8 +50,9 @@ The event object contains the following:
 
 | Event names                                    | Description                              | Event object                                                                                                                                      |
 | :--------------------------------------------- | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| element:click                                  | Click on the element                     | data, e, position                                                                                                                                 |
 | edge:click                                     | Click on the edge                        | data, e, position                                                                                                                                 |
-| edge:dbclick                                   | Double-click on the edge                 | data, e, position                                                                                                                                 |
+| edge:dbclick                                   | Double-click on the edge                 | data, e                                                                                                                                           |
 | edge:mouseenter                                | Move the mouse pointer into the edge     | data, e                                                                                                                                           |
 | edge:mouseleave                                | Move the mouse pointer out of the edge   | data, e                                                                                                                                           |
 | edge:add                                       | Add edge                                 | data                                                                                                                                              |
@@ -62,24 +63,27 @@ The event object contains the following:
 | edge:connect<Badge>2.0 Added</Badge>           | Edge connection completed                | data                                                                                                                                              |
 | edge:beforeConnect<Badge>2.0 Added</Badge>     | Before edge connection                   | data, msg                                                                                                                                         |
 | edge:properties-change<Badge>2.0 Added</Badge> | Edge custom properties change            | id: Current edge id<br/>keys: Set of keys for current changes<br/>preProperties: Properties before change<br/>properties: Properties after change |
+| connection:not-allowed                         | Connection is not allowed                | data, msg                                                                                                                                         |
 
 The event object contains the following:
 
-| Property | 类型       | 值                                                                                                                                           |
-| :------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| data     | Object     | The [data attribute](./model/edgeModel.en.md#data-attributes)                                                                                |
-| e        | MouseEvent | Native mouse event object                                                                                                                    |
-| position | Object     | Coordinates of the mouse trigger point in the canvas(Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
-| msg      | string     | Verification information of the edge                                                                                                         |
+| Property | Type       | Description                                                                                                                                   |
+| :------- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| data     | Object     | The [data attribute](./model/edgeModel.en.md#data-attributes)                                                                                 |
+| e        | MouseEvent | Native mouse event object                                                                                                                     |
+| position | Object     | Coordinates of the mouse trigger point in the canvas (Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
+| msg      | string     | Verification information of the edge                                                                                                          |
 
 ## Anchor Events
 
-| Event names                               | Description                              | Event object |
-| :---------------------------------------- | :--------------------------------------- | :----------- |
-| anchor:mouseenter<Badge>2.0 Added</Badge> | Move the mouse pointer into the anchor   | data, e      |
-| anchor:mouseleave<Badge>2.0 Added</Badge> | Move the mouse pointer out of the anchor | data, e      |
-| anchor:dragstart<Badge>2.0 Added</Badge>  | Start dragging from anchor               | data, e      |
-| anchor:drop<Badge>2.0 Added</Badge>       | Drop on anchor                           | data, e      |
+| Event names                               | Description                                                                                                          | Event object                  |
+| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------- | :---------------------------- |
+| anchor:mouseenter<Badge>2.0 Added</Badge> | Move the mouse pointer into the anchor                                                                               | data, e                       |
+| anchor:mouseleave<Badge>2.0 Added</Badge> | Move the mouse pointer out of the anchor                                                                             | data, e                       |
+| anchor:dragstart<Badge>2.0 Added</Badge>  | Start dragging from anchor                                                                                           | data, e, nodeModel            |
+| anchor:drop<Badge>2.0 Added</Badge>       | Drop on anchor, only triggered when connecting successfully. Used to distinguish manual and auto-created connections | data, e, nodeModel, edgeModel |
+| anchor:drag<Badge>2.0 Added</Badge>       | Anchor connection dragging                                                                                           | data, e, nodeModel            |
+| anchor:dragend<Badge>2.0 Added</Badge>    | End of anchor connection, triggered regardless of whether a connection is created                                    | data, e, nodeModel            |
 
 The event object contains the following:
 
@@ -89,26 +93,52 @@ The event object contains the following:
 | e          | MouseEvent | Native mouse event object                  |
 | nodeModel  | Object     | The node to which the anchor point belongs |
 
-<!-- adjustPoint -->
-
 ## Canvas Events
 
-| Event names                               | Description                      | Event object                                   |
-| :---------------------------------------- | :------------------------------- | :--------------------------------------------- |
-| blank:mousedown                           | Mouse down on blank area         | e                                              |
-| blank:mousemove                           | Mouse move on blank area         | e                                              |
-| blank:mouseup                             | Mouse up on blank area           | e                                              |
-| blank:click                               | Click on blank area              | e                                              |
-| blank:contextmenu                         | Right-click on blank area        | e                                              |
-| blank:dragstart                           | Start dragging on blank area     | e                                              |
-| blank:drag                                | Dragging on blank area           | e                                              |
-| blank:drop                                | Drop on blank area               | e                                              |
-| graph:transform                           | Graph transformation (zoom, pan) | transform: { transform: string; zoom: number } |
-| graph:rendered                            | Graph rendering completed        | graphData                                      |
-| history:change                            | History state change             | data: { undoAble: boolean; redoAble: boolean } |
-| graph:rendered<Badge>2.0 Added</Badge>    | Graph rendering completed        | graphData                                      |
-| graph:transform<Badge>2.0 Added</Badge>   | Graph transformation (zoom, pan) | transform: { transform: string; zoom: number } |
-| graph:data-change<Badge>2.0 Added</Badge> | Graph data change                | graphData                                      |
+| Event names                              | Description                                                                                                                                                                                                         | Event object                                                               |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------- |
+| blank:mousedown                          | Mouse down on blank area                                                                                                                                                                                            | e                                                                          |
+| blank:mousemove                          | Mouse move on blank area                                                                                                                                                                                            | e                                                                          |
+| blank:mouseup                            | Mouse up on blank area                                                                                                                                                                                              | e                                                                          |
+| blank:click                              | Click on blank area                                                                                                                                                                                                 | e                                                                          |
+| blank:contextmenu                        | Right-click on blank area                                                                                                                                                                                           | e, position                                                                |
+| blank:dragstart                          | Start dragging on blank area                                                                                                                                                                                        | e                                                                          |
+| blank:drag                               | Dragging on blank area                                                                                                                                                                                              | e                                                                          |
+| blank:drop                               | Drop on blank area                                                                                                                                                                                                  | e                                                                          |
+| text:update                              | Update text                                                                                                                                                                                                         | data                                                                       |
+| graph:transform                          | Graph transformation (zoom, pan)                                                                                                                                                                                    | transform: { transform: string; zoom: number }                             |
+| graph:rendered<Badge>1.1.0 Added</Badge> | Graph rendering completed                                                                                                                                                                                           | graphData                                                                  |
+| graph:updated<Badge>2.0.0 Added</Badge>  | Canvas updated. Triggered after lf.render(graphData) or after changing properties on the canvas. If you need to perform operations after the canvas updates, it's recommended to use once event instead of on event | -                                                                          |
+| history:change                           | History state change                                                                                                                                                                                                | data: { undos: Array, redos: Array, undoAble: boolean; redoAble: boolean } |
+
+The event object contains the following:
+
+| Property | Type       | Description                                                                                                                                   |
+| :------- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| e        | MouseEvent | Native mouse event object                                                                                                                     |
+| position | Object     | Coordinates of the mouse trigger point in the canvas (Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
+
+## Selection Events
+
+When multiple nodes are selected to form a selection area, the following events are triggered:
+
+| Event names           | Description                    | Event object      |
+| :-------------------- | :----------------------------- | :---------------- |
+| selection:selected    | Triggered after area selection | Selected elements |
+| selection:mousedown   | Mouse down on selection        | e                 |
+| selection:dragstart   | Start dragging selection       | e                 |
+| selection:drag        | Dragging selection             | e                 |
+| selection:drop        | Drop selection                 | e                 |
+| selection:mousemove   | Mouse move in selection        | e, position       |
+| selection:mouseup     | Mouse up in selection          | e                 |
+| selection:contextmenu | Right-click on selection       | e                 |
+
+The event object contains the following:
+
+| Property | Type       | Description                                                                                                                                   |
+| :------- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| e        | MouseEvent | Native mouse event object                                                                                                                     |
+| position | Object     | Coordinates of the mouse trigger point in the canvas (Refer to the return value of [getPointByClient](./detail/index.en.md#getpointbyclient)) |
 
 ## Text events
 
@@ -145,6 +175,62 @@ The event object contains the following:
 | e         | MouseEvent | Native mouse event object |
 | data      | Object     | NodeModel/EdgeModel       |
 
+## Plugin Events
+
+The following are events triggered by different plugins:
+
+### DndPanel
+
+| Event name            | Description                | Event object |
+| :-------------------- | :------------------------- | :----------- |
+| dnd:panel-dbclick     | Double-click on drag panel | e, data      |
+| dnd:panel-click       | Left-click on drag panel   | e, data      |
+| dnd:panel-contextmenu | Right-click on drag panel  | e, data      |
+
+The event object contains the following:
+
+| Property | Type       | Value                     |
+| :------- | :--------- | :------------------------ |
+| e        | MouseEvent | Native mouse event object |
+| data     | Object     | NodeModel/EdgeModel       |
+
+### MiniMap
+
+| Event name    | Description                      | Event object |
+| :------------ | :------------------------------- | :----------- |
+| miniMap:close | Triggered when minimap is hidden | -            |
+
+### SelectionSelect
+
+| Event name              | Description                                                  | Event object                                                              |
+| :---------------------- | :----------------------------------------------------------- | :------------------------------------------------------------------------ |
+| selection:selected-area | Selection area                                               | topLeft: Top-left coordinate, bottomRight: Bottom-right coordinate        |
+| selection:drop          | Triggered when elements are selected after mouse is released | e                                                                         |
+| selection:selected      | Triggered after selection is complete                        | elements: Selected elements, topLeft: Top-left, bottomRight: Bottom-right |
+
+### DynamicGroup/Group
+
+| Event name        | Description                                      | Event object                                           |
+| :---------------- | :----------------------------------------------- | :----------------------------------------------------- |
+| group:add-node    | Triggered when a node is added to a group        | data: Group data, childId: ID of the newly added node  |
+| group:remove-node | Triggered when a node is removed from a group    | data: Group data                                       |
+| group:not-allowed | Triggered when a node cannot be added to a group | group: Group data, node: Information of forbidden node |
+
+### Highlight
+
+| Event name           | Description                                    | Event object         |
+| :------------------- | :--------------------------------------------- | :------------------- |
+| highlight:single     | Element highlight in single element mode       | data                 |
+| highlight:neighbours | Element highlight in neighboring elements mode | data, relateElements |
+| highlight:path       | Element highlight in path elements mode        | data, relateElements |
+
+The event object contains the following:
+
+| Property       | Type   | Value                        |
+| :------------- | :----- | :--------------------------- |
+| data           | Object | NodeModel/EdgeModel          |
+| relateElements | Array  | Array of NodeModel/EdgeModel |
+
 ## on
 
 Register events.
@@ -167,7 +253,6 @@ eventCenter.on("node:click", (args) => {
 eventCenter.on("element:click", (args) => {
   console.log("element:click", args.e.target);
 });
-
 ```
 
 ## off
@@ -181,10 +266,9 @@ Parameters:
 | evt      | string | -        | -       | Event Name        |
 | callback | string | -        | -       | Callback function |
 
-When evt is empty, remove all evt listeners.
-When evt is present and callback is empty, remove all registered methods for the corresponding
-event.
-When both evt and callback are present, compare the callback objects and remove matching methods.
+- When evt is empty, remove all evt listeners.
+- When evt is present and callback is empty, remove all registered methods for the corresponding event.
+- When both evt and callback are present, compare the callback objects and remove matching methods.
 
 Example:
 
@@ -219,7 +303,6 @@ const { eventCenter } = lf.graphModel;
 eventCenter.once("node:click", () => {
   console.log("node:click");
 });
-
 ```
 
 ## emit

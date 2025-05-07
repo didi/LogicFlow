@@ -1,5 +1,5 @@
-import LogicFlow, { BaseNodeModel } from '@logicflow/core'
-import { concat } from 'lodash-es'
+import LogicFlow, { BaseEdgeModel, BaseNodeModel } from '@logicflow/core'
+import { uniqBy, concat } from 'lodash-es'
 
 // 后续并入FlowPath
 const getPath = (id: string, lf: LogicFlow) => {
@@ -99,7 +99,8 @@ export class Highlight {
     this.enable = enable
   }
 
-  setMode(mode: IMode) {
+  public setMode(mode: IMode) {
+    console.log('setMode', mode)
     this.mode = mode
   }
 
@@ -119,11 +120,14 @@ export class Highlight {
       model.sourceNode.updateStyles(this.tempStyles[model.sourceNode.id])
       model.targetNode.updateStyles(this.tempStyles[model.targetNode.id])
     }
+    this.lf.emit('highlight:single', {
+      data: model,
+    })
   }
 
   private highlightNeighbours(id: string) {
     const model = this.lf.getModelById(id)
-
+    let relateElements: (BaseNodeModel | BaseEdgeModel)[] = []
     if (model?.BaseType === 'node') {
       // 高亮节点
       model.updateStyles(this.tempStyles[id])
@@ -135,23 +139,46 @@ export class Highlight {
       concat(incomingEdges, outgoingEdges).forEach((edge) => {
         edge.updateStyles(this.tempStyles[edge.id])
       })
+      relateElements = uniqBy(
+        concat(
+          relateElements,
+          incomingNodes,
+          outgoingNodes,
+          incomingEdges,
+          outgoingEdges,
+        ),
+        'id',
+      )
     } else if (model?.BaseType === 'edge') {
       // 高亮边及对应的节点
       model.updateStyles(this.tempStyles[id])
       model.sourceNode.updateStyles(this.tempStyles[model.sourceNode.id])
       model.targetNode.updateStyles(this.tempStyles[model.targetNode.id])
+      relateElements = [model.sourceNode, model.targetNode]
     }
+    this.lf.emit('highlight:neighbours', {
+      data: model,
+      relateElements,
+    })
   }
 
   private highlightPath(id: string) {
     const path = getPath(id, this.lf)
+    const relateElements: any[] = []
     path.forEach((_id) => {
+      const elementModel = this.lf.getModelById(_id)
       // 高亮路径上所有的边和节点
-      this.lf.getModelById(_id)?.updateStyles(this.tempStyles[_id])
+      elementModel?.updateStyles(this.tempStyles[_id])
+      relateElements.push(elementModel)
+    })
+    this.lf.emit('highlight:path', {
+      data: this.lf.getModelById(id),
+      relateElements,
     })
   }
 
   highlight(id: string, mode: IMode = this.mode) {
+    console.log('highlight', id, mode)
     if (!this.enable) return
     if (Object.keys(this.tempStyles).length) {
       this.restoreHighlight()
