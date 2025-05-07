@@ -78,8 +78,35 @@ export class ProximityConnect {
       },
     )
     // 节点、锚点拖拽结束事件
-    this.lf.graphModel.eventCenter.on('node:drop,anchor:dragend', () => {
+    this.lf.graphModel.eventCenter.on('node:drop', () => {
       if (!this.enable) return
+      this.handleDrop()
+    })
+    // 锚点拖拽需要单独判断一下当前拖拽终点是否在某个锚点上，如果是，就不触发插件的连线，以免出现创建了两条连线的问题，表现见 issue 2140
+    this.lf.graphModel.eventCenter.on('anchor:dragend', ({ e, edgeModel }) => {
+      if (!this.enable) return
+      const {
+        canvasOverlayPosition: { x: eventX, y: eventY },
+      } = this.lf.graphModel.getPointByClient({
+        x: e.clientX,
+        y: e.clientY,
+      })
+
+      if (edgeModel && this.virtualEdge) {
+        const { id: virtualEdgeId } = this.virtualEdge as BaseEdgeModel
+        const { targetNodeId } = edgeModel as BaseEdgeModel
+        const targetNodeModel =
+          this.lf.graphModel.getNodeModelById(targetNodeId)
+        const dropPointIsAnchor = targetNodeModel?.anchors.some((anchor) => {
+          const { x, y } = anchor
+          return Math.abs(eventX - x) <= 10 && Math.abs(eventY - y) <= 10
+        })
+        if (dropPointIsAnchor) {
+          this.lf.deleteEdge(virtualEdgeId)
+          return
+        }
+      }
+
       this.handleDrop()
     })
   }
@@ -335,6 +362,7 @@ export class ProximityConnect {
 
   // 增加实体边
   addActualEdge() {
+    console.log('addActualEdge')
     if (isNil(this.virtualEdge)) return
     const {
       type,
@@ -346,6 +374,7 @@ export class ProximityConnect {
       endPoint,
       pointsList,
     } = this.virtualEdge
+    this.lf.deleteEdge(this.virtualEdge.id)
     this.lf.addEdge({
       type,
       sourceNodeId,
@@ -356,7 +385,6 @@ export class ProximityConnect {
       endPoint,
       pointsList,
     })
-    this.lf.deleteEdge(this.virtualEdge.id)
   }
 
   // 设置虚拟边样式
