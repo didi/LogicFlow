@@ -100,7 +100,6 @@ export class Highlight {
   }
 
   public setMode(mode: IMode) {
-    console.log('setMode', mode)
     this.mode = mode
   }
 
@@ -178,7 +177,6 @@ export class Highlight {
   }
 
   highlight(id: string, mode: IMode = this.mode) {
-    console.log('highlight', id, mode)
     if (!this.enable) return
     if (Object.keys(this.tempStyles).length) {
       this.restoreHighlight()

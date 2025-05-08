@@ -3,6 +3,7 @@ import LogicFlow, {
   twoPointDistance,
   BaseNodeModel,
   BaseEdgeModel,
+  isInNode,
 } from '@logicflow/core'
 import { assign, isEmpty, isEqual, isNil, isFinite, reduce } from 'lodash-es'
 
@@ -97,11 +98,11 @@ export class ProximityConnect {
         const { targetNodeId } = edgeModel as BaseEdgeModel
         const targetNodeModel =
           this.lf.graphModel.getNodeModelById(targetNodeId)
-        const dropPointIsAnchor = targetNodeModel?.anchors.some((anchor) => {
-          const { x, y } = anchor
-          return Math.abs(eventX - x) <= 10 && Math.abs(eventY - y) <= 10
-        })
-        if (dropPointIsAnchor) {
+        if (
+          targetNodeModel &&
+          isInNode({ x: eventX, y: eventY }, targetNodeModel)
+        ) {
+          // 如果当前拖拽点在锚点上，就不触发插件的连线
           this.lf.deleteEdge(virtualEdgeId)
           return
         }
@@ -362,7 +363,6 @@ export class ProximityConnect {
 
   // 增加实体边
   addActualEdge() {
-    console.log('addActualEdge')
     if (isNil(this.virtualEdge)) return
     const {
       type,
@@ -397,7 +397,6 @@ export class ProximityConnect {
 
   // 设置连线阈值
   public setThresholdDistance(distance: number) {
-    console.log('distance', distance)
     if (!isFinite(distance)) return
     this.thresholdDistance = distance
   }

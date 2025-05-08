@@ -513,9 +513,6 @@ export class DynamicGroup {
       }
     })
 
-    // TODO: 确认，递归的方式，是否将所有嵌套的边数据都有返回
-    console.log('allRelatedEdges -->>', allRelatedEdges)
-
     // 1. 判断每一条边的开始节点、目标节点是否在 Group 中
     const edgesInnerGroup = filter(allRelatedEdges, (edge) => {
       return (
