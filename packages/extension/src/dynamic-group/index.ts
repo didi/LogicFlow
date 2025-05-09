@@ -496,7 +496,7 @@ export class DynamicGroup {
 
         // 1. 存储 children 内部节点相关的输入边（incoming）
         allRelatedEdges.push(
-          ...[...tempChildNode.incoming.edges, ...tempChildNode.outgoing.edges],
+          ...[...childNode.incoming.edges, ...childNode.outgoing.edges],
         )
 
         if (childNodeChildren instanceof Set) {
@@ -545,11 +545,8 @@ export class DynamicGroup {
     const sourceId = nodeIdMap[sourceNodeId] ?? sourceNodeId
     const targetId = nodeIdMap[targetNodeId] ?? targetNodeId
 
-    // 如果是有 id 且 text 是对象的边，需要重新计算位置，否则直接用 edgeConfig 生成边
     let newEdgeConfig = cloneDeep(edge)
-    if (edge.id && typeof edge.text === 'object' && edge.text !== null) {
-      newEdgeConfig = transformEdgeData(edge as EdgeData, distance)
-    }
+    newEdgeConfig = transformEdgeData(edge as EdgeData, distance)
 
     return this.lf.graphModel.addEdge({
       ...newEdgeConfig,
