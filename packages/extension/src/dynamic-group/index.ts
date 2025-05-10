@@ -7,7 +7,16 @@ import LogicFlow, {
   transformNodeData,
   transformEdgeData,
 } from '@logicflow/core'
-import { assign, cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
+import {
+  assign,
+  cloneDeep,
+  filter,
+  forEach,
+  has,
+  map,
+  sortBy,
+  uniqBy,
+} from 'lodash-es'
 import { DynamicGroupNode } from './node'
 import { DynamicGroupNodeModel } from './model'
 import { isAllowMoveTo, isBoundsInGroup } from './utils'
@@ -719,7 +728,7 @@ export class DynamicGroup {
             model as DynamicGroupNodeModel,
             distance,
           )
-          edgesInnerGroup.push(...edgesData)
+          edgesInnerGroup.push(...uniqBy(edgesData, 'id'))
         }
       })
 
