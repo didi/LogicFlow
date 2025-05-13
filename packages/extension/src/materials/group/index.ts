@@ -66,7 +66,7 @@ export class Group {
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
-    lf.addElements = (
+    lf.cloneElements = (
       { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
       distance: number,
     ): {
