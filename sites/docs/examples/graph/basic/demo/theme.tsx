@@ -8,6 +8,7 @@ import {
   ColorPicker,
   Collapse,
   Radio,
+  Button,
   InputNumber,
 } from 'antd';
 
@@ -37,357 +38,6 @@ const formList = [
   { key: 'resizeControl', label: '节点旋转控制点样式' },
   { key: 'resizeOutline', label: '节点调整大小时的外框样式' },
 ];
-
-const defaultTheme = {
-  baseNode: {
-    fill: '#fff',
-    stroke: '#000',
-    strokeWidth: 2,
-  },
-
-  baseEdge: {
-    stroke: '#000',
-    strokeWidth: 2,
-  },
-
-  rect: {},
-  circle: {},
-  diamond: {},
-  ellipse: {},
-  polygon: {},
-
-  text: {
-    color: '#000',
-    stroke: 'none',
-    fontSize: 12,
-    background: {
-      fill: 'transparent',
-    },
-  },
-
-  anchor: {
-    stroke: '#000',
-    fill: '#fff',
-    r: 4,
-    hover: {
-      r: 10,
-      fill: '#949494',
-      fillOpacity: 0.5,
-      stroke: '#949494',
-    },
-  },
-
-  anchorLine: {
-    stroke: '#000',
-    strokeWidth: 2,
-    strokeDasharray: '3,2',
-  },
-
-  nodeText: {
-    color: '#000',
-    overflowMode: 'default',
-    fontSize: 12,
-    lineHeight: 1.2,
-  },
-
-  edgeText: {
-    textWidth: 100,
-    overflowMode: 'default',
-    fontSize: 12,
-    background: {
-      fill: '#fff',
-    },
-  },
-
-  line: {},
-  polyline: {},
-
-  bezier: {
-    fill: 'none',
-    adjustLine: {
-      stroke: '#949494',
-    },
-    adjustAnchor: {
-      r: 4,
-      fill: '#949494',
-      fillOpacity: 1,
-      stroke: '#949494',
-    },
-  },
-
-  arrow: {
-    offset: 10,
-    verticalLength: 5, // 箭头垂直于边的距离
-  },
-
-  snapline: {
-    stroke: '#949494',
-    strokeWidth: 1,
-  },
-
-  edgeAdjust: {
-    r: 4,
-    fill: '#fff',
-    stroke: '#949494',
-    strokeWidth: 2,
-  },
-
-  outline: {
-    fill: 'transparent',
-    stroke: '#949494',
-    strokeDasharray: '3,3',
-    hover: {
-      stroke: '#949494',
-    },
-  },
-
-  edgeAnimation: {
-    stroke: 'red',
-    strokeDasharray: '10,10',
-    strokeDashoffset: '100%',
-    animationName: 'lf_animate_dash',
-    animationDuration: '20s',
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'linear',
-    animationDirection: 'normal',
-  },
-
-  rotateControl: {
-    stroke: '#000',
-    fill: '#fff',
-    strokeWidth: 1.5,
-  },
-
-  resizeControl: {
-    width: 7,
-    height: 7,
-    fill: '#fff',
-    stroke: '#000',
-  },
-
-  resizeOutline: {
-    fill: 'none',
-    stroke: 'transparent', // 矩形默认不显示调整边框
-    strokeWidth: 1,
-    strokeDasharray: '3,3',
-  },
-};
-const colorfulTheme = {
-  baseNode: {
-    fill: '#fefaec',
-    stroke: '#625772',
-    strokeWidth: 2,
-  },
-  baseEdge: {
-    stroke: '#625772',
-    strokeWidth: 2,
-  },
-  rect: {
-    fill: '#fefaec',
-    stroke: '#f38181',
-    strokeWidth: 2,
-  },
-  circle: {
-    fill: '#fefaec',
-    stroke: '#a9eee6',
-    strokeWidth: 4,
-  },
-  diamond: {
-    fill: '#fefaec',
-    stroke: '#fce38a',
-    strokeWidth: 4,
-  },
-  ellipse: {
-    fill: '#eaffd0',
-    stroke: '#95e1d3',
-    strokeWidth: 4,
-  },
-  polygon: {
-    fill: '#fce38a',
-    stroke: '#f38181',
-    strokeWidth: 4,
-  },
-  line: {
-    stroke: '#2d4059',
-    strokeWidth: 2,
-  },
-  polyline: {
-    stroke: '#ff7e67',
-    strokeWidth: 2,
-    strokeDasharray: '5,5',
-  },
-  bezier: {
-    stroke: '#c86b85',
-    strokeWidth: 2,
-    strokeDasharray: '10,10',
-  },
-  anchorLine: {
-    stroke: '#ffc93c',
-    strokeWidth: 8,
-    strokeDasharray: '15,15',
-  },
-  text: {
-    color: '#ff6f3c',
-    fontSize: 14,
-  },
-  nodeText: {
-    color: '#7e6bc4',
-    fontSize: 14,
-    fontWeight: 800,
-  },
-  edgeText: {
-    color: '#ffaa64',
-    fontSize: 14,
-  },
-  inputText: {
-    color: '#ffaa64',
-    background: 'transparent',
-    fontSize: 14,
-  },
-  anchor: {
-    fill: '#ffaa64',
-    stroke: '#fff5a5',
-  },
-  arrow: {
-    stroke: '#f8b595',
-    strokeWidth: 1,
-  },
-  snapline: {
-    stroke: '#f67280',
-    strokeWidth: 1,
-  },
-  rotateControl: {
-    fill: '#f8b595',
-    stroke: '#6c5b7c',
-  },
-  resizeControl: {
-    fill: '#a4e5d9',
-    stroke: '#649dad',
-  },
-  resizeOutline: {
-    stroke: '#a4e5d9',
-  },
-  edgeAdjust: {
-    fill: '#fb929e',
-    stroke: '#fff6f6',
-  },
-  outline: {
-    hover: {
-      stroke: '#7098da',
-    },
-    stroke: '#a393eb',
-    strokeWidth: 2,
-  },
-  edgeAnimation: {},
-};
-const darkTheme = {
-  baseNode: {
-    fill: '#282c34',
-    stroke: '#FF79C6',
-    strokeWidth: 2,
-  },
-  baseEdge: {
-    stroke: '#FF79C6',
-    strokeWidth: 2,
-  },
-  rect: {
-    fill: '#282c34',
-    stroke: '#8dc87e',
-    strokeWidth: 2,
-  },
-  circle: {
-    fill: '#282c34',
-    stroke: '#62b2eb',
-    strokeWidth: 4,
-  },
-  diamond: {
-    fill: '#282c34',
-    stroke: '#ec5c72',
-    strokeWidth: 4,
-  },
-  ellipse: {
-    fill: '#282c34',
-    stroke: '#FFB86C',
-    strokeWidth: 4,
-  },
-  polygon: {
-    fill: '#282c34',
-    stroke: '#cd67d5',
-    strokeWidth: 4,
-  },
-  line: {
-    stroke: '#FF2222',
-    strokeWidth: 2,
-  },
-  polyline: {
-    stroke: '#1B2B34',
-    strokeWidth: 2,
-    strokeDasharray: '5,5',
-  },
-  bezier: {
-    stroke: '#282A36',
-    strokeWidth: 2,
-    strokeDasharray: '10,10',
-  },
-  anchorLine: {
-    stroke: '#DCDCAA',
-    strokeWidth: 8,
-    strokeDasharray: '15,15',
-  },
-  text: {
-    color: '#90549b',
-    fontSize: 14,
-  },
-  nodeText: {
-    color: '#D4D4D4',
-    fontSize: 14,
-    fontWeight: 800,
-  },
-  edgeText: {
-    color: '#D4D4D4',
-    fontSize: 14,
-  },
-  inputText: {
-    color: '#CE9178',
-    background: 'transparent',
-    fontSize: 14,
-  },
-  anchor: {
-    fill: '#282c34',
-    stroke: '#D7BA7D',
-  },
-  arrow: {
-    stroke: '#FF6600',
-    strokeWidth: 1,
-  },
-  snapline: {
-    stroke: '#666666',
-    strokeWidth: 1,
-  },
-  rotateControl: {
-    fill: '#282c34',
-    stroke: '#FF79C6',
-  },
-  resizeControl: {
-    fill: '#282c34',
-    stroke: '#D7BA7D',
-  },
-  resizeOutline: {
-    stroke: '#FF6600',
-  },
-  edgeAdjust: {
-    fill: '#fb929e',
-    stroke: '#fff6f6',
-  },
-  outline: {
-    hover: {
-      stroke: '#FF6600',
-    },
-    stroke: '#FF007F',
-    strokeWidth: 2,
-  },
-  edgeAnimation: {},
-};
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -443,20 +93,34 @@ const graphData = {
   ],
 };
 
-const initialFormValues = formList.reduce((acc, item) => {
-  acc[item.key] = { fill: '', stroke: '', strokeWidth: 1 };
+type FormValues = {
+  [key: string]: object;
+};
+
+const initialFormValues: FormValues = formList.reduce((acc, item) => {
+  acc[item.key] = {};
   return acc;
-}, {});
+}, {} as FormValues);
 
 const App: React.FC = () => {
   const lfRef = useRef<LogicFlow>();
   const containerRef = useRef<HTMLDivElement>(null);
   const [form] = Form.useForm();
+  const [themeModeList, setThemeModeList] = useState([
+    { label: '默认主题', value: 'default' },
+    { label: '圆角主题', value: 'radius' },
+    { label: '彩色主题', value: 'colorful' },
+    { label: '暗黑主题', value: 'dark' },
+  ]);
+  const [themeMode, setThemeMode] = useState('default');
   const [formValues, setFormValues] = useState(initialFormValues);
 
   useEffect(() => {
     lfRef.current?.setTheme(formValues);
   }, [formValues]);
+  useEffect(() => {
+    lfRef.current?.setTheme({}, themeMode as any);
+  }, [themeMode]);
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -520,7 +184,6 @@ const App: React.FC = () => {
         form={form}
         layout="vertical"
         size="small"
-        // 关键是添加这一行，确保表单显示最新值
         initialValues={formValues[key]}
         fields={Object.entries(formValues[key] || {}).map(([name, value]) => ({
           name,
@@ -531,13 +194,13 @@ const App: React.FC = () => {
         }
       >
         <Form.Item label="背景颜色" name="fill">
-          <ColorPicker defaultValue="#1677ff" size="small" showText />
+          <ColorPicker size="small" showText />
         </Form.Item>
         <Form.Item label="边框宽度" name="strokeWidth">
           <InputNumber size="small" />
         </Form.Item>
         <Form.Item label="边框颜色" name="stroke">
-          <ColorPicker defaultValue="#1677ff" size="small" showText />
+          <ColorPicker size="small" showText />
         </Form.Item>
       </Form>
     </div>
@@ -555,23 +218,74 @@ const App: React.FC = () => {
     </div>
   );
 
-  const handleThemeChange = (e: any) => {
+  const handleThemeModeChange = (e: any) => {
     const theme = e.target.value;
-    let newValues;
-
-    if (theme === 'defaultTheme') {
-      newValues = defaultTheme;
-    } else if (theme === 'colorfulTheme') {
-      newValues = colorfulTheme;
-    } else {
-      newValues = darkTheme;
-    }
-
     // 更新状态
-    setFormValues(newValues);
-
+    setThemeMode(theme);
+    const curTheme = lfRef.current?.getTheme();
     // 重置表单值
-    form.setFieldsValue(newValues);
+    form.setFieldsValue(curTheme);
+  };
+  const exportTheme = () => {
+    const theme = lfRef.current?.getTheme();
+    const themeString = JSON.stringify(theme, null, 2);
+    const blob = new Blob([themeString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'theme.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    message.success('主题导出成功');
+  };
+  const importTheme = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          try {
+            const theme = JSON.parse(content);
+            const time = new Date();
+            const themeName = `customTheme-${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+            lfRef.current?.addThemeMode(themeName, theme);
+            lfRef.current?.setTheme({}, themeName);
+            setThemeModeList([
+              ...themeModeList,
+              {
+                label: `自定义主题${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+                value: themeName,
+              },
+            ]);
+            setThemeMode(themeName);
+            form.setFieldsValue(theme);
+            setFormValues(theme);
+            message.success('主题导入成功');
+            console.log('theme', formValues);
+          } catch (error) {
+            message.error(`主题导入失败：${error}`);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+  const handleCopyTheme = () => {
+    const theme = lfRef.current?.getTheme();
+    const themeString = JSON.stringify(theme, null, 2);
+    navigator.clipboard.writeText(themeString).then(
+      () => {
+        message.success('主题配置复制成功');
+      },
+      (err) => {
+        message.error(`主题配置复制失败，错误信息: ${err}`);
+      },
+    );
   };
 
   return (
@@ -580,16 +294,39 @@ const App: React.FC = () => {
         <Col span={6}>
           <h3>主题设置</h3>
           <Radio.Group
-            defaultValue="defaultTheme"
+            value={themeMode}
+            name="themeMode"
+            defaultValue="default"
             buttonStyle="solid"
-            onChange={handleThemeChange}
+            onChange={handleThemeModeChange}
           >
-            <Radio value="defaultTheme">默认主题</Radio>
-            <Radio value="colorfulTheme">彩色主题</Radio>
-            <Radio value="darkTheme">暗黑主题</Radio>
+            {themeModeList.map((item) => (
+              <Radio key={item.value} value={item.value}>
+                {item.label}
+              </Radio>
+            ))}
           </Radio.Group>
           <Divider />
           <h3>样式定制</h3>
+          <Button
+            type="text"
+            onClick={() => {
+              form.setFieldsValue(initialFormValues);
+              setFormValues(initialFormValues);
+            }}
+          >
+            重置
+          </Button>
+          <Button type="link" onClick={() => importTheme()}>
+            导入
+          </Button>
+          <Button type="link" onClick={() => handleCopyTheme()}>
+            复制
+          </Button>
+          <Button type="link" onClick={() => exportTheme()}>
+            导出
+          </Button>
+          <Divider />
           {customPanel()}
         </Col>
         <Col span={18}>

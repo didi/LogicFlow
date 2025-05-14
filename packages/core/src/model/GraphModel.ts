@@ -5,6 +5,7 @@ import {
   merge,
   isBoolean,
   debounce,
+  cloneDeep,
   isNil,
 } from 'lodash-es'
 import { action, computed, observable } from 'mobx'
@@ -42,6 +43,8 @@ import {
   setupTheme,
   snapToGrid,
   updateTheme,
+  backgroundModeMap,
+  gridModeMap,
 } from '../util'
 import EventEmitter from '../event/eventEmitter'
 import { Grid } from '../view/overlay'
@@ -64,6 +67,8 @@ export class GraphModel {
 
   // 流程图主题配置
   @observable theme: LogicFlow.Theme
+  // 初始化样式
+  customStyles: object
   // 网格配置
   @observable grid: Grid.GridOptions
   // 事件中心
@@ -165,7 +170,8 @@ export class GraphModel {
       // TODO：需要让用户设置成 0 吗？后面可以讨论一下
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
-    this.theme = setupTheme(options.style)
+    this.theme = setupTheme(options.style, options.themeMode)
+    this.customStyles = options.style || {}
     this.grid = Grid.getGridOptions(grid ?? false)
     this.edgeType = options.edgeType || 'polyline'
     this.animation = setupAnimation(animation)
@@ -1471,8 +1477,40 @@ export class GraphModel {
    * 设置主题
    * todo docs link
    */
-  @action setTheme(style: Partial<LogicFlow.Theme>) {
-    this.theme = updateTheme({ ...this.theme, ...style })
+  @action setTheme(
+    style: Partial<LogicFlow.Theme>,
+    themeMode?: 'radius' | 'dark' | 'colorful' | 'default' | string,
+  ) {
+    if (themeMode) {
+      // 修改背景颜色
+      this.updateBackgroundOptions(backgroundModeMap[themeMode])
+      this.updateGridOptions(
+        Grid.getGridOptions(gridModeMap[themeMode] ?? false),
+      )
+    }
+    if (style.background) {
+      this.updateBackgroundOptions(style.background)
+    }
+    if (style.grid) {
+      const formattedGrid = Grid.getGridOptions(style.grid ?? false)
+      this.updateGridOptions(formattedGrid)
+    }
+    this.theme = updateTheme({ ...this.customStyles, ...style }, themeMode)
+    this.customStyles = { ...this.customStyles, ...style }
+  }
+
+  /**
+   * 设置主题
+   * todo docs link
+   */
+  @action getTheme() {
+    const { background, grid } = this
+    const theme = {
+      ...cloneDeep(this.theme),
+      background,
+      grid,
+    }
+    return theme
   }
 
   /**
@@ -1502,6 +1540,7 @@ export class GraphModel {
         ...this.background,
         ...options,
       }
+      console.log('updateBackgroundOptions', this.background, options)
     }
   }
 

@@ -44,7 +44,7 @@ order: 0
 | fill          | string \| 'none' | 形状的填充颜色。可以是 CSS 颜色字符串（如 #000000、rgba(0, 0, 0, 0)），或者字符串 'none' 表示透明。                                                                 |
 | stroke        | string \| 'none' | 形状的描边颜色。与 fill 类似，可以是 CSS 颜色字符串或 'none'。                                                                                                      |
 | strokeWidth   | number           | 描边的宽度。定义形状边框的厚度。注意：在 SVG 中可接受的值既可以是数字，也可以是百分比（如 10%）。                                                                   |
-| radius        | number           | 形状的圆角半径，适用于圆角形状。此属性为可选项。                                                                                                                    |
+| radius        | number           | 形状的圆角半径，目前矩形、多边形和菱形支持设置圆角。此属性为可选项。                                                                                                |
 | rx            | number           | x 轴方向的圆角半径。此属性为可选项。                                                                                                                                |
 | ry            | number           | y 轴方向的圆角半径。此属性为可选项。                                                                                                                                |
 | width         | number           | 形状的宽度。此属性为可选项。                                                                                                                                        |

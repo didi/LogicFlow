@@ -163,6 +163,64 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   }
 
   /**
+   * Private helper method to generate arrow path based on type and parameters
+   */
+  private getArrowPath(
+    arrowType: string,
+    props: {
+      stroke?: string
+      fill?: string
+      strokeWidth?: number
+      offset: number
+      verticalLength: number
+      strokeLinecap?: string
+      strokeLinejoin?: string
+      transform?: string
+    },
+  ): h.JSX.Element {
+    const {
+      stroke,
+      fill = stroke,
+      strokeWidth,
+      offset = 10,
+      verticalLength,
+      strokeLinecap,
+      strokeLinejoin,
+      transform,
+    } = props
+    let arrowPath = ''
+
+    switch (arrowType) {
+      case 'solid':
+        arrowPath = `M${-offset / 4},0 L${(3 * offset) / 4},${verticalLength} L${(3 * offset) / 4},-${verticalLength} Z`
+        break
+      case 'hollow':
+        arrowPath = `M${-offset / 4},0 L${(3 * offset) / 4},${verticalLength} L${-offset / 4},0 L${(3 * offset) / 4},-${verticalLength} L${-offset / 4},0 Z`
+        break
+      case 'diamond':
+        arrowPath = `M${-offset / 2},0 L0,${verticalLength} L${offset / 2},0 L0,-${verticalLength} L${-offset / 2},0 Z`
+        break
+      case 'circle':
+        arrowPath = `M${-offset / 2},0 A${offset / 4},${offset / 4} 0 1,0 ${offset / 2},0 A${offset / 4},${offset / 4} 0 1,0 ${-offset / 2},0 Z`
+        break
+      default:
+        arrowPath = ''
+        break
+    }
+    return (
+      <path
+        d={arrowPath}
+        stroke={stroke}
+        fill={fill}
+        strokeWidth={strokeWidth}
+        strokeLinecap={strokeLinecap as any}
+        strokeLinejoin={strokeLinejoin as any}
+        transform={transform}
+      />
+    )
+  }
+
+  /**
    * @overridable 可重写，自定义边起点箭头形状。
    * @example
    * getStartArrow() {
@@ -176,7 +234,25 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    * }
    */
   getStartArrow(): h.JSX.Element | null {
-    return <path />
+    const { model } = this.props
+    const {
+      stroke,
+      strokeWidth,
+      offset,
+      verticalLength,
+      startArrowType = 'solid',
+      strokeLinecap,
+      strokeLinejoin,
+    } = model.getArrowStyle()
+
+    return this.getArrowPath(startArrowType, {
+      stroke,
+      strokeWidth,
+      offset,
+      verticalLength,
+      strokeLinecap,
+      strokeLinejoin,
+    })
   }
 
   /**
@@ -194,17 +270,25 @@ export abstract class BaseEdge<P extends IProps> extends Component<
    */
   getEndArrow(): h.JSX.Element | null {
     const { model } = this.props
-    const { stroke, strokeWidth, offset, verticalLength } =
-      model.getArrowStyle()
-    return (
-      <path
-        stroke={stroke}
-        fill={stroke}
-        strokeWidth={strokeWidth}
-        transform="rotate(180)"
-        d={`M 0 0 L ${offset} -${verticalLength} L ${offset} ${verticalLength} Z`}
-      />
-    )
+    const {
+      stroke,
+      strokeWidth,
+      offset,
+      verticalLength,
+      endArrowType = 'solid',
+      strokeLinecap,
+      strokeLinejoin,
+    } = model.getArrowStyle()
+
+    return this.getArrowPath(endArrowType, {
+      stroke,
+      strokeWidth,
+      offset,
+      verticalLength,
+      strokeLinecap,
+      strokeLinejoin,
+      transform: 'rotate(180)',
+    })
   }
 
   /**
