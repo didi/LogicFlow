@@ -1,4 +1,4 @@
-import LogicFlow from '@logicflow/core'
+import LogicFlow from '@logicflow/core';
 
 import {
   Card,
@@ -12,12 +12,12 @@ import {
   InputNumber,
   Button,
   message,
-} from 'antd'
-import { useEffect, useRef, useState } from 'react'
+} from 'antd';
+import { useEffect, useRef, useState } from 'react';
 // import styles from './index.less'
 
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
 const formList = [
   { key: 'baseNode', label: '节点样式' },
@@ -41,13 +41,13 @@ const formList = [
   { key: 'rotateControl', label: '节点旋转控制点样式' },
   { key: 'resizeControl', label: '节点旋转控制点样式' },
   { key: 'resizeOutline', label: '节点调整大小时的外框样式' },
-]
+];
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
-}
+};
 
 const data = {
   nodes: [
@@ -124,36 +124,36 @@ const data = {
       targetNodeId: '5',
     },
   ],
-}
+};
 
 type FormValues = {
-  [key: string]: object
-}
+  [key: string]: object;
+};
 
 const initialFormValues: FormValues = formList.reduce((acc, item) => {
-  acc[item.key] = {}
-  return acc
-}, {} as FormValues)
+  acc[item.key] = {};
+  return acc;
+}, {} as FormValues);
 
 export default function ThemeExample() {
-  const lfRef = useRef<LogicFlow>()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [form] = Form.useForm()
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [form] = Form.useForm();
   const [themeModeList, setThemeModeList] = useState([
     { label: '默认主题', value: 'default' },
     { label: '圆角主题', value: 'radius' },
     { label: '彩色主题', value: 'colorful' },
     { label: '暗黑主题', value: 'dark' },
-  ])
-  const [themeMode, setThemeMode] = useState('default')
-  const [formValues, setFormValues] = useState(initialFormValues)
+  ]);
+  const [themeMode, setThemeMode] = useState('default');
+  const [formValues, setFormValues] = useState(initialFormValues);
 
   useEffect(() => {
-    lfRef.current?.setTheme(formValues, themeMode as any)
-  }, [formValues])
+    lfRef.current?.setTheme(formValues, themeMode as any);
+  }, [formValues]);
   useEffect(() => {
-    lfRef.current?.setTheme({}, themeMode as any)
-  }, [themeMode])
+    lfRef.current?.setTheme({}, themeMode as any);
+  }, [themeMode]);
   // 初始化 LogicFlow
   useEffect(() => {
     if (!lfRef.current) {
@@ -175,42 +175,43 @@ export default function ThemeExample() {
         background: {
           color: '#FFFFFF',
         },
+        themeMode: 'radius',
         grid: true,
         edgeTextDraggable: true,
         edgeType: 'bezier',
         idGenerator(type) {
-          return type + '_' + Math.random()
+          return type + '_' + Math.random();
         },
         edgeGenerator: (sourceNode) => {
           // 限制'rect', 'diamond', 'polygon'节点的连线为贝塞尔曲线
           if (['rect', 'diamond', 'polygon'].includes(sourceNode.type))
-            return 'bezier'
-          return 'polyline'
+            return 'bezier';
+          return 'polyline';
         },
-      })
-      lf.render(data)
-      lf.translateCenter()
-      lfRef.current = lf
+      });
+      lf.render(data);
+      lf.translateCenter();
+      lfRef.current = lf;
     }
-  }, [])
+  }, []);
   const handleFormChange = (key: any, changedValues: any, allValues: any) => {
     // 处理颜色值，转换为十六进制
-    const processedValues = { ...allValues }
+    const processedValues = { ...allValues };
 
     // 检查是否有颜色值需要转换
     Object.keys(changedValues).forEach((key) => {
       // 处理常见的颜色属性字段
       if (key === 'fill' || key === 'stroke' || key === 'color') {
         if (changedValues[key] && changedValues[key].toHexString) {
-          processedValues[key] = changedValues[key].toHexString()
+          processedValues[key] = changedValues[key].toHexString();
         }
       }
-    })
+    });
     setFormValues({
       ...formValues,
       [key]: processedValues,
-    })
-  }
+    });
+  };
 
   const renderCard = (key) => (
     <div>
@@ -237,7 +238,7 @@ export default function ThemeExample() {
         </Form.Item>
       </Form>
     </div>
-  )
+  );
 
   const customPanel = () => (
     <div style={{ height: '400px', overflow: 'auto' }}>
@@ -249,77 +250,77 @@ export default function ThemeExample() {
         </Collapse>
       ))}
     </div>
-  )
+  );
 
   const handleThemeModeChange = (e: any) => {
-    const theme = e.target.value
+    const theme = e.target.value;
     // 更新状态
-    setThemeMode(theme)
-    const curTheme = lfRef.current?.getTheme()
+    setThemeMode(theme);
+    const curTheme = lfRef.current?.getTheme();
     // 重置表单值
-    form.setFieldsValue(curTheme)
-  }
+    form.setFieldsValue(curTheme);
+  };
   const exportTheme = () => {
-    const theme = lfRef.current?.getTheme()
-    const themeString = JSON.stringify(theme, null, 2)
-    const blob = new Blob([themeString], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'theme.json'
-    a.click()
-    URL.revokeObjectURL(url)
-    message.success('主题导出成功')
-  }
+    const theme = lfRef.current?.getTheme();
+    const themeString = JSON.stringify(theme, null, 2);
+    const blob = new Blob([themeString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'theme.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    message.success('主题导出成功');
+  };
   const importTheme = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.json'
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
     input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
+      const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.onload = (e) => {
-          const content = e.target?.result as string
+          const content = e.target?.result as string;
           try {
-            const theme = JSON.parse(content)
-            const time = new Date()
-            const themeName = `customTheme-${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
-            lfRef.current?.addThemeMode(themeName, theme)
-            lfRef.current?.setTheme({}, themeName)
+            const theme = JSON.parse(content);
+            const time = new Date();
+            const themeName = `customTheme-${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+            lfRef.current?.addThemeMode(themeName, theme);
+            lfRef.current?.setTheme({}, themeName);
             setThemeModeList([
               ...themeModeList,
               {
                 label: `自定义主题${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
                 value: themeName,
               },
-            ])
-            setThemeMode(themeName)
-            form.setFieldsValue(theme)
-            setFormValues(theme)
-            message.success('主题导入成功')
-            console.log('theme', formValues)
+            ]);
+            setThemeMode(themeName);
+            form.setFieldsValue(theme);
+            setFormValues(theme);
+            message.success('主题导入成功');
+            console.log('theme', formValues);
           } catch (error) {
-            message.error(`主题导入失败：${error}`)
+            message.error(`主题导入失败：${error}`);
           }
-        }
-        reader.readAsText(file)
+        };
+        reader.readAsText(file);
       }
-    }
-    input.click()
-  }
+    };
+    input.click();
+  };
   const handleCopyTheme = () => {
-    const theme = lfRef.current?.getTheme()
-    const themeString = JSON.stringify(theme, null, 2)
+    const theme = lfRef.current?.getTheme();
+    const themeString = JSON.stringify(theme, null, 2);
     navigator.clipboard.writeText(themeString).then(
       () => {
-        message.success('主题配置复制成功')
+        message.success('主题配置复制成功');
       },
       (err) => {
-        message.error(`主题配置复制失败，错误信息: ${err}`)
+        message.error(`主题配置复制失败，错误信息: ${err}`);
       },
-    )
-  }
+    );
+  };
 
   return (
     <Card title="LogicFlow - Theme">
@@ -344,8 +345,8 @@ export default function ThemeExample() {
           <Button
             type="text"
             onClick={() => {
-              form.setFieldsValue(initialFormValues)
-              setFormValues(initialFormValues)
+              form.setFieldsValue(initialFormValues);
+              setFormValues(initialFormValues);
             }}
           >
             重置
@@ -368,5 +369,5 @@ export default function ThemeExample() {
         </Col>
       </Row>
     </Card>
-  )
+  );
 }

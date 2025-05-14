@@ -14,7 +14,7 @@ import {
 
 import Graph from './view/Graph'
 import * as _View from './view'
-import { formatData } from './util'
+import { formatData, addThemeMode } from './util'
 
 import { Dnd, snapline } from './view/behavior'
 import Tool from './tool'
@@ -44,6 +44,7 @@ import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import ClientPosition = LogicFlow.ClientPosition
 import ExtensionDefinition = LogicFlow.ExtensionDefinition
 import ExtensionType = LogicFlow.ExtensionType
+import { Grid } from './view/overlay'
 
 const pluginFlag = Symbol('plugin registered by Logicflow.use')
 
@@ -928,8 +929,22 @@ export class LogicFlow {
    * @param { object } style 自定义主题样式
    * todo docs link
    */
-  setTheme(style: Partial<LogicFlow.Theme>): void {
-    this.graphModel.setTheme(style)
+  setTheme(
+    style: Partial<LogicFlow.Theme>,
+    themeMode?: 'radius' | 'dark' | 'colorful' | 'default' | string,
+  ): void {
+    this.graphModel.setTheme(style, themeMode)
+  }
+  /**
+   * 获取当前主题样式
+   * @see todo docs link
+   */
+  getTheme(): LogicFlow.Theme {
+    return this.graphModel.getTheme()
+  }
+
+  addThemeMode(themeMode: string, style: Partial<LogicFlow.Theme>) {
+    addThemeMode(themeMode, style)
   }
 
   private focusByElement(id: string) {
@@ -1801,6 +1816,10 @@ export namespace LogicFlow {
     refX?: number
     refY?: number
     verticalLength: number
+    endArrowType?: string // 结束箭头类型
+    startArrowType?: string // 开始箭头类型
+    strokeLinecap?: 'butt' | 'round' | 'square' // 线条的端点样式
+    strokeLinejoin?: 'miter' | 'round' | 'bevel' // 线条的连接样式
   } & CommonTheme
   export type ArrowAttributesType = {
     d: string
@@ -1855,6 +1874,10 @@ export namespace LogicFlow {
     edgeAdjust: CircleTheme
     outline: OutlineTheme // 节点选择状态下外侧的选框样式
     edgeAnimation: EdgeAnimation // 边动画样式
+
+    // 画布背景
+    background?: boolean | Partial<LFOptions.BackgroundConfig>
+    grid?: boolean | Partial<Grid.GridOptions>
   }
 }
 
