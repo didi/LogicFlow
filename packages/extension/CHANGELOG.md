@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.18
+
+### Patch Changes
+
+- fix:(extension): 所有导出方式支持局部导出+修复相对路径导出问题 & 渐进连线+highlight优化
+
 ## 2.0.17
 
 ### Patch Changes

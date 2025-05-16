@@ -1,5 +1,11 @@
 # @logicflow/react-node-registry
 
+## 1.0.15
+
+### Patch Changes
+
+- fix:(extension): 所有导出方式支持局部导出+修复相对路径导出问题 & 渐进连线+highlight优化
+
 ## 1.0.14
 
 ### Patch Changes
