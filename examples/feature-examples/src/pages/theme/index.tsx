@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import LogicFlow from '@logicflow/core'
+
 import {
   Card,
   Form,
@@ -8,12 +9,15 @@ import {
   ColorPicker,
   Collapse,
   Radio,
-  Button,
   InputNumber,
-} from 'antd';
+  Button,
+  message,
+} from 'antd'
+import { useEffect, useRef, useState } from 'react'
+// import styles from './index.less'
 
-const container = document.querySelector('#container');
-const root = createRoot(container);
+import '@logicflow/core/es/index.css'
+import '@logicflow/extension/es/index.css'
 
 const formList = [
   { key: 'baseNode', label: '节点样式' },
@@ -37,90 +41,120 @@ const formList = [
   { key: 'rotateControl', label: '节点旋转控制点样式' },
   { key: 'resizeControl', label: '节点旋转控制点样式' },
   { key: 'resizeOutline', label: '节点调整大小时的外框样式' },
-];
+]
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
   stopZoomGraph: true,
-};
+}
 
-// 画布元素
-const graphData = {
+const data = {
   nodes: [
     {
-      id: 'node-1',
+      id: '1',
       type: 'rect',
-      x: 100,
+      x: 150,
       y: 100,
       text: '矩形',
+      properties: {
+        radius: 8,
+      },
     },
     {
-      id: 'node-2',
+      id: '2',
       type: 'circle',
-      x: 300,
+      x: 350,
       y: 100,
       text: '圆形',
     },
     {
-      id: 'node-3',
+      id: '3',
       type: 'ellipse',
-      x: 300,
-      y: 250,
+      x: 550,
+      y: 100,
       text: '椭圆',
     },
     {
-      id: 'node-4',
+      id: '4',
       type: 'polygon',
-      x: 100,
+      x: 150,
       y: 250,
       text: '多边形',
     },
     {
-      id: 'node-5',
+      id: '5',
       type: 'diamond',
-      x: 100,
-      y: 400,
+      x: 350,
+      y: 250,
       text: '菱形',
     },
     {
-      id: 'node-6',
+      id: '6',
       type: 'text',
-      x: 300,
+      x: 550,
+      y: 250,
+      text: '纯文本节点',
+    },
+    {
+      id: '7',
+      type: 'html',
+      x: 150,
       y: 400,
-      text: '文本',
+      text: 'html节点',
     },
   ],
-};
+  edges: [
+    {
+      id: 'e_1',
+      type: 'polyline',
+      sourceNodeId: '1',
+      targetNodeId: '2',
+    },
+    {
+      id: 'e_2',
+      type: 'polyline',
+      sourceNodeId: '2',
+      targetNodeId: '3',
+    },
+    {
+      id: 'e_3',
+      type: 'polyline',
+      sourceNodeId: '4',
+      targetNodeId: '5',
+    },
+  ],
+}
 
 type FormValues = {
-  [key: string]: object;
-};
+  [key: string]: object
+}
 
 const initialFormValues: FormValues = formList.reduce((acc, item) => {
-  acc[item.key] = {};
-  return acc;
-}, {} as FormValues);
+  acc[item.key] = {}
+  return acc
+}, {} as FormValues)
 
-const App: React.FC = () => {
-  const lfRef = useRef<LogicFlow>();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [form] = Form.useForm();
+export default function ThemeExample() {
+  const lfRef = useRef<LogicFlow>()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [form] = Form.useForm()
   const [themeModeList, setThemeModeList] = useState([
     { label: '默认主题', value: 'default' },
     { label: '圆角主题', value: 'radius' },
     { label: '彩色主题', value: 'colorful' },
     { label: '暗黑主题', value: 'dark' },
-  ]);
-  const [themeMode, setThemeMode] = useState('default');
-  const [formValues, setFormValues] = useState(initialFormValues);
+  ])
+  const [themeMode, setThemeMode] = useState('default')
+  const [formValues, setFormValues] = useState(initialFormValues)
 
   useEffect(() => {
-    lfRef.current?.setTheme(formValues);
-  }, [formValues]);
+    lfRef.current?.setTheme(formValues, themeMode as any)
+  }, [formValues])
   useEffect(() => {
-    lfRef.current?.setTheme({}, themeMode as any);
-  }, [themeMode]);
+    lfRef.current?.setTheme({}, themeMode as any)
+  }, [themeMode])
+  // 初始化 LogicFlow
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -136,6 +170,7 @@ const App: React.FC = () => {
         keyboard: {
           enabled: true,
         },
+        // themeMode: 'radius',
         partial: true,
         background: {
           color: '#FFFFFF',
@@ -144,44 +179,42 @@ const App: React.FC = () => {
         edgeTextDraggable: true,
         edgeType: 'bezier',
         idGenerator(type) {
-          return type + '_' + Math.random();
+          return type + '_' + Math.random()
         },
         edgeGenerator: (sourceNode) => {
           // 限制'rect', 'diamond', 'polygon'节点的连线为贝塞尔曲线
           if (['rect', 'diamond', 'polygon'].includes(sourceNode.type))
-            return 'bezier';
-          return 'polyline';
+            return 'bezier'
+          return 'polyline'
         },
-      });
-      lf.render(graphData);
-      lfRef.current = lf;
-      (window as any).lf = lf;
+      })
+      lf.render(data)
+      lf.translateCenter()
+      lfRef.current = lf
     }
-  }, []);
-
+  }, [])
   const handleFormChange = (key: any, changedValues: any, allValues: any) => {
     // 处理颜色值，转换为十六进制
-    const processedValues = { ...allValues };
+    const processedValues = { ...allValues }
 
     // 检查是否有颜色值需要转换
     Object.keys(changedValues).forEach((key) => {
       // 处理常见的颜色属性字段
       if (key === 'fill' || key === 'stroke' || key === 'color') {
         if (changedValues[key] && changedValues[key].toHexString) {
-          processedValues[key] = changedValues[key].toHexString();
+          processedValues[key] = changedValues[key].toHexString()
         }
       }
-    });
+    })
     setFormValues({
       ...formValues,
       [key]: processedValues,
-    });
-  };
+    })
+  }
 
   const renderCard = (key) => (
     <div>
       <Form
-        form={form}
         layout="vertical"
         size="small"
         initialValues={formValues[key]}
@@ -204,7 +237,7 @@ const App: React.FC = () => {
         </Form.Item>
       </Form>
     </div>
-  );
+  )
 
   const customPanel = () => (
     <div style={{ height: '400px', overflow: 'auto' }}>
@@ -216,77 +249,77 @@ const App: React.FC = () => {
         </Collapse>
       ))}
     </div>
-  );
+  )
 
   const handleThemeModeChange = (e: any) => {
-    const theme = e.target.value;
+    const theme = e.target.value
     // 更新状态
-    setThemeMode(theme);
-    const curTheme = lfRef.current?.getTheme();
+    setThemeMode(theme)
+    const curTheme = lfRef.current?.getTheme()
     // 重置表单值
-    form.setFieldsValue(curTheme);
-  };
+    form.setFieldsValue(curTheme)
+  }
   const exportTheme = () => {
-    const theme = lfRef.current?.getTheme();
-    const themeString = JSON.stringify(theme, null, 2);
-    const blob = new Blob([themeString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'theme.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    message.success('主题导出成功');
-  };
+    const theme = lfRef.current?.getTheme()
+    const themeString = JSON.stringify(theme, null, 2)
+    const blob = new Blob([themeString], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'theme.json'
+    a.click()
+    URL.revokeObjectURL(url)
+    message.success('主题导出成功')
+  }
   const importTheme = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
     input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
+      const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = (e) => {
-          const content = e.target?.result as string;
+          const content = e.target?.result as string
           try {
-            const theme = JSON.parse(content);
-            const time = new Date();
-            const themeName = `customTheme-${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
-            lfRef.current?.addThemeMode(themeName, theme);
-            lfRef.current?.setTheme({}, themeName);
+            const theme = JSON.parse(content)
+            const time = new Date()
+            const themeName = `customTheme-${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+            lfRef.current?.addThemeMode(themeName, theme)
+            lfRef.current?.setTheme({}, themeName)
             setThemeModeList([
               ...themeModeList,
               {
                 label: `自定义主题${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
                 value: themeName,
               },
-            ]);
-            setThemeMode(themeName);
-            form.setFieldsValue(theme);
-            setFormValues(theme);
-            message.success('主题导入成功');
-            console.log('theme', formValues);
+            ])
+            setThemeMode(themeName)
+            form.setFieldsValue(theme)
+            setFormValues(theme)
+            message.success('主题导入成功')
+            console.log('theme', formValues)
           } catch (error) {
-            message.error(`主题导入失败：${error}`);
+            message.error(`主题导入失败：${error}`)
           }
-        };
-        reader.readAsText(file);
+        }
+        reader.readAsText(file)
       }
-    };
-    input.click();
-  };
+    }
+    input.click()
+  }
   const handleCopyTheme = () => {
-    const theme = lfRef.current?.getTheme();
-    const themeString = JSON.stringify(theme, null, 2);
+    const theme = lfRef.current?.getTheme()
+    const themeString = JSON.stringify(theme, null, 2)
     navigator.clipboard.writeText(themeString).then(
       () => {
-        message.success('主题配置复制成功');
+        message.success('主题配置复制成功')
       },
       (err) => {
-        message.error(`主题配置复制失败，错误信息: ${err}`);
+        message.error(`主题配置复制失败，错误信息: ${err}`)
       },
-    );
-  };
+    )
+  }
 
   return (
     <Card title="LogicFlow - Theme">
@@ -311,8 +344,8 @@ const App: React.FC = () => {
           <Button
             type="text"
             onClick={() => {
-              form.setFieldsValue(initialFormValues);
-              setFormValues(initialFormValues);
+              form.setFieldsValue(initialFormValues)
+              setFormValues(initialFormValues)
             }}
           >
             重置
@@ -335,75 +368,5 @@ const App: React.FC = () => {
         </Col>
       </Row>
     </Card>
-  );
-};
-
-root.render(<App></App>);
-
-insertCss(`
-#container {
-  overflow: auto;
+  )
 }
-
-*:focus {
-  outline: none;
-}
-
-.dnd-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  user-select: none;
-}
-
-.wrapper {
-  width: 80px;
-  height: 50px;
-  background: #fff;
-  border: 2px solid #000;
-}
-
-.uml-wrapper {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  background: rgb(255 242 204);
-  border: 1px solid rgb(214 182 86);
-  border-radius: 10px;
-}
-
-.uml-head {
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 30px;
-  text-align: center;
-}
-
-.uml-body {
-  padding: 5px 10px;
-  font-size: 12px;
-  border-top: 1px solid rgb(214 182 86);
-  border-bottom: 1px solid rgb(214 182 86);
-}
-
-.uml-footer {
-  padding: 5px 10px;
-  font-size: 14px;
-}
-
-/* 输入框字体大小和设置的大小保持一致，自动换行输入和展示保持一致 */
-.lf-text-input {
-  font-size: 12px;
-}
-
-.buttons {
-  position: absolute;
-  z-index: 1;
-}
-
-.button-list {
-  display: flex;
-  align-items: center;
-}
-`);

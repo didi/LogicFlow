@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import LogicFlow from '@logicflow/core';
+
 import {
   Card,
   Form,
@@ -8,12 +9,15 @@ import {
   ColorPicker,
   Collapse,
   Radio,
-  Button,
   InputNumber,
+  Button,
+  message,
 } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+// import styles from './index.less'
 
-const container = document.querySelector('#container');
-const root = createRoot(container);
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
 const formList = [
   { key: 'baseNode', label: '节点样式' },
@@ -45,50 +49,79 @@ const config: Partial<LogicFlow.Options> = {
   stopZoomGraph: true,
 };
 
-// 画布元素
-const graphData = {
+const data = {
   nodes: [
     {
-      id: 'node-1',
+      id: '1',
       type: 'rect',
-      x: 100,
+      x: 150,
       y: 100,
       text: '矩形',
+      properties: {
+        radius: 8,
+      },
     },
     {
-      id: 'node-2',
+      id: '2',
       type: 'circle',
-      x: 300,
+      x: 350,
       y: 100,
       text: '圆形',
     },
     {
-      id: 'node-3',
+      id: '3',
       type: 'ellipse',
-      x: 300,
-      y: 250,
+      x: 550,
+      y: 100,
       text: '椭圆',
     },
     {
-      id: 'node-4',
+      id: '4',
       type: 'polygon',
-      x: 100,
+      x: 150,
       y: 250,
       text: '多边形',
     },
     {
-      id: 'node-5',
+      id: '5',
       type: 'diamond',
-      x: 100,
-      y: 400,
+      x: 350,
+      y: 250,
       text: '菱形',
     },
     {
-      id: 'node-6',
+      id: '6',
       type: 'text',
-      x: 300,
+      x: 550,
+      y: 250,
+      text: '纯文本节点',
+    },
+    {
+      id: '7',
+      type: 'html',
+      x: 150,
       y: 400,
-      text: '文本',
+      text: 'html节点',
+    },
+  ],
+  edges: [
+    {
+      id: 'e_1',
+      type: 'polyline',
+      sourceNodeId: '1',
+      targetNodeId: '2',
+    },
+    {
+      id: 'e_2',
+      type: 'polyline',
+      sourceNodeId: '2',
+      targetNodeId: '3',
+    },
+    {
+      id: 'e_3',
+      type: 'polyline',
+      sourceNodeId: '4',
+      targetNodeId: '5',
     },
   ],
 };
@@ -102,7 +135,7 @@ const initialFormValues: FormValues = formList.reduce((acc, item) => {
   return acc;
 }, {} as FormValues);
 
-const App: React.FC = () => {
+export default function ThemeExample() {
   const lfRef = useRef<LogicFlow>();
   const containerRef = useRef<HTMLDivElement>(null);
   const [form] = Form.useForm();
@@ -116,11 +149,12 @@ const App: React.FC = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   useEffect(() => {
-    lfRef.current?.setTheme(formValues);
+    lfRef.current?.setTheme(formValues, themeMode as any);
   }, [formValues]);
   useEffect(() => {
     lfRef.current?.setTheme({}, themeMode as any);
   }, [themeMode]);
+  // 初始化 LogicFlow
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -136,10 +170,12 @@ const App: React.FC = () => {
         keyboard: {
           enabled: true,
         },
+        // themeMode: 'radius',
         partial: true,
         background: {
           color: '#FFFFFF',
         },
+        themeMode: 'radius',
         grid: true,
         edgeTextDraggable: true,
         edgeType: 'bezier',
@@ -153,12 +189,11 @@ const App: React.FC = () => {
           return 'polyline';
         },
       });
-      lf.render(graphData);
+      lf.render(data);
+      lf.translateCenter();
       lfRef.current = lf;
-      (window as any).lf = lf;
     }
   }, []);
-
   const handleFormChange = (key: any, changedValues: any, allValues: any) => {
     // 处理颜色值，转换为十六进制
     const processedValues = { ...allValues };
@@ -181,7 +216,6 @@ const App: React.FC = () => {
   const renderCard = (key) => (
     <div>
       <Form
-        form={form}
         layout="vertical"
         size="small"
         initialValues={formValues[key]}
@@ -336,74 +370,4 @@ const App: React.FC = () => {
       </Row>
     </Card>
   );
-};
-
-root.render(<App></App>);
-
-insertCss(`
-#container {
-  overflow: auto;
 }
-
-*:focus {
-  outline: none;
-}
-
-.dnd-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  user-select: none;
-}
-
-.wrapper {
-  width: 80px;
-  height: 50px;
-  background: #fff;
-  border: 2px solid #000;
-}
-
-.uml-wrapper {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  background: rgb(255 242 204);
-  border: 1px solid rgb(214 182 86);
-  border-radius: 10px;
-}
-
-.uml-head {
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 30px;
-  text-align: center;
-}
-
-.uml-body {
-  padding: 5px 10px;
-  font-size: 12px;
-  border-top: 1px solid rgb(214 182 86);
-  border-bottom: 1px solid rgb(214 182 86);
-}
-
-.uml-footer {
-  padding: 5px 10px;
-  font-size: 14px;
-}
-
-/* 输入框字体大小和设置的大小保持一致，自动换行输入和展示保持一致 */
-.lf-text-input {
-  font-size: 12px;
-}
-
-.buttons {
-  position: absolute;
-  z-index: 1;
-}
-
-.button-list {
-  display: flex;
-  align-items: center;
-}
-`);

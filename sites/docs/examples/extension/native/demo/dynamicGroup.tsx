@@ -75,6 +75,7 @@ const DynamicGroupExtension: React.FC = () => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
         ...config,
+        height: 600,
         container: containerRef.current as HTMLElement,
       });
 
