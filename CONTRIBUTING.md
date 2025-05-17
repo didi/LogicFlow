@@ -20,6 +20,9 @@ LogicFlow 维护同学会确认 issue 意图，更新合适的标签，关联 mi
 # 先创建开发分支开发，分支名应该有含义，避免使用 update、tmp 之类的
 $ git checkout -b branch-name
 
+# 先 build 所有 workspace 依赖，避免在开发某个包时，找不到 workspace 依赖
+$ pnpm run build
+
 # 开发某个包时，利用 build:watch 监听变化实时打包更新
 $ cd packages/core # or other packages, such as packages/extensions
 $ pnpm run build:watch
