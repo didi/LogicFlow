@@ -48,10 +48,11 @@ export class SnaplineModel {
       const item = nodes[i]
       // 排除当前节点
       if (item.id !== draggingNode.id) {
-        if (x === item.x) {
+        const epsilon = 1
+        if (equal(x, item.x, epsilon)) {
           isShowVertical = true
         }
-        if (y === item.y) {
+        if (equal(y, item.y, epsilon)) {
           isShowHorizontal = true
         }
         // 如果水平垂直都显示，则停止循环。减少不必要的遍历
@@ -95,10 +96,12 @@ export class SnaplineModel {
       // 排除当前节点
       if (item.id !== draggingNode.id) {
         const itemData = getNodeBBox(item)
+
         // 如果节点的最大最小Y轴坐标与节点的最大最小Y轴坐标相等，展示水平线
+        const epsilon = 1
         if (
-          itemData.minY === draggingData?.minY ||
-          itemData.maxY === draggingData?.minY
+          equal(itemData.minY, draggingData?.minY, epsilon) ||
+          equal(itemData.maxY, draggingData?.minY, epsilon)
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowHorizontal = true
@@ -106,8 +109,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minY === draggingData?.maxY ||
-          itemData.maxY === draggingData?.maxY
+          equal(itemData.minY, draggingData?.maxY, epsilon) ||
+          equal(itemData.maxY, draggingData?.maxY, epsilon)
         ) {
           isShowHorizontal = true
           horizontalY = draggingData.maxY
@@ -151,9 +154,10 @@ export class SnaplineModel {
       if (item.id !== draggingNode.id) {
         const itemData = getNodeBBox(item)
         // 如果节点的最大最小X轴坐标与节点的最大最小X轴坐标相等，展示垂直线
+        const epsilon = 1
         if (
-          itemData.minX === draggingData?.minX ||
-          itemData.maxX === draggingData?.minX
+          equal(itemData.minX, draggingData?.minX, epsilon) ||
+          equal(itemData.maxX, draggingData?.minX, epsilon)
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowVertical = true
@@ -161,8 +165,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minX === draggingData?.maxX ||
-          itemData.maxX === draggingData?.maxX
+          equal(itemData.minX, draggingData?.maxX, epsilon) ||
+          equal(itemData.maxX, draggingData?.maxX, epsilon)
         ) {
           isShowVertical = true
           verticalX = draggingData.maxX
@@ -232,6 +236,14 @@ export class SnaplineModel {
     const { nodes } = this.graphModel
     const info = this.getSnapLinePosition(nodeData, nodes)
     this.setSnaplineInfo(info)
+  }
+}
+
+function equal(num1: number, num2: number, epsilon: number) {
+  if (Math.abs(num1 - num2) <= epsilon) {
+    return true
+  } else {
+    return false
   }
 }
 
