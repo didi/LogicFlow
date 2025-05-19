@@ -135,12 +135,6 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
       return true
     }
     selected = elements
-    selected.nodes.forEach((node) =>
-      translateNodeData(node, TRANSLATION_DISTANCE),
-    )
-    selected.edges.forEach((edge) =>
-      translateEdgeData(edge, TRANSLATION_DISTANCE),
-    )
     return false
   })
   // 粘贴
@@ -149,19 +143,13 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     if (graph.textEditElement) return true
     if (selected && (selected.nodes || selected.edges)) {
       lf.clearSelectElements()
-      const addElements = lf.addElements(
+      const addElements = lf.cloneElements(
         selected,
         CHILDREN_TRANSLATION_DISTANCE,
       )
       if (!addElements) return true
       addElements.nodes.forEach((node) => lf.selectElementById(node.id, true))
       addElements.edges.forEach((edge) => lf.selectElementById(edge.id, true))
-      selected.nodes.forEach((node) =>
-        translateNodeData(node, TRANSLATION_DISTANCE),
-      )
-      selected.edges.forEach((edge) =>
-        translateEdgeData(edge, TRANSLATION_DISTANCE),
-      )
       CHILDREN_TRANSLATION_DISTANCE =
         CHILDREN_TRANSLATION_DISTANCE + TRANSLATION_DISTANCE
     }
