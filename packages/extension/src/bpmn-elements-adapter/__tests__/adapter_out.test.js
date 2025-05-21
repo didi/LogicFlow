@@ -3,7 +3,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
 /* eslint-disable no-tabs */
-import { BPMNAdapter } from '..';
+import { BPMNAdapter } from '..'
 
 describe('Test BPMNAdapter: export xml', () => {
   const graphData = {
@@ -397,7 +397,7 @@ describe('Test BPMNAdapter: export xml', () => {
         ],
       },
     ],
-  };
+  }
   const xml = `    <bpmn:definitions id="Definitions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="http://logic-flow.org" exporter="logicflow" exporterVersion="1.2.10">	
   <bpmn:process isExecutable="true" id="Process">	
       <bpmn:startEvent id="Event_0rqndvp" name="开始" />	
@@ -559,11 +559,11 @@ describe('Test BPMNAdapter: export xml', () => {
         </bpmndi:BPMNShape>	
     </bpmndi:BPMNPlane>	
   </bpmndi:BPMNDiagram>	
-</bpmn:definitions>`;
-  const lf = {};
-  const adapter = new BPMNAdapter({ lf });
+</bpmn:definitions>`
+  const lf = {}
+  const adapter = new BPMNAdapter({ lf })
 
   it('should transform logic-flow graph data to bpmn xml', () => {
-    expect(adapter.adapterXmlOut(graphData)).toEqual(xml);
-  });
-});
+    expect(adapter.adapterXmlOut(graphData)).toEqual(xml)
+  })
+})

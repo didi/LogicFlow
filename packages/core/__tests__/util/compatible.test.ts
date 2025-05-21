@@ -1,4 +1,4 @@
-import { formatData } from '../../src/util/compatible';
+import { formatData } from '../../src/util/compatible'
 
 describe('util/compatible', () => {
   test('formatData', () => {
@@ -22,7 +22,7 @@ describe('util/compatible', () => {
         c: null,
         d: [],
       },
-    };
+    }
     expect(formatData(data)).toEqual({
       nodes: [
         {
@@ -43,6 +43,6 @@ describe('util/compatible', () => {
         c: null,
         d: [],
       },
-    });
-  });
-});
+    })
+  })
+})

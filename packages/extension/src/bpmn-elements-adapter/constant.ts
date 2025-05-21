@@ -1,52 +1,52 @@
 export const StartEventConfig = {
   width: 40,
   height: 40,
-};
+}
 
 export const EndEventConfig = {
   width: 40,
   height: 40,
-};
+}
 
 export const BoundaryEventConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const IntermediateEventConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const ParallelGatewayConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const InclusiveGatewayConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const ExclusiveGatewayConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const ServiceTaskConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const UserTaskConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const SubProcessConfig = {
   width: 100,
   height: 80,
-};
+}
 
 export const theme = {
   rect: {
@@ -73,4 +73,4 @@ export const theme = {
       radius: 3,
     },
   },
-};
+}

@@ -350,7 +350,7 @@ export const calcLabelPositionOnPolyline = (
       y: minY + (maxY - minY) * yDeltaPercent,
     }
     return isPointOnEdge
-      ? getNewPointAtDistance(points, ratio) ?? point // 函数什么意思
+      ? (getNewPointAtDistance(points, ratio) ?? point) // 函数什么意思
       : positByPercent
   }
   // 如果文本在凸包的上方或者下方

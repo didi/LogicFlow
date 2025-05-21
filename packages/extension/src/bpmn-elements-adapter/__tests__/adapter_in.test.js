@@ -3,7 +3,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
 /* eslint-disable no-tabs */
-import { BPMNAdapter } from '..';
+import { BPMNAdapter } from '..'
 
 describe('Test BPMNAdapter: import xml', () => {
   const graphData = {
@@ -349,7 +349,7 @@ describe('Test BPMNAdapter: import xml', () => {
         ],
       },
     ],
-  };
+  }
   const xml = `    <bpmn:definitions id="Definitions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="http://logic-flow.org" exporter="logicflow" exporterVersion="1.2.10">	
   <bpmn:process isExecutable="true" id="Process">	
       <bpmn:startEvent id="Event_0rqndvp" name="开始" />	
@@ -511,16 +511,18 @@ describe('Test BPMNAdapter: import xml', () => {
         </bpmndi:BPMNShape>	
     </bpmndi:BPMNPlane>	
   </bpmndi:BPMNDiagram>	
-</bpmn:definitions>`;
-  const lf = {};
-  const adapter = new BPMNAdapter({ lf });
+</bpmn:definitions>`
+  const lf = {}
+  const adapter = new BPMNAdapter({ lf })
 
   // 导入时会处理内部会出boundaryEvents（配合Bpmn节点插件中的task、subProcess使用）但是在这里不需要，所以需要extraProps来过滤掉它
   it('should convert bpmn to graph data', () => {
-    expect(adapter.adapterXmlIn(xml, {
-      excludeFields: {
-        in: ['properties.boundaryEvents'],
-      },
-    })).toEqual(graphData);
-  });
-});
+    expect(
+      adapter.adapterXmlIn(xml, {
+        excludeFields: {
+          in: ['properties.boundaryEvents'],
+        },
+      }),
+    ).toEqual(graphData)
+  })
+})
