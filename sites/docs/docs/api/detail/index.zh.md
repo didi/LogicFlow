@@ -1,5 +1,3 @@
-# LogicFlow API 文档
-
 LogicFlow 提供了丰富的 API 来帮助开发者构建流程图编辑器。本文档详细介绍了所有可用的 API 方法。
 
 ## 目录
