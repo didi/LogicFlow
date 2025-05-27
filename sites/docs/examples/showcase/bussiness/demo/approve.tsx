@@ -258,7 +258,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       const rules = super.getConnectedTargetRules();
       const geteWayOnlyAsTarget = {
         message: '开始节点只能连出，不能连入！',
-        validate: (source: BaseNodeModel, target: BaseNodeModel) => {
+        validate: (_source: BaseNodeModel, target: BaseNodeModel) => {
           let isValid = true;
           if (target) {
             isValid = false;
@@ -271,6 +271,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       return rules;
     }
   }
+
   lf.register({
     type: 'apply',
     view: CircleNode,
@@ -279,6 +280,7 @@ const RegisteNodes = (lf: LogicFlow) => {
 
   class ApproverNode extends RectNode {
     static extendKey = 'UserTaskNode';
+
     getLabelShape() {
       const { x, y, width, height, properties } = this.props.model;
       const { labelColor, approveTypeLabel } = properties as nodeProperty;
@@ -295,6 +297,7 @@ const RegisteNodes = (lf: LogicFlow) => {
         approveTypeLabel,
       );
     }
+
     getShape() {
       const { x, y, width, height, radius } = this.props.model;
       const style = this.props.model.getNodeStyle();
@@ -312,6 +315,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       ]);
     }
   }
+
   class ApproverModel extends RectNodeModel {
     constructor(data: any, graphModel: GraphModel) {
       super(data, graphModel);
@@ -322,6 +326,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       };
     }
   }
+
   lf.register({
     type: 'approver',
     view: ApproverNode,
@@ -342,6 +347,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       };
     }
   }
+
   lf.register({
     type: 'jugement',
     view: PolygonNode,
@@ -366,6 +372,7 @@ const RegisteNodes = (lf: LogicFlow) => {
       return rules;
     }
   }
+
   lf.register({
     type: 'finsh',
     view: CircleNode,
