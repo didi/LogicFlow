@@ -19,8 +19,10 @@ export class SnaplineModel {
   @observable isShowVertical: boolean
   // 对齐线的中心位置，目前仅展示中心对齐的情况，后面可以考虑多种对齐策略
   @observable position: Position
+  // 对齐线显示的阈值距离
+  epsilon: number
 
-  constructor(graphModel: GraphModel) {
+  constructor(graphModel: GraphModel, epsilon: number = 1) {
     this.isShowHorizontal = false
     this.isShowVertical = false
     this.position = {
@@ -28,6 +30,7 @@ export class SnaplineModel {
       y: 0,
     }
     this.graphModel = graphModel
+    this.epsilon = epsilon
   }
 
   getStyle() {
@@ -48,10 +51,10 @@ export class SnaplineModel {
       const item = nodes[i]
       // 排除当前节点
       if (item.id !== draggingNode.id) {
-        if (x === item.x) {
+        if (equal(x, item.x, this.epsilon)) {
           isShowVertical = true
         }
-        if (y === item.y) {
+        if (equal(y, item.y, this.epsilon)) {
           isShowHorizontal = true
         }
         // 如果水平垂直都显示，则停止循环。减少不必要的遍历
@@ -95,10 +98,11 @@ export class SnaplineModel {
       // 排除当前节点
       if (item.id !== draggingNode.id) {
         const itemData = getNodeBBox(item)
+
         // 如果节点的最大最小Y轴坐标与节点的最大最小Y轴坐标相等，展示水平线
         if (
-          itemData.minY === draggingData?.minY ||
-          itemData.maxY === draggingData?.minY
+          equal(itemData.minY, draggingData?.minY, this.epsilon) ||
+          equal(itemData.maxY, draggingData?.minY, this.epsilon)
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowHorizontal = true
@@ -106,8 +110,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minY === draggingData?.maxY ||
-          itemData.maxY === draggingData?.maxY
+          equal(itemData.minY, draggingData?.maxY, this.epsilon) ||
+          equal(itemData.maxY, draggingData?.maxY, this.epsilon)
         ) {
           isShowHorizontal = true
           horizontalY = draggingData.maxY
@@ -145,15 +149,21 @@ export class SnaplineModel {
         }
       }
     }
+
     for (let i = 0; i < nodes.length; i++) {
       const item = nodes[i]
       // 排除当前节点
       if (item.id !== draggingNode.id) {
         const itemData = getNodeBBox(item)
         // 如果节点的最大最小X轴坐标与节点的最大最小X轴坐标相等，展示垂直线
+        if (equal(itemData.minX, draggingData?.minX, this.epsilon)) {
+          isShowVertical = true
+          verticalX = draggingData.minX
+          break
+        }
         if (
-          itemData.minX === draggingData?.minX ||
-          itemData.maxX === draggingData?.minX
+          equal(itemData.minX, draggingData?.minX, this.epsilon) ||
+          equal(itemData.maxX, draggingData?.minX, this.epsilon)
         ) {
           // 找到则停止循环。减少不必要的遍历
           isShowVertical = true
@@ -161,8 +171,8 @@ export class SnaplineModel {
           break
         }
         if (
-          itemData.minX === draggingData?.maxX ||
-          itemData.maxX === draggingData?.maxX
+          equal(itemData.minX, draggingData?.maxX, this.epsilon) ||
+          equal(itemData.maxX, draggingData?.maxX, this.epsilon)
         ) {
           isShowVertical = true
           verticalX = draggingData.maxX
@@ -232,6 +242,14 @@ export class SnaplineModel {
     const { nodes } = this.graphModel
     const info = this.getSnapLinePosition(nodeData, nodes)
     this.setSnaplineInfo(info)
+  }
+}
+
+function equal(num1: number, num2: number, epsilon: number) {
+  if (Math.abs(num1 - num2) <= epsilon) {
+    return true
+  } else {
+    return false
   }
 }
 
