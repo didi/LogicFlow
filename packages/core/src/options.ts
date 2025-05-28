@@ -88,6 +88,7 @@ export namespace Options {
     history?: boolean
     outline?: boolean
     snapline?: boolean
+    snaplineEpsilon?: number
     textEdit?: boolean
 
     guards?: GuardsConfig
