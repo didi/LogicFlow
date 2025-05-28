@@ -102,6 +102,7 @@ export namespace Options {
     edgeGenerator?: EdgeGeneratorType
 
     customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
+    themeMode?: 'radius' | 'dark' | 'colorful' // 主题模式
     [key: string]: unknown
   }
 

@@ -44,7 +44,7 @@ order: 0
 | fill          | string \| 'none' | 形状的填充颜色。可以是 CSS 颜色字符串（如 #000000、rgba(0, 0, 0, 0)），或者字符串 'none' 表示透明。                                                                 |
 | stroke        | string \| 'none' | 形状的描边颜色。与 fill 类似，可以是 CSS 颜色字符串或 'none'。                                                                                                      |
 | strokeWidth   | number           | 描边的宽度。定义形状边框的厚度。注意：在 SVG 中可接受的值既可以是数字，也可以是百分比（如 10%）。                                                                   |
-| radius        | number           | 形状的圆角半径，适用于圆角形状。此属性为可选项。                                                                                                                    |
+| radius        | number           | 形状的圆角半径，目前矩形、多边形和菱形支持设置圆角。此属性为可选项。                                                                                                |
 | rx            | number           | x 轴方向的圆角半径。此属性为可选项。                                                                                                                                |
 | ry            | number           | y 轴方向的圆角半径。此属性为可选项。                                                                                                                                |
 | width         | number           | 形状的宽度。此属性为可选项。                                                                                                                                        |
@@ -166,12 +166,16 @@ LogicFlow 中定义的各种边主题类型都扩展自 [CommonTheme](#commonthe
 ### ArrowTheme
 `ArrowTheme` 类型定义了边上箭头的主题样式。它继承自 [CommonTheme](#commontheme)，并添加了一些特定于箭头的属性：
 
-| 属性名         | 类型          | 描述                                                                           |
-| -------------- | ------------- | ------------------------------------------------------------------------------ |
-| offset         | number        | 箭头长度。例如，对于符号 "->"，offset 表示箭头大于号的宽度。                   |
-| refX           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refX 表示箭头大于号的高度。           |
-| refY           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refY 表示箭头大于号的高度。           |
-| verticalLength | number        | 箭头垂直于边的距离。例如，对于符号 "->"，verticalLength 表示箭头大于号的高度。 |
+| 属性名         | 类型          | 描述                                                                                                                                                                         |
+| -------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| offset         | number        | 箭头长度。例如，对于符号 "->"，offset 表示箭头大于号的宽度。                                                                                                                 |
+| refX           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refX 表示箭头大于号的高度。                                                                                                         |
+| refY           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refY 表示箭头大于号的高度。                                                                                                         |
+| verticalLength | number        | 箭头垂直于边的距离。例如，对于符号 "->"，verticalLength 表示箭头大于号的高度。                                                                                               |
+| endArrowType   | string (可选) | 终点箭头类型，目前LogicFlow内置支持用户设置以下4种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>内部默认会用`solid` |
+| startArrowType | string (可选) | 起点箭头类型，目前LogicFlow内置支持用户设置以下4种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>内部默认会用`solid` |
+| strokeLinecap  | string (可选) | 线条的端点样式，作用同SVG strokeLinecap，支持传入：'butt'、'round'、'square' 三个值                                                                                          |
+| strokeLinejoin | string (可选) | 线条的连接样式，作用同SVG strokeLinecap，支持传入：'miter'、'round'、'bevel' 三个值                                                                                          |
 
 ### AnchorLineTheme
 `AnchorLineTheme`类型表示节点锚点拖出的连线的主题，它继承自 [EdgeTheme](#edgetheme) 和 `EdgeAnimation`。

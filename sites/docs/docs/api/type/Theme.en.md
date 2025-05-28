@@ -4,8 +4,9 @@ title: Theme
 toc: content
 order: 0
 ---
-This article mainly introduces the type definitions of LogicFlow theme styles. Let's start with the `style` parameter used to control the overall style of the canvas when creating a LogicFlow instance, which is of type `Theme`:
+This article mainly introduces the type definitions of LogicFlow theme styles.
 
+## Theme
 The `Theme` type defines the theme styles for various elements in LogicFlow. It includes the style configurations for nodes, edges, text, anchors, arrows, and other elements.
 
 | Property Name | Type                                    | Description                               |
@@ -43,7 +44,7 @@ The `CommonTheme` type defines the common properties that can be applied to vari
 | fill          | string \| 'none' | The fill color of the shape. It can be a CSS color string (e.g., #000000, rgba(0, 0, 0, 0)), or the string 'none' to indicate transparency.                                                                                                                         |
 | stroke        | string \| 'none' | The stroke color of the shape. Similar to fill, it can be a CSS color string or 'none'.                                                                                                                                                                             |
 | strokeWidth   | number           | The width of the stroke. Defines the thickness of the shape's border. Note: In SVG, acceptable values can be either numbers or percentages (e.g., 10%).                                                                                                             |
-| radius        | number           | The corner radius of the shape, applicable to rounded shapes. This property is optional.                                                                                                                                                                            |
+| radius        | number           | The corner radius of the shape, only rect, diamond and polygon can set radius. This property is optional.                                                                                                                                                           |
 | rx            | number           | The x-axis radius of the corners. This property is optional.                                                                                                                                                                                                        |
 | ry            | number           | The y-axis radius of the corners. This property is optional.                                                                                                                                                                                                        |
 | width         | number           | The width of the shape. This property is optional.                                                                                                                                                                                                                  |
@@ -166,12 +167,16 @@ The `OutlineTheme` type defines the theme for the outline of nodes when selected
 ### ArrowTheme
 The `ArrowTheme` type defines the theme for arrows on edges. It inherits from [CommonTheme](#commontheme) and adds some properties specific to arrows:
 
-| Property Name  | Type              | Description                                                                                                                                           |
-| -------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| offset         | number            | The length of the arrow. For example, for the symbol "->", offset represents the width of the greater-than sign.                                      |
-| refX           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refX represents the height of the greater-than sign.           |
-| refY           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refY represents the height of the greater-than sign.           |
-| verticalLength | number            | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", verticalLength represents the height of the greater-than sign. |
+| Property Name  | Type              | Description                                                                                                                                                                                               |
+| -------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| offset         | number            | The length of the arrow. For example, for the symbol "->", offset represents the width of the greater-than sign.                                                                                          |
+| refX           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refX represents the height of the greater-than sign.                                                               |
+| refY           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refY represents the height of the greater-than sign.                                                               |
+| verticalLength | number            | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", verticalLength represents the height of the greater-than sign.                                                     |
+| endArrowType   | string (optional) | The end arrow type. LogicFlow internally supports the following 4 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`circle`: Circle arrow   |
+| startArrowType | string (optional) | The start arrow type. LogicFlow internally supports the following 4 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`circle`: Circle arrow |
+| strokeLinecap  | string (optional) | The end style of the line, same as SVG strokeLinecap, supports three values: 'butt', 'round', 'square'                                                                                                    |
+| strokeLinejoin | string (optional) | The join style of the line, same as SVG strokeLinejoin, supports three values: 'miter', 'round', 'bevel'                                                                                                  |
 
 ### AnchorLineTheme
 The `AnchorLineTheme` type represents the theme for lines drawn from anchors. It inherits from [EdgeTheme](#edgetheme) and `EdgeAnimation`.
