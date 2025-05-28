@@ -133,7 +133,10 @@ export class LogicFlow {
     })
 
     if (initOptions.snapline !== false) {
-      this.snaplineModel = new SnaplineModel(this.graphModel)
+      this.snaplineModel = new SnaplineModel(
+        this.graphModel,
+        initOptions.snaplineEpsilon,
+      )
       snapline(eventCenter, this.snaplineModel)
     }
     if (!initOptions.isSilentMode) {
