@@ -1,12 +1,12 @@
 import LogicFlow from '@logicflow/core'
 import { Menu } from '@logicflow/extension'
 
-import { Card } from 'antd'
-import { useEffect, useRef } from 'react'
+import { Card, Select, Input, Button } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 import styles from './index.less'
 
 import '@logicflow/core/es/index.css'
-// import '@logicflow/extension/es/index.css'
+import '@logicflow/extension/es/index.css'
 
 import EdgeData = LogicFlow.EdgeData
 import NodeData = LogicFlow.NodeData
@@ -108,6 +108,17 @@ const data = {
 export default function MenuExtension() {
   const lfRef = useRef<LogicFlow>()
   const containerRef = useRef<HTMLDivElement>(null)
+  const [menuKey, setMenuKey] = useState<'nodeMenu' | 'edgeMenu' | 'graphMenu'>(
+    'nodeMenu',
+  )
+  const [menuItem, setMenuItem] = useState<string>('分享')
+
+  const handleMenuKeyChange = (
+    value: 'nodeMenu' | 'edgeMenu' | 'graphMenu',
+  ) => {
+    setMenuKey(value)
+  }
+
   useEffect(() => {
     console.log('Menu --->>>', Menu)
 
@@ -189,8 +200,52 @@ export default function MenuExtension() {
     }
   }, [])
 
+  const handleMenuItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMenuItem(e.target.value)
+  }
+
+  const handleChangeMenuItemDisabled = (disabled: boolean) => {
+    lfRef.current?.changeMenuItemDisableStatus(menuKey, menuItem, disabled)
+  }
+
+  const handleChangeSilentMode = () => {
+    const { isSilentMode } = lfRef.current?.graphModel.editConfigModel || {}
+    lfRef.current?.updateEditConfig({ isSilentMode: !isSilentMode })
+  }
+
   return (
     <Card title="LogicFlow Extension - Menu">
+      <div style={{ display: 'flex', gap: 10 }}>
+        <Select
+          options={[
+            { label: '节点菜单', value: 'nodeMenu' },
+            { label: '边菜单', value: 'edgeMenu' },
+            { label: '图菜单', value: 'graphMenu' },
+          ]}
+          value={menuKey}
+          onChange={handleMenuKeyChange}
+        />
+        <Input
+          style={{ width: 100 }}
+          value={menuItem}
+          onChange={handleMenuItemChange}
+        />
+        <Button
+          type="primary"
+          onClick={() => handleChangeMenuItemDisabled(true)}
+        >
+          禁用
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => handleChangeMenuItemDisabled(false)}
+        >
+          启用
+        </Button>
+        <Button type="primary" onClick={handleChangeSilentMode}>
+          切换静默状态
+        </Button>
+      </div>
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
   )
