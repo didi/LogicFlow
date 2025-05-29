@@ -417,6 +417,9 @@ export default defineConfig({
   alias: {
     '@': __dirname,
   },
+  // 静态资源处理
+  publicPath: '/',
+  history: { type: 'browser' },
   links: [],
   scripts: [],
   headScripts: [],
@@ -473,6 +476,24 @@ export default defineConfig({
       //   .plugin('webpack-bundle-analyzer')
       //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
     }
+
+    // 配置图片处理规则
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|svg|webp|ico|bmp)$/i)
+      .include.add(/examples/)
+      .add(/public/)
+      .add(/src/)
+      .add(/assets/)
+      // .end()
+      // .use('url-loader')
+      // .loader('url-loader')
+      // .options({
+      //   limit: 8192, // 小于8KB的图片转base64
+      //   name: 'images/[name].[hash:8].[ext]',
+      //   fallback: 'file-loader',
+      // })
+      .end();
 
     return config;
   },
