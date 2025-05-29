@@ -1,10 +1,27 @@
-import { Card, Select, Input, Button, Space, Row, Col, message } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import LogicFlow from '@logicflow/core';
+import { Menu } from '@logicflow/extension';
+import {
+  Card,
+  Select,
+  Input,
+  Button,
+  Space,
+  Divider,
+  Row,
+  Col,
+  message,
+} from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import styles from './index.module.less';
+import textEditIcon from './text-edit.svg';
+import gifIcon from './gif-icon.gif';
 
-const textEditIcon = '/text-edit.svg'; // 图片实际放在了public目录下
-const gifIcon = '/gif-icon.gif'; // 图片实际放在了public目录下
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
-const { Menu } = Extension;
+import NodeData = LogicFlow.NodeData;
+import EdgeData = LogicFlow.EdgeData;
+import Position = LogicFlow.Position;
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -85,10 +102,8 @@ const data = {
     },
   ],
 };
-const container = document.querySelector('#container');
-const root = createRoot(container);
 
-const MenuExtension: React.FC = () => {
+export default function MenuExample() {
   const lfRef = useRef<LogicFlow>();
   const containerRef = useRef<HTMLDivElement>(null);
   const [menuKey, setMenuKey] = useState<'nodeMenu' | 'edgeMenu' | 'graphMenu'>(
@@ -269,7 +284,7 @@ const MenuExtension: React.FC = () => {
           },
           {
             text: 'className Icon',
-            icon: 'customIcon',
+            icon: styles.customIcon,
             callback() {
               message.info('这是展示gif图标的菜单项');
             },
@@ -356,20 +371,33 @@ const MenuExtension: React.FC = () => {
   return (
     <Card title="LogicFlow Extension - Menu 菜单插件示例">
       <Row gutter={16}>
-        <Col span={24}>
+        <Col span={12}>
           <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            <Divider>操作说明</Divider>
+            <div style={{ fontSize: '14px', color: '#666' }}>
+              <p>
+                • 右键点击节点：查看节点菜单（包含属性、复制、删除、锁定等操作）
+              </p>
+              <p>
+                • 右键点击连线：查看边菜单（包含属性、编辑文本、删除等操作）
+              </p>
+              <p>
+                •
+                右键点击空白画布：查看画布菜单（包含添加节点、清空画布、适应画布等操作）
+              </p>
+              <p>
+                •
+                右键点击菱形节点：查看特殊类型菜单（包含特殊操作、类型转换等功能）
+              </p>
+              <p>• 使用下方控制面板可以动态禁用/启用指定菜单项</p>
+            </div>
+
+            <Divider>菜单配置</Divider>
             <Space direction="vertical" wrap>
-              <div style={{ padding: '10px' }}>
-                <Button
-                  type="default"
-                  onClick={handleResetMenu}
-                  style={{ marginBottom: 10 }}
-                >
-                  菜单重置
-                </Button>
-                <h3 style={{ margin: '10px 0' }}>菜单置灰</h3>
+              <Space wrap>
+                <div>菜单置灰</div>
                 <Select
-                  style={{ width: 120, marginRight: 10 }}
+                  style={{ width: 120 }}
                   options={[
                     { label: '节点菜单', value: 'nodeMenu' },
                     { label: '边菜单', value: 'edgeMenu' },
@@ -379,32 +407,32 @@ const MenuExtension: React.FC = () => {
                   onChange={handleMenuKeyChange}
                 />
                 <Input
-                  style={{ width: 120, marginRight: 10 }}
+                  style={{ width: 120 }}
                   value={menuItem}
                   onChange={handleMenuItemChange}
                   placeholder="菜单项文本"
                 />
                 <Button
-                  style={{ marginRight: 10 }}
                   type="primary"
                   onClick={() => handleChangeMenuItemDisabled(true)}
                 >
                   禁用
                 </Button>
                 <Button
-                  style={{ marginRight: 10 }}
                   type="primary"
                   onClick={() => handleChangeMenuItemDisabled(false)}
                 >
                   启用
                 </Button>
-              </div>
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '10px 0' }}>节点菜单</h3>
+              </Space>
+              <Button type="link" onClick={handleResetMenu}>
+                菜单重置
+              </Button>
+              <Space>
+                <div>节点菜单</div>
                 {nodeMenu.map((item) => {
                   return (
                     <Button
-                      shape="round"
                       key={`node-${item.text}-${isExistInMenu(item.text, 'nodeMenu')}-${forceUpdate}`}
                       type={
                         isExistInMenu(item.text, 'nodeMenu')
@@ -412,19 +440,17 @@ const MenuExtension: React.FC = () => {
                           : 'dashed'
                       }
                       onClick={() => handleUpdateMenu(item.text, 'nodeMenu')}
-                      style={{ marginRight: 10, marginBottom: 8 }}
                     >
                       {item.text}
                     </Button>
                   );
                 })}
-              </div>
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '10px 0' }}>边菜单</h3>
+              </Space>
+              <Space>
+                <div>边菜单</div>
                 {edgeMenu.map((item) => {
                   return (
                     <Button
-                      shape="round"
                       key={`edge-${item.text}-${isExistInMenu(item.text, 'edgeMenu')}-${forceUpdate}`}
                       type={
                         isExistInMenu(item.text, 'edgeMenu')
@@ -432,19 +458,17 @@ const MenuExtension: React.FC = () => {
                           : 'dashed'
                       }
                       onClick={() => handleUpdateMenu(item.text, 'edgeMenu')}
-                      style={{ marginRight: 10, marginBottom: 8 }}
                     >
                       {item.text}
                     </Button>
                   );
                 })}
-              </div>
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '10px 0' }}>画布菜单</h3>
+              </Space>
+              <Space>
+                <div>画布菜单</div>
                 {graphMenu.map((item) => {
                   return (
                     <Button
-                      shape="round"
                       key={`graph-${item.text}-${isExistInMenu(item.text, 'graphMenu')}-${forceUpdate}`}
                       type={
                         isExistInMenu(item.text, 'graphMenu')
@@ -452,41 +476,19 @@ const MenuExtension: React.FC = () => {
                           : 'dashed'
                       }
                       onClick={() => handleUpdateMenu(item.text, 'graphMenu')}
-                      style={{ marginRight: 10, marginBottom: 8 }}
                     >
                       {item.text}
                     </Button>
                   );
                 })}
-              </div>
+              </Space>
             </Space>
           </Space>
         </Col>
-        <Col span={24}>
-          <div ref={containerRef} id="graph"></div>
+        <Col span={12}>
+          <div ref={containerRef} id="graph" className={styles.viewport}></div>
         </Col>
       </Row>
     </Card>
   );
-};
-
-root.render(<MenuExtension></MenuExtension>);
-
-insertCss(`
-#graph{
-  min-height: 500px;
-  width: 100%;
-  height: 100%;
 }
-.customIcon {
-  background-image: url('/star.svg');
-  background-color: #fef7eb;
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  display: inline-block;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-`);
