@@ -142,14 +142,24 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   cursor: pointer;
   transition: all 120ms ease-in-out;
 }
-.lf-menu-item__disabled {
-  color: #aaa;
-  cursor: default;
-  opacity: 0.88;
-  pointer-events: none;
+.lf-menu-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
 }
 .lf-menu-item:hover {
   background: #f3f3f3;
+}
+.lf-menu-item__disabled {
+  color: #aaa;
+  opacity: 0.88;
+  cursor: not-allowed !important;
+  pointer-events: inherit !important;
+}
+.lf-menu-item__disabled:hover {
+  background: #fff;
 }
 /* dndpanel */
 .lf-dndpanel {

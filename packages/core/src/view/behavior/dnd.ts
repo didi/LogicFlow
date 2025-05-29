@@ -59,6 +59,9 @@ export class Dnd {
     })
   }
   onDragOver = (e: MouseEvent) => {
+    this.lf.graphModel.eventCenter.emit(EventType.BLANK_MOUSEMOVE, {
+      e,
+    })
     e.preventDefault()
     if (this.fakeNode) {
       const { x, y } = this.clientToLocalPoint({
