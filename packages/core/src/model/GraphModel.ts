@@ -170,9 +170,11 @@ export class GraphModel {
       // TODO：需要让用户设置成 0 吗？后面可以讨论一下
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
-    this.theme = setupTheme(options.style, options.themeMode)
     this.customStyles = options.style || {}
     this.grid = Grid.getGridOptions(grid ?? false)
+    this.theme = setupTheme(options.style, options.themeMode)
+    this.theme.grid = cloneDeep(this.grid)
+    this.theme.background = cloneDeep(this.background)
     this.edgeType = options.edgeType || 'polyline'
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
@@ -1483,10 +1485,15 @@ export class GraphModel {
   ) {
     if (themeMode) {
       // 修改背景颜色
-      this.updateBackgroundOptions(backgroundModeMap[themeMode])
-      this.updateGridOptions(
-        Grid.getGridOptions(gridModeMap[themeMode] ?? false),
-      )
+      backgroundModeMap[themeMode] &&
+        this.updateBackgroundOptions({
+          ...(typeof this.background === 'object' ? this.background : {}),
+          ...backgroundModeMap[themeMode],
+        })
+      gridModeMap[themeMode] &&
+        this.updateGridOptions(
+          Grid.getGridOptions({ ...this.grid, ...gridModeMap[themeMode] }),
+        )
     }
     if (style.background) {
       this.updateBackgroundOptions(style.background)
@@ -1540,7 +1547,6 @@ export class GraphModel {
         ...this.background,
         ...options,
       }
-      console.log('updateBackgroundOptions', this.background, options)
     }
   }
 

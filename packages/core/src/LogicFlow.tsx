@@ -14,7 +14,12 @@ import {
 
 import Graph from './view/Graph'
 import * as _View from './view'
-import { formatData, addThemeMode } from './util'
+import {
+  formatData,
+  addThemeMode,
+  removeThemeMode,
+  clearThemeMode,
+} from './util'
 
 import { Dnd, snapline } from './view/behavior'
 import Tool from './tool'
@@ -22,6 +27,7 @@ import History from './history'
 import Keyboard, { initDefaultShortcut } from './keyboard'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import { ElementType, EventType, SegmentDirection } from './constant'
+import { Grid } from './view/overlay'
 
 import Extension = LogicFlow.Extension
 import ExtensionConfig = LogicFlow.ExtensionConfig
@@ -44,7 +50,6 @@ import BaseNodeModelCtor = LogicFlow.BaseNodeModelCtor
 import ClientPosition = LogicFlow.ClientPosition
 import ExtensionDefinition = LogicFlow.ExtensionDefinition
 import ExtensionType = LogicFlow.ExtensionType
-import { Grid } from './view/overlay'
 
 const pluginFlag = Symbol('plugin registered by Logicflow.use')
 
@@ -830,7 +835,7 @@ export class LogicFlow {
 
   /**
    * 设置元素的自定义属性
-   * @see todo docs link
+   * @see http://logicflow.cn/api/detail#setproperties
    * @param id 元素的id
    * @param properties 自定义属性
    */
@@ -890,7 +895,7 @@ export class LogicFlow {
   /**
    * 更新流程图编辑相关设置
    * @param {object} config 编辑配置
-   * @see todo docs link
+   * @see http://logicflow.cn/api/detail#updateeditconfig
    */
   updateEditConfig(config: Partial<IEditConfigType>) {
     const { editConfigModel, transformModel } = this.graphModel
@@ -915,7 +920,7 @@ export class LogicFlow {
 
   /**
    * 获取流程图当前编辑相关设置
-   * @see todo docs link
+   * @see http://logicflow.cn/api/detail#geteditconfig
    */
   getEditConfig() {
     return this.graphModel.editConfigModel.getConfig()
@@ -941,10 +946,6 @@ export class LogicFlow {
    */
   getTheme(): LogicFlow.Theme {
     return this.graphModel.getTheme()
-  }
-
-  addThemeMode(themeMode: string, style: Partial<LogicFlow.Theme>) {
-    addThemeMode(themeMode, style)
   }
 
   private focusByElement(id: string) {
@@ -1348,6 +1349,23 @@ export class LogicFlow {
     })
   }
 
+  /**
+   * 添加主题模式
+   * @param themeMode 主题模式
+   * @param style 主题样式
+   */
+  static addThemeMode(themeMode: string, style: Partial<LogicFlow.Theme>) {
+    addThemeMode(themeMode, style)
+  }
+
+  static removeThemeMode(themeMode: string) {
+    removeThemeMode(themeMode)
+  }
+
+  static clearThemeMode() {
+    clearThemeMode()
+  }
+
   private installPlugins(disabledPlugins: string[] = []) {
     const extensionsAddByUse = Array.from(
       LogicFlow.extensions,
@@ -1414,6 +1432,7 @@ export class LogicFlow {
     this.graphModel.destroy()
     this.tool.destroy()
     this.history.destroy()
+    this.clearThemeMode()
     for (const extensionName in this.extension) {
       const extensionInstance = this.extension[extensionName]
       if ('destroy' in extensionInstance) {
@@ -1816,8 +1835,8 @@ export namespace LogicFlow {
     refX?: number
     refY?: number
     verticalLength: number
-    endArrowType?: string // 结束箭头类型
-    startArrowType?: string // 开始箭头类型
+    endArrowType?: 'solid' | 'hollow' | 'diamond' | 'circle' | 'none' // 结束箭头类型
+    startArrowType?: 'solid' | 'hollow' | 'diamond' | 'circle' | 'none' // 开始箭头类型
     strokeLinecap?: 'butt' | 'round' | 'square' // 线条的端点样式
     strokeLinejoin?: 'miter' | 'round' | 'bevel' // 线条的连接样式
   } & CommonTheme

@@ -62,8 +62,9 @@ export class Grid extends Component<IProps> {
 
   render() {
     const {
-      graphModel: { transformModel },
+      graphModel: { transformModel, grid },
     } = this.props
+    this.gridOptions = grid
     const { type, size = 1 } = this.gridOptions
     const { SCALE_X, SKEW_Y, SKEW_X, SCALE_Y, TRANSLATE_X, TRANSLATE_Y } =
       transformModel
