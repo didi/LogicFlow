@@ -13,8 +13,9 @@ import {
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
-import textEditIcon from './text-edit.svg';
-import gifIcon from './gif-icon.gif';
+
+const textEditIcon = '/text-edit.svg'; // 图片实际放在了public目录下
+const gifIcon = '/gif-icon.gif'; // 图片实际放在了public目录下
 
 import '@logicflow/core/es/index.css';
 import '@logicflow/extension/es/index.css';
