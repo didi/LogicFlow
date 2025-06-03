@@ -37,17 +37,17 @@ see [NodeModel Shape Attributes](./model/nodeModel.en.md#shape-attributes) for d
 
 ## setTheme set
 
-| Type                                       | Name                                                                                                  |
-|:-------------------------------------------|:------------------------------------------------------------------------------------------------------|
+| Type                                       | Name                                                                                                                                                                        |
+| :----------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | node                                       | - [baseNode](#basenode) <br> - [rect](#rect) <br> - [circle](#circle) <br> - [diamond](#diamond) <br> - [ellipse](#ellipse) <br> - [polygon](#polygon) <br> - [text](#text) |
-| anchor                                     | [anchor](#anchor)                                                                                     |
-| text                                       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                  |
-| edge                                       | - [baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)  |
-| snapline                                   | [snapline](#snapline)                                                                               |
-| anchorLine                                 | [anchorLine](#anchorline)                                                                           |
-| arrow                                      | [arrow](#arrow)                                                                                     |
-| Adjustment points at both ends of the line | [edgeAdjust](#edgeadjust)                                                                           |
-| choose/hover                               | [outline](#outline)                                                                               |
+| anchor                                     | [anchor](#anchor)                                                                                                                                                           |
+| text                                       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                                                                                        |
+| edge                                       | - [baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                                                          |
+| snapline                                   | [snapline](#snapline)                                                                                                                                                       |
+| anchorLine                                 | [anchorLine](#anchorline)                                                                                                                                                   |
+| arrow                                      | [arrow](#arrow)                                                                                                                                                             |
+| Adjustment points at both ends of the line | [edgeAdjust](#edgeadjust)                                                                                                                                                   |
+| choose/hover                               | [outline](#outline)                                                                                                                                                         |
 
 
 ### baseNode
@@ -357,3 +357,189 @@ lf.setTheme({
   },
 });
 ```
+
+## Theme Background and Grid<Badge>2.1.0</Badge>
+
+In addition to node and edge styles, LogicFlow also supports setting canvas background color and grid styles.
+
+### Background Color Setting
+
+```tsx | pure
+lf.setTheme({
+  background: {
+    background: '#f5f5f5' // Set canvas background color
+  }
+});
+```
+
+### Grid Style Setting
+
+```tsx | pure
+lf.setTheme({
+  grid: {
+    color: '#acacac', // Grid line color
+    thickness: 1,     // Grid line width
+    visible: true     // Whether to show grid
+  }
+});
+```
+
+### Background and Grid Style Priority
+
+The priority of background and grid styles from highest to lowest is as follows:
+
+1. Styles set directly via `setTheme` (Highest priority)
+```tsx | pure
+// Direct style setting, highest priority
+lf.setTheme({
+  background: {
+    background: '#f5f5f5'
+  },
+  grid: {
+    color: '#acacac',
+    thickness: 1
+  }
+});
+```
+
+2. Styles in theme mode
+```tsx | pure
+// Styles in theme mode, second priority
+LogicFlow.addThemeMode('custom', {
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#e0e0e0',
+    thickness: 1
+  }
+});
+```
+
+3. Default theme styles (Lowest priority)
+```tsx | pure
+// Default theme styles
+const defaultTheme = {
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#acacac',
+    thickness: 1
+  }
+};
+```
+
+Style application rules:
+- When switching theme modes, the background and grid styles defined in the theme mode will be applied
+- If new styles are set via `setTheme` after switching theme modes, they will override the theme mode styles
+- Styles not defined in the theme mode will inherit from the default theme configuration
+- Clearing theme modes (`clearThemeMode`) will restore to default theme styles
+
+## Theme Mode Management<Badge>2.1.0</Badge>
+
+In version 2.1.0 and later, LogicFlow provides theme mode management functionality, supporting adding, removing, and clearing theme modes.
+
+### Adding Theme Mode
+
+Use the `addThemeMode` method to add a new theme mode:
+
+```tsx | pure
+// Add a theme mode named 'custom'
+LogicFlow.addThemeMode('custom', {
+  baseNode: {
+    fill: '#f0f0f0',
+    stroke: '#333333',
+    strokeWidth: 2,
+  },
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#e0e0e0',
+    thickness: 1
+  }
+});
+```
+
+### Removing Theme Mode
+
+Use the `removeThemeMode` method to remove a specific theme mode:
+
+```tsx | pure
+// Remove the theme mode named 'custom'
+LogicFlow.removeThemeMode('custom');
+```
+
+### Clearing All Theme Modes
+
+Use the `clearThemeMode` method to clear all custom theme modes and restore to default state:
+
+```tsx | pure
+// Clear all theme modes
+LogicFlow.clearThemeMode();
+```
+
+### Theme Mode Switching
+
+After adding a theme mode, you can switch to the corresponding theme mode using the `setTheme` method:
+
+```tsx | pure
+// Switch to 'custom' theme mode
+lf.setTheme({}, 'custom');
+```
+
+### Theme Mode Inheritance
+
+Theme modes support inheriting configurations from the default theme. You only need to override the parts you want to modify:
+
+```tsx | pure
+// Inherit default theme, only modify specific configurations
+LogicFlow.addThemeMode('custom', {
+  baseNode: {
+    fill: '#f0f0f0',  // Only modify fill color
+  },
+  // Other configurations inherit from default theme
+});
+```
+
+### Background and Grid with Theme Modes
+
+Background color and grid styles can be configured as part of a theme mode:
+
+```tsx | pure
+// Include background and grid configurations in theme mode
+LogicFlow.addThemeMode('dark', {
+  // Node and edge styles
+  baseNode: {
+    fill: '#23272e',
+    stroke: '#fefeff',
+  },
+  baseEdge: {
+    stroke: '#fefeff',
+  },
+  // Background and grid configurations
+  background: {
+    background: '#23272e'
+  },
+  grid: {
+    color: '#66676a',
+    thickness: 1
+  }
+});
+```
+
+### Notes
+
+1. Theme mode names cannot be duplicated. A warning will be shown if attempting to add an existing theme mode.
+2. Clearing theme modes will remove all custom theme configurations, including background colors and grid styles.
+3. Theme mode switching will completely override the current theme configuration. It's recommended to save important custom configurations before switching.
+4. Background color and grid style settings take effect immediately without requiring canvas re-rendering.
+5. Theme mode memory management:
+   - Theme mode configurations persist in memory until page refresh or `clearThemeMode` is called
+   - It's recommended to clean up unused theme modes when they're no longer needed
+   - Consider calling `clearThemeMode` to clean up theme configurations or using `lf.destroy()` to destroy the instance when components are unmounted
+6. Theme mode inheritance mechanism:
+   - Custom themes automatically inherit configurations from the default theme
+   - You can customize theme styles by overriding specific properties
+   - Properties that are not overridden will maintain the default theme configuration

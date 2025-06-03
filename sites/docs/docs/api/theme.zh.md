@@ -38,17 +38,17 @@ LogicFlow 将`width`、`height`、`r`这些影响节点大小的属性叫做`形
 
 ## setTheme 设置
 
-| 类型       | 名称                                    |
-|:---------|:-----------------------------------------|
-| 节点       | - [baseNode](#basenode) <br> - [rect](#rect) <br> - [circle](#circle) <br> - [diamond](#diamond) <br> - [ellipse](#ellipse) <br> - [polygon](#polygon) <br> - [text](#text) |
-| 锚点       | [anchor](#anchor)                              |
-| 文本       | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)     |
-| 线        | -[baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                     |
-| 对齐线      | [snapline](#snapline)          |
-| 锚点拖出线    | [anchorLine](#anchorline)     |
-| 箭头       | [arrow](#arrow)                 |
-| 连线两端调整点 | [edgeAdjust](#edgeadjust)     |
-| 选中/hover | [outline](#outline)             |
+| 类型           | 名称                                                                                                                                                                        |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 节点           | - [baseNode](#basenode) <br> - [rect](#rect) <br> - [circle](#circle) <br> - [diamond](#diamond) <br> - [ellipse](#ellipse) <br> - [polygon](#polygon) <br> - [text](#text) |
+| 锚点           | [anchor](#anchor)                                                                                                                                                           |
+| 文本           | - [nodeText](#nodetext) <br> - [edgeText](#edgetext)                                                                                                                        |
+| 线             | -[baseEdge](#baseedge) <br> - [line](#line) <br> - [polyline](#polyline) <br> - [bezier](#bezier)                                                                           |
+| 对齐线         | [snapline](#snapline)                                                                                                                                                       |
+| 锚点拖出线     | [anchorLine](#anchorline)                                                                                                                                                   |
+| 箭头           | [arrow](#arrow)                                                                                                                                                             |
+| 连线两端调整点 | [edgeAdjust](#edgeadjust)                                                                                                                                                   |
+| 选中/hover     | [outline](#outline)                                                                                                                                                         |
 
 ### baseNode
 
@@ -353,3 +353,189 @@ lf.setTheme({
   },
 });
 ```
+
+## 主题背景和网格<Badge>2.1.0新增</Badge>
+
+除了节点和边的样式外，LogicFlow 还支持设置画布的背景色和网格样式。
+
+### 背景色设置
+
+```tsx | pure
+lf.setTheme({
+  background: {
+    background: '#f5f5f5' // 设置画布背景色
+  }
+});
+```
+
+### 网格样式设置
+
+```tsx | pure
+lf.setTheme({
+  grid: {
+    color: '#acacac', // 网格线颜色
+    thickness: 1,     // 网格线宽度
+    visible: true     // 是否显示网格
+  }
+});
+```
+
+### 背景和网格样式优先级
+
+背景和网格样式的生效优先级从高到低如下：
+
+1. 通过 `setTheme` 直接设置的样式（最高优先级）
+```tsx | pure
+// 直接设置样式，优先级最高
+lf.setTheme({
+  background: {
+    background: '#f5f5f5'
+  },
+  grid: {
+    color: '#acacac',
+    thickness: 1
+  }
+});
+```
+
+2. 主题模式中的样式
+```tsx | pure
+// 主题模式中的样式，优先级次之
+LogicFlow.addThemeMode('custom', {
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#e0e0e0',
+    thickness: 1
+  }
+});
+```
+
+3. 默认主题样式（最低优先级）
+```tsx | pure
+// 默认主题样式
+const defaultTheme = {
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#acacac',
+    thickness: 1
+  }
+};
+```
+
+样式生效规则：
+- 当切换主题模式时，会应用主题模式中定义的背景和网格样式
+- 如果在切换主题模式后，通过 `setTheme` 设置了新的样式，会覆盖主题模式中的样式
+- 主题模式中未定义的样式会继承默认主题的配置
+- 清除主题模式（`clearThemeMode`）会恢复到默认主题样式
+
+## 主题模式管理<Badge>2.1.0新增</Badge>
+
+在2.1.0及之后的版本里，LogicFlow 提供了主题模式的管理功能，支持添加、删除和清除主题模式。
+
+### 添加主题模式
+
+使用 `addThemeMode` 方法可以添加新的主题模式：
+
+```tsx | pure
+// 添加一个名为 'custom' 的主题模式
+LogicFlow.addThemeMode('custom', {
+  baseNode: {
+    fill: '#f0f0f0',
+    stroke: '#333333',
+    strokeWidth: 2,
+  },
+  background: {
+    background: '#ffffff'
+  },
+  grid: {
+    color: '#e0e0e0',
+    thickness: 1
+  }
+});
+```
+
+### 删除主题模式
+
+使用 `removeThemeMode` 方法可以删除指定的主题模式：
+
+```tsx | pure
+// 删除名为 'custom' 的主题模式
+LogicFlow.removeThemeMode('custom');
+```
+
+### 清除所有主题模式
+
+使用 `clearThemeMode` 方法可以清除所有自定义的主题模式，恢复到默认状态：
+
+```tsx | pure
+// 清除所有主题模式
+LogicFlow.clearThemeMode();
+```
+
+### 主题模式切换
+
+在添加主题模式后，可以通过 `setTheme` 方法切换到对应的主题模式：
+
+```tsx | pure
+// 切换到 'custom' 主题模式
+lf.setTheme({}, 'custom');
+```
+
+### 主题模式继承
+
+主题模式支持继承默认主题的配置，只需要在自定义主题中覆盖需要修改的部分：
+
+```tsx | pure
+// 继承默认主题，只修改部分配置
+LogicFlow.addThemeMode('custom', {
+  baseNode: {
+    fill: '#f0f0f0',  // 只修改填充色
+  },
+  // 其他配置继承默认主题
+});
+```
+
+### 背景和网格与主题模式
+
+背景色和网格样式可以作为主题模式的一部分进行配置：
+
+```tsx | pure
+// 在主题模式中包含背景和网格配置
+LogicFlow.addThemeMode('dark', {
+  // 节点和边的样式
+  baseNode: {
+    fill: '#23272e',
+    stroke: '#fefeff',
+  },
+  baseEdge: {
+    stroke: '#fefeff',
+  },
+  // 背景和网格配置
+  background: {
+    background: '#23272e'
+  },
+  grid: {
+    color: '#66676a',
+    thickness: 1
+  }
+});
+```
+
+### 注意事项
+
+1. 主题模式的名称不能重复，如果添加已存在的主题模式会收到警告提示。
+2. 清除主题模式会删除所有自定义的主题配置，包括背景色和网格样式。
+3. 主题模式的切换会完全覆盖当前的主题配置，建议在切换前保存重要的自定义配置。
+4. 背景色和网格样式的设置会立即生效，不需要重新渲染画布。
+5. 主题模式的内存管理：
+   - 主题模式配置会一直存在于内存中，直到页面刷新或调用 `clearThemeMode`
+   - 建议在不需要时及时清理不再使用的主题模式
+   - 在组件卸载时，可以考虑调用 `clearThemeMode` 清理主题配置或调用`lf.destory()`销毁实例的方式来清理主题
+6. 主题模式的继承机制：
+   - 自定义主题会自动继承默认主题的配置
+   - 可以通过覆盖特定属性来自定义主题样式
+   - 未覆盖的属性将保持默认主题的配置

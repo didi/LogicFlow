@@ -34,6 +34,8 @@ All node instance operations, event handling, and behavior monitoring on the flo
 | Option                                                    | Description                                                                                                                |
 | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- |
 | [setTheme](theme.en.md)                                   | Set theme.                                                                                                                 |
+| [getTheme](./detail/index.en.md#gettheme)                 | Get current canvas theme configuration.                                                                                    |
+| [addThemeMode](./detail/index.en.md#addthememode)         | Register a new theme mode.                                                                                                 |
 | [focusOn](./detail/index.en.md#focuson)                   | Focus to canvas viewport center.                                                                                           |
 | [resize](./detail/index.en.md#resize)                     | Adjust canvas width and height. If `width` or `height` is not provided, it will automatically calculate canvas dimensions. |
 | [toFront](./detail/index.en.md#tofront)                   | Bring an element to the front.                                                                                             |
@@ -89,6 +91,7 @@ All node instance operations, event handling, and behavior monitoring on the flo
 | :-------------------------------------------------------------- | :-------------------------------------------------------------- |
 | [addElements](./detail/index.en.md#addelements)                 | Batch add nodes and edges.                                      |
 | [selectElementById](./detail/index.en.md#selectelementbyid)     | Select a shape.                                                 |
+| [deselectElementById](./detail/index.en.md#deselectelementbyid) | Deselect a specified element.                                   |
 | [getSelectElements](./detail/index.en.md#getselectelements)     | Get all selected elements.                                      |
 | [clearSelectElements](./detail/index.en.md#clearselectelements) | Clear selection state of all elements.                          |
 | [getModelById](./detail/index.en.md#getmodelbyid)               | Get `model` by node or edge `id`.                               |
@@ -147,3 +150,9 @@ All node instance operations, event handling, and behavior monitoring on the flo
 | [off](./detail/index.en.md#off)   | Remove event listener.                                                   |
 | [once](./detail/index.en.md#once) | Listen to event once.                                                    |
 | [emit](./detail/index.en.md#emit) | Trigger event.                                                           |
+
+### Plugin System
+
+| Option                          | Description                                                                 |
+| :------------------------------ | :-------------------------------------------------------------------------- |
+| [use](./detail/index.en.md#use) | Globally register plugins, registered plugins take effect in all instances. |

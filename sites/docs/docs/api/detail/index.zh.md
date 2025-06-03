@@ -62,9 +62,7 @@ lf.setTheme({
 });
 ```
 
-**版本**
 
-1.0.0+
 
 ### focusOn
 
@@ -105,9 +103,7 @@ lf.focusOn({
 - id 和 coordinate 参数二选一
 - 如果节点 ID 不存在会报错
 
-**版本**
 
-1.0.0+
 
 ### resize
 
@@ -135,9 +131,7 @@ lf.resize();
 - 不传参数时会自动适配容器大小
 - 画布大小变化后需要重新渲染内容
 
-**版本**
 
-1.0.0+
 
 ### toFront
 
@@ -164,9 +158,7 @@ lf.toFront('edge_1');
 - 在默认堆叠模式下,被置顶元素的 zIndex 会被设为 9999,原置顶元素恢复为 1
 - 在递增模式下,被置顶元素的 zIndex 会被设为当前最大 zIndex + 1
 
-**版本**
 
-1.0.0+
 
 ### getPointByClient
 
@@ -209,9 +201,7 @@ lf.on('click', (e) => {
 - 通常用于处理鼠标事件的坐标转换
 - 返回的坐标包含两个图层的位置信息
 
-**版本**
 
-1.0.0+
 
 ### getGraphData
 
@@ -277,9 +267,7 @@ const data = lf.getGraphData(['property1', 'property2']);
 - 如果使用了 adapter 插件,返回格式由 adapter 决定
 - 返回的数据可以直接用于渲染流程图
 
-**版本**
 
-1.0.0+
 
 ### getGraphRawData
 
@@ -309,9 +297,7 @@ console.log('边:', rawData.edges);
 - 即使配置了 adapter 也不会进行格式转换
 - 主要用于需要处理原始数据的场景
 
-**版本**
 
-1.0.0+
 
 ### clearData
 
@@ -334,9 +320,7 @@ lf.render(newGraphData);
 - 清空后可以重新渲染新的数据
 - 不会清除画布的样式和配置
 
-**版本**
 
-1.0.0+
 
 ### renderRawData
 
@@ -379,9 +363,7 @@ lf.renderRawData({
 - 数据必须符合 LogicFlow 标准格式
 - 不会被 adapter 插件转换
 
-**版本**
 
-1.0.0+
 
 ### render
 
@@ -425,9 +407,7 @@ lf.render({
 - 如果配置了 adapter,数据会被转换为标准格式
 - 支持任意格式的数据,但需要配置对应的 adapter
 
-**版本**
 
-1.0.0+
 
 ## Node 相关
 
@@ -513,9 +493,7 @@ lf.addNode({
 - 节点 id 不指定时会自动生成
 - 添加节点会触发 node:add 事件
 
-**版本**
 
-1.0.0+
 
 ### deleteNode
 
@@ -546,9 +524,7 @@ lf.deleteNode('node_1');
 - 支持撤销重做
 - 如果节点不存在会抛出警告
 
-**版本**
 
-1.0.0+
 
 ### cloneNode
 
@@ -590,9 +566,7 @@ if (source && cloned) {
 - 不会克隆与节点相连的边
 - 如果原节点不存在会抛出警告
 
-**版本**
 
-1.0.0+
 
 ### changeNodeId
 
@@ -622,9 +596,7 @@ lf.changeNodeId('node_1');
 - 该操作会触发 node:change:id 事件
 - 支持撤销重做
 
-**版本**
 
-1.0.0+
 
 ### changeNodeType
 
@@ -655,9 +627,7 @@ lf.changeNodeType('node_1', 'custom-node');
 - 该操作会触发 node:change:type 事件
 - 支持撤销重做
 
-**版本**
 
-1.0.0+
 
 ### getNodeModelById
 
@@ -702,9 +672,7 @@ if (node) {
 - 对 model 的修改会实时反映到画布上
 - 建议先判断返回值是否存在再使用
 
-**版本**
 
-1.0.0+
 
 ### getNodeDataById
 
@@ -761,9 +729,7 @@ if (data) {
 - 数据可以直接用于创建新的节点
 - 建议先判断返回值是否存在再使用
 
-**版本**
 
-1.0.0+
 
 ### getNodeIncomingEdge
 
@@ -802,9 +768,7 @@ const sourceNodes = incomingEdges.map(edge => {
 - 可以通过边的 sourceNodeId 获取上游节点
 - 主要用于分析节点的入度和上游节点
 
-**版本**
 
-1.0.0+
 
 ### getNodeOutgoingEdge
 
@@ -846,9 +810,7 @@ const isEndNode = lf.getNodeOutgoingEdge('node_1').length === 0;
 - 可以通过边的 targetNodeId 获取下游节点
 - 主要用于分析节点的出度和下游节点
 
-**版本**
 
-1.0.0+
 
 ### getNodeIncomingNode
 
@@ -887,9 +849,7 @@ const isStartNode = lf.getNodeIncomingNode('node_1').length === 0;
 - 与 getNodeIncomingEdge 相比,直接返回节点而不是边
 - 主要用于分析节点的入度和依赖关系
 
-**版本**
 
-1.0.0+
 
 ### getNodeOutgoingNode
 
@@ -936,9 +896,7 @@ function getAllDownstreamNodes(nodeId, visited = new Set()) {
 - 主要用于分析节点的出度和影响范围
 - 可以配合递归实现获取所有下游节点的功能
 
-**版本**
 
-1.0.0+
 
 ## Edge 相关
 
@@ -1527,6 +1485,693 @@ lf.undo();
 
 历史记录操作-恢复下一步。
 
-示例：
-
+```tsx | pure
+lf.redo();
 ```
+
+**注意事项**
+
+- 需要先判断是否可以重做
+- 操作会触发相应的历史记录事件
+- 支持撤销重做
+
+
+
+## Transform 相关
+
+变换相关的 API 用于控制画布的缩放、平移等变换操作，帮助用户在画布中进行视图导航。
+
+### zoom
+
+放大缩小画布。
+
+**参数**
+
+| 名称     | 类型              | 必传 | 默认值 | 描述                                                                                                       |
+| :------- | :---------------- | :--- | :----- | :--------------------------------------------------------------------------------------------------------- |
+| zoomSize | boolean \| number | -    | false  | 缩放值，支持传入 0-n 之间的数字。小于 1 表示缩小，大于 1 表示放大。也支持传入 true 和 false 按内置刻度缩放 |
+| point    | PointTuple        | -    | -      | 缩放的原点，不传默认为画布中心                                                                             |
+
+**返回值**
+
+| 类型   | 描述               |
+| :----- | :----------------- |
+| string | 当前缩放比例百分比 |
+
+**示例**
+
+```ts
+// 放大
+lf.zoom(true);
+
+// 缩小  
+lf.zoom(false);
+
+// 缩放到指定比例
+lf.zoom(2);
+
+// 以指定点为原点缩放
+lf.zoom(2, [100, 100]);
+```
+
+**注意事项**
+
+- 缩放值会受到最小和最大缩放比例限制
+- 缩放原点默认为画布中心
+- 返回值为当前缩放比例的百分比字符串
+
+
+
+### resetZoom
+
+重置画布的缩放比例为默认值 1。
+
+**示例**
+
+```ts
+// 重置缩放比例
+lf.resetZoom();
+```
+
+**注意事项**
+
+- 重置后缩放比例变为 1
+- 不会影响画布的平移位置
+- 该操作会触发相应的变换事件
+
+
+
+### setZoomMiniSize
+
+设置画布缩小时能达到的最小倍数。
+
+**参数**
+
+| 名称 | 类型   | 必传 | 默认值 | 描述                          |
+| :--- | :----- | :--- | :----- | :---------------------------- |
+| size | number | ✅    | 0.2    | 最小缩放倍数，取值范围 0.01-1 |
+
+**示例**
+
+```ts
+// 设置最小缩放倍数为 0.3
+lf.setZoomMiniSize(0.3);
+```
+
+**注意事项**
+
+- 参数值应在 0.01-1 之间
+- 设置后缩放操作不能小于此值
+- 影响所有缩放相关操作
+
+
+
+### setZoomMaxSize
+
+设置画布放大时能达到的最大倍数。
+
+**参数**
+
+| 名称 | 类型   | 必传 | 默认值 | 描述         |
+| :--- | :----- | :--- | :----- | :----------- |
+| size | number | ✅    | 16     | 最大缩放倍数 |
+
+**示例**
+
+```ts
+// 设置最大缩放倍数为 20
+lf.setZoomMaxSize(20);
+```
+
+**注意事项**
+
+- 建议值不要设置过大，可能影响性能
+- 设置后缩放操作不能大于此值
+- 影响所有缩放相关操作
+
+
+
+### getTransform
+
+获取当前画布的缩放值和偏移值。
+
+**返回值**
+
+```ts
+type Transform = {
+  SCALE_X: number;    // X轴缩放比例
+  SCALE_Y: number;    // Y轴缩放比例  
+  TRANSLATE_X: number; // X轴偏移距离
+  TRANSLATE_Y: number; // Y轴偏移距离
+};
+```
+
+**示例**
+
+```ts
+// 获取当前变换信息
+const transform = lf.getTransform();
+console.log('缩放比例:', transform.SCALE_X, transform.SCALE_Y);
+console.log('偏移距离:', transform.TRANSLATE_X, transform.TRANSLATE_Y);
+```
+
+**注意事项**
+
+- 返回的是当前实时的变换状态
+- 可用于保存和恢复画布状态
+- X 和 Y 轴的缩放比例通常相等
+
+
+
+### translate
+
+平移画布。
+
+**参数**
+
+| 名称 | 类型   | 必传 | 默认值 | 描述         |
+| :--- | :----- | :--- | :----- | :----------- |
+| x    | number | ✅    | -      | X 轴移动距离 |
+| y    | number | ✅    | -      | Y 轴移动距离 |
+
+**示例**
+
+```ts
+// 向右下角平移
+lf.translate(100, 100);
+
+// 向左上角平移
+lf.translate(-50, -50);
+```
+
+**注意事项**
+
+- 平移距离是相对于当前位置的偏移量
+- 正值表示向右下方向移动
+- 平移可能受到画布移动限制的约束
+
+
+
+### resetTranslate
+
+将画布恢复到初始位置。
+
+**示例**
+
+```ts
+// 恢复到初始位置
+lf.resetTranslate();
+```
+
+**注意事项**
+
+- 恢复到画布的初始偏移位置（通常为 0, 0）
+- 不会影响缩放比例
+- 该操作会触发相应的变换事件
+
+
+
+### translateCenter
+
+将画布内容居中显示。
+
+**示例**
+
+```ts
+// 画布内容居中
+lf.translateCenter();
+```
+
+**注意事项**
+
+- 会自动计算画布内容的中心点
+- 如果画布内容为空，可能无明显效果
+- 常用于初始化后的视图调整
+
+
+
+### fitView
+
+缩放画布以适应屏幕大小，让所有内容都能在当前视口中显示。
+
+**参数**
+
+| 名称             | 类型   | 必传 | 默认值 | 描述                   |
+| :--------------- | :----- | :--- | :----- | :--------------------- |
+| verticalOffset   | number | -    | 20     | 距离画布上下边缘的距离 |
+| horizontalOffset | number | -    | 20     | 距离画布左右边缘的距离 |
+
+**示例**
+
+```ts
+// 使用默认边距适应屏幕
+lf.fitView();
+
+// 自定义边距
+lf.fitView(50, 30);
+
+// 只设置垂直边距，水平边距自动使用相同值
+lf.fitView(40);
+```
+
+**注意事项**
+
+- 会同时调整缩放比例和位置
+- 如果只传一个参数，水平边距会使用相同值
+- 画布内容为空时可能无明显效果
+- 适合在数据加载完成后调用
+
+
+
+## Edge 动画相关
+
+边动画相关的 API 用于控制连线的动画效果，增强用户交互体验。
+
+### openEdgeAnimation
+
+开启指定边的动画效果。
+
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| edgeId | string | ✅    | -      | 边的 ID |
+
+**示例**
+
+```ts
+// 开启边动画
+lf.openEdgeAnimation('edge_1');
+
+// 批量开启多个边的动画
+['edge_1', 'edge_2'].forEach(edgeId => {
+  lf.openEdgeAnimation(edgeId);
+});
+```
+
+**注意事项**
+
+- 边必须存在，否则操作无效
+- 动画样式由主题中的 edgeAnimation 配置决定
+- 可以重复调用，不会产生副作用
+
+
+
+### closeEdgeAnimation
+
+关闭指定边的动画效果。
+
+**参数**
+
+| 名称   | 类型   | 必传 | 默认值 | 描述    |
+| :----- | :----- | :--- | :----- | :------ |
+| edgeId | string | ✅    | -      | 边的 ID |
+
+**示例**
+
+```ts
+// 关闭边动画
+lf.closeEdgeAnimation('edge_1');
+
+// 关闭所有边动画
+const graphData = lf.getGraphRawData();
+graphData.edges.forEach(edge => {
+  lf.closeEdgeAnimation(edge.id);
+});
+```
+
+**注意事项**
+
+- 边必须存在，否则操作无效
+- 关闭动画后边恢复静态样式
+- 可以重复调用，不会产生副作用
+
+
+
+## Graph 主题相关
+
+### getTheme
+
+获取当前画布的主题配置。
+
+**返回值**
+
+| 类型  | 描述         |
+| :---- | :----------- |
+| Theme | 当前主题配置 |
+
+**示例**
+
+```ts
+// 获取当前主题
+const currentTheme = lf.getTheme();
+console.log('当前主题配置:', currentTheme);
+
+// 基于当前主题进行修改
+const newTheme = {
+  ...currentTheme,
+  rect: {
+    ...currentTheme.rect,
+    fill: '#ff0000'
+  }
+};
+lf.setTheme(newTheme);
+```
+
+**注意事项**
+
+- 返回的是当前完整的主题配置对象
+- 可以用于保存和恢复主题状态
+- 建议在修改主题时先获取当前主题
+
+
+
+### addThemeMode
+
+注册新的主题模式。
+
+**参数**
+
+| 名称      | 类型                     | 必传 | 默认值 | 描述         |
+| :-------- | :----------------------- | :--- | :----- | :----------- |
+| themeMode | string                   | ✅    | -      | 主题模式名称 |
+| style     | Partial<LogicFlow.Theme> | ✅    | -      | 主题样式配置 |
+
+**示例**
+
+```ts
+// 注册自定义主题模式
+lf.addThemeMode('custom', {
+  rect: {
+    fill: '#e6f7ff',
+    stroke: '#1890ff',
+    strokeWidth: 2,
+    radius: 8
+  },
+  circle: {
+    fill: '#fff2e8', 
+    stroke: '#fa8c16',
+    strokeWidth: 2
+  },
+  nodeText: {
+    color: '#333',
+    fontSize: 14
+  }
+});
+
+// 应用自定义主题
+lf.setTheme({}, 'custom');
+```
+
+**注意事项**
+
+- 主题模式名称必须唯一，重复注册会覆盖之前的配置
+- 样式配置支持部分配置，会与默认主题合并
+- 注册后可通过 setTheme 方法的第二个参数使用
+
+
+
+## Element 相关补充
+
+### deselectElementById
+
+取消指定元素的选中状态。
+
+**参数**
+
+| 名称 | 类型   | 必传 | 默认值 | 描述    |
+| :--- | :----- | :--- | :----- | :------ |
+| id   | string | ✅    | -      | 元素 ID |
+
+**示例**
+
+```ts
+// 取消选中指定节点
+lf.deselectElementById('node_1');
+
+// 取消选中指定边
+lf.deselectElementById('edge_1');
+```
+
+**注意事项**
+
+- 如果元素不存在或未被选中，操作无效果
+- 不会影响其他已选中的元素
+- 可以配合 selectElementById 实现精确的选择控制
+
+
+
+## 事件系统相关
+
+事件系统相关的 API 用于监听和触发 LogicFlow 的各种事件，实现自定义的交互逻辑。
+
+### on
+
+监听事件。支持监听单个事件或多个事件。
+
+**参数**
+
+| 名称     | 类型          | 必传 | 默认值 | 描述                                 |
+| :------- | :------------ | :--- | :----- | :----------------------------------- |
+| evt      | string        | ✅    | -      | 事件名称，支持用逗号分隔监听多个事件 |
+| callback | EventCallback | ✅    | -      | 事件回调函数                         |
+
+**示例**
+
+```ts
+// 监听单个事件
+lf.on('node:click', (data) => {
+  console.log('节点被点击:', data);
+});
+
+// 监听多个事件
+lf.on('node:click,edge:click', (data) => {
+  console.log('元素被点击:', data);
+});
+
+// 监听节点移动事件
+lf.on('node:drag', ({ data }) => {
+  console.log('节点拖拽中:', data.id, data.x, data.y);
+});
+
+// 监听画布点击事件
+lf.on('blank:click', ({ e }) => {
+  console.log('画布被点击:', e.x, e.y);
+});
+```
+
+**注意事项**
+
+- 事件名称支持用逗号分隔同时监听多个事件
+- 回调函数的参数格式取决于具体的事件类型
+- 重复监听同一事件会叠加，都会被执行
+- 详细的事件列表请参考[事件文档](../eventCenter.zh.md)
+
+
+
+### off
+
+取消事件监听。
+
+**参数**
+
+| 名称     | 类型          | 必传 | 默认值 | 描述                                 |
+| :------- | :------------ | :--- | :----- | :----------------------------------- |
+| evt      | string        | ✅    | -      | 事件名称，支持用逗号分隔取消多个事件 |
+| callback | EventCallback | ✅    | -      | 要取消的事件回调函数                 |
+
+**示例**
+
+```ts
+// 定义回调函数
+const handleNodeClick = (data) => {
+  console.log('节点被点击:', data);
+};
+
+// 监听事件
+lf.on('node:click', handleNodeClick);
+
+// 取消监听
+lf.off('node:click', handleNodeClick);
+
+// 取消多个事件监听
+lf.off('node:click,edge:click', handleNodeClick);
+```
+
+**注意事项**
+
+- 必须传入监听时使用的同一个回调函数引用
+- 如果回调函数引用不匹配，取消操作无效
+- 支持同时取消多个事件的监听
+
+
+
+### once
+
+监听事件，但只触发一次。触发后自动取消监听。
+
+**参数**
+
+| 名称     | 类型          | 必传 | 默认值 | 描述                                 |
+| :------- | :------------ | :--- | :----- | :----------------------------------- |
+| evt      | string        | ✅    | -      | 事件名称，支持用逗号分隔监听多个事件 |
+| callback | EventCallback | ✅    | -      | 事件回调函数                         |
+
+**示例**
+
+```ts
+// 只监听一次节点点击事件
+lf.once('node:click', (data) => {
+  console.log('首次点击节点:', data);
+  // 这个回调只会执行一次
+});
+
+// 监听画布首次渲染完成
+lf.once('graph:rendered', (data) => {
+  console.log('画布渲染完成:', data);
+  // 可以在这里执行一些初始化操作
+});
+```
+
+**注意事项**
+
+- 回调函数执行一次后会自动取消监听
+- 适用于只需要响应一次的场景，如初始化操作
+- 支持同时监听多个事件，但每个事件都只触发一次
+
+
+
+### emit
+
+手动触发事件。
+
+**参数**
+
+| 名称      | 类型      | 必传 | 默认值 | 描述     |
+| :-------- | :-------- | :--- | :----- | :------- |
+| evt       | string    | ✅    | -      | 事件名称 |
+| eventArgs | EventArgs | ✅    | -      | 事件参数 |
+
+**示例**
+
+```ts
+// 触发自定义事件
+lf.emit('custom:event', {
+  type: 'custom:event',
+  data: {
+    message: 'Hello World'
+  }
+});
+
+// 监听自定义事件
+lf.on('custom:event', (data) => {
+  console.log('收到自定义事件:', data);
+});
+
+// 触发节点相关事件（谨慎使用）
+lf.emit('node:click', {
+  type: 'node:click',
+  data: lf.getNodeDataById('node_1')
+});
+```
+
+**注意事项**
+
+- 主要用于触发自定义事件
+- 谨慎触发内置事件，可能会影响 LogicFlow 的正常运行
+- 事件参数格式需要符合对应事件的规范
+- 触发的事件会被所有对应的监听器接收
+
+
+
+## 插件系统相关
+
+插件系统相关的 API 用于扩展 LogicFlow 的功能，支持加载和管理插件。
+
+### use
+
+静态方法，用于全局注册插件。注册后的插件会在所有 LogicFlow 实例中生效。
+
+**参数**
+
+| 名称      | 类型                                        | 必传 | 默认值 | 描述                       |
+| :-------- | :------------------------------------------ | :--- | :----- | :------------------------- |
+| extension | ExtensionConstructor \| ExtensionDefinition | ✅    | -      | 插件构造函数或插件定义对象 |
+| props     | Record<string, unknown>                     | -    | -      | 插件属性配置               |
+
+**示例**
+
+```ts
+// 注册插件类
+class CustomPlugin {
+  static pluginName = 'CustomPlugin';
+  
+  constructor({ lf, LogicFlow, props }) {
+    this.lf = lf;
+    this.props = props;
+  }
+  
+  render(lf, container) {
+    // 插件渲染逻辑
+  }
+  
+  destroy() {
+    // 插件销毁逻辑
+  }
+}
+
+// 全局注册插件
+LogicFlow.use(CustomPlugin, {
+  option1: 'value1',
+  option2: 'value2'
+});
+
+// 注册对象形式的插件
+LogicFlow.use({
+  pluginName: 'SimplePlugin',
+  install(lf, LogicFlow) {
+    // 插件安装逻辑
+    console.log('插件已安装');
+  },
+  render(lf, container) {
+    // 插件渲染逻辑
+  }
+});
+```
+
+**注意事项**
+
+- 这是静态方法，通过 LogicFlow.use() 调用
+- 插件必须有 pluginName 属性
+- 重复注册同名插件会覆盖之前的插件
+- 全局注册的插件会应用到所有 LogicFlow 实例
+- 可以通过实例选项中的 disabledPlugins 禁用特定插件
+
+
+
+### destroy
+
+销毁 LogicFlow 实例，清理所有资源。
+
+**示例**
+
+```ts
+// 创建实例
+const lf = new LogicFlow({
+  container: document.getElementById('container')
+});
+
+// 使用实例
+lf.render(graphData);
+
+// 销毁实例
+lf.destroy();
+```
+
+**注意事项**
+
+- 销毁后实例将不可再使用
+- 会清理所有事件监听器、DOM 元素、插件等资源
+- 建议在组件卸载或页面离开时调用
+- 销毁后需要重新创建实例才能继续使用
+
