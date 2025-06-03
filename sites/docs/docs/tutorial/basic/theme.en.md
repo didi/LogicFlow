@@ -8,11 +8,18 @@ order: 3
 toc: content
 ---
 
-LogicFlow provides a way to set the theme, which makes it easy for users to set the style of all elements inside it in a uniform way.
-There are two ways to set a theme:
+LogicFlow provides a comprehensive theme customization feature that supports multiple ways to set and customize theme styles. Theme configuration allows unified management of styles for all elements in the canvas, including nodes, edges, text, and more.
 
-- Initialize `LogicFlow` with the `style` parameter in the configuration
-- After initialization, call the `setTheme` method on the `LogicFlow` instance
+## Theme Configuration Categories
+
+Theme configuration supports the following main categories:
+
+- **Base Theme**: Common styles for base nodes and edges
+- **Node Theme**: Styles for various nodes (rectangle, circle, diamond, etc.)
+- **Edge Theme**: Styles for various edges (line, polyline, bezier curve, etc.)
+- **Text Theme**: Styles for node text and edge text
+- **Other Elements**: Styles for auxiliary elements like anchors, arrows, and snaplines
+- **Canvas Configuration**: Styles for background and grid
 
 For detailed theme configuration parameters, see [Theme API](../../api/theme.en.md)
 
@@ -23,7 +30,6 @@ For detailed theme configuration parameters, see [Theme API](../../api/theme.en.
 When creating a LogicFlow instance, configure the theme using the `style` parameter.
 
 ```tsx | pure
-// Method 1: Configure theme through the style parameter
 const config = {
   container: document.querySelector('#container'),
   width: 1000,
@@ -35,6 +41,7 @@ const config = {
     edgeText: { fontSize: 12, color: '#666666' }, // Edge text style
     anchor: { stroke: '#999999', fill: '#FFFFFF' }, // Anchor point style
   },
+  themeMode: 'radius', // Set rounded corner theme
 }
 const lf = new LogicFlow(config)
 ```
@@ -44,17 +51,17 @@ const lf = new LogicFlow(config)
 After creating a LogicFlow instance, dynamically update the theme configuration by calling the `setTheme` method.
 
 ```tsx | pure
-// Method 2: Dynamically configure theme using the setTheme method
+// Dynamically configure theme
 lf.setTheme({
   rect: { fill: '#FFFFFF', stroke: '#1890FF' }, // Rectangle style
   circle: { r: 15, fill: '#1890FF' }, // Circle style
   nodeText: { fontSize: 14, color: '#333333' }, // Node text style
   edgeText: { fontSize: 12, color: '#666666' }, // Edge text style
   anchor: { r: 4, fill: '#FFFFFF', stroke: '#1890FF' }, // Anchor point style
-})
+}, 'radius')
 ```
 
-## Built-in Theme Modes
+## Built-in Theme Modes <Badge>2.1.0新增</Badge>
 
 LogicFlow comes with four built-in theme modes that allow you to quickly apply preset styles:
 
@@ -66,26 +73,30 @@ LogicFlow comes with four built-in theme modes that allow you to quickly apply p
 Applying built-in theme modes:
 
 ```tsx | pure
-// Apply dark theme
-lf.setTheme({}, 'dark')
+// Set theme mode during initialization
+const lf = new LogicFlow({
+  // ... other configurations
+  themeMode: 'radius', // Set rounded corner theme
+})
 
-// Apply colorful theme
-lf.setTheme({}, 'colorful')
+// Dynamically switch theme modes
+lf.setTheme({}, 'dark') // Apply dark theme
+lf.setTheme({}, 'colorful') // Apply colorful theme
 
-// Apply radius theme with some custom styles
+// Apply theme mode with custom styles
 lf.setTheme({
   rect: { fill: '#AECBFA' },
   circle: { fill: '#C9DAF8' }
 }, 'radius')
 ```
 
-## Custom Theme Modes
+## Custom Theme Modes <Badge>2.1.0新增</Badge>
 
-You can add custom theme modes using the `addThemeMode` method:
+LogicFlow supports creating and managing custom theme modes. You can add new theme modes using the `addThemeMode` method:
 
 ```tsx | pure
 // Register custom theme mode
-lf.addThemeMode('customTheme', {
+LogicFlow.addThemeMode('customTheme', {
   baseNode: { fill: '#EFF5FF', stroke: '#4B83FF' },
   rect: { radius: 8 },
   circle: { r: 25 },
@@ -98,12 +109,12 @@ lf.addThemeMode('customTheme', {
 lf.setTheme({}, 'customTheme')
 ```
 
-## Theme Style Priority
+### Theme Style Priority
 
 The priority of theme styles (from high to low):
 1. Built-in base styles (defaultTheme)
-2. Applied theme mode styles (specified via `themeMode` during initialization or as the second parameter of `setTheme`)
-3. Custom styles (specified via `style` during initialization or as the first parameter of `setTheme`)
+2. Applied theme mode styles (specified via `themeMode` or second parameter of `setTheme`)
+3. Custom styles (specified via `style` or first parameter of `setTheme`)
 
 ## Usage Example
 <code id="graphData" src="../../../src/tutorial/basic/instance/theme"></code>

@@ -1262,3 +1262,209 @@ Example：
 ```ts | pure
 lf.emit("custom:button-click", model);
 ```
+
+## Graph Theme Related
+
+### getTheme
+
+Get the current canvas theme configuration.
+
+**Return Value**
+
+| Type  | Description                 |
+| :---- | :-------------------------- |
+| Theme | Current theme configuration |
+
+**Example**
+
+```ts
+// Get current theme
+const currentTheme = lf.getTheme();
+console.log('Current theme configuration:', currentTheme);
+
+// Modify based on current theme
+const newTheme = {
+  ...currentTheme,
+  rect: {
+    ...currentTheme.rect,
+    fill: '#ff0000'
+  }
+};
+lf.setTheme(newTheme);
+```
+
+**Notes**
+
+- Returns the complete current theme configuration object
+- Can be used to save and restore theme states
+- Recommended to get current theme before modifying it
+
+
+
+### addThemeMode
+
+Register a new theme mode.
+
+**Parameters**
+
+| Name      | Type                     | Required | Default | Description               |
+| :-------- | :----------------------- | :------- | :------ | :------------------------ |
+| themeMode | string                   | ✅        | -       | Theme mode name           |
+| style     | Partial<LogicFlow.Theme> | ✅        | -       | Theme style configuration |
+
+**Example**
+
+```ts
+// Register custom theme mode
+lf.addThemeMode('custom', {
+  rect: {
+    fill: '#e6f7ff',
+    stroke: '#1890ff',
+    strokeWidth: 2,
+    radius: 8
+  },
+  circle: {
+    fill: '#fff2e8', 
+    stroke: '#fa8c16',
+    strokeWidth: 2
+  },
+  nodeText: {
+    color: '#333',
+    fontSize: 14
+  }
+});
+
+// Apply custom theme
+lf.setTheme({}, 'custom');
+```
+
+**Notes**
+
+- Theme mode names must be unique; duplicate registration will override previous configuration
+- Style configuration supports partial configuration and will merge with default theme
+- After registration, can be used via the second parameter of setTheme method
+
+
+
+## Element Related Supplements
+
+### deselectElementById
+
+Deselect a specified element.
+
+**Parameters**
+
+| Name | Type   | Required | Default | Description |
+| :--- | :----- | :------- | :------ | :---------- |
+| id   | string | ✅        | -       | Element ID  |
+
+**Example**
+
+```ts
+// Deselect specified node
+lf.deselectElementById('node_1');
+
+// Deselect specified edge
+lf.deselectElementById('edge_1');
+```
+
+**Notes**
+
+- No effect if element doesn't exist or isn't selected
+- Won't affect other selected elements
+- Can be used with selectElementById for precise selection control
+
+
+
+## Plugin System Related
+
+Plugin system related APIs are used to extend LogicFlow functionality and support loading and managing plugins.
+
+### use
+
+Static method for globally registering plugins. Registered plugins will take effect in all LogicFlow instances.
+
+**Parameters**
+
+| Name      | Type                                        | Required | Default | Description                             |
+| :-------- | :------------------------------------------ | :------- | :------ | :-------------------------------------- |
+| extension | ExtensionConstructor \| ExtensionDefinition | ✅        | -       | Plugin constructor or definition object |
+| props     | Record<string, unknown>                     | -        | -       | Plugin property configuration           |
+
+**Example**
+
+```ts
+// Register plugin class
+class CustomPlugin {
+  static pluginName = 'CustomPlugin';
+  
+  constructor({ lf, LogicFlow, props }) {
+    this.lf = lf;
+    this.props = props;
+  }
+  
+  render(lf, container) {
+    // Plugin render logic
+  }
+  
+  destroy() {
+    // Plugin destroy logic
+  }
+}
+
+// Globally register plugin
+LogicFlow.use(CustomPlugin, {
+  option1: 'value1',
+  option2: 'value2'
+});
+
+// Register object-form plugin
+LogicFlow.use({
+  pluginName: 'SimplePlugin',
+  install(lf, LogicFlow) {
+    // Plugin installation logic
+    console.log('Plugin installed');
+  },
+  render(lf, container) {
+    // Plugin render logic
+  }
+});
+```
+
+**Notes**
+
+- This is a static method, called via LogicFlow.use()
+- Plugin must have a pluginName property
+- Duplicate registration of same-named plugins will override previous ones
+- Globally registered plugins apply to all LogicFlow instances
+- Specific plugins can be disabled via disabledPlugins in instance options
+
+
+
+### destroy
+
+Destroy LogicFlow instance and clean up all resources.
+
+**Example**
+
+```ts
+// Create instance
+const lf = new LogicFlow({
+  container: document.getElementById('container')
+});
+
+// Use instance
+lf.render(graphData);
+
+// Destroy instance
+lf.destroy();
+```
+
+**Notes**
+
+- Instance becomes unusable after destruction
+- Cleans up all event listeners, DOM elements, plugins and other resources
+- Recommended to call when component unmounts or page leaves
+- Need to create new instance to continue using after destruction
+
+

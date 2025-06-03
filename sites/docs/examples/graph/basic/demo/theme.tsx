@@ -167,7 +167,7 @@ const App: React.FC = () => {
     Object.keys(changedValues).forEach((key) => {
       // 处理常见的颜色属性字段
       if (key === 'fill' || key === 'stroke' || key === 'color') {
-        if (changedValues[key] && changedValues[key].toHexString) {
+        if (changedValues[key]?.toHexString?.()) {
           processedValues[key] = changedValues[key].toHexString();
         }
       }

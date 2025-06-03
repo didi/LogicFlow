@@ -34,6 +34,8 @@ table td:first-of-type {
 | 选项                                                      | 描述                                                                                     |
 | :-------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
 | [setTheme](theme.zh.md)                                   | 设置主题。                                                                               |
+| [getTheme](./detail/index.zh.md#gettheme)                 | 获取当前画布的主题配置。                                                                 |
+| [addThemeMode](./detail/index.zh.md#addthememode)         | 注册新的主题模式。                                                                       |
 | [focusOn](./detail/index.zh.md#focuson)                   | 定位到画布视口中心。                                                                     |
 | [resize](./detail/index.zh.md#resize)                     | 调整画布宽高, 如果`width` 或者`height`不传会自动计算画布宽高。                           |
 | [toFront](./detail/index.zh.md#tofront)                   | 将某个元素放置到顶部。                                                                   |
@@ -89,6 +91,7 @@ table td:first-of-type {
 | :-------------------------------------------------------------- | :---------------------------------------------- |
 | [addElements](./detail/index.zh.md#addelements)                 | 批量添加节点和边。                              |
 | [selectElementById](./detail/index.zh.md#selectelementbyid)     | 将图形选中。                                    |
+| [deselectElementById](./detail/index.zh.md#deselectelementbyid) | 取消指定元素的选中状态。                        |
 | [getSelectElements](./detail/index.zh.md#getselectelements)     | 获取选中的所有元素。                            |
 | [clearSelectElements](./detail/index.zh.md#clearselectelements) | 取消所有元素的选中状态。                        |
 | [getModelById](./detail/index.zh.md#getmodelbyid)               | 基于节点或边 `id` 获取其 `model`。              |
@@ -147,3 +150,9 @@ table td:first-of-type {
 | [off](./detail/index.zh.md#off)   | 删除事件监听。                                            |
 | [once](./detail/index.zh.md#once) | 事件监听一次。                                            |
 | [emit](./detail/index.zh.md#emit) | 触发事件。                                                |
+
+### 插件系统
+
+| 选项                            | 描述                                         |
+| :------------------------------ | :------------------------------------------- |
+| [use](./detail/index.zh.md#use) | 全局注册插件，注册后的插件在所有实例中生效。 |
