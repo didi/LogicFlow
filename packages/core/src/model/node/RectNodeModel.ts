@@ -39,7 +39,6 @@ export class RectNodeModel<
     const { radius: styleRadius } = this.getNodeStyle()
     if (!isNil(width)) this.width = width
     if (!isNil(height)) this.height = height
-    console.log('radius', radius, styleRadius)
     // 矩形特有
     if (!isNil(radius)) this.radius = radius
     if (!isNil(styleRadius)) this.radius = styleRadius
@@ -58,7 +57,6 @@ export class RectNodeModel<
   getNodeStyle() {
     const style = super.getNodeStyle()
     const { rect } = this.graphModel.theme
-    console.log('style', style, rect.radius)
     const { style: customStyle = {} } = this.properties
     return {
       ...style,

@@ -22,31 +22,6 @@ type IProps = {
   arrowInfo: ArrowInfo
   style: ArrowStyle
 }
-// function getArrowMarker( type = 'solid', color = '#000') {
-
-//   let path = '';
-
-//   switch (type) {
-//     case 'solid':
-//       path = `<path d="M0,0 L10,5 L0,10 Z" fill="${color}" />`;
-//       break;
-//     case 'hollow':
-//       path = `<path d="M0,0 L10,5 L0,10 Z" fill="none" stroke="${color}" />`;
-//       break;
-//     case 'line':
-//       path = `<path d="M0,5 L10,5" stroke="${color}" stroke-width="2" />`;
-//       break;
-//     case 'diamond':
-//       path = `<path d="M0,5 L5,0 L10,5 L5,10 Z" fill="${color}" />`;
-//       break;
-//     case 'circle':
-//       path = `<circle cx="5" cy="5" r="4" fill="${color}" />`;
-//       break;
-//     default:
-//       path = `<path d="M0,0 L10,5 L0,10 Z" fill="${color}" />`; // fallback to solid
-//   }
-//   return path;
-// }
 
 export class Arrow extends Component<IProps> {
   getArrowAttributes(): ArrowAttributesType {
@@ -59,17 +34,7 @@ export class Arrow extends Component<IProps> {
       verticalLength: style.verticalLength,
       type: 'end',
     }
-    const { leftX, leftY, rightX, rightY } = getVerticalPointOfLine(config)
-    console.log(
-      'leftX',
-      leftX,
-      'leftY',
-      leftY,
-      'rightX',
-      rightX,
-      'rightY',
-      rightY,
-    )
+    const { leftX, leftY } = getVerticalPointOfLine(config)
     return {
       d: `M${leftX} ${leftY} L${end.x - 20} ${end.y}z`,
       ...style,

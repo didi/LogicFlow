@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from 'lodash-es'
+import { cloneDeep, merge, assign } from 'lodash-es'
 import LogicFlow from '../LogicFlow'
 
 export const defaultTheme: LogicFlow.Theme = {
@@ -349,9 +349,35 @@ export const addThemeMode = (
     return
   }
   themeModeMap[themeMode] = style
-  console.log('themeModeMap', themeModeMap[themeMode])
   backgroundModeMap[themeMode] = style.background || defaultBackground
   gridModeMap[themeMode] = style.grid || defaultGrid
+}
+
+export const removeThemeMode = (themeMode: string): void => {
+  delete themeModeMap[themeMode]
+  delete backgroundModeMap[themeMode]
+  delete gridModeMap[themeMode]
+}
+
+export const clearThemeMode = (): void => {
+  assign(themeModeMap, {
+    colorful: {},
+    dark: {},
+    radius: {},
+    default: {},
+  })
+  assign(backgroundModeMap, {
+    colorful: {},
+    dark: {},
+    radius: {},
+    default: {},
+  })
+  assign(gridModeMap, {
+    colorful: {},
+    dark: {},
+    radius: {},
+    default: {},
+  })
 }
 
 /* 更新 theme 方法 */
