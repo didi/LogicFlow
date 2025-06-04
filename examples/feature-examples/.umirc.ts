@@ -45,6 +45,11 @@ export default defineConfig({
           name: '动态调整画布背景',
           component: './theme',
         },
+        {
+          path: '/theme/shared-theme',
+          name: '共享主题',
+          component: './theme/shared-theme',
+        },
       ],
     },
     {
