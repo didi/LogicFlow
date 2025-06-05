@@ -14,89 +14,101 @@ table td:first-of-type {
 }
 </style>
 
-> Menu refers to the right-click menu
+When using flowchart tools for editing, users' attention is often focused on the canvas area. Compared to frequently moving the mouse to click the top menu bar or using shortcut keys, right-clicking directly on nodes, edges, or blank areas is more efficient and intuitive. To better match users' operating habits, LogicFlow has built-in right-click menus, making common operations readily accessible and improving the overall editing experience.
 
 ## Enable
 
-Introducing components to enable the default menu
+Import and enable the default menu
 
 ```tsx | purex | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
 import "@logicflow/extension/lib/style/index.css";
 
-LogicFlow.use(Menu);
+LogicFlow.use(Menu); // Global import
+
+const lf = new LogicFlow({
+  plugins: [Menu], // Local import
+})
 ```
 
-The `Menu` component supports menus including node context menus, side context menus, and canvas
-context menus. By default, `Menu` has the following functions built into each menu.
+By default, the menu plugin supports node menus, edge menus, and canvas menus, with the following built-in functions:
 
-- nodeMenu: Delete, Copy, Edit text.
-- edgeMenu: delete, edit text.
-- Canvas context menu (graphMenu): none
+- Node right-click menu (nodeMenu): Delete, Copy, Edit text
+- Edge right-click menu (edgeMenu): Delete, Edit text  
+- Canvas right-click menu (graphMenu): None
+
+Of course, supporting only these configuration items is far from enough, so we also support users to customize menu configuration items.
 
 ## Menu configuration items
 
-Each function in the menu can be represented by a configuration entry. The specific fields are as
-follows.
+Each function in the menu can be represented by a configuration entry. The specific fields are as follows:
 
-| Fields    | Type     | Role                                  | Required | Description                                                                                                                                                                                                                                                                                   |
-|-----------|----------|---------------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| text      | string   | copywriter                            |          | copywriter for Menu Item Display                                                                                                                                                                                                                                                              |
-| className | string   | className                             |          | The default class for each item is lf-menu-item, set this field and class will add className to the original.                                                                                                                                                                                 |
-| icon      | boolean  | If or not create a span booth of icon |          | If the simple text can not richly represent the menu, you can add an icon and set it to true, the corresponding menu item will add a span of class lf-menu-icon to enrich the representation of the menu by setting a background for it, which is usually used in conjunction with className. |
-| callback  | Function | Callbacks executed after clicking     | ✅        | You can get node data/edge data/event information in the three menu callbacks respectively.                                                                                                                                                                                                   |
+| Fields    | Type             | Role                                          | Required | Description                                                                                                                                                                                                                                                                                                                                                            |
+| --------- | ---------------- | --------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| text      | string           | Text content                                  |          | Text displayed by the menu item                                                                                                                                                                                                                                                                                                                                        |
+| className | string           | Class name                                    |          | The default class for each item is lf-menu-item, set this field and class will add className to the original.                                                                                                                                                                                                                                                          |
+| icon      | boolean / string | Whether to create a span placeholder for icon |          | If simple text cannot richly represent the menu, you can add an icon. Set to `true` to create an empty icon container with class `lf-menu-icon`. Set to a string for various icon formats: image file paths (e.g., `./icon.png`), base64 image data (e.g., `data:image/png;base64,...`), CSS class names, or HTML content. Usually used in conjunction with className. |
+| disabled  | boolean          | Whether to disable menu item                  |          | When set to true, the menu item will be displayed in gray and cannot be clicked. This state can be dynamically modified using the `changeMenuItemDisableStatus` method.                                                                                                                                                                                                |
+| callback  | Function         | Callback executed after clicking              | ✅        | You can get node data/edge data/event information in the three menu callbacks respectively.                                                                                                                                                                                                                                                                            |
 
-The node right-click menu delete function, the example is as follows:
+Here's an example of writing a node right-click menu delete function:
 
 ```tsx | purex | pure
+// Define a menu item for node deletion
 const menuItem = {
-  text: 'delete',
+  className: "lf-menu-delete",
+  icon: true,
   callback: (node) => {
-    lf.deleteNode(node.id)
+    // Delete menu and trigger a custom event custom-node:deleted, passing out the current deleted node information
+    this.graphModel.deleteNode(node.id);
+    this.graphModel.eventCenter.emit("custom-node:deleted", node);
   },
 }
 ```
 
 ## Adding Menu Options
 
-The `lf.extension.menu.addMenuConfig` method can be used to add new options to the existing menu,
-the configuration is shown below:
+You can use the `lf.extension.menu.addMenuConfig` method to add new options to the existing menu. The specific configuration example is as follows:
 
 ```tsx | purex | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
 
-// Instantiating Logic Flow
+import NodeData = LogicFlow.NodeData;
+import EdgeData = LogicFlow.EdgeData;
+import Position = LogicFlow.Position;
+
+// Instantiate Logic Flow
 const lf = new LogicFlow({
   container: document.getElementById("app"),
-  // Registered Components
+  // Register plugins
   plugins: [Menu],
 });
-// Append options to the menu (must be set before lf.render())
-// we can use `lf.addMenuConfig` to add menu options as other options
-lf.extension.menu.addMenuConfig({
+// Add options to the menu
+// You can also call lf.extension.menu.addMenuConfig to set the menu, both have the same effect
+lf.addMenuConfig({
   nodeMenu: [
     {
-      text: '分享',
+      text: 'Share',
       callback() {
-        alert('分享成功！')
+        alert('Share Success!')
       },
     },
     {
-      text: '属性',
+      text: 'Properties',
       callback(node: NodeData) {
         alert(`
-              节点id：${node.id}
-              节点类型：${node.type}
-              节点坐标：(x: ${node.x}, y: ${node.y})
+              Node ID: ${node.id}
+              Node Type: ${node.type}
+              Node Position: (x: ${node.x}, y: ${node.y})
             `)
       },
     },
   ],
   edgeMenu: [
     {
-      text: '属性',
+      text: 'Properties',
       callback(edge: EdgeData) {
         const {
           id,
@@ -107,21 +119,31 @@ lf.extension.menu.addMenuConfig({
           targetNodeId,
         } = edge
         alert(`
-              边id：${id}
-              边类型：${type}
-              边起点坐标：(startPoint: [${startPoint.x}, ${startPoint.y}])
-              边终点坐标：(endPoint: [${endPoint.x}, ${endPoint.y}])
-              源节点id：${sourceNodeId}
-              目标节点id：${targetNodeId}
+              Edge ID: ${id}
+              Edge Type: ${type}
+              Start Point: (x: ${startPoint.x}, y: ${startPoint.y})
+              End Point: (x: ${endPoint.x}, y: ${endPoint.y})
+              Source Node ID: ${sourceNodeId}
+              Target Node ID: ${targetNodeId}
             `)
       },
     },
   ],
   graphMenu: [
     {
-      text: '分享',
+      text: 'Share',
       callback() {
-        alert('分享成功！')
+        alert('Share Success!')
+      },
+    },
+    {
+      text: 'Add Node',
+      callback(data: Position) {
+        lf.addNode({
+          type: 'rect',
+          x: data.x,
+          y: data.y,
+        })
       },
     },
   ],
@@ -129,184 +151,169 @@ lf.extension.menu.addMenuConfig({
 lf.render();
 ```
 
-## Resetting the menu
+## Overwriting Menus
 
-If there are unwanted options in the default menu, or it doesn't meet the needs, you can reset the
-menu and replace it with a customized menu via `lf.setMenuConfig`.
+If there are unwanted options in the default menu, or it doesn't meet the requirements, you can use `lf.setMenuConfig` to override the default menu and achieve a custom menu effect.
 
 ```tsx | purex | pure
-lf.extension.menu.setMenuConfig({
+lf.setMenuConfig({
   nodeMenu: [
     {
-      text: "删除",
+      text: "Delete",
       callback(node) {
         lf.deleteNode(node.id);
       },
     },
-  ],
-  edgeMenu: false,
-  graphMenu: [],
+  ], // Override the default node right-click menu
+  edgeMenu: false, // Remove the default edge right-click menu
+  graphMenu: [], // Override the default edge right-click menu, same behavior as false
 });
 ```
 
-## Configuring Menus for Specified Types of Elements
+## Configuring Menus for Specified Element Types
 
-In addition to the above customization of generic menus for all nodes, elements, and canvases, menus
-can be defined for nodes or edges of a specified type using `lf.setMenuByType`.
+In addition to overwriting the entire menu above, you can also use `lf.setMenuByType` to set menus for elements of specified types.
 
 ```tsx | purex | pure
-lf.extension.menu.setMenuByType({
+lf.setMenuByType({
   type: "bpmn:startEvent",
   menu: [
     {
-      text: "111",
+      text: "Share111",
       callback() {
-        console.log("222");
+        console.log("Share Success222!");
       },
     },
   ],
 });
 ```
 
-## Setting the constituency menu
+## Dynamic Enable/Disable Menu Items<Badge>New in 2.1.0</Badge>
 
-After using the constituency plugin, the constituency component will also appear as a menu, you can
-set the menu item to be empty to realize the effect of not displaying the menu.
+To provide more flexible interaction, version 2.1.0 adds functionality to dynamically control the disabled state of menu items, allowing you to dynamically disable or enable specific menu items based on business logic.
+
+### API
 
 ```tsx | purex | pure
-lf.extension.menu.setMenuByType({
+lf.changeMenuItemDisableStatus(menuKey, text, disabled)
+```
+
+Parameter description:
+- `menuKey`: Menu type, possible values are `'nodeMenu'` | `'edgeMenu'` | `'graphMenu'` | `'selectionMenu'`
+- `text`: Text of the menu item to operate on
+- `disabled`: Whether to disable, `true` to disable, `false` to enable
+
+### Usage Example
+
+```tsx | purex | pure
+// Disable the "Delete" option in node menu
+lf.changeMenuItemDisableStatus('nodeMenu', 'Delete', true)
+
+// Enable the "Properties" option in edge menu
+lf.changeMenuItemDisableStatus('edgeMenu', 'Properties', false)
+
+// Disable the "Share" option in graph menu
+lf.changeMenuItemDisableStatus('graphMenu', 'Share', true)
+```
+
+### Setting Disabled State During Configuration
+
+You can also directly set certain menu items to disabled state when configuring the menu:
+
+```tsx | purex | pure
+lf.addMenuConfig({
+  nodeMenu: [
+    {
+      text: 'Delete',
+      disabled: true, // Initially disabled
+      callback(node: NodeData) {
+        lf.deleteNode(node.id)
+      },
+    },
+    {
+      text: 'Copy',
+      disabled: false, // Initially enabled
+      callback(node: NodeData) {
+        lf.cloneNode(node.id)
+      },
+    },
+  ],
+})
+```
+
+## Selection Menu
+
+After using the selection plugin, the selection component will also display a menu. By default, the selection menu only has a delete operation.
+Like other menu items, you can call the methods provided by the Menu plugin to modify the selection menu configuration.
+
+```tsx | purex | pure
+// Example: Set the selection menu to not display
+lf.setMenuByType({
   type: "lf:defaultSelectionMenu",
   menu: [],
 });
 ```
 
-## Setting menus for specific business states
+## Setting Menus for Custom Nodes
 
-In addition to setting a menu for a certain type of element as above, you can also set a menu for a
-node to be in a different business state when customizing the element.
-
-- You can set a custom menu for a node by customizing the node and setting its menu.
-- Since you may not be able to get the lf instance object directly from the customized model, you
-  can get the graphModel object from `this.graphModel`. Please refer
-  to [API/graphModel](../../api/graphModel.en.md) for the detailed description of the graphModel
-  object.
-- If you still want to do business processing after clicking the menu, you can send a custom event
-  via `eventCenter` of `graphModel`, and then listen to this event on `lf` instance by yourself.
-- Priority: specify business state setting menu > specify type element configuration menu > generic
-  menu configuration > default menu.
+In addition to setting menus for general canvas elements above, LogicFlow also supports setting menus for custom nodes:
 
 ```tsx | purex | pure
-// customNode.ts
-import { RectNode, RectNodeModel } from "@logicflow/core";
-
-class CustomeModel extends RectNodeModel {
-  setAttributes() {
-    this.stroke = "#1E90FF";
-    this.fill = "#F0F8FF";
-    this.radius = 10;
-    const {
-      properties: { isDisabledNode },
-    } = this;
-    if (!isDisabledNode) {
-      // Separate menus for non-disabled elements.
-      this.menu = [
-        {
-          className: "lf-menu-delete",
-          icon: true,
-          callback: (node) => {
-            this.graphModel.deleteNode(node.id);
-            this.graphModel.eventCenter.emit("custom:event", node);
-          },
-        },
-        {
-          text: "edit",
-          className: "lf-menu-item",
-          callback: (node) => {
-            this.graphModel.setElementStateById(node.id, 2);
-          },
-        },
-        {
-          text: "copy",
-          className: "lf-menu-item",
-          callback: (node) => {
-            this.graphModel.cloneNode(node.id);
-          },
-        },
-      ];
-    }
-  }
-}
 
 // index.js
 import { RectNode, CustomeModel } from "./custom.ts";
-
+// Register custom node
 lf.register({
   type: "custome_node",
   view: RectNode,
   model: CustomeModel,
 });
-
-lf.on("custom:event", (r) => {
-  console.log(r);
-});
-```
-
-- Set up a customized custom menu for an edge by customizing the edge and setting its menu
-
-```tsx | purex | pure
-// custom.ts
-import { PolylineEdge, PolylineEdgeModel } from "@logicflow/core";
-
-class CustomModel extends PolylineEdgeModel {
-  setAttributes() {
-    // context menu
-    this.menu = [
-      {
-        className: "lf-menu-delete",
-        icon: true,
-        callback(edge) {
-          const comfirm = window.confirm("你确定要删除吗？");
-          comfirm && this.graphModel.deleteEdgeById(edge.id);
-        },
+// Set custom node menu
+lf.setMenuByType({
+  type: "custome_node",
+  menu: [
+    {
+      className: "lf-menu-delete",
+      icon: true,
+      callback: (node) => {
+        this.lf.graphModel.deleteNode(node.id);
+        this.lf.graphModel.eventCenter.emit("custom:event", node);
       },
-    ];
-  }
-}
-
-// index.ts
-lf.register({
-  type: "custome_edge",
-  view: PolylineEdge,
-  model: CustomeModel,
+    },
+    {
+      text: "edit",
+      className: "lf-menu-item",
+      callback: (node) => {
+        this.lf.graphModel.setElementStateById(node.id, 2);
+      },
+    },
+    {
+      text: "copy",
+      className: "lf-menu-item",
+      disabled: false, // Can set disabled state
+      callback: (node) => {
+        this.lf.graphModel.cloneNode(node.id);
+      },
+    }
+  ],
 });
-// Set default edge type to custom edge type
-lf.setDefaultEdgeType("custome_edge");
+
+lf.on("custom:event", (node) => {
+  console.log(node);
+});
 ```
 
-```stylus
-.lf-menu-delete .lf-menu-item-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: url("./delete.png") no-repeat;
-  background-size: 20px;
-}
-```
+### Custom Menu Styles
 
-### Menu Styles
-
-Overrides the original style based on the class in the menu structure and sets a style that matches
-the host's style.
+The Menu plugin sets a class for each DOM it displays. Users can override the original style based on the class in the menu structure and set styles that match the host's style.
 
 - Menu: lf-menu
 - Menu item: lf-menu-item, user-defined className
-- menu-item-text: lf-menu-item-text
-- menu-item-icon: lf-menu-item-icon, need to set menu-item-icon to true.
-  By setting these classes, you can override the default style, beautify the font color, set the
-  menu item icon and so on.
+- Menu item text: lf-menu-item-text
+- Menu item icon: lf-menu-item-icon, need to set the menu item configuration icon to true
+- Disabled menu item: lf-menu-item__disabled, this class is automatically added when a menu item is disabled
 
-Note that the menu configuration described above must be called before `lf.render()`.
+By setting these classes, you can override the default style, beautify font color, set menu item icons, etc.
 
-### example
-
+## Effect
 <a href="https://codesandbox.io/embed/dazzling-hypatia-en8s9?fontsize=14&hidenavigation=1&theme=dark&view=preview" target="_blank"> Go to CodeSandbox for examples </a>
