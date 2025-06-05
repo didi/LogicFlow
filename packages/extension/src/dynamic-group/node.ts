@@ -237,7 +237,7 @@ export class DynamicGroupNode<
 
   // 获取操作图标（收起或展开）
   getOperateIcon(): h.JSX.Element | null {
-    const { model } = this.props
+    const { model, graphModel } = this.props
     const { x, y, width, height } = model
     const sx = x - width / 2 + 10
     const sy = y - height / 2 + 10
@@ -268,7 +268,13 @@ export class DynamicGroupNode<
         x: sx,
         y: sy,
         onClick: () => {
-          model.toggleCollapse(!model.isCollapsed)
+          // DONE: 抛出折叠或展开事件
+          const nextState = !model.isCollapsed
+          graphModel.eventCenter.emit('dynamicGroup:collapse', {
+            collapse: nextState,
+            nodeModel: model,
+          })
+          model.toggleCollapse(nextState)
         },
       }),
       operateIcon,
