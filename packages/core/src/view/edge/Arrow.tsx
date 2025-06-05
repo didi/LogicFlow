@@ -34,9 +34,9 @@ export class Arrow extends Component<IProps> {
       verticalLength: style.verticalLength,
       type: 'end',
     }
-    const { leftX, leftY } = getVerticalPointOfLine(config)
+    const { leftX, leftY, rightX, rightY } = getVerticalPointOfLine(config)
     return {
-      d: `M${leftX} ${leftY} L${end.x - 20} ${end.y}z`,
+      d: `M${leftX} ${leftY} L${end.x} ${end.y} L${rightX} ${rightY} z`,
       ...style,
     }
   }
