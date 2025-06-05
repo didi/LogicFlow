@@ -381,6 +381,14 @@ export default function DynamicGroupDemo() {
       lf.render(graphData)
       // lf.setSelectionSelectMode(true)
 
+      lf.on('node:properties-change', (event: unknown) => {
+        console.log('node:properties-change', event)
+      })
+
+      lf.on('dynamicGroup:collapse', (collapsedState: unknown) => {
+        console.log('dynamicGroup:collapse', collapsedState)
+      })
+
       lfRef.current = lf
     }
   }, [])
