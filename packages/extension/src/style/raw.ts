@@ -143,19 +143,19 @@ export const content = `@import url('medium-editor/dist/css/medium-editor.min.cs
   transition: all 120ms ease-in-out;
 }
 .lf-menu-item {
-  list-style: none;
   display: flex;
+  gap: 4px;
   align-items: center;
   justify-content: flex-start;
-  gap: 4px;
+  list-style: none;
 }
 .lf-menu-item:hover {
   background: #f3f3f3;
 }
 .lf-menu-item__disabled {
   color: #aaa;
-  opacity: 0.88;
   cursor: not-allowed !important;
+  opacity: 0.88;
   pointer-events: inherit !important;
 }
 .lf-menu-item__disabled:hover {

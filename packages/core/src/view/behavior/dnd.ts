@@ -59,7 +59,7 @@ export class Dnd {
     })
   }
   onDragOver = (e: MouseEvent) => {
-    this.lf.graphModel.eventCenter.emit(EventType.BLANK_MOUSEMOVE, {
+    this.lf.graphModel.eventCenter.emit(EventType.BLANK_CANVAS_MOUSEMOVE, {
       e,
     })
     e.preventDefault()

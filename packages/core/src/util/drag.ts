@@ -161,7 +161,6 @@ export class StepDrag {
           deltaY,
           e,
           data: this.data || elementData,
-          isDragging: true,
         })
         this.eventCenter?.emit(EventType[`${this.eventType}_DRAG`], {
           e,
