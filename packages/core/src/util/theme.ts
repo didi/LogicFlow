@@ -360,24 +360,15 @@ export const removeThemeMode = (themeMode: string): void => {
 }
 
 export const clearThemeMode = (): void => {
-  assign(themeModeMap, {
+  const resetTheme = {
     colorful: {},
     dark: {},
     radius: {},
     default: {},
-  })
-  assign(backgroundModeMap, {
-    colorful: {},
-    dark: {},
-    radius: {},
-    default: {},
-  })
-  assign(gridModeMap, {
-    colorful: {},
-    dark: {},
-    radius: {},
-    default: {},
-  })
+  }
+  assign(themeModeMap, resetTheme)
+  assign(backgroundModeMap, resetTheme)
+  assign(gridModeMap, resetTheme)
 }
 
 /* 更新 theme 方法 */
