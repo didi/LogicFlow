@@ -101,6 +101,7 @@ export enum EventType {
   BLANK_DRAG = 'blank:drag',
   BLANK_DROP = 'blank:drop',
   BLANK_MOUSEMOVE = 'blank:mousemove',
+  BLANK_CANVAS_MOUSEMOVE = 'blank:canvas-mousemove',
   BLANK_MOUSEUP = 'blank:mouseup',
   BLANK_CLICK = 'blank:click',
   BLANK_CONTEXTMENU = 'blank:contextmenu',
