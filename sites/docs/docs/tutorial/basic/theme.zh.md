@@ -62,7 +62,7 @@ lf.setTheme({
 }, 'radius')
 ```
 
-## 内置主题模式<Badge>2.1.0新增</Badge>
+## 内置主题模式<Badge>2.0.14新增</Badge>
 
 LogicFlow 内置了四种主题模式，可以快速应用预设样式：
 
@@ -91,7 +91,7 @@ lf.setTheme({
 }, 'radius')
 ```
 
-## 自定义主题模式 <Badge>2.1.0新增</Badge>
+## 自定义主题模式 <Badge>2.0.14新增</Badge>
 
 LogicFlow 支持创建和管理自定义主题模式。通过 `addThemeMode` 方法可以添加新的主题模式：
 

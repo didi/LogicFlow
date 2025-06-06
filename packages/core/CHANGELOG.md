@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.14
+
+### Patch Changes
+
+- fix: 主题功能增强 & dynamic-group增加事件回调
+
 ## 2.0.13
 
 ### Patch Changes

@@ -358,7 +358,7 @@ lf.setTheme({
 });
 ```
 
-## Theme Background and Grid<Badge>2.1.0</Badge>
+## Theme Background and Grid<Badge>2.0.14</Badge>
 
 In addition to node and edge styles, LogicFlow also supports setting canvas background color and grid styles.
 
@@ -436,7 +436,7 @@ Style application rules:
 - Styles not defined in the theme mode will inherit from the default theme configuration
 - Clearing theme modes (`clearThemeMode`) will restore to default theme styles
 
-## Theme Mode Management<Badge>2.1.0</Badge>
+## Theme Mode Management<Badge>2.0.14</Badge>
 
 In version 2.1.0 and later, LogicFlow provides theme mode management functionality, supporting adding, removing, and clearing theme modes.
 

@@ -61,7 +61,7 @@ lf.setTheme({
 }, 'radius')
 ```
 
-## Built-in Theme Modes <Badge>2.1.0新增</Badge>
+## Built-in Theme Modes <Badge>2.0.14新增</Badge>
 
 LogicFlow comes with four built-in theme modes that allow you to quickly apply preset styles:
 
@@ -90,7 +90,7 @@ lf.setTheme({
 }, 'radius')
 ```
 
-## Custom Theme Modes <Badge>2.1.0新增</Badge>
+## Custom Theme Modes <Badge>2.0.14新增</Badge>
 
 LogicFlow supports creating and managing custom theme modes. You can add new theme modes using the `addThemeMode` method:
 
