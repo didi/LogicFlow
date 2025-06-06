@@ -112,9 +112,43 @@ lf.setTheme({}, 'customTheme')
 ### Theme Style Priority
 
 The priority of theme styles (from low to high):
+
+#### Node, Edge, Text and Other Element Style Priority
 1. Built-in base styles (defaultTheme)
 2. Applied theme mode styles (specified via `themeMode` or second parameter of `setTheme`)
 3. Custom styles (specified via `style` or first parameter of `setTheme`)
+
+#### Background and Grid Style Priority
+Background and grid configurations have independent update mechanisms, with priority divided into two phases:
+
+**Initialization Phase Priority** (from low to high):
+1. Configuration in style: `background` and `grid` configurations in the constructor's `style` parameter
+2. Direct Parameter Configuration: Values set through `background` and `grid` parameters in the constructor (overrides configurations in style)
+
+**Runtime Phase Priority** (from low to high):
+1. Current Configuration: `background` and `grid` configurations after initialization
+2. Theme Mode Configuration: When calling `setTheme(style, themeMode)`, background and grid configurations in themeMode will override current configuration
+3. Custom Configuration: `background` and `grid` configurations in the style parameter of `setTheme(style, themeMode)` will override theme mode configuration
+
+```tsx | pure
+// Example: Priority application of background and grid
+
+// Initialization: Direct parameters > style parameters
+const lf = new LogicFlow({
+  style: {
+    background: { color: '#f0f0f0' }, // Lower priority
+    grid: { size: 15 }                // Lower priority
+  },
+  background: { color: '#f5f5f5' },   // Final effective (overrides style configuration)
+  grid: { size: 20 },                 // Final effective (overrides style configuration)
+})
+
+// Runtime: style parameters > themeMode parameters > current configuration
+lf.setTheme({
+  background: { color: '#ffffff' },   // Final effective background configuration
+  grid: { size: 10, visible: true },  // Final effective grid configuration
+}, 'dark') // Background and grid configurations in dark theme mode will be overridden by style parameters
+```
 
 ## Usage Example
 <code id="graphData" src="../../../src/tutorial/basic/instance/theme"></code>

@@ -113,9 +113,43 @@ lf.setTheme({}, 'customTheme')
 ### 主题样式优先级
 
 主题样式的应用优先级（从低到高）：
+
+#### 节点、边、文本等元素样式优先级
 1. 内置基础样式（defaultTheme）
 2. 应用的主题模式样式（通过 `themeMode` 或 `setTheme` 的第二个参数设置）
 3. 自定义样式（通过 `style` 或 `setTheme` 的第一个参数设置）
+
+#### 背景和网格样式优先级
+背景（background）和网格（grid）配置具有独立的更新机制，其优先级分为两个阶段：
+
+**初始化阶段优先级**（从低到高）：
+1. style 中的配置：通过构造函数 `style` 参数中的 `background` 和 `grid` 配置
+2. 直接参数配置：通过构造函数中的 `background` 和 `grid` 参数设置的值（会覆盖 style 中的配置）
+
+**运行时阶段优先级**（从低到高）：
+1. 当前配置：初始化后的 `background` 和 `grid` 配置
+2. 主题模式配置：调用 `setTheme(style, themeMode)` 时，themeMode 中的背景和网格配置会覆盖当前配置
+3. 自定义配置：`setTheme(style, themeMode)` 中 style 参数的 `background` 和 `grid` 配置会覆盖主题模式配置
+
+```tsx | pure
+// 示例：背景和网格的优先级应用
+
+// 初始化时：直接参数 > style 参数
+const lf = new LogicFlow({
+  style: {
+    background: { color: '#f0f0f0' }, // 优先级较低
+    grid: { size: 15 }                // 优先级较低
+  },
+  background: { color: '#f5f5f5' },   // 最终生效（覆盖 style 中的配置）
+  grid: { size: 20 },                 // 最终生效（覆盖 style 中的配置）
+})
+
+// 运行时：style 参数 > themeMode 参数 > 当前配置
+lf.setTheme({
+  background: { color: '#ffffff' },   // 最终生效的背景配置
+  grid: { size: 10, visible: true },  // 最终生效的网格配置
+}, 'dark') // dark 主题模式的背景和网格配置会被 style 参数覆盖
+```
 
 ## 使用示例
 <code id="graphData" src="../../../src/tutorial/basic/instance/theme"></code>
