@@ -7,14 +7,14 @@ import {
   SelectionSelect,
 } from '@logicflow/extension'
 
-import { Button, Card, Divider, Flex } from 'antd'
+import { Button, Card, Divider, Flex, message } from 'antd'
 import { useEffect, useRef } from 'react'
 // import { customGroup, subProcess } from './nodes'
 import GraphConfigData = LogicFlow.GraphConfigData
 
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
-import styles from './index.less'
+import './index.less'
 
 const config: Partial<LogicFlow.Options> = {
   // grid: true,
@@ -39,38 +39,38 @@ const customDndConfig: ShapeItem[] = [
     type: 'dynamic-group',
     label: '内置动态分组',
     text: 'DynamicGroup',
-    icon: require('@/assets/group/group.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/group.png',
   },
   {
     type: 'circle',
     label: '圆形',
     text: 'Circle',
-    icon: require('@/assets/group/circle.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/circle.png',
   },
   {
     type: 'rect',
     label: '矩形',
     text: 'Rect',
-    icon: require('@/assets/group/rect.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/rect.png',
   },
   // {
   //   type: 'sub-process',
   //   label: '子流程-展开',
   //   text: 'SubProcess',
-  //   icon: require('@/assets/group/subprocess-expanded.png')
+  //   icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/subprocess-expanded.png',
   // },
   // {
   //   type: 'sub-process',
   //   label: '子流程-收起',
   //   text: 'SubProcess',
-  //   icon: require('@/assets/group/subprocess-collapsed.png')
-  // }
+  //   icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/subprocess-collapsed.png',
+  // },
 ]
 
 const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
   {
     label: '单次框选',
-    icon: require('@/assets/bpmn/select.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn/select.png',
     callback: () => {
       lf.openSelectionSelect()
       lf.once('selection:selected', () => {
@@ -80,14 +80,14 @@ const getDndPanelConfig = (lf: LogicFlow): ShapeItem[] => [
   },
   {
     label: '开启框选',
-    icon: require('@/assets/bpmn/select.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn/select.png',
     callback: () => {
       lf.openSelectionSelect()
     },
   },
   {
     label: '关闭框选',
-    icon: require('@/assets/bpmn/select.png'),
+    icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/bpmn/select.png',
     callback: () => {
       lf.closeSelectionSelect()
     },
@@ -110,7 +110,7 @@ export default function DynamicGroupDemo() {
         iconClass: 'lf-control-move',
         title: '',
         text: '右移分组',
-        onClick: () => {
+        onClick: (lf) => {
           const { nodes } = lf.getSelectElements()
           const selectedNode = nodes[0]
           if (!selectedNode) {
@@ -124,11 +124,11 @@ export default function DynamicGroupDemo() {
         },
       })
       ;(lf.extension.control as Control).addItem({
-        key: 'move-group',
+        key: 'add-child',
         iconClass: 'lf-control-add',
         title: '',
         text: 'addChild',
-        onClick: () => {
+        onClick: (lf) => {
           const groupModel = lf.getNodeModelById('#2041_dynamic-group_1')
           groupModel?.addChild('#2041_circle_1')
           groupModel?.addChild('#2041_circle_2')
@@ -194,11 +194,6 @@ export default function DynamicGroupDemo() {
               width: 40,
               height: 40,
             },
-            // text: {
-            //   x: 455,
-            //   y: 213,
-            //   value: 'Rect',
-            // },
           },
           {
             id: 'dynamic-group_2',
@@ -251,14 +246,14 @@ export default function DynamicGroupDemo() {
               value: 'Rect',
             },
           },
-          // #2041
+          // #2041 - 演示动态添加子节点的功能
           {
             id: '#2041_circle_1',
             type: 'circle',
             x: 1022,
             y: 170,
             text: {
-              value: '#2041_circle_1',
+              value: 'circle_1',
               x: 1022,
               y: 170,
               draggable: true,
@@ -270,7 +265,7 @@ export default function DynamicGroupDemo() {
             x: 1180,
             y: 170,
             text: {
-              value: '#2041_circle_2',
+              value: 'circle_2',
               x: 1180,
               y: 170,
               draggable: true,
@@ -281,7 +276,7 @@ export default function DynamicGroupDemo() {
             type: 'dynamic-group',
             x: 1042,
             y: 189,
-            text: '#2041_dynamic-group_1',
+            text: 'dynamic-group_fix_#2041',
             resizable: true,
             properties: {
               width: 420,
@@ -291,94 +286,18 @@ export default function DynamicGroupDemo() {
           },
         ],
         edges: [],
-        // 'nodes': [
-        //   {
-        //     'id': 'circle_2',
-        //     'type': 'circle',
-        //     'x': 800,
-        //     'y': 140,
-        //     'properties': {},
-        //     'text': {
-        //       'x': 800,
-        //       'y': 140,
-        //       'value': 'circle_2',
-        //     },
-        //   },
-        //   {
-        //     'id': 'dynamic-group_1',
-        //     'type': 'dynamic-group',
-        //     'x': 330,
-        //     'y': 45,
-        //     'properties': {
-        //       'collapsible': true,
-        //       'width': 420,
-        //       'height': 250,
-        //       'radius': 5,
-        //       'isCollapsed': true,
-        //       'children': [],
-        //     },
-        //     'text': {
-        //       'x': 330,
-        //       'y': 45,
-        //       'value': 'dynamic-group_1',
-        //     },
-        //     'children': [],
-        //   },
-        //   {
-        //     'id': 'dynamic-group_2',
-        //     'type': 'dynamic-group',
-        //     'x': 500,
-        //     'y': 220,
-        //     'properties': {
-        //       'width': 420,
-        //       'height': 250,
-        //       'radius': 5,
-        //       'collapsible': false,
-        //       'isCollapsed': false,
-        //       'children': [
-        //         '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
-        //         '37869799-e2ee-45b8-9150-b38ccc8e65d3',
-        //       ],
-        //     },
-        //     'text': {
-        //       'x': 500,
-        //       'y': 220,
-        //       'value': 'dynamic-group_2',
-        //     },
-        //     'children': [
-        //       '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
-        //       '37869799-e2ee-45b8-9150-b38ccc8e65d3',
-        //     ],
-        //   },
-        //   {
-        //     'id': '60cff3ff-c20d-461f-9643-ee6a3b9badfc',
-        //     'type': 'circle',
-        //     'x': 552,
-        //     'y': 194,
-        //     'properties': {},
-        //     'text': {
-        //       'x': 552,
-        //       'y': 194,
-        //       'value': 'Circle',
-        //     },
-        //   },
-        //   {
-        //     'id': '37869799-e2ee-45b8-9150-b38ccc8e65d3',
-        //     'type': 'rect',
-        //     'x': 390,
-        //     'y': 214,
-        //     'properties': {},
-        //     'text': {
-        //       'x': 390,
-        //       'y': 214,
-        //       'value': 'Rect',
-        //     },
-        //   },
-        // ],
-        // 'edges': [],
       }
       lf.render(graphData)
       // lf.setSelectionSelectMode(true)
+
+      // 添加事件监听
+      lf.on('node:properties-change', (event: unknown) => {
+        console.log('node:properties-change', event)
+      })
+
+      lf.on('dynamicGroup:collapse', ({ collapse, nodeModel }) => {
+        message.info(`分组${nodeModel.id} ${collapse ? '收起' : '展开'}`)
+      })
 
       lfRef.current = lf
     }
@@ -405,7 +324,7 @@ export default function DynamicGroupDemo() {
         </Button>
       </Flex>
       <Divider />
-      <div ref={containerRef} id="graph" className={styles.viewport}></div>
+      <div ref={containerRef} id="graph" className="viewport"></div>
     </Card>
   )
 }
