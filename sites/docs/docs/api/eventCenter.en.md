@@ -210,11 +210,12 @@ The event object contains the following:
 
 ### DynamicGroup/Group
 
-| Event name        | Description                                      | Event object                                           |
-| :---------------- | :----------------------------------------------- | :----------------------------------------------------- |
-| group:add-node    | Triggered when a node is added to a group        | data: Group data, childId: ID of the newly added node  |
-| group:remove-node | Triggered when a node is removed from a group    | data: Group data                                       |
-| group:not-allowed | Triggered when a node cannot be added to a group | group: Group data, node: Information of forbidden node |
+| Event name                                      | Description                                      | Event object                                           |
+| :---------------------------------------------- | :----------------------------------------------- | :----------------------------------------------------- |
+| group:add-node                                  | Triggered when a node is added to a group        | data: Group data, childId: ID of the newly added node  |
+| group:remove-node                               | Triggered when a node is removed from a group    | data: Group data, childId: ID of the removed node      |
+| group:not-allowed                               | Triggered when a node cannot be added to a group | group: Group data, node: Information of forbidden node |
+| dynamicGroup:collapse<Badge>2.1.0 Added</Badge> | Group node collapse event                        | collapse: Collapse state, nodeModel: Node entity       |
 
 ### Highlight
 
