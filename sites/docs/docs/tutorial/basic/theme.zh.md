@@ -112,7 +112,7 @@ lf.setTheme({}, 'customTheme')
 
 ### 主题样式优先级
 
-主题样式的应用优先级（从高到低）：
+主题样式的应用优先级（从低到高）：
 1. 内置基础样式（defaultTheme）
 2. 应用的主题模式样式（通过 `themeMode` 或 `setTheme` 的第二个参数设置）
 3. 自定义样式（通过 `style` 或 `setTheme` 的第一个参数设置）
