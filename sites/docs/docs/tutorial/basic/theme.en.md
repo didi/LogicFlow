@@ -111,7 +111,7 @@ lf.setTheme({}, 'customTheme')
 
 ### Theme Style Priority
 
-The priority of theme styles (from high to low):
+The priority of theme styles (from low to high):
 1. Built-in base styles (defaultTheme)
 2. Applied theme mode styles (specified via `themeMode` or second parameter of `setTheme`)
 3. Custom styles (specified via `style` or first parameter of `setTheme`)
