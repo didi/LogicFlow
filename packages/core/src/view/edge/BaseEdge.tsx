@@ -240,7 +240,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
       strokeWidth,
       offset,
       verticalLength,
-      startArrowType = 'solid',
+      startArrowType = 'none',
       strokeLinecap,
       strokeLinejoin,
     } = model.getArrowStyle()
