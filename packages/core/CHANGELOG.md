@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.15
+
+### Patch Changes
+
+- fix: 修复边默认展示双向箭头问题
+
 ## 2.0.14
 
 ### Patch Changes
