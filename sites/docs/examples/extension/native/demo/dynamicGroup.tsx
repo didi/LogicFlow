@@ -1,18 +1,7 @@
-import LogicFlow from '@logicflow/core';
-import {
-  Control,
-  DndPanel,
-  ShapeItem,
-  DynamicGroup,
-  SelectionSelect,
-} from '@logicflow/extension';
 import { Button, Card, Divider, Flex, message } from 'antd';
 import React, { useEffect, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
-import GraphConfigData = LogicFlow.GraphConfigData;
 
-import '@logicflow/core/es/index.css';
-import '@logicflow/extension/es/index.css';
+const { Control, DndPanel, DynamicGroup, SelectionSelect } = Extension;
 
 function insertCss(cssText: string) {
   const style = document.createElement('style');
@@ -38,7 +27,7 @@ const config: Partial<LogicFlow.Options> = {
   plugins: [DynamicGroup, Control, DndPanel, SelectionSelect],
 };
 
-const customDndConfig: ShapeItem[] = [
+const customDndConfig = [
   {
     type: 'dynamic-group',
     label: '内置动态分组',
