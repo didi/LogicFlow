@@ -1432,7 +1432,7 @@ export class LogicFlow {
     this.graphModel.destroy()
     this.tool.destroy()
     this.history.destroy()
-    this.clearThemeMode()
+    clearThemeMode()
     for (const extensionName in this.extension) {
       const extensionInstance = this.extension[extensionName]
       if ('destroy' in extensionInstance) {
