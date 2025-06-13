@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.16
+
+### Patch Changes
+
+- fix: 修正静态方法调用逻辑,解决destroy报错问题
+
 ## 2.0.15
 
 ### Patch Changes
