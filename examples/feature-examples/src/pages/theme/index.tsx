@@ -19,55 +19,91 @@ const data = {
   nodes: [
     {
       id: '1',
-      type: 'rect',
+      type: 'polygon',
       x: 150,
-      y: 100,
-      text: '矩形',
+      y: 150,
       properties: {
-        radius: 8,
+        style: {
+          radius: 5,
+        },
       },
     },
     {
       id: '2',
-      type: 'circle',
-      x: 350,
-      y: 100,
-      text: '圆形',
+      type: 'diamond',
+      x: 500,
+      y: 50,
+      properties: {
+        style: {
+          radius: 5,
+        },
+      },
     },
     {
       id: '3',
-      type: 'ellipse',
-      x: 550,
-      y: 100,
-      text: '椭圆',
+      type: 'polygon',
+      x: 150,
+      y: 300,
+      properties: {
+        style: {
+          radius: 10,
+        },
+      },
     },
     {
       id: '4',
-      type: 'polygon',
-      x: 150,
-      y: 250,
-      text: '多边形',
+      type: 'diamond',
+      x: 500,
+      y: 200,
+      properties: {
+        style: {
+          radius: 10,
+        },
+      },
     },
     {
       id: '5',
-      type: 'diamond',
-      x: 350,
-      y: 250,
-      text: '菱形',
+      type: 'polygon',
+      x: 150,
+      y: 450,
+      properties: {
+        style: {
+          radius: 15,
+        },
+      },
     },
     {
       id: '6',
-      type: 'text',
-      x: 550,
-      y: 250,
-      text: '纯文本节点',
+      type: 'diamond',
+      x: 500,
+      y: 350,
+      properties: {
+        style: {
+          radius: 15,
+        },
+      },
     },
     {
       id: '7',
-      type: 'html',
+      type: 'polygon',
       x: 150,
-      y: 400,
-      text: 'html节点',
+      y: 600,
+      properties: {
+        style: {
+          radius: 20,
+        },
+      },
+    },
+    {
+      id: '8',
+      type: 'diamond',
+      x: 500,
+      y: 500,
+      properties: {
+        style: {
+          radius: 20,
+        },
+      },
     },
   ],
   edges: [
@@ -76,18 +112,52 @@ const data = {
       type: 'polyline',
       sourceNodeId: '1',
       targetNodeId: '2',
+      text: 'radius: 5 + solid arrow',
+      properties: {
+        style: {
+          startArrowType: 'solid',
+          endArrowType: 'solid',
+        },
+      },
     },
     {
       id: 'e_2',
       type: 'polyline',
-      sourceNodeId: '2',
-      targetNodeId: '3',
+      sourceNodeId: '3',
+      targetNodeId: '4',
+      text: 'radius: 10 + hollow arrow',
+      properties: {
+        style: {
+          startArrowType: 'hollow',
+          endArrowType: 'hollow',
+        },
+      },
     },
     {
       id: 'e_3',
       type: 'polyline',
-      sourceNodeId: '4',
-      targetNodeId: '5',
+      sourceNodeId: '5',
+      targetNodeId: '6',
+      text: 'radius: 15 + diamond arrow',
+      properties: {
+        style: {
+          startArrowType: 'diamond',
+          endArrowType: 'diamond',
+        },
+      },
+    },
+    {
+      id: 'e_4',
+      type: 'polyline',
+      sourceNodeId: '7',
+      targetNodeId: '8',
+      text: 'radius: 20 + circle arrow',
+      properties: {
+        style: {
+          startArrowType: 'circle',
+          endArrowType: 'circle',
+        },
+      },
     },
   ],
 }
@@ -98,12 +168,6 @@ const config = {
   },
   width: 700,
   height: 600,
-  background: {
-    backgroundImage:
-      'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=)',
-    backgroundRepeat: 'repeat',
-    backgroundSize: '40px 40px',
-  },
   grid: {
     size: 20,
     visible: true,
@@ -372,7 +436,7 @@ const fieldTypeConfigs: Record<string, FieldConfig> = {
   // 颜色类型
   fill: { type: 'color', label: '填充颜色' },
   stroke: { type: 'color', label: '边框颜色' },
-  color: { type: 'color', label: '文字颜色' },
+  color: { type: 'color', label: '颜色' },
   background: { type: 'color', label: '背景颜色' },
 
   // 数字类型
@@ -576,16 +640,19 @@ const fieldTypeConfigs: Record<string, FieldConfig> = {
 const renderFormField = (fieldName: string, fieldConfig: FieldConfig) => {
   const { type, label, options, min, max, step, placeholder } = fieldConfig
 
+  // 处理嵌套字段
+  const [parentField, childField] = fieldName.split('.')
+  const name = childField ? [parentField, childField] : fieldName
+
   switch (type) {
     case 'color':
       return (
-        <Form.Item key={fieldName} label={label} name={fieldName}>
+        <Form.Item key={fieldName} label={label} name={name}>
           <ColorPicker
             size="small"
             showText
             format="hex"
             onChange={(color) => {
-              // 确保返回十六进制字符串
               return color.toHexString()
             }}
           />
@@ -593,19 +660,19 @@ const renderFormField = (fieldName: string, fieldConfig: FieldConfig) => {
       )
     case 'number':
       return (
-        <Form.Item key={fieldName} label={label} name={fieldName}>
+        <Form.Item key={fieldName} label={label} name={name}>
           <InputNumber size="small" min={min} max={max} step={step} />
         </Form.Item>
       )
     case 'select':
       return (
-        <Form.Item key={fieldName} label={label} name={fieldName}>
+        <Form.Item key={fieldName} label={label} name={name}>
           <Select size="small" options={options} />
         </Form.Item>
       )
     case 'text':
       return (
-        <Form.Item key={fieldName} label={label} name={fieldName}>
+        <Form.Item key={fieldName} label={label} name={name}>
           <Input placeholder={placeholder} />
         </Form.Item>
       )
@@ -626,8 +693,20 @@ const ThemeFormComponent: React.FC<{
 
   // 当初始值改变时，更新表单值
   useEffect(() => {
-    form.setFieldsValue(initialValues)
-  }, [form, initialValues])
+    // 处理嵌套字段的初始值
+    const processedInitialValues: Record<string, any> = { ...initialValues }
+    if (nestedFields) {
+      Object.entries(nestedFields).forEach(([nestedKey, nestedFieldNames]) => {
+        if (initialValues[nestedKey]) {
+          nestedFieldNames.forEach((fieldName) => {
+            processedInitialValues[`${nestedKey}.${fieldName}`] =
+              initialValues[nestedKey][fieldName]
+          })
+        }
+      })
+    }
+    form.setFieldsValue(processedInitialValues)
+  }, [form, initialValues, nestedFields])
 
   return (
     <Form
@@ -635,9 +714,30 @@ const ThemeFormComponent: React.FC<{
       layout="vertical"
       size="small"
       initialValues={initialValues}
-      onValuesChange={(changedValues, allValues) =>
-        onFormChange(themeKey, changedValues, allValues)
-      }
+      onValuesChange={(changedValues, allValues) => {
+        // 处理嵌套字段的值
+        const processedValues: Record<string, any> = { ...allValues }
+        if (nestedFields) {
+          Object.entries(nestedFields).forEach(
+            ([nestedKey, nestedFieldNames]) => {
+              const nestedValues: Record<string, any> = {}
+              let hasNestedValues = false
+              nestedFieldNames.forEach((fieldName) => {
+                const key = `${nestedKey}.${fieldName}`
+                if (key in allValues) {
+                  nestedValues[fieldName] = allValues[key]
+                  hasNestedValues = true
+                  delete processedValues[key]
+                }
+              })
+              if (hasNestedValues) {
+                processedValues[nestedKey] = nestedValues
+              }
+            },
+          )
+        }
+        onFormChange(themeKey, changedValues, processedValues)
+      }}
     >
       {/* 渲染基础字段 */}
       {fields.map((fieldName) => {
@@ -765,24 +865,36 @@ export default function ThemeExample() {
       // 直接更新背景配置
       lfRef.current.graphModel.updateBackgroundOptions(processedValues)
     } else if (themeKey === 'grid' && lfRef.current) {
-      // 直接更新网格配置
-      const gridOptions = {
-        ...processedValues,
-        // 确保config字段正确处理
-        config: processedValues.config
-          ? {
-              color: processedValues.config.color,
-              thickness: processedValues.config.thickness,
-            }
-          : undefined,
+      // 处理扁平化的配置数据
+      const gridOptions: any = {
+        size: processedValues.size,
+        visible: processedValues.visible,
+        type: processedValues.type,
+        config: {
+          ...lfRef.current.graphModel.grid.config,
+        },
       }
+
+      // 处理扁平化的 config 字段
+      Object.keys(processedValues).forEach((key) => {
+        if (key.startsWith('config.')) {
+          const configKey = key.replace('config.', '')
+          gridOptions.config[configKey] = processedValues[key]
+        }
+      })
+      console.log('grid', processedValues, gridOptions)
+
       // 过滤掉undefined值
       Object.keys(gridOptions).forEach((key) => {
         if (gridOptions[key] === undefined) {
           delete gridOptions[key]
         }
       })
+
+      // 更新网格配置
       lfRef.current.graphModel.updateGridOptions(gridOptions)
+      // 同时更新主题中的网格配置
+      lfRef.current.setTheme({}, themeMode)
     }
 
     // 标记当前主题已被修改
@@ -996,7 +1108,7 @@ export default function ThemeExample() {
 
           // 添加新的主题模式
           const newThemeMode = {
-            label: themeConfig.name || '导入的主题',
+            label: `imported-theme-${Date.now()}`,
             value:
               themeConfig.name?.toLowerCase().replace(/\s+/g, '-') ||
               `imported-theme-${Date.now()}`,
@@ -1114,13 +1226,8 @@ export default function ThemeExample() {
         keyboard: {
           enabled: true,
         },
-        // themeMode: 'radius',
         partial: true,
-        background: {
-          color: '#FFFFFF',
-        },
-        // 使用config中定义的网格配置，而不是简单的true
-        grid: config.grid,
+        grid: config.grid, // 使用 config 中定义的网格配置
         edgeTextDraggable: true,
         edgeType: 'bezier',
         idGenerator(type) {
@@ -1134,7 +1241,6 @@ export default function ThemeExample() {
         },
       })
       lf.render(data)
-      lf.translateCenter()
       lfRef.current = lf
 
       // LogicFlow 初始化后，加载当前主题到表单
