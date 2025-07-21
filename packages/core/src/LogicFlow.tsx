@@ -900,7 +900,6 @@ export class LogicFlow {
   updateEditConfig(config: Partial<IEditConfigType>) {
     const { editConfigModel, transformModel } = this.graphModel
     const currentSnapGrid = editConfigModel.snapGrid
-
     editConfigModel.updateEditConfig(config)
     if (config?.stopMoveGraph !== undefined) {
       transformModel.updateTranslateLimits(config.stopMoveGraph)
@@ -916,6 +915,9 @@ export class LogicFlow {
       } = this.graphModel
       this.graphModel.updateGridSize(config.snapGrid ? size : 1)
     }
+    this.emit(EventType.EDIT_CONFIG_CHANGED, {
+      data: editConfigModel.getConfig(),
+    })
   }
 
   /**

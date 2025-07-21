@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Logicflow", "preact", "Snapline"]
+  "cSpell.words": ["Logicflow", "preact", "Snapline"],
+  "editor.formatOnSave": true
 }
