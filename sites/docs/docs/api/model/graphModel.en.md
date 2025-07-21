@@ -462,7 +462,7 @@ Parameters:
 
 Bring specified node or edge to front
 
-In default stacking mode, sets specified element's zIndex to 9999 and restores original top element's zIndex to 1.
+In default overlap mode, set specified element's zIndex to 9999 and restores original top element's zIndex to 1. all node zIndexes are restored to 1 when you click the canvas to unselect the element
 
 In incremental mode, sets specified element's zIndex to current maximum zIndex + 1.
 
