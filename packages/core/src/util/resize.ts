@@ -89,10 +89,12 @@ export const recalcResizeInfo = (
   controlY: number | undefined,
   oldCenterX: number,
   oldCenterY: number,
+  forceProportional = false,
 ): ResizeInfo => {
   const nextResizeInfo = cloneDeep(resizeInfo)
   let { deltaX, deltaY } = nextResizeInfo
   const { width, height, PCTResizeInfo } = nextResizeInfo
+
   if (PCTResizeInfo) {
     const sensitivity = 4 // 越低越灵敏
     let deltaScale = 0
@@ -190,7 +192,88 @@ export const recalcResizeInfo = (
     )
   }
 
-  // 如果限制了宽/高不变，对应的 width/height 保持一致
+  //Shift键等比缩放逻辑
+  if (forceProportional) {
+    // 计算当前的宽高比
+    const aspectRatio = width / height
+    
+    // 根据拖拽方向确定主要的缩放参考
+    let primaryDelta = 0
+    let newWidth = width
+    let newHeight = height
+    
+    switch (index) {
+      case ResizeControlIndex.LEFT_TOP:
+        // 取绝对值较大的delta作为主要缩放参考
+        primaryDelta = Math.abs(deltaX) > Math.abs(deltaY) ? -deltaX : -deltaY
+        if (aspectRatio >= 1) {
+          // 宽度大于等于高度，以宽度为基准
+          newWidth = width + primaryDelta
+          newHeight = newWidth / aspectRatio
+        } else {
+          // 高度大于宽度，以高度为基准
+          newHeight = height + primaryDelta
+          newWidth = newHeight * aspectRatio
+        }
+        nextResizeInfo.width = newWidth
+        nextResizeInfo.height = newHeight
+        nextResizeInfo.deltaX = width - newWidth
+        nextResizeInfo.deltaY = height - newHeight
+        break
+        
+      case ResizeControlIndex.RIGHT_TOP:
+        primaryDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : -deltaY
+        if (aspectRatio >= 1) {
+          newWidth = width + primaryDelta
+          newHeight = newWidth / aspectRatio
+        } else {
+          newHeight = height - primaryDelta
+          newWidth = newHeight * aspectRatio
+        }
+        nextResizeInfo.width = newWidth
+        nextResizeInfo.height = newHeight
+        nextResizeInfo.deltaX = newWidth - width
+        nextResizeInfo.deltaY = height - newHeight
+        break
+        
+      case ResizeControlIndex.RIGHT_BOTTOM:
+        primaryDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY
+        if (aspectRatio >= 1) {
+          newWidth = width + primaryDelta
+          newHeight = newWidth / aspectRatio
+        } else {
+          newHeight = height + primaryDelta
+          newWidth = newHeight * aspectRatio
+        }
+        nextResizeInfo.width = newWidth
+        nextResizeInfo.height = newHeight
+        nextResizeInfo.deltaX = newWidth - width
+        nextResizeInfo.deltaY = newHeight - height
+        break
+        
+      case ResizeControlIndex.LEFT_BOTTOM:
+        primaryDelta = Math.abs(deltaX) > Math.abs(deltaY) ? -deltaX : deltaY
+        if (aspectRatio >= 1) {
+          newWidth = width - primaryDelta
+          newHeight = newWidth / aspectRatio
+        } else {
+          newHeight = height + primaryDelta
+          newWidth = newHeight * aspectRatio
+        }
+        nextResizeInfo.width = newWidth
+        nextResizeInfo.height = newHeight
+        nextResizeInfo.deltaX = width - newWidth
+        nextResizeInfo.deltaY = newHeight - height
+        break
+        
+      default:
+        break
+    }
+    
+    return nextResizeInfo
+  }
+
+  // 原有的非等比缩放逻辑保持不变
   switch (index) {
     case ResizeControlIndex.LEFT_TOP:
       nextResizeInfo.width = freezeWidth ? width : width - deltaX * pct
@@ -283,7 +366,7 @@ export const triggerResizeEvent = (
 }
 
 // TODO：确认 handleResize 函数的类型定义
-export type IHandleResizeParams = {
+export type IHandleResizeParams {
   x?: number
   y?: number
   deltaX: number
@@ -292,6 +375,7 @@ export type IHandleResizeParams = {
   nodeModel: BaseNodeModel
   graphModel: GraphModel
   cancelCallback?: () => void
+  forceProportional?: boolean
 }
 
 /**
@@ -304,16 +388,18 @@ export type IHandleResizeParams = {
  * @param nodeModel
  * @param graphModel
  * @param cancelCallback
+ * @param forceProportional
  */
 export const handleResize = ({
-  x,
-  y,
-  deltaX,
-  deltaY,
-  index,
-  nodeModel,
-  graphModel,
-  cancelCallback,
+    x,
+    y, 
+    deltaX,
+    deltaY,
+    index, 
+    nodeModel,
+    graphModel, 
+    cancelCallback,
+    forceProportional = false,
 }: IHandleResizeParams) => {
   const {
     r, // circle
@@ -331,6 +417,7 @@ export const handleResize = ({
     x: oldCenterX,
     y: oldCenterY,
   } = nodeModel
+
   const isFreezeWidth = minWidth === maxWidth
   const isFreezeHeight = minHeight === maxHeight
 
@@ -356,6 +443,7 @@ export const handleResize = ({
     controlY,
     oldCenterX,
     oldCenterY,
+    forceProportional,
   )
 
   // 限制放大缩小的最大最小范围
@@ -378,10 +466,9 @@ export const handleResize = ({
     // rotate!==0并且不是PCTResizeInfo时，即使是isFreezeWidth||isFreezeHeight
     // recalcRotatedResizeInfo()计算出来的中心点会发生变化
 
-    // 如果限制了宽高不变，对应的 x/y 不产生位移
-    nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
-    nextSize.deltaY = isFreezeHeight ? 0 : nextSize.deltaY
-  }
+  // 如果限制了宽高不变，对应的 x/y 不产生位移
+  nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
+  nextSize.deltaY = isFreezeHeight ? 0 : nextSize.deltaY
 
   const preNodeData = nodeModel.getData()
   const curNodeData = nodeModel.resize(nextSize)
