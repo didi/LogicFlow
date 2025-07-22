@@ -1,5 +1,5 @@
 import { createElement as h, Component } from 'preact/compat'
-import { cloneDeep, find, forEach, map } from 'lodash-es'
+import { find, forEach, map } from 'lodash-es'
 import { Rect } from './shape'
 import LogicFlow from '../LogicFlow'
 import { getNodeBBox, IDragParams, StepDrag, handleResize } from '../util'
@@ -8,7 +8,6 @@ import { BaseNodeModel, GraphModel } from '../model'
 import NodeData = LogicFlow.NodeData
 import VectorData = LogicFlow.VectorData
 import { EventType } from '../constant'
-import ResizeInfo = ResizeControl.ResizeInfo
 import ResizeNodeData = ResizeControl.ResizeNodeData
 import ControlItemProps = ResizeControl.ControlItemProps
 
@@ -40,6 +39,9 @@ export class ResizeControl extends Component<
   readonly nodeModel: BaseNodeModel
   readonly graphModel: GraphModel
   readonly dragHandler: StepDrag
+  
+  //判断Shift键状态
+  private isShiftPressed = false
 
   constructor(props: IResizeControlProps) {
     super()
@@ -48,17 +50,39 @@ export class ResizeControl extends Component<
     this.nodeModel = model
     this.graphModel = graphModel
 
-    // 初始化拖拽工具
     this.dragHandler = new StepDrag({
       onDragStart: this.onDragStart,
       onDragging: this.onDragging,
       onDragEnd: this.onDragEnd,
       step: graphModel.gridSize,
     })
+
+    this.bindKeyboardEvents()
+  }
+
+  //绑定键盘事件监听
+  bindKeyboardEvents = () => {
+    document.addEventListener('keydown', this.handleKeyDown)
+    document.addEventListener('keyup', this.handleKeyUp)
+  }
+
+  //处理键盘按下事件
+  handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Shift') {
+      this.isShiftPressed = true
+    }
+  }
+
+  handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === 'Shift') {
+      this.isShiftPressed = false
+    }
   }
 
   componentWillUnmount() {
     this.dragHandler.destroy()
+    document.removeEventListener('keydown', this.handleKeyDown)
+    document.removeEventListener('keyup', this.handleKeyUp)
   }
 
   updateEdgePointByAnchors = () => {
@@ -247,7 +271,6 @@ export class ResizeControl extends Component<
   resizeNode = ({ deltaX, deltaY }: VectorData) => {
     const { index } = this
     const { model, graphModel, x, y } = this.props
-
     // DONE: 调用每个节点中更新缩放时的方法 updateNode 函数，用来各节点缩放的方法
     handleResize({
       x,
@@ -257,6 +280,7 @@ export class ResizeControl extends Component<
       index,
       nodeModel: model,
       graphModel,
+      forceProportional: this.isShiftPressed,
       cancelCallback: () => {
         this.dragHandler.cancelDrag()
       },
@@ -325,7 +349,6 @@ export class ResizeControl extends Component<
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
     const { transformModel } = this.graphModel
     const [dx, dy] = transformModel.fixDeltaXY(deltaX, deltaY)
-
     this.resizeNode({
       deltaX: dx,
       deltaY: dy,
