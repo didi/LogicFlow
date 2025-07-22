@@ -21,7 +21,7 @@ import '@logicflow/extension/es/index.css'
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   stopScrollGraph: true,
-  stopZoomGraph: true,
+  stopZoomGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -119,6 +119,9 @@ export default function ProximityConnectExtension() {
         // container: document.querySelector('#graph') as HTMLElement,
         grid: {
           size: 10,
+        },
+        keyboard: {
+          enabled: true,
         },
         plugins: [ProximityConnect],
         pluginsOptions: {
