@@ -92,7 +92,6 @@ export class ProximityConnect {
         x: e.clientX,
         y: e.clientY,
       })
-
       if (edgeModel && this.virtualEdge) {
         const { id: virtualEdgeId } = this.virtualEdge as BaseEdgeModel
         const { targetNodeId } = edgeModel as BaseEdgeModel
@@ -100,7 +99,7 @@ export class ProximityConnect {
           this.lf.graphModel.getNodeModelById(targetNodeId)
         if (
           targetNodeModel &&
-          isInNode({ x: eventX, y: eventY }, targetNodeModel)
+          isInNode({ x: eventX, y: eventY }, targetNodeModel, 10)
         ) {
           // 如果当前拖拽点在锚点上，就不触发插件的连线
           this.lf.deleteEdge(virtualEdgeId)
