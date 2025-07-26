@@ -366,7 +366,7 @@ export const triggerResizeEvent = (
 }
 
 // TODO：确认 handleResize 函数的类型定义
-export type IHandleResizeParams {
+export type IHandleResizeParams = {
   x?: number
   y?: number
   deltaX: number
