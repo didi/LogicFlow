@@ -1,5 +1,5 @@
 import { createElement as h, Component } from 'preact/compat'
-import { find, forEach, map } from 'lodash-es'
+import { find, forEach, map, cloneDeep } from 'lodash-es'
 import { Rect } from './shape'
 import LogicFlow from '../LogicFlow'
 import { getNodeBBox, IDragParams, StepDrag, handleResize } from '../util'
@@ -9,6 +9,7 @@ import NodeData = LogicFlow.NodeData
 import VectorData = LogicFlow.VectorData
 import { EventType } from '../constant'
 import ResizeNodeData = ResizeControl.ResizeNodeData
+import ResizeInfo = ResizeControl.ResizeInfo
 import ControlItemProps = ResizeControl.ControlItemProps
 
 export enum ResizeControlIndex {
@@ -39,7 +40,7 @@ export class ResizeControl extends Component<
   readonly nodeModel: BaseNodeModel
   readonly graphModel: GraphModel
   readonly dragHandler: StepDrag
-  
+
   //判断Shift键状态
   private isShiftPressed = false
 
