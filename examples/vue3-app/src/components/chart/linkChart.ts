@@ -3,6 +3,7 @@ import { Group, MiniMap } from '@logicflow/extension'
 import NodeExtension from './nodes'
 import Graph from './graph'
 import type { IGraphData } from './types.d'
+import '@logicflow/extension/es/index.css'
 
 interface IOptions {
   container: HTMLDivElement
@@ -25,7 +26,16 @@ export default class LinkChart {
           color: '#eee'
         }
       },
-      plugins: [NodeExtension, Group, Graph, MiniMap]
+      plugins: [NodeExtension, Group, Graph, MiniMap],
+      pluginsOptions: {
+        miniMap: {
+          width: 200,
+          height: 150,
+          isShowHeader: true,
+          isShowCloseIcon: true,
+          position: 'right-bottom' as const
+        }
+      }
     })
     this.lf.graphModel.graphData = options.graphData
     const g = this.lf.extension.graph as any
