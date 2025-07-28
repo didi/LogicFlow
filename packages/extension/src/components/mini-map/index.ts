@@ -1,4 +1,5 @@
 import LogicFlow from '@logicflow/core'
+import { createTeleportContainer } from '@logicflow/vue-node-registry'
 
 import Position = LogicFlow.Position
 import MiniMapOption = MiniMap.MiniMapOption
@@ -355,6 +356,10 @@ export class MiniMap {
     // minimap中禁用adapter。
     // this.lfMap.adapterIn = (a) => a
     // this.lfMap.adapterOut = (a) => a
+
+    // 创建teleport容器（vue3中生效）
+    createTeleportContainer(miniMapWrap, this.lfMap.graphModel.flowId)
+
     this.miniMapWrap = miniMapWrap
     this.createViewPort()
     miniMapWrap.addEventListener('click', this.mapClick)

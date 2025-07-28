@@ -36,11 +36,13 @@
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@logicflow/core": "workspace:*"
+    "@logicflow/core": "workspace:*",
+    "@logicflow/vue-node-registry": "workspace:*"
   },
   "dependencies": {
     "@antv/hierarchy": "^0.6.11",
     "@logicflow/core": "workspace:*",
+    "@logicflow/vue-node-registry": "workspace:*",
     "classnames": "^2.3.2",
     "lodash-es": "^4.17.21",
     "medium-editor": "^5.23.3",

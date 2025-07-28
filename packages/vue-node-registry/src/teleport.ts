@@ -2,6 +2,7 @@ import { BaseNodeModel, GraphModel } from '@logicflow/core'
 import {
   defineComponent,
   h,
+  render,
   reactive,
   isVue3,
   Teleport,
@@ -82,4 +83,25 @@ export function getTeleport(): any {
       }
     },
   })
+}
+
+/**
+ * 创建并挂载 Teleport 容器组件
+ * @param container 目标容器元素
+ * @param flowId 当前流程图的唯一标识
+ */
+export function createTeleportContainer(
+  container: HTMLElement,
+  flowId: string | undefined,
+): void {
+  if (!isVue3 || !flowId || !container || !active) return
+
+  // 获取 Teleport 组件
+  const TeleportContainer = getTeleport()
+
+  // 创建 Teleport 组件的虚拟节点，传入 flowId
+  const teleportVNode = h(TeleportContainer, { flowId })
+
+  // 渲染到指定容器中
+  render(teleportVNode, container)
 }
