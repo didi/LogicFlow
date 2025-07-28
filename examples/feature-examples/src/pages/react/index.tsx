@@ -2,8 +2,9 @@ import React, { FC } from 'react'
 import LogicFlow from '@logicflow/core'
 import { register, ReactNodeProps } from '@logicflow/react-node-registry'
 import { Card } from 'antd'
-
+import { MiniMap } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
+import '@logicflow/extension/es/index.css'
 import styles from './index.less'
 
 const NodeComponent: FC<ReactNodeProps> = ({ node }) => {
@@ -29,9 +30,22 @@ export default class Example extends React.Component {
       grid: {
         size: 20,
       },
+      plugins: [MiniMap], // 实例启用
+      pluginsOptions: {
+        miniMap: {
+          width: 200,
+          height: 150,
+          isShowHeader: true,
+          isShowCloseIcon: true,
+          position: 'right-bottom' as const,
+        },
+      },
       // width: 800,
       // height: 600,
     })
+    setTimeout(() => {
+      lf.extension.miniMap.show()
+    }, 50)
 
     lf.render({
       nodes: [
