@@ -1,3 +1,5 @@
+import type { TransformModel } from './model'
+
 import { assign } from 'lodash-es'
 import { createElement as h } from 'preact/compat'
 import LogicFlow from './LogicFlow'
@@ -103,6 +105,9 @@ export namespace Options {
 
     customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
     themeMode?: 'radius' | 'dark' | 'colorful' // 主题模式
+
+    parentTransform?: TransformModel // 父级变换模型，用于嵌套变换
+
     [key: string]: unknown
   }
 

@@ -32,6 +32,11 @@ import { RouterView } from 'vue-router'
           <el-icon><TrendCharts /></el-icon>
           <span>LFChartView</span>
         </el-menu-item>
+
+        <el-menu-item index="/nested-transform">
+          <el-icon><TrendCharts /></el-icon>
+          <span>NestedTransform</span>
+        </el-menu-item>
       </el-menu>
     </div>
   </header>
