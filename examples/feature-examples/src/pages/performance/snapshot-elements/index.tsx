@@ -41,7 +41,7 @@ const config: Partial<LogicFlow.Options> = {
       fontSize: 12,
     },
   },
-  partial: true,
+  partial: false,
 }
 
 const miniMapOptions: MiniMap.MiniMapOption = {
@@ -110,15 +110,23 @@ export default function MiniMapExtension() {
       const nodeStart: LogicFlow.NodeConfig = {
         id: nodeStartId,
         type: 'rect',
-        x: 400 * (i % 10) - 200,
-        y: 100 * Math.floor(i / 10) - 500,
+        //单列
+        x: 0,
+        y: 100 * i,
+        //多列
+        // x: 400 * (i % 10) - 200,
+        // y: 100 * Math.floor(i / 10) - 500,
         text: `${i}-start`,
       }
       const nodeEnd: LogicFlow.NodeConfig = {
         id: nodeEndId,
         type: 'rect',
-        x: 400 * (i % 10),
-        y: 100 * Math.floor(i / 10) - 500,
+        //单列
+        x: 200,
+        y: 100 * i,
+        //多列
+        // x: 400 * (i % 10),
+        // y: 100 * Math.floor(i / 10) - 500,
         text: `${i}-end`,
       }
       const edge: LogicFlow.EdgeConfig = {

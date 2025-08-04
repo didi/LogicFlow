@@ -315,7 +315,6 @@ export class Snapshot {
     otherMaxCanvasDimension: number
   } {
     const userAgent = navigator.userAgent
-    console.log('userAgent', userAgent)
 
     // 默认值
     let maxCanvasDimension = 65535
@@ -386,12 +385,6 @@ export class Snapshot {
     const actualWidth = (bbox.width / SCALE_X) * safetyFactor
     const actualHeight = (bbox.height / SCALE_Y) * safetyFactor
 
-    // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
-    // 在transform矩阵中加入padding值，确保左侧元素不会被截断
-    // ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
-    //   (-offsetX + TRANSLATE_X) * (1 / SCALE_X)  + padding / (dpr )
-    // }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y)  + padding / (dpr )})`
-
     // 包含所有元素的最小宽高，确保足够大以容纳所有元素
     const bboxWidth = Math.ceil(actualWidth)
     const bboxHeight = Math.ceil(actualHeight)
@@ -413,7 +406,7 @@ export class Snapshot {
     let targetHeight = bboxHeight * dpr + padding * 2 + safetyMargin
     let scaleWidth = 1 //宽 缩放
     let scaleHeight = 1 //高 缩放
-    //对宽和高分别进行缩放，如chrome，矩形单边最大宽度不超过65535，如宽超过65535，那么高不能超过4096，否则像素会超，也会显示不出。
+    // 对宽和高分别进行缩放，如chrome，矩形单边最大宽度不超过65535，如宽超过65535，那么高不能超过4096，否则像素会超，也会显示不出。
     if (
       targetWidth > MAX_CANVAS_DIMENSION &&
       targetHeight > OTHER_MAX_CANVAS_DIMENSION
@@ -444,7 +437,7 @@ export class Snapshot {
     }
     // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
     // 在transform矩阵中加入padding值，确保左侧元素不会被截断
-    //对这个矩阵进行缩放，否则会导致截断
+    // 对这个矩阵进行缩放，否则会导致截断
     ;(copy.lastChild as SVGElement).style.transform =
       `matrix(${scaleWidth}, 0, 0, ${scaleHeight}, ${
         (-offsetX + TRANSLATE_X) * (1 / SCALE_X) * scaleWidth + padding / dpr
@@ -453,14 +446,11 @@ export class Snapshot {
       })`
     canvas.width = targetWidth
     canvas.height = targetHeight
-    // canvas.width = bboxWidth * dpr + padding * 2 + safetyMargin
-    // canvas.height = bboxHeight * dpr + padding * 2 + safetyMargin
     const ctx = canvas.getContext('2d')
     if (ctx) {
       // 清空canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.scale(dpr * scaleWidth, dpr * scaleHeight)
-      // ctx.scale(dpr, dpr)
       // 如果有背景色，设置流程图导出的背景色
       if (backgroundColor) {
         ctx.fillStyle = backgroundColor

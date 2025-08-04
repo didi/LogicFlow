@@ -69,6 +69,7 @@ The export method supports the `toImageOptions` parameter with the following con
 - During export, the canvas will automatically handle wide canvas situations, adding safety factors and extra margins
 - During export, silent mode will be automatically enabled, disabling canvas interaction
 - Automatically converts relative path images in SVG to Base64 encoding <Badge type="warning">2.0.14 New</Badge>
+- When the image exceeds the browser's canvas limit, it will automatically scale the image size to ensure successful export, but it will affect image clarity
 :::
 
 ### Custom CSS Styles
