@@ -427,6 +427,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const { model, graphModel } = this.props
     this.startTime = new Date().getTime()
     const { editConfigModel } = graphModel
+    model.setSelected(true)
     if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev)
     }
