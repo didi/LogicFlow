@@ -157,15 +157,14 @@ export class Label implements Extension {
       const textEdit = element.BaseType === 'node' ? nodeTextEdit : edgeTextEdit
       const textDraggable =
         element.BaseType === 'node' ? nodeTextDraggable : edgeTextDraggable
-
       return {
         ...config,
         zIndex,
         labelWidth,
         content: content ?? value,
         vertical: vertical ?? false,
-        editable: textEdit && editable,
-        draggable: textDraggable && draggable,
+        editable: Boolean(textEdit) && editable,
+        draggable: Boolean(textDraggable) && draggable,
         textOverflowMode: labelTextOverflowMode ?? textOverflowMode,
       }
     })
@@ -347,8 +346,17 @@ export class Label implements Extension {
       const element = graphModel.getElement(data.id)
       if (element) {
         this.rewriteInnerMethods(element)
-        const formatedLabel = this.formatConfig(graphModel, data)
-        element.setProperty('_label', formatedLabel)
+        // 检查_label是否已经是格式化后的数组格式，如果是则跳过格式化
+        // 这样可以避免在复制粘贴时重复处理已经格式化好的label数据
+        const currentLabel = element.properties._label
+        if (
+          !isArray(currentLabel) ||
+          currentLabel.length === 0 ||
+          !currentLabel[0].id
+        ) {
+          const formatedLabel = this.formatConfig(graphModel, data)
+          element.setProperty('_label', formatedLabel)
+        }
       }
     })
   }
