@@ -42,6 +42,7 @@ const config: Partial<LogicFlow.Options> = {
   },
   allowRotate: true,
   allowResize: true,
+  adjustEdgeStartAndEnd: true, // 调整边的起点和终点
 }
 
 const data = {
