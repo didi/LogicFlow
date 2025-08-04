@@ -307,6 +307,35 @@ export class Snapshot {
   }
 
   /**
+   * 根据浏览器类型获取Canvas尺寸限制
+   * @returns 包含最大主维度和次维度的对象
+   */
+  private getCanvasDimensionsByBrowser(): {
+    maxCanvasDimension: number
+    otherMaxCanvasDimension: number
+  } {
+    const userAgent = navigator.userAgent
+    console.log('userAgent', userAgent)
+
+    // 默认值
+    let maxCanvasDimension = 65535
+    let otherMaxCanvasDimension = 4096
+
+    if (
+      userAgent.indexOf('Chrome') !== -1 ||
+      userAgent.indexOf('Edge') !== -1
+    ) {
+      maxCanvasDimension = 65535
+      otherMaxCanvasDimension = 4096
+    } else if (userAgent.indexOf('Firefox') !== -1) {
+      maxCanvasDimension = 32767
+      otherMaxCanvasDimension = 3814
+    }
+
+    return { maxCanvasDimension, otherMaxCanvasDimension }
+  }
+
+  /**
    * 将 svg 转化为 canvas
    * @param svg - svg 元素
    * @param toImageOptions - 图像选项
@@ -359,9 +388,9 @@ export class Snapshot {
 
     // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
     // 在transform矩阵中加入padding值，确保左侧元素不会被截断
-    ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
-      (-offsetX + TRANSLATE_X) * (1 / SCALE_X) + padding / dpr
-    }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) + padding / dpr})`
+    // ;(copy.lastChild as SVGElement).style.transform = `matrix(1, 0, 0, 1, ${
+    //   (-offsetX + TRANSLATE_X) * (1 / SCALE_X)  + padding / (dpr )
+    // }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y)  + padding / (dpr )})`
 
     // 包含所有元素的最小宽高，确保足够大以容纳所有元素
     const bboxWidth = Math.ceil(actualWidth)
@@ -373,13 +402,65 @@ export class Snapshot {
     // 宽高值 默认加padding 40，保证图形不会紧贴着下载图片
     // 为宽画布添加额外的安全边距，确保不会裁剪
     const safetyMargin = 40 // 额外的安全边距
-    canvas.width = bboxWidth * dpr + padding * 2 + safetyMargin
-    canvas.height = bboxHeight * dpr + padding * 2 + safetyMargin
+
+    // 获取当前浏览器类型，不同浏览器对canvas的限制不同
+    const { maxCanvasDimension, otherMaxCanvasDimension } =
+      this.getCanvasDimensionsByBrowser()
+    const MAX_CANVAS_DIMENSION = maxCanvasDimension
+    const OTHER_MAX_CANVAS_DIMENSION = otherMaxCanvasDimension
+
+    let targetWidth = bboxWidth * dpr + padding * 2 + safetyMargin
+    let targetHeight = bboxHeight * dpr + padding * 2 + safetyMargin
+    let scaleWidth = 1 //宽 缩放
+    let scaleHeight = 1 //高 缩放
+    //对宽和高分别进行缩放，如chrome，矩形单边最大宽度不超过65535，如宽超过65535，那么高不能超过4096，否则像素会超，也会显示不出。
+    if (
+      targetWidth > MAX_CANVAS_DIMENSION &&
+      targetHeight > OTHER_MAX_CANVAS_DIMENSION
+    ) {
+      scaleWidth = MAX_CANVAS_DIMENSION / targetWidth
+      scaleHeight = OTHER_MAX_CANVAS_DIMENSION / targetHeight
+    } else if (
+      targetWidth > OTHER_MAX_CANVAS_DIMENSION &&
+      targetHeight > MAX_CANVAS_DIMENSION
+    ) {
+      scaleWidth = OTHER_MAX_CANVAS_DIMENSION / targetWidth
+      scaleHeight = MAX_CANVAS_DIMENSION / targetHeight
+    } else if (
+      targetWidth > MAX_CANVAS_DIMENSION &&
+      targetHeight < OTHER_MAX_CANVAS_DIMENSION
+    ) {
+      scaleHeight = scaleWidth = MAX_CANVAS_DIMENSION / targetWidth
+    } else if (
+      targetWidth < OTHER_MAX_CANVAS_DIMENSION &&
+      targetHeight > MAX_CANVAS_DIMENSION
+    ) {
+      scaleHeight = scaleWidth = MAX_CANVAS_DIMENSION / targetHeight
+    }
+
+    if (scaleWidth < 1 || scaleHeight < 1) {
+      targetWidth = Math.floor(targetWidth * scaleWidth)
+      targetHeight = Math.floor(targetHeight * scaleHeight)
+    }
+    // 将导出区域移动到左上角，canvas 绘制的时候是从左上角开始绘制的
+    // 在transform矩阵中加入padding值，确保左侧元素不会被截断
+    //对这个矩阵进行缩放，否则会导致截断
+    ;(copy.lastChild as SVGElement).style.transform =
+      `matrix(${scaleWidth}, 0, 0, ${scaleHeight}, ${
+        (-offsetX + TRANSLATE_X) * (1 / SCALE_X) * scaleWidth + padding / dpr
+      }, ${
+        (-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) * scaleHeight + padding / dpr
+      })`
+    canvas.width = targetWidth
+    canvas.height = targetHeight
+    // canvas.width = bboxWidth * dpr + padding * 2 + safetyMargin
+    // canvas.height = bboxHeight * dpr + padding * 2 + safetyMargin
     const ctx = canvas.getContext('2d')
     if (ctx) {
       // 清空canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.scale(dpr, dpr)
+      ctx.scale(dpr * scaleWidth, dpr * scaleHeight)
+      // ctx.scale(dpr, dpr)
       // 如果有背景色，设置流程图导出的背景色
       if (backgroundColor) {
         ctx.fillStyle = backgroundColor
