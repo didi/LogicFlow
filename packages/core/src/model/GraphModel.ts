@@ -984,6 +984,8 @@ export class GraphModel {
     }
     if (edgeOriginData.id && this.edgesMap[edgeOriginData.id]) {
       delete edgeOriginData.id
+      delete edgeOriginData.sourceAnchorId
+      delete edgeOriginData.targetAnchorId
     }
     const Model = this.getModel(type) as BaseEdgeModelCtor
     if (!Model) {
