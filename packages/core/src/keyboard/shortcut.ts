@@ -19,6 +19,12 @@ export function translateNodeData(nodeData: NodeData, distance: number) {
     nodeData.text.y += distance
   }
 
+  if (!isEmpty(nodeData.properties?._label)) {
+    nodeData.properties?._label.forEach((label) => {
+      label.x += distance
+      label.y += distance
+    })
+  }
   return nodeData
 }
 
