@@ -485,14 +485,6 @@ export default defineConfig({
       .add(/public/)
       .add(/src/)
       .add(/assets/)
-      // .end()
-      // .use('url-loader')
-      // .loader('url-loader')
-      // .options({
-      //   limit: 8192, // 小于8KB的图片转base64
-      //   name: 'images/[name].[hash:8].[ext]',
-      //   fallback: 'file-loader',
-      // })
       .end();
 
     return config;
