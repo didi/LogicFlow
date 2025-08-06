@@ -1,5 +1,21 @@
 # Change Log
 
+## 2.1.0
+
+### Minor Changes
+
+- - [fix] 修复关闭网格吸附后点击节点时容易无法选中的问题
+  - [feature] 支持shift节点等比缩放
+  - [fix] 修复批量框选后，调整边起终点报错的 bug
+  - [fix] snapline cannot show when zoomed
+  - [feature] 画布增加blank:mousemove事件外发,并新增isDragging参数以区分鼠标是拖拽移动还是普通移动
+  - [feature] 邮件菜单某项的禁用能力
+  - 修复vue3项目中小地图插件不显示vue自定义节点问题 close #2200
+  - 修复渐进连线插件isInNode判定过于精确导致的偶现会连出两条线的问题 close #2210
+  - 修复带label的元素复制粘贴后label展示错位且不可拖拽的问题 close #2196
+  - 修复快照插件导出图片受浏览器对canvas限制 close #2187
+  - 优化文档中关于 OverlapMode 属性的说明
+
 ## 2.0.16
 
 ### Patch Changes
