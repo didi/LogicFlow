@@ -220,6 +220,11 @@ export default defineConfig({
           name: 'Proximity Connect 插件',
           component: './extensions/proximity-connect',
         },
+        {
+          path: 'extension/layout',
+          name: 'Layout 插件',
+          component: './extensions/layout',
+        },
       ],
     },
     {
