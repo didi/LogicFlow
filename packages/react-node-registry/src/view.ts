@@ -25,10 +25,10 @@ export class ReactNodeView extends HtmlNode {
     rootEl.appendChild(el)
   }
 
-  // confirmUpdate(_rootEl: SVGForeignObjectElement) {
-  //   // TODO: 如有需要，可以先通过继承的方式，自定义该节点的更新逻辑；我们后续会根据实际需求，丰富该功能
-  //   // console.log('_rootEl', _rootEl)
-  // }
+  confirmUpdate(_rootEl: SVGForeignObjectElement) {
+    // TODO: 如有需要，可以先通过继承的方式，自定义该节点的更新逻辑；我们后续会根据实际需求，丰富该功能
+    console.log('_rootEl', _rootEl)
+  }
 
   protected renderReactComponent(container: HTMLElement) {
     this.unmountReactComponent()
