@@ -100,7 +100,7 @@ export class VueNodeView extends HtmlNode {
 
   unmount() {
     if (isActive()) {
-      disconnect(this.targetId())
+      disconnect(this.targetId(), this.props.graphModel.flowId!)
     }
     this.unmountVueComponent()
   }

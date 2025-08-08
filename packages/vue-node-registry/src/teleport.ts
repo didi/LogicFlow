@@ -2,7 +2,7 @@ import { BaseNodeModel, GraphModel } from '@logicflow/core'
 import {
   defineComponent,
   h,
-  render,
+  createApp,
   reactive,
   isVue3,
   Teleport,
@@ -11,6 +11,7 @@ import {
 } from 'vue-demi'
 
 let active = false
+const appInstances = new Map<string, InstanceType<any>>()
 const items = reactive<{ [key: string]: any }>({})
 
 export function connect(
@@ -36,9 +37,14 @@ export function connect(
   }
 }
 
-export function disconnect(id: string) {
+export function disconnect(id: string, flowId: string) {
   if (active) {
     delete items[id]
+    const app = appInstances.get(flowId)
+    if (app) {
+      app.unmount()
+      appInstances.delete(flowId)
+    }
   }
 }
 
@@ -99,9 +105,18 @@ export function createTeleportContainer(
   // 获取 Teleport 组件
   const TeleportContainer = getTeleport()
 
-  // 创建 Teleport 组件的虚拟节点，传入 flowId
-  const teleportVNode = h(TeleportContainer, { flowId })
+  // 不重新创建 Teleport 容器组件
+  if (appInstances.has(flowId)) {
+    return
+  }
 
-  // 渲染到指定容器中
-  render(teleportVNode, container)
+  // ✅ 1. 创建独立容器放到目标容器中
+  const mountPoint = document.createElement('div')
+  container.appendChild(mountPoint)
+
+  // ✅ 2. 创建并挂载 Vue 应用到新容器
+  const app = createApp(TeleportContainer, { flowId })
+  app.mount(mountPoint)
+
+  appInstances.set(flowId, app)
 }
