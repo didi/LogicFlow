@@ -28,6 +28,11 @@ const router = createRouter({
       path: '/lf-chart',
       name: 'lfChart',
       component: () => import('../views/LFChartView.vue')
+    },
+    {
+      path: '/nested-transform',
+      name: 'nestedTransform',
+      component: () => import('../views/NestedTransformView.vue')
     }
   ]
 })
