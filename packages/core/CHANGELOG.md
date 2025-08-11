@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.1
+
+### Patch Changes
+
+- fix: 修复点击节点会触发多选的问题和vue-node-registry引入报错问题
+
 ## 2.1.0
 
 ### Minor Changes
