@@ -1,0 +1,183 @@
+.viewport {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+
+  :global {
+    .lf-dnd-shape {
+      background-size: contain;
+    }
+
+    .custom-node-wrap {
+      box-sizing: border-box;
+      width: 190px;
+      min-height: 84px;
+      padding: 0 12px;
+      background: #fff;
+      border: 1px solid #dddfe6;
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 1;
+    }
+
+    .custom-node-wrap-start {
+      width: 190px;
+      height: 44px;
+      min-height: 44px;
+      background-image: linear-gradient(180deg, #e3ffef 0%, #fff 50%);
+    }
+
+    .custom-node-wrap-end {
+      width: 190px;
+      height: 44px;
+      min-height: 44px;
+      background-image: linear-gradient(180deg, #ffebeb 0%, #fff 50%);
+    }
+
+    .custom-node-wrap-judge {
+      width: 190px;
+      min-height: 100px;
+      background-image: linear-gradient(180deg, #e3ebff 0%, #fff 50%);
+    }
+
+    .custom-node-wrap-task {
+      width: 190px;
+      height: 100px;
+      min-height: 100px;
+      background-image: linear-gradient(180deg, #fff5ea 0%, #fff 50%);
+    }
+
+    .title-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      margin-bottom: 8px;
+      color: #303a51;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0;
+
+      .title-left {
+        display: flex;
+        align-items: center;
+        width: 150px;
+
+        .node-label {
+          flex: 1;
+          // 一行显示不下时，省略号
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .node-icon {
+        box-sizing: border-box;
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        padding: 3px;
+        border-radius: 4px;
+      }
+
+      .more-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 2px;
+        cursor: pointer;
+
+        &:hover {
+          background: #f0f3f8;
+        }
+      }
+
+      .node-more-icon {
+        color: #5d6276;
+        font-size: 12px;
+      }
+    }
+
+    .response-content {
+      padding-top: 5px;
+      font-size: 12px;
+
+      .response-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .response-label {
+          width: 50px;
+          margin-right: 5px;
+          color: #7e8393;
+        }
+
+        .response-value {
+          flex: 1;
+
+          .task-name {
+            width: 160px;
+            margin-bottom: 5px;
+            color: #303a51;
+          }
+        }
+
+        .response-default {
+          margin-left: 0;
+        }
+      }
+    }
+
+    .ellipsis-one-line {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .branch-list {
+      font-size: 12px;
+
+      .branch-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .branch-index {
+          width: 40px;
+          color: #7e8393;
+          text-align: right;
+        }
+      }
+    }
+
+    .branch-name,
+    .branch-name-default,
+    .response-default {
+      flex: 1;
+      height: 22px;
+      margin-left: 10px;
+      padding: 0 8px;
+      // 一行显示不下时，省略号
+      overflow: hidden;
+      color: #303a51;
+      line-height: 22px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background: #f5f7fb;
+      border-radius: 4px;
+    }
+
+    .branch-name-default,
+    .response-default {
+      display: inline-block;
+      flex: none;
+      color: #f9a11d;
+      background: rgb(249 161 29 / 10%);
+    }
+  }
+}

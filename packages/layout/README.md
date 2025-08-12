@@ -50,7 +50,7 @@ lf.extension.dagre.layout({
 | ranker | string | 'tight-tree' | 排名算法，'network-simplex', 'tight-tree', 'longest-path' |
 | edgesep | number | 10 | 边之间的水平间距(像素) |
 | acyclicer | string | undefined | 如果设置为'greedy'，使用贪心算法查找反馈弧集，用于使图变为无环图 |
-| changeAnchor | boolean | false | 是否自动调整连线锚点，当为true时会调整连线的锚点，自动计算边的路径 |
+| isDefaultAnchor | boolean | false | 是否是系统默认锚点（默认上下左右4个锚点），当为true时会自动调整连线的路径 |
 
 ## 布局方向示例
 
@@ -70,11 +70,11 @@ lf.extension.dagre.layout({
 })
 ```
 
-### 调整连线锚点
+### 默认锚点的话（默认上下左右4个锚点）， 会自动调整连线的路径以及起终点位置
 
 ```js
 lf.extension.dagre.layout({
   rankdir: 'TB',
-  changeAnchor: true  // 启用调整连线锚点
+  isDefaultAnchor: true  // 调整连线锚点
 })
 ```

@@ -18,10 +18,10 @@ import Point = LogicFlow.Point
  */
 export interface DagreOption extends GraphLabel {
   /**
-   * 是否自动调整连线锚点和计算路径
+   * 是否是默认锚点
    * true: 会根据布局方向自动计算边的路径点
    */
-  changeAnchor?: boolean
+  isDefaultAnchor?: boolean
 }
 
 /**
@@ -121,11 +121,11 @@ export class Dagre {
     const newEdges: EdgeConfig[] = []
 
     // 更新节点位置
-    g.nodes().forEach((nodeId: string) => {
-      const { x, y } = g.node(nodeId)
-      const lfNode = this.lf.getNodeDataById(nodeId)
+    nodes.forEach((node: BaseNodeModel) => {
+      const { x, y } = g.node(node.id)
+      const lfNode = node.getData()
       if (!lfNode) {
-        throw new Error(`布局错误：找不到ID为 ${nodeId} 的节点`)
+        throw new Error(`布局错误：找不到ID为 ${node.id} 的节点`)
       }
 
       // 更新节点坐标
@@ -143,18 +143,18 @@ export class Dagre {
 
     // 处理边的路径和锚点
     edges.forEach((edge: BaseEdgeModel) => {
-      const lfEdge: any = this.lf.getEdgeDataById(edge.id)
+      const lfEdge: any = edge.getData()
       if (!lfEdge) {
         return
       }
 
-      if (!option.changeAnchor) {
-        // 不调整锚点时，清除路径相关数据让LogicFlow自动计算
+      if (!option.isDefaultAnchor) {
+        // 自定义锚点，不调整边的关联锚点，只清除路径相关数据，让LogicFlow自动计算
         delete lfEdge.pointsList
         delete lfEdge.startPoint
         delete lfEdge.endPoint
       } else {
-        // 调整锚点时，重新计算路径
+        // 默认锚点，重新计算路径以及边的起点和终点（节点默认锚点为上下左右）
         delete lfEdge.pointsList
         delete lfEdge.startPoint
         delete lfEdge.endPoint
@@ -190,7 +190,6 @@ export class Dagre {
 
       newEdges.push(lfEdge)
     })
-
     // 将计算好的布局数据应用到画布
     this.lf.renderRawData({
       nodes: newNodes,
