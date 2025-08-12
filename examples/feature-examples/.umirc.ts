@@ -138,6 +138,26 @@ export default defineConfig({
       ],
     },
     {
+      path: '/layout',
+      name: 'layout',
+      routes: [
+        {
+          path: 'layout',
+          redirect: 'layout/default',
+        },
+        {
+          path: 'layout/default',
+          name: '默认锚点布局',
+          component: './layout/default',
+        },
+        {
+          path: 'layout/custom',
+          name: '自定义锚点布局',
+          component: './layout/custom',
+        },
+      ],
+    },
+    {
       name: 'official extensions',
       path: '/extension',
       routes: [
@@ -219,11 +239,6 @@ export default defineConfig({
           path: '/extension/proximity-connect',
           name: 'Proximity Connect 插件',
           component: './extensions/proximity-connect',
-        },
-        {
-          path: 'extension/layout',
-          name: 'Layout 插件',
-          component: './extensions/layout',
         },
       ],
     },
