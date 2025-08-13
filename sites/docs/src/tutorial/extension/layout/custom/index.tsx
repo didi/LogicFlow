@@ -1,13 +1,13 @@
-import LogicFlow, { createUuid } from '@logicflow/core'
-import { DndPanel } from '@logicflow/extension'
-import { Dagre } from '@logicflow/layout'
-import { Card, Flex, Form, Divider, Button, Select, message } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import registerNode from './registerNodeConfig'
-import styles from './index.less'
+import LogicFlow, { createUuid } from '@logicflow/core';
+import { DndPanel } from '@logicflow/extension';
+import { Dagre } from '@logicflow/layout';
+import { Card, Flex, Form, Divider, Button, Select, message } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import registerNode from './registerNodeConfig';
+import styles from './index.module.less';
 
-import '@logicflow/core/es/index.css'
-import '@logicflow/extension/es/index.css'
+import '@logicflow/core/es/index.css';
+import '@logicflow/extension/es/index.css';
 
 // 布局方向选项
 const rankdirOptions = [
@@ -15,7 +15,7 @@ const rankdirOptions = [
   { value: 'TB', label: '从上到下(TB)' },
   { value: 'BT', label: '从下到上(BT)' },
   { value: 'RL', label: '从右到左(RL)' },
-]
+];
 
 // 节点对齐选项
 const alignOptions = [
@@ -24,7 +24,7 @@ const alignOptions = [
   { value: 'UR', label: '上右对齐(UR)' },
   { value: 'DL', label: '下左对齐(DL)' },
   { value: 'DR', label: '下右对齐(DR)' },
-]
+];
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -37,7 +37,7 @@ const config: Partial<LogicFlow.Options> = {
   keyboard: {
     enabled: true,
   },
-}
+};
 
 const data = {
   nodes: [
@@ -409,16 +409,16 @@ const data = {
       ],
     },
   ],
-}
+};
 
 export default function SelectionSelectExample() {
-  const lfRef = useRef<LogicFlow>()
-  const containerRef = useRef<HTMLDivElement>(null)
+  const lfRef = useRef<LogicFlow>();
+  const containerRef = useRef<HTMLDivElement>(null);
   // 布局配置状态
   const [layoutConfig, setLayoutConfig] = useState({
     rankdir: 'LR',
     align: '',
-  })
+  });
 
   // 初始化 LogicFlow
   useEffect(() => {
@@ -430,14 +430,14 @@ export default function SelectionSelectExample() {
           size: 20,
         },
         plugins: [DndPanel, Dagre],
-      })
+      });
       lf.setTheme({
         polyline: {
           stroke: '#2961ef',
           strokeWidth: 1,
         },
-      })
-      registerNode(lf)
+      });
+      registerNode(lf);
       lf.setPatternItems([
         {
           type: 'start',
@@ -472,77 +472,77 @@ export default function SelectionSelectExample() {
             nodeName: '结束',
           },
         },
-      ])
+      ]);
       // 边的连接不允许
       lf.on('connection:not-allowed', (data) => {
-        const { msg } = data
-        message.error(msg)
-      })
+        const { msg } = data;
+        message.error(msg);
+      });
       // 复制ID
       lf.on('CopyId', (data) => {
-        const ele = document.createElement('textarea')
-        document.body.appendChild(ele)
-        ele.value = `${data.id}`
-        ele.select()
-        document.execCommand('copy')
-        document.body.removeChild(ele)
-        message.success('ID复制成功！')
-      })
+        const ele = document.createElement('textarea');
+        document.body.appendChild(ele);
+        ele.value = `${data.id}`;
+        ele.select();
+        document.execCommand('copy');
+        document.body.removeChild(ele);
+        message.success('ID复制成功！');
+      });
       // 复制节点
       lf.on('CopyNode', async (data) => {
-        const newNode: any = lf.cloneNode(data.id)
+        const newNode: any = lf.cloneNode(data.id);
         // 重新生成判断节点properties.branches中的anchorId
-        const nodeModel: any = lf.graphModel.getNodeModelById(newNode.id)
+        const nodeModel: any = lf.graphModel.getNodeModelById(newNode.id);
         if (nodeModel.type === 'judge') {
-          const { properties } = nodeModel
+          const { properties } = nodeModel;
           const newBranches = (properties.branches || []).map((branch: any) => {
-            branch.anchorId = `${createUuid()}_right`
-            return branch
-          })
+            branch.anchorId = `${createUuid()}_right`;
+            return branch;
+          });
           nodeModel.setProperties({
             ...properties,
             branches: newBranches,
-          })
+          });
         }
-      })
+      });
       // 删除节点
       lf.on('DeleteNode', (data) => {
-        lf.deleteNode(data.id)
-      })
-      lf.render(data)
-      lf.translateCenter()
-      lfRef.current = lf
+        lf.deleteNode(data.id);
+      });
+      lf.render(data);
+      lf.translateCenter();
+      lfRef.current = lf;
     }
-  }, [])
+  }, []);
 
   // 执行布局
   const applyLayout = () => {
     if (lfRef.current?.extension.dagre) {
-      ;(lfRef.current.extension.dagre as Dagre)?.layout({
+      (lfRef.current.extension.dagre as Dagre)?.layout({
         ranksep: 100,
         nodesep: 50,
         rankdir: layoutConfig.rankdir as any,
         align: layoutConfig.align || undefined,
         isDefaultAnchor: false,
-      })
-      lfRef.current.fitView()
+      });
+      lfRef.current.fitView();
     }
-  }
+  };
 
   const getData = () => {
-    console.log('当前data数据', lfRef.current?.getGraphRawData())
-  }
+    console.log('当前data数据', lfRef.current?.getGraphRawData());
+  };
 
   // 处理配置项变更
   const handleConfigChange = (key: string, value: any) => {
     setLayoutConfig((prev) => ({
       ...prev,
       [key]: value,
-    }))
-  }
+    }));
+  };
 
   return (
-    <Card title="LogicFlow - 自动布局">
+    <Card title="布局示例">
       <Flex wrap="wrap" gap="middle" align="center" justify="space-between">
         <Form layout="inline">
           <Form.Item label="布局方向">
@@ -577,5 +577,5 @@ export default function SelectionSelectExample() {
       <Divider />
       <div ref={containerRef} id="graph" className={styles.viewport}></div>
     </Card>
-  )
+  );
 }

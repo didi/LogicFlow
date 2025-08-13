@@ -1,0 +1,70 @@
+.graph {
+  width: 100%;
+  height: 600px;
+  background-color: #f5f5f5;
+  border: 1px solid #e9e9e9;
+  border-radius: 4px;
+
+  :global {
+    .lf-dnd-shape {
+      background-size: contain;
+    }
+
+    .lf-node-text-auto-wrap {
+      max-width: 100px;
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .lf-node-text {
+      width: 100%;
+      color: #000;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .lf-edge-text {
+      padding: 2px 4px;
+      font-weight: 400;
+      font-size: 12px;
+      background-color: #fff;
+      border-radius: 2px;
+      fill: #333;
+    }
+
+    .lf-dnd-panel {
+      .lf-dnd-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+        padding: 5px;
+        background: #fff;
+        border: 1px solid #e9e9e9;
+        border-radius: 4px;
+        cursor: grab;
+        transition: all 0.3s;
+        user-select: none;
+
+        &:hover {
+          border-color: #1890ff;
+          box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+        }
+
+        .lf-dnd-icon {
+          width: 30px;
+          height: 30px;
+          margin-bottom: 4px;
+        }
+
+        .lf-dnd-label {
+          color: #666;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

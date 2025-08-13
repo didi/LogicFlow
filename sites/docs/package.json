@@ -34,6 +34,7 @@
     "@logicflow/dumi-theme-simple": "^0.0.21",
     "@logicflow/extension": "workspace:*",
     "@logicflow/react-node-registry": "workspace:*",
+    "@logicflow/layout": "workspace:*",
     "antd": "^5.25.0",
     "insert-css": "^2.0.0",
     "react": "18.2.0",
