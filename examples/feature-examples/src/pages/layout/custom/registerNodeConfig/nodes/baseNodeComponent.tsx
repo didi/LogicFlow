@@ -7,7 +7,7 @@ import { SmallDashOutlined } from '@ant-design/icons' // 引入更多图标
 export default function BaseNodeComponent(props: { node: any; graph: any }) {
   console.log('组件props', { ...props })
   const { node, graph } = props
-  const data = node.getData()
+  const data = graph.getNodeModelById(node.id)
   if (!data.properties) data.properties = {}
 
   const updateJudgeNode = function () {

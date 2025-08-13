@@ -909,11 +909,7 @@ export default function SelectionSelectExample() {
   }
 
   const getData = () => {
-    console.log(
-      '当前data数据',
-      lfRef.current?.getDataById('b1bb3a79-0d8e-4d0b-a351-c742d70aab0f')
-        ?.properties,
-    )
+    console.log('当前data数据', lfRef.current?.getGraphRawData())
   }
 
   // 处理配置项变更

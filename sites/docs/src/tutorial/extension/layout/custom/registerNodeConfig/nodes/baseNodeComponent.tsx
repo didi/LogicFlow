@@ -1,27 +1,81 @@
-import { Button, Popover } from 'antd'
-import { SmallDashOutlined } from '@ant-design/icons' // 引入更多图标
+import { createUuid } from '@logicflow/core';
+import { EventType } from '@logicflow/core';
+import { useEffect } from 'react';
+import { Button, Popover } from 'antd';
+import { SmallDashOutlined } from '@ant-design/icons'; // 引入更多图标
 
 export default function BaseNodeComponent(props: { node: any; graph: any }) {
-  console.log('组件props', props)
-  const { node, graph } = props
-  const data = graph.getNodeModelById(node.id)
-  if (!data.properties) data.properties = {}
+  console.log('组件props', { ...props });
+  const { node, graph } = props;
+  const data = graph.getNodeModelById(node.id);
+  if (!data.properties) data.properties = {};
+
+  const updateJudgeNode = function () {
+    if (data.type !== 'judge') {
+      return;
+    }
+    // 更新节点高度
+    const currentNode = graph.getElement(node.id); // graphModel里拿到的是最新数据
+    // 更新以此节点为终点的边的终点位置
+    const { edges } = graph;
+    const currentNodeAsTargetEdges = edges.filter(
+      (edge: any) => edge.targetNodeId === currentNode.id,
+    );
+    if (currentNodeAsTargetEdges.length === 0) return;
+    const { anchors } = currentNode;
+    const leftAnchor = anchors.find((anchor: any) =>
+      anchor.id.includes('left'),
+    );
+    currentNodeAsTargetEdges.forEach((edge: any) => {
+      edge.updateEndPoint({
+        x: leftAnchor.x,
+        y: leftAnchor.y,
+      });
+    });
+    // 更新以此节点为起点的边的起点位置
+    const currentNodeAsSourceEdges = edges.filter(
+      (edge: any) => edge.sourceNodeId === currentNode.id,
+    );
+    if (currentNodeAsSourceEdges.length === 0) return;
+    const rightAnchors = anchors.filter((anchor: any) =>
+      anchor.id.includes('right'),
+    );
+    currentNodeAsSourceEdges.forEach((edge: any) => {
+      const sourceAnchorId = rightAnchors.find(
+        (anchor: any) => anchor.id === edge.sourceAnchorId,
+      );
+      if (sourceAnchorId) {
+        edge.updateStartPoint({
+          x: sourceAnchorId.x,
+          y: sourceAnchorId.y,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    graph.eventCenter.on(EventType.NODE_PROPERTIES_CHANGE, (eventData: any) => {
+      console.log('节点属性变化', { ...eventData });
+      if (eventData.id !== node.id) return;
+      updateJudgeNode();
+    });
+  }, []);
 
   const addBranch = () => {
     const newBranch = {
+      anchorId: `${createUuid()}_right`,
       branchName: `分支${(data.properties.branches || []).length + 1}条件`,
       conditions: [],
-    }
-    // remind 不能使用node.setProperty 有时候会有问题
-    const newBranches = (data.properties.branches || []).concat(newBranch)
-    const nodeModel = graph.getNodeModelById(node.id)
-    nodeModel.setProperty('branches', newBranches)
-  }
+    };
+    const newBranches = (data.properties.branches || []).concat(newBranch);
+    const nodeModel = graph.getNodeModelById(node.id);
+    nodeModel.setProperty('branches', newBranches);
+  };
 
   // 处理点击事件
   const handleClick = (eventType: string) => {
-    graph.eventCenter.emit(eventType, node)
-  }
+    graph.eventCenter.emit(eventType, node);
+  };
 
   return (
     <div className={`custom-node-wrap custom-node-wrap-${data.type}`}>
@@ -105,5 +159,5 @@ export default function BaseNodeComponent(props: { node: any; graph: any }) {
         </div>
       )}
     </div>
-  )
+  );
 }
