@@ -16,6 +16,7 @@
     "@logicflow/engine": "workspace:*",
     "@logicflow/extension": "workspace:*",
     "@logicflow/react-node-registry": "workspace:*",
+    "@logicflow/layout": "workspace:*",
     "antd": "^5.4.0",
     "umi": "^4.2.1"
   },
