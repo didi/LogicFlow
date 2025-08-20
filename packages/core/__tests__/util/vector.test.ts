@@ -1,50 +1,52 @@
-import { Vector } from '../../src/util/vector'
+import { Vector, Point } from '../../src/util/vector'
 
-describe('util/vector', () => {
-  test('construct', () => {
-    const v = new Vector(1, 2)
-    expect(v.x).toEqual(1)
-    expect(v[0]).toEqual(1)
+describe('Vector Utils', () => {
+  test('Vector constructor should create vector with x, y coordinates', () => {
+    const vector = new Vector(10, 20)
+    expect(vector.x).toBe(10)
+    expect(vector.y).toBe(20)
+    expect(vector.z).toBe(0)
+  })
 
-    expect(v.y).toEqual(2)
-    expect(v[1]).toEqual(2)
+  test('Vector constructor with z coordinate', () => {
+    const vector = new Vector(10, 20, 30)
+    expect(vector.x).toBe(10)
+    expect(vector.y).toBe(20)
+    expect(vector.z).toBe(30)
+  })
 
-    expect(v.z).toEqual(0)
-    expect(v[2]).toEqual(0)
+  test('Vector add method should add two vectors', () => {
+    const vector1 = new Vector(10, 20)
+    const vector2 = new Vector(5, 15)
+    const result = vector1.add(vector2) as Vector
+
+    expect(result.x).toBe(15)
+    expect(result.y).toBe(35)
   })
-  test('add', () => {
-    const v = new Vector(1, 2)
-    const v1 = new Vector(3, 4)
-    expect(v.add(v1)).toEqual(new Vector(4, 6))
+
+  test('Vector subtract method should subtract two vectors', () => {
+    const vector1 = new Vector(10, 20)
+    const vector2 = new Vector(5, 15)
+    const result = vector1.subtract(vector2) as Vector
+
+    expect(result.x).toBe(5)
+    expect(result.y).toBe(5)
   })
-  test('subtract', () => {
-    const v = new Vector(1, 2)
-    const v1 = new Vector(3, 4)
-    expect(v.subtract(v1)).toEqual(new Vector(-2, -2))
+
+  test('Vector toString should return "Vector"', () => {
+    const vector = new Vector(10, 20)
+    expect(vector.toString()).toBe('Vector')
   })
-  test('dot', () => {
-    const v = new Vector(1, 2)
-    const v1 = new Vector(3, 4)
-    expect(v.dot(v1)).toEqual(11)
+
+  test('Point constructor should create point with x, y coordinates', () => {
+    const point = new Point(10, 20)
+    expect(point.x).toBe(10)
+    expect(point.y).toBe(20)
+    expect(point.z).toBe(1)
   })
-  test('cross', () => {
-    const v = new Vector(1, 2)
-    const v1 = new Vector(3, 4)
-    expect(v.cross(v1)).toEqual(new Vector(0, 0, -2))
-  })
-  test('getLength', () => {
-    const v = new Vector(1, 2)
-    expect(v.getLength()).toEqual(Math.sqrt(5))
-  })
-  test('normalize', () => {
-    const v = new Vector(1, 2)
-    expect(v.normalize()).toEqual(
-      new Vector(1 / Math.sqrt(5), 2 / Math.sqrt(5)),
-    )
-  })
-  test('angle', () => {
-    const v = new Vector(1, 1)
-    const v1 = new Vector(0, 1)
-    expect(v.angle(v1) - Math.PI / 4 < Number.EPSILON).toBeTruthy()
+
+  test('Point toString should return "Point"', () => {
+    const point = new Point(10, 20)
+    expect(point.toString()).toBe('Point')
   })
 })

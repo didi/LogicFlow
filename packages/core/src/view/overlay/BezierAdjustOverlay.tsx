@@ -1,19 +1,17 @@
 import { Component } from 'preact/compat'
 import { Circle, Line } from '../shape'
 import { observer } from '../..'
-import LogicFlow from '../../LogicFlow'
 import { EventType, ModelType } from '../../constant'
 import { StepDrag, getBezierPoints, IDragParams } from '../../util'
 import { GraphModel, BezierEdgeModel } from '../../model'
-
-import Point = LogicFlow.Point
+import { CommonTypes } from '../../types/common'
 
 type IProps = {
   graphModel: GraphModel
 }
 
 type IAnchorProps = {
-  position: Point
+  position: CommonTypes.Point
   bezierModel: BezierEdgeModel
   graphModel: GraphModel
   type: string

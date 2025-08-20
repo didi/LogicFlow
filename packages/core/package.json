@@ -27,7 +27,7 @@
     "build:watch:cjs": "rss",
     "build": "rss",
     "prebuild": "rss",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "@logicflow/core",
