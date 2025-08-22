@@ -1058,3 +1058,136 @@ export const getSvgTextSize = ({
     height: rowsLength * (fontSize + 2) + fontSize / 4,
   }
 }
+
+/**
+ * 折线简化：移除冗余点，压缩短边
+ * @param points 原始点列表
+ * @param collinearEpsilon 共线容差（角度偏差，弧度）
+ * @param minSegmentLen 最小线段长度阈值
+ * @returns 简化后的点列表
+ */
+export const simplifyPolyline = (
+  points: Point[],
+  collinearEpsilon: number = 0.01,
+  minSegmentLen: number = 2,
+): Point[] => {
+  if (points.length <= 2) return points.slice()
+
+  const result = points.slice()
+
+  // 1. 移除共线点（基于向量叉积）
+  let i = 1
+  while (i < result.length - 1) {
+    const p1 = result[i - 1]
+    const p2 = result[i]
+    const p3 = result[i + 1]
+
+    // 计算向量叉积判断是否共线
+    const v1x = p2.x - p1.x
+    const v1y = p2.y - p1.y
+    const v2x = p3.x - p2.x
+    const v2y = p3.y - p2.y
+
+    const crossProduct = Math.abs(v1x * v2y - v1y * v2x)
+    const magnitude = Math.sqrt(
+      (v1x * v1x + v1y * v1y) * (v2x * v2x + v2y * v2y),
+    )
+
+    // 如果共线（叉积接近0）则移除中间点
+    if (magnitude > 0 && crossProduct / magnitude < collinearEpsilon) {
+      result.splice(i, 1)
+    } else {
+      i++
+    }
+  }
+
+  // 2. 合并过短的线段
+  if (minSegmentLen > 0) {
+    i = 0
+    while (i < result.length - 1) {
+      const a = result[i]
+      const b = result[i + 1]
+      const segmentLen = distance(a.x, a.y, b.x, b.y)
+
+      if (segmentLen < minSegmentLen && i > 0 && i + 2 < result.length) {
+        const prev = result[i - 1]
+        const next = result[i + 2]
+
+        // 判断保持哪个方向更合理（优先保持正交）
+        const isPrevHorizontal = Math.abs(prev.y - a.y) < Math.abs(prev.x - a.x)
+        const isNextHorizontal = Math.abs(next.y - b.y) < Math.abs(next.x - b.x)
+
+        if (isPrevHorizontal === isNextHorizontal) {
+          // 方向一致，直接连接
+          result.splice(i, 2, {
+            x: isPrevHorizontal ? (a.x + b.x) / 2 : prev.x,
+            y: isPrevHorizontal ? prev.y : (a.y + b.y) / 2,
+          })
+        } else {
+          // 方向不一致，保持正交
+          result.splice(i, 2, {
+            x: isPrevHorizontal ? b.x : a.x,
+            y: isPrevHorizontal ? a.y : b.y,
+          })
+        }
+        i = Math.max(0, i - 1) // 回退检查新生成的点
+      } else {
+        i++
+      }
+    }
+  }
+
+  // 3. 再次过滤严格共线的点
+  return pointFilter(result)
+}
+
+/**
+ * 判断两个点之间的线段方向
+ */
+export const getSegmentDirection = (
+  p1: Point,
+  p2: Point,
+): 'horizontal' | 'vertical' | 'diagonal' => {
+  const dx = Math.abs(p1.x - p2.x)
+  const dy = Math.abs(p1.y - p2.y)
+
+  if (dx < 0.1) return 'vertical'
+  if (dy < 0.1) return 'horizontal'
+  return 'diagonal'
+}
+
+/**
+ * 正交吸附：将点吸附到与相邻点的水平或垂直位置
+ */
+export const snapToOrthogonal = (
+  point: Point,
+  prevPoint?: Point,
+  nextPoint?: Point,
+  tolerance: number = 5,
+): Point => {
+  const result = { ...point }
+
+  if (prevPoint) {
+    const dx = Math.abs(point.x - prevPoint.x)
+    const dy = Math.abs(point.y - prevPoint.y)
+
+    if (dx < tolerance && dx < dy) {
+      result.x = prevPoint.x // 吸附到垂直
+    } else if (dy < tolerance && dy < dx) {
+      result.y = prevPoint.y // 吸附到水平
+    }
+  }
+
+  if (nextPoint) {
+    const dx = Math.abs(point.x - nextPoint.x)
+    const dy = Math.abs(point.y - nextPoint.y)
+
+    if (dx < tolerance && dx < dy) {
+      result.x = nextPoint.x // 吸附到垂直
+    } else if (dy < tolerance && dy < dx) {
+      result.y = nextPoint.y // 吸附到水平
+    }
+  }
+
+  return result
+}

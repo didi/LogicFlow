@@ -20,6 +20,8 @@ import {
   segmentDirection,
   points2PointsList,
   pointFilter,
+  simplifyPolyline,
+  getSegmentDirection,
 } from '../../util'
 
 import Point = LogicFlow.Point
@@ -27,11 +29,48 @@ import Position = LogicFlow.Position
 import AppendConfig = LogicFlow.AppendConfig
 import AnchorConfig = Model.AnchorConfig
 
+// 路径优化配置接口
+interface PolylineRouteOptions {
+  perf?: { useRaf?: boolean; throttleMs?: number }
+  simplify?: {
+    enabled?: boolean
+    collinearEpsilon?: number
+    minSegmentLen?: number
+  }
+  route?: { mode?: 'auto' | 'incremental' | 'locked' }
+  snap?: { orthogonal?: boolean; tolerance?: number }
+}
+
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
   draggingPointList: Point[] = []
   @observable offset?: number
   @observable dbClickPosition?: Point
+
+  // 新增优化相关字段
+  @observable routeMode: 'auto' | 'incremental' | 'locked' = 'auto'
+  userFixedPoints: Set<number> = new Set()
+  private _cachedTextPos?: Point
+
+  // 配置选项（从 properties 或 theme 中读取）
+  private get routeOptions(): PolylineRouteOptions {
+    const defaultOptions: PolylineRouteOptions = {
+      perf: { useRaf: true, throttleMs: 16 },
+      simplify: { enabled: true, collinearEpsilon: 0.01, minSegmentLen: 2 },
+      route: { mode: 'auto' },
+      snap: { orthogonal: true, tolerance: 5 },
+    }
+
+    // 注意：这里暂时忽略theme中的配置，避免类型错误
+    const propOptions = (this.properties as any)?.routeOptions || {}
+
+    return {
+      perf: { ...defaultOptions.perf, ...propOptions.perf },
+      simplify: { ...defaultOptions.simplify, ...propOptions.simplify },
+      route: { ...defaultOptions.route, ...propOptions.route },
+      snap: { ...defaultOptions.snap, ...propOptions.snap },
+    }
+  }
 
   initEdgeData(data: LogicFlow.EdgeConfig): void {
     this.offset = get(data, 'properties.offset', 30)
@@ -59,13 +98,23 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       const { x, y } = this.dbClickPosition
       return { x, y }
     }
+
+    // 拖拽中使用缓存位置，避免抖动
+    if (this.isDragging && this._cachedTextPos) {
+      return this._cachedTextPos
+    }
+
     // 文本不为空或者没有双击位置时，取最长边的中点作为文本位置
     const currentPositionList = points2PointsList(this.points)
     const [p1, p2] = getLongestEdge(currentPositionList)
-    return {
+    const position = {
       x: (p1.x + p2.x) / 2,
       y: (p1.y + p2.y) / 2,
     }
+
+    // 缓存计算结果
+    this._cachedTextPos = position
+    return position
   }
 
   // 获取下一个锚点
@@ -376,8 +425,56 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   moveStartPoint(deltaX: number, deltaY: number): void {
     this.startPoint.x += deltaX
     this.startPoint.y += deltaY
-    this.updatePoints()
-    // todo: 尽量保持边的整体轮廓, 通过deltaX和deltaY更新pointsList，而不是重新计算。
+
+    // 根据路由模式决定更新策略
+    const options = this.routeOptions
+    const mode = options.route?.mode || this.routeMode
+
+    if (mode === 'incremental' || mode === 'locked') {
+      // 增量更新：仅调整首段，保持其他折点不变
+      this.moveStartPointIncremental()
+    } else {
+      // 传统全量更新
+      this.updatePoints()
+    }
+  }
+
+  /**
+   * 增量更新起点：仅调整首段与第二个点的连接，保持后续折点不变
+   */
+  private moveStartPointIncremental(): void {
+    if (this.pointsList.length >= 2) {
+      const list = this.pointsList.map((p) => ({ ...p }))
+      const secondPoint = list[1]
+
+      // 更新第一个点为新的起点
+      list[0] = { x: this.startPoint.x, y: this.startPoint.y }
+
+      // 判断原首段方向并保持正交
+      const originalDir = getSegmentDirection(this.pointsList[0], secondPoint)
+      if (originalDir === 'horizontal') {
+        // 保持水平：调整第二个点的y坐标
+        list[1] = { x: secondPoint.x, y: list[0].y }
+      } else if (originalDir === 'vertical') {
+        // 保持垂直：调整第二个点的x坐标
+        list[1] = { x: list[0].x, y: secondPoint.y }
+      } else {
+        // 对角线：选择更接近正交的方向
+        const dx = Math.abs(secondPoint.x - list[0].x)
+        const dy = Math.abs(secondPoint.y - list[0].y)
+        if (dx < dy) {
+          list[1] = { x: list[0].x, y: secondPoint.y } // 垂直
+        } else {
+          list[1] = { x: secondPoint.x, y: list[0].y } // 水平
+        }
+      }
+
+      // 拖拽中仅更新可视路径，不改pointsList
+      this.updatePointsAfterDrag(list)
+    } else {
+      // 回退：只有两点时直接全量更新
+      this.updatePoints()
+    }
   }
 
   @action
@@ -390,7 +487,57 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   moveEndPoint(deltaX: number, deltaY: number): void {
     this.endPoint.x += deltaX
     this.endPoint.y += deltaY
-    this.updatePoints()
+
+    // 根据路由模式决定更新策略
+    const options = this.routeOptions
+    const mode = options.route?.mode || this.routeMode
+
+    if (mode === 'incremental' || mode === 'locked') {
+      // 增量更新：仅调整末段，保持其他折点不变
+      this.moveEndPointIncremental()
+    } else {
+      // 传统全量更新
+      this.updatePoints()
+    }
+  }
+
+  /**
+   * 增量更新终点：仅调整末段与倒数第二个点的连接，保持前面折点不变
+   */
+  private moveEndPointIncremental(): void {
+    const n = this.pointsList.length
+    if (n >= 2) {
+      const list = this.pointsList.map((p) => ({ ...p }))
+      const prevPoint = list[n - 2]
+
+      // 更新最后一个点为新的终点
+      list[n - 1] = { x: this.endPoint.x, y: this.endPoint.y }
+
+      // 判断原末段方向并保持正交
+      const originalDir = getSegmentDirection(prevPoint, this.pointsList[n - 1])
+      if (originalDir === 'horizontal') {
+        // 保持水平：调整倒数第二个点的y坐标
+        list[n - 2] = { x: prevPoint.x, y: list[n - 1].y }
+      } else if (originalDir === 'vertical') {
+        // 保持垂直：调整倒数第二个点的x坐标
+        list[n - 2] = { x: list[n - 1].x, y: prevPoint.y }
+      } else {
+        // 对角线：选择更接近正交的方向
+        const dx = Math.abs(prevPoint.x - list[n - 1].x)
+        const dy = Math.abs(prevPoint.y - list[n - 1].y)
+        if (dx < dy) {
+          list[n - 2] = { x: list[n - 1].x, y: prevPoint.y } // 垂直
+        } else {
+          list[n - 2] = { x: prevPoint.x, y: list[n - 1].y } // 水平
+        }
+      }
+
+      // 拖拽中仅更新可视路径，不改pointsList
+      this.updatePointsAfterDrag(list)
+    } else {
+      // 回退：只有两点时直接全量更新
+      this.updatePoints()
+    }
   }
 
   @action
@@ -600,7 +747,18 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   @action
   dragAppendEnd() {
     if (this.draggingPointList) {
-      const pointsList = pointFilter(points2PointsList(this.points))
+      let pointsList = pointFilter(points2PointsList(this.points))
+
+      // 应用路径简化（如果启用）
+      const options = this.routeOptions
+      if (options.simplify?.enabled) {
+        pointsList = simplifyPolyline(
+          pointsList,
+          options.simplify.collinearEpsilon,
+          options.simplify.minSegmentLen,
+        )
+      }
+
       // 更新pointsList，重新渲染appendWidth
       this.pointsList = pointsList.map((i) => i)
       // draggingPointList清空
@@ -610,6 +768,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.startPoint = assign({}, startPoint)
       const endPoint = pointsList[pointsList.length - 1]
       this.endPoint = assign({}, endPoint)
+
+      // 清除文本位置缓存，强制重新计算
+      this._cachedTextPos = undefined
     }
     this.isDragging = false
   }
@@ -666,6 +827,43 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     )
 
     this.initPoints()
+  }
+
+  /**
+   * 重置路径：清除用户自定义折点，回到自动路径模式
+   */
+  @action
+  resetPath() {
+    this.userFixedPoints.clear()
+    this.routeMode = 'auto'
+    this._cachedTextPos = undefined
+    this.updatePoints() // 重新计算路径
+  }
+
+  /**
+   * 标记折点为用户自定义（在手动拖拽折点时调用）
+   */
+  markPointAsUserFixed(index: number) {
+    this.userFixedPoints.add(index)
+  }
+
+  /**
+   * 获取当前路径的统计信息（用于调试和监控）
+   */
+  getPathStats() {
+    const pointsList = this.pointsList
+    const totalLength = pointsList.reduce((sum, point, index) => {
+      if (index === 0) return 0
+      const prev = pointsList[index - 1]
+      return sum + distance(point.x, point.y, prev.x, prev.y)
+    }, 0)
+
+    return {
+      pointCount: pointsList.length,
+      totalLength: Math.round(totalLength),
+      userFixedCount: this.userFixedPoints.size,
+      routeMode: this.routeMode,
+    }
   }
 }
 
