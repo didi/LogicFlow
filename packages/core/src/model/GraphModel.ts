@@ -48,6 +48,8 @@ import {
 } from '../util'
 import EventEmitter from '../event/eventEmitter'
 import { Grid } from '../view/overlay'
+import NestedTransformModel from './NestedTransformModel'
+
 import Position = LogicFlow.Position
 import PointTuple = LogicFlow.PointTuple
 import GraphData = LogicFlow.GraphData
@@ -207,7 +209,7 @@ export class GraphModel {
 
     this.eventCenter = new EventEmitter()
     this.editConfigModel = new EditConfigModel(options)
-    this.transformModel = new TransformModel(this.eventCenter, options)
+    this.transformModel = new NestedTransformModel(this.eventCenter, options)
 
     this.flowId = createUuid()
     this.idGenerator = idGenerator
