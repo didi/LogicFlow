@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.1
+
+### Patch Changes
+
+- fix: 修复UMD打包产物报错问题
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,12 @@
 # logicflow-docs
 
+## 2.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/layout@2.0.1
+
 ## 2.1.3
 
 ### Patch Changes
