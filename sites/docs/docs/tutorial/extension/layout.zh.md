@@ -24,6 +24,36 @@ yarn add @logicflow/layout
 pnpm add @logicflow/layout
 ```
 
+### UMD 方式使用
+
+您也可以通过 CDN 直接引入 UMD 包：
+
+```html
+<!-- 引入 LogicFlow Core UMD -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<!-- 引入 Layout UMD -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/layout/dist/index.min.js"></script>
+
+<script>
+  // 通过全局变量 Layout 访问 Dagre 插件
+  const { Dagre } = Layout;
+  
+  // 创建 LogicFlow 实例并注册插件
+  const lf = new LogicFlow.default({
+    container: document.getElementById('container'),
+    plugins: [Dagre]
+  });
+  
+  // 使用布局功能
+  lf.dagre.layout({
+    rankdir: 'LR',
+    nodesep: 50,
+    ranksep: 100
+  });
+</script>
+```
+
 ## 基本使用
 
 ### 注册插件

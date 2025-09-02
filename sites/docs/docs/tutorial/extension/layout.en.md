@@ -24,6 +24,36 @@ yarn add @logicflow/layout
 pnpm add @logicflow/layout
 ```
 
+### UMD Usage
+
+You can also use the UMD bundle directly via CDN:
+
+```html
+<!-- Include LogicFlow Core UMD -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<!-- Include Layout UMD -->
+<script src="https://cdn.jsdelivr.net/npm/@logicflow/layout/dist/index.min.js"></script>
+
+<script>
+  // Access Dagre plugin through global variable Layout
+  const { Dagre } = Layout;
+  
+  // Create LogicFlow instance and register plugin
+  const lf = new LogicFlow.default({
+    container: document.getElementById('container'),
+    plugins: [Dagre]
+  });
+  
+  // Use layout functionality
+  lf.dagre.layout({
+    rankdir: 'LR',
+    nodesep: 50,
+    ranksep: 100
+  });
+</script>
+```
+
 ## Basic Usage
 
 ### Register the Plugin

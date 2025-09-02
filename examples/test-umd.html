@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogicFlow Layout UMD 测试</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #container {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+      }
+      .success {
+        color: green;
+        font-weight: bold;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>LogicFlow Layout UMD 包测试</h1>
+
+    <div>
+      <button onclick="testUMD()">测试 UMD 包</button>
+      <span id="status"></span>
+    </div>
+
+    <div id="container"></div>
+
+    <!-- 引入 LogicFlow Core UMD -->
+    <!-- <script src="./dist/index.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css"
+      rel="stylesheet"
+    />
+    <!-- 引入我们新构建的 Layout UMD -->
+    <script src="./dist/index.min.js"></script>
+
+    <script>
+      function testUMD() {
+        const { Dagre } = Layout
+        const statusEl = document.getElementById('status')
+        statusEl.textContent = '测试中...'
+        statusEl.className = ''
+
+        try {
+          // 创建 LogicFlow 实例
+          const lf = new Core.default({
+            container: document.getElementById('container'),
+            width: 800,
+            height: 600,
+            plugins: [Dagre],
+          })
+          console.log('lf', lf)
+          // 注册 Dagre 插件
+          // Core.default.use(Dagre)
+
+          // 测试数据
+          const graphData = {
+            nodes: [
+              { id: '1', type: 'rect', x: 100, y: 100, text: '节点1' },
+              { id: '2', type: 'rect', x: 300, y: 200, text: '节点2' },
+              { id: '3', type: 'rect', x: 500, y: 100, text: '节点3' },
+            ],
+            edges: [
+              { sourceNodeId: '1', targetNodeId: '2', type: 'polyline' },
+              { sourceNodeId: '2', targetNodeId: '3', type: 'polyline' },
+            ],
+          }
+
+          // 渲染图形
+          lf.render(graphData)
+
+          // 测试布局功能
+          setTimeout(() => {
+            lf.dagre.layout({
+              rankdir: 'LR',
+              nodesep: 50,
+              ranksep: 100,
+            })
+
+            statusEl.textContent = '测试成功！UMD 包正常工作'
+            statusEl.className = 'success'
+          }, 1000)
+        } catch (error) {
+          statusEl.textContent = '测试失败: ' + error.message
+          statusEl.className = 'error'
+          console.error('UMD 测试错误:', error)
+        }
+      }
+
+      // 页面加载完成后自动测试
+      window.onload = function () {
+        console.log('页面加载完成，可以开始测试')
+        console.log('全局变量检查:', {
+          LogicFlow: typeof LogicFlow,
+          Dagre: typeof Dagre,
+        })
+      }
+    </script>
+  </body>
+</html>
