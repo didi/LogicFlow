@@ -1,7 +1,7 @@
 {
   "exclude": ["node_modules", "**/es", "**/lib"],
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
