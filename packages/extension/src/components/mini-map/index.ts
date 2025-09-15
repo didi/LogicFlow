@@ -1,5 +1,8 @@
 import LogicFlow from '@logicflow/core'
-import { createTeleportContainer } from '@logicflow/vue-node-registry'
+import {
+  createTeleportContainer,
+  destroyTeleportContainer,
+} from '@logicflow/vue-node-registry'
 
 import Position = LogicFlow.Position
 import MiniMapOption = MiniMap.MiniMapOption
@@ -675,6 +678,7 @@ export class MiniMap {
     })
   }
   destroy() {
+    destroyTeleportContainer(this.lfMap.graphModel.flowId)
     this.lf.off('graph:resize', this.onGraphResize)
   }
 }
