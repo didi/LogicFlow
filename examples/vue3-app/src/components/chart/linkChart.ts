@@ -18,6 +18,9 @@ export default class LinkChart {
     this.lf = new LogicFlow({
       container: options.container,
       snapline: false,
+      keyboard: {
+        enabled: true
+      },
       grid: {
         visible: true,
         type: 'mesh',
@@ -50,6 +53,7 @@ export default class LinkChart {
 
   destroy() {
     this.lf.clearData()
+    this.lf.destroy()
   }
 
   static create(options: IOptions) {

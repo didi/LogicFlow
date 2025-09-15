@@ -1,5 +1,7 @@
 <template>
   <div class="w-full h-full">
+    <el-button @click="handelMiniMap">显示小地图</el-button>
+    <el-button @click="clearFlow">卸载画布</el-button>
     <div ref="container" class="flow w-full h-full overflow-hidden" />
     <TeleportContainer :flow-id="flowId" />
   </div>
@@ -213,7 +215,12 @@ onMounted(() => {
   })
   flowId.value = linkChart.flowId!
 })
-
+const handelMiniMap = () => {
+  linkChart.lf.extension.miniMap.show()
+}
+const clearFlow = () => {
+  linkChart.destroy()
+}
 onUnmounted(() => {
   // 非KeepAlive模式下应该主动触发destroy()方法触发LogicFlow.clearData()
   linkChart && linkChart.destroy()

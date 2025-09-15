@@ -37,14 +37,9 @@ export function connect(
   }
 }
 
-export function disconnect(id: string, flowId: string) {
+export function disconnect(id: string) {
   if (active) {
     delete items[id]
-    const app = appInstances.get(flowId)
-    if (app) {
-      app.unmount()
-      appInstances.delete(flowId)
-    }
   }
 }
 
@@ -77,6 +72,7 @@ export function getTeleport(): any {
 
           // 比对当前界面显示的flowId，只更新items[当前页面flowId:nodeId]的数据
           // 比如items[0]属于Page1的数据，那么Page2无论active=true/false，都无法执行items[0]
+
           if (id.startsWith(props.flowId)) {
             children.push(items[id])
           }
@@ -119,4 +115,16 @@ export function createTeleportContainer(
   app.mount(mountPoint)
 
   appInstances.set(flowId, app)
+}
+/**
+ * 卸载 Teleport 容器组件
+ * @param flowId 需要卸载流程图的唯一标识
+ */
+export function destroyTeleportContainer(flowId: string | undefined): void {
+  if (!isVue3 || !flowId || !active) return
+  const app = appInstances.get(flowId)
+  if (app) {
+    app.unmount()
+    appInstances.delete(flowId)
+  }
 }
