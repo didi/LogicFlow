@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.2
+
+### Patch Changes
+
+- fix: 修复存在子应用时,父子应用缩放后,边连线错位的问题
+
 ## 2.1.1
 
 ### Patch Changes
