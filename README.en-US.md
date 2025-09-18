@@ -130,3 +130,12 @@ To become a contributor, please follow our [contributing guide](/CONTRUBUTING.en
 
 The scripts and documentation in this project are released under the [Apache-2.0 License](/LICENSE).
 
+## Star History
+
+<a href="https://www.star-history.com/#didi/LogicFlow&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
+ </picture>
+</a>
