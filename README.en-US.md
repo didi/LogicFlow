@@ -126,10 +126,6 @@ To become a contributor, please follow our [contributing guide](/CONTRUBUTING.en
 <img src="https://raw.githubusercontent.com/didi/LogicFlow/master/CONTRIBUTORS.svg" alt="Contributors" />
 </a>
 
-## License
-
-The scripts and documentation in this project are released under the [Apache-2.0 License](/LICENSE).
-
 ## Star History
 
 <a href="https://www.star-history.com/#didi/LogicFlow&Date">
@@ -139,3 +135,7 @@ The scripts and documentation in this project are released under the [Apache-2.0
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
  </picture>
 </a>
+
+## License
+
+The scripts and documentation in this project are released under the [Apache-2.0 License](/LICENSE).
