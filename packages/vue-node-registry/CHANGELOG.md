@@ -1,5 +1,11 @@
 # @logicflow/vue-node-registry
 
+## 1.1.3
+
+### Patch Changes
+
+- fix: 修复小地图在vue自定义节点删除一个小地图中全部vue节点消失问题
+
 ## 1.1.2
 
 ### Patch Changes
