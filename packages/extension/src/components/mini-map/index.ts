@@ -198,8 +198,6 @@ export class MiniMap {
     this.bounds = boundsInit
     this.elementAreaBounds = boundsInit
     this.viewPortBounds = boundsInit
-    this.initMiniMap()
-    lf.on('graph:resize', this.onGraphResize)
   }
 
   onGraphResize = () => {
@@ -230,8 +228,10 @@ export class MiniMap {
    */
   public show = (left?: number, top?: number) => {
     if (!this.isShow) {
+      this.initMiniMap()
+      this.lf.on('graph:resize', this.onGraphResize)
       this.createMiniMap(left, top)
-      this.setView()
+      this.setView(true)
     }
     this.isShow = true
   }
@@ -240,6 +240,14 @@ export class MiniMap {
    */
   public hide = () => {
     if (this.isShow) {
+      // 隐藏小地图时摧毁实例
+      destroyTeleportContainer(this.lfMap.graphModel.flowId)
+      this.lf.off('graph:resize', this.onGraphResize)
+      this.lfMap.destroy()
+      // 保证重新创建实例时，小地图中内容偏移正确
+      this.translateX = 0
+      this.translateY = 0
+
       this.removeMiniMap()
       this.lf.emit('miniMap:close', {})
     }
@@ -677,6 +685,7 @@ export class MiniMap {
       },
     })
   }
+
   destroy() {
     destroyTeleportContainer(this.lfMap.graphModel.flowId)
     this.lf.off('graph:resize', this.onGraphResize)
