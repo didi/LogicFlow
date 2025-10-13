@@ -26,6 +26,17 @@ function handleAttributes(o: any) {
   return t
 }
 
+function escapeXml(text: string) {
+  if (text == null) return ''
+  return text
+    .toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 function getAttributes(obj: any) {
   let tmp = obj
   try {
@@ -35,7 +46,8 @@ function getAttributes(obj: any) {
   } catch (error) {
     tmp = JSON.stringify(handleAttributes(obj)).replace(/"/g, "'")
   }
-  return tmp
+  // 确保属性值中的特殊字符被正确转义
+  return escapeXml(String(tmp))
 }
 
 const tn = '\t\n'
@@ -51,7 +63,7 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
 
   let str = ''
   if (name === '#text') {
-    return tn + frontSpace + obj
+    return tn + frontSpace + escapeXml(String(obj))
   } else if (name === '#cdata-section') {
     return tn + frontSpace + '<![CDATA[' + obj + ']]>'
   } else if (name === '#comment') {
@@ -78,7 +90,7 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
         attributes +
         (children !== '' ? `>${children}${tn + frontSpace}</${name}>` : ' />')
     } else {
-      str += tn + frontSpace + `<${name}>${obj.toString()}</${name}>`
+      str += tn + frontSpace + `<${name}>${escapeXml(String(obj))}</${name}>`
     }
   }
 
