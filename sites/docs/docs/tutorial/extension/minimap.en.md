@@ -6,7 +6,6 @@ group:
 title: MiniMap
 order: 4
 toc: content
-tag: Optimization
 ---
 
 <style>
