@@ -15,11 +15,13 @@ export type ProximityConnectProps = {
   distance: number
   reverseDirection: boolean
   virtualEdgeStyle: Record<string, unknown>
+  type: 'node' | 'anchor' | 'default'
 }
 
 export class ProximityConnect {
   static pluginName = 'proximityConnect'
   enable: boolean = true
+  type: 'node' | 'anchor' | 'default' = 'default'
   lf: LogicFlow // lf实例
   closestNode?: BaseNodeModel // 当前距离最近的节点
   currentDistance: number = Infinity // 当前间距
@@ -52,6 +54,7 @@ export class ProximityConnect {
   addEventListeners() {
     // 节点开始拖拽事件
     this.lf.graphModel.eventCenter.on('node:dragstart', ({ data }) => {
+      if (this.type === 'anchor') return
       if (!this.enable) return
       const { graphModel } = this.lf
       const { id } = data
@@ -59,13 +62,14 @@ export class ProximityConnect {
     })
     // 节点拖拽事件
     this.lf.graphModel.eventCenter.on('node:drag', () => {
+      if (this.type === 'anchor') return
       this.handleNodeDrag()
     })
     // 锚点开始拖拽事件
     this.lf.graphModel.eventCenter.on(
       'anchor:dragstart',
       ({ data, nodeModel }) => {
-        if (!this.enable) return
+        if (!this.enable || this.type === 'node') return
         this.currentNode = nodeModel
         this.currentAnchor = data
       },
@@ -74,18 +78,18 @@ export class ProximityConnect {
     this.lf.graphModel.eventCenter.on(
       'anchor:drag',
       ({ e: { clientX, clientY } }) => {
-        if (!this.enable) return
+        if (!this.enable || this.type === 'node') return
         this.handleAnchorDrag(clientX, clientY)
       },
     )
     // 节点、锚点拖拽结束事件
     this.lf.graphModel.eventCenter.on('node:drop', () => {
-      if (!this.enable) return
+      if (!this.enable || this.type === 'anchor') return
       this.handleDrop()
     })
     // 锚点拖拽需要单独判断一下当前拖拽终点是否在某个锚点上，如果是，就不触发插件的连线，以免出现创建了两条连线的问题，表现见 issue 2140
     this.lf.graphModel.eventCenter.on('anchor:dragend', ({ e, edgeModel }) => {
-      if (!this.enable) return
+      if (!this.enable || this.type === 'node') return
       const {
         canvasOverlayPosition: { x: eventX, y: eventY },
       } = this.lf.graphModel.getPointByClient({

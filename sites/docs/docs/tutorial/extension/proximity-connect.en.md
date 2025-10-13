@@ -6,7 +6,6 @@ order: 3
 title: Progressive Connection
 order: 6
 toc: content
-tag: New Plugin
 ---
 
 Progressive Connection is a dynamic interaction method in flowchart tools. Through dynamic interaction and intelligent adsorption, it helps users achieve accurate connection between nodes during the dragging process. It simplifies the operation and improves the efficiency and experience of complex process design.
@@ -55,6 +54,7 @@ proximityConnect: {
 // enable, // Whether the plugin is enabled
 // distance, // Progressive connection threshold
 // reverseDirection, // Connection direction
+// type, // Working mode: 'default' | 'node' | 'anchor'
 }
 },
 });
@@ -70,6 +70,7 @@ Each function in the menu can be represented by a configuration item. The specif
 | distance         | number  | 100                                             |          | Gradual connection threshold                                                                                                                                                                                              |
 | reverseDirection | boolean | false                                           |          | Whether to create a reverse connection<br/>The default connection direction is that the currently dragged node points to the nearest node<br/>When set to true, the nearest node will point to the currently dragged node |
 | virtualEdgeStyle | object  | { strokeDasharray: '10,10', stroke: '#acacac' } |          | Virtual line style                                                                                                                                                                                                        |
+| type             | string  | 'default'                                       |          | Plugin working mode: `'default'`, `'node'`, or `'anchor'`. `default` supports both node drag and anchor drag; `node` works only during node dragging; `anchor` works only during anchor dragging.                         |
 
 ## API
 ### setThresholdDistance(distance)
@@ -96,3 +97,8 @@ Set the virtual edge style
 ```ts
 setVirtualEdgeStyle = (style: 'Record<string, unknown>'): void => {}
 ```
+
+## Notes
+
+- Deduplication: If a real edge with the same configuration (same source/target nodes and anchors, same direction) already exists on the canvas, the plugin will not create another virtual edge.
+- Anchor drag end special case: When anchor dragging ends, if the release position falls within a node’s anchor area, the plugin will not trigger progressive connection creation to avoid duplicate connections with built-in anchor linking (see issue 2140).
