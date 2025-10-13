@@ -76,6 +76,20 @@ export default function SnapshotExample() {
   const [quality, setQuality] = useState<number>() // 图片质量
   const [partial, setPartial] = useState<boolean>(false) // 导出局部渲染
 
+  // 快照插件样式控制
+  const [useGlobalRules, setUseGlobalRules] = useState<boolean>(true) // 是否注入全局样式
+  const [customCssRules, setCustomCssRules] = useState<string>(`
+          .uml-wrapper {
+            line-height: 1.2;
+            text-align: center;
+            color: blue;
+          }
+        `) // 自定义样式规则，将叠加到导出图片中
+
+  // 画布尺寸安全参数
+  const [safetyFactor, setSafetyFactor] = useState<number>(1.1) // 画布导出安全系数
+  const [safetyMargin, setSafetyMargin] = useState<number>(40) // 画布导出安全边距
+
   const [blobData, setBlobData] = useState('')
   const [base64Data, setBase64Data] = useState('')
 
@@ -118,16 +132,12 @@ export default function SnapshotExample() {
         })
       })
 
-      // 默认开启css样式
-      lf.extension.snapshot.useGlobalRules = true
-      // 不会覆盖css样式，会叠加，customCssRules优先级高
-      lf.extension.snapshot.customCssRules = `
-          .uml-wrapper {
-            line-height: 1.2;
-            text-align: center;
-            color: blue;
-          }
-        `
+      // 设置快照插件样式参数（通过类型断言访问扩展实例属性）
+      const snapshotExt = lf.extension?.snapshot as unknown as Snapshot
+      if (snapshotExt) {
+        snapshotExt.useGlobalRules = useGlobalRules
+        snapshotExt.customCssRules = customCssRules
+      }
 
       lf.render(data)
       lf.translateCenter()
@@ -146,8 +156,17 @@ export default function SnapshotExample() {
       height,
       padding,
       quality,
+      safetyFactor,
+      safetyMargin,
     }
     console.log(params, 'params')
+    // 在导出前更新快照扩展的样式控制参数
+    const snapshotExt = lfRef.current?.extension
+      ?.snapshot as unknown as Snapshot
+    if (snapshotExt) {
+      snapshotExt.useGlobalRules = useGlobalRules
+      snapshotExt.customCssRules = customCssRules
+    }
     await lfRef.current?.getSnapshot(fileName, params)
     // await lfRef.current?.extension.snapshot?.getSnapshot(fileName, params)
     // 测试
@@ -172,6 +191,15 @@ export default function SnapshotExample() {
         height,
         padding,
         quality,
+        safetyFactor,
+        safetyMargin,
+      }
+      // 在预览前更新快照扩展的样式控制参数
+      const snapshotExt = lfRef.current.extension
+        ?.snapshot as unknown as Snapshot
+      if (snapshotExt) {
+        snapshotExt.useGlobalRules = useGlobalRules
+        snapshotExt.customCssRules = customCssRules
       }
       lfRef.current
         .getSnapshotBlob(backgroundColor, fileType, params)
@@ -204,6 +232,15 @@ export default function SnapshotExample() {
         height,
         padding,
         quality,
+        safetyFactor,
+        safetyMargin,
+      }
+      // 在预览前更新快照扩展的样式控制参数
+      const snapshotExt = lfRef.current.extension
+        ?.snapshot as unknown as Snapshot
+      if (snapshotExt) {
+        snapshotExt.useGlobalRules = useGlobalRules
+        snapshotExt.customCssRules = customCssRules
       }
       const result = await lfRef.current.getSnapshotBase64(
         'white',
@@ -287,6 +324,16 @@ export default function SnapshotExample() {
           value={height}
           onChange={(value) => handleInputChange(value, 'height')}
         />
+        <InputNumber
+          addonBefore="安全系数："
+          value={safetyFactor}
+          onChange={(value) => setSafetyFactor(value ?? 1.1)}
+        />
+        <InputNumber
+          addonBefore="安全边距："
+          value={safetyMargin}
+          onChange={(value) => setSafetyMargin(value ?? 40)}
+        />
       </Space>
       <p></p>
       <Space>
@@ -307,6 +354,20 @@ export default function SnapshotExample() {
         />
         <span>导出局部渲染：</span>
         <Switch onChange={(partial) => setPartial(partial)} />
+        <span>注入全局样式：</span>
+        <Switch
+          checked={useGlobalRules}
+          onChange={(checked) => setUseGlobalRules(checked)}
+        />
+      </Space>
+      <p></p>
+      <Space style={{ width: '100%' }} direction="vertical">
+        <Input.TextArea
+          rows={4}
+          placeholder="自定义导出样式，支持标准CSS语法"
+          value={customCssRules}
+          onChange={(e) => setCustomCssRules(e.target.value)}
+        />
       </Space>
       <Divider />
       <Space>

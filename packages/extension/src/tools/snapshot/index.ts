@@ -35,6 +35,14 @@ export type ToImageOptions = {
    * - `true`：只导出画面区域内的可见元素
    */
   partial?: boolean
+  /**
+   * 导出图片时的安全系数，用于确保导出的图片能够容纳所有元素，默认值为 1.1
+   */
+  safetyFactor?: number
+  /**
+   * 导出图片时的安全边距，用于确保导出的图片能够容纳所有元素，默认值为 40
+   */
+  safetyMargin?: number
 }
 
 // Blob | base64
@@ -381,7 +389,7 @@ export class Snapshot {
     // 计算实际宽高，考虑缩放因素
     // 在宽画布情况下，getBoundingClientRect可能无法获取到所有元素的边界
     // 因此我们添加一个安全系数来确保能够容纳所有元素
-    const safetyFactor = 1.1 // 安全系数，增加20%的空间
+    const safetyFactor = toImageOptions.safetyFactor || 1.1 // 安全系数，增加10%的空间
     const actualWidth = (bbox.width / SCALE_X) * safetyFactor
     const actualHeight = (bbox.height / SCALE_Y) * safetyFactor
 
@@ -394,7 +402,7 @@ export class Snapshot {
 
     // 宽高值 默认加padding 40，保证图形不会紧贴着下载图片
     // 为宽画布添加额外的安全边距，确保不会裁剪
-    const safetyMargin = 40 // 额外的安全边距
+    const safetyMargin = toImageOptions.safetyMargin || 40 // 额外的安全边距
 
     // 获取当前浏览器类型，不同浏览器对canvas的限制不同
     const { maxCanvasDimension, otherMaxCanvasDimension } =
