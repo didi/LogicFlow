@@ -6,7 +6,6 @@ group:
 title: SelectionSelect
 order: 5
 toc: content
-tag: Optimization
 ---
 
 <style>

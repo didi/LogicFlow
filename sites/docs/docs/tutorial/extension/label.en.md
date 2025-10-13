@@ -6,7 +6,6 @@ group:
 title: Label
 order: 7
 toc: content
-tag: New
 ---
 
 LogicFlow provides built-in node text and text editing capabilities, but sometimes we need richer text content, such as multi-line text or rich text. In such cases, you can use the `Label` plugin.
@@ -44,12 +43,12 @@ const lf = new LogicFlow({
 
 Each feature in the menu can be represented by a single configuration. The specific fields are as follows:
 
-| Field               | Type                                                      | Default Value | Required | Description                                      |
-|---------------------|-----------------------------------------------------------|---------------|----------|--------------------------------------------------|
-| isMultiple          | boolean                                                   | `true`        |          | Whether a node or edge can have multiple Labels. |
-| maxCount            | number                                                    | `Infinity`    |          | When multiple Labels are allowed, the maximum number of Labels. |
-| labelWidth          | number                                                    | -             |          | The width of each Label, can be uniformly set and used with textOverflowMode. |
-| textOverflowMode    | 'ellipsis' \| 'wrap' \| 'clip' \| 'nowrap' \| 'default' | `default`     |          | Text overflow display mode, consistent with CSS configuration. |
+| Field            | Type                                                    | Default Value | Required | Description                                                                   |
+| ---------------- | ------------------------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------- |
+| isMultiple       | boolean                                                 | `true`        |          | Whether a node or edge can have multiple Labels.                              |
+| maxCount         | number                                                  | `Infinity`    |          | When multiple Labels are allowed, the maximum number of Labels.               |
+| labelWidth       | number                                                  | -             |          | The width of each Label, can be uniformly set and used with textOverflowMode. |
+| textOverflowMode | 'ellipsis' \| 'wrap' \| 'clip' \| 'nowrap' \| 'default' | `default`     |          | Text overflow display mode, consistent with CSS configuration.                |
 
 ### Element-Level
 

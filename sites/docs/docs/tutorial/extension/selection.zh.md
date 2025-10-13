@@ -6,7 +6,6 @@ group:
 title: 框选 (SelectionSelect)
 order: 5
 toc: content
-tag: 优化
 ---
 
 <style>

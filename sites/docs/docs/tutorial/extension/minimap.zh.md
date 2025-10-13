@@ -6,7 +6,6 @@ group:
 title: 小地图 (MiniMap)
 order: 4
 toc: content
-tag: 优化
 ---
 
 <style>

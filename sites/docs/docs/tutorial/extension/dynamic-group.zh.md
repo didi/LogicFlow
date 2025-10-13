@@ -6,7 +6,6 @@ group:
 title: 动态分组 (DynamicGroup)
 order: 8
 toc: content
-tag: 新插件
 ---
 
 LogicFlow 支持动态分组。动态分组是 LogicFlow 内置的自定义节点, 是 Group 分组的升级版本（因为我们内置了 Node Resize 功能，且 Group 分组的功能命名不够规范，所以我们推出了升级版的 DynamicGroup 节点）。我们会持续在该插件中做能力增强，欢迎大家一起参与共建。

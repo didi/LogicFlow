@@ -6,7 +6,6 @@ group:
 title: 富文本标签 (Label)
 order: 7
 toc: content
-tag: 新插件
 ---
 
 LogicFlow
