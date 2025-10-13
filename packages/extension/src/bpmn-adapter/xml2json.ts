@@ -283,11 +283,14 @@ XML.ObjTree.prototype.scalar_to_xml = function (name, text) {
 //  method: xml_escape( text )
 
 XML.ObjTree.prototype.xml_escape = function (text) {
+  if (text == null) return ''
   return text
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
+    .toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 }
 
 /*
