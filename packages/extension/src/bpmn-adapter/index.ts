@@ -127,6 +127,14 @@ const defaultRetainedFields = [
   'pointsList',
 ]
 
+const unescapeXml = (text: string) =>
+  String(text || '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+
 /**
  * 将普通 JSON 转换为 XML 风格 JSON（xmlJson）
  * 输入：任意 JSON 对象；可选的保留属性字段 retainedFields
@@ -372,7 +380,6 @@ function convertLf2DiagramData(bpmnDiagramData, data) {
  * - bpmnData：包含 'bpmn:definitions' 的 BPMN JSON
  * 输出：{ nodes, edges }：LogicFlow 的 GraphConfigData
  * 特殊处理：
- * - 兼容 xml2json 输出的数组结构（当 definitions 下存在多个 process/diagram/plane 时取第一个）；
  * - 若缺失 process 或 plane，返回空数据以避免渲染错误。
  */
 function convertBpmn2LfData(bpmnData) {
@@ -380,14 +387,10 @@ function convertBpmn2LfData(bpmnData) {
   let edges: EdgeConfig[] = []
   const definitions = bpmnData['bpmn:definitions']
   if (definitions) {
-    // xml2json 在遇到同名子节点（如多个 process/diagram/plane）时会返回数组，
-    // 这里统一取第一个以满足单图渲染场景；如需多图/多流程支持，可在此扩展为遍历与合并。
-    const processRaw = definitions['bpmn:process']
-    const process = Array.isArray(processRaw) ? processRaw[0] : processRaw
-    const diagramRaw = definitions['bpmndi:BPMNDiagram']
-    const diagram = Array.isArray(diagramRaw) ? diagramRaw[0] : diagramRaw
-    const planeRaw = diagram?.['bpmndi:BPMNPlane']
-    const plane = Array.isArray(planeRaw) ? planeRaw[0] : planeRaw
+    // 如后续需多图/多流程支持，再扩展为遍历与合并，现在看起来是没有这个场景
+    const process = definitions['bpmn:process']
+    const diagram = definitions['bpmndi:BPMNDiagram']
+    const plane = diagram?.['bpmndi:BPMNPlane']
     if (!process || !plane) {
       return { nodes, edges }
     }
@@ -467,13 +470,6 @@ function getNodeConfig(shapeValue, type, processValue) {
   let x = Number(shapeValue['dc:Bounds']['-x'])
   let y = Number(shapeValue['dc:Bounds']['-y'])
   // 反转义 XML 实体，确保导入后文本包含特殊字符时能被完整还原
-  const unescapeXml = (text: string) =>
-    String(text || '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&apos;/g, "'")
   const name = unescapeXml(processValue['-name'])
   const shapeConfig = BpmnAdapter.shapeConfigMap.get(type)
   if (shapeConfig) {
@@ -570,13 +566,6 @@ function getLfEdges(value, bpmnEdges) {
 function getEdgeConfig(edgeValue, processValue): EdgeConfig {
   let text
   // 反转义 XML 实体，确保导入后文本包含特殊字符时能被完整还原
-  const unescapeXml = (text: string) =>
-    String(text || '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&apos;/g, "'")
   const textVal = processValue['-name']
     ? unescapeXml(`${processValue['-name']}`)
     : ''
