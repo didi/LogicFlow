@@ -15,6 +15,12 @@ export type ProximityConnectProps = {
   distance: number
   reverseDirection: boolean
   virtualEdgeStyle: Record<string, unknown>
+  /**
+   * proximityConnect 类型:
+   * - 'node': 节点-节点连接
+   * - 'anchor': 锚点-锚点连接
+   * - 'default': 节点-锚点连接
+   */
   type: 'node' | 'anchor' | 'default'
 }
 
