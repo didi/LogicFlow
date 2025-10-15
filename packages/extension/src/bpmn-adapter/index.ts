@@ -127,6 +127,13 @@ const defaultRetainedFields = [
   'pointsList',
 ]
 
+/**
+ * XML 实体反转义：
+ * - 将常见的 XML 实体还原为字符：`&lt;`→`<`、`&gt;`→`>`、`&amp;`→`&`、`&quot;`→`"`、`&apos;`→`'`；保障流程图能正常回填
+ * - 使用 `String(text || '')` 规范化输入，避免 `null/undefined` 导致错误；
+ * - 注意：此实现为单次替换，若存在嵌套/二次编码（例如 `&amp;lt;`），会先还原为 `&lt;`，
+ *   如需完全解码，可在外层循环调用或调整替换顺序策略。
+ */
 const unescapeXml = (text: string) =>
   String(text || '')
     .replace(/&lt;/g, '<')
