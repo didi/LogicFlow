@@ -3,6 +3,7 @@
 // ========================================================================
 //  XML.ObjTree -- XML source code from/to JavaScript object like E4X
 // ========================================================================
+import { escapeXml } from './json2xml'
 
 let XML = function () {}
 
@@ -282,16 +283,7 @@ XML.ObjTree.prototype.scalar_to_xml = function (name, text) {
 
 //  method: xml_escape( text )
 
-XML.ObjTree.prototype.xml_escape = function (text) {
-  if (text == null) return ''
-  return text
-    .toString()
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
+XML.ObjTree.prototype.xml_escape = escapeXml
 
 /*
 // ========================================================================
