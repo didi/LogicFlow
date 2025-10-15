@@ -124,14 +124,23 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     const { refY = 0, refX = 2 } = model.getArrowStyle()
     const [start, end] = this.getLastTwoPoints()
     let theta: string | number = 'auto'
-    if (start !== null && end !== null) {
-      theta = degrees(
-        getThetaOfVector({
-          x: end.x - start.x,
-          y: end.y - start.y,
-          z: 0,
-        }),
-      )
+    // 防止无效点和零长度向量以避免 NaN 方向
+    if (start && end) {
+      const dx = end.x - start.x
+      const dy = end.y - start.y
+      // 仅在有实际方向时才计算
+      if (dx !== 0 || dy !== 0) {
+        const computed = degrees(
+          getThetaOfVector({
+            x: dx,
+            y: dy,
+            z: 0,
+          }),
+        )
+        if (Number.isFinite(computed) && !Number.isNaN(computed)) {
+          theta = computed
+        }
+      }
     }
     return (
       <g>
