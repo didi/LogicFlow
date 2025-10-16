@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.1.3
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - fix: 修复用户自定义折线路径场景下,终点没在具体锚点上导致的NaN报错的问题 #2121
+
 ## 2.1.2
 
 ### Patch Changes

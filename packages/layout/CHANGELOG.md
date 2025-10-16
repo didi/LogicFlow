@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.0.3
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - fix: 修复自动布局文本位置不跟新bug #2282
+- Updated dependencies
+  - @logicflow/core@2.1.3
+
 ## 2.0.2
 
 ### Patch Changes
