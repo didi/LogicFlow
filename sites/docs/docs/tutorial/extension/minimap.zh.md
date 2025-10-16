@@ -6,7 +6,6 @@ group:
 title: 小地图 (MiniMap)
 order: 4
 toc: content
-tag: 优化
 ---
 
 <style>
@@ -66,18 +65,18 @@ const lf = new LogicFlow({
 
 `miniMapOptions` 配置如下：
 
-| 属性名  | 类型 | 默认值 | 必填 | 描述   |
-| --------- | -------- | -------------------------- | -------- | -------------------------------------------------------------- |
-| width           | number  | 150   | - | 小地图中画布的宽度                                   |
-| height          | number  | 220   | - | 小地图中画布的高度                                   |
-| showEdge        | boolean | false | - | 在小地图的画布中是否渲染边                            |
-| headerTitle     | string  | 导航   |  - | 小地图标题栏的文本内容，默认不显示                    |
-| isShowHeader    | boolean | false | - | 是否显示小地图的标题栏                               |
-| isShowCloseIcon | boolean | false | - | 是否显示关闭按钮                                    |
-| leftPosition    | number  | -     | - | 小地图与画布左边界的左边距，优先级高于`rightPosition`   |
-| rightPosition   | number  | 0     | - | 小地图与画布右边界的右边距，优先级低于`leftPosition`    |
-| topPosition     | number  | -     | - | 小地图与画布上边界的上边距，优先级高于`bottomPosition`  |
-| bottomPosition  | number  | 0     | - | 小地图与画布下边界的下边距，优先级低于`topPosition`     |
+| 属性名          | 类型    | 默认值 | 必填 | 描述                                                   |
+| --------------- | ------- | ------ | ---- | ------------------------------------------------------ |
+| width           | number  | 150    | -    | 小地图中画布的宽度                                     |
+| height          | number  | 220    | -    | 小地图中画布的高度                                     |
+| showEdge        | boolean | false  | -    | 在小地图的画布中是否渲染边                             |
+| headerTitle     | string  | 导航   | -    | 小地图标题栏的文本内容，默认不显示                     |
+| isShowHeader    | boolean | false  | -    | 是否显示小地图的标题栏                                 |
+| isShowCloseIcon | boolean | false  | -    | 是否显示关闭按钮                                       |
+| leftPosition    | number  | -      | -    | 小地图与画布左边界的左边距，优先级高于`rightPosition`  |
+| rightPosition   | number  | 0      | -    | 小地图与画布右边界的右边距，优先级低于`leftPosition`   |
+| topPosition     | number  | -      | -    | 小地图与画布上边界的上边距，优先级高于`bottomPosition` |
+| bottomPosition  | number  | 0      | -    | 小地图与画布下边界的下边距，优先级低于`topPosition`    |
 
 ## API
 
@@ -100,7 +99,9 @@ lf.extension.miniMap.show(left?: number, top?: number): void
 - `lf-mini-map-graph` - mini-map 画布元素
 - `lf-mini-map-close` - mini-map 关闭图标元素
 
-> `MiniMap.show()`必须在`lf.render()`后调用。
+:::warning
+`MiniMap.show()`必须在`lf.render()`后调用。否则控制台会一直有警告
+:::
 
 ### hide
 
@@ -174,6 +175,6 @@ lf.extension.miniMap.setShowEdge(showEdge: boolean): void
 
 mini-map 事件。
 
-| 事件名  | 说明 | 事件对象 |
-| --------- | -------- | --------------------------- |
-| miniMap:close | 小地图隐藏 | {} |
+| 事件名        | 说明       | 事件对象 |
+| ------------- | ---------- | -------- |
+| miniMap:close | 小地图隐藏 | {}       |

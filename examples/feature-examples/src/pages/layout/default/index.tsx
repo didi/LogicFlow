@@ -31,9 +31,6 @@ const config: Partial<LogicFlow.Options> = {
   stopScrollGraph: false,
   stopZoomGraph: false,
   stopMoveGraph: true,
-  textEdit: false,
-  nodeTextEdit: false,
-  edgeTextEdit: false,
   keyboard: {
     enabled: true,
   },

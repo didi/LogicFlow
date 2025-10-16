@@ -153,6 +153,9 @@ export class Dagre {
         delete lfEdge.pointsList
         delete lfEdge.startPoint
         delete lfEdge.endPoint
+        if (lfEdge.text && lfEdge.text.value) {
+          lfEdge.text = lfEdge.text.value
+        }
       } else {
         // 默认锚点，重新计算路径以及边的起点和终点（节点默认锚点为上下左右）
         delete lfEdge.pointsList
@@ -173,17 +176,9 @@ export class Dagre {
           const last = lfEdge.pointsList[lfEdge.pointsList.length - 1]
           lfEdge.startPoint = { x: first.x, y: first.y }
           lfEdge.endPoint = { x: last.x, y: last.y }
-
-          // 调整边标签位置
-          if (lfEdge.text && lfEdge.text.value) {
-            lfEdge.text = {
-              x: last.x - this.getBytesLength(lfEdge.text.value) * 6 - 10,
-              y: last.y,
-              value: lfEdge.text.value,
-            }
-          }
-        } else if (lfEdge.text && lfEdge.text.value) {
-          // 没有自定义路径时保留文本内容
+        }
+        if (lfEdge.text && lfEdge.text.value) {
+          // 保留文本内容
           lfEdge.text = lfEdge.text.value
         }
       }

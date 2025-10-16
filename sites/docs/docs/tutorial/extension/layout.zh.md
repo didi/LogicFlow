@@ -6,7 +6,6 @@ group:
 title: 自动布局 (Layout)
 order: 7
 toc: content
-tag: 增强
 ---
 
 在复杂的流程图中，手动排列节点和边缘可能既耗时又难以保持整洁。LogicFlow 提供了自动布局插件，能够自动计算节点位置和边的路径，使图表呈现出结构化且美观的效果。
@@ -95,18 +94,18 @@ lf.extension.dagre.layout({
 
 通过配置不同的选项，您可以自定义布局的外观和行为。以下是支持的选项：
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|-------|-----|-------|------|
-| rankdir | string | 'LR' | 布局方向，'LR'(左到右), 'TB'(上到下), 'BT'(下到上), 'RL'(右到左) |
-| align | string | 'UL' | 节点对齐方式，'UL'(上左), 'UR'(上右), 'DL'(下左), 'DR'(下右) |
-| nodesep | number | 100 | 节点间的水平间距(像素) |
-| ranksep | number | 150 | 层级间的垂直间距(像素) |
-| marginx | number | 120 | 图的水平边距(像素) |
-| marginy | number | 120 | 图的垂直边距(像素) |
-| ranker | string | 'tight-tree' | 排名算法，'network-simplex', 'tight-tree', 'longest-path' |
-| edgesep | number | 10 | 边之间的水平间距(像素) |
-| acyclicer | string | undefined | 如果设置为'greedy'，使用贪心算法查找反馈弧集，用于使图变为无环图 |
-| isDefaultAnchor | boolean | false | 是否使用默认锚点：true表示会自动调整连线锚点，根据布局方向计算边的路径 |
+| 参数名          | 类型    | 默认值       | 说明                                                                   |
+| --------------- | ------- | ------------ | ---------------------------------------------------------------------- |
+| rankdir         | string  | 'LR'         | 布局方向，'LR'(左到右), 'TB'(上到下), 'BT'(下到上), 'RL'(右到左)       |
+| align           | string  | 'UL'         | 节点对齐方式，'UL'(上左), 'UR'(上右), 'DL'(下左), 'DR'(下右)           |
+| nodesep         | number  | 100          | 节点间的水平间距(像素)                                                 |
+| ranksep         | number  | 150          | 层级间的垂直间距(像素)                                                 |
+| marginx         | number  | 120          | 图的水平边距(像素)                                                     |
+| marginy         | number  | 120          | 图的垂直边距(像素)                                                     |
+| ranker          | string  | 'tight-tree' | 排名算法，'network-simplex', 'tight-tree', 'longest-path'              |
+| edgesep         | number  | 10           | 边之间的水平间距(像素)                                                 |
+| acyclicer       | string  | undefined    | 如果设置为'greedy'，使用贪心算法查找反馈弧集，用于使图变为无环图       |
+| isDefaultAnchor | boolean | false        | 是否使用默认锚点：true表示会自动调整连线锚点，根据布局方向计算边的路径 |
 
 ## 高级功能
 

@@ -125,6 +125,16 @@ pnpm run start
 <img src="https://raw.githubusercontent.com/didi/LogicFlow/master/CONTRIBUTORS.svg" alt="Contributors" />
 </a>
 
+## Star History
+
+<a href="https://www.star-history.com/#didi/LogicFlow&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
+ </picture>
+</a>
+
 ## 开源协议
 
 该项目的代码和文档基于 [Apache-2.0 License](/LICENSE) 开源协议。

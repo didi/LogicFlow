@@ -2,6 +2,20 @@ import { getBpmnId } from './bpmnIds'
 import { handleAttributes, lfJson2Xml } from './json2xml'
 import { lfXml2Json } from './xml2json'
 
+/**
+ * 模块说明（BPMN Adapter）
+ *
+ * 该模块负责在 LogicFlow 内部图数据（GraphData）与 BPMN XML/JSON 之间进行双向转换：
+ * - adapterOut：将 LogicFlow 图数据转换为 BPMN JSON（随后由 json2xml 转为 XML）
+ * - adapterIn：将 BPMN JSON 转换为 LogicFlow 图数据（如果是 XML，则先经 xml2json 转为 JSON）
+ *
+ * 设计要点与特殊处理：
+ * - BPMN XML 的属性在 JSON 中以前缀 '-' 表示（如 '-id'、'-name'），本模块严格遵循该约定。
+ * - XML 中同名子节点可能出现多次，xml2json 解析后会以数组表示；本模块对数组与单对象场景均做兼容处理。
+ * - BPMN 画布坐标以元素左上角为基准，而 LogicFlow 以元素中心为基准；转换时需进行坐标基准转换。
+ * - 文本内容在导出时进行 XML 转义，在导入时进行反转义，确保特殊字符（如 <, >, & 等）能被正确保留。
+ */
+
 import {
   ExclusiveGatewayConfig,
   StartEventConfig,
@@ -10,6 +24,12 @@ import {
   UserTaskConfig,
 } from '../bpmn/constant'
 
+/**
+ * LogicFlow 节点配置（导入/导出过程中使用的中间结构）
+ * - id/type/x/y：节点基本信息
+ * - text：节点文本的中心坐标与内容（值为未转义的原始字符串）
+ * - properties：节点的额外属性（会保留到 BPMN 的扩展字段）
+ */
 type NodeConfig = {
   id: string
   properties?: Record<string, unknown>
@@ -23,11 +43,21 @@ type NodeConfig = {
   y: number
 }
 
+/**
+ * 点坐标结构（用于边的路径点）
+ */
 type Point = {
   x: number
   y: number
 }
 
+/**
+ * LogicFlow 边配置（导入/导出过程中使用的中间结构）
+ * - id/type/sourceNodeId/targetNodeId：边的基本信息
+ * - pointsList：边的路径点（用于 BPMN 的 di:waypoint）
+ * - text：边文本的位置与内容（值为未转义的原始字符串）
+ * - properties：边的扩展属性
+ */
 type EdgeConfig = {
   id: string
   sourceNodeId: string
@@ -50,6 +80,9 @@ type EdgeConfig = {
   properties: Record<string, unknown>
 }
 
+/**
+ * BPMN 元素类型映射（用于在 JSON 中定位具体的 BPMN 节点类型）
+ */
 enum BpmnElements {
   START = 'bpmn:startEvent',
   END = 'bpmn:endEvent',
@@ -59,6 +92,11 @@ enum BpmnElements {
   FLOW = 'bpmn:sequenceFlow',
 }
 
+/**
+ * BPMN 过程元素的标准属性键列表
+ * - 在解析 `processValue` 时，这些键会被视为标准属性而非扩展属性；
+ * - 其余未在列表中的键会进入 LogicFlow 的 `properties` 中，以保留扩展数据。
+ */
 const defaultAttrs = [
   '-name',
   '-id',
@@ -78,6 +116,10 @@ const defaultAttrs = [
  * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性
  * @reference node type reference https://www.w3schools.com/xml/dom_nodetype.asp
  */
+/**
+ * 导出至 BPMN JSON 时，作为属性保留的字段列表
+ * - 当这些字段的值为对象或数组时，仍视为属性（在 JSON 中以 '-' 前缀表示），而非子节点。
+ */
 const defaultRetainedFields = [
   'properties',
   'startPoint',
@@ -85,11 +127,39 @@ const defaultRetainedFields = [
   'pointsList',
 ]
 
+/**
+ * XML 实体反转义：
+ * - 将常见的 XML 实体还原为字符：`&lt;`→`<`、`&gt;`→`>`、`&amp;`→`&`、`&quot;`→`"`、`&apos;`→`'`；保障流程图能正常回填
+ * - 使用 `String(text || '')` 规范化输入，避免 `null/undefined` 导致错误；
+ * - 注意：此实现为单次替换，若存在嵌套/二次编码（例如 `&amp;lt;`），会先还原为 `&lt;`，
+ *   如需完全解码，可在外层循环调用或调整替换顺序策略。
+ */
+const unescapeXml = (text: string) =>
+  String(text || '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+
+/**
+ * 将普通 JSON 转换为 XML 风格 JSON（xmlJson）
+ * 输入：任意 JSON 对象；可选的保留属性字段 retainedFields
+ * 输出：遵循 XML 属性前缀约定的 xmlJson（属性键以 '-' 开头）
+ * 规则：
+ * - 原始字符串直接返回；数组逐项转换；对象根据键类型决定是否加 '-' 前缀。
+ * - 保留字段（fields）中出现的键以属性形式（带 '-'）保留，否则视为子节点。
+ */
 function toXmlJson(retainedFields?: string[]) {
   const fields = retainedFields
     ? defaultRetainedFields.concat(retainedFields)
     : defaultRetainedFields
   return (json: string | any[] | Record<string, any>) => {
+    /**
+     * 递归转换核心方法
+     * @param obj 输入对象/数组/字符串
+     * @returns 转换后的 xmlJson
+     */
     function ToXmlJson(obj: string | any[] | Record<string, any>) {
       const xmlJson = {}
       if (typeof obj === 'string') {
@@ -123,7 +193,9 @@ function toXmlJson(retainedFields?: string[]) {
 }
 
 /**
- * 将xmlJson转换为普通的json，在内部使用。
+ * 将 XML 风格 JSON（xmlJson）转换回普通 JSON（内部使用）
+ * 输入：遵循 '-' 属性前缀约定的 xmlJson
+ * 输出：去除前缀并恢复原有结构的普通 JSON
  */
 function toNormalJson(xmlJson) {
   const json = {}
@@ -151,6 +223,18 @@ function toNormalJson(xmlJson) {
  * 1) 如果是xml的属性，json中属性用'-'开头
  * 2）如果只有一个子元素，json中表示为正常属性
  * 3）如果是多个子元素，json中使用数组存储
+ */
+/**
+ * 将 LogicFlow 图数据中的节点与边转换为 BPMN 的 process 数据结构
+ * 输入：
+ * - bpmnProcessData：输出目标对象（会被填充 '-id'、各 bpmn:* 节点以及 sequenceFlow）
+ * - data：LogicFlow 图数据（nodes/edges）
+ * - retainedFields：可选保留属性字段，用于控制属性与子节点的映射
+ * 输出：直接修改 bpmnProcessData
+ * 特殊处理：
+ * - 节点文本（node.text.value）作为 BPMN 的 '-name' 属性；
+ * - 维护 incoming/outgoing 的顺序，保证解析兼容性；
+ * - 多子元素时转为数组结构（XML 约定）。
  */
 function convertLf2ProcessData(
   bpmnProcessData,
@@ -223,6 +307,16 @@ function convertLf2ProcessData(
 /**
  * adapterOut 设置bpmn diagram信息
  */
+/**
+ * 将 LogicFlow 图数据转换为 BPMN 的图形数据（BPMNDiagram/BPMNPlane 下的 Shape 与 Edge）
+ * 输入：
+ * - bpmnDiagramData：输出目标对象（填充 BPMNShape/BPMNEdge）
+ * - data：LogicFlow 图数据（nodes/edges）
+ * 输出：直接修改 bpmnDiagramData
+ * 特殊处理：
+ * - 节点坐标从中心点转换为左上角基准；
+ * - 文本的显示边界（Bounds）根据文本长度近似计算，用于在 BPMN 渲染器正确定位标签。
+ */
 function convertLf2DiagramData(bpmnDiagramData, data) {
   bpmnDiagramData['bpmndi:BPMNEdge'] = data.edges.map((edge) => {
     const edgeId = edge.id
@@ -287,26 +381,36 @@ function convertLf2DiagramData(bpmnDiagramData, data) {
 /**
  * 将bpmn数据转换为LogicFlow内部能识别数据
  */
+/**
+ * 将 BPMN JSON 转换为 LogicFlow 可识别的图数据
+ * 输入：
+ * - bpmnData：包含 'bpmn:definitions' 的 BPMN JSON
+ * 输出：{ nodes, edges }：LogicFlow 的 GraphConfigData
+ * 特殊处理：
+ * - 若缺失 process 或 plane，返回空数据以避免渲染错误。
+ */
 function convertBpmn2LfData(bpmnData) {
   let nodes: NodeConfig[] = []
   let edges: EdgeConfig[] = []
   const definitions = bpmnData['bpmn:definitions']
   if (definitions) {
+    // 如后续需多图/多流程支持，再扩展为遍历与合并，现在看起来是没有这个场景
     const process = definitions['bpmn:process']
+    const diagram = definitions['bpmndi:BPMNDiagram']
+    const plane = diagram?.['bpmndi:BPMNPlane']
+    if (!process || !plane) {
+      return { nodes, edges }
+    }
     Object.keys(process).forEach((key) => {
       if (key.indexOf('bpmn:') === 0) {
         const value = process[key]
         if (key === BpmnElements.FLOW) {
-          const bpmnEdges =
-            definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
-              'bpmndi:BPMNEdge'
-            ]
+          const edgesRaw = plane['bpmndi:BPMNEdge']
+          const bpmnEdges = Array.isArray(edgesRaw) ? edgesRaw : edgesRaw
           edges = getLfEdges(value, bpmnEdges)
         } else {
-          const shapes =
-            definitions['bpmndi:BPMNDiagram']['bpmndi:BPMNPlane'][
-              'bpmndi:BPMNShape'
-            ]
+          const shapesRaw = plane['bpmndi:BPMNShape']
+          const shapes = Array.isArray(shapesRaw) ? shapesRaw : shapesRaw
           nodes = nodes.concat(getLfNodes(value, shapes, key))
         }
       }
@@ -318,6 +422,14 @@ function convertBpmn2LfData(bpmnData) {
   }
 }
 
+/**
+ * 根据 BPMN 的 process 子节点与 plane 中的 BPMNShape 生成 LogicFlow 节点数组
+ * 输入：
+ * - value：当前类型（如 bpmn:userTask）的值，可能为对象或数组
+ * - shapes：plane['bpmndi:BPMNShape']，可能为对象或数组
+ * - key：当前处理的 BPMN 类型键名（如 'bpmn:userTask'）
+ * 输出：LogicFlow 节点数组
+ */
 function getLfNodes(value, shapes, key) {
   const nodes: NodeConfig[] = []
   if (Array.isArray(value)) {
@@ -349,10 +461,23 @@ function getLfNodes(value, shapes, key) {
   return nodes
 }
 
+/**
+ * 将单个 BPMNShape 与其对应的 process 节点合成为 LogicFlow 节点配置
+ * 输入：
+ * - shapeValue：plane 中的 BPMNShape（包含 Bounds 与可选 BPMNLabel）
+ * - type：BPMN 节点类型键（如 'bpmn:userTask'）
+ * - processValue：process 中对应的节点对象（包含 '-id'、'-name' 等）
+ * 输出：LogicFlow NodeConfig
+ * 特殊处理：
+ * - 坐标从左上角转为中心点；
+ * - 文本从 '-name' 读取并进行 XML 实体反转义；
+ * - 文本位置优先使用 BPMNLabel 的 Bounds。
+ */
 function getNodeConfig(shapeValue, type, processValue) {
   let x = Number(shapeValue['dc:Bounds']['-x'])
   let y = Number(shapeValue['dc:Bounds']['-y'])
-  const name = processValue['-name']
+  // 反转义 XML 实体，确保导入后文本包含特殊字符时能被完整还原
+  const name = unescapeXml(processValue['-name'])
   const shapeConfig = BpmnAdapter.shapeConfigMap.get(type)
   if (shapeConfig) {
     x += shapeConfig.width / 2
@@ -399,6 +524,13 @@ function getNodeConfig(shapeValue, type, processValue) {
   return nodeConfig
 }
 
+/**
+ * 根据 BPMN 的 sequenceFlow 与 BPMNEdge 生成 LogicFlow 边数组
+ * 输入：
+ * - value：process['bpmn:sequenceFlow']，对象或数组
+ * - bpmnEdges：plane['bpmndi:BPMNEdge']，对象或数组
+ * 输出：LogicFlow 边数组
+ */
 function getLfEdges(value, bpmnEdges) {
   const edges: EdgeConfig[] = []
   if (Array.isArray(value)) {
@@ -427,11 +559,31 @@ function getLfEdges(value, bpmnEdges) {
   return edges
 }
 
+/**
+ * 将单个 BPMNEdge 与其对应的 sequenceFlow 合成为 LogicFlow 边配置
+ * 输入：
+ * - edgeValue：BPMNEdge（包含 di:waypoint 以及可选 BPMNLabel/Bounds）
+ * - processValue：sequenceFlow（包含 '-id'、'-sourceRef'、'-targetRef'、'-name' 等）
+ * 输出：LogicFlow EdgeConfig
+ * 特殊处理：
+ * - 文本从 '-name' 读取并进行 XML 实体反转义；
+ * - 若缺失 BPMNLabel，则以边的几何中心近似作为文本位置；
+ * - pointsList 由 waypoints 转换得到，数值类型统一为 Number。
+ */
 function getEdgeConfig(edgeValue, processValue): EdgeConfig {
   let text
-  const textVal = processValue['-name'] ? `${processValue['-name']}` : ''
+  // 反转义 XML 实体，确保导入后文本包含特殊字符时能被完整还原
+  const textVal = processValue['-name']
+    ? unescapeXml(`${processValue['-name']}`)
+    : ''
   if (textVal) {
-    const textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds']
+    let textBounds
+    if (
+      edgeValue['bpmndi:BPMNLabel'] &&
+      edgeValue['bpmndi:BPMNLabel']['dc:Bounds']
+    ) {
+      textBounds = edgeValue['bpmndi:BPMNLabel']['dc:Bounds']
+    }
     // 如果边文本换行，则其偏移量应该是最长一行的位置
     let textLength = 0
     textVal.split('\n').forEach((textSpan) => {
@@ -440,10 +592,26 @@ function getEdgeConfig(edgeValue, processValue): EdgeConfig {
       }
     })
 
-    text = {
-      value: textVal,
-      x: Number(textBounds['-x']) + (textLength * 10) / 2,
-      y: Number(textBounds['-y']) + 7,
+    if (textBounds) {
+      text = {
+        value: textVal,
+        x: Number(textBounds['-x']) + (textLength * 10) / 2,
+        y: Number(textBounds['-y']) + 7,
+      }
+    } else {
+      // 兼容缺少 BPMNLabel 的图：使用边的几何中心作为文本位置
+      const waypoints = edgeValue['di:waypoint'] || []
+      const first = waypoints[0]
+      const last = waypoints[waypoints.length - 1] || first
+      const centerX =
+        (Number(first?.['-x'] || 0) + Number(last?.['-x'] || 0)) / 2
+      const centerY =
+        (Number(first?.['-y'] || 0) + Number(last?.['-y'] || 0)) / 2
+      text = {
+        value: textVal,
+        x: centerX,
+        y: centerY,
+      }
     }
   }
   let properties
@@ -474,6 +642,14 @@ function getEdgeConfig(edgeValue, processValue): EdgeConfig {
   return edge
 }
 
+/**
+ * BpmnAdapter：基础适配器
+ *
+ * 作用：在 LogicFlow 数据与 BPMN JSON 之间进行转换，并注入 adapterIn/adapterOut 钩子。
+ * - processAttributes：导出时 BPMN process 的基础属性（可配置 isExecutable、id 等）。
+ * - definitionAttributes：导出时 BPMN definitions 的基础属性与命名空间声明。
+ * - shapeConfigMap：不同 BPMN 元素类型的默认宽高，用于坐标/Bounds 计算。
+ */
 class BpmnAdapter {
   static pluginName = 'bpmn-adapter'
   static shapeConfigMap = new Map()
@@ -494,6 +670,11 @@ class BpmnAdapter {
     [key: string]: any
   }
 
+  /**
+   * 构造函数
+   * - 注入 LogicFlow 的 adapterIn/adapterOut（处理 JSON 方向的适配）
+   * - 初始化 process 与 definitions 的基础属性
+   */
   constructor({ lf }) {
     lf.adapterIn = (data) => this.adapterIn(data)
     lf.adapterOut = (data, retainedFields?: string[]) =>
@@ -524,6 +705,13 @@ class BpmnAdapter {
    * ["properties", "startPoint", "endPoint", "pointsList"]合并，
    * 这意味着出现在这个数组里的字段当它的值是数组或是对象时不会被视为一个节点而是一个属性。
    */
+  /**
+   * adapterOut：将 LogicFlow 图数据转换为 BPMN JSON
+   * 输入：
+   * - data：LogicFlow GraphData
+   * - retainedFields：扩展属性保留字段
+   * 输出：BPMN JSON（包含 definitions/process/diagram/plane）
+   */
   adapterOut = (data, retainedFields?: string[]) => {
     const bpmnProcessData = { ...this.processAttributes }
     convertLf2ProcessData(bpmnProcessData, data, retainedFields)
@@ -543,6 +731,11 @@ class BpmnAdapter {
     }
     return bpmnData
   }
+  /**
+   * adapterIn：将 BPMN JSON 转换为 LogicFlow 图数据
+   * 输入：bpmnData：BPMN JSON
+   * 输出：GraphConfigData（nodes/edges）
+   */
   adapterIn = (bpmnData) => {
     if (bpmnData) {
       return convertBpmn2LfData(bpmnData)
@@ -571,9 +764,19 @@ BpmnAdapter.shapeConfigMap.set(BpmnElements.USER, {
   height: UserTaskConfig.height,
 })
 
+/**
+ * BpmnXmlAdapter：XML 适配器（继承 BpmnAdapter）
+ *
+ * 作用：处理 XML 输入/输出的适配，使用 xml2json/json2xml 完成格式转换。
+ * 特殊处理：在 XML 导入前对 name 属性的非法字符进行预处理转义，提升容错。
+ */
 class BpmnXmlAdapter extends BpmnAdapter {
   static pluginName = 'bpmnXmlAdapter'
 
+  /**
+   * 构造函数
+   * - 覆盖 LogicFlow 的 adapterIn/adapterOut，使其面向 XML 输入与输出。
+   */
   constructor(data) {
     super(data)
     const { lf } = data
@@ -581,10 +784,46 @@ class BpmnXmlAdapter extends BpmnAdapter {
     lf.adapterOut = this.adapterXmlOut
   }
 
+  // 预处理：修复属性值中非法的XML字符（仅针对 name 属性）
+  /**
+   * 预处理 XML：仅对 name 属性值进行非法字符转义（<, >, &），避免 DOM 解析失败。
+   * 注意：不影响已合法的实体（如 &amp;），仅在属性值中生效，不修改其它内容。
+   */
+  private sanitizeNameAttributes(xml: string): string {
+    return xml.replace(/name="([^"]*)"/g, (_, val) => {
+      const safe = val
+        .replace(/&(?!#?\w+;)/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      return `name="${safe}"`
+    })
+  }
+
+  /**
+   * adapterXmlIn：将 BPMN XML 转换为 LogicFlow 图数据
+   * 输入：bpmnData：XML 字符串或对象
+   * 步骤：
+   * 1) 若为字符串，先对 name 属性进行预处理转义；
+   * 2) 使用 lfXml2Json 转换为 BPMN JSON；
+   * 3) 调用基础 adapterIn 转换为 GraphData。
+   */
   adapterXmlIn = (bpmnData) => {
-    const json = lfXml2Json(bpmnData)
+    const xmlStr =
+      typeof bpmnData === 'string'
+        ? this.sanitizeNameAttributes(bpmnData)
+        : bpmnData
+    const json = lfXml2Json(xmlStr)
     return this.adapterIn(json)
   }
+  /**
+   * adapterXmlOut：将 LogicFlow 图数据转换为 BPMN XML
+   * 输入：
+   * - data：GraphData
+   * - retainedFields：保留属性字段
+   * 步骤：
+   * 1) 调用基础 adapterOut 生成 BPMN JSON；
+   * 2) 使用 lfJson2Xml 转为合法的 XML 字符串（包含属性与文本的转义）。
+   */
   adapterXmlOut = (data, retainedFields?: string[]) => {
     const outData = this.adapterOut(data, retainedFields)
     return lfJson2Xml(outData)

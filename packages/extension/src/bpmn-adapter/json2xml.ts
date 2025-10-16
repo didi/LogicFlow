@@ -26,6 +26,31 @@ function handleAttributes(o: any) {
   return t
 }
 
+/**
+ * 将普通文本中的一些特殊字符进行转移，保障文本安全地嵌入 XML：
+ * - 空值(`null/undefined`)返回空字符串，避免输出非法字面量；
+ * - 按顺序转义 XML 保留字符：`&`, `<`, `>`, `"`, `'`；
+ *   注意优先转义 `&`，避免后续生成的实体被再次转义。
+ * @param text 原始文本
+ * @returns 已完成 XML 转义的字符串
+ */
+function escapeXml(text: string) {
+  // 空值直接返回空字符串，防止在 XML 中出现 "null"/"undefined"
+  if (text == null) return ''
+  return (
+    text
+      .toString()
+      // & 必须先转义，避免影响后续 < > " ' 的实体
+      .replace(/&/g, '&amp;')
+      // 小于号与大于号，用于标签边界
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      // 双引号与单引号，用于属性值的包裹
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;')
+  )
+}
+
 function getAttributes(obj: any) {
   let tmp = obj
   try {
@@ -35,7 +60,8 @@ function getAttributes(obj: any) {
   } catch (error) {
     tmp = JSON.stringify(handleAttributes(obj)).replace(/"/g, "'")
   }
-  return tmp
+  // 确保属性值中的特殊字符被正确转义
+  return escapeXml(String(tmp))
 }
 
 const tn = '\t\n'
@@ -51,7 +77,7 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
 
   let str = ''
   if (name === '#text') {
-    return tn + frontSpace + obj
+    return tn + frontSpace + escapeXml(String(obj))
   } else if (name === '#cdata-section') {
     return tn + frontSpace + '<![CDATA[' + obj + ']]>'
   } else if (name === '#comment') {
@@ -78,7 +104,7 @@ function toXml(obj: string | any[] | Object, name: string, depth: number) {
         attributes +
         (children !== '' ? `>${children}${tn + frontSpace}</${name}>` : ' />')
     } else {
-      str += tn + frontSpace + `<${name}>${obj.toString()}</${name}>`
+      str += tn + frontSpace + `<${name}>${escapeXml(String(obj))}</${name}>`
     }
   }
 
@@ -98,4 +124,4 @@ function lfJson2Xml(o: Object) {
   return xmlStr
 }
 
-export { lfJson2Xml, handleAttributes }
+export { lfJson2Xml, handleAttributes, escapeXml }

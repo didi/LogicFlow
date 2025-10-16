@@ -1,5 +1,26 @@
 # Change Log
 
+## 2.1.5
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - feat: 修改小地图 lf 实例的创建与销毁时机 #2261
+  - fix: bpmn格式数据兼容特殊字符 #2269
+  - feat: 渐进连线的连线模式支持配置 #2175
+  - feat: 画布导出的安全系数和安全边距支持配置 #2213
+- Updated dependencies
+  - @logicflow/core@2.1.3
+  - @logicflow/vue-node-registry@1.1.4
+
+## 2.1.4
+
+### Patch Changes
+
+- fix: 修复小地图在vue自定义节点删除一个小地图中全部vue节点消失问题
+- Updated dependencies
+  - @logicflow/vue-node-registry@1.1.3
+
 ## 2.1.3
 
 ### Patch Changes

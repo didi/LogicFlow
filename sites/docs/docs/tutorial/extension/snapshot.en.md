@@ -6,7 +6,6 @@ group:
 title: Snapshot
 order:  6
 toc: content
-tag: Optimization
 ---
 
 We often need to export the canvas content as an image. LogicFlow provides an independent plug-in package `Snapshot` to support exporting the canvas as an image.
@@ -53,15 +52,17 @@ In version 2.0, we have comprehensively upgraded the export functionality:
 
 The export method supports the `toImageOptions` parameter with the following configuration options:
 
-| Property Name | Type | Default Value | Description |
-| ------------- | ---- | ------------- | ----------- |
-| fileType | string | png | Export format: `png`, `webp`, `jpeg`, `svg` |
-| width | number | - | Image width (may cause image stretching) |
-| height | number | - | Image height (may cause image stretching) |
-| backgroundColor | string | - | Background color, transparent by default |
-| quality | number | 0.92 | Image quality, only effective for `jpeg` and `webp`, value range 0-1 |
-| padding | number | 40 | Inner margin, in pixels |
-| partial | boolean | false | Whether to export only the visible area |
+| Property Name   | Type    | Default Value | Description                                                                                                             |
+| --------------- | ------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| fileType        | string  | png           | Export format: `png`, `webp`, `jpeg`, `svg`                                                                             |
+| width           | number  | -             | Image width (may cause image stretching)                                                                                |
+| height          | number  | -             | Image height (may cause image stretching)                                                                               |
+| backgroundColor | string  | -             | Background color, transparent by default                                                                                |
+| quality         | number  | 0.92          | Image quality, only effective for `jpeg` and `webp`, value range 0-1                                                    |
+| padding         | number  | 40            | Inner margin, in pixels                                                                                                 |
+| partial         | boolean | false         | Whether to export only the visible area                                                                                 |
+| safetyFactor    | number  | 1.1           | Safety factor: for wide canvas scenarios, enlarges the export bounds proportionally to ensure all elements are included |
+| safetyMargin    | number  | 40            | Safety margin: extra margin for wide canvas scenarios to avoid cropping                                                 |
 
 :::warning{title=Notes}
 - SVG format does not support `width`, `height`, `backgroundColor`, `padding` attributes
@@ -70,6 +71,9 @@ The export method supports the `toImageOptions` parameter with the following con
 - During export, silent mode will be automatically enabled, disabling canvas interaction
 - Automatically converts relative path images in SVG to Base64 encoding <Badge type="warning">2.0.14 New</Badge>
 - When the image exceeds the browser's canvas limit, it will automatically scale the image size to ensure successful export, but it will affect image clarity
+- You can fine-tune wide canvas behavior via `safetyFactor` and `safetyMargin` to avoid element cropping
+- If `partial` is not explicitly provided, it defaults to the current canvas partial rendering state; during export, the rendering mode may be temporarily switched and will be restored afterward
+- Anchors and rotate controls are automatically removed during export to prevent auxiliary elements from appearing in the image
 :::
 
 ### Custom CSS Styles

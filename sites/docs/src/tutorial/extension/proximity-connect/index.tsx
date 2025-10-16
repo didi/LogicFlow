@@ -4,6 +4,7 @@ import { ProximityConnect } from '@logicflow/extension';
 import {
   Space,
   Input,
+  InputNumber,
   Button,
   Card,
   Divider,
@@ -11,6 +12,7 @@ import {
   Col,
   Form,
   Switch,
+  Select,
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
@@ -89,6 +91,9 @@ export default function ProximityConnectExtension() {
   const [distance, setDistance] = useState<number>(100);
   const [reverse, setReverse] = useState<boolean>(false);
   const [enable, setEnable] = useState<boolean>(true);
+  const [mode, setMode] = useState<'node' | 'anchor' | 'default'>('default');
+  const [virtualStroke, setVirtualStroke] = useState<string>('#acacac');
+  const [virtualDash, setVirtualDash] = useState<string>('10,10');
   useEffect(() => {
     if (!lfRef.current) {
       const lf = new LogicFlow({
@@ -104,25 +109,39 @@ export default function ProximityConnectExtension() {
             enable,
             distance,
             reverseDirection: reverse,
+            type: mode,
           },
         },
       });
 
       lf.render(data);
       lfRef.current = lf;
+
+      // 初始化插件的阈值与样式，确保示例与 UI 状态一致
+      const pc = lf.extension.proximityConnect as ProximityConnect;
+      pc.setThresholdDistance(distance);
+      pc.setReverseDirection(reverse);
+      pc.setEnable(enable);
+      pc.type = mode;
+      pc.setVirtualEdgeStyle({
+        stroke: virtualStroke,
+        strokeDasharray: virtualDash,
+      });
     }
   }, []);
 
   return (
     <Card title="LogicFlow Extension - proximity-connect">
       <Row>
-        <Col span={24}>
+        <Col span={8}>
           <Form.Item label="连线阈值：">
-            <Input
+            <InputNumber
               value={distance}
-              style={{ width: '200px' }}
-              onInput={(e) => {
-                setDistance(+e.target.value);
+              style={{ width: '180px' }}
+              min={1}
+              onChange={(val) => {
+                const next = Number(val || 0);
+                setDistance(next);
               }}
             />
             <Button
@@ -139,10 +158,10 @@ export default function ProximityConnectExtension() {
             </Button>
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Form.Item label="连线方向：">
             <Switch
-              value={reverse}
+              checked={reverse}
               checkedChildren="最近节点 → 拖拽节点"
               unCheckedChildren="拖拽节点 → 最近节点"
               onChange={(checked) => {
@@ -156,10 +175,10 @@ export default function ProximityConnectExtension() {
             />
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Form.Item label="启用状态：">
             <Switch
-              value={enable}
+              checked={enable}
               checkedChildren="启用"
               unCheckedChildren="禁用"
               onChange={(checked) => {
@@ -172,6 +191,65 @@ export default function ProximityConnectExtension() {
               }}
             />
           </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={8}>
+          <Form.Item label="模式：">
+            <Select
+              style={{ width: 200 }}
+              value={mode}
+              options={[
+                { value: 'default', label: '混合（节点+锚点）' },
+                { value: 'node', label: '仅节点拖拽' },
+                { value: 'anchor', label: '仅锚点拖拽' },
+              ]}
+              onChange={(val) => {
+                setMode(val);
+                if (lfRef.current) {
+                  (
+                    lfRef.current.extension.proximityConnect as ProximityConnect
+                  ).type = val;
+                }
+              }}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="虚拟边颜色：">
+            <Input
+              style={{ width: 200 }}
+              value={virtualStroke}
+              onChange={(e) => setVirtualStroke(e.target.value)}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="虚线样式：">
+            <Input
+              style={{ width: 200 }}
+              value={virtualDash}
+              onChange={(e) => setVirtualDash(e.target.value)}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Button
+            onClick={() => {
+              if (lfRef.current) {
+                (
+                  lfRef.current.extension.proximityConnect as ProximityConnect
+                ).setVirtualEdgeStyle({
+                  stroke: virtualStroke,
+                  strokeDasharray: virtualDash,
+                });
+              }
+            }}
+          >
+            应用虚拟边样式
+          </Button>
         </Col>
       </Row>
       <Space.Compact style={{ width: '100%' }}></Space.Compact>

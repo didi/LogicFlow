@@ -6,7 +6,6 @@ group:
 title: 导出图片 (Snapshot)
 order: 6
 toc: content
-tag: 优化
 ---
 
 我们常常有需要将画布内容以图片的形式导出来的情况，因此LogicFlow提供了一个独立的插件包 `Snapshot` 以支持用户将画布导出为图片。
@@ -52,15 +51,17 @@ lf.getSnapshot('流程图');
 
 导出方法支持`toImageOptions`参数，提供以下配置项：
 
-| 属性名          | 类型    | 默认值 | 描述                                      |
-| --------------- | ------- | ------ | ----------------------------------------- |
-| fileType        | string  | png    | 导出格式：`png`、`webp`、`jpeg`、`svg`    |
-| width           | number  | -      | 图片宽度（可能导致图形拉伸）              |
-| height          | number  | -      | 图片高度（可能导致图形拉伸）              |
-| backgroundColor | string  | -      | 背景色，默认透明                          |
-| quality         | number  | 0.92   | 图片质量，仅对`jpeg`和`webp`有效，取值0-1 |
-| padding         | number  | 40     | 内边距，单位像素                          |
-| partial         | boolean | false  | 是否只导出可见区域                        |
+| 属性名          | 类型    | 默认值 | 描述                                                                   |
+| --------------- | ------- | ------ | ---------------------------------------------------------------------- |
+| fileType        | string  | png    | 导出格式：`png`、`webp`、`jpeg`、`svg`                                 |
+| width           | number  | -      | 图片宽度（可能导致图形拉伸）                                           |
+| height          | number  | -      | 图片高度（可能导致图形拉伸）                                           |
+| backgroundColor | string  | -      | 背景色，默认透明                                                       |
+| quality         | number  | 0.92   | 图片质量，仅对`jpeg`和`webp`有效，取值0-1                              |
+| padding         | number  | 40     | 内边距，单位像素                                                       |
+| partial         | boolean | false  | 是否只导出可见区域                                                     |
+| safetyFactor    | number  | 1.1    | 安全系数：用于宽画布场景，导出时按比例扩大画布边界，确保所有元素被包含 |
+| safetyMargin    | number  | 40     | 安全边距：用于宽画布场景，导出时额外增加边距，避免被裁剪               |
 
 :::warning{title=注意事项}
 - 导出SVG格式的图片时不支持`width`、`height`、`backgroundColor`、`padding`属性
@@ -69,6 +70,9 @@ lf.getSnapshot('流程图');
 - 导出过程中会自动开启静默模式，禁用画布交互
 - 自动将SVG中的相对路径图片转换为Base64编码<Badge type="warning">2.0.14新增</Badge> 
 - 导出图片超过浏览器对canvas限制时，会自动缩放图片尺寸，确保导出成功，但会影响图片清晰度
+- 可通过 `safetyFactor` 与 `safetyMargin` 精细调整宽画布的安全余量，避免元素裁剪
+- `partial` 未显式传入时，默认沿用当前画布的局部渲染状态；导出期间如需切换渲染模式会临时切换并在导出完成后还原
+- 导出时会自动移除锚点与旋转控件，避免辅助元素进入图片
 :::
 
 ### 自定义CSS样式

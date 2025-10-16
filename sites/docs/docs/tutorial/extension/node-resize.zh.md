@@ -6,7 +6,7 @@ group:
 title: 节点缩放 (NodeResize)
 order: 16
 toc: content
-tag:  即将废弃
+tag: 已内置
 ---
 
 ## 使用

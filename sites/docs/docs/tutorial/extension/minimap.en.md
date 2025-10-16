@@ -6,7 +6,6 @@ group:
 title: MiniMap
 order: 4
 toc: content
-tag: Optimization
 ---
 
 <style>
@@ -63,18 +62,18 @@ const lf = new LogicFlow({
 
 The `miniMapOptions` configuration is as follows:
 
-| Property Name  | Type   | Default Value | Required | Description                              |
-| -------------- | ------ | ------------- | -------- | ---------------------------------------- |
-| width           | number | 150           | -        | The width of the canvas in the MiniMap   |
-| height          | number | 220           | -        | The height of the canvas in the MiniMap  |
-| showEdge        | boolean| false         | -        | Whether to render edges in the MiniMap   |
-| headerTitle     | string | Navigation    | -        | The text content of the MiniMap's title bar; defaults to not showing |
-| isShowHeader    | boolean| false         | -        | Whether to show the MiniMap's title bar  |
-| isShowCloseIcon | boolean| false         | -        | Whether to show the close button         |
-| leftPosition    | number | -             | -        | The left margin of the MiniMap from the canvas's left boundary; takes precedence over `rightPosition` |
-| rightPosition   | number | 0             | -        | The right margin of the MiniMap from the canvas's right boundary; lower priority than `leftPosition` |
-| topPosition     | number | -             | -        | The top margin of the MiniMap from the canvas's top boundary; takes precedence over `bottomPosition` |
-| bottomPosition  | number | 0             | -        | The bottom margin of the MiniMap from the canvas's bottom boundary; lower priority than `topPosition` |
+| Property Name   | Type    | Default Value | Required | Description                                                                                           |
+| --------------- | ------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| width           | number  | 150           | -        | The width of the canvas in the MiniMap                                                                |
+| height          | number  | 220           | -        | The height of the canvas in the MiniMap                                                               |
+| showEdge        | boolean | false         | -        | Whether to render edges in the MiniMap                                                                |
+| headerTitle     | string  | Navigation    | -        | The text content of the MiniMap's title bar; defaults to not showing                                  |
+| isShowHeader    | boolean | false         | -        | Whether to show the MiniMap's title bar                                                               |
+| isShowCloseIcon | boolean | false         | -        | Whether to show the close button                                                                      |
+| leftPosition    | number  | -             | -        | The left margin of the MiniMap from the canvas's left boundary; takes precedence over `rightPosition` |
+| rightPosition   | number  | 0             | -        | The right margin of the MiniMap from the canvas's right boundary; lower priority than `leftPosition`  |
+| topPosition     | number  | -             | -        | The top margin of the MiniMap from the canvas's top boundary; takes precedence over `bottomPosition`  |
+| bottomPosition  | number  | 0             | -        | The bottom margin of the MiniMap from the canvas's bottom boundary; lower priority than `topPosition` |
 
 ## API
 
@@ -95,7 +94,9 @@ Providing only `left` and `top` values allows integration with the `lf.getPointB
 - `lf-mini-map-graph` - MiniMap canvas element
 - `lf-mini-map-close` - MiniMap close icon element
 
-> `MiniMap.show()` must be called after `lf.render()`.
+:::warning
+`MiniMap.show()` must be called after `lf.render()`. Otherwise, the console will always show a warning.
+:::
 
 ### hide
 
@@ -157,7 +158,7 @@ lf.extension.miniMap.setShowEdge(showEdge: boolean): void
 
 MiniMap events.
 
-| Event Name       | Description          | Event Object |
-| ---------------- | --------------------- | ------------ |
-| miniMap:close    | MiniMap hidden        | {}           |
+| Event Name    | Description    | Event Object |
+| ------------- | -------------- | ------------ |
+| miniMap:close | MiniMap hidden | {}           |
 
