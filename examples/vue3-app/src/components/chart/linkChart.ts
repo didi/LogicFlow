@@ -46,7 +46,7 @@ export default class LinkChart {
       this.flowId = graphModel.flowId!
     })
     g.init()
-    this.lf.extension.miniMap.show()
+    // this.lf.extension.miniMap.show()
 
     // this.lf.render()
   }

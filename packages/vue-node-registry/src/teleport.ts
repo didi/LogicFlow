@@ -12,6 +12,7 @@ import {
 
 let active = false
 const appInstances = new Map<string, InstanceType<any>>()
+const appNodesMap = new Map<string, any>() // 用于储存当前流程图节点id当节点都销毁时同时卸载vueApp实例
 const items = reactive<{ [key: string]: any }>({})
 
 export function connect(
@@ -22,6 +23,9 @@ export function connect(
   graph: GraphModel,
 ) {
   if (active) {
+    if (graph.isMiniMap) {
+      createTeleportContainer(container, graph.flowId)
+    }
     items[id] = markRaw(
       defineComponent({
         render: () =>
@@ -37,9 +41,21 @@ export function connect(
   }
 }
 
-export function disconnect(id: string) {
+export function disconnect(id: string, flowId: string) {
   if (active) {
     delete items[id]
+    if (appInstances.has(flowId)) {
+      const appNodeList = appNodesMap.get(flowId) || []
+      const index = appNodeList.indexOf(id)
+      if (index > -1) {
+        appNodeList.splice(index, 1)
+        if (appNodeList.length === 0) {
+          destroyTeleportContainer(flowId)
+        } else {
+          appNodesMap.set(flowId, appNodeList)
+        }
+      }
+    }
   }
 }
 
@@ -74,6 +90,13 @@ export function getTeleport(): any {
           // 比如items[0]属于Page1的数据，那么Page2无论active=true/false，都无法执行items[0]
 
           if (id.startsWith(props.flowId)) {
+            if (appInstances.has(props.flowId)) {
+              const appNodeList = appNodesMap.get(props.flowId) || []
+              if (!appNodeList.includes(id)) {
+                appNodeList.push(id)
+                appNodesMap.set(props.flowId, appNodeList)
+              }
+            }
             children.push(items[id])
           }
         })
@@ -115,6 +138,7 @@ export function createTeleportContainer(
   app.mount(mountPoint)
 
   appInstances.set(flowId, app)
+  appNodesMap.set(flowId, [])
 }
 /**
  * 卸载 Teleport 容器组件
@@ -126,5 +150,6 @@ export function destroyTeleportContainer(flowId: string | undefined): void {
   if (app) {
     app.unmount()
     appInstances.delete(flowId)
+    appNodesMap.delete(flowId)
   }
 }

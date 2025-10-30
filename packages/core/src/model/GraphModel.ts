@@ -181,6 +181,7 @@ export class GraphModel {
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
 
+    this.isMiniMap = options.isMiniMap || false
     this.width = options.width ?? this.rootEl.getBoundingClientRect().width
     this.isContainerWidth = isNil(options.width)
     this.height = options.height ?? this.rootEl.getBoundingClientRect().height
