@@ -207,7 +207,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     assign(this, pickNodeConfig(data))
 
     const { overlapMode } = this.graphModel
-    if (overlapMode === OverlapMode.INCREASE) {
+    if (
+      overlapMode === OverlapMode.INCREASE ||
+      overlapMode === OverlapMode.EDGE_TOP
+    ) {
       this.zIndex = data.zIndex || getZIndex()
     }
   }
@@ -339,7 +342,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     if (this.rotate) {
       data.rotate = this.rotate
     }
-    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+    if (
+      this.graphModel.overlapMode === OverlapMode.INCREASE ||
+      this.graphModel.overlapMode === OverlapMode.EDGE_TOP
+    ) {
       data.zIndex = this.zIndex
     }
     if (value) {

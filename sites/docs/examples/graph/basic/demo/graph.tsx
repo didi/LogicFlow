@@ -653,8 +653,124 @@ const App: React.FC = () => {
     lfRef?.current?.dnd.startDrag(node);
   };
 
+  // overlapMode 演示逻辑
+  const setOverlapMode = (mode: number) => {
+    const lf = lfRef.current;
+    if (!lf) return;
+    lf.graphModel.overlapMode = mode;
+    const order = lf.graphModel.sortElements.map((m) => (m as any).BaseType);
+    console.log('[overlapMode]', mode, '渲染排序:', order);
+  };
+  const setOverlapModeDefault = () => setOverlapMode(0);
+  const setOverlapModeIncrease = () => setOverlapMode(1);
+  const setOverlapModeEdgeTop = () => setOverlapMode(-1);
+
+  const addOverlapNode = () => {
+    const lf = lfRef.current;
+    if (!lf) return;
+    lf.addNode({
+      id: 'overlap-node',
+      text: 'overlap-node',
+      type: 'rect',
+      x: 400,
+      y: 150,
+      properties: { width: 60, height: 60 },
+    });
+  };
+  const deleteOverlapNode = () => {
+    lfRef.current?.deleteNode('overlap-node');
+  };
+  const selectFirstEdge = () => {
+    const lf = lfRef.current;
+    if (!lf) return;
+    const data = lf.getGraphData() as GraphData;
+    const edgeId = data.edges?.[0]?.id;
+    if (edgeId) {
+      lf.selectElementById(edgeId);
+      lf.toFront(edgeId);
+      console.log('选中并置顶首条边:', edgeId);
+    }
+  };
+  const selectOverlapNode = () => {
+    const lf = lfRef.current;
+    if (!lf) return;
+    const id = 'overlap-node';
+    lf.selectElementById(id);
+    lf.toFront(id);
+    console.log('选中并置顶重叠节点:', id);
+  };
+  const clearSelection = () => {
+    lfRef.current?.clearSelectElements();
+  };
+
   return (
     <Card title="Graph">
+      <Flex wrap="wrap" gap="small">
+        {/* overlapMode 演示控制 */}
+        <Button
+          key="overlap-default"
+          type="primary"
+          onClick={setOverlapModeDefault}
+        >
+          默认堆叠模式
+        </Button>
+        <Button
+          key="overlap-increase"
+          type="primary"
+          onClick={setOverlapModeIncrease}
+        >
+          递增堆叠模式
+        </Button>
+        <Button
+          key="overlap-edge-top"
+          type="primary"
+          onClick={setOverlapModeEdgeTop}
+        >
+          边置顶模式
+        </Button>
+        <Button
+          key="print-sort"
+          type="primary"
+          onClick={() => {
+            const lf = lfRef.current;
+            if (!lf) return;
+            const order = lf.graphModel.sortElements.map((m) =>
+              (m as any).BaseType === 'edge' ? 'edge' : 'node',
+            );
+            console.log('当前渲染排序:', order);
+          }}
+        >
+          打印渲染排序
+        </Button>
+        <Button key="add-overlap-node" type="primary" onClick={addOverlapNode}>
+          添加重叠节点
+        </Button>
+        <Button
+          key="delete-overlap-node"
+          type="primary"
+          onClick={deleteOverlapNode}
+        >
+          删除重叠节点
+        </Button>
+        <Button
+          key="select-first-edge"
+          type="primary"
+          onClick={selectFirstEdge}
+        >
+          选中并置顶首条边
+        </Button>
+        <Button
+          key="select-overlap-node"
+          type="primary"
+          onClick={selectOverlapNode}
+        >
+          选中并置顶重叠节点
+        </Button>
+        <Button key="clear-selection" type="primary" onClick={clearSelection}>
+          取消选中
+        </Button>
+      </Flex>
+      <Divider orientation="left" orientationMargin="5" plain></Divider>
       <Flex wrap="wrap" gap="small">
         <Button key="arrow1" type="primary" onClick={() => setArrow('half')}>
           箭头 1

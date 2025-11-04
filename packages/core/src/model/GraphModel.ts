@@ -249,6 +249,48 @@ export class GraphModel {
    * todo: 性能优化
    */
   @computed get sortElements() {
+    // 在 EDGE_TOP 模式下，先渲染节点，再渲染边，保证边始终在顶部。
+    if (this.overlapMode === OverlapMode.EDGE_TOP) {
+      const nodesSorted = [...this.nodes].sort((a, b) => a.zIndex - b.zIndex)
+      const edgesSorted = [...this.edges].sort((a, b) => a.zIndex - b.zIndex)
+
+      const visibleNodes: (BaseNodeModel | BaseEdgeModel)[] = []
+      const visibleEdges: (BaseNodeModel | BaseEdgeModel)[] = []
+      const visibleLt: PointTuple = [
+        -DEFAULT_VISIBLE_SPACE,
+        -DEFAULT_VISIBLE_SPACE,
+      ]
+      const visibleRb: PointTuple = [
+        this.width + DEFAULT_VISIBLE_SPACE,
+        this.height + DEFAULT_VISIBLE_SPACE,
+      ]
+
+      for (let i = 0; i < nodesSorted.length; i++) {
+        const item = nodesSorted[i]
+        if (
+          item.visible &&
+          (!this.partial ||
+            item.isSelected ||
+            this.isElementInArea(item, visibleLt, visibleRb, false, false))
+        ) {
+          visibleNodes.push(item)
+        }
+      }
+      for (let i = 0; i < edgesSorted.length; i++) {
+        const item = edgesSorted[i]
+        if (
+          item.visible &&
+          (!this.partial ||
+            item.isSelected ||
+            this.isElementInArea(item, visibleLt, visibleRb, false, false))
+        ) {
+          visibleEdges.push(item)
+        }
+      }
+
+      return [...visibleNodes, ...visibleEdges]
+    }
+
     const elements = [...this.nodes, ...this.edges].sort(
       (a, b) => a.zIndex - b.zIndex,
     )
@@ -772,7 +814,10 @@ export class GraphModel {
         element.setZIndex(ELEMENT_MAX_Z_INDEX)
         this.topElement = element
       }
-      if (this.overlapMode === OverlapMode.INCREASE) {
+      if (
+        this.overlapMode === OverlapMode.INCREASE ||
+        this.overlapMode === OverlapMode.EDGE_TOP
+      ) {
         this.setElementZIndex(id, 'top')
       }
     }
@@ -1584,7 +1629,7 @@ export class GraphModel {
   }
 
   /**
-   * 获取图形区域虚拟矩型的尺寸和中心坐标
+   * 获取图形区域虚拟矩形的尺寸和中心坐标
    * @returns
    */
   getVirtualRectSize(): GraphModel.VirtualRectProps {
@@ -1611,7 +1656,7 @@ export class GraphModel {
     const virtualRectWidth = maxX - minX || 0
     const virtualRectHeight = maxY - minY || 0
 
-    // 获取虚拟矩型的中心坐标
+    // 获取虚拟矩形的中心坐标
     const virtualRectCenterPositionX = minX + virtualRectWidth / 2
     const virtualRectCenterPositionY = minY + virtualRectHeight / 2
 

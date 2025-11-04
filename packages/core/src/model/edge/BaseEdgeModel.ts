@@ -145,7 +145,10 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     this.isShowAdjustPoint = adjustEdgeStartAndEnd
     assign(this, pickEdgeConfig(data))
     const { overlapMode } = this.graphModel
-    if (overlapMode === OverlapMode.INCREASE) {
+    if (
+      overlapMode === OverlapMode.INCREASE ||
+      overlapMode === OverlapMode.EDGE_TOP
+    ) {
       this.zIndex = data.zIndex || getZIndex()
     }
     // 设置边的 anchors，也就是边的两个端点
@@ -397,7 +400,10 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
       startPoint: assign({}, this.startPoint),
       endPoint: assign({}, this.endPoint),
     }
-    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+    if (
+      this.graphModel.overlapMode === OverlapMode.INCREASE ||
+      this.graphModel.overlapMode === OverlapMode.EDGE_TOP
+    ) {
       data.zIndex = this.zIndex
     }
     const { x, y, value } = this.text

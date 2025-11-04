@@ -1,5 +1,9 @@
 import { forEach, map } from 'lodash-es'
-import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+import LogicFlow, {
+  ElementState,
+  OverlapMode,
+  ModelType,
+} from '@logicflow/core'
 import '@logicflow/core/es/index.css'
 
 import { Button, Card, Divider, Flex } from 'antd'
@@ -98,6 +102,7 @@ const data = {
       type: 'rect',
       x: 600,
       y: 200,
+
       properties: {
         width: 80,
         height: 120,
@@ -363,92 +368,186 @@ export default function BasicNode() {
     }
   }
 
-  const handleChangeColor = () => {
+  // overlapMode 测试逻辑
+  const setOverlapMode = (mode: OverlapMode) => {
     const lf = lfRef.current
-    if (lf) {
-      const { edges } = lf.graphModel
-      edges.forEach(({ id }) => {
-        lf.setProperties(id, {
-          style: {
-            stroke: 'blue',
-          },
-        })
-      })
+    if (!lf) return
+    lf.graphModel.overlapMode = mode
+    const order = lf.graphModel.sortElements.map((m) => m.modelType)
+    console.log('[overlapMode]', mode, '排序结果:', order)
+  }
+  const setOverlapModeDefault = () => setOverlapMode(OverlapMode.DEFAULT)
+  const setOverlapModeIncrease = () => setOverlapMode(OverlapMode.INCREASE)
+  const setOverlapModeEdgeTop = () => setOverlapMode(OverlapMode.EDGE_TOP)
+
+  const addOverlapNode = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    lf.addNode({
+      id: 'overlap-node',
+      text: 'overlap-node',
+      type: 'rect',
+      x: 400,
+      y: 150,
+      properties: { width: 60, height: 60 },
+    })
+  }
+  const deleteOverlapNode = () => {
+    lfRef.current?.deleteNode('overlap-node')
+  }
+  const selectFirstEdge = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const data = lf.getGraphData() as GraphData
+    const edgeId = data.edges?.[0]?.id
+    if (edgeId) {
+      lf.selectElementById(edgeId)
+      lf.toFront(edgeId)
+      console.log('选中并置顶首条边:', edgeId)
     }
+  }
+  const selectOverlapNode = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const id = 'overlap-node'
+    lf.selectElementById(id)
+    lf.toFront(id)
+    console.log('选中并置顶重叠节点:', id)
+  }
+  const clearSelection = () => {
+    lfRef.current?.clearSelectElements()
+  }
+
+  // 其他演示用处理函数
+  const handleActiveElements = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const { nodes, edges } = lf.getSelectElements()
+    nodes.forEach(({ id }) => {
+      lf.setProperties(id, { isHovered: true })
+    })
+    edges.forEach(({ id }) => {
+      lf.setProperties(id, { isHovered: true })
+    })
+  }
+
+  const handleTurnAnimationOn = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const { edges } = lf.getGraphData() as GraphData
+    forEach(edges, (edge) => {
+      if ((edge as any).id) lf.openEdgeAnimation((edge as any).id)
+    })
+  }
+
+  const handleTurnAnimationOff = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const { edges } = lf.getGraphData() as GraphData
+    forEach(edges, (edge) => {
+      if ((edge as any).id) lf.closeEdgeAnimation((edge as any).id)
+    })
+  }
+
+  const handleDragItem = (cfg: OnDragNodeConfig) => {
+    const lf = lfRef.current
+    if (!lf) return
+    lf.dnd?.startDrag(cfg)
   }
 
   const handleRefreshGraph = () => {
     const lf = lfRef.current
-    if (lf) {
-      const data = lf.getGraphRawData()
-      console.log('current graph data', data)
-      const refreshData = LogicFlowUtil.refreshGraphId(data)
-      console.log('after refresh graphId', data)
-      lf.render(refreshData)
-
-      // 测试 getAreaElement API
-      // const lt: LogicFlow.PointTuple = [550, 130];
-      // const rb: LogicFlow.PointTuple = [650, 270];
-      // const areaElements = lf.getAreaElement(lt, rb);
-      // console.log('areaElements', areaElements);
-    }
+    if (!lf) return
+    const raw = lf.getGraphRawData?.()
+    console.log('当前原始数据:', raw || lf.getGraphData())
   }
 
-  const handleActiveElements = () => {
+  const handleChangeColor = () => {
     const lf = lfRef.current
-    if (lf) {
-      const { nodes, edges } = lf.getSelectElements()
-      nodes.forEach(({ id }) => {
-        lf.setProperties(id, {
-          isHovered: true,
-        })
-      })
-      edges.forEach(({ id }) => {
-        lf.setProperties(id, {
-          isHovered: true,
-        })
-      })
-    }
-  }
-
-  const handleTurnAnimationOn = () => {
-    if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphData
-      forEach(edges, (edge) => {
-        lfRef.current?.openEdgeAnimation(edge.id)
-      })
-    }
-  }
-  const handleTurnAnimationOff = () => {
-    if (lfRef.current) {
-      const { edges } = lfRef.current.getGraphData() as GraphData
-      forEach(edges, (edge) => {
-        lfRef.current?.closeEdgeAnimation(edge.id)
-      })
-    }
-  }
-
-  const handleDragItem = (node: OnDragNodeConfig) => {
-    lfRef?.current?.dnd.startDrag(node)
+    if (!lf) return
+    const { edges } = lf.getSelectElements()
+    edges.forEach(({ id }) => {
+      lf.setProperties(id, { style: { stroke: '#ff4d4f' } })
+    })
   }
 
   const changeNodeBorderColor = () => {
     const lf = lfRef.current
-    if (lf) {
-      const { nodes } = lf.getSelectElements()
-      nodes.forEach(({ id, properties }) => {
-        console.log('properties', properties)
-        lf.setProperties(id, {
-          style: {
-            stroke: 'pink',
-          },
-        })
-      })
-    }
+    if (!lf) return
+    const { nodes } = lf.getSelectElements()
+    nodes.forEach(({ id }) => {
+      lf.setProperties(id, { style: { stroke: '#ff4d4f' } })
+    })
   }
 
   return (
     <Card title="Graph">
+      <Flex wrap="wrap" gap="small">
+        {/* overlapMode 测试控制 */}
+        <Button
+          key="overlap-default"
+          type="primary"
+          onClick={setOverlapModeDefault}
+        >
+          默认堆叠模式
+        </Button>
+        <Button
+          key="overlap-increase"
+          type="primary"
+          onClick={setOverlapModeIncrease}
+        >
+          递增堆叠模式
+        </Button>
+        <Button
+          key="overlap-edge-top"
+          type="primary"
+          onClick={setOverlapModeEdgeTop}
+        >
+          边置顶模式
+        </Button>
+        <Button
+          key="print-sort"
+          type="primary"
+          onClick={() => {
+            const lf = lfRef.current
+            if (!lf) return
+            const order = lf.graphModel.sortElements.map((m) =>
+              m.modelType === ModelType.EDGE ? 'edge' : 'node',
+            )
+            console.log('当前渲染排序:', order)
+          }}
+        >
+          打印渲染排序
+        </Button>
+        <Button key="add-overlap-node" type="primary" onClick={addOverlapNode}>
+          添加重叠节点
+        </Button>
+        <Button
+          key="delete-overlap-node"
+          type="primary"
+          onClick={deleteOverlapNode}
+        >
+          删除重叠节点
+        </Button>
+        <Button
+          key="select-first-edge"
+          type="primary"
+          onClick={selectFirstEdge}
+        >
+          选中并置顶首条边
+        </Button>
+        <Button
+          key="select-overlap-node"
+          type="primary"
+          onClick={selectOverlapNode}
+        >
+          选中并置顶重叠节点
+        </Button>
+        <Button key="clear-selection" type="primary" onClick={clearSelection}>
+          取消选中
+        </Button>
+      </Flex>
+      <Divider orientation="left" orientationMargin="5" plain></Divider>
       <Flex wrap="wrap" gap="small">
         <Button key="arrow1" type="primary" onClick={() => setArrow('half')}>
           箭头 1
