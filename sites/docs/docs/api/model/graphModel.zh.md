@@ -62,7 +62,7 @@ class CustomNode extends RectNode {
 | nodes                       | `BaseNodeModel[]`                             | []     | 画布所有的节点对象                                                         |
 | edges                       | `BaseEdgeModel[]`                             | []     | 画布所有的连线对象                                                         |
 | fakeNode                    | `BaseNodeModel  \| null`                      | null   | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开       |
-| [overlapMode](#overlapmode) | `number`                                      |        | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                                 |
+| [overlapMode](#overlapmode) | `number`                                      |        | 元素重合时堆叠模式；支持 -1:边在上(EDGE_TOP)、0:默认模式(DEFAULT)、1:递增模式(INCREASE) |
 | background                  | `false \| LFOptions.BackgroundConfig`         |        | 画布背景配置                                                               |
 | transformModel              | `TransformModel`                              |        | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)        |
 | editConfigModel             | `EditConfigModel`                             |        | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md)       |
@@ -112,6 +112,7 @@ lf.on("user:detail", (res) => {});
 
 - 值为`0`: 默认模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
 - 值为`1`: 递增模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会保持层级。
+- 值为`-1`: 边在上的模式（EDGE_TOP），边始终位于节点之上。渲染顺序为“先节点后边”，`toFront` 行为与递增模式一致（置顶元素 zIndex）。
 
 ## 方法
 
@@ -472,6 +473,8 @@ graphModel.changeEdgeId("edge_id_1", "edge_id_2");
 将指定节点或者边放置在前面
 
 如果堆叠模式为默认模式，则临时将指定元素置顶（zIndex设置为9999），原置顶元素重新恢复默认层级（zIndex设置为1），点击画布取消元素选中时，所有节点 zIndex 恢复为 1。
+
+ 在 `EDGE_TOP` 模式下，`toFront` 的行为与递增模式一致：将元素的 `zIndex` 置顶。由于堆叠规则，边始终位于节点之上。
 
 如果堆叠模式为递增模式，则将需指定元素 zIndex 设置为当前最大 zIndex + 1。
 

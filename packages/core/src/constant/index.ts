@@ -162,6 +162,7 @@ export enum EventType {
 }
 
 export enum OverlapMode {
+  EDGE_TOP = -1, // 边固定在顶部
   DEFAULT = 0, // 默认
   INCREASE = 1, // 递增
 }
