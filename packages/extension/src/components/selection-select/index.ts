@@ -18,6 +18,7 @@ export class SelectionSelect {
   private disabled = true
   private isWholeNode = true
   private isWholeEdge = true
+  private originStatusSaved = false
   exclusiveMode = false // 框选独占模式：true 表示只能进行框选操作，false 表示可以同时进行其他画布操作
   // 用于区分选区和点击事件
   private mouseDownInfo: {
@@ -97,7 +98,6 @@ export class SelectionSelect {
 
   private addEventListeners() {
     if (!this.container) return
-
     if (this.exclusiveMode) {
       // 独占模式：监听 container 的 mousedown 事件
       this.container.style.pointerEvents = 'auto'
@@ -143,9 +143,12 @@ export class SelectionSelect {
       y: e.clientY,
       time: Date.now(),
     }
-
     // 记录原始设置并临时禁止画布移动
-    this.originalStopMoveGraph = this.lf.getEditConfig().stopMoveGraph!
+    if (!this.originStatusSaved) {
+      // 为了防止在开启框选时用户多次点击画布导致缓存的stopMoveGraph变化，所以只在第一次点击时记录原始的stopMoveGraph issue #2263
+      this.originalStopMoveGraph = this.lf.getEditConfig().stopMoveGraph!
+      this.originStatusSaved = true
+    }
     this.lf.updateEditConfig({
       stopMoveGraph: true,
     })
@@ -249,6 +252,11 @@ export class SelectionSelect {
     }
   }
   private drawOff = (e: MouseEvent) => {
+    // 恢复原始的 stopMoveGraph 设置
+    this.lf.updateEditConfig({
+      stopMoveGraph: this.originalStopMoveGraph,
+    })
+    this.originStatusSaved = false
     // 处理鼠标抬起事件
     // 首先判断是否是点击，如果是，则清空框选
     if (this.mouseDownInfo) {
@@ -270,11 +278,6 @@ export class SelectionSelect {
     if (!this.exclusiveMode) {
       document.removeEventListener('mouseup', this.drawOff)
     }
-
-    // 恢复原始的 stopMoveGraph 设置
-    this.lf.updateEditConfig({
-      stopMoveGraph: this.originalStopMoveGraph,
-    })
 
     if (curStartPoint && curEndPoint) {
       const { x, y } = curStartPoint
