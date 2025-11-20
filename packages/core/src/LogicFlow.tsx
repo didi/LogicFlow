@@ -26,7 +26,12 @@ import Tool from './tool'
 import History from './history'
 import Keyboard, { initDefaultShortcut } from './keyboard'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
-import { ElementType, EventType, SegmentDirection } from './constant'
+import {
+  ElementType,
+  EventType,
+  OverlapMode,
+  SegmentDirection,
+} from './constant'
 import { Grid } from './view/overlay'
 
 import Extension = LogicFlow.Extension
@@ -1088,6 +1093,9 @@ export class LogicFlow {
     this.render({})
   }
 
+  setOverlapMode(mode: OverlapMode) {
+    this.graphModel.setOverlapMode(mode)
+  }
   /*********************************************************
    * LogicFlow Render方法
    ********************************************************/
