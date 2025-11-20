@@ -62,7 +62,7 @@ class CustomNode extends RectNode {
 | nodes                       | `BaseNodeModel[]`                             | []      | All node objects on canvas                                                       |
 | edges                       | `BaseEdgeModel[]`                             | []      | All edge objects on canvas                                                       |
 | fakeNode                    | `BaseNodeModel \| null`                       | null    | Used to distinguish temporary node from formal nodes when dragging external node |
-| [overlapMode](#overlapmode) | `number`                                      |         | Element stacking mode when overlapping; 0:default mode, 1:incremental mode       |
+| [overlapMode](#overlapmode) | `OverlapMode`                                  |         | Overlap stacking mode; supports static: -1, default: 0, incremental: 1, edge top: 2 |
 | background                  | `false \| LFOptions.BackgroundConfig`         |         | Canvas background configuration                                                  |
 | transformModel              | `TransformModel`                              |         | Current canvas transform matrix model, see [API](./transformModel.en.md)         |
 | editConfigModel             | `EditConfigModel`                             |         | Basic page editing config object, see [editConfigApi](./editConfigModel.en.md)   |
@@ -110,8 +110,12 @@ Used to restore previous top element to initial order in default mode.
 
 Element stacking mode when overlapping<br>
 
-- Value `0`: Default mode, selected nodes and edges display on top. When deselected, elements restore previous level.
-- Value `1`: Incremental mode, selected nodes and edges display on top. When deselected, elements maintain level.
+- Value `-1` (STATIC): Selection does not change stacking; `toFront` has no effect. Use explicit `zIndex` to control order.
+- Value `0` (DEFAULT): Nodes render above edges; sorting renders edges first then nodes. Selected element is temporarily raised to top and restores its previous level when selection clears.
+- Value `1` (INCREASE): Each `toFront` raises the element's zIndex and the new level is kept after deselection.
+- Value `2` (EDGE_TOP): Edges always render above nodes. Sorting renders nodes first then edges. `toFront` behaves like default mode (temporary raise, restored when deselected).
+
+Note: `zIndex` is persisted to graph data only in `INCREASE` and `STATIC` modes; in `DEFAULT` and `EDGE_TOP` modes, ordering is determined during render.
 
 ## Methods
 
@@ -462,9 +466,11 @@ Parameters:
 
 Bring specified node or edge to front
 
-In default overlap mode, set specified element's zIndex to 9999 and restores original top element's zIndex to 1. all node zIndexes are restored to 1 when you click the canvas to unselect the element
+In default mode (and in `EDGE_TOP` mode), the specified element is temporarily raised (zIndex set to a high value) and the previous top element is restored when the selection clears.
 
-In incremental mode, sets specified element's zIndex to current maximum zIndex + 1.
+In incremental mode, the specified element's zIndex is raised to the current maximum + 1 and persists after deselection.
+
+In static mode, this method does nothing.
 
 Parameters:
 
