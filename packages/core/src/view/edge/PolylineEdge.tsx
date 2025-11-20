@@ -95,7 +95,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
   /**
    * 不支持重写
    */
-  beforeDragStart = (e, appendInfo) => {
+  beforeDragStart = (e: PointerEvent, appendInfo) => {
     // 如果允许拖拽调整触发事件处理
     if (appendInfo.draggable) {
       this.drag.handleMouseDown(e)
@@ -284,7 +284,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
         append = (
           <g
             className={this.isDragging ? 'lf-dragging' : 'lf-drag-able'}
-            onMouseDown={(e) => this.beforeDragStart(e, appendInfo)}
+            onPointerDown={(e) => this.beforeDragStart(e, appendInfo)}
           >
             <g className={className}>{this.getAppendShape(appendInfo)}</g>
           </g>

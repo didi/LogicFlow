@@ -42,6 +42,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   mouseUpDrag?: boolean
   startTime?: number
   modelDisposer: IReactionDisposer
+  longPressTimer?: number
 
   constructor(props: IProps) {
     super()
@@ -248,7 +249,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       gridSize,
     } = graphModel
     model.isDragging = true
-    const { clientX, clientY } = event!
+    const { clientX, clientY } = event as PointerEvent
     let {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
@@ -330,13 +331,18 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   handleMouseUp = () => {
     const { model } = this.props
     this.mouseUpDrag = model.isDragging
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
   }
 
-  handleClick = (e: MouseEvent) => {
+  handleClick = (e: MouseEvent | PointerEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     const isDragging = this.mouseUpDrag === false
     const curTime = new Date().getTime()
+    console.log('6666', e)
     if (!this.startTime) return
     const timeInterval = curTime - this.startTime
     const { model, graphModel } = this.props
@@ -401,7 +407,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleContextMenu = (ev: MouseEvent) => {
+  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
     ev.preventDefault()
     const { model, graphModel } = this.props
     const { editConfigModel } = graphModel
@@ -431,12 +437,22 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleMouseDown = (ev: MouseEvent) => {
+  handleMouseDown = (ev: PointerEvent) => {
     const { model, graphModel } = this.props
     this.startTime = new Date().getTime()
     const { editConfigModel } = graphModel
     if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev)
+    }
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+    }
+    if (ev.pointerType === 'touch') {
+      this.longPressTimer = window.setTimeout(() => {
+        if (!this.props.model.isDragging) {
+          this.handleContextMenu(ev)
+        }
+      }, 500)
     }
   }
 
@@ -532,8 +548,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       nodeShape = (
         <g
           className={`${this.getStateClassName()} ${className}`}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
+          onPointerDown={this.handleMouseDown}
+          onPointerUp={this.handleMouseUp}
           onClick={this.handleClick}
           onMouseEnter={this.setHoverOn}
           onMouseOver={this.setHoverOn}

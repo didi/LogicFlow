@@ -78,7 +78,7 @@ export class AdjustPoint extends Component<IProps, IState> {
     })
   }
 
-  handleMouseDown = (ev: MouseEvent) => {
+  handleMouseDown = (ev: PointerEvent) => {
     if (this.stepDrag) {
       this.stepDrag.handleMouseDown(ev)
     }
@@ -414,7 +414,7 @@ export class AdjustPoint extends Component<IProps, IState> {
     return (
       <g
         pointerEvents={dragging ? 'none' : ''}
-        onMouseDown={this.handleMouseDown}
+        onPointerDown={this.handleMouseDown}
       >
         {!dragging ? getAdjustPointShape(x, y, edgeModel) : ''}
       </g>

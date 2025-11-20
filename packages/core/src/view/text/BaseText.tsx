@@ -73,7 +73,7 @@ export class BaseText<
     )
   }
 
-  mouseDownHandler = (e: MouseEvent) => {
+  mouseDownHandler = (e: PointerEvent) => {
     const { draggable, model, graphModel } = this.props
     const {
       editConfigModel: { nodeTextDraggable },
@@ -120,7 +120,10 @@ export class BaseText<
     } = this.props
     if (text) {
       return (
-        <g onMouseDown={this.mouseDownHandler} onDblClick={this.dbClickHandler}>
+        <g
+          onPointerDown={this.mouseDownHandler}
+          onDblClick={this.dbClickHandler}
+        >
           {this.getShape()}
         </g>
       )
