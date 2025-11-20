@@ -18,6 +18,10 @@ export class CanvasOverlay extends Component<IProps, IState> {
   stepDrag: StepDrag
   stepScrollX = 0
   stepScrollY = 0
+  pointers = new Map<number, { x: number; y: number }>()
+  pinchStartDistance?: number
+  pinchStartScale?: number
+  longPressTimer?: number
 
   constructor(props: IProps) {
     super()
@@ -108,7 +112,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev })
     }
   }
-  handleContextMenu = (ev: MouseEvent) => {
+  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
     const target = ev.target as HTMLElement
     if (target.getAttribute('name') === 'canvas-overlay') {
       ev.preventDefault()
@@ -125,7 +129,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
     }
   }
   // 鼠标、触摸板 按下
-  mouseDownHandler = (ev: MouseEvent) => {
+  mouseDownHandler = (ev: PointerEvent) => {
     const {
       graphModel: {
         eventCenter,
@@ -134,6 +138,12 @@ export class CanvasOverlay extends Component<IProps, IState> {
         gridSize,
       },
     } = this.props
+    this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
+    if (ev.pointerType === 'touch') {
+      this.longPressTimer = window.setTimeout(() => {
+        this.handleContextMenu(ev)
+      }, 500)
+    }
     const { adjustEdge, adjustNodePosition, stopMoveGraph } = editConfigModel
     const target = ev.target as HTMLElement
     const isFrozenElement = !adjustEdge && !adjustNodePosition
@@ -146,6 +156,51 @@ export class CanvasOverlay extends Component<IProps, IState> {
       }
       // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
       this.clickHandler(ev)
+    }
+    if (this.pointers.size === 2) {
+      const {
+        graphModel: { transformModel },
+      } = this.props
+      const pts = Array.from(this.pointers.values())
+      const dx = pts[0].x - pts[1].x
+      const dy = pts[0].y - pts[1].y
+      this.pinchStartDistance = Math.hypot(dx, dy)
+      this.pinchStartScale = transformModel.SCALE_X
+      this.stepDrag.cancelDrag()
+    }
+  }
+  pointerMoveHandler = (ev: PointerEvent) => {
+    this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
+    if (this.pinchStartDistance && this.pointers.size >= 2) {
+      const {
+        graphModel,
+        graphModel: { editConfigModel, transformModel },
+      } = this.props
+      if (editConfigModel.stopZoomGraph) return
+      const pts = Array.from(this.pointers.values())
+      const dx = pts[0].x - pts[1].x
+      const dy = pts[0].y - pts[1].y
+      const dist = Math.hypot(dx, dy)
+      const scale =
+        (this.pinchStartScale ?? transformModel.SCALE_X) *
+        (dist / this.pinchStartDistance)
+      const cx = (pts[0].x + pts[1].x) / 2
+      const cy = (pts[0].y + pts[1].y) / 2
+      const pos = graphModel.getPointByClient({ x: cx, y: cy })
+      const { x, y } = pos.canvasOverlayPosition
+      transformModel.zoom(scale, [x, y])
+      ev.preventDefault()
+    }
+  }
+  pointerUpHandler = (ev: PointerEvent) => {
+    this.pointers.delete(ev.pointerId)
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
+    if (this.pointers.size < 2) {
+      this.pinchStartDistance = undefined
+      this.pinchStartScale = undefined
     }
   }
 
@@ -164,8 +219,12 @@ export class CanvasOverlay extends Component<IProps, IState> {
         height="100%"
         name="canvas-overlay"
         onWheel={this.zoomHandler}
-        onMouseDown={this.mouseDownHandler}
+        onPointerDown={this.mouseDownHandler}
+        onPointerMove={this.pointerMoveHandler}
+        onPointerUp={this.pointerUpHandler}
+        onPointerCancel={this.pointerUpHandler}
         onContextMenu={this.handleContextMenu}
+        style={{ touchAction: 'none', WebkitUserSelect: 'none' }}
         className={
           isDragging
             ? 'lf-canvas-overlay lf-dragging'

@@ -34,6 +34,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   startTime?: number
   contextMenuTime?: number
   clickTimer?: number
+  longPressTimer?: number
   textRef = createRef()
 
   constructor() {
@@ -443,7 +444,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于contextmenu事件做处理，请监听edge:contextmenu事件。
    */
-  handleContextMenu = (ev: MouseEvent) => {
+  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
     ev.preventDefault()
     // 节点右击也会触发时间，区分右击和点击(mouseup)
     this.contextMenuTime = new Date().getTime()
@@ -479,13 +480,25 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写
    */
-  handleMouseDown = (e: MouseEvent) => {
+  handleMouseDown = (e: PointerEvent) => {
     e.stopPropagation()
     this.startTime = new Date().getTime()
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+    }
+    if (e.pointerType === 'touch') {
+      this.longPressTimer = window.setTimeout(() => {
+        this.handleContextMenu(e)
+      }, 500)
+    }
   }
   handleMouseUp = () => {
     const { model } = this.props
     this.mouseUpDrag = model.isDragging
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
   }
   /**
    * 不支持重写
@@ -606,10 +619,17 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           ]
             .filter(Boolean)
             .join(' ')}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
+          style={{
+            touchAction: 'none',
+            WebkitTouchCallout: 'none',
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
+          }}
           onClick={this.handleClick}
           onContextMenu={this.handleContextMenu}
+          onPointerDown={this.handleMouseDown}
+          onPointerUp={this.handleMouseUp}
+          onPointerCancel={this.handleMouseUp}
           onMouseOver={this.setHoverOn}
           onMouseEnter={this.setHoverOn}
           onMouseLeave={this.setHoverOff}

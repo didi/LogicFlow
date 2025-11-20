@@ -99,7 +99,7 @@ class RotateControlPoint extends Component<IRotateControlProps> {
     return (
       <g className="lf-rotate-control">
         <g
-          onMouseDown={(ev) => {
+          onPointerDown={(ev) => {
             this.stepperDrag.handleMouseDown(ev)
           }}
         >

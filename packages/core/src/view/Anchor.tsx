@@ -216,7 +216,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
-  checkEnd = (event: MouseEvent | null | undefined) => {
+  checkEnd = (event: PointerEvent | null | undefined) => {
     const {
       graphModel,
       nodeModel,
@@ -375,7 +375,7 @@ class Anchor extends Component<IProps, IState> {
               nodeModel,
             })
           }}
-          onMouseDown={(ev) => {
+          onPointerDown={(ev) => {
             graphModel.eventCenter.emit(EventType.ANCHOR_MOUSEDOWN, {
               data: anchorData,
               e: ev!,

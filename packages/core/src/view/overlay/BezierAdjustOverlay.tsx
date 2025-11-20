@@ -71,7 +71,7 @@ export class BezierAdjustAnchor extends Component<IAnchorProps, IState> {
         x={x}
         y={y}
         {...adjustAnchor}
-        onMouseDown={(ev) => {
+        onPointerDown={(ev) => {
           // if (edgeAddable !== false) {
           this.dragHandler.handleMouseDown(ev)
           // }
