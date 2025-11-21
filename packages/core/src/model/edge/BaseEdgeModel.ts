@@ -156,7 +156,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
 
     eventCenter.on('overlap:change', (data) => {
       const { overlapMode: newMode } = data
-      this.updateZIndexByOverlap(newMode, data.zIndex || getZIndex())
+      this.updateZIndexByOverlap(newMode, this.zIndex || getZIndex())
     })
   }
 
