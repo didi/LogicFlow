@@ -341,7 +341,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const timeInterval = curTime - this.startTime
     const { model, graphModel } = this.props
     // 这里会有一种极端情况：当网格大小是1或者关闭网格吸附时，用触摸板点击节点会触发拖拽事件导致节点无法选中
-    // 所以这里在增加了下面的判断：只有状态是拖拽中且时间间隔小于100ms时，才触发点击事件
+    // 当触摸板点击节点时,为了防止误触发拖拽导致节点无法选中，允许在非拖拽状态且时间间隔小于100ms时触发点击事件
     if (!isDragging && timeInterval > 100) return
     if (!isDragging) {
       this.onDragEnd()
