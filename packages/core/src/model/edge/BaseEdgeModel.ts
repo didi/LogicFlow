@@ -145,10 +145,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     this.isShowAdjustPoint = adjustEdgeStartAndEnd
     assign(this, pickEdgeConfig(data))
     const { overlapMode, eventCenter } = this.graphModel
-    if (overlapMode !== OverlapMode.DEFAULT) {
-      this.zIndex =
-        overlapMode === OverlapMode.EDGE_TOP ? 1 : data.zIndex || getZIndex()
-    }
+    this.updateZIndexByOverlap(overlapMode, data.zIndex || getZIndex())
     // 设置边的 anchors，也就是边的两个端点
     // 端点依赖于 edgeData 的 sourceNode 和 targetNode
     this.setAnchors()
@@ -159,17 +156,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
 
     eventCenter.on('overlap:change', (data) => {
       const { overlapMode: newMode } = data
-      switch (newMode) {
-        case OverlapMode.DEFAULT:
-          this.zIndex = 0
-          break
-        case OverlapMode.EDGE_TOP:
-          this.zIndex = 1
-          break
-        default:
-          this.zIndex = data.zIndex || getZIndex()
-          break
-      }
+      this.updateZIndexByOverlap(newMode, data.zIndex || getZIndex())
     })
   }
 
@@ -766,6 +753,24 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
   }: Record<'startPoint' | 'endPoint', Point>) {
     this.updateStartPoint({ x: startPoint.x, y: startPoint.y })
     this.updateEndPoint({ x: endPoint.x, y: endPoint.y })
+  }
+
+  // 堆叠模式变化时，更新zIndex
+  @action
+  updateZIndexByOverlap(overlapMode: OverlapMode, defaultZIndex) {
+    switch (overlapMode) {
+      case OverlapMode.DEFAULT:
+        this.zIndex = 0
+        break
+      case OverlapMode.EDGE_TOP:
+        this.zIndex = 1
+        break
+      case OverlapMode.INCREASE:
+        this.zIndex = defaultZIndex
+        break
+      default:
+        break
+    }
   }
 }
 

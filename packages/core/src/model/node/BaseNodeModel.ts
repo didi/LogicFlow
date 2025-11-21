@@ -207,23 +207,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     assign(this, pickNodeConfig(data))
 
     const { overlapMode, eventCenter } = this.graphModel
-    if (overlapMode !== OverlapMode.DEFAULT) {
-      this.zIndex =
-        overlapMode === OverlapMode.EDGE_TOP ? 0 : data.zIndex || getZIndex()
-    }
+    this.updateZIndexByOverlap(overlapMode, data.zIndex || getZIndex())
     eventCenter.on('overlap:change', (data) => {
       const { overlapMode: newMode } = data
-      switch (newMode) {
-        case OverlapMode.DEFAULT:
-          this.zIndex = 1
-          break
-        case OverlapMode.EDGE_TOP:
-          this.zIndex = 0
-          break
-        default:
-          this.zIndex = data.zIndex || getZIndex()
-          break
-      }
+      this.updateZIndexByOverlap(newMode, this.zIndex || getZIndex())
     })
   }
 
@@ -934,6 +921,23 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
 
   @action updateAttributes(attributes: any) {
     assign(this, attributes)
+  }
+  // 堆叠模式变化时，更新zIndex
+  @action
+  updateZIndexByOverlap(overlapMode: OverlapMode, defaultZIndex) {
+    switch (overlapMode) {
+      case OverlapMode.DEFAULT:
+        this.zIndex = 1
+        break
+      case OverlapMode.EDGE_TOP:
+        this.zIndex = 0
+        break
+      case OverlapMode.INCREASE:
+        this.zIndex = defaultZIndex
+        break
+      default:
+        break
+    }
   }
 }
 
