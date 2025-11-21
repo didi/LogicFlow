@@ -254,11 +254,6 @@ export class GraphModel {
     }
     // 默认情况下节点与边按照 zIndex 排序
     const elements = sortElement([...this.nodes, ...this.edges])
-    console.log('sortElement run', [...this.nodes, ...this.edges], elements)
-    // 在 EDGE_TOP 模式下，分别为节点和边进行排序，然后再以节点先，边后的方式塞到渲染数据里，保证边始终在顶部。
-    // if (this.overlapMode === OverlapMode.EDGE_TOP) {
-    //   elements = [...sortElement(this.nodes), ...sortElement(this.edges)]
-    // }
 
     // 只显示可见区域的节点和边
     const visibleElements: (BaseNodeModel | BaseEdgeModel)[] = []
@@ -788,7 +783,6 @@ export class GraphModel {
    */
   @action
   toFront(id: string) {
-    console.log('toFront run', id)
     const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model
     if (element) {
       // 静态模式toFront不做处理
@@ -803,7 +797,6 @@ export class GraphModel {
       // 默认模式（节点在上）和边在上模式下，将原置顶元素重新恢复原有层级，将需指定元素zIndex设置为最大zIndex
       this.topElement?.setZIndex()
       element.setZIndex(ELEMENT_MAX_Z_INDEX)
-      console.log('setZIndex run', element.zIndex)
       this.topElement = element
     }
   }
