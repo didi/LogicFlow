@@ -88,9 +88,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
   abstract getShape(): h.JSX.Element | null
 
@@ -448,6 +448,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   }
 
   handleBlur = () => {
+    // 当节点通过自定义锚点实现节点删除时，这里props会变成undefined，需兼容一下
+    if (!this.props) return
     const { model, graphModel } = this.props
     graphModel.eventCenter.emit(EventType.NODE_BLUR, {
       data: model.getData(),
