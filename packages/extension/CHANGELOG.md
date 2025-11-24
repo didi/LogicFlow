@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.1.6
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - fix: 修复extension包引入vue包问题 fix #2277
+  - Updated dependencies
+    - @logicflow/core@2.1.4
+    - @logicflow/vue-node-registry@1.1.5
+
 ## 2.1.5
 
 ### Patch Changes

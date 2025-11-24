@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.1.4
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - feat: 增加边层级优先的堆叠模式和静态堆叠模式 #2063 #2019
+  - fix: 修复部分场景下节点点击无法选中问题 #2181
+  - fix: 修复开启框选的情况下,双击画布会导致关闭框选后stopMoveGraph不还原问题 #2263
+
 ## 2.1.3
 
 ### Patch Changes
