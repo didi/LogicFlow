@@ -223,6 +223,8 @@ export class MiniMap {
    * @param top 相对画布的上边距
    */
   public show = (left?: number, top?: number) => {
+    console.log('ciissdd')
+
     if (!this.isShow) {
       this.initMiniMap()
       this.lf.on('graph:resize', this.onGraphResize)
@@ -616,8 +618,8 @@ export class MiniMap {
     const div = document.createElement('div')
     div.className = 'lf-minimap-viewport'
 
-    // 拖拽预览视窗，主画布视口跟随移动
-    div.addEventListener('mousedown', this.startDrag)
+    div.style.touchAction = 'none'
+    div.addEventListener('pointerdown', this.startDrag)
 
     // 禁止预览视窗的点击事件冒泡
     div.addEventListener('click', (e: MouseEvent) => {
@@ -626,9 +628,11 @@ export class MiniMap {
     this.viewport = div
   }
 
-  private startDrag = (e: MouseEvent) => {
-    document.addEventListener('mousemove', this.drag)
-    document.addEventListener('mouseup', this.drop)
+  private startDrag = (e: PointerEvent) => {
+    document.addEventListener('pointermove', this.drag)
+    document.addEventListener('pointerup', this.drop)
+    console.log('startDrag', e)
+
     const { x, y } = e
     this.startPosition = { x, y }
   }
@@ -636,7 +640,7 @@ export class MiniMap {
   /**
    * 拖拽预览视窗过程中，更新主画布视口
    */
-  private drag = (e: MouseEvent) => {
+  private drag = (e: PointerEvent) => {
     const { x, y } = e
     const translateX = (x - this.startPosition.x) / this.scale
     const translateY = (y - this.startPosition.y) / this.scale
@@ -659,14 +663,15 @@ export class MiniMap {
    * 拖拽预览视窗结束，移除拖拽事件
    */
   private drop = () => {
-    document.removeEventListener('mousemove', this.drag)
-    document.removeEventListener('mouseup', this.drop)
+    document.removeEventListener('pointermove', this.drag)
+    document.removeEventListener('pointerup', this.drop)
   }
 
   /**
    * 点击小地图中非预览视窗的区域时，移动主画布视口聚焦于点击位置
    */
   private mapClick = (e: MouseEvent) => {
+    console.log('mapClick', e)
     const { offsetX, offsetY } = e
     const centerX = this.translateX + offsetX / this.scale
     const centerY = this.translateY + offsetY / this.scale
