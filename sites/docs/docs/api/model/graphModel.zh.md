@@ -912,7 +912,7 @@ graphModel.changeNodeType("node_1", "circle");
 
 ### changeEdgeType<Badge>方法</Badge>
 
-修改指定节点的类型
+修改指定边的类型
 
 参数
 
