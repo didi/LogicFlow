@@ -36,6 +36,46 @@ export class DndPanel {
     }
     this.panelEl = document.createElement('div')
     this.panelEl.className = 'lf-dndpanel'
+    this.panelEl.onpointermove = (e: PointerEvent) => {
+      const panel = this.panelEl as HTMLElement
+      const rect = panel.getBoundingClientRect()
+      const outside =
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom
+      const overlay = document.querySelector(
+        'svg[name="canvas-overlay"]',
+      ) as SVGElement | null
+      if (outside) {
+        if (panel.hasPointerCapture?.(e.pointerId)) {
+          panel.releasePointerCapture(e.pointerId)
+        }
+        overlay?.setPointerCapture?.(e.pointerId)
+        console.log('overlay setPointerCapture', e.pointerId)
+      } else {
+        if (overlay?.hasPointerCapture?.(e.pointerId)) {
+          overlay.releasePointerCapture(e.pointerId)
+        }
+        console.log('route pointer to panel', e.pointerId)
+      }
+    }
+    this.panelEl.onpointerup = (e: PointerEvent) => {
+      const panel = this.panelEl as HTMLElement
+      const overlay = document.querySelector(
+        'svg[name="canvas-overlay"]',
+      ) as SVGElement | null
+      panel.releasePointerCapture(e.pointerId)
+      overlay?.releasePointerCapture(e.pointerId)
+      console.log('panel pointerup', e.pointerId)
+    }
+    this.panelEl.addEventListener(
+      'touchmove',
+      (e) => {
+        e.preventDefault()
+      },
+      { passive: false },
+    )
     this.shapeList.forEach((shapeItem) => {
       this.panelEl?.appendChild(this.createDndItem(shapeItem))
     })
@@ -85,14 +125,14 @@ export class DndPanel {
     if (shapeItem.disabled) {
       el.classList.add('disabled')
       // 保留callback的执行，可用于界面提示当前shapeItem的禁用状态
-      el.onmousedown = () => {
+      el.onpointerdown = () => {
         if (shapeItem.callback) {
           shapeItem.callback(this.lf, this.domContainer)
         }
       }
       return el
     }
-    el.onmousedown = () => {
+    el.onpointerdown = (e: PointerEvent) => {
       if (shapeItem.type) {
         this.lf.dnd.startDrag({
           type: shapeItem.type,
@@ -103,6 +143,10 @@ export class DndPanel {
       if (shapeItem.callback) {
         shapeItem.callback(this.lf, this.domContainer)
       }
+      // try {
+      //   (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+      // } catch { }
+      e.preventDefault()
     }
     el.ondblclick = (e) => {
       this.lf.graphModel.eventCenter.emit('dnd:panel-dbclick', {
