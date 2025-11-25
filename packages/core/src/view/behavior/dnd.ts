@@ -40,15 +40,17 @@ export class Dnd {
     const { editConfigModel } = this.lf.graphModel
     if (!editConfigModel?.isSilentMode) {
       this.nodeConfig = nodeConfig
-      window.document.addEventListener('mouseup', this.stopDrag)
+      window.document.addEventListener('pointerup', this.stopDrag)
     }
   }
 
   stopDrag = () => {
+    console.log('stop')
+
     this.nodeConfig = null
-    window.document.removeEventListener('mouseup', this.stopDrag)
+    window.document.removeEventListener('pointerup', this.stopDrag)
   }
-  dragEnter = (e: MouseEvent) => {
+  dragEnter = (e: PointerEvent) => {
     if (!this.nodeConfig || this.fakeNode) return
     this.fakeNode = this.lf.createFakeNode({
       ...this.nodeConfig,
@@ -79,6 +81,8 @@ export class Dnd {
     return false
   }
   onDragLeave = () => {
+    console.log('leave canvas')
+
     if (this.fakeNode) {
       this.lf.removeNodeSnapLine()
       this.lf.graphModel.removeFakeNode()
@@ -86,6 +90,8 @@ export class Dnd {
     }
   }
   onDrop = (e: MouseEvent) => {
+    console.log(111)
+
     if (!this.lf.graphModel || !e || !this.nodeConfig) {
       return
     }
@@ -110,10 +116,10 @@ export class Dnd {
 
   eventMap() {
     return {
-      onMouseEnter: this.dragEnter,
-      onMouseOver: this.dragEnter, // IE11
+      onPointerEnter: this.dragEnter,
+      onPointerOver: this.dragEnter, // IE11
       onMouseMove: this.onDragOver,
-      onMouseLeave: this.onDragLeave,
+      onPointerLeave: this.onDragLeave,
       // onMouseOut: this.onDragLeave, // IE11
       onMouseUp: this.onDrop,
     }
