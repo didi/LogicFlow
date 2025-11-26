@@ -223,8 +223,6 @@ export class MiniMap {
    * @param top 相对画布的上边距
    */
   public show = (left?: number, top?: number) => {
-    console.log('ciissdd')
-
     if (!this.isShow) {
       this.initMiniMap()
       this.lf.on('graph:resize', this.onGraphResize)
@@ -631,8 +629,6 @@ export class MiniMap {
   private startDrag = (e: PointerEvent) => {
     document.addEventListener('pointermove', this.drag)
     document.addEventListener('pointerup', this.drop)
-    console.log('startDrag', e)
-
     const { x, y } = e
     this.startPosition = { x, y }
   }
@@ -671,7 +667,6 @@ export class MiniMap {
    * 点击小地图中非预览视窗的区域时，移动主画布视口聚焦于点击位置
    */
   private mapClick = (e: MouseEvent) => {
-    console.log('mapClick', e)
     const { offsetX, offsetY } = e
     const centerX = this.translateX + offsetX / this.scale
     const centerY = this.translateY + offsetY / this.scale

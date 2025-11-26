@@ -76,8 +76,8 @@ export class SelectionSelect {
     this.mouseDownInfo = null
 
     // 移除事件监听
-    document.removeEventListener('mousemove', this.draw)
-    document.removeEventListener('mouseup', this.drawOff)
+    document.removeEventListener('pointermove', this.draw)
+    document.removeEventListener('pointerup', this.drawOff)
   }
 
   /**
@@ -101,7 +101,8 @@ export class SelectionSelect {
     if (this.exclusiveMode) {
       // 独占模式：监听 container 的 mousedown 事件
       this.container.style.pointerEvents = 'auto'
-      this.container.addEventListener('mousedown', this.handleMouseDown)
+      this.container.style.touchAction = 'none'
+      this.container.addEventListener('pointerdown', this.handleMouseDown)
     } else {
       // 非独占模式：监听画布的 blank:mousedown 事件
       this.container.style.pointerEvents = 'none'
@@ -113,7 +114,7 @@ export class SelectionSelect {
   private removeEventListeners() {
     if (this.container) {
       this.container.style.pointerEvents = 'none'
-      this.container.removeEventListener('mousedown', this.handleMouseDown)
+      this.container.removeEventListener('pointerdown', this.handleMouseDown)
     }
     // 移除 blank:mousedown 事件监听
     this.lf.off('blank:mousedown', this.handleBlankMouseDown)
@@ -122,14 +123,14 @@ export class SelectionSelect {
   /**
    * 处理画布空白处鼠标按下事件（非独占模式）
    */
-  private handleBlankMouseDown = ({ e }: { e: MouseEvent }) => {
-    this.handleMouseDown(e)
+  private handleBlankMouseDown = ({ e }: { e: MouseEvent | PointerEvent }) => {
+    this.handleMouseDown(e as PointerEvent)
   }
 
   /**
    * 处理鼠标按下事件
    */
-  private handleMouseDown(e: MouseEvent) {
+  private handleMouseDown(e: PointerEvent) {
     if (!this.container || this.disabled) return
 
     // 禁用右键框选
@@ -170,8 +171,8 @@ export class SelectionSelect {
     this.container?.appendChild(wrapper)
     this.wrapper = wrapper
 
-    document.addEventListener('mousemove', this.draw)
-    document.addEventListener('mouseup', this.drawOff)
+    document.addEventListener('pointermove', this.draw)
+    document.addEventListener('pointerup', this.drawOff)
   }
 
   /**
@@ -210,7 +211,7 @@ export class SelectionSelect {
     if (this.wrapper && this.startPoint && this.endPoint) {
       // 记录上一次的结束点，用于触发 mouseup 事件
       const lastEndPoint = cloneDeep(this.endPoint)
-      const lastEvent = new MouseEvent('mouseup', {
+      const lastEvent = new PointerEvent('pointerup', {
         clientX: lastEndPoint.x,
         clientY: lastEndPoint.y,
       })
@@ -221,7 +222,7 @@ export class SelectionSelect {
     this.close()
   }
 
-  private draw = (ev: MouseEvent) => {
+  private draw = (ev: PointerEvent) => {
     const {
       domOverlayPosition: { x: x1, y: y1 },
     } = this.lf.getPointByClient(ev.clientX, ev.clientY)
@@ -251,7 +252,7 @@ export class SelectionSelect {
       }
     }
   }
-  private drawOff = (e: MouseEvent) => {
+  private drawOff = (e: PointerEvent) => {
     // 恢复原始的 stopMoveGraph 设置
     this.lf.updateEditConfig({
       stopMoveGraph: this.originalStopMoveGraph,
@@ -274,9 +275,9 @@ export class SelectionSelect {
 
     const curStartPoint = cloneDeep(this.startPoint)
     const curEndPoint = cloneDeep(this.endPoint)
-    document.removeEventListener('mousemove', this.draw)
+    document.removeEventListener('pointermove', this.draw)
     if (!this.exclusiveMode) {
-      document.removeEventListener('mouseup', this.drawOff)
+      document.removeEventListener('pointerup', this.drawOff)
     }
 
     if (curStartPoint && curEndPoint) {
