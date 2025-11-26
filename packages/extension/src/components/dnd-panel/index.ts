@@ -36,39 +36,6 @@ export class DndPanel {
     }
     this.panelEl = document.createElement('div')
     this.panelEl.className = 'lf-dndpanel'
-    this.panelEl.onpointermove = (e: PointerEvent) => {
-      const panel = this.panelEl as HTMLElement
-      const rect = panel.getBoundingClientRect()
-      const outside =
-        e.clientX < rect.left ||
-        e.clientX > rect.right ||
-        e.clientY < rect.top ||
-        e.clientY > rect.bottom
-      const overlay = document.querySelector(
-        'svg[name="canvas-overlay"]',
-      ) as SVGElement | null
-      if (outside) {
-        if (panel.hasPointerCapture?.(e.pointerId)) {
-          panel.releasePointerCapture(e.pointerId)
-        }
-        overlay?.setPointerCapture?.(e.pointerId)
-        console.log('overlay setPointerCapture', e.pointerId)
-      } else {
-        if (overlay?.hasPointerCapture?.(e.pointerId)) {
-          overlay.releasePointerCapture(e.pointerId)
-        }
-        console.log('route pointer to panel', e.pointerId)
-      }
-    }
-    this.panelEl.onpointerup = (e: PointerEvent) => {
-      const panel = this.panelEl as HTMLElement
-      const overlay = document.querySelector(
-        'svg[name="canvas-overlay"]',
-      ) as SVGElement | null
-      panel.releasePointerCapture(e.pointerId)
-      overlay?.releasePointerCapture(e.pointerId)
-      console.log('panel pointerup', e.pointerId)
-    }
     this.panelEl.addEventListener(
       'touchmove',
       (e) => {
