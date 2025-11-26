@@ -254,7 +254,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       graphModel: { transformModel },
     } = this.props
     const { transform } = transformModel.getTransformStyle()
-    const { children, dnd } = this.props
+    const { children } = this.props
     const { isDragging } = this.state
 
     return (
@@ -275,7 +275,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
             ? 'lf-canvas-overlay lf-dragging'
             : 'lf-canvas-overlay lf-drag-able'
         }
-        {...dnd.eventMap()}
+        // {...dnd.eventMap()}
       >
         <g transform={transform}>{children}</g>
       </svg>

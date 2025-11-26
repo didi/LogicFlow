@@ -11,6 +11,8 @@ export class Dnd {
   nodeConfig: OnDragNodeConfig | null = null
   lf: LogicFlow
   fakeNode: BaseNodeModel | null = null
+  docPointerMove?: (e: PointerEvent) => void
+  docPointerUp?: (e: PointerEvent) => void
 
   constructor(params: { lf: LogicFlow }) {
     const { lf } = params
@@ -40,7 +42,47 @@ export class Dnd {
     const { editConfigModel } = this.lf.graphModel
     if (!editConfigModel?.isSilentMode) {
       this.nodeConfig = nodeConfig
-      window.document.addEventListener('pointerup', this.stopDrag)
+      this.docPointerMove = (e: PointerEvent) => {
+        if (!this.nodeConfig) return
+        const overlay = this.lf.graphModel.rootEl.querySelector(
+          '[name="canvas-overlay"]',
+        ) as HTMLElement | null
+        const topEl = window.document.elementFromPoint(
+          e.clientX,
+          e.clientY,
+        ) as HTMLElement | null
+        const inside = topEl === overlay || (topEl && overlay?.contains(topEl))
+        if (!inside) {
+          this.onDragLeave()
+          return
+        }
+        if (!this.fakeNode) {
+          this.dragEnter(e)
+          return
+        }
+        this.onDragOver(e)
+      }
+      this.docPointerUp = (e: PointerEvent) => {
+        if (!this.nodeConfig) return
+        const overlay = this.lf.graphModel.rootEl.querySelector(
+          '[name="canvas-overlay"]',
+        ) as HTMLElement | null
+        const topEl = window.document.elementFromPoint(
+          e.clientX,
+          e.clientY,
+        ) as HTMLElement | null
+        const inside = topEl === overlay || (topEl && overlay?.contains(topEl))
+        if (inside) {
+          this.onDrop(e)
+        } else {
+          this.onDragLeave()
+        }
+        e.preventDefault()
+        e.stopPropagation()
+        this.stopDrag()
+      }
+      window.document.addEventListener('pointermove', this.docPointerMove)
+      window.document.addEventListener('pointerup', this.docPointerUp)
     }
   }
 
@@ -48,7 +90,14 @@ export class Dnd {
     console.log('stop')
 
     this.nodeConfig = null
-    window.document.removeEventListener('pointerup', this.stopDrag)
+    if (this.docPointerMove) {
+      window.document.removeEventListener('pointermove', this.docPointerMove)
+      this.docPointerMove = undefined
+    }
+    if (this.docPointerUp) {
+      window.document.removeEventListener('pointerup', this.docPointerUp)
+      this.docPointerUp = undefined
+    }
   }
   dragEnter = (e: PointerEvent) => {
     if (!this.nodeConfig || this.fakeNode) return
@@ -114,16 +163,16 @@ export class Dnd {
     this.fakeNode = null
   }
 
-  eventMap() {
-    return {
-      onPointerEnter: this.dragEnter,
-      onPointerOver: this.dragEnter, // IE11
-      onMouseMove: this.onDragOver,
-      onPointerLeave: this.onDragLeave,
-      // onMouseOut: this.onDragLeave, // IE11
-      onMouseUp: this.onDrop,
-    }
-  }
+  // eventMap() {
+  //   return {
+  //     // onPointerEnter: this.dragEnter,
+  //     // onPointerOver: this.dragEnter, // IE11
+  //     // onMouseMove: this.onDragOver,
+  //     // onPointerLeave: this.onDragLeave,
+  //     // onMouseOut: this.onDragLeave, // IE11
+  //     // onMouseUp: this.onDrop,
+  //   }
+  // }
 }
 
 export default Dnd
