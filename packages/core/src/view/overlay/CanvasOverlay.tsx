@@ -171,30 +171,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
     }
   }
   pointerMoveHandler = (ev: PointerEvent) => {
-    const svgEl = ev.currentTarget as SVGElement
-    const panel = document.querySelector('.lf-dndpanel') as HTMLElement | null
-    if (panel) {
-      const rect = panel.getBoundingClientRect()
-      const insidePanel =
-        ev.clientX >= rect.left &&
-        ev.clientX <= rect.right &&
-        ev.clientY >= rect.top &&
-        ev.clientY <= rect.bottom
-      if (insidePanel) {
-        if (svgEl.hasPointerCapture?.(ev.pointerId)) {
-          svgEl.releasePointerCapture(ev.pointerId)
-        }
-        const { dnd } = this.props
-        if (dnd && dnd.nodeConfig && dnd.fakeNode) {
-          dnd.onDragLeave()
-        }
-      } else {
-        if (panel.hasPointerCapture?.(ev.pointerId)) {
-          panel.releasePointerCapture(ev.pointerId)
-        }
-        ;(svgEl as any).setPointerCapture?.(ev.pointerId)
-      }
-    }
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
     if (this.pinchStartDistance && this.pointers.size >= 2) {
       const {
@@ -216,11 +192,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
       transformModel.zoom(scale, [x, y])
       ev.preventDefault()
     }
-    const { dnd } = this.props
-    if (dnd && dnd.nodeConfig) {
-      dnd.onDragOver(ev)
-      ev.preventDefault()
-    }
   }
   pointerUpHandler = (ev: PointerEvent) => {
     this.pointers.delete(ev.pointerId)
@@ -231,22 +202,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
     if (this.pointers.size < 2) {
       this.pinchStartDistance = undefined
       this.pinchStartScale = undefined
-    }
-    const { dnd } = this.props
-    if (dnd && dnd.nodeConfig) {
-      const svgEl = ev.currentTarget as SVGElement
-      const rect = svgEl.getBoundingClientRect()
-      const insideCanvas =
-        ev.clientX >= rect.left &&
-        ev.clientX <= rect.right &&
-        ev.clientY >= rect.top &&
-        ev.clientY <= rect.bottom
-      if (insideCanvas) {
-        dnd.onDrop(ev)
-      } else {
-        dnd.onDragLeave()
-        dnd.stopDrag()
-      }
     }
   }
 
