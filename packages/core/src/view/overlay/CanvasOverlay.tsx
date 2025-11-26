@@ -138,6 +138,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
         gridSize,
       },
     } = this.props
+    console.log('canvas down')
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
     if (ev.pointerType === 'touch') {
       this.longPressTimer = window.setTimeout(() => {
