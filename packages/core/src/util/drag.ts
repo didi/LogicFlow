@@ -105,8 +105,10 @@ export class StepDrag {
     if (this.isStopPropagation) e.stopPropagation()
     e.preventDefault()
     const target = e.target as any
+    // 使用 Pointer Capture 保证后续 pointermove/pointerup 事件派发到当前目标
+    // 在移动端或复杂 DOM 场景下，可避免因隐式捕获导致的事件丢失
     if (target && typeof target.setPointerCapture === 'function') {
-      target.setPointerCapture((e as PointerEvent).pointerId)
+      target.setPointerCapture(e.pointerId)
     }
     this.isStartDragging = true
     this.startX = e.clientX
@@ -182,12 +184,12 @@ export class StepDrag {
     if (this.isStopPropagation) e.stopPropagation()
     const target = e.target as any
     if (target && typeof target.releasePointerCapture === 'function') {
-      target.releasePointerCapture((e as PointerEvent).pointerId)
+      target.releasePointerCapture(e.pointerId)
     }
     // fix #568: 如果onDragging在下一个事件循环中触发，而drop在当前事件循环，会出现问题。
     Promise.resolve().then(() => {
-      DOC.removeEventListener('pointermove', this.handleMouseMove as any, false)
-      DOC.removeEventListener('pointerup', this.handleMouseUp as any, false)
+      DOC.removeEventListener('pointermove', this.handleMouseMove, false)
+      DOC.removeEventListener('pointerup', this.handleMouseUp, false)
       const elementData = this.model?.getData()
       this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], {
         e,
@@ -204,8 +206,8 @@ export class StepDrag {
   }
   cancelDrag = () => {
     const DOC: any = window?.document
-    DOC.removeEventListener('pointermove', this.handleMouseMove as any, false)
-    DOC.removeEventListener('pointerup', this.handleMouseUp as any, false)
+    DOC.removeEventListener('pointermove', this.handleMouseMove, false)
+    DOC.removeEventListener('pointerup', this.handleMouseUp, false)
     this.onDragEnd({ event: undefined })
     this.isDragging = false
   }

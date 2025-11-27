@@ -488,7 +488,9 @@ export abstract class BaseEdge<P extends IProps> extends Component<
     }
     if (e.pointerType === 'touch') {
       this.longPressTimer = window.setTimeout(() => {
-        this.handleContextMenu(e)
+        if (!this.props.model.isDragging) {
+          this.handleContextMenu(e)
+        }
       }, 500)
     }
   }
@@ -622,8 +624,6 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           style={{
             touchAction: 'none',
             WebkitTouchCallout: 'none',
-            WebkitUserSelect: 'none',
-            userSelect: 'none',
           }}
           onClick={this.handleClick}
           onContextMenu={this.handleContextMenu}

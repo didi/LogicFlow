@@ -42,26 +42,33 @@ export class Dnd {
     const { editConfigModel } = this.lf.graphModel
     if (!editConfigModel?.isSilentMode) {
       this.nodeConfig = nodeConfig
+      // 指针移动：根据命中结果判断是否在画布覆盖层上，驱动假节点创建/移动或清理
       this.docPointerMove = (e: PointerEvent) => {
         if (!this.nodeConfig) return
+        // 获取画布覆盖层元素（仅在其自身或后代命中时视为“在画布内”）
         const overlay = this.lf.graphModel.rootEl.querySelector(
           '[name="canvas-overlay"]',
         ) as HTMLElement | null
+        // 获取当前指针位置下最上层的DOM元素，判断当前指针是否“在画布上”
         const topEl = window.document.elementFromPoint(
           e.clientX,
           e.clientY,
         ) as HTMLElement | null
         const inside = topEl === overlay || (topEl && overlay?.contains(topEl))
+        // 离开画布：清理吸附线与假节点
         if (!inside) {
           this.onDragLeave()
           return
         }
+        // 首次进入画布：创建假节点并初始化位置
         if (!this.fakeNode) {
           this.dragEnter(e)
           return
         }
+        // 在画布内移动：更新假节点位置与吸附线
         this.onDragOver(e)
       }
+      // 指针抬起：在画布内落点生成节点，否则清理假节点
       this.docPointerUp = (e: PointerEvent) => {
         if (!this.nodeConfig) return
         const overlay = this.lf.graphModel.rootEl.querySelector(
@@ -77,8 +84,10 @@ export class Dnd {
         } else {
           this.onDragLeave()
         }
+        // 阻止默认行为与冒泡，避免滚动/点击穿透
         e.preventDefault()
         e.stopPropagation()
+        // 结束拖拽并移除监听
         this.stopDrag()
       }
       window.document.addEventListener('pointermove', this.docPointerMove)
@@ -87,8 +96,6 @@ export class Dnd {
   }
 
   stopDrag = () => {
-    console.log('stop')
-
     this.nodeConfig = null
     if (this.docPointerMove) {
       window.document.removeEventListener('pointermove', this.docPointerMove)
@@ -130,8 +137,6 @@ export class Dnd {
     return false
   }
   onDragLeave = () => {
-    console.log('leave canvas')
-
     if (this.fakeNode) {
       this.lf.removeNodeSnapLine()
       this.lf.graphModel.removeFakeNode()
@@ -139,8 +144,6 @@ export class Dnd {
     }
   }
   onDrop = (e: MouseEvent) => {
-    console.log(111)
-
     if (!this.lf.graphModel || !e || !this.nodeConfig) {
       return
     }
