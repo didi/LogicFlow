@@ -47,6 +47,10 @@ export class CanvasOverlay extends Component<IProps, IState> {
   //   return this.props as InjectedProps;
   // }
   onDragging = ({ deltaX, deltaY }: IDragParams) => {
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
     this.setState({
       isDragging: true,
     })
@@ -138,8 +142,10 @@ export class CanvasOverlay extends Component<IProps, IState> {
         gridSize,
       },
     } = this.props
-    console.log('canvas down')
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+    }
     if (ev.pointerType === 'touch') {
       this.longPressTimer = window.setTimeout(() => {
         this.handleContextMenu(ev)
@@ -158,33 +164,46 @@ export class CanvasOverlay extends Component<IProps, IState> {
       // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
       this.clickHandler(ev)
     }
+    // 检测双指触摸，初始化捏合缩放
     if (this.pointers.size === 2) {
       const {
         graphModel: { transformModel },
       } = this.props
+      // 记录两指当前位置用于计算初始距离
       const pts = Array.from(this.pointers.values())
       const dx = pts[0].x - pts[1].x
       const dy = pts[0].y - pts[1].y
+      // 记录捏合起始距离与当前缩放，后续按比例计算缩放
       this.pinchStartDistance = Math.hypot(dx, dy)
       this.pinchStartScale = transformModel.SCALE_X
+      // 双指操作下取消画布拖拽，避免与捏合缩放冲突
       this.stepDrag.cancelDrag()
     }
   }
   pointerMoveHandler = (ev: PointerEvent) => {
+    // 记录当前指针位置（按 pointerId）
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
+    // 当已记录初始捏合距离且存在两指时，执行捏合缩放
     if (this.pinchStartDistance && this.pointers.size >= 2) {
       const {
         graphModel,
         graphModel: { editConfigModel, transformModel },
       } = this.props
       if (editConfigModel.stopZoomGraph) return
+      // 取消触摸长按计时，避免捏合过程中误触发上下文菜单
+      if (this.longPressTimer) {
+        clearTimeout(this.longPressTimer)
+      }
+      // 计算两指间当前距离
       const pts = Array.from(this.pointers.values())
       const dx = pts[0].x - pts[1].x
       const dy = pts[0].y - pts[1].y
       const dist = Math.hypot(dx, dy)
+      // 以初始缩放为基准，根据距离比例得到新的缩放比例
       const scale =
         (this.pinchStartScale ?? transformModel.SCALE_X) *
         (dist / this.pinchStartDistance)
+      // 取两指中心作为缩放原点，并转换为画布坐标系
       const cx = (pts[0].x + pts[1].x) / 2
       const cy = (pts[0].y + pts[1].y) / 2
       const pos = graphModel.getPointByClient({ x: cx, y: cy })

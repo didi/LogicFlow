@@ -89,9 +89,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
-  componentDidUpdate() { }
+  componentDidUpdate() {}
 
   abstract getShape(): h.JSX.Element | null
 
@@ -342,7 +342,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     const isDragging = this.mouseUpDrag === false
     const curTime = new Date().getTime()
-    console.log('6666', e)
     if (!this.startTime) return
     const timeInterval = curTime - this.startTime
     const { model, graphModel } = this.props
