@@ -1248,6 +1248,7 @@ export class GraphModel {
   clearSelectElements() {
     this.selectElements.forEach((element) => {
       element?.setSelected(false)
+      element?.setHovered(false)
     })
     this.selectElements.clear()
     /**

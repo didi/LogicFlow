@@ -104,12 +104,6 @@ export class StepDrag {
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return
     if (this.isStopPropagation) e.stopPropagation()
     e.preventDefault()
-    const target = e.target as any
-    // 使用 Pointer Capture 保证后续 pointermove/pointerup 事件派发到当前目标
-    // 在移动端或复杂 DOM 场景下，可避免因隐式捕获导致的事件丢失
-    if (target && typeof target.setPointerCapture === 'function') {
-      target.setPointerCapture(e.pointerId)
-    }
     this.isStartDragging = true
     this.startX = e.clientX
     this.startY = e.clientY
