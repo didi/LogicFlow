@@ -110,9 +110,6 @@ export class DndPanel {
       if (shapeItem.callback) {
         shapeItem.callback(this.lf, this.domContainer)
       }
-      // try {
-      //   (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
-      // } catch { }
       e.preventDefault()
     }
     el.ondblclick = (e) => {

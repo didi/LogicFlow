@@ -29,7 +29,7 @@ interface IProps {
   anchorIndex: number
   graphModel: GraphModel
   nodeModel: BaseNodeModel
-  setHoverOff: (e: MouseEvent) => void
+  setHoverOff: (e: PointerEvent) => void
 }
 
 interface IState {
@@ -154,7 +154,7 @@ class Anchor extends Component<IProps, IState> {
       endY: y1,
       dragging: true,
     })
-    this.moveAnchorEnd(x1, y1)
+    this.moveAnchorEnd(x1, y1, event)
     if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary
@@ -164,7 +164,7 @@ class Anchor extends Component<IProps, IState> {
           endX: endX - translateX,
           endY: endY - translateY,
         })
-        this.moveAnchorEnd(endX - translateX, endY - translateY)
+        this.moveAnchorEnd(endX - translateX, endY - translateY, event)
       })
     }
     eventCenter.emit(EventType.ANCHOR_DRAG, {
@@ -189,6 +189,11 @@ class Anchor extends Component<IProps, IState> {
     this.sourceRuleResults.clear()
     this.targetRuleResults.clear()
     const { graphModel, nodeModel, anchorData } = this.props
+    // 拖拽结束清理：取消悬浮态
+    if (this.preTargetNode) {
+      this.preTargetNode.setHovered(false)
+      this.preTargetNode = undefined
+    }
 
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
       data: anchorData,
@@ -289,7 +294,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
-  moveAnchorEnd(endX: number, endY: number) {
+  moveAnchorEnd(endX: number, endY: number, event?: PointerEvent) {
     const { graphModel, nodeModel, anchorData } = this.props
     const info = targetNodeInfo(
       {
@@ -344,12 +349,33 @@ class Anchor extends Component<IProps, IState> {
       } else {
         targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT)
       }
+      // 人工触发进入目标节点事件，同步设置 hovered 以驱动锚点显隐和样式
+      if (!targetNode.isHovered) {
+        const nodeData = targetNode.getData()
+        if (event) {
+          graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
+            data: nodeData,
+            e: event,
+          })
+        }
+        targetNode.setHovered(true)
+      }
     } else if (
       this.preTargetNode &&
       this.preTargetNode.state !== ElementState.DEFAULT
     ) {
       // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
       this.preTargetNode.setElementState(ElementState.DEFAULT)
+      // 未命中任何节点：人工派发离开事件并取消悬浮，避免状态残留
+      const prevData = this.preTargetNode.getData()
+      if (event) {
+        graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
+          data: prevData,
+          e: event,
+        })
+      }
+      this.preTargetNode.setHovered(false)
+      this.preTargetNode = undefined
     }
   }
 

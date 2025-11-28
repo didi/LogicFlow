@@ -125,6 +125,7 @@ export interface IEditConfigType {
   edgeTextMode: TextMode
   // 开启网格对齐
   snapGrid: boolean
+  isPinching: boolean
 }
 
 export type IConfigKeys = keyof IEditConfigType
@@ -186,6 +187,7 @@ const allKeys = [
   'edgeTextMultiple', // 是否支持多个边文本
   'nodeTextVertical', // 节点文本是否纵向显示
   'edgeTextVertical', // 边文本是否纵向显示
+  'isPinching', //是否是双指捏合态
 ] as const
 
 /**
@@ -202,6 +204,7 @@ export class EditConfigModel {
   @observable stopMoveGraph = false
   @observable stopScrollGraph = false
   @observable snapGrid = false
+  @observable isPinching = false
   /*********************************************************
    * 文本相关配置（全局）
    ********************************************************/

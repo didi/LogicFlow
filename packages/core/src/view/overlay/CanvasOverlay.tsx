@@ -21,6 +21,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
   pointers = new Map<number, { x: number; y: number }>()
   pinchStartDistance?: number
   pinchStartScale?: number
+  pinchLastCenterX?: number
+  pinchLastCenterY?: number
   longPressTimer?: number
 
   constructor(props: IProps) {
@@ -116,7 +118,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
       graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev })
     }
   }
-  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
+  handleContextMenu = (ev: MouseEvent) => {
     const target = ev.target as HTMLElement
     if (target.getAttribute('name') === 'canvas-overlay') {
       ev.preventDefault()
@@ -133,7 +135,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
     }
   }
   // 鼠标、触摸板 按下
-  mouseDownHandler = (ev: PointerEvent) => {
+  pointerDownHandler = (ev: PointerEvent) => {
     const {
       graphModel: {
         eventCenter,
@@ -151,6 +153,27 @@ export class CanvasOverlay extends Component<IProps, IState> {
         this.handleContextMenu(ev)
       }, 500)
     }
+    // 检测双指触摸，初始化捏合缩放
+    if (this.pointers.size === 2) {
+      const {
+        graphModel: { transformModel, editConfigModel },
+      } = this.props
+      // 记录两指当前位置用于计算初始距离
+      const pts = Array.from(this.pointers.values())
+      const dx = pts[0].x - pts[1].x
+      const dy = pts[0].y - pts[1].y
+      const cx = (pts[0].x + pts[1].x) / 2
+      const cy = (pts[0].y + pts[1].y) / 2
+      // 记录捏合起始距离与当前缩放，后续按比例计算缩放
+      this.pinchStartDistance = Math.hypot(dx, dy)
+      this.pinchStartScale = transformModel.SCALE_X
+      // 双指操作下取消画布拖拽，避免与捏合缩放冲突
+      this.stepDrag.cancelDrag()
+      this.pinchLastCenterX = cx
+      this.pinchLastCenterY = cy
+      editConfigModel.updateEditConfig({ isPinching: true })
+      return
+    }
     const { adjustEdge, adjustNodePosition, stopMoveGraph } = editConfigModel
     const target = ev.target as HTMLElement
     const isFrozenElement = !adjustEdge && !adjustNodePosition
@@ -163,21 +186,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
       }
       // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
       this.clickHandler(ev)
-    }
-    // 检测双指触摸，初始化捏合缩放
-    if (this.pointers.size === 2) {
-      const {
-        graphModel: { transformModel },
-      } = this.props
-      // 记录两指当前位置用于计算初始距离
-      const pts = Array.from(this.pointers.values())
-      const dx = pts[0].x - pts[1].x
-      const dy = pts[0].y - pts[1].y
-      // 记录捏合起始距离与当前缩放，后续按比例计算缩放
-      this.pinchStartDistance = Math.hypot(dx, dy)
-      this.pinchStartScale = transformModel.SCALE_X
-      // 双指操作下取消画布拖拽，避免与捏合缩放冲突
-      this.stepDrag.cancelDrag()
     }
   }
   pointerMoveHandler = (ev: PointerEvent) => {
@@ -209,6 +217,16 @@ export class CanvasOverlay extends Component<IProps, IState> {
       const pos = graphModel.getPointByClient({ x: cx, y: cy })
       const { x, y } = pos.canvasOverlayPosition
       transformModel.zoom(scale, [x, y])
+      // 双指中心位移驱动画布平移，配合缩放实现捏合移动；
+      if (!editConfigModel.stopMoveGraph || editConfigModel.isPinching) {
+        const deltaX =
+          this.pinchLastCenterX === undefined ? 0 : cx - this.pinchLastCenterX
+        const deltaY =
+          this.pinchLastCenterY === undefined ? 0 : cy - this.pinchLastCenterY
+        transformModel.translate(deltaX, deltaY)
+        this.pinchLastCenterX = cx
+        this.pinchLastCenterY = cy
+      }
       ev.preventDefault()
     }
   }
@@ -218,9 +236,19 @@ export class CanvasOverlay extends Component<IProps, IState> {
       clearTimeout(this.longPressTimer)
       this.longPressTimer = undefined
     }
+    // 双指松开或仅剩一指：结束捏合手势并清理临时状态
     if (this.pointers.size < 2) {
+      // 清空捏合距离与缩放起始值
       this.pinchStartDistance = undefined
       this.pinchStartScale = undefined
+      // 清空上一帧的双指中心
+      this.pinchLastCenterX = undefined
+      this.pinchLastCenterY = undefined
+      const {
+        graphModel: { editConfigModel },
+      } = this.props
+      // 标记退出捏合，框选等交互可恢复
+      editConfigModel.updateEditConfig({ isPinching: false })
     }
   }
 
@@ -239,7 +267,7 @@ export class CanvasOverlay extends Component<IProps, IState> {
         height="100%"
         name="canvas-overlay"
         onWheel={this.zoomHandler}
-        onPointerDown={this.mouseDownHandler}
+        onPointerDown={this.pointerDownHandler}
         onPointerMove={this.pointerMoveHandler}
         onPointerUp={this.pointerUpHandler}
         onPointerCancel={this.pointerUpHandler}
@@ -250,7 +278,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
             ? 'lf-canvas-overlay lf-dragging'
             : 'lf-canvas-overlay lf-drag-able'
         }
-        // {...dnd.eventMap()}
       >
         <g transform={transform}>{children}</g>
       </svg>

@@ -249,7 +249,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       gridSize,
     } = graphModel
     model.isDragging = true
-    const { clientX, clientY } = event as PointerEvent
+    const { clientX, clientY } = event!
     let {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
@@ -337,7 +337,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleClick = (e: MouseEvent | PointerEvent) => {
+  handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     const isDragging = this.mouseUpDrag === false
@@ -406,7 +406,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
+  handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault()
     const { model, graphModel } = this.props
     const { editConfigModel } = graphModel
@@ -550,6 +550,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
           onPointerDown={this.handleMouseDown}
           onPointerUp={this.handleMouseUp}
           onClick={this.handleClick}
+          //因为移动端点击操作完成会按顺序触发enter、leave、click事件，所以会造成节点的闪烁，所以在这里没有统一状态为Pointer
           onMouseEnter={this.setHoverOn}
           onMouseOver={this.setHoverOn}
           onMouseLeave={this.setHoverOff}

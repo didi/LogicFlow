@@ -444,7 +444,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写，如果想要基于contextmenu事件做处理，请监听edge:contextmenu事件。
    */
-  handleContextMenu = (ev: MouseEvent | PointerEvent) => {
+  handleContextMenu = (ev: MouseEvent) => {
     ev.preventDefault()
     // 节点右击也会触发时间，区分右击和点击(mouseup)
     this.contextMenuTime = new Date().getTime()

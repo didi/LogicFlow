@@ -132,6 +132,7 @@ export class SelectionSelect {
    */
   private handleMouseDown(e: PointerEvent) {
     if (!this.container || this.disabled) return
+    if (this.lf.graphModel.editConfigModel.isPinching) return
 
     // 禁用右键框选
     const isRightClick = e.button === 2
@@ -223,6 +224,12 @@ export class SelectionSelect {
   }
 
   private draw = (ev: PointerEvent) => {
+    if (this.lf.graphModel.editConfigModel.isPinching) {
+      this.lf.updateEditConfig({ stopMoveGraph: this.originalStopMoveGraph })
+      this.originStatusSaved = false
+      this.cleanupSelectionState()
+      return
+    }
     const {
       domOverlayPosition: { x: x1, y: y1 },
     } = this.lf.getPointByClient(ev.clientX, ev.clientY)
