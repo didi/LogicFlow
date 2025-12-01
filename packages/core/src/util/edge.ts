@@ -159,6 +159,7 @@ export const mergeBBox = (b1: BoxBounds, b2: BoxBounds): BoxBounds => {
 export const getBBoxOfPoints = (
   points: Point[] = [],
   offset?: number,
+  heightOffset?: number,
 ): BoxBounds => {
   const xList: number[] = []
   const yList: number[] = []
@@ -174,7 +175,7 @@ export const getBBoxOfPoints = (
   let height = maxY - minY
   if (offset) {
     width += offset
-    height += offset
+    height += heightOffset || offset
   }
   return {
     centerX: (minX + maxX) / 2,

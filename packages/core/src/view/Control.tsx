@@ -389,8 +389,8 @@ export class ResizeControl extends Component<
           className="lf-resize-control-content"
           x={x}
           y={y}
-          width={25}
-          height={25}
+          width={width ? width + 5 : 25}
+          height={width ? width + 5 : 25}
           fill="transparent"
           stroke="transparent"
           onPointerDown={this.dragHandler.handleMouseDown}
@@ -414,31 +414,32 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
   getResizeControl(): h.JSX.Element[] {
     const { model, graphModel } = this.props
     const { minX, minY, maxX, maxY } = getNodeBBox(model)
+    const { width = 8, height = 8 } = model.getResizeControlStyle()
 
     const controlList: ControlItemProps[] = [
       {
         index: ResizeControlIndex.LEFT_TOP,
         direction: 'nw',
-        x: minX,
-        y: minY,
+        x: minX - width / 2,
+        y: minY - height / 2,
       }, // 左上角
       {
         index: ResizeControlIndex.RIGHT_TOP,
         direction: 'ne',
-        x: maxX,
-        y: minY,
+        x: maxX + width / 2,
+        y: minY - height / 2,
       }, // 右上角
       {
         index: ResizeControlIndex.RIGHT_BOTTOM,
         direction: 'se',
-        x: maxX,
-        y: maxY,
+        x: maxX + width / 2,
+        y: maxY + height / 2,
       }, // 右下角
       {
         index: ResizeControlIndex.LEFT_BOTTOM,
         direction: 'sw',
-        x: minX,
-        y: maxY,
+        x: minX - width / 2,
+        y: maxY + height / 2,
       }, // 左下角
     ]
 
@@ -451,7 +452,9 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
     const { model } = this.props
     const { x, y, width, height } = model
     const style = model.getResizeOutlineStyle()
-    return <Rect {...style} x={x} y={y} width={width} height={height} />
+    return (
+      <Rect {...style} x={x} y={y} width={width + 10} height={height + 10} />
+    )
   }
 
   render(): h.JSX.Element {
