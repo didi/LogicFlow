@@ -202,7 +202,7 @@ export default function SelectionSelectExample() {
           </Form.Item>
           <Form.Item label="网格颜色">
             <ColorPicker
-              value={'#ababab'}
+              value={'#D7DEEB'}
               onChange={(color) => {
                 lfRef.current?.graphModel.updateGridOptions({
                   config: { color: color.toHexString() },

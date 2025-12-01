@@ -80,14 +80,32 @@ export class HtmlNode<
     const style = model.getNodeStyle()
     this.currentProperties = JSON.stringify(model.properties)
     return (
-      <foreignObject
-        {...style}
-        x={x - width / 2}
-        y={y - height / 2}
-        width={width}
-        height={height}
-        ref={this.ref}
-      />
+      <g>
+        {style.shadow && (
+          <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow {...style.shadow} />
+            </filter>
+          </defs>
+        )}
+        <rect
+          x={x - width / 2}
+          y={y - height / 2}
+          width={width}
+          height={height}
+          rx="8"
+          {...style}
+          filter="url(#shadow)"
+        />
+        <foreignObject
+          {...style}
+          x={x - width / 2}
+          y={y - height / 2}
+          width={width}
+          height={height}
+          ref={this.ref}
+        />
+      </g>
     )
   }
 }

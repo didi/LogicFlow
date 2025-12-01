@@ -105,7 +105,7 @@ export namespace Options {
     edgeGenerator?: EdgeGeneratorType
 
     customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
-    themeMode?: 'radius' | 'dark' | 'colorful' // 主题模式
+    themeMode?: LogicFlow.ThemeMode // 主题模式
 
     parentTransform?: TransformModel // 父级变换模型，用于嵌套变换
 

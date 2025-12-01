@@ -289,7 +289,19 @@ export default function BasicNode() {
       ;(window as any).lf = lf
     }
   }, [])
-
+  const handleRandomEdgeOffset = () => {
+    if (lfRef.current) {
+      const { edges } = lfRef.current.getGraphData() as GraphData
+      forEach(edges, (edge) => {
+        if (edge.type !== 'polyline') return
+        const offset = Math.random() * 100
+        console.log('handleRandomEdgeOffset offset', offset)
+        lfRef.current?.setProperties(edge.id, {
+          offset,
+        })
+      })
+    }
+  }
   const setArrow = (arrowName: string) => {
     const lf = lfRef.current
     if (lf) {
@@ -302,7 +314,19 @@ export default function BasicNode() {
       })
     }
   }
-
+  const handleRandomEdgeRadius = () => {
+    if (lfRef.current) {
+      const { edges } = lfRef.current.getGraphData() as GraphData
+      forEach(edges, (edge) => {
+        if (edge.type !== 'polyline') return
+        const radius = Math.random() * 100
+        console.log('handleRandomEdgeRadius radius', radius)
+        lfRef.current?.setProperties(edge.id, {
+          radius,
+        })
+      })
+    }
+  }
   const focusOn = () => {
     lfRef?.current?.focusOn({
       id: 'custom-node-1',
@@ -575,6 +599,20 @@ export default function BasicNode() {
           onClick={handleTurnAnimationOn}
         >
           开启边动画
+        </Button>
+        <Button
+          key="randomEdgeOffset"
+          type="primary"
+          onClick={handleRandomEdgeOffset}
+        >
+          随机修改折线边offset
+        </Button>
+        <Button
+          key="randomEdgeRadius"
+          type="primary"
+          onClick={handleRandomEdgeRadius}
+        >
+          随机修改折线边radius
         </Button>
         <Button
           key="closeEdgeAnimation"

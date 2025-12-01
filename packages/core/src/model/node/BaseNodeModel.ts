@@ -425,7 +425,15 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
 
   getResizeOutlineStyle() {
     const { resizeOutline } = this.graphModel.theme
-    return cloneDeep(resizeOutline)
+    let attributes = { ...resizeOutline }
+    if (this.isHovered) {
+      const hoverStyle = resizeOutline.hover || {}
+      attributes = {
+        ...attributes,
+        ...hoverStyle,
+      }
+    }
+    return cloneDeep(attributes)
   }
 
   /**

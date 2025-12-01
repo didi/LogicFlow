@@ -262,8 +262,16 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
    */
   getOutlineStyle(): LogicFlow.OutlineTheme {
     const { graphModel } = this
-    const { outline } = graphModel.theme
-    return cloneDeep(outline)
+    const { edgeOutline } = graphModel.theme
+    let attributes = { ...edgeOutline }
+    if (this.isHovered) {
+      const hoverStyle = edgeOutline.hover || {}
+      attributes = {
+        ...attributes,
+        ...hoverStyle,
+      }
+    }
+    return cloneDeep(attributes)
   }
 
   /**
