@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.0-alpha.0
+
+### Minor Changes
+
+- feat: 支持移动端适配
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.0
+  - @logicflow/vue-node-registry@1.2.0-alpha.0
+
 ## 2.1.6
 
 ### Patch Changes

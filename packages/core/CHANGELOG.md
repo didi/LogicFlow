@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0-alpha.0
+
+### Minor Changes
+
+- feat: 支持移动端适配
+
 ## 2.1.4
 
 ### Patch Changes
