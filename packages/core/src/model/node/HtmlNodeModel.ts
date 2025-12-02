@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash-es'
 import BaseNodeModel from './BaseNodeModel'
 import { Model } from '../BaseModel'
 import { ModelType } from '../../constant'
@@ -44,6 +45,18 @@ export class HtmlNodeModel<
       { x, y: y + height / 2, id: `${this.id}_2` },
       { x: x - width / 2, y, id: `${this.id}_3` },
     ]
+  }
+
+  getNodeStyle() {
+    const style = super.getNodeStyle()
+    const { rect, html } = this.graphModel.theme
+    const { style: customStyle = {} } = this.properties
+    return {
+      ...style,
+      ...cloneDeep(rect),
+      ...cloneDeep(html),
+      ...cloneDeep(customStyle),
+    }
   }
 }
 

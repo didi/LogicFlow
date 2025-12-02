@@ -16,6 +16,26 @@ type IProps = {
 
 @observer
 export class OutlineOverlay extends Component<IProps> {
+  // 通用渲染函数：根据点集合与样式计算包围盒并返回矩形轮廓
+  private renderRectOutline(
+    pointsList: any[],
+    style: Record<string, unknown>,
+    className: string,
+    defaultOffsets: { widthOffset: number; heightOffset: number },
+  ) {
+    const {
+      widthOffset = defaultOffsets.widthOffset,
+      heightOffset = defaultOffsets.heightOffset,
+    } = (style || {}) as any
+    const { x, y, width, height } = getBBoxOfPoints(
+      pointsList,
+      widthOffset,
+      heightOffset,
+    )
+    return (
+      <Rect className={className} {...{ x, y, width, height }} {...style} />
+    )
+  }
   // 节点outline
   getNodesOutline() {
     const { graphModel } = this.props
@@ -52,10 +72,8 @@ export class OutlineOverlay extends Component<IProps> {
               {...{
                 x,
                 y,
-                // width: width + 10,
-                // height: height + 10,
-                width: width + 10,
-                height: height + 10,
+                width: width + 4,
+                height: height + 4,
               }}
               {...attributes}
             />,
@@ -96,22 +114,12 @@ export class OutlineOverlay extends Component<IProps> {
   // 直线outline
   getLineOutline(line: LineEdgeModel) {
     const { startPoint, endPoint } = line
-    const x = (startPoint.x + endPoint.x) / 2
-    const y = (startPoint.y + endPoint.y) / 2
-    const width = Math.abs(startPoint.x - endPoint.x) + 10
-    const height = Math.abs(startPoint.y - endPoint.y) + 10
     const style = line.getOutlineStyle()
-    return (
-      <Rect
-        className="lf-outline-edge"
-        {...{
-          x,
-          y,
-          width,
-          height,
-        }}
-        {...style}
-      />
+    return this.renderRectOutline(
+      [startPoint, endPoint],
+      style,
+      'lf-outline-edge',
+      { widthOffset: 10, heightOffset: 10 },
     )
   }
 
@@ -119,42 +127,22 @@ export class OutlineOverlay extends Component<IProps> {
   getPolylineOutline(polyline: PolylineEdgeModel) {
     const { points } = polyline
     const pointsList = points2PointsList(points)
-    const bbox = getBBoxOfPoints(pointsList, 8)
-    const { x, y, width, height } = bbox
     const style = polyline.getOutlineStyle()
-    return (
-      <Rect
-        className="lf-outline"
-        {...{
-          x,
-          y,
-          width,
-          height,
-        }}
-        {...style}
-      />
-    )
+    return this.renderRectOutline(pointsList, style, 'lf-outline', {
+      widthOffset: 8,
+      heightOffset: 16,
+    })
   }
 
   // 曲线outline
   getBezierOutline(bezier: BezierEdgeModel) {
     const { path } = bezier
     const pointsList = getBezierPoints(path)
-    const bbox = getBBoxOfPoints(pointsList, 8)
-    const { x, y, width, height } = bbox
     const style = bezier.getOutlineStyle()
-    return (
-      <Rect
-        className="lf-outline"
-        {...{
-          x,
-          y,
-          width,
-          height,
-        }}
-        {...style}
-      />
-    )
+    return this.renderRectOutline(pointsList, style, 'lf-outline', {
+      widthOffset: 8,
+      heightOffset: 16,
+    })
   }
 
   render() {

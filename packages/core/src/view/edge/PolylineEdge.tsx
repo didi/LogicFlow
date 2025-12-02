@@ -5,6 +5,7 @@ import LogicFlow from '../../LogicFlow'
 import { GraphModel, PolylineEdgeModel } from '../../model'
 import { EventType, SegmentDirection } from '../../constant'
 import { StepDrag, points2PointsList } from '../../util'
+import { generateRoundedCorners } from '../../util/geometry'
 import { getVerticalPointOfLine } from '../../algorithm'
 
 import ArrowInfo = LogicFlow.ArrowInfo
@@ -110,7 +111,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
    */
   getEdge() {
     const { model } = this.props
-    const { points, isAnimation, arrowConfig } = model
+    const { points, isAnimation, arrowConfig, properties } = model
     const style = model.getEdgeStyle()
     const animationStyle = model.getEdgeAnimationStyle()
     const {
@@ -123,9 +124,20 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
       animationTimingFunction,
       animationDirection,
     } = animationStyle
+    // 应用通用圆角：当存在样式半径时，为折线拐点生成圆角
+    const radius: number = (properties?.radius ??
+      (style as any)?.radius ??
+      0) as number
+    const roundedPointsStr = (() => {
+      if (!radius || radius <= 0) return points
+      const list = points2PointsList(points)
+      const rounded = generateRoundedCorners(list, radius, false)
+      return rounded.map((p) => `${p.x},${p.y}`).join(' ')
+    })()
+
     return (
       <Polyline
-        points={points}
+        points={roundedPointsStr}
         {...style}
         {...arrowConfig}
         {...(isAnimation

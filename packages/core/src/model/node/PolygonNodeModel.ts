@@ -67,12 +67,14 @@ export class PolygonNodeModel<
     const {
       graphModel: {
         theme: { polygon },
+        customStyles: { polygon: customPolygon },
       },
     } = this
     const { style: customStyle = {} } = this.properties
     return {
       ...style,
       ...cloneDeep(polygon),
+      ...cloneDeep(customPolygon),
       ...cloneDeep(customStyle),
     }
   }

@@ -1,3 +1,5 @@
+export * from './theme'
+
 export const DEFAULT_VISIBLE_SPACE = 200
 export const ELEMENT_MAX_Z_INDEX = 9999
 

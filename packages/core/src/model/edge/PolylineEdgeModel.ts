@@ -34,11 +34,36 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   @observable dbClickPosition?: Point
 
   initEdgeData(data: LogicFlow.EdgeConfig): void {
-    this.offset = get(data, 'properties.offset', 30)
+    const providedOffset = get(data, 'properties.offset')
+    // 当用户未传入 offset 时，按“箭头与折线重叠长度 + 10”作为默认值
+    // 其中“重叠长度”采用箭头样式中的 offset（沿边方向的长度）
+    this.offset =
+      typeof providedOffset === 'number'
+        ? providedOffset
+        : this.getDefaultOffset()
     if (data.pointsList) {
       this.pointsList = data.pointsList
     }
     super.initEdgeData(data)
+  }
+
+  setAttributes() {
+    const { offset: newOffset } = this.properties
+    if (newOffset && newOffset !== this.offset) {
+      this.offset = newOffset
+      this.updatePoints()
+    }
+  }
+
+  /**
+   * 计算默认 offset：箭头与折线重叠长度 + 10
+   * 重叠长度采用箭头样式中的 offset（沿边方向的长度）
+   */
+  private getDefaultOffset(): number {
+    const arrowStyle = this.getArrowStyle()
+    const arrowOverlap =
+      typeof arrowStyle.offset === 'number' ? arrowStyle.offset : 0
+    return arrowOverlap + 5
   }
 
   getEdgeStyle() {

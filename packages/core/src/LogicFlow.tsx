@@ -1832,6 +1832,8 @@ export namespace LogicFlow {
 
   export type OutlineTheme = {
     hover?: CommonTheme
+    widthOffset?: number
+    heightOffset?: number
   } & CommonTheme &
     EdgeAnimation
 
@@ -1871,6 +1873,7 @@ export namespace LogicFlow {
     diamond: PolygonTheme // 菱形样式
     ellipse: EllipseTheme // 椭圆样式
     polygon: PolygonTheme // 多边形样式
+    html: RectTheme // html 节点样式
 
     /**
      * 基础图形线相关主题
@@ -1905,12 +1908,15 @@ export namespace LogicFlow {
      */
     edgeAdjust: CircleTheme
     outline: OutlineTheme // 节点选择状态下外侧的选框样式
+    edgeOutline: OutlineTheme // 边选择状态下外侧的选框样式
     edgeAnimation: EdgeAnimation // 边动画样式
 
     // 画布背景
     background?: boolean | Partial<LFOptions.BackgroundConfig>
     grid?: boolean | Partial<Grid.GridOptions>
   }
+
+  export type ThemeMode = 'default' | 'retro' | 'dark' | 'colorful'
 }
 
 // Render or Functions

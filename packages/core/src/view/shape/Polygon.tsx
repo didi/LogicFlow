@@ -1,6 +1,7 @@
 import { createElement as h } from 'preact/compat'
 import { forEach, toPairs } from 'lodash-es'
 import { LogicFlow } from '../..'
+import { generateRoundedCorners } from '../../util/geometry'
 
 export type IPolygonProps = {
   points: LogicFlow.PointTuple[]
@@ -8,52 +9,6 @@ export type IPolygonProps = {
   y?: number
   className?: string
   radius?: number
-}
-/**
- * 生成带圆角的多边形路径
- * @param points 多边形顶点坐标数组
- * @param radius 圆角半径
- * @returns SVG 路径字符串
- */
-export function createRoundedPolygonPath(points, radius): string {
-  const pointList = points.map((point) => ({ x: point[0], y: point[1] }))
-  const len = pointList.length
-  if (len < 3) return ''
-
-  const r = Math.abs(radius)
-  let path = ''
-
-  for (let i = 0; i < len; i++) {
-    const prev = pointList[(i - 1 + len) % len]
-    const curr = pointList[i]
-    const next = pointList[(i + 1) % len]
-
-    // 向量
-    const v1 = { x: curr.x - prev.x, y: curr.y - prev.y }
-    const v2 = { x: next.x - curr.x, y: next.y - curr.y }
-
-    // 单位向量
-    const len1 = Math.hypot(v1.x, v1.y)
-    const len2 = Math.hypot(v2.x, v2.y)
-    const u1 = { x: v1.x / len1, y: v1.y / len1 }
-    const u2 = { x: v2.x / len2, y: v2.y / len2 }
-
-    // 起点 = curr - u1 * r，终点 = curr + u2 * r
-    const start = { x: curr.x - u1.x * r, y: curr.y - u1.y * r }
-    const end = { x: curr.x + u2.x * r, y: curr.y + u2.y * r }
-
-    if (i === 0) {
-      path += `M ${start.x} ${start.y} `
-    } else {
-      path += `L ${start.x} ${start.y} `
-    }
-
-    // Q 控制点是当前拐角点
-    path += `Q ${curr.x} ${curr.y} ${end.x} ${end.y} `
-  }
-
-  path += 'Z'
-  return path
 }
 
 export function Polygon(props: IPolygonProps): h.JSX.Element {
@@ -74,13 +29,21 @@ export function Polygon(props: IPolygonProps): h.JSX.Element {
   })
 
   if (className) {
-    attrs.classNmae = `lf-basic-shape ${className}`
+    attrs.className = `lf-basic-shape ${className}`
   } else {
     attrs.className = 'lf-basic-shape'
   }
   if (radius) {
-    const path = createRoundedPolygonPath(points, radius)
-    attrs.d = path
+    const pointList = points.map((point) => ({ x: point[0], y: point[1] }))
+    const rounded = generateRoundedCorners(pointList, radius, true)
+    const d = rounded.length
+      ? `M ${rounded[0].x} ${rounded[0].y} ${rounded
+          .slice(1)
+          .map((p) => `L ${p.x} ${p.y}`)
+          .join(' ')} Z`
+      : ''
+    attrs.d = d
+    delete attrs.points
     return <path {...attrs} />
   } else {
     attrs.points = points.map((point) => point.join(',')).join(' ')
