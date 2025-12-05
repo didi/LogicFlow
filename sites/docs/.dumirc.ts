@@ -489,4 +489,11 @@ export default defineConfig({
 
     return config;
   },
+  proxy: {
+    '/agent': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      pathRewrite: { '^/agent': '' },
+    },
+  },
 });
