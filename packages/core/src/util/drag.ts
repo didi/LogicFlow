@@ -103,7 +103,6 @@ export class StepDrag {
     const DOC: any = window?.document
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return
     if (this.isStopPropagation) e.stopPropagation()
-    e.preventDefault()
     this.isStartDragging = true
     this.startX = e.clientX
     this.startY = e.clientY
