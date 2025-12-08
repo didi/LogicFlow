@@ -133,7 +133,6 @@ export class InsertNodeInPolyline {
         } = edges[i]
         // fix https://github.com/didi/LogicFlow/issues/996
         const startPoint = cloneDeep(pointsList[0])
-        // const endPoint = cloneDeep(crossPoints.startCrossPoint)
         this._lf.deleteEdge(id)
         const checkResult = this.checkRuleBeforeInsetNode(
           sourceNodeId,
