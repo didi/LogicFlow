@@ -3,6 +3,7 @@ import LogicFlow, {
   PolylineEdgeModel,
   EventType,
   formatAnchorConnectValidateData,
+  getClosestAnchor,
 } from '@logicflow/core'
 import { cloneDeep } from 'lodash-es'
 import { isNodeInSegment } from './edge'
@@ -132,7 +133,7 @@ export class InsertNodeInPolyline {
         } = edges[i]
         // fix https://github.com/didi/LogicFlow/issues/996
         const startPoint = cloneDeep(pointsList[0])
-        const endPoint = cloneDeep(crossPoints.startCrossPoint)
+        // const endPoint = cloneDeep(crossPoints.startCrossPoint)
         this._lf.deleteEdge(id)
         const checkResult = this.checkRuleBeforeInsetNode(
           sourceNodeId,
@@ -141,27 +142,29 @@ export class InsertNodeInPolyline {
           targetAnchorId!,
           nodeData,
         )
+        const startAnchorInfo = getClosestAnchor(
+          crossPoints.startCrossPoint,
+          nodeModel,
+        )
+        const startAnchor = startAnchorInfo.anchor
         this._lf.addEdge({
           type,
           sourceNodeId,
           targetNodeId: nodeData.id,
           startPoint,
-          endPoint,
-          pointsList: [
-            ...pointsList.slice(0, crossIndex),
-            crossPoints.startCrossPoint,
-          ],
+          endPoint: startAnchor,
         })
+        const endAnchorInfo = getClosestAnchor(
+          crossPoints.endCrossPoint,
+          nodeModel,
+        )
+        const endAnchor = endAnchorInfo.anchor
         this._lf.addEdge({
           type,
           sourceNodeId: nodeData.id,
           targetNodeId,
-          startPoint: cloneDeep(crossPoints.endCrossPoint),
+          startPoint: cloneDeep(endAnchor),
           endPoint: cloneDeep(pointsList[pointsList.length - 1]),
-          pointsList: [
-            crossPoints.endCrossPoint,
-            ...pointsList.slice(crossIndex),
-          ],
         })
         if (!checkResult.isPass) {
           this._lf.graphModel.eventCenter.emit(

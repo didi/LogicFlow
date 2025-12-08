@@ -314,40 +314,25 @@ class Anchor extends Component<IProps, IState> {
         return
       }
       this.preTargetNode = targetNode
-      // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
-      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`
-
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
-      if (!this.targetRuleResults.has(targetInfoId)) {
-        const targetAnchor = info.anchor
-        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+      const d = distance(endX, endY, info.anchor.x, info.anchor.y)
+      const validateDistance = 10
+      const { editConfigModel } = graphModel
+      if (editConfigModel.anchorOnlyConnectValidate && d <= validateDistance) {
+        this.validateAndSetState(
           targetNode,
-          anchorData,
-          targetAnchor,
-        )
-        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+          anchorId,
+          info.anchor,
           nodeModel,
           anchorData,
-          targetAnchor,
         )
-        this.sourceRuleResults.set(
-          targetInfoId,
-          formatAnchorConnectValidateData(sourceRuleResult),
+      } else if (!editConfigModel.anchorOnlyConnectValidate) {
+        this.validateAndSetState(
+          targetNode,
+          anchorId,
+          info.anchor,
+          nodeModel,
+          anchorData,
         )
-        this.targetRuleResults.set(
-          targetInfoId,
-          formatAnchorConnectValidateData(targetRuleResult),
-        )
-      }
-      const { isAllPass: isSourcePass } =
-        this.sourceRuleResults.get(targetInfoId) ?? {}
-      const { isAllPass: isTargetPass } =
-        this.targetRuleResults.get(targetInfoId) ?? {}
-      // 实时提示出即将链接的锚点
-      if (isSourcePass && isTargetPass) {
-        targetNode.setElementState(ElementState.ALLOW_CONNECT)
-      } else {
-        targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT)
       }
       // 人工触发进入目标节点事件，同步设置 hovered 以驱动锚点显隐和样式
       if (!targetNode.isHovered) {
@@ -376,6 +361,45 @@ class Anchor extends Component<IProps, IState> {
       }
       this.preTargetNode.setHovered(false)
       this.preTargetNode = undefined
+    }
+  }
+
+  validateAndSetState(
+    targetNode: BaseNodeModel,
+    anchorId: string | undefined,
+    targetAnchor: AnchorConfig,
+    nodeModel: BaseNodeModel,
+    anchorData: AnchorConfig,
+  ) {
+    const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`
+    if (!this.targetRuleResults.has(targetInfoId)) {
+      const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+        targetNode,
+        anchorData,
+        targetAnchor,
+      )
+      const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+        nodeModel,
+        anchorData,
+        targetAnchor,
+      )
+      this.sourceRuleResults.set(
+        targetInfoId,
+        formatAnchorConnectValidateData(sourceRuleResult),
+      )
+      this.targetRuleResults.set(
+        targetInfoId,
+        formatAnchorConnectValidateData(targetRuleResult),
+      )
+    }
+    const { isAllPass: isSourcePass } =
+      this.sourceRuleResults.get(targetInfoId) ?? {}
+    const { isAllPass: isTargetPass } =
+      this.targetRuleResults.get(targetInfoId) ?? {}
+    if (isSourcePass && isTargetPass) {
+      targetNode.setElementState(ElementState.ALLOW_CONNECT)
+    } else {
+      targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT)
     }
   }
 
