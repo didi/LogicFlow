@@ -54,6 +54,18 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
 {
   readonly BaseType = ElementType.EDGE
   static BaseType: ElementType = ElementType.EDGE
+  static preferredTargetAnchorIdMap: Map<string, string> = new Map()
+  static setTargetAnchorId(nodeId: string, anchorId?: string) {
+    if (anchorId) {
+      this.preferredTargetAnchorIdMap.set(nodeId, anchorId)
+    } else {
+      this.preferredTargetAnchorIdMap.delete(nodeId)
+    }
+  }
+
+  static getTargetAnchorId(nodeId: string) {
+    return this.preferredTargetAnchorIdMap.get(nodeId)
+  }
 
   // 数据属性
   public id = ''
