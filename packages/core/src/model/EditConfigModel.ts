@@ -23,10 +23,10 @@ export interface IEditConfigType {
    * - [number, number, number, number]：[minX, minY, maxX, maxY] 画布可拖动范围
    */
   stopMoveGraph:
-  | boolean
-  | 'vertical'
-  | 'horizontal'
-  | [number, number, number, number]
+    | boolean
+    | 'vertical'
+    | 'horizontal'
+    | [number, number, number, number]
   /**
    * 允许调整边
    */
@@ -126,7 +126,6 @@ export interface IEditConfigType {
   // 开启网格对齐
   snapGrid: boolean
   isPinching: boolean
-  anchorProximityValidate: boolean
 }
 
 export type IConfigKeys = keyof IEditConfigType
@@ -189,7 +188,6 @@ const allKeys = [
   'nodeTextVertical', // 节点文本是否纵向显示
   'edgeTextVertical', // 边文本是否纵向显示
   'isPinching', //是否是双指捏合态
-  'anchorProximityValidate', // 仅在靠近锚点时触发连接校验
 ] as const
 
 /**
@@ -225,7 +223,6 @@ export class EditConfigModel {
   @observable edgeTextDraggable = false
   @observable edgeTextMultiple = false // 是否支持多个边文本
   @observable edgeTextVertical = false // 边文本朝向是否是纵向
-  @observable anchorProximityValidate = false // 仅在靠近锚点时触发连接校验
   /*********************************************************
    * 节点相关配置
    ********************************************************/

@@ -314,21 +314,15 @@ class Anchor extends Component<IProps, IState> {
         return
       }
       this.preTargetNode = targetNode
-      const anchorDist = distance(endX, endY, info.anchor.x, info.anchor.y)
-      const validateDistance = 10
-      const { editConfigModel } = graphModel
-      if (
-        !editConfigModel.anchorProximityValidate ||
-        anchorDist <= validateDistance
-      ) {
-        this.validateAndSetState(
-          targetNode,
-          anchorId,
-          info.anchor,
-          nodeModel,
-          anchorData,
-        )
-      }
+
+      this.validateAndSetState(
+        targetNode,
+        anchorId,
+        info.anchor,
+        nodeModel,
+        anchorData,
+      )
+
       // 人工触发进入目标节点事件，同步设置 hovered 以驱动锚点显隐和样式
       if (!targetNode.isHovered) {
         const nodeData = targetNode.getData()
