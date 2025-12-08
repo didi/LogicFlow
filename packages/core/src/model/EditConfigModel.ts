@@ -23,10 +23,10 @@ export interface IEditConfigType {
    * - [number, number, number, number]：[minX, minY, maxX, maxY] 画布可拖动范围
    */
   stopMoveGraph:
-    | boolean
-    | 'vertical'
-    | 'horizontal'
-    | [number, number, number, number]
+  | boolean
+  | 'vertical'
+  | 'horizontal'
+  | [number, number, number, number]
   /**
    * 允许调整边
    */

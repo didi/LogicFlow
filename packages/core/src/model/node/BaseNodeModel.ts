@@ -8,7 +8,7 @@ import {
   isUndefined,
   set,
 } from 'lodash-es'
-import { GraphModel, Model } from '..'
+import { GraphModel, Model, BaseEdgeModel } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
@@ -57,8 +57,7 @@ export interface IBaseNodeModel<P extends PropertiesType>
 }
 
 export class BaseNodeModel<P extends PropertiesType = PropertiesType>
-  implements IBaseNodeModel<P>
-{
+  implements IBaseNodeModel<P> {
   readonly BaseType = ElementType.NODE
   static BaseType: ElementType = ElementType.NODE
 
@@ -150,7 +149,11 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   moveRules: Model.NodeMoveRule[] = [] // 节点移动之前的hook
   resizeRules: Model.NodeResizeRule[] = [] // 节点resize之前的hook
   hasSetTargetRules = false // 用来限制rules的重复值
-  hasSetSourceRules = false; // 用来限制rules的重复值
+  hasSetSourceRules = false // 用来限制rules的重复值
+  customTargetAnchor?: (
+    position: Point,
+    nodeModel: BaseNodeModel,
+  ) => Model.AnchorInfo | undefined;
   [propName: string]: any // 支持用户自定义属性
 
   constructor(data: NodeConfig<P>, graphModel: GraphModel) {
@@ -226,7 +229,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    *
    * @overridable 支持重写
    */
-  public setAttributes() {}
+  public setAttributes() { }
 
   /**
    * @overridable 支持重写，自定义此类型节点默认生成方式
@@ -307,7 +310,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   }
 
   // TODO: 等比例缩放
-  proportionalResize() {}
+  proportionalResize() { }
 
   /**
    * 获取被保存时返回的数据
