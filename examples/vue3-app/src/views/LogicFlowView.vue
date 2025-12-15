@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { forEach, map, has } from 'lodash-es'
-import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+import LogicFlow, { GraphModel, BaseNodeModel, ElementState, LogicFlowUtil } from '@logicflow/core'
 import { register, getTeleport } from '@logicflow/vue-node-registry'
 import '@logicflow/core/es/index.css'
+import '@logicflow/vue-node-registry/es/index.css'
 
 import ProgressNode from '@/components/LFElements/ProgressNode.vue'
 import { combine, square, star, uml, user } from '../components/LFElements/nodes'
@@ -11,8 +12,8 @@ import { animation, connection } from '../components/LFElements/edges'
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
-  stopScrollGraph: true,
-  stopZoomGraph: true,
+  stopScrollGraph: false,
+  stopZoomGraph: false,
   style: {
     rect: {
       rx: 5,
@@ -137,6 +138,7 @@ onMounted(() => {
       adjustEdgeStartAndEnd: true,
       // adjustEdge: false,
       allowRotate: true,
+      allowResize: false,
       edgeTextEdit: true,
       keyboard: {
         enabled: true
@@ -216,7 +218,7 @@ onMounted(() => {
     })
     console.log('node1 --->>>', node1)
 
-    const node2 = lf.addNode({
+    lf.addNode({
       id: 'vue-node-2',
       type: 'custom-vue-node',
       x: 360,
@@ -224,18 +226,28 @@ onMounted(() => {
       properties: {
         progress: 60,
         width: 80,
-        height: 80
+        height: 80,
+        _showTitle: true,
+        _title: '自定义节点',
+        _titleActions: [
+          {
+            name: '复制',
+            callback: (nodeModel: BaseNodeModel, graphModel: GraphModel) => {
+              console.log('复制', nodeModel, graphModel)
+            }
+          }
+        ]
       }
     })
 
-    setInterval(() => {
-      const { properties } = node2.getData()
-      console.log('properties.progress --->>>', properties?.progress)
-      if (has(properties, 'progress')) {
-        const progress = properties?.progress
-        node2.setProperty('progress', (progress + 10) % 100)
-      }
-    }, 2000)
+    // setInterval(() => {
+    //   const { properties } = node2.getData()
+    //   console.log('properties.progress --->>>', properties?.progress)
+    //   if (has(properties, 'progress')) {
+    //     const progress = properties?.progress
+    //     node2.setProperty('progress', (progress + 10) % 100)
+    //   }
+    // }, 2000)
 
     lfRef.value = lf
   }

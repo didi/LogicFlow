@@ -43,6 +43,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   startTime?: number
   modelDisposer: IReactionDisposer
   longPressTimer?: number
+  mouseDownPosition?: LogicFlow.Position
 
   constructor(props: IProps) {
     super()
@@ -248,8 +249,11 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       height,
       gridSize,
     } = graphModel
-    model.isDragging = true
     const { clientX, clientY } = event!
+    const { x: mouseDownX, y: mouseDownY } = this.mouseDownPosition!
+    if (clientX - mouseDownX > gridSize || clientY - mouseDownY > gridSize) {
+      model.isDragging = true
+    }
     let {
       canvasOverlayPosition: { x, y },
     } = graphModel.getPointByClient({
@@ -347,7 +351,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const { model, graphModel } = this.props
     // 这里会有一种极端情况：当网格大小是1或者关闭网格吸附时，用触摸板点击节点会触发拖拽事件导致节点无法选中
     // 当触摸板点击节点时,为了防止误触发拖拽导致节点无法选中，允许在非拖拽状态且时间间隔小于100ms时触发点击事件
-    if (!isDragging && timeInterval > 100) return
+    if (!isDragging && timeInterval > 300) return
     if (!isDragging) {
       this.onDragEnd()
       this.handleMouseUp()
@@ -438,6 +442,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
 
   handleMouseDown = (ev: PointerEvent) => {
     const { model, graphModel } = this.props
+    this.mouseDownPosition = { x: ev.clientX, y: ev.clientY }
     this.startTime = new Date().getTime()
     const { editConfigModel } = graphModel
     if (editConfigModel.adjustNodePosition && model.draggable) {
@@ -524,8 +529,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         <g transform={transform}>
           {this.getShape()}
           {this.getText()}
-          {allowRotate && this.getRotateControl()}
           {allowResize && this.getResizeControl()}
+          {allowRotate && this.getRotateControl()}
         </g>
         {!hideAnchors && this.getAnchors()}
       </g>

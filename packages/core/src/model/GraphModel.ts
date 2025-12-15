@@ -1,4 +1,5 @@
 import {
+  assign,
   find,
   forEach,
   map,
@@ -26,6 +27,8 @@ import {
   ModelType,
   OverlapMode,
   TextMode,
+  backgroundModeMap,
+  gridModeMap,
 } from '../constant'
 import LogicFlow from '../LogicFlow'
 import { Options as LFOptions } from '../options'
@@ -43,8 +46,6 @@ import {
   setupTheme,
   snapToGrid,
   updateTheme,
-  backgroundModeMap,
-  gridModeMap,
 } from '../util'
 import EventEmitter from '../event/eventEmitter'
 import { Grid } from '../view/overlay'
@@ -69,8 +70,9 @@ export class GraphModel {
 
   // 流程图主题配置
   @observable theme: LogicFlow.Theme
+  @observable themeMode: LogicFlow.ThemeMode | string = 'default'
   // 初始化样式
-  customStyles: object
+  customStyles: LogicFlow.Theme
   // 网格配置
   @observable grid: Grid.GridOptions
   // 事件中心
@@ -167,6 +169,10 @@ export class GraphModel {
       customTrajectory,
       customTargetAnchor,
     } = options
+    this.themeMode = options.themeMode || 'default'
+    const initialGrid = gridModeMap[this.themeMode] || gridModeMap['default']
+    const initialBackground =
+      backgroundModeMap[this.themeMode] || backgroundModeMap['default']
     this.rootEl = container
     this.partial = !!partial
     this.background = background
@@ -175,11 +181,16 @@ export class GraphModel {
       // TODO：需要让用户设置成 0 吗？后面可以讨论一下
       this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
     }
-    this.customStyles = options.style || {}
-    this.grid = Grid.getGridOptions(grid ?? false)
+    this.customStyles = (options.style || {}) as LogicFlow.Theme
     this.theme = setupTheme(options.style, options.themeMode)
+    this.grid = Grid.getGridOptions(assign({}, initialGrid, grid))
     this.theme.grid = cloneDeep(this.grid)
-    this.theme.background = cloneDeep(this.background)
+    if (background) {
+      this.background = cloneDeep(assign({}, initialBackground, background))
+      this.theme.background = cloneDeep(
+        assign({}, initialBackground, background),
+      )
+    }
     this.edgeType = options.edgeType || 'polyline'
     this.animation = setupAnimation(animation)
     this.overlapMode = options.overlapMode || OverlapMode.DEFAULT
@@ -1516,9 +1527,10 @@ export class GraphModel {
    */
   @action setTheme(
     style: Partial<LogicFlow.Theme>,
-    themeMode?: 'radius' | 'dark' | 'colorful' | 'default' | string,
+    themeMode?: LogicFlow.ThemeMode | string,
   ) {
     if (themeMode) {
+      this.themeMode = themeMode
       // 修改背景颜色
       backgroundModeMap[themeMode] &&
         this.updateBackgroundOptions({

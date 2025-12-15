@@ -46,15 +46,15 @@ const translateLimitsMap = {
 }
 
 export class TransformModel implements TransformInterface {
-  MINI_SCALE_SIZE = 0.2
-  MAX_SCALE_SIZE = 16
-  @observable SCALE_X = 1
-  @observable SKEW_Y = 0
-  @observable SKEW_X = 0
-  @observable SCALE_Y = 1
-  @observable TRANSLATE_X = 0
-  @observable TRANSLATE_Y = 0
-  @observable ZOOM_SIZE = 0.04
+  MINI_SCALE_SIZE = 0.2 // 缩小的最小值
+  MAX_SCALE_SIZE = 16 // 放大的最大值
+  @observable SCALE_X = 1 // x轴缩放比例
+  @observable SKEW_Y = 0 // y轴倾斜角度
+  @observable SKEW_X = 0 // x轴倾斜角度
+  @observable SCALE_Y = 1 // y轴缩放比例
+  @observable TRANSLATE_X = 0 // x轴平移距离
+  @observable TRANSLATE_Y = 0 // y轴平移距离
+  @observable ZOOM_SIZE = 0.04 // 缩放比例变化量
   eventCenter: EventEmitter
 
   // 限制画布可移动区域

@@ -86,9 +86,10 @@ export default class MultipleSelect extends Component<IToolProps> {
 
   render() {
     const {
-      graphModel: { selectElements, transformModel },
+      graphModel: { selectElements, transformModel, theme },
     } = this.props
     const { SCALE_X, SCALE_Y } = this.props.lf.getTransform()
+    const { xPadding = 8, yPadding = 8 } = theme.multiSelect || {}
     if (selectElements.size <= 1) return
     let x = Number.MAX_SAFE_INTEGER
     let y = Number.MAX_SAFE_INTEGER
@@ -113,10 +114,10 @@ export default class MultipleSelect extends Component<IToolProps> {
     ;[x, y] = transformModel.CanvasPointToHtmlPoint([x, y])
     ;[x1, y1] = transformModel.CanvasPointToHtmlPoint([x1, y1])
     const style = {
-      left: `${x - (20 * SCALE_X) / 2}px`,
-      top: `${y - (20 * SCALE_Y) / 2}px`,
-      width: `${x1 - x + 20 * SCALE_X}px`,
-      height: `${y1 - y + 20 * SCALE_Y}px`,
+      left: `${x - (20 * SCALE_X) / 2 - xPadding / 2}px`,
+      top: `${y - (20 * SCALE_Y) / 2 - yPadding / 2}px`,
+      width: `${x1 - x + 20 * SCALE_X + xPadding}px`,
+      height: `${y1 - y + 20 * SCALE_Y + yPadding}px`,
       'border-width': `${2 * SCALE_X}px`,
     }
     return (

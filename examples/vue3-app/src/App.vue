@@ -56,6 +56,7 @@ header {
 .content {
   position: relative;
   width: calc(100% - 340px);
+  min-width: 800px;
   height: 100%;
 }
 

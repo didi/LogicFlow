@@ -5,6 +5,18 @@ import LogicFlow, {
   ModelType,
 } from '@logicflow/core'
 import '@logicflow/core/es/index.css'
+import {
+  Control,
+  DndPanel,
+  DynamicGroup,
+  SelectionSelect,
+  Menu,
+  MiniMap,
+} from '@logicflow/extension'
+import '@logicflow/extension/es/index.css'
+
+import { register, ReactNodeProps } from '@logicflow/react-node-registry'
+import '@logicflow/react-node-registry/es/index.css'
 
 import { Button, Card, Divider, Flex, Drawer } from 'antd'
 import { useEffect, useRef, useState } from 'react'
@@ -23,173 +35,533 @@ import styles from './index.less'
 
 import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
+const NodeComponent: FC<ReactNodeProps> = ({ node }) => {
+  const data = node.getData()
+  if (!data.properties) data.properties = {}
+
+  return (
+    <div className="react-algo-node">
+      <img src={require('@/assets/didi.png')} alt="滴滴出行" />
+      <span>{data.properties.name as string}</span>
+    </div>
+  )
+}
+
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
   // stopScrollGraph: true,
   // stopZoomGraph: true,
   // textDraggable: true, // TODO: 节点旋转状态下，拖动文本移动是有问题的！！！
   edgeTextDraggable: true,
-  style: {
-    rect: {
-      rx: 5,
-      ry: 5,
-      strokeWidth: 2,
-    },
-    circle: {
-      fill: '#f5f5f5',
-      stroke: '#666',
-    },
-    ellipse: {
-      fill: '#dae8fc',
-      stroke: '#6c8ebf',
-    },
-    polygon: {
-      fill: '#d5e8d4',
-      stroke: '#82b366',
-    },
-    diamond: {
-      fill: '#ffe6cc',
-      stroke: '#d79b00',
-    },
-    text: {
-      color: '#b85450',
-      fontSize: 12,
-    },
-    // 下面的 style 移动到此处，不然会覆盖上面设置的各图形的主题样式
-    inputText: {
-      background: 'black',
-      color: 'white',
-    },
-  },
+  // style: {
+  //   rect: {
+  //     rx: 5,
+  //     ry: 5,
+  //     strokeWidth: 2,
+  //   },
+  //   circle: {
+  //     fill: '#f5f5f5',
+  //     stroke: '#666',
+  //   },
+  //   ellipse: {
+  //     fill: '#dae8fc',
+  //     stroke: '#6c8ebf',
+  //   },
+  //   polygon: {
+  //     fill: '#d5e8d4',
+  //     stroke: '#82b366',
+  //   },
+  //   diamond: {
+  //     fill: '#ffe6cc',
+  //     stroke: '#d79b00',
+  //   },
+  //   text: {
+  //     color: '#b85450',
+  //     fontSize: 12,
+  //   },
+  //   // 下面的 style 移动到此处，不然会覆盖上面设置的各图形的主题样式
+  //   inputText: {
+  //     background: 'black',
+  //     color: 'white',
+  //   },
+  // },
 }
 
-const customTheme: Partial<LogicFlow.Theme> = {
-  baseNode: {
-    stroke: '#4E93F5',
-  },
-  nodeText: {
-    overflowMode: 'ellipsis',
-    lineHeight: 1.5,
-    fontSize: 13,
-  },
-  edgeText: {
-    overflowMode: 'ellipsis',
-    lineHeight: 1.5,
-    fontSize: 13,
-    textWidth: 100,
-  }, // 确认 textWidth 是否必传 ❓
-  polyline: {
-    stroke: 'red',
-  },
-  rect: {
-    width: 200,
-    height: 40,
-  },
-  arrow: {
-    offset: 4, // 箭头长度
-    verticalLength: 2, // 箭头垂直于边的距离
-  },
-}
+// const customTheme: Partial<LogicFlow.Theme> = {
+//   baseNode: {
+//     stroke: '#4E93F5',
+//   },
+//   nodeText: {
+//     overflowMode: 'ellipsis',
+//     lineHeight: 1.5,
+//     fontSize: 13,
+//   },
+//   edgeText: {
+//     overflowMode: 'ellipsis',
+//     lineHeight: 1.5,
+//     fontSize: 13,
+//     textWidth: 100,
+//   }, // 确认 textWidth 是否必传 ❓
+//   // polyline: {
+//   //   stroke: 'red',
+//   // },
+//   rect: {
+//     width: 200,
+//     height: 40,
+//   },
+//   arrow: {
+//     offset: 4, // 箭头长度
+//     verticalLength: 2, // 箭头垂直于边的距离
+//   },
+// }
 const data = {
   nodes: [
     {
-      id: 'custom-node-1',
-      // rotate: 1.1722738811284763,
-      text: {
-        x: 600,
-        y: 200,
-        value: 'node-1',
-      },
+      id: '1',
       type: 'rect',
-      x: 600,
-      y: 200,
-
+      x: -150.484375,
+      y: -53.17578125,
       properties: {
-        width: 80,
-        height: 120,
-        radius: 20,
+        width: 100,
+        height: 80,
+      },
+      text: {
+        x: -150.484375,
+        y: -53.17578125,
+        value: '矩形',
       },
     },
     {
-      id: 'custom-node-2',
-      text: 'node-2',
-      type: 'polygon',
-      x: 90,
-      y: 94,
+      id: '2',
+      type: 'circle',
+      x: 175.7890625,
+      y: 31.359375,
+      properties: {
+        width: 100,
+        height: 100,
+      },
+      text: {
+        x: 175.7890625,
+        y: 31.359375,
+        value: '圆形',
+      },
     },
     {
-      id: 'custom-node-3',
-      text: 'node-3',
-      type: 'centerAnchorRect',
-      x: 360,
-      y: 280,
+      id: '3',
+      type: 'ellipse',
+      x: 550,
+      y: 100,
+      properties: {
+        width: 60,
+        height: 90,
+      },
+      text: {
+        x: 550,
+        y: 100,
+        value: '椭圆',
+      },
+    },
+    {
+      id: '4',
+      type: 'polygon',
+      x: 17.796875,
+      y: 256.41796875,
+      properties: {
+        width: 100,
+        height: 100,
+      },
+      text: {
+        x: 17.796875,
+        y: 256.41796875,
+        value: '多边形',
+      },
+    },
+    {
+      id: '5',
+      type: 'diamond',
+      x: 428.47265625,
+      y: 298.89453125,
+      properties: {
+        width: 60,
+        height: 100,
+      },
+      text: {
+        x: 428.47265625,
+        y: 298.89453125,
+        value: '菱形',
+      },
+    },
+    {
+      id: '6',
+      type: 'text',
+      x: 717.21875,
+      y: 102.1328125,
+      properties: {
+        width: 63,
+        height: 17,
+      },
+      text: {
+        x: 717.21875,
+        y: 102.1328125,
+        value: '纯文本节点',
+      },
+    },
+    {
+      id: '7',
+      type: 'html',
+      x: -184.58203125,
+      y: 408.37890625,
+      properties: {
+        width: 100,
+        height: 80,
+      },
+      text: {
+        x: -184.58203125,
+        y: 408.37890625,
+        value: 'html节点',
+      },
+    },
+    {
+      id: 'react-node-1',
+      type: 'custom-react-node',
+      x: 735.21875,
+      y: 471.765625,
+      properties: {
+        name: '今日出行',
+        width: 120,
+        height: 26,
+      },
+    },
+    {
+      id: 'react-node-2',
+      type: 'custom-react-node',
+      x: 960.1875,
+      y: 225.33984375,
+      properties: {
+        name: '今日出行',
+        width: 160,
+        height: 44,
+        _showTitle: true,
+        _title: '展示icon',
+        _expanded: true,
+        style: {
+          overflow: 'visible',
+        },
+      },
+    },
+    {
+      id: '8',
+      type: 'dynamic-group',
+      x: 299.83203125,
+      y: 502.328125,
+      properties: {
+        isCollapsed: false,
+        width: 400,
+        height: 230,
+        children: [],
+      },
+      text: {
+        x: 299.83203125,
+        y: 402.328125,
+        value: '动态分组节点',
+      },
+      children: [],
     },
   ],
   edges: [
     {
-      id: 'bezier-1',
-      type: 'bezier',
-      sourceNodeId: 'custom-node-1',
-      targetNodeId: 'custom-node-2',
-      properties: {
-        style: {
-          stroke: 'red',
-        },
+      id: '1',
+      type: 'polyline',
+      properties: {},
+      sourceNodeId: '1',
+      targetNodeId: '2',
+      sourceAnchorId: '1_1',
+      targetAnchorId: '2_3',
+      startPoint: {
+        x: -100.484375,
+        y: -53.17578125,
       },
+      endPoint: {
+        x: 125.7890625,
+        y: 31.359375,
+      },
+      text: {
+        x: 20.15234375,
+        y: 31.39453125,
+        value: '默认圆角 + 默认边距（offset）',
+      },
+      pointsList: [
+        {
+          x: -100.484375,
+          y: -53.17578125,
+        },
+        {
+          x: -85.484375,
+          y: -53.17578125,
+        },
+        {
+          x: -85.484375,
+          y: 31.359375,
+        },
+        {
+          x: 125.7890625,
+          y: 31.359375,
+        },
+      ],
     },
     {
-      id: 'bezier-2',
-      type: 'bezier',
-      sourceNodeId: 'custom-node-2',
-      targetNodeId: 'custom-node-3',
+      id: '2',
+      type: 'polyline',
       properties: {
-        style: {
-          stroke: 'blue',
-        },
+        radius: 10,
+        offset: 10,
       },
+      sourceNodeId: '2',
+      targetNodeId: '3',
+      sourceAnchorId: '2_1',
+      targetAnchorId: '3_3',
+      startPoint: {
+        x: 225.7890625,
+        y: 31.359375,
+      },
+      endPoint: {
+        x: 520,
+        y: 100,
+      },
+      text: {
+        x: 380.39453125,
+        y: 100,
+        value: '10圆角 + 10边距（offset）',
+      },
+      pointsList: [
+        {
+          x: 225.7890625,
+          y: 31.359375,
+        },
+        {
+          x: 240.7890625,
+          y: 31.359375,
+        },
+        {
+          x: 240.7890625,
+          y: 100,
+        },
+        {
+          x: 520,
+          y: 100,
+        },
+      ],
+    },
+    {
+      id: '9',
+      type: 'polyline',
+      properties: {
+        radius: 20,
+        offset: 20,
+      },
+      sourceNodeId: 'react-node-1',
+      targetNodeId: 'react-node-2',
+      sourceAnchorId: 'react-node-1_1',
+      targetAnchorId: 'react-node-2_3',
+      startPoint: {
+        x: 795.21875,
+        y: 471.765625,
+      },
+      endPoint: {
+        x: 880.1875,
+        y: 225.33984375,
+      },
+      text: {
+        x: 847.62890625,
+        y: 471.890625,
+        value: '20圆角 + 20边距（offset）',
+      },
+      pointsList: [
+        {
+          x: 795.21875,
+          y: 471.765625,
+        },
+        {
+          x: 865.1875,
+          y: 471.765625,
+        },
+        {
+          x: 865.1875,
+          y: 225.33984375,
+        },
+        {
+          x: 880.1875,
+          y: 225.33984375,
+        },
+      ],
+    },
+    {
+      id: 'polyline_0.49045578156978475',
+      type: 'polyline',
+      properties: {
+        radius: 30,
+        offset: 30,
+      },
+      sourceNodeId: '7',
+      targetNodeId: '8',
+      sourceAnchorId: '7_1',
+      targetAnchorId: '8_3',
+      text: '30圆角 + 30边距（offset）',
+      startPoint: {
+        x: -134.58203125,
+        y: 408.37890625,
+      },
+      endPoint: {
+        x: 99.83203125,
+        y: 502.328125,
+      },
+      pointsList: [
+        {
+          x: -134.58203125,
+          y: 408.37890625,
+        },
+        {
+          x: -119.58203125,
+          y: 408.37890625,
+        },
+        {
+          x: -119.58203125,
+          y: 502.328125,
+        },
+        {
+          x: 99.83203125,
+          y: 502.328125,
+        },
+      ],
+    },
+    {
+      id: 'polyline_0.5264201201781769',
+      type: 'polyline',
+      properties: {
+        radius: 40,
+        offset: 40,
+      },
+      sourceNodeId: '8',
+      targetNodeId: 'react-node-1',
+      sourceAnchorId: '8_1',
+      targetAnchorId: 'react-node-1_3',
+      text: '40圆角 + 40边距（offset）',
+      startPoint: {
+        x: 499.83203125,
+        y: 502.328125,
+      },
+      endPoint: {
+        x: 675.21875,
+        y: 471.765625,
+      },
+      pointsList: [
+        {
+          x: 499.83203125,
+          y: 502.328125,
+        },
+        {
+          x: 660.21875,
+          y: 502.328125,
+        },
+        {
+          x: 660.21875,
+          y: 471.765625,
+        },
+        {
+          x: 675.21875,
+          y: 471.765625,
+        },
+      ],
+    },
+    {
+      id: 'polyline_0.6108247521670321',
+      type: 'polyline',
+      properties: {
+        radius: 50,
+        offset: 50,
+      },
+      sourceNodeId: '3',
+      targetNodeId: '5',
+      sourceAnchorId: '3_2',
+      targetAnchorId: '5_1',
+      text: '50圆角 + 50边距（offset）',
+      startPoint: {
+        x: 550,
+        y: 145,
+      },
+      endPoint: {
+        x: 458.47265625,
+        y: 298.89453125,
+      },
+      pointsList: [
+        {
+          x: 550,
+          y: 145,
+        },
+        {
+          x: 550,
+          y: 298.89453125,
+        },
+        {
+          x: 458.47265625,
+          y: 298.89453125,
+        },
+      ],
+    },
+    {
+      id: 'polyline_0.6781490701384516',
+      type: 'polyline',
+      properties: {
+        radius: 60,
+        offset: 60,
+      },
+      sourceNodeId: '5',
+      targetNodeId: '4',
+      sourceAnchorId: '5_3',
+      targetAnchorId: '4_1',
+      text: '60圆角 + 60边距（offset）',
+      startPoint: {
+        x: 398.47265625,
+        y: 298.89453125,
+      },
+      endPoint: {
+        x: 67.796875,
+        y: 256.41796875,
+      },
+      pointsList: [
+        {
+          x: 398.47265625,
+          y: 298.89453125,
+        },
+        {
+          x: 233.134765625,
+          y: 298.89453125,
+        },
+        {
+          x: 233.134765625,
+          y: 256.41796875,
+        },
+        {
+          x: 67.796875,
+          y: 256.41796875,
+        },
+      ],
+    },
+    {
+      id: 'polyline_0.9512266825324852',
+      type: 'polyline',
+      properties: {
+        radius: 100,
+        offset: 100,
+      },
+      sourceNodeId: '4',
+      targetNodeId: '7',
+      sourceAnchorId: '4_3',
+      targetAnchorId: '7_0',
+      text: '100圆角 + 100边距（offset）',
     },
   ],
 }
-
-// const customData = {
-//   nodes: [
-//     {
-//       id: 'custom-circle',
-//       text: 'custom-circle',
-//       type: 'customCircle',
-//       x: 100,
-//       y: 100,
-//     },
-//     {
-//       id: 'custom-rect',
-//       text: 'custom-rect',
-//       type: 'customRect',
-//       x: 300,
-//       y: 100,
-//     },
-//     {
-//       id: 'custom-ellipse',
-//       text: 'custom-ellipse',
-//       type: 'customEllipse',
-//       x: 500,
-//       y: 100,
-//     },
-//     {
-//       id: 'custom-diamond',
-//       text: 'custom-diamond',
-//       type: 'customDiamond',
-//       x: 700,
-//       y: 100,
-//     },
-//     {
-//       id: 'custom-polygon',
-//       text: 'custom-polygon',
-//       type: 'customPolygon',
-//       x: 100,
-//       y: 300,
-//     },
-//   ]
-// }
 
 export default function BasicNode() {
   const lfRef = useRef<LogicFlow>()
@@ -238,7 +610,7 @@ export default function BasicNode() {
     })
     lf.on('node:click', (data) => {
       console.log('node:click', data)
-      setOpen(true)
+      // setOpen(true)
     })
   }
 
@@ -248,8 +620,8 @@ export default function BasicNode() {
         ...config,
         container: containerRef.current as HTMLElement,
         // hideAnchors: true,
-        width: 800,
-        height: 400,
+        // width: 800,
+        // height: 400,
         // adjustNodePosition: false,
         // isSilentMode: true,
         // overlapMode: 1,
@@ -268,23 +640,23 @@ export default function BasicNode() {
         edgeTextEdit: true,
         keyboard: {
           enabled: true,
-          // shortcuts: [
-          //   {
-          //     keys: ["backspace"],
-          //     callback: () => {
-          //       const r = window.confirm("确定要删除吗？");
-          //       if (r) {
-          //         const elements = lf.getSelectElements(true);
-          //         lf.clearSelectElements();
-          //         elements.edges.forEach((edge) => lf.deleteEdge(edge.id));
-          //         elements.nodes.forEach((node) => lf.deleteNode(node.id));
-          //         const graphData = lf.getGraphData()
-          //         console.log(42, graphData, graphData.nodes.length)
-          //       }
-          //       // console.log(1)
-          //     }
-          //   }
-          // ]
+          shortcuts: [
+            {
+              keys: ['backspace'],
+              callback: () => {
+                const r = window.confirm('确定要删除吗？')
+                if (r) {
+                  const elements = lf.getSelectElements(true)
+                  lf.clearSelectElements()
+                  elements.edges.forEach((edge) => lf.deleteEdge(edge.id))
+                  elements.nodes.forEach((node) => lf.deleteNode(node.id))
+                  const graphData = lf.getGraphData()
+                  console.log(42, graphData, graphData.nodes.length)
+                }
+                // console.log(1)
+              },
+            },
+          ],
         },
         partial: true,
         background: {
@@ -292,10 +664,7 @@ export default function BasicNode() {
           // backgroundImage:
           //   "url('https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/core/rect.png')",
         },
-        // grid: true,
-        grid: {
-          size: 60,
-        },
+        grid: true,
         edgeTextDraggable: true,
         edgeType: 'polyline',
         // 全局自定义id
@@ -309,22 +678,71 @@ export default function BasicNode() {
         idGenerator(type) {
           return type + '_' + Math.random()
         },
+        themeMode: 'retro',
+        plugins: [
+          Control,
+          DndPanel,
+          DynamicGroup,
+          SelectionSelect,
+          Menu,
+          MiniMap,
+        ],
       })
-
-      lf.setTheme(customTheme)
+      lf.setPatternItems([
+        {
+          type: 'circle',
+          label: '圆形',
+          text: 'Circle',
+          icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/circle.png',
+        },
+        {
+          type: 'rect',
+          label: '矩形',
+          text: 'Rect',
+          icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/rect.png',
+        },
+        {
+          type: 'dynamic-group',
+          label: '内置动态分组',
+          text: 'DynamicGroup',
+          icon: 'https://cdn.jsdelivr.net/gh/Logic-Flow/static@latest/docs/examples/extension/group/group.png',
+        },
+      ])
+      // lf.setTheme(customTheme)
       // 注册节点 or 边
       registerElements(lf)
       // 注册事件
       registerEvents(lf)
 
+      register(
+        {
+          type: 'custom-react-node',
+          component: NodeComponent,
+        },
+        lf,
+      )
+
       lf.render(data)
       // lf.render(customData)
 
       lfRef.current = lf
+      lfRef.current.extension.miniMap?.show()
       ;(window as any).lf = lf
     }
   }, [])
-
+  const handleRandomEdgeOffset = () => {
+    if (lfRef.current) {
+      const { edges } = lfRef.current.getGraphData() as GraphData
+      forEach(edges, (edge) => {
+        if (edge.type !== 'polyline') return
+        const offset = Math.random() * 100
+        console.log('handleRandomEdgeOffset offset', offset)
+        lfRef.current?.setProperties(edge.id, {
+          offset,
+        })
+      })
+    }
+  }
   const setArrow = (arrowName: string) => {
     const lf = lfRef.current
     if (lf) {
@@ -337,7 +755,19 @@ export default function BasicNode() {
       })
     }
   }
-
+  const handleRandomEdgeRadius = () => {
+    if (lfRef.current) {
+      const { edges } = lfRef.current.getGraphData() as GraphData
+      forEach(edges, (edge) => {
+        if (edge.type !== 'polyline') return
+        const radius = Math.random() * 100
+        console.log('handleRandomEdgeRadius radius', radius)
+        lfRef.current?.setProperties(edge.id, {
+          radius,
+        })
+      })
+    }
+  }
   const focusOn = () => {
     lfRef?.current?.focusOn({
       id: 'custom-node-1',
@@ -714,6 +1144,20 @@ export default function BasicNode() {
           开启边动画
         </Button>
         <Button
+          key="randomEdgeOffset"
+          type="primary"
+          onClick={handleRandomEdgeOffset}
+        >
+          随机修改折线边offset
+        </Button>
+        <Button
+          key="randomEdgeRadius"
+          type="primary"
+          onClick={handleRandomEdgeRadius}
+        >
+          随机修改折线边radius
+        </Button>
+        <Button
           key="closeEdgeAnimation"
           type="primary"
           onClick={handleTurnAnimationOff}
@@ -762,6 +1206,21 @@ export default function BasicNode() {
           }}
         >
           修改网格对齐状态
+        </Button>
+        <Button
+          key="resizeGraph"
+          type="primary"
+          onClick={() => {
+            if (lfRef.current) {
+              const theme = lfRef.current?.graphModel.themeMode
+              lfRef.current.setTheme(
+                {},
+                theme === 'default' ? 'retro' : 'default',
+              )
+            }
+          }}
+        >
+          主题切换
         </Button>
       </Flex>
       <Divider orientation="left" orientationMargin="5" plain>

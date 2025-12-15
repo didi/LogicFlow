@@ -54,14 +54,12 @@ export class HtmlNode<
   }
 
   componentDidMount() {
-    // console.log('HtmlNode --->>> componentDidMount - 初始化内容')
     if (this.shouldUpdate() && this.rootEl) {
       this.setHtml(this.rootEl)
     }
   }
 
   componentDidUpdate() {
-    // console.log('HtmlNode --->>> componentDidUpdate - 更新节点内容')
     // DONE: 将 componentDidMount 和 componentDidUpdate 区分开，如果写在一次，渲染 React 组件会重复初始化，消耗过多资源
     // 为了保证历史兼容性，先将默认 HTML 节点的 setHtml 和 confirmUpdate 保持一直，用户可通过自定义的方式重新定义
     if (this.shouldUpdate() && this.rootEl) {
@@ -80,14 +78,33 @@ export class HtmlNode<
     const style = model.getNodeStyle()
     this.currentProperties = JSON.stringify(model.properties)
     return (
-      <foreignObject
-        {...style}
-        x={x - width / 2}
-        y={y - height / 2}
-        width={width}
-        height={height}
-        ref={this.ref}
-      />
+      <g>
+        {style.shadow && (
+          <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow {...style.shadow} />
+            </filter>
+          </defs>
+        )}
+        <rect
+          x={x - width / 2}
+          y={y - height / 2}
+          width={width}
+          height={height}
+          rx={style.radius}
+          ry={style.radius}
+          {...style}
+          filter="url(#shadow)"
+        />
+        <foreignObject
+          {...style}
+          x={x - width / 2}
+          y={y - height / 2}
+          width={width}
+          height={height}
+          ref={this.ref}
+        />
+      </g>
     )
   }
 }

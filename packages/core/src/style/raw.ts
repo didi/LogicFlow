@@ -183,8 +183,9 @@ export const content = `.lf-graph {
 }
 .lf-multiple-select {
   position: absolute;
-  border: 2px dashed #187dffcc;
-  box-shadow: 0 0 3px 0 #187dff80;
+  border: 2px dashed #4271dfcc;
+  border-radius: 12px;
+  box-shadow: 0 0 3px 0 #4271df80;
   cursor: move;
 }
 .lf-edge-adjust-point {

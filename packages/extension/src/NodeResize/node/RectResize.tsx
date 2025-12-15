@@ -60,15 +60,6 @@ export class RectResizeModel extends RectNodeModel {
     return style
   }
 
-  getResizeOutlineStyle() {
-    return {
-      fill: 'none',
-      stroke: 'transparent', // 矩形默认不显示调整边框
-      strokeWidth: 1,
-      strokeDasharray: '3,3',
-    }
-  }
-
   getControlPointStyle() {
     return {
       width: 7,
@@ -122,18 +113,7 @@ export class RectResizeView extends RectNode {
   }
 
   getShape(): h.JSX.Element {
-    const {
-      model: { isSelected },
-      graphModel: {
-        editConfigModel: { isSilentMode },
-      },
-    } = this.props
-    return (
-      <g>
-        {this.getResizeShape()}
-        {isSelected && !isSilentMode ? this.getControlGroup() : ''}
-      </g>
-    )
+    return <g>{this.getResizeShape()}</g>
   }
 }
 
