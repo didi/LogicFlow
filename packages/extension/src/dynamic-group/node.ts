@@ -41,7 +41,6 @@ export class DynamicGroupNode<
       const center = { x: curGroup.x, y: curGroup.y }
       forEach(Array.from(curGroup.children), (childId) => {
         const child = graphModel.getNodeModelById(childId)
-
         if (child) {
           let point: Position = { x: child.x, y: child.y }
           if (childrenPositionMap.has(child.id)) {
@@ -59,6 +58,7 @@ export class DynamicGroupNode<
 
           child.moveTo(newPoint.x, newPoint.y)
           child.rotate = model.rotate
+          console.log('childInfo', child)
         }
       })
     }

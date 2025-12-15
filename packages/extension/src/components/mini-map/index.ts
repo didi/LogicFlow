@@ -315,8 +315,8 @@ export class MiniMap {
    */
   private setOption(options: MiniMapOption) {
     const {
-      width = 150,
-      height = 220,
+      width = 200,
+      height = 150,
       showEdge = false,
       isShowHeader = false,
       isShowCloseIcon = false,

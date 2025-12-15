@@ -78,12 +78,6 @@ export class GroupNodeModel extends RectResizeModel {
     // this.foldGroup(this.isFolded);
   }
 
-  getResizeOutlineStyle() {
-    const style = super.getResizeOutlineStyle()
-    style.stroke = 'none'
-    return style
-  }
-
   /**
    * 折叠分组
    * 1. 折叠分组的宽高
@@ -419,6 +413,7 @@ export class GroupNode extends RectResizeView {
         x: model.x - model.width / 2 + 5,
         y: model.y - model.height / 2 + 5,
         onClick: () => {
+          console.log('fold click')
           ;(model as GroupNodeModel).foldGroup(!model.properties.isFolded)
         },
       }),

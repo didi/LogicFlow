@@ -1,5 +1,6 @@
 .viewport {
   position: relative;
+  width: 80vw;
   height: 80vh;
   overflow: hidden;
 }
@@ -7,6 +8,34 @@
 :global {
   *:focus {
     outline: none;
+  }
+
+  .react-algo-node {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e59b68;
+    border-radius: 14px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+
+    span {
+      margin-left: 4px;
+      color: #000000a6;
+      font-size: 12px;
+    }
+
+    &.dark {
+      background-color: #141414;
+
+      span {
+        color: #fff;
+      }
+    }
   }
 
   .dnd-item {

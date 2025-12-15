@@ -203,7 +203,7 @@ export default function DynamicGroupDemo() {
             text: 'dynamic-group_2',
             resizable: true,
             properties: {
-              transformWithContainer: false,
+              transformWithContainer: true,
               width: 520,
               height: 350,
               radius: 5,
@@ -310,6 +310,62 @@ export default function DynamicGroupDemo() {
 
   const rerender = () => {}
 
+  // 导出当前图数据为 JSON 文件
+  const handleExportGraph = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const data = lf.getGraphRawData() as GraphConfigData
+    try {
+      const json = JSON.stringify(data, null, 2)
+      const blob = new Blob([json], { type: 'application/json;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'dynamic-group-graph.json'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      message.success('导出成功')
+    } catch (err) {
+      console.error('导出失败:', err)
+      message.error('导出失败，请查看控制台日志')
+    }
+  }
+
+  // 从本地 JSON 文件导入图数据
+  const handleImportGraph = () => {
+    const lf = lfRef.current
+    if (!lf) return
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json,application/json'
+    input.onchange = () => {
+      const file = input.files?.[0]
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = () => {
+        try {
+          const text = String(reader.result || '')
+          const parsed = JSON.parse(text) as GraphConfigData
+          // 简单校验结构
+          if (!parsed || typeof parsed !== 'object') {
+            throw new Error('无效的图数据')
+          }
+          // 渲染导入数据
+          lf.clearData()
+          lf.render(parsed)
+          message.success('导入成功')
+        } catch (err) {
+          console.error('导入失败:', err)
+          message.error('导入失败：JSON 格式不合法或数据结构错误')
+        }
+      }
+      reader.readAsText(file)
+    }
+    input.click()
+  }
+
   return (
     <Card
       title="LogicFlow Extension - DynamicGroup"
@@ -321,6 +377,12 @@ export default function DynamicGroupDemo() {
         </Button>
         <Button type="primary" key="rerender" onClick={rerender}>
           重新渲染
+        </Button>
+        <Button type="primary" key="export" onClick={handleExportGraph}>
+          导出 JSON
+        </Button>
+        <Button type="primary" key="import" onClick={handleImportGraph}>
+          导入 JSON
         </Button>
       </Flex>
       <Divider />

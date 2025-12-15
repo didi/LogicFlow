@@ -5,6 +5,7 @@ import { Card } from 'antd'
 import { MiniMap } from '@logicflow/extension'
 import '@logicflow/core/es/index.css'
 import '@logicflow/extension/es/index.css'
+import '@logicflow/react-node-registry/es/index.css'
 import styles from './index.less'
 
 const NodeComponent: FC<ReactNodeProps> = ({ node }) => {
@@ -90,6 +91,8 @@ export default class Example extends React.Component {
         name: '今日出行',
         width: 120,
         height: 28,
+        _showTitle: true,
+        _title: 'React带标题的测试节点',
       },
     })
     lf.addNode({

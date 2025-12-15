@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { BaseNodeModel, EventType, GraphModel } from '@logicflow/core'
 import { reactNodesMap } from './registry'
+import Container from './components/Container'
 
 export interface IWrapperProps {
   node: BaseNodeModel
@@ -49,12 +50,26 @@ export class Wrapper extends PureComponent<IWrapperProps, IWrapperState> {
 
     if (!content) return null
 
+    const { _showTitle = false } = node.properties || {}
+
     const { component } = content
     if (React.isValidElement(component)) {
-      return this.clone(component)
+      return _showTitle ? (
+        <Container node={this.props.node} graph={this.props.graph}>
+          {this.clone(component)}
+        </Container>
+      ) : (
+        this.clone(component)
+      )
     }
     const FC = component as React.FC
-    return this.clone(<FC />)
+    return _showTitle ? (
+      <Container node={this.props.node} graph={this.props.graph}>
+        {this.clone(<FC />)}
+      </Container>
+    ) : (
+      this.clone(<FC />)
+    )
   }
 }
 

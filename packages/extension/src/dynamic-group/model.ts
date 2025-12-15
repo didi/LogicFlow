@@ -88,6 +88,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   autoResize: boolean = false
   // 分组节点是否可以折叠
   collapsible: boolean = true
+  // 是否使用自定义文本位置
+  staticTextPosition: boolean = true
 
   // 分组节点 初始化尺寸(默认展开)，后续支持从 properties 中传入 width 和 height 设置
   expandWidth!: number
@@ -152,7 +154,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.autoResize = autoResize ?? false
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false
-
+    this.setTextPosition()
     // 禁用掉 Group 节点的文本编辑能力
     this.text.editable = false
     this.text.draggable = false
@@ -329,14 +331,36 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapseEdge(nextCollapseState, allRelatedEdges)
   }
 
+  setTextPosition() {
+    const {
+      x,
+      y,
+      staticTextPosition,
+      text,
+      isCollapsed,
+      width,
+      height,
+      collapsedWidth,
+      collapsedHeight,
+    } = this
+    if (staticTextPosition) {
+      text.x = x
+      text.y = isCollapsed ? y : y - height / 2 + 15
+      return
+    }
+    text.x = isCollapsed
+      ? x - width / 2 + collapsedWidth / 2
+      : x + width / 2 - collapsedWidth / 2
+    text.y = isCollapsed
+      ? y - height / 2 + collapsedHeight / 2
+      : y + height / 2 - collapsedHeight / 2
+  }
+
   // 折叠操作
   private collapse() {
-    const { x, y, text, width, height, collapsedWidth, collapsedHeight } = this
+    const { x, y, width, height, collapsedWidth, collapsedHeight } = this
     this.x = x - width / 2 + collapsedWidth / 2
     this.y = y - height / 2 + collapsedHeight / 2
-
-    this.text.x = text.x - width / 2 + collapsedWidth / 2
-    this.text.y = text.y - height / 2 + collapsedHeight / 2
 
     // 记录折叠前的节点大小，并将其记录到 expandWidth 中
     this.expandWidth = width
@@ -344,28 +368,22 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
     this.width = collapsedWidth
     this.height = collapsedHeight
+    // 设置文本位置
+    this.setTextPosition()
   }
 
   // 展开操作
   private expand() {
-    const {
-      x,
-      y,
-      text,
-      expandWidth,
-      expandHeight,
-      collapsedWidth,
-      collapsedHeight,
-    } = this
+    const { x, y, expandWidth, expandHeight, collapsedWidth, collapsedHeight } =
+      this
     this.width = expandWidth
     this.height = expandHeight
 
     // 重新计算节点及文本的坐标
     this.x = x + this.width / 2 - collapsedWidth / 2
     this.y = y + this.height / 2 - collapsedHeight / 2
-
-    this.text.x = text.x + this.width / 2 - collapsedWidth / 2
-    this.text.y = text.y + this.height / 2 - collapsedHeight / 2
+    // 设置文本位置
+    this.setTextPosition()
   }
 
   createVirtualEdge(edgeConfig: EdgeConfig) {
@@ -528,11 +546,11 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   /**
    * 重写 Group 节点的 Resize Outline
    */
-  getResizeOutlineStyle(): LogicFlow.CommonTheme {
-    const style = super.getResizeOutlineStyle()
-    style.stroke = 'none'
-    return style
-  }
+  // getResizeOutlineStyle(): LogicFlow.CommonTheme {
+  //   const style = super.getResizeOutlineStyle()
+  //   // style.stroke = 'none'
+  //   return style
+  // }
 
   // TODO: 是否是设置 group 节点没有锚点，而不是设置成透明？？？
   getAnchorStyle() {

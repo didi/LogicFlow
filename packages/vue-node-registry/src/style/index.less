@@ -1,0 +1,140 @@
+.lf-vue-node-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 6px;
+  color: #474747;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #cad2e15f;
+}
+
+.lf-vue-node-content-wrap {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+.lf-vue-node-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  backdrop-filter: saturate(180%) blur(4px);
+
+  &-expanded {
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eaeaea;
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .lf-vue-node-title {
+    backdrop-filter: none;
+  }
+}
+
+.lf-vue-node-title-left {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.lf-vue-node-title-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  color: #666;
+  font-style: normal;
+  line-height: 16px;
+  text-align: center;
+}
+
+.lf-vue-node-title-text {
+  overflow: hidden;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lf-vue-node-title-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.lf-vue-node-title-expand,
+.lf-vue-node-title-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  appearance: none;
+}
+
+.lf-vue-node-title-expand:hover,
+.lf-vue-node-title-more:hover {
+  background: rgb(0 0 0 / 6%);
+}
+
+.lf-vue-node-title-expand-icon {
+  color: #666;
+  font-style: normal;
+  transition: transform 0.3s ease;
+}
+
+.lf-vue-node-title-more-icon {
+  color: #666;
+  font-style: normal;
+}
+
+.lf-vue-node-title-tooltip {
+  position: absolute;
+  top: -50px;
+  right: -135px;
+  min-width: 120px;
+  max-width: 240px;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+  transform: translateY(calc(100% + 4px));
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.lf-vue-node-title-tooltip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lf-vue-node-title-tooltip-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 6px;
+  color: #333;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lf-vue-node-title-tooltip-item:hover {
+  background: rgb(0 0 0 / 5%);
+}

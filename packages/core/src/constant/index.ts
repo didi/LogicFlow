@@ -1,8 +1,6 @@
 export const DEFAULT_VISIBLE_SPACE = 200
 export const ELEMENT_MAX_Z_INDEX = 9999
 
-export const DEFAULT_GRID_SIZE = 10
-
 export enum ElementState {
   DEFAULT = 1, // 默认显示
   TEXT_EDIT, // 此元素正在进行文本编辑
@@ -177,3 +175,5 @@ export enum TextMode {
   TEXT = 'text',
   LABEL = 'label',
 }
+
+export * from './theme'

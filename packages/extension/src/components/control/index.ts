@@ -1,3 +1,4 @@
+import { isNil } from 'lodash-es'
 import LogicFlow from '@logicflow/core'
 
 type ControlItem = {
@@ -5,6 +6,7 @@ type ControlItem = {
   iconClass: string
   title: string
   text: string
+  hideText?: boolean
   onClick?: (lf: LogicFlow, e: MouseEvent) => void
   onMouseEnter?: (lf: LogicFlow, e: MouseEvent) => void
   onMouseLeave?: (lf: LogicFlow, e: MouseEvent) => void
@@ -20,6 +22,7 @@ export class Control {
       iconClass: 'lf-control-zoomOut',
       title: '缩小流程图',
       text: '缩小',
+      hideText: false,
       onClick: () => {
         this.lf.zoom(false)
       },
@@ -29,6 +32,7 @@ export class Control {
       iconClass: 'lf-control-zoomIn',
       title: '放大流程图',
       text: '放大',
+      hideText: false,
       onClick: () => {
         this.lf.zoom(true)
       },
@@ -38,6 +42,7 @@ export class Control {
       iconClass: 'lf-control-fit',
       title: '恢复流程原有尺寸',
       text: '适应',
+      hideText: false,
       onClick: () => {
         this.lf.resetZoom()
       },
@@ -47,6 +52,7 @@ export class Control {
       iconClass: 'lf-control-undo',
       title: '回到上一步',
       text: '上一步',
+      hideText: false,
       onClick: () => {
         this.lf.undo()
       },
@@ -56,6 +62,7 @@ export class Control {
       iconClass: 'lf-control-redo',
       title: '移到下一步',
       text: '下一步',
+      hideText: false,
       onClick: () => {
         this.lf.redo()
       },
@@ -96,15 +103,17 @@ export class Control {
   }
 
   private getControlTool(): HTMLElement {
-    const NORMAL = 'lf-control-item'
+    const { themeMode } = this.lf.graphModel
+    const NORMAL = `lf-control-item-${themeMode} lf-control-item`
     const DISABLED = 'lf-control-item disabled'
     const controlTool = document.createElement('div')
     const controlElements: HTMLDivElement[] = []
-    controlTool.className = 'lf-control'
-    this.controlItems.forEach((item) => {
+    controlTool.className = `lf-control-${themeMode} lf-control`
+
+    const itemsToRender = [...this.controlItems]
+    itemsToRender.forEach((item) => {
       const itemContainer = document.createElement('div')
       const icon = document.createElement('i')
-      const text = document.createElement('span')
       itemContainer.className = DISABLED
       item.onClick && (itemContainer.onclick = item.onClick.bind(null, this.lf))
       item.onMouseEnter &&
@@ -112,10 +121,15 @@ export class Control {
       item.onMouseLeave &&
         (itemContainer.onmouseleave = item.onMouseLeave.bind(null, this.lf))
       icon.className = item.iconClass
-      text.className = 'lf-control-text'
-      text.title = item.title
-      text.innerText = item.text
-      itemContainer.append(icon, text)
+      if (isNil(item.hideText) || item.hideText !== true) {
+        const text = document.createElement('span')
+        text.className = `lf-control-text-${themeMode} lf-control-text`
+        text.title = item.title
+        text.innerText = item.text
+        itemContainer.append(icon, text)
+      } else {
+        itemContainer.append(icon)
+      }
       switch (item.text) {
         case '上一步':
           this.lf.on('history:change', ({ data: { undoAble } }: any) => {

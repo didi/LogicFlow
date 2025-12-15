@@ -1,3 +1,4 @@
+import { assign } from 'lodash-es'
 import { RectNodeModel } from '@logicflow/core'
 
 const getJudgeNodeHeight = (branchLength: number) => {
@@ -40,7 +41,7 @@ export class BaseNodeModel extends RectNodeModel {
   getOutlineStyle() {
     const style: any = super.getOutlineStyle()
     style.stroke = 'none'
-    style.hover.stroke = 'none'
+    assign(style.hover, { stroke: 'none' })
     return style
   }
   getDefaultAnchor(): { x: number; y: number; id: string }[] {

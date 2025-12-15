@@ -286,61 +286,6 @@ export class ResizeControl extends Component<
         this.dragHandler.cancelDrag()
       },
     })
-    // 1. 计算当前 Control 的一些信息，
-    // const {
-    //   r, // circle
-    //   rx, // ellipse/diamond
-    //   ry,
-    //   width, // rect/html
-    //   height,
-    //   PCTResizeInfo,
-    //
-    //   minWidth,
-    //   minHeight,
-    //   maxWidth,
-    //   maxHeight,
-    // } = this.nodeModel
-    // const isFreezeWidth = minWidth === maxWidth
-    // const isFreezeHeight = minHeight === maxHeight
-    //
-    // const resizeInfo = {
-    //   width: r || rx || width,
-    //   height: r || ry || height,
-    //   deltaX,
-    //   deltaY,
-    //   PCTResizeInfo,
-    // }
-    //
-    // const pct = r || (rx && ry) ? 1 / 2 : 1
-    // const nextSize = this.recalcResizeInfo(
-    //   this.index,
-    //   resizeInfo,
-    //   pct,
-    //   isFreezeWidth,
-    //   isFreezeHeight,
-    // )
-    //
-    // // 限制放大缩小的最大最小范围
-    // if (
-    //   nextSize.width < minWidth ||
-    //   nextSize.width > maxWidth ||
-    //   nextSize.height < minHeight ||
-    //   nextSize.height > maxHeight
-    // ) {
-    //   this.dragHandler.cancelDrag()
-    //   return
-    // }
-    // // 如果限制了宽高不变，对应的 x/y 不产生位移
-    // nextSize.deltaX = isFreezeWidth ? 0 : nextSize.deltaX
-    // nextSize.deltaY = isFreezeWidth ? 0 : nextSize.deltaY
-    //
-    // const preNodeData = this.nodeModel.getData()
-    // const curNodeData = this.nodeModel.resize(nextSize)
-    //
-    // // 更新边
-    // this.updateEdgePointByAnchors()
-    // // 触发 resize 事件
-    // this.triggerResizeEvent(preNodeData, curNodeData, deltaX, deltaY, this.index, this.nodeModel)
   }
 
   onDragStart = () => {
@@ -372,28 +317,70 @@ export class ResizeControl extends Component<
     this.updateEdgePointByAnchors()
   }
 
+  onPointerDown = (e: PointerEvent) => {
+    e.stopPropagation()
+    this.dragHandler.handleMouseDown(e)
+  }
+
+  getViewPosition(direction, x, y) {
+    const { width = 8, height = 8 } = this.props.model.getResizeControlStyle()
+    switch (direction) {
+      case 'nw':
+        return {
+          x: x - width / 2,
+          y: y - height / 2,
+        }
+      case 'ne': {
+        return {
+          x: x + width / 2,
+          y: y - height / 2,
+        }
+      }
+      case 'se': {
+        return {
+          x: x + width / 2,
+          y: y + height / 2,
+        }
+      }
+      case 'sw': {
+        return {
+          x: x - width / 2,
+          y: y + height / 2,
+        }
+      }
+      default: {
+        return {
+          x,
+          y,
+        }
+      }
+    }
+  }
+
   render(): h.JSX.Element {
     const { x, y, direction, model } = this.props
     const { width, height, ...restStyle } = model.getResizeControlStyle()
+    // 为了让调整点在视觉上在调整外框的中间，因此在渲染时转换一下
+    const { x: viewX, y: viewY } = this.getViewPosition(direction, x, y)
     return (
       <g className={`lf-resize-control lf-resize-control-${direction}`}>
         <Rect
           className="lf-resize-control-content"
-          x={x}
-          y={y}
+          x={viewX}
+          y={viewY}
           width={width ?? 7}
           height={height ?? 7}
           {...restStyle}
         />
         <Rect
           className="lf-resize-control-content"
-          x={x}
-          y={y}
-          width={25}
-          height={25}
+          x={viewX}
+          y={viewY}
+          width={width ? width + 5 : 25}
+          height={width ? width + 5 : 25}
           fill="transparent"
           stroke="transparent"
-          onPointerDown={this.dragHandler.handleMouseDown}
+          onPointerDown={this.onPointerDown}
         />
       </g>
     )
@@ -451,7 +438,18 @@ export class ResizeControlGroup extends Component<IResizeControlGroupProps> {
     const { model } = this.props
     const { x, y, width, height } = model
     const style = model.getResizeOutlineStyle()
-    return <Rect {...style} x={x} y={y} width={width} height={height} />
+
+    return (
+      <Rect
+        {...style}
+        pointer-events="none"
+        x={x}
+        y={y}
+        // TODO：宽高padding后续改成配置化的
+        width={width + 10}
+        height={height + 10}
+      />
+    )
   }
 
   render(): h.JSX.Element {
