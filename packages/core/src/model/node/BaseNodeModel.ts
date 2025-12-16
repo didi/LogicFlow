@@ -8,7 +8,7 @@ import {
   isUndefined,
   set,
 } from 'lodash-es'
-import { GraphModel, Model, BaseEdgeModel } from '..'
+import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
@@ -149,11 +149,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   moveRules: Model.NodeMoveRule[] = [] // 节点移动之前的hook
   resizeRules: Model.NodeResizeRule[] = [] // 节点resize之前的hook
   hasSetTargetRules = false // 用来限制rules的重复值
-  hasSetSourceRules = false // 用来限制rules的重复值
-  customTargetAnchor?: (
-    position: Point,
-    nodeModel: BaseNodeModel,
-  ) => Model.AnchorInfo | undefined;
+  hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: any // 支持用户自定义属性
 
   constructor(data: NodeConfig<P>, graphModel: GraphModel) {
