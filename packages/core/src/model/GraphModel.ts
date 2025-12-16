@@ -89,6 +89,8 @@ export class GraphModel {
   idGenerator?: (type?: string) => string | undefined
   // 节点间连线、连线变更时的边的生成规则
   edgeGenerator: LFOptions.Definition['edgeGenerator']
+  // 自定义目标锚点连接规则
+  customTargetAnchor?: LFOptions.Definition['customTargetAnchor']
 
   // Remind：用于记录当前画布上所有节点和边的 model 的 Map
   // 现在的处理方式，用 this.nodes.map 生成的方式，如果在 new Model 的过程中依赖于其它节点的 model，会出现找不到的情况
@@ -163,6 +165,7 @@ export class GraphModel {
       edgeGenerator,
       animation,
       customTrajectory,
+      customTargetAnchor,
     } = options
     this.rootEl = container
     this.partial = !!partial
@@ -216,6 +219,7 @@ export class GraphModel {
     this.idGenerator = idGenerator
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator)
     this.customTrajectory = customTrajectory
+    this.customTargetAnchor = customTargetAnchor
   }
 
   @computed get nodesMap(): GraphModel.NodesMapType {

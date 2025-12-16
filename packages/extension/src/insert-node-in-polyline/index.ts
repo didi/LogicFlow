@@ -141,28 +141,32 @@ export class InsertNodeInPolyline {
           targetAnchorId!,
           nodeData,
         )
-        const startAnchorInfo = getClosestAnchor(
+        // 基于插入节点的进入交点计算出最近的“进入锚点”，用于重连原边的前半段
+        const entryAnchorInfo = getClosestAnchor(
           crossPoints.startCrossPoint,
           nodeModel,
         )
-        const startAnchor = startAnchorInfo.anchor
+        const entryAnchor = entryAnchorInfo.anchor
+        // 构造第一条边：原 source → 插入节点（终点为进入锚点）
         this._lf.addEdge({
           type,
           sourceNodeId,
           targetNodeId: nodeData.id,
           startPoint,
-          endPoint: startAnchor,
+          endPoint: entryAnchor,
         })
-        const endAnchorInfo = getClosestAnchor(
+        // 基于插入节点的离开交点计算出最近的“离开锚点”，用于重连原边的后半段
+        const exitAnchorInfo = getClosestAnchor(
           crossPoints.endCrossPoint,
           nodeModel,
         )
-        const endAnchor = endAnchorInfo.anchor
+        const exitAnchor = exitAnchorInfo.anchor
+        // 构造第二条边：插入节点 → 原 target（起点为离开锚点）
         this._lf.addEdge({
           type,
           sourceNodeId: nodeData.id,
           targetNodeId,
-          startPoint: cloneDeep(endAnchor),
+          startPoint: cloneDeep(exitAnchor),
           endPoint: cloneDeep(pointsList[pointsList.length - 1]),
         })
         if (!checkResult.isPass) {
