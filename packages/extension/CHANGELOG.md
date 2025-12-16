@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.2.0-alpha.1
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - 修复electron环境引用插件控制台报错问题
+- Updated dependencies
+  - @logicflow/core@2.2.0
+  - @logicflow/vue-node-registry@1.2.0
+
 ## 2.2.0-alpha.0
 
 ### Minor Changes

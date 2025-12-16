@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0-alpha.1
+
+### Patch Changes
+
+- feat: 锚点功能优化
+  - 支持用户指定连接锚点
+  - 支持配置是否必须连到锚点上才能触发连线
+- fix：修复快捷键需要点右键后才能正常触发快捷键问题
+
 ## 2.2.0-alpha.0
 
 ### Minor Changes
