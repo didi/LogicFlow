@@ -8,7 +8,7 @@ import {
   isUndefined,
   set,
 } from 'lodash-es'
-import { GraphModel, Model, BaseEdgeModel } from '..'
+import { GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import {
   createUuid,
@@ -150,11 +150,7 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   moveRules: Model.NodeMoveRule[] = [] // 节点移动之前的hook
   resizeRules: Model.NodeResizeRule[] = [] // 节点resize之前的hook
   hasSetTargetRules = false // 用来限制rules的重复值
-  hasSetSourceRules = false // 用来限制rules的重复值
-  customTargetAnchor?: (
-    position: Point,
-    nodeModel: BaseNodeModel,
-  ) => Model.AnchorInfo | undefined;
+  hasSetSourceRules = false; // 用来限制rules的重复值
   [propName: string]: any // 支持用户自定义属性
 
   constructor(data: NodeConfig<P>, graphModel: GraphModel) {
@@ -639,20 +635,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    * 手动连接边到节点时，需要连接的锚点
    */
   public getTargetAnchor(position: Point): Model.AnchorInfo {
-    if (typeof this.customTargetAnchor === 'function') {
-      const info = this.customTargetAnchor(position, this)
-      if (info) return info
-    }
-    const preferredId = BaseEdgeModel.getTargetAnchorId(this.id)
-    if (preferredId) {
-      const anchors = this.getAnchorsByOffset()
-      console.log(anchors)
-      const idx = anchors.findIndex((a) => a.id == preferredId)
-      if (idx >= 0) {
-        return { index: idx, anchor: anchors[idx] }
-      }
-    }
-    return getClosestAnchor(position, this)
+    const { customTargetAnchor } = this.graphModel
+    return (
+      customTargetAnchor?.(this, position) ?? getClosestAnchor(position, this)
+    )
   }
 
   /**

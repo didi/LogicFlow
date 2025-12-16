@@ -1,4 +1,4 @@
-import type { TransformModel } from './model'
+import type { TransformModel, BaseNodeModel, Model } from './model'
 
 import { assign } from 'lodash-es'
 import { createElement as h } from 'preact/compat'
@@ -41,6 +41,10 @@ export namespace Options {
     currentEdge?: Partial<LogicFlow.EdgeConfig>,
   ) => any
 
+  export type customTargetAnchorType = (
+    nodeModel: BaseNodeModel,
+    position: LogicFlow.Point,
+  ) => Model.AnchorInfo | undefined
   export interface CustomAnchorLineProps {
     sourcePoint: LogicFlow.Point
     targetPoint: LogicFlow.Point
@@ -104,6 +108,7 @@ export namespace Options {
     idGenerator?: (type?: string) => string
     edgeGenerator?: EdgeGeneratorType
 
+    customTargetAnchor?: customTargetAnchorType
     customTrajectory?: (props: CustomAnchorLineProps) => h.JSX.Element
     themeMode?: 'radius' | 'dark' | 'colorful' // 主题模式
 

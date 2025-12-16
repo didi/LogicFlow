@@ -314,18 +314,13 @@ class Anchor extends Component<IProps, IState> {
         return
       }
       this.preTargetNode = targetNode
-      const d = distance(endX, endY, info.anchor.x, info.anchor.y)
+      const anchorDist = distance(endX, endY, info.anchor.x, info.anchor.y)
       const validateDistance = 10
       const { editConfigModel } = graphModel
-      if (editConfigModel.anchorOnlyConnectValidate && d <= validateDistance) {
-        this.validateAndSetState(
-          targetNode,
-          anchorId,
-          info.anchor,
-          nodeModel,
-          anchorData,
-        )
-      } else if (!editConfigModel.anchorOnlyConnectValidate) {
+      if (
+        !editConfigModel.anchorProximityValidate ||
+        anchorDist <= validateDistance
+      ) {
         this.validateAndSetState(
           targetNode,
           anchorId,
@@ -364,6 +359,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
+  // 校验 source/target 连接规则并设置目标节点状态
   validateAndSetState(
     targetNode: BaseNodeModel,
     anchorId: string | undefined,
@@ -373,6 +369,7 @@ class Anchor extends Component<IProps, IState> {
   ) {
     const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`
     if (!this.targetRuleResults.has(targetInfoId)) {
+      // 首次计算并缓存源/目标两侧的规则校验结果
       const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
         targetNode,
         anchorData,
@@ -392,10 +389,12 @@ class Anchor extends Component<IProps, IState> {
         formatAnchorConnectValidateData(targetRuleResult),
       )
     }
+    // 读取缓存的校验结果
     const { isAllPass: isSourcePass } =
       this.sourceRuleResults.get(targetInfoId) ?? {}
     const { isAllPass: isTargetPass } =
       this.targetRuleResults.get(targetInfoId) ?? {}
+    // 两侧都通过则允许连接，否则标记为不允许连接
     if (isSourcePass && isTargetPass) {
       targetNode.setElementState(ElementState.ALLOW_CONNECT)
     } else {
