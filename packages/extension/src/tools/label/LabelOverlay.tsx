@@ -4,7 +4,11 @@ import { forEach, merge } from 'lodash-es'
 import LabelPlugin from '.'
 import Label from './Label'
 import LabelModel from './LabelModel'
-import { MediumEditor, defaultOptions, ColorPickerButton } from './mediumEditor'
+import {
+  MediumEditor,
+  defaultOptions,
+  createColorPickerButtonClass,
+} from './mediumEditor'
 
 import LabelConfig = LogicFlow.LabelConfig
 
@@ -47,7 +51,7 @@ export class LabelOverlay extends Component<IToolProps, ILabelOverlayState> {
       merge(defaultOptions, {
         autoLink: true,
         extensions: {
-          colorPicker: new ColorPickerButton(),
+          colorPicker: new (createColorPickerButtonClass(MediumEditor))(),
         },
       }),
     )
@@ -82,7 +86,7 @@ export class LabelOverlay extends Component<IToolProps, ILabelOverlayState> {
         merge(defaultOptions, {
           autoLink: true,
           extensions: {
-            colorPicker: new ColorPickerButton(),
+            colorPicker: new (createColorPickerButtonClass(MediumEditor))(),
           },
         }),
       )
