@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0-alpha.2
+
+### Patch Changes
+
+- chore: 重新打包
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.2
+  - @logicflow/vue-node-registry@1.2.0-alpha.2
+
 ## 2.2.0-alpha.1
 
 ### Patch Changes
