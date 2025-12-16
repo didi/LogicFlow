@@ -115,6 +115,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
       if (selectElements.size > 0) {
         graphModel.clearSelectElements()
       }
+      // 如果是拖拽状态，不触发点击事件
+      if (this.state.isDragging) return
       graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev })
     }
   }
@@ -184,8 +186,6 @@ export class CanvasOverlay extends Component<IProps, IState> {
       } else {
         eventCenter.emit(EventType.BLANK_MOUSEDOWN, { e: ev })
       }
-      // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
-      this.clickHandler(ev)
     }
   }
   pointerMoveHandler = (ev: PointerEvent) => {
@@ -249,6 +249,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
       } = this.props
       // 标记退出捏合，框选等交互可恢复
       editConfigModel.updateEditConfig({ isPinching: false })
+      // 为了处理画布移动的时候，编辑和菜单仍然存在的问题。
+      this.clickHandler(ev)
     }
   }
 
