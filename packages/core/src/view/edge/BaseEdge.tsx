@@ -34,6 +34,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   startTime?: number
   contextMenuTime?: number
   clickTimer?: number
+  longPressTimer?: number
   textRef = createRef()
 
   constructor() {
@@ -479,13 +480,27 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不支持重写
    */
-  handleMouseDown = (e: MouseEvent) => {
+  handleMouseDown = (e: PointerEvent) => {
     e.stopPropagation()
     this.startTime = new Date().getTime()
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+    }
+    if (e.pointerType === 'touch') {
+      this.longPressTimer = window.setTimeout(() => {
+        if (!this.props.model.isDragging) {
+          this.handleContextMenu(e)
+        }
+      }, 500)
+    }
   }
   handleMouseUp = () => {
     const { model } = this.props
     this.mouseUpDrag = model.isDragging
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
   }
   /**
    * 不支持重写
@@ -606,10 +621,15 @@ export abstract class BaseEdge<P extends IProps> extends Component<
           ]
             .filter(Boolean)
             .join(' ')}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
+          style={{
+            touchAction: 'none',
+            WebkitTouchCallout: 'none',
+          }}
           onClick={this.handleClick}
           onContextMenu={this.handleContextMenu}
+          onPointerDown={this.handleMouseDown}
+          onPointerUp={this.handleMouseUp}
+          onPointerCancel={this.handleMouseUp}
           onMouseOver={this.setHoverOn}
           onMouseEnter={this.setHoverOn}
           onMouseLeave={this.setHoverOff}

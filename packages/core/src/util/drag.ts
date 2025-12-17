@@ -10,7 +10,7 @@ const LEFT_MOUSE_BUTTON_CODE = 0
 export type IDragParams = {
   deltaX: number
   deltaY: number
-  event?: MouseEvent
+  event?: PointerEvent
   [key: string]: unknown
 }
 
@@ -99,16 +99,15 @@ export class StepDrag {
     this.model = model
   }
 
-  handleMouseDown = (e: MouseEvent) => {
+  handleMouseDown = (e: PointerEvent) => {
     const DOC: any = window?.document
     if (e.button !== LEFT_MOUSE_BUTTON_CODE) return
     if (this.isStopPropagation) e.stopPropagation()
     this.isStartDragging = true
     this.startX = e.clientX
     this.startY = e.clientY
-
-    DOC.addEventListener('mousemove', this.handleMouseMove, false)
-    DOC.addEventListener('mouseup', this.handleMouseUp, false)
+    DOC.addEventListener('pointermove', this.handleMouseMove, false)
+    DOC.addEventListener('pointerup', this.handleMouseUp, false)
     const elementData = this.model?.getData()
     this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEDOWN`], {
       e,
@@ -117,8 +116,9 @@ export class StepDrag {
     this.startTime = new Date().getTime()
   }
 
-  handleMouseMove = (e: MouseEvent) => {
+  handleMouseMove = (e: PointerEvent) => {
     if (this.isStopPropagation) e.stopPropagation()
+    e.preventDefault()
     if (!this.isStartDragging) return
     this.sumDeltaX += e.clientX - this.startX
     this.sumDeltaY += e.clientY - this.startY
@@ -170,15 +170,19 @@ export class StepDrag {
     }
   }
 
-  handleMouseUp = (e: MouseEvent) => {
+  handleMouseUp = (e: PointerEvent) => {
     const DOC = window.document
 
     this.isStartDragging = false
     if (this.isStopPropagation) e.stopPropagation()
+    const target = e.target as any
+    if (target && typeof target.releasePointerCapture === 'function') {
+      target.releasePointerCapture(e.pointerId)
+    }
     // fix #568: 如果onDragging在下一个事件循环中触发，而drop在当前事件循环，会出现问题。
     Promise.resolve().then(() => {
-      DOC.removeEventListener('mousemove', this.handleMouseMove, false)
-      DOC.removeEventListener('mouseup', this.handleMouseUp, false)
+      DOC.removeEventListener('pointermove', this.handleMouseMove, false)
+      DOC.removeEventListener('pointerup', this.handleMouseUp, false)
       const elementData = this.model?.getData()
       this.eventCenter?.emit(EventType[`${this.eventType}_MOUSEUP`], {
         e,
@@ -195,9 +199,8 @@ export class StepDrag {
   }
   cancelDrag = () => {
     const DOC: any = window?.document
-
-    DOC.removeEventListener('mousemove', this.handleMouseMove, false)
-    DOC.removeEventListener('mouseup', this.handleMouseUp, false)
+    DOC.removeEventListener('pointermove', this.handleMouseMove, false)
+    DOC.removeEventListener('pointerup', this.handleMouseUp, false)
     this.onDragEnd({ event: undefined })
     this.isDragging = false
   }

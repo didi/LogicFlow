@@ -206,10 +206,12 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     // TODO: 确认 constructor 中赋值 properties 是否必要，此处将 NodeConfig 中所有属性赋值给 this，包括 rotate、rotatable，resizable 等
     assign(this, pickNodeConfig(data))
 
-    const { overlapMode } = this.graphModel
-    if (overlapMode === OverlapMode.INCREASE) {
-      this.zIndex = data.zIndex || getZIndex()
-    }
+    const { overlapMode, eventCenter } = this.graphModel
+    this.updateZIndexByOverlap(overlapMode, data.zIndex || getZIndex())
+    eventCenter.on('overlap:change', (data) => {
+      const { overlapMode: newMode } = data
+      this.updateZIndexByOverlap(newMode, this.zIndex || getZIndex())
+    })
   }
 
   /**
@@ -339,7 +341,13 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     if (this.rotate) {
       data.rotate = this.rotate
     }
-    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+    // 因为默认模式和节点在上模式下，对边的zIndex要求不高（因为渲染的时候会按照模式对所有元素进行排序）
+    // 所以只在递增模式和静态模式下设置zIndex
+    if (
+      [OverlapMode.INCREASE, OverlapMode.STATIC].includes(
+        this.graphModel.overlapMode,
+      )
+    ) {
       data.zIndex = this.zIndex
     }
     if (value) {
@@ -627,7 +635,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
    * 手动连接边到节点时，需要连接的锚点
    */
   public getTargetAnchor(position: Point): Model.AnchorInfo {
-    return getClosestAnchor(position, this)
+    const { customTargetAnchor } = this.graphModel
+    return (
+      customTargetAnchor?.(this, position) ?? getClosestAnchor(position, this)
+    )
   }
 
   /**
@@ -913,6 +924,23 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
 
   @action updateAttributes(attributes: any) {
     assign(this, attributes)
+  }
+  // 堆叠模式变化时，更新zIndex
+  @action
+  updateZIndexByOverlap(overlapMode: OverlapMode, defaultZIndex) {
+    switch (overlapMode) {
+      case OverlapMode.DEFAULT:
+        this.zIndex = 1
+        break
+      case OverlapMode.EDGE_TOP:
+        this.zIndex = 0
+        break
+      case OverlapMode.INCREASE:
+        this.zIndex = defaultZIndex
+        break
+      default:
+        break
+    }
   }
 }
 

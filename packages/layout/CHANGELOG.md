@@ -1,5 +1,33 @@
 # Change Log
 
+## 2.1.0-alpha.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.2
+
+## 2.1.0-alpha.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.2.0
+
+## 2.1.0-alpha.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.0
+
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.1.4
+
 ## 2.0.3
 
 ### Patch Changes

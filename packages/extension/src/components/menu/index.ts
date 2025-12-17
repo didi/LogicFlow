@@ -603,7 +603,6 @@ class Menu {
     if (lf.graphModel.editConfigModel.isSilentMode) return
     this.__container = container
     this.__currentData = null // 当前展示的菜单所属元素的model数据
-
     // 监听 isSilentMode 变化
     this.setupSilentModeListener()
 

@@ -42,6 +42,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   mouseUpDrag?: boolean
   startTime?: number
   modelDisposer: IReactionDisposer
+  longPressTimer?: number
 
   constructor(props: IProps) {
     super()
@@ -330,15 +331,27 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   handleMouseUp = () => {
     const { model } = this.props
     this.mouseUpDrag = model.isDragging
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+      this.longPressTimer = undefined
+    }
   }
 
   handleClick = (e: MouseEvent) => {
     // 节点拖拽进画布之后，不触发click事件相关emit
     // 点拖拽进画布没有触发mousedown事件，没有startTime，用这个值做区分
     const isDragging = this.mouseUpDrag === false
+    const curTime = new Date().getTime()
     if (!this.startTime) return
+    const timeInterval = curTime - this.startTime
     const { model, graphModel } = this.props
-    if (!isDragging) return // 如果是拖拽, 不触发click事件。
+    // 这里会有一种极端情况：当网格大小是1或者关闭网格吸附时，用触摸板点击节点会触发拖拽事件导致节点无法选中
+    // 当触摸板点击节点时,为了防止误触发拖拽导致节点无法选中，允许在非拖拽状态且时间间隔小于100ms时触发点击事件
+    if (!isDragging && timeInterval > 100) return
+    if (!isDragging) {
+      this.onDragEnd()
+      this.handleMouseUp()
+    }
     // 节点数据，多为事件对象数据抛出
     const nodeData = model.getData()
     const position = graphModel.getPointByClient({
@@ -423,12 +436,22 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     }
   }
 
-  handleMouseDown = (ev: MouseEvent) => {
+  handleMouseDown = (ev: PointerEvent) => {
     const { model, graphModel } = this.props
     this.startTime = new Date().getTime()
     const { editConfigModel } = graphModel
     if (editConfigModel.adjustNodePosition && model.draggable) {
       this.stepDrag && this.stepDrag.handleMouseDown(ev)
+    }
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer)
+    }
+    if (ev.pointerType === 'touch') {
+      this.longPressTimer = window.setTimeout(() => {
+        if (!this.props.model.isDragging) {
+          this.handleContextMenu(ev)
+        }
+      }, 500)
     }
   }
 
@@ -440,6 +463,8 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   }
 
   handleBlur = () => {
+    // 当节点通过自定义锚点实现节点删除时，这里props会变成undefined，需兼容一下
+    if (!this.props) return
     const { model, graphModel } = this.props
     graphModel.eventCenter.emit(EventType.NODE_BLUR, {
       data: model.getData(),
@@ -522,9 +547,10 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       nodeShape = (
         <g
           className={`${this.getStateClassName()} ${className}`}
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}
+          onPointerDown={this.handleMouseDown}
+          onPointerUp={this.handleMouseUp}
           onClick={this.handleClick}
+          //因为移动端点击操作完成会按顺序触发enter、leave、click事件，所以会造成节点的闪烁，所以在这里没有统一状态为Pointer
           onMouseEnter={this.setHoverOn}
           onMouseOver={this.setHoverOn}
           onMouseLeave={this.setHoverOff}

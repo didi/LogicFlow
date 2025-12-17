@@ -393,7 +393,7 @@ export class ResizeControl extends Component<
           height={25}
           fill="transparent"
           stroke="transparent"
-          onMouseDown={this.dragHandler.handleMouseDown}
+          onPointerDown={this.dragHandler.handleMouseDown}
         />
       </g>
     )

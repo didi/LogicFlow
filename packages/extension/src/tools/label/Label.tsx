@@ -72,7 +72,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
     element.setHovered(false)
   }
 
-  handleMouseDown = (e: MouseEvent) => {
+  handleMouseDown = (e: PointerEvent) => {
     const { label, graphModel } = this.props
     const {
       editConfigModel: { nodeTextDraggable },
@@ -86,7 +86,7 @@ export class Label extends Component<ILabelProps, ILabelState> {
       this.stepDrag.handleMouseDown(e)
     }
   }
-  handleMouseUp = (e: MouseEvent) => {
+  handleMouseUp = (e: PointerEvent) => {
     if (this.state.isDragging) {
       this.stepDrag.handleMouseUp(e)
     }
@@ -320,8 +320,8 @@ export class Label extends Component<ILabelProps, ILabelState> {
         id={`element-container-${id}`}
         className={classNames('lf-label-editor-container')}
         style={containerStyle}
-        onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMouseUp}
+        onPointerDown={this.handleMouseDown}
+        onPointerUp={this.handleMouseUp}
         onClick={this.handleClick}
         onDblClick={this.handleDbClick}
         onBlur={this.handleBlur}

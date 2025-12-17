@@ -162,8 +162,10 @@ export enum EventType {
 }
 
 export enum OverlapMode {
+  STATIC = -1, // 静态(元素层级不随点击变化)
   DEFAULT = 0, // 默认
   INCREASE = 1, // 递增
+  EDGE_TOP = 2, // 边固定在顶部
 }
 
 export enum SegmentDirection {

@@ -89,6 +89,8 @@ export class GraphModel {
   idGenerator?: (type?: string) => string | undefined
   // 节点间连线、连线变更时的边的生成规则
   edgeGenerator: LFOptions.Definition['edgeGenerator']
+  // 自定义目标锚点连接规则
+  customTargetAnchor?: LFOptions.Definition['customTargetAnchor']
 
   // Remind：用于记录当前画布上所有节点和边的 model 的 Map
   // 现在的处理方式，用 this.nodes.map 生成的方式，如果在 new Model 的过程中依赖于其它节点的 model，会出现找不到的情况
@@ -163,6 +165,7 @@ export class GraphModel {
       edgeGenerator,
       animation,
       customTrajectory,
+      customTargetAnchor,
     } = options
     this.rootEl = container
     this.partial = !!partial
@@ -216,6 +219,7 @@ export class GraphModel {
     this.idGenerator = idGenerator
     this.edgeGenerator = createEdgeGenerator(this, edgeGenerator)
     this.customTrajectory = customTrajectory
+    this.customTargetAnchor = customTargetAnchor
   }
 
   @computed get nodesMap(): GraphModel.NodesMapType {
@@ -250,9 +254,11 @@ export class GraphModel {
    * todo: 性能优化
    */
   @computed get sortElements() {
-    const elements = [...this.nodes, ...this.edges].sort(
-      (a, b) => a.zIndex - b.zIndex,
-    )
+    const sortElement = (list) => {
+      return [...list].sort((a, b) => a.zIndex - b.zIndex)
+    }
+    // 默认情况下节点与边按照 zIndex 排序
+    const elements = sortElement([...this.nodes, ...this.edges])
 
     // 只显示可见区域的节点和边
     const visibleElements: (BaseNodeModel | BaseEdgeModel)[] = []
@@ -719,6 +725,22 @@ export class GraphModel {
   }
 
   /**
+   * 内部保留方法，请勿直接使用
+   */
+
+  /**
+   * 设置重叠模式
+   * @param mode 重叠模式
+   */
+  @action
+  setOverlapMode(mode: OverlapMode) {
+    this.overlapMode = mode
+    this.eventCenter.emit('overlap:change', {
+      overlapMode: mode,
+    })
+  }
+
+  /**
    * 更新元素的文本模式
    * @param mode
    * @param model
@@ -768,14 +790,19 @@ export class GraphModel {
   toFront(id: string) {
     const element = this.nodesMap[id]?.model || this.edgesMap[id]?.model
     if (element) {
-      if (this.overlapMode === OverlapMode.DEFAULT) {
-        this.topElement?.setZIndex()
-        element.setZIndex(ELEMENT_MAX_Z_INDEX)
-        this.topElement = element
+      // 静态模式toFront不做处理
+      if (this.overlapMode === OverlapMode.STATIC) {
+        return
       }
+      // 递增模式下，将需指定元素zIndex设置为当前最大zIndex + 1
       if (this.overlapMode === OverlapMode.INCREASE) {
         this.setElementZIndex(id, 'top')
+        return
       }
+      // 默认模式（节点在上）和边在上模式下，将原置顶元素重新恢复原有层级，将需指定元素zIndex设置为最大zIndex
+      this.topElement?.setZIndex()
+      element.setZIndex(ELEMENT_MAX_Z_INDEX)
+      this.topElement = element
     }
   }
 
@@ -1225,12 +1252,15 @@ export class GraphModel {
   clearSelectElements() {
     this.selectElements.forEach((element) => {
       element?.setSelected(false)
+      element?.setHovered(false)
     })
     this.selectElements.clear()
     /**
      * 如果堆叠模式为默认模式，则将置顶元素重新恢复原有层级
      */
-    if (this.overlapMode === OverlapMode.DEFAULT) {
+    if (
+      [OverlapMode.DEFAULT, OverlapMode.EDGE_TOP].includes(this.overlapMode)
+    ) {
       this.topElement?.setZIndex()
     }
   }
@@ -1585,7 +1615,7 @@ export class GraphModel {
   }
 
   /**
-   * 获取图形区域虚拟矩型的尺寸和中心坐标
+   * 获取图形区域虚拟矩形的尺寸和中心坐标
    * @returns
    */
   getVirtualRectSize(): GraphModel.VirtualRectProps {
@@ -1612,7 +1642,7 @@ export class GraphModel {
     const virtualRectWidth = maxX - minX || 0
     const virtualRectHeight = maxY - minY || 0
 
-    // 获取虚拟矩型的中心坐标
+    // 获取虚拟矩形的中心坐标
     const virtualRectCenterPositionX = minX + virtualRectWidth / 2
     const virtualRectCenterPositionY = minY + virtualRectHeight / 2
 
@@ -1718,7 +1748,6 @@ export class GraphModel {
   @action setPartial(partial: boolean): void {
     this.partial = partial
   }
-
   /** 销毁当前实例 */
   destroy() {
     try {

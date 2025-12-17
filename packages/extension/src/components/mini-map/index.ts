@@ -616,8 +616,8 @@ export class MiniMap {
     const div = document.createElement('div')
     div.className = 'lf-minimap-viewport'
 
-    // 拖拽预览视窗，主画布视口跟随移动
-    div.addEventListener('mousedown', this.startDrag)
+    div.style.touchAction = 'none'
+    div.addEventListener('pointerdown', this.startDrag)
 
     // 禁止预览视窗的点击事件冒泡
     div.addEventListener('click', (e: MouseEvent) => {
@@ -626,9 +626,9 @@ export class MiniMap {
     this.viewport = div
   }
 
-  private startDrag = (e: MouseEvent) => {
-    document.addEventListener('mousemove', this.drag)
-    document.addEventListener('mouseup', this.drop)
+  private startDrag = (e: PointerEvent) => {
+    document.addEventListener('pointermove', this.drag)
+    document.addEventListener('pointerup', this.drop)
     const { x, y } = e
     this.startPosition = { x, y }
   }
@@ -636,7 +636,7 @@ export class MiniMap {
   /**
    * 拖拽预览视窗过程中，更新主画布视口
    */
-  private drag = (e: MouseEvent) => {
+  private drag = (e: PointerEvent) => {
     const { x, y } = e
     const translateX = (x - this.startPosition.x) / this.scale
     const translateY = (y - this.startPosition.y) / this.scale
@@ -659,8 +659,8 @@ export class MiniMap {
    * 拖拽预览视窗结束，移除拖拽事件
    */
   private drop = () => {
-    document.removeEventListener('mousemove', this.drag)
-    document.removeEventListener('mouseup', this.drop)
+    document.removeEventListener('pointermove', this.drag)
+    document.removeEventListener('pointerup', this.drop)
   }
 
   /**

@@ -45,36 +45,36 @@ class CustomNode extends RectNode {
 
 ## 属性
 
-| 属性                        | 类型                                          | 默认值 | 描述                                                                       |
-| :-------------------------- | :-------------------------------------------- | :----- | :------------------------------------------------------------------------- |
-| width                       | `number`                                      |        | LogicFlow 画布宽度                                                         |
-| height                      | `number`                                      |        | LogicFlow 画布高度                                                         |
-| theme                       | `LogicFlow.Theme`                             |        | [详细 API](../theme.zh.md)                                                 |
-| animation                   | `boolean \| LFOptions.AnimationConfig`        | false  | 动画状态配置，是否已打开对应的动画                                         |
-| [eventCenter](#eventcenter) | `EventEmitter`                                |        | 事件中心, 可以通过这个对象向外部抛出事件                                   |
-| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 维护所有节点和边类型对应的 model                                           |
-| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |        | 位于当前画布顶部的元素                                                     |
-| idGenerator                 | `(type?: string) => string \| undefined`      |        | 自定义全局 id 生成器                                                       |
-| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []     | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断               |
-| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |        | 获取自定义连线轨迹                                                         |
-| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |        | 节点间连线、连线变更时边的生成规则                                         |
-| edgeType                    | `string`                                      |        | 在图上操作创建边时，默认使用的边类型                                       |
-| nodes                       | `BaseNodeModel[]`                             | []     | 画布所有的节点对象                                                         |
-| edges                       | `BaseEdgeModel[]`                             | []     | 画布所有的连线对象                                                         |
-| fakeNode                    | `BaseNodeModel  \| null`                      | null   | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开       |
-| [overlapMode](#overlapmode) | `number`                                      |        | 元素重合时堆叠模式; 0:默认模式, 1:递增模式                                 |
-| background                  | `false \| LFOptions.BackgroundConfig`         |        | 画布背景配置                                                               |
-| transformModel              | `TransformModel`                              |        | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)        |
-| editConfigModel             | `EditConfigModel`                             |        | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md)       |
-| gridSize                    | `number`                                      | 1      | 网格大小                                                                   |
-| partial                     | `boolean`                                     | false  | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能 |
-| nodesMap                    | `GraphModel.NodesMapType`                     |        | 画布所有节点的构成的 `map`                                                 |
-| edgesMap                    | `GraphModel.EdgesMapType`                     |        | 画布所有边构成的 `map`                                                     |
-| modelsMap                   | `GraphModel.ModelsMapType`                    |        | 画布所有节点和边共同构成的 `map`                                           |
-| selectNodes                 | `BaseNodeModel[]`                             |        | 画布中所有选中节点对象                                                     |
-| sortElements                | `array`                                       |        | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                         |
-| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |        | 当前被编辑的元素                                                           |
-| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 当前画布所有被选中的元素                                                   |
+| 属性                        | 类型                                          | 默认值 | 描述                                                                                             |
+| :-------------------------- | :-------------------------------------------- | :----- | :----------------------------------------------------------------------------------------------- |
+| width                       | `number`                                      |        | LogicFlow 画布宽度                                                                               |
+| height                      | `number`                                      |        | LogicFlow 画布高度                                                                               |
+| theme                       | `LogicFlow.Theme`                             |        | [详细 API](../theme.zh.md)                                                                       |
+| animation                   | `boolean \| LFOptions.AnimationConfig`        | false  | 动画状态配置，是否已打开对应的动画                                                               |
+| [eventCenter](#eventcenter) | `EventEmitter`                                |        | 事件中心, 可以通过这个对象向外部抛出事件                                                         |
+| modelMap                    | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 维护所有节点和边类型对应的 model                                                                 |
+| [topElement](#topElement)   | `BaseNodeModel \| BaseEdgeModel`              |        | 位于当前画布顶部的元素                                                                           |
+| idGenerator                 | `(type?: string) => string \| undefined`      |        | 自定义全局 id 生成器                                                                             |
+| nodeMoveRules               | `Model.NodeMoveRule[]`                        | []     | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断                                     |
+| customTrajectory            | `LFOptions.CustomAnchorLineProps`             |        | 获取自定义连线轨迹                                                                               |
+| edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |        | 节点间连线、连线变更时边的生成规则                                                               |
+| edgeType                    | `string`                                      |        | 在图上操作创建边时，默认使用的边类型                                                             |
+| nodes                       | `BaseNodeModel[]`                             | []     | 画布所有的节点对象                                                                               |
+| edges                       | `BaseEdgeModel[]`                             | []     | 画布所有的连线对象                                                                               |
+| fakeNode                    | `BaseNodeModel  \| null`                      | null   | 外部拖入节点进入画布的过程中，用 fakeNode 来和画布上正式的节点区分开                             |
+| [overlapMode](#overlapmode) | `OverlapMode`                                 |        | 元素重合时堆叠模式；支持 静态模式: -1、默认模式(节点层级优先): 0、递增模式: 1、边层级优先模式: 2 |
+| background                  | `false \| LFOptions.BackgroundConfig`         |        | 画布背景配置                                                                                     |
+| transformModel              | `TransformModel`                              |        | 当前画布平移、缩放矩阵 `model`, 详细见[API](./transformModel.zh.md)                              |
+| editConfigModel             | `EditConfigModel`                             |        | 页面编辑基本配置对象, 详细见[editConfigApi](./editConfigModel.zh.md)                             |
+| gridSize                    | `number`                                      | 1      | 网格大小                                                                                         |
+| partial                     | `boolean`                                     | false  | 是否开启局部渲染，当页面元素数量过多的时候，开启局部渲染会提高页面渲染性能                       |
+| nodesMap                    | `GraphModel.NodesMapType`                     |        | 画布所有节点的构成的 `map`                                                                       |
+| edgesMap                    | `GraphModel.EdgesMapType`                     |        | 画布所有边构成的 `map`                                                                           |
+| modelsMap                   | `GraphModel.ModelsMapType`                    |        | 画布所有节点和边共同构成的 `map`                                                                 |
+| selectNodes                 | `BaseNodeModel[]`                             |        | 画布中所有选中节点对象                                                                           |
+| sortElements                | `array`                                       |        | 按照 zIndex 排序后的元素，基于zIndex对元素进行排序                                               |
+| textEditElement             | `BaseNodeModel \| BaseEdgeModel`              |        | 当前被编辑的元素                                                                                 |
+| selectElements              | `Map<string, BaseNodeModel \| BaseEdgeModel>` |        | 当前画布所有被选中的元素                                                                         |
 
 ### eventCenter<Badge>属性</Badge>
 
@@ -110,8 +110,12 @@ lf.on("user:detail", (res) => {});
 
 元素重合时堆叠模式<br>
 
-- 值为`0`: 默认模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会恢复之前的层级。
-- 值为`1`: 递增模式，节点和边被选中，会被显示在最上面。当取消选中后，元素会保持层级。
+- 值为 `-1`（STATIC）：选中不改变层级，`toFront` 无效；通过元素自身的 `zIndex` 控制顺序。
+- 值为 `0`（DEFAULT）：节点始终位于边之上，渲染顺序为“先边后节点”。选中元素临时置顶，取消选中后恢复原有层级。
+- 值为 `1`（INCREASE）：每次 `toFront` 都提升元素 zIndex，取消选中后仍保留提升的层级。
+- 值为 `2`（EDGE_TOP）：边始终位于节点之上，渲染顺序为“先节点后边”。`toFront` 行为与默认模式一致（临时置顶，取消选中恢复）。
+
+说明：只有在 `INCREASE` 与 `STATIC` 模式下，元素的 `zIndex` 才会持久化到图数据；`DEFAULT` 与 `EDGE_TOP` 模式下的层级由渲染时规则决定。
 
 ## 方法
 
@@ -471,9 +475,11 @@ graphModel.changeEdgeId("edge_id_1", "edge_id_2");
 
 将指定节点或者边放置在前面
 
-如果堆叠模式为默认模式，则临时将指定元素置顶（zIndex设置为9999），原置顶元素重新恢复默认层级（zIndex设置为1），点击画布取消元素选中时，所有节点 zIndex 恢复为 1。
+在默认模式（以及 `EDGE_TOP` 模式）下，指定元素会被临时置顶（zIndex 设为较高值），当取消选中时恢复原有层级。
 
-如果堆叠模式为递增模式，则将需指定元素 zIndex 设置为当前最大 zIndex + 1。
+在递增模式下，指定元素的 zIndex 会提升到当前最大值 + 1，并在取消选中后仍保留提升的层级。
+
+在静态模式下，此方法不生效。
 
 入参:
 
@@ -906,7 +912,7 @@ graphModel.changeNodeType("node_1", "circle");
 
 ### changeEdgeType<Badge>方法</Badge>
 
-修改指定节点的类型
+修改指定边的类型
 
 参数
 

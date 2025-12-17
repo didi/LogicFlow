@@ -29,7 +29,7 @@ interface IProps {
   anchorIndex: number
   graphModel: GraphModel
   nodeModel: BaseNodeModel
-  setHoverOff: (e: MouseEvent) => void
+  setHoverOff: (e: PointerEvent) => void
 }
 
 interface IState {
@@ -154,7 +154,7 @@ class Anchor extends Component<IProps, IState> {
       endY: y1,
       dragging: true,
     })
-    this.moveAnchorEnd(x1, y1)
+    this.moveAnchorEnd(x1, y1, event)
     if (nearBoundary.length > 0 && !stopMoveGraph && autoExpand) {
       this.t = createRaf(() => {
         const [translateX, translateY] = nearBoundary
@@ -164,7 +164,7 @@ class Anchor extends Component<IProps, IState> {
           endX: endX - translateX,
           endY: endY - translateY,
         })
-        this.moveAnchorEnd(endX - translateX, endY - translateY)
+        this.moveAnchorEnd(endX - translateX, endY - translateY, event)
       })
     }
     eventCenter.emit(EventType.ANCHOR_DRAG, {
@@ -189,6 +189,11 @@ class Anchor extends Component<IProps, IState> {
     this.sourceRuleResults.clear()
     this.targetRuleResults.clear()
     const { graphModel, nodeModel, anchorData } = this.props
+    // 拖拽结束清理：取消悬浮态
+    if (this.preTargetNode) {
+      this.preTargetNode.setHovered(false)
+      this.preTargetNode = undefined
+    }
 
     graphModel.eventCenter.emit(EventType.ANCHOR_DRAGEND, {
       data: anchorData,
@@ -216,7 +221,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
-  checkEnd = (event: MouseEvent | null | undefined) => {
+  checkEnd = (event: PointerEvent | null | undefined) => {
     const {
       graphModel,
       nodeModel,
@@ -289,7 +294,7 @@ class Anchor extends Component<IProps, IState> {
     }
   }
 
-  moveAnchorEnd(endX: number, endY: number) {
+  moveAnchorEnd(endX: number, endY: number, event?: PointerEvent) {
     const { graphModel, nodeModel, anchorData } = this.props
     const info = targetNodeInfo(
       {
@@ -309,40 +314,31 @@ class Anchor extends Component<IProps, IState> {
         return
       }
       this.preTargetNode = targetNode
-      // 支持节点的每个锚点单独设置是否可连接，因此规则key去nodeId + anchorId作为唯一值
-      const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`
-
-      // 查看鼠标是否进入过target，若有检验结果，表示进入过, 就不重复计算了。
-      if (!this.targetRuleResults.has(targetInfoId)) {
-        const targetAnchor = info.anchor
-        const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+      const anchorDist = distance(endX, endY, info.anchor.x, info.anchor.y)
+      const validateDistance = 10
+      const { editConfigModel } = graphModel
+      if (
+        !editConfigModel.anchorProximityValidate ||
+        anchorDist <= validateDistance
+      ) {
+        this.validateAndSetState(
           targetNode,
-          anchorData,
-          targetAnchor,
-        )
-        const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+          anchorId,
+          info.anchor,
           nodeModel,
           anchorData,
-          targetAnchor,
-        )
-        this.sourceRuleResults.set(
-          targetInfoId,
-          formatAnchorConnectValidateData(sourceRuleResult),
-        )
-        this.targetRuleResults.set(
-          targetInfoId,
-          formatAnchorConnectValidateData(targetRuleResult),
         )
       }
-      const { isAllPass: isSourcePass } =
-        this.sourceRuleResults.get(targetInfoId) ?? {}
-      const { isAllPass: isTargetPass } =
-        this.targetRuleResults.get(targetInfoId) ?? {}
-      // 实时提示出即将链接的锚点
-      if (isSourcePass && isTargetPass) {
-        targetNode.setElementState(ElementState.ALLOW_CONNECT)
-      } else {
-        targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT)
+      // 人工触发进入目标节点事件，同步设置 hovered 以驱动锚点显隐和样式
+      if (!targetNode.isHovered) {
+        const nodeData = targetNode.getData()
+        if (event) {
+          graphModel.eventCenter.emit(EventType.NODE_MOUSEENTER, {
+            data: nodeData,
+            e: event,
+          })
+        }
+        targetNode.setHovered(true)
       }
     } else if (
       this.preTargetNode &&
@@ -350,6 +346,59 @@ class Anchor extends Component<IProps, IState> {
     ) {
       // 为了保证鼠标离开的时候，将上一个节点状态重置为正常状态。
       this.preTargetNode.setElementState(ElementState.DEFAULT)
+      // 未命中任何节点：人工派发离开事件并取消悬浮，避免状态残留
+      const prevData = this.preTargetNode.getData()
+      if (event) {
+        graphModel.eventCenter.emit(EventType.NODE_MOUSELEAVE, {
+          data: prevData,
+          e: event,
+        })
+      }
+      this.preTargetNode.setHovered(false)
+      this.preTargetNode = undefined
+    }
+  }
+
+  // 校验 source/target 连接规则并设置目标节点状态
+  validateAndSetState(
+    targetNode: BaseNodeModel,
+    anchorId: string | undefined,
+    targetAnchor: AnchorConfig,
+    nodeModel: BaseNodeModel,
+    anchorData: AnchorConfig,
+  ) {
+    const targetInfoId = `${nodeModel.id}_${targetNode.id}_${anchorId}_${anchorData.id}`
+    if (!this.targetRuleResults.has(targetInfoId)) {
+      // 首次计算并缓存源/目标两侧的规则校验结果
+      const sourceRuleResult = nodeModel.isAllowConnectedAsSource(
+        targetNode,
+        anchorData,
+        targetAnchor,
+      )
+      const targetRuleResult = targetNode.isAllowConnectedAsTarget(
+        nodeModel,
+        anchorData,
+        targetAnchor,
+      )
+      this.sourceRuleResults.set(
+        targetInfoId,
+        formatAnchorConnectValidateData(sourceRuleResult),
+      )
+      this.targetRuleResults.set(
+        targetInfoId,
+        formatAnchorConnectValidateData(targetRuleResult),
+      )
+    }
+    // 读取缓存的校验结果
+    const { isAllPass: isSourcePass } =
+      this.sourceRuleResults.get(targetInfoId) ?? {}
+    const { isAllPass: isTargetPass } =
+      this.targetRuleResults.get(targetInfoId) ?? {}
+    // 两侧都通过则允许连接，否则标记为不允许连接
+    if (isSourcePass && isTargetPass) {
+      targetNode.setElementState(ElementState.ALLOW_CONNECT)
+    } else {
+      targetNode.setElementState(ElementState.NOT_ALLOW_CONNECT)
     }
   }
 
@@ -375,7 +424,7 @@ class Anchor extends Component<IProps, IState> {
               nodeModel,
             })
           }}
-          onMouseDown={(ev) => {
+          onPointerDown={(ev) => {
             graphModel.eventCenter.emit(EventType.ANCHOR_MOUSEDOWN, {
               data: anchorData,
               e: ev!,

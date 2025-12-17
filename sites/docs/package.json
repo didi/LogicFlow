@@ -1,6 +1,6 @@
 {
   "name": "logicflow-docs",
-  "version": "2.1.7",
+  "version": "2.2.1",
   "private": true,
   "description": "LogicFlow sites deployed on gh-pages",
   "scripts": {
@@ -31,7 +31,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@logicflow/core": "workspace:*",
-    "@logicflow/dumi-theme-simple": "^1.0.0",
+    "@logicflow/dumi-theme-simple": "^1.0.2",
     "@logicflow/extension": "workspace:*",
     "@logicflow/react-node-registry": "workspace:*",
     "@logicflow/layout": "workspace:*",

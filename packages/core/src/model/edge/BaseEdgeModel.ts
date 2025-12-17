@@ -144,10 +144,8 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     } = this.graphModel
     this.isShowAdjustPoint = adjustEdgeStartAndEnd
     assign(this, pickEdgeConfig(data))
-    const { overlapMode } = this.graphModel
-    if (overlapMode === OverlapMode.INCREASE) {
-      this.zIndex = data.zIndex || getZIndex()
-    }
+    const { overlapMode, eventCenter } = this.graphModel
+    this.updateZIndexByOverlap(overlapMode, data.zIndex || getZIndex())
     // 设置边的 anchors，也就是边的两个端点
     // 端点依赖于 edgeData 的 sourceNode 和 targetNode
     this.setAnchors()
@@ -155,6 +153,11 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     this.initPoints()
     // 文本位置依赖于边上的所有拐点
     this.formatText(data)
+
+    eventCenter.on('overlap:change', (data) => {
+      const { overlapMode: newMode } = data
+      this.updateZIndexByOverlap(newMode, this.zIndex || getZIndex())
+    })
   }
 
   /**
@@ -397,7 +400,13 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
       startPoint: assign({}, this.startPoint),
       endPoint: assign({}, this.endPoint),
     }
-    if (this.graphModel.overlapMode === OverlapMode.INCREASE) {
+    // 因为默认模式和边在上模式下，对节点的zIndex要求不高（因为渲染的时候会按照模式对所有元素进行排序）
+    // 所以只在递增模式和静态模式下设置zIndex
+    if (
+      [OverlapMode.INCREASE, OverlapMode.STATIC].includes(
+        this.graphModel.overlapMode,
+      )
+    ) {
       data.zIndex = this.zIndex
     }
     const { x, y, value } = this.text
@@ -744,6 +753,24 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
   }: Record<'startPoint' | 'endPoint', Point>) {
     this.updateStartPoint({ x: startPoint.x, y: startPoint.y })
     this.updateEndPoint({ x: endPoint.x, y: endPoint.y })
+  }
+
+  // 堆叠模式变化时，更新zIndex
+  @action
+  updateZIndexByOverlap(overlapMode: OverlapMode, defaultZIndex) {
+    switch (overlapMode) {
+      case OverlapMode.DEFAULT:
+        this.zIndex = 0
+        break
+      case OverlapMode.EDGE_TOP:
+        this.zIndex = 1
+        break
+      case OverlapMode.INCREASE:
+        this.zIndex = defaultZIndex
+        break
+      default:
+        break
+    }
   }
 }
 

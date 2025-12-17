@@ -1,5 +1,35 @@
 # Change Log
 
+## 2.2.0-alpha.2
+
+### Patch Changes
+
+- chore: 重新打包
+
+## 2.2.0-alpha.1
+
+### Patch Changes
+
+- feat: 锚点功能优化
+  - 支持用户指定连接锚点
+  - 支持配置是否必须连到锚点上才能触发连线
+- fix：修复快捷键需要点右键后才能正常触发快捷键问题
+
+## 2.2.0-alpha.0
+
+### Minor Changes
+
+- feat: 支持移动端适配
+
+## 2.1.4
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - feat: 增加边层级优先的堆叠模式和静态堆叠模式 #2063 #2019
+  - fix: 修复部分场景下节点点击无法选中问题 #2181
+  - fix: 修复开启框选的情况下,双击画布会导致关闭框选后stopMoveGraph不还原问题 #2263
+
 ## 2.1.3
 
 ### Patch Changes

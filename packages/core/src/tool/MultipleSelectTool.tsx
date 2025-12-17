@@ -26,7 +26,7 @@ export default class MultipleSelect extends Component<IToolProps> {
     })
   }
 
-  handleMouseDown = (ev: MouseEvent) => {
+  handleMouseDown = (ev: PointerEvent) => {
     this.stepDrag.handleMouseDown(ev)
   }
   // 使多选区域的滚轮事件可以触发画布的滚轮事件
@@ -123,7 +123,7 @@ export default class MultipleSelect extends Component<IToolProps> {
       <div
         className="lf-multiple-select"
         style={style}
-        onMouseDown={this.handleMouseDown}
+        onPointerDown={this.handleMouseDown}
         onContextMenu={this.handleContextMenu}
         onWheel={this.handleWheelEvent}
       />

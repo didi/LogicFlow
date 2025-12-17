@@ -646,6 +646,18 @@ export class Snapshot {
     const { fileType = baseFileType } = toImageOptions ?? {}
     const svg = this.getSvgRootElement(this.lf)
     await updateImageSource(svg as SVGElement)
+    if (fileType === 'svg') {
+      const copy = await this.cloneSvg(svg)
+      const svgString = new XMLSerializer().serializeToString(copy)
+      const blob = new Blob([svgString], {
+        type: 'image/svg+xml;charset=utf-8',
+      })
+      return {
+        data: blob,
+        width: 0,
+        height: 0,
+      }
+    }
     return new Promise((resolve) => {
       this.getCanvasData(svg, {
         backgroundColor,

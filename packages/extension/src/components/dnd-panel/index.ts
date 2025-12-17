@@ -36,6 +36,13 @@ export class DndPanel {
     }
     this.panelEl = document.createElement('div')
     this.panelEl.className = 'lf-dndpanel'
+    this.panelEl.addEventListener(
+      'touchmove',
+      (e) => {
+        e.preventDefault()
+      },
+      { passive: false },
+    )
     this.shapeList.forEach((shapeItem) => {
       this.panelEl?.appendChild(this.createDndItem(shapeItem))
     })
@@ -85,14 +92,14 @@ export class DndPanel {
     if (shapeItem.disabled) {
       el.classList.add('disabled')
       // 保留callback的执行，可用于界面提示当前shapeItem的禁用状态
-      el.onmousedown = () => {
+      el.onpointerdown = () => {
         if (shapeItem.callback) {
           shapeItem.callback(this.lf, this.domContainer)
         }
       }
       return el
     }
-    el.onmousedown = () => {
+    el.onpointerdown = (e: PointerEvent) => {
       if (shapeItem.type) {
         this.lf.dnd.startDrag({
           type: shapeItem.type,
@@ -103,6 +110,7 @@ export class DndPanel {
       if (shapeItem.callback) {
         shapeItem.callback(this.lf, this.domContainer)
       }
+      e.preventDefault()
     }
     el.ondblclick = (e) => {
       this.lf.graphModel.eventCenter.emit('dnd:panel-dbclick', {

@@ -1,5 +1,46 @@
 # Change Log
 
+## 2.2.0-alpha.2
+
+### Patch Changes
+
+- chore: 重新打包
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.2
+  - @logicflow/vue-node-registry@1.2.0-alpha.2
+
+## 2.2.0-alpha.1
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - 修复electron环境引用插件控制台报错问题
+- Updated dependencies
+  - @logicflow/core@2.2.0
+  - @logicflow/vue-node-registry@1.2.0
+
+## 2.2.0-alpha.0
+
+### Minor Changes
+
+- feat: 支持移动端适配
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.0
+  - @logicflow/vue-node-registry@1.2.0-alpha.0
+
+## 2.1.6
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - fix: 修复extension包引入vue包问题 fix #2277
+  - Updated dependencies
+    - @logicflow/core@2.1.4
+    - @logicflow/vue-node-registry@1.1.5
+
 ## 2.1.5
 
 ### Patch Changes
