@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0-alpha.3
+
+### Patch Changes
+
+- feat: 整体UI美化,并丰富可配置的UI项
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.3
+  - @logicflow/vue-node-registry@1.2.0-alpha.3
+
 ## 2.2.0-alpha.2
 
 ### Patch Changes

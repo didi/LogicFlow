@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0-alpha.3
+
+### Patch Changes
+
+- feat: 整体UI美化,并丰富可配置的UI项
+
 ## 2.2.0-alpha.2
 
 ### Patch Changes
