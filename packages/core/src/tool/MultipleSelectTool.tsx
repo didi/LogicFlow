@@ -27,6 +27,13 @@ export default class MultipleSelect extends Component<IToolProps> {
   }
 
   handleMouseDown = (ev: PointerEvent) => {
+    // 多选区域的拖拽步长随缩放变化
+    const {
+      graphModel: { gridSize },
+      lf,
+    } = this.props
+    const { SCALE_X } = lf.getTransform()
+    this.stepDrag.setStep(gridSize * SCALE_X)
     this.stepDrag.handleMouseDown(ev)
   }
   // 使多选区域的滚轮事件可以触发画布的滚轮事件
