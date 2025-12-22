@@ -192,6 +192,9 @@ export class GraphModel {
         ((entries) => {
           for (const entry of entries) {
             if (entry.target === this.rootEl) {
+              // 检查元素是否仍在DOM中
+              const isElementInDOM = document.body.contains(this.rootEl)
+              if (!isElementInDOM) return
               this.resize()
               this.eventCenter.emit('graph:resize', {
                 target: this.rootEl,
@@ -1584,15 +1587,32 @@ export class GraphModel {
    * 重新设置画布的宽高
    */
   @action resize(width?: number, height?: number): void {
-    this.width = width ?? this.rootEl.getBoundingClientRect().width
-    this.isContainerWidth = isNil(width)
-    this.height = height ?? this.rootEl.getBoundingClientRect().height
-    this.isContainerHeight = isNil(height)
+    // 检查当前实例是否已被销毁或rootEl不存在
+    if (!this.rootEl) return
 
-    if (!this.width || !this.height) {
-      console.warn(
-        '渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675',
-      )
+    // 检查元素是否仍在DOM中
+    const isElementInDOM = document.body.contains(this.rootEl)
+    if (!isElementInDOM) return
+
+    // 检查元素是否可见
+    const isVisible = this.rootEl.offsetParent !== null
+    if (!isVisible) return
+
+    try {
+      this.width = width ?? this.rootEl.getBoundingClientRect().width
+      this.isContainerWidth = isNil(width)
+      this.height = height ?? this.rootEl.getBoundingClientRect().height
+      this.isContainerHeight = isNil(height)
+
+      // 只有在元素可见且应该有宽高的情况下才显示警告
+      if (isVisible && (!this.width || !this.height)) {
+        console.warn(
+          '渲染画布的时候无法获取画布宽高，请确认在container已挂载到DOM。@see https://github.com/didi/LogicFlow/issues/675',
+        )
+      }
+    } catch (error) {
+      // 捕获可能的DOM操作错误
+      console.warn('获取画布宽高时发生错误:', error)
     }
   }
 
