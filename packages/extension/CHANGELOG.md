@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.1.7
+
+### Patch Changes
+
+- fix: 修复已知问题
+  - fix: 修复electron环境下引入插件报错问题
+- Updated dependencies
+  - @logicflow/core@2.1.5
+  - @logicflow/vue-node-registry@1.1.6
+
 ## 2.1.6
 
 ### Patch Changes

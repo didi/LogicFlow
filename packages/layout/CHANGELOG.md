@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.1.5
+
 ## 2.0.4
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.5
+
+### Patch Changes
+
+- fix: 修复已知问题
+  - fix: 修复添加了mousedown up时间间隔限制后仍容易出现节点点击后触发拖拽的问题
+  - fix: (GraphModel)添加DOM存在性和可见性检查防止resize错误
+
 ## 2.1.4
 
 ### Patch Changes
