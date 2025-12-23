@@ -524,40 +524,10 @@ export class GraphModel {
         this.edgeModelMap.set(edgeModel.id, edgeModel)
         this.elementsModelMap.set(edgeModel.id, edgeModel)
 
-        // 对齐边的端点
-        this.alignEdgeEndpoints(edgeModel)
         return edgeModel
       })
     } else {
       this.edges = []
-    }
-  }
-  /**
-   * 对齐边的起点/终点到其当前锚点坐标
-   * 用途：
-   * - 在撤销/重建（graphDataToModel）以及网格吸附、节点旋转后，确保边端点与锚点不产生偏移
-   */
-  private alignEdgeEndpoints(edgeModel: BaseEdgeModel) {
-    // 根据边的源/目标节点 id 获取节点 model
-    const sourceNode = this.nodesMap[edgeModel.sourceNodeId]?.model
-    const targetNode = this.nodesMap[edgeModel.targetNodeId]?.model
-    // 有源锚点 id 时，对齐起点到源锚点的当前坐标
-    if (sourceNode && edgeModel.sourceAnchorId) {
-      const startAnchor = sourceNode.anchors.find(
-        (a) => a.id === edgeModel.sourceAnchorId,
-      )
-      if (startAnchor) {
-        edgeModel.updateStartPoint({ x: startAnchor.x, y: startAnchor.y })
-      }
-    }
-    // 有目标锚点 id 时，对齐终点到目标锚点的当前坐标
-    if (targetNode && edgeModel.targetAnchorId) {
-      const endAnchor = targetNode.anchors.find(
-        (a) => a.id === edgeModel.targetAnchorId,
-      )
-      if (endAnchor) {
-        edgeModel.updateEndPoint({ x: endAnchor.x, y: endAnchor.y })
-      }
     }
   }
 
