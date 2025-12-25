@@ -1,6 +1,6 @@
 import LogicFlow, { createUuid } from '@logicflow/core'
 import { DndPanel } from '@logicflow/extension'
-import { Dagre } from '@logicflow/layout'
+import { Dagre, ElkLayout } from '@logicflow/layout'
 import { Card, Flex, Form, Divider, Button, Select, message } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import registerNode from './registerNodeConfig'
@@ -426,7 +426,7 @@ export default function SelectionSelectExample() {
         grid: {
           size: 20,
         },
-        plugins: [DndPanel, Dagre],
+        plugins: [DndPanel, Dagre, ElkLayout],
       })
       lf.setTheme({
         polyline: {
@@ -526,6 +526,20 @@ export default function SelectionSelectExample() {
     }
   }
 
+  // 执行布局
+  const applyElkLayout = () => {
+    if (lfRef.current?.extension.elkLayout) {
+      ;(lfRef.current.extension.elkLayout as ElkLayout)?.layout({
+        ranksep: 100,
+        nodesep: 50,
+        rankdir: layoutConfig.rankdir as any,
+        align: layoutConfig.align || undefined,
+        isDefaultAnchor: false,
+      })
+      lfRef.current.fitView()
+    }
+  }
+
   const getData = () => {
     console.log('当前data数据', lfRef.current?.getGraphRawData())
   }
@@ -562,6 +576,11 @@ export default function SelectionSelectExample() {
           <Form.Item>
             <Button type="primary" onClick={applyLayout}>
               应用布局
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" onClick={applyElkLayout}>
+              应用ELK布局
             </Button>
           </Form.Item>
           <Form.Item>

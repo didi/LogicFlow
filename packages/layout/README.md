@@ -19,18 +19,25 @@ pnpm add @logicflow/layout
 
 ```js
 import LogicFlow from '@logicflow/core';
-import { Dagre } from '@logicflow/layout';
+import { Dagre, ElkLayout } from '@logicflow/layout';
 
+// 提供两种布局插件：Dagre 和 ElkLayout。调用参数相同，按需使用即可
 const lf = new LogicFlow({
   container: '#app',
-  plugins: [Dagre]
+  plugins: [Dagre, ElkLayout]
 })
 
 // 基本使用方式 - 无参数
 lf.extension.dagre.layout()
+lf.extension.elkLayout.layout()
 
 // 使用布局参数
 lf.extension.dagre.layout({
+  rankdir: 'LR', // 从坐到右布局
+  ranksep: 100    // 层级间距
+  nodesep: 50,   // 节点间距
+})
+lf.extension.elkLayout.layout({
   rankdir: 'LR', // 从坐到右布局
   ranksep: 100    // 层级间距
   nodesep: 50,   // 节点间距
