@@ -40,7 +40,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@logicflow/core": "workspace:*",
-    "dagre": "^0.8.5"
+    "dagre": "^0.8.5",
+    "elkjs": "^0.11.0"
   },
   "devDependencies": {
     "@types/dagre": "^0.7.53"
