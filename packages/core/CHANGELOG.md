@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.7
+
+### Patch Changes
+
+- fix(core): 修复节点选中偶发失焦问题
+
 ## 2.1.6
 
 ### Patch Changes
