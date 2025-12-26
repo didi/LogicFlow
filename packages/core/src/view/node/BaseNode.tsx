@@ -1,6 +1,6 @@
 import { createElement as h, Component } from 'preact/compat'
 import { reaction, IReactionDisposer } from 'mobx'
-import { map } from 'lodash-es'
+import { map, isFunction, isNil } from 'lodash-es'
 import Anchor from '../Anchor'
 import { BaseText } from '../text'
 import LogicFlow from '../../LogicFlow'
@@ -410,8 +410,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       // 复制粘贴后会出现点击节点时，节点会失去焦点的问题，这里手动让节点获焦以解决这个问题
       const el = e.currentTarget as HTMLElement
       const rAF =
-        typeof window !== 'undefined' &&
-        typeof window.requestAnimationFrame === 'function'
+        !isNil(window) && isFunction(window.requestAnimationFrame)
           ? window.requestAnimationFrame.bind(window)
           : (fn: () => void) => setTimeout(fn, 0)
       rAF(() => {
