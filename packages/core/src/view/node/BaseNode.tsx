@@ -409,7 +409,12 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       graphModel.eventCenter.emit(EventType.NODE_CLICK, eventOptions)
       // 复制粘贴后会出现点击节点时，节点会失去焦点的问题，这里手动让节点获焦以解决这个问题
       const el = e.currentTarget as HTMLElement
-      requestAnimationFrame(() => {
+      const rAF =
+        typeof window !== 'undefined' &&
+        typeof window.requestAnimationFrame === 'function'
+          ? window.requestAnimationFrame.bind(window)
+          : (fn: () => void) => setTimeout(fn, 0)
+      rAF(() => {
         el.focus()
       })
     }
