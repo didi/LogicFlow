@@ -1,5 +1,6 @@
 import { createElement as h, Component, createRef } from 'preact/compat'
 import { Circle } from '../shape'
+import { isNil, isFunction } from 'lodash-es'
 import { LineText } from '../text'
 import LogicFlow from '../../LogicFlow'
 import { GraphModel, BaseEdgeModel, PolylineEdgeModel } from '../../model'
@@ -549,6 +550,15 @@ export abstract class BaseEdge<P extends IProps> extends Component<
         data: edgeData,
         e,
         position,
+      })
+      // 会偶现边点击后会马上失去焦点的问题，这里手动让节点获焦以解决这个问题
+      const el = e.currentTarget as HTMLElement
+      const rAF =
+        !isNil(window) && isFunction(window.requestAnimationFrame)
+          ? window.requestAnimationFrame.bind(window)
+          : (fn: () => void) => setTimeout(fn, 0)
+      rAF(() => {
+        el.focus()
       })
     }
     const { editConfigModel } = graphModel
