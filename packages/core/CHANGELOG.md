@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.6
+
+### Patch Changes
+
+- fix: 修复节点点击偶现失焦问题
+
 ## 2.1.5
 
 ### Patch Changes

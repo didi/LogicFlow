@@ -1,6 +1,6 @@
 {
   "name": "@logicflow/layout",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "LogicFlow layout",
   "main": "lib/index.js",
   "module": "es/index.js",
