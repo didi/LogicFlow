@@ -23,6 +23,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "publish:only": "changeset publish --registry=https://registry.npmjs.org",
+    "publish:alpha": "changeset publish --tag alpha --registry=https://registry.npmjs.org",
     "setup:husky": "husky install .husky",
     "prepare": "is-ci || run-p setup:husky build"
   },

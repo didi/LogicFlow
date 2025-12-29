@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.0-alpha.4
+
+### Patch Changes
+
+- fix: 修复已知问题&layout包新增elk布局
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.4
+
 ## 2.1.0-alpha.3
 
 ### Patch Changes

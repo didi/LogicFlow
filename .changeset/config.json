@@ -13,7 +13,8 @@
     "feature-examples",
     "material-ui-app",
     "next-app",
-    "vue3-app"
+    "vue3-app",
+    "logicflow-node-red-vue3"
   ],
   "extends": [],
   "pipeline": {}
