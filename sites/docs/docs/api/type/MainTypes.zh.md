@@ -718,4 +718,77 @@ const myCustomExtension: LogicFlow.ExtensionDefinition = {
 | icon      | boolean (可选)                   | 是否显示图标。如果设为 `true`，则会在菜单文本旁边渲染一个图标。                                            |
 | callback  | `(id: string \| number) => void` | 当菜单项被点击时调用的回调函数。该函数接收菜单项的 `id` 作为参数，开发者可以根据选中的菜单项执行特定操作。 |
 
+### **BPMNElements相关类型**
+
+#### DefinitionConfigType（定义配置）
+用于批量为多个节点类型注册事件或任务的定义。
+
+| 属性名     | 类型                                          | 描述                                  |
+| ---------- | --------------------------------------------- | ------------------------------------- |
+| nodes      | string[]                                      | 节点类型名称列表（如 `startEvent`）。 |
+| definition | EventDefinitionType[] \| TaskDefinitionType[] | 对应的事件/任务定义数组。             |
+
+#### DefinitionPropertiesType（定义属性）
+事件或任务定义携带的业务属性集合。
+
+| 属性名         | 类型   | 描述                                     |
+| -------------- | ------ | ---------------------------------------- |
+| definitionType | string | 定义类型标识（需要与bpmn元素类型对应）。 |
+| [key: string]  | any    | 其他自定义属性。                         |
+
+#### EventDefinitionType（事件定义）
+定义事件节点的渲染与序列化行为。
+
+| 属性名        | 类型                          | 描述                                                       |
+| ------------- | ----------------------------- | ---------------------------------------------------------- |
+| type          | string                        | 定义类型名称（与 `definitionType` 对应）。                 |
+| icon          | string \| Record<string, any> | 事件图标定义（支持单个 `path d` 或由多子元素组成的 `g`）。 |
+| toJSON        | (data?: unknown) => unknown   | 将事件定义序列化为 JSON 的方法。                           |
+| properties    | DefinitionPropertiesType      | 事件默认属性（如中断/非中断、计时器配置等）。              |
+| [key: string] | any                           | 其他扩展字段。                                             |
+
+#### TaskDefinitionType（任务定义）
+定义任务节点的属性集合。
+
+| 属性名        | 类型   | 描述           |
+| ------------- | ------ | -------------- |
+| type          | string | 定义类型名称。 |
+| [key: string] | any    | 其他扩展字段。 |
+
+#### 示例（类型定义）
+```ts
+const customDefinition: DefinitionConfigType[] = [
+  {
+    // 为startEvent、intermediateCatchEvent、boundaryEvent添加definition
+    nodes: ['startEvent', 'intermediateCatchEvent', 'boundaryEvent'],
+    definition: { // EventDefinitionType类型
+      /**
+       * definition的type属性，对应XML数据中的节点名
+       * 例如一个时间非中断边界事件的XML数据如下：
+       * <bpmn:boundaryEvent id="BoundaryEvent_1" cancelActivity="false" attachedToRef="Task_1">
+       *  <bpmn:timerEventDefinition>
+       *   <bpmn:timeDuration>
+       *    P1D
+       *   </bpmn:timeDuration>
+       *  </bpmn:timerEventDefinition>
+       * </bpmn:boundaryEvent>
+       */
+      type: 'bpmn:timerEventDefinition',
+      // icon可以是svg的path路径m, 也可以是@logicflow/core 导出的h函数生成的svg, 这里是通过h函数生成的svg
+      icon: timerIcon,
+      /**
+       * 对应definition需要的属性，例如这里是timerType和timerValue
+       * timerType值可以"timeCycle", "timerDate", "timeDuration", 用于区分 <bpmn:timeCycle/>、<bpmn:timeDate/>、<bpmn:timeDuration/>
+       * timerValue是timerType对应的cron表达式
+       * 最终会生成 `<bpmn:${timerType} xsi:type="bpmn:tFormalExpression">${timerValue}</bpmn:${timerType}>`
+       */
+      properties: { // DefinitionPropertiesType 类型
+        definitionType: 'bpmn:timerEventDefinition',
+        timerValue: '',
+        timerType: '',
+      }
+    }
+  }
+]
+```
 

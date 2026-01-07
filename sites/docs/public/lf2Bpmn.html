@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.js"></script>
+    <title>BPMN Adapter Compare</title>
+    <style>
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+      .panel {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        height: 240px;
+        overflow: scroll;
+        background: #fff;
+      }
+      .panel .header {
+        width: 100%;
+        text-align: left;
+        padding: 10px 12px;
+        background: #f3f4f6;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .panel .content {
+        padding: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="panel">
+        <button class="header" aria-expanded="true">LogicFlow图数据</button>
+        <div class="content">
+          <div id="logicflow-content"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <button class="header" aria-expanded="true">未配置 retainedFields 时的 BPMN 数据</button>
+        <div class="content">
+          <div id="bpmn-content"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <button class="header" aria-expanded="true">retainedFields = ['businessData'] 时的 BPMN 数据</button>
+        <div class="content">
+          <div id="bpmn-with-retain-content"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const logicflowData = {
+          "nodes": [
+              {
+                  "id": "Event_5d74c17",
+                  "type": "bpmn:startEvent",
+                  "x": 567.98828125,
+                  "y": 153.98828125,
+                  "properties": {
+                      "businessData": {
+                          "name": "开始流程"
+                      },
+                      "width": 36,
+                      "height": 36
+                  },
+                  "text": {
+                      "x": 567.98828125,
+                      "y": 193.98828125,
+                      "value": "开始"
+                  }
+              }
+          ],
+          "edges": []
+      }
+      const bpmnData = {
+          "bpmn:definitions": {
+              "-id": "Definitions_5270fca",
+              "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+              "-xmlns:bpmn": "http://www.omg.org/spec/BPMN/20100524/MODEL",
+              "-xmlns:bpmndi": "http://www.omg.org/spec/BPMN/20100524/DI",
+              "-xmlns:dc": "http://www.omg.org/spec/DD/20100524/DC",
+              "-xmlns:di": "http://www.omg.org/spec/DD/20100524/DI",
+              "-targetNamespace": "http://logic-flow.org",
+              "-exporter": "logicflow",
+              "-exporterVersion": "1.2.0",
+              "bpmn:process": {
+                  "-isExecutable": "true",
+                  "-id": "Process_7c11290",
+                  "bpmn:startEvent": {
+                      "-id": "Event_5d74c17",
+                      "-name": "开始",
+                      "businessData": { // 区别主要在这里，没传retainedFields的属性名称会保持原状
+                          "-name": "开始流程"
+                      },
+                      "-width": 36,
+                      "-height": 36
+                  },
+                  "bpmn:sequenceFlow": []
+              },
+              "bpmndi:BPMNDiagram": {
+                  "-id": "BPMNDiagram_1",
+                  "bpmndi:BPMNPlane": {
+                      "-id": "BPMNPlane_1",
+                      "-bpmnElement": "Process_7c11290",
+                      "bpmndi:BPMNEdge": [],
+                      "bpmndi:BPMNShape": [
+                          {
+                              "-id": "Event_5d74c17_di",
+                              "-bpmnElement": "Event_5d74c17",
+                              "dc:Bounds": {
+                                  "-x": 547.98828125,
+                                  "-y": 133.98828125,
+                                  "-width": 40,
+                                  "-height": 40
+                              },
+                              "bpmndi:BPMNLabel": {
+                                  "dc:Bounds": {
+                                      "-x": 557.98828125,
+                                      "-y": 186.98828125,
+                                      "-width": 20,
+                                      "-height": 14
+                                  }
+                              }
+                          }
+                      ]
+                  }
+              }
+          }
+      }
+      const bpmnDataWithRetain = {
+          "bpmn:definitions": {
+              "-id": "Definitions_df66a4f",
+              "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+              "-xmlns:bpmn": "http://www.omg.org/spec/BPMN/20100524/MODEL",
+              "-xmlns:bpmndi": "http://www.omg.org/spec/BPMN/20100524/DI",
+              "-xmlns:dc": "http://www.omg.org/spec/DD/20100524/DC",
+              "-xmlns:di": "http://www.omg.org/spec/DD/20100524/DI",
+              "-targetNamespace": "http://logic-flow.org",
+              "-exporter": "logicflow",
+              "-exporterVersion": "1.2.0",
+              "bpmn:process": {
+                  "-isExecutable": "true",
+                  "-id": "Process_5c23c51",
+                  "bpmn:startEvent": {
+                      "-id": "Event_5d74c17",
+                      "-name": "开始",
+                      "-businessData": { // 区别主要在这里，传了retainedFields，对应属性名称会变成`-${key}`的格式
+                          "-name": "开始流程"
+                      },
+                      "-width": 36,
+                      "-height": 36
+                  },
+                  "bpmn:sequenceFlow": []
+              },
+              "bpmndi:BPMNDiagram": {
+                  "-id": "BPMNDiagram_1",
+                  "bpmndi:BPMNPlane": {
+                      "-id": "BPMNPlane_1",
+                      "-bpmnElement": "Process_5c23c51",
+                      "bpmndi:BPMNEdge": [],
+                      "bpmndi:BPMNShape": [
+                          {
+                              "-id": "Event_5d74c17_di",
+                              "-bpmnElement": "Event_5d74c17",
+                              "dc:Bounds": {
+                                  "-x": 547.98828125,
+                                  "-y": 133.98828125,
+                                  "-width": 40,
+                                  "-height": 40
+                              },
+                              "bpmndi:BPMNLabel": {
+                                  "dc:Bounds": {
+                                      "-x": 557.98828125,
+                                      "-y": 186.98828125,
+                                      "-width": 20,
+                                      "-height": 14
+                                  }
+                              }
+                          }
+                      ]
+                  }
+              }
+          }
+      }
+      const formatedBpmnData = new JSONFormatter(bpmnData, 5);
+      const formatedLogicflowData = new JSONFormatter(logicflowData, 5);
+      const formatedBpmnDataWithRetain = new JSONFormatter(bpmnDataWithRetain, 5);
+      
+      document.getElementById('bpmn-content').appendChild(formatedBpmnData.render());
+      document.getElementById('logicflow-content').appendChild(formatedLogicflowData.render());
+      document.getElementById('bpmn-with-retain-content').appendChild(formatedBpmnDataWithRetain.render());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<html style="overflow: hidden;">
+  <head>
+      <title>Original Usage</title>
+  </head>
+  <body>
+  <!-- 引入 core 包和对应 css-->
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+  <style>
+    .download-button {
+      background-color: #fff;
+      border: 1px solid #187dff;
+      color: #187dff;
+      padding: 6px 12px;
+      margin: 10px 10px 10px 0;
+      border-radius: 6px;
+    }
+    .download-button:hover {
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      background-color: #187dff;
+      color: #fff;
+    }
+  </style>
+  <!-- 创建画布容器 -->
+  <div>
+    <button class="download-button" id="downloadBtn">获取数据</button>
+    <button class="download-button" id="downloadXmlBtn">获取xml数据</button>
+    <div id="container"></div>
+  </div>
+  
+  </body>
+  <script>
+    const { BpmnElement, BpmnAdapter, BpmnXmlAdapter } = Extension
+
+    function download(filename, text) {
+      const element = document.createElement('a')
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text),
+      )
+      element.setAttribute('download', filename)
+
+      element.style.display = 'none'
+      document.body.appendChild(element)
+
+      element.click()
+      document.body.removeChild(element)
+    }
+    
+    // 准备图数据
+    const data = {
+      // 节点
+      nodes: [
+        { id: 'Event_123ac56', type: 'bpmn:startEvent', x: 100, y: 200, text: '开始' },
+        { id: 'Gateway_123ac56', type: 'bpmn:exclusiveGateway', x: 300, y: 200, text: '互斥网关' },
+        { id: 'Activity_123ac56', type: 'bpmn:userTask', x: 500, y: 100, text: '用户任务' },
+        { id: 'Activity_234ac56', type: 'bpmn:serviceTask', x: 500, y: 300, text: '系统任务' },
+        { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 700, y: 200, text: '结束' },
+      ],
+      // 边
+      edges: [
+        { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Gateway_123ac56', type: 'bpmn:sequenceFlow', },
+        { id: 'Flow_23ac567', sourceNodeId: 'Gateway_123ac56', targetNodeId: 'Activity_123ac56', type: 'bpmn:sequenceFlow', },
+        { id: 'Flow_34ac568', sourceNodeId: 'Gateway_123ac56', targetNodeId: 'Activity_234ac56', type: 'bpmn:sequenceFlow', },
+        { id: 'Flow_54ac569', sourceNodeId: 'Activity_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
+        { id: 'Flow_564c689', sourceNodeId: 'Activity_234ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
+      ],
+    }
+    
+    // 创建画布实例，也可以 new Core.LogicFLow
+    const lf = new Core.default({
+      container: document.querySelector('#container'),
+      stopScrollGraph: true,
+      stopZoomGraph: true,
+      grid: true,
+      plugins: [BpmnElement, BpmnXmlAdapter, BpmnAdapter],
+    })
+    lf.adapterIn = undefined
+    // 渲染画布实例
+    lf.render(data)
+    lf.translateCenter()
+    const downloadBtn = document.querySelector('#downloadBtn')
+    downloadBtn.addEventListener('click', () => {
+      const bpmnData = lf.getGraphData()
+      download('bpmn.json', JSON.stringify(bpmnData))
+    })
+    const downloadXmlBtn = document.querySelector('#downloadXmlBtn')
+    downloadXmlBtn.addEventListener('click', () => {
+      const bpmnXml = lf.extension.bpmnXmlAdapter.adapterXmlOut(lf.getGraphRawData())
+      console.log(bpmnXml)
+      download('bpmn.xml', bpmnXml)
+    })
+  </script>
+</html>
