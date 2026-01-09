@@ -51,7 +51,7 @@ export class OutlineOverlay extends Component<IProps> {
           (nodeSelectedOutline && isSelected) ||
           (hoverOutline && isHovered)
         ) {
-          const style = element.getOutlineStyle()
+          const style = element.getOutlineStyle() || {}
           let attributes = {}
           Object.keys(style).forEach((key) => {
             if (key !== 'hover') {
