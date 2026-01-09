@@ -84,7 +84,6 @@ export class VueNodeModel<
         ])
       }
     }
-    console.log('nodeModel', this)
   }
   setAttributes() {
     // DONE: 解决 width、height、radius 为 0 时的问题

@@ -218,7 +218,7 @@ export class VueNodeView extends HtmlNode {
       isVue3 && this.vm.unmount()
       this.vm = null
     }
-    if (root) {
+    if (root && !isActive()) {
       root.innerHTML = ''
     }
     return root
