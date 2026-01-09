@@ -108,7 +108,6 @@ export class VueNodeView extends HtmlNode {
             },
           })
         } else if (isVue3) {
-          console.log('isActive', isActive())
           if (isActive()) {
             const Composed = wrapWithContainer(component)
             connect(this.targetId(), Composed, root, model, graphModel)
@@ -219,7 +218,7 @@ export class VueNodeView extends HtmlNode {
       isVue3 && this.vm.unmount()
       this.vm = null
     }
-    if (root) {
+    if (root && !isActive()) {
       root.innerHTML = ''
     }
     return root

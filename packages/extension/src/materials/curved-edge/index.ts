@@ -1,9 +1,14 @@
 import { PolylineEdge, PolylineEdgeModel, h, LogicFlow } from '@logicflow/core'
 import PointTuple = LogicFlow.PointTuple
 
+// 方向类型：t=上(top), b=下(bottom), l=左(left), r=右(right)，'' 表示未确定
 type DirectionType = 't' | 'b' | 'l' | 'r' | ''
+// 圆弧所在象限：tl=左上，tr=右上，bl=左下，br=右下，'-' 表示不需要圆弧
 type ArcQuadrantType = 'tl' | 'tr' | 'bl' | 'br' | '-'
 
+// 方向组合到圆弧象限的映射。
+// key 由进入方向(dir1)和离开方向(dir2)拼接，例如 'tr' 表示从上(t)到右(r)的拐角。
+// 通过该映射确定在拐点处应该绘制的圆弧象限，用于计算中间控制点。
 const directionMap: {
   [key: string]: ArcQuadrantType
 } = {
@@ -17,19 +22,24 @@ const directionMap: {
   rt: 'br',
 }
 
+// 过滤折线中的共线中间点，减少不必要的顶点
 function pointFilter(points: number[][]) {
+  // 原地修改传入的数组
   const all = points
+  // 从第二个点开始，检查三点是否共线
   let i = 1
   while (i < all.length - 1) {
     const [x, y] = all[i - 1]
     const [x1, y1] = all[i]
     const [x2, y2] = all[i + 1]
+    // 如果三点在同一条水平或垂直直线上，删除中间点
     if ((x === x1 && x1 === x2) || (y === y1 && y1 === y2)) {
       all.splice(i, 1)
     } else {
       i++
     }
   }
+  // 返回精简后的点集
   return all
 }
 
@@ -93,18 +103,23 @@ function getPartialPath(
   next: PointTuple,
   radius: number,
 ): string {
+  // 定义误差容错变量
+  const tolerance = 1
+
   let dir1: DirectionType = ''
   let dir2: DirectionType = ''
 
-  if (prev[0] === cur[0]) {
+  if (Math.abs(prev[0] - cur[0]) <= tolerance) {
+    // 垂直方向
     dir1 = prev[1] > cur[1] ? 't' : 'b'
-  } else if (prev[1] === cur[1]) {
+  } else if (Math.abs(prev[1] - cur[1]) <= tolerance) {
+    // 水平方向
     dir1 = prev[0] > cur[0] ? 'l' : 'r'
   }
 
-  if (cur[0] === next[0]) {
+  if (Math.abs(cur[0] - next[0]) <= tolerance) {
     dir2 = cur[1] > next[1] ? 't' : 'b'
-  } else if (cur[1] === next[1]) {
+  } else if (Math.abs(cur[1] - next[1]) <= tolerance) {
     dir2 = cur[0] > next[0] ? 'l' : 'r'
   }
 
