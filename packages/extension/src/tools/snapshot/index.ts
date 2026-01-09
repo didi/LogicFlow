@@ -389,20 +389,22 @@ export class Snapshot {
     // 计算实际宽高，考虑缩放因素
     // 在宽画布情况下，getBoundingClientRect可能无法获取到所有元素的边界
     // 因此我们添加一个安全系数来确保能够容纳所有元素
-    const safetyFactor = toImageOptions.safetyFactor || 1.1 // 安全系数，增加10%的空间
-    const actualWidth = (bbox.width / SCALE_X) * safetyFactor
-    const actualHeight = (bbox.height / SCALE_Y) * safetyFactor
+    const safetyFactor = toImageOptions.safetyFactor || 1 // 安全系数，增加10%的空间
+    const actualWidth = bbox.width / SCALE_X
+    const actualHeight = bbox.height / SCALE_Y
+    const factorWidth = actualWidth * (safetyFactor - 1)
+    const factorHeight = actualHeight * (safetyFactor - 1)
 
     // 包含所有元素的最小宽高，确保足够大以容纳所有元素
-    const bboxWidth = Math.ceil(actualWidth)
-    const bboxHeight = Math.ceil(actualHeight)
+    const bboxWidth = Math.ceil(actualWidth + factorWidth)
+    const bboxHeight = Math.ceil(actualHeight + factorHeight)
     const canvas = document.createElement('canvas')
     canvas.style.width = `${bboxWidth}px`
     canvas.style.height = `${bboxHeight}px`
 
     // 宽高值 默认加padding 40，保证图形不会紧贴着下载图片
     // 为宽画布添加额外的安全边距，确保不会裁剪
-    const safetyMargin = toImageOptions.safetyMargin || 40 // 额外的安全边距
+    const safetyMargin = toImageOptions.safetyMargin || 0 // 额外的安全边距
 
     // 获取当前浏览器类型，不同浏览器对canvas的限制不同
     const { maxCanvasDimension, otherMaxCanvasDimension } =
@@ -410,8 +412,8 @@ export class Snapshot {
     const MAX_CANVAS_DIMENSION = maxCanvasDimension
     const OTHER_MAX_CANVAS_DIMENSION = otherMaxCanvasDimension
 
-    let targetWidth = bboxWidth * dpr + padding * 2 + safetyMargin
-    let targetHeight = bboxHeight * dpr + padding * 2 + safetyMargin
+    let targetWidth = bboxWidth * dpr
+    let targetHeight = bboxHeight * dpr
     let scaleWidth = 1 //宽 缩放
     let scaleHeight = 1 //高 缩放
     // 对宽和高分别进行缩放，如chrome，矩形单边最大宽度不超过65535，如宽超过65535，那么高不能超过4096，否则像素会超，也会显示不出。
@@ -448,12 +450,13 @@ export class Snapshot {
     // 对这个矩阵进行缩放，否则会导致截断
     ;(copy.lastChild as SVGElement).style.transform =
       `matrix(${scaleWidth}, 0, 0, ${scaleHeight}, ${
-        (-offsetX + TRANSLATE_X) * (1 / SCALE_X) * scaleWidth + padding / dpr
-      }, ${
-        (-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) * scaleHeight + padding / dpr
-      })`
-    canvas.width = targetWidth
-    canvas.height = targetHeight
+        (-offsetX + TRANSLATE_X) * (1 / SCALE_X) * scaleWidth +
+        padding +
+        factorWidth / 2 +
+        safetyMargin
+      }, ${(-offsetY + TRANSLATE_Y) * (1 / SCALE_Y) * scaleHeight + padding + factorHeight / 2 + safetyMargin})`
+    canvas.width = targetWidth + (padding + safetyMargin) * 2 * dpr
+    canvas.height = targetHeight + (padding + safetyMargin) * 2 * dpr
     const ctx = canvas.getContext('2d')
     if (ctx) {
       // 清空canvas
@@ -678,12 +681,6 @@ export class Snapshot {
     fileType?: string,
     toImageOptions?: ToImageOptions,
   ): Promise<SnapshotResponse> {
-    console.log(
-      'getSnapshotBase64---------------',
-      backgroundColor,
-      fileType,
-      toImageOptions,
-    )
     return await this.withExportPreparation(
       () => this._getSnapshotBase64(backgroundColor, fileType, toImageOptions),
       toImageOptions,
