@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.8
+
+### Patch Changes
+
+- fix: 修复内部系统和issue反馈的问题
+
 ## 2.1.7
 
 ### Patch Changes

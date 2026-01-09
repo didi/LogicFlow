@@ -1,5 +1,13 @@
 # @logicflow/vue-node-registry
 
+## 1.1.9
+
+### Patch Changes
+
+- fix: 修复内部系统和issue反馈的问题
+- Updated dependencies
+  - @logicflow/core@2.1.8
+
 ## 1.1.8
 
 ### Patch Changes
