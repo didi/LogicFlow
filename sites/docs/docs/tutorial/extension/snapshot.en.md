@@ -70,7 +70,7 @@ The export method supports the `toImageOptions` parameter with the following con
 - During export, the canvas will automatically handle wide canvas situations, adding safety factors and extra margins
 - During export, silent mode will be automatically enabled, disabling canvas interaction
 - Automatically converts relative path images in SVG to Base64 encoding <Badge type="warning">2.0.14 New</Badge>
-- When the image exceeds the browser's canvas limit, it will automatically scale the image size to ensure successful export, but it will affect image clarity
+- When the image exceeds the browser's canvas limit, it will automatically scale the image size proportionally to ensure successful export, but it will affect image clarity
 - You can fine-tune wide canvas behavior via `safetyFactor` and `safetyMargin` to avoid element cropping
 - If `partial` is not explicitly provided, it defaults to the current canvas partial rendering state; during export, the rendering mode may be temporarily switched and will be restored afterward
 - Anchors and rotate controls are automatically removed during export to prevent auxiliary elements from appearing in the image
