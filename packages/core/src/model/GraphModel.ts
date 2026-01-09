@@ -576,7 +576,8 @@ export class GraphModel {
       if (edgeMode.isDragging) {
         edgeDragging = true
         break
-      } else {
+      }
+      if (!edgeMode.virtual) {
         edges.push(edgeMode.getHistoryData())
       }
     }
