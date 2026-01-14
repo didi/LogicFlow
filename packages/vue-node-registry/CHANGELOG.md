@@ -1,5 +1,15 @@
 # @logicflow/vue-node-registry
 
+## 1.2.0-alpha.5
+
+### Patch Changes
+
+- fix: 修复已知问题
+  - 删除多余console.log
+  - 修复拖拽创建vue-node-registry节点时控制台报错问题
+- Updated dependencies
+  - @logicflow/core@2.2.0
+
 ## 1.2.0-alpha.4
 
 ### Patch Changes

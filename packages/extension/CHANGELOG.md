@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.0-alpha.5
+
+### Patch Changes
+
+- fix: 修复已知问题
+  - 修复圆角折线插件会出现没有圆角或圆角旁多了一条线的问题
+  - 修复导出插件safetyMargin和safetyFactor导致的快照导出后不居中对齐问题 & 修改safetyFactor为1 safetyMargin为0
+  - snapshot插件导出图片受canvas的大小限制导致导出为空（计算规则、等比缩放）
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.5
+  - @logicflow/vue-node-registry@1.2.0-alpha.5
+
 ## 2.2.0-alpha.4
 
 ### Patch Changes

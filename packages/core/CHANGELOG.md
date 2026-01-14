@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0-alpha.5
+
+### Patch Changes
+
+- fix: 修复已知问题
+  - 销毁实例时不清空主题配置
+  - 修复在撤销步骤中将渐进连线算入操作历史的问题
+  - 优化requestAnimationFrame兼容代码的实现
+
 ## 2.2.0-alpha.4
 
 ### Patch Changes
