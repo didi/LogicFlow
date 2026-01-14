@@ -31,7 +31,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@logicflow/core": "workspace:*",
-    "@logicflow/dumi-theme-simple": "^1.0.2",
+    "@logicflow/dumi-theme-simple": "^1.0.3",
     "@logicflow/extension": "workspace:*",
     "@logicflow/react-node-registry": "workspace:*",
     "@logicflow/layout": "workspace:*",
