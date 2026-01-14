@@ -16,7 +16,7 @@ import customPolygon from '@/components/nodes/custom-polygon'
 import GraphData = LogicFlow.GraphData
 import styles from './index.less'
 
-import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
+// import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 const config: Partial<LogicFlow.Options> = {
   isSilentMode: false,
@@ -426,10 +426,6 @@ export default function BasicNode() {
         lfRef.current?.closeEdgeAnimation(edge.id)
       })
     }
-  }
-
-  const handleDragItem = (node: OnDragNodeConfig) => {
-    lfRef?.current?.dnd.startDrag(node)
   }
 
   const changeNodeBorderColor = () => {

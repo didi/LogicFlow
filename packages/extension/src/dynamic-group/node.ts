@@ -277,6 +277,7 @@ export class DynamicGroupNode<
   }
 
   getShape(): h.JSX.Element | null {
+    console.log('dynamic group render')
     return h('g', {}, [
       this.getAppendAreaShape(),
       super.getShape(),

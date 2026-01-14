@@ -90,6 +90,16 @@ export default defineConfig({
           name: '自定义主题',
           component: './nodes/custom/theme',
         },
+        {
+          path: '/custom-nodes/pool',
+          name: '泳道节点',
+          component: './nodes/custom/pool',
+        },
+        {
+          path: '/custom-nodes/new-pool',
+          name: '新泳道节点',
+          component: './nodes/custom/pool/newDemo',
+        },
       ],
     },
     {

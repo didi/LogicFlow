@@ -477,7 +477,6 @@ export class GraphModel {
     this.elementsModelMap.clear()
     this.nodeModelMap.clear()
     this.edgeModelMap.clear()
-
     if (graphData.nodes) {
       this.nodes = map(graphData.nodes, (node: NodeConfig) => {
         const nodeModel = this.getModelAfterSnapToGrid(node)
