@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.9
+
+### Patch Changes
+
+- fix(core): 虚拟边不塞入历史记录
+
 ## 2.1.8
 
 ### Patch Changes

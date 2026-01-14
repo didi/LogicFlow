@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.1.11
+
+### Patch Changes
+
+- fix(extension): 修复图超过浏览器canvas限制时导出图片为空问题
+- Updated dependencies
+  - @logicflow/core@2.1.9
+  - @logicflow/vue-node-registry@1.1.10
+
 ## 2.1.10
 
 ### Patch Changes
