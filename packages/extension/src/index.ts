@@ -9,6 +9,8 @@ export * from './bpmn-adapter/json2xml'
 // Adapter
 export * from './turbo-adapter'
 
+// 泳道相关
+export * from './pool'
 // 新版 Group
 export * from './dynamic-group'
 // 折线上动态插入节点
