@@ -33,7 +33,7 @@ import centerAnchorRect from './nodes/centerAnchorRect'
 import GraphData = LogicFlow.GraphData
 import styles from './index.less'
 
-import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
+// import OnDragNodeConfig = LogicFlow.OnDragNodeConfig
 
 const NodeComponent: FC<ReactNodeProps> = ({ node }) => {
   const data = node.getData()

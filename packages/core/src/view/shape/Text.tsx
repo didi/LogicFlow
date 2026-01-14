@@ -129,7 +129,6 @@ export function renderHtmlText(props: ITextProps): h.JSX.Element {
   if (isEllipsis) {
     foreignObjectHeight = fontSize + 2
   }
-
   return (
     <g>
       <foreignObject
