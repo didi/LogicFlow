@@ -42,7 +42,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         ? providedOffset
         : this.getDefaultOffset()
     if (data.pointsList) {
-      this.pointsList = data.pointsList
+      const corrected = this.orthogonalizePath(data.pointsList)
+      ;(data as any).pointsList = corrected
+      this.pointsList = corrected
     }
     super.initEdgeData(data)
   }
@@ -53,6 +55,120 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.offset = newOffset
       this.updatePoints()
     }
+  }
+
+  orthogonalizePath(points: Point[]): Point[] {
+    // 输入非法或不足两点时直接返回副本
+    if (!Array.isArray(points) || points.length < 2) {
+      return points
+    }
+    // pushUnique: 向数组中添加唯一点，避免重复
+    const pushUnique = (arr: Point[], p: Point) => {
+      const last = arr[arr.length - 1]
+      if (!last || last.x !== p.x || last.y !== p.y) {
+        arr.push({ x: p.x, y: p.y })
+      }
+    }
+    // isAxisAligned: 检查两点是否在同一条轴上
+    const isAxisAligned = (a: Point, b: Point) => a.x === b.x || a.y === b.y
+    // manhattanDistance: 计算两点在曼哈顿距离上的距离
+    const manhattanDistance = (a: Point, b: Point) =>
+      Math.abs(a.x - b.x) + Math.abs(a.y - b.y)
+
+    // 1) 生成严格正交路径，尽量延续前一段方向以减少折点
+    const orthogonal: Point[] = []
+    pushUnique(orthogonal, points[0])
+    // previousDirection: 记录前一段的方向，用于判断当前段的PreferredCorner
+    let previousDirection: SegmentDirection | undefined
+    // 遍历所有点对，生成正交路径
+    for (let i = 0; i < points.length - 1; i++) {
+      const current = orthogonal[orthogonal.length - 1]
+      const next = points[i + 1]
+      if (!current || !next) continue
+
+      if (isAxisAligned(current, next)) {
+        pushUnique(orthogonal, next)
+        previousDirection =
+          current.x === next.x
+            ? SegmentDirection.VERTICAL
+            : SegmentDirection.HORIZONTAL
+        continue
+      }
+
+      const cornerHV: Point = { x: next.x, y: current.y }
+      const cornerVH: Point = { x: current.x, y: next.y }
+
+      // 根据前一段的方向，优先选择能延续该方向的拐角点，以减少折点数量；
+      // 若前一段为垂直方向，则优先选择垂直-水平拐角(cornerVH)；
+      // 若前一段为水平方向，则优先选择水平-垂直拐角(cornerHV)；
+      // 若前一段无方向（初始情况），则比较两个拐角的曼哈顿距离，选更近者。
+      const preferredCorner =
+        previousDirection === SegmentDirection.VERTICAL
+          ? cornerVH
+          : previousDirection === SegmentDirection.HORIZONTAL
+            ? cornerHV
+            : manhattanDistance(current, cornerHV) <=
+                manhattanDistance(current, cornerVH)
+              ? cornerHV
+              : cornerVH
+
+      if (preferredCorner.x !== current.x || preferredCorner.y !== current.y) {
+        pushUnique(orthogonal, preferredCorner)
+      }
+      pushUnique(orthogonal, next)
+
+      const a = orthogonal[orthogonal.length - 2]
+      const b = orthogonal[orthogonal.length - 1]
+      previousDirection =
+        a && b
+          ? a.x === b.x
+            ? SegmentDirection.VERTICAL
+            : SegmentDirection.HORIZONTAL
+          : previousDirection
+    }
+
+    // 2) 去除冗余共线中间点
+    const simplified: Point[] = []
+    for (let i = 0; i < orthogonal.length; i++) {
+      const prev = orthogonal[i - 1]
+      const curr = orthogonal[i]
+      const next = orthogonal[i + 1]
+      // 如果当前点与前一个点和后一个点在同一条水平线或垂直线上，则跳过该点，去除冗余的共线中间点
+      if (
+        prev &&
+        curr &&
+        next &&
+        ((prev.x === curr.x && curr.x === next.x) || // 水平共线
+          (prev.y === curr.y && curr.y === next.y)) // 垂直共线
+      ) {
+        continue
+      }
+      pushUnique(simplified, curr)
+    }
+
+    // 3) 保留原始起点与终点位置
+    if (simplified.length >= 2) {
+      simplified[0] = { x: points[0].x, y: points[0].y }
+      simplified[simplified.length - 1] = {
+        x: points[points.length - 1].x,
+        y: points[points.length - 1].y,
+      }
+    }
+
+    // 4) 结果校验：任意相邻段都必须为水平/垂直；失败则退化为起止两点
+    const isOrthogonal =
+      simplified.length < 2 ||
+      simplified.every((_, idx, arr) => {
+        if (idx === 0) return true
+        return isAxisAligned(arr[idx - 1], arr[idx])
+      })
+
+    return isOrthogonal
+      ? simplified
+      : [
+          { x: points[0].x, y: points[0].y },
+          { x: points[points.length - 1].x, y: points[points.length - 1].y },
+        ]
   }
 
   /**
@@ -344,7 +460,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   updatePath(pointList: Point[]) {
-    this.pointsList = pointList
+    this.pointsList = this.orthogonalizePath(pointList)
     this.points = this.getPath(this.pointsList)
   }
 
@@ -387,7 +503,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.targetNode,
       this.offset || 0,
     )
-    this.pointsList = pointsList
+    this.pointsList = this.orthogonalizePath(pointsList)
     this.points = pointsList.map((point) => `${point.x},${point.y}`).join(' ')
   }
 
@@ -676,18 +792,20 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     sourceNode: BaseNodeModel
     targetNode: BaseNodeModel
   }) {
-    this.pointsList = getPolylinePoints(
-      {
-        x: startPoint.x,
-        y: startPoint.y,
-      },
-      {
-        x: endPoint.x,
-        y: endPoint.y,
-      },
-      sourceNode,
-      targetNode,
-      this.offset || 0,
+    this.pointsList = this.orthogonalizePath(
+      getPolylinePoints(
+        {
+          x: startPoint.x,
+          y: startPoint.y,
+        },
+        {
+          x: endPoint.x,
+          y: endPoint.y,
+        },
+        sourceNode,
+        targetNode,
+        this.offset || 0,
+      ),
     )
 
     this.initPoints()
