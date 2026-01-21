@@ -105,6 +105,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
       if (selectElements.size > 0) {
         graphModel.clearSelectElements()
       }
+      // 如果是拖拽状态，不触发点击事件
+      if (this.state.isDragging) return
       graphModel.eventCenter.emit(EventType.BLANK_CLICK, { e: ev })
     }
   }
