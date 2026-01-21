@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.12
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/core@2.1.10
+  - @logicflow/vue-node-registry@1.1.11
+
 ## 2.1.11
 
 ### Patch Changes
