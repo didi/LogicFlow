@@ -130,13 +130,13 @@ export class Control {
       } else {
         itemContainer.append(icon)
       }
-      switch (item.text) {
-        case '上一步':
+      switch (item.key) {
+        case 'undo':
           this.lf.on('history:change', ({ data: { undoAble } }: any) => {
             itemContainer.className = undoAble ? NORMAL : DISABLED
           })
           break
-        case '下一步':
+        case 'redo':
           this.lf.on('history:change', ({ data: { redoAble } }: any) => {
             itemContainer.className = redoAble ? NORMAL : DISABLED
           })
