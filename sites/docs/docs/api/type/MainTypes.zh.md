@@ -45,7 +45,8 @@ order: 2
 | disabledPlugins  | string[] （可选）                                                                  | 禁用的插件列表。                                                                     |
 | disabledTools    | string[] （可选）                                                                  | 禁用的工具列表。                                                                     |
 | idGenerator      | (type?: string) => string （可选）                                                 | ID 生成器函数。                                                                      |
-| edgeGenerator    | EdgeGeneratorType （可选）                                                         | 边生成器函数。                                                                       |
+| edgeGenerator    | EdgeGeneratorType （可选）                                                         | 边生成器函数。                                                                      |
+| customTargetAnchor | customTargetAnchorType （可选）                                                  | 自定义锚点连接规则（连线到目标节点时，决定使用哪个锚点）。                   |
 | customTrajectory | (props: CustomAnchorLineProps) => h.JSX.Element （可选）                           | 自定义轨迹函数。                                                                     |
 | [key: string]    | unknown                                                                            | 其他自定义属性。                                                                     |
 
@@ -117,6 +118,34 @@ edgeGenerator: (sourceNode, targetNode, currentEdge) => {
   if (sourceNode.type === 'rect') return 'bezier'
   if (currentEdge) return currentEdge.type
   return 'polyline'
+},
+```
+
+### **customTargetAnchorType（自定义锚点连接规则）**
+```ts
+export type customTargetAnchorType = (
+  nodeModel: BaseNodeModel,
+  position: LogicFlow.Point,
+) => Model.AnchorInfo | undefined
+```
+| 属性名   | 类型               | 描述                                                         |
+| -------- | ------------------ | ------------------------------------------------------------ |
+| nodeModel | BaseNodeModel      | 当前作为“目标节点”的节点模型。                               |
+| position | LogicFlow.Point    | 鼠标释放时的坐标（画布坐标系）。                              |
+| 返回值   | Model.AnchorInfo \| undefined | 要连接的锚点信息；返回 undefined 时回退为默认逻辑（连接到距离 position 最近的锚点）。 |
+
+该类型主要用于约束初始化时传入的 `customTargetAnchor` 参数。
+
+例如在创建实例的时候加入下面的代码，就能实现无论拖拽到节点的哪个位置，始终连接到最左侧锚点：
+``` typescript
+customTargetAnchor: (nodeModel) => {
+  const anchors = nodeModel?.anchors || []
+  if (!anchors.length) return
+  const left = anchors.reduce((min, a) => (a.x < min.x ? a : min), anchors[0])
+  return {
+    index: anchors.indexOf(left),
+    anchor: left,
+  }
 },
 ```
 

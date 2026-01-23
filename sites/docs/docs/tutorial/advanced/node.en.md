@@ -124,6 +124,16 @@ issue [How to hide anchors?](https://github.com/didi/LogicFlow/issues/454)，Go 
 for [examples](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hideAnchor/index.js)
 :::
 
+### customTargetAnchor (Custom Anchor Drop Target)
+
+When you drag a connection from an anchor and release it on a node, LogicFlow uses the mouse release position (`position`) to decide which anchor on the target node to connect to.
+
+- Default behavior: connect to the anchor closest to `position`
+- Custom behavior: pass `customTargetAnchor` during LogicFlow initialization to return the preferred anchor first; if it returns `undefined`, it falls back to the default behavior
+
+
+<code id="node-custom-target-anchor" src="../../../src/tutorial/advanced/node/customTargetAnchor"></code>
+
 ## Text
 
 LogicFlow supports customizing the appearance and editing state of node text.
@@ -326,4 +336,3 @@ class CustomComponent extends Component {
   }
 }
 ```
-

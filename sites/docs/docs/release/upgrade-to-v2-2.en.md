@@ -72,3 +72,13 @@ toc: content
     - Menus support hiding labels and showing only icons; icons improved
     - For dynamic group nodes, the expanded text position changes from centered both horizontally and vertically to horizontally centered + top-aligned vertically, so group text is not obscured when there are child elements by default; a new method allows overriding the text position on expand
     - UI polish for context menu, minimap, and drag panel
+## 2.2.0-alpha.4
+
+- Added ELK layout plugin (ElkLayout), built on elkjs layered algorithm for automatic layout. It automatically computes node positions and edge paths.
+- Usage is consistent with Dagre and both can coexist; choose as needed:
+  - Install: @logicflow/layout
+  - Register: import { ElkLayout } from '@logicflow/layout', then use LogicFlow.use(ElkLayout) or plugins: [ElkLayout]
+  - Invoke: lf.extension.elkLayout.layout(options)
+- Main options (aligned with Dagre):
+  - rankdir (LR/TB/BT/RL), align (UL/UR/DL/DR), nodesep, ranksep, marginx, marginy, ranker, edgesep, acyclicer, isDefaultAnchor
+- Supports passing native ELK layout parameters via elkOption to override default layout strategy details.

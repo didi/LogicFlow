@@ -24,6 +24,7 @@ order: 0
 - [EdgeType](MainTypes.zh.md#edgetype边类型)：定义边的类型，包括直线、折线和贝塞尔曲线。
 - [AnimationConfig](MainTypes.zh.md#animationconfig动画配置)：定义动画的配置，包括节点和边的动画启用状态。
 - [EdgeGeneratorType](MainTypes.zh.md#edgegeneratortype自定义边生成函数)：定义自定义边生成函数的类型，用于根据节点类型生成不同类型的边。
+- [customTargetAnchorType](MainTypes.zh.md#customtargetanchortype自定义锚点连接规则)：定义自定义锚点连接规则函数类型，用于决定手动连线落到目标节点时连接哪个锚点。
 - [GuardsConfig](MainTypes.zh.md#guardsconfig守卫函数类型)：定义守卫函数的配置，用于在克隆或删除节点/边之前进行拦截。
 - [AppendConfig](MainTypes.zh.md#appendconfig折线边选区信息)：定义折线边选区的信息，包括起点、终点、方向和是否可拖动。
 - [ArrowConfig](MainTypes.zh.md#arrowconfig箭头配置)：定义箭头的配置，包括箭头起点和终点的样式。
