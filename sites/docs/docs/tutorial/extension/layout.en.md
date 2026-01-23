@@ -9,7 +9,34 @@ toc: content
 tag: Enhancement
 ---
 
-In complex flowcharts, manually arranging nodes and edges can be both time-consuming and difficult to keep tidy. LogicFlow provides an automatic layout plugin that can automatically calculate node positions and edge paths, resulting in structured and visually appealing diagrams.
+In complex flowcharts, manually placing nodes and adjusting edges is time-consuming and often messy.
+
+The auto layout plugin can:
+- Automatically compute node positions and rank order from edge relationships
+- Support layout directions (LR/TB/BT/RL) and alignment
+- Configure node spacing, rank spacing, edge spacing, and canvas margins
+- Plan edge routes to reduce crossings and keep a consistent overall flow
+- Optionally adjust edge endpoints based on default anchors
+
+It typically produces a structured layout with clear hierarchy, consistent spacing, and fewer edge crossings, making it ideal for an initial layout that you can fine-tune.
+
+The Layout plugin is currently based on Dagre, and its scope is:
+- Covered: automatic calculation of node positions, hierarchy, spacing, and basic edge routing
+- Not covered: business rule validation, node/edge styling, and complex interaction logic (handled separately)
+
+## Live Demonstration
+
+### Default Anchors
+
+If nodes use LogicFlow's default anchors (i.e., top, bottom, left, and right anchors), and anchor information doesn't carry business meaning, you can set isDefaultAnchor to true to adjust connection start and end anchor positions during layout.
+
+<code id="react-portal-1" src="@/src/tutorial/extension/layout"></code>
+
+### Custom Anchors
+
+If nodes use custom anchors, or if anchors have actual business meaning, isDefaultAnchor is false by default, which means the layout will not adjust the connection's start and end anchors.
+
+<code id="react-portal-2" src="@/src/tutorial/extension/layout/custom"></code>
 
 ## Installation
 
@@ -120,20 +147,6 @@ lf.extension.dagre.layout();
 // Then fit the view
 lf.fitView();
 ```
-
-## Live Demonstration
-
-### Default Anchors
-
-If nodes use LogicFlow's default anchors (i.e., top, bottom, left, and right anchors), and anchor information doesn't carry business meaning, you can set isDefaultAnchor to true to adjust connection start and end anchor positions during layout.
-
-<code id="react-portal-1" src="@/src/tutorial/extension/layout"></code>
-
-### Custom Anchors
-
-If nodes use custom anchors, or if anchors have actual business meaning, isDefaultAnchor is false by default, which means the layout will not adjust the connection's start and end anchors.
-
-<code id="react-portal-2" src="@/src/tutorial/extension/layout/custom"></code>
 
 ## Usage Recommendations
 

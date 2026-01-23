@@ -73,3 +73,13 @@ toc: content
     - 动态分组节点展开态的文本展示位置从水平垂直居中改为水平居中 + 垂直顶部对齐，以实现默认有子元素时分组文本不被遮挡的效果，新增方法支持用户继承重写以自定义分组节点展开时的文本位置
     - 右键菜单、小地图、拖拽面板UI优化
 
+## 2.2.0-alpha.4
+
+- 新增 ELK 布局插件（ElkLayout），基于 elkjs 的 layered 算法进行自动布局，可自动计算节点位置与连线路径。
+- 与 Dagre 使用方式一致，可与 Dagre 并存使用，按需选择：
+  - 安装：@logicflow/layout
+  - 注册：import { ElkLayout } from '@logicflow/layout'，通过 LogicFlow.use(ElkLayout) 或 plugins: [ElkLayout]
+  - 调用：lf.extension.elkLayout.layout(options)
+- 主要配置项（与 Dagre 对齐）：
+  - rankdir（LR/TB/BT/RL）、align（UL/UR/DL/DR）、nodesep、ranksep、marginx、marginy、ranker、edgesep、acyclicer、isDefaultAnchor
+- 支持通过 elkOption 透传 ELK 原生布局参数，用于覆盖默认布局策略细节。

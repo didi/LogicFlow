@@ -13,6 +13,7 @@ This document mainly introduces the core types of `LogicFlow`, including the fol
 - **`BackgroundConfig`**: Background configuration
 - **`AnimationConfig`**: Animation configuration
 - **`EdgeGeneratorType`**: Custom edge generation function
+- **`CustomTargetAnchorType`**: Custom anchor connection rules
 - **`CustomAnchorLineProps`**: Custom properties for anchor lines
 - **`GuardsConfig`**: Interceptors (permission control)
 - **`Manual` & `Definition`**: Extended configuration
@@ -91,6 +92,7 @@ export interface Common {
 - `disabledTools`: List of disabled tools.
 - `idGenerator`: ID generator function.
 - `edgeGenerator`: Edge generator function.
+- `customTargetAnchor`: Custom anchor connection rules, which can be a function or `undefined`.
 - `customTrajectory`: Custom trajectory function.
 - `[key: string]`: Other custom properties.
 
@@ -151,6 +153,34 @@ edgeGenerator: (sourceNode, targetNode, currentEdge) => {
 ```
 
 Used to constrain the type of custom edge generation methods.
+
+### **customTargetAnchorType (Custom Anchor Connection Rule)**
+```ts
+export type customTargetAnchorType = (
+  nodeModel: BaseNodeModel,
+  position: LogicFlow.Point,
+) => Model.AnchorInfo | undefined
+```
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| nodeModel | BaseNodeModel | The node model that acts as the target node. |
+| position | LogicFlow.Point | The mouse release position (canvas coordinates). |
+| Return | Model.AnchorInfo \| undefined | The anchor info to connect to; returning undefined falls back to the default behavior (connect to the anchor closest to position). |
+
+This type constrains the `customTargetAnchor` parameter passed during initialization.
+
+For example, adding the following code when creating the instance will always connect to the leftmost anchor, no matter where you drop on the node:
+``` typescript
+customTargetAnchor: (nodeModel) => {
+  const anchors = nodeModel?.anchors || []
+  if (!anchors.length) return
+  const left = anchors.reduce((min, a) => (a.x < min.x ? a : min), anchors[0])
+  return {
+    index: anchors.indexOf(left),
+    anchor: left,
+  }
+},
+```
 
 ### **GuardsConfig**
 ```ts

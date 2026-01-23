@@ -8,7 +8,34 @@ order: 7
 toc: content
 ---
 
-在复杂的流程图中，手动排列节点和边缘可能既耗时又难以保持整洁。LogicFlow 提供了自动布局插件，能够自动计算节点位置和边的路径，使图表呈现出结构化且美观的效果。
+在复杂流程图中，手动摆放节点与调整连线既耗时又容易混乱。
+
+自动布局插件可以：
+- 根据连线关系自动计算节点位置与层级顺序
+- 支持布局方向（LR/TB/BT/RL）与对齐方式
+- 支持节点间距、层级间距、边间距与画布边距配置
+- 规划连线路径，减少交叉并保持整体走向一致
+- 可选使用默认锚点自动调整连线起终点位置
+
+使用后通常能获得层级清晰、间距统一、连线更少交叉的结构化布局，适合作为初始排版，再进行少量手动微调。
+
+当前 Layout 插件基于 Dagre，能力范围如下：
+- 会处理的内容：节点位置、层级与间距的自动计算，连线走向的基础规划
+- 不会处理的内容：业务规则校验、节点/边样式、复杂交互逻辑（需自行处理）
+
+## 效果演示
+
+### 默认锚点
+
+如果节点是Logicflow的默认锚点（即上下左右4个锚点），且锚点信息并不具备业务含义。那么通过设置isDefaultAnchor 为true，就可以在布局中调整连线起终点锚点的位置。
+
+<code id="react-portal-1" src="@/src/tutorial/extension/layout"></code>
+
+### 自定义锚点
+
+如果节点的锚点是自定义的，或者锚点是具备实际业务含义的，isDefaultAnchor 默认为false，那么布局中就不会调整连线的起终点锚点。
+
+<code id="react-portal-2" src="@/src/tutorial/extension/layout/custom"></code>
 
 ## 安装
 
@@ -120,19 +147,6 @@ lf.extension.dagre.layout();
 lf.fitView();
 ```
 
-## 实际效果演示
-
-### 默认锚点
-
-如果节点是Logicflow的默认锚点（即上下左右4个锚点），且锚点信息并不具备业务含义。那么通过设置isDefaultAnchor 为true，就可以在布局中调整连线起终点锚点的位置。
-
-<code id="react-portal-1" src="@/src/tutorial/extension/layout"></code>
-
-### 自定义锚点
-
-如果节点的锚点是自定义的，或者锚点是具备实际业务含义的，isDefaultAnchor 默认为false，那么布局中就不会调整连线的起终点锚点。
-
-<code id="react-portal-2" src="@/src/tutorial/extension/layout/custom"></code>
 
 ## 使用建议
 
