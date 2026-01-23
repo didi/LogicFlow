@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.1.13
+
+### Patch Changes
+
+- fix: Control插件中redo、undo的事件监听判断从判断菜单项名称改为判断key
+- Updated dependencies
+  - @logicflow/core@2.1.11
+  - @logicflow/vue-node-registry@1.1.12
+
 ## 2.1.12
 
 ### Patch Changes

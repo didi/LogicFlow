@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.11
+
+### Patch Changes
+
+- fix: 修复折线边拖拽过程中偶现斜线问题&圆角旁边出现突出线段问题
+
 ## 2.1.10
 
 ### Patch Changes
