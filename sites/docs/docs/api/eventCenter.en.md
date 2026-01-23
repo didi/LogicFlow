@@ -34,8 +34,7 @@ flowchart. The detailed usage of events is described in [events](../tutorial/bas
 | node:drag                                      | Nodes in dragging                      | data, e                                                                                                                                           |
 | node:drop                                      | End of node dragging                   | data, e                                                                                                                                           |
 | node:contextmenu                               | Right-click on the node                | data, e, position                                                                                                                                 |
-| node:resize<Badge>2.0 Added</Badge>            | Adjust node scaling                    | preData, data, model, deltaX, deltaY, index                                                                                                       |
-| node:resize-start<Badge>2.0 Added</Badge>      | Start adjusting node scaling           | e, data, model                                                                                                                                    |
+| node:resize<Badge>2.0 Added</Badge>            | Adjust node scaling                    | preData, data, model, deltaX, deltaY, index                                                                                 |
 | node:properties-change<Badge>2.0 Added</Badge> | Node custom properties change          | id: Current node id<br/>keys: Set of keys for current changes<br/>preProperties: Properties before change<br/>properties: Properties after change |
 
 The event object contains the following:

@@ -130,7 +130,7 @@ y2 → maxY
 ### Extension
 
 #### 框选插件
-**新能力s**
+**新能力**
 1. 增加`selection:selected-area`事件，返回框选范围;
 2. 框选插件默认启用状态改为不启用，如需初始化时就启用框选，在LogicFlow实例创建后调用`lf.extension.selectionSelect.open()`方法开启框选;
 **问题修复**
@@ -138,7 +138,7 @@ y2 → maxY
 2. 修复缩放后，框选边距与外边框宽度计算问题;
 
 #### 小地图插件
-**新能力s**
+**新能力**
 1. 支持配置小地图展示位置;
 2. 支持选择是否渲染连线，支持初始化时设置或通过`setShowEdge`方法更新设置;
 3. 小地图显示内容优化，目前会有画布元素与视口位置共同决定展示内容;
@@ -153,7 +153,7 @@ y2 → maxY
 **优化**
 在1.x版本中，节点缩放能力需要通过引入NodeResize插件实现，在2.0版本中，我们将resize能力内置到基础节点上;同时还支持了节点旋转能力可配置。
 1. 用户可以通过全局配置项`allowResize`、`allowRotate`设置当前实例中所有节点是否可缩放、可旋转;
-2. 也可以在初始化渲染传入数据的`properties`中增加`resizable`、`rotatable`参数控制单个节点是否可旋转可缩放，在内部，节点的`resizable`和`rotatable`默认为`true`;
+2. 也可以在初始化渲染传入数据的`properties`中增加`resizable`（需要全局配置`allowResize`为true才会生效）、`rotatable`参数控制单个节点是否可旋转可缩放（需要全局配置`allowRotate`为true才会生效），在内部，节点的`resizable`和`rotatable`默认为`true`;
 
 :::warning{title=Tip}
   缩放能力内置后，NodeResize插件会逐步废弃
@@ -176,7 +176,7 @@ y2 → maxY
 
 #### Group插件
 在2.0版本里，我们重写了分组插件相关逻辑，将 Group 插件升级为 [Dynamic Group 插件](extension/dynamic-group.zh.md)
-**新能力s**
+**新能力**
 1. 支持分组节点缩放旋转时，内部元素也随之同步缩放旋转;
 
 **优化**
@@ -184,7 +184,7 @@ y2 → maxY
 2. 优化允许文本拖动的逻辑判断 -> nodeTextDraggable && draggable 才可以允许拖动;
 
 #### HighLight插件
-**新能力s**
+**新能力**
 1. 支持高亮邻居节点模式;
 2. 支持外部传参配置高亮形式;
 
@@ -192,7 +192,7 @@ y2 → maxY
 1. 补充功能介绍文档[HighLight 插件](extension/highlight.zh.md)
 
 #### 「New」Label插件
-**新能力s**
+**新能力**
 在2.0版本里，我们新增了一种文本展现形式：Label，这种形式与现有Text形式文本之间的主要区别点在于：
 1. 支持一个节点/一条边 上可以添加多个文本，且可以设置文本朝向;
 2. 自带富文本编辑能力，支持设置局部文本样式;

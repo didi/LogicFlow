@@ -74,7 +74,6 @@ class SqlNodeModel extends HtmlNodeModel {
   getOutlineStyle() {
     const style = super.getOutlineStyle();
     style.stroke = 'none';
-    style.hover.stroke = 'none';
     return style;
   }
 
@@ -83,8 +82,6 @@ class SqlNodeModel extends HtmlNodeModel {
     const style = super.getAnchorStyle();
     if (anchorInfo.type === 'left') {
       style.fill = 'red';
-      style.hover.fill = 'transparent';
-      style.hover.stroke = 'transpanrent';
       style.className = 'lf-hide-default';
     } else {
       style.fill = 'green';

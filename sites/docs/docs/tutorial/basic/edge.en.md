@@ -42,7 +42,14 @@ You just need to customize the style class in [edgeModel](../../api/edgeModel.en
 :::info{title=提示}
 Custom edges also need to be registered using `register`.
 :::
+## Modify edge style
+Similar to node style attributes, edge styles can also be customized via [theme configuration](../../api/theme.en.md). The edge style is then redefined by this.
 
+- If you need to define styles according to the state of the edge, you can put the passed parameters into `properties`, and in `getEdgeStyle`, you can judge the parameters in `properties` and return different styles according to different parameters.
+- To achieve the hover effect, you can listen for the `edge:mouseenter` and `edge:mouseleave` events, modify the parameters in `properties`, and then call the `edge.updateStyle()` method to update the edge style.
+- It is not recommended to use the `setStyle` method to set the style of the edges. This method is generally used to skip the rendering of custom edges when developing plugins.
+
+<code id="edge-style" src="../../../src/tutorial/basic/edge/style"></code>
 ## Customize side text position
 
 By default, the position of the text on the edge is the position when the user double-clicks on the
