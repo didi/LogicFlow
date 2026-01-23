@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0-alpha.6
+
+### Patch Changes
+
+- fix: 修复来自内部反馈的边问题
+
 ## 2.2.0-alpha.5
 
 ### Patch Changes

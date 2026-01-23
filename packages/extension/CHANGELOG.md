@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0-alpha.6
+
+### Patch Changes
+
+- fix: 修复来自内部反馈的边问题 & Control插件redo/undo的事件监听判断从name改成key
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.6
+  - @logicflow/vue-node-registry@1.2.0-alpha.6
+
 ## 2.2.0-alpha.5
 
 ### Patch Changes
