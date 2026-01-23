@@ -504,7 +504,9 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       this.offset || 0,
     )
     this.pointsList = this.orthogonalizePath(pointsList)
-    this.points = pointsList.map((point) => `${point.x},${point.y}`).join(' ')
+    this.points = this.pointsList
+      .map((point) => `${point.x},${point.y}`)
+      .join(' ')
   }
 
   @action

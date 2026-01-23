@@ -107,6 +107,15 @@ export const pointDirection = (point: Point, bbox: BoxBounds): Direction => {
 }
 
 /* 获取扩展图形上的点，即起始终点相邻的点，上一个或者下一个节点 */
+/**
+ * 计算扩展包围盒上的相邻点（起点或终点的下一个/上一个拐点）
+ * - 使用原始节点 bbox 来判定点相对中心的方向，避免 offset 扩展后宽高改变导致方向误判
+ * - 若 start 相对中心为水平方向，则返回扩展盒在 x 上的边界，y 保持不变
+ * - 若为垂直方向，则返回扩展盒在 y 上的边界，x 保持不变
+ * @param expendBBox 扩展后的包围盒（包含 offset）
+ * @param bbox 原始节点包围盒（用于正确的方向判定）
+ * @param point 起点或终点坐标
+ */
 export const getExpandedBBoxPoint = (
   expendBBox: BoxBounds,
   bbox: BoxBounds,
@@ -377,7 +386,11 @@ export const isSegmentCrossingBBox = (
   )
 }
 
-/* 获取下一个相邻的点 */
+/**
+ * 基于轴对齐规则获取某点的相邻可连通点（不穿越节点）
+ * - 仅考虑 x 或 y 相同的候选点，保证严格水平/垂直
+ * - 使用 isSegmentCrossingBBox 校验线段不穿越源/目标节点
+ */
 export const getNextNeighborPoints = (
   points: Point[],
   point: Point,
@@ -400,9 +413,12 @@ export const getNextNeighborPoints = (
   return filterRepeatPoints(neighbors)
 }
 
-/* 路径查找,AStar查找+曼哈顿距离
- * 算法wiki:https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
- * 方法无法复用，且调用了很多polyline相关的方法，暂不抽离到src/algorithm中
+/**
+ * 使用 A* + 曼哈顿启发式在候选点图上查找正交路径
+ * - 开放集/关闭集管理遍历
+ * - gScore 为累计实际代价，fScore = gScore + 启发式
+ * - 邻居仅为与当前点 x 或 y 相同且不穿越节点的点
+ * 参考：https://zh.wikipedia.org/wiki/A*%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
  */
 export const pathFinder = (
   points: Point[],
@@ -474,8 +490,9 @@ export const pathFinder = (
       }
 
       if (current?.id && neighbor?.id) {
+        // 修复：累计代价应基于 gScore[current] 而非 fScore[current]
         const tentativeGScore =
-          fScore[current.id] + estimateDistance(current, neighbor)
+          (gScore[current.id] ?? 0) + estimateDistance(current, neighbor)
         if (gScore[neighbor.id] && tentativeGScore >= gScore[neighbor.id]) {
           return
         }
@@ -494,7 +511,10 @@ export const pathFinder = (
 export const getBoxByOriginNode = (node: BaseNodeModel): BoxBounds => {
   return getNodeBBox(node)
 }
-/* 保证一条直线上只有2个节点： 删除x/y相同的中间节点 */
+/**
+ * 去除共线冗余中间点，保持每条直线段仅保留两端点
+ * - 若三点在同一水平线或同一垂直线，移除中间点
+ */
 export const pointFilter = (points: Point[]): Point[] => {
   let i = 1
   while (i < points.length - 1) {
@@ -513,7 +533,16 @@ export const pointFilter = (points: Point[]): Point[] => {
   return points
 }
 
-/* 计算折线点 */
+/**
+ * 计算折线点（正交候选点 + A* 路径）
+ * 步骤：
+ * 1) 取源/目标节点的扩展包围盒与相邻点 sPoint/tPoint
+ * 2) 若两个扩展盒重合，使用简单路径 getSimplePoints
+ * 3) 构造 lineBBox/sMixBBox/tMixBBox，并收集其角点与中心交点
+ * 4) 过滤掉落在两个扩展盒内部的点，形成 connectPoints
+ * 5) 以 sPoint/tPoint 为起止，用 A* 查找路径
+ * 6) 拼入原始 start/end，并用 pointFilter 去除冗余共线点
+ */
 export const getPolylinePoints = (
   start: Point,
   end: Point,
@@ -699,6 +728,10 @@ export const points2PointsList = (points: string): Point[] => {
   return pointsList
 }
 
+/**
+ * 当扩展 bbox 重合时的简化拐点计算
+ * - 根据起止段的方向（水平/垂直）插入 1~2 个中间点，避免折线重合与穿越
+ */
 export const getSimplePoints = (
   start: Point,
   end: Point,
