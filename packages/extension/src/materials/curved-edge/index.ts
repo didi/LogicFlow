@@ -97,50 +97,67 @@ function getMidPoints(
   }
 }
 
+/**
+ * 生成局部路径片段（包含圆角）
+ * - 输入为上一个顶点、当前拐点、下一个顶点，计算方向组合并选择圆弧象限
+ * - 将圆角半径限制在相邻两段长度的一半以内，避免过度弯曲
+ * @param prevPoint 上一个顶点
+ * @param cornerPoint 当前拐点（圆角所在拐点）
+ * @param nextPoint 下一个顶点
+ * @param cornerRadius 圆角半径上限
+ * @returns 局部 path 字符串（包含 L/Q 操作）
+ */
 function getPartialPath(
-  prev: PointTuple,
-  cur: PointTuple,
-  next: PointTuple,
-  radius: number,
+  prevPoint: PointTuple,
+  cornerPoint: PointTuple,
+  nextPoint: PointTuple,
+  cornerRadius: number,
 ): string {
-  // 定义误差容错变量
-  const tolerance = 1
+  // 轴对齐容差（像素），用于消除微小误差
+  const epsilon = 1
 
-  let dir1: DirectionType = ''
-  let dir2: DirectionType = ''
-
-  if (Math.abs(prev[0] - cur[0]) <= tolerance) {
-    // 垂直方向
-    dir1 = prev[1] > cur[1] ? 't' : 'b'
-  } else if (Math.abs(prev[1] - cur[1]) <= tolerance) {
-    // 水平方向
-    dir1 = prev[0] > cur[0] ? 'l' : 'r'
+  const resolveDir = (a: PointTuple, b: PointTuple): DirectionType => {
+    const dx = b[0] - a[0]
+    const dy = b[1] - a[1]
+    const adx = Math.abs(dx)
+    const ady = Math.abs(dy)
+    if (ady <= epsilon && adx > epsilon) {
+      return dx < 0 ? 'l' : 'r'
+    }
+    if (adx <= epsilon && ady > epsilon) {
+      return dy < 0 ? 't' : 'b'
+    }
+    if (adx <= epsilon && ady <= epsilon) {
+      return ''
+    }
+    // 非严格对齐时，选择更接近的轴
+    return adx < ady ? (dx < 0 ? 'l' : 'r') : dy < 0 ? 't' : 'b'
   }
 
-  if (Math.abs(cur[0] - next[0]) <= tolerance) {
-    dir2 = cur[1] > next[1] ? 't' : 'b'
-  } else if (Math.abs(cur[1] - next[1]) <= tolerance) {
-    dir2 = cur[0] > next[0] ? 'l' : 'r'
-  }
+  const dir1: DirectionType = resolveDir(prevPoint, cornerPoint)
+  const dir2: DirectionType = resolveDir(cornerPoint, nextPoint)
 
   const r =
     Math.min(
-      Math.hypot(cur[0] - prev[0], cur[1] - prev[1]) / 2,
-      Math.hypot(next[0] - cur[0], next[1] - cur[1]) / 2,
-      radius,
-    ) || (1 / 5) * radius
+      Math.hypot(cornerPoint[0] - prevPoint[0], cornerPoint[1] - prevPoint[1]) /
+        2,
+      Math.hypot(nextPoint[0] - cornerPoint[0], nextPoint[1] - cornerPoint[1]) /
+        2,
+      cornerRadius,
+    ) || (1 / 5) * cornerRadius
 
   const key = `${dir1}${dir2}`
   const orientation: ArcQuadrantType = directionMap[key] || '-'
-  let path = `L ${prev[0]} ${prev[1]}`
+  let path = ''
 
   if (orientation === '-') {
-    path += `L ${cur[0]} ${cur[1]} L ${next[0]} ${next[1]}`
+    // 仅移动到当前拐点，由下一次迭代决定如何从拐点继续（直线或圆角）
+    path += `L ${cornerPoint[0]} ${cornerPoint[1]}`
   } else {
-    const [mid1, mid2] = getMidPoints(cur, key, orientation, r)
+    const [mid1, mid2] = getMidPoints(cornerPoint, key, orientation, r)
     if (mid1 && mid2) {
-      path += `L ${mid1[0]} ${mid1[1]} Q ${cur[0]} ${cur[1]} ${mid2[0]} ${mid2[1]}`
-      ;[cur[0], cur[1]] = mid2
+      path += `L ${mid1[0]} ${mid1[1]} Q ${cornerPoint[0]} ${cornerPoint[1]} ${mid2[0]} ${mid2[1]}`
+      ;[cornerPoint[0], cornerPoint[1]] = mid2
     }
   }
   return path
