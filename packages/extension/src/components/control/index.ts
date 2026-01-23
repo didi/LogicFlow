@@ -116,7 +116,7 @@ export class Control {
       text.title = item.title
       text.innerText = item.text
       itemContainer.append(icon, text)
-      switch (item.text) {
+      switch (item.key) {
         case 'undo':
           this.lf.on('history:change', ({ data: { undoAble } }: any) => {
             itemContainer.className = undoAble ? NORMAL : DISABLED
