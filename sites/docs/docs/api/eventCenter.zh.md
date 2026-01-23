@@ -35,7 +35,6 @@ LogicFlow
 | node:drop                                     | 节点拖拽放开           | data, e                                                                                                                     |
 | node:contextmenu                              | 右键点击节点           | data, e, position                                                                                                           |
 | node:resize<Badge>2.0 新增</Badge>            | 调整节点缩放           | preData, data, model, deltaX, deltaY, index                                                                                 |
-| node:resize<Badge>2.0 新增</Badge>            | 调整节点缩放           | e, data, model                                                                                                              |
 | node:properties-change<Badge>2.0 新增</Badge> | 节点自定义属性变化     | id: 当前节点的id<br/>keys: 当前变更字段的key的集合<br/>preProperties: 改动前的properties<br/>properties: 改动后的properties |
 
 事件对象包含如下内容：

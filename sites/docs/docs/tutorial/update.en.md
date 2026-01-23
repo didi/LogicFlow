@@ -154,7 +154,7 @@ Fixed the bug that TextEditTool is invalid, and the reason is noted later
 **Optimization**
 In version 1.x, the node scaling capability needs to be implemented by introducing the NodeResize plug-in. In version 2.0, we built the resize capability into the basic node; and also supported the configurable node rotation capability.
 1. Users can set whether all nodes in the current instance are scalable and rotatable through the global configuration items `allowResize` and `allowRotate`;
-2. You can also add `resizable` and `rotatable` parameters in the `properties` of the initial rendering incoming data to control whether a single node is rotatable and scalable. Internally, the node's `resizable` and `rotatable` default to `true`;
+2. You can also add `resizable` and `rotatable` parameters in the `properties` of the initial rendering incoming data to control whether a single node is rotatable and scalable(This will only take effect if `allowResize`/`allowRotate` is set to true globally.). Internally, the node's `resizable` and `rotatable` default to `true`;
 
 :::warning{title=Tip}
 After the scaling capability is built-in, the NodeResize plug-in will be gradually abandoned

@@ -40,7 +40,14 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 :::info{title=提示}
 自定义边同样需要使用`register`注册哦。
 :::
+## 修改边样式
+和节点的样式属性一样边样式也支持通过 [主题配置](../../api/theme.zh.md) 自定义边的样式则是它重新定义。
 
+- 如果需要按照边的状态定义样式，可以把传递的参数放入`properties`中，在`getEdgeStyle`中判断`properties`中的参数，根据不同的参数返回不同的样式。
+- 如果需要实现hover的效果，可以监听`edge:mouseenter`和`edge:mouseleave`事件，修改完`properties`中的参数，然后调用`edge.updateStyle()`方法更新边的样式。
+- 不建议使用`setStyle`方法设置边的样式,这个方法一般用于插件开发时跳过自定义边的渲染。
+
+<code id="edge-style" src="../../../src/tutorial/basic/edge/style"></code>
 ## 自定义边文本位置
 
 默认情况下，边上文本的位置是用户双击点击边时的位置。如果是通过 API 的方式给边添加的文本，文本位置按照如下规则。
