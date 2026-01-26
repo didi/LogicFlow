@@ -57,6 +57,7 @@ class CustomNode extends RectNode {
 | idGenerator                 | `(type?: string) => string \| undefined`      |         | Custom global id generator                                                       |
 | nodeMoveRules               | `Model.NodeMoveRule[]`                        | []      | Node movement rules, all rules in this array are checked when node moves         |
 | customTrajectory            | `LFOptions.CustomAnchorLineProps`             |         | Get custom connection trajectory                                                 |
+| customTargetAnchor          | `LFOptions.customTargetAnchorType`            |        | Custom anchor connection rules (when a manual connection drops on a node, decides which anchor to use). |
 | edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |         | Edge generation rules for node connections and edge changes                      |
 | edgeType                    | `string`                                      |         | Default edge type used when creating edges on graph                              |
 | nodes                       | `BaseNodeModel[]`                             | []      | All node objects on canvas                                                       |

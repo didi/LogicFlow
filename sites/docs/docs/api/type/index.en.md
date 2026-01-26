@@ -5,67 +5,70 @@ toc: content
 order: 0
 ---
 
-Welcome to the LogicFlow type documentation. This article serves as the main entry point for understanding the various types used in the LogicFlow framework. Each type is crucial for defining the structure and behavior of elements within the LogicFlow environment.
+Welcome to the LogicFlow type reference. This page is the main entry point to the types used across the LogicFlow framework. Each type is critical for defining the structure and behavior of elements in a LogicFlow application.
 
-Below is an introduction to each type defined in LogicFlow:
+Below is an overview of the types defined in LogicFlow:
 
-### Theme Style Related Types
-- [CommonTheme](commonTheme.en.md): The foundation of various theme types, providing common properties such as `fill`, `stroke`, and `strokeWidth`.
-- [EdgeTheme](edgeTheme.en.md): Extends `CommonTheme` and includes additional properties specific to edge styles, allowing detailed customization of edge appearance.
-- [NodeTheme](nodeTheme.en.md): Node theme types such as `RectTheme`, `CircleTheme`, `PolygonTheme`, and `EllipseTheme`, inheriting from `CommonTheme` and defining properties specific to each shape.
-- [TextTheme](textTheme.en.md): Describes properties related to text styles, including `color`, `fontSize`, and `textAnchor`, while also extending `CommonTheme`.
+## Theme Style Related Types
+- [Theme](Theme.en.md#theme主题配置): The LogicFlow theme configuration for styling supported elements.
+- [CommonTheme](Theme.en.md#commontheme通用主题): The base for all theme variants, providing common properties such as `fill`, `stroke`, and `strokeWidth`.
+- [NodeTheme](Theme.en.md#nodetheme节点主题): Node theme types, for example `RectTheme`, `CircleTheme`, `PolygonTheme`, and `EllipseTheme`, inheriting from `CommonTheme` and defining shape-specific properties.
+- [EdgeTheme](Theme.en.md#edgetheme边主题): Extends `CommonTheme` and adds edge-specific styling properties for fine-grained control.
+- [TextTheme](Theme.en.md#texttheme文本主题): Text styling properties including `color`, `fontSize`, and `textAnchor`; extends `CommonTheme`.
 
-### Configuration Types
-- [LFOptions](LFOptions.en.md): The core configuration type for LogicFlow.
-- [DomAttributes](domAttributes.en.md): Attributes for DOM elements, including optional className.
-- [PropertiesType](propertiesType.en.md): Attributes for elements such as width, height, style, and text style.
-- [AttributesType](attributesType.en.md): Attribute records associated with LogicFlow elements.
-- [VectorData](vectorData.en.md): Represents vector calculations with deltaX and deltaY.
-- [OffsetData](offsetData.en.md): Contains offset calculations with dx and dy properties.
-- [Position](position.en.md): Represents a point in 2D space with x and y coordinates.
-- [Point](point.md): Extends Position with optional id and other attributes.
-- [PointTuple](pointTuple.en.md): Represents a tuple of points with two values.
-- [ClientPosition](clientPosition.en.md): Position information for DOM overlay and canvas overlay.
-- [LineSegment](lineSegment.en.md): Consists of a start and end point represented by the Point type.
-- [Direction](direction.en.md): Alias for SegmentDirection.
-- [RadiusCircleInfo](radiusCircleInfo.en.md): Includes radius and position.
-- [Vector](vector.en.md): Represents x, y, z coordinates and an optional id.
-- [RectSize](rectSize.en.md): Contains width and height properties.
-- [TextConfig](textConfig.en.md): Attributes for text value, position, and optional edit and drag flags.
-- [LabelConfig](labelConfig.en.md): Attributes for label position, content, style, and edit options.
-- [LabelOption](labelOption.en.md): Settings for label direction and maximum count.
-- [LabelData](labelData.en.md): Extends LabelConfig with mandatory properties.
-- [AppendConfig](appendConfig.en.md): Includes startIndex, endIndex, direction, and segment information.
-- [ArrowConfig](arrowConfig.en.md): Attributes for arrow configuration, including markerStart and markerEnd.
-- [ArrowInfo](arrowInfo.en.md): Includes start and end points, hover state, and selection state.
-- [GraphConfigData](graphConfigData.en.md): Optional arrays of nodes and edges.
-- [GraphData](graphData.en.md): Mandatory arrays of nodes and edges.
-- [FakeNodeConfig](fakeNodeConfig.en.md): Type, text, and properties for fake nodes.
-- [OnDragNodeConfig](onDragNodeConfig.en.md): Attributes for draggable nodes.
-- [NodeConfig](nodeConfig.en.md): Attributes for node identification, type, position, and configuration.
-- [NodeData](nodeData.en.md): Extends NodeConfig with mandatory properties.
-- [EdgeConfig](edgeConfig.en.md): Attributes for edge identification, source node, target node, and configuration.
-- [EdgeData](edgeData.en.md): Extends EdgeConfig with mandatory properties.
-- [MenuConfig](menuConfig.en.md): Attributes for menu text, className, icon, and callback function.
+## Instance Related
+- [Common](MainTypes.en.md#common实例基础配置项): Basic LogicFlow instance configuration, including the canvas DOM node, width, height, etc.
+- [BackgroundConfig](MainTypes.en.md#backgroundconfig背景配置): Canvas background configuration, including background image and tiling mode.
+- [GridOptions](MainTypes.en.md#gridoptions网格配置): Canvas grid configuration, including grid size, visibility, and grid type.
+- [KeyboardDef](MainTypes.en.md#keyboarddef快捷键参数类型): Keyboard shortcut configuration, including enable state and key combinations.
+- [EdgeType](MainTypes.en.md#edgetype边类型): Edge types including straight line, polyline, and bezier curve.
+- [AnimationConfig](MainTypes.en.md#animationconfig动画配置): Animation configuration, including whether node and edge animations are enabled.
+- [EdgeGeneratorType](MainTypes.en.md#edgegeneratortype自定义边生成函数): Custom edge generator type, used to generate different edge types based on node type.
+- [customTargetAnchorType](MainTypes.en.md#customtargetanchortype自定义锚点连接规则): Custom anchor connection rule function type, used to decide which anchor to connect when a manual connection drops on the target node.
+- [GuardsConfig](MainTypes.en.md#guardsconfig守卫函数类型): Guard configuration for intercepting clone or delete actions.
+- [AppendConfig](MainTypes.en.md#appendconfig折线边选区信息): Polyline segment selection info, including start and end indices, direction, and whether it is draggable.
+- [ArrowConfig](MainTypes.en.md#arrowconfig箭头配置): Arrow configuration, including styles for arrow start and end.
+- [AttributesType](MainTypes.en.md#attributestype通用属性类型): Generic attribute type, allowing custom properties to be attached to LogicFlow elements.
+- [RegisterConfig](MainTypes.en.md#registerconfig注册配置): Configuration for registering new elements, including element type, view component, and model constructor.
+- [RegisterElement](MainTypes.en.md#registerelement注册元素配置): Configuration for registering new element types, including view component and data model.
+- [RegisterElementFunc](MainTypes.en.md#registerelementfunc): Function type for registering elements; accepts registration parameters and returns the registered element object.
+- [RegisterParam](MainTypes.en.md#registerparam): Parameter type for registering elements, including hyperscript function and other custom properties.
+- [BaseNodeModelCtor](MainTypes.en.md#basenodemodelctor基础节点构造函数): Constructor type for base node models, used to create node model instances.
+- [BaseEdgeModelCtor](MainTypes.en.md#baseedgemodelctor基础边构造函数): Constructor type for base edge models, used to create edge model instances.
 
-### Rendering Related
-- [FocusOnArgsType](FocusOnArgsType.en.md): Parameters for centering the canvas viewport.
-- [BaseNodeModelCtor](BaseNodeModelCtor.en.md): Constructor type for node models.
-- [BaseEdgeModelCtor](BaseEdgeModelCtor.en.md): Constructor type for edge models.
-- [GraphElementCtor](GraphElementCtor.en.md): Constructor type for graph elements.
-- [GraphElement](GraphElement.en.md): Type for graph elements.
-- [GraphElements](GraphElements.en.md): Type for collections of graph elements.
-- [RegisterConfig](RegisterConfig.en.md): Configuration items for registering elements (nodes or edges).
-- [RegisterElement](RegisterElement.en.md): Type for registering elements.
-- [RegisterParam](RegisterParam.en.md): Parameter type for registering elements.
-- [RegisterElementFunc](RegisterElementFunc.en.md): Function type for registering elements.
-- [LogicFlowConstructor](LogicFlowConstructor.en.md): Constructor type for LogicFlow.
-- [ExtensionType](ExtensionType.en.md): Type for plugins.
-- [ExtensionConfig](ExtensionConfig.en.md): Configuration type for plugins.
-- [IExtensionProps](IExtensionProps.en.md): Property type for plugins.
-- [ExtensionConstructor](ExtensionConstructor.en.md): Constructor type for plugins.
-- [ExtensionRenderFunc](ExtensionRenderFunc.en.md): Render function type for plugins.
-- [ExtensionDefinition](ExtensionDefinition.en.md): Object form type for plugins.
-- [Extension](Extension.en.md): Type for plugins.
+## Canvas Related
+- [GraphConfigData](MainTypes.en.md#graphconfigdata流程图渲染数据类型): Flowchart rendering data type, including node and edge configurations.
+- [GraphData](MainTypes.en.md#graphdata画布数据): Canvas data type, including the data structures of nodes and edges.
+- [GraphElement](MainTypes.en.md#graphelement): Element type on the canvas, including nodes and edges.
+- [GraphElementCtor](MainTypes.en.md#graphelementctor画布元素构造函数): Constructor type for canvas elements, used to create node or edge instances.
+- [Position](MainTypes.en.md#position坐标类型): Coordinate type for a point in 2D space, including x and y.
+- [Point](MainTypes.en.md#point点类型): Extends `Position`, represents a point in 2D space with optional id and other attributes.
+- [PointTuple](MainTypes.en.md#pointtuple点坐标组): A tuple representing a point in 2D space, with two numeric values for x and y.
+- [PropertiesType](MainTypes.en.md#propertiestype元素属性): Element property type, including width, height, style, and text style.
+- [TextConfig](MainTypes.en.md#textconfig文本配置): Configuration for text elements, including content, position, editing, and drag options.
+- [ClientPosition](MainTypes.en.md#clientposition元素位置): Represents event positions relative to the DOM overlay and the canvas overlay.
+
+## Node Related
+- [NodeConfig](MainTypes.en.md#nodeconfig节点配置): Node configuration structure, including identity, position, and behavior.
+- [OffsetData](MainTypes.en.md#offsetdata移动偏移): Data structure representing node drag offset.
+- [FakeNodeConfig](MainTypes.en.md#fakenodeconfig虚拟节点配置): Configuration for a temporary node used during drag-create.
+- [VectorData](MainTypes.en.md#vectordata向量数据): Vector data, including changes along the x and y axes.
+- [DomAttributes](MainTypes.en.md#domattributesdom属性): DOM attributes for nodes, including CSS class name and other custom attributes.
+
+## Edge Related
+- [EdgeConfig](MainTypes.en.md#edgeconfig边配置): Edge configuration structure, including edge properties, source, and target.
+- [EdgeData](MainTypes.en.md#edgedata边数据): Extends `EdgeConfig`, representing edge data structure and behavior.
+
+## Plugin Related
+- [Extension](MainTypes.en.md#extension插件): Defines the structure and behavior of extensions in the LogicFlow framework, including render and destroy methods.
+- [ExtensionRenderFunc](MainTypes.en.md#extensionrenderfunc插件渲染函数): Render function type for plugins, used to render extension content in LogicFlow.
+- [ExtensionType](MainTypes.en.md#extensiontype插件类型): Different forms of extensions available in LogicFlow, including constructor and object definitions.
+- [ExtensionConfig](MainTypes.en.md#extensionconfig插件配置): Configuration for extensions, including plugin identifier, extension behavior, and extra properties.
+- [IExtensionProps](MainTypes.en.md#iextensionprops插件参数类型): Parameter type for plugins, including LogicFlow instance and extension properties.
+- [ExtensionConstructor](MainTypes.en.md#extensionconstructor插件构造函数): Constructor type for creating plugin instances.
+- [ExtensionDefinition](MainTypes.en.md#extensiondefinition插件定义): Object form definition for plugins, including plugin name, install, and render methods.
+- [LabelConfig](MainTypes.en.md#labelconfiglabel插件数据类型): Render data structure supported by the Label plugin, including label position, content, and style.
+- [LabelOption](MainTypes.en.md#labeloptionlabel插件配置项类型): Configuration settings for the Label plugin, including label direction and maximum count.
+- [MenuConfig](MainTypes.en.md#menuconfigmenu插件菜单项类型): Menu item configuration in the Menu plugin, including display text, CSS class name, icon, and callback function.
 
 For detailed information on each type, please refer to the corresponding documentation linked above.

@@ -106,6 +106,15 @@ lf.graphModel.addNodeMoveRules((model, deltaX, deltaY) => {
 issue [如何隐藏锚点？](https://github.com/didi/LogicFlow/issues/454)，可以查看code
 sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_hideAnchor/index.js)
 :::
+### customTargetAnchor（自定义连线落点锚点）
+
+当你从锚点拖拽创建连线，并在某个节点上释放鼠标时，LogicFlow 需要根据鼠标释放位置（position）决定“目标节点”最终连接到哪个锚点。
+
+- 默认行为：连接到距离 position 最近的锚点
+- 自定义方式：在初始化 LogicFlow 时传入 `customTargetAnchor`，作为全局规则优先返回你期望的锚点；若返回 `undefined`，则回退到默认行为
+
+
+<code id="node-custom-target-anchor" src="../../../src/tutorial/advanced/node/customTargetAnchor"></code>
 
 ## 文本
 

@@ -57,6 +57,7 @@ class CustomNode extends RectNode {
 | idGenerator                 | `(type?: string) => string \| undefined`      |        | 自定义全局 id 生成器                                                                             |
 | nodeMoveRules               | `Model.NodeMoveRule[]`                        | []     | 节点移动规则, 在节点移动的时候，会触发此数组中的所有规则判断                                     |
 | customTrajectory            | `LFOptions.CustomAnchorLineProps`             |        | 获取自定义连线轨迹                                                                               |
+| customTargetAnchor          | `LFOptions.customTargetAnchorType`            |        | 自定义锚点连接规则（手动连线落到节点时，决定使用哪个锚点）                                       |
 | edgeGenerator               | `LFOptions.EdgeGeneratorType`                 |        | 节点间连线、连线变更时边的生成规则                                                               |
 | edgeType                    | `string`                                      |        | 在图上操作创建边时，默认使用的边类型                                                             |
 | nodes                       | `BaseNodeModel[]`                             | []     | 画布所有的节点对象                                                                               |
