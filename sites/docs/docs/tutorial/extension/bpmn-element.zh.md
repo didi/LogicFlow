@@ -435,16 +435,57 @@ const lf = new LogicFlow({
 ```js
 // 渲染数据
 lf.render({
-  nodes: [
-    { id: 'Event_1234567', type: 'bpmn:startEvent', x: 100, y: 100, },
-    { id: 'Task_123ac56', type: 'bpmn:userTask', x: 300, y: 100, },
-    { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 500, y: 100, },
-  ],
-  edges: [
-    { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
-    { id: 'Flow_fa4c689', sourceNodeId: 'Task_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
-  ],
-})
+  "bpmn:definitions": {
+    "-id": "Definitions_09b7413",
+    "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "-xmlns:bpmn": "http://www.omg.org/spec/BPMN/20100524/MODEL",
+    "-xmlns:bpmndi": "http://www.omg.org/spec/BPMN/20100524/DI",
+    "-xmlns:dc": "http://www.omg.org/spec/DD/20100524/DC",
+    "-xmlns:di": "http://www.omg.org/spec/DD/20100524/DI",
+    "-targetNamespace": "http://logic-flow.org",
+    "-exporter": "logicflow",
+    "-exporterVersion": "1.2.0",
+    "bpmn:process": {
+      "-isExecutable": "true",
+      "-id": "Process_f5f16a1",
+      "bpmn:startEvent": {
+        "-id": "Event_5d74c17",
+        "-name": "开始",
+        "-width": 36,
+        "-height": 36
+      },
+      "bpmn:sequenceFlow": []
+    },
+    "bpmndi:BPMNDiagram": {
+      "-id": "BPMNDiagram_1",
+      "bpmndi:BPMNPlane": {
+        "-id": "BPMNPlane_1",
+        "-bpmnElement": "Process_f5f16a1",
+        "bpmndi:BPMNEdge": [],
+        "bpmndi:BPMNShape": [
+          {
+            "-id": "Event_5d74c17_di",
+            "-bpmnElement": "Event_5d74c17",
+            "dc:Bounds": {
+              "-x": 547.98828125,
+              "-y": 133.98828125,
+              "-width": 40,
+              "-height": 40
+            },
+            "bpmndi:BPMNLabel": {
+              "dc:Bounds": {
+                "-x": 557.98828125,
+                "-y": 186.98828125,
+                "-width": 20,
+                "-height": 14
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+)
 // 生成BPMN XML数据并下载到本地
 const handleDownloadData = () => {
   const retainedFields = ['width', 'height']
@@ -1287,17 +1328,25 @@ const lf = new LogicFlow({
 2. 使用插件进行数据转换
 ```js
 // 渲染数据
-lf.render({
-  nodes: [
-    { id: 'Event_1234567', type: 'bpmn:startEvent', x: 100, y: 100, },
-    { id: 'Task_123ac56', type: 'bpmn:userTask', x: 300, y: 100, },
-    { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 500, y: 100, },
-  ],
-  edges: [
-    { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
-    { id: 'Flow_fa4c689', sourceNodeId: 'Task_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
-  ],
-})
+lf.render(`
+  <bpmn:definitions id="Definitions_48012e2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="http://logic-flow.org" exporter="logicflow" exporterVersion="1.2.0">	
+    <bpmn:process isExecutable="true" id="Process_0482d02">	
+      <bpmn:startEvent id="Event_5d74c17" name="开始" width="36" height="36">	
+        <businessData name="开始流程" />	
+      </bpmn:startEvent>	
+    </bpmn:process>	
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">	
+      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0482d02">	
+          <bpmndi:BPMNShape id="Event_5d74c17_di" bpmnElement="Event_5d74c17">	
+            <dc:Bounds x="547.98828125" y="133.98828125" width="40" height="40" />	
+            <bpmndi:BPMNLabel>	
+              <dc:Bounds x="557.98828125" y="186.98828125" width="20" height="14" />	
+            </bpmndi:BPMNLabel>	
+          </bpmndi:BPMNShape>	
+      </bpmndi:BPMNPlane>	
+    </bpmndi:BPMNDiagram>	
+  </bpmn:definitions>
+`)
 // 生成BPMN XML数据并下载到本地
 const handleDownloadData = () => {
   const retainedFields = ['width', 'height']
