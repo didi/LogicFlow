@@ -7,12 +7,21 @@ import LogicFlow, {
   transformNodeData,
   transformEdgeData,
 } from '@logicflow/core'
-import { assign, cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
+import {
+  assign,
+  cloneDeep,
+  filter,
+  forEach,
+  has,
+  map,
+  sortBy,
+  uniqBy,
+} from 'lodash-es'
 import { DynamicGroupNode } from './node'
 import { DynamicGroupNodeModel } from './model'
 import { isAllowMoveTo, isBoundsInGroup } from './utils'
 
-import GraphConfigData = LogicFlow.GraphConfigData
+import GraphData = LogicFlow.GraphData
 import GraphElements = LogicFlow.GraphElements
 import EdgeConfig = LogicFlow.EdgeConfig
 import EdgeData = LogicFlow.EdgeData
@@ -466,6 +475,7 @@ export class DynamicGroup {
    */
   initGroupChildNodes(
     nodeIdMap: Record<string, string>,
+    anchorIdMap: Record<string, string>,
     children: Set<string>,
     curGroup: DynamicGroupNodeModel,
     distance: number,
@@ -492,16 +502,24 @@ export class DynamicGroup {
         curGroup.addChild(tempChildNode.id)
 
         nodeIdMap[childId] = tempChildNode.id // id 同 childId，做映射存储
+        childNode.anchors.forEach((anchor, index) => {
+          if (anchor.id && tempChildNode.anchors[index].id) {
+            // @ts-ignore
+            anchorIdMap[anchor.id] = tempChildNode.anchors[index].id
+          }
+        })
+
         allChildNodes.push(tempChildNode)
 
         // 1. 存储 children 内部节点相关的输入边（incoming）
         allRelatedEdges.push(
-          ...[...tempChildNode.incoming.edges, ...tempChildNode.outgoing.edges],
+          ...[...childNode.incoming.edges, ...childNode.outgoing.edges],
         )
 
         if (childNodeChildren instanceof Set) {
           const { childNodes, edgesData } = this.initGroupChildNodes(
             nodeIdMap,
+            anchorIdMap,
             childNodeChildren,
             tempChildNode as DynamicGroupNodeModel,
             distance,
@@ -539,22 +557,35 @@ export class DynamicGroup {
   createEdge(
     edge: EdgeConfig | EdgeData,
     nodeIdMap: Record<string, string>,
+    anchorIdMap: Record<string, string>,
     distance: number,
   ) {
-    const { sourceNodeId, targetNodeId } = edge
+    const {
+      sourceNodeId,
+      targetNodeId,
+      sourceAnchorId: originSourceAnchorId,
+      targetAnchorId: originTargetAnchorId,
+    } = edge
     const sourceId = nodeIdMap[sourceNodeId] ?? sourceNodeId
     const targetId = nodeIdMap[targetNodeId] ?? targetNodeId
-
-    // 如果是有 id 且 text 是对象的边，需要重新计算位置，否则直接用 edgeConfig 生成边
-    let newEdgeConfig = cloneDeep(edge)
-    if (edge.id && typeof edge.text === 'object' && edge.text !== null) {
-      newEdgeConfig = transformEdgeData(edge as EdgeData, distance)
+    let sourceAnchorId = originSourceAnchorId
+    if (originSourceAnchorId) {
+      sourceAnchorId = anchorIdMap[originSourceAnchorId] ?? originSourceAnchorId
     }
+    let targetAnchorId = originTargetAnchorId
+    if (originTargetAnchorId) {
+      targetAnchorId = anchorIdMap[originTargetAnchorId] ?? originTargetAnchorId
+    }
+
+    let newEdgeConfig = cloneDeep(edge)
+    newEdgeConfig = transformEdgeData(edge as EdgeData, distance)
 
     return this.lf.graphModel.addEdge({
       ...newEdgeConfig,
       sourceNodeId: sourceId,
       targetNodeId: targetId,
+      sourceAnchorId: sourceAnchorId,
+      targetAnchorId: targetAnchorId,
     })
   }
 
@@ -689,14 +720,16 @@ export class DynamicGroup {
     lf.on('group:add-node', this.onGroupAddNode)
 
     // https://github.com/didi/LogicFlow/issues/1346
-    // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
-    // 使用场景：addElements api 项目内部目前只在快捷键粘贴时使用（此处解决的也应该是粘贴场景的问题）
-    lf.addElements = (
-      { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
+    // 重写 cloneElements() 方法，在 cloneElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
+    // 使用场景： cloneElements api 项目内部目前只在快捷键粘贴时使用（此处解决的也应该是粘贴场景的问题）
+    lf.cloneElements = (
+      { nodes: selectedNodes, edges: selectedEdges }: GraphData,
       distance = 40,
     ): GraphElements => {
       // oldNodeId -> newNodeId 映射 Map
       const nodeIdMap: Record<string, string> = {}
+      // oldAnchorId -> newAnchorId 映射 Map
+      const anchorIdMap: Record<string, string> = {}
       // 本次添加的所有节点和边
       const elements: GraphElements = {
         nodes: [],
@@ -709,28 +742,48 @@ export class DynamicGroup {
         const originId = node.id
         const children = node.properties?.children ?? node.children
 
-        const model = lf.addNode(this.removeChildrenInGroupNodeData(node))
+        const newNodeConfig = transformNodeData(
+          this.removeChildrenInGroupNodeData(node),
+          distance,
+        )
+        const model = lf.addNode(newNodeConfig)
 
-        if (originId) nodeIdMap[originId] = model.id
+        if (originId) {
+          nodeIdMap[originId] = model.id
+          const originNodeModel = lf.getNodeModelById(originId)
+          if (originNodeModel) {
+            // 建立源节点和新节点的锚点映射
+            const newNodeAnchors = model.anchors
+            originNodeModel.anchors.forEach((originNodeAnchor, index) => {
+              if (originNodeAnchor.id && newNodeAnchors[index].id) {
+                // @ts-ignore
+                anchorIdMap[originNodeAnchor.id] = newNodeAnchors[index].id
+              }
+            })
+          }
+        }
         elements.nodes.push(model) // 此时为 group 的 nodeModel
 
         // TODO: 递归创建 group 的 nodeModel 的 children
         if (model.isGroup) {
           const { edgesData } = this.initGroupChildNodes(
             nodeIdMap,
+            anchorIdMap,
             children,
             model as DynamicGroupNodeModel,
             distance,
           )
-          edgesInnerGroup.push(...edgesData)
+          edgesInnerGroup.push(...uniqBy(edgesData, 'id'))
         }
       })
 
       forEach(edgesInnerGroup, (edge) => {
-        this.createEdge(edge, nodeIdMap, distance)
+        this.createEdge(edge, nodeIdMap, anchorIdMap, distance)
       })
       forEach(selectedEdges, (edge) => {
-        elements.edges.push(this.createEdge(edge, nodeIdMap, distance))
+        elements.edges.push(
+          this.createEdge(edge, nodeIdMap, anchorIdMap, distance),
+        )
       })
 
       // 返回 elements 进行选中效果，即触发 element.selectElementById()
