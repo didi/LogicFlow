@@ -96,8 +96,10 @@ export class VueNodeView extends HtmlNode {
             el: root,
             render(h: any) {
               return h(Composed, {
-                node: model,
-                graph: graphModel,
+                props: {
+                  node: model,
+                  graph: graphModel,
+                },
               })
             },
             provide() {
