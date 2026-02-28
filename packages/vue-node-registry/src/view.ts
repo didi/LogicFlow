@@ -10,7 +10,7 @@ import {
   isNumber,
 } from 'lodash-es'
 import { HtmlNode } from '@logicflow/core'
-import { vueNodesMap } from './registry'
+import { getVueNodeConfig } from './registry'
 import { isActive, connect, disconnect } from './teleport'
 import { Container } from './components/container'
 
@@ -87,7 +87,8 @@ export class VueNodeView extends HtmlNode {
       })
 
     if (root) {
-      const { component } = vueNodesMap[model.type]
+      const nodeConfig = getVueNodeConfig(model.type, graphModel)
+      const { component } = nodeConfig!
       if (component) {
         if (isVue2) {
           const Vue = Vue2 as any
