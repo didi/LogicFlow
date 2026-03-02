@@ -1119,8 +1119,21 @@ class BPMNAdapter extends BPMNBaseAdapter {
     lf.adapterOut = this.adapterXmlOut
     this.props = props
   }
+  private sanitizeNameAttributes(xml: string): string {
+    return xml.replace(/name="([^"]*)"/g, (_, val) => {
+      const safe = val
+        .replace(/&(?!#?\w+;)/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      return `name="${safe}"`
+    })
+  }
   adapterXmlIn = (bpmnData: any) => {
-    const json = lfXml2Json(bpmnData)
+    const xmlData =
+      typeof bpmnData === 'string'
+        ? this.sanitizeNameAttributes(bpmnData)
+        : bpmnData
+    const json = lfXml2Json(xmlData)
     return this.adapterIn(json, this.props)
   }
   adapterXmlOut = (data: any) => {

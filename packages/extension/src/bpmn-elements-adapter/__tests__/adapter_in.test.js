@@ -525,4 +525,12 @@ describe('Test BPMNAdapter: import xml', () => {
       }),
     ).toEqual(graphData)
   })
+
+  it('should import shape names with special characters', () => {
+    const xmlWithSpecialName = xml.replace('name="开始"', 'name="A < B & C"')
+    const data = adapter.adapterXmlIn(xmlWithSpecialName)
+    expect(data.nodes.find((node) => node.id === 'Event_0rqndvp')?.text?.value).toBe(
+      'A < B & C',
+    )
+  })
 })
