@@ -1,5 +1,5 @@
 import { ComponentType, createElement as h, render } from 'preact/compat'
-import { cloneDeep, forEach, indexOf, isNil } from 'lodash-es'
+import { cloneDeep, forEach, indexOf, isEqual, isNil } from 'lodash-es'
 import { observer } from '.'
 import { Options as LFOptions } from './options'
 import * as _Model from './model'
@@ -1160,16 +1160,42 @@ export class LogicFlow {
   /*********************************************************
    * History/Resize 相关方法
    ********************************************************/
+  private emitNodePropertiesChange(
+    preGraphData: GraphData,
+    curGraphData: GraphData,
+  ) {
+    const preNodeMap = new Map(preGraphData.nodes.map((node) => [node.id, node]))
+    forEach(curGraphData.nodes, (node) => {
+      const preNode = preNodeMap.get(node.id)
+      if (!preNode) return
+      const preProperties = (preNode.properties ?? {}) as Record<string, unknown>
+      const properties = (node.properties ?? {}) as Record<string, unknown>
+      if (isEqual(preProperties, properties)) return
+      const keys = Object.keys({
+        ...preProperties,
+        ...properties,
+      }).filter((key) => !isEqual(preProperties[key], properties[key]))
+      this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
+        id: node.id,
+        keys,
+        preProperties,
+        properties,
+      })
+    })
+  }
+
   /**
    * 历史记录操作
    * 返回上一步
    */
   undo() {
     if (!this.history.undoAble()) return
+    const preGraphData = this.graphModel.modelToGraphData()
     // formatData兼容vue数据
     const graphData = formatData(this.history.undo()!)
     this.clearSelectElements()
     this.graphModel.graphDataToModel(graphData)
+    this.emitNodePropertiesChange(preGraphData, graphData)
   }
 
   /**
@@ -1178,10 +1204,12 @@ export class LogicFlow {
    */
   redo() {
     if (!this.history.redoAble()) return
+    const preGraphData = this.graphModel.modelToGraphData()
     // formatData兼容vue数据
     const graphData = formatData(this.history.redo()!)
     this.clearSelectElements()
     this.graphModel.graphDataToModel(graphData)
+    this.emitNodePropertiesChange(preGraphData, graphData)
   }
 
   /**
