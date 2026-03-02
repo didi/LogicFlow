@@ -533,4 +533,12 @@ describe('Test BPMNAdapter: import xml', () => {
       'A < B & C',
     )
   })
+
+  it('should import mixed escaped and unescaped characters in shape names', () => {
+    const xmlWithMixedName = xml.replace('name="开始"', 'name="A &amp; B < C"')
+    const data = adapter.adapterXmlIn(xmlWithMixedName)
+    expect(data.nodes.find((node) => node.id === 'Event_0rqndvp')?.text?.value).toBe(
+      'A & B < C',
+    )
+  })
 })
