@@ -1171,10 +1171,9 @@ export class LogicFlow {
       const preProperties = (preNode.properties ?? {}) as Record<string, unknown>
       const properties = (node.properties ?? {}) as Record<string, unknown>
       if (isEqual(preProperties, properties)) return
-      const keys = Object.keys({
-        ...preProperties,
-        ...properties,
-      }).filter((key) => !isEqual(preProperties[key], properties[key]))
+      const keys = Array.from(
+        new Set([...Object.keys(preProperties), ...Object.keys(properties)]),
+      ).filter((key) => !isEqual(preProperties[key], properties[key]))
       this.graphModel.eventCenter.emit(EventType.NODE_PROPERTIES_CHANGE, {
         id: node.id,
         keys,
