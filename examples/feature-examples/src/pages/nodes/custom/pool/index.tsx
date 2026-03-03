@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import LogicFlow from '@logicflow/core'
 import { Flex } from 'antd'
 import { PoolElements } from '@logicflow/extension'
-import data from './newData'
+import data from './data'
 import '@logicflow/core/dist/index.css'
 import './index.less'
 
