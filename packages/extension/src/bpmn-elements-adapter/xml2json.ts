@@ -6,6 +6,7 @@
 // @ts-nocheck
 
 import { has } from 'lodash-es'
+import { escapeXml } from './json2xml'
 // ========================================================================
 //  XML.ObjTree -- XML source code from/to JavaScript object like E4X
 // ========================================================================
@@ -287,14 +288,7 @@ XML.ObjTree.prototype.scalar_to_xml = function (name, text) {
 }
 
 //  method: xml_escape( text )
-
-XML.ObjTree.prototype.xml_escape = function (text) {
-  return text
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
-}
+XML.ObjTree.prototype.xml_escape = escapeXml
 
 /*
 // ========================================================================

@@ -24,6 +24,17 @@ function handleAttributes(obj: any): any {
   return obj
 }
 
+function escapeXml(text: string) {
+  if (text == null) return ''
+  return text
+    .toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 function getAttributes(obj: any) {
   let tmp = obj
   try {
@@ -33,7 +44,7 @@ function getAttributes(obj: any) {
   } catch (error) {
     tmp = JSON.stringify(handleAttributes(obj)).replace(/"/g, "'")
   }
-  return tmp
+  return escapeXml(String(tmp))
 }
 
 const tn = '\t\n'
@@ -44,8 +55,11 @@ function toXml(obj: any, name: string, depth: number) {
   let str = ''
   const prefix = tn + frontSpace
   if (name === '-json') return ''
+  if (obj !== 0 && obj !== false && !obj) {
+    return `${prefix}<${name} />`
+  }
   if (name === '#text') {
-    return prefix + obj
+    return prefix + escapeXml(String(obj))
   }
   if (name === '#cdata-section') {
     return `${prefix}<![CDATA[${obj}]]>`
@@ -74,7 +88,7 @@ function toXml(obj: any, name: string, depth: number) {
     str +=
       attributes + (children !== '' ? `>${children}${prefix}</${name}>` : ' />')
   } else {
-    str += `${prefix}<${name}>${obj.toString()}</${name}>`
+    str += `${prefix}<${name}>${escapeXml(String(obj))}</${name}>`
   }
 
   return str
@@ -88,4 +102,4 @@ function lfJson2Xml(obj: any) {
   return xmlStr
 }
 
-export { lfJson2Xml, handleAttributes }
+export { lfJson2Xml, handleAttributes, escapeXml }
