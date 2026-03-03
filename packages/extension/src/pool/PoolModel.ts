@@ -55,7 +55,7 @@ export class PoolModel extends DynamicGroupNodeModel {
     this.updateTextPosition()
     this.addEventListeners()
     this.resizePool()
-    this
+
   }
 
   // 增加监听事件
@@ -206,7 +206,9 @@ export class PoolModel extends DynamicGroupNodeModel {
     orderedLanes = lanes
       .filter((lane) => lane.id !== newLaneId)
       .slice()
-      .sort((a: any, b: any) => a.x - b.x)
+      .sort((a: any, b: any) =>
+        this.isHorizontal ? a.y - b.y : a.x - b.x,
+      )
     if (newLane) {
       const refId = (newLane as any).properties?.referenceLaneId
       const refIndex = refId
@@ -408,8 +410,10 @@ export class PoolModel extends DynamicGroupNodeModel {
     let initialY = this.y
     // 参考泳道（用于定位）
     const referenceLane = lanes.find((lane) => lane.id === laneData?.id)
-    const laneWidth = referenceLane.width
-    const laneHeight = referenceLane.height
+    // 用于确定新泳道尺寸的参考泳道，优先使用referenceLane，其次使用现有第一个泳道，最后回退到泳池尺寸
+    const sizeLane = referenceLane || lanes[0]
+    const laneWidth = sizeLane?.width ?? this.width
+    const laneHeight = sizeLane?.height ?? this.height
 
     if (this.isHorizontal && ['above', 'below'].includes(position)) {
       if (referenceLane) {
