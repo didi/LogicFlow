@@ -55,9 +55,6 @@ function toXml(obj: any, name: string, depth: number) {
   let str = ''
   const prefix = tn + frontSpace
   if (name === '-json') return ''
-  if (obj !== 0 && obj !== false && !obj) {
-    return `${prefix}<${name} />`
-  }
   if (name === '#text') {
     return prefix + escapeXml(String(obj))
   }
@@ -66,6 +63,9 @@ function toXml(obj: any, name: string, depth: number) {
   }
   if (name === '#comment') {
     return `${prefix}<!--${obj}-->`
+  }
+  if (obj !== 0 && obj !== false && !obj) {
+    return `${prefix}<${name} />`
   }
   if (`${name}`.charAt(0) === '-') {
     return ` ${name.substring(1)}="${getAttributes(obj)}"`
