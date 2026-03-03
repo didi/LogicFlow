@@ -99,20 +99,6 @@ export class PoolElements {
    * 提高元素的层级，如果是 group，同时提高其子元素的层级
    * @param model
    */
-  // sendNodeToFront(model?: BaseNodeModel) {
-  //   if (!model || !model.isGroup) return
-
-  //   this.topGroupZIndex++
-  //   model.setZIndex(this.topGroupZIndex)
-  //   if (model.children) {
-  //     const { children } = model as LaneModel
-  //     forEach(Array.from(children), (nodeId) => {
-  //       const node = this.lf.getNodeModelById(nodeId)
-  //       this.sendNodeToFront(node)
-  //     })
-  //   }
-  // }
-
   onSelectionDrop = () => {
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
     selectedNodes.forEach((node) => {
