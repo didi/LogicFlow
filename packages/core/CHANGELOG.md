@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0-alpha.7
+
+### Patch Changes
+
+- fix: 去除anchorProximityValidate配置项
+
 ## 2.2.0-alpha.6
 
 ### Patch Changes

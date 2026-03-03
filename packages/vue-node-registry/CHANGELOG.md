@@ -1,5 +1,14 @@
 # @logicflow/vue-node-registry
 
+## 1.2.0-alpha.7
+
+### Patch Changes
+
+- fix: 修复issue反馈的问题
+  - fix: 修复vue2自定义节点获取props错误
+- Updated dependencies
+  - @logicflow/core@2.2.0-alpha.7
+
 ## 1.2.0-alpha.6
 
 ### Patch Changes
