@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0-alpha.7
+
+### Patch Changes
+
+- feat: 新增泳道插件
+
 ## 2.2.0-alpha.6
 
 ### Patch Changes
