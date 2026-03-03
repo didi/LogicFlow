@@ -55,7 +55,6 @@ export class PoolModel extends DynamicGroupNodeModel {
     this.updateTextPosition()
     this.addEventListeners()
     this.resizePool()
-
   }
 
   // 增加监听事件
@@ -206,9 +205,7 @@ export class PoolModel extends DynamicGroupNodeModel {
     orderedLanes = lanes
       .filter((lane) => lane.id !== newLaneId)
       .slice()
-      .sort((a: any, b: any) =>
-        this.isHorizontal ? a.y - b.y : a.x - b.x,
-      )
+      .sort((a: any, b: any) => (this.isHorizontal ? a.y - b.y : a.x - b.x))
     if (newLane) {
       const refId = (newLane as any).properties?.referenceLaneId
       const refIndex = refId
@@ -251,7 +248,7 @@ export class PoolModel extends DynamicGroupNodeModel {
       }, 0)
       let laneLeftDistance: number = this.x - newWidth / 2
       // 遍历所有泳道，设置它们的位置
-      orderedLanes.forEach(async (lane: any, index: number) => {
+      orderedLanes.forEach((lane: any, index: number) => {
         const newLaneX = laneLeftDistance + lane.width / 2
         // 统一泳道文本位置
         lane.text = {
@@ -402,7 +399,7 @@ export class PoolModel extends DynamicGroupNodeModel {
   addLane(position: 'above' | 'below' | 'left' | 'right', laneData?: any) {
     const lanes = this.getLanes()
     if (lanes.length === 0) {
-      return this._addFirstLane(laneData)
+      return this.createDefaultLane(laneData)
     }
 
     // 计算初始位置
@@ -438,6 +435,7 @@ export class PoolModel extends DynamicGroupNodeModel {
     // laneData可能包含一些运行时属性，需要清理
     const cleanLaneData = cloneDeep(laneData)
     if (cleanLaneData) {
+      delete cleanLaneData.id
       delete cleanLaneData.children
       delete cleanLaneData.properties?.parent
       delete cleanLaneData.properties?.children
@@ -446,7 +444,6 @@ export class PoolModel extends DynamicGroupNodeModel {
     const nodeConfig = merge(
       cleanLaneData,
       {
-        id: undefined,
         type: 'lane',
         x: initialX,
         y: initialY,
