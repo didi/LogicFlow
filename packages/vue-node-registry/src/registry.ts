@@ -15,7 +15,7 @@ type VueNodeEntry = {
   effect?: (keyof LogicFlow.PropertiesType)[]
 }
 
-// Per-instance map: automatically garbage-collected when the GraphModel is destroyed
+// Per-instance map: entries are eligible for garbage collection once the associated GraphModel instance is no longer referenced
 const vueNodesMaps = new WeakMap<GraphModel, Map<string, VueNodeEntry>>()
 
 /**
