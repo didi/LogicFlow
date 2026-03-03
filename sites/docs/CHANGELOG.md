@@ -1,5 +1,12 @@
 # logicflow-docs
 
+## 2.1.16
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/extension@2.1.14
+
 ## 2.1.15
 
 ### Patch Changes

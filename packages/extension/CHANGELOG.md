@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.14
+
+### Patch Changes
+
+- feat: 插件BPMNAdapter支持特殊字符串转义
+
 ## 2.1.13
 
 ### Patch Changes
