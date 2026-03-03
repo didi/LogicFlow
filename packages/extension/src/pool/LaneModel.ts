@@ -16,7 +16,7 @@ export class LaneModel extends DynamicGroupNodeModel {
     // 泳道特定配置
     this.width = data.width || laneConfig.defaultWidth
     this.height = data.height || laneConfig.defaultHeight
-    this.draggable = true // 禁止拖拽（由泳池控制）
+    this.draggable = true // 允许拖拽（实际拖拽逻辑由泳池控制）
     this.resizable = true // 允许调整大小
     this.rotatable = false // 禁止旋转
 
