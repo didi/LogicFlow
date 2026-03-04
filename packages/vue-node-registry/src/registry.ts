@@ -32,8 +32,11 @@ export const vueNodesMap: Record<string, VueNodeEntry> = Object.create(
  */
 export function getVueNodeConfig(
   type: string,
-  graphModel: GraphModel,
+  graphModel?: GraphModel | null,
 ): VueNodeEntry | undefined {
+  if (typeof graphModel !== 'object' || graphModel === null) {
+    return undefined
+  }
   return vueNodesMaps.get(graphModel)?.get(type)
 }
 
