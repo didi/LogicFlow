@@ -1,5 +1,11 @@
 # @logicflow/vue-node-registry
 
+## 1.1.13
+
+### Patch Changes
+
+- feat(vue-node-registry): 为每个 LogicFlow 实例分配 vueNodesMap 范围，以支持嵌套场景
+
 ## 1.1.12
 
 ### Patch Changes
