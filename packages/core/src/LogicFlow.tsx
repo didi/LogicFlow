@@ -1090,7 +1090,8 @@ export class LogicFlow {
   clearData() {
     this.graphModel.clearData()
     // 强制刷新数据, 让 preact 清除对已删除节点的引用
-    this.render({})
+    // 这里使用 renderRawData 绕开可能存在的自定义的Adapter插件实现的adapterIn方法
+    this.renderRawData({})
   }
 
   setOverlapMode(mode: OverlapMode) {
