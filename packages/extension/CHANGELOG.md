@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @logicflow/vue-node-registry@1.2.0
+
 ## 2.2.0-alpha.7
 
 ### Patch Changes
