@@ -90,16 +90,17 @@ export class VueNodeView extends HtmlNode {
       const nodeConfig = getVueNodeConfig(model.type, graphModel)
       if (!nodeConfig) {
         // No registered config for this node type; ensure any existing Teleport mount is cleaned up
-        if (isVue3 && isActive()) {
-          disconnect(this.targetId(), this.props.graphModel.flowId as string)
+        const flowId = this.props.graphModel.flowId
+        if (isVue3 && isActive() && flowId) {
+          disconnect(this.targetId(), flowId)
         }
         return
       }
-      const { component } = nodeConfig
       if (!component) {
         // Config exists but has no component; also clean up any existing Teleport mount
-        if (isVue3 && isActive()) {
-          disconnect(this.targetId(), this.props.graphModel.flowId as string)
+        const flowId = this.props.graphModel.flowId
+        if (isVue3 && isActive() && flowId) {
+          disconnect(this.targetId(), flowId)
         }
         return
       }
