@@ -1,11 +1,5 @@
 # @logicflow/vue-node-registry
 
-## 1.1.14-alpha.1
-
-### Patch Changes
-
-- fix @logicflow/vue-node-registry 1.1.13版本打包没有js问题
-
 ## 1.2.0-alpha.7
 
 ### Patch Changes

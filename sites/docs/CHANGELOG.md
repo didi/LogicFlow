@@ -1,11 +1,5 @@
 # logicflow-docs
 
-## 2.2.8
-
-### Patch Changes
-
-- @logicflow/extension@2.2.0
-
 ## 2.2.7
 
 ### Patch Changes
