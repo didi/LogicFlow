@@ -47,6 +47,11 @@
     "@logicflow/core": "workspace:*",
     "vue": "^3.0.0"
   },
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
   "author": {
     "name": "boyongjiong",
     "email": "boyongjiong@gmail.com"

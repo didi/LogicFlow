@@ -45,5 +45,10 @@
   },
   "devDependencies": {
     "@types/dagre": "^0.7.53"
-  }
+  },
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ]
 }
