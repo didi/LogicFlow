@@ -3,7 +3,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-undef */
 /* eslint-disable no-tabs */
-import { BPMNAdapter } from '..'
+import { BPMNAdapter } from '../../src/bpmn-elements-adapter'
 
 describe('Test BPMNAdapter: export xml', () => {
   const graphData = {
@@ -398,7 +398,7 @@ describe('Test BPMNAdapter: export xml', () => {
       },
     ],
   }
-  const xml = `    <bpmn:definitions id="Definitions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="http://logic-flow.org" exporter="logicflow" exporterVersion="1.2.10">	
+  const xml = `<bpmn:definitions id="Definitions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="http://logic-flow.org" exporter="logicflow" exporterVersion="1.2.10">	
   <bpmn:process isExecutable="true" id="Process">	
       <bpmn:startEvent id="Event_0rqndvp" name="开始" />	
       <bpmn:subProcess id="121213b3-8fad-4b41-bb1e-a7672e9bfc07">	
@@ -407,25 +407,25 @@ describe('Test BPMNAdapter: export xml', () => {
           <bpmn:serviceTask id="Activity_383p4ds" name="服务任务">	
               <bpmn:incoming>Flow_39cdevi</bpmn:incoming>	
           </bpmn:serviceTask>	
-          <bpmn:boundaryEvent id="Event_3nm6g45" name="时间边界" attachedToRef="Activity_383p4ds" cancelActivity="false" definitionType="bpmn:timerEventDefinition" timerValue="R5/PT10S" timerType="timeCycle" definitionId="bpmn:timerEventDefinitionEventDefinition_0ukj8qs" isBoundaryEvent="true">	
+          <bpmn:boundaryEvent id="Event_3nm6g45" name="时间边界" attachedToRef="Activity_383p4ds" cancelActivity="false" isBoundaryEvent="true">	
             <bpmn:timerEventDefinition id="bpmn:timerEventDefinitionEventDefinition_0ukj8qs"><bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R5/PT10S</bpmn:timeCycle></bpmn:timerEventDefinition>	
           </bpmn:boundaryEvent>	
-          <bpmn:parallelGateway id="Gateway_10p8112" name="并行网关" expr="\${A > B}">	
+          <bpmn:parallelGateway id="Gateway_10p8112" name="并行网关" expr="\${A &gt; B}">	
               <bpmn:outgoing>Flow_39cdevi</bpmn:outgoing>	
               <bpmn:outgoing>Flow_1mpq63n</bpmn:outgoing>	
           </bpmn:parallelGateway>	
           <bpmn:inclusiveGateway id="Gateway_36vu52v" name="包容网关">	
               <bpmn:incoming>Flow_1mpq63n</bpmn:incoming>	
           </bpmn:inclusiveGateway>	
-          <bpmn:sequenceFlow id="Flow_39cdevi" sourceRef="Gateway_10p8112" targetRef="Activity_383p4ds" expressionType="cdata" condition="foo &gt; bar">	
+          <bpmn:sequenceFlow id="Flow_39cdevi" sourceRef="Gateway_10p8112" targetRef="Activity_383p4ds" expressionType="cdata" condition="foo &amp;gt; bar">	
             <bpmn:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[\${foo &gt; bar}]]></bpmn:conditionExpression>	
           </bpmn:sequenceFlow>	
           <bpmn:sequenceFlow id="Flow_1mpq63n" sourceRef="Gateway_10p8112" targetRef="Gateway_36vu52v" isDefaultFlow="true" />	
       </bpmn:subProcess>	
-      <bpmn:boundaryEvent id="Event_2ffv4vc" name="时间边界" attachedToRef="Activity_05avavm" cancelActivity="false" definitionType="bpmn:timerEventDefinition" timerValue="" timerType="" definitionId="bpmn:timerEventDefinitionEventDefinition_0anvuso" isBoundaryEvent="true">	
+      <bpmn:boundaryEvent id="Event_2ffv4vc" name="时间边界" attachedToRef="Activity_05avavm" cancelActivity="false" isBoundaryEvent="true">	
         <bpmn:timerEventDefinition id="bpmn:timerEventDefinitionEventDefinition_0anvuso"/>	
       </bpmn:boundaryEvent>	
-      <bpmn:boundaryEvent id="Event_2o2l6ht" name="时间边界" attachedToRef="Activity_28r64ai" cancelActivity="false" definitionType="bpmn:timerEventDefinition" timerValue="PT15S" timerType="timeDuration" definitionId="bpmn:timerEventDefinitionEventDefinition_11s0ei9" isBoundaryEvent="true">	
+      <bpmn:boundaryEvent id="Event_2o2l6ht" name="时间边界" attachedToRef="Activity_28r64ai" cancelActivity="false" isBoundaryEvent="true">	
         <bpmn:timerEventDefinition id="bpmn:timerEventDefinitionEventDefinition_11s0ei9"><bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration></bpmn:timerEventDefinition>	
       </bpmn:boundaryEvent>	
       <bpmn:parallelGateway id="Gateway_0ke5iid" name="并行网关">	

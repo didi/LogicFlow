@@ -13,9 +13,7 @@
   "files": [
     "dist",
     "es",
-    "lib",
-    "src",
-    "readme.md"
+    "lib"
   ],
   "scripts": {
     "test": "jest",
