@@ -24,6 +24,9 @@ const config: Config = {
 
   // The test environment that will be used for testing
   testEnvironment: 'jest-environment-jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
@@ -40,7 +43,7 @@ const config: Config = {
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: ['node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)'],
+  transformIgnorePatterns: ['/node_modules/'],
 }
 
 export default config
