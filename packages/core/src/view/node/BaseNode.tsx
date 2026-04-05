@@ -529,7 +529,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         allowResize,
       },
       gridSize,
-      transformModel: { SCALE_X },
+      transformModel,
     } = graphModel
     const { isHitable, draggable, transform } = model
     const { className = '', ...restAttributes } = model.getOuterGAttributes()
@@ -556,7 +556,7 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
       )
     } else {
       if (adjustNodePosition && draggable) {
-        this.stepDrag.setStep(gridSize * SCALE_X)
+        this.stepDrag.setStep(gridSize * transformModel.SCALE_X)
       }
       nodeShape = (
         <g
