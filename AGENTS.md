@@ -1,167 +1,195 @@
 # AGENTS.md
 
-This file defines the default working rules for GitHub Copilot and human contributors in the LogicFlow repository. Use it as the project-level contract before making code, docs, or example changes.
+This file is the repository entry point for agents and contributors working in LogicFlow. Use it to answer three questions before editing anything:
 
-## 1. Repository Scope
+1. Where should this change live?
+2. What boundaries must remain intact?
+3. What is the smallest meaningful validation for this change?
 
-LogicFlow is a pnpm-based monorepo.
+## 1. Repository Shape
 
-- `packages/core`: core graph editor and interaction model.
-- `packages/engine`: execution engine for browser and Node.js scenarios.
-- `packages/extension`: built-in plugins and integration extensions.
-- `packages/layout`: layout-related utilities.
-- `packages/react-node-registry`: React node registry support.
-- `packages/vue-node-registry`: Vue node registry support.
-- `examples/`: runnable demos and integration examples.
-- `sites/docs`: documentation site.
+LogicFlow is a pnpm monorepo with three main product surfaces and several support packages.
 
-When making a change, identify the narrowest package or app that owns the behavior and keep the change local to that area.
+- `packages/core`: graph editor runtime, built-in shapes, interaction model, rendering, and extension hooks.
+- `packages/engine`: graph execution engine for browser and Node.js environments. It does not depend on `packages/core`.
+- `packages/extension`: optional editor plugins, BPMN support, built-in UI components, and shared materials built on top of `packages/core`.
+- `packages/layout`: automatic layout helpers built around the public core graph model.
+- `packages/react-node-registry`: React-backed custom node rendering.
+- `packages/vue-node-registry`: Vue-backed custom node rendering.
+- `examples/`: runnable demos used for focused verification.
+- `sites/docs`: documentation site and docs examples.
 
-## 2. Required Working Rules
+Default rule: change the narrowest package that owns the behavior. Do not patch examples to compensate for package bugs.
 
-- Use `pnpm` only. Do not use npm or yarn in this repository.
-- Prefer minimal, targeted changes. Do not refactor unrelated areas while fixing a local issue.
-- Do not hand-edit generated build outputs in `dist`, `es`, `lib`, or generated style artifacts unless the task is specifically about the build pipeline.
-- Keep public APIs backward-compatible unless the task explicitly requires a breaking change.
-- Reuse existing patterns from the owning package before introducing a new abstraction.
-- If a change touches multiple packages, state the dependency between them clearly in the PR description.
+## 2. Working Contract
 
-## 3. How To Work In This Monorepo
+- Use `pnpm` only.
+- Prefer minimal, local changes over broad refactors.
+- Edit source files in `src` rather than generated outputs in `dist`, `es`, or `lib`.
+- Preserve public API compatibility unless the task explicitly requires a breaking change.
+- Reuse package-local patterns before introducing new abstractions.
+- If a change crosses package boundaries, document that dependency in the PR.
+- Treat examples as verification targets, not as the primary place to implement shared behavior.
 
-### Install
+## 3. Task Routing
 
-```sh
-pnpm install
-```
+Use this section to decide where to start reading and editing.
 
-### Build all packages
+### Editor behavior and graph interaction
+
+Start in `packages/core`.
+
+Typical work:
+- node or edge drag behavior
+- selection, keyboard, history, snapline, zoom, viewport behavior
+- graph state transitions and event emission
+- built-in node or edge rendering
+
+Primary code areas:
+- `packages/core/src/LogicFlow.tsx`
+- `packages/core/src/model`
+- `packages/core/src/view`
+- `packages/core/src/view/behavior`
+- `packages/core/src/history`
+- `packages/core/src/event`
+
+### Execution semantics
+
+Start in `packages/engine`.
+
+Typical work:
+- execution scheduling
+- node execution lifecycle
+- resume, interrupt, recorder, or platform-specific behavior
+- browser versus Node execution support
+
+Primary code areas:
+- `packages/engine/src/FlowModel.ts`
+- `packages/engine/src/Scheduler.ts`
+- `packages/engine/src/nodes`
+- `packages/engine/src/recorder`
+- `packages/engine/src/platform`
+
+### Plugins, BPMN, built-in editor add-ons
+
+Start in `packages/extension`.
+
+Typical work:
+- BPMN elements or adapters
+- context menu, mini-map, control panel, drag-and-drop panel
+- group, pool, dynamic-group, node resize, flow-path, auto-layout integration
+- built-in materials such as curved edges or selection helpers
+
+Primary code areas:
+- `packages/extension/src/bpmn`
+- `packages/extension/src/bpmn-adapter`
+- `packages/extension/src/components`
+- `packages/extension/src/materials`
+- `packages/extension/src/tools`
+- `packages/extension/src/pool`
+
+### Automatic layout
+
+Start in `packages/layout`.
+
+This package should stay focused on layout algorithms and layout-facing adaptation. Do not move core editor state logic here.
+
+### Framework-backed custom nodes
+
+Start in `packages/react-node-registry` or `packages/vue-node-registry`.
+
+These packages bridge framework components into the core node system. Keep framework-specific rendering concerns here rather than inside `packages/core`.
+
+### Demos and documentation
+
+Use `examples/` and `sites/docs` to verify or document package behavior.
+
+Keep the fix in the owning package unless the task is explicitly demo-only or docs-only.
+
+## 4. Stable Package Boundaries
+
+These boundaries should remain true unless the repository is intentionally being redesigned.
+
+- `packages/core` owns editor state, rendering, interaction, registration, and extension hooks.
+- `packages/engine` owns execution and must remain usable without `packages/core`.
+- `packages/extension` depends on public core extension points; it should not require private core internals to function.
+- `packages/layout` should consume graph data or public core models, not duplicate editor behavior.
+- React and Vue node registry packages are adapters, not alternate graph engines.
+- Packages layered on top of `packages/core` should treat `@logicflow/core` as the host runtime provided by the consumer. Do not introduce or restore hard runtime dependencies that bundle a second copy of core unless the package truly cannot function as an extension.
+- Framework adapter packages should treat framework runtimes such as `react`, `react-dom`, and `vue` as consumer-provided peers rather than silently bundling their own copies.
+
+## 5. Validation Strategy
+
+Run the smallest meaningful validation for the area you touched.
+
+- `packages/core`: build the package and verify with the nearest editor example, usually `examples/feature-examples`.
+- `packages/engine`: run package tests first; use engine examples when behavior is environment-specific.
+- `packages/extension`: build the package and verify the relevant feature in `examples/feature-examples` or another targeted demo.
+- framework integration packages: verify with `examples/next-app`, `examples/vue3-app`, or another matching app.
+- docs changes: verify in `sites/docs`.
+
+Repository-level commands that are stable enough to rely on:
 
 ```sh
 pnpm build
+pnpm test
+pnpm run lint:ts
+pnpm prettier
 ```
 
-### Typical package workflow
-
-When changing a package under `packages/*`:
-
-1. Run `pnpm run build:watch` inside the target package.
-2. Start the most relevant example app to verify behavior.
-3. Keep the verification focused on the package you changed.
-
-Example:
+Package-level workflow that usually matches source changes:
 
 ```sh
-cd packages/core
+cd packages/<target-package>
 pnpm run build:watch
 
-cd examples/feature-examples
+cd examples/<closest-example>
 pnpm start
 ```
 
-Use a more specific example when it better matches the change:
+Do not claim validation you did not run.
 
-- `examples/engine-browser-examples` for browser engine behavior.
-- `examples/engine-node-examples` for Node.js engine behavior.
-- `examples/next-app`, `examples/vue3-app`, or `examples/material-ui-demo` for framework integration work.
-- `sites/docs` for documentation site changes.
+## 6. Commit And PR Expectations
 
-## 4. Validation Expectations
-
-Run the smallest meaningful validation set for the area you changed.
-
-- For source changes, run the relevant build command and the nearest demo or docs app.
-- For lint-sensitive changes, run `pnpm run lint:ts` when the touched files are under `src`.
-- For formatting-heavy edits, run `pnpm prettier` or format only the touched files with the existing toolchain.
-- For behavior changes, run `pnpm test` when tests exist for the affected area.
-
-Current repository reality:
-
-- Root test command: `pnpm test`
-- Engine has explicit tests and should be validated when engine behavior changes.
-- Some packages have limited or no automated tests, so example-based verification is often required.
-
-Do not claim test coverage you did not run.
-
-## 5. Commit And PR Rules
-
-Follow the existing Angular-style commit convention from `CONTRIBUTING.md`:
+Commit messages follow the Angular-style convention documented in `CONTRIBUTING.md`:
 
 ```text
 <type>(<scope>): <subject>
 ```
 
-Common commit types:
-
-- `feat`
-- `fix`
-- `docs`
-- `style`
-- `refactor`
-- `perf`
-- `test`
-- `chore`
-- `deps`
-
 Before opening a PR, make sure the description covers:
 
 1. What changed.
 2. Why the change is needed.
-3. How the change was verified.
+3. How it was verified.
 4. Any compatibility risk, migration note, or reviewer focus area.
 
-Keep the PR content aligned with the repository template in `.github/workflows/PULL_REQUEST_TEMPLATE.md`.
+Use `.github/workflows/PULL_REQUEST_TEMPLATE.md` as the PR template source of truth.
 
-## 6. Editing Guidelines By Area
+## 7. Architecture Index
 
-### Packages
+Read these documents before making structural changes in the corresponding package:
 
-- Prefer fixing root causes in `src` rather than patching built output.
-- Preserve package-level API shape and naming unless the task is an intentional API update.
-- Check sibling implementations before adding duplicated logic.
+- `packages/core/ARCHITECTURE.md`
+- `packages/engine/ARCHITECTURE.md`
+- `packages/extension/ARCHITECTURE.md`
 
-### Examples
-
-- Use examples to validate package behavior, not to hide missing fixes in package code.
-- Keep demo-only hacks out of shared packages.
-- If an example requires a temporary workaround, document why in the PR.
-
-### Docs
-
-- Update docs when public behavior, APIs, or user-visible workflows change.
-- Keep examples and docs in sync when a feature contract changes.
-
-## 7. Things To Avoid
-
-- Do not switch package managers.
-- Do not rewrite large files for small behavior changes.
-- Do not introduce unrelated formatting churn across the monorepo.
-- Do not edit multiple example apps unless the change truly affects multiple integration targets.
-- Do not assume CI or hidden automation will catch missing validation; verify locally when possible.
-
-## 8. Useful Commands
-
-```sh
-pnpm build
-pnpm build:cjs
-pnpm build:esm
-pnpm build:umd
-pnpm build:dev
-pnpm test
-pnpm run lint:ts
-pnpm prettier
-pnpm changeset
-pnpm changeset:version
-```
-
-## 9. Primary References
-
-Use these files as the source of truth when this document is not specific enough:
+Use these repository files as supporting references when the architecture docs are not specific enough:
 
 - `README.md`
 - `CONTRIBUTING.md`
 - `package.json`
 - `turbo.json`
 - `lerna.json`
-- `.github/workflows/PULL_REQUEST_TEMPLATE.md`
 
-If a future task needs finer-grained Copilot behavior, add more specific instructions under `.github/` without weakening the repository-level rules in this file.
+## 8. What Not To Put Here
+
+This file is intentionally not a full architecture manual.
+
+Do not turn it into:
+- a file-by-file code walkthrough
+- a temporary task checklist
+- a dump of unstable implementation details
+- a replacement for package-level architecture docs
+
+If a future task needs more agent-specific behavior, add narrower instructions under `.github/` instead of expanding this file into package internals.

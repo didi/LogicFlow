@@ -3,16 +3,19 @@
 layout 扩展包
 
 ## 安装
+
+此包是基于 `@logicflow/core` 的布局扩展，使用方需要同时安装 core。
+
 ```shell
-npm install @logicflow/layout
+npm install @logicflow/core @logicflow/layout
 ```
 or
 ```shell
-yarn add @logicflow/layout
+yarn add @logicflow/core @logicflow/layout
 ```
 or
 ```shell
-pnpm add @logicflow/layout
+pnpm add @logicflow/core @logicflow/layout
 ```
 
 ## 使用方式

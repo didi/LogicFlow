@@ -36,13 +36,10 @@
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@logicflow/core": "workspace:*",
-    "@logicflow/vue-node-registry": "workspace:*"
+    "@logicflow/core": "workspace:*"
   },
   "dependencies": {
     "@antv/hierarchy": "^0.6.11",
-    "@logicflow/core": "workspace:*",
-    "@logicflow/vue-node-registry": "workspace:*",
     "classnames": "^2.3.2",
     "lodash-es": "^4.17.21",
     "medium-editor": "^5.23.3",
@@ -52,6 +49,7 @@
     "vanilla-picker": "^2.12.3"
   },
   "devDependencies": {
+    "@logicflow/core": "workspace:*",
     "less": "^4.1.1",
     "postcss-url": "^10.1.3",
     "postcss-import": "^16.1.0",
