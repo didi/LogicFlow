@@ -29,3 +29,4 @@ logic-flow-docs.tar.gz
 .umi/
 tmp
 tmp-production
+package-lock.json
