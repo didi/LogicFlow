@@ -21,9 +21,10 @@
     "start": "cd ./examples/feature-examples && pnpm start",
     "test": "jest",
     "changeset": "changeset",
+    "changeset:pre:enter": "changeset pre enter alpha",
+    "changeset:pre:exit": "changeset pre exit",
     "changeset:version": "changeset version",
     "publish:only": "changeset publish --registry=https://registry.npmjs.org",
-    "publish:alpha": "changeset publish --tag alpha --registry=https://registry.npmjs.org",
     "setup:husky": "husky install .husky",
     "prepare": "is-ci || run-p setup:husky build"
   },
