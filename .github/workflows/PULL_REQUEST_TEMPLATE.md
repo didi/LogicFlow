@@ -35,4 +35,4 @@
 - [ ] I have read the [**CONTRIBUTING**](https://github.com/didi/LogicFlow/blob/next/CONTRUBUTING.en-US.md) document
 - [ ] I have added tests to cover my changes.
 - [ ] All new and existing tests passed.
-- [ ] If lockfiles changed, I explained why and separated lockfile-only changes when possible.
+- [ ] If this PR includes lockfile changes, I explained why and separated lockfile-only changes when possible.
