@@ -46,12 +46,6 @@ $ git push origin branch-name
 3. 框架测试点（可以关联到测试文件，不用详细描述，关键点即可）
 4. 关注点（针对用户而言，可以没有，一般是不兼容更新等，需要额外提示）
 
-#### Lockfile 变更约定
-
-- `package-lock.json`、`pnpm-lock.yaml`、`yarn.lock` 属于自动生成文件。
-- 如仅涉及 lockfile 变更，请尽量单独发起 PR，不与业务代码混合提交。
-- 如 PR 同时包含业务代码与 lockfile 变更，请在描述中明确说明 lockfile 变化来源（例如依赖升级、安装器版本调整）。
-
 ### 代码风格
 
 你的代码风格必须通过 eslint，你可以运行 `$ pnpm run lint:ts` 本地测试
