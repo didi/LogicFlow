@@ -3,16 +3,19 @@
 LogicFlow Shape for rendering Vue components.
 
 ## Installation
+
+此包将 Vue 组件桥接到 LogicFlow 节点系统，`@logicflow/core` 和 `vue` 需要由使用方显式提供。Vue 2 场景下，如果项目未通过 `vue-demi` 自动满足要求，还需要安装 `@vue/composition-api`。
+
 ```shell
-npm install @logicflow/vue-node-registry
+npm install @logicflow/core @logicflow/vue-node-registry vue
 ```
 or
 ```shell
-yarn add @logicflow/vue-node-registry
+yarn add @logicflow/core @logicflow/vue-node-registry vue
 ```
 or
 ```shell
-pnpm add @logicflow/vue-node-registry
+pnpm add @logicflow/core @logicflow/vue-node-registry vue
 ```
 
 ## Usage

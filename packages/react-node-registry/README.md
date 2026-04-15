@@ -3,16 +3,19 @@
 LogicFlow Shape for rendering React components.
 
 ## Installation
+
+此包将 React 组件桥接到 LogicFlow 节点系统，`@logicflow/core`、`react`、`react-dom` 需要由使用方显式提供。
+
 ```shell
-npm install @logicflow/react-node-registry
+npm install @logicflow/core @logicflow/react-node-registry react react-dom
 ```
 or
 ```shell
-yarn add @logicflow/react-node-registry
+yarn add @logicflow/core @logicflow/react-node-registry react react-dom
 ```
 or
 ```shell
-pnpm add @logicflow/react-node-registry
+pnpm add @logicflow/core @logicflow/react-node-registry react react-dom
 ```
 
 ## Usage
