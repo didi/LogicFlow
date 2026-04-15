@@ -1,5 +1,13 @@
 # @logicflow/react-node-registry
 
+## 1.2.1
+
+### Patch Changes
+
+- bump version 2.2.1
+- Updated dependencies
+  - @logicflow/core@2.2.1
+
 ## 1.2.0
 
 ### Patch Changes

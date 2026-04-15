@@ -84,7 +84,7 @@
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.5",
-    "@changesets/cli": "^2.27.6",
+    "@changesets/cli": "^2.30.0",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@jest/globals": "^29.6.4",
