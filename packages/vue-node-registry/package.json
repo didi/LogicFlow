@@ -4,8 +4,8 @@
   "description": "LogicFlow Vue Component Node Registry",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/index.js",
-  "jsdeliver": "dist/index.js",
+  "unpkg": "dist/index.min.js",
+  "jsdelivr": "dist/index.min.js",
   "types": "lib/index.d.ts",
   "keywords": [
     "@logicflow/vue-node-registry",

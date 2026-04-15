@@ -8,8 +8,8 @@
   "browser": {
     "./es/platform/node/index.js": "./es/platform/browser/index.js"
   },
-  "jsdeliver": "dist/index.js",
-  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.min.js",
+  "unpkg": "dist/index.min.js",
   "files": [
     "dist",
     "es",
