@@ -28,6 +28,7 @@ describe('util/node', () => {
       y: 0,
       width: 100,
       height: 100,
+      rotate: 0,
     }
     expect(isInNode(position1, node)).toBeTruthy()
     expect(isInNode(position2, node)).toBeFalsy()

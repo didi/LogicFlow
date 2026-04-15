@@ -1,4 +1,4 @@
-import History from '../../src/history/History'
+import History from '../../src/history'
 import EventEmitter from '../../src/event/eventEmitter'
 
 describe('history', () => {

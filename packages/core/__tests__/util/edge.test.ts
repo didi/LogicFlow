@@ -83,6 +83,8 @@ describe('util/edge', () => {
       minY: 0,
       maxX: 3,
       maxY: 3,
+      x: 1.5,
+      y: 1.5,
       centerX: 1.5,
       centerY: 1.5,
       width: 3,
@@ -193,6 +195,7 @@ describe('util/edge', () => {
     y: 0,
     width: 20,
     height: 20,
+    rotate: 0,
   }
   test('is segments in node', () => {
     expect(isSegmentsInNode(segment1[0], segment1[1], bbox)).toBeTruthy()

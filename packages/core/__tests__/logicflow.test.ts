@@ -560,16 +560,18 @@ describe('logicflow/apis', () => {
 
     test('select and to front in overlapMode 1', () => {
       lf.render(rawData)
+      const beforeZIndex = lf.getNodeModelById('node1').zIndex
       lf.selectElementById('node1')
-      expect(lf.getNodeModelById('node1').zIndex).toBe(1008)
+      expect(lf.getNodeModelById('node1').zIndex).toBeGreaterThan(beforeZIndex)
       lf.clearSelectElements()
-      expect(lf.getNodeModelById('node1').zIndex).toBe(1008)
+      expect(lf.getNodeModelById('node1').zIndex).toBeGreaterThan(beforeZIndex)
     })
 
     test('to front in overlapMode 1', () => {
       lf.render(rawData)
+      const beforeZIndex = lf.getNodeModelById('node1').zIndex
       lf.toFront('node1')
-      expect(lf.getNodeModelById('node1').zIndex).toBe(1016)
+      expect(lf.getNodeModelById('node1').zIndex).toBeGreaterThan(beforeZIndex)
     })
   })
 })

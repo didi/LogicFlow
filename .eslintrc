@@ -11,6 +11,9 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
+  "env": {
+    "jest": true
+  },
   "rules": {
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/ban-ts-comment": "off",

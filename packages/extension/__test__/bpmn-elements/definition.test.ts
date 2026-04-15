@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-undef */
 import LogicFlow from '@logicflow/core'
-import { BPMNElements } from '../index'
+import { BPMNElements } from '../../src/bpmn-elements/index'
+import { messageIcon } from '../../src/bpmn-elements/presets/icons'
 
 // const registerEventNodes = new (jest.fn())();
 // const registerGatewayNodes = new (jest.fn())();
@@ -37,7 +38,7 @@ describe('Test bpmn elements: definitionConfig', () => {
   //   ]
 
   test('nodes startEvent, intermediateCatchEvent, boundaryEvent, contain default definition: bpmn:timerEventDefinition', () => {
-    expect(Object.keys(definition)).toEqual([
+    expect(Object.keys(definition).sort()).toEqual([
       'boundaryEvent',
       'intermediateCatchEvent',
       'startEvent',
