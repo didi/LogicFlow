@@ -1,4 +1,4 @@
-# Copilot Cloud Agent Instructions for `didi/LogicFlow`
+# Copilot Cloud Agent Instructions for LogicFlow Repository
 
 ## Start Here First
 
@@ -66,7 +66,7 @@ During onboarding, the following issues were encountered:
      ```
 
 2. `pnpm install` failed in `examples/feature-examples` postinstall with Umi error:
-   - `No such module: http_parser`
+   - exact error observed: `No such module: http_parser`
    - Workaround used for CI/agent setup:
      ```sh
      pnpm install --ignore-scripts
