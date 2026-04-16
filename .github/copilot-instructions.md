@@ -2,7 +2,7 @@
 
 ## Start Here First
 
-1. Read `/home/runner/work/LogicFlow/LogicFlow/AGENTS.md` before editing anything.
+1. Read `AGENTS.md` before editing anything.
 2. Use `pnpm` only (enforced by repo preinstall).
 3. Make the smallest change in the owning package; do not patch examples to hide package bugs.
 4. Edit source in `src/`, not generated `dist/`, `es/`, or `lib/`.
@@ -36,7 +36,7 @@ For structural or cross-cutting changes, also read:
 
 ## Build, Lint, and Test Commands
 
-Run from repo root (`/home/runner/work/LogicFlow/LogicFlow`):
+Run from the repository root:
 
 ```sh
 pnpm run lint:ts
