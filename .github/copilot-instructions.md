@@ -76,7 +76,7 @@ During onboarding, the following issues were encountered:
 ## PR and Commit Expectations
 
 - Commit message format: Angular style (`<type>(<scope>): <subject>`).
-- Use `.github/workflows/PULL_REQUEST_TEMPLATE.md` for PR structure.
+- Use the repository PR template for PR structure (check `.github/` for the current template location).
 - In PR description, cover:
   1. What changed
   2. Why it was needed
