@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.1
+
+### Patch Changes
+
+- bump version 2.2.1
+
+## 2.2.0
+
+### Patch Changes
+
+- 发布正式版
+
 ## 2.2.0-alpha.7
 
 ### Patch Changes

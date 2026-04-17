@@ -1,6 +1,6 @@
 {
   "name": "logicflow-docs",
-  "version": "2.2.7",
+  "version": "2.2.9",
   "private": true,
   "description": "LogicFlow sites deployed on gh-pages",
   "scripts": {
