@@ -1,8 +1,11 @@
 ---
 nav: API
-title: 主题样式
+group:
+  title: 类型字典
+  order: 3
+title: 主题相关
 toc: content
-order: 0
+order: 5
 ---
 本文主要介绍 LogicFlow 主题样式的类型定义。
 
@@ -49,7 +52,7 @@ order: 0
 | ry            | number           | y 轴方向的圆角半径。此属性为可选项。                                                                                                                                |
 | width         | number           | 形状的宽度。此属性为可选项。                                                                                                                                        |
 | height        | number           | 形状的高度。此属性为可选项。                                                                                                                                        |
-| path          | number           | 定义自定义形状的 SVG 路径字符串。此属性为可选项。                                                                                                                   |
+| path          | string           | 定义自定义形状的 SVG 路径字符串。此属性为可选项。                                                                                                                   |
 | [key: string] | unknown          | 允许在主题中包含额外的自定义属性，并将其传递给 DOM。这为扩展主题提供了灵活性。详情请参考 [svg 属性规范](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Attribute) |
 
 ## NodeTheme（节点主题）
@@ -85,7 +88,7 @@ LogicFlow 中定义的各种边主题类型都扩展自 [CommonTheme](#commonthe
 `EdgePolylineTheme`表示折线边的主题，它与[EdgeTheme](#edgetheme)类型相同，且没有做额外扩展。
 
 ### EdgeBezierTheme
-`EdgeBezierTheme` 表示曲线边的主题，曲线边在直线边的基础上扩展了一下特定属性：
+`EdgeBezierTheme` 表示曲线边的主题，曲线边在直线边的基础上扩展了以下特定属性：
 
 | 属性名       | 类型                        | 描述                     |
 | ------------ | --------------------------- | ------------------------ |
@@ -127,7 +130,7 @@ LogicFlow 中定义的各种边主题类型都扩展自 [CommonTheme](#commonthe
 | background | [RectTheme](#recttheme) (可选) | 文本节点的背景样式。 |
 
 ### NodeTextTheme
-`NodeTextTheme` 类型定义了文本节点的主题样式。它继承自 `TextTheme`，额外扩展了以下属性：
+`NodeTextTheme` 类型定义了节点上文本的主题样式。它继承自 `TextTheme`，额外扩展了以下属性：
 
 | 属性名       | 类型                                         | 描述                                                                                                                               |
 | ------------ | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
@@ -169,11 +172,11 @@ LogicFlow 中定义的各种边主题类型都扩展自 [CommonTheme](#commonthe
 | 属性名         | 类型          | 描述                                                                                                                                                                                            |
 | -------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | offset         | number        | 箭头长度。例如，对于符号 "->"，offset 表示箭头大于号的宽度。                                                                                                                                    |
-| refX           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refX 表示箭头大于号的高度。                                                                                                                            |
-| refY           | number (可选) | 箭头垂直于边的距离。例如，对于符号 "->"，refY 表示箭头大于号的高度。                                                                                                                            |
-| verticalLength | number        | 箭头垂直于边的距离。例如，对于符号 "->"，verticalLength 表示箭头大于号的高度。                                                                                                                  |
-| endArrowType   | string (可选) | 终点箭头类型，目前LogicFlow内置支持用户设置以下4种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>`none`: 无箭头<br/>内部默认会用`solid` |
-| startArrowType | string (可选) | 起点箭头类型，目前LogicFlow内置支持用户设置以下4种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>`none`: 无箭头<br/>内部默认会用`solid` |
+| refX           | number (可选) | SVG marker 的 x 轴参考点，用于控制箭头相对边终点的水平偏移。                                                                                                           |
+| refY           | number (可选) | SVG marker 的 y 轴参考点，用于控制箭头相对边终点的垂直偏移。                                                                                                           |
+| verticalLength | number        | 箭头垂直于边方向的长度。例如，对于符号 "->"，verticalLength 表示箭头大于号的高度。                                                                                       |
+| endArrowType   | string (可选) | 终点箭头类型，目前 LogicFlow 内置支持用户设置以下 5 种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>`none`: 无箭头<br/>内部默认会用 `solid` |
+| startArrowType | string (可选) | 起点箭头类型，目前 LogicFlow 内置支持用户设置以下 5 种箭头：<br/>`solid`: 实心箭头<br/>`hollow`: 线条箭头<br/>`diamond`: 菱形箭头<br/>`circle`: 圆形箭头<br/>`none`: 无箭头<br/>内部默认会用 `solid` |
 | strokeLinecap  | string (可选) | 线条的端点样式，作用同SVG strokeLinecap，支持传入：'butt'、'round'、'square' 三个值                                                                                                             |
 | strokeLinejoin | string (可选) | 线条的连接样式，作用同SVG strokeLinecap，支持传入：'miter'、'round'、'bevel' 三个值                                                                                                             |
 

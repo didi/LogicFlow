@@ -67,7 +67,7 @@ can be achieved using different approaches 😊.
 
 <code id="node-custom" src="../../../src/tutorial/basic/node/custom"></code>
 
-[lf.register](../../api/detail/index.en.md#register): Register custom nodes. After registration,
+[lf.register](../../api/logicflow-instance/register.en.md#register): Register custom nodes. After registration,
 custom nodes can be used.
 
 :::info
@@ -101,19 +101,19 @@ class CustomNode extends RectResize.view {
 
 LogicFlow categorizes custom node appearance into two ways: `custom node style attribute`
 and `custom node shape attribute`. For more details on how to define them,
-see [NodeModelApi](../../api/model/nodeModel.en.md)。
+see [NodeModelApi](../../api/runtime-model/nodeModel.en.md)。
 
 #### 1. style attributes
 
 In LogicFlow, the appearance attributes represent the control of the node's `border`, `color`, and
 other appearance-oriented attributes. These properties can be controlled directly
-through [theme-configuration](../../api/theme.en.md). Customizing node styles can be seen as
+through [theme-configuration](../../api/logicflow-instance/theme.en.md). Customizing node styles can be seen as
 redefining the theme based on the current node type.
 
 For example, if all `rect` nodes in the theme have their border color defined as red `stroke: red`,
 then you can redefine `UserTask` to have a blue `stroke: blue` border when customizing the
 node `UserTask`. For more granular node style control,
-see [API Style Attributes](../../api/model/nodeModel.en.md#style-attributes).
+see [API Style Attributes](../../api/runtime-model/nodeModel.en.md#style-attributes).
 
 ```tsx | pure
 class UserTaskModel extends RectNodeModel {
@@ -134,7 +134,7 @@ points for nodes and start/end points for connections based on them. Customizing
 requires modification within the `setAttributes` method or `initNodeData` method.
 
 LogicFlow has some shape attributes specific to each base node.
-See [API Shape Attributes](../../api/model/nodeModel.en.md#shape-attributes) for details.
+See [API Shape Attributes](../../api/runtime-model/nodeModel.en.md#shape-attributes) for details.
 
 ```tsx | pure
 class customRectModel extends RectNodeModel {
@@ -166,7 +166,7 @@ In the previous LogicFlow example, it was mentioned that both nodes and edges in
 retain a properties field. This field allows developers not only to modify elements' `styles`
 and `shapes`, but also to store their own `business` attributes. Therefore, when customizing node
 styles, developers can use properties from
-the [properties](../../api/model/nodeModel.en.md#data-attributes) to control how nodes display different
+the [properties](../../api/runtime-model/nodeModel.en.md#data-properties) to control how nodes display different
 styles.
 
 <code id="custom-rect" src="../../../src/tutorial/basic/node/properties"></code>
@@ -192,7 +192,7 @@ The following is an example of a node `view`. Click `node1` several times to try
 Here the `h function` is used for the return of `Shape`. The `h` method is a rendering function
 exposed by LogicFlow, and its usage is the same as `react` and `vue`'
 s <a href="https://v2.vuejs.org/v2/guide/render-function#createElement-Arguments" target="_blank">createElement</a> .
-But here we need to create `svg` tags, so some basic knowledge of svg is required.
+But here we need to create `SVG` tags, so some basic knowledge of SVG is required.
 
 To give a few simple examples.
 
@@ -310,7 +310,6 @@ const pointStr = points.map((point) => {
 // svg dom <polygon points="100,10 250,150 200,110" >
 h("polygon", {
   ...style,
-  r,
   points: pointStr,
 })
 ```
@@ -331,7 +330,7 @@ passed from the parent component through `this.props`. The `this.props` object c
 properties, they are.
 
 - `model`: represents the model of the custom node
-- [graphModel](../../api/model/graphModel.en.md): the model for the entire graph of logicflow
+- [graphModel](../../api/runtime-model/graphModel.en.md): the model for the entire graph of logicflow
 
 ##### 3. How to get the path of an icon?
 

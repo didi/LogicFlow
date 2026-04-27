@@ -21,7 +21,7 @@ Theme configuration supports the following main categories:
 - **Other Elements**: Styles for auxiliary elements like anchors, arrows, and snaplines
 - **Canvas Configuration**: Styles for background and grid
 
-For detailed theme configuration parameters, see [Theme API](../../api/theme.en.md)
+For detailed theme configuration parameters, see [Theme API](../../api/logicflow-instance/theme.en.md)
 
 ## Theme Configuration Methods
 

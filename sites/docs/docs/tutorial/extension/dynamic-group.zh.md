@@ -83,14 +83,14 @@ class CustomGroupModel extends dynamicGroup.model {
 
 lf.register({
   type: "my-custom-group",
-  model: CustomGroup,
-  view: CustomGroupModel,
+  view: CustomGroup,
+  model: CustomGroupModel,
 });
 ```
 
 ## groupModel 的属性和方法
 
-分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见 [nodeModel](../../api/nodeModel.zh.md)。
+分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见 [nodeModel](../../api/runtime-model/nodeModel.zh.md)。
 
 ### 状态属性
 ```ts

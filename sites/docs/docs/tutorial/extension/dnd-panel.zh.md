@@ -16,7 +16,7 @@ toc: content
 
 设置拖拽面板组件内容
 
-```tsx | purex | pure
+```tsx | pure
 type PatternItem = {
   type?: string;
   text?: string;

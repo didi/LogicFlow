@@ -14,7 +14,7 @@ toc: content
 
 引入并启用默认菜单
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
 import "@logicflow/extension/lib/style/index.css";
@@ -48,17 +48,15 @@ const lf = new LogicFlow({
 
 这里以节点右键菜单删除功能的写法为例：
 
-```tsx | purex | pure
+```tsx | pure
 // 定义一个做节点删除动作的菜单项
 const menuItem = {
-  {
-    className: "lf-menu-delete",
-    icon: true,
-    callback: (node) => {
-      // 删除菜单，并触发一个自定义事件custom-node:deleted，把当前删除的节点信息抛出去
-      this.graphModel.deleteNode(node.id);
-      this.graphModel.eventCenter.emit("custom-node:deleted", node);
-    },
+  className: "lf-menu-delete",
+  icon: true,
+  callback: (node) => {
+    // 删除节点，并触发一个自定义事件 custom-node:deleted，把当前删除的节点信息抛出去
+    lf.graphModel.deleteNode(node.id);
+    lf.graphModel.eventCenter.emit("custom-node:deleted", node);
   },
 }
 ```
@@ -69,7 +67,7 @@ const menuItem = {
 
 通过`addMenuConfig`方法可以在原有菜单的基础上追加新的选项，具体配置示例如下：
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from '@logicflow/core'
 import { Menu } from '@logicflow/extension'
 
@@ -77,7 +75,7 @@ import NodeData = LogicFlow.NodeData
 import EdgeData = LogicFlow.EdgeData
 import Position = LogicFlow.Position
 
-// 实例化 Logic Flow
+// 实例化 LogicFlow
 const lf = new LogicFlow({
   container: document.getElementById('app'),
   // 注册插件
@@ -153,7 +151,7 @@ lf.render()
 
 如果默认菜单中存在不需要的选项，或者无法满足需求，可以通过`lf.setMenuConfig`覆盖默认菜单，实现自定义菜单的效果。
 
-```tsx | purex | pure
+```tsx | pure
 lf.setMenuConfig({
   nodeMenu: [
     {
@@ -172,7 +170,7 @@ lf.setMenuConfig({
 
 除了上面的复写整个菜单外，还可以使用`lf.setMenuByType`为指定类型的元素设置菜单。
 
-```tsx | purex | pure
+```tsx | pure
 lf.setMenuByType({
   type: "bpmn:startEvent",
   menu: [
@@ -190,18 +188,18 @@ lf.setMenuByType({
 
 为了提供更灵活的交互，在2.1.0版本新增提供了动态控制菜单项禁用状态的功能，可以根据业务逻辑动态地禁用或启用特定的菜单项。
 
-```tsx | purex | pure
+```tsx | pure
 lf.changeMenuItemDisableStatus(menuKey, text, disabled)
 ```
 
 参数说明：
-- `menuKey`: 菜单类型，可选值为 `'nodeMenu'` | `'edgeMenu'` | `'graphMenu'`
+- `menuKey`: 菜单类型，可选值为 `'nodeMenu'` | `'edgeMenu'` | `'graphMenu'` | `'selectionMenu'`
 - `text`: 要操作的菜单项文本
 - `disabled`: 是否禁用，`true` 为禁用，`false` 为启用
 
 #### 使用示例
 
-```tsx | purex | pure
+```tsx | pure
 // 禁用节点菜单中的"删除"选项
 lf.changeMenuItemDisableStatus('nodeMenu', '删除', true)
 
@@ -216,7 +214,7 @@ lf.changeMenuItemDisableStatus('graphMenu', '分享', true)
 
 也可以在配置菜单时直接设置某些菜单项为禁用状态：
 
-```tsx | purex | pure
+```tsx | pure
 lf.addMenuConfig({
   nodeMenu: [
     {
@@ -242,7 +240,7 @@ lf.addMenuConfig({
 在使用了选区插件后，选区插件也会出现菜单，默认情况下选区菜单只有删除操作。
 和其他菜单项一样，可以调用Menu插件提供的方法对选区菜单配置进行修改。
 
-```tsx | purex | pure
+```tsx | pure
 // 一个🌰：设置选区菜单不展示
 lf.setMenuByType({
   type: "lf:defaultSelectionMenu",
@@ -254,7 +252,7 @@ lf.setMenuByType({
 
 除了上面的为画布通用元素设置菜单外，LogicFlow还支持为自定义节点设置菜单：
 
-```tsx | purex | pure
+```tsx | pure
 
 // index.js
 import { RectNode, CustomeModel } from "./custom.ts";
@@ -272,8 +270,8 @@ lf.setMenuByType({
       className: "lf-menu-delete",
       icon: true,
       callback: (node) => {
-        this.lf.graphModel.deleteNode(node.id);
-        this.lf.graphModel.eventCenter.emit("custom:event", node);
+        lf.graphModel.deleteNode(node.id);
+        lf.graphModel.eventCenter.emit("custom:event", node);
       },
     },
     {

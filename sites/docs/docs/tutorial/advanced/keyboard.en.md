@@ -33,7 +33,7 @@ products.
 | cmd + c or ctrl + c | copy node  |
 | cmd + v or ctrl + v | Paste Node |
 | cmd + z or ctrl + z | Undo       |
-| cmd + y or ctrl + y | Regression |
+| cmd + y or ctrl + y | Redo       |
 | backspace           | Delete     |
 
 ## Customized shortcuts
@@ -42,8 +42,7 @@ shortcuts allow you to define a user-defined set of shortcuts.
 It is worth mentioning the rules for keys, which are consistent
 with [mousetrap](https://www.npmjs.com/package/mousetrap).
 
-We have customized the delete function as an example by adding a confirmation action before
-deletion.
+Use a custom delete shortcut as an example: add a confirmation action before deletion.
 
 ```tsx | pure
 const lf = new LogicFlow({

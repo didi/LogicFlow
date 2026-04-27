@@ -180,8 +180,8 @@ toc: content
 > Release Date: 2022/04/13
 
 - features
-  - Added API to set whether the element is editable or not. [setElementState](../api/graphModel.en.md#setelementstate)
-  - Added API [lf.renderRawData](../api/logicFlowApi#renderrawdata)
+  - Added API to set whether the element is editable or not. [setElementState](../api/runtime-model/graphModel.en.md#setelementstatebyid)
+  - Added API [lf.renderRawData](../api/logicflow-instance/render-and-data.en.md#renderrawdata)
 - bugfix
   - Fixed the problem that the node could not be moved when the width and height of the canvas was passed to 0
   - Fixed the problem that the edge does not disappear occasionally. [#568](https://github.com/didi/LogicFlow/issues/568)
@@ -212,7 +212,7 @@ toc: content
 - features
 
   - The [Node resize](../guide/extension/extension-node-resize) plugin supports setting the maximum and minimum values for zooming in and out and adjusting the sensitivity.
-  - Added [lf.fitView](../api/logicFlowApi#fitview) method [@lixianyu-icon](https://github.com/lixianyu-icon).
+  - Added [lf.fitView](../api/logicflow-instance/canvas.en.md#fitview) method [@lixianyu-icon](https://github.com/lixianyu-icon).
   - When connecting nodes manually, the canvas scrolls automatically when the mouse moves to the edge of the canvas. [#534](https://github.com/didi/LogicFlow/issues/534)
   - Optimized the interaction of moving a node to the edge of the canvas. Moving a node to the edge of the canvas now automatically expands the canvas size.
   - Optimized the interaction of moving nodes. Now if the node is not allowed to move out of the grouping range, the node will appear at the mouse position when the mouse goes back inside the grouping again.

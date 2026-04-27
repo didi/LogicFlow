@@ -30,6 +30,7 @@ Default rule: change the narrowest package that owns the behavior. Do not patch 
 - Reuse package-local patterns before introducing new abstractions.
 - If a change crosses package boundaries, document that dependency in the PR.
 - Treat examples as verification targets, not as the primary place to implement shared behavior.
+- When writing or updating documentation, use natural human phrasing and reading flow; avoid overly AI-like tone, repetitive template language, or mechanical wording.
 
 ## 3. Task Routing
 

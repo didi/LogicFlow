@@ -10,7 +10,7 @@ The `snapshot` plugin is used to export canvas snapshots. This feature is freque
 
 Before diving into the `snapshot` implementation principles, it is recommended that you have a basic understanding of `svg` and `canvas`. If you are not familiar with these concepts, it is advised to read related materials to better understand the content of this document.
 
-Additionally, to better understand the implementation principles of `snapshot`, it would be helpful to first read the basic usage of the [snapshot](../../tutorial/extension/snapshot.zh.md) plugin and how to [customize plugins](../../tutorial/extension/custom.zh.md), which will provide a good foundation for understanding the `snapshot` implementation.
+Additionally, to better understand the implementation principles of `snapshot`, it would be helpful to first read the basic usage of the [snapshot](../../tutorial/extension/snapshot.en.md) plugin and how to [customize plugins](../../tutorial/extension/custom.en.md), which will provide a good foundation for understanding the `snapshot` implementation.
 
 ## 1. Registration and Usage
 

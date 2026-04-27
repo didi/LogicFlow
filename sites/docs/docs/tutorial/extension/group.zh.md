@@ -6,10 +6,16 @@ group:
 title: 分组 (Group)
 order: 15
 toc: content
-tag: 即将废弃
+tag: 废弃
 ---
 
-LogicFlow 支持分组。分组是 LogicFlow 内置的自定义节点, 所以开发者可以在分组的基础上，参考自定义节点进行更多场景的自定义。
+::::warning{title=废弃说明}
+`Group` 已进入废弃状态，不再推荐用于新项目。
+
+如果你正在新建或维护分组能力，请优先使用 [动态分组（Dynamic Group）](./dynamic-group.zh.md)。
+::::
+
+保留本页仅用于历史项目兼容与迁移参考。
 
 ## 默认分组
 
@@ -89,7 +95,7 @@ lf.register({
 
 ## groupModel 的属性和方法
 
-分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见[nodeModel](../../api/nodeModel.zh.md)。
+分组节点除了节点本身的属性以外，还有一些属于分组的特殊属性。我们可以在自定义的时候，控制这些属性来实现各种效果的分组。节点本身的属性和方法见 [nodeModel](../../api/runtime-model/nodeModel.zh.md)。
 
 ### 状态属性
 

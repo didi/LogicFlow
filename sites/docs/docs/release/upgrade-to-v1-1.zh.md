@@ -180,8 +180,8 @@ toc: content
 > 发版时间: 2022/04/13
 
 - features
-  - 新增设置元素编辑、不可编辑状态 API。[setElementState](api/graph-model-api#setelementstate)
-  - 新增 API [lf.renderRawData](api/detail#renderrawdata)
+  - 新增设置元素编辑、不可编辑状态 API。[setElementState](../api/runtime-model/graphModel.zh.md#setelementstatebyid)
+  - 新增 API [lf.renderRawData](../api/logicflow-instance/render-and-data.zh.md#renderrawdata)
 - bugfix
   - 修复了画布宽高传入参数值为 0 时，节点无法移动的问题。
   - 修复了连线偶尔不消失的问题. [#568](https://github.com/didi/LogicFlow/issues/568)
@@ -212,7 +212,7 @@ toc: content
 - features
 
   - [节点缩放](tutorial/extension-node-resize)插件支持设置放大缩小的最大最小值和调整灵敏度。
-  - 新增[lf.fitView](api/detail#fitview)方法 [@lixianyu-icon](https://github.com/lixianyu-icon)。
+  - 新增[lf.fitView](../api/logicflow-instance/canvas.zh.md#fitview)方法 [@lixianyu-icon](https://github.com/lixianyu-icon)。
   - 新增在连线时，鼠标移动到画布边缘画布自动滚动。[#534](https://github.com/didi/LogicFlow/issues/534)
   - 优化了移动节点到画布边缘的交互，现在移动节点到画布边缘会自动扩展画布大小。
   - 优化了移动节点的交互，现在如果节点不允许移动出分组范围后，鼠标再次回到分组内部时，节点会出现在鼠标位置。

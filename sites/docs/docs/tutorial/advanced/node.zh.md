@@ -3,10 +3,28 @@ nav: 指南
 group:
   title: 进阶
   order: 2
-title: 节点
+title: 节点进阶
 order: 0
 toc: content
 ---
+
+这页适合已经完成基础自定义节点、准备继续处理**连接规则、锚点、节点移动和框架节点渲染**的读者。
+
+::::info{title=阅读提示}
+- 前置知识：建议先读 [节点](../basic/node.zh.md) 和 [实例与图数据](../basic/class.zh.md)
+- 本页不解决插件选型和 API 全量参数查询；当你需要精确查属性或方法时，请转到 [`nodeModel`](../../api/runtime-model/nodeModel.zh.md)、[`graphModel`](../../api/runtime-model/graphModel.zh.md)、[`事件`](../../api/logicflow-instance/event.zh.md)
+- 如果你是 React / Vue 项目，优先看本页中的导读，再继续进入 [React 自定义节点](react.zh.md) 或 [Vue 自定义节点](vue.zh.md)
+::::
+
+## 本页导读
+
+你可以按下面的目标跳读：
+
+1. 想限制节点怎么连：看“连接规则”
+2. 想控制节点能不能移动：看“移动”
+3. 想精细控制连线落点：看“锚点”
+4. 想把 React / Vue 组件渲染进节点：优先看独立的 React / Vue 页面
+5. 想从节点内部和外部通信：看“外部通信”
 
 ## 连接规则
 
@@ -15,7 +33,7 @@ toc: content
 - `sourceRules` - 当节点作为边的起始节点（source）时的校验规则
 - `targetRules` - 当节点作为边的目标节点（target）时的校验规则
 
-以正方形（square）为例，在边时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`
+以正方形（square）为例，连边时我们希望它的下一节点只能是圆形节点（circle），那么我们应该给`square`
 添加作为`source`节点的校验规则。
 
 ```tsx | pure
@@ -37,7 +55,7 @@ class SquareModel extends RectNodeModel {
 ```
 
 在上例中，我们为`model`的`sourceRules`
-属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`messgage`和`validate`属性。
+属性添加了一条校验规则，校验规则是一个对象，我们需要为其提供`message`和`validate`属性。
 
 `message`属性是当不满足校验规则时所抛出的错误信息，`validate`则是传入规则检验的回调函数。`validate`
 方法有两个参数，分别为边的起始节点（source）和目标节点（target），我们可以根据参数信息来决定是否通过校验，其返回值是一个布尔值。
@@ -46,7 +64,7 @@ class SquareModel extends RectNodeModel {
 当我们在面板上进行边操作的时候，LogicFlow 会校验每一条规则，只有**全部**通过后才能连接。
 :::
 
-在边时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），LogicFlow
+连边时，当鼠标松开后如果没有通过自定义规则（`validate`方法返回值为`false`），LogicFlow
 会对外抛出事件`connection:not-allowed`。
 
 ```tsx | pure
@@ -57,7 +75,7 @@ lf.on('connection:not-allowed', (msg) => {
 
 下面举个例子，通过**设置不同状态下节点的样式**来展示连接状态👇
 
-在节点model中，有个state属性，当节点连接规则校验不通过时，state属性值为5。我们可以通过这个属性来实现连线是节点的提示效果。
+在节点model中，有个state属性，当节点连接规则校验不通过时，state属性值为5。我们可以通过这个属性来实现连线时节点的提示效果。
 
 <code id="node-connect" src="../../../src/tutorial/advanced/node/connect"></code>
 
@@ -118,7 +136,7 @@ sandbox [示例](https://codesandbox.io/s/reverent-haslett-dkb9n?file=/step_14_h
 
 ## 文本
 
-LogicFlow支持自定义节点文本的外观和编辑状态。参考[nodeModel API](../../api/nodeModel.zh.md)
+LogicFlow 支持自定义节点文本的外观和编辑状态。参考 [nodeModel API](../../api/runtime-model/nodeModel.zh.md)
 中的`textObject`
 
 ```tsx | pure
@@ -271,7 +289,7 @@ HTML节点目前通过修改properties触发节点更新。
 ```tsx | pure
  /**
  * @overridable 支持重写
- * 和react的shouldComponentUpdate类似，都是为了避免出发不必要的render.
+ * 和react的shouldComponentUpdate类似，都是为了避免触发不必要的render.
  * 但是这里不一样的地方在于，setHtml方法，我们只在properties发生变化了后再触发。
  * 而x,y等这些坐标相关的方法发生了变化，不会再重新触发setHtml.
  */

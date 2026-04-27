@@ -7,14 +7,14 @@ toc: content
 ### Theme
 
 Our new custom theme approach supports passing all custom svg attributes directly to the node. Compared to the original way, it provides better customization capabilities.
-The original `outlineHover`, `edgeAdjust`, etc. are changed to the new custom theme method, see [Theme API](../api/theme.en.md) for details.
+The original `outlineHover`, `edgeAdjust`, etc. are changed to the new custom theme method, see [Theme API](../api/logicflow-instance/theme.en.md) for details.
 
 ### Custom nodes and edges
 
 - We standardized the way of customization, now the theme-related style attributes are obtained by `model.getNodeStyle()` or `model.getEdgeStyle()` methods in the custom `view`, and not by `getAttributes()` in the `view`.
-- To customize style-related properties, you need to override the method of getting styles in `model`. For example [getNodeStyle](../api/nodeModel.en.md#styleAttributes), [getEdgeStyle](../api/edgeModel.en.md#styleAttributes).
+- To customize style-related properties, you need to override the method of getting styles in `model`. For example [getNodeStyle](../api/runtime-model/nodeModel.en.md#style-attributes), [getEdgeStyle](../api/runtime-model/edgeModel.en.md#style-attributes).
 - The custom html node has a built-in `shouldUpdate` method, which triggers the setHtml method only if the properties of the node have changed.
-- We clarify the classification of attributes. For attributes like width and height that affect the calculation of the path of an edge, we define them as [shape attributes](../api/nodeModel.en.md#ShapeAttributes), which are only allowed to be defined in `setAttributes`.
+- We clarify the classification of attributes. For attributes like width and height that affect the calculation of the path of an edge, we define them as [shape attributes](../api/runtime-model/nodeModel.en.md#shape-attributes), which are only allowed to be defined in `setAttributes`.
 
 ### API for Logicflow instances
 

@@ -1,8 +1,11 @@
 ---
 nav: API
-title: LogicFlow Core Types
+group:
+  title: 类型字典
+  order: 3
+title: Core Types (MainTypes)
 toc: content
-order: 2
+order: 1
 ---
 
 ## **Introduction**
@@ -20,7 +23,7 @@ This document mainly introduces the core types of `LogicFlow`, including the fol
 
 ## **Detailed Description of Configuration Items**
 
-## **Basic Configuration Items for Instances (Common)**
+## **Basic Configuration Items for Instances (Common)** {#common}
 ```ts
 export interface Common {
   container: HTMLElement
@@ -96,7 +99,7 @@ export interface Common {
 - `customTrajectory`: Custom trajectory function.
 - `[key: string]`: Other custom properties.
 
-### **EdgeType**
+### **EdgeType** {#edgetype}
 ```ts
 export type EdgeType = 'line' | 'polyline' | 'bezier' | string
 ```
@@ -106,7 +109,7 @@ Defines the types of edges. Possible values are:
 - `'bezier'`: Bezier curve
 - `string`: Other custom types
 
-### **BackgroundConfig**
+### **BackgroundConfig** {#backgroundconfig}
 ```ts
 export type BackgroundConfig = {
   backgroundImage?: string
@@ -120,7 +123,7 @@ export type BackgroundConfig = {
 
 This type is mainly used to constrain the `background` parameter passed in during initialization. The passed attributes will be directly applied to the `BackgroundOverlay` of the LogicFlow canvas.
 
-### **AnimationConfig**
+### **AnimationConfig** {#animationconfig}
 ```ts
 export type AnimationConfig = {
   node: boolean
@@ -130,7 +133,7 @@ export type AnimationConfig = {
 - `node`: Whether to enable animation for nodes.
 - `edge`: Whether to enable animation for edges.
 
-### **EdgeGeneratorType**
+### **EdgeGeneratorType** {#edgegeneratortype}
 ```ts
 export type EdgeGeneratorType = (
   sourceNode: LogicFlow.NodeData,
@@ -154,7 +157,7 @@ edgeGenerator: (sourceNode, targetNode, currentEdge) => {
 
 Used to constrain the type of custom edge generation methods.
 
-### **customTargetAnchorType (Custom Anchor Connection Rule)**
+### **customTargetAnchorType (Custom Anchor Connection Rule)** {#customtargetanchortype}
 ```ts
 export type customTargetAnchorType = (
   nodeModel: BaseNodeModel,
@@ -182,7 +185,7 @@ customTargetAnchor: (nodeModel) => {
 },
 ```
 
-### **GuardsConfig**
+### **GuardsConfig** {#guardsconfig}
 ```ts
 export interface GuardsConfig {
   beforeClone?: (data: NodeData | GraphData) => boolean
@@ -191,3 +194,405 @@ export interface GuardsConfig {
 ```
 - `beforeClone`: Interceptor function before cloning nodes/graphs. Returning `false` will prevent cloning.
 - `beforeDelete`: Interceptor function before deleting nodes/edges. Returning `false` will prevent deletion.
+
+### **IEditConfigType (edit control configuration)** {#ieditconfigtype-edit-control}
+
+`IEditConfigType` is the full runtime edit-control shape used by `updateEditConfig` and `getEditConfig`.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `isSilentMode` | `boolean` | Silent (read-only) mode. |
+| `stopZoomGraph` | `boolean` | Disable zooming the canvas. |
+| `stopScrollGraph` | `boolean` | Disable wheel panning. |
+| `stopMoveGraph` | `boolean \| 'vertical' \| 'horizontal' \| [number, number, number, number]` | Constrain or disable canvas panning. |
+| `adjustEdge` | `boolean` | Allow edge adjustment. |
+| `adjustEdgeMiddle` | `boolean` | Allow adjusting edge midpoints. |
+| `adjustEdgeStartAndEnd` | `boolean` | Allow dragging edge endpoints. |
+| `adjustNodePosition` | `boolean` | Allow moving nodes. |
+| `hideAnchors` | `boolean` | Hide anchors. |
+| `allowRotate` | `boolean` | Allow node rotation. |
+| `allowResize` | `boolean` | Allow node resize. |
+| `autoExpand` | `boolean` | Auto-expand canvas when elements exceed bounds. |
+| `hoverOutline` | `boolean` | Show hover outline. |
+| `nodeSelectedOutline` | `boolean` | Outline when node is selected. |
+| `edgeSelectedOutline` | `boolean` | Outline when edge is selected. |
+| `textEdit` | `boolean` | Allow text editing. |
+| `nodeTextEdit` | `boolean` | Allow node text editing. |
+| `edgeTextEdit` | `boolean` | Allow edge text editing. |
+| `textDraggable` | `boolean` | Allow dragging text. |
+| `nodeTextDraggable` | `boolean` | Allow dragging node text. |
+| `edgeTextDraggable` | `boolean` | Allow dragging edge text. |
+| `multipleSelectKey` | `string` | Multi-select modifier (`meta` / `shift` / `alt`). |
+
+### **GridOptions** {#gridoptions}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| size | number (optional) | Grid cell spacing. |
+| visible | boolean (optional) | Whether grid lines are visible. |
+| type | `'dot' \| 'mesh'` (optional) | Grid pattern: dots or mesh lines. |
+| config | `{ color?: string; thickness?: number }` (optional) | Line/dot styling. |
+| config.color | string (optional) | Grid color. |
+| config.thickness | number (optional) | Line thickness or dot size. |
+
+### **KeyboardDef** {#keyboarddef}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| enabled | boolean | Master switch for keyboard shortcuts. |
+| shortcuts | `Array<{ keys: string \| string[]; callback: Handler; action?: Action }>` (optional) | Custom shortcut definitions. |
+| shortcuts.keys | string \| string[] | Key combination to listen for. |
+| shortcuts.callback | Handler | Handler invoked when the shortcut fires. |
+| shortcuts.action | Action (optional) | DOM keyboard event type (`keypress`, `keydown`, `keyup`). |
+
+### **AppendConfig** {#appendconfig}
+
+Polyline segment selection metadata when inserting nodes on an edge.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| startIndex | number | Segment start index for insertion. |
+| endIndex | number | Segment end index / append position. |
+| direction | Direction | Direction along the polyline. |
+| draggable | boolean (optional) | Whether the segment can be dragged. |
+| start | Point | Start coordinate of the selection. |
+| end | Point | End coordinate of the selection. |
+
+### **ArrowConfig** {#arrowconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| markerStart | string | SVG marker id or definition for the arrow start. |
+| markerEnd | string | SVG marker id or definition for the arrow end. |
+
+### **AttributesType** {#attributestype}
+
+```ts
+export type AttributesType = Record<string, any>
+```
+
+Bag for arbitrary custom attributes on LogicFlow elements.
+
+### **RegisterConfig** {#registerconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| type | string | Element type name (required). |
+| view | ComponentType<any> & { isObserved?: boolean } | View component for rendering. |
+| model | GraphElementCtor | Model constructor (`BaseNodeModelCtor` or `BaseEdgeModelCtor`). |
+| isObserverView | boolean (optional) | Whether the view observes model changes. |
+
+### **RegisterElement** {#registerelement}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| view | React.ComponentType<any> | Visual component. |
+| model | any | Data model implementation. |
+
+### **RegisterElementFunc** {#registerelementfunc}
+
+```ts
+export type RegisterElementFunc = (params: RegisterParam) => RegisterElement
+```
+
+### **RegisterParam** {#registerparam}
+
+```ts
+export type RegisterParam = {
+  h: typeof h
+  [key: string]: unknown
+}
+```
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| h | Function | Hyperscript helper for virtual DOM. |
+| [key: string] | any | Additional registration context. |
+
+### **BaseNodeModelCtor** {#basenodemodelctor}
+
+Constructor type for node models derived from `BaseNodeModel`.
+
+### **BaseEdgeModelCtor** {#baseedgemodelctor}
+
+Constructor type for edge models derived from `BaseEdgeModel`.
+
+## **Canvas-related types** {#canvas-related}
+
+### **GraphConfigData** {#graphconfigdata}
+
+Input shape for `lf.render` when using LogicFlow graph configuration objects.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| nodes | `NodeConfig[] \| undefined` | Optional array of node configs (see [NodeConfig](#nodeconfig)). |
+| edges | `EdgeConfig[] \| undefined` | Optional array of edge configs (see [EdgeConfig](#edgeconfig)). |
+
+### **GraphData** {#graphdata}
+
+Native graph snapshot returned by APIs such as `getGraphRawData`.
+
+```ts
+interface GraphData {
+  nodes: NodeData[]
+  edges: EdgeData[]
+}
+```
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| nodes | NodeData[] | All node records. |
+| edges | EdgeData[] | All edge records. |
+
+### **GraphElement** {#graphelement}
+
+Union of `BaseNodeModel | BaseEdgeModel` representing any element on the canvas.
+
+### **GraphElementCtor** {#graphelementctor}
+
+```ts
+export type GraphElementCtor = BaseNodeModelCtor | BaseEdgeModelCtor
+```
+
+### **Position** {#position}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| x | number | Horizontal coordinate. |
+| y | number | Vertical coordinate. |
+
+### **Point** {#point}
+
+Extends `Position` with optional identifiers or extra fields.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| id | string (optional) | Stable point identifier. |
+| x | number | X coordinate. |
+| y | number | Y coordinate. |
+| [key: string] | any | Additional metadata. |
+
+### **PointTuple** {#pointtuple}
+
+Tuple `[x, y]` representing a point in canvas space.
+
+### **PropertiesType** {#propertiestype}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| width | number (optional) | Element width. |
+| height | number (optional) | Element height. |
+| rx | number (optional) | Horizontal corner radius. |
+| ry | number (optional) | Vertical corner radius. |
+| style | LogicFlow.CommonTheme (optional) | Theme snippet for the element. |
+| textStyle | LogicFlow.CommonTheme (optional) | Theme snippet for nested text. |
+| [key: string] | any (optional) | Arbitrary business fields. |
+
+### **TextConfig** {#textconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| value | string | Text body. |
+| x | number | Canvas X coordinate. |
+| y | number | Canvas Y coordinate. |
+| editable | boolean (optional) | Whether users can edit inline. |
+| draggable | boolean (optional) | Whether text can be dragged. |
+| overflowMode | `'default' \| 'autoWrap' \| 'ellipsis'` (optional) | Overflow handling. |
+
+### **ClientPosition** {#clientposition}
+
+```ts
+export type ClientPosition = {
+  domOverlayPosition: Position
+  canvasOverlayPosition: Position
+}
+```
+
+Returned by pointer helpers and several interaction events.
+
+### **ElementState** {#elementstate}
+
+Numeric codes consumed by `graphModel.setElementStateById`.
+
+| Name | Value | Meaning |
+| ---- | ----- | ------- |
+| DEFAULT | 1 | Normal display. |
+| TEXT_EDIT | 2 | Text editing mode. |
+| SHOW_MENU | 3 | Legacy menu state (prefer menu plugin). |
+| ALLOW_CONNECT | 4 | Element may accept the active edge. |
+| NOT_ALLOW_CONNECT | 5 | Element rejects the active edge. |
+
+## **Node-related types** {#node-related}
+
+### **NodeConfig** {#nodeconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| id | string (optional) | Node identifier (auto-generated if omitted). |
+| type | string | Registered node type (required). |
+| x | number | Canvas X coordinate. |
+| y | number | Canvas Y coordinate. |
+| text | TextConfig \| string (optional) | Label configuration or plain string. |
+| zIndex | number (optional) | Stack order. |
+| properties | PropertiesType (optional) | Custom properties payload. |
+| virtual | boolean (optional) | Marks transient / preview nodes. |
+| rotate | number (optional) | Rotation in degrees. |
+| rotatable | boolean (optional) | Allows interactive rotation. |
+| resizable | boolean (optional) | Allows interactive resizing. |
+
+### **OffsetData** {#offsetdata}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| dx | number | Horizontal drag delta. |
+| dy | number | Vertical drag delta. |
+
+### **FakeNodeConfig** {#fakenodeconfig}
+
+Configuration for placeholder nodes while dragging from external sources.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| type | string | Target node type. |
+| text | TextConfig \| string (optional) | Label while dragging. |
+| properties | PropertiesType (optional) | Shape/style hints. |
+| [key: string] | unknown | Additional transient fields. |
+
+### **VectorData** {#vectordata}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| deltaX | number | Resize/move delta on X. |
+| deltaY | number | Resize/move delta on Y. |
+
+### **DomAttributes** {#domattributes}
+
+SVG attributes returned from `getOuterGAttributes`.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| className | string | Optional CSS class on the outer `<g>`. |
+| [key: string] | string \| undefined | Arbitrary SVG attributes. |
+
+## **Edge-related types** {#edge-related}
+
+### **EdgeConfig** {#edgeconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| id | string (optional) | Edge identifier. |
+| type | string (optional) | Edge type (`polyline` by default). |
+| sourceNodeId | string | Source node id. |
+| sourceAnchorId | string (optional) | Source anchor id. |
+| targetNodeId | string | Target node id. |
+| targetAnchorId | string (optional) | Target anchor id. |
+| startPoint | Point (optional) | Manual start coordinate. |
+| endPoint | Point (optional) | Manual end coordinate. |
+| text | string \| TextConfig (optional) | Edge label. |
+| pointsList | Point[] (optional) | Polyline bend points. |
+| zIndex | number (optional) | Stack order. |
+| properties | PropertiesType (optional) | Custom properties. |
+
+### **EdgeData** {#edgedata}
+
+Runtime edge snapshot extending `EdgeConfig` with resolved geometry.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| id | string | Edge identifier. |
+| type | string | Edge type. |
+| text | TextConfig \| string | Label payload. |
+| startPoint | Point | Resolved start. |
+| endPoint | Point | Resolved end. |
+| pointsList | Point[] | Bend points for polylines. |
+
+## **Plugin-related types** {#plugin-related}
+
+### **Extension** {#extension}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| render | `(lf: LogicFlow, container: HTMLElement) => void` | Mount UI into the plugin container. |
+| destroy | `() => void` (optional) | Cleanup hook. |
+
+### **ExtensionRenderFunc** {#extensionrenderfunc}
+
+```ts
+export type ExtensionRenderFunc = (lf: LogicFlow, container: HTMLElement) => void
+```
+
+### **ExtensionType** {#extensiontype}
+
+```ts
+export type ExtensionType = ExtensionConstructor | ExtensionDefinition
+```
+
+### **ExtensionConfig** {#extensionconfig}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| pluginFlag | Symbol | Unique symbol identifying the plugin slot. |
+| extension | ExtensionConstructor \| ExtensionDefinition | Plugin implementation. |
+| props | Record<string, any> (optional) | Props forwarded to the plugin ctor. |
+
+### **IExtensionProps** {#iextensionprops}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| lf | LogicFlow | Host instance. |
+| LogicFlow | LogicFlowConstructor | Constructor reference for advanced usage. |
+| props | Record<string, unknown> (optional) | Custom props from registration. |
+| options | Record<string, unknown> | Plugin-specific options. |
+
+### **ExtensionConstructor** {#extensionconstructor}
+
+Class-based plugins must expose `pluginName` and accept `IExtensionProps` in the constructor.
+
+### **ExtensionDefinition** {#extensiondefinition}
+
+Object-style plugins with optional `install` and `render` hooks.
+
+### **LabelConfig** {#labelconfig}
+
+Rich configuration for Label plugin instances (positions, overflow, draggability, etc.).
+
+### **LabelOption** {#labeloption}
+
+Global Label plugin options (`isVertical`, `isMultiple`, `maxCount`, …).
+
+### **MenuConfig** {#menuconfig}
+
+Context-menu entry definition (`text`, `className`, `icon`, `callback`).
+
+## **BPMN helper types** {#bpmn-elements}
+
+### **DefinitionConfigType** {#definitionconfigtype}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| nodes | string[] | BPMN element types receiving the definition bundle. |
+| definition | EventDefinitionType[] \| TaskDefinitionType[] | Associated BPMN definitions. |
+
+### **DefinitionPropertiesType** {#definitionpropertiestype}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| definitionType | string | BPMN XML discriminator. |
+| [key: string] | any | Additional serialized fields. |
+
+### **EventDefinitionType** {#eventdefinitiontype}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| type | string | Definition name aligned with BPMN XML. |
+| icon | string \| Record<string, any> | Icon payload for palette/rendering. |
+| toJSON | `(data?: unknown) => unknown` | Serializer hook. |
+| properties | DefinitionPropertiesType | Default properties for new nodes. |
+| [key: string] | any | Extension slots. |
+
+### **TaskDefinitionType** {#taskdefinitiontype}
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| type | string | Task identifier. |
+| [key: string] | any | Extension slots. |

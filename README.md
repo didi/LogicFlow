@@ -45,6 +45,38 @@ $ yarn add @logicflow/core @logicflow/extension
 $ pnpm add @logicflow/core @logicflow/extension
 ```
 
+## AI 编程支持
+
+LogicFlow 为 AI 编程工具提供了随 npm 包发布的本地文档。`@logicflow/core@2.3.0` 及以上版本会包含这些文档。安装或升级后，可以把下面这段提示词复制给你的 AI Agent，让它在实现 LogicFlow 功能前先查官方文档。
+
+更多说明请查看 [AI 编程支持](https://site.logic-flow.cn/tutorial/ai)。
+
+```md
+<!-- BEGIN:logicflow-agent-rules -->
+# LogicFlow Agent Rules
+
+LogicFlow documentation is available at:
+
+- `node_modules/@logicflow/core/dist/docs/`
+
+Package roles:
+
+- `@logicflow/core`: core graph editor runtime, including canvas, nodes, edges, models, events, rendering, themes, and basic interactions.
+- `@logicflow/extension`: official plugins for common product features.
+- `@logicflow/layout`: official layout plugins for automatic graph layout.
+
+The docs for `@logicflow/extension` and `@logicflow/layout` are included under:
+
+- `node_modules/@logicflow/core/dist/docs/tutorial/extension/`
+
+Before implementing any LogicFlow feature, check the local docs first to see whether LogicFlow already provides a built-in, extension, or layout capability. If it does, prefer the documented official capability instead of reimplementing it from scratch.
+
+If an official package is needed but not installed, ask the user before installing it.
+<!-- END:logicflow-agent-rules -->
+```
+
+如果你升级了 `@logicflow/core`，建议把最新提示词重新提供给 Agent。
+
 ## 快速上手
 
 ```html

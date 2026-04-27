@@ -3,10 +3,18 @@ nav: 指南
 group:
   title: 进阶
   order: 2
-title: 边
+title: 边进阶
 order: 1
 toc: content
 ---
+
+这页适合已经完成基础自定义边、准备继续处理**边上的 React 内容、锚点信息和动画效果**的读者。
+
+::::info{title=阅读提示}
+- 前置知识：建议先读 [边](../basic/edge.zh.md)
+- 本页不展开节点规则和框架节点注册；这些内容请看 [进阶节点](node.zh.md)
+- 相关 API：[`edgeModel`](../../api/runtime-model/edgeModel.zh.md)、[`事件`](../../api/logicflow-instance/event.zh.md)、[`主题`](../../api/logicflow-instance/theme.zh.md)
+::::
 
 ## React 边
 

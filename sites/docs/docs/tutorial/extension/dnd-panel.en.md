@@ -16,7 +16,7 @@ toc: content
 
 Setting the Drag & Drop Panel Component Content
 
-```tsx | purex | pure
+```tsx | pure
 type PatternItem = {
   type?: string;
   text?: string;

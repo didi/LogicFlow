@@ -8,13 +8,15 @@ order: 0
 toc: content
 ---
 
-> LogicFlow's original goal was to support an extensible process mapping tool that could be used to meet a variety of business needs. In order to make LogicFlow extensible enough, LogicFlow develops all non-core functionality using plug-ins, and then puts these plug-ins into the `@logicflow/extension` package.
+> LogicFlow's original goal was to support an extensible flowchart editor that can meet a wide range of business needs. To keep LogicFlow extensible, non-core features are provided through plugins.
+>
+> Common product features are usually provided by `@logicflow/extension`, while automatic layout is provided by `@logicflow/layout`. Docs for both kinds of capabilities are included in this plugin tutorial group.
 
 ## Usage Guidelines
 
 The `@logicflow/extension` package provides a number of out-of-the-box components that quickly support common features in the product, such as the control panel, right-click menus, and more.
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from '@logicflow/core'
 import { Control, Menu, DndPanel } from '@logicflow/extension'
 import '@logicflow/extension/lib/style/index.css'

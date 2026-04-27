@@ -35,7 +35,7 @@ Like nodes, LogicFlow edges support inheritance-based customization. Again, you 
 from both `view` and `model`.
 However, unlike nodes, in most cases it is not recommended to customize `view` when customizing
 edges due to the editing complexity of edges.
-You just need to customize the style class in [edgeModel](../../api/edgeModel.en.md).
+You just need to customize the style class in [edgeModel](../../api/runtime-model/edgeModel.en.md).
 
 <code id="edge-custom" src="../../../src/tutorial/basic/edge/custom"></code>
 
@@ -43,7 +43,7 @@ You just need to customize the style class in [edgeModel](../../api/edgeModel.en
 Custom edges also need to be registered using `register`.
 :::
 ## Modify edge style
-Similar to node style attributes, edge styles can also be customized via [theme configuration](../../api/theme.en.md). The edge style is then redefined by this.
+Similar to node style attributes, edge styles can also be customized via [theme configuration](../../api/logicflow-instance/theme.en.md). The edge style is then redefined by this.
 
 - If you need to define styles according to the state of the edge, you can put the passed parameters into `properties`, and in `getEdgeStyle`, you can judge the parameters in `properties` and return different styles according to different parameters.
 - To achieve the hover effect, you can listen for the `edge:mouseenter` and `edge:mouseleave` events, modify the parameters in `properties`, and then call the `edge.updateStyle()` method to update the edge style.

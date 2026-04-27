@@ -1,15 +1,27 @@
 ---
 nav: API
-title: 导览
+group:
+  title: 类型字典
+  order: 3
+title: 总览
 toc: content
 order: 0
 ---
 
-欢迎阅读 LogicFlow 类型说明。本文是了解 LogicFlow 框架中使用的各种类型的主要入口。每种类型对于定义 LogicFlow 环境中元素的结构和行为都至关重要。
+欢迎阅读 LogicFlow 类型说明。本页为 **API「类型字典」分组入口**，收录与构造方法、实例能力相关的类型索引与正文。
 
-下面是 LogicFlow 中定义的每种类型的简介：
+**分组内文档**
+
+- [`配置相关`](./MainTypes.zh.md)
+- [`画布相关`](./canvas-types.zh.md)
+- [`节点相关`](./node-types.zh.md)
+- [`内置插件相关`](./plugin-types.zh.md)
+- [`主题相关`](./Theme.zh.md)
+
+下面是 LogicFlow 中定义的每种类型的简介（条目与旧版类型字典一致，便于检索）：
 
 ## 主题样式相关类型
+
 - [Theme](Theme.zh.md#theme主题配置)：LogicFlow主题配置项，提供了目前LogicFlow支持的元素的样式配置。
 - [CommonTheme](Theme.zh.md#commontheme通用主题)：各种主题类型的基础，提供了诸如 `fill`、`stroke` 和 `strokeWidth` 等通用属性。
 - [NodeTheme](Theme.zh.md#nodetheme节点主题)：节点主题类型，例如 `RectTheme`、`CircleTheme`、`PolygonTheme` 和 `EllipseTheme`，继承自 `CommonTheme` 并定义了特定于每种形状的属性。
@@ -17,6 +29,7 @@ order: 0
 - [TextTheme](Theme.zh.md#texttheme文本主题)：概述了与文本样式相关的属性，包括 `color`、`fontSize` 和 `textAnchor`，同时也扩展了 `CommonTheme`。
 
 ## 实例相关
+
 - [Common](MainTypes.zh.md#common实例基础配置项)：LogicFlow 实例的基础配置项，包括画布的 DOM 节点、宽度、高度等。
 - [BackgroundConfig](MainTypes.zh.md#backgroundconfig背景配置)：定义画布背景的配置，包括背景图片和背景平铺方式。
 - [GridOptions](MainTypes.zh.md#gridoptions网格配置)：定义画布网格的配置，包括网格大小、可见性和网格类型。
@@ -76,3 +89,11 @@ order: 0
 - [MenuConfig](MainTypes.zh.md#menuconfigmenu插件菜单项类型)：定义 Menu 插件中菜单项的配置结构，包括显示文本、CSS 类名、图标和回调函数。
 
 有关每种类型的详细信息，请参阅上面链接的相应文档。
+
+## 相关跳转
+
+- 运行时主题与主题类型：[`LogicFlow 实例 > 主题`](../logicflow-instance/theme.zh.md)
+- 构造期配置与嵌套类型：[`构造方法`](../logicflow-constructor/index.zh.md)
+- model 相关文档：[graphModel](../runtime-model/graphModel.zh.md)
+- 插件全局注册：[`LogicFlow.use`](../logicflow-constructor/use.zh.md)
+- 节点/边注册能力：[`实例 > 注册`](../logicflow-instance/register.zh.md)

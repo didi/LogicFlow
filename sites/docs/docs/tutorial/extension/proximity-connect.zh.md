@@ -36,7 +36,7 @@ toc: content
 
 ## 使用插件
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { ProximityConnect } from "@logicflow/extension";
 import "@logicflow/core/es/index.css";
@@ -80,25 +80,25 @@ const lf = new LogicFlow({
 用于修改连线阈值
 
 ```ts
-setThresholdDistance = (distance: 'number'): void => {}
+setThresholdDistance = (distance: number): void => {}
 ```
 ### setReverseDirection(reverse)
 用于修改创建连线的方向
 
 ```ts
-setReverseDirection = (reverse: 'boolean'): void => {}
+setReverseDirection = (reverse: boolean): void => {}
 ```
 ### setEnable(enable)
 用于设置插件启用状态
 
 ```ts
-setEnable = (enable: 'boolean'): void => {}
+setEnable = (enable: boolean): void => {}
 ```
 ### setVirtualEdgeStyle(style)
 设置虚拟边样式
 
 ```ts
-setVirtualEdgeStyle = (style: 'Record<string, unknown>'): void => {}
+setVirtualEdgeStyle = (style: Record<string, unknown>): void => {}
 ```
 
 ## 注意事项

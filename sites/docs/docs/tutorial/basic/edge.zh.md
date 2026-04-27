@@ -3,10 +3,19 @@ nav: 指南
 group:
   title: 基础
   order: 1
-title: 边 Edge
+title: 边
 order: 2
 toc: content
 ---
+
+本页从内置边出发，介绍如何定义符合业务语义的自定义边。更复杂的连线交互和路径控制，会在 [进阶-边](../advanced/edge.zh.md) 中继续展开。
+
+::::info{title=阅读提示}
+- 适合已经读过 [快速上手](../get-started.zh.md) 和 [实例与图数据](class.zh.md) 的读者
+- 前置知识：知道节点、边、`graphData` 和 `render` 的基本用法
+- 本页不展开更复杂的边交互和框架节点方案，这些内容请继续阅读 [进阶-边](../advanced/edge.zh.md)
+- 相关 API：[`edgeModel`](../../api/runtime-model/edgeModel.zh.md)、[`主题`](../../api/logicflow-instance/theme.zh.md)、[`事件`](../../api/logicflow-instance/event.zh.md)
+::::
 
 和节点一样，LogicFlow 也内置一些基础的边。LogicFlow 的内置边包括:
 
@@ -33,7 +42,7 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 
 和节点一样，LogicFlow 的边也支持基于继承的自定义机制。同样也只需同时继承`view`和`model`。
 但是和节点不一样的是，由于边的编辑复杂度问题，绝大多数情况下，自定义边时不推荐自定义`view`。
-只需要在自定义[edgeModel](../../api/edgeModel.zh.md)中样式类即可。
+只需要在自定义 [edgeModel](../../api/runtime-model/edgeModel.zh.md) 中定义样式相关逻辑即可。
 
 <code id="edge-custom" src="../../../src/tutorial/basic/edge/custom"></code>
 
@@ -41,7 +50,7 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 自定义边同样需要使用`register`注册哦。
 :::
 ## 修改边样式
-和节点的样式属性一样边样式也支持通过 [主题配置](../../api/theme.zh.md) 自定义边的样式则是它重新定义。
+和节点的样式属性一样边样式也支持通过 [主题配置](../../api/logicflow-instance/theme.zh.md) 自定义边的样式则是它重新定义。
 
 - 如果需要按照边的状态定义样式，可以把传递的参数放入`properties`中，在`getEdgeStyle`中判断`properties`中的参数，根据不同的参数返回不同的样式。
 - 如果需要实现hover的效果，可以监听`edge:mouseenter`和`edge:mouseleave`事件，修改完`properties`中的参数，然后调用`edge.updateStyle()`方法更新边的样式。
@@ -57,7 +66,7 @@ import { BezierEdge, BezierEdgeModel } from '@logicflow/core'
 - bezier: 起点、终点、调整点中间
 
 LogicFlow 支持开发者自定义文本位置，例如文本位置永远在边起点旁边。定义方式为将属性`customTextPosition`
-设置为 true, 然后重写`getTextPosition`方法, 此方法发回的坐标就是文本的坐标。
+设置为 true, 然后重写`getTextPosition`方法, 此方法返回的坐标就是文本的坐标。
 
 <code id="edge-text" src="../../../src/tutorial/basic/edge/textPosition"></code>
 
@@ -134,4 +143,10 @@ class CustomEdge extends LineEdge {
 ```
 
 <a href="https://codesandbox.io/embed/logicflow026-edgeanimation-forked-fdg3v0?fontsize=14&hidenavigation=1&theme=dark" target="_blank"> 去 CodeSandbox 查看示例</a>
+
+## 下一步阅读
+
+1. [进阶-边](../advanced/edge.zh.md)：继续看动画、数据扩展和更复杂的边能力
+2. [事件 API](../../api/logicflow-instance/event.zh.md)：查看边事件和交互事件
+3. [edgeModel API](../../api/runtime-model/edgeModel.zh.md)：精确查阅可用属性和方法
 

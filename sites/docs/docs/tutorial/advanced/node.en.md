@@ -40,7 +40,7 @@ class SquareModel extends RectNodeModel {
 ```
 
 In the above example, we added a checking rule to the `sourceRules` property of `model`, which is an
-object for which we need to provide the `messgage` and `validate` properties.
+object for which we need to provide the `message` and `validate` properties.
 
 The `message` attribute is the error message that is thrown when the check rule is not satisfied,
 and `validate` is the callback function that is passed in to check the rule. The `validate` method
@@ -137,7 +137,7 @@ When you drag a connection from an anchor and release it on a node, LogicFlow us
 ## Text
 
 LogicFlow supports customizing the appearance and editing state of node text.
-References [nodeModel API](../../api/nodeModel.en.md) `textObject`
+References [nodeModel API](../../api/runtime-model/nodeModel.en.md) `textObject`
 
 ```tsx | pure
 class CustomNodeModel extends RectNodeModel {

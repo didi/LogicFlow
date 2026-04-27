@@ -1,8 +1,11 @@
 ---
 nav: API
-title: 实例
+group:
+  title: 类型字典
+  order: 3
+title: 配置相关
 toc: content
-order: 2
+order: 1
 ---
 
 ## **简介**
@@ -14,8 +17,8 @@ order: 2
 ### **Common（实例基础配置项）**
 | 属性名           | 类型                                                                               | 描述                                                                                 |
 | ---------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| container        | [HTMLElement]('https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement')      | 用于挂载 LogicFlow 画布的 DOM 节点。                                                 |
-| width            | numbe （可选）                                                                     | 画布的宽度。                                                                         |
+| container        | [HTMLElement](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement)        | 用于挂载 LogicFlow 画布的 DOM 节点。                                                 |
+| width            | number （可选）                                                                    | 画布的宽度。                                                                         |
 | height           | number （可选）                                                                    | 画布的高度。                                                                         |
 | background       | false \| BackgroundConfig （可选）                                                 | 画布的背景配置，可以是 `false` 或者 `BackgroundConfig` 对象。                        |
 | grid             | number \| boolean \| GridOptions （可选）                                          | 网格配置，可以是网格大小的数值、布尔值或者 `GridOptions` 对象。                      |
@@ -30,7 +33,7 @@ order: 2
 | allowRotate      | boolean （可选）                                                                   | 是否允许节点旋转。                                                                   |
 | allowResize      | boolean （可选）                                                                   | 是否允许节点缩放。                                                                   |
 | isSilentMode     | boolean （可选）                                                                   | 是否为静默模式。在静默模式下，画布中的节点和边不可移动，不可进行文案修改，没有锚点。 |
-| stopScrollGraph  | boolean （可选）                                                                   | W是否停止滚动画布。                                                                  |
+| stopScrollGraph  | boolean （可选）                                                                   | 是否停止滚动画布。                                                                   |
 | stopZoomGraph    | boolean （可选）                                                                   | 是否停止缩放画布。                                                                   |
 | stopMoveGraph    | boolean \| 'vertical' \| 'horizontal' \| [number, number, number, number] （可选） | 是否停止移动画布，可以是布尔值、字符串或数组。                                       |
 | animation        | boolean \| Partial<`AnimationConfig`> （可选）                                     | 动画配置，可以是布尔值或者 `AnimationConfig` 对象。                                  |
@@ -50,6 +53,35 @@ order: 2
 | customTrajectory | (props: CustomAnchorLineProps) => h.JSX.Element （可选）                           | 自定义轨迹函数。                                                                     |
 | [key: string]    | unknown                                                                            | 其他自定义属性。                                                                     |
 
+### **IEditConfigType（编辑控制配置）**
+
+`IEditConfigType` 是运行时编辑控制的完整配置类型，`updateEditConfig` 与 `getEditConfig` 基于该类型工作。
+
+| 属性名 | 类型 | 描述 |
+| --- | --- | --- |
+| `isSilentMode` | `boolean` | 是否为静默模式。 |
+| `stopZoomGraph` | `boolean` | 禁止缩放画布。 |
+| `stopScrollGraph` | `boolean` | 禁止鼠标滚动画布。 |
+| `stopMoveGraph` | `boolean \| 'vertical' \| 'horizontal' \| [number, number, number, number]` | 禁止拖动画布或限制拖动方向/范围。 |
+| `adjustEdge` | `boolean` | 是否允许调整边。 |
+| `adjustEdgeMiddle` | `boolean` | 是否允许调整边中间点。 |
+| `adjustEdgeStartAndEnd` | `boolean` | 是否允许调整边起终点。 |
+| `adjustNodePosition` | `boolean` | 是否允许拖动节点。 |
+| `hideAnchors` | `boolean` | 是否隐藏锚点。 |
+| `allowRotate` | `boolean` | 是否允许节点旋转。 |
+| `allowResize` | `boolean` | 是否允许节点缩放。 |
+| `autoExpand` | `boolean` | 元素超出画布时是否自动扩展。 |
+| `hoverOutline` | `boolean` | 是否显示悬停外框。 |
+| `nodeSelectedOutline` | `boolean` | 是否显示节点选中外框。 |
+| `edgeSelectedOutline` | `boolean` | 是否显示边选中外框。 |
+| `textEdit` | `boolean` | 是否允许文本编辑。 |
+| `nodeTextEdit` | `boolean` | 是否允许节点文本编辑。 |
+| `edgeTextEdit` | `boolean` | 是否允许边文本编辑。 |
+| `textDraggable` | `boolean` | 是否允许文本拖拽。 |
+| `nodeTextDraggable` | `boolean` | 是否允许节点文本拖拽。 |
+| `edgeTextDraggable` | `boolean` | 是否允许边文本拖拽。 |
+| `multipleSelectKey` | `string` | 多选按键（`meta` / `shift` / `alt`）。 |
+
 
 ### **BackgroundConfig（背景配置）**
 | 属性名           | 类型                                                                                   | 描述                                                |
@@ -65,7 +97,7 @@ order: 2
 | ---------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
 | size             | number （可选）                                 | 网格格子间距。                                                                      |
 | visible          | boolean （可选）                                | 网格是否可见                                                                        |
-| type             | 'dot' \| 'mesh' （可选）                        | 网格类型，可选值：`dot` 点状网格                                                    | `mesh` 交叉线网格 |
+| type             | 'dot' \| 'mesh' （可选）                        | 网格类型，可选值：`dot` 点状网格 / `mesh` 交叉线网格                                |
 | config           | { color?: string, thickness?: number } （可选） | 网格线配置                                                                          |
 | config.color     | string （可选）                                 | 网格线颜色                                                                          |
 | config.thickness | number （可选）                                 | 网格的宽度，对于 `dot` 点状网格，表示点的大小；对于 `mesh` 交叉线网格，表示线的宽度 |
@@ -73,11 +105,11 @@ order: 2
 ### **KeyboardDef（快捷键参数类型）**
 | 属性名             | 类型                                                                             | 描述                                                                                |
 | ------------------ | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| enabled            | boolean                                                                          | 网格格子间距。                                                                      |
-| shortcuts          | Array<{ keys: string \| string[], callback: Handler, action?: Action }> （可选） | 网格是否可见                                                                        |
-| shortcuts.keys     | string \| string[]                                                               | 网格线配置                                                                          |
-| shortcuts.callback | Handler                                                                          | 网格的宽度，对于 `dot` 点状网格，表示点的大小；对于 `mesh` 交叉线网格，表示线的宽度 |
-| shortcuts.action   | Action （可选）                                                                  | 网格的宽度，对于 `dot` 点状网格，表示点的大小；对于 `mesh` 交叉线网格，表示线的宽度 |
+| enabled            | boolean                                                                          | 是否启用键盘快捷键。                                                                |
+| shortcuts          | Array<{ keys: string \| string[], callback: Handler, action?: Action }> （可选） | 自定义快捷键配置。                                                                  |
+| shortcuts.keys     | string \| string[]                                                               | 触发快捷键的按键组合。                                                              |
+| shortcuts.callback | Handler                                                                          | 快捷键触发后的回调函数。                                                            |
+| shortcuts.action   | Action （可选）                                                                  | 监听的键盘事件类型，例如 `keypress`、`keydown`、`keyup`。                           |
 
 ### **EdgeType（边类型）**
 ```ts
@@ -292,8 +324,8 @@ if (!Model) {
 
 | 属性名 | 类型                          | 描述                                                                                                                                               |
 | ------ | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| nodes  | `NodeConfig[]` \| `undefined` | 一个可选的数组，包含图中节点的配置。每个节点由 [NodeConfig](./nodeConfig.zh.md) 接口定义，包括 `id`、`type`、`x`、`y` 以及其他可选配置。           |
-| edges  | `EdgeConfig[]` \| `undefined` | 一个可选的数组，包含图中边的配置。每条边由 [EdgeConfig](./edgeConfig.zh.md) 接口定义，包括 `id`、`sourceNodeId`、`targetNodeId` 以及其他可选配置。 |
+| nodes  | `NodeConfig[]` \| `undefined` | 一个可选的数组，包含图中节点的配置。每个节点由 [NodeConfig](#nodeconfig节点配置) 接口定义，包括 `id`、`type`、`x`、`y` 以及其他可选配置。           |
+| edges  | `EdgeConfig[]` \| `undefined` | 一个可选的数组，包含图中边的配置。每条边由 [EdgeConfig](#edgeconfig边配置) 接口定义，包括 `id`、`sourceNodeId`、`targetNodeId` 以及其他可选配置。 |
 
 ### **GraphData（画布数据）**
 `GraphData` 是 LogicFlow 渲染数据导出时的数据类型。
@@ -396,7 +428,7 @@ export type GraphElementCtor = BaseNodeModelCtor | BaseEdgeModelCtor;
 | [key: string] | any    | 允许为 `Point` 类型添加其他属性，提供了灵活性以适应各种用例。 |
 
 ### **PointTuple（点坐标组）**
-`PointTuple` 类型是一个表示二维空间中点的元组。它由两个数值组成，分别对应点的 x 坐标和 y 坐标。例如获取制定范围内所有元素的函数`getAreaElement`接收的参数`leftTopPoint`、`rightBottomPoint`就是这个类型。
+`PointTuple` 类型是一个表示二维空间中点的元组。它由两个数值组成，分别对应点的 x 坐标和 y 坐标。例如获取指定范围内所有元素的函数`getAreaElement`接收的参数`leftTopPoint`、`rightBottomPoint`就是这个类型。
 
 ### **PropertiesType（元素属性）**
 `PropertiesType`定义了流程图元素properties属性的类型，它包括以下属性：
@@ -439,6 +471,18 @@ export type ClientPosition = {
 | canvasOverlayPosition | Position | 表示事件相对于画布覆盖层的位置，包含 `x` 和 `y` 坐标。  |
 
 `ClientPosition` 类型是LogicFlow部分事件返回给外部的数据的格式，例如`lf.graphModel.getPointByClient`方法返回的数据，节点、边、画布的单双击事件和右键点击事件中返回的`position`字段的数据就是这个格式。
+
+### **ElementState（元素状态）**
+
+`ElementState` 表示元素状态码，常用于 `graphModel.setElementStateById` 的 `state` 参数。
+
+| 状态名 | 值 | 说明 |
+| ------ | --- | --- |
+| `DEFAULT` | `1` | 默认显示 |
+| `TEXT_EDIT` | `2` | 元素处于文本编辑态 |
+| `SHOW_MENU` | `3` | 显示菜单（已废弃，建议使用菜单插件） |
+| `ALLOW_CONNECT` | `4` | 元素允许作为当前边目标节点 |
+| `NOT_ALLOW_CONNECT` | `5` | 元素不允许作为当前边目标节点 |
 
 ## 节点相关
 

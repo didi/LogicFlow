@@ -88,7 +88,7 @@ y2 → maxY
    3. `setHoverOFF` -> `setHoverOff`;
 2. 移除 TextNode getBackground 中 rectAttr下 y: y-1 的设置;
 3. fakerNode 重命名为 fakeNode;
-4. 节点文本支样式持通过`properties.textStylele`配置
+4. 节点文本支样式持通过`properties.textStyle`配置
 
 **问题修复**
 1. 通过 points 置原点并基于设定的 width 和 height 缩放的方法，解决多边形形状与边框定位异常的问题;
@@ -96,7 +96,7 @@ y2 → maxY
 #### Edge
 **新能力**
 1. 新增 adjustEdgeStart 和 adjustEdgeEnd，可单独控制调整起始点或结束点;
-2. 边文本支样式持通过`properties.textStylele`配置;
+2. 边文本支样式持通过`properties.textStyle`配置;
 
 **问题修复**
 1. 修复初始化时 edgeConfig 中 type 未传值场景下，未使用 graphModel.edgeType(默认边类型) 初始化边的 bug
@@ -163,7 +163,7 @@ y2 → maxY
 
 **问题修复**
 1. 解决resize 结束后节点重新定位的问题;
-2. 修复 HtmlREsize 节点 outlineStyle fill 默认为 黑色的 bug;
+2. 修复 HtmlResize 节点 outlineStyle fill 默认为 黑色的 bug;
 
 #### Snapshot插件
 **优化**
@@ -202,7 +202,7 @@ y2 → maxY
 **优化**
 1. 优化文本可编辑配置项的赋值优先级：textEdit(全局) > nodeTextEdit/edgeTextEdit(分类) > 元素本身 editable;
 2. graphModel 中增加 textMode 属性，用于标识当前使用什么文本模式;
-3. BaseNodeMode、 BaseEdgeModel 以及 graphModel 中增加 更新 textMode 的方法;`updateTextMode`;
+3. BaseNodeModel、 BaseEdgeModel 以及 graphModel 中增加 更新 textMode 的方法;`updateTextMode`;
 4. 为文本模块增加可监听的事件;
 
 

@@ -13,6 +13,17 @@ LogicFlow支持前端自定义开发各种逻辑编排场景，如流程图、ER
 
 如果你已经迫不及待想试试 LogicFlow，那就来 [快速上手](./get-started.zh.md) 吧！
 
+## 推荐阅读顺序
+
+如果你是第一次接触 LogicFlow，推荐按下面的顺序阅读：
+
+1. [快速上手](./get-started.zh.md)：先把最小示例跑通
+2. [实例与图数据](./basic/class.zh.md)：理解 `LogicFlow` 实例和 `graphData`
+3. [主题](./basic/theme.zh.md) / [事件](./basic/event.zh.md)：掌握样式和交互入口
+4. [节点](./basic/node.zh.md) / [边](./basic/edge.zh.md)：开始进入业务自定义
+5. [进阶节点](./advanced/node.zh.md)：理解连接规则、锚点和框架节点
+6. [插件简介](./extension/intro.zh.md) / [API 导览](../api/logicflow-instance/index.zh.md)：按目标扩展或精确查阅
+
 ## 特性
 
 - **可视化模型**：通过 LogicFlow 提供的直观可视化界面，用户可以轻松创建、编辑和管理复杂的逻辑流程图。

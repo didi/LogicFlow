@@ -8,7 +8,7 @@ order: 5
 toc: content
 ---
 
-LogicFlow提供了非常多的控制图如何编辑的配置，详情见[editConfigModel](../../api/editConfigModel.zh.md)。
+LogicFlow提供了非常多的控制图如何编辑的配置，详情见[editConfigModel](../../api/runtime-model/graphModel.zh.md#editconfigmodel)。
 
 ## 初始化
 
