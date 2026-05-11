@@ -548,7 +548,7 @@
 - 新增 adjustEdgeStart 和 adjustEdgeEnd，可单独控制调整起始点或结束点
 
   - 支持cmd - 鼠标滚动操作放大缩小画布
-  - 节点文本支样式持通过properties传入textStyle配置
+  - 节点文本样式支持通过properties传入textStyle配置
 
 - 重构 core 包中 properties 类型定义，通过泛型的方式约束其类型
 
