@@ -1,8 +1,8 @@
 ---
 nav: Guide
 group:
-title: Plugin Function
-order: 3
+  title: Plug-in functionality
+  order: 3
 title: Progressive Connection
 order: 6
 toc: content

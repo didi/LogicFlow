@@ -88,7 +88,7 @@ y2 → maxY
    3. `setHoverOFF` -> `setHoverOff`;
 2. 移除 TextNode getBackground 中 rectAttr下 y: y-1 的设置;
 3. fakerNode 重命名为 fakeNode;
-4. 节点文本支样式持通过`properties.textStyle`配置
+4. 节点文本样式支持通过`properties.textStyle`配置
 
 **问题修复**
 1. 通过 points 置原点并基于设定的 width 和 height 缩放的方法，解决多边形形状与边框定位异常的问题;

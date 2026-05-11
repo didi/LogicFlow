@@ -18,7 +18,7 @@ graphModel 是 LogicFlow 中整个画布对应的 `model`。
 
 LogicFlow 实例上的大多方法都是在 graphModel 上进行的简单封装。
 
-可以通过一下几种方法获取到 graphModel
+可以通过以下几种方法获取到 graphModel
 
 - 直接从 lf 属性中获取。`lf.graphModel`
 - 自定义`model`的时候，从构造函数中获取，也可以在方法中从`this`中获取。
