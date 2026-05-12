@@ -75,8 +75,6 @@ If an official package is needed but not installed, ask the user before installi
 <!-- END:logicflow-agent-rules -->
 ```
 
-如果你升级了 `@logicflow/core`，建议把最新提示词重新提供给 Agent。
-
 ## 快速上手
 
 ```html
