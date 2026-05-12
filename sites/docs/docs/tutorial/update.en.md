@@ -190,7 +190,7 @@ In version 2.0, we rewrote the logic of the group plugin and upgraded the Group 
 1. Support highlight neighbor node mode;
 2. Support external parameter configuration of highlight form;
 
-**ptimizations**
+**Optimizations**
 1. Supplementary function introduction document [HighLight plugin](extension/highlight.en.md)
 
 #### 「New」Label plugin

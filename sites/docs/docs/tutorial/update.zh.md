@@ -188,7 +188,7 @@ y2 → maxY
 1. 支持高亮邻居节点模式;
 2. 支持外部传参配置高亮形式;
 
-**ptimizations**
+**Optimizations**
 1. 补充功能介绍文档[HighLight 插件](extension/highlight.zh.md)
 
 #### 「New」Label插件
