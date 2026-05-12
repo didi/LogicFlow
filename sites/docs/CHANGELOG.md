@@ -1,5 +1,16 @@
 # logicflow-docs
 
+## 2.2.10
+
+### Patch Changes
+
+- AI friendly docs include in core package
+- Updated dependencies
+  - @logicflow/core@2.2.2
+  - @logicflow/extension@2.2.2
+  - @logicflow/layout@2.1.2
+  - @logicflow/react-node-registry@1.2.2
+
 ## 2.2.9
 
 ### Patch Changes

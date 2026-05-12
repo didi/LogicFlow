@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.2
+
+### Patch Changes
+
+- AI friendly docs include in core package
+
 ## 2.2.1
 
 ### Patch Changes
