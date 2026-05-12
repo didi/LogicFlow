@@ -26,14 +26,14 @@ type BackgroundConfig = {
   backgroundPosition?: string,
   backgroundSize?: string,
   backgroundOpacity?: number,
-  filter?: string, // 滤镜
-  [key: any]: any,
+  filter?: string, // Filter
+  [key: string]: any,
 };
 ```
 
 ### Configuration items
 
-### Set the background color
+### Set the background image
 
 ```tsx | pure
 const lf = new LogicFlow({

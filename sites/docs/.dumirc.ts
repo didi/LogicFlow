@@ -42,15 +42,15 @@ export default defineConfig({
           zh: '教程',
           en: 'Tutorial',
         },
-        order: 0,
+        order: 1,
       },
       {
-        slug: 'docs/api',
+        slug: 'docs/api/logicflow-constructor',
         title: {
           zh: 'API',
           en: 'API',
         },
-        order: 1,
+        order: 2,
       },
       {
         slug: 'examples',
@@ -58,7 +58,7 @@ export default defineConfig({
           zh: '图表示例',
           en: 'Examples',
         },
-        order: 2,
+        order: 3,
       },
       {
         slug: 'docs/article',
@@ -66,7 +66,7 @@ export default defineConfig({
           zh: '相关文章',
           en: 'Articles',
         },
-        order: 3,
+        order: 4,
       },
       {
         slug: 'docs/release',
@@ -74,7 +74,7 @@ export default defineConfig({
           zh: '更新日志',
           en: 'CHANGELOG',
         },
-        order: 4,
+        order: 5,
       },
     ],
 
@@ -104,36 +104,44 @@ export default defineConfig({
         order: 5,
       },
       {
-        slug: 'api/model',
-        title: {
-          zh: 'Model定义',
-          en: 'Models',
-        },
-        order: 6,
-      },
-      {
-        slug: 'api/detail',
-        title: {
-          zh: '构造函数',
-          en: 'Constructor',
-        },
-        order: 1,
-      },
-      {
-        slug: 'api/type',
-        title: {
-          zh: '类型定义字典',
-          en: 'Type Dictionary',
-        },
-        order: 6,
-      },
-      {
         slug: 'article/extension',
         title: {
           zh: '插件实现原理',
           en: 'Extension Implementation Principles',
         },
         order: 6,
+      },
+      {
+        slug: 'api/logicflow-constructor',
+        title: {
+          zh: 'LogicFlow',
+          en: 'LogicFlow',
+        },
+        order: 1,
+      },
+      {
+        slug: 'api/logicflow-instance',
+        title: {
+          zh: 'LogicFlow 实例',
+          en: 'LogicFlow Instance',
+        },
+        order: 2,
+      },
+      {
+        slug: 'api/runtime-model',
+        title: {
+          zh: '运行时 Model',
+          en: 'Runtime Model',
+        },
+        order: 3,
+      },
+      {
+        slug: 'api/type',
+        title: {
+          zh: '类型字典',
+          en: 'Types',
+        },
+        order: 4,
       },
     ],
 

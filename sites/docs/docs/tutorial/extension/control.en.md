@@ -10,7 +10,7 @@ toc: content
 
 ### start using
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Control } from "@logicflow/extension";
 import "@logicflow/extension/lib/style/index.css";
@@ -18,12 +18,12 @@ import "@logicflow/extension/lib/style/index.css";
 LogicFlow.use(Control);
 ```
 
-After registering the `Control` component, Logic Flow creates a control panel at the top right of
+After registering the `Control` component, LogicFlow creates a control panel at the top right of
 the canvas, as shown here
 
 The control panel provides the common ability to zoom in and out or adapt to the canvas, and also
 has built-in redo and undo functionality, of course if you don't like the UI or the functionality,
-you can define your own based on the [API](../../api) provided by `LogicFlow`.
+you can define your own based on the [API](../../api/logicflow-instance/index.en.md) provided by `LogicFlow`.
 
 
 <details>

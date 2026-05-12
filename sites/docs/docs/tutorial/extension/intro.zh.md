@@ -8,13 +8,32 @@ order: 0
 toc: content
 ---
 
-> LogicFlow最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。为了让LogicFlow的拓展性足够强，LogicFlow将所有的非核心功能都使用插件的方式开发，然后将这些插件放到`@logicflow/extension`包中。
+> LogicFlow最初的目标就是支持一个扩展性强的流程绘制工具，用来满足各种业务需求。为了让LogicFlow的拓展性足够强，LogicFlow将所有的非核心功能都使用插件的方式开发。
+>
+> 常见产品功能通常由 `@logicflow/extension` 提供，自动布局能力由 `@logicflow/layout` 提供。两类能力的使用文档都放在插件教程分组中。
+
+::::info{title=这页适合谁读}
+- 你已经知道如何创建 `LogicFlow` 实例，现在想按目标挑选现成插件
+- 你想知道全局安装插件和实例级安装插件有什么区别
+
+如果你还没有跑通过最小示例，建议先看 [快速上手](../get-started.zh.md)。
+::::
+
+## 插件地图
+
+可以先按目标选择，而不是逐个翻插件文件：
+
+- 编辑体验增强：控制面板、右键菜单、选区、多选等
+- 节点/边能力增强：节点缩放、分组、泳道、曲线边等
+- 数据导入导出：adapter、BPMN 相关能力
+- 布局与导出：自动布局、画布辅助能力
+- 领域方案：BPMN 元素和配套能力
 
 ## 使用指南
 
 `@logicflow/extension`包中提供一些开箱即用的组件，快速支持产品中常见的功能，如控制面板、右键菜单等。
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from '@logicflow/core'
 import { Control, Menu, DndPanel } from '@logicflow/extension'
 import '@logicflow/extension/lib/style/index.css'
@@ -68,3 +87,9 @@ const lf = new LogicFlow({
   plugins: [DndPanel, SelectionSelect]
 });
 ```
+
+## 下一步阅读
+
+1. 已经知道要用哪个插件：直接进入对应插件页面
+2. 想先理解实例和插件关系：查看 [API 导览](../../api/logicflow-instance/index.zh.md) 中的“插件系统”
+3. 想继续自定义节点或边：回到 [进阶节点](../advanced/node.zh.md) / [进阶-边](../advanced/edge.zh.md)

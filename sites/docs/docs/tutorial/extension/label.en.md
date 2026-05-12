@@ -16,7 +16,7 @@ LogicFlow provides built-in node text and text editing capabilities, but sometim
 
 ## Using the Plugin
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Label } from "@logicflow/extension";
 import "@logicflow/extension/lib/style/index.css";

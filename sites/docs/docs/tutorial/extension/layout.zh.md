@@ -27,7 +27,7 @@ toc: content
 
 ### 默认锚点
 
-如果节点是Logicflow的默认锚点（即上下左右4个锚点），且锚点信息并不具备业务含义。那么通过设置isDefaultAnchor 为true，就可以在布局中调整连线起终点锚点的位置。
+如果节点是LogicFlow的默认锚点（即上下左右4个锚点），且锚点信息并不具备业务含义。那么通过设置isDefaultAnchor 为true，就可以在布局中调整连线起终点锚点的位置。
 
 <code id="react-portal-1" src="@/src/tutorial/extension/layout"></code>
 

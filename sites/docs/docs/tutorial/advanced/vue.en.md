@@ -30,8 +30,8 @@ Here's an example of how to use Vue 3:
 
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { forEach, map, has } from 'lodash-es'
-  import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+  import { has } from 'lodash-es'
+  import LogicFlow from '@logicflow/core'
   import { register, getTeleport } from '@logicflow/vue-node-registry'
   import '@logicflow/core/es/index.css'
 
@@ -158,7 +158,7 @@ Below is an animated image showing the effect. To experience the functionality, 
 
 ## Updating Nodes
 
-Similar to `HTMLNode` , when users update node properties using `setProperties` or `setProperty` , we need to listen to the `node:property-change` event inside the component and update the component's state based on the properties value, as demonstrated in the example above.
+Similar to `HTMLNode`, when users update node properties using `setProperties` or `setProperty`, we need to listen to the `node:properties-change` event inside the component and update the component's state based on the properties value, as demonstrated in the example above.
 
 ## Using Vue 2
 

@@ -153,7 +153,7 @@ export type AbsolutePosition = Partial<
 export type MiniMapPosition =
   | 'left-top' // 表示迷你地图位于容器的左上角
   | 'right-top' // 表示迷你地图位于容器的右上角
-  | 'left-bottom' // 表示迷你地图位于容器的右上角
+  | 'left-bottom' // 表示迷你地图位于容器的左下角
   | 'right-bottom' // 表示迷你地图位于容器的右下角。
   | AbsolutePosition // 自定义小地图在画布上的位置
 

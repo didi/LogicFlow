@@ -81,7 +81,7 @@ Other changes theoretically have no impact on usage. Here is a list of changes:
 2. Remove the setting of y: y-1 under rectAttr in TextNode getBackground;
 3. fakerNode renamed to fakeNode;
 
-4. Node text style supports configuration through `properties.textStylele`
+4. Node text style supports configuration through `properties.textStyle`
 
 **Bug fix**
 
@@ -92,7 +92,7 @@ Other changes theoretically have no impact on usage. Here is a list of changes:
 
 1. Added adjustEdgeStart and adjustEdgeEnd, which can adjust the start point or end point separately;
 
-2. Edge text style supports configuration through `properties.textStylele`;
+2. Edge text style supports configuration through `properties.textStyle`;
 
 **Bug fix**
 
@@ -164,7 +164,7 @@ After the scaling capability is built-in, the NodeResize plug-in will be gradual
 
 **Bug fix**
 1. Solve the problem of node repositioning after resize ends;
-2. Fix the bug that the outlineStyle fill of HtmlREsize node defaults to black;
+2. Fix the bug that the outlineStyle fill of HtmlResize node defaults to black;
 
 #### Snapshot plug-in
 **Optimization**
@@ -176,7 +176,7 @@ After the scaling capability is built-in, the NodeResize plug-in will be gradual
 1. Fixed the problem of missing exported content after turning on local rendering;
 
 #### Group plugin
-In version 2.0, we rewrote the logic of the group plugin and upgraded the Group plugin to [Dynamic Group plugin](extension/dynamic-group.zh.md)
+In version 2.0, we rewrote the logic of the group plugin and upgraded the Group plugin to [Dynamic Group plugin](extension/dynamic-group.en.md)
 **New capabilities**
 1. Support the synchronous scaling and rotation of group nodes, and the internal elements will also scale and rotate synchronously;
 
@@ -190,8 +190,8 @@ In version 2.0, we rewrote the logic of the group plugin and upgraded the Group 
 1. Support highlight neighbor node mode;
 2. Support external parameter configuration of highlight form;
 
-**ptimizations**
-1. Supplementary function introduction document [HighLight plugin] (extension/highlight.zh.md)
+**Optimizations**
+1. Supplementary function introduction document [HighLight plugin](extension/highlight.en.md)
 
 #### 「New」Label plugin
 **New capabilities**
@@ -199,12 +199,12 @@ In version 2.0, we added a new text display format: Label. The main differences 
 1. Supports adding multiple texts to a node/edge, and can set the text direction;
 2. Comes with rich text editing capabilities, supports set local text style;
 3. Use the new position calculation algorithm to optimize the mobile experience of associated text when adjusting nodes and edges;
-Welcome everyone to use it, the function introduction portal: [Label plugin](extension/label.zh.md)
+Welcome everyone to use it, the function introduction portal: [Label plugin](extension/label.en.md)
 
 **Optimization**
 1. Optimize the assignment priority of text editable configuration items: textEdit (global) > nodeTextEdit/edgeTextEdit (category) > element itself editable;
 2. Add the textMode attribute to graphModel to identify the current text mode;
-3. Add the method to update textMode in BaseNodeMode, BaseEdgeModel and graphModel; `updateTextMode`;
+3. Add the method to update textMode in BaseNodeModel, BaseEdgeModel and graphModel; `updateTextMode`;
 4. Add listenable events to the text module;
 
 ### Engine

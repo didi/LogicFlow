@@ -11,7 +11,7 @@ toc: content
 当一张画布上的元素逐渐增多时，快速分辨出当前获焦的节点是谁，都连了几条线，连到了哪些节点上的难度也会逐渐增大，为了方便用户快速看清当前获焦节点的关联信息，我们提供了高亮功能。
 
 ## 启用
-```tsx | purex | pure
+```tsx | pure
 
 import LogicFlow from '@logicflow/core'
 import { Highlight } from '@logicflow/extension'
@@ -35,7 +35,7 @@ Highlight插件对外提供了修改状态的API:
 ### setMode
 设置高亮方式，用法：
 
-```tsx | purex | pure
+```tsx | pure
 lf.extension.highlight.setMode('single');
 
 ```
@@ -43,7 +43,7 @@ lf.extension.highlight.setMode('single');
 ### setEnable
 设置启用状态，用法：
 
-```tsx | purex | pure
+```tsx | pure
 // 设置不启用高亮
 lf.extension.highlight.setEnable(false);
 

@@ -44,7 +44,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Start Event (bpmn:startEvent)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -66,7 +66,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">End Event (bpmn:endEvent)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -89,7 +89,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">User Task (bpmn:userTask)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -111,7 +111,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Service Task (bpmn:serviceTask)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -133,7 +133,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Exclusive Gateway (bpmn:exclusiveGateway)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -155,7 +155,7 @@ During mounting, the bpmnElement plugin registers the following six BPMN element
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Sequence Flow (bpmn:sequenceFlow)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -217,7 +217,7 @@ lf.render({
     { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 500, y: 100, },
   ],
   edges: [
-    { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
+    { id: 'Flow_12ac567', sourceNodeId: 'Event_1234567', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
     { id: 'Flow_fa4c689', sourceNodeId: 'Task_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
   ],
 })
@@ -244,14 +244,14 @@ Performs bidirectional conversion between LogicFlow graph data and BPMN graph da
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert BPMN graph data to LogicFlow graph data.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
 - bpmnData *(Object)*: BPMN data to convert
 
 **Returns**<br/>
-- data *([GraphConfigData](../../api/type/MainTypes.zh.md#graphconfigdata流程图渲染数据类型))*: Converted LogicFlow graph data
+- data *([GraphConfigData](../../api/type/MainTypes.en.md#graphconfigdata))*: Converted LogicFlow graph data
 
 **Data conversion example**
 <iframe src="/bpmn2Lf.html" style="border: none; width: 100%; height: 260px; margin: auto;"></iframe>
@@ -263,11 +263,11 @@ Performs bidirectional conversion between LogicFlow graph data and BPMN graph da
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert LogicFlow graph data to BPMN graph data.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
-- data *([GraphConfigData](../../api/type/MainTypes.zh.md#graphconfigdata流程图渲染数据类型))*: LogicFlow data to convert
+- data *([GraphConfigData](../../api/type/MainTypes.en.md#graphconfigdata))*: LogicFlow data to convert
 - retainedFields *(string[])*: Optional; list of field names to retain and write as BPMN attributes during conversion. Effective only when the corresponding field in `node.properties` is of type `object`.
 
 **Returns**<br/>
@@ -291,14 +291,14 @@ Extends BpmnAdapter and overrides `adapterIn` and `adapterOut` with the same ove
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert BPMN graph data to LogicFlow graph data.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
 - bpmnData *(Object)*: BPMN data to convert
 
 **Returns**<br/>
-- data *([GraphConfigData](../../api/type/MainTypes.zh.md#graphconfigdata流程图渲染数据类型))*: Converted LogicFlow graph data
+- data *([GraphConfigData](../../api/type/MainTypes.en.md#graphconfigdata))*: Converted LogicFlow graph data
 
 **Data conversion example**
 <iframe src="/bpmnXml2Lf.html" style="border: none; width: 100%; height: 260px; margin: auto;"></iframe>
@@ -310,11 +310,11 @@ Extends BpmnAdapter and overrides `adapterIn` and `adapterOut` with the same ove
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert LogicFlow graph data to BPMN graph data.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
-- data *([GraphConfigData](../../api/type/MainTypes.zh.md#graphconfigdata流程图渲染数据类型))*: LogicFlow data to convert
+- data *([GraphConfigData](../../api/type/MainTypes.en.md#graphconfigdata))*: LogicFlow data to convert
 - retainedFields *(string[])*: List of field names to retain and write as BPMN attributes during conversion. Effective only when the corresponding field in `node.properties` is of type `object`.
 
 **Returns**<br/>
@@ -341,7 +341,7 @@ You can wrap customized conversion logic based on these methods as needed.
     <span style="font-size: 12px; color: #a4a4a4;">
       将 XML 风格 JSON（属性键以 `-` 前缀）转换为普通 JSON；移除 `-` 前缀并递归处理对象/数组，保留文本与属性结构。
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
@@ -358,7 +358,7 @@ You can wrap customized conversion logic based on these methods as needed.
     <span style="font-size: 12px; color: #a4a4a4;">
       将普通 JSON 转为 XML 风格 JSON；为属性键加 `-` 前缀；支持保留字段 `retainedFields` 与默认保留字段（如 `properties/startPoint/endPoint/pointsList`）；处理数组与 `#text/#cdata-section/#comment`。
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
@@ -443,7 +443,7 @@ lf.render({
     { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 500, y: 100, },
   ],
   edges: [
-    { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
+    { id: 'Flow_12ac567', sourceNodeId: 'Event_1234567', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
     { id: 'Flow_fa4c689', sourceNodeId: 'Task_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
   ],
 })
@@ -513,14 +513,14 @@ In the extended BPMNElements plugin, all event nodes support event definitions. 
     <span style="font-size: 12px; color: #a4a4a4;">
       Provides mapping and configuration between nodes and event definitions
     </span>
-  <p>
+  </p>
 </div>
 
 **Returns**<br/>
 - Returns a parameterless function whose result is a tuple `[definition, setDefinition]`.
 - Where:
-  - definition: `Map<string, [DefinitionConfigType](../../api/type/MainTypes.zh.md#bpmnelements相关类型)>`, an event definition mapping for storing node definition configurations
-  - setDefinition: `(config: [DefinitionConfigType](../../api/type/MainTypes.zh.md#bpmnelements相关类型)[]) => void`, used to set node definition configurations
+  - definition: `Map<string, [DefinitionConfigType](../../api/type/MainTypes.en.md#definitionconfigtype)>`, an event definition mapping for storing node definition configurations
+  - setDefinition: `(config: [DefinitionConfigType](../../api/type/MainTypes.en.md#definitionconfigtype)[]) => void`, used to set node definition configurations
 
 :::info{title=Default Event Definitions}
 When initialized, the BPMNElements plugin calls `setDefinition(definitionConfig)` once to generate a default set of event definitions:
@@ -585,7 +585,7 @@ First, three event nodes:
 <div style="height: 94px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Boundary Event (bpmn:boundaryEvent)<br/>Intermediate Catch Event (bpmn:intermediateCatchEvent)<br/>Intermediate Throw Event (bpmn:intermediateThrowEvent)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -617,7 +617,7 @@ Next, two gateway nodes:
 <div style="height: 60px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">Parallel Gateway (bpmn:parallelGateway)<br/>Inclusive Gateway (bpmn:inclusiveGateway)</span>
-  <p>
+  </p>
 </div>
 
 In the BPMNElements plugin, gateway node implementations are unified: exclusive, parallel, and inclusive gateways are constructed via the same factory method. They differ only by node type and icon, so they are described together.
@@ -640,7 +640,7 @@ Finally, a process node:
 <div style="height: 42px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 20px;">
     <span style="font-size: 14px;">SubProcess Node (bpmn:subProcess)</span>
-  <p>
+  </p>
 </div>
 
 **Visual Style**
@@ -825,7 +825,7 @@ Whether to use `bpmn:sequenceFlow` as the default edge type can be controlled vi
 ## bpmnElementsAdapter Plugin
 
 :::info{title=Tip}
-Before reading this section, it is recommended to read the [bpmnAdapter plugin](bpmn-plugin.zh.md) section to understand the basic features and usage of the bpmnAdapter plugin.
+Before reading this section, it is recommended to read the [BPMN adapter](adapter.en.md) section to understand the basic features and usage of the bpmnAdapter plugin.
 :::
 
 Similar to bpmnAdapter, bpmnElementsAdapter exposes two adapters: `BPMNBaseAdapter` and `BPMNAdapter`, and two data conversion helper functions: `convertNormalToXml` and `convertXmlToNormal`.
@@ -911,7 +911,7 @@ Compared to bpmnAdapter, bpmnElementsAdapter further enhances data conversion ca
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">retainedAttrsFields</span>
-  <p>
+  </p>
 </div>
 
 - Type: `string[]`
@@ -925,7 +925,7 @@ Compared to bpmnAdapter, bpmnElementsAdapter further enhances data conversion ca
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">excludeFields</span>
-  <p>
+  </p>
 </div>
 
 - Type: `{ in?: Set<string>; out?: Set<string> }`
@@ -954,7 +954,7 @@ Compared to bpmnAdapter, bpmnElementsAdapter further enhances data conversion ca
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">transformer</span>
-  <p>
+  </p>
 </div>
 
 - Type:
@@ -976,7 +976,7 @@ Compared to bpmnAdapter, bpmnElementsAdapter further enhances data conversion ca
 <div style="height: 40px;">
   <p style="padding: 8px; border-left: 4px solid #598df6; font-weight: bolder; line-height: 24px;">
     <span style="font-size: 14px;">mapping</span>
-  <p>
+  </p>
 </div>
 
 - Type: `{ in?: { [key: string]: string }; out?: { [key: string]: string } }`
@@ -1187,7 +1187,7 @@ The transformer in method is only invoked when the imported node has attributes 
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert normal JSON (GraphData) to XML-style JSON; supports retained fields, ignored fields, type mapping, and semantic hooks; handles arrays and <code>#text/#cdata-section/#comment</code>.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
@@ -1214,7 +1214,7 @@ The transformer in method is only invoked when the imported node has attributes 
     <span style="font-size: 12px; color: #a4a4a4;">
       Convert XML-style JSON to normal JSON; remove attribute prefix <code>-</code> and recursively process objects, arrays, and text nodes; used for flattening and backfilling attributes during import.
     </span>
-  <p>
+  </p>
 </div>
 
 **Parameters**<br/>
@@ -1266,12 +1266,12 @@ const lf = new LogicFlow({
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
 <div id="container"></div>
 <script>
-  const { BPMNElements, BPMNAdapter, BPMNBaseAdaptern } = Extension
+  const { BPMNElements, BPMNAdapter, BPMNBaseAdapter } = Extension
   // Global usage
   // Choose to include BpmnAdapter or BpmnXmlAdapter as needed
   Core.default.use(BPMNElements);
   Core.default.use(BPMNAdapter);
-  // Core.default.use(BPMNBaseAdaptern);
+  // Core.default.use(BPMNBaseAdapter);
   // Per-instance usage
   const lf = new Core.default({
     ..., // Other options
@@ -1279,7 +1279,7 @@ const lf = new LogicFlow({
       BPMNElements,
       // Choose to include BpmnAdapter or BpmnXmlAdapter as needed
       // BPMNAdapter,
-      BPMNBaseAdaptern
+      BPMNBaseAdapter
     ],
   })
 </script>
@@ -1296,7 +1296,7 @@ lf.render({
     { id: 'Event_fa4c699', type: 'bpmn:endEvent', x: 500, y: 100, },
   ],
   edges: [
-    { id: 'Flow_12ac567', sourceNodeId: 'Event_123ac56', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
+    { id: 'Flow_12ac567', sourceNodeId: 'Event_1234567', targetNodeId: 'Task_123ac56', type: 'bpmn:sequenceFlow', },
     { id: 'Flow_fa4c689', sourceNodeId: 'Task_123ac56', targetNodeId: 'Event_fa4c699', type: 'bpmn:sequenceFlow', },
   ],
 })
@@ -1381,7 +1381,7 @@ const lf = new LogicFlow({
       BPMNElements,
       // Choose to include BpmnAdapter or BpmnXmlAdapter as needed
       // BPMNAdapter,
-      BPMNBaseAdaptern
+      BPMNBaseAdapter
     ],
     pluginsOptions: {
       BPMNBaseAdapter: extraProps,

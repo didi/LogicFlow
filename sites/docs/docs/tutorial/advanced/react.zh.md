@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 进阶
   order: 2
-title: React 自定义节点
+title: React 节点
 order: 6
 toc: content
 tag: 新特性
@@ -13,6 +13,13 @@ tag: 新特性
 - 如何使用 React 组件来注册节点内容
 - properties 更新后如何同步更新节点内容
 :::
+
+::::info{title=阅读提示}
+- 适合已经理解 [节点](../basic/node.zh.md) 的 React 项目用户
+- 当前推荐优先使用 `@logicflow/react-node-registry`
+- 本页不展开连接规则、锚点和边能力；这些内容请回到 [进阶节点](node.zh.md)
+- 相关 API：[`nodeModel`](../../api/runtime-model/nodeModel.zh.md)、[`graphModel`](../../api/runtime-model/graphModel.zh.md)、[`事件`](../../api/logicflow-instance/event.zh.md)
+::::
 
 ## 渲染 React 组件为节点内容
 我们虽然提供了通过继承 HTMLNode 自定义节点的能力，但从用户反馈来看，这种方式并不够直观且有可能因为销毁时机不对而出现性能问题。

@@ -12,7 +12,7 @@ When the number of elements on a canvas gradually increases, it becomes more dif
 
 ## Enable
 
-```tsx | purex | pure
+```tsx | pure
 
 import LogicFlow from '@logicflow/core'
 import { Highlight } from '@logicflow/extension'
@@ -37,13 +37,13 @@ The Highlight plug-in provides an API for modifying the state:
 
 ### setMode
 Set the highlighting mode, usage:
-```tsx | purex | pure
+```tsx | pure
 lf.extension.highlight.setMode('single');
 
 ```
 ### setEnable
 Set the enable state, usage:
-```tsx | purex | pure
+```tsx | pure
 // Set to disable highlighting
 lf.extension.highlight.setEnable(false);
 

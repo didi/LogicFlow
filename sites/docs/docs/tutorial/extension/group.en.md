@@ -93,7 +93,7 @@ lf.register({
 
 In addition to the properties of the node itself, there are some special properties of the group. We
 can control these properties to achieve various effects of grouping when customizing. The properties
-and methods of the node itself are shown in [nodeModel](../../api/nodeModel.en.md)。
+and methods of the node itself are shown in [nodeModel](../../api/runtime-model/nodeModel.en.md)。
 
 ### State Properties
 

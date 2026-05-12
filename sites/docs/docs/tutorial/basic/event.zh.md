@@ -3,12 +3,12 @@ nav: 指南
 group:
   title: 基础
   order: 1
-title: 事件 Event
+title: 事件
 order: 6
 toc: content
 ---
 
-当我们使用鼠标或其它方式与画布交互时，会触发的对应的事件。通过监听这些事件，可以获取其在触发时所产生的数据，根据这些数据来实现需要的功能。详细可监听事件见[事件 API](../../api/eventCenter.zh.md)。
+当我们使用鼠标或其它方式与画布交互时，会触发的对应的事件。通过监听这些事件，可以获取其在触发时所产生的数据，根据这些数据来实现需要的功能。详细可监听事件见[事件 API](../../api/logicflow-instance/event.zh.md)。
 
 ## 监听事件
 
@@ -26,7 +26,7 @@ lf.on('node:click,edge:click', (data) => {})
 
 ## 自定义事件
 
-除了 lf 上支持的监听事件外，还可以使用[eventCenter](../../api/graphModel.zh.md#eventcenter)
+除了 lf 上支持的监听事件外，还可以使用 [eventCenter](../../api/runtime-model/graphModel.zh.md#eventcenter)
 对象来监听和触发事件。`eventCenter`是一个`graphModel`
 上的一个属性。所以在自定义节点的时候，我们可以使用`eventCenter`触发自定义事件。
 

@@ -20,7 +20,7 @@ When using flowchart tools for editing, users' attention is often focused on the
 
 Import and enable the default menu
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
 import "@logicflow/extension/lib/style/index.css";
@@ -54,15 +54,15 @@ Each function in the menu can be represented by a configuration entry. The speci
 
 Here's an example of writing a node right-click menu delete function:
 
-```tsx | purex | pure
+```tsx | pure
 // Define a menu item for node deletion
 const menuItem = {
   className: "lf-menu-delete",
   icon: true,
   callback: (node) => {
-    // Delete menu and trigger a custom event custom-node:deleted, passing out the current deleted node information
-    this.graphModel.deleteNode(node.id);
-    this.graphModel.eventCenter.emit("custom-node:deleted", node);
+    // Delete the node and emit a custom-node:deleted event with the deleted node data.
+    lf.graphModel.deleteNode(node.id);
+    lf.graphModel.eventCenter.emit("custom-node:deleted", node);
   },
 }
 ```
@@ -71,7 +71,7 @@ const menuItem = {
 
 You can use the `lf.extension.menu.addMenuConfig` method to add new options to the existing menu. The specific configuration example is as follows:
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
 
@@ -79,7 +79,7 @@ import NodeData = LogicFlow.NodeData;
 import EdgeData = LogicFlow.EdgeData;
 import Position = LogicFlow.Position;
 
-// Instantiate Logic Flow
+// Instantiate LogicFlow
 const lf = new LogicFlow({
   container: document.getElementById("app"),
   // Register plugins
@@ -155,7 +155,7 @@ lf.render();
 
 If there are unwanted options in the default menu, or it doesn't meet the requirements, you can use `lf.setMenuConfig` to override the default menu and achieve a custom menu effect.
 
-```tsx | purex | pure
+```tsx | pure
 lf.setMenuConfig({
   nodeMenu: [
     {
@@ -174,7 +174,7 @@ lf.setMenuConfig({
 
 In addition to overwriting the entire menu above, you can also use `lf.setMenuByType` to set menus for elements of specified types.
 
-```tsx | purex | pure
+```tsx | pure
 lf.setMenuByType({
   type: "bpmn:startEvent",
   menu: [
@@ -194,7 +194,7 @@ To provide more flexible interaction, version 2.1.0 adds functionality to dynami
 
 ### API
 
-```tsx | purex | pure
+```tsx | pure
 lf.changeMenuItemDisableStatus(menuKey, text, disabled)
 ```
 
@@ -205,7 +205,7 @@ Parameter description:
 
 ### Usage Example
 
-```tsx | purex | pure
+```tsx | pure
 // Disable the "Delete" option in node menu
 lf.changeMenuItemDisableStatus('nodeMenu', 'Delete', true)
 
@@ -220,7 +220,7 @@ lf.changeMenuItemDisableStatus('graphMenu', 'Share', true)
 
 You can also directly set certain menu items to disabled state when configuring the menu:
 
-```tsx | purex | pure
+```tsx | pure
 lf.addMenuConfig({
   nodeMenu: [
     {
@@ -246,7 +246,7 @@ lf.addMenuConfig({
 After using the selection plugin, the selection component will also display a menu. By default, the selection menu only has a delete operation.
 Like other menu items, you can call the methods provided by the Menu plugin to modify the selection menu configuration.
 
-```tsx | purex | pure
+```tsx | pure
 // Example: Set the selection menu to not display
 lf.setMenuByType({
   type: "lf:defaultSelectionMenu",
@@ -258,7 +258,7 @@ lf.setMenuByType({
 
 In addition to setting menus for general canvas elements above, LogicFlow also supports setting menus for custom nodes:
 
-```tsx | purex | pure
+```tsx | pure
 
 // index.js
 import { RectNode, CustomeModel } from "./custom.ts";
@@ -276,15 +276,15 @@ lf.setMenuByType({
       className: "lf-menu-delete",
       icon: true,
       callback: (node) => {
-        this.lf.graphModel.deleteNode(node.id);
-        this.lf.graphModel.eventCenter.emit("custom:event", node);
+        lf.graphModel.deleteNode(node.id);
+        lf.graphModel.eventCenter.emit("custom:event", node);
       },
     },
     {
       text: "edit",
       className: "lf-menu-item",
       callback: (node) => {
-        this.lf.graphModel.setElementStateById(node.id, 2);
+        lf.graphModel.setElementStateById(node.id, 2);
       },
     },
     {
@@ -292,7 +292,7 @@ lf.setMenuByType({
       className: "lf-menu-item",
       disabled: false, // Can set disabled state
       callback: (node) => {
-        this.lf.graphModel.cloneNode(node.id);
+        lf.graphModel.cloneNode(node.id);
       },
     }
   ],

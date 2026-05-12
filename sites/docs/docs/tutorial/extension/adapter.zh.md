@@ -58,7 +58,7 @@ lf.render({
       targetNodeId: "2",
       startPoint: { x: 150, y: 100 },
       endPoint: { x: 250, y: 200 },
-      pointList: [
+      pointsList: [
         { x: 150, y: 100 },
         { x: 200, y: 100 },
         { x: 200, y: 200 },
@@ -107,7 +107,7 @@ bpmn-js 上绘制的图在 LogicFlow
 
 ### bpmnAdapter
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { BpmnAdapter } from "@logicflow/extension";
 
@@ -286,7 +286,7 @@ extraProps.transformer = {
 在配置完需要的extraProps之后，我们需要在注册插件时传入
 
 ```tsx | pure
-Logicflow.use(BPMNAdapter, extraProps)
+LogicFlow.use(BPMNAdapter, extraProps)
 ```
 
 目前，我们内置了一下transformer **（仅做参考）**：
@@ -295,7 +295,7 @@ Logicflow.use(BPMNAdapter, extraProps)
 注意：这里内置的transformer仅做参考使用，这些transformer在编写的过程中是用来配合bpmn节点插件的，里面诸如`timerType`, `timerValue`, `definitionId`
 ，都是通过bpmn节点插件的definitionConfig配置的。在实际使用该数据转换插件时，你完全可以不使用bpmn节点插件，通过你自己的方式为节点添加属性，自定义transformer来实现符合你需要的数据转换。
 
-```tsx | purex | pure
+```tsx | pure
 
 let defaultTransformer: TransformerType = {
   'bpmn:startEvent': {
@@ -407,7 +407,7 @@ let defaultTransformer: TransformerType = {
 
 传入的transformer和默认的transformer会通过
 
-```tsx | purex | pure
+```tsx | pure
 
 const mergeInNOutObject = (target: any, source: any): TransformerType => {
   const sourceKeys = Object.keys(source);

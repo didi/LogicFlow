@@ -81,14 +81,14 @@ class CustomGroupModel extends dynamicGroup.model {
 
 lf.register({
   type: "my-custom-group",
-  model: CustomGroup,
-  view: CustomGroupModel,
+  view: CustomGroup,
+  model: CustomGroupModel,
 });
 ```
 
 ## Properties and Methods of groupModel
 
-In addition to the standard node properties, group nodes have special properties related to grouping. You can control these properties to achieve various grouping effects. For node properties and methods, see [nodeModel](../../api/nodeModel.en.md).
+In addition to the standard node properties, group nodes have special properties related to grouping. You can control these properties to achieve various grouping effects. For node properties and methods, see [nodeModel](../../api/runtime-model/nodeModel.en.md).
 
 ### State Properties
 ```ts

@@ -63,7 +63,7 @@ lf.render({
       targetNodeId: '2',
       startPoint: { x: 150, y: 100 },
       endPoint: { x: 250, y: 200 },
-      pointList: [
+      pointsList: [
         { x: 150, y: 100 },
         { x: 200, y: 100 },
         { x: 200, y: 200 },
@@ -107,7 +107,7 @@ lf.adapterOut = function(logicFlowData, params, ...rest) {
 };
 ```
 
-## Use the built-in data conversion tools
+## Use the built-in data conversion tools {#use-built-in-data-conversion-tool}
 
 LogicFlow has a built-in generic bpmn-js compatible conversion tool. You can support to display the
 graph drawn on LogicFlow on bpmn-js, and also support to display the graph drawn on bpmn-js on
@@ -115,7 +115,7 @@ LogicFlow.[LogicFlow2Bpmn](https://github.com/didi/LogicFlow/tree/master/package
 
 ### bpmnAdapter
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { BpmnAdapter } from "@logicflow/extension";
 
@@ -298,7 +298,7 @@ child elements are handled when importing. ***
 After configuring the required extraProps, we need to register the plugin by passing in the
 
 ```tsx | pure
-Logicflow.use(BPMNAdapter, extraProps)
+LogicFlow.use(BPMNAdapter, extraProps)
 ```
 
 Currently, we have built-in transformers **(for reference only)**:
@@ -310,7 +310,7 @@ Currently, we have built-in transformers **(for reference only)**:
 > plugin, through your own way to add properties to the node, customize the transformer to achieve the
 > data transformation that meets your needs.
 
-```tsx | purex | pure
+```tsx | pure
 
 let defaultTransformer: TransformerType = {
   'bpmn:startEvent': {
@@ -422,7 +422,7 @@ let defaultTransformer: TransformerType = {
 
 The incoming transformer and the default transformer are passed through the
 
-```tsx | purex | pure
+```tsx | pure
 
 const mergeInNOutObject = (target: any, source: any): TransformerType => {
   const sourceKeys = Object.keys(source);

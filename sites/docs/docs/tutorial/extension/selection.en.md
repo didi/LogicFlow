@@ -119,9 +119,11 @@ You can call the plugin method `setExclusiveMode` to reconfigure
 Usage:
 
 ```tsx | pure
-lf.setSelectionSelectMode(true)
-
 lf.extension.selectionSelect.setExclusiveMode(true);
+
+// You can also use the runtime shortcut mounted on the lf instance.
+// Note: this method is not typed in the current public types, so TypeScript projects should prefer the plugin instance method above.
+lf.setSelectionSelectMode(true);
 ```
 
 ## Events

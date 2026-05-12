@@ -3,24 +3,34 @@ nav: Guide
 group:
   title: Basics
   order: 1
-title: Examples
+title: Instance and graph data
 order: 0
 toc: content
 ---
 
-## Creating instances
+This page answers two basics: **how to create a LogicFlow instance**, and **what the graph data passed to `render` looks like**.
 
-Each process design interface is an instance of LogicFlow. To standardize terminology, we will later
-write `lf` for `LogicFlow` instances at the code level.
+::::info{title=Reading guide}
+- If you only want to run the first example end-to-end, start with [Get started](../get-started.en.md).
+- If you have already run the minimal example, this page fills in the instance, initialization options, and `graphData` fundamentals.
+::::
+
+The LogicFlow instance is the main object for designing and managing flowcharts. It initializes, renders, operates, and manages all elements on the diagram, including nodes and edges. With it you can build and manipulate diagrams and implement richer business logic and interactions.
+
+## Creating an instance
+
+Each flow-design surface is one LogicFlow instance. Create one with `new LogicFlow`, for example:
+
+<iframe src="/initialized-demo.html" style="border: none; width: 100%; height: 400px; margin: auto;"></iframe>
 
 ```html
-
 <style>
   #container {
     width: 1000px;
     height: 500px
   }
 </style>
+
 <div id="container"></div>
 ```
 
@@ -30,42 +40,67 @@ const lf = new LogicFlow({
 });
 ```
 
-When creating an instance, we need to pass configuration items that initialize the LogicFlow
-instance.LogicFlow supports a very rich set of initialization configuration items, but only
-the `container` parameter of the DOM node that is mounted when the LogicFlow canvas is initialized
-is required. See [LogicFlow API](../../api) for the complete set of configuration items.
+:::info{title=Tip}
+For consistent terminology, we write LogicFlow instances as `lf` in code examples from here on.
+:::
+
+When creating an instance you pass initialization options. LogicFlow supports many options, but **`container`** (the DOM element that hosts the canvas) is the only required field. For the full option list see [Constructor options](../../api/logicflow-constructor/index.en.md).
 
 ## Graph data
 
-Inside LogicFlow, we think of a flowchart as a graph consisting of nodes and edges. So we use the
-following data structure to represent the graph data of LogicFlow.
+Inside LogicFlow a flowchart is a graph made of nodes and edges. Graph data uses the following shape:
 
-<code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
+```json
+{
+  "nodes": [
+    {
+      "id",
+      "type",
+      "x",
+      "y",
+      "text",
+      "properties"
+    }
+  ],
+  "edges": [
+    {
+      "id",
+      "type",
+      "sourceNodeId",
+      "targetNodeId"
+    }
+  ]
+}
+```
 
-**`nodes`**: Contains all nodes. Each node's data attributes are detailed in
-the <a href="../../../en/api/model/node-model#DataAttributes">nodeModel</a>.
+- **`id`**: Optional for nodes and edges; generated when omitted.
+- **`type`**: Required; a built-in type such as `rect` / `polyline` or your custom type.
+- **`x` / `y`**: Required node coordinates.
+- **`text`**: Optional node or edge text.
+- **`properties`**: Custom data attached to the element.
 
-**`edges`**: Contains all edges, connecting two nodes through `sourceNodeId` and `targetNodeId`.
-Each edge's data attributes are detailed in the <a href="../../../en/api/model/edge-model#DataAttributes">
-EdgeModel</a>.
+**`nodes`**: All nodes to render. Full field definitions: [Type guide](../../api/type/index.en.md).
 
-**`type`**: Indicates the type of node or edge, which can be a basic type built into LogicFlow such
-as `rect` or `polyline`, or a custom type defined by users based on these basic types.
+**`edges`**: All edges to render, linked by `sourceNodeId` and `targetNodeId`. Full field definitions: [Type guide](../../api/type/index.en.md).
 
-**`text`**: `text` can represent either node text or edge text. For node text, the node coordinates
-are automatically used as the text coordinates. For edge text, an appropriate coordinate is computed
-based on the type of edge. In some scenarios, text positions can be adjusted and dragged. Therefore,
-our text data in LogicFlow provides coordinate attributes.
+After data is passed into the instance, LogicFlow builds a `nodeModel` and `edgeModel` for each element to hold state, behavior, and rendering. See [NodeModel](../../api/runtime-model/nodeModel.en.md) and [EdgeModel](../../api/runtime-model/edgeModel.en.md) for details.
 
-**`properties`**: Each node and edge has properties including node style, shape attributes, and
-business-specific properties reserved for particular business scenarios. Examples include node shape
-attributes like `width` and `height`, `style` attributes, and business-specific properties
-like `isPass`.
+## Rendering
 
-## Diagram Rendering
-
-The data is put directly into the `render` method to render the diagram.
+Call `render` with data in the format above:
 
 ```js
 lf.render(graphData)
 ```
+
+The example below shows how graph data is defined and passed in:
+
+<code id="graphData" src="../../../src/tutorial/basic/instance/graphData"></code>
+
+Beyond rendering, LogicFlow exposes many APIs. Start from the [API overview](../../api/logicflow-instance/index.en.md), then open the [full method index](../../api/logicflow-instance/index.en.md) as needed.
+
+## Next
+
+1. [Theme](theme.en.md): unify node, edge, and text styling
+2. [Events](event.en.md): listen to canvas, node, and edge interactions
+3. [Nodes](node.en.md) / [Edges](edge.en.md): move on to customization

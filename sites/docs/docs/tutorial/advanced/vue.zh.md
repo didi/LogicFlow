@@ -3,7 +3,7 @@ nav: 指南
 group:
   title: 进阶
   order: 2
-title: Vue 自定义节点
+title: Vue 节点
 order: 7
 toc: content
 tag: 新特性
@@ -12,7 +12,15 @@ tag: 新特性
 :::info{title=我们带来了新特性，本节内容主要介绍}
 - 如何使用 Vue 组件来注册节点内容
 - properties 更新后如何同步更新节点内容
-  :::
+::::
+
+::::info{title=阅读提示}
+- 适合已经理解 [节点](../basic/node.zh.md) 的 Vue 项目用户
+- 当前推荐优先使用 `@logicflow/vue-node-registry`
+- Vue3 和 Vue2 的使用方式不同，建议按自己的技术栈跳读，不要混在一起理解
+- 本页不展开连接规则、锚点和边能力；这些内容请回到 [进阶节点](node.zh.md)
+- 相关 API：[`nodeModel`](../../api/runtime-model/nodeModel.zh.md)、[`graphModel`](../../api/runtime-model/graphModel.zh.md)、[`事件`](../../api/logicflow-instance/event.zh.md)
+::::
 
 ## 渲染 Vue 组件为节点内容
 同 React 一样我们提供了一个独立的包 `@logicflow/vue-node-registry` 来使用 Vue 组件渲染节点。
@@ -28,8 +36,8 @@ tag: 新特性
 
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { forEach, map, has } from 'lodash-es'
-  import LogicFlow, { ElementState, LogicFlowUtil } from '@logicflow/core'
+  import { has } from 'lodash-es'
+  import LogicFlow from '@logicflow/core'
   import { register, getTeleport } from '@logicflow/vue-node-registry'
   import '@logicflow/core/es/index.css'
 
@@ -149,7 +157,7 @@ export default defineComponent({
 
 ## 更新节点
 跟 `HTMLNode` 一样，当用户通过 `setProperties` 或 `setProperty` 等更新节点 properties 时，
-我们需要在组件内部监听 `node:property-change` 事件，根据 properties 值更新组件状态。如上面 Demo 所示。
+我们需要在组件内部监听 `node:properties-change` 事件，根据 properties 值更新组件状态。如上面 Demo 所示。
 
 ## Vue2 使用
 上面我们使用到了 teleport，它是 Vue3 中的特性，如果在 Vue2 中，如何使用呢？

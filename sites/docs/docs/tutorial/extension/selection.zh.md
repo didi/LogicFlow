@@ -37,7 +37,7 @@ const lf = new LogicFlow({
   },
 });
 ```
-也可以通过调用下方的[`toggleExclusiveMode`](#setleexclusivemode)方法动态修改独占模式的启用状态
+也可以通过调用下方的[`setExclusiveMode`](#setexclusivemode)方法动态修改独占模式的启用状态。
 
 ## 使用
 
@@ -110,13 +110,13 @@ lf.extension.selectionSelect.closeSelectionSelect()
 lf.extension.selectionSelect.setSelectionSense(false, true);
 ```
 
-### setleExclusiveMode
+### setExclusiveMode
 
 设置框选独占模式的启用状态
 
 - 默认不启用独占模式
 
-可以调用插件方法`setSelectionSense`来重新设置
+可以调用插件实例方法 `setExclusiveMode` 来重新设置。
 
 | 参数   | 默认值 | 描述             |
 | ------ | ------ | ---------------- |
@@ -125,9 +125,11 @@ lf.extension.selectionSelect.setSelectionSense(false, true);
 用法：
 
 ```tsx | pure
-lf.setSelectionSelectMode(true)
+lf.extension.selectionSelect.setExclusiveMode(true);
 
-lf.extension.selectionSelect.setleExclusiveMode(true);
+// 也可以使用运行时挂载在 lf 实例上的快捷方法。
+// 注意：该方法当前公开类型里没有类型提示，TypeScript 项目中更推荐使用上面的插件实例方法。
+lf.setSelectionSelectMode(true);
 ```
 
 ## 默认状态

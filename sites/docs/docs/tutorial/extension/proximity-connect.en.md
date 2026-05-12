@@ -1,8 +1,8 @@
 ---
 nav: Guide
 group:
-title: Plugin Function
-order: 3
+  title: Plug-in functionality
+  order: 3
 title: Progressive Connection
 order: 6
 toc: content
@@ -35,7 +35,7 @@ The plugin will listen to the following events and take some actions
 
 ## Use plug-ins
 
-```tsx | purex | pure
+```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { ProximityConnect } from "@logicflow/extension";
 import "@logicflow/core/es/index.css";
@@ -77,25 +77,25 @@ Each function in the menu can be represented by a configuration item. The specif
 Used to modify the connection threshold
 
 ```ts
-setThresholdDistance = (distance: 'number'): void => {}
+setThresholdDistance = (distance: number): void => {}
 ```
 ### setReverseDirection(reverse)
 Used to modify the direction of creating a connection
 
 ```ts
-setReverseDirection = (reverse: 'boolean'): void => {}
+setReverseDirection = (reverse: boolean): void => {}
 ```
 ### setEnable(enable)
 Used to set the plug-in enable status
 
 ```ts
-setEnable = (enable: 'boolean'): void => {}
+setEnable = (enable: boolean): void => {}
 ```
 ### setVirtualEdgeStyle(style)
 Set the virtual edge style
 
 ```ts
-setVirtualEdgeStyle = (style: 'Record<string, unknown>'): void => {}
+setVirtualEdgeStyle = (style: Record<string, unknown>): void => {}
 ```
 
 ## Notes

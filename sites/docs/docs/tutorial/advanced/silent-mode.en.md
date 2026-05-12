@@ -9,7 +9,7 @@ toc: content
 ---
 
 LogicFlow provides a very large number of configurations that control how diagrams are edited,
-see [editConfigModel](../../api/editConfigModel.en.md) for details.
+see [editConfigModel](../../api/runtime-model/graphModel.en.md#editconfigmodel) for details.
 
 ## Initialization
 

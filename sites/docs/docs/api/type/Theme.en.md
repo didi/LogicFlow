@@ -1,8 +1,11 @@
 ---
 nav: API
-title: Theme
+group:
+  title: 类型字典
+  order: 3
+title: Theme Types
 toc: content
-order: 0
+order: 2
 ---
 This article mainly introduces the type definitions of LogicFlow theme styles.
 
@@ -49,7 +52,7 @@ The `CommonTheme` type defines the common properties that can be applied to vari
 | ry            | number           | The y-axis radius of the corners. This property is optional.                                                                                                                                                                                                        |
 | width         | number           | The width of the shape. This property is optional.                                                                                                                                                                                                                  |
 | height        | number           | The height of the shape. This property is optional.                                                                                                                                                                                                                 |
-| path          | number           | The SVG path string that defines a custom shape. This property is optional.                                                                                                                                                                                         |
+| path          | string           | The SVG path string that defines a custom shape. This property is optional.                                                                                                                                                                                         |
 | [key: string] | unknown          | Allows additional custom properties to be included in the theme and passed to the DOM. This provides flexibility for extending the theme. For more details, refer to the [SVG attribute specification](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute). |
 
 ## Node-Related Theme Types
@@ -170,11 +173,11 @@ The `ArrowTheme` type defines the theme for arrows on edges. It inherits from [C
 | Property Name  | Type              | Description                                                                                                                                                                                                                    |
 | -------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | offset         | number            | The length of the arrow. For example, for the symbol "->", offset represents the width of the greater-than sign.                                                                                                               |
-| refX           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refX represents the height of the greater-than sign.                                                                                    |
-| refY           | number (optional) | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", refY represents the height of the greater-than sign.                                                                                    |
-| verticalLength | number            | The distance of the arrow perpendicular to the edge. For example, for the symbol "->", verticalLength represents the height of the greater-than sign.                                                                          |
-| endArrowType   | string (optional) | The end arrow type. LogicFlow internally supports the following 4 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`none`: No arrow<br/>`circle`: Circle arrow   |
-| startArrowType | string (optional) | The start arrow type. LogicFlow internally supports the following 4 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`none`: No arrow<br/>`circle`: Circle arrow |
+| refX           | number (optional) | The x-axis reference point of the SVG marker, used to control the arrow's horizontal offset relative to the edge endpoint.                                                                                                     |
+| refY           | number (optional) | The y-axis reference point of the SVG marker, used to control the arrow's vertical offset relative to the edge endpoint.                                                                                                       |
+| verticalLength | number            | The arrow length perpendicular to the edge direction. For example, for the symbol "->", verticalLength represents the height of the greater-than sign.                                                                         |
+| endArrowType   | string (optional) | The end arrow type. LogicFlow internally supports the following 5 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`circle`: Circle arrow<br/>`none`: No arrow   |
+| startArrowType | string (optional) | The start arrow type. LogicFlow internally supports the following 5 types of arrows: <br/>`solid`: Solid arrow (default)<br/>`hollow`: Line arrow<br/>`diamond`: Diamond arrow<br/>`circle`: Circle arrow<br/>`none`: No arrow |
 | strokeLinecap  | string (optional) | The end style of the line, same as SVG strokeLinecap, supports three values: 'butt', 'round', 'square'                                                                                                                         |
 | strokeLinejoin | string (optional) | The join style of the line, same as SVG strokeLinejoin, supports three values: 'miter', 'round', 'bevel'                                                                                                                       |
 
