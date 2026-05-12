@@ -21,7 +21,7 @@
       "outputs": ["lib/**", "es/**", "src/style/raw.ts"]
     },
     "build": {
-      "dependsOn": ["^build:dev"],
+      "dependsOn": ["^build"],
       "outputs": ["lib/**", "es/**", "dist/**", "src/style/raw.ts"]
     }
   }
