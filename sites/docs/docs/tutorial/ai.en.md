@@ -7,7 +7,7 @@ order: 2
 toc: content
 ---
 
-Starting from `@logicflow/core@2.3.0`, LogicFlow ships tutorial and API docs with the npm package. Copy the prompt on this page to your AI Agent so it can read local docs in your project instead of implementing LogicFlow features from general knowledge alone.
+Starting from `@logicflow/core@2.2.2`, LogicFlow ships tutorial and API docs with the npm package. Copy the prompt on this page to your AI Agent so it can read local docs in your project instead of implementing LogicFlow features from general knowledge alone.
 
 ## When to Copy the Prompt
 

@@ -48,7 +48,7 @@ $ pnpm add @logicflow/core @logicflow/extension
 
 ## AI Programming Support
 
-LogicFlow ships local documentation for AI coding tools with the npm package. `@logicflow/core@2.3.0` and later include these docs. After installing or upgrading, copy the prompt below to your AI Agent so it checks the official docs before implementing LogicFlow features.
+LogicFlow ships local documentation for AI coding tools with the npm package. `@logicflow/core@2.2.2` and later include these docs. After installing or upgrading, copy the prompt below to your AI Agent so it checks the official docs before implementing LogicFlow features.
 
 Learn more in [AI Programming Support](https://site.logic-flow.cn/en/tutorial/ai).
 

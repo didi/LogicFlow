@@ -47,7 +47,7 @@ $ pnpm add @logicflow/core @logicflow/extension
 
 ## AI 编程支持
 
-LogicFlow 为 AI 编程工具提供了随 npm 包发布的本地文档。`@logicflow/core@2.3.0` 及以上版本会包含这些文档。安装或升级后，可以把下面这段提示词复制给你的 AI Agent，让它在实现 LogicFlow 功能前先查官方文档。
+LogicFlow 为 AI 编程工具提供了随 npm 包发布的本地文档。`@logicflow/core@2.2.2` 及以上版本会包含这些文档。安装或升级后，可以把下面这段提示词复制给你的 AI Agent，让它在实现 LogicFlow 功能前先查官方文档。
 
 更多说明请查看 [AI 编程支持](https://site.logic-flow.cn/tutorial/ai)。
 

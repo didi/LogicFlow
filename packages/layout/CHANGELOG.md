@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.2
+
+### Patch Changes
+
+- AI friendly docs include in core package
+- Updated dependencies
+  - @logicflow/core@2.2.2
+
 ## 2.1.1
 
 ### Patch Changes

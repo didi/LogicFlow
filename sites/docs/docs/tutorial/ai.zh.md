@@ -7,7 +7,7 @@ order: 2
 toc: content
 ---
 
-LogicFlow 会从 `@logicflow/core@2.3.0` 开始，把教程和 API 文档随 npm 包一起发布。你可以把本页的提示词复制给 AI Agent，让它在你的项目里直接读取本地文档，而不是只凭通用经验实现功能。
+LogicFlow 从 `@logicflow/core@2.2.2` 开始，把教程和 API 文档随 npm 包一起发布。你可以把本页的提示词复制给 AI Agent，让它在你的项目里直接读取本地文档，而不是只凭通用经验实现功能。
 
 ## 什么时候复制给 Agent
 
