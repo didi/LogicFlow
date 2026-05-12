@@ -1,5 +1,11 @@
 # @logicflow/engine
 
+## 0.1.2
+
+### Patch Changes
+
+- add ai coding intro to core/readme.md
+
 ## 0.1.1
 
 ### Patch Changes

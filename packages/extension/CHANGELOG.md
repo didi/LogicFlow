@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.2.3
+
+### Patch Changes
+
+- add ai coding intro to core/readme.md
+- Updated dependencies
+  - @logicflow/core@2.2.3
+
 ## 2.2.2
 
 ### Patch Changes

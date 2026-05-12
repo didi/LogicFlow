@@ -102,6 +102,38 @@ const lf = new LogicFlow({
 lf.render(data);
 ```
 
+## AI 编程支持
+
+LogicFlow 为 AI 编程工具提供了随 npm 包发布的本地文档。`@logicflow/core@2.2.2` 及以上版本会包含这些文档。安装或升级后，可以把下面这段提示词复制给你的 AI Agent，让它在实现 LogicFlow 功能前先查官方文档。
+
+更多说明请查看 [AI 编程支持](https://site.logic-flow.cn/tutorial/ai)。
+
+升级 `@logicflow/core` 后，请将最新版提示词再次提供给 Agent。
+
+```md
+<!-- BEGIN:logicflow-agent-rules -->
+# LogicFlow Agent Rules
+
+LogicFlow documentation is available at:
+
+- `node_modules/@logicflow/core/dist/docs/`
+
+Package roles:
+
+- `@logicflow/core`: core graph editor runtime, including canvas, nodes, edges, models, events, rendering, themes, and basic interactions.
+- `@logicflow/extension`: official plugins for common product features.
+- `@logicflow/layout`: official layout plugins for automatic graph layout.
+
+The docs for `@logicflow/extension` and `@logicflow/layout` are included under:
+
+- `node_modules/@logicflow/core/dist/docs/tutorial/extension/`
+
+Before implementing any LogicFlow feature, check the local docs first to see whether LogicFlow already provides a built-in, extension, or layout capability. If it does, prefer the documented official capability instead of reimplementing it from scratch.
+
+If an official package is needed but not installed, ask the user before installing it.
+<!-- END:logicflow-agent-rules -->
+```
+
 ## 文档
 
 [官方文档](https://docs.logic-flow.cn)
