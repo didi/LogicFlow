@@ -1,5 +1,16 @@
 # logicflow-docs
 
+## 2.2.11
+
+### Patch Changes
+
+- add ai coding intro to core/readme.md
+- Updated dependencies
+  - @logicflow/core@2.2.3
+  - @logicflow/extension@2.2.3
+  - @logicflow/layout@2.1.3
+  - @logicflow/react-node-registry@1.2.3
+
 ## 2.2.10
 
 ### Patch Changes

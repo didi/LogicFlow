@@ -1,5 +1,13 @@
 # @logicflow/react-node-registry
 
+## 1.2.3
+
+### Patch Changes
+
+- add ai coding intro to core/readme.md
+- Updated dependencies
+  - @logicflow/core@2.2.3
+
 ## 1.2.2
 
 ### Patch Changes
