@@ -453,9 +453,10 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
     const { model, graphModel } = this.props
     this.mouseDownPosition = { x: ev.clientX, y: ev.clientY }
     this.startTime = new Date().getTime()
-    const { editConfigModel } = graphModel
+    const { editConfigModel, gridSize, transformModel } = graphModel
     if (editConfigModel.adjustNodePosition && model.draggable) {
-      this.stepDrag && this.stepDrag.handleMouseDown(ev)
+      this.stepDrag.setStep(gridSize * transformModel.SCALE_X)
+      this.stepDrag.handleMouseDown(ev)
     }
     if (this.longPressTimer) {
       clearTimeout(this.longPressTimer)
@@ -522,16 +523,9 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
   render() {
     const { model, graphModel } = this.props
     const {
-      editConfigModel: {
-        hideAnchors,
-        adjustNodePosition,
-        allowRotate,
-        allowResize,
-      },
-      gridSize,
-      transformModel: { SCALE_X },
+      editConfigModel: { hideAnchors, allowRotate, allowResize },
     } = graphModel
-    const { isHitable, draggable, transform } = model
+    const { isHitable, transform } = model
     const { className = '', ...restAttributes } = model.getOuterGAttributes()
     const nodeShapeInner = (
       <g className="lf-node-content">
@@ -555,9 +549,6 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         </g>
       )
     } else {
-      if (adjustNodePosition && draggable) {
-        this.stepDrag.setStep(gridSize * SCALE_X)
-      }
       nodeShape = (
         <g
           className={`${this.getStateClassName()} ${className}`}
