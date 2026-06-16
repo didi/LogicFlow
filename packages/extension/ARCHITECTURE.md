@@ -79,6 +79,32 @@ Preserve that pattern. Extension code should layer on top of core, not tunnel in
 - Change grouped editing or swimlane behavior: start with `src/pool` or `src/dynamic-group`.
 - Change reusable node or edge materials: start with `src/materials`.
 
+## Grouping: DynamicGroup, Pool, and legacy Group
+
+Three related stacks coexist. Do not assume they share one plugin or one fix.
+
+| Stack | Code | Plugin | `graphModel` hook | Node types |
+| --- | --- | --- | --- | --- |
+| **DynamicGroup** (current) | `src/dynamic-group` | `DynamicGroup` | `dynamicGroup` | `dynamic-group` |
+| **Pool** (swimlanes, current) | `src/pool` | `PoolElements` | **also** `dynamicGroup` | `pool`, `lane` |
+| **Group** (deprecated) | `src/materials/group` | `Group` | `group` | `group`, BPMN `bpmn:subProcess`, old `bpmn-elements` Pool/Lane |
+
+### DynamicGroup ↔ Pool
+
+- **Inheritance:** `PoolModel` / `LaneModel` extend `DynamicGroupNodeModel`; `PoolView` / `LaneView` extend `DynamicGroupNode`. Pool reuses grouping semantics (`children`, `isGroup`, restrict, move/resize rules).
+- **Plugin:** `PoolElements` is largely a fork of the `DynamicGroup` plugin (lane drop-in, `nodeLaneMap`, pool resize). It assigns `graphModel.dynamicGroup = this` but exposes `getLaneByNodeId`, not `getGroupByNodeId`.
+- **Behavior:** Lanes disable collapse (`toggleCollapse` no-op). Pool is fixed **pool → lane → tasks**, not arbitrary group nesting.
+- **Usage:** Use **either** `DynamicGroup` **or** `PoolElements` on one canvas. Loading both overwrites `graphModel.dynamicGroup`; last plugin wins.
+- **Fixes:** Bugs in `dynamic-group/model.ts` (e.g. `collapseEdge`, `children` / map sync) can affect Pool/Lane models that inherit that code. Regression-test `examples/feature-examples` pool and dynamic-group pages when changing shared model logic.
+
+### Not the same as BPMN SubProcess
+
+`bpmn:subProcess` in `src/bpmn-elements` still extends **legacy Group**, not DynamicGroup. Migrating subprocess to DynamicGroup is a separate task; fixing DynamicGroup does not fix `bpmn:subProcess` unless explicitly migrated.
+
+### Custom groups
+
+Preferred pattern: extend `dynamicGroup.view` / `dynamicGroup.model` and enable the `DynamicGroup` plugin. See `sites/docs` dynamic-group tutorial.
+
 ## Dependency Boundaries
 
 This package depends on `@logicflow/core` and should primarily consume its public extension and rendering surface.
