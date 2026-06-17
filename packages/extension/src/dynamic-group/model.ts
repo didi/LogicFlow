@@ -12,6 +12,16 @@ import NodeData = LogicFlow.NodeData
 import NodeConfig = LogicFlow.NodeConfig
 import EdgeConfig = LogicFlow.EdgeConfig
 
+/** DynamicGroup 插件在 graphModel.dynamicGroup 上暴露的边登记 API（#2395） */
+type DynamicGroupEdgeRegistry = {
+  registerCollapsedVirtualEdge: (
+    virtualId: string,
+    groupId: string,
+    realEdgeId: string,
+  ) => void
+  unregisterCollapsedVirtualEdge: (virtualId: string) => void
+}
+
 export type IGroupNodeProperties = {
   /**
    * 当前分组中的节点 id
@@ -386,16 +396,22 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.setTextPosition()
   }
 
-  createVirtualEdge(edgeConfig: EdgeConfig) {
+  createVirtualEdge(edgeConfig: EdgeConfig, realEdgeId: string) {
+    // 虚拟边仅用于折叠态展示，路径由锚点重算；不修改真实边的 pointsList
     edgeConfig.pointsList = undefined
 
     const virtualEdge = this.graphModel.addEdge(edgeConfig)
     virtualEdge.virtual = true
-
-    // TODO: 强制不保存 group 连线数据？？？-> 为什么注释掉？是不是不能强制设置为 null，会导致无法回填
-    // virtualEdge.getData = () => null
     virtualEdge.text.editable = false
-    virtualEdge.isCollapsedEdge = true // 这一行干啥的,TODO: 项目中没搜到应用的地方，是否应该移除
+    virtualEdge.isCollapsedEdge = true
+
+    // 登记虚拟边 ↔ 真实边映射，供删除虚拟边时同步删除真实边（#2395）
+    const registry = this.graphModel.dynamicGroup as
+      | DynamicGroupEdgeRegistry
+      | undefined
+    registry?.registerCollapsedVirtualEdge(virtualEdge.id, this.id, realEdgeId)
+
+    return virtualEdge
   }
 
   /**
@@ -429,7 +445,13 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       }
 
       if (edge.virtual) {
+        // 先注销映射再删边，避免 deleteEdgeById 触发 edge:delete 时映射残留
+        const registry = graphModel.dynamicGroup as
+          | DynamicGroupEdgeRegistry
+          | undefined
+        registry?.unregisterCollapsedVirtualEdge(edge.id)
         graphModel.deleteEdgeById(edge.id)
+        return
       }
       // 考虑目标节点也属于分组的情况
       let targetNodeGroup =
@@ -460,13 +482,17 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
         // 如果边的起点和终点都在分组内部，则不创建新的虚拟边
         if (targetNodeGroup.id !== this.id || sourceNodeGroup.id !== this.id) {
-          this.createVirtualEdge(edgeConfig)
+          this.createVirtualEdge(edgeConfig, edge.id)
         }
         edge.visible = false
       }
 
       // 展开时，处理被隐藏的边的逻辑 -> expand
       if (!collapse && !edge.visible) {
+        // 折叠期间用户已删虚拟边并连带删掉真实边时，跳过显示
+        if (!graphModel.getEdgeModelById(edge.id)) {
+          return
+        }
         // 展开分组时：判断真实边的起点和中带你是否有任一节点在已折叠分组中，如果不是，则显示真实边
         // 如果是，则修改这个边的对应目标节点 id 来创建虚拟边
         if (
@@ -476,7 +502,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         ) {
           edgeConfig.targetNodeId = targetNodeGroup.id
           edgeConfig.endPoint = undefined
-          this.createVirtualEdge(edgeConfig)
+          this.createVirtualEdge(edgeConfig, edge.id)
         } else if (
           sourceNodeGroup &&
           sourceNodeGroup.isGroup &&
@@ -484,8 +510,9 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         ) {
           edgeConfig.sourceNodeId = sourceNodeGroup.id
           edgeConfig.startPoint = undefined
-          this.createVirtualEdge(edgeConfig)
+          this.createVirtualEdge(edgeConfig, edge.id)
         } else {
+          // 保留折叠态期间隐藏边已更新的几何，勿用折叠瞬间快照覆盖（折叠态拖分组场景）
           edge.visible = true
         }
       }

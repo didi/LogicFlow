@@ -41,6 +41,11 @@ export class DynamicGroup {
   activeGroup?: DynamicGroupNodeModel
   // 存储节点与 group 的映射关系
   nodeGroupMap: Map<string, string> = new Map()
+  /** 折叠态虚拟边 id → 所属分组与真实边 id */
+  collapsedVirtualEdges: Map<string, { groupId: string; realEdgeId: string }> =
+    new Map()
+  /** 折叠隐藏的真实边 id → 分组 id */
+  collapsedRealEdgeToGroup: Map<string, string> = new Map()
 
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(dynamicGroup)
@@ -58,6 +63,56 @@ export class DynamicGroup {
     const groupId = this.nodeGroupMap.get(nodeId)
     if (groupId) {
       return this.lf.getNodeModelById(groupId)
+    }
+  }
+
+  registerCollapsedVirtualEdge(
+    virtualId: string,
+    groupId: string,
+    realEdgeId: string,
+  ) {
+    // 双向索引：删虚拟边时能找到真实边；删真实边时能清理虚拟边登记
+    this.collapsedVirtualEdges.set(virtualId, { groupId, realEdgeId })
+    this.collapsedRealEdgeToGroup.set(realEdgeId, groupId)
+  }
+
+  unregisterCollapsedVirtualEdge(virtualId: string) {
+    const info = this.collapsedVirtualEdges.get(virtualId)
+    if (info) {
+      this.collapsedVirtualEdges.delete(virtualId)
+      if (this.collapsedRealEdgeToGroup.get(info.realEdgeId) === info.groupId) {
+        this.collapsedRealEdgeToGroup.delete(info.realEdgeId)
+      }
+    }
+  }
+
+  /**
+   * 折叠态删边：删虚拟边时连带删对应真实边，防止展开后「边复活」（#2395）。
+   * Gateway 双分支等场景下，每条虚拟边只映射一条真实边。
+   */
+  onEdgeDelete = ({ data: edge }: CallbackArgs<'edge:delete'>) => {
+    const virtualMapping = this.collapsedVirtualEdges.get(edge.id)
+    if (virtualMapping) {
+      this.collapsedVirtualEdges.delete(edge.id)
+      this.collapsedRealEdgeToGroup.delete(virtualMapping.realEdgeId)
+
+      // 仅删除本条映射的真实边，不影响同组其它分支
+      if (this.lf.getEdgeModelById(virtualMapping.realEdgeId)) {
+        this.lf.deleteEdge(virtualMapping.realEdgeId)
+      }
+      return
+    }
+
+    // 真实边被其它路径删除时，同步清理登记与分组内快照
+    const groupId = this.collapsedRealEdgeToGroup.get(edge.id)
+    if (groupId) {
+      this.collapsedRealEdgeToGroup.delete(edge.id)
+    }
+
+    for (const [virtualId, info] of this.collapsedVirtualEdges.entries()) {
+      if (info.realEdgeId === edge.id) {
+        this.collapsedVirtualEdges.delete(virtualId)
+      }
     }
   }
 
@@ -679,6 +734,7 @@ export class DynamicGroup {
     lf.on('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
     lf.on('selection:drop', this.onSelectionDrop)
     lf.on('node:delete', this.removeNodeFromGroup)
+    lf.on('edge:delete', this.onEdgeDelete)
     lf.on('node:drag,node:dnd-drag', this.onNodeDrag)
     lf.on('selection:drag', this.onSelectionDrag)
     lf.on('node:click', this.onNodeSelect)
@@ -747,6 +803,7 @@ export class DynamicGroup {
     this.lf.off('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
     this.lf.off('selection:drop', this.onSelectionDrop)
     this.lf.off('node:delete', this.removeNodeFromGroup)
+    this.lf.off('edge:delete', this.onEdgeDelete)
     this.lf.off('node:drag,node:dnd-drag', this.onNodeDrag)
     this.lf.off('selection:drag', this.onSelectionDrag)
     this.lf.off('node:click', this.onNodeSelect)
