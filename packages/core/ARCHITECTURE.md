@@ -109,7 +109,7 @@ For most source changes:
 
 ```sh
 cd packages/core
-pnpm run build:watch
+pnpm run dev
 
 cd examples/feature-examples
 pnpm start

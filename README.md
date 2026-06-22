@@ -135,16 +135,14 @@ lf.render(data);
 ## [本地开发](/CONTRIBUTING.md)
 
 ```shell
-# 安装项目依赖和初始化构建
+# 安装项目依赖（prepare 会自动跑 build:all）
 $ pnpm install
 
-# 进入到指定项目开发和调试
-cd packages/core
-pnpm run build:watch
+# 终端 1：监听 packages，热更新 es/lib
+$ pnpm run dev
 
-# 启动 example 查看效果
-cd examples/feature-examples
-pnpm run start
+# 终端 2：启动 demo
+$ cd examples/feature-examples && pnpm dev
 ```
 
 ## 参与共建

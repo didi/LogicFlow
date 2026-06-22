@@ -20,13 +20,16 @@ LogicFlow 维护同学会确认 issue 意图，更新合适的标签，关联 mi
 # 先创建开发分支开发，分支名应该有含义，避免使用 update、tmp 之类的
 $ git checkout -b branch-name
 
-# 开发某个包时，利用 build:watch 监听变化实时打包更新
-$ cd packages/core # or other packages, such as packages/extensions
-$ pnpm run build:watch
-
-# 在新的 Shell 中启动 examples 以开发 demo 并验证功能
-$ cd examples/feature-examples
+# 监听 packages 源码变更，热更新 es/lib 产物
+$ pnpm run dev
+# 或
 $ pnpm start
+
+# 首次或 clean 后，先一次性构建（es + lib，demo 开发所需）
+$ pnpm run build
+
+# 再另开终端，进入 example 启动 demo
+$ cd examples/feature-examples && pnpm dev
 
 # 开发完成后跑下测试是否通过，必要时需要新增或修改测试用例
 pnpm run test

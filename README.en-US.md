@@ -143,7 +143,7 @@ $ pnpm install
 
 # enter the specified project for development and debugging
 cd packages/core
-pnpm run build:watch
+pnpm run dev
 
 # start example to develop
 cd examples/feature-examples

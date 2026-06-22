@@ -121,7 +121,7 @@ For most extension changes:
 
 ```sh
 cd packages/extension
-pnpm run build:watch
+pnpm run dev
 
 cd examples/feature-examples
 pnpm start

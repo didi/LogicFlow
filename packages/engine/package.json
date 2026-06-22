@@ -23,11 +23,11 @@
     "build:esm": "tsc --module esnext --target es6 --outDir ./es",
     "build:cjs": "tsc --module commonjs --target es6 --outDir ./lib",
     "build:umd": "rollup -c ./rollup.config.js --bundleConfigAsCjs",
-    "build:dev": "run-p -s build:cjs build:esm",
-    "build:watch": "run-p -s build:watch:esm build:watch:cjs",
-    "build:watch:esm": "rss",
-    "build:watch:cjs": "rss",
-    "build": "rss",
+    "build": "run-p -s build:cjs build:esm",
+    "build:all": "run-p -s build build:umd",
+    "dev": "run-p -s dev:esm dev:cjs",
+    "dev:esm": "rss",
+    "dev:cjs": "rss",
     "prebuild": "rss"
   },
   "keywords": [
