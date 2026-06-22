@@ -191,7 +191,7 @@ const lf = new LogicFlow({
 <!-- Include plugin bundle -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- Include plugin styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BpmnElement } = Extension
@@ -410,7 +410,7 @@ const lf = new LogicFlow({
 <!-- Include plugin bundle -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- Include plugin styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BpmnElement, BpmnAdapter, BpmnXmlAdapter, toNormalJson, toXmlJson } = Extension
@@ -692,7 +692,7 @@ const lf = new LogicFlow({
 <!-- Include plugin bundle -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- Include plugin styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements } = Extension
@@ -1263,7 +1263,7 @@ const lf = new LogicFlow({
 <!-- Include plugin bundle -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- Include plugin styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements, BPMNAdapter, BPMNBaseAdapter } = Extension
@@ -1361,7 +1361,7 @@ const lf = new LogicFlow({
 <!-- Include plugin bundle -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- Include plugin styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements, BPMNAdapter, BPMNBaseAdapter } = Extension

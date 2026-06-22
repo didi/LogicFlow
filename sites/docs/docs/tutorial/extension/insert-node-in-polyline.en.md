@@ -28,9 +28,9 @@ Currently only the fold line is supported
 
 ```tsx | pure
 import LogicFlow from '@logicflow/core'
-import '@logicflow/core/lib/style/index.css'
+import '@logicflow/core/es/index.css'
 import { InsertNodeInPolyline } from '@logicflow/extension'
-import '@logicflow/extension/lib/style/index.css'
+import '@logicflow/extension/es/index.css'
 
 LogicFlow.use(InsertNodeInPolyline)
 ```

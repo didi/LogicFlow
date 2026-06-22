@@ -1,7 +1,7 @@
 <script>
 import { ref } from 'vue'
 import LogicFlow from '@logicflow/core'
-import '@logicflow/core/lib/style/index.css'
+import '@logicflow/core/es/index.css'
 import NodeRedExtension from './node-red/index'
 import Setting from './node-red/tools/Setting.vue'
 

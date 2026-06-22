@@ -19,7 +19,7 @@ The `@logicflow/extension` package provides a number of out-of-the-box component
 ```tsx | pure
 import LogicFlow from '@logicflow/core'
 import { Control, Menu, DndPanel } from '@logicflow/extension'
-import '@logicflow/extension/lib/style/index.css'
+import '@logicflow/extension/es/index.css'
 
 LogicFlow.use(Control)
 LogicFlow.use(Menu)
@@ -39,9 +39,9 @@ LogicFlow.use(BpmnElement)
 cdn:
 ```tsx | pure
 <!--LogicFlow core-css-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" />
 <!--LogicFlow extension-css-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <!--LogicFlow core-js-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
 <!--LogicFlow's plug-ins support individual introductions, here's an example of a menu plug-in-->
@@ -60,9 +60,8 @@ When a single-page application has multiple pages that use LogicFlow, different 
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { DndPanel, SelectionSelect } from "@logicflow/extension";
-import "@logicflow/core/lib/style/index.css";
-// import "@logicflow/core/dist/style/index.css"; // Introduced before version 2.0
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/core/es/index.css";
+import "@logicflow/extension/es/index.css";
 
 const lf = new LogicFlow({
   container: document.querySelector("#app"),

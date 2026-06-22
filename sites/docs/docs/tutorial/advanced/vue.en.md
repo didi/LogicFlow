@@ -178,7 +178,7 @@ In the example above, we used teleport, a feature of Vue 3. How can this be done
     } from '@logicflow/vue-node-registry'
 
     import ProgressNode from '@/components/ProgressNode'
-    import '@logicflow/core/dist/index.css'
+    import '@logicflow/core/es/index.css'
 
     export default {
         name: 'App',

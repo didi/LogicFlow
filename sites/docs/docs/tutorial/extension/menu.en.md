@@ -23,7 +23,7 @@ Import and enable the default menu
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Menu } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/extension/es/index.css";
 
 LogicFlow.use(Menu); // Global import
 

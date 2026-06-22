@@ -21,7 +21,7 @@ LogicFlow
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Label } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/extension/es/index.css";
 
 // 两种使用方式
 // 通过 use 方法引入插件

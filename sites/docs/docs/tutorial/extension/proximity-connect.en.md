@@ -39,7 +39,7 @@ The plugin will listen to the following events and take some actions
 import LogicFlow from "@logicflow/core";
 import { ProximityConnect } from "@logicflow/extension";
 import "@logicflow/core/es/index.css";
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/extension/es/index.css";
 
 // Two ways of using
 // Import the plugin through the use method

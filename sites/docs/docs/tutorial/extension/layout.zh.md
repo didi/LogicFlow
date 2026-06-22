@@ -57,7 +57,7 @@ pnpm add @logicflow/layout
 ```html
 <!-- 引入 LogicFlow Core UMD -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <!-- 引入 Layout UMD -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/layout/dist/index.min.js"></script>
 

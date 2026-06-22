@@ -12,30 +12,30 @@ In the `2.0` version, we optimized multiple modules of project infrastructure, c
 ```html | pure
 <!-- Original import path -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/Menu.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 
 <!-- Current import path -->
 <!-- When importing the old version, you need to add the version number after the package name and use the old path -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/logic-flow.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/style/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Menu.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/dist/index.css" />
 <!-- If you want to directly import the latest version of 2.0, just copy the following code -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 
 ```
 2. The style path of the LogicFlow core package needs to be changed when importing it through the package manager:
 ```js
 
 // 1.x version import method
-import "@logicflow/core/dist/style/index.css";
+import "@logicflow/core/dist/index.css";
 // How to import version 2.0
-import "@logicflow/core/lib/style/index.css";
+import "@logicflow/core/es/index.css";
 
 ```
 

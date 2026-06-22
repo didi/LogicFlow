@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/dist/index.css';
+import '@logicflow/core/es/index.css';
 import StatusButtons from './statusButton';
 import { StatusEdge } from './statusEdge';
 import { HoverEdge } from './hoverEdge';

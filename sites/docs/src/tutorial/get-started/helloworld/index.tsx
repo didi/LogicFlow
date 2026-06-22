@@ -1,7 +1,6 @@
 import React from 'react';
 import LogicFlow from '@logicflow/core';
 import '@logicflow/core/es/index.css';
-// import '@logicflow/core/dist/style/index.less';
 
 import data from './data';
 import '../index.less';
