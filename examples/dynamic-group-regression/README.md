@@ -23,8 +23,6 @@ pnpm start
 pnpm --filter dynamic-group-regression start
 ```
 
-> **若 `pnpm install` 因 `sites/docs` 的 `search-insights@2.15.0` 失败**：可先只构建上述三个 package（若本机已有 `node_modules`），或临时从 `pnpm-workspace.yaml` 注释 `sites/**` 后再 install。这是文档站锁文件问题，与本示例无关。
-
 ## 场景与 Issue 对照
 
 | 场景 ID | Issue |
@@ -49,8 +47,10 @@ pnpm --filter dynamic-group-regression start
 1. 左侧点击场景，画布自动加载预置图数据。
 2. 左侧 **DndPanel** 可拖「动态分组 / 矩形 / 圆形」（`new-group-map-pollution` 等场景需要）。
 3. 按步骤操作；可用场景内快捷按钮（折叠/展开/删边等）。
-3. **修复前**：应能复现 `已知问题` 描述的现象。
-4. **修复后**：同一操作应满足 [设计说明](../../docs/superpowers/specs/2026-05-18-dynamic-group-fix-design.md) 中的预期。
+4. **修复前**：应能复现 `已知问题` 描述的现象。
+5. **修复后**：同一操作应满足 [设计说明](../../docs/superpowers/specs/2026-05-18-dynamic-group-fix-design.md) 中的预期。
+
+回归示例默认开启 `pluginsOptions.dynamicGroup.disallowEdgeConnectToGroup: true`（推荐新业务配置），所有场景共用该设置。
 
 ## 注意
 

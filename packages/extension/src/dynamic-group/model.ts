@@ -12,8 +12,9 @@ import NodeData = LogicFlow.NodeData
 import NodeConfig = LogicFlow.NodeConfig
 import EdgeConfig = LogicFlow.EdgeConfig
 
-/** DynamicGroup 插件在 graphModel.dynamicGroup 上暴露的边登记 API（#2395） */
-type DynamicGroupEdgeRegistry = {
+/** DynamicGroup 插件在 graphModel.dynamicGroup 上暴露的 API */
+type DynamicGroupPluginApi = {
+  disallowEdgeConnectToGroup?: boolean
   registerCollapsedVirtualEdge: (
     virtualId: string,
     groupId: string,
@@ -72,6 +73,12 @@ export type IGroupNodeProperties = {
    * 分组节点是否自动置顶
    */
   autoToFront?: boolean
+
+  /**
+   * 是否允许手动将边连到/从本分组节点。
+   * 显式设置时优先于插件选项 disallowEdgeConnectToGroup。
+   */
+  allowEdgeConnect?: boolean
 
   // 节点是否允许添加到分组中，是否可以通过 properties 的方式传入
   // TODO: 函数类型的 properties 该如何传入
@@ -407,7 +414,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
 
     // 登记虚拟边 ↔ 真实边映射，供删除虚拟边时同步删除真实边（#2395）
     const registry = this.graphModel.dynamicGroup as
-      | DynamicGroupEdgeRegistry
+      | DynamicGroupPluginApi
       | undefined
     registry?.registerCollapsedVirtualEdge(virtualEdge.id, this.id, realEdgeId)
 
@@ -447,7 +454,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       if (edge.virtual) {
         // 先注销映射再删边，避免 deleteEdgeById 触发 edge:delete 时映射残留
         const registry = graphModel.dynamicGroup as
-          | DynamicGroupEdgeRegistry
+          | DynamicGroupPluginApi
           | undefined
         registry?.unregisterCollapsedVirtualEdge(edge.id)
         graphModel.deleteEdgeById(edge.id)
@@ -579,7 +586,53 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
   //   return style
   // }
 
-  // TODO: 是否是设置 group 节点没有锚点，而不是设置成透明？？？
+  /**
+   * 展开态手动连线是否允许连到/从分组节点本身。
+   * 未设置 allowEdgeConnect 时由插件 disallowEdgeConnectToGroup 决定；折叠虚拟边不受影响。
+   */
+  isManualEdgeConnectAllowed(): boolean {
+    const { allowEdgeConnect } = this.properties ?? {}
+    if (allowEdgeConnect !== undefined) {
+      return allowEdgeConnect
+    }
+    const plugin = this.graphModel.dynamicGroup as
+      | DynamicGroupPluginApi
+      | undefined
+    return !plugin?.disallowEdgeConnectToGroup
+  }
+
+  getConnectedTargetRules() {
+    const rules = super.getConnectedTargetRules()
+    rules.push({
+      message: '分组节点不允许作为边的终点',
+      validate: () => this.isManualEdgeConnectAllowed(),
+    })
+    return rules
+  }
+
+  getConnectedSourceRules() {
+    const rules = super.getConnectedSourceRules()
+    rules.push({
+      message: '分组节点不允许作为边的起点',
+      validate: () => this.isManualEdgeConnectAllowed(),
+    })
+    return rules
+  }
+
+  /**
+   * 保留锚点供折叠态虚拟边使用；禁止手动连线时关闭 edgeAddable。
+   */
+  getDefaultAnchor() {
+    const anchors = super.getDefaultAnchor()
+    if (this.isManualEdgeConnectAllowed()) {
+      return anchors
+    }
+    return anchors.map((anchor) => ({
+      ...anchor,
+      edgeAddable: false,
+    }))
+  }
+
   getAnchorStyle() {
     const style = super.getAnchorStyle()
     style.stroke = 'transparent'

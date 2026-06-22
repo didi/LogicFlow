@@ -36,6 +36,11 @@ export class DynamicGroup {
   static pluginName = 'dynamicGroup'
 
   private lf: LogicFlow
+  /**
+   * 为 true 时禁止手动将边连到/从 dynamic-group 节点本身。
+   * 默认 false，与历史行为一致；折叠虚拟边不受影响。
+   */
+  disallowEdgeConnectToGroup: boolean = false
   topGroupZIndex: number = DEFAULT_BOTTOM_Z_INDEX
   // 激活态的 group 节点
   activeGroup?: DynamicGroupNodeModel
@@ -825,6 +830,8 @@ export namespace DynamicGroup {
 
   export type DynamicGroupOptions = Partial<{
     isCollapsed: boolean
+    /** 为 true 时禁止手动将边连到/从分组节点；默认 false */
+    disallowEdgeConnectToGroup: boolean
   }>
 }
 

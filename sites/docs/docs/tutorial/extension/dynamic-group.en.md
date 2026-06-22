@@ -37,6 +37,46 @@ lf.render({
 });
 ```
 
+### Plugin options
+
+Pass DynamicGroup options via `pluginsOptions.dynamicGroup` when creating the LogicFlow instance (the key matches `DynamicGroup.pluginName`, i.e. `dynamicGroup`).
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `disallowEdgeConnectToGroup` | `boolean` | `false` | When `true`, **manual** edges cannot connect to or from a `dynamic-group` node as source/target. Edges between child nodes and the outside are unaffected. Virtual edges created on collapse are also unaffected. |
+
+**Default (`false`)**: Same as legacy behavior — manual connections to the group node are allowed.
+
+**Recommended for new apps**: Enable strict mode so users connect to child nodes instead of the group container:
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      disallowEdgeConnectToGroup: true,
+    },
+  },
+});
+```
+
+Per-node override via `properties.allowEdgeConnect` (when set explicitly, it takes precedence over `disallowEdgeConnectToGroup`):
+
+```tsx | pure
+{
+  type: 'dynamic-group',
+  x: 300,
+  y: 300,
+  properties: {
+    // Allow manual edges to this group even when strict mode is on
+    allowEdgeConnect: true,
+  },
+}
+```
+
+You can still extend connection rules in a custom `DynamicGroupNodeModel` subclass; see [Connection rules](../advanced/node.en.md#connection-rules).
+
 ## Data Format for DynamicGroup Nodes
 
 `dynamic-group` is a special type of node in LogicFlow, so its data format is similar to that of nodes but with an additional `children` property to store the IDs of its child nodes.
@@ -160,6 +200,12 @@ export type IGroupNodeProperties = {
    * and its children to the top layer
    */
   autoToFront?: boolean
+
+  /**
+   * Whether manual edges may connect to/from this group node.
+   * When set explicitly, overrides plugin option disallowEdgeConnectToGroup.
+   */
+  allowEdgeConnect?: boolean
   
   /**
    * Validation function for whether nodes can be added to the group
@@ -594,7 +640,22 @@ const transformGroup = {
 
 :::info{title=How-to-Prevent-Nodes-from-Connecting-to-a-Group?}
 
-Groups are a special type of node, so it is still possible to use [custom connection rules](../advanced/node.en.md#connection-rules) to prevent nodes from connecting directly to groups. However, do not set the number of anchors on a group to 0, as connections are used to represent the relationship between internal and external nodes when the group is collapsed.
+A group is a **container**, not a regular flow node. In the expanded state, edges should connect to **child business nodes**, not the group frame itself.
+
+**Recommended**: Enable strict mode via [plugin options](#plugin-options):
+
+```tsx | pure
+pluginsOptions: {
+  dynamicGroup: {
+    disallowEdgeConnectToGroup: true,
+  },
+},
+```
+
+- **Default (off)**: Manual connections to the group node remain allowed (legacy behavior).
+- **When enabled**: Dragging from group anchors and connecting external nodes to the group are blocked; use `properties.allowEdgeConnect` on a single group to opt out.
+- **Collapse unchanged**: Virtual edges on collapse still use group anchors — **do not** set anchor count to 0.
+- **Custom groups**: You may also override [connection rules](../advanced/node.en.md#connection-rules) in a `DynamicGroupNodeModel` subclass.
 
 :::
 
