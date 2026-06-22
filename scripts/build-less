@@ -11,8 +11,8 @@ const cwd = process.cwd()
 const es = path.join(cwd, 'es')
 const lib = path.join(cwd, 'lib')
 const src = path.join(cwd, 'src')
-const dist = path.join(cwd, 'dist')
 const index = path.join(src, 'index.less')
+const rootIndex = path.resolve(index)
 
 function compile(source, target) {
   let cmd = '../../node_modules/.bin/lessc'
@@ -28,34 +28,34 @@ function toCSSPath(source) {
   return path.join(dir, file)
 }
 
-// Copy less files
-function processLessInDir(dir) {
+function walkLessFiles(dir, callback) {
   const stat = fs.statSync(dir)
-  if (stat) {
-    if (stat.isDirectory()) {
-      fs.readdir(dir, (err, files) => {
-        files.forEach((file) => {
-          processLessInDir(path.join(dir, file))
-        })
-      })
+  if (!stat.isDirectory()) {
+    return
+  }
+  for (const file of fs.readdirSync(dir)) {
+    const fullPath = path.join(dir, file)
+    if (fs.statSync(fullPath).isDirectory()) {
+      walkLessFiles(fullPath, callback)
     } else {
-      const ext = path.extname(dir)
-      if (ext === '.less' || ext === '.css') {
-        fse.copySync(dir, path.join(es, path.relative(src, dir)))
-        fse.copySync(dir, path.join(lib, path.relative(src, dir)))
-      }
-
-      if (ext === '.less') {
-        let source = path.join(es, path.relative(src, dir))
-        let target = toCSSPath(source)
-        compile(dir, target)
-
-        source = path.join(lib, path.relative(src, dir))
-        target = toCSSPath(source)
-        compile(dir, target)
-      }
+      callback(fullPath)
     }
   }
+}
+
+function processLessFile(filePath) {
+  const ext = path.extname(filePath)
+  if (ext === '.less' || ext === '.css') {
+    fse.copySync(filePath, path.join(es, path.relative(src, filePath)))
+    fse.copySync(filePath, path.join(lib, path.relative(src, filePath)))
+  }
+
+  if (ext !== '.less' || path.resolve(filePath) === rootIndex) {
+    return
+  }
+
+  compile(filePath, toCSSPath(path.join(es, path.relative(src, filePath))))
+  compile(filePath, toCSSPath(path.join(lib, path.relative(src, filePath))))
 }
 
 function makeStyleModule() {
@@ -63,8 +63,11 @@ function makeStyleModule() {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  const source = path.join(dist, 'index.css')
+  const source = path.join(es, 'index.css')
   const target = path.join(dir, 'raw.ts')
+  if (!fs.existsSync(source)) {
+    return
+  }
   const content = fs.readFileSync(source, { encoding: 'utf8' })
   const prev = fs.existsSync(target)
     ? fs.readFileSync(target, { encoding: 'utf8' })
@@ -86,10 +89,7 @@ export const content = \`${content}\`
 if (fs.existsSync(index)) {
   compile(index, path.join(es, 'index.css'))
   compile(index, path.join(lib, 'index.css'))
-  compile(index, path.join(dist, 'index.css'))
 
-  processLessInDir(src)
+  walkLessFiles(src, processLessFile)
   makeStyleModule()
-} else {
-  // console.log(`style not found: ${index}`)
 }

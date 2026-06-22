@@ -10,6 +10,9 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
+import postcss from 'rollup-plugin-postcss'
+import postcssUrl from 'postcss-url'
+import postcssImport from 'postcss-import'
 import fileSize from 'rollup-plugin-filesize'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -41,6 +44,36 @@ export function makeOutput() {
   }
 
   return output
+}
+
+export function rollupCssConfig(config = {}) {
+  const { input = 'src/index.less', output = { file: 'dist/index.css' } } =
+    config
+
+  return {
+    input,
+    output,
+    plugins: [
+      postcss({
+        plugins: [
+          postcssImport({
+            resolve: (id) => {
+              if (id.startsWith('~')) {
+                return path.resolve('node_modules', id.slice(1))
+              }
+              return id
+            },
+          }),
+          postcssUrl({
+            url: 'inline',
+          }),
+        ],
+        use: [['less', { javascriptEnabled: true }]],
+        extract: true,
+        minimize: true,
+      }),
+    ],
+  }
 }
 
 export function rollupConfig(config = {}) {

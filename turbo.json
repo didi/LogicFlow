@@ -14,7 +14,7 @@
     },
     "build:umd": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "src/style/raw.ts"]
+      "outputs": ["dist/**"]
     },
     "build": {
       "dependsOn": ["^build"],
