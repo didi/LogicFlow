@@ -1,5 +1,5 @@
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/dist/index.css';
+import '@logicflow/core/es/index.css';
 import { useEffect, useRef } from 'react';
 
 import UserTask from './customRect';

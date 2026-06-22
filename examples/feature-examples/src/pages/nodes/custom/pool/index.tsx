@@ -3,7 +3,7 @@ import LogicFlow from '@logicflow/core'
 import { Flex } from 'antd'
 import { PoolElements } from '@logicflow/extension'
 import data from './data'
-import '@logicflow/core/dist/index.css'
+import '@logicflow/core/es/index.css'
 import './index.less'
 
 const config = {

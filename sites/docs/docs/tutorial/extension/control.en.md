@@ -13,7 +13,7 @@ toc: content
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Control } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/extension/es/index.css";
 
 LogicFlow.use(Control);
 ```

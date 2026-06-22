@@ -19,7 +19,7 @@ LogicFlow provides built-in node text and text editing capabilities, but sometim
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { Label } from "@logicflow/extension";
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/extension/es/index.css";
 
 // Two ways to use the plugin
 // Register the plugin using the use method

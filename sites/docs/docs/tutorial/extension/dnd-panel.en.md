@@ -47,10 +47,9 @@ PatternItem：
 
 ```tsx | pure
 import LogicFlow from '@logicflow/core';
-import "@logicflow/core/lib/style/index.css";
-// import "@logicflow/core/dist/style/index.css"; // Introduced before version 2.0
+import "@logicflow/core/es/index.css";
 import { DndPanel, SelectionSelect } from '@logicflow/extension';
-import '@logicflow/extension/lib/style/index.css'
+import '@logicflow/extension/es/index.css'
 
 LogicFlow.use(DndPanel);
 LogicFlow.use(SelectionSelect);

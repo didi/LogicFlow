@@ -191,7 +191,7 @@ const lf = new LogicFlow({
 <!-- 引入插件包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- 引入插件样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BpmnElement } = Extension
@@ -408,7 +408,7 @@ const lf = new LogicFlow({
 <!-- 引入插件包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- 引入插件样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BpmnElement, BpmnAdapter, BpmnXmlAdapter, toNormalJson, toXmlJson } = Extension
@@ -733,7 +733,7 @@ const lf = new LogicFlow({
 <!-- 引入插件包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- 引入插件样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements } = Extension
@@ -1302,7 +1302,7 @@ const lf = new LogicFlow({
 <!-- 引入插件包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- 引入插件样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements, BPMNAdapter, BPMNBaseAdapter } = Extension
@@ -1406,7 +1406,7 @@ const lf = new LogicFlow({
 <!-- 引入插件包 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
 <!-- 引入插件样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <div id="container"></div>
 <script>
   const { BPMNElements, BPMNAdapter, BPMNBaseAdapter } = Extension

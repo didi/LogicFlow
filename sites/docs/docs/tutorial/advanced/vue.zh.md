@@ -174,7 +174,7 @@ export default defineComponent({
   import { register } from '@logicflow/vue-node-registry'
 
   import ProgressNode from '@/components/ProgressNode'
-  import '@logicflow/core/dist/index.css'
+  import '@logicflow/core/es/index.css'
 
   export default {
     name: 'App',

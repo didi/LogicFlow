@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { getTeleport } from '@logicflow/vue-node-registry'
-import '@logicflow/core/lib/style/index.css'
+import '@logicflow/core/es/index.css'
 import LinkChart from '@/components/chart/linkChart'
 import type { IGraphData } from '@/components/chart/types.d'
 

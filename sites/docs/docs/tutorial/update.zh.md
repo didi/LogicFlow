@@ -12,30 +12,30 @@ toc: content
 ```html | pure
 <!-- 原引入路径 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/Menu.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 
 <!-- 现引入路径 -->
 <!-- 旧版本引入时，需要在包名后面加上版本号、路径也需要使用老的 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/logic-flow.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/style/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Menu.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/dist/index.css" />
 <!-- 如果想直接引入2.0最新的版本，只需要复制下面这段代码即可 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 
 ```
 2. 通过包管理器方式引入LogicFlow core包样式路径需要变更：
 ```js
 
 // 1.x版本的引入方式
-import "@logicflow/core/dist/style/index.css";
+import "@logicflow/core/dist/index.css";
 // 2.0版本的引入方式
-import "@logicflow/core/lib/style/index.css";
+import "@logicflow/core/es/index.css";
 
 ```
 

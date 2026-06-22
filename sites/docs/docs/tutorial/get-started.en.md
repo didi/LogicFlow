@@ -56,11 +56,11 @@ LogicFlow requires including CSS files for its built-in styles in addition to th
 
 <!-- Import the core package and corresponding css -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 
 <!--  Import extension packages and corresponding css (not necessary when not using plugins)  -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 
 ```
 
@@ -68,12 +68,12 @@ LogicFlow requires including CSS files for its built-in styles in addition to th
 
 <!-- Import the core package and corresponding css -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/logic-flow.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/style/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core@1.2.27/dist/index.css" rel="stylesheet">
 
 <!--  Import extension packages and corresponding css (not necessary when not using plugins) -->
 <!-- Tip: version 1.0, the plug-in script package is exported separately, so the introduction of a component, the reference path needs to be specific to the name of the package, like the following introduction of the Menu plug-in so 👇🏻 -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/Menu.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension@1.2.27/dist/index.css" />
 ```
 :::
 
@@ -82,6 +82,12 @@ By default, the CDN will include the latest version. To include a different vers
 <a href="https://www.jsdelivr.com/package/npm/@logicflow/extension" target="_blank">extension package</a>, and adjust the CDN path accordingly.
 
 ## Getting Started
+
+::::info{title=Styles}
+In bundler projects, import `@logicflow/core/es/index.css`. When using extension plugins, import `@logicflow/extension/es/index.css` as well. For CDN / UMD usage, use `dist/index.css`.
+
+**Legacy paths not recommended:** `@logicflow/core/lib/style/index.css`, `@logicflow/core/dist/style/index.css`, `@logicflow/core/es/style/index.css`, and the corresponding `style/index.css` subpaths in extension packages.
+::::
 
 Let's get started with LogicFlow now!
 
@@ -115,7 +121,7 @@ LogicFlow itself is packaged in umd as a pure JS package, so it can be used in b
   <body>
   <!-- 引入 core 包和对应 css-->
   <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 
   <!-- 创建画布容器 -->
   <div id="container"></div>
@@ -177,7 +183,7 @@ LogicFlow itself is packaged in umd as a pure JS package, so it can be used in b
 
 ``` jsx [React]
 import LogicFlow from '@logicflow/core';
-import '@logicflow/core/dist/index.css';
+import '@logicflow/core/es/index.css';
 import { useEffect, useRef } from 'react';
 
 export default function App() {
@@ -239,7 +245,7 @@ export default function App() {
 
 <script>
   import LogicFlow from "@logicflow/core";
-  import "@logicflow/core/lib/style/index.css";
+  import "@logicflow/core/es/index.css";
 
   export default {
     name: 'lf-Demo',
@@ -388,7 +394,7 @@ Below is an example of using the functionality of a control panel plugin that pr
 <!-- Import extension-->
 
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <!-- create graph container -->
 <div id="container"></div>
 <script>

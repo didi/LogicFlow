@@ -36,7 +36,7 @@ toc: content
 ```tsx | pure
 import LogicFlow from '@logicflow/core'
 import { Control, Menu, DndPanel } from '@logicflow/extension'
-import '@logicflow/extension/lib/style/index.css'
+import '@logicflow/extension/es/index.css'
 
 LogicFlow.use(Control) // 控制面板
 LogicFlow.use(Menu) // 右键菜单
@@ -57,9 +57,9 @@ cdn方式
 
 ```tsx
 <!--LogicFlow core包css-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" />
 <!--LogicFlow extension包css-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/lib/style/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@logicflow/extension/dist/index.css" />
 <!--LogicFlow core包js-->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/logic-flow.js"></script>
 <!--LogicFlow的插件支持单个引入，这里以菜单插件为例-->
@@ -77,9 +77,8 @@ cdn方式
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
 import { DndPanel, SelectionSelect } from "@logicflow/extension";
-import "@logicflow/core/lib/style/index.css";
-// import "@logicflow/core/dist/style/index.css"; // 2.0版本前的引入方式
-import "@logicflow/extension/lib/style/index.css";
+import "@logicflow/core/es/index.css";
+import "@logicflow/extension/es/index.css";
 
 const lf = new LogicFlow({
   container: document.querySelector("#app"),

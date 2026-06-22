@@ -78,6 +78,12 @@ pnpm add @logicflow/extension
 
 然后初始化一个实例并渲染最小图数据：
 
+::::info{title=样式引入}
+在 bundler 项目中，推荐引入 `@logicflow/core/es/index.css`；使用 extension 插件时，同理引入 `@logicflow/extension/es/index.css`。CDN / UMD 场景请使用 `dist/index.css`。
+
+**不推荐继续使用的旧路径：** `@logicflow/core/lib/style/index.css`、`@logicflow/core/dist/style/index.css`、`@logicflow/core/es/style/index.css` 及 extension 包中对应的 `style/index.css` 子路径。
+::::
+
 ```ts
 import LogicFlow from '@logicflow/core'
 import '@logicflow/core/es/index.css'

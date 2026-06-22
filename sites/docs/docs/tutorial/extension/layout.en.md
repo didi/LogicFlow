@@ -58,7 +58,7 @@ You can also use the UMD bundle directly via CDN:
 ```html
 <!-- Include LogicFlow Core UMD -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.css" rel="stylesheet">
 <!-- Include Layout UMD -->
 <script src="https://cdn.jsdelivr.net/npm/@logicflow/layout/dist/index.min.js"></script>
 
