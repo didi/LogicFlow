@@ -141,11 +141,11 @@ pnpm prettier
 Package-level workflow that usually matches source changes:
 
 ```sh
-cd packages/<target-package>
-pnpm run build:watch
+# 终端 1：packages 热更新
+pnpm run dev
 
-cd examples/<closest-example>
-pnpm start
+# 终端 2：example demo
+cd examples/<closest-example> && pnpm dev
 ```
 
 Do not claim validation you did not run.

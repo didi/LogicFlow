@@ -4,23 +4,23 @@
     "clean": {
       "outputs": []
     },
-    "build:esm": {
-      "dependsOn": ["^build:dev"],
-      "outputs": ["es/**", "src/style/raw.ts"]
-    },
     "build:cjs": {
-      "dependsOn": ["^build:dev"],
+      "dependsOn": ["^build"],
       "outputs": ["lib/**", "src/style/raw.ts"]
     },
+    "build:esm": {
+      "dependsOn": ["^build"],
+      "outputs": ["es/**", "src/style/raw.ts"]
+    },
     "build:umd": {
-      "dependsOn": ["^build:dev"],
+      "dependsOn": ["^build"],
       "outputs": ["dist/**", "src/style/raw.ts"]
     },
-    "build:dev": {
-      "dependsOn": ["^build:dev"],
+    "build": {
+      "dependsOn": ["^build"],
       "outputs": ["lib/**", "es/**", "src/style/raw.ts"]
     },
-    "build": {
+    "build:all": {
       "dependsOn": ["^build"],
       "outputs": ["lib/**", "es/**", "dist/**", "src/style/raw.ts"]
     }

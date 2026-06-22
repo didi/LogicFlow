@@ -8,19 +8,22 @@
 
 ```sh
 # 仓库根目录
-pnpm install
-pnpm exec turbo run build --filter=@logicflow/core --filter=@logicflow/extension --filter=@logicflow/layout
+pnpm install   # prepare 会自动 build:all
+# 或仅开发所需的最小构建
+pnpm run build
 
 cd examples/dynamic-group-regression
-pnpm start
+pnpm dev
 ```
 
-浏览器默认打开 `http://localhost:5190`。
-
-或在根目录一条命令启动 dev：
+完整本地开发：
 
 ```sh
-pnpm --filter dynamic-group-regression start
+# 终端 1：packages 热更新
+pnpm run dev
+
+# 终端 2
+cd examples/dynamic-group-regression && pnpm dev
 ```
 
 ## 场景与 Issue 对照

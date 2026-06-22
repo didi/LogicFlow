@@ -21,7 +21,7 @@ If you want to contribute improvements or new features we are happy to review yo
 $ pnpm install
 
 $ cd packages/core # or other packages, such as packages/extensions
-$ pnpm run build:watch
+$ pnpm run dev
 
 # create a new shell
 $ cd examples/feature-examples
