@@ -9,12 +9,17 @@ export function createContainer() {
   return container
 }
 
-export function createDynamicGroupLF() {
+export function createDynamicGroupLF(pluginOptions?: {
+  disallowEdgeConnectToGroup?: boolean
+}) {
   return new LogicFlow({
     container: createContainer(),
     width: 1200,
     height: 800,
     plugins: [DynamicGroup],
+    ...(pluginOptions
+      ? { pluginsOptions: { dynamicGroup: pluginOptions } }
+      : {}),
   })
 }
 

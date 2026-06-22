@@ -36,6 +36,46 @@ lf.render({
 })
 ```
 
+### 插件配置项
+
+初始化 LogicFlow 时，可通过 `pluginsOptions.dynamicGroup` 传入 DynamicGroup 插件选项（键名与 `DynamicGroup.pluginName` 一致，即 `dynamicGroup`）。
+
+| 选项 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `disallowEdgeConnectToGroup` | `boolean` | `false` | 为 `true` 时，**禁止手动**将边连到/从 `dynamic-group` 节点本身（作为起点或终点）。组内节点与外部节点的连线不受影响；分组折叠时由插件创建的虚拟边也不受影响。 |
+
+**默认行为（`false`）**：与历史版本一致，允许手动连到分组节点。
+
+**推荐新业务**：开启严格模式，避免用户误将流程边连在分组容器上：
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      disallowEdgeConnectToGroup: true,
+    },
+  },
+})
+```
+
+单个分组节点可通过 `properties.allowEdgeConnect` **覆盖**插件配置（显式设置时优先级高于 `disallowEdgeConnectToGroup`）：
+
+```tsx | pure
+{
+  type: 'dynamic-group',
+  x: 300,
+  y: 300,
+  properties: {
+    // 插件已开启 disallowEdgeConnectToGroup 时，仅此分组仍允许手动连线
+    allowEdgeConnect: true,
+  },
+}
+```
+
+若未使用 `pluginsOptions`、需要自定义连接规则，仍可参考 [连接规则](../advanced/node.zh.md#连接规则) 在继承的 `DynamicGroupNodeModel` 中扩展。
+
 ## DynamicGroup 节点的数据格式
 
 `dynamic-group`对 LogicFlow 来说是一种特殊的节点，所以其数据格式仍然和节点基本一致。只是相对于普通的节点，`dynamic-group`
@@ -160,6 +200,12 @@ export type IGroupNodeProperties = {
    * 当选中分组时，是否自动将分组及其子节点置于最顶层
    */
   autoToFront?: boolean
+
+  /**
+   * 是否允许手动将边连到/从本分组节点。
+   * 显式设置时优先于插件选项 disallowEdgeConnectToGroup。
+   */
+  allowEdgeConnect?: boolean
   
   /**
    * 节点是否允许添加到分组中的校验函数
@@ -594,9 +640,24 @@ const transformGroup = {
 ```
 
 :::info{title=如何阻止节点连接到分组上?}
-分组是一种特殊的节点，所以仍然可以通过[自定义连接规则校验](../advanced/node.zh.md#连接规则)
-来实现不允许节点和分组直接相连。但是请不要将分组的锚点数量设置为
-0，因为在分组被折叠时，会通过分组的锚点与外部节点相连来表示分组内部节点与外部节点的关系。
+
+分组是**容器**而非普通流程节点，展开态下更合理的连线方式是连接**组内业务节点**，而不是分组框本身。
+
+**推荐做法**：初始化时开启插件严格模式（见上文 [插件配置项](#插件配置项)）：
+
+```tsx | pure
+pluginsOptions: {
+  dynamicGroup: {
+    disallowEdgeConnectToGroup: true,
+  },
+},
+```
+
+- **默认（未开启）**：仍允许手动连到分组，与旧版行为一致。
+- **开启后**：禁止从分组锚点拖出连线，也禁止外部节点连到分组；可通过节点 `properties.allowEdgeConnect` 对单个分组例外放行。
+- **折叠不受影响**：折叠时插件仍会通过分组锚点创建虚拟边，因此**请勿**将分组锚点数量设为 0。
+- **自定义分组**：也可在继承 `DynamicGroupNodeModel` 后重写 [连接规则](../advanced/node.zh.md#连接规则)。
+
 :::
 
 ## 关于泳道

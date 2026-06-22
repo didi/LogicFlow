@@ -43,6 +43,11 @@ const lfOptions: Partial<LogicFlow.Options> = {
   allowRotate: false,
   keyboard: { enabled: true },
   plugins: [DynamicGroup, Control, DndPanel, ElkLayout],
+  pluginsOptions: {
+    dynamicGroup: {
+      disallowEdgeConnectToGroup: true,
+    },
+  },
 }
 
 function setupLf(lf: LogicFlow) {

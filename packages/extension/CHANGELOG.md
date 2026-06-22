@@ -16,6 +16,12 @@
 - Updated dependencies
   - @logicflow/core@2.2.2
 
+## Unreleased
+
+### Minor Changes
+
+- **dynamic-group**: 新增插件选项 `disallowEdgeConnectToGroup`（默认 `false`，行为与历史版本一致）。设为 `true` 时禁止手动将边连到/从分组节点；节点 `properties.allowEdgeConnect` 可覆盖。详见 [动态分组文档](https://site.logic-flow.cn/tutorial/extension/dynamic-group)。
+
 ## 2.2.1
 
 ### Patch Changes
