@@ -249,65 +249,95 @@ export class DynamicGroup {
     this.addNodeToGroup(node)
   }
 
+  detachNodeFromGroup = (groupId: string, nodeId: string) => {
+    const group = this.lf.getNodeModelById(groupId) as DynamicGroupNodeModel
+    if (!group) return
+    group.removeChild(nodeId)
+    this.nodeGroupMap.delete(nodeId)
+    group.setAllowAppendChild(false)
+  }
+
   addNodeToGroup = (node: LogicFlow.NodeData) => {
+    const nodeModel = this.lf.getNodeModelById(node.id)
+    const bounds = nodeModel?.getBounds()
+    if (!nodeModel || !bounds) return
+
     // 1. 如果该节点之前已经在 group 中了，则将其从之前的 group 移除
     const preGroupId = this.nodeGroupMap.get(node.id)
 
-    if (preGroupId) {
-      const group = this.lf.getNodeModelById(
-        preGroupId,
-      ) as DynamicGroupNodeModel
-
-      group.removeChild(node.id)
-      this.nodeGroupMap.delete(node.id)
-      group.setAllowAppendChild(false)
+    // TODO: 确认下面的注释内容
+    // https://github.com/didi/LogicFlow/issues/1261
+    // 当使用 SelectionSelect 框选后触发 lf.addNode(Group)
+    // 会触发 appendNodeToGroup() 的执行
+    // 由于 this.getGroup() 会判断 node.id !== nodeData.id
+    // 因此当 addNode 是 Group 类型时，this.getGroup() 会一直返回空
+    // 导致了下面这段代码无法执行，也就是无法将当前添加的 Group 添加到 this.nodeGroupMap 中
+    // 这导致了折叠分组时触发的 foldEdge() 无法正确通过 getNodeGroup() 拿到正确的 groupId
+    // 从而导致折叠分组时一直都会创建一个虚拟边
+    // 而初始化分组时由于正确设置了nodeGroupMap的数据，因此不会产生虚拟边的错误情况
+    if (nodeModel.isGroup) {
+      const group = nodeModel as DynamicGroupNodeModel
+      forEach(Array.from(group.children), (childId) => {
+        this.nodeGroupMap.set(childId, node.id)
+      })
+      // 新增 node 时进行 this.topGroupZIndex 的校准更新
+      this.calibrateTopGroupZIndex([node])
+      this.onNodeSelect({
+        data: node,
+        isSelected: false,
+        isMultiple: false,
+      })
     }
 
     // 2. 然后再判断这个节点是否在某个 group 范围内，如果是，则将其添加到对应的 group 中
-    const nodeModel = this.lf.getNodeModelById(node.id)
-    const bounds = nodeModel?.getBounds()
+    // TODO: 找到这个范围内的 groupModel, 并加 node 添加到该 group
+    const targetGroup = this.getGroupByBounds(bounds, node)
 
-    if (nodeModel && bounds) {
-      // TODO: 确认下面的注释内容
-      // https://github.com/didi/LogicFlow/issues/1261
-      // 当使用 SelectionSelect 框选后触发 lf.addNode(Group)
-      // 会触发 appendNodeToGroup() 的执行
-      // 由于 this.getGroup() 会判断 node.id !== nodeData.id
-      // 因此当 addNode 是 Group 类型时，this.getGroup() 会一直返回空
-      // 导致了下面这段代码无法执行，也就是无法将当前添加的 Group 添加到 this.nodeGroupMap 中
-      // 这导致了折叠分组时触发的 foldEdge() 无法正确通过 getNodeGroup() 拿到正确的 groupId
-      // 从而导致折叠分组时一直都会创建一个虚拟边
-      // 而初始化分组时由于正确设置了nodeGroupMap的数据，因此不会产生虚拟边的错误情况
-      if (nodeModel.isGroup) {
-        const group = nodeModel as DynamicGroupNodeModel
-        forEach(Array.from(group.children), (childId) => {
-          this.nodeGroupMap.set(childId, node.id)
-        })
-        // 新增 node 时进行 this.topGroupZIndex 的校准更新
-        this.calibrateTopGroupZIndex([node])
-        this.onNodeSelect({
-          data: node,
-          isSelected: false,
-          isMultiple: false,
+    // 同组内移动，成员关系不变（#2412）
+    if (preGroupId && targetGroup?.id === preGroupId) {
+      return
+    }
+
+    if (!targetGroup) {
+      if (preGroupId) {
+        this.detachNodeFromGroup(preGroupId, node.id)
+      }
+      return
+    }
+
+    if (!preGroupId) {
+      if (targetGroup.isAllowAppendIn(node)) {
+        targetGroup.addChild(node.id)
+        // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
+        targetGroup.setAllowAppendChild(false)
+      } else {
+        // 抛出不允许插入的事件
+        this.lf.emit('group:not-allowed', {
+          group: targetGroup.getData(),
+          node,
         })
       }
+      return
+    }
 
-      // TODO: 找到这个范围内的 groupModel, 并加 node 添加到该 group
-      const group = this.getGroupByBounds(bounds, node)
-      if (group) {
-        const isAllowAppendIn = group.isAllowAppendIn(node)
-        if (isAllowAppendIn) {
-          group.addChild(node.id)
-          // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
-          group.setAllowAppendChild(false)
-        } else {
-          // 抛出不允许插入的事件
-          this.lf.emit('group:not-allowed', {
-            group: group.getData(),
-            node,
-          })
-        }
+    if (targetGroup.isAllowAppendIn(node)) {
+      this.detachNodeFromGroup(preGroupId, node.id)
+      targetGroup.addChild(node.id)
+      // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
+      targetGroup.setAllowAppendChild(false)
+    } else {
+      const preGroup = this.lf.getNodeModelById(
+        preGroupId,
+      ) as DynamicGroupNodeModel
+      if (preGroup && isBoundsInGroup(bounds, preGroup)) {
+        return
       }
+      this.detachNodeFromGroup(preGroupId, node.id)
+      // 抛出不允许插入的事件
+      this.lf.emit('group:not-allowed', {
+        group: targetGroup.getData(),
+        node,
+      })
     }
   }
 
