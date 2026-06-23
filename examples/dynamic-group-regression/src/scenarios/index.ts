@@ -316,6 +316,7 @@ export const scenarios: Scenario[] = [
     id: 'restrict-no-append-in',
     title: 'isRestrict + 禁止入组时组内拖放出组',
     issues: ['#2412'],
+    fixedIssues: ['#2412'],
     expectedBug: '组内节点拖放松手后脱离 children，可拖出组外。',
     steps: [
       '1. 组为 locked-dynamic-group，子节点在组内。',
