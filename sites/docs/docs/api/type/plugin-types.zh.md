@@ -22,3 +22,4 @@ order: 4
 | [`LabelConfig`](./MainTypes.zh.md#labelconfiglabel插件数据类型) | Label 插件数据类型。 |
 | [`LabelOption`](./MainTypes.zh.md#labeloptionlabel插件配置项类型) | Label 插件配置类型。 |
 | [`MenuConfig`](./MainTypes.zh.md#menuconfigmenu插件菜单项类型) | Menu 插件菜单项类型。 |
+| [Layout 自动布局](../extension/layout.zh.md) | `@logicflow/layout` 的 Dagre / ElkLayout 及分组布局 API。 |

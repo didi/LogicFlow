@@ -24,6 +24,8 @@
 | #1673 | 本期修 |
 | #2205 / #2332 | 本期修（layout / 格式化适配分组） |
 | #1555 | 本期修（分组单边 resize） |
+| **分组节点名（LOCAL-3）** | **本期纳入、必要**：业务用户在画布建组并起名；**展开态与折叠态均可**双击编辑；`setTextPosition` 在两种态下分别锚定文案；折叠 ↔ 展开切换后组名不丢、位置不漂 |
+| **折叠态组名展示（LOCAL-4）** | **方案 B**：折叠框宽固定（`collapsedWidth/Height`），组名超出宽度时 **ellipsis 省略号**；不随文案自动撑开折叠框 |
 
 ## 嵌套策略（统一）
 
@@ -111,6 +113,7 @@
 | 3 | #1616, #2198, **LOCAL-1** | 初始折叠、坐标、子节点与分组 zIndex |
 | 4 | #2205, #2332 | layout / 格式化 |
 | 5 | #1532, #1555 | history、单边 resize |
+| 6 | **LOCAL-3**, **LOCAL-4** | 分组节点名可编辑；折叠态固定宽 + ellipsis |
 | 额外 | #1673 | addNode + children |
 | 不做 | #2180 | BPMN adapter 嵌套导出 |
 
@@ -122,6 +125,7 @@
 | GitHub | [#2400](https://github.com/didi/LogicFlow/issues/2400) | 收起时丢 `pointsList`；并入批次 1 |
 | Demo 体验 | **LOCAL-1** | 组内节点与分组框 zIndex 不一致 |
 | Demo 体验 | **LOCAL-2** | 两分组叠放，折叠/展开组 1 导致节点归属组 2 |
+| 产品 | **LOCAL-3** | 动态分组节点支持修改节点名；**展开态 + 折叠态**均可编辑；组名在折叠/展开切换后保持 |
 
 ## 主要改动文件
 
@@ -141,13 +145,15 @@
 - [ ] 折叠 / 展开：无 NaN、线不消失（#2401）
 - [ ] 删组 / 移子节点：无 map 残留报错（#2194、#2052）
 - [ ] `isCollapsed: true` 首屏位置正确（#1616、#2198）
-- [ ] 格式化 / layout 后子节点仍在组内（#2205、#2332）
+- [x] 格式化 / layout 后子节点仍在组内（#2205、#2332）
 - [ ] 分组 resize 撤销一次到位（#1532）；单边 resize 可用（#1555）
 - [x] addNode 带 children 单层建组（#1673）
 - [ ] **Lane 内 dynamic-group**：成员、对外连线、折叠 / 展开测通
 - [x] **#2412**：`isRestrict` + 拒绝入组时，组内拖放不出组
 - [ ] **LOCAL-1**：组与子节点图层一致
 - [ ] **LOCAL-2**：重叠分组折叠/展开不误迁移归属
+- [ ] **LOCAL-3**：`nodeTextEdit: true` 时，**展开态与折叠态**均可双击改组名；切换折叠/展开后组名不丢、文案仍在组框内
+- [ ] **LOCAL-4**：折叠态固定 `collapsedWidth`，组名过长显示省略号，不撑开折叠框
 - [ ] Pool 示例回归：无 lane / 移动 / resize 回归
 
 ## 开发与验证方式（TDD）
@@ -240,6 +246,40 @@ pnpm test -- packages/layout/__test__/dynamic-group   # 批次 4 新增后
 | R1 | 展开态分组 `resizable: true` | 存在单边 resize 控件（或调用 resize API 仅改宽/高）（#1555） |
 | R2 | `isCollapsed: true` | `getResizeControl()` 为 null（与主流行为一致） |
 
+### 批次 6 — 分组节点名可编辑（LOCAL-3）
+
+文件：`group-text-edit.test.ts`
+
+**背景：** 当前 `DynamicGroupNodeModel.initNodeData` 写死 `text.editable = false`；示例层强行改 `editable` 或把 `text` 改成对象而未同步坐标，会导致文案偏离组框（回归示例已验证不可用）。
+
+**实现要点（`model.ts` / `node.ts`）：**
+
+- 在 `nodeTextEdit === true` 时允许分组文案编辑；未开启时保持现网 `editable: false`
+- **展开态、折叠态**均须能进入文本编辑（`collapsible: true` 且 `isCollapsed` 时不应额外禁用）
+- 编辑能力走 core 文本编辑链路；编辑完成或折叠/展开后调用 `setTextPosition()` 重算锚点
+- 展开态：标题在组框上沿内侧（`y - height/2 + 15`）；折叠态：标题在收起框内（`text.x = x`, `text.y = y`）
+- 折叠态编辑后的 `text` 坐标在展开时须换算到展开语义（与 `getHistoryData` #1810 同一套坐标系，避免 history/展开跳变）
+- 禁止在示例里 re-register 覆盖 `dynamic-group` 作为长期方案
+
+| ID | 用例 | 断言要点 |
+| --- | --- | --- |
+| T1 | **展开态**，`nodeTextEdit: true`，双击改组名 | `getData().text.value` 更新；`text` 仍在展开态 `setTextPosition` 位置 |
+| T2 | **折叠态**，先 `toggleCollapse(true)` 再双击改组名 | 组名更新；`text` 在折叠态 `setTextPosition` 位置（组框内） |
+| T3 | T1 改名后折叠 → 再展开 | 组名保持 T1 的值；展开后位置正确、不漂出组框 |
+| T4 | T2 改名后展开 | 组名保持 T2 的值；展开后位置正确 |
+| T5 | `nodeTextEdit: false` | 展开/折叠两种态下 `text.editable === false`，不可编辑 |
+
+### 批次 6b — 折叠态组名省略号（LOCAL-4）
+
+文件：`group-text-edit.test.ts`（与 LOCAL-3 同文件）
+
+**方案 B：** 折叠后 `width/height` 仍仅用 `collapsedWidth/Height`（默认 80×60），**不**按组名测宽；标题超出折叠框宽度时显示省略号（`textOverflow: ellipsis` 或等价实现）。
+
+| ID | 用例 | 断言要点 |
+| --- | --- | --- |
+| T6 | 折叠态，组名长于 `collapsedWidth` 能容纳的宽度 | 视觉上/测宽表现为 ellipsis，不撑开折叠框 |
+| T7 | T6 后展开 | 显示完整组名，无省略 |
+
 ### 额外 — addNode（#1673）
 
 文件：`add-node.test.ts`（或并入 `membership.test.ts`）
@@ -276,7 +316,7 @@ pnpm test -- packages/layout/__test__/dynamic-group   # 批次 4 新增后
 1. 新增 fixtures + 空测试骨架（全 skip 或 expect 占位失败）
 2. 批次 1：E1–E7c 红灯 → 改 model/index 边状态机（含 `virtualToReal` 映射）→ 绿灯
 3. 批次 2：M1–M4 红灯 → 改 map 单写入口 → 绿灯
-4. 批次 3：C1–C3 → 批次 4：L1–L2 → 批次 5：H1,R1,R2 → N1–N2
+4. 批次 3：C1–C3 → 批次 4：L1–L2 → 批次 5：H1,R1,R2 → 批次 6：T1–T5 → N1–N2
 5. X1–X2、P1–P3（可与 2/3 并行，但 P1 依赖批次 1）
 6. 全量：pnpm test -- packages/extension/__test__/dynamic-group packages/extension/__test__/pool
 7. 手动：examples/feature-examples dynamic-group / pool 页

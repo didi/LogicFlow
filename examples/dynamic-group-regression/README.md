@@ -41,7 +41,7 @@ cd examples/dynamic-group-regression && pnpm dev
 | `zindex-mismatch` | LOCAL-1 |
 | `overlap-collapse-misassign` | LOCAL-2 |
 | `add-node-with-children` | #1673 |
-| `layout-format-escape` | #2205、#2332 |
+| `layout-format-escape` | #2205、#2332（已修复） |
 | `resize-undo-twice` | #1532 |
 | `resize-single-axis` | #1555 |
 
@@ -59,7 +59,7 @@ cd examples/dynamic-group-regression && pnpm dev
 
 - 部分场景需**手动**拖折线控制点（#2401、#2399）后再点折叠。
 - `#2412` 使用自定义节点类型 `locked-dynamic-group`。
-- 布局场景依赖 `@logicflow/layout` 的 `ElkLayout` 插件。
+- 布局场景（`layout-format-escape`）支持通过控制面板组合测试：**Dagre (#2205) / ELK (#2332)**、全图/组内布局、`resizeGroup`、分组 `resizable` 与尺寸等。
 
 ## 相关文档
 

@@ -22,3 +22,4 @@ This page indexes extension and built-in plugin typings. Full descriptions live 
 | [`LabelConfig`](./MainTypes.en.md#labelconfig) | Label plugin data |
 | [`LabelOption`](./MainTypes.en.md#labeloption) | Label plugin options |
 | [`MenuConfig`](./MainTypes.en.md#menuconfig) | Context menu entries |
+| [Layout](../extension/layout.en.md) | `@logicflow/layout` Dagre / ElkLayout and group layout API |

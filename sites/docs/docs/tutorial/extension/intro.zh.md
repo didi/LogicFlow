@@ -92,3 +92,4 @@ const lf = new LogicFlow({
 1. 已经知道要用哪个插件：直接进入对应插件页面
 2. 想先理解实例和插件关系：查看 [API 导览](../../api/logicflow-instance/index.zh.md) 中的“插件系统”
 3. 想继续自定义节点或边：回到 [进阶节点](../advanced/node.zh.md) / [进阶-边](../advanced/edge.zh.md)
+4. 使用自动布局（含分组）：查看 [自动布局](./layout.zh.md) 与 [Layout API](../../api/extension/layout.zh.md)

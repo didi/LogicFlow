@@ -1,5 +1,10 @@
 import type LogicFlow from '@logicflow/core'
-import type { GraphConfigData } from '@logicflow/core'
+import type { ComponentType } from 'react'
+
+export type ScenarioControlsProps = {
+  lf: LogicFlow | undefined
+  loadGraph: (data: LogicFlow.GraphConfigData) => void
+}
 
 export type ScenarioAction = {
   key: string
@@ -18,10 +23,12 @@ export type Scenario = {
   unreproducibleIssues?: string[]
   expectedBug: string
   steps: string[]
-  graphData: GraphConfigData
+  graphData: LogicFlow.GraphConfigData
   /** 切换场景前注册自定义节点等 */
   prepare?: (lf: LogicFlow) => void
   /** render 完成后执行（如 addChild 等需图已加载的操作） */
   afterRender?: (lf: LogicFlow) => void
   actions?: ScenarioAction[]
+  /** 自定义控制面板（布局参数、checkbox 等），替代默认 action 按钮区 */
+  Controls?: ComponentType<ScenarioControlsProps>
 }

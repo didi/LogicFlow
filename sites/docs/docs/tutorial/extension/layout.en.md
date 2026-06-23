@@ -20,9 +20,16 @@ The auto layout plugin can:
 
 It typically produces a structured layout with clear hierarchy, consistent spacing, and fewer edge crossings, making it ideal for an initial layout that you can fine-tune.
 
-The Layout plugin is currently based on Dagre, and its scope is:
-- Covered: automatic calculation of node positions, hierarchy, spacing, and basic edge routing
-- Not covered: business rule validation, node/edge styling, and complex interaction logic (handled separately)
+`@logicflow/layout` provides **Dagre** and **ElkLayout**. Both share group-layout options (see [Layout API](../../api/extension/layout.en.md)).
+
+**Scope:**
+
+- Covered: node positions, hierarchy, spacing, basic edge routing; inner layout and overflow detection for containers such as `dynamic-group` and lanes
+- Not covered: business validation, styling, group membership (owned by DynamicGroup / Pool plugins)
+
+:::warning{title=resizeGroup defaults to false}
+By default, group width/height is **not** changed. Overflow triggers a console warning. Pass `resizeGroup: 'grow-only'` or `'fit'` when you want the group box to follow laid-out children.
+:::
 
 ## Live Demonstration
 
@@ -89,51 +96,82 @@ Like other LogicFlow plugins, Layout supports both global and local registration
 
 ```tsx | pure
 import LogicFlow from "@logicflow/core";
-import { Dagre } from "@logicflow/layout";
+import { Dagre, ElkLayout } from "@logicflow/layout";
 
-// Global registration
 LogicFlow.use(Dagre);
+LogicFlow.use(ElkLayout);
 
-// Local registration
 const lf = new LogicFlow({
   container: document.getElementById('app'),
-  plugins: [Dagre]
+  plugins: [Dagre, ElkLayout]
 });
 ```
 
 ### Apply Layout
 
-After registration, you can access the dagre plugin through the LogicFlow instance's extension property:
-
 ```tsx | pure
-// Use default configuration
-lf.extension.dagre.layout();
-
-// Use custom configuration
-lf.extension.dagre.layout({
-  rankdir: 'TB',   // Top-to-bottom layout direction
-  align: 'UL',     // Upper-left alignment
-  nodesep: 60,     // Node spacing
-  ranksep: 70      // Rank spacing
-});
+lf.extension.dagre.layout({ rankdir: 'TB', nodesep: 60, ranksep: 70 });
+await lf.extension.elkLayout.layout({ rankdir: 'TB', nodesep: 60, ranksep: 70 });
 ```
 
 ## Layout Configuration Options
 
-You can customize the appearance and behavior of the layout through various options:
+### Common options (Dagre / ElkLayout)
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| rankdir | string | 'LR' | Layout direction: 'LR'(left to right), 'TB'(top to bottom), 'BT'(bottom to top), 'RL'(right to left) |
-| align | string | 'UL' | Node alignment: 'UL'(upper left), 'UR'(upper right), 'DL'(down left), 'DR'(down right) |
+| rankdir | string | 'LR' | Layout direction: 'LR', 'TB', 'BT', 'RL' |
+| align | string | 'UL' | Node alignment: 'UL', 'UR', 'DL', 'DR' |
 | nodesep | number | 100 | Horizontal spacing between nodes (pixels) |
 | ranksep | number | 150 | Vertical spacing between ranks (pixels) |
 | marginx | number | 120 | Horizontal margin of the graph (pixels) |
 | marginy | number | 120 | Vertical margin of the graph (pixels) |
 | ranker | string | 'tight-tree' | Ranking algorithm: 'network-simplex', 'tight-tree', 'longest-path' |
-| edgesep | number | 10 | Horizontal spacing between edges (pixels) |
-| acyclicer | string | undefined | If set to 'greedy', uses a greedy heuristic for finding a feedback arc set for making the graph acyclic |
-| isDefaultAnchor | boolean | false | Whether to use default anchors: when true, automatically adjusts edge anchors and calculates edge paths based on layout direction |
+| isDefaultAnchor | boolean | false | When true, adjusts edge anchors and paths based on layout direction |
+
+ElkLayout also supports `edgesep`, `acyclicer`, and `elkOption`.
+
+### Group layout options (new)
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| groupId | string | — | Omit for full graph; set to layout only that group's children |
+| resizeGroup | `false \| 'grow-only' \| 'fit'` | `false` | Whether to adjust group size after layout |
+| groupPadding | number | 40 | Padding around child bounds for overflow checks and group resizing |
+
+**`resizeGroup`:**
+
+- `false`: keep size; warn on overflow
+- `'grow-only'`: expand only
+- `'fit'`: fit to children (grow or shrink); warns when size changes
+
+When `resizeGroup` is truthy and `group.resizable === false`, layout still resizes and warns about the override.
+
+Within one `layout()` call, each warning category is emitted at most once per group.
+
+## Group layout examples
+
+See also [Dynamic Group](./dynamic-group.en.md) and [Pool / Lane](./pool.en.md).
+
+```tsx | pure
+lf.extension.dagre.layout({ rankdir: 'TB' })
+
+lf.extension.dagre.layout({ groupId: 'group_1', rankdir: 'LR' })
+
+lf.extension.dagre.layout({
+  groupId: 'group_1',
+  resizeGroup: 'grow-only',
+  groupPadding: 24,
+})
+
+lf.extension.elkLayout.layout({
+  groupId: 'lane_1',
+  rankdir: 'LR',
+  resizeGroup: false,
+})
+```
+
+Full API reference: [Layout API](../../api/extension/layout.en.md).
 
 ## Advanced Features
 
@@ -150,7 +188,9 @@ lf.fitView();
 
 ## Usage Recommendations
 
-1. **Complex Graphs**: For large or complex flowcharts, use automatic layout to generate an initial arrangement, then make manual adjustments
-2. **Dynamic Updates**: Apply layout after adding/removing nodes to keep the graph tidy
-3. **Direction Selection**: Choose a suitable layout direction based on the actual meaning of your business process
-4. **Parameter Adjustment**: Find the layout that best suits your diagram by adjusting node spacing and rank spacing
+1. **Complex Graphs**: Use auto layout for an initial arrangement, then fine-tune manually
+2. **Grouped graphs**: Default `resizeGroup: false` warns only; use `'grow-only'` or `'fit'` to resize group boxes
+3. **Swimlanes**: Prefer `resizeGroup: false` inside lanes to preserve pool/lane geometry
+4. **Dynamic Updates**: Re-layout after adding or removing nodes
+5. **Direction Selection**: Pick a direction that matches your process semantics
+6. **Parameter Tuning**: Adjust `nodesep` and `ranksep` for your diagram density

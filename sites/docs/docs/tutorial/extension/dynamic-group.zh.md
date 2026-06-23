@@ -660,6 +660,15 @@ pluginsOptions: {
 
 :::
 
+## 与自动布局配合
+
+对含 `dynamic-group` 的图执行自动布局时，请使用 `@logicflow/layout` 的分组参数，避免子节点跑出组框或误改分组尺寸：
+
+- 全图排版：不传 `groupId`；默认 `resizeGroup: false` 不改分组宽高，越界时控制台告警
+- 仅整理组内：传 `groupId`；需要撑开组框时使用 `resizeGroup: 'grow-only'` 或 `'fit'`
+
+详见 [自动布局插件](./layout.zh.md) 与 [Layout API 文档](../../api/extension/layout.zh.md)。
+
 ## 关于泳道
 :::info{title=关于泳道}
 分组功能不是泳道，需要开发者在分组的基础上自己实现。后续 LogicFlow 提供的 Bpmn 全功能支持会支持 BPMN
