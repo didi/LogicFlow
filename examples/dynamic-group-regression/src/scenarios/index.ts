@@ -440,36 +440,62 @@ export const scenarios: Scenario[] = [
     id: 'add-node-with-children',
     title: 'addNode 带 children 建组',
     issues: ['#1673'],
-    expectedBug: 'addNode 创建含 children 的分组时报 isGroup undefined。',
+    fixedIssues: ['#1673'],
+    expectedBug:
+      'addNode 创建含 children 的分组时报 isGroup undefined；嵌套场景下外层 children 与 map 不一致导致子节点双重位移。',
     steps: [
-      '1. 点击「addNode 建组+子节点」。',
-      '2. 预期：无报错，children 与 map 正确。',
+      '1. 画布已预置默认分组 default_group。',
+      '2. 点击「新增分组+子节点」。',
+      '3. 预期：在 default_group 内新增子分组与子节点，无报错，children 与 map 正确；拖动外层分组时内层子节点同步移动。',
     ],
-    graphData: { nodes: [], edges: [] },
+    graphData: {
+      nodes: [
+        {
+          ...makeGroup('default_group', 400, 300, [], {
+            width: 420,
+            height: 320,
+          }),
+          text: '默认分组',
+        },
+      ],
+      edges: [],
+    },
     actions: [
       {
         key: 'add-with-children',
-        label: 'addNode 建组+子节点',
+        label: '新增分组+子节点',
         run: (lf) => {
+          const parent = lf.getNodeModelById('default_group')
+          if (!parent) return
+          const x = parent.x
+          const y = parent.y
+
           lf.addNode({
             id: 'api_rect',
             type: 'rect',
-            x: 300,
-            y: 200,
+            x,
+            y,
             text: 'api子',
           })
           lf.addNode({
             id: 'api_group',
             type: 'dynamic-group',
-            x: 300,
-            y: 200,
+            x,
+            y,
             text: 'api组',
             resizable: true,
             properties: {
               ...baseGroupProps,
+              width: 200,
+              height: 150,
               children: ['api_rect'],
             },
           })
+
+          const parentModel = lf.getNodeModelById('default_group') as
+            | { addChild: (id: string) => void }
+            | undefined
+          parentModel?.addChild('api_group')
         },
       },
     ],

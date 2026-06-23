@@ -37,6 +37,12 @@ const dndPatternItems: ShapeItem[] = [
   },
 ]
 
+declare global {
+  interface Window {
+    lf?: LogicFlow
+  }
+}
+
 const lfOptions: Partial<LogicFlow.Options> = {
   grid: { size: 10 },
   allowResize: true,
@@ -65,7 +71,8 @@ export default function RegressionWorkbench() {
     if (!lf) return
     scenario.prepare?.(lf)
     lf.render(JSON.parse(JSON.stringify(scenario.graphData)))
-    lf.fitView(40, 40)
+    scenario.afterRender?.(lf)
+    lf.resetZoom()
   }, [])
 
   useEffect(() => {
@@ -76,10 +83,12 @@ export default function RegressionWorkbench() {
     })
     setupLf(lf)
     lfRef.current = lf
+    window.lf = lf
     loadScenario(scenarios[0])
     return () => {
       lf.destroy()
       lfRef.current = undefined
+      delete window.lf
     }
   }, [loadScenario])
 
@@ -111,11 +120,30 @@ export default function RegressionWorkbench() {
               <div>
                 <Text strong>{item.title}</Text>
                 <div>
-                  {item.issues.map((tag) => (
-                    <Tag key={tag} style={{ marginTop: 4 }}>
-                      {tag}
-                    </Tag>
-                  ))}
+                  {item.issues.map((tag) => {
+                    const fixed = item.fixedIssues?.includes(tag)
+                    const unreproducible =
+                      item.unreproducibleIssues?.includes(tag)
+                    return (
+                      <Tag
+                        key={tag}
+                        color={
+                          fixed
+                            ? 'success'
+                            : unreproducible
+                              ? 'blue'
+                              : 'default'
+                        }
+                        style={{ marginTop: 4 }}
+                      >
+                        {fixed
+                          ? `${tag} 已修复`
+                          : unreproducible
+                            ? `${tag} 未复现`
+                            : tag}
+                      </Tag>
+                    )
+                  })}
                 </div>
               </div>
             </List.Item>
@@ -130,9 +158,23 @@ export default function RegressionWorkbench() {
           bodyStyle={{ padding: 12 }}
         >
           <Alert
-            type="warning"
+            type={
+              active.fixedIssues && active.fixedIssues.length > 0
+                ? 'success'
+                : active.unreproducibleIssues &&
+                    active.unreproducibleIssues.length > 0
+                  ? 'info'
+                  : 'warning'
+            }
             showIcon
-            message={`已知问题：${active.expectedBug}`}
+            message={
+              active.fixedIssues && active.fixedIssues.length > 0
+                ? `已修复 ${active.fixedIssues.join('、')}：${active.expectedBug}`
+                : active.unreproducibleIssues &&
+                    active.unreproducibleIssues.length > 0
+                  ? `未复现 ${active.unreproducibleIssues.join('、')}：${active.expectedBug}`
+                  : `已知问题：${active.expectedBug}`
+            }
           />
           <Paragraph style={{ marginTop: 12, marginBottom: 8 }}>
             <Text strong>操作步骤</Text>

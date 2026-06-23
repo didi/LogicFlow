@@ -114,4 +114,73 @@ describe('dynamic-group membership (#2412)', () => {
     expect(moveX).toBe(0)
     expect(moveY).toBe(0)
   })
+
+  test('N1: nested addNode with children — outer children set stays consistent (#1673)', () => {
+    const lf = createDynamicGroupLF()
+    lf.render({
+      nodes: [
+        {
+          id: 'default_group',
+          type: 'dynamic-group',
+          x: 400,
+          y: 300,
+          properties: {
+            width: 420,
+            height: 320,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: [],
+          },
+        },
+      ],
+      edges: [],
+    })
+
+    const parent = lf.getNodeModelById('default_group') as DynamicGroupNodeModel
+    const x = parent.x
+    const y = parent.y
+
+    lf.addNode({
+      id: 'api_rect',
+      type: 'rect',
+      x,
+      y,
+      text: 'api子',
+    })
+    lf.addNode({
+      id: 'api_group',
+      type: 'dynamic-group',
+      x,
+      y,
+      text: 'api组',
+      resizable: true,
+      properties: {
+        width: 200,
+        height: 150,
+        collapsedWidth: 80,
+        collapsedHeight: 60,
+        collapsible: true,
+        isCollapsed: false,
+        children: ['api_rect'],
+      },
+    })
+    parent.addChild('api_group')
+
+    const innerGroup = lf.getNodeModelById('api_group') as DynamicGroupNodeModel
+    const rect = lf.getNodeModelById('api_rect')!
+
+    expect(parent.children.has('api_group')).toBe(true)
+    expect(parent.children.has('api_rect')).toBe(false)
+    expect(innerGroup.children.has('api_rect')).toBe(true)
+    expect(getDynamicGroup(lf).getGroupByNodeId('api_rect')?.id).toBe(
+      'api_group',
+    )
+
+    const rectYBefore = rect.y
+    parent.getMoveDistance(0, 20)
+
+    expect(rect.y).toBe(rectYBefore + 20)
+  })
 })
