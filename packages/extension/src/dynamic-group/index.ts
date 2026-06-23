@@ -278,6 +278,10 @@ export class DynamicGroup {
     if (nodeModel.isGroup) {
       const group = nodeModel as DynamicGroupNodeModel
       forEach(Array.from(group.children), (childId) => {
+        const preChildGroupId = this.nodeGroupMap.get(childId)
+        if (preChildGroupId && preChildGroupId !== node.id) {
+          this.detachNodeFromGroup(preChildGroupId, childId)
+        }
         this.nodeGroupMap.set(childId, node.id)
       })
       // 新增 node 时进行 this.topGroupZIndex 的校准更新

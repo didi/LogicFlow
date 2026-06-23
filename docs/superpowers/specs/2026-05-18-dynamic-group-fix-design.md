@@ -143,7 +143,7 @@
 - [ ] `isCollapsed: true` 首屏位置正确（#1616、#2198）
 - [ ] 格式化 / layout 后子节点仍在组内（#2205、#2332）
 - [ ] 分组 resize 撤销一次到位（#1532）；单边 resize 可用（#1555）
-- [ ] addNode 带 children 单层建组（#1673）
+- [x] addNode 带 children 单层建组（#1673）
 - [ ] **Lane 内 dynamic-group**：成员、对外连线、折叠 / 展开测通
 - [x] **#2412**：`isRestrict` + 拒绝入组时，组内拖放不出组
 - [ ] **LOCAL-1**：组与子节点图层一致
