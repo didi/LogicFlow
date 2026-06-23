@@ -3,9 +3,10 @@ import {
   Control,
   DndPanel,
   DynamicGroup,
+  MiniMap,
   type ShapeItem,
 } from '@logicflow/extension'
-import { ElkLayout } from '@logicflow/layout'
+import { Dagre, ElkLayout } from '@logicflow/layout'
 import { Alert, Button, Card, Flex, List, Space, Tag, Typography } from 'antd'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { scenarios } from '@/scenarios'
@@ -48,10 +49,18 @@ const lfOptions: Partial<LogicFlow.Options> = {
   allowResize: true,
   allowRotate: false,
   keyboard: { enabled: true },
-  plugins: [DynamicGroup, Control, DndPanel, ElkLayout],
+  plugins: [DynamicGroup, Control, DndPanel, Dagre, ElkLayout, MiniMap],
   pluginsOptions: {
     dynamicGroup: {
       disallowEdgeConnectToGroup: true,
+    },
+    miniMap: {
+      width: 200,
+      height: 150,
+      isShowHeader: true,
+      isShowCloseIcon: true,
+      headerTitle: '小地图',
+      position: 'right-bottom',
     },
   },
 }
@@ -75,6 +84,13 @@ export default function RegressionWorkbench() {
     lf.resetZoom()
   }, [])
 
+  const loadGraph = useCallback((data: LogicFlow.GraphConfigData) => {
+    const lf = lfRef.current
+    if (!lf) return
+    lf.render(JSON.parse(JSON.stringify(data)))
+    lf.resetZoom()
+  }, [])
+
   useEffect(() => {
     if (!containerRef.current || lfRef.current) return
     const lf = new LogicFlow({
@@ -85,6 +101,7 @@ export default function RegressionWorkbench() {
     lfRef.current = lf
     window.lf = lf
     loadScenario(scenarios[0])
+    ;(lf.extension.miniMap as MiniMap).show()
     return () => {
       lf.destroy()
       lfRef.current = undefined
@@ -186,32 +203,37 @@ export default function RegressionWorkbench() {
               </li>
             ))}
           </ol>
-          {active.actions && active.actions.length > 0 && (
-            <Space wrap style={{ marginTop: 12 }}>
-              {active.actions.map((action) => (
-                <Button
-                  key={action.key}
-                  size="small"
-                  onClick={() => lfRef.current && action.run(lfRef.current)}
-                  title={action.description}
-                >
-                  {action.label}
+          {active.Controls ? (
+            <active.Controls lf={lfRef.current} loadGraph={loadGraph} />
+          ) : (
+            active.actions &&
+            active.actions.length > 0 && (
+              <Space wrap style={{ marginTop: 12 }}>
+                {active.actions.map((action) => (
+                  <Button
+                    key={action.key}
+                    size="small"
+                    onClick={() => lfRef.current && action.run(lfRef.current)}
+                    title={action.description}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+                <Button size="small" onClick={() => loadScenario(active)}>
+                  重置场景
                 </Button>
-              ))}
-              <Button size="small" onClick={() => loadScenario(active)}>
-                重置场景
-              </Button>
-              <Button
-                size="small"
-                type="dashed"
-                onClick={() => {
-                  console.log(lfRef.current?.getGraphRawData())
-                  alert('图数据已输出到控制台')
-                }}
-              >
-                打印 getGraphRawData
-              </Button>
-            </Space>
+                <Button
+                  size="small"
+                  type="dashed"
+                  onClick={() => {
+                    console.log(lfRef.current?.getGraphRawData())
+                    alert('图数据已输出到控制台')
+                  }}
+                >
+                  打印 getGraphRawData
+                </Button>
+              </Space>
+            )
           )}
         </Card>
         <div

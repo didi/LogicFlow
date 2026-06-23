@@ -105,6 +105,17 @@ Three related stacks coexist. Do not assume they share one plugin or one fix.
 
 Preferred pattern: extend `dynamicGroup.view` / `dynamicGroup.model` and enable the `DynamicGroup` plugin. See `sites/docs` dynamic-group tutorial.
 
+### Layout integration (`@logicflow/layout`)
+
+Automatic layout lives in **`packages/layout`**, not in this package. When a graph contains groups:
+
+- Layout reads `isGroup` + `children` to scope inner layout (`groupId`) and detect overflow.
+- Membership (`children`, maps) remains owned by `DynamicGroup` / `PoolElements`; layout must preserve `properties.children` when calling `renderRawData`.
+- Default `resizeGroup: false` keeps group boxes unchanged and warns on overflow; `'grow-only'` / `'fit'` opt in to resizing group width/height (see `packages/layout/ARCHITECTURE.md`).
+- Pool/Lane: treat as groups for inner layout; avoid implicit pool/lane resize unless product explicitly sets `resizeGroup`.
+
+Regression: `packages/layout/__test__/group-layout.test.ts`, `examples/dynamic-group-regression` (`layout-format-escape`).
+
 ## Dependency Boundaries
 
 This package depends on `@logicflow/core` and should primarily consume its public extension and rendering surface.

@@ -659,6 +659,15 @@ pluginsOptions: {
 
 :::
 
+## Auto layout with groups
+
+When laying out graphs that contain `dynamic-group`, use `@logicflow/layout` group options so children stay inside the group and group size changes are explicit:
+
+- Full graph: omit `groupId`; default `resizeGroup: false` keeps group size and warns on overflow
+- Inner layout only: set `groupId`; use `resizeGroup: 'grow-only'` or `'fit'` to resize the group box
+
+See [Automatic Layout](./layout.en.md) and the [Layout API reference](../../api/extension/layout.en.md).
+
 ## About Swimlanes
 :::info{title=About-Swimlanes}
 

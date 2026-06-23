@@ -9,6 +9,17 @@ import elkConstructor from 'elkjs/lib/elk.bundled'
 import { LayoutOptions, ElkNode } from 'elkjs/lib/elk-api'
 import { processEdges } from '../utils/processEdge'
 import { elkOptionMap } from './config'
+import {
+  alignScopedLayoutToGroup,
+  applyGroupResizeAndWarnings,
+  createGroupLayoutWarningState,
+  getNodeSize,
+  GroupLayoutOption,
+  isGroupModel,
+  LayoutScope,
+  moveGroupDescendantsBy,
+  resolveLayoutScopes,
+} from '../utils/groupLayout'
 
 import NodeConfig = LogicFlow.NodeConfig
 import EdgeConfig = LogicFlow.EdgeConfig
@@ -17,7 +28,7 @@ import EdgeConfig = LogicFlow.EdgeConfig
  * ElkLayout布局配置选项接口
  * @interface ElkLayoutOption
  */
-export interface ElkLayoutOption {
+export interface ElkLayoutOption extends GroupLayoutOption {
   /**
    * 布局方向
    * 'LR' | 'TB' | 'BT' | 'RL'
@@ -107,7 +118,7 @@ export class ElkLayout {
    * @param option - 布局配置选项
    */
   layout(option: ElkLayoutOption = {}) {
-    const { nodes, edges, gridSize } = this.lf.graphModel
+    const { nodes: allNodes, edges: allEdges, gridSize } = this.lf.graphModel
 
     // 根据网格大小调整节点间距
     let nodesep = 100
@@ -137,7 +148,9 @@ export class ElkLayout {
       ...option,
     }
 
-    this.applyElkLayout(nodes, edges)
+    const scopes = resolveLayoutScopes(allNodes, allEdges, this.option.groupId)
+    if (scopes.length === 0) return
+    this.applyElkLayout(allNodes, allEdges, scopes)
   }
 
   /**
@@ -146,32 +159,44 @@ export class ElkLayout {
    * @param edges - 边数据
    * @param elkOption - ELK 配置选项
    */
-  async applyElkLayout(nodes: BaseNodeModel[], edges: BaseEdgeModel[]) {
+  async applyElkLayout(
+    allNodes: BaseNodeModel[],
+    allEdges: BaseEdgeModel[],
+    scopes: LayoutScope[],
+  ) {
     // 创建elk实例
     const elk = new elkConstructor()
     // elk布局配置
     const layoutOptions = this.convertOptionsToElk()
-    // 构造elk布局数据
-    const elkGraph = {
-      id: 'root',
-      children: nodes.map((node) => ({
-        id: node.id,
-        width: node.width || 150,
-        height: node.height || 50,
-      })),
-      edges: edges.map((edge) => ({
-        id: edge.id,
-        sources: [edge.sourceNodeId],
-        targets: [edge.targetNodeId],
-      })),
-    }
     // 开始elk布局
     try {
-      const elkLayoutGraph = await elk.layout(elkGraph, { layoutOptions })
-      const newGraphData = this.convertLayoutDataToLf(
-        nodes,
-        edges,
-        elkLayoutGraph,
+      const newGraphData = await this.convertLayoutDataToLf(
+        allNodes,
+        allEdges,
+        scopes,
+        async (scope, nodeMap) => {
+          // 构造elk布局数据
+          const elkGraph = {
+            id: scope.groupId ?? 'root',
+            children: scope.nodes.map((node) => {
+              const nodeData = nodeMap.get(node.id)
+              const size = nodeData
+                ? getNodeSize(nodeData, new Map([[node.id, node]]))
+                : node
+              return {
+                id: node.id,
+                width: size.width || 150,
+                height: size.height || 50,
+              }
+            }),
+            edges: scope.edges.map((edge) => ({
+              id: edge.id,
+              sources: [edge.sourceNodeId],
+              targets: [edge.targetNodeId],
+            })),
+          }
+          return elk.layout(elkGraph, { layoutOptions })
+        },
       )
       this.lf.renderRawData(newGraphData)
     } catch (error) {
@@ -210,40 +235,42 @@ export class ElkLayout {
     return layoutOptions
   }
 
-  convertLayoutDataToLf(
-    nodes: BaseNodeModel[],
-    edges: BaseEdgeModel[],
-    layoutData: ElkNode,
+  async convertLayoutDataToLf(
+    allNodes: BaseNodeModel[],
+    allEdges: BaseEdgeModel[],
+    scopes: LayoutScope[],
+    runLayout: (
+      scope: LayoutScope,
+      nodeMap: Map<string, NodeConfig>,
+    ) => Promise<ElkNode>,
   ) {
     // 存储新的节点和边数据
-    const newNodes: NodeConfig[] = []
-
-    // 更新节点位置
-    nodes.forEach((nodeModel) => {
+    const newNodes: NodeConfig[] = allNodes.map((nodeModel) => {
       const lfNode = nodeModel.getData()
-      const newNode = (layoutData?.children || []).find(
-        (n) => n.id === nodeModel.id,
-      )
-      if (!lfNode || !newNode || !newNode.x || !newNode.y) {
+      if (!lfNode) {
         throw new Error(`布局错误：找不到ID为 ${nodeModel.id} 的节点`)
       }
-      // 更新节点坐标
-      lfNode.x = newNode.x + nodeModel.width / 2
-      lfNode.y = newNode.y + nodeModel.height / 2
-
-      // 更新节点文本位置
-      if (lfNode?.text?.x) {
-        lfNode.text.x = newNode.x + nodeModel.width / 2
-        lfNode.text.y = newNode.y + nodeModel.height / 2
-      }
-      newNodes.push(lfNode)
+      return lfNode
     })
+    const nodeMap = new Map(
+      newNodes
+        .filter((node): node is NodeConfig & { id: string } => !!node.id)
+        .map((node) => [node.id, node]),
+    )
+    const warningState = createGroupLayoutWarningState()
+
+    for (const scope of scopes) {
+      const layoutData = await runLayout(scope, nodeMap)
+      this.applyScopeLayout(allNodes, newNodes, nodeMap, scope, layoutData)
+      alignScopedLayoutToGroup(allNodes, newNodes, scope.nodes, scope.groupId)
+      applyGroupResizeAndWarnings(allNodes, newNodes, this.option, warningState)
+    }
 
     const newEdges: EdgeConfig[] = processEdges(
       this.lf,
       this.option.rankdir,
       this.option.isDefaultAnchor,
-      edges,
+      allEdges,
       newNodes,
     )
 
@@ -251,5 +278,51 @@ export class ElkLayout {
       nodes: newNodes,
       edges: newEdges,
     }
+  }
+
+  applyScopeLayout(
+    allNodes: BaseNodeModel[],
+    newNodes: NodeConfig[],
+    nodeMap: Map<string, NodeConfig>,
+    scope: LayoutScope,
+    layoutData: ElkNode,
+  ) {
+    const layoutChildren = layoutData?.children || []
+
+    scope.nodes.forEach((nodeModel) => {
+      const lfNode = nodeMap.get(nodeModel.id)
+      const newNode = layoutChildren.find((n) => n.id === nodeModel.id)
+      if (
+        !lfNode ||
+        !newNode ||
+        newNode.x === undefined ||
+        newNode.y === undefined
+      ) {
+        throw new Error(`布局错误：找不到ID为 ${nodeModel.id} 的节点`)
+      }
+      // 更新节点坐标
+      const size = getNodeSize(lfNode, new Map([[nodeModel.id, nodeModel]]))
+      const nextX = newNode.x + size.width / 2
+      const nextY = newNode.y + size.height / 2
+      const dx = nextX - lfNode.x
+      const dy = nextY - lfNode.y
+
+      lfNode.x = nextX
+      lfNode.y = nextY
+
+      // 更新节点文本位置
+      if (
+        typeof lfNode.text === 'object' &&
+        lfNode.text &&
+        typeof lfNode.text.x === 'number'
+      ) {
+        lfNode.text.x = nextX
+        lfNode.text.y = nextY
+      }
+
+      if (isGroupModel(nodeModel)) {
+        moveGroupDescendantsBy(allNodes, newNodes, nodeModel.id, dx, dy)
+      }
+    })
   }
 }

@@ -1,90 +1,68 @@
 # layout
 
-layout 扩展包
+`@logicflow/layout` 提供 LogicFlow 自动布局能力，包含 **Dagre** 与 **ElkLayout** 两个插件。
 
 ## 安装
 
-此包是基于 `@logicflow/core` 的布局扩展，使用方需要同时安装 core。
-
-```shell
-npm install @logicflow/core @logicflow/layout
-```
-or
-```shell
-yarn add @logicflow/core @logicflow/layout
-```
-or
 ```shell
 pnpm add @logicflow/core @logicflow/layout
 ```
 
-## 使用方式
+## 基本使用
 
 ```js
-import LogicFlow from '@logicflow/core';
-import { Dagre, ElkLayout } from '@logicflow/layout';
+import LogicFlow from '@logicflow/core'
+import { Dagre, ElkLayout } from '@logicflow/layout'
 
-// 提供两种布局插件：Dagre 和 ElkLayout。调用参数相同，按需使用即可
 const lf = new LogicFlow({
   container: '#app',
-  plugins: [Dagre, ElkLayout]
+  plugins: [Dagre, ElkLayout],
 })
 
-// 基本使用方式 - 无参数
-lf.extension.dagre.layout()
-lf.extension.elkLayout.layout()
-
-// 使用布局参数
-lf.extension.dagre.layout({
-  rankdir: 'LR', // 从坐到右布局
-  ranksep: 100    // 层级间距
-  nodesep: 50,   // 节点间距
-})
-lf.extension.elkLayout.layout({
-  rankdir: 'LR', // 从坐到右布局
-  ranksep: 100    // 层级间距
-  nodesep: 50,   // 节点间距
-})
+lf.extension.dagre.layout({ rankdir: 'LR' })
+lf.extension.elkLayout.layout({ rankdir: 'TB' })
 ```
 
-## DagreOption 参数说明
+## 分组布局（GroupLayoutOption）
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|-------|-----|-------|------|
-| rankdir | string | 'LR' | 布局方向，'LR'(左到右), 'TB'(上到下), 'BT'(下到上), 'RL'(右到左) |
-| align | string | 'UL' | 节点对齐方式，'UL'(上左), 'UR'(上右), 'DL'(下左), 'DR'(下右) |
-| nodesep | number | 100 | 节点间的水平间距(像素) |
-| ranksep | number | 150 | 层级间的垂直间距(像素) |
-| marginx | number | 120 | 图的水平边距(像素) |
-| marginy | number | 120 | 图的垂直边距(像素) |
-| ranker | string | 'tight-tree' | 排名算法，'network-simplex', 'tight-tree', 'longest-path' |
-| edgesep | number | 10 | 边之间的水平间距(像素) |
-| acyclicer | string | undefined | 如果设置为'greedy'，使用贪心算法查找反馈弧集，用于使图变为无环图 |
-| isDefaultAnchor | boolean | false | 是否是系统默认锚点（默认上下左右4个锚点），当为true时会自动调整连线的路径 |
+Dagre / ElkLayout 共用以下参数（完整说明见文档站 [Layout API](https://site.logic-flow.cn)）：
 
-## 布局方向示例
-
-### 从左到右 (LR)
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `groupId` | `string` | — | 不传：全图布局；传：仅布局该分组内部 |
+| `resizeGroup` | `false \| 'grow-only' \| 'fit'` | `false` | 布局后是否调整分组尺寸 |
+| `groupPadding` | `number` | `40` | 计算分组包围盒时的内边距 |
 
 ```js
+// 仅布局组内，不改分组框（默认）
+lf.extension.dagre.layout({ groupId: 'group_1', rankdir: 'LR' })
+
+// 组内布局并扩大分组框
 lf.extension.dagre.layout({
-  rankdir: 'LR'  // 默认值
+  groupId: 'group_1',
+  resizeGroup: 'grow-only',
+  groupPadding: 24,
 })
 ```
 
-### 从上到下 (TB)
+**告警（console.warn）：**
 
-```js
-lf.extension.dagre.layout({
-  rankdir: 'TB'
-})
-```
+- 子节点超出分组边界
+- 实际调整了分组尺寸
+- `resizeGroup` 覆盖了 `group.resizable === false`
 
-### 默认锚点的话（默认上下左右4个锚点）， 会自动调整连线的路径以及起终点位置
+## 通用布局参数
 
-```js
-lf.extension.dagre.layout({
-  rankdir: 'TB',
-  isDefaultAnchor: true  // 调整连线锚点
-})
-```
+| 参数 | 默认值 | 说明 |
+| --- | --- | --- |
+| rankdir | 'LR' | LR / TB / BT / RL |
+| align | 'UL' | UL / UR / DL / DR |
+| nodesep | 100 | 同层节点间距 |
+| ranksep | 150 | 层级间距 |
+| isDefaultAnchor | false | 是否重算默认锚点与折线路径 |
+
+ElkLayout 另支持 `elkOption` 透传 ELK 原生配置。
+
+## 架构
+
+见 [ARCHITECTURE.md](./ARCHITECTURE.md)。

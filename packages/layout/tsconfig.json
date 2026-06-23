@@ -1,5 +1,6 @@
 {
-  "exclude": ["node_modules", "**/es", "**/lib"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/es", "**/lib", "__test__"],
   "compilerOptions": {
     "module": "ES2020",
     "moduleResolution": "node",

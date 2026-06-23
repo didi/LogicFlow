@@ -174,6 +174,7 @@ Read these documents before making structural changes in the corresponding packa
 - `packages/core/ARCHITECTURE.md`
 - `packages/engine/ARCHITECTURE.md`
 - `packages/extension/ARCHITECTURE.md`
+- `packages/layout/ARCHITECTURE.md`
 
 Use these repository files as supporting references when the architecture docs are not specific enough:
 
