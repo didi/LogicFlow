@@ -19,6 +19,8 @@ export type Scenario = {
   issues: string[]
   /** issues 中已修复的子集 */
   fixedIssues?: string[]
+  /** issues 中关闭且暂不修复的子集 */
+  wontFixIssues?: string[]
   /** issues 中当前无法复现的子集 */
   unreproducibleIssues?: string[]
   expectedBug: string

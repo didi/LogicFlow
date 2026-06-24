@@ -4,6 +4,7 @@ import LogicFlow, {
   RectNode,
   handleResize,
   CallbackArgs,
+  EventType,
 } from '@logicflow/core'
 import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
@@ -151,22 +152,22 @@ export class DynamicGroupNode<
     super.componentDidMount()
     const { eventCenter } = this.props.graphModel
     // 在 group 旋转时，对组内的所有子节点也进行对应的旋转计算
-    eventCenter.on('node:rotate', this.onNodeRotate)
+    eventCenter.on(EventType.NODE_ROTATE, this.onNodeRotate)
     // 在 group 缩放时，对组内的所有子节点也进行对应的缩放计算
-    eventCenter.on('node:resize', this.onNodeResize)
+    eventCenter.on(EventType.NODE_RESIZE, this.onNodeResize)
     // 在 group 移动时，对组内的所有子节点也进行对应的移动计算
-    eventCenter.on('node:mousemove', this.onNodeMouseMove)
+    eventCenter.on(EventType.NODE_MOUSEMOVE, this.onNodeMouseMove)
     // 全部渲染完成后，判断是否【主动触发一次折叠操作】
-    eventCenter.on('graph:rendered', this.graphRendered)
+    eventCenter.on(EventType.GRAPH_RENDERED, this.graphRendered)
   }
 
   componentWillUnmount() {
     super.componentWillUnmount()
     const { eventCenter } = this.props.graphModel
-    eventCenter.off('node:rotate', this.onNodeRotate)
-    eventCenter.off('node:resize', this.onNodeResize)
-    eventCenter.off('node:mousemove', this.onNodeMouseMove)
-    eventCenter.off('graph:rendered', this.graphRendered)
+    eventCenter.off(EventType.NODE_ROTATE, this.onNodeRotate)
+    eventCenter.off(EventType.NODE_RESIZE, this.onNodeResize)
+    eventCenter.off(EventType.NODE_MOUSEMOVE, this.onNodeMouseMove)
+    eventCenter.off(EventType.GRAPH_RENDERED, this.graphRendered)
   }
 
   /**

@@ -52,7 +52,7 @@ function generateEdge(edge: { fromNodeId: string; endNodeId: string }) {
 const jobCompose2052 = {
   jobNode: {
     id: 'job_group',
-    jobName: '任务组',
+    jobName: 'job_group',
     nodeType: 'dynamic-group',
     nodePositionX: 520,
     nodePositionY: 200,
@@ -67,7 +67,7 @@ const jobCompose2052 = {
   nodes: [
     {
       id: 'job_child_1',
-      jobName: '子任务1',
+      jobName: 'job_child_1',
       nodeType: 'rect',
       nodePositionX: 520,
       nodePositionY: 200,
@@ -76,7 +76,7 @@ const jobCompose2052 = {
     },
     {
       id: 'job_child_2',
-      jobName: '子任务2',
+      jobName: 'job_child_2',
       nodeType: 'circle',
       nodePositionX: 580,
       nodePositionY: 180,
@@ -508,6 +508,7 @@ export const scenarios: Scenario[] = [
     id: 'new-group-map-pollution',
     title: '新分组被旧分组 map 污染',
     issues: ['#2052'],
+    fixedIssues: ['#2052'],
     expectedBug:
       'graphModel.addNode 批量落盘后 dynamic-group children 为空，再 addChild 时子节点仍可能被旧分组 nodeGroupMap / children 影响。',
     steps: [
@@ -522,13 +523,13 @@ export const scenarios: Scenario[] = [
           width: 480,
           height: 250,
         }),
-        { id: 'rect_a', type: 'rect', x: 350, y: 200, text: 'A内' },
+        { id: 'rect_a', type: 'rect', x: 350, y: 200, text: 'rect_a' },
         {
           id: 'job_placeholder',
           type: 'rect',
           x: 520,
           y: 200,
-          text: '占位',
+          text: 'job_placeholder',
           properties: { width: 80, height: 50 },
         },
       ],
@@ -749,12 +750,13 @@ export const scenarios: Scenario[] = [
     id: 'resize-undo-twice',
     title: '分组 resize 后需撤销两次',
     issues: ['#1532'],
+    wontFixIssues: ['#1532'],
     expectedBug:
-      '拖分组角点改大小后，按一次 Ctrl+Z 无法回到 resize 前，需撤销两次。',
+      '报告为 resize 后需撤销两次。调查：默认快速 resize 通常一次 undo 即可；慢速/断续拖动因 history debounce 可能产生多条快照。已关闭，暂不修复。',
     steps: [
-      '1. 选中 group_resize，拖右下角控制点改变宽高。',
-      '2. 按 Ctrl+Z（或 Cmd+Z）撤销一次。',
-      '3. 预期（修复后）：一次撤销即恢复 resize 前尺寸。',
+      '1. 选中 group_resize，拖右下角控制点改变宽高（可对比快速拖动 vs 慢速拖动）。',
+      '2. 按 Ctrl+Z（或 Cmd+Z）撤销，观察需几次才回到 resize 前。',
+      '3. 结论：默认配置下多为一次 undo；机制性隐患留待后续有需求再修。',
     ],
     graphData: {
       nodes: [
@@ -786,11 +788,13 @@ export const scenarios: Scenario[] = [
     id: 'resize-single-axis',
     title: '单边 resize 控制点',
     issues: ['#1555'],
-    expectedBug: '展开态分组仅有四角等比缩放，缺少单独改宽/高的控制点。',
+    wontFixIssues: ['#1555'],
+    expectedBug:
+      '希望分组四边中点有仅改宽/高的控制点。当前 LogicFlow 全图可缩放节点（含 dynamic-group）统一为四角 resize，与 rect 等一致。已关闭，暂不修复。',
     steps: [
       '1. 选中 group_axis（展开、resizable）。',
-      '2. 观察分组周围 resize 控制点。',
-      '3. 预期（修复后）：除四角外应有仅改宽或仅改高的边中点控制点。',
+      '2. 观察分组周围 resize 控制点（当前为四角，无边中点）。',
+      '3. 结论：属体验增强；若要做应在 core 层统一设计单边 resize，而非仅改分组。',
     ],
     graphData: {
       nodes: [
@@ -818,7 +822,9 @@ export const scenarios: Scenario[] = [
           }
           const ctrl = m?.getResizeControl?.()
           const count = Array.isArray(ctrl) ? ctrl.length : ctrl ? 1 : 0
-          alert(`getResizeControl 返回 ${count} 个控件（修复后应 > 4）`)
+          alert(
+            `getResizeControl 返回 ${count} 个控件（当前设计为四角 resize）`,
+          )
         },
       },
     ],

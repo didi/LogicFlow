@@ -10,6 +10,11 @@ import LogicFlow, {
   Model,
 } from '@logicflow/core'
 import GroupNode, { GroupNodeModel } from './GroupNode'
+import {
+  ExtensionEventType,
+  NODE_ADD_DROP_DND_EVENTS,
+  NODE_DRAG_EVENTS,
+} from '../../constant/events'
 
 import GraphConfigData = LogicFlow.GraphConfigData
 import EdgeConfig = LogicFlow.EdgeConfig
@@ -58,11 +63,11 @@ export class Group {
     })
 
     lf.graphModel.group = this
-    lf.on('node:add,node:drop,node:dnd-add', this.appendNodeToGroup)
-    lf.on('node:delete', this.deleteGroupChild)
-    lf.on('node:dnd-drag,node:drag', this.setActiveGroup)
-    lf.on('node:click', this.nodeSelected)
-    lf.on('graph:rendered', this.graphRendered)
+    lf.on(NODE_ADD_DROP_DND_EVENTS, this.appendNodeToGroup)
+    lf.on(EventType.NODE_DELETE, this.deleteGroupChild)
+    lf.on(NODE_DRAG_EVENTS, this.setActiveGroup)
+    lf.on(EventType.NODE_CLICK, this.nodeSelected)
+    lf.on(EventType.GRAPH_RENDERED, this.graphRendered)
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
@@ -330,7 +335,7 @@ export class Group {
       if (!group) return
       const isAllowAppendIn = group.isAllowAppendIn(data)
       if (!isAllowAppendIn) {
-        this.lf.emit('group:not-allowed', {
+        this.lf.emit(ExtensionEventType.GROUP_NOT_ALLOWED, {
           group: group.getData(),
           node: data,
         })
