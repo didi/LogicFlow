@@ -10,6 +10,7 @@ import LogicFlow, {
 import { assign, cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
 import { DynamicGroupNode } from './node'
 import { DynamicGroupNodeModel } from './model'
+import { ExtensionEventType, NODE_DRAG_EVENTS } from '../constant/events'
 import { isAllowMoveTo, isBoundsInGroup } from './utils'
 
 import GraphConfigData = LogicFlow.GraphConfigData
@@ -245,7 +246,16 @@ export class DynamicGroup {
     })
   }
 
-  onNodeAddOrDrop = ({ data: node }: CallbackArgs<'node:add'>) => {
+  onNodeAdd = ({ data: node }: CallbackArgs<'node:add'>) => {
+    this.syncGroupChildren(node)
+  }
+
+  onNodeDndAdd = ({ data: node }: CallbackArgs<'node:dnd-add'>) => {
+    this.syncGroupChildren(node)
+    this.addNodeToGroup(node)
+  }
+
+  onNodeDrop = ({ data: node }: CallbackArgs<'node:drop'>) => {
     this.addNodeToGroup(node)
   }
 
@@ -257,6 +267,47 @@ export class DynamicGroup {
     group.setAllowAppendChild(false)
   }
 
+  removeChildFromOtherGroups = (childId: string, ownerGroupId: string) => {
+    const preGroupId = this.nodeGroupMap.get(childId)
+    if (preGroupId && preGroupId !== ownerGroupId) {
+      const preGroup = this.lf.getNodeModelById(
+        preGroupId,
+      ) as DynamicGroupNodeModel
+      preGroup?.removeChild(childId)
+    }
+
+    forEach(this.lf.graphModel.nodes, (node) => {
+      if (!node.isGroup || node.id === ownerGroupId) return
+      const group = node as DynamicGroupNodeModel
+      if (group.children?.has(childId)) {
+        group.removeChild(childId)
+      }
+    })
+  }
+
+  setNodeGroup = (groupId: string, childId: string) => {
+    this.removeChildFromOtherGroups(childId, groupId)
+    this.nodeGroupMap.set(childId, groupId)
+  }
+
+  syncGroupChildren = (node: LogicFlow.NodeData) => {
+    const nodeModel = this.lf.getNodeModelById(node.id)
+    if (!nodeModel?.isGroup) return
+
+    const group = nodeModel as DynamicGroupNodeModel
+    forEach(Array.from(group.children), (childId) => {
+      this.setNodeGroup(node.id, childId)
+    })
+
+    // 新增 group 时进行 this.topGroupZIndex 的校准更新
+    this.calibrateTopGroupZIndex([node])
+    this.onNodeSelect({
+      data: node,
+      isSelected: false,
+      isMultiple: false,
+    })
+  }
+
   addNodeToGroup = (node: LogicFlow.NodeData) => {
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
@@ -264,34 +315,6 @@ export class DynamicGroup {
 
     // 1. 如果该节点之前已经在 group 中了，则将其从之前的 group 移除
     const preGroupId = this.nodeGroupMap.get(node.id)
-
-    // TODO: 确认下面的注释内容
-    // https://github.com/didi/LogicFlow/issues/1261
-    // 当使用 SelectionSelect 框选后触发 lf.addNode(Group)
-    // 会触发 appendNodeToGroup() 的执行
-    // 由于 this.getGroup() 会判断 node.id !== nodeData.id
-    // 因此当 addNode 是 Group 类型时，this.getGroup() 会一直返回空
-    // 导致了下面这段代码无法执行，也就是无法将当前添加的 Group 添加到 this.nodeGroupMap 中
-    // 这导致了折叠分组时触发的 foldEdge() 无法正确通过 getNodeGroup() 拿到正确的 groupId
-    // 从而导致折叠分组时一直都会创建一个虚拟边
-    // 而初始化分组时由于正确设置了nodeGroupMap的数据，因此不会产生虚拟边的错误情况
-    if (nodeModel.isGroup) {
-      const group = nodeModel as DynamicGroupNodeModel
-      forEach(Array.from(group.children), (childId) => {
-        const preChildGroupId = this.nodeGroupMap.get(childId)
-        if (preChildGroupId && preChildGroupId !== node.id) {
-          this.detachNodeFromGroup(preChildGroupId, childId)
-        }
-        this.nodeGroupMap.set(childId, node.id)
-      })
-      // 新增 node 时进行 this.topGroupZIndex 的校准更新
-      this.calibrateTopGroupZIndex([node])
-      this.onNodeSelect({
-        data: node,
-        isSelected: false,
-        isMultiple: false,
-      })
-    }
 
     // 2. 然后再判断这个节点是否在某个 group 范围内，如果是，则将其添加到对应的 group 中
     // TODO: 找到这个范围内的 groupModel, 并加 node 添加到该 group
@@ -316,7 +339,7 @@ export class DynamicGroup {
         targetGroup.setAllowAppendChild(false)
       } else {
         // 抛出不允许插入的事件
-        this.lf.emit('group:not-allowed', {
+        this.lf.emit(ExtensionEventType.GROUP_NOT_ALLOWED, {
           group: targetGroup.getData(),
           node,
         })
@@ -338,7 +361,7 @@ export class DynamicGroup {
       }
       this.detachNodeFromGroup(preGroupId, node.id)
       // 抛出不允许插入的事件
-      this.lf.emit('group:not-allowed', {
+      this.lf.emit(ExtensionEventType.GROUP_NOT_ALLOWED, {
         group: targetGroup.getData(),
         node,
       })
@@ -348,8 +371,8 @@ export class DynamicGroup {
   onGroupAddNode = ({
     data: groupData,
     childId,
-  }: CallbackArgs<'group:add-node'>) => {
-    this.nodeGroupMap.set(childId, groupData.id)
+  }: CallbackArgs<ExtensionEventType.GROUP_ADD_NODE>) => {
+    this.setNodeGroup(groupData.id, childId)
   }
 
   removeNodeFromGroup = ({
@@ -529,6 +552,13 @@ export class DynamicGroup {
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
+    // lf.render / graphDataToModel 不会逐节点触发 node:delete，需在整图重建时重置插件侧状态
+    this.nodeGroupMap.clear()
+    this.collapsedVirtualEdges.clear()
+    this.collapsedRealEdgeToGroup.clear()
+    this.activeGroup = undefined
+    this.topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX
+
     forEach(data.nodes, (node) => {
       if (node.children) {
         forEach(node.children, (childId) => {
@@ -770,17 +800,19 @@ export class DynamicGroup {
     })
 
     graphModel.dynamicGroup = this
-    lf.on('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
-    lf.on('selection:drop', this.onSelectionDrop)
-    lf.on('node:delete', this.removeNodeFromGroup)
-    lf.on('edge:delete', this.onEdgeDelete)
-    lf.on('node:drag,node:dnd-drag', this.onNodeDrag)
-    lf.on('selection:drag', this.onSelectionDrag)
-    lf.on('node:click', this.onNodeSelect)
-    lf.on('node:mousemove', this.onNodeMove)
-    lf.on('graph:rendered', this.onGraphRendered)
+    lf.on(EventType.NODE_ADD, this.onNodeAdd)
+    lf.on(EventType.NODE_DND_ADD, this.onNodeDndAdd)
+    lf.on(EventType.NODE_DROP, this.onNodeDrop)
+    lf.on(EventType.SELECTION_DROP, this.onSelectionDrop)
+    lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    lf.on(EventType.EDGE_DELETE, this.onEdgeDelete)
+    lf.on(NODE_DRAG_EVENTS, this.onNodeDrag)
+    lf.on(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    lf.on(EventType.NODE_CLICK, this.onNodeSelect)
+    lf.on(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    lf.on(EventType.GRAPH_RENDERED, this.onGraphRendered)
 
-    lf.on('group:add-node', this.onGroupAddNode)
+    lf.on(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
@@ -839,16 +871,18 @@ export class DynamicGroup {
 
   destroy() {
     // 销毁监听的事件，并移除渲染的 dom 内容
-    this.lf.off('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
-    this.lf.off('selection:drop', this.onSelectionDrop)
-    this.lf.off('node:delete', this.removeNodeFromGroup)
-    this.lf.off('edge:delete', this.onEdgeDelete)
-    this.lf.off('node:drag,node:dnd-drag', this.onNodeDrag)
-    this.lf.off('selection:drag', this.onSelectionDrag)
-    this.lf.off('node:click', this.onNodeSelect)
-    this.lf.off('node:mousemove', this.onNodeMove)
-    this.lf.off('graph:rendered', this.onGraphRendered)
-    this.lf.off('group:add-node', this.onGroupAddNode)
+    this.lf.off(EventType.NODE_ADD, this.onNodeAdd)
+    this.lf.off(EventType.NODE_DND_ADD, this.onNodeDndAdd)
+    this.lf.off(EventType.NODE_DROP, this.onNodeDrop)
+    this.lf.off(EventType.SELECTION_DROP, this.onSelectionDrop)
+    this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    this.lf.off(EventType.EDGE_DELETE, this.onEdgeDelete)
+    this.lf.off(NODE_DRAG_EVENTS, this.onNodeDrag)
+    this.lf.off(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    this.lf.off(EventType.NODE_CLICK, this.onNodeSelect)
+    this.lf.off(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
+    this.lf.off(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
     // 还原 lf.addElements 方法？
     // 移除 graphModel 上重写的 addNodeMoveRules 方法？

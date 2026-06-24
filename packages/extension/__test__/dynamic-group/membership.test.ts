@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { EventType } from '@logicflow/core'
 import {
   DynamicGroup,
   DynamicGroupNodeModel,
@@ -77,11 +77,183 @@ function simulateNodeDrop(lf: LogicFlow, nodeId: string) {
   })
 }
 
+function graphWithSingleGroup() {
+  return {
+    nodes: [
+      {
+        id: 'group_a',
+        type: 'dynamic-group',
+        x: 400,
+        y: 240,
+        properties: {
+          width: 320,
+          height: 200,
+          collapsedWidth: 80,
+          collapsedHeight: 60,
+          collapsible: true,
+          isCollapsed: false,
+          children: ['rect_a'],
+        },
+      },
+      {
+        id: 'rect_a',
+        type: 'rect',
+        x: 400,
+        y: 240,
+        properties: { width: 80, height: 50 },
+      },
+    ],
+    edges: [],
+  }
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('dynamic-group membership (#2412)', () => {
+  test('M3: node:add creates a node without auto-appending by bounds', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleGroup())
+
+    const group = lf.getNodeModelById('group_a') as DynamicGroupNodeModel
+    const dg = getDynamicGroup(lf)
+
+    lf.addNode({
+      id: 'api_child',
+      type: 'rect',
+      x: 400,
+      y: 240,
+      properties: { width: 80, height: 50 },
+    })
+
+    expect(group.children.has('api_child')).toBe(false)
+    expect(dg.getGroupByNodeId('api_child')).toBeUndefined()
+  })
+
+  test('M3: node:dnd-add appends a new node by bounds', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleGroup())
+
+    const group = lf.getNodeModelById('group_a') as DynamicGroupNodeModel
+    const dg = getDynamicGroup(lf)
+
+    lf.addNode(
+      {
+        id: 'dnd_child',
+        type: 'rect',
+        x: 400,
+        y: 240,
+        properties: { width: 80, height: 50 },
+      },
+      EventType.NODE_DND_ADD,
+      {} as MouseEvent,
+    )
+
+    expect(group.children.has('dnd_child')).toBe(true)
+    expect(dg.getGroupByNodeId('dnd_child')?.id).toBe('group_a')
+  })
+
+  test('M3: explicit addChild removes stale membership from previous groups (#2052)', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleGroup())
+
+    const groupA = lf.getNodeModelById('group_a') as DynamicGroupNodeModel
+
+    lf.graphModel.addNode({
+      id: 'job_child_1',
+      type: 'rect',
+      x: 400,
+      y: 240,
+      properties: { width: 80, height: 50 },
+    })
+    lf.graphModel.addNode({
+      id: 'job_group',
+      type: 'dynamic-group',
+      x: 400,
+      y: 240,
+      properties: {
+        width: 200,
+        height: 150,
+        collapsedWidth: 80,
+        collapsedHeight: 60,
+        collapsible: true,
+        isCollapsed: false,
+        children: [],
+      },
+    })
+
+    const jobGroup = lf.getNodeModelById('job_group') as DynamicGroupNodeModel
+    jobGroup.addChild('job_child_1')
+
+    expect(groupA.children.has('job_child_1')).toBe(false)
+    expect(jobGroup.children.has('job_child_1')).toBe(true)
+    expect(getDynamicGroup(lf).getGroupByNodeId('job_child_1')?.id).toBe(
+      'job_group',
+    )
+  })
+
+  test('M3: group drop reparents the group only, not its descendants', () => {
+    const lf = createDynamicGroupLF()
+    lf.render({
+      nodes: [
+        {
+          id: 'group_a',
+          type: 'dynamic-group',
+          x: 400,
+          y: 240,
+          properties: {
+            width: 320,
+            height: 200,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: ['job_child_1'],
+          },
+        },
+        {
+          id: 'job_group',
+          type: 'dynamic-group',
+          x: 400,
+          y: 240,
+          properties: {
+            width: 220,
+            height: 160,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: ['job_child_1'],
+          },
+        },
+        {
+          id: 'job_child_1',
+          type: 'rect',
+          x: 400,
+          y: 240,
+          properties: { width: 80, height: 50 },
+        },
+      ],
+      edges: [],
+    })
+
+    const groupA = lf.getNodeModelById('group_a') as DynamicGroupNodeModel
+    const jobGroup = lf.getNodeModelById('job_group') as DynamicGroupNodeModel
+
+    expect(getDynamicGroup(lf).getGroupByNodeId('job_child_1')?.id).toBe(
+      'job_group',
+    )
+
+    simulateNodeDrop(lf, 'group_a')
+
+    expect(groupA.children.has('job_child_1')).toBe(true)
+    expect(jobGroup.children.has('job_child_1')).toBe(true)
+    expect(getDynamicGroup(lf).getGroupByNodeId('job_child_1')?.id).toBe(
+      'job_group',
+    )
+  })
+
   test('M5: isRestrict + isAllowAppendIn false — in-group drop keeps children and map', () => {
     const lf = createLockedGroupLF()
     lf.render(graphLockedGroupWithChild())

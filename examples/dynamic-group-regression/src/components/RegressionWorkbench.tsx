@@ -79,6 +79,7 @@ export default function RegressionWorkbench() {
     const lf = lfRef.current
     if (!lf) return
     scenario.prepare?.(lf)
+    lf.graphModel.clearData()
     lf.render(JSON.parse(JSON.stringify(scenario.graphData)))
     scenario.afterRender?.(lf)
     lf.resetZoom()
@@ -87,6 +88,7 @@ export default function RegressionWorkbench() {
   const loadGraph = useCallback((data: LogicFlow.GraphConfigData) => {
     const lf = lfRef.current
     if (!lf) return
+    lf.graphModel.clearData()
     lf.render(JSON.parse(JSON.stringify(data)))
     lf.resetZoom()
   }, [])
@@ -139,6 +141,7 @@ export default function RegressionWorkbench() {
                 <div>
                   {item.issues.map((tag) => {
                     const fixed = item.fixedIssues?.includes(tag)
+                    const wontFix = item.wontFixIssues?.includes(tag)
                     const unreproducible =
                       item.unreproducibleIssues?.includes(tag)
                     return (
@@ -147,17 +150,21 @@ export default function RegressionWorkbench() {
                         color={
                           fixed
                             ? 'success'
-                            : unreproducible
-                              ? 'blue'
-                              : 'default'
+                            : wontFix
+                              ? 'default'
+                              : unreproducible
+                                ? 'blue'
+                                : 'default'
                         }
                         style={{ marginTop: 4 }}
                       >
                         {fixed
                           ? `${tag} 已修复`
-                          : unreproducible
-                            ? `${tag} 未复现`
-                            : tag}
+                          : wontFix
+                            ? `${tag} 关闭 · 暂不修复`
+                            : unreproducible
+                              ? `${tag} 未复现`
+                              : tag}
                       </Tag>
                     )
                   })}
@@ -178,19 +185,23 @@ export default function RegressionWorkbench() {
             type={
               active.fixedIssues && active.fixedIssues.length > 0
                 ? 'success'
-                : active.unreproducibleIssues &&
-                    active.unreproducibleIssues.length > 0
+                : active.wontFixIssues && active.wontFixIssues.length > 0
                   ? 'info'
-                  : 'warning'
+                  : active.unreproducibleIssues &&
+                      active.unreproducibleIssues.length > 0
+                    ? 'info'
+                    : 'warning'
             }
             showIcon
             message={
               active.fixedIssues && active.fixedIssues.length > 0
                 ? `已修复 ${active.fixedIssues.join('、')}：${active.expectedBug}`
-                : active.unreproducibleIssues &&
-                    active.unreproducibleIssues.length > 0
-                  ? `未复现 ${active.unreproducibleIssues.join('、')}：${active.expectedBug}`
-                  : `已知问题：${active.expectedBug}`
+                : active.wontFixIssues && active.wontFixIssues.length > 0
+                  ? `关闭 · 暂不修复 ${active.wontFixIssues.join('、')}：${active.expectedBug}`
+                  : active.unreproducibleIssues &&
+                      active.unreproducibleIssues.length > 0
+                    ? `未复现 ${active.unreproducibleIssues.join('、')}：${active.expectedBug}`
+                    : `已知问题：${active.expectedBug}`
             }
           />
           <Paragraph style={{ marginTop: 12, marginBottom: 8 }}>

@@ -8,6 +8,11 @@ import LogicFlow, {
   transformEdgeData,
 } from '@logicflow/core'
 import { assign, filter, forEach, cloneDeep, has, map } from 'lodash-es'
+import {
+  ExtensionEventType,
+  NODE_ADD_DROP_DND_EVENTS,
+  NODE_DRAG_EVENTS,
+} from '../constant/events'
 import { PoolModel } from './PoolModel'
 import { PoolView } from './PoolView'
 import { LaneModel } from './LaneModel'
@@ -170,7 +175,7 @@ export class PoolElements {
   onGroupAddNode = ({
     data: groupData,
     childId,
-  }: CallbackArgs<'group:add-node'>) => {
+  }: CallbackArgs<ExtensionEventType.GROUP_ADD_NODE>) => {
     this.nodeLaneMap.set(childId, groupData.id)
   }
 
@@ -542,16 +547,16 @@ export class PoolElements {
     })
 
     graphModel.dynamicGroup = this
-    lf.on('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
-    lf.on('selection:drop', this.onSelectionDrop)
-    lf.on('node:delete', this.removeNodeFromGroup)
-    lf.on('node:drag,node:dnd-drag', this.onNodeDrag)
-    lf.on('selection:drag', this.onSelectionDrag)
-    lf.on('node:click', this.onNodeSelect)
-    lf.on('node:mousemove', this.onNodeMove)
-    lf.on('graph:rendered', this.onGraphRendered)
+    lf.on(NODE_ADD_DROP_DND_EVENTS, this.onNodeAddOrDrop)
+    lf.on(EventType.SELECTION_DROP, this.onSelectionDrop)
+    lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    lf.on(NODE_DRAG_EVENTS, this.onNodeDrag)
+    lf.on(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    lf.on(EventType.NODE_CLICK, this.onNodeSelect)
+    lf.on(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    lf.on(EventType.GRAPH_RENDERED, this.onGraphRendered)
 
-    lf.on('group:add-node', this.onGroupAddNode)
+    lf.on(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
     lf.addElements = (
       { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
@@ -606,15 +611,15 @@ export class PoolElements {
 
   destroy() {
     // 销毁监听的事件，并移除渲染的 dom 内容
-    this.lf.off('node:add,node:drop,node:dnd-add', this.onNodeAddOrDrop)
-    this.lf.off('selection:drop', this.onSelectionDrop)
-    this.lf.off('node:delete', this.removeNodeFromGroup)
-    this.lf.off('node:drag,node:dnd-drag', this.onNodeDrag)
-    this.lf.off('selection:drag', this.onSelectionDrag)
-    this.lf.off('node:click', this.onNodeSelect)
-    this.lf.off('node:mousemove', this.onNodeMove)
-    this.lf.off('graph:rendered', this.onGraphRendered)
-    this.lf.off('group:add-node', this.onGroupAddNode)
+    this.lf.off(NODE_ADD_DROP_DND_EVENTS, this.onNodeAddOrDrop)
+    this.lf.off(EventType.SELECTION_DROP, this.onSelectionDrop)
+    this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    this.lf.off(NODE_DRAG_EVENTS, this.onNodeDrag)
+    this.lf.off(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    this.lf.off(EventType.NODE_CLICK, this.onNodeSelect)
+    this.lf.off(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
+    this.lf.off(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
   }
 }
 

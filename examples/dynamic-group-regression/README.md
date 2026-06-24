@@ -36,14 +36,14 @@ cd examples/dynamic-group-regression && pnpm dev
 | `edge-nan-after-toggle` | #2401 |
 | `initial-collapsed-position` | #1616、#2198 |
 | `map-after-remove-group` | #2194 |
-| `new-group-map-pollution` | #2052 |
+| `new-group-map-pollution` | #2052（已修复） |
 | `restrict-no-append-in` | #2412 |
 | `zindex-mismatch` | LOCAL-1 |
 | `overlap-collapse-misassign` | LOCAL-2 |
 | `add-node-with-children` | #1673 |
 | `layout-format-escape` | #2205、#2332（已修复） |
-| `resize-undo-twice` | #1532 |
-| `resize-single-axis` | #1555 |
+| `resize-undo-twice` | #1532（关闭 · 暂不修复） |
+| `resize-single-axis` | #1555（关闭 · 暂不修复） |
 
 ## 使用说明
 
