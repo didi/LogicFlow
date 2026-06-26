@@ -43,6 +43,9 @@ lf.render({
 | 选项 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `disallowEdgeConnectToGroup` | `boolean` | `false` | 为 `true` 时，**禁止手动**将边连到/从 `dynamic-group` 节点本身（作为起点或终点）。组内节点与外部节点的连线不受影响；分组折叠时由插件创建的虚拟边也不受影响。 |
+| `cascadeDeleteChildren` | `boolean` | `true` | 删除 `dynamic-group` 节点时，是否**一并删除**其 `children` 中的成员。为 `false` 时仅删除分组框，成员保留在画布并解除归属关系。 |
+
+> **关于 `cascadeDeleteChildren` 默认值**：默认为 `true`，与 v1.1 以来行为一致——删除分组会同时删除组内节点。若业务将分组视为视觉容器而非复合对象，可显式设为 `false` 以保留子节点。
 
 **默认行为（`false`）**：与历史版本一致，允许手动连到分组节点。
 
@@ -55,6 +58,20 @@ const lf = new LogicFlow({
   pluginsOptions: {
     dynamicGroup: {
       disallowEdgeConnectToGroup: true,
+    },
+  },
+})
+```
+
+删除分组时保留子节点（仅解除归属）：
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      cascadeDeleteChildren: false,
     },
   },
 })
