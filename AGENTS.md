@@ -167,7 +167,39 @@ Before opening a PR, make sure the description covers:
 
 Use `.github/workflows/PULL_REQUEST_TEMPLATE.md` as the PR template source of truth.
 
-## 7. Architecture Index
+## 7. Public API, Docs, And Release Notes
+
+When a change introduces or modifies **user-facing behavior**, treat documentation and release notes as part of the same task—not a follow-up.
+
+### Update the docs site
+
+If the change adds a feature, plugin option, public method, config field, or changes documented behavior, update the matching pages under `sites/docs` (usually both `.zh.md` and `.en.md` for extension tutorials).
+
+Do not ship package-only behavior without a docs counterpart when users are expected to discover or configure it through the docs.
+
+### Default behavior changes need visible warnings
+
+If a change alters **default** runtime behavior (even when the API shape stays compatible), the docs must call this out prominently—use a blockquote, bold lead-in, or equivalent stand-out formatting near the option or behavior description. State:
+
+1. what the new default is;
+2. what older versions did;
+3. how to opt in/out or migrate.
+
+Prefer **opt-in strict modes** or **unchanged defaults with new options** over silent default flips in minor releases.
+
+### CHANGELOG at release time
+
+Before or as part of release, record the change in the owning package's `CHANGELOG.md` (for example `packages/extension/CHANGELOG.md`). Include:
+
+- **Added** / **Changed** / **Fixed** as appropriate;
+- the public API or option name;
+- default value and compatibility note when relevant.
+
+If the docs site maintains its own changelog (`sites/docs/CHANGELOG.md`), align entries when the release is user-visible there too.
+
+Implementation PRs may land before the version bump, but the release PR must not omit changelog entries for shipped API or behavior changes.
+
+## 8. Architecture Index
 
 Read these documents before making structural changes in the corresponding package:
 
@@ -184,7 +216,7 @@ Use these repository files as supporting references when the architecture docs a
 - `turbo.json`
 - `lerna.json`
 
-## 8. What Not To Put Here
+## 9. What Not To Put Here
 
 This file is intentionally not a full architecture manual.
 
