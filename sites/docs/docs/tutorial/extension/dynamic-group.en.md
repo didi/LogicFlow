@@ -44,6 +44,9 @@ Pass DynamicGroup options via `pluginsOptions.dynamicGroup` when creating the Lo
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `disallowEdgeConnectToGroup` | `boolean` | `false` | When `true`, **manual** edges cannot connect to or from a `dynamic-group` node as source/target. Edges between child nodes and the outside are unaffected. Virtual edges created on collapse are also unaffected. |
+| `cascadeDeleteChildren` | `boolean` | `true` | When deleting a `dynamic-group` node, whether to **also delete** all members in its `children`. When `false`, only the group node is removed; members stay on the canvas and membership is cleared. |
+
+> **`cascadeDeleteChildren` default**: Defaults to `true`, matching behavior since v1.1 — deleting a group also deletes its child nodes. Set to `false` if your app treats groups as visual containers rather than composite objects.
 
 **Default (`false`)**: Same as legacy behavior — manual connections to the group node are allowed.
 
@@ -56,6 +59,20 @@ const lf = new LogicFlow({
   pluginsOptions: {
     dynamicGroup: {
       disallowEdgeConnectToGroup: true,
+    },
+  },
+});
+```
+
+Keep child nodes when deleting a group (detach only):
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      cascadeDeleteChildren: false,
     },
   },
 });
