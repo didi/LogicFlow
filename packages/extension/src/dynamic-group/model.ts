@@ -483,9 +483,11 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         if (this.children.has(sourceNodeId) || this.id === sourceNodeId) {
           edgeConfig.startPoint = undefined
           edgeConfig.sourceNodeId = this.id
+          delete edgeConfig.sourceAnchorId
         } else {
           edgeConfig.endPoint = undefined
           edgeConfig.targetNodeId = this.id
+          delete edgeConfig.targetAnchorId
         }
 
         // 如果边的起点和终点都在分组内部，则不创建新的虚拟边
@@ -510,6 +512,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         ) {
           edgeConfig.targetNodeId = targetNodeGroup.id
           edgeConfig.endPoint = undefined
+          delete edgeConfig.targetAnchorId
           this.createVirtualEdge(edgeConfig, edge.id)
         } else if (
           sourceNodeGroup &&
@@ -518,6 +521,7 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         ) {
           edgeConfig.sourceNodeId = sourceNodeGroup.id
           edgeConfig.startPoint = undefined
+          delete edgeConfig.sourceAnchorId
           this.createVirtualEdge(edgeConfig, edge.id)
         } else {
           // 保留折叠态期间隐藏边已更新的几何，勿用折叠瞬间快照覆盖（折叠态拖分组场景）

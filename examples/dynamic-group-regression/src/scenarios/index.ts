@@ -2,7 +2,9 @@ import type LogicFlow from '@logicflow/core'
 import type { Scenario } from './types'
 import { baseGroupProps, makeGroup, registerLockedGroup } from './customNodes'
 import LayoutFormatEscapeControls from '@/components/LayoutFormatEscapeControls'
+import CascadeDeleteControls from '@/components/CascadeDeleteControls'
 import { layoutFormatEscapeScenario } from './layoutFormatEscape'
+import { autoResizeCompareScenario } from './autoResizeCompare'
 
 function toggleGroup(lf: LogicFlow, groupId: string, collapse?: boolean) {
   const model = lf.getNodeModelById(groupId) as {
@@ -157,6 +159,87 @@ function logGroupMembership2052(lf: LogicFlow) {
 }
 
 export const scenarios: Scenario[] = [
+  autoResizeCompareScenario,
+  {
+    id: 'cascade-delete-children',
+    title: '删分组：级联删除 vs 保留子节点',
+    issues: ['cascadeDeleteChildren'],
+    fixedIssues: ['cascadeDeleteChildren'],
+    expectedBug:
+      '验证 pluginsOptions.dynamicGroup.cascadeDeleteChildren：true 时删组连带删子节点；false 时仅删分组框，子节点与对外连线保留。',
+    steps: [
+      '1. 画布预置：cascade_outer → cascade_rect，组内另有 cascade_circle；分组 cascade_group_1 默认展开。',
+      '2. 用开关切换 cascadeDeleteChildren（级联删 / 保留子）。',
+      '3. 可选：先点「折叠分组」再删（勿连续重复点折叠/展开，已在目标态时再点无效）。',
+      '4. 点击「删除分组」，观察 cascade_rect / cascade_circle 是否仍在画布。',
+      '5. 点「重置场景」可重复对比两种模式。',
+    ],
+    graphData: {
+      nodes: [
+        {
+          id: 'cascade_outer',
+          type: 'circle',
+          x: 120,
+          y: 220,
+          text: 'cascade_outer',
+        },
+        {
+          id: 'cascade_rect',
+          type: 'rect',
+          x: 420,
+          y: 200,
+          text: 'cascade_rect',
+          properties: { width: 80, height: 50 },
+        },
+        {
+          id: 'cascade_circle',
+          type: 'circle',
+          x: 520,
+          y: 240,
+          text: 'cascade_circle',
+        },
+        {
+          id: 'cascade_group_1',
+          type: 'dynamic-group',
+          x: 460,
+          y: 220,
+          text: 'cascade_group_1',
+          resizable: true,
+          properties: {
+            width: 360,
+            height: 220,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            radius: 5,
+          },
+        },
+      ],
+      edges: [
+        {
+          id: 'cascade_edge_outer_rect',
+          type: 'polyline',
+          sourceNodeId: 'cascade_outer',
+          targetNodeId: 'cascade_rect',
+        },
+      ],
+    },
+    afterRender: (lf) => {
+      const group = lf.getNodeModelById('cascade_group_1') as
+        | { addChild: (id: string) => void }
+        | undefined
+      group?.addChild('cascade_rect')
+      group?.addChild('cascade_circle')
+      const dg = lf.graphModel.dynamicGroup as {
+        cascadeDeleteChildren?: boolean
+      }
+      if (dg) {
+        dg.cascadeDeleteChildren = true
+      }
+    },
+    Controls: CascadeDeleteControls,
+  },
   {
     id: 'edge-delete-after-collapse',
     title: '折叠后删边再展开（边复活）',
@@ -636,6 +719,7 @@ export const scenarios: Scenario[] = [
     id: 'overlap-collapse-misassign',
     title: '重叠分组折叠后归属漂移',
     issues: ['LOCAL-2', '#2052'],
+    fixedIssues: ['LOCAL-2', '#2052'],
     expectedBug: '折叠 group_1 后，其子节点归属变成 group_2。',
     steps: [
       '1. group_1 与 group_2 部分重叠，node_x 属于 group_1。',
