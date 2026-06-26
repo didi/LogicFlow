@@ -119,6 +119,99 @@ describe('dynamic-group collapse edge (#2395)', () => {
     expect(lf.getGraphData().edges).toHaveLength(0)
   })
 
+  test('E9: collapse — virtual edge clears stale anchor ids when retargeting to group', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const lf = createDynamicGroupLF()
+      lf.render(graphWithSingleExternalEdge())
+
+      const realEdge = lf.getEdgeModelById('e_outer_inner')!
+      realEdge.targetAnchorId = 'inner_3'
+
+      collapseGroup(lf, 'group_1')
+
+      const virtualEdges = getVirtualEdges(lf)
+      expect(virtualEdges).toHaveLength(1)
+      expect(virtualEdges[0].targetNodeId).toBe('group_1')
+      expect(virtualEdges[0].targetAnchorId).not.toBe('inner_3')
+
+      const groupAnchorIds = (
+        lf.getNodeModelById('group_1')!.getDefaultAnchor() as Array<{
+          id: string
+        }>
+      ).map((anchor) => anchor.id)
+      if (virtualEdges[0].targetAnchorId) {
+        expect(groupAnchorIds).toContain(virtualEdges[0].targetAnchorId)
+      }
+
+      const anchorWarns = warnSpy.mock.calls.filter(([msg]) =>
+        /未在节点上找到指定的(起点|终点)锚点/.test(String(msg)),
+      )
+      expect(anchorWarns).toHaveLength(0)
+    } finally {
+      warnSpy.mockRestore()
+    }
+  })
+
+  test('E9b: collapse — virtual edge clears source anchor when retargeting to group', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const lf = createDynamicGroupLF()
+      lf.render({
+        nodes: [
+          {
+            id: 'group_out',
+            type: 'dynamic-group',
+            x: 420,
+            y: 220,
+            properties: {
+              width: 360,
+              height: 220,
+              collapsedWidth: 80,
+              collapsedHeight: 60,
+              collapsible: true,
+              isCollapsed: false,
+              children: ['inner_out'],
+            },
+          },
+          { id: 'outer_tgt', type: 'circle', x: 120, y: 220 },
+          {
+            id: 'inner_out',
+            type: 'rect',
+            x: 420,
+            y: 220,
+            properties: { width: 80, height: 50 },
+          },
+        ],
+        edges: [
+          {
+            id: 'e_inner_outer',
+            type: 'polyline',
+            sourceNodeId: 'inner_out',
+            targetNodeId: 'outer_tgt',
+          },
+        ],
+      })
+
+      const realEdge = lf.getEdgeModelById('e_inner_outer')!
+      realEdge.sourceAnchorId = 'inner_out_1'
+
+      collapseGroup(lf, 'group_out')
+
+      const virtualEdges = getVirtualEdges(lf)
+      expect(virtualEdges).toHaveLength(1)
+      expect(virtualEdges[0].sourceNodeId).toBe('group_out')
+      expect(virtualEdges[0].sourceAnchorId).not.toBe('inner_out_1')
+
+      const anchorWarns = warnSpy.mock.calls.filter(([msg]) =>
+        /未在节点上找到指定的(起点|终点)锚点/.test(String(msg)),
+      )
+      expect(anchorWarns).toHaveLength(0)
+    } finally {
+      warnSpy.mockRestore()
+    }
+  })
+
   test('E8: collapse → drag group → expand → drag — edge endpoints stay on anchors', () => {
     const lf = createDynamicGroupLF()
     lf.render({

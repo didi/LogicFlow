@@ -30,6 +30,7 @@ cd examples/dynamic-group-regression && pnpm dev
 
 | 场景 ID | Issue |
 | --- | --- |
+| `cascade-delete-children` | cascadeDeleteChildren 级联删除 |
 | `edge-delete-after-collapse` | #2395 |
 | `gateway-dual-branch` | #2395 / E7 双分支 |
 | `points-list-collapse` | #2399、#2400 |
@@ -39,7 +40,7 @@ cd examples/dynamic-group-regression && pnpm dev
 | `new-group-map-pollution` | #2052（已修复） |
 | `restrict-no-append-in` | #2412 |
 | `zindex-mismatch` | LOCAL-1 |
-| `overlap-collapse-misassign` | LOCAL-2 |
+| `overlap-collapse-misassign` | LOCAL-2、#2052（已修复） |
 | `add-node-with-children` | #1673 |
 | `layout-format-escape` | #2205、#2332（已修复） |
 | `resize-undo-twice` | #1532（关闭 · 暂不修复） |

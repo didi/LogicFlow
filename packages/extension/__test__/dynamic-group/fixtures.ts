@@ -11,6 +11,7 @@ export function createContainer() {
 
 export function createDynamicGroupLF(pluginOptions?: {
   disallowEdgeConnectToGroup?: boolean
+  cascadeDeleteChildren?: boolean
 }) {
   return new LogicFlow({
     container: createContainer(),

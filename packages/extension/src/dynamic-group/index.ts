@@ -42,6 +42,11 @@ export class DynamicGroup {
    * 默认 false，与历史行为一致；折叠虚拟边不受影响。
    */
   disallowEdgeConnectToGroup: boolean = false
+  /**
+   * 删除 dynamic-group 时是否级联删除其成员。
+   * 默认 true，与 v1.1 以来行为一致；为 false 时仅删除分组，成员保留并解除归属。
+   */
+  cascadeDeleteChildren: boolean = true
   topGroupZIndex: number = DEFAULT_BOTTOM_Z_INDEX
   // 激活态的 group 节点
   activeGroup?: DynamicGroupNodeModel
@@ -52,6 +57,7 @@ export class DynamicGroup {
     new Map()
   /** 折叠隐藏的真实边 id → 分组 id */
   collapsedRealEdgeToGroup: Map<string, string> = new Map()
+  private originDeleteNode?: LogicFlow['deleteNode']
 
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(dynamicGroup)
@@ -267,6 +273,17 @@ export class DynamicGroup {
     group.setAllowAppendChild(false)
   }
 
+  releaseGroupMembers = (groupModel: DynamicGroupNodeModel) => {
+    if (groupModel.isCollapsed) {
+      // 复用展开路径恢复真实边与成员可见性，避免删虚拟边时误删真实边
+      groupModel.toggleCollapse(false)
+    }
+
+    forEach(Array.from(groupModel.children), (childId) => {
+      this.detachNodeFromGroup(groupModel.id, childId)
+    })
+  }
+
   removeChildFromOtherGroups = (childId: string, ownerGroupId: string) => {
     const preGroupId = this.nodeGroupMap.get(childId)
     if (preGroupId && preGroupId !== ownerGroupId) {
@@ -380,13 +397,15 @@ export class DynamicGroup {
     model,
   }: CallbackArgs<'node:delete'>) => {
     if (model.isGroup && node.children) {
-      forEach(
-        Array.from((node as DynamicGroupNodeModel).children),
-        (childId) => {
+      const groupModel = model as DynamicGroupNodeModel
+      if (this.cascadeDeleteChildren) {
+        forEach(Array.from(groupModel.children), (childId) => {
           this.nodeGroupMap.delete(childId)
           this.lf.deleteNode(childId)
-        },
-      )
+        })
+      } else {
+        this.releaseGroupMembers(groupModel)
+      }
     }
 
     const groupId = this.nodeGroupMap.get(node.id)
@@ -800,6 +819,21 @@ export class DynamicGroup {
     })
 
     graphModel.dynamicGroup = this
+
+    // cascadeDeleteChildren=false 时须在 core 删除「指向分组的边」之前释放成员，
+    // 否则折叠虚拟边被删会连带删掉真实边（graphModel.deleteNode 先删边再 emit node:delete）
+    this.originDeleteNode = lf.deleteNode.bind(lf)
+    lf.deleteNode = (nodeId: string): boolean => {
+      const nodeModel = lf.getNodeModelById(nodeId)
+      if (!this.cascadeDeleteChildren && nodeModel?.isGroup) {
+        const groupModel = nodeModel as DynamicGroupNodeModel
+        if (groupModel.children.size > 0) {
+          this.releaseGroupMembers(groupModel)
+        }
+      }
+      return this.originDeleteNode!(nodeId)
+    }
+
     lf.on(EventType.NODE_ADD, this.onNodeAdd)
     lf.on(EventType.NODE_DND_ADD, this.onNodeDndAdd)
     lf.on(EventType.NODE_DROP, this.onNodeDrop)
@@ -885,6 +919,9 @@ export class DynamicGroup {
     this.lf.off(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
     // 还原 lf.addElements 方法？
+    if (this.originDeleteNode) {
+      this.lf.deleteNode = this.originDeleteNode
+    }
     // 移除 graphModel 上重写的 addNodeMoveRules 方法？
     // TODO: 讨论一下插件该具体做些什么
   }
@@ -900,6 +937,8 @@ export namespace DynamicGroup {
     isCollapsed: boolean
     /** 为 true 时禁止手动将边连到/从分组节点；默认 false */
     disallowEdgeConnectToGroup: boolean
+    /** 删除分组时是否级联删除成员；默认 true */
+    cascadeDeleteChildren: boolean
   }>
 }
 
