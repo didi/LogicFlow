@@ -46,6 +46,16 @@ cd examples/dynamic-group-regression && pnpm dev
 | `resize-undo-twice` | #1532（关闭 · 暂不修复） |
 | `resize-single-axis` | #1555（关闭 · 暂不修复） |
 
+## 图数据约定
+
+**所有预置节点与场景内 `addNode` 创建的节点：`text` 必须与 `id` 一致。**
+
+- 字符串：`text: 'node_a'` 对应 `id: 'node_a'`
+- 对象：`text: { value: 'node_a', x, y, ... }` 中 `value` 等于 `id`
+- 辅助方法：`makeNode`、`makeGroup`、`nodeText`（见 `src/scenarios/customNodes.ts`）
+
+便于在画布、控制台与 `getGraphRawData()` 中快速对应节点。
+
 ## 使用说明
 
 1. 左侧点击场景，画布自动加载预置图数据。

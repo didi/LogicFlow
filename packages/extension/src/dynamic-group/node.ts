@@ -5,9 +5,17 @@ import LogicFlow, {
   handleResize,
   CallbackArgs,
   EventType,
+  ElementState,
+  TextMode,
 } from '@logicflow/core'
 import { forEach } from 'lodash-es'
 import { DynamicGroupNodeModel } from './model'
+import {
+  DG_OPERATE_BTN_HEIGHT,
+  DG_OPERATE_BTN_WIDTH,
+  DG_OPERATE_INSET,
+} from './utils'
+import { DynamicGroupText } from './titleText'
 
 import Position = LogicFlow.Position
 import { rotatePointAroundCenter } from '../tools/label/utils'
@@ -240,8 +248,8 @@ export class DynamicGroupNode<
   getOperateIcon(): h.JSX.Element | null {
     const { model } = this.props
     const { x, y, width, height } = model
-    const sx = x - width / 2 + 10
-    const sy = y - height / 2 + 10
+    const sx = x - width / 2 + DG_OPERATE_INSET
+    const sy = y - height / 2 + DG_OPERATE_INSET
 
     if (!model.collapsible) return null
     const iconPath = model?.isCollapsed
@@ -258,8 +266,8 @@ export class DynamicGroupNode<
 
     return h('g', {}, [
       h('rect', {
-        height: 12,
-        width: 14,
+        height: DG_OPERATE_BTN_HEIGHT,
+        width: DG_OPERATE_BTN_WIDTH,
         rx: 2,
         ry: 2,
         strokeWidth: 1,
@@ -268,21 +276,52 @@ export class DynamicGroupNode<
         cursor: 'pointer',
         x: sx,
         y: sy,
-        onClick: () => {
+        onPointerDown: (e: PointerEvent) => {
+          e.stopPropagation()
+        },
+        onClick: (e: MouseEvent) => {
+          e.stopPropagation()
           // DONE: 抛出折叠或展开事件 -> 在 toggleCollapse 方法中抛出
           model.toggleCollapse(!model.isCollapsed)
+        },
+        onDblClick: (e: MouseEvent) => {
+          e.stopPropagation()
         },
       }),
       operateIcon,
     ])
   }
 
+  getText(): h.JSX.Element | null {
+    const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
+
+    if (editConfigModel.nodeTextMode !== TextMode.TEXT) return null
+    if (model.state === ElementState.TEXT_EDIT) return null
+
+    let textShape: h.JSX.Element | null = null
+    if (model.text) {
+      let draggable = false
+      if (editConfigModel.nodeTextDraggable && model.text.draggable) {
+        draggable = true
+      }
+      textShape = h(DynamicGroupText, {
+        editable: editConfigModel.nodeTextEdit && (model.text.editable ?? true),
+        model,
+        graphModel,
+        draggable,
+      })
+    }
+
+    const operateIcon = this.getOperateIcon()
+    if (!textShape && !operateIcon) return null
+    // 文本在 getShape 之后渲染；overflow 为 autoWrap/ellipsis 时使用 foreignObject，
+    // 会盖住同区域的折叠按钮。将 operateIcon 叠在文本之上以保证可点击（#1099）。
+    return h('g', {}, textShape, operateIcon)
+  }
+
   getShape(): h.JSX.Element | null {
-    return h('g', {}, [
-      this.getAppendAreaShape(),
-      super.getShape(),
-      this.getOperateIcon(),
-    ])
+    return h('g', {}, [this.getAppendAreaShape(), super.getShape()])
   }
 }
 

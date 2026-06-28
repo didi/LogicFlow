@@ -1,6 +1,8 @@
 import type LogicFlow from '@logicflow/core'
 import type { ComponentType } from 'react'
 
+/** 场景图数据约定：节点 text 与 id 保持一致，见 `customNodes.ts` 与 README。 */
+
 export type ScenarioControlsProps = {
   lf: LogicFlow | undefined
   loadGraph: (data: LogicFlow.GraphConfigData) => void

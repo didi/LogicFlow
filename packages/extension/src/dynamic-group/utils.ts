@@ -44,3 +44,157 @@ export function isAllowMoveTo(
     y: y + deltaY >= allowMoveMinY && y + deltaY <= allowMoveMaxY,
   }
 }
+
+/** 折叠按钮距节点顶边/左边的默认 inset，与 node.getOperateIcon 一致 */
+export const DG_OPERATE_INSET = 10
+/** @deprecated 使用 DG_OPERATE_INSET */
+export const DG_OPERATE_INSET_TOP = DG_OPERATE_INSET
+export const DG_OPERATE_BTN_WIDTH = 14
+export const DG_OPERATE_BTN_HEIGHT = 12
+/** 左对齐时推荐用于避开 operator 的 wrapPadding.left（inset + btn + inset） */
+export const DG_TITLE_LEFT_CLEARANCE =
+  DG_OPERATE_INSET + DG_OPERATE_BTN_WIDTH + DG_OPERATE_INSET
+
+export const DEFAULT_TITLE_WRAP_PADDING = '0,0,0,0'
+export const DEFAULT_TITLE_TEXT_ALIGN = 'center'
+
+export type TitleBand = {
+  bandLeft: number
+  bandTop: number
+  bandWidth: number
+  bandHeight: number
+}
+
+export type TitleForeignObjectRect = {
+  foX: number
+  foY: number
+  foWidth: number
+  foHeight: number
+}
+
+export function getTitleBand(options: {
+  x: number
+  y: number
+  width: number
+  height: number
+}): TitleBand {
+  const { x, y, width, height } = options
+  const left = x - width / 2
+  const top = y - height / 2
+  return {
+    bandLeft: left,
+    bandTop: top + DG_OPERATE_INSET,
+    bandWidth: width,
+    bandHeight: height - DG_OPERATE_INSET,
+  }
+}
+
+export function resolveTitleTextPosition(options: {
+  x: number
+  y: number
+  width: number
+  height: number
+  textAlign: string
+  pad: ReturnType<typeof parseWrapPadding>
+}): { x: number; y: number } {
+  const { x, width, height, textAlign, pad } = options
+  const { bandLeft, bandTop, bandWidth } = getTitleBand({
+    x,
+    y: options.y,
+    width,
+    height,
+  })
+  const contentLeft = bandLeft + pad.left
+  const contentRight = bandLeft + bandWidth - pad.right
+  const contentTop = bandTop + pad.top
+  const contentCenterX =
+    contentLeft + Math.max(0, contentRight - contentLeft) / 2
+
+  if (textAlign === 'left') {
+    return { x: contentLeft, y: contentTop }
+  }
+  if (textAlign === 'right') {
+    return { x: contentRight, y: contentTop }
+  }
+  return { x: contentCenterX, y: contentTop }
+}
+
+export function getTitleForeignObjectRect(options: {
+  x: number
+  y: number
+  width: number
+  height: number
+  overflowMode: 'autoWrap' | 'ellipsis'
+  fontSize: number
+  pad: ReturnType<typeof parseWrapPadding>
+}): TitleForeignObjectRect {
+  const { bandLeft, bandTop, bandWidth, bandHeight } = getTitleBand(options)
+  const { overflowMode, fontSize, pad } = options
+  const foX = bandLeft
+  const foY = bandTop
+  const foWidth = bandWidth
+  const foHeight =
+    overflowMode === 'ellipsis'
+      ? pad.top + fontSize + 2 + pad.bottom
+      : bandHeight
+
+  return { foX, foY, foWidth, foHeight }
+}
+
+export function parseWrapPadding(padding?: string | number | null): {
+  top: number
+  right: number
+  bottom: number
+  left: number
+} {
+  if (padding === undefined || padding === null || padding === '') {
+    return { top: 0, right: 0, bottom: 0, left: 0 }
+  }
+  if (typeof padding === 'number') {
+    const n = Math.max(0, padding)
+    return { top: n, right: n, bottom: n, left: n }
+  }
+  const parts = String(padding)
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map((s) => parseFloat(s.replace(/px$/i, '')) || 0)
+  if (parts.length === 1) {
+    const n = parts[0]
+    return { top: n, right: n, bottom: n, left: n }
+  }
+  if (parts.length === 2) {
+    return { top: parts[0], right: parts[1], bottom: parts[0], left: parts[1] }
+  }
+  if (parts.length === 3) {
+    return {
+      top: parts[0],
+      right: parts[1],
+      bottom: parts[2],
+      left: parts[1],
+    }
+  }
+  return {
+    top: parts[0],
+    right: parts[1],
+    bottom: parts[2],
+    left: parts[3],
+  }
+}
+
+export function textAlignToAnchor(
+  textAlign?: string,
+): 'start' | 'middle' | 'end' {
+  if (textAlign === 'left') return 'start'
+  if (textAlign === 'right') return 'end'
+  return 'middle'
+}
+
+export function isHtmlTextOverflow(overflowMode?: string): boolean {
+  return overflowMode === 'autoWrap' || overflowMode === 'ellipsis'
+}
+
+/** LogicFlow 存储格式 `15,8,4,8` → CSS padding `15px 8px 4px 8px` */
+export function formatWrapPaddingCss(padding?: string | number | null): string {
+  const p = parseWrapPadding(padding)
+  return `${p.top}px ${p.right}px ${p.bottom}px ${p.left}px`
+}

@@ -568,6 +568,15 @@ export class DynamicGroup {
     groupModel.moveTo(newGroupX, newGroupY)
     groupModel.width = newGroupWidth
     groupModel.height = newGroupHeight
+    groupModel.setTextPosition()
+  }
+
+  onNodeResize = ({
+    model,
+  }: Omit<CallbackArgs<'node:resize'>, 'e' | 'position'>) => {
+    if (model?.isGroup && !(model as DynamicGroupNodeModel).isCollapsed) {
+      ;(model as DynamicGroupNodeModel).setTextPosition()
+    }
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
@@ -844,6 +853,7 @@ export class DynamicGroup {
     lf.on(EventType.SELECTION_DRAG, this.onSelectionDrag)
     lf.on(EventType.NODE_CLICK, this.onNodeSelect)
     lf.on(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    lf.on(EventType.NODE_RESIZE, this.onNodeResize)
     lf.on(EventType.GRAPH_RENDERED, this.onGraphRendered)
 
     lf.on(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
@@ -915,6 +925,7 @@ export class DynamicGroup {
     this.lf.off(EventType.SELECTION_DRAG, this.onSelectionDrag)
     this.lf.off(EventType.NODE_CLICK, this.onNodeSelect)
     this.lf.off(EventType.NODE_MOUSEMOVE, this.onNodeMove)
+    this.lf.off(EventType.NODE_RESIZE, this.onNodeResize)
     this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
     this.lf.off(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
