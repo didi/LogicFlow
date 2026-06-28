@@ -48,6 +48,7 @@ const lfOptions: Partial<LogicFlow.Options> = {
   grid: { size: 10 },
   allowResize: true,
   allowRotate: false,
+  textEdit: true,
   keyboard: { enabled: true },
   plugins: [DynamicGroup, Control, DndPanel, Dagre, ElkLayout, MiniMap],
   pluginsOptions: {

@@ -1,7 +1,7 @@
 import type LogicFlow from '@logicflow/core'
 import type { ResizeGroupMode } from '@logicflow/layout'
 import type { Scenario } from './types'
-import { makeGroup } from './customNodes'
+import { makeGroup, makeNode } from './customNodes'
 
 export const LAYOUT_GROUP_ID = 'group_layout'
 
@@ -39,12 +39,12 @@ export function buildLayoutGraph(
   return {
     nodes: [
       groupNode,
-      { id: 'lay_a', type: 'rect', x: 380, y: 240, text: '组内A' },
-      { id: 'lay_b', type: 'rect', x: 480, y: 300, text: '组内B' },
-      { id: 'lay_c', type: 'rect', x: 580, y: 360, text: '组内C' },
-      { id: 'outer_start', type: 'circle', x: 120, y: 200, text: '组外起' },
-      { id: 'outer_mid', type: 'rect', x: 160, y: 380, text: '组外中' },
-      { id: 'outer_end', type: 'diamond', x: 780, y: 300, text: '组外终' },
+      makeNode('lay_a', 'rect', 380, 240),
+      makeNode('lay_b', 'rect', 480, 300),
+      makeNode('lay_c', 'rect', 580, 360),
+      makeNode('outer_start', 'circle', 120, 200),
+      makeNode('outer_mid', 'rect', 160, 380),
+      makeNode('outer_end', 'diamond', 780, 300),
     ],
     edges: [
       {

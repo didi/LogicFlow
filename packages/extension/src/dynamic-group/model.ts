@@ -6,8 +6,17 @@ import LogicFlow, {
   IRectNodeProperties,
   RectNodeModel,
 } from '@logicflow/core'
-import { forEach } from 'lodash-es'
+import { cloneDeep, forEach } from 'lodash-es'
 import { ExtensionEventType } from '../constant/events'
+import {
+  DEFAULT_TITLE_TEXT_ALIGN,
+  DEFAULT_TITLE_WRAP_PADDING,
+  formatWrapPaddingCss,
+  getTitleForeignObjectRect,
+  parseWrapPadding,
+  resolveTitleTextPosition,
+  textAlignToAnchor,
+} from './utils'
 
 import NodeData = LogicFlow.NodeData
 import NodeConfig = LogicFlow.NodeConfig
@@ -173,13 +182,42 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapsible = collapsible ?? true
     this.autoToFront = autoToFront ?? false
     this.setTextPosition()
-    // 禁用掉 Group 节点的文本编辑能力
-    this.text.editable = false
     this.text.draggable = false
   }
 
   setAttributes() {
     super.setAttributes()
+    this.setTextPosition()
+  }
+
+  getTextStyle() {
+    const style = super.getTextStyle()
+    const rawWrapPadding =
+      (this.properties?.textStyle as { wrapPadding?: string } | undefined)
+        ?.wrapPadding ??
+      (style.wrapPadding as string | undefined) ??
+      DEFAULT_TITLE_WRAP_PADDING
+    const pad = parseWrapPadding(rawWrapPadding)
+    const merged = {
+      textAlign: DEFAULT_TITLE_TEXT_ALIGN,
+      ...style,
+      wrapPadding: formatWrapPaddingCss(rawWrapPadding),
+    } as Record<string, unknown> & typeof style
+
+    const overflowMode = (merged.overflowMode as string) ?? 'default'
+    const fontSize = Number(merged.fontSize ?? 12)
+    if (overflowMode === 'ellipsis') {
+      merged.textHeight = pad.top + fontSize + 2 + pad.bottom
+    }
+
+    merged.textAnchor = textAlignToAnchor(merged.textAlign as string)
+    merged.dominantBaseline = 'hanging'
+
+    return cloneDeep(merged)
+  }
+
+  setProperties(properties: Partial<IGroupNodeProperties>) {
+    super.setProperties(properties)
   }
 
   getData(): NodeData {
@@ -349,29 +387,66 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     this.collapseEdge(nextCollapseState, allRelatedEdges)
   }
 
+  getTitleHtmlRect() {
+    const style = this.getTextStyle()
+    const pad = parseWrapPadding(
+      (this.properties?.textStyle as { wrapPadding?: string } | undefined)
+        ?.wrapPadding ?? DEFAULT_TITLE_WRAP_PADDING,
+    )
+    const overflowMode =
+      ((style.overflowMode as string) ?? 'default') === 'ellipsis'
+        ? 'ellipsis'
+        : 'autoWrap'
+    return getTitleForeignObjectRect({
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height,
+      overflowMode,
+      fontSize: Number(style.fontSize ?? 12),
+      pad,
+    })
+  }
+
   setTextPosition() {
-    const {
-      x,
-      y,
-      staticTextPosition,
-      text,
-      isCollapsed,
-      width,
-      height,
-      collapsedWidth,
-      collapsedHeight,
-    } = this
-    if (staticTextPosition) {
-      text.x = x
-      text.y = isCollapsed ? y : y - height / 2 + 15
+    const { x, y, width, height, text } = this
+    if (!text) {
       return
     }
-    text.x = isCollapsed
-      ? x - width / 2 + collapsedWidth / 2
-      : x + width / 2 - collapsedWidth / 2
-    text.y = isCollapsed
-      ? y - height / 2 + collapsedHeight / 2
-      : y + height / 2 - collapsedHeight / 2
+
+    if (this.isCollapsed) {
+      if (text.x !== x || text.y !== y) {
+        this.text = {
+          ...text,
+          x,
+          y,
+        }
+      }
+      return
+    }
+
+    const style = this.getTextStyle()
+    const pad = parseWrapPadding(
+      (this.properties?.textStyle as { wrapPadding?: string } | undefined)
+        ?.wrapPadding ?? DEFAULT_TITLE_WRAP_PADDING,
+    )
+    const textAlign = (style.textAlign as string) ?? DEFAULT_TITLE_TEXT_ALIGN
+    const { x: nextX, y: nextY } = resolveTitleTextPosition({
+      x,
+      y,
+      width,
+      height,
+      textAlign,
+      pad,
+    })
+
+    if (nextX !== text.x || nextY !== text.y) {
+      this.text = {
+        ...text,
+        x: nextX,
+        y: nextY,
+      }
+    }
   }
 
   // 折叠操作

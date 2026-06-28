@@ -1,10 +1,17 @@
 import type LogicFlow from '@logicflow/core'
 import type { Scenario } from './types'
-import { baseGroupProps, makeGroup, registerLockedGroup } from './customNodes'
+import {
+  baseGroupProps,
+  makeGroup,
+  makeNode,
+  nodeText,
+  registerLockedGroup,
+} from './customNodes'
 import LayoutFormatEscapeControls from '@/components/LayoutFormatEscapeControls'
+import TitleHeaderControls from '@/components/TitleHeaderControls'
 import CascadeDeleteControls from '@/components/CascadeDeleteControls'
 import { layoutFormatEscapeScenario } from './layoutFormatEscape'
-import { autoResizeCompareScenario } from './autoResizeCompare'
+import { titleHeaderScenario } from './titleHeader'
 
 function toggleGroup(lf: LogicFlow, groupId: string, collapse?: boolean) {
   const model = lf.getNodeModelById(groupId) as {
@@ -33,7 +40,7 @@ type JobComposeNode = {
 function generateNode(node: JobComposeNode) {
   return {
     id: node.id,
-    text: node.jobName,
+    text: node.id,
     type: node.nodeType,
     x: node.nodePositionX,
     y: node.nodePositionY,
@@ -159,7 +166,6 @@ function logGroupMembership2052(lf: LogicFlow) {
 }
 
 export const scenarios: Scenario[] = [
-  autoResizeCompareScenario,
   {
     id: 'cascade-delete-children',
     title: '删分组：级联删除 vs 保留子节点',
@@ -176,44 +182,17 @@ export const scenarios: Scenario[] = [
     ],
     graphData: {
       nodes: [
-        {
-          id: 'cascade_outer',
-          type: 'circle',
-          x: 120,
-          y: 220,
-          text: 'cascade_outer',
-        },
-        {
-          id: 'cascade_rect',
-          type: 'rect',
-          x: 420,
-          y: 200,
-          text: 'cascade_rect',
+        makeNode('cascade_outer', 'circle', 120, 220),
+        makeNode('cascade_rect', 'rect', 420, 200, {
           properties: { width: 80, height: 50 },
-        },
+        }),
+        makeNode('cascade_circle', 'circle', 520, 240),
         {
-          id: 'cascade_circle',
-          type: 'circle',
-          x: 520,
-          y: 240,
-          text: 'cascade_circle',
-        },
-        {
-          id: 'cascade_group_1',
-          type: 'dynamic-group',
-          x: 460,
-          y: 220,
-          text: 'cascade_group_1',
-          resizable: true,
-          properties: {
+          ...makeGroup('cascade_group_1', 460, 220, [], {
             width: 360,
             height: 220,
-            collapsedWidth: 80,
-            collapsedHeight: 60,
-            collapsible: true,
-            isCollapsed: false,
             radius: 5,
-          },
+          }),
         },
       ],
       edges: [
@@ -256,15 +235,10 @@ export const scenarios: Scenario[] = [
     graphData: {
       nodes: [
         makeGroup('group_1', 420, 220, ['inner_rect'], { isCollapsed: false }),
-        { id: 'outer_circle', type: 'circle', x: 120, y: 220, text: '外节点' },
-        {
-          id: 'inner_rect',
-          type: 'rect',
-          x: 420,
-          y: 220,
-          text: '组内',
+        makeNode('outer_circle', 'circle', 120, 220),
+        makeNode('inner_rect', 'rect', 420, 220, {
           properties: { width: 80, height: 50 },
-        },
+        }),
       ],
       edges: [
         {
@@ -312,9 +286,9 @@ export const scenarios: Scenario[] = [
     graphData: {
       nodes: [
         makeGroup('group_gw', 480, 240, ['node_a', 'node_b']),
-        { id: 'gateway', type: 'diamond', x: 160, y: 240, text: '判断' },
-        { id: 'node_a', type: 'rect', x: 420, y: 180, text: 'A' },
-        { id: 'node_b', type: 'rect', x: 420, y: 300, text: 'B' },
+        makeNode('gateway', 'diamond', 160, 240),
+        makeNode('node_a', 'rect', 420, 180),
+        makeNode('node_b', 'rect', 420, 300),
       ],
       edges: [
         {
@@ -366,8 +340,8 @@ export const scenarios: Scenario[] = [
     graphData: {
       nodes: [
         makeGroup('group_pl', 400, 200, ['inner_c']),
-        { id: 'outer_c', type: 'circle', x: 100, y: 200, text: '外' },
-        { id: 'inner_c', type: 'rect', x: 400, y: 200, text: '内' },
+        makeNode('outer_c', 'circle', 100, 200),
+        makeNode('inner_c', 'rect', 400, 200),
       ],
       edges: [
         {
@@ -410,8 +384,8 @@ export const scenarios: Scenario[] = [
     graphData: {
       nodes: [
         makeGroup('group_nan', 450, 250, ['r_nan']),
-        { id: 'c_nan', type: 'circle', x: 120, y: 250, text: '外' },
-        { id: 'r_nan', type: 'rect', x: 450, y: 250, text: '内' },
+        makeNode('c_nan', 'circle', 120, 250),
+        makeNode('r_nan', 'rect', 450, 250),
       ],
       edges: [
         {
@@ -453,13 +427,10 @@ export const scenarios: Scenario[] = [
           type: 'circle',
           x: 800,
           y: 140,
-          text: {
-            value: 'circle_2',
-            x: 800,
-            y: 140,
+          text: nodeText('circle_2', 800, 140, {
             editable: false,
             draggable: true,
-          },
+          }),
         },
         {
           id: 'circle_3',
@@ -467,11 +438,7 @@ export const scenarios: Scenario[] = [
           x: 544,
           y: 94,
           properties: {},
-          text: {
-            x: 544,
-            y: 94,
-            value: 'Circle',
-          },
+          text: nodeText('circle_3', 544, 94),
         },
         {
           id: 'dynamic-group_1',
@@ -524,24 +491,14 @@ export const scenarios: Scenario[] = [
           type: 'circle',
           x: 502,
           y: 170,
-          text: {
-            value: 'circle_1',
-            x: 502,
-            y: 170,
-            draggable: true,
-          },
+          text: nodeText('circle_1', 502, 170, { draggable: true }),
         },
         {
           id: 'circle_2',
           type: 'circle',
           x: 680,
           y: 170,
-          text: {
-            value: 'circle_2',
-            x: 680,
-            y: 170,
-            draggable: true,
-          },
+          text: nodeText('circle_2', 680, 170, { draggable: true }),
         },
         {
           id: 'dynamic-group_1',
@@ -607,14 +564,9 @@ export const scenarios: Scenario[] = [
           height: 250,
         }),
         { id: 'rect_a', type: 'rect', x: 350, y: 200, text: 'rect_a' },
-        {
-          id: 'job_placeholder',
-          type: 'rect',
-          x: 520,
-          y: 200,
-          text: 'job_placeholder',
+        makeNode('job_placeholder', 'rect', 520, 200, {
           properties: { width: 80, height: 50 },
-        },
+        }),
       ],
       edges: [],
     },
@@ -660,7 +612,7 @@ export const scenarios: Scenario[] = [
           {},
           'locked-dynamic-group',
         ),
-        { id: 'locked_child', type: 'rect', x: 400, y: 240, text: '锁定子' },
+        makeNode('locked_child', 'rect', 400, 240),
       ],
       edges: [],
     },
@@ -696,14 +648,7 @@ export const scenarios: Scenario[] = [
           autoToFront: true,
           zIndex: -1000,
         }),
-        {
-          id: 'inner_z',
-          type: 'rect',
-          x: 400,
-          y: 220,
-          text: '子 z=1',
-          zIndex: 1,
-        },
+        makeNode('inner_z', 'rect', 400, 220, { zIndex: 1 }),
       ],
       edges: [],
     },
@@ -734,7 +679,7 @@ export const scenarios: Scenario[] = [
           height: 180,
         }),
         makeGroup('group_2', 400, 260, [], { width: 280, height: 180 }),
-        { id: 'node_x', type: 'rect', x: 360, y: 240, text: '属于1' },
+        makeNode('node_x', 'rect', 360, 240),
       ],
       edges: [],
     },
@@ -776,13 +721,10 @@ export const scenarios: Scenario[] = [
     ],
     graphData: {
       nodes: [
-        {
-          ...makeGroup('default_group', 400, 300, [], {
-            width: 420,
-            height: 320,
-          }),
-          text: '默认分组',
-        },
+        makeGroup('default_group', 400, 300, [], {
+          width: 420,
+          height: 320,
+        }),
       ],
       edges: [],
     },
@@ -801,14 +743,14 @@ export const scenarios: Scenario[] = [
             type: 'rect',
             x,
             y,
-            text: 'api子',
+            text: 'api_rect',
           })
           lf.addNode({
             id: 'api_group',
             type: 'dynamic-group',
             x,
             y,
-            text: 'api组',
+            text: 'api_group',
             resizable: true,
             properties: {
               ...baseGroupProps,
@@ -831,6 +773,10 @@ export const scenarios: Scenario[] = [
     Controls: LayoutFormatEscapeControls,
   },
   {
+    ...titleHeaderScenario,
+    Controls: TitleHeaderControls,
+  },
+  {
     id: 'resize-undo-twice',
     title: '分组 resize 后需撤销两次',
     issues: ['#1532'],
@@ -848,7 +794,7 @@ export const scenarios: Scenario[] = [
           width: 280,
           height: 180,
         }),
-        { id: 'child_resize', type: 'rect', x: 400, y: 240, text: '子' },
+        makeNode('child_resize', 'rect', 400, 240),
       ],
       edges: [],
     },
@@ -887,7 +833,7 @@ export const scenarios: Scenario[] = [
           height: 200,
           isCollapsed: false,
         }),
-        { id: 'child_axis', type: 'rect', x: 420, y: 260, text: '子' },
+        makeNode('child_axis', 'rect', 420, 260),
       ],
       edges: [],
     },
