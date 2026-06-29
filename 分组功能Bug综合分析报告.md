@@ -65,8 +65,8 @@ type IGroupNodeProperties = {
 | 12 | [#1673](https://github.com/didi/LogicFlow/issues/1673) | addNode方法添加分组节点报错（嵌套分组支持） | Bug | Open | ✅ |
 | 13 | [#2052](https://github.com/didi/LogicFlow/issues/2052) | 新创建的dynamic-group中的孩子节点会被之前创建的dynamic-group节点影响 | Bug | Open | ✅ |
 | 14 | [#2412](https://github.com/didi/LogicFlow/issues/2412) | DynamicGroup 分组内节点异常出组（isRestrict + isAllowAppendIn=false） | Bug | Open | ✅ **新增** |
-| 15 | [#1532](https://github.com/didi/LogicFlow/issues/1532) | 分组group变换形状以后，撤销需要撤销2次才能回到前一步的状态 | Bug | Open | ✅ |
-| 16 | [#1555](https://github.com/didi/LogicFlow/issues/1555) | Feature: 可变形分组希望有单独改变宽度或高度的控制按钮 | Feature | Open | ✅ |
+| 15 | [#1532](https://github.com/didi/LogicFlow/issues/1532) | 分组group变换形状以后，撤销需要撤销2次才能回到前一步的状态 | Bug | Open · 暂不修复 | ✅ |
+| 16 | [#1555](https://github.com/didi/LogicFlow/issues/1555) | Feature: 可变形分组希望有单独改变宽度或高度的控制按钮 | Feature | Open · 暂不修复 | ✅ |
 
 **#2400 与 #2399 关系**：#2400 强调「**收起**」时丢路径；#2399 强调「展开/收起」往返丢路径。根因均在 `collapseEdge` / 虚拟边对 `pointsList` 的处理，**本期与 #2399 一并修复**。
 
@@ -927,7 +927,7 @@ lf.resizeGroup(groupId, newWidth, newHeight)
 **补充验证（Codex）**：
 - ⚠️ 该问题目前偏“机制推断”：报告认为一次交互产生了两条历史记录，方向合理，但需日志/测试确认触发链。
 - 🔎 建议先加 history 埋点（操作类型、次数、来源事件），再决定是 batch 合并还是专用 API。
-- **结论**：原结论可接受，但证据强度低于前几个核心问题。
+- **结论（2026-06-23）**：默认快速 resize 通常一次 undo 即可；慢速拖动因 history debounce 可能多条。**关闭 · 暂不修复**（`resolution: wontfix`），见 [issue 评论](https://github.com/didi/LogicFlow/issues/1532#issuecomment-4779507145)。
 
 ---
 
@@ -958,7 +958,7 @@ getResizeControls() {
 **补充验证（Codex）**：
 - ✅ 这是典型能力增强而非缺陷修复，低优先级判断合理。
 - 🔎 若后续支持嵌套分组，建议把该需求放在“分组交互能力二期”，避免与核心稳定性修复抢资源。
-- **结论**：原判断正确，建议保持低优先级。
+- **结论（2026-06-23）**：全图可缩放节点（含 dynamic-group）统一为四角 resize，分组无特殊边中点控件。**关闭 · 暂不修复**（`resolution: wontfix`），见 [issue 评论](https://github.com/didi/LogicFlow/issues/1555)。
 
 ---
 

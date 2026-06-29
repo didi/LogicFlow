@@ -177,7 +177,6 @@ export type IGroupNodeProperties = {
   /**
    * 子节点是否限制移动范围
    * 启用后，子节点只能在分组范围内移动，不能拖拽到分组外
-   * 同时限制resize不能超过children占地面积
    * 默认为 false，允许拖拽移除分组
    */
   isRestrict?: boolean
@@ -593,6 +592,8 @@ lf.on('group:not-allowed', ({ group, node }) => {
 ```
 
 ## 高级用法
+
+> **默认行为变更：** 所有 dynamic-group 在**缩小 resize** 时，外框不得小于其**直接子节点**的占地面积。此约束为默认行为，**不依赖** `isRestrict`。`isRestrict` 仅控制子节点能否拖出分组外框；`autoResize` 仍要求 `isRestrict: true`。
 
 ### 限制模式 (isRestrict)
 

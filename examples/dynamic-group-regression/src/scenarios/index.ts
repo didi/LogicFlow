@@ -8,9 +8,14 @@ import {
   registerLockedGroup,
 } from './customNodes'
 import LayoutFormatEscapeControls from '@/components/LayoutFormatEscapeControls'
+import ResizeBoundsControls from '@/components/ResizeBoundsControls'
 import TitleHeaderControls from '@/components/TitleHeaderControls'
 import CascadeDeleteControls from '@/components/CascadeDeleteControls'
 import { layoutFormatEscapeScenario } from './layoutFormatEscape'
+import {
+  resizeBoundsScenario,
+  syncResizeBoundsMembership,
+} from './resizeBounds'
 import { titleHeaderScenario } from './titleHeader'
 
 function toggleGroup(lf: LogicFlow, groupId: string, collapse?: boolean) {
@@ -775,6 +780,11 @@ export const scenarios: Scenario[] = [
   {
     ...titleHeaderScenario,
     Controls: TitleHeaderControls,
+  },
+  {
+    ...resizeBoundsScenario,
+    Controls: ResizeBoundsControls,
+    afterRender: syncResizeBoundsMembership,
   },
   {
     id: 'resize-undo-twice',

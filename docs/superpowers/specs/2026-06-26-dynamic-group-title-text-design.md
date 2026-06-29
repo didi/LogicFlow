@@ -2,7 +2,7 @@
 
 **日期：** 2026-06-26  
 **状态：** 已实现  
-**关联：** [dynamic-group.zh.md](../../../sites/docs/docs/tutorial/extension/dynamic-group.zh.md)、[2026-05-18-dynamic-group-fix-design.md](./2026-05-18-dynamic-group-fix-design.md)、[2026-06-26-dynamic-group-resize-padding-design.md](./2026-06-26-dynamic-group-resize-padding-design.md)（分组 `properties.padding` 与本文 `textStyle.wrapPadding` 职责不同）
+**关联：** [dynamic-group.zh.md](../../../sites/docs/docs/tutorial/extension/dynamic-group.zh.md)、[2026-05-18-dynamic-group-fix-design.md](./2026-05-18-dynamic-group-fix-design.md)、[2026-06-26-dynamic-group-resize-bounds-design.md](./2026-06-26-dynamic-group-resize-bounds-design.md)（本文 `textStyle.wrapPadding` 仅用于标题文字布局，与 resize 最小边界无关）
 
 > 曾规划 `textPlacement` API，未落地且不再采用；标题布局统一使用 `properties.textStyle`。
 
