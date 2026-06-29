@@ -408,6 +408,15 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
     })
   }
 
+  /**
+   * autoResize 更新分组尺寸后同步展开态快照，避免折叠/展开回退到旧尺寸。
+   */
+  updateExpandedSize(width: number, height: number) {
+    this.expandWidth = width
+    this.expandHeight = height
+    this.setProperties({ width, height })
+  }
+
   setTextPosition() {
     const { x, y, width, height, text } = this
     if (!text) {

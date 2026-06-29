@@ -11,7 +11,12 @@ import { assign, cloneDeep, filter, forEach, has, map, sortBy } from 'lodash-es'
 import { DynamicGroupNode } from './node'
 import { DynamicGroupNodeModel } from './model'
 import { ExtensionEventType, NODE_DRAG_EVENTS } from '../constant/events'
-import { isAllowMoveTo, isBoundsInGroup } from './utils'
+import {
+  isAllowMoveTo,
+  isBoundsInGroup,
+  getChildrenBounds,
+  isGroupBoundsContainsChildren,
+} from './utils'
 
 import GraphConfigData = LogicFlow.GraphConfigData
 import GraphElements = LogicFlow.GraphElements
@@ -505,15 +510,9 @@ export class DynamicGroup {
   }
 
   onNodeMove = ({
-    deltaX,
-    deltaY,
     data,
   }: Omit<CallbackArgs<'node:mousemove'>, 'e' | 'position'>) => {
-    const { id, x, y, properties } = data
-    if (!properties) {
-      return
-    }
-    const { width, height } = properties
+    const { id } = data
     const groupId = this.nodeGroupMap.get(id)
     if (!groupId) {
       return
@@ -527,14 +526,14 @@ export class DynamicGroup {
     }
     // 当父节点isRestrict=true & autoResize=true
     // 子节点在父节点中移动时，父节点会自动调整大小
+    const childModel = this.lf.getNodeModelById(id)
+    if (!childModel) {
+      return
+    }
 
-    // step1: 计算出当前child的bounds
-    const newX = x + deltaX / 2
-    const newY = y + deltaY / 2
-    const minX = newX - width! / 2
-    const minY = newY - height! / 2
-    const maxX = newX + width! / 2
-    const maxY = newY + height! / 2
+    // node:mousemove 的 data 在 onDragging 之前采集，坐标滞后；
+    // 此时子节点 model 已更新，直接读取 getBounds()。
+    const { minX, minY, maxX, maxY } = childModel.getBounds()
     // step2：比较当前child.bounds与parent.bounds的差异，比如child.minX<parent.minX，那么parent.minX=child.minX
     let hasChange = false
     const groupBounds = groupModel.getBounds()
@@ -568,6 +567,7 @@ export class DynamicGroup {
     groupModel.moveTo(newGroupX, newGroupY)
     groupModel.width = newGroupWidth
     groupModel.height = newGroupHeight
+    groupModel.updateExpandedSize(newGroupWidth, newGroupHeight)
     groupModel.setTextPosition()
   }
 
@@ -725,38 +725,23 @@ export class DynamicGroup {
     newWidth: number,
     newHeight: number,
   ) {
-    if (groupModel.children) {
-      const { children, x, y } = groupModel
-      // 根据deltaX和deltaY计算出当前model的bounds
-      const newX = x + deltaX / 2
-      const newY = y + deltaY / 2
-      const groupMinX = newX - newWidth / 2
-      const groupMinY = newY - newHeight / 2
-      const groupMaxX = newX + newWidth / 2
-      const groupMaxY = newY + newHeight / 2
-
-      const childrenArray = Array.from(children)
-      for (let i = 0; i < childrenArray.length; i++) {
-        const childId = childrenArray[i]
-        const child = this.lf.getNodeModelById(childId)
-        if (!child) {
-          continue
-        }
-        const childBounds = child.getBounds()
-        const { minX, minY, maxX, maxY } = childBounds
-        // parent:resize后的bounds不能小于child:bounds，否则阻止其resize
-        const canResize =
-          groupMinX <= minX &&
-          groupMinY <= minY &&
-          groupMaxX >= maxX &&
-          groupMaxY >= maxY
-        if (!canResize) {
-          return false
-        }
-      }
+    const childrenBounds = getChildrenBounds(groupModel, (id) =>
+      this.lf.getNodeModelById(id),
+    )
+    if (!childrenBounds) {
+      return true
     }
 
-    return true
+    const newX = groupModel.x + deltaX / 2
+    const newY = groupModel.y + deltaY / 2
+    const groupBounds = {
+      minX: newX - newWidth / 2,
+      minY: newY - newHeight / 2,
+      maxX: newX + newWidth / 2,
+      maxY: newY + newHeight / 2,
+    }
+
+    return isGroupBoundsContainsChildren(groupBounds, childrenBounds)
   }
 
   /**
@@ -809,13 +794,10 @@ export class DynamicGroup {
       return true
     })
 
-    // https://github.com/didi/LogicFlow/issues/1442
-    // https://github.com/didi/LogicFlow/issues/937
     // 添加分组节点resize规则
-    // isRestrict限制模式下，当前model resize时不能小于children的占地面积
-    // 并且在isRestrict限制模式下，transformWidthContainer即使设置为true，也无效
+    // 所有分组默认不可缩小到直接子节点占地面积以下
     graphModel.addNodeResizeRules((model, deltaX, deltaY, width, height) => {
-      if (model.isGroup && model.isRestrict) {
+      if (model.isGroup) {
         return this.checkGroupBoundsWithChildren(
           model as DynamicGroupNodeModel,
           deltaX,

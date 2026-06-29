@@ -80,7 +80,7 @@ export default function RegressionWorkbench() {
     const lf = lfRef.current
     if (!lf) return
     scenario.prepare?.(lf)
-    lf.graphModel.clearData()
+    lf.clearData()
     lf.render(JSON.parse(JSON.stringify(scenario.graphData)))
     scenario.afterRender?.(lf)
     lf.resetZoom()
@@ -89,7 +89,7 @@ export default function RegressionWorkbench() {
   const loadGraph = useCallback((data: LogicFlow.GraphConfigData) => {
     const lf = lfRef.current
     if (!lf) return
-    lf.graphModel.clearData()
+    lf.clearData()
     lf.render(JSON.parse(JSON.stringify(data)))
     lf.resetZoom()
   }, [])

@@ -176,7 +176,6 @@ export type IGroupNodeProperties = {
    * Whether to restrict the movement range of child nodes
    * When enabled, child nodes can only move within the group bounds
    * and cannot be dragged outside the group.
-   * Also limits resizing to not exceed children's floor area
    * Defaults to false, allowing nodes to be dragged out of the group
    */
   isRestrict?: boolean
@@ -592,6 +591,8 @@ lf.on('group:not-allowed', ({ group, node }) => {
 ```
 
 ## Advanced Usage
+
+> **Default behavior change:** All dynamic-group nodes cannot be **shrunk** below the combined footprint of their **direct children** during resize. This constraint is always on and does **not** depend on `isRestrict`. `isRestrict` only controls whether children can be dragged outside the group bounds; `autoResize` still requires `isRestrict: true`.
 
 ### Restriction Mode (isRestrict)
 

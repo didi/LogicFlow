@@ -43,6 +43,8 @@ cd examples/dynamic-group-regression && pnpm dev
 | `overlap-collapse-misassign` | LOCAL-2、#2052（已修复） |
 | `add-node-with-children` | #1673 |
 | `layout-format-escape` | #2205、#2332（已修复） |
+| `title-header` | LOCAL 组名 / titleHeader |
+| `resize-bounds` | LOCAL-resize-bounds（DG 缩小 resize 最小边界） |
 | `resize-undo-twice` | #1532（关闭 · 暂不修复） |
 | `resize-single-axis` | #1555（关闭 · 暂不修复） |
 

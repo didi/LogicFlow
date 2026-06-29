@@ -11,7 +11,6 @@
 ## 非目标
 
 - `bpmn:subProcess`、旧 `Group` 插件（`materials/group`）
-- 任意深度的 **同构嵌套**（`dynamic-group` ⊂ `dynamic-group` ⊂ …）
 - BPMN `adapterOut` 多层 subProcess（#2180）除非与本期 lane 内分组无冲突则可 defer
 
 ## 已确认决策
@@ -19,11 +18,11 @@
 | 项 | 决策 |
 | --- | --- |
 | 边 / 折叠 | **方案甲**：统一边状态机 |
-| 嵌套 | **统一策略**：禁止 DG⊂DG；允许异构组合 Pool → Lane → DG → 普通节点 |
+| 嵌套 | **统一策略**：支持 `dynamic-group` 同构嵌套；允许异构组合 Pool → Lane → DG → 普通节点 |
 | Lane 内 DG | **本期测通**（含折叠、对外连线、组内成员） |
 | #1673 | 本期修 |
 | #2205 / #2332 | 本期修（layout / 格式化适配分组） |
-| #1555 | 本期修（分组单边 resize） |
+| #1555 | 关闭 · 暂不修复（与全图节点统一四角 resize） |
 | **分组节点名（LOCAL-3）** | **本期纳入、必要**：业务用户在画布建组并起名；**展开态与折叠态均可**双击编辑；`setTextPosition` 在两种态下分别锚定文案；折叠 ↔ 展开切换后组名不丢、位置不漂 |
 | **折叠态组名展示（LOCAL-4）** | **方案 B**：折叠框宽固定（`collapsedWidth/Height`），组名超出宽度时 **ellipsis 省略号**；不随文案自动撑开折叠框 |
 
@@ -31,15 +30,13 @@
 
 ```text
 允许：
+  dynamic-group → dynamic-group → 业务节点（rect 等）
   pool → lane → dynamic-group → 业务节点（rect 等）
 
-禁止（运行态默认拦截）：
-  dynamic-group → dynamic-group
-
 实现要点：
-  - DynamicGroupNodeModel.isAllowAppendIn：默认拒绝 type === 'dynamic-group' 或 isGroup 子组
+  - DynamicGroupNodeModel.isAllowAppendIn：默认允许 dynamic-group 子组，业务可按需重写
   - LaneModel：继续禁止 lane ⊂ lane；允许 dynamic-group ⊂ lane
-  - 数据格式仍保留 children 树，不破坏未来同构嵌套
+  - 数据格式保留 children 树，支持同构嵌套
 ```
 
 ## 边状态机（方案甲）
@@ -110,12 +107,15 @@
 | --- | --- | --- |
 | 1 | #2395, #2399, **#2400**, #2401, #1809 | 边状态机（#2400 与 #2399 同根因） |
 | 2 | #2194, #2052, **#2412**, **LOCAL-2** | children ↔ map；拖放结束勿误移出组；叠放分组归属 |
-| 3 | #1616, #2198, **LOCAL-1** | 初始折叠、坐标、子节点与分组 zIndex |
+| 3 | #1616, #2198 | 初始折叠、坐标 |
 | 4 | #2205, #2332 | layout / 格式化 |
-| 5 | #1532, #1555 | history、单边 resize |
+| 5 | ~~#1555~~（#1532、#1555 均关闭 · 暂不修复） | history、resize UI |
 | 6 | **LOCAL-3**, **LOCAL-4** | 分组节点名可编辑；折叠态固定宽 + ellipsis |
 | 额外 | #1673 | addNode + children |
 | 不做 | #2180 | BPMN adapter 嵌套导出 |
+| 关闭 · 暂不修复 | #1532 | resize undo 需多次（默认快速操作通常一次 undo；见 [issue #1532](https://github.com/didi/LogicFlow/issues/1532) 评论） |
+| 关闭 · 暂不修复 | #1555 | 分组边中点单边 resize（全图节点统一四角缩放，见 [issue #1555](https://github.com/didi/LogicFlow/issues/1555) 评论） |
+| 专项分支 | **LOCAL-1** | 组与子节点图层不一致；见分支 `design/dynamic-group-layering` 与 `2026-06-24-dynamic-group-layering-design.md` |
 
 ### 本期新增纳入（2026-05-18）
 
@@ -123,7 +123,7 @@
 | --- | --- | --- |
 | GitHub | [#2412](https://github.com/didi/LogicFlow/issues/2412) | `isRestrict` + `isAllowAppendIn=false` 时组内拖放松手误出组；修 `addNodeToGroup` 先删后加逻辑 |
 | GitHub | [#2400](https://github.com/didi/LogicFlow/issues/2400) | 收起时丢 `pointsList`；并入批次 1 |
-| Demo 体验 | **LOCAL-1** | 组内节点与分组框 zIndex 不一致 |
+| Demo 体验 | **LOCAL-1** | 组内节点与分组框 zIndex 不一致（**专项分支** `design/dynamic-group-layering`，本期不修复） |
 | Demo 体验 | **LOCAL-2** | 两分组叠放，折叠/展开组 1 导致节点归属组 2 |
 | 产品 | **LOCAL-3** | 动态分组节点支持修改节点名；**展开态 + 折叠态**均可编辑；组名在折叠/展开切换后保持 |
 
@@ -146,11 +146,11 @@
 - [ ] 删组 / 移子节点：无 map 残留报错（#2194、#2052）
 - [ ] `isCollapsed: true` 首屏位置正确（#1616、#2198）
 - [x] 格式化 / layout 后子节点仍在组内（#2205、#2332）
-- [ ] 分组 resize 撤销一次到位（#1532）；单边 resize 可用（#1555）
+- [x] 分组 resize 撤销一次到位（#1532，**关闭 · 暂不修复**）；单边 resize（#1555，**关闭 · 暂不修复**）
 - [x] addNode 带 children 单层建组（#1673）
 - [ ] **Lane 内 dynamic-group**：成员、对外连线、折叠 / 展开测通
 - [x] **#2412**：`isRestrict` + 拒绝入组时，组内拖放不出组
-- [ ] **LOCAL-1**：组与子节点图层一致
+- [ ] **LOCAL-1**：组与子节点图层一致（**不在本期**；见 `design/dynamic-group-layering`）
 - [ ] **LOCAL-2**：重叠分组折叠/展开不误迁移归属
 - [ ] **LOCAL-3**：`nodeTextEdit: true` 时，**展开态与折叠态**均可双击改组名；切换折叠/展开后组名不丢、文案仍在组框内
 - [ ] **LOCAL-4**：折叠态固定 `collapsedWidth`，组名过长显示省略号，不撑开折叠框
@@ -215,17 +215,17 @@ pnpm test -- packages/layout/__test__/dynamic-group   # 批次 4 新增后
 | M5 | **#2412**：`isRestrict` + `isAllowAppendIn` 恒 false，组内节点拖放仍在原组 bounds 内 | 松手后仍在原组 `children` / map；不可拖出组外 |
 | M6 | **LOCAL-2**：两重叠 DG，组 1 含节点 A，折叠再展开组 1 | A 仍归属组 1，不进入组 2 `children` |
 
-### 批次 3 — 初始折叠与坐标（#1616、#2198）+ 图层（LOCAL-1）
+### 批次 3 — 初始折叠与坐标（#1616、#2198）
 
-文件：`collapse-init.test.ts`、`z-index.test.ts`
+文件：`collapse-init.test.ts`
 
 | ID | 用例 | 断言要点 |
 | --- | --- | --- |
 | C1 | `render` 数据 `isCollapsed: true`（子节点在 children 中） | 首屏子节点 `visible=false`；组宽高为 `collapsedWidth/Height` |
 | C2 | C1 渲染后立即 `getData()` | 组 `x/y` 与「展开语义」一致（#2198：无二次偏移） |
 | C3 | 先展开再折叠再展开 | 组位置与首次展开相比无累计漂移 |
-| Z1 | **LOCAL-1**：组 + 子节点 render 后 | 子节点绘制层级与分组关系一致（例如子节点 zIndex ≥ 组，或整组抬升后子随组；以产品约定断言，不得出现子永远在组框之上遮挡组边框的异常） |
-| Z2 | 选中分组 `autoToFront` 后 | 组与其 `children` 相对层级同步提升，子不单独留在更底层 |
+
+**LOCAL-1（图层）** 已移至专项分支 `design/dynamic-group-layering`；对应设计见 `2026-06-24-dynamic-group-layering-design.md`，不在本分支实现 `z-index.test.ts` 中的 Z1/Z2。
 
 ### 批次 4 — layout / 格式化（#2205、#2332）
 
@@ -236,14 +236,14 @@ pnpm test -- packages/layout/__test__/dynamic-group   # 批次 4 新增后
 | L1 | 含 `dynamic-group` + `children` 的图调用 layout API | layout 后子节点仍在组 `children` 内；相对位置或 bounds 在组内 |
 | L2 | 格式化/等效 `getGraphData` 往返 | 子节点不「逃出」组框（#2205） |
 
-### 批次 5 — history 与 resize UI（#1532、#1555）
+### 批次 5 — history 与 resize UI（#1532、#1555 均关闭 · 暂不修复）
 
 文件：`history-resize.test.ts`
 
 | ID | 用例 | 断言要点 |
 | --- | --- | --- |
-| H1 | 分组 resize 一次 → `undo` 一次 | 宽高与坐标回到 resize 前（#1532） |
-| R1 | 展开态分组 `resizable: true` | 存在单边 resize 控件（或调用 resize API 仅改宽/高）（#1555） |
+| H1 | 分组 resize 一次 → `undo` 一次 | 宽高与坐标回到 resize 前（#1532，**关闭 · 暂不修复**） |
+| R1 | 展开态分组 `resizable: true` | 存在单边 resize 控件（#1555，**关闭 · 暂不修复**；当前与全图节点一致为四角） |
 | R2 | `isCollapsed: true` | `getResizeControl()` 为 null（与主流行为一致） |
 
 ### 批次 6 — 分组节点名可编辑（LOCAL-3）
@@ -295,7 +295,7 @@ pnpm test -- packages/layout/__test__/dynamic-group   # 批次 4 新增后
 
 | ID | 用例 | 断言要点 |
 | --- | --- | --- |
-| X1 | 将 `dynamic-group` 拖入另一 `dynamic-group` | `group:not-allowed` 或 `isAllowAppendIn === false`；内组不在外组 `children` |
+| X1 | 将 `dynamic-group` 拖入另一 `dynamic-group` | 入组成功；外组 `children`、`nodeGroupMap`、折叠/展开联动正确 |
 | X2 | 将 `dynamic-group` 拖入 `lane` | 入组成功；map / `properties.parent` 正确 |
 
 ### Pool + Lane 内 DG（本期必测）

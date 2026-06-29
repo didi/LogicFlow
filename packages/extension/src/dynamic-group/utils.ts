@@ -45,6 +45,59 @@ export function isAllowMoveTo(
   }
 }
 
+/**
+ * 计算直接子节点的 bounds 并集。
+ * 无有效子节点时返回 null。
+ */
+export function getChildrenBounds(
+  groupModel: { children?: Set<string> },
+  getNodeById: (id: string) => BaseNodeModel | undefined,
+): BoxBoundsPoint | null {
+  if (!groupModel.children || groupModel.children.size === 0) {
+    return null
+  }
+
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+  let hasChild = false
+
+  for (const childId of Array.from(groupModel.children)) {
+    const child = getNodeById(childId)
+    if (!child) {
+      continue
+    }
+    hasChild = true
+    const childBounds = child.getBounds()
+    minX = Math.min(minX, childBounds.minX)
+    minY = Math.min(minY, childBounds.minY)
+    maxX = Math.max(maxX, childBounds.maxX)
+    maxY = Math.max(maxY, childBounds.maxY)
+  }
+
+  if (!hasChild) {
+    return null
+  }
+
+  return { minX, minY, maxX, maxY }
+}
+
+/**
+ * 判断 groupBounds 是否完全包含 childrenBounds。
+ */
+export function isGroupBoundsContainsChildren(
+  groupBounds: BoxBoundsPoint,
+  childrenBounds: BoxBoundsPoint,
+): boolean {
+  return (
+    groupBounds.minX <= childrenBounds.minX &&
+    groupBounds.minY <= childrenBounds.minY &&
+    groupBounds.maxX >= childrenBounds.maxX &&
+    groupBounds.maxY >= childrenBounds.maxY
+  )
+}
+
 /** 折叠按钮距节点顶边/左边的默认 inset，与 node.getOperateIcon 一致 */
 export const DG_OPERATE_INSET = 10
 /** @deprecated 使用 DG_OPERATE_INSET */

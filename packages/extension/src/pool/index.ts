@@ -18,6 +18,10 @@ import { PoolView } from './PoolView'
 import { LaneModel } from './LaneModel'
 import { LaneView } from './LaneView'
 import { isAllowMoveTo, isBoundsInLane } from './utils'
+import {
+  getChildrenBounds,
+  isGroupBoundsContainsChildren,
+} from '../dynamic-group/utils'
 
 import GraphConfigData = LogicFlow.GraphConfigData
 import GraphElements = LogicFlow.GraphElements
@@ -272,15 +276,9 @@ export class PoolElements {
   }
 
   onNodeMove = ({
-    deltaX,
-    deltaY,
     data,
   }: Omit<CallbackArgs<'node:mousemove'>, 'e' | 'position'>) => {
-    const { id, x, y, properties } = data
-    if (!properties) {
-      return
-    }
-    const { width, height } = properties
+    const { id } = data
     const groupId = this.nodeLaneMap.get(id)
     if (!groupId) {
       return
@@ -292,14 +290,12 @@ export class PoolElements {
     }
     // 当父节点isRestrict=true & autoResize=true
     // 子节点在父节点中移动时，父节点会自动调整大小
+    const childModel = this.lf.getNodeModelById(id)
+    if (!childModel) {
+      return
+    }
 
-    // step1: 计算出当前child的bounds
-    const newX = x + deltaX / 2
-    const newY = y + deltaY / 2
-    const minX = newX - width! / 2
-    const minY = newY - height! / 2
-    const maxX = newX + width! / 2
-    const maxY = newY + height! / 2
+    const { minX, minY, maxX, maxY } = childModel.getBounds()
     // step2：比较当前child.bounds与parent.bounds的差异，比如child.minX<parent.minX，那么parent.minX=child.minX
     let hasChange = false
     const groupBounds = groupModel.getBounds()
@@ -333,6 +329,7 @@ export class PoolElements {
     groupModel.moveTo(newGroupX, newGroupY)
     groupModel.width = newGroupWidth
     groupModel.height = newGroupHeight
+    groupModel.updateExpandedSize(newGroupWidth, newGroupHeight)
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
@@ -470,38 +467,23 @@ export class PoolElements {
     newWidth: number,
     newHeight: number,
   ) {
-    if (groupModel.children) {
-      const { children, x, y } = groupModel
-      // 根据deltaX和deltaY计算出当前model的bounds
-      const newX = x + deltaX / 2
-      const newY = y + deltaY / 2
-      const groupMinX = newX - newWidth / 2
-      const groupMinY = newY - newHeight / 2
-      const groupMaxX = newX + newWidth / 2
-      const groupMaxY = newY + newHeight / 2
-
-      const childrenArray = Array.from(children)
-      for (let i = 0; i < childrenArray.length; i++) {
-        const childId = childrenArray[i]
-        const child = this.lf.getNodeModelById(childId)
-        if (!child) {
-          continue
-        }
-        const childBounds = child.getBounds()
-        const { minX, minY, maxX, maxY } = childBounds
-        // parent:resize后的bounds不能小于child:bounds，否则阻止其resize
-        const canResize =
-          groupMinX <= minX &&
-          groupMinY <= minY &&
-          groupMaxX >= maxX &&
-          groupMaxY >= maxY
-        if (!canResize) {
-          return false
-        }
-      }
+    const childrenBounds = getChildrenBounds(groupModel, (id) =>
+      this.lf.getNodeModelById(id),
+    )
+    if (!childrenBounds) {
+      return true
     }
 
-    return true
+    const newX = groupModel.x + deltaX / 2
+    const newY = groupModel.y + deltaY / 2
+    const groupBounds = {
+      minX: newX - newWidth / 2,
+      minY: newY - newHeight / 2,
+      maxX: newX + newWidth / 2,
+      maxY: newY + newHeight / 2,
+    }
+
+    return isGroupBoundsContainsChildren(groupBounds, childrenBounds)
   }
 
   init() {
@@ -534,7 +516,7 @@ export class PoolElements {
       return true
     })
     graphModel.addNodeResizeRules((model, deltaX, deltaY, width, height) => {
-      if (model.isGroup && model.isRestrict) {
+      if (model.isGroup) {
         return this.checkGroupBoundsWithChildren(
           model as LaneModel,
           deltaX,
