@@ -187,17 +187,44 @@ If a change alters **default** runtime behavior (even when the API shape stays c
 
 Prefer **opt-in strict modes** or **unchanged defaults with new options** over silent default flips in minor releases.
 
-### CHANGELOG at release time
+### CHANGELOG and changesets
 
-Before or as part of release, record the change in the owning package's `CHANGELOG.md` (for example `packages/extension/CHANGELOG.md`). Include:
+This monorepo uses [Changesets](https://github.com/changesets/changesets) (`.changeset/`, `pnpm changeset`, `pnpm changeset version`) to drive version bumps and `CHANGELOG.md` updates. See `CONTRIBUTING.md` for the release flow.
 
-- **Added** / **Changed** / **Fixed** as appropriate;
-- the public API or option name;
-- default value and compatibility note when relevant.
+**During implementation (feature/fix PRs):**
+
+- **Prefer** interactive `pnpm changeset`: select package(s), bump level (`patch` / `minor` / `major`), enter the user-visible summary. The CLI writes `.changeset/<random-name>.md`.
+- **When there is no TTY** (agents, CI, automation): hand-write `.changeset/<descriptive-name>.md` with the **same format** as the CLI output. A semantic filename (e.g. `fix-grid-options-shorthand.md`) is fine and easier to review than a random slug.
+- Set affected package(s) and bump level in the YAML frontmatter; put the changelog text in the body (Fixed / Added / Changed, API names, compatibility notes).
+- Validate pending changesets before opening a PR: `pnpm exec changeset status` (lists packages and bump levels; does not modify files).
+- **Do not** run `pnpm changeset version` in an implementation PR — that bumps `package.json`, rewrites `CHANGELOG.md`, and deletes consumed changeset files (release-only).
+- **Do not** edit `packages/*/CHANGELOG.md` for unreleased work — changesets does not read `## Unreleased`; manual entries are easy to duplicate or leave orphaned.
+
+Hand-written changeset template:
+
+```markdown
+---
+'@logicflow/core': patch
+---
+
+fix: short user-visible summary
+```
+
+Only list packages you actually changed. Dependents may receive a transitive patch at release time via `updateInternalDependencies` in `.changeset/config.json` — you do not need to add every downstream package to the frontmatter.
+
+**What happens if you edit CHANGELOG manually anyway:**
+
+- `pnpm changeset version` (release / Version Packages PR) only consumes `.changeset/*.md` files, bumps `package.json`, and **prepends a new version section** to each affected `CHANGELOG.md`.
+- A hand-written `## Unreleased` block is **not** merged into that release; it stays at the top until someone removes it.
+- If the same fix is described in both a changeset and CHANGELOG, readers see **duplicate** entries after release.
+- Appending to an **already published** version header (e.g. `## 2.2.2`) is wrong: that version is already on npm.
+
+**At release:**
+
+- Run `pnpm changeset version` (or merge the Changesets bot PR). This applies all pending changesets, updates changelogs, and deletes the consumed `.changeset/*.md` files.
+- Then `pnpm publish:only` (see `CONTRIBUTING.md`).
 
 If the docs site maintains its own changelog (`sites/docs/CHANGELOG.md`), align entries when the release is user-visible there too.
-
-Implementation PRs may land before the version bump, but the release PR must not omit changelog entries for shipped API or behavior changes.
 
 ## 8. Architecture Index
 
