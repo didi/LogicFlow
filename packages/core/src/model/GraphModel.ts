@@ -183,7 +183,11 @@ export class GraphModel {
     }
     this.customStyles = (options.style || {}) as LogicFlow.Theme
     this.theme = setupTheme(options.style, options.themeMode)
-    this.grid = Grid.getGridOptions(assign({}, initialGrid, grid))
+    this.grid = Grid.getGridOptions(
+      typeof grid === 'object' && grid !== null
+        ? assign({}, initialGrid, grid)
+        : (grid ?? false),
+    )
     this.theme.grid = cloneDeep(this.grid)
     if (background) {
       this.background = cloneDeep(assign({}, initialBackground, background))
