@@ -44,6 +44,7 @@ lf.render({
 | --- | --- | --- | --- |
 | `disallowEdgeConnectToGroup` | `boolean` | `false` | 为 `true` 时，**禁止手动**将边连到/从 `dynamic-group` 节点本身（作为起点或终点）。组内节点与外部节点的连线不受影响；分组折叠时由插件创建的虚拟边也不受影响。 |
 | `cascadeDeleteChildren` | `boolean` | `true` | 删除 `dynamic-group` 节点时，是否**一并删除**其 `children` 中的成员。为 `false` 时仅删除分组框，成员保留在画布并解除归属关系。 |
+| `sensorOutline` | `{ stroke?: string; strokeWidth?: number }` | `stroke: '#feb663'`、`strokeWidth: 2` | 拖拽节点进入**可放入**的分组时，分组外框的感应高亮样式。仅在拖拽过程中显示，移出分组或松手后立即消失；不是选中框或常驻边框。 |
 
 > **关于 `cascadeDeleteChildren` 默认值**：默认为 `true`，与 v1.1 以来行为一致——删除分组会同时删除组内节点。若业务将分组视为视觉容器而非复合对象，可显式设为 `false` 以保留子节点。
 
@@ -76,6 +77,25 @@ const lf = new LogicFlow({
   },
 })
 ```
+
+自定义拖拽感应外框（节点拖入分组时的橙色虚线高亮）：
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      sensorOutline: {
+        stroke: '#2961EF',
+        strokeWidth: 3,
+      },
+    },
+  },
+})
+```
+
+`strokeDasharray` 与 `fill` 目前固定为 `'4 4'` 与 `'transparent'`，暂不支持通过配置修改。若需按节点类型定制样式，仍可在 `DynamicGroupNodeModel` 子类中重写 `getAddableOutlineStyle()`（优先级高于 `sensorOutline`）。
 
 单个分组节点可通过 `properties.allowEdgeConnect` **覆盖**插件配置（显式设置时优先级高于 `disallowEdgeConnectToGroup`）：
 
@@ -441,7 +461,11 @@ class MyGroupModel extends dynamicGroup.model {
 
 #### getAddableOutlineStyle
 
-设置拖动节点到分组上时，分组高亮的提示效果样式。
+设置拖动节点到分组上时，分组高亮的提示效果样式（**sensor outline**，由内部状态 `groupAddable` 控制，仅在拖拽过程中显示）。
+
+**推荐**：全局样式优先使用 `pluginsOptions.dynamicGroup.sensorOutline`（见上文），无需子类化即可修改描边颜色与线宽。
+
+**按节点类型定制**：在 Model 子类中重写本方法；返回值会覆盖 `sensorOutline` 插件配置。
 
 ```tsx | pure
 class MyGroupModel extends dynamicGroup.model {

@@ -45,6 +45,7 @@ Pass DynamicGroup options via `pluginsOptions.dynamicGroup` when creating the Lo
 | --- | --- | --- | --- |
 | `disallowEdgeConnectToGroup` | `boolean` | `false` | When `true`, **manual** edges cannot connect to or from a `dynamic-group` node as source/target. Edges between child nodes and the outside are unaffected. Virtual edges created on collapse are also unaffected. |
 | `cascadeDeleteChildren` | `boolean` | `true` | When deleting a `dynamic-group` node, whether to **also delete** all members in its `children`. When `false`, only the group node is removed; members stay on the canvas and membership is cleared. |
+| `sensorOutline` | `{ stroke?: string; strokeWidth?: number }` | `stroke: '#feb663'`, `strokeWidth: 2` | Highlight style for the group outline while dragging a node over a **droppable** group. Shown only during drag; hidden when the pointer leaves the group or on mouse up. Not a selection or idle border. |
 
 > **`cascadeDeleteChildren` default**: Defaults to `true`, matching behavior since v1.1 — deleting a group also deletes its child nodes. Set to `false` if your app treats groups as visual containers rather than composite objects.
 
@@ -77,6 +78,25 @@ const lf = new LogicFlow({
   },
 });
 ```
+
+Customize the drag sensor outline (dashed highlight when a node enters a droppable group):
+
+```tsx | pure
+const lf = new LogicFlow({
+  container: document.querySelector('#container'),
+  plugins: [DynamicGroup],
+  pluginsOptions: {
+    dynamicGroup: {
+      sensorOutline: {
+        stroke: '#2961EF',
+        strokeWidth: 3,
+      },
+    },
+  },
+});
+```
+
+`strokeDasharray` and `fill` are fixed at `'4 4'` and `'transparent'` and are not configurable yet. For per-node-type styling, override `getAddableOutlineStyle()` on a `DynamicGroupNodeModel` subclass (takes precedence over `sensorOutline`).
 
 Per-node override via `properties.allowEdgeConnect` (when set explicitly, it takes precedence over `disallowEdgeConnectToGroup`):
 
@@ -440,7 +460,11 @@ If a node is not allowed to be added to a group, it will still be displayed at t
 
 #### getAddableOutlineStyle
 
-Sets the highlight style for the group when dragging a node over it.
+Sets the highlight style when dragging a node over a group (**sensor outline**, driven by internal `groupAddable`, visible only while dragging).
+
+**Recommended**: set global defaults via `pluginsOptions.dynamicGroup.sensorOutline` (see above) instead of subclassing.
+
+**Per node type**: override this method on your Model subclass; the return value overrides the `sensorOutline` plugin option.
 
 ```tsx | pure
 class MyGroupModel extends dynamicGroup.model {
