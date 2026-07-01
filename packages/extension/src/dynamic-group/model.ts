@@ -739,13 +739,22 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
    * 设置分组节点 drop 区域的样式
    */
   getAddableOutlineStyle() {
+    const plugin = this.graphModel.dynamicGroup as
+      | { sensorOutline?: { stroke?: string; strokeWidth?: number } }
+      | undefined
+    const { stroke, strokeWidth } = plugin?.sensorOutline ?? {}
     return {
-      stroke: '#feb663',
-      strokeWidth: 2,
+      stroke: stroke ?? DEFAULT_SENSOR_OUTLINE.stroke,
+      strokeWidth: strokeWidth ?? DEFAULT_SENSOR_OUTLINE.strokeWidth,
       strokeDasharray: '4 4',
       fill: 'transparent',
     }
   }
+}
+
+export const DEFAULT_SENSOR_OUTLINE = {
+  stroke: '#feb663',
+  strokeWidth: 2,
 }
 
 export default DynamicGroupNodeModel

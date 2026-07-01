@@ -38,6 +38,13 @@ export const dynamicGroup = {
 const DEFAULT_TOP_Z_INDEX = -1000
 const DEFAULT_BOTTOM_Z_INDEX = -10000
 
+export type SensorOutlineOptions = {
+  /** 拖拽感应外框描边颜色，默认 '#feb663' */
+  stroke?: string
+  /** 拖拽感应外框线宽，默认 2 */
+  strokeWidth?: number
+}
+
 export class DynamicGroup {
   static pluginName = 'dynamicGroup'
 
@@ -52,6 +59,8 @@ export class DynamicGroup {
    * 默认 true，与 v1.1 以来行为一致；为 false 时仅删除分组，成员保留并解除归属。
    */
   cascadeDeleteChildren: boolean = true
+  /** 拖拽节点进入分组时的感应外框样式 */
+  sensorOutline?: SensorOutlineOptions
   topGroupZIndex: number = DEFAULT_BOTTOM_Z_INDEX
   // 激活态的 group 节点
   activeGroup?: DynamicGroupNodeModel
@@ -251,6 +260,7 @@ export class DynamicGroup {
   }
 
   onSelectionDrop = () => {
+    this.clearDragTargetHighlight()
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
     selectedNodes.forEach((node) => {
       this.addNodeToGroup(node)
@@ -264,10 +274,23 @@ export class DynamicGroup {
   onNodeDndAdd = ({ data: node }: CallbackArgs<'node:dnd-add'>) => {
     this.syncGroupChildren(node)
     this.addNodeToGroup(node)
+    this.clearDragTargetHighlight()
   }
 
   onNodeDrop = ({ data: node }: CallbackArgs<'node:drop'>) => {
+    this.clearDragTargetHighlight()
     this.addNodeToGroup(node)
+  }
+
+  onNodeMouseUp = () => {
+    this.clearDragTargetHighlight()
+  }
+
+  clearDragTargetHighlight() {
+    if (this.activeGroup) {
+      this.activeGroup.setAllowAppendChild(false)
+      this.activeGroup = undefined
+    }
   }
 
   detachNodeFromGroup = (groupId: string, nodeId: string) => {
@@ -358,7 +381,6 @@ export class DynamicGroup {
       if (targetGroup.isAllowAppendIn(node)) {
         targetGroup.addChild(node.id)
         // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
-        targetGroup.setAllowAppendChild(false)
       } else {
         // 抛出不允许插入的事件
         this.lf.emit(ExtensionEventType.GROUP_NOT_ALLOWED, {
@@ -373,7 +395,6 @@ export class DynamicGroup {
       this.detachNodeFromGroup(preGroupId, node.id)
       targetGroup.addChild(node.id)
       // 建立节点与 group 的映射关系放在了 group.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
-      targetGroup.setAllowAppendChild(false)
     } else {
       const preGroup = this.lf.getNodeModelById(
         preGroupId,
@@ -828,6 +849,7 @@ export class DynamicGroup {
     lf.on(EventType.NODE_ADD, this.onNodeAdd)
     lf.on(EventType.NODE_DND_ADD, this.onNodeDndAdd)
     lf.on(EventType.NODE_DROP, this.onNodeDrop)
+    lf.on(EventType.NODE_MOUSEUP, this.onNodeMouseUp)
     lf.on(EventType.SELECTION_DROP, this.onSelectionDrop)
     lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
     lf.on(EventType.EDGE_DELETE, this.onEdgeDelete)
@@ -900,6 +922,7 @@ export class DynamicGroup {
     this.lf.off(EventType.NODE_ADD, this.onNodeAdd)
     this.lf.off(EventType.NODE_DND_ADD, this.onNodeDndAdd)
     this.lf.off(EventType.NODE_DROP, this.onNodeDrop)
+    this.lf.off(EventType.NODE_MOUSEUP, this.onNodeMouseUp)
     this.lf.off(EventType.SELECTION_DROP, this.onSelectionDrop)
     this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
     this.lf.off(EventType.EDGE_DELETE, this.onEdgeDelete)
@@ -932,6 +955,8 @@ export namespace DynamicGroup {
     disallowEdgeConnectToGroup: boolean
     /** 删除分组时是否级联删除成员；默认 true */
     cascadeDeleteChildren: boolean
+    /** 拖拽节点进入分组时的感应外框样式 */
+    sensorOutline: SensorOutlineOptions
   }>
 }
 

@@ -12,6 +12,7 @@ export function createContainer() {
 export function createDynamicGroupLF(pluginOptions?: {
   disallowEdgeConnectToGroup?: boolean
   cascadeDeleteChildren?: boolean
+  sensorOutline?: { stroke?: string; strokeWidth?: number }
 }) {
   return new LogicFlow({
     container: createContainer(),
