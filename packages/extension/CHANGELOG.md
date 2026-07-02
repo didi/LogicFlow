@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.3.0-alpha.0
+
+### Minor Changes
+
+- b0db539: **dynamic-group**: 新增插件选项 `sensorOutline`，可配置拖拽节点进入分组时的感应外框描边颜色与线宽；修复拖拽结束后感应外框残留的问题。
+
+### Patch Changes
+
+- Updated dependencies [43132f5]
+  - @logicflow/core@2.2.3-alpha.0
+
 ## 2.2.2
 
 ### Patch Changes

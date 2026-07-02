@@ -212,6 +212,22 @@ fix: short user-visible summary
 
 Only list packages you actually changed. Dependents may receive a transitive patch at release time via `updateInternalDependencies` in `.changeset/config.json` — you do not need to add every downstream package to the frontmatter.
 
+**Publish scope:** only packages under `packages/` are published to npm. Changesets `ignore` accepts **package `name` values only** (from each `package.json`), not directory globs — you cannot write `examples/**` or `sites/**`.
+
+This repo sets `privatePackages.version: false` in `.changeset/config.json` so workspace packages with `"private": true` (root `logicflow`, all of `examples/*`, `sites/docs`, etc.) are **not** version-bumped or given `CHANGELOG.md` entries during `changeset version`. Publishable packages under `packages/` omit `"private"` and are the only npm release targets.
+
+To exclude a **non-private** workspace package from versioning, add its `name` to `ignore` explicitly.
+
+**Alpha then stable (prerelease mode):**
+
+1. `changeset pre enter alpha` → `changeset version` — **consumes** pending `.changeset/*.md` files (content goes into `CHANGELOG.md` under `x.y.z-alpha.0`; file ids are recorded in `.changeset/pre.json`).
+2. `changeset publish` — publishes alpha tags to npm.
+3. More fixes during alpha — add **new** changeset files → `changeset version` again → `alpha.1`, `alpha.2`, …
+4. Ready for stable — `changeset pre exit` → `changeset version` — bumps `2.2.3-alpha.0` → `2.2.3`. **Does not re-read the old changeset md files** (already consumed in step 1). Stable release adds a new version header; release notes were written at alpha time.
+5. If you need additional changelog text for stable only, add a **new** changeset before step 4.
+
+Do not expect the same `.changeset/*.md` to be consumed twice across alpha and stable.
+
 **What happens if you edit CHANGELOG manually anyway:**
 
 - `pnpm changeset version` (release / Version Packages PR) only consumes `.changeset/*.md` files, bumps `package.json`, and **prepends a new version section** to each affected `CHANGELOG.md`.

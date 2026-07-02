@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.3-alpha.0
+
+### Patch Changes
+
+- 43132f5: fix: 修复 `grid: false` / `grid: true` / `grid: number` 简写在 2.2.1+ 失效的问题；对象形式 `grid: GridOptions` 仍与 `themeMode` 默认网格合并
+
 ## 2.2.2
 
 ### Patch Changes

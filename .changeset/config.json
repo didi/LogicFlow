@@ -7,15 +7,11 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": [
-    "engine-browser-app",
-    "engine-node-app",
-    "feature-examples",
-    "material-ui-app",
-    "next-app",
-    "vue3-app",
-    "logicflow-node-red-vue3"
-  ],
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  },
+  "ignore": [],
   "extends": [],
   "pipeline": {}
 }

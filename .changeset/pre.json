@@ -1,0 +1,21 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "engine-browser-app": "0.0.1",
+    "engine-node-app": "0.0.1",
+    "next-app": "1.0.0",
+    "vue3-app": "1.0.0",
+    "logicflow-node-red-vue3": "1.0.1",
+    "@logicflow/core": "2.2.2",
+    "@logicflow/engine": "0.1.1",
+    "@logicflow/extension": "2.2.2",
+    "@logicflow/layout": "2.1.2",
+    "@logicflow/react-node-registry": "1.2.2",
+    "@logicflow/vue-node-registry": "1.2.2"
+  },
+  "changesets": [
+    "fix-dynamic-group-sensor-outline",
+    "fix-grid-options-shorthand"
+  ]
+}

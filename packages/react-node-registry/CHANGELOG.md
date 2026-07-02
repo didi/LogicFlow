@@ -1,5 +1,12 @@
 # @logicflow/react-node-registry
 
+## 1.2.3-alpha.0
+
+### Patch Changes
+
+- Updated dependencies [43132f5]
+  - @logicflow/core@2.2.3-alpha.0
+
 ## 1.2.2
 
 ### Patch Changes
