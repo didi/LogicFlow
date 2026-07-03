@@ -46,6 +46,7 @@ declare global {
 
 const lfOptions: Partial<LogicFlow.Options> = {
   grid: { size: 10 },
+  multipleSelectKey: 'meta',
   allowResize: true,
   allowRotate: false,
   textEdit: true,

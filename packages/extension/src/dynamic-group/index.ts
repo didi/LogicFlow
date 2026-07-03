@@ -62,8 +62,8 @@ export class DynamicGroup {
   /** 拖拽节点进入分组时的感应外框样式 */
   sensorOutline?: SensorOutlineOptions
   topGroupZIndex: number = DEFAULT_BOTTOM_Z_INDEX
-  // 激活态的 group 节点
-  activeGroup?: DynamicGroupNodeModel
+  // 激活态的 group 节点（支持多组同时高亮）
+  activeGroups: Set<DynamicGroupNodeModel> = new Set()
   // 存储节点与 group 的映射关系
   nodeGroupMap: Map<string, string> = new Map()
   /** 折叠态虚拟边 id → 所属分组与真实边 id */
@@ -287,10 +287,10 @@ export class DynamicGroup {
   }
 
   clearDragTargetHighlight() {
-    if (this.activeGroup) {
-      this.activeGroup.setAllowAppendChild(false)
-      this.activeGroup = undefined
+    for (const group of this.activeGroups) {
+      group.setAllowAppendChild(false)
     }
+    this.activeGroups.clear()
   }
 
   detachNodeFromGroup = (groupId: string, nodeId: string) => {
@@ -444,34 +444,58 @@ export class DynamicGroup {
 
   onSelectionDrag = () => {
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
+
+    // 每个节点独立找目标组，合并为 Set，消除迭代顺序的影响
+    const next = new Set<DynamicGroupNodeModel>()
     selectedNodes.forEach((node) => {
-      this.setActiveGroup(node)
+      const targetGroup = this.getTargetGroupForNode(node)
+      if (targetGroup) next.add(targetGroup)
     })
+
+    // diff 更新：只操作有变化的组，避免无谓的视觉抖动
+    for (const group of this.activeGroups) {
+      if (!next.has(group)) group.setAllowAppendChild(false)
+    }
+    for (const group of next) {
+      if (!this.activeGroups.has(group)) group.setAllowAppendChild(true)
+    }
+
+    this.activeGroups = next
   }
+
   onNodeDrag = ({ data: node }: CallbackArgs<'node:drag'>) => {
     this.setActiveGroup(node)
   }
 
-  setActiveGroup = (node: LogicFlow.NodeData) => {
+  private getTargetGroupForNode(
+    node: LogicFlow.NodeData,
+  ): DynamicGroupNodeModel | undefined {
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
+    if (!nodeModel || !bounds) return undefined
 
-    if (nodeModel && bounds) {
-      const targetGroup = this.getGroupByBounds(bounds, node)
-      if (this.activeGroup) {
-        this.activeGroup.setAllowAppendChild(false)
-      }
+    const targetGroup = this.getGroupByBounds(bounds, node)
+    if (!targetGroup) return undefined
+    if (nodeModel.isGroup && targetGroup.id === node.id) return undefined
+    if (!targetGroup.isAllowAppendIn(node)) return undefined
 
-      if (!targetGroup || (nodeModel.isGroup && targetGroup.id === node.id)) {
-        return
-      }
+    return targetGroup
+  }
 
-      const isAllowAppendIn = targetGroup.isAllowAppendIn(node)
-      if (!isAllowAppendIn) return
+  setActiveGroup = (node: LogicFlow.NodeData) => {
+    const targetGroup = this.getTargetGroupForNode(node)
 
-      this.activeGroup = targetGroup
-      this.activeGroup.setAllowAppendChild(true)
+    const next = new Set<DynamicGroupNodeModel>()
+    if (targetGroup) next.add(targetGroup)
+
+    for (const group of this.activeGroups) {
+      if (!next.has(group)) group.setAllowAppendChild(false)
     }
+    for (const group of next) {
+      if (!this.activeGroups.has(group)) group.setAllowAppendChild(true)
+    }
+
+    this.activeGroups = next
   }
 
   /**
@@ -605,7 +629,7 @@ export class DynamicGroup {
     this.nodeGroupMap.clear()
     this.collapsedVirtualEdges.clear()
     this.collapsedRealEdgeToGroup.clear()
-    this.activeGroup = undefined
+    this.activeGroups.clear()
     this.topGroupZIndex = DEFAULT_BOTTOM_Z_INDEX
 
     forEach(data.nodes, (node) => {
