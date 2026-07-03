@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.3.0-alpha.1
+
+### Patch Changes
+
+- 4315f7d: fix(dynamic-group): 修复多选拖拽时感应区高亮不稳定的问题，支持多个分组同时高亮。
+
 ## 2.3.0-alpha.0
 
 ### Minor Changes

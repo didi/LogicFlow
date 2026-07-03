@@ -12,9 +12,12 @@
     "@logicflow/extension": "2.2.2",
     "@logicflow/layout": "2.1.2",
     "@logicflow/react-node-registry": "1.2.2",
-    "@logicflow/vue-node-registry": "1.2.2"
+    "@logicflow/vue-node-registry": "1.2.2",
+    "dynamic-group-regression": "0.0.1",
+    "logicflow-docs": "2.2.10"
   },
   "changesets": [
+    "fix-dynamic-group-multi-select-sensor",
     "fix-dynamic-group-sensor-outline",
     "fix-grid-options-shorthand"
   ]
