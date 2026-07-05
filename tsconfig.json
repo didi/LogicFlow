@@ -16,6 +16,7 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "target": "ES5",
+    "downlevelIteration": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
 
