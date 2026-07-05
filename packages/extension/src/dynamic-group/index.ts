@@ -287,9 +287,9 @@ export class DynamicGroup {
   }
 
   clearDragTargetHighlight() {
-    for (const group of this.activeGroups) {
+    this.activeGroups.forEach((group) => {
       group.setAllowAppendChild(false)
-    }
+    })
     this.activeGroups.clear()
   }
 
@@ -453,12 +453,12 @@ export class DynamicGroup {
     })
 
     // diff 更新：只操作有变化的组，避免无谓的视觉抖动
-    for (const group of this.activeGroups) {
+    this.activeGroups.forEach((group) => {
       if (!next.has(group)) group.setAllowAppendChild(false)
-    }
-    for (const group of next) {
+    })
+    next.forEach((group) => {
       if (!this.activeGroups.has(group)) group.setAllowAppendChild(true)
-    }
+    })
 
     this.activeGroups = next
   }
@@ -488,12 +488,12 @@ export class DynamicGroup {
     const next = new Set<DynamicGroupNodeModel>()
     if (targetGroup) next.add(targetGroup)
 
-    for (const group of this.activeGroups) {
+    this.activeGroups.forEach((group) => {
       if (!next.has(group)) group.setAllowAppendChild(false)
-    }
-    for (const group of next) {
+    })
+    next.forEach((group) => {
       if (!this.activeGroups.has(group)) group.setAllowAppendChild(true)
-    }
+    })
 
     this.activeGroups = next
   }

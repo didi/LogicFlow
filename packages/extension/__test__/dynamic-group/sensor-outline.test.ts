@@ -82,7 +82,7 @@ describe('dynamic-group sensor outline', () => {
     simulateNodeDrag(lf, 'rect_a')
 
     expect(group.groupAddable).toBe(true)
-    expect(getDynamicGroup(lf).activeGroup?.id).toBe('group_a')
+    expect(getDynamicGroup(lf).activeGroups.has(group)).toBe(true)
   })
 
   test('clears highlight after node:drop when moving within the same group', () => {
@@ -98,7 +98,7 @@ describe('dynamic-group sensor outline', () => {
     simulateNodeDrop(lf, 'rect_a')
 
     expect(group.groupAddable).toBe(false)
-    expect(dg.activeGroup).toBeUndefined()
+    expect(dg.activeGroups.size).toBe(0)
   })
 
   test('clears highlight on node:mouseup without drop', () => {
