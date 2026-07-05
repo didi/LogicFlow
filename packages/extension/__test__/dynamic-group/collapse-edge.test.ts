@@ -212,6 +212,45 @@ describe('dynamic-group collapse edge (#2395)', () => {
     }
   })
 
+  test('C1a: collapse → API delete real edge → virtual edge is removed immediately', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleExternalEdge())
+
+    collapseGroup(lf, 'group_1')
+    expect(getVirtualEdges(lf)).toHaveLength(1)
+
+    // API 直接删隐藏的真实边（绕过 UI）
+    lf.deleteEdge('e_outer_inner')
+
+    // 真实边与虚拟边都应从图中移除
+    expect(lf.getEdgeModelById('e_outer_inner')).toBeUndefined()
+    expect(getVirtualEdges(lf)).toHaveLength(0)
+    expect(lf.graphModel.edges).toHaveLength(0)
+  })
+
+  test('C1b: collapse → API delete real edge → expand → no edges remain', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleExternalEdge())
+
+    collapseGroup(lf, 'group_1')
+    lf.deleteEdge('e_outer_inner')
+    expandGroup(lf, 'group_1')
+
+    expect(getVirtualEdges(lf)).toHaveLength(0)
+    expect(lf.getGraphData().edges).toHaveLength(0)
+  })
+
+  test('C1c: collapse → API delete real edge → getGraphData excludes deleted edge', () => {
+    const lf = createDynamicGroupLF()
+    lf.render(graphWithSingleExternalEdge())
+
+    collapseGroup(lf, 'group_1')
+    lf.deleteEdge('e_outer_inner')
+
+    const { edges } = lf.getGraphData()
+    expect(edges).toHaveLength(0)
+  })
+
   test('E8: collapse → drag group → expand → drag — edge endpoints stay on anchors', () => {
     const lf = createDynamicGroupLF()
     lf.render({

@@ -825,6 +825,76 @@ export const scenarios: Scenario[] = [
     ],
   },
   {
+    id: 'real-edge-api-delete-while-collapsed',
+    title: '折叠态 API 删真实边 → 虚拟边不残留（C1）',
+    issues: ['C1'],
+    expectedBug:
+      '折叠态下通过 API 删除真实边后，对应虚拟边仍残留在画布上，且展开分组也无法消除它。',
+    steps: [
+      '1. 画布预置：外圆 → 组内矩形（真实边 id: real_edge_c1）。',
+      '2. 点「折叠分组」，此时画布上出现一条虚拟边（替代真实边显示）。',
+      '3. 点「API 删真实边」，通过 lf.deleteEdge 直接删除真实边（此时真实边不可见）。',
+      '4. 观察：虚拟边应立即从画布消失。（Bug 时：虚拟边仍然存在）',
+      '5. 点「展开分组」，画布上不应出现任何边。（Bug 时：展开后虚拟边仍残留）',
+      '6. 点「打印边数量」可验证 graphModel.edges 里是否还有残留。',
+    ],
+    graphData: {
+      nodes: [
+        makeGroup('group_c1', 420, 220, ['inner_rect_c1'], {
+          isCollapsed: false,
+        }),
+        makeNode('outer_circle_c1', 'circle', 120, 220),
+        makeNode('inner_rect_c1', 'rect', 420, 220, {
+          properties: { width: 80, height: 50 },
+        }),
+      ],
+      edges: [
+        {
+          id: 'real_edge_c1',
+          type: 'polyline',
+          sourceNodeId: 'outer_circle_c1',
+          targetNodeId: 'inner_rect_c1',
+        },
+      ],
+    },
+    actions: [
+      {
+        key: 'collapse',
+        label: '折叠分组',
+        run: (lf) => toggleGroup(lf, 'group_c1', true),
+      },
+      {
+        key: 'api-delete-real-edge',
+        label: 'API 删真实边',
+        run: (lf) => {
+          const deleted = lf.deleteEdge('real_edge_c1')
+          alert(
+            deleted
+              ? '真实边已删除，观察虚拟边是否消失'
+              : '真实边不存在（已经被删过了）',
+          )
+        },
+      },
+      {
+        key: 'expand',
+        label: '展开分组',
+        run: (lf) => toggleGroup(lf, 'group_c1', false),
+      },
+      {
+        key: 'count-edges',
+        label: '打印边数量',
+        run: (lf) => {
+          const edges = lf.graphModel.edges
+          const virtual = edges.filter((e) => e.virtual)
+          const real = edges.filter((e) => !e.virtual)
+          alert(
+            `graphModel.edges 共 ${edges.length} 条\n虚拟边: ${virtual.length} 条\n真实边: ${real.length} 条`,
+          )
+        },
+      },
+    ],
+  },
+  {
     id: 'resize-single-axis',
     title: '单边 resize 控制点',
     issues: ['#1555'],

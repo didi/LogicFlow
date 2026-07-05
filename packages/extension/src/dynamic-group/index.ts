@@ -129,17 +129,26 @@ export class DynamicGroup {
       return
     }
 
-    // 真实边被其它路径删除时，同步清理登记与分组内快照
+    // 真实边被其它路径删除时，同步清理登记并删除对应虚拟边
     const groupId = this.collapsedRealEdgeToGroup.get(edge.id)
     if (groupId) {
       this.collapsedRealEdgeToGroup.delete(edge.id)
     }
 
-    for (const [virtualId, info] of this.collapsedVirtualEdges.entries()) {
+    // 先收集需要删除的虚拟边 id，再统一删除，避免遍历中修改 Map
+    // 使用 forEach 代替 for...of entries()，确保在 ES5 编译目标下（无 downlevelIteration）也能正确迭代
+    const virtualIdsToDelete: string[] = []
+    this.collapsedVirtualEdges.forEach((info, virtualId) => {
       if (info.realEdgeId === edge.id) {
-        this.collapsedVirtualEdges.delete(virtualId)
+        virtualIdsToDelete.push(virtualId)
       }
-    }
+    })
+    virtualIdsToDelete.forEach((virtualId) => {
+      this.collapsedVirtualEdges.delete(virtualId)
+      if (this.lf.getEdgeModelById(virtualId)) {
+        this.lf.deleteEdge(virtualId)
+      }
+    })
   }
 
   /**
