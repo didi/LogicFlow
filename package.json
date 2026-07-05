@@ -25,7 +25,7 @@
     "test": "jest",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "publish:prerelease": "node scripts/publish-prerelease.mjs",
+    "publish:pre": "node scripts/publish-prerelease.mjs",
     "publish:only": "pnpm test && changeset publish --registry=https://registry.npmjs.org",
     "setup:husky": "husky install .husky",
     "prepare": "is-ci || run-p setup:husky build:all"

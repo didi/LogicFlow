@@ -1,10 +1,11 @@
 #!/usr/bin/env node
+/* eslint-env node */
 /**
  * Publish a prerelease (snapshot) version to npm.
  *
  * Usage:
- *   pnpm publish:prerelease          # tag = alpha (default)
- *   pnpm publish:prerelease beta     # tag = beta
+ *   pnpm publish:pre          # tag = alpha (default)
+ *   pnpm publish:pre beta     # tag = beta
  *
  * Design:
  *   - Runs tests and builds before publishing.
