@@ -14,7 +14,7 @@
     "build:esm": "turbo run build:esm --filter=./packages/*",
     "build:umd": "turbo run build:umd --filter=./packages/*",
     "build:docs": "node scripts/copy-ai-docs.js",
-    "build:all": "run-s build build:umd build:docs",
+    "build:all": "run-s test build build:umd build:docs",
     "build:vercel": "sh scripts/build-docs",
     "link": "pnpm -C packages/core link --global && pnpm -C packages/extension link --global && pnpm -C packages/layout link --global",
     "clean": "run-s clean:build clean:turbo clean:modules",
@@ -27,7 +27,7 @@
     "changeset:pre:enter": "changeset pre enter alpha",
     "changeset:pre:exit": "changeset pre exit",
     "changeset:version": "changeset version",
-    "publish:only": "changeset publish --registry=https://registry.npmjs.org",
+    "publish:only": "pnpm test && changeset publish --registry=https://registry.npmjs.org",
     "setup:husky": "husky install .husky",
     "prepare": "is-ci || run-p setup:husky build:all"
   },
