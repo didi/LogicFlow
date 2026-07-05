@@ -3,7 +3,6 @@
  */
 import LogicFlow from '@logicflow/core'
 import {
-  DynamicGroup,
   DynamicGroupNodeModel,
   DEFAULT_SENSOR_OUTLINE,
 } from '../../src/dynamic-group'
@@ -40,7 +39,9 @@ function graphWithSingleGroup() {
 }
 
 function getDynamicGroup(lf: LogicFlow) {
-  return lf.graphModel.dynamicGroup as DynamicGroup
+  // activeGroups is private; cast to any for white-box testing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return lf.graphModel.dynamicGroup as any
 }
 
 function simulateNodeDrag(lf: LogicFlow, nodeId: string) {

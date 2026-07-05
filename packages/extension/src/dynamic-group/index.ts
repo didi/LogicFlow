@@ -63,7 +63,7 @@ export class DynamicGroup {
   sensorOutline?: SensorOutlineOptions
   topGroupZIndex: number = DEFAULT_BOTTOM_Z_INDEX
   // 激活态的 group 节点（支持多组同时高亮）
-  activeGroups: Set<DynamicGroupNodeModel> = new Set()
+  private activeGroups: Set<DynamicGroupNodeModel> = new Set()
   // 存储节点与 group 的映射关系
   nodeGroupMap: Map<string, string> = new Map()
   /** 折叠态虚拟边 id → 所属分组与真实边 id */

@@ -142,6 +142,107 @@ describe('pool plugin', () => {
     expect(plugin.getLaneByNodeId('rect_1')?.id).toBe('lane_2')
   })
 
+  test('highlights both lanes when multi-select drag spans two lanes', () => {
+    const lf = createPoolLF()
+    lf.render(createPoolWithTwoLanes())
+    lf.addNode({
+      id: 'node_a',
+      type: 'rect',
+      x: 530,
+      y: 170,
+      width: 80,
+      height: 40,
+    })
+    lf.addNode({
+      id: 'node_b',
+      type: 'rect',
+      x: 530,
+      y: 350,
+      width: 80,
+      height: 40,
+    })
+
+    const lane1 = lf.getNodeModelById('lane_1') as any
+    const lane2 = lf.getNodeModelById('lane_2') as any
+
+    lf.graphModel.selectElementById('node_a')
+    lf.graphModel.selectElementById('node_b', true)
+    lf.graphModel.eventCenter.emit('selection:drag', {})
+
+    expect(lane1.groupAddable).toBe(true)
+    expect(lane2.groupAddable).toBe(true)
+  })
+
+  test('clears all lane highlights after node:drop', () => {
+    const lf = createPoolLF()
+    lf.render(createPoolWithTwoLanes())
+    lf.addNode({
+      id: 'node_a',
+      type: 'rect',
+      x: 530,
+      y: 170,
+      width: 80,
+      height: 40,
+    })
+    lf.addNode({
+      id: 'node_b',
+      type: 'rect',
+      x: 530,
+      y: 350,
+      width: 80,
+      height: 40,
+    })
+
+    const lane1 = lf.getNodeModelById('lane_1') as any
+    const lane2 = lf.getNodeModelById('lane_2') as any
+
+    lf.graphModel.selectElementById('node_a')
+    lf.graphModel.selectElementById('node_b', true)
+    lf.graphModel.eventCenter.emit('selection:drag', {})
+    lf.graphModel.eventCenter.emit('node:drop', {
+      data: lf.getNodeModelById('node_a')!.getData(),
+      e: {} as MouseEvent,
+    })
+
+    expect(lane1.groupAddable).toBe(false)
+    expect(lane2.groupAddable).toBe(false)
+  })
+
+  test('clears all lane highlights after node:mouseup', () => {
+    const lf = createPoolLF()
+    lf.render(createPoolWithTwoLanes())
+    lf.addNode({
+      id: 'node_a',
+      type: 'rect',
+      x: 530,
+      y: 170,
+      width: 80,
+      height: 40,
+    })
+    lf.addNode({
+      id: 'node_b',
+      type: 'rect',
+      x: 530,
+      y: 350,
+      width: 80,
+      height: 40,
+    })
+
+    const lane1 = lf.getNodeModelById('lane_1') as any
+    const lane2 = lf.getNodeModelById('lane_2') as any
+
+    lf.graphModel.selectElementById('node_a')
+    lf.graphModel.selectElementById('node_b', true)
+    lf.graphModel.eventCenter.emit('selection:drag', {})
+    lf.graphModel.eventCenter.emit('node:mouseup', {
+      data: lf.getNodeModelById('node_a')!.getData(),
+      e: {} as MouseEvent,
+    })
+
+    expect(lane1.groupAddable).toBe(false)
+    expect(lane2.groupAddable).toBe(false)
+  })
+
   test('emits lane:not-allowed when the target lane rejects a node', () => {
     const lf = createPoolLF()
 

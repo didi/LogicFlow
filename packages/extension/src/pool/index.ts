@@ -49,8 +49,8 @@ export const LaneNode = {
 export class PoolElements {
   static pluginName = 'PoolElements'
   private lf: LogicFlow
-  // 激活态的 group 节点
-  activeGroup?: LaneModel
+  // 激活态的泳道节点（支持多泳道同时高亮）
+  private activeGroups: Set<LaneModel> = new Set()
   // 存储节点与 group 的映射关系
   nodeLaneMap: Map<string, string> = new Map()
 
@@ -213,35 +213,71 @@ export class PoolElements {
 
   onSelectionDrag = () => {
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
+
+    const next = new Set<LaneModel>()
     selectedNodes.forEach((node) => {
-      this.setActiveGroup(node)
+      const targetLane = this.getTargetLaneForNode(node)
+      if (targetLane) next.add(targetLane)
     })
+
+    this.activeGroups.forEach((lane) => {
+      if (!next.has(lane)) lane.setAllowAppendChild(false)
+    })
+    next.forEach((lane) => {
+      if (!this.activeGroups.has(lane)) lane.setAllowAppendChild(true)
+    })
+
+    this.activeGroups = next
   }
 
   onNodeDrag = ({ data: node }: CallbackArgs<'node:drag'>) => {
     this.setActiveGroup(node)
   }
 
-  setActiveGroup = (node: LogicFlow.NodeData) => {
+  private getTargetLaneForNode(
+    node: LogicFlow.NodeData,
+  ): LaneModel | undefined {
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
+    if (!nodeModel || !bounds) return undefined
 
-    if (nodeModel && bounds) {
-      const targetGroup = this.getLaneByBounds(bounds, node)
-      if (this.activeGroup) {
-        this.activeGroup.setAllowAppendChild(false)
-      }
+    const targetLane = this.getLaneByBounds(bounds, node)
+    if (!targetLane) return undefined
+    if (nodeModel.isGroup && targetLane.id === node.id) return undefined
+    if (!targetLane.isAllowAppendIn(node)) return undefined
 
-      if (!targetGroup || (nodeModel.isGroup && targetGroup.id === node.id)) {
-        return
-      }
+    return targetLane
+  }
 
-      const isAllowAppendIn = targetGroup.isAllowAppendIn(node)
-      if (!isAllowAppendIn) return
+  setActiveGroup = (node: LogicFlow.NodeData) => {
+    const targetLane = this.getTargetLaneForNode(node)
 
-      this.activeGroup = targetGroup
-      this.activeGroup?.setAllowAppendChild(true)
-    }
+    const next = new Set<LaneModel>()
+    if (targetLane) next.add(targetLane)
+
+    this.activeGroups.forEach((lane) => {
+      if (!next.has(lane)) lane.setAllowAppendChild(false)
+    })
+    next.forEach((lane) => {
+      if (!this.activeGroups.has(lane)) lane.setAllowAppendChild(true)
+    })
+
+    this.activeGroups = next
+  }
+
+  clearDragTargetHighlight() {
+    this.activeGroups.forEach((lane) => {
+      lane.setAllowAppendChild(false)
+    })
+    this.activeGroups.clear()
+  }
+
+  onNodeDrop = () => {
+    this.clearDragTargetHighlight()
+  }
+
+  onNodeMouseUp = () => {
+    this.clearDragTargetHighlight()
   }
   /**
    * @param node
@@ -534,6 +570,8 @@ export class PoolElements {
     lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
     lf.on(NODE_DRAG_EVENTS, this.onNodeDrag)
     lf.on(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    lf.on(EventType.NODE_DROP, this.onNodeDrop)
+    lf.on(EventType.NODE_MOUSEUP, this.onNodeMouseUp)
     lf.on(EventType.NODE_CLICK, this.onNodeSelect)
     lf.on(EventType.NODE_MOUSEMOVE, this.onNodeMove)
     lf.on(EventType.GRAPH_RENDERED, this.onGraphRendered)
@@ -598,6 +636,8 @@ export class PoolElements {
     this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
     this.lf.off(NODE_DRAG_EVENTS, this.onNodeDrag)
     this.lf.off(EventType.SELECTION_DRAG, this.onSelectionDrag)
+    this.lf.off(EventType.NODE_DROP, this.onNodeDrop)
+    this.lf.off(EventType.NODE_MOUSEUP, this.onNodeMouseUp)
     this.lf.off(EventType.NODE_CLICK, this.onNodeSelect)
     this.lf.off(EventType.NODE_MOUSEMOVE, this.onNodeMove)
     this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
