@@ -24,9 +24,8 @@
     "update:deps": "pnpm update --interactive --latest --recursive",
     "test": "jest",
     "changeset": "changeset",
-    "changeset:pre:enter": "changeset pre enter alpha",
-    "changeset:pre:exit": "changeset pre exit",
     "changeset:version": "changeset version",
+    "publish:prerelease": "node scripts/publish-prerelease.mjs",
     "publish:only": "pnpm test && changeset publish --registry=https://registry.npmjs.org",
     "setup:husky": "husky install .husky",
     "prepare": "is-ci || run-p setup:husky build:all"
