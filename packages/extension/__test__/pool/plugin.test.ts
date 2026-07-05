@@ -276,4 +276,28 @@ describe('pool plugin', () => {
       }),
     )
   })
+
+  test('calls setTextPosition on the lane after onNodeMove triggers auto-resize', () => {
+    // setTextPosition is triggered indirectly via MobX setAttributes when moveTo/width/height
+    // change, matching the behaviour in dynamic-group/index.ts. This test documents that
+    // setTextPosition is always called after auto-resize, regardless of the call path.
+    const lf = createPoolLF()
+    lf.render(createPoolGraphWithNodeInLane())
+
+    const lane = lf.getNodeModelById('lane_1') as any
+    lane.isRestrict = true
+    lane.autoResize = true
+
+    const spy = jest.spyOn(lane, 'setTextPosition')
+
+    // Move the child node far enough to exceed the lane bounds
+    const rect = lf.getNodeModelById('rect_1') as any
+    rect.x = lane.x + lane.width
+
+    lf.graphModel.eventCenter.emit('node:mousemove', {
+      data: rect.getData(),
+    })
+
+    expect(spy).toHaveBeenCalled()
+  })
 })

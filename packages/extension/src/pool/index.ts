@@ -366,6 +366,7 @@ export class PoolElements {
     groupModel.width = newGroupWidth
     groupModel.height = newGroupHeight
     groupModel.updateExpandedSize(newGroupWidth, newGroupHeight)
+    groupModel.setTextPosition()
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
