@@ -1,9 +1,13 @@
 /**
  * @jest-environment jsdom
  */
-import LogicFlow from '@logicflow/core'
+import LogicFlow, { BaseNodeModel } from '@logicflow/core'
 import { DynamicGroup, PoolElements } from '@logicflow/extension'
 import { Dagre } from '../src'
+import {
+  applyGroupResizeAndWarnings,
+  createGroupLayoutWarningState,
+} from '../src/utils/groupLayout'
 
 function createContainer() {
   const container = document.createElement('div')
@@ -440,5 +444,76 @@ describe('layout group resize options', () => {
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('节点超出group边界'),
     )
+  })
+})
+
+describe('calcDepth cycle detection', () => {
+  function makeGroup(
+    id: string,
+    children: string[],
+  ): BaseNodeModel & { isGroup: boolean; children: Set<string> } {
+    return {
+      id,
+      isGroup: true,
+      children: new Set(children),
+      x: 0,
+      y: 0,
+      width: 200,
+      height: 150,
+      resizable: true,
+      properties: {},
+    } as unknown as BaseNodeModel & { isGroup: boolean; children: Set<string> }
+  }
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  test('does not throw on circular group nesting and emits a cycle warning', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+
+    const ga = makeGroup('ga', ['gb'])
+    const gb = makeGroup('gb', ['ga'])
+
+    const models = [ga, gb]
+    const nodeData = [
+      { id: 'ga', x: 0, y: 0, width: 200, height: 150 },
+      { id: 'gb', x: 300, y: 0, width: 200, height: 150 },
+    ]
+
+    expect(() => {
+      applyGroupResizeAndWarnings(
+        models,
+        nodeData,
+        { resizeGroup: false },
+        createGroupLayoutWarningState(),
+      )
+    }).not.toThrow()
+
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('循环嵌套'))
+  })
+
+  test('calculates depth correctly for a linear chain without false cycle warnings', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+
+    // outer → inner (no cycle)
+    const outer = makeGroup('outer', ['inner'])
+    const inner = makeGroup('inner', ['leaf'])
+
+    applyGroupResizeAndWarnings(
+      [outer, inner],
+      [
+        { id: 'outer', x: 0, y: 0, width: 400, height: 300 },
+        { id: 'inner', x: 0, y: 0, width: 200, height: 150 },
+        { id: 'leaf', x: 0, y: 0, width: 100, height: 50 },
+      ],
+      { resizeGroup: false },
+      createGroupLayoutWarningState(),
+    )
+
+    const cycleWarnings = warnSpy.mock.calls.filter(([msg]) =>
+      String(msg).includes('循环嵌套'),
+    )
+    expect(cycleWarnings).toHaveLength(0)
   })
 })

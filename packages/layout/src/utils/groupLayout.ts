@@ -238,9 +238,18 @@ function sortGroupsByDepthDesc(groups: BaseNodeModel[]) {
   groups.forEach((group) => groupMap.set(group.id, group))
 
   const depthMemo = new Map<string, number>()
+  const visiting = new Set<string>()
+
   const calcDepth = (group: BaseNodeModel): number => {
     const cached = depthMemo.get(group.id)
     if (cached !== undefined) return cached
+
+    if (visiting.has(group.id)) {
+      console.warn(`[LogicFlow Layout] 检测到循环嵌套分组，已跳过: ${group.id}`)
+      return 0
+    }
+
+    visiting.add(group.id)
     const children = getGroupChildren(group)
     let depth = 0
     children.forEach((childId) => {
@@ -249,6 +258,8 @@ function sortGroupsByDepthDesc(groups: BaseNodeModel[]) {
         depth = Math.max(depth, calcDepth(childGroup) + 1)
       }
     })
+    visiting.delete(group.id)
+
     depthMemo.set(group.id, depth)
     return depth
   }
