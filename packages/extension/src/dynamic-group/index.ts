@@ -439,7 +439,9 @@ export class DynamicGroup {
           this.lf.deleteNode(childId)
         })
       } else {
-        this.releaseGroupMembers(groupModel)
+        if (groupModel.children.size > 0) {
+          this.releaseGroupMembers(groupModel)
+        }
       }
     }
 

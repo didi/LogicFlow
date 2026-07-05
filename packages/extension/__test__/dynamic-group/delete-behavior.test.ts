@@ -184,4 +184,16 @@ describe('dynamic-group delete behavior (cascadeDeleteChildren)', () => {
     }).not.toThrow()
     expect(lf.getNodeModelById('inner')?.isSelected).toBe(true)
   })
+
+  test('D7: releaseGroupMembers is called exactly once when cascadeDeleteChildren=false', () => {
+    const lf = createDynamicGroupLF({ cascadeDeleteChildren: false })
+    lf.render(graphWithGroupAndChild())
+
+    const dg = getDynamicGroup(lf)
+    const spy = jest.spyOn(dg, 'releaseGroupMembers')
+
+    lf.deleteNode('group_1')
+
+    expect(spy).toHaveBeenCalledTimes(1)
+  })
 })
