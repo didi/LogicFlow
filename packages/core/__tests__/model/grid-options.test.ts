@@ -9,6 +9,28 @@ function createLf(options: ConstructorParameters<typeof LogicFlow>[0]) {
   return new LogicFlow({ container: dom, ...options })
 }
 
+describe('gridSize sync with grid.size', () => {
+  test('grid: number + snapGrid: true sets gridSize to that number', () => {
+    const lf = createLf({ grid: 20, snapGrid: true })
+    expect(lf.graphModel.gridSize).toBe(20)
+  })
+
+  test('grid: true + snapGrid: true sets gridSize to default grid size', () => {
+    const lf = createLf({ grid: true, snapGrid: true })
+    expect(lf.graphModel.gridSize).toBe(10)
+  })
+
+  test('grid: object + snapGrid: true sets gridSize to grid.size', () => {
+    const lf = createLf({ grid: { size: 30 }, snapGrid: true })
+    expect(lf.graphModel.gridSize).toBe(30)
+  })
+
+  test('grid: number + snapGrid: false keeps gridSize at 1 (snap off)', () => {
+    const lf = createLf({ grid: 20, snapGrid: false })
+    expect(lf.graphModel.gridSize).toBe(1)
+  })
+})
+
 describe('grid options', () => {
   test('grid: false hides the grid', () => {
     const lf = createLf({ grid: false })

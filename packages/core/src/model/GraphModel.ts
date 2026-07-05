@@ -176,11 +176,6 @@ export class GraphModel {
     this.rootEl = container
     this.partial = !!partial
     this.background = background
-    if (typeof grid === 'object' && options.snapGrid) {
-      // 开启网格对齐时才根据网格尺寸设置步长
-      // TODO：需要让用户设置成 0 吗？后面可以讨论一下
-      this.gridSize = grid.size || 1 // 默认 gridSize 设置为 1
-    }
     this.customStyles = (options.style || {}) as LogicFlow.Theme
     this.theme = setupTheme(options.style, options.themeMode)
     this.grid = Grid.getGridOptions(
@@ -189,6 +184,10 @@ export class GraphModel {
         : (grid ?? false),
     )
     this.theme.grid = cloneDeep(this.grid)
+    if (options.snapGrid) {
+      // 开启网格对齐时，以解析后的 grid.size 作为吸附步长，兼容 number/boolean/object 三种简写
+      this.gridSize = this.grid.size || 1
+    }
     if (background) {
       this.background = cloneDeep(assign({}, initialBackground, background))
       this.theme.background = cloneDeep(
