@@ -53,7 +53,7 @@ export class DynamicGroupText extends BaseText<
       pad,
     })
     const isEllipsis = overflowMode === 'ellipsis'
-    const rows = String(value).split(/[\r\n]/g)
+    const rows = String(value).split(/\r\n|\r|\n/g)
     const isDraggable = editConfigModel.nodeTextDraggable || draggable
 
     return (
@@ -99,8 +99,10 @@ export class DynamicGroupText extends BaseText<
                 width: '100%',
               }}
             >
-              {rows.map((row) => (
-                <div className="lf-node-text--auto-wrap-inner">{row}</div>
+              {rows.map((row, i) => (
+                <div key={i} className="lf-node-text--auto-wrap-inner">
+                  {row}
+                </div>
               ))}
             </div>
           </div>

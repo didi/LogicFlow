@@ -6,7 +6,7 @@ if ! [ -x "$(command -v pnpm)" ]; then
 fi
 
 pnpm install
-pnpm build:all
+pnpm build
 
 cd sites/docs
 rm -rf ./dist
