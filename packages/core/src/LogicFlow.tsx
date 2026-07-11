@@ -24,7 +24,11 @@ import {
 import { Dnd, snapline } from './view/behavior'
 import Tool from './tool'
 import History from './history'
-import Keyboard, { initDefaultShortcut } from './keyboard'
+import Keyboard, {
+  initDefaultShortcut,
+  transformEdgeData,
+  transformNodeData,
+} from './keyboard'
 import { EventCallback, CallbackArgs, EventArgs } from './event/eventEmitter'
 import {
   ElementType,
@@ -705,30 +709,76 @@ export class LogicFlow {
    * @param edges
    * @param distance
    */
-  addElements({ nodes, edges }: GraphConfigData, distance = 40): GraphElements {
-    // TODO: 1. 解决下面方法中 distance 传参缺未使用的问题；该方法在快捷键中有调用
-    // TODO: 2. review 一下本函数代码逻辑，确认 nodeIdMap 的作用，看是否有优化的空间
-    console.log('distance', distance)
-    const nodeIdMap: Record<string, string> = {}
+  addElements({ nodes, edges }: GraphConfigData): GraphElements {
     const elements: GraphElements = {
       nodes: [],
       edges: [],
     }
     forEach(nodes, (node) => {
-      const nodeId = node.id
       const nodeModel = this.addNode(node)
-      if (nodeId) nodeIdMap[nodeId] = nodeModel.id
       elements.nodes.push(nodeModel)
     })
     forEach(edges, (edge) => {
-      let { sourceNodeId, targetNodeId } = edge
-      if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId]
-      if (nodeIdMap[targetNodeId]) targetNodeId = nodeIdMap[targetNodeId]
+      const { sourceNodeId, targetNodeId } = edge
       const edgeModel = this.graphModel.addEdge({
         ...edge,
         sourceNodeId,
         targetNodeId,
       })
+      elements.edges.push(edgeModel)
+    })
+    return elements
+  }
+
+  cloneElements({ nodes, edges }: GraphData, distance = 40): GraphElements {
+    const nodeIdMap: Record<string, string> = {}
+    const anchorIdMap: Record<string, string> = {}
+    const elements: GraphElements = {
+      nodes: [],
+      edges: [],
+    }
+    forEach(nodes, (node) => {
+      const originNodeId = node.id
+      const nodeModel = this.addNode(transformNodeData(node, distance))
+      if (originNodeId) {
+        nodeIdMap[originNodeId] = nodeModel.id
+        const originNodeModel = this.getNodeModelById(originNodeId)
+        if (originNodeModel) {
+          // 建立源节点和新节点的锚点映射
+          const newNodeAnchors = nodeModel.anchors
+          originNodeModel.anchors.forEach((originNodeAnchor, index) => {
+            if (originNodeAnchor.id && newNodeAnchors[index].id) {
+              // @ts-ignore
+              anchorIdMap[originNodeAnchor.id] = newNodeAnchors[index].id
+            }
+          })
+        }
+      }
+      elements.nodes.push(nodeModel)
+    })
+    forEach(edges, (edge) => {
+      let { sourceNodeId, targetNodeId, sourceAnchorId, targetAnchorId } = edge
+      if (nodeIdMap[sourceNodeId]) sourceNodeId = nodeIdMap[sourceNodeId]
+      if (nodeIdMap[targetNodeId]) targetNodeId = nodeIdMap[targetNodeId]
+      if (sourceAnchorId && targetAnchorId) {
+        if (anchorIdMap[sourceAnchorId])
+          sourceAnchorId = anchorIdMap[sourceAnchorId]
+        if (anchorIdMap[targetAnchorId])
+          targetAnchorId = anchorIdMap[targetAnchorId]
+      }
+
+      const edgeModel = this.graphModel.addEdge(
+        transformEdgeData(
+          {
+            ...edge,
+            sourceNodeId,
+            targetNodeId,
+            sourceAnchorId,
+            targetAnchorId,
+          },
+          distance,
+        ),
+      )
       elements.edges.push(edgeModel)
     })
     return elements
