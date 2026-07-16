@@ -47,6 +47,7 @@ cd examples/dynamic-group-regression && pnpm dev
 | `resize-bounds` | LOCAL-resize-bounds（DG 缩小 resize 最小边界） |
 | `resize-undo-twice` | #1532（关闭 · 暂不修复） |
 | `resize-single-axis` | #1555（关闭 · 暂不修复） |
+| `selection-copy-paste` | LOCAL-copy-paste（选区复制分组+连线后节点/连线分离） |
 
 ## 图数据约定
 
@@ -72,6 +73,7 @@ cd examples/dynamic-group-regression && pnpm dev
 
 - 部分场景需**手动**拖折线控制点（#2401、#2399）后再点折叠。
 - `#2412` 使用自定义节点类型 `locked-dynamic-group`。
+- `selection-copy-paste` 使用 `SelectionSelect` 插件框选（点「开启框选」后在空白处拖拽），复制/粘贴按钮与键盘 `Cmd/Ctrl+C`、`Cmd/Ctrl+V` 走同一套 core 逻辑；复现要点：框选「分组+组内节点+连线」粘贴后，`addElements` 会让新分组另生成一套幽灵子节点，粘贴出的连线连的是另一批子节点，拖动新分组即分离（点「诊断」可看到重合矩形与归属信息）。
 - 布局场景（`layout-format-escape`）支持通过控制面板组合测试：**Dagre (#2205) / ELK (#2332)**、全图/组内布局、`resizeGroup`、分组 `resizable` 与尺寸等。
 
 ## 相关文档

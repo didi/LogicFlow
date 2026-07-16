@@ -4,6 +4,7 @@ import {
   DndPanel,
   DynamicGroup,
   MiniMap,
+  SelectionSelect,
   type ShapeItem,
 } from '@logicflow/extension'
 import { Dagre, ElkLayout } from '@logicflow/layout'
@@ -51,7 +52,15 @@ const lfOptions: Partial<LogicFlow.Options> = {
   allowRotate: false,
   textEdit: true,
   keyboard: { enabled: true },
-  plugins: [DynamicGroup, Control, DndPanel, Dagre, ElkLayout, MiniMap],
+  plugins: [
+    DynamicGroup,
+    Control,
+    DndPanel,
+    Dagre,
+    ElkLayout,
+    MiniMap,
+    SelectionSelect,
+  ],
   pluginsOptions: {
     dynamicGroup: {
       disallowEdgeConnectToGroup: true,

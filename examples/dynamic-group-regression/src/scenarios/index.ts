@@ -11,12 +11,14 @@ import LayoutFormatEscapeControls from '@/components/LayoutFormatEscapeControls'
 import ResizeBoundsControls from '@/components/ResizeBoundsControls'
 import TitleHeaderControls from '@/components/TitleHeaderControls'
 import CascadeDeleteControls from '@/components/CascadeDeleteControls'
+import SelectionCopyControls from '@/components/SelectionCopyControls'
 import { layoutFormatEscapeScenario } from './layoutFormatEscape'
 import {
   resizeBoundsScenario,
   syncResizeBoundsMembership,
 } from './resizeBounds'
 import { titleHeaderScenario } from './titleHeader'
+import { selectionCopyPasteScenario } from './selectionCopyPaste'
 
 function toggleGroup(lf: LogicFlow, groupId: string, collapse?: boolean) {
   const model = lf.getNodeModelById(groupId) as {
@@ -785,6 +787,10 @@ export const scenarios: Scenario[] = [
     ...resizeBoundsScenario,
     Controls: ResizeBoundsControls,
     afterRender: syncResizeBoundsMembership,
+  },
+  {
+    ...selectionCopyPasteScenario,
+    Controls: SelectionCopyControls,
   },
   {
     id: 'resize-undo-twice',

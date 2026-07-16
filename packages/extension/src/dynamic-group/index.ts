@@ -902,7 +902,7 @@ export class DynamicGroup {
     // 使用场景：addElements api 项目内部目前只在快捷键粘贴时使用（此处解决的也应该是粘贴场景的问题）
     lf.addElements = (
       { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
-      distance = 40,
+      distance = 0,
     ): GraphElements => {
       // oldNodeId -> newNodeId 映射 Map
       const nodeIdMap: Record<string, string> = {}
