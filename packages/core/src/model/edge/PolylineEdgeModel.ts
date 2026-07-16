@@ -27,6 +27,9 @@ import Position = LogicFlow.Position
 import AppendConfig = LogicFlow.AppendConfig
 import AnchorConfig = Model.AnchorConfig
 
+const isFinitePoint = (point?: Point): point is Point =>
+  !!point && Number.isFinite(point.x) && Number.isFinite(point.y)
+
 export class PolylineEdgeModel extends BaseEdgeModel {
   modelType = ModelType.POLYLINE_EDGE
   draggingPointList: Point[] = []
@@ -403,7 +406,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         break
     }
     // 如果线段和形状没有交点时startCrossPoint会为undefined导致后续计算报错
-    if (startCrossPoint) {
+    if (isFinitePoint(startCrossPoint)) {
       list[0] = startCrossPoint
     }
     const endPointDirection = segmentDirection(pre, end)!
@@ -453,7 +456,7 @@ export class PolylineEdgeModel extends BaseEdgeModel {
         break
     }
     // 如果线段和形状没有交点时startCrossPoint会为undefined导致后续计算报错
-    if (endCrossPoint) {
+    if (isFinitePoint(endCrossPoint)) {
       list[list.length - 1] = endCrossPoint
     }
     return list

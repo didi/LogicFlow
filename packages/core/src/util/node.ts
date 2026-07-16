@@ -205,17 +205,44 @@ export const getClosestRadiusCenter = (
   direction: Direction,
   node: BaseNodeModel,
 ): Point => {
-  const radiusCenter = getRectRadiusCircle(node)
-  let closestRadiusPoint: RadiusCircle
+  const radiusCenters = getRectRadiusCircle(node)
+  let closestRadiusPoint: RadiusCircle | undefined
   let minDistance = Number.MAX_SAFE_INTEGER
-  radiusCenter.forEach((item) => {
+  radiusCenters.forEach((item) => {
+    // 只有线段所在的水平线或垂直线经过该圆时，才能用圆弧求交点。
+    const canIntersect =
+      direction === SegmentDirection.HORIZONTAL
+        ? Math.abs(point.y - item.y) <= item.r
+        : direction === SegmentDirection.VERTICAL
+          ? Math.abs(point.x - item.x) <= item.r
+          : false
+    if (!canIntersect) return
+
     const radiusDistance = distance(point.x, point.y, item.x, item.y)
     if (radiusDistance < minDistance) {
       minDistance = radiusDistance
       closestRadiusPoint = item
     }
   })
-  return getCrossPointWithCircle(point, direction, closestRadiusPoint!)
+  if (closestRadiusPoint) {
+    return getCrossPointWithCircle(point, direction, closestRadiusPoint)
+  }
+
+  // 不经过任何圆角圆时，线段位于圆角矩形的直边区域。
+  const { x, y, width, height } = node
+  if (direction === SegmentDirection.HORIZONTAL) {
+    return {
+      x: point.x <= x ? x - width / 2 : x + width / 2,
+      y: point.y,
+    }
+  }
+  if (direction === SegmentDirection.VERTICAL) {
+    return {
+      x: point.x,
+      y: point.y <= y ? y - height / 2 : y + height / 2,
+    }
+  }
+  return point
 }
 /* 求点在垂直或者水平方向上与圆形的交点 */
 export const getCrossPointWithCircle = (

@@ -1,6 +1,7 @@
 import {
   getClosestAnchor,
   isInNode,
+  getClosestRadiusCenter,
   getCrossPointWithCircle,
   getCrossPointWithEllipse,
 } from '../../src/util/node'
@@ -47,6 +48,49 @@ describe('util/node', () => {
     expect(getCrossPointWithCircle(position, 'vertical', node)).toEqual({
       x: 0,
       y: 10,
+    })
+  })
+  test('get cross point from the straight side of a rounded rectangle', () => {
+    const node = {
+      x: 650,
+      y: 220,
+      width: 220,
+      height: 160,
+      radius: 24,
+    }
+
+    expect(
+      getClosestRadiusCenter(
+        { x: 546.1114561800017, y: 198 },
+        'horizontal',
+        node,
+      ),
+    ).toEqual({
+      x: 540,
+      y: 198,
+    })
+    expect(
+      getClosestRadiusCenter({ x: 650, y: 198 }, 'vertical', node),
+    ).toEqual({
+      x: 650,
+      y: 140,
+    })
+  })
+  test('keeps using a rounded corner when the line intersects its circle', () => {
+    const node = {
+      x: 650,
+      y: 220,
+      width: 220,
+      height: 160,
+      radius: 24,
+    }
+    const expectedX = 564 - Math.sqrt(24 ** 2 - (148 - 164) ** 2)
+
+    expect(
+      getClosestRadiusCenter({ x: expectedX, y: 148 }, 'horizontal', node),
+    ).toEqual({
+      x: expectedX,
+      y: 148,
     })
   })
   test('get cross point with ellipse', () => {

@@ -120,6 +120,11 @@ export default defineConfig({
           name: '圆角折线',
           component: './edges/custom/curved-polyline',
         },
+        {
+          path: '/custom-edges/rounded-rect-nan',
+          name: '圆角矩形拖线 NaN 回归',
+          component: './edges/custom/rounded-rect-nan',
+        },
       ],
     },
     {
