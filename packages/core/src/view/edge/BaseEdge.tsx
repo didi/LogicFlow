@@ -617,7 +617,7 @@ export abstract class BaseEdge<P extends IProps> extends Component<
   /**
    * 不建议重写，如果要自定义边的形状，请重写getEdge方法。
    */
-  render() {
+  render(): h.JSX.Element | null {
     const {
       model: { isSelected, isHitable, isShowAdjustPoint },
     } = this.props

@@ -15,6 +15,25 @@ import Point = LogicFlow.Point
 const isFinitePoint = (point?: Point): point is Point =>
   !!point && Number.isFinite(point.x) && Number.isFinite(point.y)
 
+const hasFiniteRenderedPoints = (points: string): boolean => {
+  const normalizedPoints = points.trim()
+  if (!normalizedPoints) return true
+
+  return normalizedPoints.split(/\s+/).every((item) => {
+    const coordinates = item.split(',')
+    return (
+      coordinates.length === 2 &&
+      coordinates.every(
+        (coordinate) =>
+          coordinate.trim() !== '' && Number.isFinite(Number(coordinate)),
+      )
+    )
+  })
+}
+
+const isFinitePath = (pointsList: Point[], points: string): boolean =>
+  pointsList.every(isFinitePoint) && hasFiniteRenderedPoints(points)
+
 type AppendAttributesType = {
   d: string
   fill: string
@@ -115,11 +134,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
   getEdge() {
     const { model } = this.props
     const { points, pointsList, isAnimation, arrowConfig, properties } = model
-    const renderedPointsList = points2PointsList(points)
-    if (
-      !pointsList.every(isFinitePoint) ||
-      !renderedPointsList.every(isFinitePoint)
-    ) {
+    if (!isFinitePath(pointsList, points)) {
       return null
     }
     const style = model.getEdgeStyle()
@@ -166,6 +181,14 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
           : {})}
       />
     )
+  }
+
+  render() {
+    const { points, pointsList } = this.props.model
+    if (!isFinitePath(pointsList, points)) {
+      return null
+    }
+    return super.render()
   }
 
   /**

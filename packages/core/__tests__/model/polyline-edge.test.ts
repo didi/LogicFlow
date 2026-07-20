@@ -303,6 +303,34 @@ describe('PolylineEdge invalid point rendering', () => {
       },
     })
 
+  const renderEdge = (pointsList: LogicFlow.Point[], points: string) => {
+    const edge = Object.create(PolylineEdge.prototype)
+    edge.props = {
+      model: {
+        points,
+        pointsList,
+        isSelected: false,
+        isHitable: true,
+        isShowAdjustPoint: false,
+        isAnimation: false,
+        draggable: false,
+        arrowConfig: {},
+        properties: {},
+        getArrowStyle: () => ({}),
+        getEdgeStyle: () => ({}),
+        getEdgeAnimationStyle: () => ({}),
+      },
+      graphModel: {
+        editConfigModel: {
+          edgeTextMode: 'none',
+          adjustEdge: false,
+          adjustEdgeMiddle: false,
+        },
+      },
+    }
+    return edge.render()
+  }
+
   test('keeps a finite single-point path safe but invisible', () => {
     const shape = renderShape([{ x: 100, y: 100 }], '100,100')
 
@@ -335,5 +363,47 @@ describe('PolylineEdge invalid point rendering', () => {
     )
 
     expect(shape).toBeNull()
+  })
+
+  test('accepts finite rendered points separated by repeated whitespace', () => {
+    const shape = renderShape(
+      [
+        { x: 100, y: 100 },
+        { x: 200, y: 200 },
+      ],
+      '100,100  \n\t200,200',
+    )
+
+    expect(shape).not.toBeNull()
+  })
+
+  test('skips a rendered point with an extra coordinate', () => {
+    const shape = renderShape(
+      [
+        { x: 100, y: 100 },
+        { x: 200, y: 200 },
+      ],
+      '100,100,NaN 200,200',
+    )
+
+    expect(shape).toBeNull()
+  })
+
+  test('skips the entire edge component for a non-finite path', () => {
+    const edge = renderEdge(
+      [
+        { x: 100, y: 100 },
+        { x: Number.NaN, y: 200 },
+      ],
+      '100,100 NaN,200',
+    )
+
+    expect(edge).toBeNull()
+  })
+
+  test('keeps the edge component for a finite single-point path', () => {
+    const edge = renderEdge([{ x: 100, y: 100 }], '100,100')
+
+    expect(edge).not.toBeNull()
   })
 })
