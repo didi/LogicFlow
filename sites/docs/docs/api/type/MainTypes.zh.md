@@ -586,7 +586,7 @@ getOuterGAttributes(): LogicFlow.DomAttributes {
 | startPoint     | Point (可选)                | 一个 `Point` 类型的对象，定义边的起始坐标。可以用来手动设置边的起始位置。 |
 | endPoint       | Point (可选)                | 一个 `Point` 类型的对象，定义边的结束坐标。可以用来手动设置边的结束位置。 |
 | text           | string \| TextConfig (可选) | 指定要在边上显示的文本。                                                  |
-| pointsList     | Point[] (可选)              | 一个 `Point` 对象数组，定义边上的额外点，允许创建更复杂的形状。           |
+| pointsList     | Point[] (可选)              | 折线的完整路径点数组，包含起点、终点以及两者之间的拐点。                  |
 | zIndex         | number (可选)               | 确定边相对于其他元素的堆叠顺序。较高的值会使边渲染在较低值的元素之上。    |
 | properties     | PropertiesType (可选)       | 一个 `PropertiesType` 类型的对象，允许为边关联额外的自定义属性。          |
 
@@ -601,7 +601,9 @@ getOuterGAttributes(): LogicFlow.DomAttributes {
 | text       | TextConfig \| string | 包含与边相关的文本。可以是定义文本属性（如位置和样式）的 `TextConfig` 对象，也可以是简单的字符串。 |
 | startPoint | Point                | 表示边的起点。使用包含 x 和 y 坐标的 `Point` 类型定义。                                            |
 | endPoint   | Point                | 表示边的终点，也使用 `Point` 类型定义。                                                            |
-| pointsList | Point[]              | 表示折线的拐点路径。                                                                               |
+| pointsList | Point[]              | 折线的完整路径点数组，包含起点、终点以及两者之间的拐点。                                           |
+
+> **异常路径处理：** 未传 `pointsList` 或传入空数组时，LogicFlow 会自动寻路。非空路径会被保留；路径最终只有一个有限点时会告警且没有可见线段，包含非有限或缺失坐标时会告警并跳过当前边的线条渲染，不会影响图中其他元素。旧版本的圆角折线可能在单点路径上抛出异常。
 
 以下是一个定义edgeData的例子：
 ```typescript
@@ -616,15 +618,15 @@ const edge: EdgeData = {
   startPoint: { x: 100, y: 100 },
   endPoint: { x: 300, y: 200 },
   pointsList: [
-    { x: 150, y: 150 },
-    { x: 250, y: 150 },
-    { x: 150, y: 175 },
-    { x: 250, y: 175 },
+    { x: 100, y: 100 },
+    { x: 200, y: 100 },
+    { x: 200, y: 200 },
+    { x: 300, y: 200 },
   ],
 };
 ```
 
-在这个示例中，定义了一条具有唯一 ID、类型、相关文本和指定起点和终点的边，并通过`pointsList`参数约定了折线的路径是Z型。
+在这个示例中，`pointsList` 从起点开始，经过两个拐点，到终点结束，定义了一条完整的折线路径。
 
 ## 插件相关
 
@@ -864,4 +866,3 @@ const customDefinition: DefinitionConfigType[] = [
   }
 ]
 ```
-

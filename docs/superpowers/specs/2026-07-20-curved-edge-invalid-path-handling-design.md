@@ -35,7 +35,7 @@
 | 2 个有限点 | 按现有规则正交化并保留 | 直线 | 无 |
 | 3 个及以上有限点 | 按现有规则正交化并保留 | 折线或圆角折线 | 无 |
 | 正交化后收缩为 1 个有限点 | 保留收缩结果，不重新寻路 | 无可见线段，不抛异常 | 一次 |
-| 任一点包含 `NaN` 或 `Infinity` | 保留原始输入，不进行正交化 | 跳过线条渲染 | 一次 |
+| 任一点包含非有限或缺失坐标 | 保留 Model 实际收到的数据，不进行正交化 | 跳过线条渲染 | 一次 |
 
 `pointsList` 未传或为空数组仍表示没有固定路径，沿用当前自动寻路行为。非空路径则被视为调用方明确提供的数据，即使它无法形成线段，也不会被 Core 擅自替换。
 
@@ -91,7 +91,7 @@ model.points / model.pointsList
 
 1. 未传 `pointsList` 或长度为 `0` 时，不告警并调用 `updatePoints()`。
 2. 非空路径先检查每个点的 `x`、`y` 是否为有限数字。
-3. 存在非有限坐标时，保留原始 `pointsList`，不调用 `orthogonalizePath()`，输出一次告警。
+3. 存在非有限或缺失坐标时，保留 Model 实际收到的 `pointsList`，不调用 `orthogonalizePath()`，输出一次告警。
 4. 全部坐标有限时，调用现有 `orthogonalizePath()`。
 5. 正交化结果只有一个点时，保留该结果，输出一次告警。
 6. 将最终保留的数据同步到 `pointsList` 和 `points`，不调用 `updatePoints()`。
@@ -116,7 +116,9 @@ model.points / model.pointsList
 
 ### 数据保留
 
-`getData()` 继续返回模型中保存的 `pointsList`。单点或非有限数据不会在序列化时被替换，调用方仍可检查、修复并重新提交原始路径。
+`getData()` 继续返回模型中保存的 `pointsList`。单点或异常坐标不会再被正交化或自动寻路替换，调用方仍可检查、修复并重新提交该路径。
+
+需要区分 LogicFlow 的公开加载入口和 Model 输入边界：`LogicFlow.render()` 会先通过 JSON 序列化标准化图数据，因此调用方传入的 `NaN` 或 `Infinity` 会在创建 Model 前变成 `null`；Model 会保留它实际收到的 `null`。直接调用 `updatePath()` 时没有这一步，`NaN` 或 `Infinity` 会原样保留。两种入口都会被识别为异常坐标、输出告警并跳过线条渲染。
 
 ## View 与路径函数处理
 

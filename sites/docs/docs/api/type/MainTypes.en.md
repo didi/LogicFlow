@@ -489,7 +489,7 @@ SVG attributes returned from `getOuterGAttributes`.
 | startPoint | Point (optional) | Manual start coordinate. |
 | endPoint | Point (optional) | Manual end coordinate. |
 | text | string \| TextConfig (optional) | Edge label. |
-| pointsList | Point[] (optional) | Polyline bend points. |
+| pointsList | Point[] (optional) | Complete polyline path, including its start, end, and intermediate bend points. |
 | zIndex | number (optional) | Stack order. |
 | properties | PropertiesType (optional) | Custom properties. |
 
@@ -504,7 +504,9 @@ Runtime edge snapshot extending `EdgeConfig` with resolved geometry.
 | text | TextConfig \| string | Label payload. |
 | startPoint | Point | Resolved start. |
 | endPoint | Point | Resolved end. |
-| pointsList | Point[] | Bend points for polylines. |
+| pointsList | Point[] | Complete polyline path, including its start, end, and intermediate bend points. |
+
+> **Invalid path handling:** LogicFlow calculates a route when `pointsList` is omitted or empty. A non-empty path is preserved. A path that resolves to one finite point emits a warning and has no visible segment. A path with non-finite or missing coordinates emits a warning and skips rendering that edge line without affecting other graph elements. Older versions of the curved edge could throw for a single-point path.
 
 ## **Plugin-related types** {#plugin-related}
 
