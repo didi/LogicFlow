@@ -506,7 +506,7 @@ Runtime edge snapshot extending `EdgeConfig` with resolved geometry.
 | endPoint | Point | Resolved end. |
 | pointsList | Point[] | Complete polyline path, including its start, end, and intermediate bend points. |
 
-> **Invalid path handling:** LogicFlow calculates a route when `pointsList` is omitted or empty. A non-empty path is preserved. A path that resolves to one finite point emits a warning and has no visible segment. A path with non-finite or missing coordinates emits a warning and skips rendering that edge line without affecting other graph elements. Older versions of the curved edge could throw for a single-point path.
+> **Invalid path handling:** LogicFlow calculates a route when `pointsList` is omitted or empty. A non-empty path is preserved. A path that resolves to one finite point emits a warning and has no visible segment. A path with non-finite or missing coordinates emits a warning and skips rendering that edge without affecting other graph elements. Older versions of the curved edge could throw for a single-point path.
 
 ## **Plugin-related types** {#plugin-related}
 

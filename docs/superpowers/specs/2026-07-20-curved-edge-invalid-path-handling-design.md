@@ -35,7 +35,7 @@
 | 2 个有限点 | 按现有规则正交化并保留 | 直线 | 无 |
 | 3 个及以上有限点 | 按现有规则正交化并保留 | 折线或圆角折线 | 无 |
 | 正交化后收缩为 1 个有限点 | 保留收缩结果，不重新寻路 | 无可见线段，不抛异常 | 一次 |
-| 任一点包含非有限或缺失坐标 | 保留 Model 实际收到的数据，不进行正交化 | 跳过线条渲染 | 一次 |
+| 任一点包含非有限或缺失坐标 | 保留 Model 实际收到的数据，不进行正交化 | 跳过整个 View | 一次 |
 
 `pointsList` 未传或为空数组仍表示没有固定路径，沿用当前自动寻路行为。非空路径则被视为调用方明确提供的数据，即使它无法形成线段，也不会被 Core 擅自替换。
 
@@ -72,7 +72,7 @@ PolylineEdgeModel 输入分类与告警
         ▼
 model.points / model.pointsList
         │
-        ├─ PolylineEdge ───────────► 有限点按原数据交给 SVG；非有限点返回 null
+        ├─ PolylineEdge ───────────► 有限点按原数据交给 SVG；非有限点跳过整个组件
         │
         └─ CurvedEdge ─────────────► 安全解析并调用 getCurvedEdgePath()
                                              │
@@ -126,11 +126,11 @@ model.points / model.pointsList
 
 单个有限点可以安全传给 SVG `<polyline>`。它不会形成可见线段，但也不会抛出 JavaScript 异常。
 
-当 `model.pointsList` 中存在非有限坐标时，`PolylineEdge.getEdge()` 返回 `null`，不再依赖不同浏览器对非法 SVG `points` 属性的容错行为。
+当 `model.pointsList` 或实际渲染使用的 `model.points` 中存在非有限坐标时，`PolylineEdge.render()` 返回 `null`，不再生成主路径、透明点击热区、箭头或文本，也不依赖不同浏览器对非法 SVG 属性的容错行为。`getEdge()` 自身保留相同校验，以保证被扩展或测试代码直接调用时同样安全。
 
 ### CurvedEdge
 
-`CurvedEdge.getEdge()` 将空 `model.points` 解析为空点集，而不是 `[0]`。解析得到的任意点包含非有限坐标时直接返回 `null`。
+`CurvedEdge.getEdge()` 将空 `model.points` 解析为空点集，而不是 `[0]`。解析得到的任意点包含非有限坐标、缺少坐标或带有多余坐标时直接返回 `null`。
 
 对有限点调用 `getCurvedEdgePath()`：
 
@@ -145,7 +145,7 @@ model.points / model.pointsList
 
 `getCurvedEdgePath()` 是导出的纯函数，可能被 View 以外的代码直接调用。因此函数自身也校验点结构和坐标有限性：
 
-- 空数组和非法点集返回空字符串。
+- 空数组和非法点集返回空字符串；每个 tuple 必须恰好包含 `x`、`y` 两个有限坐标。
 - 单点返回合法的 `M` 命令。
 - 不打印告警，不访问不存在的数组项。
 
@@ -255,7 +255,7 @@ pnpm --dir examples/feature-examples dev
 ### 风险
 
 - 使用单点路径作为业务信号的调用方会看到新的告警，但数据不会被修改。
-- 返回 `null` 只跳过边的线条；边模型仍参与数据查询和后续更新。
+- 返回 `null` 跳过当前边的整个 View；边模型仍参与数据查询和后续更新。
 - 多个重复点可能在正交化后收缩为单点，必须在正交化之后再次判断长度。
 - 必须先拦截非有限输入再正交化，避免错误坐标扩散。
 
