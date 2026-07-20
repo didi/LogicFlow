@@ -1,6 +1,66 @@
-import { getCurvedEdgePath } from '../../../src/materials/curved-edge'
+import {
+  CurvedEdge,
+  getCurvedEdgePath,
+} from '../../../src/materials/curved-edge'
 
 describe('test curved edge ', () => {
+  const renderCurvedEdge = (points: string) =>
+    (CurvedEdge.prototype.getEdge as any).call({
+      props: {
+        model: {
+          points,
+          isAnimation: false,
+          arrowConfig: {},
+          radius: 5,
+          getEdgeStyle: () => ({}),
+          getEdgeAnimationStyle: () => ({}),
+        },
+      },
+    })
+
+  test('handles empty and single-point paths without throwing', () => {
+    expect(getCurvedEdgePath([], 5)).toBe('')
+    expect(getCurvedEdgePath([[100, 100]], 5)).toBe('M100 100')
+  })
+
+  test.each([
+    [
+      'NaN',
+      [
+        [100, 100],
+        [Number.NaN, 200],
+      ],
+    ],
+    [
+      'Infinity',
+      [
+        [100, 100],
+        [Number.POSITIVE_INFINITY, 200],
+      ],
+    ],
+    ['a missing coordinate', [[100, 100], [200]]],
+  ])('rejects %s path data', (_, points) => {
+    expect(getCurvedEdgePath(points, 5)).toBe('')
+  })
+
+  test('skips an empty model path', () => {
+    expect(renderCurvedEdge('')).toBeNull()
+  })
+
+  test('renders a finite single point as a move command', () => {
+    const path = renderCurvedEdge('100,100')
+
+    expect(path.props.d).toBe('M100 100')
+  })
+
+  test.each([
+    ['NaN', '100,100 NaN,200'],
+    ['Infinity', '100,100 Infinity,200'],
+    ['a missing collinear coordinate', '100,100 100 100,200'],
+  ])('skips a model path containing %s', (_, points) => {
+    expect(renderCurvedEdge(points)).toBeNull()
+  })
+
   test('path calculation', () => {
     const radius = 5
 

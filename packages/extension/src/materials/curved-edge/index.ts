@@ -6,6 +6,12 @@ type DirectionType = 't' | 'b' | 'l' | 'r' | ''
 // 圆弧所在象限：tl=左上，tr=右上，bl=左下，br=右下，'-' 表示不需要圆弧
 type ArcQuadrantType = 'tl' | 'tr' | 'bl' | 'br' | '-'
 
+const isFinitePointTuple = (point: number[]): point is PointTuple =>
+  Array.isArray(point) &&
+  point.length >= 2 &&
+  Number.isFinite(point[0]) &&
+  Number.isFinite(point[1])
+
 // 方向组合到圆弧象限的映射。
 // key 由进入方向(dir1)和离开方向(dir2)拼接，例如 'tr' 表示从上(t)到右(r)的拐角。
 // 通过该映射确定在拐点处应该绘制的圆弧象限，用于计算中间控制点。
@@ -164,12 +170,18 @@ function getPartialPath(
 }
 
 function getCurvedEdgePath(points: number[][], radius: number): string {
+  if (points.length === 0 || !points.every(isFinitePointTuple)) {
+    return ''
+  }
+
   let i = 0
-  let d = ''
+  let d = `M${points[i][0]} ${points[i++][1]}`
+  if (points.length === 1) {
+    return d
+  }
   if (points.length === 2) {
-    d += `M${points[i][0]} ${points[i++][1]} L ${points[i][0]} ${points[i][1]}`
+    d += ` L ${points[i][0]} ${points[i][1]}`
   } else {
-    d += `M${points[i][0]} ${points[i++][1]}`
     for (; i + 1 < points.length; ) {
       const prev = points[i - 1] as PointTuple
       const cur = points[i] as PointTuple
@@ -182,15 +194,26 @@ function getCurvedEdgePath(points: number[][], radius: number): string {
 }
 
 class CurvedEdge extends PolylineEdge {
-  getEdge(): h.JSX.Element {
+  getEdge(): h.JSX.Element | null {
     const { model } = this.props
     const { points: pointsStr, isAnimation, arrowConfig, radius = 5 } = model
     const style = model.getEdgeStyle()
     const animationStyle = model.getEdgeAnimationStyle()
-    const points = pointFilter(
-      pointsStr.split(' ').map((p) => p.split(',').map((a) => +a)),
-    )
+    if (!pointsStr.trim()) {
+      return null
+    }
+    const parsedPoints = pointsStr
+      .trim()
+      .split(/\s+/)
+      .map((p) => p.split(',').map((a) => +a))
+    if (!parsedPoints.every(isFinitePointTuple)) {
+      return null
+    }
+    const points = pointFilter(parsedPoints)
     const d = getCurvedEdgePath(points, radius as number)
+    if (!d) {
+      return null
+    }
     const attrs = {
       style: isAnimation ? animationStyle : {},
       ...style,
