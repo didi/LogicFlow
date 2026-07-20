@@ -288,7 +288,11 @@ describe('PolylineEdgeModel invalid pointsList', () => {
 })
 
 describe('PolylineEdge invalid point rendering', () => {
-  const renderShape = (pointsList: LogicFlow.Point[], points: string) =>
+  const renderShape = (
+    pointsList: LogicFlow.Point[],
+    points: string,
+    properties = {},
+  ) =>
     (PolylineEdge.prototype.getEdge as any).call({
       props: {
         model: {
@@ -296,7 +300,7 @@ describe('PolylineEdge invalid point rendering', () => {
           pointsList,
           isAnimation: false,
           arrowConfig: {},
-          properties: {},
+          properties,
           getEdgeStyle: () => ({}),
           getEdgeAnimationStyle: () => ({}),
         },
@@ -375,6 +379,23 @@ describe('PolylineEdge invalid point rendering', () => {
     )
 
     expect(shape).not.toBeNull()
+  })
+
+  test('rounds finite rendered points separated by repeated whitespace', () => {
+    const pointsList = [
+      { x: 100, y: 100 },
+      { x: 100, y: 200 },
+      { x: 200, y: 200 },
+    ]
+    const shape = renderShape(pointsList, '100,100  \n\t100,200 200,200', {
+      radius: 5,
+    })
+    const cleanShape = renderShape(pointsList, '100,100 100,200 200,200', {
+      radius: 5,
+    })
+
+    expect(shape).not.toBeNull()
+    expect(shape.props.points).toBe(cleanShape.props.points)
   })
 
   test('skips a rendered point with an extra coordinate', () => {

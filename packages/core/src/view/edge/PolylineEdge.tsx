@@ -15,24 +15,32 @@ import Point = LogicFlow.Point
 const isFinitePoint = (point?: Point): point is Point =>
   !!point && Number.isFinite(point.x) && Number.isFinite(point.y)
 
-const hasFiniteRenderedPoints = (points: string): boolean => {
+const getFiniteRenderedPoints = (points: string): Point[] | null => {
   const normalizedPoints = points.trim()
-  if (!normalizedPoints) return true
+  if (!normalizedPoints) return []
 
-  return normalizedPoints.split(/\s+/).every((item) => {
+  const parsedPoints: Point[] = []
+  for (const item of normalizedPoints.split(/\s+/)) {
     const coordinates = item.split(',')
-    return (
-      coordinates.length === 2 &&
-      coordinates.every(
+    if (
+      coordinates.length !== 2 ||
+      coordinates.some(
         (coordinate) =>
-          coordinate.trim() !== '' && Number.isFinite(Number(coordinate)),
+          coordinate.trim() === '' || !Number.isFinite(Number(coordinate)),
       )
-    )
-  })
+    ) {
+      return null
+    }
+    parsedPoints.push({
+      x: Number(coordinates[0]),
+      y: Number(coordinates[1]),
+    })
+  }
+  return parsedPoints
 }
 
 const isFinitePath = (pointsList: Point[], points: string): boolean =>
-  pointsList.every(isFinitePoint) && hasFiniteRenderedPoints(points)
+  pointsList.every(isFinitePoint) && getFiniteRenderedPoints(points) !== null
 
 type AppendAttributesType = {
   d: string
@@ -134,7 +142,8 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
   getEdge() {
     const { model } = this.props
     const { points, pointsList, isAnimation, arrowConfig, properties } = model
-    if (!isFinitePath(pointsList, points)) {
+    const renderedPointsList = getFiniteRenderedPoints(points)
+    if (!pointsList.every(isFinitePoint) || !renderedPointsList) {
       return null
     }
     const style = model.getEdgeStyle()
@@ -155,8 +164,7 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
       0) as number
     const roundedPointsStr = (() => {
       if (!radius || radius <= 0) return points
-      const list = points2PointsList(points)
-      const rounded = generateRoundedCorners(list, radius, false)
+      const rounded = generateRoundedCorners(renderedPointsList, radius, false)
       return rounded.map((p) => `${p.x},${p.y}`).join(' ')
     })()
 
