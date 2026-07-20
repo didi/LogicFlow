@@ -8,7 +8,7 @@ type ArcQuadrantType = 'tl' | 'tr' | 'bl' | 'br' | '-'
 
 const isFinitePointTuple = (point: number[]): point is PointTuple =>
   Array.isArray(point) &&
-  point.length >= 2 &&
+  point.length === 2 &&
   Number.isFinite(point[0]) &&
   Number.isFinite(point[1])
 

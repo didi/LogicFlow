@@ -39,6 +39,13 @@ describe('test curved edge ', () => {
       ],
     ],
     ['a missing coordinate', [[100, 100], [200]]],
+    [
+      'an extra coordinate',
+      [
+        [100, 100, Number.NaN],
+        [200, 200],
+      ],
+    ],
   ])('rejects %s path data', (_, points) => {
     expect(getCurvedEdgePath(points, 5)).toBe('')
   })
@@ -57,6 +64,8 @@ describe('test curved edge ', () => {
     ['NaN', '100,100 NaN,200'],
     ['Infinity', '100,100 Infinity,200'],
     ['a missing collinear coordinate', '100,100 100 100,200'],
+    ['an extra coordinate', '100,100,NaN 200,200'],
+    ['a trailing comma', '100,100, 200,200'],
   ])('skips a model path containing %s', (_, points) => {
     expect(renderCurvedEdge(points)).toBeNull()
   })
