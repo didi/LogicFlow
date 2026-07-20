@@ -121,6 +121,11 @@ export default defineConfig({
           component: './edges/custom/curved-polyline',
         },
         {
+          path: '/custom-edges/invalid-curved-edge',
+          name: '圆角折线异常路径隔离',
+          component: './edges/custom/invalid-curved-edge',
+        },
+        {
           path: '/custom-edges/rounded-rect-nan',
           name: '圆角矩形拖线 NaN 回归',
           component: './edges/custom/rounded-rect-nan',
