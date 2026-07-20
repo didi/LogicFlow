@@ -1,4 +1,9 @@
-import { LogicFlow, PolylineEdgeModel, SegmentDirection } from '../../src'
+import {
+  LogicFlow,
+  PolylineEdge,
+  PolylineEdgeModel,
+  SegmentDirection,
+} from '../../src'
 
 const createLogicFlow = () => {
   const container = document.createElement('div')
@@ -123,5 +128,212 @@ describe('PolylineEdgeModel rounded rectangle intersections', () => {
     ])
 
     expect(points[points.length - 1]).toEqual({ x: 450, y: 220 })
+  })
+})
+
+const graphData = {
+  nodes: [
+    { id: 'source', type: 'rect', x: 100, y: 100 },
+    { id: 'target', type: 'rect', x: 500, y: 180 },
+  ],
+}
+
+const renderPolyline = (pointsList?: LogicFlow.Point[]) => {
+  const lf = createLogicFlow()
+  lf.render({
+    ...graphData,
+    edges: [
+      {
+        id: 'test-edge',
+        type: 'polyline',
+        sourceNodeId: 'source',
+        targetNodeId: 'target',
+        ...(pointsList === undefined ? {} : { pointsList }),
+      },
+    ],
+  })
+  return lf.getEdgeModelById('test-edge') as PolylineEdgeModel
+}
+
+describe('PolylineEdgeModel invalid pointsList', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  test.each([
+    ['omitted', undefined],
+    ['empty', []],
+  ])('automatically routes an %s pointsList without warning', (_, input) => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline(input as LogicFlow.Point[] | undefined)
+
+    expect(edge.pointsList.length).toBeGreaterThanOrEqual(2)
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test.each([
+    ['omitted', undefined],
+    ['empty', []],
+  ])(
+    'does not warn when an automatically routed %s pointsList resolves to one point',
+    (_, input) => {
+      jest
+        .spyOn(PolylineEdgeModel.prototype, 'updatePoints')
+        .mockImplementation(function (this: PolylineEdgeModel) {
+          this.pointsList = [{ x: 300, y: 140 }]
+          this.points = '300,140'
+        })
+      const warn = jest.spyOn(console, 'warn').mockImplementation()
+
+      renderPolyline(input as LogicFlow.Point[] | undefined)
+
+      expect(warn).not.toHaveBeenCalled()
+    },
+  )
+
+  test('keeps and warns for a single-point path during initialization', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const point = { x: 300, y: 140 }
+    const edge = renderPolyline([point])
+
+    expect(edge.pointsList).toEqual([point])
+    expect(edge.points).toBe('300,140')
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('Edge "test-edge"'),
+    )
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('resolves to one point'),
+    )
+  })
+
+  test('keeps and warns for a single-point update', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline()
+    const point = { x: 320, y: 160 }
+
+    edge.updatePath([point])
+
+    expect(edge.pointsList).toEqual([point])
+    expect(edge.points).toBe('320,160')
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('resolves to one point'),
+    )
+  })
+
+  test('automatically routes an empty path update without warning', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline()
+
+    edge.updatePath([])
+
+    expect(edge.pointsList.length).toBeGreaterThanOrEqual(2)
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test('warns when repeated points collapse to a single point', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline()
+    const point = { x: 320, y: 160 }
+
+    edge.updatePath([point, { ...point }])
+
+    expect(edge.pointsList).toEqual([point])
+    expect(edge.points).toBe('320,160')
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('resolves to one point'),
+    )
+  })
+
+  test.each([
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+  ])('keeps and warns for a %s path update without orthogonalizing', (_, x) => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline()
+    const invalidPoints = [
+      { x: 200, y: 100 },
+      { x, y: 180 },
+    ]
+
+    edge.updatePath(invalidPoints)
+
+    expect(edge.pointsList).toEqual(invalidPoints)
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('non-finite coordinates'),
+    )
+  })
+
+  test('warns and avoids orthogonalizing non-finite render data', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation()
+    const edge = renderPolyline([
+      { x: 200, y: 100 },
+      { x: Number.NaN, y: 180 },
+    ])
+
+    // LogicFlow normalizes graph data through JSON before model creation,
+    // which converts NaN to null. The model must preserve that received path.
+    expect(edge.pointsList).toEqual([
+      { x: 200, y: 100 },
+      { x: null, y: 180 },
+    ])
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('non-finite coordinates'),
+    )
+  })
+})
+
+describe('PolylineEdge invalid point rendering', () => {
+  const renderShape = (pointsList: LogicFlow.Point[], points: string) =>
+    (PolylineEdge.prototype.getEdge as any).call({
+      props: {
+        model: {
+          points,
+          pointsList,
+          isAnimation: false,
+          arrowConfig: {},
+          properties: {},
+          getEdgeStyle: () => ({}),
+          getEdgeAnimationStyle: () => ({}),
+        },
+      },
+    })
+
+  test('keeps a finite single-point path safe but invisible', () => {
+    const shape = renderShape([{ x: 100, y: 100 }], '100,100')
+
+    expect(shape).not.toBeNull()
+    expect(shape.props.points).toBe('100,100')
+  })
+
+  test.each([
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+  ])('skips a path containing %s', (_, x) => {
+    const shape = renderShape(
+      [
+        { x: 100, y: 100 },
+        { x, y: 200 },
+      ],
+      `100,100 ${x},200`,
+    )
+
+    expect(shape).toBeNull()
+  })
+
+  test('skips non-finite rendered points even if pointsList is still finite', () => {
+    const shape = renderShape(
+      [
+        { x: 100, y: 100 },
+        { x: 200, y: 200 },
+      ],
+      '100,100 NaN,200',
+    )
+
+    expect(shape).toBeNull()
   })
 })

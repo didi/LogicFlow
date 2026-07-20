@@ -44,12 +44,17 @@ export class PolylineEdgeModel extends BaseEdgeModel {
       typeof providedOffset === 'number'
         ? providedOffset
         : this.getDefaultOffset()
-    if (data.pointsList) {
-      const corrected = this.orthogonalizePath(data.pointsList)
+    const providedPointsList = data.pointsList
+    const hasProvidedPath = !!providedPointsList?.length
+    if (providedPointsList?.length) {
+      const corrected = this.normalizePath(providedPointsList)
       ;(data as any).pointsList = corrected
       this.pointsList = corrected
     }
     super.initEdgeData(data)
+    if (hasProvidedPath) {
+      this.warnInvalidPath(this.pointsList)
+    }
   }
 
   setAttributes() {
@@ -57,6 +62,24 @@ export class PolylineEdgeModel extends BaseEdgeModel {
     if (newOffset && newOffset !== this.offset) {
       this.offset = newOffset
       this.updatePoints()
+    }
+  }
+
+  private normalizePath(points: Point[]): Point[] {
+    return points.every(isFinitePoint) ? this.orthogonalizePath(points) : points
+  }
+
+  private warnInvalidPath(points: Point[]): void {
+    if (!points.length) return
+
+    if (!points.every(isFinitePoint)) {
+      console.warn(
+        `[LogicFlow] Edge "${this.id}" received a pointsList with non-finite coordinates. The path is kept, but the edge will be skipped during rendering.`,
+      )
+    } else if (points.length === 1) {
+      console.warn(
+        `[LogicFlow] Edge "${this.id}" received a pointsList that resolves to one point. The path is kept, but no visible segment can be rendered.`,
+      )
     }
   }
 
@@ -463,8 +486,14 @@ export class PolylineEdgeModel extends BaseEdgeModel {
   }
 
   updatePath(pointList: Point[]) {
-    this.pointsList = this.orthogonalizePath(pointList)
+    if (pointList.length === 0) {
+      this.updatePoints()
+      return
+    }
+
+    this.pointsList = this.normalizePath(pointList)
     this.points = this.getPath(this.pointsList)
+    this.warnInvalidPath(this.pointsList)
   }
 
   getData() {

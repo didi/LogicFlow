@@ -12,6 +12,9 @@ import ArrowInfo = LogicFlow.ArrowInfo
 import AppendConfig = LogicFlow.AppendConfig
 import Point = LogicFlow.Point
 
+const isFinitePoint = (point?: Point): point is Point =>
+  !!point && Number.isFinite(point.x) && Number.isFinite(point.y)
+
 type AppendAttributesType = {
   d: string
   fill: string
@@ -111,7 +114,14 @@ export class PolylineEdge extends BaseEdge<IPolylineEdgeProps> {
    */
   getEdge() {
     const { model } = this.props
-    const { points, isAnimation, arrowConfig, properties } = model
+    const { points, pointsList, isAnimation, arrowConfig, properties } = model
+    const renderedPointsList = points2PointsList(points)
+    if (
+      !pointsList.every(isFinitePoint) ||
+      !renderedPointsList.every(isFinitePoint)
+    ) {
+      return null
+    }
     const style = model.getEdgeStyle()
     const animationStyle = model.getEdgeAnimationStyle()
     const {
