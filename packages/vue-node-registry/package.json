@@ -34,7 +34,7 @@
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
-    "@logicflow/core": "workspace:*",
+    "@logicflow/core": "workspace:^",
     "@vue/composition-api": "^1.0.0-rc.10",
     "vue": "^2.0.0 || >=3.0.0"
   },

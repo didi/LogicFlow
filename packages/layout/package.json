@@ -39,7 +39,7 @@
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@logicflow/core": "workspace:*"
+    "@logicflow/core": "workspace:^"
   },
   "dependencies": {
     "dagre": "^0.8.5",

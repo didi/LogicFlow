@@ -32,7 +32,7 @@
   "author": "Logicflow-Team",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@logicflow/core": "workspace:*",
+    "@logicflow/core": "workspace:^",
     "react": ">= 18.0.0",
     "react-dom": ">= 18.0.0"
   },
