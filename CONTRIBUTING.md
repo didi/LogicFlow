@@ -152,14 +152,17 @@ LogicFlow 基于 [semver](http://semver.org/lang/zh-CN/) 语义化版本号进�
 **Prerelease（内网测试）：**
 
 ```sh
-pnpm publish:pre        # 发布 alpha 包（默认）
-pnpm publish:pre beta   # 发布 beta 包
+pnpm publish:pre        # 生成并发布 alpha 包（默认）
+pnpm publish:pre beta   # 生成并发布 beta 包
 ```
 
-脚本自动完成：测试 → 构建 → 生成快照版本号 → 发布到 npm → 还原 package.json。`.changeset/*.md` 文件不会被消费，继续累积。
+首次运行前需要提交所有工作区改动。脚本自动完成：测试 → 进入 Changesets prerelease 模式 → 生成数字预发布版本（例如 `2.2.5-alpha.0`）→ 构建 → 使用对应 dist-tag 发布到 npm。
+
+版本、CHANGELOG 和 `.changeset/pre.json` 会保留在工作区，发布成功后需要检查并提交。如果构建或发布中途失败，修复问题后重新运行同一条命令；脚本会复用当前 prerelease 版本，不会再次递增版本号。连续发布新的 alpha/beta 前，先提交新的 changeset。
 
 **Stable Release（对外正式发布）：**
 
-1. `pnpm changeset version` — 消费所有累积的 changeset 文件，生成完整 CHANGELOG，更新版本号
-2. `git add . && git commit -m "chore: version packages"`
-3. `pnpm publish:only` — 发布到 npm
+1. 如果仓库正处于 prerelease 模式，先运行 `pnpm exec changeset pre exit`
+2. `pnpm changeset version` — 消费所有累积的 changeset 文件，生成完整 CHANGELOG，更新版本号
+3. `git add . && git commit -m "chore: version packages"`
+4. `pnpm publish:only` — 发布到 npm

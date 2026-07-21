@@ -1,52 +1,118 @@
 #!/usr/bin/env node
 /* eslint-env node */
 /**
- * Publish a prerelease (snapshot) version to npm.
+ * Version, build, and publish a numeric Changesets prerelease.
  *
  * Usage:
- *   pnpm publish:pre          # tag = alpha (default)
- *   pnpm publish:pre beta     # tag = beta
+ *   pnpm publish:pre          # alpha (default)
+ *   pnpm publish:pre beta     # beta
  *
- * Design:
- *   - Runs tests and builds before publishing.
- *   - Uses `changeset version --snapshot <tag>` to bump package versions to
- *     ephemeral snapshot versions (e.g. 2.3.0-alpha-20260705-abc123).
- *   - Does NOT consume .changeset/*.md files, so they accumulate until the
- *     stable release where `changeset version` is run and the full CHANGELOG
- *     is generated at once.
- *   - Restores package.json files after publishing (snapshot versions should
- *     never be committed).
+ * The generated release state is intentionally kept in the worktree so it can
+ * be reviewed and committed. If a build or publish fails, rerunning the command
+ * resumes the same prerelease instead of generating another version.
  */
 
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import prereleaseUtils from './publish-prerelease-utils.cjs'
 
+const { getPrereleaseAction, getUnsafeDirtyPaths, validateTag } =
+  prereleaseUtils
 const REGISTRY = 'https://registry.npmjs.org'
-const tag = process.argv[2] ?? 'alpha'
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const changesetDir = path.join(rootDir, '.changeset')
+const tag = validateTag(process.argv[2] ?? 'alpha')
 
-function run(cmd) {
-  console.log(`\n> ${cmd}`)
-  execSync(cmd, { stdio: 'inherit' })
-}
-
-console.log(`\n📦 Publishing prerelease — tag: ${tag}\n`)
-
-try {
-  run('pnpm test')
-  run('pnpm build')
-  run('pnpm build:umd')
-  run(`pnpm changeset version --snapshot ${tag}`)
-  run(`pnpm changeset publish --tag ${tag} --registry=${REGISTRY}`)
-} finally {
-  // Always restore package.json — snapshot versions must not be committed.
-  console.log('\n🔁 Restoring package.json versions...')
-  try {
-    run('git checkout -- packages/*/package.json')
-  } catch {
-    console.error(
-      '⚠️  Could not restore package.json files automatically.\n' +
-        '   Run: git checkout -- packages/*/package.json',
+function formatCommand(command, args) {
+  return [command, ...args]
+    .map((part) =>
+      /^[A-Za-z0-9_./:=@-]+$/.test(part) ? part : JSON.stringify(part),
     )
-  }
+    .join(' ')
 }
 
-console.log(`\n✅ Prerelease (${tag}) published successfully.\n`)
+function run(command, args) {
+  console.log(`\n> ${formatCommand(command, args)}`)
+  execFileSync(command, args, { cwd: rootDir, stdio: 'inherit' })
+}
+
+function capture(command, args) {
+  return execFileSync(command, args, {
+    cwd: rootDir,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'inherit'],
+  }).trim()
+}
+
+function readPreState() {
+  const preStatePath = path.join(changesetDir, 'pre.json')
+  if (!fs.existsSync(preStatePath)) return undefined
+  return JSON.parse(fs.readFileSync(preStatePath, 'utf8'))
+}
+
+function getChangesetIds() {
+  return fs
+    .readdirSync(changesetDir)
+    .filter((file) => file.endsWith('.md') && file !== 'README.md')
+    .map((file) => path.basename(file, '.md'))
+    .sort()
+}
+
+function getDirtyPaths() {
+  const status = capture('git', [
+    'status',
+    '--porcelain=v1',
+    '--untracked-files=all',
+  ])
+  if (!status) return []
+  return status.split('\n').map((line) => line.slice(3))
+}
+
+const preState = readPreState()
+const action = getPrereleaseAction({
+  preState,
+  tag,
+  changesetIds: getChangesetIds(),
+})
+const unsafeDirtyPaths = getUnsafeDirtyPaths(getDirtyPaths(), Boolean(preState))
+
+if (unsafeDirtyPaths.length > 0) {
+  throw new Error(
+    `Refusing to publish with unrelated worktree changes:\n${unsafeDirtyPaths
+      .map((file) => `- ${file}`)
+      .join('\n')}`,
+  )
+}
+
+console.log(`\n📦 Publishing numeric prerelease — tag: ${tag}\n`)
+
+run('pnpm', ['test'])
+
+if (action === 'enter-and-version') {
+  run('pnpm', ['exec', 'changeset', 'pre', 'enter', tag])
+  run('pnpm', ['exec', 'changeset', 'version'])
+} else if (action === 'version') {
+  run('pnpm', ['exec', 'changeset', 'version'])
+} else {
+  console.log(
+    '\n↪ Existing prerelease version detected; skipping version step.',
+  )
+}
+
+// Build after versioning in case package metadata is embedded in an artifact.
+run('pnpm', ['build'])
+run('pnpm', ['build:umd'])
+run('pnpm', [
+  'exec',
+  'changeset',
+  'publish',
+  '--tag',
+  tag,
+  `--registry=${REGISTRY}`,
+])
+
+console.log(
+  `\n✅ Prerelease (${tag}) published successfully. Review and commit the generated release files.\n`,
+)
