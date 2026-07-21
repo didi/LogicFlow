@@ -36,6 +36,12 @@ function getPrereleaseAction({ preState, tag, changesetIds }) {
     : 'publish-only'
 }
 
+function getPrereleasePublishArgs(registry) {
+  // In Changesets prerelease mode, `pre.json` is the source of truth for the
+  // npm dist-tag. Passing `--tag` here is treated as an invalid custom tag.
+  return ['exec', 'changeset', 'publish', `--registry=${registry}`]
+}
+
 function getUnsafeDirtyPaths(paths, hasPreState) {
   if (!hasPreState) return paths
 
@@ -47,6 +53,7 @@ function getUnsafeDirtyPaths(paths, hasPreState) {
 
 module.exports = {
   getPrereleaseAction,
+  getPrereleasePublishArgs,
   getUnsafeDirtyPaths,
   validateTag,
 }

@@ -1,8 +1,12 @@
 import { describe, expect, test } from '@jest/globals'
 import prereleaseUtils from '../publish-prerelease-utils.cjs'
 
-const { getPrereleaseAction, getUnsafeDirtyPaths, validateTag } =
-  prereleaseUtils
+const {
+  getPrereleaseAction,
+  getPrereleasePublishArgs,
+  getUnsafeDirtyPaths,
+  validateTag,
+} = prereleaseUtils
 
 describe('publish prerelease workflow', () => {
   test('enters pre mode and versions pending changesets on the first run', () => {
@@ -54,6 +58,15 @@ describe('publish prerelease workflow', () => {
     expect(() => validateTag('latest')).toThrow(
       'The "latest" tag is not allowed for prereleases',
     )
+  })
+
+  test('lets Changesets read the dist tag from prerelease state', () => {
+    expect(getPrereleasePublishArgs('https://registry.npmjs.org')).toEqual([
+      'exec',
+      'changeset',
+      'publish',
+      '--registry=https://registry.npmjs.org',
+    ])
   })
 
   test('requires a clean worktree before entering prerelease mode', () => {

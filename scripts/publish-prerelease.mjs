@@ -18,8 +18,12 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import prereleaseUtils from './publish-prerelease-utils.cjs'
 
-const { getPrereleaseAction, getUnsafeDirtyPaths, validateTag } =
-  prereleaseUtils
+const {
+  getPrereleaseAction,
+  getPrereleasePublishArgs,
+  getUnsafeDirtyPaths,
+  validateTag,
+} = prereleaseUtils
 const REGISTRY = 'https://registry.npmjs.org'
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const changesetDir = path.join(rootDir, '.changeset')
@@ -104,14 +108,7 @@ if (action === 'enter-and-version') {
 // Build after versioning in case package metadata is embedded in an artifact.
 run('pnpm', ['build'])
 run('pnpm', ['build:umd'])
-run('pnpm', [
-  'exec',
-  'changeset',
-  'publish',
-  '--tag',
-  tag,
-  `--registry=${REGISTRY}`,
-])
+run('pnpm', getPrereleasePublishArgs(REGISTRY))
 
 console.log(
   `\n✅ Prerelease (${tag}) published successfully. Review and commit the generated release files.\n`,
