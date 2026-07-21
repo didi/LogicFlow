@@ -1,6 +1,38 @@
 import { getCurvedEdgePath } from '../../../src/materials/curved-edge'
 
 describe('test curved edge ', () => {
+  test('handles empty and single-point paths without throwing', () => {
+    expect(getCurvedEdgePath([], 5)).toBe('')
+    expect(getCurvedEdgePath([[100, 100]], 5)).toBe('M100 100')
+  })
+
+  test.each([
+    [
+      'NaN',
+      [
+        [100, 100],
+        [Number.NaN, 200],
+      ],
+    ],
+    [
+      'Infinity',
+      [
+        [100, 100],
+        [Number.POSITIVE_INFINITY, 200],
+      ],
+    ],
+    ['a missing coordinate', [[100, 100], [200]]],
+    [
+      'an extra coordinate',
+      [
+        [100, 100, Number.NaN],
+        [200, 200],
+      ],
+    ],
+  ])('rejects %s path data', (_, points) => {
+    expect(getCurvedEdgePath(points, 5)).toBe('')
+  })
+
   test('path calculation', () => {
     const radius = 5
 

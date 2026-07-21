@@ -6,6 +6,13 @@ type DirectionType = 't' | 'b' | 'l' | 'r' | ''
 // 圆弧所在象限：tl=左上，tr=右上，bl=左下，br=右下，'-' 表示不需要圆弧
 type ArcQuadrantType = 'tl' | 'tr' | 'bl' | 'br' | '-'
 
+// SVG 路径点只能是严格的 [x, y]；多余坐标也视为格式错误，不能静默忽略。
+const isFinitePointTuple = (point: number[]): point is PointTuple =>
+  Array.isArray(point) &&
+  point.length === 2 &&
+  Number.isFinite(point[0]) &&
+  Number.isFinite(point[1])
+
 // 方向组合到圆弧象限的映射。
 // key 由进入方向(dir1)和离开方向(dir2)拼接，例如 'tr' 表示从上(t)到右(r)的拐角。
 // 通过该映射确定在拐点处应该绘制的圆弧象限，用于计算中间控制点。
@@ -164,12 +171,21 @@ function getPartialPath(
 }
 
 function getCurvedEdgePath(points: number[][], radius: number): string {
+  // 这是可独立调用的导出函数，不能依赖 View 一定提前完成校验。
+  if (points.length === 0 || !points.every(isFinitePointTuple)) {
+    return ''
+  }
+
+  // i 始终指向下一个尚未写入路径的点：首点只生成 M，单点路径到此结束；
+  // 两点生成直线，三个及以上的点才为中间拐点计算圆角。
   let i = 0
-  let d = ''
+  let d = `M${points[i][0]} ${points[i++][1]}`
+  if (points.length === 1) {
+    return d
+  }
   if (points.length === 2) {
-    d += `M${points[i][0]} ${points[i++][1]} L ${points[i][0]} ${points[i][1]}`
+    d += ` L ${points[i][0]} ${points[i][1]}`
   } else {
-    d += `M${points[i][0]} ${points[i++][1]}`
     for (; i + 1 < points.length; ) {
       const prev = points[i - 1] as PointTuple
       const cur = points[i] as PointTuple
