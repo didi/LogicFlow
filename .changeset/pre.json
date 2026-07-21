@@ -1,0 +1,24 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "dynamic-group-regression": "0.0.2",
+    "engine-browser-app": "0.0.1",
+    "engine-node-app": "0.0.1",
+    "next-app": "1.0.0",
+    "vue3-app": "1.0.0",
+    "logicflow-node-red-vue3": "1.0.1",
+    "@logicflow/core": "2.2.4",
+    "@logicflow/engine": "0.1.2",
+    "@logicflow/extension": "2.3.0",
+    "@logicflow/layout": "2.1.4",
+    "@logicflow/react-node-registry": "1.2.4",
+    "@logicflow/vue-node-registry": "1.2.4",
+    "logicflow-docs": "2.2.12"
+  },
+  "changesets": [
+    "broaden-core-peer-range",
+    "fix-invalid-polyline-path-rendering",
+    "fix-rounded-rect-edge-nan"
+  ]
+}

@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.5-alpha.0
+
+### Patch Changes
+
+- 612bb5e: fix: keep polyline endpoints finite when dragging across rounded rectangle straight-side regions
+
 ## 2.2.4
 
 ### Patch Changes

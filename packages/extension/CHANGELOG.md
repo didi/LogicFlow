@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.3.1-alpha.0
+
+### Patch Changes
+
+- 1c2faef: chore: broaden the `@logicflow/core` peer dependency to a compatible major range
+- 419d976: fix: prevent curved-edge path generation from throwing for empty, single-point, or malformed point lists
+- Updated dependencies [612bb5e]
+  - @logicflow/core@2.2.5-alpha.0
+
 ## 2.3.0
 
 ### Minor Changes
