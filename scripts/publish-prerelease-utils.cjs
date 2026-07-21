@@ -42,6 +42,17 @@ function getPrereleasePublishArgs(registry) {
   return ['exec', 'changeset', 'publish', `--registry=${registry}`]
 }
 
+function parsePorcelainPaths(status) {
+  if (!status.trim()) return []
+
+  // Keep the two-character XY status prefix intact, especially the leading
+  // space on the first line for an unstaged modification (` M file`).
+  return status
+    .trimEnd()
+    .split(/\r?\n/)
+    .map((line) => line.slice(3))
+}
+
 function getUnsafeDirtyPaths(paths, hasPreState) {
   if (!hasPreState) return paths
 
@@ -55,5 +66,6 @@ module.exports = {
   getPrereleaseAction,
   getPrereleasePublishArgs,
   getUnsafeDirtyPaths,
+  parsePorcelainPaths,
   validateTag,
 }

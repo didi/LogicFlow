@@ -22,6 +22,7 @@ const {
   getPrereleaseAction,
   getPrereleasePublishArgs,
   getUnsafeDirtyPaths,
+  parsePorcelainPaths,
   validateTag,
 } = prereleaseUtils
 const REGISTRY = 'https://registry.npmjs.org'
@@ -47,7 +48,7 @@ function capture(command, args) {
     cwd: rootDir,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'inherit'],
-  }).trim()
+  })
 }
 
 function readPreState() {
@@ -70,8 +71,7 @@ function getDirtyPaths() {
     '--porcelain=v1',
     '--untracked-files=all',
   ])
-  if (!status) return []
-  return status.split('\n').map((line) => line.slice(3))
+  return parsePorcelainPaths(status)
 }
 
 const preState = readPreState()

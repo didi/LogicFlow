@@ -5,6 +5,7 @@ const {
   getPrereleaseAction,
   getPrereleasePublishArgs,
   getUnsafeDirtyPaths,
+  parsePorcelainPaths,
   validateTag,
 } = prereleaseUtils
 
@@ -73,6 +74,14 @@ describe('publish prerelease workflow', () => {
     expect(getUnsafeDirtyPaths(['packages/core/src/index.ts'], false)).toEqual([
       'packages/core/src/index.ts',
     ])
+  })
+
+  test('preserves the first filename when parsing porcelain status', () => {
+    expect(
+      parsePorcelainPaths(
+        ' M packages/core/CHANGELOG.md\n?? .changeset/pre.json\n',
+      ),
+    ).toEqual(['packages/core/CHANGELOG.md', '.changeset/pre.json'])
   })
 
   test('allows only generated release files when retrying a publish', () => {
