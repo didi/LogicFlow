@@ -4,8 +4,8 @@ import prereleaseUtils from '../publish-prerelease-utils.cjs'
 const {
   getPrereleaseAction,
   getPrereleasePublishArgs,
-  getUnsafeDirtyPaths,
-  parsePorcelainPaths,
+  getUnsafeDirtyEntries,
+  parsePorcelainEntries,
   validateTag,
 } = prereleaseUtils
 
@@ -71,35 +71,48 @@ describe('publish prerelease workflow', () => {
   })
 
   test('requires a clean worktree before entering prerelease mode', () => {
-    expect(getUnsafeDirtyPaths(['packages/core/src/index.ts'], false)).toEqual([
-      'packages/core/src/index.ts',
+    const sourceModification = {
+      status: ' M',
+      path: 'packages/core/src/index.ts',
+    }
+
+    expect(getUnsafeDirtyEntries([sourceModification], false)).toEqual([
+      sourceModification,
     ])
   })
 
-  test('preserves the first filename when parsing porcelain status', () => {
+  test('preserves XY statuses and filenames when parsing porcelain status', () => {
     expect(
-      parsePorcelainPaths(
+      parsePorcelainEntries(
         ' M packages/core/CHANGELOG.md\n?? .changeset/pre.json\n',
       ),
-    ).toEqual(['packages/core/CHANGELOG.md', '.changeset/pre.json'])
+    ).toEqual([
+      { status: ' M', path: 'packages/core/CHANGELOG.md' },
+      { status: '??', path: '.changeset/pre.json' },
+    ])
   })
 
-  test('allows only generated release files when retrying a publish', () => {
+  test('allows ordinary generated release-file changes when retrying', () => {
     expect(
-      getUnsafeDirtyPaths(
+      getUnsafeDirtyEntries(
         [
-          '.changeset/pre.json',
-          'packages/core/package.json',
-          'packages/core/CHANGELOG.md',
+          { status: '??', path: '.changeset/pre.json' },
+          { status: ' M', path: 'packages/core/package.json' },
+          { status: 'M ', path: 'packages/core/CHANGELOG.md' },
         ],
         true,
       ),
     ).toEqual([])
-    expect(
-      getUnsafeDirtyPaths(
-        ['packages/core/package.json', 'packages/core/src/index.ts'],
-        true,
-      ),
-    ).toEqual(['packages/core/src/index.ts'])
+  })
+
+  test('rejects unsafe statuses and unrelated files when retrying', () => {
+    const unsafeEntries = [
+      { status: 'UU', path: 'packages/core/package.json' },
+      { status: ' D', path: 'packages/core/CHANGELOG.md' },
+      { status: 'R ', path: 'packages/core/package.json' },
+      { status: ' M', path: 'packages/core/src/index.ts' },
+    ]
+
+    expect(getUnsafeDirtyEntries(unsafeEntries, true)).toEqual(unsafeEntries)
   })
 })

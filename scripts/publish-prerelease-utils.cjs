@@ -1,5 +1,6 @@
 const RELEASE_FILE_PATTERN =
   /^packages\/[^/]+\/(?:package\.json|CHANGELOG\.md)$/
+const SAFE_RELEASE_STATUSES = new Set([' M', 'M ', 'MM', '??'])
 
 function validateTag(tag) {
   if (!/^[A-Za-z][A-Za-z0-9._-]*$/.test(tag)) {
@@ -42,30 +43,35 @@ function getPrereleasePublishArgs(registry) {
   return ['exec', 'changeset', 'publish', `--registry=${registry}`]
 }
 
-function parsePorcelainPaths(status) {
+function parsePorcelainEntries(status) {
   if (!status.trim()) return []
 
-  // Keep the two-character XY status prefix intact, especially the leading
-  // space on the first line for an unstaged modification (` M file`).
+  // Preserve Git's two-character XY status so callers can distinguish an
+  // ordinary modification from a conflict, deletion, or rename of the same
+  // release file.
   return status
     .trimEnd()
     .split(/\r?\n/)
-    .map((line) => line.slice(3))
+    .map((line) => ({
+      status: line.slice(0, 2),
+      path: line.slice(3),
+    }))
 }
 
-function getUnsafeDirtyPaths(paths, hasPreState) {
-  if (!hasPreState) return paths
+function getUnsafeDirtyEntries(entries, hasPreState) {
+  if (!hasPreState) return entries
 
-  return paths.filter(
-    (file) =>
-      file !== '.changeset/pre.json' && !RELEASE_FILE_PATTERN.test(file),
+  return entries.filter(
+    ({ status, path }) =>
+      !SAFE_RELEASE_STATUSES.has(status) ||
+      (path !== '.changeset/pre.json' && !RELEASE_FILE_PATTERN.test(path)),
   )
 }
 
 module.exports = {
   getPrereleaseAction,
   getPrereleasePublishArgs,
-  getUnsafeDirtyPaths,
-  parsePorcelainPaths,
+  getUnsafeDirtyEntries,
+  parsePorcelainEntries,
   validateTag,
 }

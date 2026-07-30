@@ -21,8 +21,8 @@ import prereleaseUtils from './publish-prerelease-utils.cjs'
 const {
   getPrereleaseAction,
   getPrereleasePublishArgs,
-  getUnsafeDirtyPaths,
-  parsePorcelainPaths,
+  getUnsafeDirtyEntries,
+  parsePorcelainEntries,
   validateTag,
 } = prereleaseUtils
 const REGISTRY = 'https://registry.npmjs.org'
@@ -65,13 +65,13 @@ function getChangesetIds() {
     .sort()
 }
 
-function getDirtyPaths() {
+function getDirtyEntries() {
   const status = capture('git', [
     'status',
     '--porcelain=v1',
     '--untracked-files=all',
   ])
-  return parsePorcelainPaths(status)
+  return parsePorcelainEntries(status)
 }
 
 const preState = readPreState()
@@ -80,12 +80,15 @@ const action = getPrereleaseAction({
   tag,
   changesetIds: getChangesetIds(),
 })
-const unsafeDirtyPaths = getUnsafeDirtyPaths(getDirtyPaths(), Boolean(preState))
+const unsafeDirtyEntries = getUnsafeDirtyEntries(
+  getDirtyEntries(),
+  Boolean(preState),
+)
 
-if (unsafeDirtyPaths.length > 0) {
+if (unsafeDirtyEntries.length > 0) {
   throw new Error(
-    `Refusing to publish with unrelated worktree changes:\n${unsafeDirtyPaths
-      .map((file) => `- ${file}`)
+    `Refusing to publish with unsafe worktree changes:\n${unsafeDirtyEntries
+      .map(({ status, path: file }) => `- ${status} ${file}`)
       .join('\n')}`,
   )
 }
