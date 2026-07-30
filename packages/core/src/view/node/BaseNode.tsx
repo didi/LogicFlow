@@ -19,6 +19,9 @@ import {
 import RotateControlPoint from '../Rotate'
 import ResizeControlGroup from '../Control'
 
+const NESTED_FOCUS_CONTROL_SELECTOR =
+  'input, textarea, select, button, [contenteditable="true"], [contenteditable=""]'
+
 type IProps = {
   model: BaseNodeModel
   graphModel: GraphModel
@@ -413,9 +416,17 @@ export abstract class BaseNode<P extends IProps = IProps> extends Component<
         !isNil(window) && isFunction(window.requestAnimationFrame)
           ? window.requestAnimationFrame.bind(window)
           : (fn: () => void) => setTimeout(fn, 0)
-      rAF(() => {
-        el.focus()
-      })
+      const target = e.target as Element | null
+      const nestedFocusControl =
+        target &&
+        target !== el &&
+        isFunction(target.closest) &&
+        target.closest(NESTED_FOCUS_CONTROL_SELECTOR)
+      if (!nestedFocusControl || !el.contains(nestedFocusControl)) {
+        rAF(() => {
+          el.focus()
+        })
+      }
     }
   }
 
