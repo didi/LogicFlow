@@ -1,4 +1,4 @@
-import { BaseNode, BaseNodeModel, Keyboard } from '../src'
+import { BaseNode, BaseNodeModel, EventType, Keyboard } from '../src'
 import LogicFlow from '../src/LogicFlow'
 // import Tool from '../src/tool'
 /**
@@ -462,6 +462,45 @@ describe('logicflow/apis', () => {
           f: null,
         },
       })
+    })
+
+    test('emit node properties change when undo/redo', async () => {
+      const dom = document.createElement('div')
+      dom.id = 'history-graph'
+      document.body.appendChild(dom)
+      const historyLf = new LogicFlow({
+        container: dom,
+      })
+      historyLf.renderRawData(rawData)
+      historyLf.history.waitTime = 0
+
+      const propertiesChangeHandler = jest.fn()
+      historyLf.on(EventType.NODE_PROPERTIES_CHANGE, propertiesChangeHandler)
+      historyLf.setProperties('node1', {
+        width: 160,
+        height: 80,
+      })
+      await new Promise((resolve) => setTimeout(resolve, 20))
+
+      propertiesChangeHandler.mockClear()
+      historyLf.undo()
+      expect(propertiesChangeHandler).toBeCalledWith(
+        expect.objectContaining({
+          id: 'node1',
+          preProperties: { width: 160, height: 80 },
+          properties: {},
+        }),
+      )
+
+      propertiesChangeHandler.mockClear()
+      historyLf.redo()
+      expect(propertiesChangeHandler).toBeCalledWith(
+        expect.objectContaining({
+          id: 'node1',
+          preProperties: {},
+          properties: { width: 160, height: 80 },
+        }),
+      )
     })
 
     test('delete properties', () => {
