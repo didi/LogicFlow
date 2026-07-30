@@ -1,5 +1,13 @@
 # @logicflow/vue-node-registry
 
+## 1.2.5
+
+### Patch Changes
+
+- 1c2faef: chore: broaden the `@logicflow/core` peer dependency to a compatible major range
+- Updated dependencies [612bb5e]
+  - @logicflow/core@2.2.5
+
 ## 1.2.5-alpha.0
 
 ### Patch Changes
