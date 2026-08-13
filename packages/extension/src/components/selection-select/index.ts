@@ -259,6 +259,49 @@ export class SelectionSelect {
       }
     }
   }
+
+  /**
+   * 查询节点的直接容器。
+   *
+   * 框选插件不认识具体容器类型，因此按历史 group → DynamicGroup → Pool/Lane 的
+   * 兼容顺序向宿主查询。
+   */
+  private getParentContainerByNodeId(
+    nodeId: string,
+  ): LogicFlow.GraphElement | undefined {
+    const { dynamicGroup, group } = this.lf.graphModel
+
+    if (typeof group?.getNodeGroup === 'function') {
+      const legacyGroup = group.getNodeGroup(nodeId)
+      if (legacyGroup) return legacyGroup
+    }
+
+    if (typeof dynamicGroup?.getGroupByNodeId === 'function') {
+      return dynamicGroup.getGroupByNodeId(nodeId)
+    }
+
+    if (typeof dynamicGroup?.getLaneByNodeId === 'function') {
+      return dynamicGroup.getLaneByNodeId(nodeId)
+    }
+  }
+
+  /**
+   * 查询节点的祖先容器链。
+   *
+   * 宿主如果能返回完整祖先链，就用祖先链过滤父子同时选中；否则退化为只看直接父容器。
+   */
+  private getAncestorContainersByNodeId(
+    nodeId: string,
+  ): LogicFlow.GraphElement[] {
+    const { dynamicGroup } = this.lf.graphModel
+    if (typeof dynamicGroup?.getAncestorContainersByNodeId === 'function') {
+      return dynamicGroup.getAncestorContainersByNodeId(nodeId)
+    }
+
+    const parentContainer = this.getParentContainerByNodeId(nodeId)
+    return parentContainer ? [parentContainer] : []
+  }
+
   private drawOff = (e: PointerEvent) => {
     // 恢复原始的 stopMoveGraph 设置
     this.lf.updateEditConfig({
@@ -315,7 +358,6 @@ export class SelectionSelect {
         this.isWholeNode,
         true,
       )
-      const { dynamicGroup, group } = this.lf.graphModel
       const nonGroupedElements: typeof elements = []
       const selectedElements = this.lf.getSelectElements()
       // 同时记录节点和边的ID
@@ -325,20 +367,14 @@ export class SelectionSelect {
       ])
 
       elements.forEach((element) => {
-        // 如果节点属于分组，则不选中节点，此处兼容旧版 Group 插件
-        if (group) {
-          const elementGroup = group.getNodeGroup(element.id)
-          if (elements.includes(elementGroup)) {
-            // 当被选中的元素的父分组被选中时，不选中该元素
-            return
-          }
-        }
-        if (dynamicGroup) {
-          const elementGroup = dynamicGroup.getGroupByNodeId(element.id)
-          if (elements.includes(elementGroup)) {
-            // 当被选中的元素的父分组被选中时，不选中该元素
-            return
-          }
+        const ancestorContainers = this.getAncestorContainersByNodeId(
+          element.id,
+        )
+        if (
+          ancestorContainers.some((ancestor) => elements.includes(ancestor))
+        ) {
+          // 当被选中元素的任一祖先容器也在框选范围内时，只保留祖先容器，避免父子重复拖拽。
+          return
         }
         // 在独占模式下，如果元素已经被选中，则取消选中
         if (this.exclusiveMode && selectedIds.has(element.id)) {
