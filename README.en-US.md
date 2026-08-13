@@ -160,11 +160,11 @@ To become a contributor, please follow our [contributing guide](/CONTRUBUTING.en
 
 ## Star History
 
-<a href="https://www.star-history.com/#didi/LogicFlow&Date">
+<a href="https://star-history.dera.page/#didi/LogicFlow&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=didi/LogicFlow&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=didi/LogicFlow&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=didi/LogicFlow&type=Date" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=didi/LogicFlow&type=Date" />
  </picture>
 </a>
 
