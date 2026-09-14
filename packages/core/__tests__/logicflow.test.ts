@@ -540,6 +540,27 @@ describe('logicflow/apis', () => {
       })
     })
 
+    test('keeps the outer container dimensions in sync with explicit resize', () => {
+      const host = document.createElement('div')
+      document.body.appendChild(host)
+      const instance = new LogicFlow({
+        container: host,
+        width: 1000,
+        height: 800,
+      })
+      const resizeSpy = jest
+        .spyOn(instance.graphModel, 'resize')
+        .mockImplementation(() => {})
+
+      instance.resize(320, 240)
+
+      expect(resizeSpy).toHaveBeenCalledWith(320, 240)
+      expect(instance.container.style.width).toBe('320px')
+      expect(instance.container.style.height).toBe('240px')
+
+      resizeSpy.mockRestore()
+    })
+
     test('zoom', () => {
       lf.zoom(0.5)
       expect(lf.graphModel.transformModel.SCALE_X).toBe(0.5)
