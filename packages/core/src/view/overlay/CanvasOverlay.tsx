@@ -189,6 +189,8 @@ export class CanvasOverlay extends Component<IProps, IState> {
     }
   }
   pointerMoveHandler = (ev: PointerEvent) => {
+    // 悬停不参与手势，避免把后续单指拖动误判为双指缩放。
+    if (ev.buttons === 0) return
     // 记录当前指针位置（按 pointerId）
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY })
     // 当已记录初始捏合距离且存在两指时，执行捏合缩放

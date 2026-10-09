@@ -8,7 +8,7 @@ order: 4
 toc: content
 ---
 
-This page covers three canvas-related topics: **grid** (alignment and snapping), **background** (underlay styling), and **snaplines** (alignment guides while dragging nodes).
+This page covers **grid** (alignment and snapping), **background** (underlay styling), **snaplines** (alignment guides while dragging nodes), and **touch gestures**.
 
 ## Grid
 
@@ -162,3 +162,9 @@ lf.setTheme({
 <example :height="400" ></example>
 
 More styling options: [Theme](./theme.en.md).
+
+## Touch gestures
+
+Drag the blank canvas with one finger to pan. Use two fingers to pinch and zoom. A hovering mouse or pen does not act as a second touch contact.
+
+> **Hover handling fix:** Earlier versions could count mouse or pen hover as a second contact and unexpectedly zoom during a single-finger drag. Hover is now ignored for pinch detection. Existing drag and zoom options remain unchanged; no configuration migration is needed.
