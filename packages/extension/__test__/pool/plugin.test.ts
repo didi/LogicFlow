@@ -24,6 +24,17 @@ describe('pool plugin', () => {
     expect(plugin.getLaneByNodeId('rect_1')?.id).toBe('lane_1')
   })
 
+  test('rebuilds lane membership from current graph data after render', () => {
+    const lf = createPoolLF()
+
+    lf.render(createPoolGraphWithNodeInLane())
+    lf.render(createPoolWithTwoLanes())
+
+    const plugin = getPoolPlugin(lf)
+
+    expect(plugin.getLaneByNodeId('rect_1')).toBeUndefined()
+  })
+
   test('getLaneByBounds returns the matching lane', () => {
     const lf = createPoolLF()
 
@@ -275,6 +286,30 @@ describe('pool plugin', () => {
         node: expect.objectContaining({ id: 'rect_1' }),
       }),
     )
+  })
+
+  test('keeps previous lane membership when target lane rejects a reassigned node', () => {
+    const lf = createPoolLF()
+
+    lf.render(createPoolGraphWithNodeInLane())
+
+    const plugin = getPoolPlugin(lf)
+    const lane1 = lf.getNodeModelById('lane_1') as any
+    const lane2 = lf.getNodeModelById('lane_2') as any
+    const rect = lf.getNodeModelById('rect_1') as any
+    const onNotAllowed = jest.fn()
+
+    lf.on('lane:not-allowed', onNotAllowed)
+    jest.spyOn(lane2, 'isAllowAppendIn').mockReturnValue(false)
+
+    lf.graphModel.moveNode2Coordinate('rect_1', 530, 350)
+    plugin.addNodeToGroup(rect.getData())
+
+    expect(onNotAllowed).toHaveBeenCalledTimes(1)
+    expect(lane1.children.has('rect_1')).toBe(true)
+    expect(lane2.children.has('rect_1')).toBe(false)
+    expect(rect.properties.parent).toBe('lane_1')
+    expect(plugin.getLaneByNodeId('rect_1')?.id).toBe('lane_1')
   })
 
   test('calls setTextPosition on the lane after onNodeMove triggers auto-resize', () => {

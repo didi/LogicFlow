@@ -154,12 +154,12 @@ export function initDefaultShortcut(lf: LogicFlow, graph: GraphModel) {
     if (!keyboardOptions?.enabled) return true
     if (graph.textEditElement) return true
     if (selected && (selected.nodes || selected.edges)) {
-      lf.clearSelectElements()
       const addElements = lf.addElements(
         selected,
         CHILDREN_TRANSLATION_DISTANCE,
       )
       if (!addElements) return true
+      lf.clearSelectElements()
       addElements.nodes.forEach((node) => lf.selectElementById(node.id, true))
       addElements.edges.forEach((edge) => lf.selectElementById(edge.id, true))
       selected.nodes.forEach((node) =>

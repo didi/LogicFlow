@@ -1,8 +1,14 @@
 import LogicFlow from '@logicflow/core'
-import { poolConfig } from '../../src/pool/constant'
+import { poolConfig, TitlePosition } from '../../src/pool/constant'
 import { PoolElements } from '../../src/pool'
 
 type PoolDirection = 'horizontal' | 'vertical'
+
+export function createPoolTitleProperties(
+  titlePosition?: TitlePosition,
+): Record<string, unknown> {
+  return titlePosition ? { titlePosition } : {}
+}
 
 export function createContainer() {
   const container = document.createElement('div')
@@ -12,13 +18,16 @@ export function createContainer() {
   return container
 }
 
-export function createPoolLF() {
+export function createPoolLF(options: Record<string, unknown> = {}) {
   return new LogicFlow({
     container: createContainer(),
     width: 1200,
     height: 800,
     allowResize: true,
     plugins: [PoolElements],
+    pluginsOptions: {
+      PoolElements: options,
+    },
   })
 }
 
@@ -150,6 +159,44 @@ export function createPoolGraphWithNodeInLane() {
   })
 
   return graph
+}
+
+export function createTwoPoolGraph() {
+  const first = createPoolGraphWithNodeInLane()
+  return {
+    nodes: [
+      ...first.nodes,
+      {
+        id: 'pool_2',
+        type: 'pool',
+        x: 900,
+        y: 260,
+        text: '目标泳池',
+        properties: {
+          direction: 'horizontal',
+          width: 520,
+          height: 180,
+          children: ['lane_3'],
+        },
+        children: ['lane_3'],
+      },
+      {
+        id: 'lane_3',
+        type: 'lane',
+        x: 930,
+        y: 260,
+        width: 480,
+        height: 180,
+        text: '目标泳道',
+        properties: {
+          parent: 'pool_2',
+          direction: 'horizontal',
+          isHorizontal: true,
+        },
+      },
+    ],
+    edges: first.edges,
+  }
 }
 
 export function getPoolAndLanes(lf: LogicFlow) {

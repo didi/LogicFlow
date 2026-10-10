@@ -2,12 +2,104 @@
  * 基于DynamicGroup重新实现的泳道节点组件
  * 继承DynamicGroupNodeModel和DynamicGroupNode，提供泳道特定功能
  */
-import { h } from '@logicflow/core'
+import { ElementState, h, TextMode } from '@logicflow/core'
 import { DynamicGroupNode } from '../dynamic-group'
 import { laneConfig } from './constant'
 import { LaneModel } from './LaneModel'
+import { PoolTitleText } from './PoolTitleText'
+import { getTitleLayout, getTitleOperateIconPosition } from './utils'
+
+function toRectAttrs(box: {
+  x: number
+  y: number
+  width: number
+  height: number
+}) {
+  return {
+    x: box.x - box.width / 2,
+    y: box.y - box.height / 2,
+    width: box.width,
+    height: box.height,
+  }
+}
 
 export class LaneView extends DynamicGroupNode {
+  getText() {
+    const { model, graphModel } = this.props
+    const { editConfigModel } = graphModel
+
+    if (editConfigModel.nodeTextMode !== TextMode.TEXT) return null
+    if (model.state === ElementState.TEXT_EDIT) return null
+
+    const textShape = model.text
+      ? h(PoolTitleText, {
+          editable: !!(
+            editConfigModel.nodeTextEdit &&
+            (model.text.editable ?? true)
+          ),
+          model,
+          graphModel,
+          draggable: !!(
+            editConfigModel.nodeTextDraggable && model.text.draggable
+          ),
+        })
+      : null
+    const operateIcon = this.getOperateIcon()
+    if (!textShape && !operateIcon) return null
+
+    return h('g', {}, textShape, operateIcon)
+  }
+
+  /** Lane 的折叠按钮和标题文字必须共同跟随当前标题边。 */
+  getOperateIcon() {
+    const { model } = this.props
+    if (!model.collapsible) return null
+    const plugin = model.graphModel.dynamicGroup as any
+    if (
+      typeof plugin?.isCollapseAllowed === 'function' &&
+      !plugin.isCollapseAllowed(model)
+    ) {
+      return null
+    }
+
+    const titleBox = model.getTitleTextBox()
+    const { x, y } = getTitleOperateIconPosition(
+      titleBox,
+      model.getTitleRenderPosition(),
+    )
+    const iconPath = model.isCollapsed
+      ? this.getCollapseIcon(x, y)
+      : this.getExpandIcon(x, y)
+
+    return h('g', {}, [
+      h('rect', {
+        height: 12,
+        width: 14,
+        rx: 2,
+        ry: 2,
+        strokeWidth: 1,
+        fill: '#f4f5f6',
+        stroke: '#cecece',
+        cursor: 'pointer',
+        x,
+        y,
+        onPointerDown: (e: PointerEvent) => e.stopPropagation(),
+        onClick: (e: MouseEvent) => {
+          e.stopPropagation()
+          model.toggleCollapse(!model.isCollapsed)
+        },
+        onDblClick: (e: MouseEvent) => e.stopPropagation(),
+      }),
+      h('path', {
+        fill: 'none',
+        stroke: '#818281',
+        strokeWidth: 2,
+        'pointer-events': 'none',
+        d: iconPath,
+      }),
+    ])
+  }
+
   getAppendAreaShape(): h.JSX.Element | null {
     // DONE: 此区域用于初始化 group container, 即元素拖拽进入感应区域
     const { model } = this.props
@@ -31,17 +123,27 @@ export class LaneView extends DynamicGroupNode {
   }
   getShape() {
     const { model } = this.props
-    const {
-      x,
-      y,
-      width,
-      height,
-      properties: { textStyle: customTextStyle = {}, isHorizontal },
-    } = model
+    const { x, y, width, height } = model
     const style = model.getNodeStyle()
     const base = { fill: '#ffffff', stroke: '#000000', strokeWidth: 1 }
-    const left = x - width / 2
-    const top = y - height / 2
+    if (model.isCollapsed) {
+      // 折叠 Lane 只保留由排列方向决定的完整标题块。
+      return h('g', {}, [
+        h('rect', {
+          ...base,
+          ...style,
+          x: x - width / 2,
+          y: y - height / 2,
+          width,
+          height,
+        }),
+      ])
+    }
+    const titleLayout = getTitleLayout(
+      { x, y, width, height },
+      model.getResolvedTitlePosition(),
+      model.titleSize,
+    )
     // 泳道主体
     const rectAttrs = {
       x: x - width / 2,
@@ -57,17 +159,23 @@ export class LaneView extends DynamicGroupNode {
     const icons = this.getOperateIcons()
     const titleRect = {
       ...base,
-      ...style,
-      x: isHorizontal ? left + laneConfig.titleSize : left,
-      y: isHorizontal ? top : top + laneConfig.titleSize,
-      width: isHorizontal ? width - laneConfig.titleSize : width,
-      height: isHorizontal ? height : laneConfig.titleSize,
-      ...(isHorizontal ? customTextStyle : {}),
+      ...toRectAttrs(titleLayout.titleBox),
+    }
+    const contentRect = {
+      ...base,
+      ...toRectAttrs(titleLayout.contentBox),
     }
     return h('g', {}, [
       this.getAppendAreaShape(),
+      h('rect', contentRect),
       h('rect', titleRect),
       h('rect', { ...rectAttrs }),
+      h('line', {
+        ...titleLayout.divider,
+        stroke: style.stroke,
+        strokeWidth: style.strokeWidth,
+        pointerEvents: 'none',
+      }),
       ...icons,
     ])
   }

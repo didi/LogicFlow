@@ -533,7 +533,8 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
       const edgeConfig: EdgeConfig = {
         ...edgeData,
         id: `${edgeData.id}__${idx}`,
-        text: edgeData.text?.value,
+        // 虚拟边只表达折叠后的连接关系，真实边的业务标题在展开前不应显示。
+        text: '',
       }
 
       if (edge.virtual) {
@@ -559,8 +560,13 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         sourceNodeGroup = graphModel.getNodeModelById(sourceNodeId)
       }
 
-      // 折叠时，处理未被隐藏的边的逻辑 -> collapse
-      if (collapse && edge.visible) {
+      // 折叠时，处理未被隐藏的边；另一端已折叠时，需要基于隐藏的真实边重建虚拟边。
+      if (
+        collapse &&
+        (edge.visible ||
+          (sourceNodeGroup.isGroup && sourceNodeGroup.isCollapsed) ||
+          (targetNodeGroup.isGroup && targetNodeGroup.isCollapsed))
+      ) {
         // 需要确认此分组节点是新连线的起点还是终点
         // 创建一个虚拟边，虚拟边相对于真实边，起点或者终点从一起分组节点的中心点开始 TODO：??? 确认什么意思
         // 如果需要被隐藏的边的起点在需要折叠的分组中，那么设置虚拟边的开始节点为此分组
@@ -571,6 +577,18 @@ export class DynamicGroupNodeModel extends RectNodeModel<IGroupNodeProperties> {
         } else {
           edgeConfig.endPoint = undefined
           edgeConfig.targetNodeId = this.id
+          delete edgeConfig.targetAnchorId
+        }
+
+        // 两端分别归一到当前已折叠的容器，跨多个折叠容器时仍保持连线关系。
+        if (sourceNodeGroup.isGroup && sourceNodeGroup.isCollapsed) {
+          edgeConfig.sourceNodeId = sourceNodeGroup.id
+          edgeConfig.startPoint = undefined
+          delete edgeConfig.sourceAnchorId
+        }
+        if (targetNodeGroup.isGroup && targetNodeGroup.isCollapsed) {
+          edgeConfig.targetNodeId = targetNodeGroup.id
+          edgeConfig.endPoint = undefined
           delete edgeConfig.targetAnchorId
         }
 
