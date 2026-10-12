@@ -1,6 +1,6 @@
 import { get, assign, cloneDeep } from 'lodash-es'
 import { observable, action } from 'mobx'
-import { BaseEdgeModel } from '.'
+import { BaseEdgeModel } from './BaseEdgeModel'
 import { BaseNodeModel, RectNodeModel, CircleNodeModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
 import { ModelType, SegmentDirection } from '../../constant'
