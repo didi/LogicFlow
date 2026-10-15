@@ -48,7 +48,7 @@ class Vector extends Base {
   }
 
   dot(v1: Vector) {
-    return v1.reduce((prev, cur, index) => prev + cur * this[index])
+    return v1.reduce((prev, cur, index) => prev + cur * this[index], 0)
   }
 
   cross(v1: Vector) {
