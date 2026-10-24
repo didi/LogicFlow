@@ -1025,6 +1025,12 @@ export class LogicFlow {
     this.graphModel.resize(width, height)
     this.options.width = this.graphModel.width
     this.options.height = this.graphModel.height
+    if (width !== undefined) {
+      this.container.style.width = `${width}px`
+    }
+    if (height !== undefined) {
+      this.container.style.height = `${height}px`
+    }
   }
 
   /**
