@@ -27,6 +27,19 @@ describe('util/vector', () => {
     const v1 = new Vector(3, 4)
     expect(v.dot(v1)).toEqual(11)
   })
+  test.each<[Vector, Vector, number]>([
+    [new Vector(2, 3), new Vector(3, 4), 18],
+    [new Vector(0, 0), new Vector(3, 4), 0],
+    [new Vector(-2, 3), new Vector(3, -4), -18],
+    [new Vector(2, 3, 4), new Vector(5, 6, 7), 56],
+  ])('dot includes every component (%#)', (left, right, expected) => {
+    expect(left.dot(right)).toEqual(expected)
+    expect(right.dot(left)).toEqual(expected)
+  })
+  test('angle between a vector and itself is zero', () => {
+    const v = new Vector(2, 3)
+    expect(v.angle(v)).toBeCloseTo(0, 6)
+  })
   test('cross', () => {
     const v = new Vector(1, 2)
     const v1 = new Vector(3, 4)
