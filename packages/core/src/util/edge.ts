@@ -1,4 +1,4 @@
-import { pick, forEach } from 'lodash-es'
+import { forEach } from 'lodash-es'
 import { getNodeBBox, isInNode, distance, sampleCubic } from '.'
 import LogicFlow from '../LogicFlow'
 import { Options } from '../options'
@@ -22,8 +22,9 @@ import Direction = LogicFlow.Direction
 import LineSegment = LogicFlow.LineSegment
 import NodeData = LogicFlow.NodeData
 import EdgeConfig = LogicFlow.EdgeConfig
-import Position = LogicFlow.Position
 import BoxBounds = Model.BoxBounds
+
+export { pickEdgeConfig, twoPointDistance } from './edgeBase'
 
 type PolyPointMap = Record<string, Point>
 type PolyPointLink = Record<string, string>
@@ -1006,34 +1007,6 @@ export const getClosestPointOfPolyline = (
     }
   }
   return crossPoint
-}
-
-// 规范边初始化数据
-export const pickEdgeConfig = (data: EdgeConfig): EdgeConfig =>
-  pick(data, [
-    'id',
-    'type',
-    'sourceNodeId',
-    'sourceAnchorId',
-    'targetNodeId',
-    'targetAnchorId',
-    'pointsList',
-    'startPoint',
-    'endPoint',
-    'properties',
-  ])
-
-export const twoPointDistance = (source: Position, target: Position) => {
-  // fix: 修复坐标存在负值时计算错误的问题。
-  // const source = {
-  //   x: p1.x,
-  //   y: Math.abs(p1.y),
-  // }
-  // const target = {
-  //   x: Math.abs(p2.x),
-  //   y: Math.abs(p2.y),
-  // }
-  return Math.sqrt((source.x - target.x) ** 2 + (source.y - target.y) ** 2)
 }
 
 /**

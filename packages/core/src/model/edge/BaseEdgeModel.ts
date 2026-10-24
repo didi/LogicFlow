@@ -2,14 +2,10 @@ import { assign, cloneDeep, find, isUndefined } from 'lodash-es'
 import { action, computed, isObservable, observable, set, toJS } from 'mobx'
 import { BaseNodeModel, GraphModel, Model } from '..'
 import LogicFlow from '../../LogicFlow'
-import {
-  createUuid,
-  formatData,
-  getAnchors,
-  getZIndex,
-  pickEdgeConfig,
-  twoPointDistance,
-} from '../../util'
+import { createUuid } from '../../util/uuid'
+import { formatData } from '../../util/compatible'
+import { getZIndex } from '../../util/zIndex'
+import { pickEdgeConfig, twoPointDistance } from '../../util/edgeBase'
 import {
   ElementState,
   ElementType,
@@ -319,7 +315,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     // 可能拿到的sourceAnchors为空数组，因此position可能返回为undefined
     let position: Point | undefined
     let minDistance: number | undefined
-    const sourceAnchors = getAnchors(sourceNode)
+    const sourceAnchors = sourceNode.anchors
     if (sourceAnchorId) {
       position = find(sourceAnchors, (anchor) => anchor.id === sourceAnchorId)
       // 如果指定了起始锚点，且指定锚点是节点拥有的锚点时，就把该点设置为起点
@@ -354,7 +350,7 @@ export class BaseEdgeModel<P extends PropertiesType = PropertiesType>
     // 可能拿到的targetAnchors为空数组，因此position可能返回为undefined
     let position: Point | undefined
     let minDistance: number | undefined
-    const targetAnchors = getAnchors(targetNode)
+    const targetAnchors = targetNode.anchors
     if (targetAnchorId) {
       position = find(targetAnchors, (anchor) => anchor.id === targetAnchorId)
       // 如果指定了终点锚点，且指定锚点是节点拥有的锚点时，就把该点设置为终点
