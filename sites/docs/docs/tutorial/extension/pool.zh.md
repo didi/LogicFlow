@@ -26,8 +26,37 @@ const lf = new LogicFlow({
   container: document.querySelector('#container') as HTMLElement,
   plugins: [PoolElements],
   allowResize: true,
+  pluginsOptions: {
+    PoolElements: {
+      cascadeDeleteChildren: true,
+      minLaneCount: 1,
+      collapse: {
+        pool: true,
+        lane: true,
+      },
+    },
+  },
 })
 ```
+
+## 配置项
+
+| 配置 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `cascadeDeleteChildren` | `boolean` | `true` | 删除 pool/lane 时是否一并删除内部 lane 和业务节点。为 `false` 时只删除容器并释放子节点。 |
+| `minLaneCount` | `number` | `1` | 每个 pool 至少保留的 lane 数量；单个 pool 可用 `properties.minLaneCount` 覆盖。设为 `0` 时，最后一条 lane 跨 pool 迁移后会自动删除原空 pool。 |
+| `collapse.pool` | `boolean` | `true` | 是否允许 pool 折叠。 |
+| `collapse.lane` | `boolean` | `true` | 是否允许 lane 折叠。 |
+
+### 标题与折叠间距
+
+`direction` 仍只表达泳道排列方向：`horizontal` 为上下排列，`vertical` 为左右排列。可通过 `properties.titlePosition` 设置 Pool 标题边，通过 `properties.laneConfig.titlePosition` 设置 Lane 默认标题边；两者均支持 `top`、`right`、`bottom`、`left`。Lane 可用自身的 `properties.titlePosition` 覆盖 Pool 默认值。
+
+旧图不提供这些字段时保持历史显示：`horizontal` 使用左侧标题，`vertical` 使用顶部标题。`laneConfig.collapsedLaneGap` 默认 `12`，折叠 Lane 与相邻 Lane 间会预留该间距以保证连线可见。
+
+> **兼容说明**：泳池泳道仍使用 `children` 和 `properties.parent` 表达层级关系。升级后旧数据无需迁移；新增配置都是可选项。
+
+> **默认删除行为**：`cascadeDeleteChildren` 默认为 `true`，保持历史行为。删除 lane 会同时删除 lane 内业务节点；如果业务希望保留节点，请显式设为 `false`。
 
 ## 快速开始
 
@@ -65,6 +94,8 @@ type PoolProperties = {
   width?: number
   height?: number
   laneConfig?: Record<string, unknown>
+  minLaneCount?: number
+  collapsible?: boolean
   children?: string[]
 }
 ```
@@ -76,6 +107,7 @@ type LaneProperties = {
   parent?: string
   width?: number
   height?: number
+  collapsible?: boolean
   isRestrict?: boolean
   autoResize?: boolean
   children?: string[]
@@ -162,12 +194,26 @@ lf.render({
 
 当你把节点拖拽/放置到某条泳道区域内时，插件会自动把节点加入该泳道。若节点原本属于其他泳道，会先从旧泳道移除，再加入新泳道。
 
+### Lane 跨 Pool 移动与粘贴
+
+Lane 不能脱离 pool 独立存在。拖拽 lane 时，只有落入目标 pool 才会建立新的归属关系；目标为普通节点、分组或空白区域时会被拒绝。跨 pool 移动会保留 lane 内业务节点相对 lane 的位置，并同步更新旧/新 pool 的 `children`。当源 pool 的 `minLaneCount` 为 `0` 且迁移后没有 lane 时，插件会删除原空 pool；默认值为 `1` 时，最后一条 lane 的迁移会被拒绝。
+
+复制 lane 时，如果当前唯一选中的目标是 pool，会把 lane 粘贴进该 pool；如果没有选中的目标 pool，粘贴会自动创建一个新 pool 作为容器。
+
+### Lane 内排序
+
+拖拽 lane 时，鼠标进入目标 lane 的槽位即触发候选排序：向下或向右进入时预览插入到目标之后，向上或向左进入时预览插入到目标之前。被拖拽的 lane 会置顶，其他 lane 在固定槽位中以动画腾挪；横向 pool 显示横向落位框，纵向 pool 显示纵向落位框。只有 drop 后才会更新 `pool.children`，取消或落入非法区域不会写入中间态。
+
 ### 插入/删除泳道
 
 选中泳道后，泳道右侧会显示操作按钮：
 
 - 插入：在当前泳道的前/后插入一条新泳道（横向泳池为“上/下”，竖向泳池为“左/右”）
-- 删除：删除当前泳道（至少保留 1 条泳道）
+- 删除：删除当前泳道（默认至少保留 1 条泳道，可通过 `minLaneCount` 调整）
+
+### Resize 与折叠
+
+Pool 本体不允许 resize。选中 Pool 时会显示与 resize 节点同位置的虚线边框作为选中反馈，但不会出现 resize 控制点。泳道尺寸变化会驱动所属 pool 重新计算尺寸；横向 pool 中调整 lane 高度会改变 pool 高度，调整 lane 宽度会同步所有 lane 的宽度。Lane 折叠后仅保留标题区，内容区和内部节点会隐藏。
 
 ## API
 
@@ -207,6 +253,10 @@ const laneModel = lf.graphModel.dynamicGroup.getLaneByBounds(bounds, nodeData)
 
 删除泳道。
 
+#### moveLaneToPool(laneId, targetPoolId, insertIndex)
+
+将当前 pool 内的 lane 移动到另一个 pool 的指定位置。若源 pool 会低于 `minLaneCount`，返回 `false`；当 `minLaneCount` 为 `0` 且迁出最后一条 lane 时，会删除原空 pool。
+
 ### 泳道（lane）模型方法
 
 #### getPoolId / getPoolModel
@@ -225,3 +275,12 @@ lf.on('lane:not-allowed', ({ lane, node }) => {
 })
 ```
 
+### lane:paste-not-allowed
+
+复制粘贴 lane 时，如果粘贴位置没有可用目标 pool，会触发该事件：
+
+```ts | pure
+lf.on('lane:paste-not-allowed', ({ lane, reason }) => {
+  console.log('paste not allowed', lane.id, reason)
+})
+```

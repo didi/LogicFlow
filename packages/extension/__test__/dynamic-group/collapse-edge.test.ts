@@ -314,4 +314,111 @@ describe('dynamic-group collapse edge (#2395)', () => {
     expect(endpointDrift('e_ab').end).toBeLessThan(1)
     expect(endpointDrift('e_bc').start).toBeLessThan(1)
   })
+
+  test('E10: collapsing both endpoint groups keeps one virtual edge between groups', () => {
+    const lf = createDynamicGroupLF()
+    lf.render({
+      nodes: [
+        {
+          id: 'group_source',
+          type: 'dynamic-group',
+          x: 300,
+          y: 220,
+          properties: {
+            width: 240,
+            height: 180,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: ['source_child'],
+          },
+        },
+        {
+          id: 'group_target',
+          type: 'dynamic-group',
+          x: 700,
+          y: 220,
+          properties: {
+            width: 240,
+            height: 180,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: ['target_child'],
+          },
+        },
+        { id: 'source_child', type: 'rect', x: 300, y: 220 },
+        { id: 'target_child', type: 'rect', x: 700, y: 220 },
+      ],
+      edges: [
+        {
+          id: 'edge_between_children',
+          type: 'polyline',
+          sourceNodeId: 'source_child',
+          targetNodeId: 'target_child',
+        },
+      ],
+    })
+
+    collapseGroup(lf, 'group_source')
+    collapseGroup(lf, 'group_target')
+
+    const virtualEdges = getVirtualEdges(lf)
+    expect(virtualEdges).toHaveLength(1)
+    expect(virtualEdges[0].sourceNodeId).toBe('group_source')
+    expect(virtualEdges[0].targetNodeId).toBe('group_target')
+    expect(lf.getEdgeModelById('edge_between_children')?.visible).toBe(false)
+  })
+
+  test('E11: collapsed virtual edges do not display one real edge title', () => {
+    const lf = createDynamicGroupLF()
+    lf.render({
+      nodes: [
+        {
+          id: 'group_source',
+          type: 'dynamic-group',
+          x: 300,
+          y: 220,
+          properties: {
+            width: 240,
+            height: 180,
+            collapsedWidth: 80,
+            collapsedHeight: 60,
+            collapsible: true,
+            isCollapsed: false,
+            children: ['source_child'],
+          },
+        },
+        { id: 'source_child', type: 'rect', x: 300, y: 220 },
+        { id: 'target_a', type: 'circle', x: 700, y: 180 },
+        { id: 'target_b', type: 'circle', x: 700, y: 260 },
+      ],
+      edges: [
+        {
+          id: 'edge_a',
+          type: 'polyline',
+          sourceNodeId: 'source_child',
+          targetNodeId: 'target_a',
+          text: '业务标题 A',
+        },
+        {
+          id: 'edge_b',
+          type: 'polyline',
+          sourceNodeId: 'source_child',
+          targetNodeId: 'target_b',
+          text: '业务标题 B',
+        },
+      ],
+    })
+
+    collapseGroup(lf, 'group_source')
+
+    const virtualEdges = getVirtualEdges(lf)
+    expect(virtualEdges).toHaveLength(2)
+    virtualEdges.forEach((edge) => {
+      expect(edge.text.value).toBe('')
+    })
+  })
 })

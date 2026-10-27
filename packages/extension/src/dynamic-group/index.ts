@@ -72,6 +72,7 @@ export class DynamicGroup {
   /** 折叠隐藏的真实边 id → 分组 id */
   collapsedRealEdgeToGroup: Map<string, string> = new Map()
   private originDeleteNode?: LogicFlow['deleteNode']
+  private originAddElements?: LogicFlow['addElements']
 
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(dynamicGroup)
@@ -90,6 +91,43 @@ export class DynamicGroup {
     if (groupId) {
       return this.lf.getNodeModelById(groupId)
     }
+  }
+
+  getParentContainerByNodeId(nodeId: string) {
+    return this.getGroupByNodeId(nodeId)
+  }
+
+  getAncestorContainersByNodeId(nodeId: string) {
+    const ancestors: DynamicGroupNodeModel[] = []
+    const visited = new Set<string>()
+    let parent = this.getParentContainerByNodeId(nodeId) as
+      | DynamicGroupNodeModel
+      | undefined
+
+    while (parent && !visited.has(parent.id)) {
+      ancestors.push(parent)
+      visited.add(parent.id)
+      parent = this.getParentContainerByNodeId(parent.id) as
+        | DynamicGroupNodeModel
+        | undefined
+    }
+
+    return ancestors
+  }
+
+  getDescendantNodeIds(containerId: string, visited = new Set<string>()) {
+    const container = this.lf.getNodeModelById(containerId) as
+      | DynamicGroupNodeModel
+      | undefined
+    if (!container?.children || visited.has(containerId)) return []
+
+    visited.add(containerId)
+    const descendantIds: string[] = []
+    forEach(Array.from(container.children), (childId: string) => {
+      descendantIds.push(childId)
+      descendantIds.push(...this.getDescendantNodeIds(childId, visited))
+    })
+    return descendantIds
   }
 
   registerCollapsedVirtualEdge(
@@ -549,18 +587,19 @@ export class DynamicGroup {
     // 这个节点是分组，则将分组的所有子节点取消选中
     // 这个节点是分组的子节点，且其所属分组节点已选，则取消选中
     if (isMultiple && isSelected) {
+      const selectedAncestor = this.getAncestorContainersByNodeId(node.id).find(
+        (ancestor) => ancestor.isSelected,
+      )
+      if (selectedAncestor) {
+        nodeModel?.setSelected(false)
+        return
+      }
+
       if (nodeModel?.isGroup) {
-        const { children } = nodeModel as DynamicGroupNodeModel
-        forEach(Array.from(children), (childId) => {
+        forEach(this.getDescendantNodeIds(nodeModel.id), (childId) => {
           const childModel = this.lf.getNodeModelById(childId)
           childModel?.setSelected(false)
         })
-      } else {
-        const groupId = this.nodeGroupMap.get(node.id)
-        if (groupId) {
-          const graphModel = this.lf.getNodeModelById(groupId)
-          graphModel?.isSelected && nodeModel?.setSelected(false)
-        }
       }
     }
   }
@@ -900,6 +939,7 @@ export class DynamicGroup {
     // https://github.com/didi/LogicFlow/issues/1346
     // 重写 addElements() 方法，在 addElements() 原有基础上增加对 group 内部所有 nodes 和 edges 的复制功能
     // 使用场景：addElements api 项目内部目前只在快捷键粘贴时使用（此处解决的也应该是粘贴场景的问题）
+    this.originAddElements = lf.addElements.bind(lf)
     lf.addElements = (
       { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
       distance = 0,
@@ -972,6 +1012,9 @@ export class DynamicGroup {
     // 还原 lf.addElements 方法？
     if (this.originDeleteNode) {
       this.lf.deleteNode = this.originDeleteNode
+    }
+    if (this.originAddElements) {
+      this.lf.addElements = this.originAddElements
     }
     // 移除 graphModel 上重写的 addNodeMoveRules 方法？
     // TODO: 讨论一下插件该具体做些什么

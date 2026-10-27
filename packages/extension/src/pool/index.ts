@@ -4,34 +4,111 @@ import LogicFlow, {
   BaseNodeModel,
   BaseEdgeModel,
   EventType,
-  transformNodeData,
-  transformEdgeData,
+  h,
 } from '@logicflow/core'
-import { assign, filter, forEach, cloneDeep, has, map } from 'lodash-es'
+import { render } from 'preact'
+import { assign, filter, forEach } from 'lodash-es'
 import {
   ExtensionEventType,
   NODE_ADD_DROP_DND_EVENTS,
   NODE_DRAG_EVENTS,
 } from '../constant/events'
 import { PoolModel } from './PoolModel'
+export type { LayoutLanesOptions, LayoutLanesReason } from './PoolModel'
 import { PoolView } from './PoolView'
 import { LaneModel } from './LaneModel'
 import { LaneView } from './LaneView'
-import { isAllowMoveTo, isBoundsInLane } from './utils'
+import PoolLaneDragOverlay from './PoolLaneDragOverlay'
+import { POOL_STYLE_ID, poolStyleContent } from './style'
+import { getTitleLayout, isAllowMoveTo, isBoundsInLane } from './utils'
 import {
   getChildrenBounds,
   isGroupBoundsContainsChildren,
 } from '../dynamic-group/utils'
+import { poolBehaviorConfig } from './constant'
+import { createPoolAddElements } from './paste'
+import {
+  canMoveLaneBlock,
+  getLaneBlockPreviewOrder,
+  getLaneModelsByIds,
+  getSelectionLaneBlock,
+  getSelectionLaneVisualOrder,
+  getSourcePoolsByIds,
+  groupLanesBySourcePool,
+  previewLaneBlockOrder,
+  reorderLaneBlock,
+  restoreLaneBlockChildPositions,
+  setLaneBlockDropIndicator,
+  type LaneSnapshot,
+  type PoolLaneBlockContext,
+} from './lane-block'
+import {
+  captureLaneSlotBounds,
+  clearLaneDragPreview,
+  clearLaneDropTarget,
+  canDropLaneIntoPool,
+  createLaneDragState,
+  getLaneDragMembers,
+  getLanePointerInsertIndex,
+  getLanePreviewOrder,
+  getLaneRelatedEdges,
+  getLaneSlotBounds,
+  previewLaneOrder,
+  raiseLaneRelatedElements,
+  restoreLaneTextPositions,
+  returnLaneToSourcePool,
+  setLaneDragCursor,
+  setLaneDropIndicator,
+  syncLaneChildZIndex,
+  updateLaneDragPreview,
+  finalizeLaneDrop,
+  type LaneDragState,
+  type LaneSlotBounds,
+  type PoolLaneDragContext,
+} from './lane-drag'
 
-import GraphConfigData = LogicFlow.GraphConfigData
-import GraphElements = LogicFlow.GraphElements
-import EdgeConfig = LogicFlow.EdgeConfig
-import EdgeData = LogicFlow.EdgeData
 import NodeData = LogicFlow.NodeData
 import BoxBoundsPoint = Model.BoxBoundsPoint
-type ElementsInfoInGroup = {
-  childNodes: BaseNodeModel[] // 分组节点的所有子节点 model
-  edgesData: EdgeData[] // 属于分组内的线的 EdgeData (即开始节点和结束节点都在 Group 内)
+
+type SelectionLaneDragState = {
+  /** 被框选的 lane；拖拽期间只以这份快照作为块成员。 */
+  laneIds: string[]
+  /** 拖拽开始时的来源 pool，用于统一做 minLaneCount 校验和归位。 */
+  sourcePoolIds: string[]
+  /** 当前预览命中的目标及插入槽位；drop 时复用，避免鼠标抬起瞬间重新计算。 */
+  targetPoolId?: string
+  insertIndex?: number
+  /** 来源 pool 的初始槽位，不受框选拖拽移动后的模型坐标影响。 */
+  sourceSlotsByPool: Record<
+    string,
+    {
+      laneIds: string[]
+      slots: LaneSlotBounds[]
+    }
+  >
+  laneSnapshots: Record<string, LaneSnapshot>
+  /** Pool 与独立 Lane 混选时，Lane 不能脱离原有 Pool 参与泳道迁移。 */
+  mixedPoolSelection: boolean
+}
+
+let poolStyleRefCount = 0
+
+function ensurePoolStyle() {
+  if (typeof document === 'undefined') return
+  if (!document.getElementById(POOL_STYLE_ID)) {
+    const style = document.createElement('style')
+    style.id = POOL_STYLE_ID
+    style.textContent = poolStyleContent
+    document.head.appendChild(style)
+  }
+  poolStyleRefCount++
+}
+
+function releasePoolStyle() {
+  if (typeof document === 'undefined') return
+  poolStyleRefCount = Math.max(0, poolStyleRefCount - 1)
+  if (poolStyleRefCount > 0) return
+  document.getElementById(POOL_STYLE_ID)?.remove()
 }
 
 export const PoolNode = {
@@ -49,16 +126,29 @@ export const LaneNode = {
 export class PoolElements {
   static pluginName = 'PoolElements'
   private lf: LogicFlow
+  cascadeDeleteChildren: boolean = poolBehaviorConfig.cascadeDeleteChildren
+  minLaneCount: number = poolBehaviorConfig.minLaneCount
+  collapse: { pool: boolean; lane: boolean } = poolBehaviorConfig.collapse
   // 激活态的泳道节点（支持多泳道同时高亮）
   private activeGroups: Set<LaneModel> = new Set()
   // 存储节点与 group 的映射关系
   nodeLaneMap: Map<string, string> = new Map()
+  /** 折叠态虚拟边 id 到泳道及真实边的映射。 */
+  collapsedVirtualEdges: Map<string, { groupId: string; realEdgeId: string }> =
+    new Map()
+  /** 折叠隐藏的真实边 id 到所属泳道的映射。 */
+  collapsedRealEdgeToGroup: Map<string, string> = new Map()
+  laneDragState?: LaneDragState
+  selectionLaneDragState?: SelectionLaneDragState
+  private originDeleteNode?: LogicFlow['deleteNode']
+  private dragOverlayContainer?: HTMLElement
 
   constructor({ lf, options }: LogicFlow.IExtensionProps) {
     lf.register(PoolNode)
     lf.register(LaneNode)
     this.lf = lf
     assign(this, options)
+    ensurePoolStyle()
     // 初始化插件，从监听事件开始及设置规则开始
     this.init()
   }
@@ -74,6 +164,271 @@ export class PoolElements {
     }
   }
 
+  resolvePoolById(poolId?: unknown): PoolModel | undefined {
+    if (typeof poolId !== 'string') return undefined
+    const pool = this.lf.getNodeModelById(poolId) as PoolModel | undefined
+    return String(pool?.type) === 'pool' ? pool : undefined
+  }
+
+  getParentContainerByNodeId(nodeId: string) {
+    return this.getLaneByNodeId(nodeId)
+  }
+
+  getAncestorContainersByNodeId(nodeId: string) {
+    const ancestors: (PoolModel | LaneModel)[] = []
+    const visited = new Set<string>()
+    let parent = this.getParentContainerByNodeId(nodeId) as
+      | PoolModel
+      | LaneModel
+      | undefined
+
+    while (parent && !visited.has(parent.id)) {
+      ancestors.push(parent)
+      visited.add(parent.id)
+      parent = this.getParentContainerByNodeId(parent.id) as
+        | PoolModel
+        | LaneModel
+        | undefined
+    }
+
+    return ancestors
+  }
+
+  getDescendantNodeIds(containerId: string, visited = new Set<string>()) {
+    const container = this.lf.getNodeModelById(containerId) as
+      | PoolModel
+      | LaneModel
+      | undefined
+    if (!container?.children || visited.has(containerId)) return []
+
+    visited.add(containerId)
+    const descendantIds: string[] = []
+    forEach(Array.from(container.children), (childId: string) => {
+      descendantIds.push(childId)
+      descendantIds.push(...this.getDescendantNodeIds(childId, visited))
+    })
+    return descendantIds
+  }
+
+  getRootContainerNodes(nodes: BaseNodeModel[]) {
+    return nodes.filter((node) => {
+      const ancestorContainers = this.getAncestorContainersByNodeId(node.id)
+      return !ancestorContainers.some((ancestor) => nodes.includes(ancestor))
+    })
+  }
+
+  normalizeSelectedContainerTree(nodeId: string) {
+    const nodeModel = this.lf.getNodeModelById(nodeId)
+    const selectedAncestor = this.getAncestorContainersByNodeId(nodeId).find(
+      (ancestor) => ancestor.isSelected,
+    )
+    if (selectedAncestor) {
+      nodeModel?.setSelected(false)
+      return
+    }
+
+    if (nodeModel?.isGroup) {
+      forEach(this.getDescendantNodeIds(nodeModel.id), (childId) => {
+        const childModel = this.lf.getNodeModelById(childId)
+        childModel?.setSelected(false)
+      })
+    }
+  }
+
+  /**
+   * DynamicGroupNodeModel 的折叠逻辑通过此接口查询节点所属容器。
+   * PoolElements 使用泳道作为容器，接口名保持兼容以复用边折叠流程。
+   */
+  getGroupByNodeId(nodeId: string) {
+    return this.getLaneByNodeId(nodeId)
+  }
+
+  registerCollapsedVirtualEdge(
+    virtualId: string,
+    groupId: string,
+    realEdgeId: string,
+  ) {
+    this.collapsedVirtualEdges.set(virtualId, { groupId, realEdgeId })
+    this.collapsedRealEdgeToGroup.set(realEdgeId, groupId)
+  }
+
+  unregisterCollapsedVirtualEdge(virtualId: string) {
+    const info = this.collapsedVirtualEdges.get(virtualId)
+    if (!info) return
+
+    this.collapsedVirtualEdges.delete(virtualId)
+    if (this.collapsedRealEdgeToGroup.get(info.realEdgeId) === info.groupId) {
+      this.collapsedRealEdgeToGroup.delete(info.realEdgeId)
+    }
+  }
+
+  /** 折叠态删除虚拟边时，同步删除对应真实边，避免展开后边重新出现。 */
+  onEdgeDelete = ({ data: edge }: CallbackArgs<'edge:delete'>) => {
+    const virtualMapping = this.collapsedVirtualEdges.get(edge.id)
+    if (virtualMapping) {
+      this.collapsedVirtualEdges.delete(edge.id)
+      this.collapsedRealEdgeToGroup.delete(virtualMapping.realEdgeId)
+      if (this.lf.getEdgeModelById(virtualMapping.realEdgeId)) {
+        this.lf.deleteEdge(virtualMapping.realEdgeId)
+      }
+      return
+    }
+
+    this.collapsedRealEdgeToGroup.delete(edge.id)
+    const virtualIdsToDelete: string[] = []
+    this.collapsedVirtualEdges.forEach((info, virtualId) => {
+      if (info.realEdgeId === edge.id) virtualIdsToDelete.push(virtualId)
+    })
+    virtualIdsToDelete.forEach((virtualId) => {
+      this.collapsedVirtualEdges.delete(virtualId)
+      if (this.lf.getEdgeModelById(virtualId)) {
+        this.lf.deleteEdge(virtualId)
+      }
+    })
+  }
+
+  getPoolMinLaneCount(pool: PoolModel) {
+    const value = pool.properties?.minLaneCount
+    return typeof value === 'number' ? value : this.minLaneCount
+  }
+
+  isCollapseAllowed(model: any): boolean {
+    if (model.properties?.collapsible === false) return false
+    if (String(model.type) === 'pool') return this.collapse?.pool !== false
+    if (String(model.type) === 'lane') return this.collapse?.lane !== false
+    return true
+  }
+
+  getPoolByBounds(
+    bounds: BoxBoundsPoint,
+    nodeData: NodeData | LogicFlow.NodeConfig,
+  ): PoolModel | undefined {
+    const { nodes } = this.lf.graphModel
+    const pools = filter(nodes, (node) => {
+      return (
+        String(node.type) === 'pool' &&
+        isBoundsInLane(bounds, node) &&
+        node.id !== nodeData.id
+      )
+    })
+
+    const count = pools.length
+    if (count <= 1) {
+      return pools[0] as PoolModel
+    } else {
+      let topZIndexPool = pools[count - 1]
+      for (let i = count - 2; i >= 0; i--) {
+        if (pools[i].zIndex > topZIndexPool.zIndex) {
+          topZIndexPool = pools[i]
+        }
+      }
+      return topZIndexPool as PoolModel
+    }
+  }
+
+  getPoolByPoint(
+    point: { x: number; y: number },
+    nodeData: NodeData | LogicFlow.NodeConfig,
+  ): PoolModel | undefined {
+    const pools = filter(this.lf.graphModel.nodes, (node) => {
+      if (String(node.type) !== 'pool' || node.id === nodeData.id) return false
+      const bounds = node.getBounds()
+      return (
+        point.x >= bounds.minX &&
+        point.x <= bounds.maxX &&
+        point.y >= bounds.minY &&
+        point.y <= bounds.maxY
+      )
+    })
+
+    if (pools.length <= 1) return pools[0] as PoolModel
+    return pools.reduce((top: any, node: any) =>
+      node.zIndex > top.zIndex ? node : top,
+    ) as PoolModel
+  }
+
+  getLaneDragContext(): PoolLaneDragContext {
+    return {
+      lf: this.lf,
+      getLaneDragState: () => this.laneDragState,
+      setLaneDragState: (state) => {
+        this.laneDragState = state
+      },
+      resolvePoolById: this.resolvePoolById.bind(this),
+      getPoolByPoint: this.getPoolByPoint.bind(this),
+      getPoolByBounds: this.getPoolByBounds.bind(this),
+      moveLaneToPool: this.moveLaneToPool.bind(this),
+      emitLaneMoveNotAllowed: this.emitLaneMoveNotAllowed.bind(this),
+      getLaneBlockPreviewOrder: this.getLaneBlockPreviewOrder.bind(this),
+      setLaneBlockDropIndicator: this.setLaneBlockDropIndicator.bind(this),
+      previewLaneBlockOrder: this.previewLaneBlockOrder.bind(this),
+    }
+  }
+
+  getLaneBlockContext(): PoolLaneBlockContext {
+    return {
+      lf: this.lf,
+      resolvePoolById: this.resolvePoolById.bind(this),
+      getPoolContentBox: this.getPoolContentBox.bind(this),
+    }
+  }
+
+  emitLaneMoveNotAllowed(lane: LaneModel, reason: string) {
+    this.lf.emit('lane:not-allowed', {
+      lane: lane.getData(),
+      node: lane.getData(),
+      reason,
+    })
+  }
+
+  moveLaneToPool = (
+    laneId: string,
+    targetPoolId: string,
+    insertIndex: number,
+  ) => {
+    const lane = this.lf.getNodeModelById(laneId) as LaneModel
+    if (!lane || String(lane.type) !== 'lane') return false
+
+    const sourcePool = this.resolvePoolById(lane.properties?.parent)
+    const targetPool = this.lf.getNodeModelById(targetPoolId) as PoolModel
+
+    if (!sourcePool || typeof sourcePool.moveLaneToPool !== 'function') {
+      this.emitLaneMoveNotAllowed(lane, 'missing-source-pool')
+      return false
+    }
+
+    if (!targetPool || String(targetPool.type) !== 'pool') {
+      this.emitLaneMoveNotAllowed(lane, 'invalid-target-pool')
+      return false
+    }
+
+    if (targetPool.id !== sourcePool.id && !sourcePool.canRemoveLane(1)) {
+      this.emitLaneMoveNotAllowed(lane, 'source-min-lane-count')
+      return false
+    }
+
+    const moved = sourcePool.moveLaneToPool(laneId, targetPoolId, insertIndex)
+    if (moved) {
+      this.nodeLaneMap.set(laneId, targetPoolId)
+      forEach(Array.from(lane.children), (childId) => {
+        this.nodeLaneMap.set(childId, laneId)
+      })
+      this.removeEmptySourcePool(sourcePool, targetPool)
+    }
+    return moved
+  }
+
+  removeEmptySourcePool(sourcePool: PoolModel, targetPool: PoolModel) {
+    // 仅显式允许保留 0 条泳道的 Pool 可在迁移后自动清理，避免改变既有最小泳道数语义。
+    if (
+      sourcePool.id !== targetPool.id &&
+      sourcePool.getMinLaneCount() === 0 &&
+      sourcePool.getLanes().length === 0
+    ) {
+      this.lf.deleteNode(sourcePool.id)
+    }
+  }
+
   /**
    * 获取指定范围内的泳道
    * 当泳道重合时，优先返回最上层的泳道
@@ -84,7 +439,7 @@ export class PoolElements {
     const { nodes } = this.lf.graphModel
     const lanes = filter(nodes, (node) => {
       return (
-        !!node.isGroup &&
+        String(node.type) === 'lane' &&
         isBoundsInLane(bounds, node) &&
         node.id !== nodeData.id
       )
@@ -108,28 +463,24 @@ export class PoolElements {
    * 提高元素的层级，如果是 group，同时提高其子元素的层级
    * @param model
    */
-  onSelectionDrop = () => {
+  onSelectionDrop = ({ e }: Partial<CallbackArgs<'selection:drop'>> = {}) => {
+    this.finalizeSelectionLaneMove(e)
+    this.clearSelectionLaneDragPreview()
+    this.selectionLaneDragState = undefined
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
     selectedNodes.forEach((node) => {
+      if (String(node.type) === 'lane') return
       this.addNodeToGroup(node)
     })
   }
   onNodeAddOrDrop = ({ data: node }: CallbackArgs<'node:add'>) => {
+    // 泳道归属由泳道放置流程统一处理，在确定目标泳池和最终顺序前必须保留在原泳池中。
+    if (String(node.type) === 'lane') return
     this.addNodeToGroup(node)
   }
 
   addNodeToGroup = (node: LogicFlow.NodeData) => {
-    // 1. 如果该节点之前已经有泳道了，则将其从之前的泳道移除
     const preLaneId = this.nodeLaneMap.get(node.id)
-    if (preLaneId) {
-      const lane = this.lf.getNodeModelById(preLaneId) as LaneModel
-
-      lane.removeChild(node.id)
-      this.nodeLaneMap.delete(node.id)
-      lane.setAllowAppendChild(false)
-    }
-
-    // 2. 然后再判断这个节点是否在某个泳道范围内，如果是，则将其添加到对应的泳道中
     const nodeModel = this.lf.getNodeModelById(node.id)
     const bounds = nodeModel?.getBounds()
 
@@ -154,24 +505,37 @@ export class PoolElements {
       const lane = this.getLaneByBounds(bounds, node)
       if (lane) {
         const isAllowAppendIn = lane.isAllowAppendIn(node)
-        if (isAllowAppendIn) {
-          lane.addChild(node.id)
-          // 建立节点与 lane 的映射关系放在了 lane.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
-          lane.setAllowAppendChild(false)
-          const nodeModel = this.lf.getNodeModelById(node.id)
-          nodeModel?.setProperties({
-            ...nodeModel.properties,
-            parent: lane.id,
-            // relativeDistanceX: nodeModel.x - lane.x,
-            // relativeDistanceY: nodeModel.y - lane.y,
-          })
-        } else {
+        if (!isAllowAppendIn) {
           // 抛出不允许插入的事件
           this.lf.emit('lane:not-allowed', {
             lane: lane.getData(),
             node,
           })
+          return
         }
+
+        if (preLaneId && preLaneId !== lane.id) {
+          const preLane = this.lf.getNodeModelById(preLaneId) as LaneModel
+          preLane?.removeChild(node.id)
+          this.nodeLaneMap.delete(node.id)
+          preLane?.setAllowAppendChild(false)
+        }
+
+        lane.addChild(node.id)
+        // 建立节点与 lane 的映射关系放在了 lane.addChild 触发的事件中，与直接调用 addChild 的行为保持一致
+        lane.setAllowAppendChild(false)
+        nodeModel.setProperties({
+          ...nodeModel.properties,
+          parent: lane.id,
+          // relativeDistanceX: nodeModel.x - lane.x,
+          // relativeDistanceY: nodeModel.y - lane.y,
+        })
+      } else if (preLaneId) {
+        const preLane = this.lf.getNodeModelById(preLaneId) as LaneModel
+
+        preLane?.removeChild(node.id)
+        this.nodeLaneMap.delete(node.id)
+        preLane?.setAllowAppendChild(false)
       }
     }
   }
@@ -181,17 +545,30 @@ export class PoolElements {
     childId,
   }: CallbackArgs<ExtensionEventType.GROUP_ADD_NODE>) => {
     this.nodeLaneMap.set(childId, groupData.id)
+    const lane = this.lf.getNodeModelById(groupData.id) as LaneModel | undefined
+    if (lane && String(lane.type) === 'lane') {
+      this.syncLaneChildZIndex(lane, childId)
+    }
   }
 
   removeNodeFromGroup = ({
     data: node,
     model,
   }: CallbackArgs<'node:delete'>) => {
-    if (model.isGroup && node.children) {
-      forEach(Array.from((node as LaneModel).children), (childId) => {
-        this.nodeLaneMap.delete(childId)
+    if (model.isPool && node.children) {
+      forEach(Array.from((model as PoolModel).children), (childId) => {
         this.lf.deleteNode(childId)
       })
+    } else if (model.isGroup && node.children) {
+      const groupModel = model as LaneModel
+      if (this.cascadeDeleteChildren) {
+        forEach(Array.from(groupModel.children), (childId) => {
+          this.nodeLaneMap.delete(childId)
+          this.lf.deleteNode(childId)
+        })
+      } else {
+        this.releaseLaneMembers(groupModel)
+      }
     }
 
     const laneId = this.nodeLaneMap.get(node.id)
@@ -199,6 +576,12 @@ export class PoolElements {
       const lane = this.lf.getNodeModelById(laneId)
       lane && (lane as LaneModel).removeChild(node.id)
       this.nodeLaneMap.delete(node.id)
+
+      if (String(model.type) === 'lane' && String(lane?.type) === 'pool') {
+        // 快捷键和 API 会直接删除泳道，需在统一删除事件中让父泳池按剩余泳道收敛。
+        ;(lane as PoolModel).layoutLanesByOrder({ reason: 'delete' })
+      }
+
       const nodeModel = this.lf.getNodeModelById(node.id)
       // 移除时删除properties中的parent和relativeDistanceX、relativeDistanceY
       const newProperties = {
@@ -211,7 +594,31 @@ export class PoolElements {
     }
   }
 
-  onSelectionDrag = () => {
+  releaseLaneMembers = (laneModel: LaneModel) => {
+    if (laneModel.isCollapsed) {
+      laneModel.toggleCollapse()
+    }
+
+    forEach(Array.from(laneModel.children), (childId) => {
+      const child = this.lf.getNodeModelById(childId)
+      laneModel.removeChild(childId)
+      this.nodeLaneMap.delete(childId)
+      child?.deleteProperty('parent')
+      child?.deleteProperty('relativeDistanceX')
+      child?.deleteProperty('relativeDistanceY')
+    })
+  }
+
+  /**
+   * 保留成员删除折叠泳道前，先恢复真实边，避免删虚拟边时连带删除业务连线。
+   */
+  prepareLaneForDeletion = (laneModel: LaneModel) => {
+    if (!this.cascadeDeleteChildren && laneModel.isCollapsed) {
+      this.releaseLaneMembers(laneModel)
+    }
+  }
+
+  onSelectionDrag = ({ e }: Partial<CallbackArgs<'selection:drag'>> = {}) => {
     const { nodes: selectedNodes } = this.lf.graphModel.getSelectElements()
 
     const next = new Set<LaneModel>()
@@ -228,10 +635,674 @@ export class PoolElements {
     })
 
     this.activeGroups = next
+    this.updateSelectionLaneDragPreview(e)
   }
 
-  onNodeDrag = ({ data: node }: CallbackArgs<'node:drag'>) => {
+  getSelectedLaneModels(): LaneModel[] {
+    const { nodes } = this.lf.graphModel.getSelectElements()
+    return nodes
+      .map((node) => this.lf.getNodeModelById(node.id))
+      .filter((node): node is LaneModel => String(node?.type) === 'lane')
+  }
+
+  getLaneModelsByIds(laneIds: string[]): LaneModel[] {
+    return getLaneModelsByIds(this.getLaneBlockContext(), laneIds)
+  }
+
+  /**
+   * 根据来源 Pool id 获取 Pool 模型。
+   *
+   * @param poolIds 来源 Pool id 列表。
+   * @returns 可用的来源 Pool 模型列表。
+   */
+  getSourcePoolsByIds(poolIds: string[]): PoolModel[] {
+    return getSourcePoolsByIds(this.getLaneBlockContext(), poolIds)
+  }
+
+  /**
+   * 按 Lane 当前的 parent 关系，将多选 Lane 分组到各自来源 Pool。
+   *
+   * @param lanes 参与多选拖拽的 Lane 模型列表。
+   * @returns 来源 Pool id 到 Lane 列表的映射。
+   */
+  groupLanesBySourcePool(lanes: LaneModel[]) {
+    return groupLanesBySourcePool(this.getLaneBlockContext(), lanes)
+  }
+
+  /**
+   * 判断多个来源 Pool 的 Lane block 是否可以整体迁移到目标 Pool。
+   *
+   * @param sourcePools 参与迁移的来源 Pool 列表。
+   * @param lanesBySourcePool 各来源 Pool 对应的待迁移 Lane。
+   * @param targetPool 预览或 drop 命中的目标 Pool。
+   * @returns 所有来源 Pool 都满足最小 Lane 数约束时返回 true。
+   */
+  canMoveLaneBlock(
+    sourcePools: PoolModel[],
+    lanesBySourcePool: Map<string, LaneModel[]>,
+    targetPool: PoolModel,
+  ) {
+    return canMoveLaneBlock(sourcePools, lanesBySourcePool, targetPool)
+  }
+
+  /**
+   * 根据指针位置计算多选 Lane block 在目标 Pool 中的插入下标。
+   *
+   * @param pool 目标 Pool。
+   * @param lanes 当前选中的 Lane 列表。
+   * @param point 指针在画布中的坐标。
+   * @returns 基于拖拽开始时槽位快照计算出的插入下标。
+   */
+  getSelectionLaneInsertIndex(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    point: { x: number; y: number },
+  ): number {
+    const snapshot = this.selectionLaneDragState?.sourceSlotsByPool[pool.id]
+    if (!snapshot) return pool.getLaneInsertIndex(point)
+
+    const selectedIds = new Set(lanes.map((lane) => lane.id))
+    const selectedSlots = snapshot.slots.filter((slot) =>
+      selectedIds.has(slot.laneId),
+    )
+    const axis = pool.isHorizontal ? point.y : point.x
+    const initialAxis = selectedSlots.reduce((minimum, slot) => {
+      const center = pool.isHorizontal
+        ? (slot.minY + slot.maxY) / 2
+        : (slot.minX + slot.maxX) / 2
+      return Math.min(minimum, center)
+    }, Number.POSITIVE_INFINITY)
+    const targetSlot = snapshot.slots.find(
+      (slot) =>
+        !selectedIds.has(slot.laneId) &&
+        point.x >= slot.minX &&
+        point.x <= slot.maxX &&
+        point.y >= slot.minY &&
+        point.y <= slot.maxY,
+    )
+
+    if (targetSlot) {
+      const targetIndex = snapshot.laneIds.indexOf(targetSlot.laneId)
+      // 指针进入目标槽位即切换排序；依据相对初始块的位置决定插在槽位前或后。
+      return axis < initialAxis ? targetIndex : targetIndex + 1
+    }
+
+    const bounds = pool.getBounds()
+    const minAxis = pool.isHorizontal ? bounds.minY : bounds.minX
+    const maxAxis = pool.isHorizontal ? bounds.maxY : bounds.maxX
+    if (axis <= minAxis) return 0
+    if (axis >= maxAxis) return snapshot.laneIds.length
+
+    return snapshot.laneIds.findIndex((laneId) => selectedIds.has(laneId))
+  }
+
+  /**
+   * selection 拖拽开始时记录 Lane/Pool 快照。
+   *
+   * core 会先整体移动选中节点；Pool 后续预览和 drop 都基于这里的快照修正顺序与子节点相对位置。
+   */
+  onSelectionDragStart = () => {
+    const lanes = this.getSelectedLaneModels()
+    if (lanes.length === 0) return
+
+    const { nodes } = this.lf.graphModel.getSelectElements()
+    const sourcePoolIds = Array.from(
+      new Set(
+        lanes
+          .map((lane) => lane.properties?.parent)
+          .filter((poolId): poolId is string => typeof poolId === 'string'),
+      ),
+    )
+    const sourceSlotsByPool = sourcePoolIds.reduce(
+      (slotsByPool, poolId) => {
+        const pool = this.resolvePoolById(poolId)
+        if (!pool) return slotsByPool
+
+        // 框选拖拽会先移动 lane 的模型坐标，排序命中必须使用开始拖拽时的固定槽位。
+        slotsByPool[poolId] = {
+          laneIds: pool.getOrderedLanes().map((lane: LaneModel) => lane.id),
+          slots: this.captureLaneSlotBounds(pool),
+        }
+        return slotsByPool
+      },
+      {} as SelectionLaneDragState['sourceSlotsByPool'],
+    )
+    const laneSnapshots = lanes.reduce(
+      (snapshots, lane) => {
+        snapshots[lane.id] = {
+          x: lane.x,
+          y: lane.y,
+          children: lane.captureChildrenRelativePositions(),
+        }
+        return snapshots
+      },
+      {} as SelectionLaneDragState['laneSnapshots'],
+    )
+
+    this.selectionLaneDragState = {
+      laneIds: lanes.map((lane) => lane.id),
+      sourcePoolIds,
+      sourceSlotsByPool,
+      laneSnapshots,
+      mixedPoolSelection: nodes.some((node) => String(node.type) === 'pool'),
+    }
+  }
+
+  /**
+   * 计算多选 Lane block 预览时的完整 Lane 顺序。
+   *
+   * @param pool 目标 Pool。
+   * @param lanes 待插入的 Lane block。
+   * @param insertIndex 目标插入下标。
+   * @returns 预览状态下的 Lane id 顺序。
+   */
+  getLaneBlockPreviewOrder(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    insertIndex: number,
+  ): string[] {
+    return getLaneBlockPreviewOrder(pool, lanes, insertIndex)
+  }
+
+  getPoolContentBox(pool: PoolModel) {
+    return getTitleLayout(
+      { x: pool.x, y: pool.y, width: pool.width, height: pool.height },
+      pool.getResolvedTitlePosition(),
+      pool.titleSize,
+    ).contentBox
+  }
+
+  /**
+   * 预览多选 Lane block 插入后的布局。
+   *
+   * @param pool 目标 Pool。
+   * @param lanes 待预览的 Lane block。
+   * @param insertIndex 目标插入下标。
+   * @returns {void} 仅更新模型布局和预览状态。
+   */
+  previewLaneBlockOrder(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    insertIndex: number,
+  ) {
+    previewLaneBlockOrder(this.getLaneBlockContext(), pool, lanes, insertIndex)
+  }
+
+  /**
+   * 更新多选 Lane block 的 drop 指示器。
+   *
+   * @param pool 当前命中的目标 Pool。
+   * @param lanes 待插入的 Lane block。
+   * @param insertIndex 目标插入下标。
+   * @returns {void}
+   */
+  setLaneBlockDropIndicator(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    insertIndex: number,
+  ) {
+    setLaneBlockDropIndicator(
+      this.getLaneBlockContext(),
+      pool,
+      lanes,
+      insertIndex,
+    )
+  }
+
+  previewSelectionLaneOrder(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    insertIndex: number,
+  ) {
+    this.previewLaneBlockOrder(pool, lanes, insertIndex)
+  }
+
+  setSelectionLaneDropIndicator(
+    pool: PoolModel,
+    lanes: LaneModel[],
+    insertIndex: number,
+  ) {
+    this.setLaneBlockDropIndicator(pool, lanes, insertIndex)
+  }
+
+  /**
+   * selection:drag 阶段更新多选 Lane 的落位预览。
+   *
+   * 该阶段只负责展示“如果现在松手会放在哪里”，真正落位在 selection:drop。
+   */
+  updateSelectionLaneDragPreview(e?: MouseEvent | PointerEvent) {
+    const state = this.selectionLaneDragState
+    if (!state || !e) return
+
+    const lanes = this.getLaneModelsByIds(state.laneIds)
+    if (lanes.length === 0) return
+
+    const point = this.lf.graphModel.getPointByClient({
+      x: e.clientX,
+      y: e.clientY,
+    }).canvasOverlayPosition
+    const targetPool = this.getPoolByPoint(point, lanes[0].getData())
+    if (state.targetPoolId && state.targetPoolId !== targetPool?.id) {
+      const previousPool = this.resolvePoolById(state.targetPoolId)
+      this.clearLaneDropTarget(previousPool)
+    }
+
+    const sourcePools = this.getSourcePoolsByIds(state.sourcePoolIds)
+    const lanesBySourcePool = this.groupLanesBySourcePool(lanes)
+    const canMove =
+      !!targetPool &&
+      this.canMoveLaneBlock(sourcePools, lanesBySourcePool, targetPool)
+    if (!targetPool || !canMove) {
+      // 任一来源池不满足数量下限时，整个块都不能迁移，避免出现部分成功。
+      state.targetPoolId = undefined
+      state.insertIndex = undefined
+      this.setLaneDragCursor('not-allowed')
+      return
+    }
+
+    const insertIndex = this.getSelectionLaneInsertIndex(
+      targetPool,
+      lanes,
+      point,
+    )
+    state.targetPoolId = targetPool.id
+    state.insertIndex = insertIndex
+    targetPool.isLaneDropTarget = !sourcePools.some(
+      (sourcePool) => sourcePool.id === targetPool.id,
+    )
+    targetPool.setAllowAppendChild(targetPool.isLaneDropTarget)
+    this.setLaneDragCursor(targetPool.isLaneDropTarget ? 'allowed' : undefined)
+    this.setSelectionLaneDropIndicator(targetPool, lanes, insertIndex)
+    if (sourcePools.length === 1 && sourcePools[0].id === targetPool.id) {
+      this.previewSelectionLaneOrder(targetPool, lanes, insertIndex)
+    }
+  }
+
+  clearSelectionLaneDragPreview() {
+    const state = this.selectionLaneDragState
+    if (!state) return
+
+    // 同一预览可能先后经过多个来源/目标；结束时必须把本轮涉及的容器状态都还原。
+    const poolIds = new Set([...state.sourcePoolIds, state.targetPoolId])
+    poolIds.forEach((poolId) => {
+      if (!poolId) return
+      const pool = this.resolvePoolById(poolId)
+      if (!pool) return
+      this.clearLaneDropTarget(pool)
+      pool.getOrderedLanes().forEach((lane: LaneModel) => {
+        lane.isLaneReordering = false
+      })
+    })
+    this.setLaneDragCursor()
+  }
+
+  getSelectionLaneBlock(
+    lanes: LaneModel[],
+    sourcePool: PoolModel,
+  ): LaneModel[] {
+    return getSelectionLaneBlock(lanes, sourcePool)
+  }
+
+  reorderLaneBlock(pool: PoolModel, lanes: LaneModel[], insertIndex: number) {
+    reorderLaneBlock(pool, lanes, insertIndex)
+  }
+
+  returnSelectedLanesToSources(sourcePoolIds: string[]) {
+    sourcePoolIds.forEach((poolId) => {
+      const pool = this.resolvePoolById(poolId)
+      pool?.layoutLanesByOrder({ reason: 'reorder' })
+    })
+  }
+
+  /**
+   * 获取多选 Lane block 在来源 Pool 中的视觉顺序。
+   *
+   * @param lanes 参与迁移的 Lane 列表。
+   * @param targetPool 目标 Pool。
+   * @returns 按用户视觉顺序排列的 Lane 列表。
+   */
+  getSelectionLaneVisualOrder(lanes: LaneModel[], targetPool: PoolModel) {
+    return getSelectionLaneVisualOrder(
+      lanes,
+      targetPool,
+      this.selectionLaneDragState?.laneSnapshots ?? {},
+    )
+  }
+
+  /**
+   * 根据拖拽开始快照恢复多选 Lane 的子节点相对位置。
+   *
+   * @param lanes 需要恢复子节点位置的 Lane 列表。
+   * @returns {void}
+   */
+  restoreSelectionLaneChildPositions(lanes: LaneModel[]) {
+    restoreLaneBlockChildPositions(
+      lanes,
+      this.selectionLaneDragState?.laneSnapshots ?? {},
+    )
+  }
+
+  /**
+   * 多选 Lane drop 的统一出口。
+   *
+   * 同池换序、跨池迁移、非法目标归位都在这里收敛。
+   */
+  finalizeSelectionLaneMove = (e?: MouseEvent | PointerEvent) => {
+    const state = this.selectionLaneDragState
+    if (!state) return false
+
+    const lanes = this.getLaneModelsByIds(state.laneIds)
+    if (lanes.length === 0) return false
+
+    if (state.mixedPoolSelection) {
+      this.returnSelectedLanesToSources(state.sourcePoolIds)
+      this.restoreSelectionLaneChildPositions(lanes)
+      return false
+    }
+
+    const point = e
+      ? this.lf.graphModel.getPointByClient({ x: e.clientX, y: e.clientY })
+          .canvasOverlayPosition
+      : { x: lanes[0].x, y: lanes[0].y }
+    const targetPool = this.getPoolByPoint(point, lanes[0].getData())
+    if (!targetPool) {
+      this.returnSelectedLanesToSources(state.sourcePoolIds)
+      this.restoreSelectionLaneChildPositions(lanes)
+      return false
+    }
+
+    const sourcePools = this.getSourcePoolsByIds(state.sourcePoolIds)
+    const lanesBySourcePool = this.groupLanesBySourcePool(lanes)
+    const canMove = this.canMoveLaneBlock(
+      sourcePools,
+      lanesBySourcePool,
+      targetPool,
+    )
+    if (!canMove) {
+      this.returnSelectedLanesToSources(state.sourcePoolIds)
+      this.restoreSelectionLaneChildPositions(lanes)
+      return false
+    }
+
+    const insertIndex =
+      state.targetPoolId === targetPool.id &&
+      typeof state.insertIndex === 'number'
+        ? state.insertIndex
+        : this.getSelectionLaneInsertIndex(targetPool, lanes, point)
+    if (sourcePools.length === 1 && sourcePools[0].id === targetPool.id) {
+      this.reorderLaneBlock(
+        targetPool,
+        this.getSelectionLaneBlock(lanes, targetPool),
+        insertIndex,
+      )
+      return true
+    }
+
+    const block = this.getSelectionLaneVisualOrder(lanes, targetPool)
+
+    // 跨 Pool 迁移要先从所有来源 Pool 的 laneOrder 中移除选中块，再插入目标 Pool。
+    sourcePools.forEach((sourcePool) => {
+      const movedIds = new Set(
+        (lanesBySourcePool.get(sourcePool.id) ?? []).map((lane) => lane.id),
+      )
+      const ids = sourcePool
+        .getOrderedLanes()
+        .map((lane: LaneModel) => lane.id)
+        .filter((id: string) => !movedIds.has(id))
+      sourcePool.setLaneOrder(ids)
+    })
+
+    const targetIds = targetPool
+      .getOrderedLanes()
+      .map((lane: LaneModel) => lane.id)
+      .filter((id: string) => !block.some((lane) => lane.id === id))
+    targetIds.splice(
+      Math.min(insertIndex, targetIds.length),
+      0,
+      ...block.map((lane) => lane.id),
+    )
+    targetPool.setLaneOrder(targetIds)
+    block.forEach((lane) => {
+      lane.setProperties({
+        ...lane.properties,
+        parent: targetPool.id,
+        direction: targetPool.properties?.direction,
+        isHorizontal: targetPool.isHorizontal,
+      })
+      this.nodeLaneMap.set(lane.id, targetPool.id)
+    })
+    this.restoreSelectionLaneChildPositions(block)
+
+    sourcePools.forEach((sourcePool) => {
+      if (sourcePool.id !== targetPool.id) {
+        sourcePool.layoutLanesByOrder({ reason: 'move-to-pool' })
+      }
+    })
+    targetPool.layoutLanesByOrder({ reason: 'move-to-pool' })
+    sourcePools.forEach((sourcePool) => {
+      this.removeEmptySourcePool(sourcePool, targetPool)
+    })
+    return true
+  }
+
+  onNodeDrag = ({ data: node, e }: CallbackArgs<'node:drag'>) => {
+    if (String(node.type) === 'lane' && e) {
+      const { canvasOverlayPosition } = this.lf.graphModel.getPointByClient({
+        x: e.clientX,
+        y: e.clientY,
+      })
+      this.updateLaneDragPreview(node.id, canvasOverlayPosition)
+      return
+    }
     this.setActiveGroup(node)
+  }
+
+  getLanePointerInsertIndex(
+    pool: PoolModel,
+    lane: LaneModel,
+    point: { x: number; y: number },
+    previousAxis: number,
+    slotBounds: LaneSlotBounds[],
+  ): number {
+    return getLanePointerInsertIndex(
+      this.getLaneDragContext(),
+      pool,
+      lane,
+      point,
+      previousAxis,
+      slotBounds,
+    )
+  }
+
+  /**
+   * 保存 Pool 当前各 Lane 的几何槽位。
+   *
+   * @param pool 需要保存槽位快照的 Pool。
+   * @returns 当前 Lane 顺序对应的槽位边界列表。
+   */
+  captureLaneSlotBounds(pool: PoolModel): LaneSlotBounds[] {
+    return captureLaneSlotBounds(pool)
+  }
+
+  /**
+   * 获取单 Lane 拖拽排序使用的槽位边界。
+   *
+   * @param pool 当前来源或目标 Pool。
+   * @returns Lane 槽位边界列表。
+   */
+  getLaneSlotBounds(pool: PoolModel): LaneSlotBounds[] {
+    return getLaneSlotBounds(this.getLaneDragContext(), pool)
+  }
+
+  /**
+   * 获取单 Lane 拖拽时需要跟随移动的 Lane 及其子节点。
+   *
+   * @param lane 当前拖拽的 Lane。
+   * @returns 需要同步移动的节点模型列表。
+   */
+  getLaneDragMembers(lane: LaneModel): BaseNodeModel[] {
+    return getLaneDragMembers(this.getLaneDragContext(), lane)
+  }
+
+  /**
+   * 获取与 Lane 关联、需要同步处理的边。
+   *
+   * @param lane 当前拖拽的 Lane。
+   * @returns 与 Lane 或其子节点关联的边模型列表。
+   */
+  getLaneRelatedEdges(lane: LaneModel): BaseEdgeModel[] {
+    return getLaneRelatedEdges(this.getLaneDragContext(), lane)
+  }
+
+  /**
+   * 创建单 Lane 拖拽过程所需的初始快照。
+   *
+   * @param lane 当前拖拽的 Lane。
+   * @param sourcePool Lane 所属的来源 Pool。
+   * @param previousAxis 拖拽开始时 Lane 在 Pool 主轴上的位置。
+   * @returns 单 Lane 拖拽状态。
+   */
+  createLaneDragState(
+    lane: LaneModel,
+    sourcePool: PoolModel,
+    previousAxis: number,
+  ) {
+    return createLaneDragState(
+      this.getLaneDragContext(),
+      lane,
+      sourcePool,
+      previousAxis,
+    )
+  }
+
+  /**
+   * 恢复单 Lane 拖拽前的标题文本位置。
+   *
+   * @param state 单 Lane 拖拽状态快照。
+   * @returns {void}
+   */
+  restoreLaneTextPositions(state: LaneDragState) {
+    restoreLaneTextPositions(this.getLaneDragContext(), state)
+  }
+
+  /**
+   * 设置单 Lane 拖拽期间的鼠标指针样式。
+   *
+   * @param cursor 允许或禁止 drop 时显示的指针样式；不传则恢复默认样式。
+   * @returns {void}
+   */
+  setLaneDragCursor(cursor?: 'not-allowed' | 'allowed') {
+    setLaneDragCursor(this.getLaneDragContext(), cursor)
+  }
+
+  /**
+   * 清理指定 Pool 的 Lane drop 目标状态。
+   *
+   * @param pool 需要清理的 Pool；不传时由底层逻辑清理当前目标。
+   * @returns {void}
+   */
+  clearLaneDropTarget(pool?: PoolModel) {
+    clearLaneDropTarget(pool)
+  }
+
+  /**
+   * 判断单 Lane 是否可以从来源 Pool 移入目标 Pool。
+   *
+   * @param sourcePool Lane 当前所属的来源 Pool。
+   * @param targetPool 预览或 drop 命中的目标 Pool。
+   * @returns 满足 Pool 约束时返回 true。
+   */
+  canDropLaneIntoPool(sourcePool: PoolModel, targetPool: PoolModel) {
+    return canDropLaneIntoPool(sourcePool, targetPool)
+  }
+
+  raiseLaneRelatedElements(lane: LaneModel) {
+    raiseLaneRelatedElements(this.getLaneDragContext(), lane)
+  }
+
+  syncLaneChildZIndex(lane: LaneModel, childId: string) {
+    syncLaneChildZIndex(this.getLaneDragContext(), lane, childId)
+  }
+
+  /**
+   * 获取单 Lane 在目标 Pool 中的预览顺序。
+   *
+   * @param pool 目标 Pool。
+   * @param laneId 待移动的 Lane id。
+   * @param insertIndex 目标插入下标。
+   * @returns 预览状态下的 Lane id 顺序。
+   */
+  getLanePreviewOrder(
+    pool: PoolModel,
+    laneId: string,
+    insertIndex: number,
+  ): string[] {
+    return getLanePreviewOrder(
+      this.getLaneDragContext(),
+      pool,
+      laneId,
+      insertIndex,
+    )
+  }
+
+  /**
+   * 更新单 Lane 的 drop 指示器。
+   *
+   * @param pool 目标 Pool。
+   * @param laneId 待移动的 Lane id。
+   * @param insertIndex 目标插入下标。
+   * @returns {void}
+   */
+  setLaneDropIndicator(pool: PoolModel, laneId: string, insertIndex: number) {
+    setLaneDropIndicator(this.getLaneDragContext(), pool, laneId, insertIndex)
+  }
+
+  /**
+   * 预览单 Lane 插入后的 Pool 布局。
+   *
+   * @param pool 目标 Pool。
+   * @param laneId 待移动的 Lane id。
+   * @param insertIndex 目标插入下标。
+   * @returns {void}
+   */
+  previewLaneOrder(pool: PoolModel, laneId: string, insertIndex: number) {
+    previewLaneOrder(this.getLaneDragContext(), pool, laneId, insertIndex)
+  }
+
+  /**
+   * 根据指针位置更新单 Lane 拖拽预览。
+   *
+   * @param laneId 当前拖拽的 Lane id。
+   * @param point 指针在画布中的坐标。
+   * @returns {void}
+   */
+  updateLaneDragPreview(laneId: string, point: { x: number; y: number }) {
+    updateLaneDragPreview(this.getLaneDragContext(), laneId, point)
+  }
+
+  /**
+   * 清理单 Lane 拖拽期间的预览布局和指示器。
+   *
+   * @returns {void}
+   */
+  clearLaneDragPreview() {
+    clearLaneDragPreview(this.getLaneDragContext())
+  }
+
+  /**
+   * 将非法 drop 的 Lane 恢复到来源 Pool。
+   *
+   * @param lane 需要归位的 Lane。
+   * @param sourcePool Lane 原所属的 Pool。
+   * @param state 单 Lane 拖拽快照；不传时由底层逻辑按当前状态处理。
+   * @returns {void}
+   */
+  returnLaneToSourcePool(
+    lane: LaneModel,
+    sourcePool: PoolModel,
+    state?: LaneDragState,
+  ) {
+    returnLaneToSourcePool(this.getLaneDragContext(), lane, sourcePool, state)
   }
 
   private getTargetLaneForNode(
@@ -272,11 +1343,25 @@ export class PoolElements {
     this.activeGroups.clear()
   }
 
-  onNodeDrop = () => {
+  /**
+   * 完成单 Lane drop，并根据命中结果执行同池换序或跨池迁移。
+   *
+   * @param node drop 事件中的节点数据。
+   * @returns drop 被成功处理时返回 true，否则返回 false。
+   */
+  finalizeLaneDrop(node?: LogicFlow.NodeData): boolean {
+    return finalizeLaneDrop(this.getLaneDragContext(), node)
+  }
+
+  onNodeDrop = ({ data: node }: Partial<CallbackArgs<'node:drop'>> = {}) => {
+    this.finalizeLaneDrop(node)
+    this.clearLaneDragPreview()
+    this.setLaneDragCursor()
     this.clearDragTargetHighlight()
   }
 
   onNodeMouseUp = () => {
+    this.setLaneDragCursor()
     this.clearDragTargetHighlight()
   }
   /**
@@ -295,19 +1380,10 @@ export class PoolElements {
     // 这个节点是分组，则将分组的所有子节点取消选中
     // 这个节点是分组的子节点，且其所属分组节点已选，则取消选中
     if (isMultiple && isSelected) {
-      if (nodeModel?.isGroup) {
-        const { children } = nodeModel as LaneModel
-        forEach(Array.from(children), (childId) => {
-          const childModel = this.lf.getNodeModelById(childId)
-          childModel?.setSelected(false)
-        })
-      } else {
-        const laneId = this.nodeLaneMap.get(node.id)
-        if (laneId) {
-          const laneModel = this.lf.getNodeModelById(laneId)
-          laneModel?.isSelected && nodeModel?.setSelected(false)
-        }
-      }
+      this.normalizeSelectedContainerTree(node.id)
+    }
+    if (isSelected && String(nodeModel?.type) === 'lane') {
+      this.raiseLaneRelatedElements(nodeModel as LaneModel)
     }
   }
 
@@ -370,6 +1446,7 @@ export class PoolElements {
   }
 
   onGraphRendered = ({ data }: CallbackArgs<'graph:rendered'>) => {
+    this.nodeLaneMap.clear()
     forEach(data.nodes, (node) => {
       if (node.children) {
         forEach(node.children, (childId) => {
@@ -377,114 +1454,13 @@ export class PoolElements {
         })
       }
     })
-  }
 
-  removeChildrenInGroupNodeData<
-    T extends LogicFlow.NodeData | LogicFlow.NodeConfig,
-  >(nodeData: T) {
-    const newNodeData = cloneDeep(nodeData)
-    delete newNodeData.children
-    if (newNodeData.properties?.children) {
-      delete newNodeData.properties.children
-    }
-    return newNodeData
-  }
-
-  /**
-   * 创建一个 Group 类型节点内部所有子节点的副本
-   * 并且在遍历所有 nodes 的过程中，顺便拿到所有 edges (只在 Group 范围的 edges)
-   */
-  initGroupChildNodes(
-    nodeIdMap: Record<string, string>,
-    children: Set<string>,
-    curGroup: LaneModel,
-    distance: number,
-  ): ElementsInfoInGroup {
-    // Group 中所有子节点
-    const allChildNodes: BaseNodeModel[] = []
-    // 属于 Group 内部边的 EdgeData
-    const edgesDataArr: EdgeData[] = []
-    // 所有有关联的连线
-    const allRelatedEdges: BaseEdgeModel[] = []
-
-    forEach(Array.from(children), (childId: string) => {
-      const childNode = this.lf.getNodeModelById(childId)
-      if (childNode) {
-        const childNodeChildren = childNode.children
-        const childNodeData = childNode.getData()
-        const eventType = EventType.NODE_GROUP_COPY || 'node:group-copy-add'
-
-        const newNodeConfig = transformNodeData(
-          this.removeChildrenInGroupNodeData(childNodeData),
-          distance,
-        )
-        const tempChildNode = this.lf.addNode(newNodeConfig, eventType)
-        curGroup.addChild(tempChildNode.id)
-
-        nodeIdMap[childId] = tempChildNode.id // id 同 childId，做映射存储
-        allChildNodes.push(tempChildNode)
-
-        // 1. 存储 children 内部节点相关的输入边（incoming）
-        allRelatedEdges.push(
-          ...[...tempChildNode.incoming.edges, ...tempChildNode.outgoing.edges],
-        )
-
-        if (childNodeChildren instanceof Set) {
-          const { childNodes, edgesData } = this.initGroupChildNodes(
-            nodeIdMap,
-            childNodeChildren,
-            tempChildNode as LaneModel,
-            distance,
-          )
-
-          allChildNodes.push(...childNodes)
-          edgesDataArr.push(...edgesData)
-        }
+    // Pool 模型初始化早于 Lane 模型，初次布局可能没有可用泳道。显式使用新标题边
+    // 配置的 Pool 在渲染完成后重排，既能正确避让标题区，也不改变历史数据的既有坐标。
+    this.lf.graphModel.nodes.forEach((node) => {
+      if (String(node.type) === 'pool' && node.properties?.titlePosition) {
+        ;(node as PoolModel).layoutLanesByOrder({ reason: 'init' })
       }
-    })
-
-    // 1. 判断每一条边的开始节点、目标节点是否在 Group 中
-    const edgesInnerGroup = filter(allRelatedEdges, (edge) => {
-      return (
-        has(nodeIdMap, edge.sourceNodeId) && has(nodeIdMap, edge.targetNodeId)
-      )
-    })
-    // 2. 为「每一条 Group 的内部边」构建出 EdgeData 数据，得到 EdgeConfig，生成新的线
-    const edgesDataInnerGroup = map(edgesInnerGroup, (edge) => {
-      return edge.getData()
-    })
-
-    return {
-      childNodes: allChildNodes,
-      edgesData: edgesDataArr.concat(edgesDataInnerGroup),
-    }
-  }
-
-  /**
-   * 根据参数 edge 选择是新建边还是基于已有边，复制一条边出来
-   * @param edge
-   * @param nodeIdMap
-   * @param distance
-   */
-  createEdge(
-    edge: EdgeConfig | EdgeData,
-    nodeIdMap: Record<string, string>,
-    distance: number,
-  ) {
-    const { sourceNodeId, targetNodeId } = edge
-    const sourceId = nodeIdMap[sourceNodeId] ?? sourceNodeId
-    const targetId = nodeIdMap[targetNodeId] ?? targetNodeId
-
-    // 如果是有 id 且 text 是对象的边，需要重新计算位置，否则直接用 edgeConfig 生成边
-    let newEdgeConfig = cloneDeep(edge)
-    if (edge.id && typeof edge.text === 'object' && edge.text !== null) {
-      newEdgeConfig = transformEdgeData(edge as EdgeData, distance)
-    }
-
-    return this.lf.graphModel.addEdge({
-      ...newEdgeConfig,
-      sourceNodeId: sourceId,
-      targetNodeId: targetId,
     })
   }
 
@@ -553,6 +1529,7 @@ export class PoolElements {
       return true
     })
     graphModel.addNodeResizeRules((model, deltaX, deltaY, width, height) => {
+      if (String(model.type) === 'pool') return false
       if (model.isGroup) {
         return this.checkGroupBoundsWithChildren(
           model as LaneModel,
@@ -566,9 +1543,24 @@ export class PoolElements {
     })
 
     graphModel.dynamicGroup = this
+    // 快捷键、菜单和 API 都会调用 lf.deleteNode，统一在这里保护泳道数量下限。
+    this.originDeleteNode = lf.deleteNode.bind(lf)
+    lf.deleteNode = (nodeId: string): boolean => {
+      const node = lf.getNodeModelById(nodeId)
+      if (String(node?.type) === 'lane') {
+        const pool = this.resolvePoolById(
+          this.nodeLaneMap.get(nodeId) ?? node?.properties?.parent,
+        )
+        if (pool?.isPool && !pool.canRemoveLane(1)) return false
+        this.prepareLaneForDeletion(node as LaneModel)
+      }
+      return this.originDeleteNode!(nodeId)
+    }
     lf.on(NODE_ADD_DROP_DND_EVENTS, this.onNodeAddOrDrop)
     lf.on(EventType.SELECTION_DROP, this.onSelectionDrop)
+    lf.on(EventType.SELECTION_DRAGSTART, this.onSelectionDragStart)
     lf.on(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    lf.on(EventType.EDGE_DELETE, this.onEdgeDelete)
     lf.on(NODE_DRAG_EVENTS, this.onNodeDrag)
     lf.on(EventType.SELECTION_DRAG, this.onSelectionDrag)
     lf.on(EventType.NODE_DROP, this.onNodeDrop)
@@ -579,62 +1571,44 @@ export class PoolElements {
 
     lf.on(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
 
-    lf.addElements = (
-      { nodes: selectedNodes, edges: selectedEdges }: GraphConfigData,
-      distance = 40,
-    ): GraphElements => {
-      // oldNodeId -> newNodeId 映射 Map
-      const nodeIdMap: Record<string, string> = {}
-      // 本次添加的所有节点和边
-      const elements: GraphElements = {
-        nodes: [],
-        edges: [],
-      }
-      // 所有属于分组内的边 -> sourceNodeId 和 targetNodeId 都在 Group 内
-      const edgesInnerGroup: EdgeData[] = []
-
-      forEach(selectedNodes, (node) => {
-        const originId = node.id
-        const children = node.properties?.children ?? node.children
-
-        const model = lf.addNode(this.removeChildrenInGroupNodeData(node))
-
-        if (originId) nodeIdMap[originId] = model.id
-        elements.nodes.push(model) // 此时为 group 的 nodeModel
-
-        if (model.isGroup) {
-          const { edgesData } = this.initGroupChildNodes(
-            nodeIdMap,
-            children,
-            model as LaneModel,
-            distance,
-          )
-          edgesInnerGroup.push(...edgesData)
-        }
-      })
-
-      forEach(edgesInnerGroup, (edge) => {
-        this.createEdge(edge, nodeIdMap, distance)
-      })
-      forEach(selectedEdges, (edge) => {
-        elements.edges.push(this.createEdge(edge, nodeIdMap, distance))
-      })
-
-      // 返回 elements 进行选中效果，即触发 element.selectElementById()
-      // shortcut.ts 也会对最外层的 nodes 和 edges 进行偏移，即 translationNodeData()
-      return elements
-    }
+    lf.addElements = createPoolAddElements({
+      lf,
+      nodeLaneMap: this.nodeLaneMap,
+      resolvePoolById: this.resolvePoolById.bind(this),
+      getAncestorContainersByNodeId:
+        this.getAncestorContainersByNodeId.bind(this),
+      getRootContainerNodes: this.getRootContainerNodes.bind(this),
+    })
 
     this.render()
   }
 
-  render() {}
+  /** 将临时的泳道落位反馈挂到 LogicFlow 顶层工具层，始终高于节点与边。 */
+  render(_lf?: LogicFlow, container?: HTMLElement) {
+    // init 阶段会调用一次无参数 render；此时 ToolOverlay 尚未创建。
+    if (!container) return
+    if (!this.dragOverlayContainer) {
+      this.dragOverlayContainer = document.createElement('div')
+      this.dragOverlayContainer.className = 'lf-pool-lane-drag-overlay-root'
+      // ToolOverlay 默认允许子元素接收事件；拖拽反馈层必须完全透传给画布。
+      this.dragOverlayContainer.style.pointerEvents = 'none'
+      this.dragOverlayContainer.style.position = 'absolute'
+      this.dragOverlayContainer.style.inset = '0'
+      container.appendChild(this.dragOverlayContainer)
+    }
+    render(
+      h(PoolLaneDragOverlay, { graphModel: this.lf.graphModel }),
+      this.dragOverlayContainer,
+    )
+  }
 
   destroy() {
     // 销毁监听的事件，并移除渲染的 dom 内容
     this.lf.off(NODE_ADD_DROP_DND_EVENTS, this.onNodeAddOrDrop)
     this.lf.off(EventType.SELECTION_DROP, this.onSelectionDrop)
+    this.lf.off(EventType.SELECTION_DRAGSTART, this.onSelectionDragStart)
     this.lf.off(EventType.NODE_DELETE, this.removeNodeFromGroup)
+    this.lf.off(EventType.EDGE_DELETE, this.onEdgeDelete)
     this.lf.off(NODE_DRAG_EVENTS, this.onNodeDrag)
     this.lf.off(EventType.SELECTION_DRAG, this.onSelectionDrag)
     this.lf.off(EventType.NODE_DROP, this.onNodeDrop)
@@ -643,6 +1617,15 @@ export class PoolElements {
     this.lf.off(EventType.NODE_MOUSEMOVE, this.onNodeMove)
     this.lf.off(EventType.GRAPH_RENDERED, this.onGraphRendered)
     this.lf.off(ExtensionEventType.GROUP_ADD_NODE, this.onGroupAddNode)
+    if (this.originDeleteNode) {
+      this.lf.deleteNode = this.originDeleteNode
+    }
+    if (this.dragOverlayContainer) {
+      render(null, this.dragOverlayContainer)
+      this.dragOverlayContainer.remove()
+      this.dragOverlayContainer = undefined
+    }
+    releasePoolStyle()
   }
 }
 
