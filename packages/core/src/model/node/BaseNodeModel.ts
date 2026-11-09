@@ -663,16 +663,20 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
   get anchors(): Model.AnchorConfig[] {
     const anchors = this.getAnchorsByOffset()
     const { x, y, rotate } = this
-    anchors.forEach((anchor) => {
+    // 自定义 getDefaultAnchor 可能返回缓存的锚点数组，不能原地修改，
+    // 否则每次读取 anchors（例如 undo/redo 后的重绘）都会在上次旋转结果上再次旋转，导致锚点漂移。
+    return anchors.map((anchor) => {
       const { x: anchorX, y: anchorY } = anchor
       const [e, f] = new Matrix([anchorX, anchorY, 1])
         .translate(-x, -y)
         .rotate(rotate)
         .translate(x, y)[0]
-      anchor.x = e
-      anchor.y = f
+      return {
+        ...anchor,
+        x: e,
+        y: f,
+      }
     })
-    return anchors
   }
 
   getAnchorInfo(anchorId: string | undefined): AnchorConfig | undefined {
