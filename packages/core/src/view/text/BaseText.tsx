@@ -24,7 +24,7 @@ export class BaseText<
 
   constructor(props: P) {
     super()
-    const { draggable } = props
+    const { draggable, graphModel } = props
     // TODO: 确认为什么不在 new 的时候传入 model，而在下面使用的时候赋值
     this.stepperDrag = new StepDrag({
       onDragging: this.onDragging,
@@ -32,6 +32,7 @@ export class BaseText<
       // model,
       eventType: 'TEXT',
       isStopPropagation: draggable,
+      eventCenter: graphModel.eventCenter,
     })
   }
 
