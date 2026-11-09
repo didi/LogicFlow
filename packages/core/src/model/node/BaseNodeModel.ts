@@ -765,6 +765,10 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     return [moveX, moveY]
   }
 
+  /**
+   * 将节点移动到指定坐标，并同步移动关联边
+   * @param isIgnoreRule 是否忽略节点移动规则
+   */
   @action moveTo(x: number, y: number, isIgnoreRule = false): boolean {
     const deltaX = x - this.x
     const deltaY = y - this.y
@@ -773,6 +777,12 @@ export class BaseNodeModel<P extends PropertiesType = PropertiesType>
     this.text && this.moveText(deltaX, deltaY)
     this.x = x
     this.y = y
+    // 旋转矩阵依赖节点最新的 x、y，直接调用 moveTo 时也要同步更新
+    this.transform = new TranslateMatrix(-this.x, -this.y)
+      .rotate(this.rotate)
+      .translate(this.x, this.y)
+      .toString()
+    this.graphModel.moveEdge(this.id, deltaX, deltaY)
     return true
   }
 
