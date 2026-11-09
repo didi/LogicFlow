@@ -79,8 +79,11 @@ export class CanvasOverlay extends Component<IProps, IState> {
     // 如果没有禁止滚动移动画布, 并且当前触发的时候ctrl键、cmd键没有按住, 那么移动画布
     if (!stopScrollGraph && !ev.ctrlKey && !ev.metaKey) {
       ev.preventDefault()
-      this.stepScrollX += eX
-      this.stepScrollY += eY
+      // Windows 下按住 Shift 滚动时浏览器只给出 deltaY，将其映射为水平滚动。
+      const scrollDeltaX = ev.shiftKey && eX === 0 ? eY : eX
+      const scrollDeltaY = ev.shiftKey && eX === 0 ? 0 : eY
+      this.stepScrollX += scrollDeltaX
+      this.stepScrollY += scrollDeltaY
       if (Math.abs(this.stepScrollX) >= gridSize) {
         const remainderX = this.stepScrollX % gridSize
         const moveDistance = this.stepScrollX - remainderX
