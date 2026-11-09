@@ -2,7 +2,7 @@
  * 基于DynamicGroup重新实现的泳池节点组件
  * 充分利用DynamicGroup的分组管理能力，实现完整的泳道功能
  */
-import LogicFlow, { GraphModel, BaseEdgeModel } from '@logicflow/core'
+import LogicFlow, { GraphModel } from '@logicflow/core'
 import { computed } from 'mobx'
 import { forEach, merge, cloneDeep, isEmpty } from 'lodash-es'
 import {
@@ -293,18 +293,10 @@ export class PoolModel extends DynamicGroupNodeModel {
     childrenRelPos.forEach(({ id, dx, dy }) => {
       const childNode = this.graphModel.getNodeModelById(id)
       if (childNode) {
-        const { x, y } = childNode
         const newChildX = lane.x + dx
         const newChildY = lane.y + dy
+        // moveTo 会同步移动子节点的关联边
         childNode.moveTo(newChildX, newChildY)
-        const { edges: incomingEdges } = childNode.incoming
-        const { edges: outgoingEdges } = childNode.outgoing
-        incomingEdges.forEach((edge: BaseEdgeModel) => {
-          edge.moveEndPoint(newChildX - x, newChildY - y)
-        })
-        outgoingEdges.forEach((edge: BaseEdgeModel) => {
-          edge.moveStartPoint(newChildX - x, newChildY - y)
-        })
       }
     })
   }
