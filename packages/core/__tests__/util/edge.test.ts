@@ -1,4 +1,5 @@
 import {
+  getBytesLength,
   isBboxOverLapping,
   mergeBBox,
   isPointOutsideBBox,
@@ -224,4 +225,9 @@ describe('util/edge', () => {
       }),
     ).toEqual('horizontal')
   })
+})
+
+test('counts uppercase characters individually', () => {
+  expect(getBytesLength('Approve')).toBe(7.5)
+  expect(getBytesLength('A中文')).toBe(5.5)
 })

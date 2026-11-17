@@ -61,3 +61,10 @@ describe('grid options', () => {
     expect(lf.graphModel.grid.config?.color).toBe('#ababab')
   })
 })
+
+test('snaps the other coordinate when a node is on an axis', () => {
+  const lf = createLf({ grid: 10, snapGrid: true })
+  const node = lf.addNode({ type: 'rect', x: 0, y: 14 })
+  expect(node.x).toBe(0)
+  expect(node.y).toBe(10)
+})
