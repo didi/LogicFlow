@@ -911,7 +911,7 @@ export class GraphModel {
     }
     const { x: nodeX, y: nodeY } = node
     // 根据 grid 修正节点的 x, y
-    if (nodeX && nodeY) {
+    if (typeof nodeX === 'number' && typeof nodeY === 'number') {
       node.x = snapToGrid(nodeX, this.gridSize, snapGrid)
       node.y = snapToGrid(nodeY, this.gridSize, snapGrid)
       if (typeof node.text === 'object' && node.text !== null) {

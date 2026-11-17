@@ -12,3 +12,9 @@ describe('util/geometry', () => {
     expect(getGridOffset(distance, grid) - 2 < Number.EPSILON).toBeTruthy()
   })
 })
+
+test('snapToGrid preserves a snapped zero', () => {
+  expect(snapToGrid(4, 10, true)).toBe(0)
+  expect(snapToGrid(-4, 10, true)).toBeCloseTo(0)
+  expect(snapToGrid(4, 10, false)).toBe(4)
+})
